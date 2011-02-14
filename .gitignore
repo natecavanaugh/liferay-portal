@@ -84,6 +84,7 @@
 /portal-web/test-output
 /portal-web/test-results
 
+/portal-web/docroot/.sass-cache
 /portal-web/docroot/dtd
 /portal-web/docroot/wsrp
 
