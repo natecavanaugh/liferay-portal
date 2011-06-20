@@ -23,10 +23,6 @@
 	width: 30%;
 }
 
-.taglib-form-navigator .form-table {
-	border-collapse: collapse;
-}
-
 .taglib-form-navigator .form-navigator h3 {
 	color: #036;
 	font-size: 14px;

@@ -60,18 +60,15 @@
 }
 
 .opens-new-window-accessible {
-	background: url(../images/common/open_window.png) no-repeat 3px 50%;
+	background: url(../images/common/open_window.png) no-repeat 0 50%;
 	display: inline-block;
 	font-size: 0;
-	height: 15px;
+	height: 11px;
+	margin-left: 2px;
 	overflow: hidden;
 	text-indent: -9999px;
-	width: 15px;
-}
-
-.webkit .opens-new-window-accessible {
-	position: relative;
-	top: -11px;
+	vertical-align: top;
+	width: 11px;
 }
 
 /* ---------- Extras ---------- */

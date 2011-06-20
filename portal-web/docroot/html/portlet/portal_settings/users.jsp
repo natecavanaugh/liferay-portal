@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/portal_settings/init.jsp" %>
 
 <%
 boolean termsOfUseRequired = PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.TERMS_OF_USE_REQUIRED, PropsValues.TERMS_OF_USE_REQUIRED);

@@ -21,6 +21,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.BaseAssetRendererFactory;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecord;
+import com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion;
 import com.liferay.portlet.dynamicdatalists.service.DDLRecordLocalServiceUtil;
 import com.liferay.portlet.dynamicdatalists.service.permission.DDLRecordSetPermission;
 
@@ -36,9 +37,21 @@ public class DDLRecordAssetRendererFactory extends BaseAssetRendererFactory {
 	public AssetRenderer getAssetRenderer(long classPK, int type)
 		throws PortalException, SystemException {
 
-		DDLRecord record = DDLRecordLocalServiceUtil.getRecord(classPK);
+		DDLRecord record = null;
+		DDLRecordVersion recordVersion = null;
 
-		return new DDLRecordAssetRenderer(record);
+		if (type == TYPE_LATEST) {
+			recordVersion = DDLRecordLocalServiceUtil.getRecordVersion(classPK);
+
+			record = recordVersion.getRecord();
+		}
+		else {
+			record = DDLRecordLocalServiceUtil.getRecord(classPK);
+
+			recordVersion = record.getRecordVersion();
+		}
+
+		return new DDLRecordAssetRenderer(record, recordVersion);
 	}
 
 	public String getClassName() {

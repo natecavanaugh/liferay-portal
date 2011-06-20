@@ -634,6 +634,19 @@ public class LayoutLocalServiceUtil {
 		return getService().updatePriority(plid, priority);
 	}
 
+	/**
+	* @see com.liferay.portlet.portletconfiguration.action.EditScopeAction#updateScope
+	*/
+	public static void updateScopedPortletNames(long groupId,
+		boolean privateLayout, long layoutId, java.lang.String name,
+		java.lang.String languageId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.updateScopedPortletNames(groupId, privateLayout, layoutId, name,
+			languageId);
+	}
+
 	public static LayoutLocalService getService() {
 		if (_service == null) {
 			_service = (LayoutLocalService)PortalBeanLocatorUtil.locate(LayoutLocalService.class.getName());

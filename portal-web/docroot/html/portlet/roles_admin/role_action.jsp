@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/roles_admin/init.jsp" %>
 
 <%
 RoleSearch searchContainer = (RoleSearch)request.getAttribute("liferay-ui:search:searchContainer");

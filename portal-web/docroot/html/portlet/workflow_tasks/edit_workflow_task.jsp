@@ -34,15 +34,7 @@ long classPK = GetterUtil.getLong((String)workflowContext.get(WorkflowConstants.
 
 long[] pooledActorsIds = WorkflowTaskManagerUtil.getPooledActorsIds(company.getCompanyId(), workflowTask.getWorkflowTaskId());
 
-boolean showEditURL = false;
-if ((workflowTask.getAssigneeUserId() == user.getUserId()) &&
-	(!workflowTask.isCompleted())) {
-	showEditURL = true;
-}
-
 WorkflowHandler workflowHandler = WorkflowHandlerRegistryUtil.getWorkflowHandler(className);
-
-request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 
 AssetRenderer assetRenderer = workflowHandler.getAssetRenderer(classPK);
 AssetRendererFactory assetRendererFactory = workflowHandler.getAssetRendererFactory();
@@ -62,8 +54,6 @@ PortletURL editPortletURL = workflowHandler.getURLEdit(classPK, liferayPortletRe
 PortletURL viewFullContentURL = renderResponse.createRenderURL();
 
 viewFullContentURL.setParameter("struts_action", "/workflow_tasks/view_content");
-viewFullContentURL.setParameter(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE.toString());
-viewFullContentURL.setParameter("showEditURL", String.valueOf(showEditURL));
 viewFullContentURL.setParameter("redirect", currentURL);
 
 if (assetRendererFactory != null) {
@@ -74,6 +64,18 @@ if (assetEntry != null) {
 	viewFullContentURL.setParameter("assetEntryId", String.valueOf(assetEntry.getEntryId()));
 	viewFullContentURL.setParameter("assetEntryVersionId", String.valueOf(classPK));
 }
+
+boolean showEditURL = false;
+
+if ((workflowTask.getAssigneeUserId() == user.getUserId()) && !workflowTask.isCompleted()) {
+	showEditURL = true;
+}
+
+viewFullContentURL.setParameter("showEditURL", String.valueOf(showEditURL));
+
+viewFullContentURL.setParameter("workflowAssetPreview", Boolean.TRUE.toString());
+
+request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 %>
 
 <portlet:renderURL var="backURL">
@@ -190,15 +192,13 @@ if (assetEntry != null) {
 								editPortletURL.setPortletMode(PortletMode.VIEW);
 
 								editPortletURL.setParameter("redirect", currentURL);
-
-								boolean hasEditPermissions = assetRenderer.hasEditPermission(permissionChecker);
 								%>
 
 								<c:choose>
-									<c:when test="<%= hasEditPermissions && showEditURL %>">
+									<c:when test="<%= assetRenderer.hasEditPermission(permissionChecker) && showEditURL %>">
 										<liferay-ui:icon image="edit" method="get" url="<%= editPortletURL.toString() %>" />
 									</c:when>
-									<c:when test="<%= hasEditPermissions && !showEditURL && !workflowTask.isCompleted()%>">
+									<c:when test="<%= assetRenderer.hasEditPermission(permissionChecker) && !showEditURL && !workflowTask.isCompleted() %>">
 										<liferay-ui:icon-help message="please-assign-the-task-to-yourself-to-be-able-to-edit-the-content" />
 									</c:when>
 								</c:choose>

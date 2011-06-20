@@ -54,15 +54,15 @@ public class JournalArticleWorkflowHandler extends BaseWorkflowHandler {
 
 		long userId = GetterUtil.getLong(
 			(String)workflowContext.get(WorkflowConstants.CONTEXT_USER_ID));
-		long id = GetterUtil.getLong(
+		long classPK = GetterUtil.getLong(
 			(String)workflowContext.get(
 				WorkflowConstants.CONTEXT_ENTRY_CLASS_PK));
 
 		ServiceContext serviceContext = (ServiceContext)workflowContext.get(
 			"serviceContext");
 
-		JournalArticle article =
-			JournalArticleLocalServiceUtil.getArticle(id);
+		JournalArticle article = JournalArticleLocalServiceUtil.getArticle(
+			classPK);
 
 		return JournalArticleLocalServiceUtil.updateStatus(
 			userId, article, status, null, serviceContext);

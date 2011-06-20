@@ -35,8 +35,11 @@ DDLRecordVersion recordVersion = record.getRecordVersion();
 	backURL="<%= backURL %>"
 	title='view-record'
 />
+
+<aui:model-context bean="<%= recordVersion %>" model="<%= DDLRecordVersion.class %>" />
+
 <c:if test="<%= recordVersion != null %>">
-	<aui:workflow-status status="<%= recordVersion.getStatus() %>" version="<%= recordVersion.getVersion() %>" />
+	<aui:workflow-status model="<%= DDLRecord.class %>" status="<%= recordVersion.getStatus() %>" version="<%= recordVersion.getVersion() %>" />
 </c:if>
 
 <aui:fieldset>

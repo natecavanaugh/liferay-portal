@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/users_admin/init.jsp" %>
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");

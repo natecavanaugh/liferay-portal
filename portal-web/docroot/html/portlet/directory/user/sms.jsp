@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/directory/init.jsp" %>
 
 <%
 Contact selContact = (Contact)request.getAttribute("user.selContact");

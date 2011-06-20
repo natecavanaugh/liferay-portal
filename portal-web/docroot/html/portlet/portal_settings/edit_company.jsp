@@ -14,13 +14,10 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/portal_settings/init.jsp" %>
 
 <%
 themeDisplay.setIncludeServiceJs(true);
-
-String tabs2 = ParamUtil.getString(request, "tabs2");
-String tabs3 = ParamUtil.getString(request, "tabs3");
 
 String[] configurationSections = PropsValues.COMPANY_SETTINGS_FORM_CONFIGURATION;
 String[] identificationSections = PropsValues.COMPANY_SETTINGS_FORM_IDENTIFICATION;
@@ -31,9 +28,6 @@ String[][] categorySections = {configurationSections, identificationSections, mi
 PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("struts_action", "/portal_settings/view");
-portletURL.setParameter("tabs1", tabs1);
-portletURL.setParameter("tabs2", tabs2);
-portletURL.setParameter("tabs3", tabs3);
 
 request.setAttribute("addresses.className", Account.class.getName());
 request.setAttribute("emailAddresses.className", Account.class.getName());

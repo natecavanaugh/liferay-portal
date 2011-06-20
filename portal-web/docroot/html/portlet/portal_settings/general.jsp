@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/portal_settings/init.jsp" %>
 
 <%
 VirtualHost virtualHost = null;

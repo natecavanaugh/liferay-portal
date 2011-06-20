@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/plugins_admin/init.jsp" %>
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");
@@ -72,6 +72,8 @@ if (pluginType.equals(Plugin.TYPE_PORTLET)) {
 
 					<%
 					List curActions = ResourceActionsUtil.getResourceActions(portlet.getPortletId(), null);
+
+					int maxNumberOfRolesChecked = 500;
 
 					List<Role> roles = RoleLocalServiceUtil.search(company.getCompanyId(), null, null, null, 0, maxNumberOfRolesChecked, new RoleRoleIdComparator(true));
 					int rolesCount = RoleLocalServiceUtil.searchCount(company.getCompanyId(), null, null, null);

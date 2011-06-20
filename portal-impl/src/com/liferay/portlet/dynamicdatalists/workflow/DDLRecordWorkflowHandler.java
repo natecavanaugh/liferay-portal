@@ -26,6 +26,7 @@ import com.liferay.portal.service.WorkflowDefinitionLinkLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecord;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
+import com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion;
 import com.liferay.portlet.dynamicdatalists.service.DDLRecordLocalServiceUtil;
 
 import java.io.Serializable;
@@ -53,7 +54,10 @@ public class DDLRecordWorkflowHandler extends BaseWorkflowHandler {
 			long companyId, long groupId, long classPK)
 		throws PortalException, SystemException {
 
-		DDLRecord record = DDLRecordLocalServiceUtil.getDDLRecord(classPK);
+		DDLRecordVersion recordVersion =
+			DDLRecordLocalServiceUtil.getRecordVersion(classPK);
+
+		DDLRecord record = recordVersion.getRecord();
 
 		return WorkflowDefinitionLinkLocalServiceUtil.getWorkflowDefinitionLink(
 			companyId, groupId, DDLRecordSet.class.getName(),
@@ -71,7 +75,7 @@ public class DDLRecordWorkflowHandler extends BaseWorkflowHandler {
 
 		long userId = GetterUtil.getLong(
 			(String)workflowContext.get(WorkflowConstants.CONTEXT_USER_ID));
-		long recordId = GetterUtil.getLong(
+		long classPK = GetterUtil.getLong(
 			(String)workflowContext.get(
 				WorkflowConstants.CONTEXT_ENTRY_CLASS_PK));
 
@@ -79,7 +83,7 @@ public class DDLRecordWorkflowHandler extends BaseWorkflowHandler {
 			"serviceContext");
 
 		return DDLRecordLocalServiceUtil.updateStatus(
-			userId, recordId, status, serviceContext);
+			userId, classPK, status, serviceContext);
 	}
 
 	@Override

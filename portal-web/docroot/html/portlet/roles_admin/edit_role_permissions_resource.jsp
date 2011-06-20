@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/roles_admin/init.jsp" %>
 
 <%
 Role role = (Role)request.getAttribute("edit_role_permissions.jsp-role");

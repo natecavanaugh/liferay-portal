@@ -334,6 +334,13 @@ public class DDLRecordLocalServiceWrapper implements DDLRecordLocalService {
 	}
 
 	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion getRecordVersion(
+		long recordVersionId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _ddlRecordLocalService.getRecordVersion(recordVersionId);
+	}
+
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion getRecordVersion(
 		long recordId, java.lang.String version)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -395,12 +402,12 @@ public class DDLRecordLocalServiceWrapper implements DDLRecordLocalService {
 	}
 
 	public com.liferay.portlet.dynamicdatalists.model.DDLRecord updateStatus(
-		long userId, long recordId, int status,
+		long userId, long recordVersionId, int status,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _ddlRecordLocalService.updateStatus(userId, recordId, status,
-			serviceContext);
+		return _ddlRecordLocalService.updateStatus(userId, recordVersionId,
+			status, serviceContext);
 	}
 
 	public DDLRecordLocalService getWrappedDDLRecordLocalService() {

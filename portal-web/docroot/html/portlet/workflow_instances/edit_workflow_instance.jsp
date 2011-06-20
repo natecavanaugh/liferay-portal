@@ -30,8 +30,6 @@ long classPK = GetterUtil.getLong((String)workflowContext.get(WorkflowConstants.
 
 WorkflowHandler workflowHandler = WorkflowHandlerRegistryUtil.getWorkflowHandler(className);
 
-request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
-
 AssetRenderer assetRenderer = workflowHandler.getAssetRenderer(classPK);
 AssetRendererFactory assetRendererFactory = workflowHandler.getAssetRendererFactory();
 
@@ -51,14 +49,17 @@ PortletURL viewFullContentURL = renderResponse.createRenderURL();
 
 viewFullContentURL.setParameter("struts_action", "/workflow_tasks/view_content");
 viewFullContentURL.setParameter("redirect", currentURL);
-viewFullContentURL.setParameter(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE.toString());
-viewFullContentURL.setParameter("showEditURL", Boolean.FALSE.toString());
 viewFullContentURL.setParameter("type", assetRendererFactory.getType());
 
 if (assetEntry != null) {
 	viewFullContentURL.setParameter("assetEntryId", String.valueOf(assetEntry.getEntryId()));
 	viewFullContentURL.setParameter("assetEntryVersionId", String.valueOf(classPK));
 }
+
+viewFullContentURL.setParameter("showEditURL", Boolean.FALSE.toString());
+viewFullContentURL.setParameter("workflowAssetPreview", Boolean.TRUE.toString());
+
+request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 %>
 
 <portlet:renderURL var="backURL">

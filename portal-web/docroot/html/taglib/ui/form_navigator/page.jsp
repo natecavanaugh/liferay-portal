@@ -43,130 +43,125 @@ if (Validator.isNotNull(historyKey)) {
 
 <div class="taglib-form-navigator">
 	<div id="<portlet:namespace />sectionsContainer">
-		<table class="form-table" width="100%">
-		<tr>
-			<td>
 
-				<%
-				for (String section : allSections) {
-					String sectionId = _getSectionId(section);
-					String sectionJsp = jspPath + _getSectionJsp(section) + ".jsp";
-				%>
+		<%
+		for (String section : allSections) {
+			String sectionId = _getSectionId(section);
+			String sectionJsp = jspPath + _getSectionJsp(section) + ".jsp";
+		%>
 
-					<!-- Begin fragment <%= namespace + sectionId %> -->
+			<!-- Begin fragment <%= namespace + sectionId %> -->
 
-					<div class="form-section <%= (curSection.equals(section) || curSection.equals(sectionId)) ? "selected" : "aui-helper-hidden-accessible" %>" id="<%= namespace + sectionId %>">
-						<liferay-util:include page="<%= sectionJsp %>" />
-					</div>
+			<div class="form-section <%= (curSection.equals(section) || curSection.equals(sectionId)) ? "selected" : "aui-helper-hidden-accessible" %>" id="<%= namespace + sectionId %>">
+				<liferay-util:include page="<%= sectionJsp %>" />
+			</div>
 
-					<!-- End fragment <%= namespace + sectionId %> -->
+			<!-- End fragment <%= namespace + sectionId %> -->
 
-				<%
-				}
-				%>
+		<%
+		}
+		%>
 
-				<div class="lfr-component form-navigator">
-					<%= Validator.isNotNull(htmlTop) ? htmlTop : StringPool.BLANK  %>
+		<div class="lfr-component form-navigator">
+			<%= Validator.isNotNull(htmlTop) ? htmlTop : StringPool.BLANK  %>
 
-					<%
-					String[] modifiedSections = StringUtil.split(ParamUtil.getString(request, "modifiedSections"));
+			<%
+			String[] modifiedSections = StringUtil.split(ParamUtil.getString(request, "modifiedSections"));
 
-					for (int i = 0; i < categoryNames.length; i++) {
-						String category = categoryNames[i];
-						String[] sections = categorySections[i];
+			for (int i = 0; i < categoryNames.length; i++) {
+				String category = categoryNames[i];
+				String[] sections = categorySections[i];
 
-						if (sections.length > 0) {
-					%>
+				if (sections.length > 0) {
+			%>
 
-							<div class="menu-group">
-								<c:if test="<%= Validator.isNotNull(category) %>">
-									<h3><liferay-ui:message key="<%= category %>" /></h3>
-								</c:if>
+					<div class="menu-group">
+						<c:if test="<%= Validator.isNotNull(category) %>">
+							<h3><liferay-ui:message key="<%= category %>" /></h3>
+						</c:if>
 
-								<ul>
-
-									<%
-									String errorSection = (String)request.getAttribute("errorSection");
-
-									if (Validator.isNotNull(errorSection)) {
-										curSection = StringPool.BLANK;
-									}
-
-									for (String section : sections) {
-										String sectionId = _getSectionId(section);
-
-										Boolean show = (Boolean)request.getAttribute(WebKeys.FORM_NAVIGATOR_SECTION_SHOW + sectionId);
-
-										if ((show != null) && !show.booleanValue()) {
-											continue;
-										}
-
-										boolean error = false;
-
-										if (sectionId.equals(errorSection)) {
-											error = true;
-
-											curSection = section;
-										}
-
-										String cssClass = StringPool.BLANK;
-
-										if (curSection.equals(section) || curSection.equals(sectionId)) {
-											cssClass += "selected";
-										}
-
-										if (ArrayUtil.contains(modifiedSections, sectionId)) {
-											cssClass += " section-modified";
-										}
-
-										if (error) {
-											cssClass += " section-error";
-										}
-									%>
-
-										<li class="<%= cssClass %>">
-											<a href="#<%= namespace + sectionId %>" id="<%= namespace + sectionId %>Link">
-
-											<liferay-ui:message key="<%= section %>" />
-
-											<span class="modified-notice"> (<liferay-ui:message key="modified" />) </span>
-
-											<c:if test="<%= error %>">
-												<span class="error-notice"> (<liferay-ui:message key="error" />) </span>
-											</c:if>
-
-											</a>
-										</li>
-
-									<%
-									}
-									%>
-
-								</ul>
-							</div>
-
-					<%
-						}
-					}
-					%>
-
-					<c:if test="<%= showButtons %>">
-						<aui:button-row>
-							<aui:button type="submit" />
+						<ul>
 
 							<%
-							String taglibOnClick = Validator.isNull(backURL) ? "location.href = '';" : backURL;
+							String errorSection = (String)request.getAttribute("errorSection");
+
+							if (Validator.isNotNull(errorSection)) {
+								curSection = StringPool.BLANK;
+							}
+
+							for (String section : sections) {
+								String sectionId = _getSectionId(section);
+
+								Boolean show = (Boolean)request.getAttribute(WebKeys.FORM_NAVIGATOR_SECTION_SHOW + sectionId);
+
+								if ((show != null) && !show.booleanValue()) {
+									continue;
+								}
+
+								boolean error = false;
+
+								if (sectionId.equals(errorSection)) {
+									error = true;
+
+									curSection = section;
+								}
+
+								String cssClass = StringPool.BLANK;
+
+								if (curSection.equals(section) || curSection.equals(sectionId)) {
+									cssClass += "selected";
+								}
+
+								if (ArrayUtil.contains(modifiedSections, sectionId)) {
+									cssClass += " section-modified";
+								}
+
+								if (error) {
+									cssClass += " section-error";
+								}
 							%>
 
-							<aui:button onClick="<%= taglibOnClick %>" type="cancel" />
-						</aui:button-row>
-					</c:if>
+								<li class="<%= cssClass %>">
+									<a href="#<%= namespace + sectionId %>" id="<%= namespace + sectionId %>Link">
 
-					<%= Validator.isNotNull(htmlBottom) ? htmlBottom : StringPool.BLANK  %>
-				</div>
-			</td>
-		</tr>
-	</table>
+									<liferay-ui:message key="<%= section %>" />
+
+									<span class="modified-notice"> (<liferay-ui:message key="modified" />) </span>
+
+									<c:if test="<%= error %>">
+										<span class="error-notice"> (<liferay-ui:message key="error" />) </span>
+									</c:if>
+
+									</a>
+								</li>
+
+							<%
+							}
+							%>
+
+						</ul>
+					</div>
+
+			<%
+				}
+			}
+			%>
+
+			<c:if test="<%= showButtons %>">
+				<aui:button-row>
+					<aui:button type="submit" />
+
+					<%
+					String taglibOnClick = Validator.isNull(backURL) ? "location.href = '';" : backURL;
+					%>
+
+					<aui:button onClick="<%= taglibOnClick %>" type="cancel" />
+				</aui:button-row>
+			</c:if>
+
+			<%= Validator.isNotNull(htmlBottom) ? htmlBottom : StringPool.BLANK  %>
+		</div>
+	</div>
 </div>
 
 <aui:script use="liferay-form-navigator">

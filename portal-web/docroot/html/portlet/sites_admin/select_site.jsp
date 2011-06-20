@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/sites_admin/init.jsp" %>
 
 <%
 String target = ParamUtil.getString(request, "target");

@@ -17,17 +17,15 @@
 <%@ include file="/html/portlet/dynamic_data_lists/init.jsp" %>
 
 <%
+DDLRecordVersion recordVersion = (DDLRecordVersion)request.getAttribute(WebKeys.DYNAMIC_DATA_LISTS_RECORD_VERSION);
+
 DDLRecord record = (DDLRecord)request.getAttribute(WebKeys.DYNAMIC_DATA_LISTS_RECORD);
 
 DDLRecordSet recordSet = record.getRecordSet();
 
 DDMStructure ddmStructure = recordSet.getDDMStructure();
 
-Fields fields = null;
-
-if (record != null) {
-	fields = StorageEngineUtil.getFields(record.getDDMStorageId());
-}
+Fields fields = StorageEngineUtil.getFields(recordVersion.getDDMStorageId());
 %>
 
 <%= DDMXSDUtil.getHTML(pageContext, ddmStructure.getXsd(), fields, "", true) %>

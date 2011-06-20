@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/password_policies_admin/init.jsp" %>
 
 <%
 String toolbarItem = ParamUtil.getString(request, "toolbarItem", "view-all");

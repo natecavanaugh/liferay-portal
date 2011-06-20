@@ -484,14 +484,16 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 		// All versions
 
-		List<WikiPage> allPageVersions = wikiPagePersistence.findByN_T(
+		List<WikiPage> pages = wikiPagePersistence.findByN_T(
 			page.getNodeId(), page.getTitle());
 
-		for (WikiPage pageVersion : allPageVersions) {
+		for (WikiPage curPage : pages) {
+
 			// Workflow
+
 			workflowInstanceLinkLocalService.deleteWorkflowInstanceLinks(
-				pageVersion.getCompanyId(), pageVersion.getGroupId(),
-				WikiPage.class.getName(), pageVersion.getPageId());
+				curPage.getCompanyId(), curPage.getGroupId(),
+				WikiPage.class.getName(), curPage.getPageId());
 		}
 
 		wikiPagePersistence.removeByN_T(page.getNodeId(), page.getTitle());

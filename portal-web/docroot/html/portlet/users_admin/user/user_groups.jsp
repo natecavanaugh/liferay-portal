@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/users_admin/init.jsp" %>
 
 <%
 List<UserGroup> userGroups = (List<UserGroup>)request.getAttribute("user.userGroups");

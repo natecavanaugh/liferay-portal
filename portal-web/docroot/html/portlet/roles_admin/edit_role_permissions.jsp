@@ -14,12 +14,12 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/roles_admin/init.jsp" %>
 
 <%
 String cmd = ParamUtil.getString(request, Constants.CMD);
 
-tabs1 = "roles";
+String tabs1 = "roles";
 String tabs2 = ParamUtil.getString(request, "tabs2", "current");
 
 String redirect = ParamUtil.getString(request, "redirect");

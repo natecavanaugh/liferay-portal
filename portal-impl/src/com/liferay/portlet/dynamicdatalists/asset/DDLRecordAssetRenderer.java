@@ -28,6 +28,7 @@ import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecord;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
+import com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion;
 import com.liferay.portlet.dynamicdatalists.service.permission.DDLRecordSetPermission;
 
 import java.util.Locale;
@@ -43,8 +44,11 @@ import javax.portlet.RenderResponse;
  */
 public class DDLRecordAssetRenderer extends BaseAssetRenderer {
 
-	public DDLRecordAssetRenderer(DDLRecord record) {
+	public DDLRecordAssetRenderer(
+		DDLRecord record, DDLRecordVersion recordVersion) {
+
 		_record = record;
+		_recordVersion = recordVersion;
 
 		try {
 			_recordSet = record.getRecordSet();
@@ -122,9 +126,11 @@ public class DDLRecordAssetRenderer extends BaseAssetRenderer {
 
 			renderRequest.setAttribute(
 				WebKeys.DYNAMIC_DATA_LISTS_RECORD, _record);
+			renderRequest.setAttribute(
+				WebKeys.DYNAMIC_DATA_LISTS_RECORD_VERSION, _recordVersion);
 
 			String path =
-				"/html/portlet/dynamic_data_lists/asset/" + template + ".jsp";
+				"/html/portlet/dynamic_data_lists/asset/full_content.jsp";
 
 			return path;
 		}
@@ -143,5 +149,6 @@ public class DDLRecordAssetRenderer extends BaseAssetRenderer {
 
 	private DDLRecord _record;
 	private DDLRecordSet _recordSet;
+	private DDLRecordVersion _recordVersion;
 
 }

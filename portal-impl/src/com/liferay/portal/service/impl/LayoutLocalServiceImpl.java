@@ -24,6 +24,7 @@ import com.liferay.portal.RequiredLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -44,6 +45,7 @@ import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutReference;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.PortletConstants;
+import com.liferay.portal.model.PortletPreferences;
 import com.liferay.portal.model.Resource;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
@@ -56,6 +58,7 @@ import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.comparator.LayoutComparator;
 import com.liferay.portal.util.comparator.LayoutPriorityComparator;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 
 import java.io.File;
@@ -73,6 +76,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import javax.portlet.PortletException;
 
 /**
  * @author Brian Wing Shun Chan
@@ -891,6 +896,16 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 			}
 		}
 
+		// Portlet preferences
+
+		Locale[] locales = LanguageUtil.getAvailableLocales();
+
+		for (Locale locale : locales) {
+			updateScopedPortletNames(
+				groupId, privateLayout, layoutId, nameMap.get(locale),
+				LanguageUtil.getLanguageId(locale));
+		}
+
 		// Expando
 
 		ExpandoBridge expandoBridge = layout.getExpandoBridge();
@@ -1117,6 +1132,60 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		Layout layout = layoutPersistence.findByPrimaryKey(plid);
 
 		return updatePriority(layout, priority);
+	}
+
+	/**
+	 * @see com.liferay.portlet.portletconfiguration.action.EditScopeAction#updateScope
+	 */
+	public void updateScopedPortletNames(
+			long groupId, boolean privateLayout, long layoutId, String name,
+			String languageId)
+		throws PortalException, SystemException {
+
+		Layout layout = getLayout(groupId, privateLayout, layoutId);
+
+		List<PortletPreferences> portletPreferencesList =
+			portletPreferencesLocalService.getPortletPreferencesByPlid(
+				layout.getPlid());
+
+		for (PortletPreferences portletPreferences : portletPreferencesList) {
+			String portletId = portletPreferences.getPortletId();
+
+			javax.portlet.PortletPreferences preferences =
+				PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+					layout, portletId);
+
+			String scopeLayoutUuid = GetterUtil.getString(
+				preferences.getValue("lfrScopeLayoutUuid", null));
+
+			if (!scopeLayoutUuid.equals(layout.getUuid())) {
+				continue;
+			}
+
+			String portletTitle = PortalUtil.getPortletTitle(
+				portletId, languageId);
+
+			String newPortletTitle = PortalUtil.getNewPortletTitle(
+				portletTitle, layout.getName(languageId), name);
+
+			try {
+				if (!newPortletTitle.equals(portletTitle)) {
+					preferences.setValue(
+						"portlet-setup-title-" + languageId, newPortletTitle);
+					preferences.setValue(
+						"portlet-setup-use-custom-title",
+						Boolean.TRUE.toString());
+				}
+
+				preferences.store();
+			}
+			catch (IOException ioe) {
+				throw new SystemException(ioe);
+			}
+			catch (PortletException pe) {
+				throw new SystemException(pe);
+			}
+		}
 	}
 
 	protected String getFriendlyURL(

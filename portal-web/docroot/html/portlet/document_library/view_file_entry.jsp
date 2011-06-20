@@ -266,46 +266,46 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							<c:otherwise>
 								<c:choose>
 									<c:when test ="<%= !supportedVideo %>">
-								<div class="lfr-preview-file" id="<portlet:namespace />previewFile">
-									<div class="lfr-preview-file-content" id="<portlet:namespace />previewFileContent">
-										<div class="lfr-preview-file-image-current-column">
-											<div class="lfr-preview-file-image-container">
-												<img class="lfr-preview-file-image-current" id="<portlet:namespace />previewFileImage" src="<%= previewFileURL + "1" %>" />
+										<div class="lfr-preview-file" id="<portlet:namespace />previewFile">
+											<div class="lfr-preview-file-content" id="<portlet:namespace />previewFileContent">
+												<div class="lfr-preview-file-image-current-column">
+													<div class="lfr-preview-file-image-container">
+														<img class="lfr-preview-file-image-current" id="<portlet:namespace />previewFileImage" src="<%= previewFileURL + "1" %>" />
+													</div>
+													<span class="lfr-preview-file-actions aui-helper-hidden" id="<portlet:namespace />previewFileActions">
+														<span class="lfr-preview-file-toolbar" id="<portlet:namespace />previewToolbar"></span>
+
+														<span class="lfr-preview-file-info">
+															<span class="lfr-preview-file-index" id="<portlet:namespace />previewFileIndex">1</span> of <span class="lfr-preview-file-count"><%= previewFileCount %></span>
+														</span>
+													</span>
+												</div>
+
+												<div class="lfr-preview-file-images" id="<portlet:namespace />previewImagesContent">
+													<div class="lfr-preview-file-images-content"></div>
+												</div>
 											</div>
-											<span class="lfr-preview-file-actions aui-helper-hidden" id="<portlet:namespace />previewFileActions">
-												<span class="lfr-preview-file-toolbar" id="<portlet:namespace />previewToolbar"></span>
-
-												<span class="lfr-preview-file-info">
-													<span class="lfr-preview-file-index" id="<portlet:namespace />previewFileIndex">1</span> of <span class="lfr-preview-file-count"><%= previewFileCount %></span>
-												</span>
-											</span>
 										</div>
 
-										<div class="lfr-preview-file-images" id="<portlet:namespace />previewImagesContent">
-											<div class="lfr-preview-file-images-content"></div>
-										</div>
-									</div>
-								</div>
-
-								<aui:script use="aui-base,liferay-preview">
-									new Liferay.Preview(
-										{
-											actionContent: '#<portlet:namespace />previewFileActions',
-											baseImageURL: '<%= previewFileURL %>',
-											boundingBox: '#<portlet:namespace />previewFile',
-											contentBox: '#<portlet:namespace />previewFileContent',
-											currentPreviewImage: '#<portlet:namespace />previewFileImage',
-											imageListContent: '#<portlet:namespace />previewImagesContent',
-											maxIndex: <%= previewFileCount %>,
-											previewFileIndexNode: '#<portlet:namespace />previewFileIndex',
-											toolbar: '#<portlet:namespace />previewToolbar'
-										}
-									).render();
-								</aui:script>
+										<aui:script use="aui-base,liferay-preview">
+											new Liferay.Preview(
+												{
+													actionContent: '#<portlet:namespace />previewFileActions',
+													baseImageURL: '<%= previewFileURL %>',
+													boundingBox: '#<portlet:namespace />previewFile',
+													contentBox: '#<portlet:namespace />previewFileContent',
+													currentPreviewImage: '#<portlet:namespace />previewFileImage',
+													imageListContent: '#<portlet:namespace />previewImagesContent',
+													maxIndex: <%= previewFileCount %>,
+													previewFileIndexNode: '#<portlet:namespace />previewFileIndex',
+													toolbar: '#<portlet:namespace />previewToolbar'
+												}
+											).render();
+										</aui:script>
 									</c:when>
 									<c:otherwise>
-										<div class="lfr-preview-file" id="<portlet:namespace />previewFile">
-											<div class="lfr-preview-file-content" id="<portlet:namespace />previewFileContent"></div>
+										<div class="lfr-preview-file lfr-preview-video" id="<portlet:namespace />previewFile">
+											<div class="lfr-preview-file-content lfr-preview-video-content" id="<portlet:namespace />previewFileContent"></div>
 										</div>
 
 										<script src="<%= themeDisplay.getPathJavaScript() %>/misc/swfobject.js" type="text/javascript"></script>
@@ -377,7 +377,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 					</div>
 
 					<div class="lfr-asset-summary">
-						<aui:workflow-status status="<%= fileVersion.getStatus() %>" />
+						<aui:workflow-status model="<%= DLFileEntry.class %>" status="<%= fileVersion.getStatus() %>" />
 					</div>
 
 					<c:if test="<%= Validator.isNotNull(fileEntry.getDescription()) %>">
@@ -458,7 +458,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 					</c:if>
 
 
-					<aui:workflow-status status="<%= fileVersion.getStatus() %>" />
+					<aui:workflow-status model="<%= DLFileEntry.class %>" status="<%= fileVersion.getStatus() %>" />
 
 					<%
 					if (fileEntryTypeId > 0) {

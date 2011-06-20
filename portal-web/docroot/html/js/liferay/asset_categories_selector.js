@@ -144,7 +144,11 @@ AUI().add(
 
 						var output = [];
 
-						var singleSelect = instance.get('singleSelect');
+						var type = 'check';
+
+						if (instance.get('singleSelect')) {
+							type = 'radio';
+						}
 
 						A.each(
 							json,
@@ -164,7 +168,7 @@ AUI().add(
 									id: treeId,
 									label: Liferay.Util.escapeHTML(item.name),
 									leaf: !item.hasChildren,
-									type: singleSelect ? 'radio' : 'check'
+									type: type
 								};
 
 								output.push(newTreeNode);

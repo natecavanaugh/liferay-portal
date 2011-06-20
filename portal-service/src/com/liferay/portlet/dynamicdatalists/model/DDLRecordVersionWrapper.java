@@ -476,6 +476,12 @@ public class DDLRecordVersionWrapper implements DDLRecordVersion {
 		return _ddlRecordVersion.toXmlString();
 	}
 
+	public com.liferay.portlet.dynamicdatalists.model.DDLRecord getRecord()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _ddlRecordVersion.getRecord();
+	}
+
 	public DDLRecordVersion getWrappedDDLRecordVersion() {
 		return _ddlRecordVersion;
 	}

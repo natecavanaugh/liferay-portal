@@ -313,8 +313,8 @@ public class JournalArticleLocalServiceImpl
 		if (classNameId == 0) {
 			WorkflowHandlerRegistryUtil.startWorkflowInstance(
 				user.getCompanyId(), groupId, userId,
-				JournalArticle.class.getName(), article.getId(),
-				article, serviceContext);
+				JournalArticle.class.getName(), article.getId(), article,
+				serviceContext);
 
 			if (serviceContext.getWorkflowAction() !=
 					WorkflowConstants.ACTION_PUBLISH) {

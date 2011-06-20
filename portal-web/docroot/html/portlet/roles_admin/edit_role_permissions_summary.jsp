@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/enterprise_admin/init.jsp" %>
+<%@ include file="/html/portlet/roles_admin/init.jsp" %>
 
 <h3><liferay-ui:message key="summary" /></h3>
 

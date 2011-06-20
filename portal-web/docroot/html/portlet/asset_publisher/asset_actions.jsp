@@ -18,9 +18,10 @@
 
 <%
 boolean showIconLabel = ((Boolean)request.getAttribute("view.jsp-showIconLabel")).booleanValue();
-boolean showEditURL = GetterUtil.getBoolean(request.getParameter("showEditURL"), true);
 
 AssetRenderer assetRenderer = (AssetRenderer)request.getAttribute("view.jsp-assetRenderer");
+
+boolean showEditURL = ParamUtil.getBoolean(request, "showEditURL", true);
 
 PortletURL editPortletURL = assetRenderer.getURLEdit(liferayPortletRequest, liferayPortletResponse);
 

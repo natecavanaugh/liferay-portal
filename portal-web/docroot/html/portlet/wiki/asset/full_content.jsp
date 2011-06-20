@@ -19,8 +19,6 @@
 <%
 WikiPage wikiPage = (WikiPage)request.getAttribute(WebKeys.WIKI_PAGE);
 
-boolean workflowAssetPreview = GetterUtil.getBoolean(request.getParameter(WebKeys.WORKFLOW_ASSET_PREVIEW), false);
-
 PortletURL viewPageURL = new PortletURLImpl(request, PortletKeys.WIKI, plid, PortletRequest.ACTION_PHASE);
 
 viewPageURL.setWindowState(WindowState.MAXIMIZED);
@@ -40,9 +38,11 @@ editPageURL.setParameter("nodeId", String.valueOf(wikiPage.getNodeId()));
 
 String attachmentURLPrefix = themeDisplay.getPathMain() + "/wiki/get_page_attachment?p_l_id=" + themeDisplay.getPlid() + "&nodeId=" + wikiPage.getNodeId() + "&title=" + HttpUtil.encodeURL(wikiPage.getTitle()) + "&fileName=";
 
+boolean workflowAssetPreview = ParamUtil.getBoolean(request, "workflowAssetPreview");
+
 WikiPageDisplay pageDisplay = null;
 
-if (wikiPage.isApproved() && !workflowAssetPreview) {
+if (!workflowAssetPreview && wikiPage.isApproved()) {
 	pageDisplay = WikiCacheUtil.getDisplay(wikiPage.getNodeId(), wikiPage.getTitle(), viewPageURL, editPageURL, attachmentURLPrefix);
 }
 else {

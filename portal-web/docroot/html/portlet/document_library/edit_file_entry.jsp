@@ -193,7 +193,7 @@ else if (fileEntryType != null) {
 	<aui:model-context bean="<%= fileVersion %>" model="<%= DLFileVersion.class %>" />
 
 	<c:if test="<%= fileVersion != null %>">
-		<aui:workflow-status status="<%= fileVersion.getStatus() %>" version="<%= fileVersion.getVersion() %>" />
+		<aui:workflow-status model="<%= DLFileEntry.class %>" status="<%= fileVersion.getStatus() %>" version="<%= fileVersion.getVersion() %>" />
 	</c:if>
 
 	<aui:fieldset>
