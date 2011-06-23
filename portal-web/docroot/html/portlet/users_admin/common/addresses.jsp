@@ -85,7 +85,7 @@ else {
 
 		<aui:model-context bean="<%= address %>" model="<%= Address.class %>" />
 
-		<div class="lfr-form-row" id="addresses">
+		<div class="lfr-form-row" id="<portlet:namespace />addresses">
 			<div class="row-fields">
 				<aui:column columnWidth="50">
 					<aui:input name='<%= "addressId" + addressesIndex %>' type="hidden" value="<%= address.getAddressId() %>" />
