@@ -205,6 +205,26 @@ body #banner .logo a {
 .nav-menu-style-arrows ul {
 	list-style-image: url(../images/navigation/bullet_selected.png);
 }
+/* TEMP override area for nav dropdownds */
+#navigation .yui3-menu .yui3-menu-content {
+	background: none;
+	border: none;
+}
+#navigation .yui3-menu .yui3-menu-content li {
+	border: none;
+}
+#navigation .yui3-menu .yui3-menu-content li ul {
+	background: #57595A;
+}
+#navigation .yui3-menu .yui3-menu-content li ul li {
+	padding: 6px;
+}
+#navigation .yui3-menu-horizontal .yui3-menu-label {
+	border: none;
+}
+#navigation .yui3-menu-horizontal .yui3-menuitem-content {
+	border: none;
+}
 
 /* ---------- Portlet wrapper and icons ---------- */
 

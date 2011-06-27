@@ -209,6 +209,10 @@
 		#set ($css_class = $css_class + " private-page")
 	#end
 
+	#if	($page_group.isUser() && $layout.isPrivateLayout())
+		#set ($community_name = $languageUtil.get($locale, "my-community"))
+	#end
+
 	#set ($my_places_portlet_url = $portletURLFactory.create($request, "49", $page.getPlid(), "ACTION_PHASE"))
 
 	$my_places_portlet_url.setWindowState("normal")
@@ -300,5 +304,55 @@
 #set ($the_year = $date.getCurrentDate("yyyy", $locale))
 
 ## ---------- Custom init ---------- ##
+
+#set($aui_guid = 0)
+
+#macro(aui_drop_down_ul $nav_items $orientation)
+	#set($aui_guid = $aui_guid + 1)
+
+	#set($menu_class="yui3-menu")
+
+	#if($validator.isNotNull($orientation))
+		#set($menu_class = "$menu_class yui3-menu-${orientation}")
+	#end
+
+	<div class="$menu_class" id="yui3-menu-$aui_guid">
+		<div class="yui3-menu-content">
+			<ul>
+				#foreach ($nav_item in $nav_items)
+					#set($menu_item = "yui3-menuitem")
+					#set($menu_item_label = "yui3-menuitem-content")
+
+					#if ($nav_item.hasChildren())
+						#set($menu_item = "")
+						#set($menu_item_label = "$menu_item_label yui3-menu-label")
+					#end
+
+					<li class="$menu_item">
+						<a class="$menu_item_label" href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
+						#if ($nav_item.hasChildren())
+							#aui_drop_down_ul($nav_item.getChildren() "")
+						#end
+					</li>
+				#end
+			</ul>
+		</div>
+	</div>	
+#end
+
+#macro(aui_drop_down $nav_items $orientation)
+	#set($menu_id = $aui_guid + 1)
+
+	#aui_drop_down_ul($nav_items)
+
+	<script type="text/javascript">
+		AUI().use(
+			'node-menunav',
+			function(A) {
+				A.one('\#yui3-menu-${menu_id}').plug(A.Plugin.NodeMenuNav);
+			}
+		);
+	</script>
+#end
 
 #parse ("$full_templates_path/init_custom.vm")
