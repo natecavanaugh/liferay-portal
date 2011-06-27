@@ -188,7 +188,7 @@ hr, .separator {
 .nav-menu-style-arrows ul {
 	list-style-image: url(@theme_image_path@/navigation/bullet_selected.png);
 }
-/* TEMP override area for nav dropdownds */
+/* TEMP override area for nav dropdowns */
 #navigation .yui3-menu .yui3-menu-content {
 	background: none;
 	border: none;
@@ -197,16 +197,20 @@ hr, .separator {
 	border: none;
 }
 #navigation .yui3-menu .yui3-menu-content li ul {
-	background: #57595A;
+	background: #414445;
+	border-radius: 0 0 4px 4px;
 }
 #navigation .yui3-menu .yui3-menu-content li ul li {
-	padding: 6px;
+	padding: 0;
 }
 #navigation .yui3-menu-horizontal .yui3-menu-label {
 	border: none;
 }
 #navigation .yui3-menu-horizontal .yui3-menuitem-content {
 	border: none;
+}
+#navigation li li {
+	border-radius: none;
 }
 
 /* ---------- Portlet wrapper and icons ---------- */
