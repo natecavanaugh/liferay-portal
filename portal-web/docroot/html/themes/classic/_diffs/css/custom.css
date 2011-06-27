@@ -206,28 +206,21 @@ body #banner .logo a {
 	list-style-image: url(../images/navigation/bullet_selected.png);
 }
 /* TEMP override area for nav dropdowns */
-#navigation .yui3-menu .yui3-menu-content {
-	background: none;
-	border: none;
-}
+#navigation .yui3-menu .yui3-menu-content,
 #navigation .yui3-menu .yui3-menu-content li {
-	border: none;
-}
-#navigation .yui3-menu .yui3-menu-content li ul {
 	background: #414445;
+	border: none;
+}
+
+#navigation .yui3-menu .yui3-menu-content li ul {
 	border-radius: 0 0 4px 4px;
-}
-#navigation .yui3-menu .yui3-menu-content li ul li {
 	padding: 0;
+	width: auto;
 }
-#navigation .yui3-menu-horizontal .yui3-menu-label {
+#navigation .yui3-menu-horizontal .yui3-menuitem-content,
+#navigation .yui3-menu-horizontal .yui3-menu-label
+ {
 	border: none;
-}
-#navigation .yui3-menu-horizontal .yui3-menuitem-content {
-	border: none;
-}
-#navigation li li {
-	border-radius: none;
 }
 
 /* ---------- Portlet wrapper and icons ---------- */
