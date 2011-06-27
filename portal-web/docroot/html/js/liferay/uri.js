@@ -9,6 +9,8 @@
 AUI().add(
 	'liferay-uri',
 	function(A) {
+		var Array = A.Array;
+
 		var Lang = A.Lang;
 
 		var owns = A.Object.owns;
@@ -171,7 +173,7 @@ AUI().add(
 
 						var key = instance.get('key');
 
-						var index = key.indexOf(mapName);
+						var index = Array.indexOf(key, mapName);
 
 						uri[map.name] = {};
 
