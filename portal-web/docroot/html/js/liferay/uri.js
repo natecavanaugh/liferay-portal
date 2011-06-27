@@ -11,33 +11,13 @@ AUI().add(
 	function(A) {
 		var Lang = A.Lang;
 
-		var REGEX_QUERY = /(?:^|&)([^&=]*)=?([^&]*)/g;
-
 		var owns = A.Object.owns;
+
+		var REGEX_QUERY = /(?:^|&)([^&=]*)=?([^&]*)/g;
 
 		var URI = A.Component.create(
 			{
 				ATTRS: {
-					strictMode: {
-						value: false,
-						validator: Lang.isBoolean
-					},
-
-					key: {
-						value: ['source','protocol','authority','userInfo','user','password','host','port','relative','path','directory','file','query','hash'],
-						validator: Lang.isArray
-					},
-					queryMap: {
-						value: {
-							name:   'queryMap',
-							parser: REGEX_QUERY
-						},
-						validator: function(value) {
-							return Lang.isObject(value) &&
-								owns.call(value, 'name') && Lang.isString(value.name) &&
-								owns.call(value, 'parser') && value.parser instanceof RegExp;
-						}
-					},
 					hashMap: {
 						value: {
 							name:   'hashMap',
@@ -45,10 +25,16 @@ AUI().add(
 						},
 						validator: function(value) {
 							return Lang.isObject(value) &&
-								owns.call(value, 'name') && Lang.isString(value.name) &&
-								owns.call(value, 'parser') && value.parser instanceof RegExp;
+								owns(value, 'name') && Lang.isString(value.name) &&
+								owns(value, 'parser') && value.parser instanceof RegExp;
 						}
 					},
+
+					key: {
+						value: ['source','protocol','authority','userInfo','user','password','host','port','relative','path','directory','file','query','hash'],
+						validator: Lang.isArray
+					},
+
 					parser: {
 						value: {
 							strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
@@ -56,9 +42,26 @@ AUI().add(
 						},
 						validator: function(value) {
 							return Lang.isObject(value) &&
-								owns.call(value, 'strict') && value.strict instanceof RegExp &&
-								owns.call(value, 'loose') && value.loose instanceof RegExp;
+								owns(value, 'strict') && value.strict instanceof RegExp &&
+								owns(value, 'loose') && value.loose instanceof RegExp;
 						}
+					},
+
+					queryMap: {
+						value: {
+							name:   'queryMap',
+							parser: REGEX_QUERY
+						},
+						validator: function(value) {
+							return Lang.isObject(value) &&
+								owns(value, 'name') && Lang.isString(value.name) &&
+								owns(value, 'parser') && value.parser instanceof RegExp;
+						}
+					},
+
+					strictMode: {
+						value: false,
+						validator: Lang.isBoolean
 					}
 				},
 

@@ -7,13 +7,13 @@ AUI().add(
 
 		var NAME = 'liferayhistoryhtml5';
 
-		var Win = A.config.win;
-
 		var URI = new Liferay.URI(
 			{
 				strictMode: true
 			}
 		);
+
+		var Win = A.config.win;
 
 		var History = A.Component.create(
 			{
