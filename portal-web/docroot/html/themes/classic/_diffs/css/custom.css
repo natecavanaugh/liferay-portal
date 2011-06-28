@@ -193,13 +193,35 @@ hr, .separator {
 #navigation .yui3-menu .yui3-menu-content li {
 	background: #414445;
 	border: none;
+	background: #414445;
+	border: none;
+}
+#navigation .yui3-dd-drop a {
+	cursor: move;
+}
+
+#navigation .yui3-menu .yui3-menu-content {
+	border: none;
+}
+
+#navigation .yui3-menu .yui3-menu-content ul {
+	border: none;
+	padding: 2px;
 }
 
 #navigation .yui3-menu .yui3-menu-content li ul {
-	border-radius: 0 0 4px 4px;
-	padding: 0;
-	width: auto;
+	padding: 4px;
 }
+
+#navigation .yui3-menu li .yui3-menu-content {
+	background: #414445;
+	border: none;
+}
+
+#navigation .yui3-menu .yui3-menu-content li ul li ul {
+	background: #414445;
+}
+
 #navigation .yui3-menu-horizontal .yui3-menuitem-content,
 #navigation .yui3-menu-horizontal .yui3-menu-label
  {
