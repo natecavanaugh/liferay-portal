@@ -33,6 +33,25 @@ String keywords = ParamUtil.getString(request, "keywords");
 <aui:script use="aui-dialog,aui-dialog-iframe">
 	var buttonRow = A.one('#<portlet:namespace />displayStyleToolbar');
 
+	function onButtonClick(displayStyle) {
+		var config = {
+			'<portlet:namespace />struts_action': '<%= Validator.isNull(keywords) ? "/document_library/view" : "/document_library/search" %>',
+			'<portlet:namespace />displayStyle': displayStyle,
+			'<portlet:namespace />fileEntryTypeId': '<%= String.valueOf(fileEntryTypeId) %>',
+			'<portlet:namespace />folderId': '<%= String.valueOf(folderId) %>',
+			'<portlet:namespace />saveDisplayStyle': <%= Boolean.TRUE.toString() %>
+		};
+
+		if (<%= Validator.isNull(keywords) %>) {
+			config['<portlet:namespace />viewEntries'] = <%= Boolean.TRUE.toString() %>;
+		}
+		else {
+			config['<portlet:namespace />keywords'] = '<%= keywords %>';
+		}
+
+		updateDisplayStyle(config);
+	}
+
 	var displayStyleToolbar = new A.Toolbar(
 		{
 			activeState: true,
@@ -60,7 +79,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 					</portlet:resourceURL>
 
 					handler: function(event) {
-						updateDisplayStyle('<%= iconDisplayStyle.toString() %>', 0);
+						onButtonClick('icon');
 					},
 					icon: 'display-icon'
 				},
@@ -86,7 +105,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 					</portlet:resourceURL>
 
 					handler: function(event) {
-						updateDisplayStyle('<%= descriptiveDisplayStyle.toString() %>', 1);
+						onButtonClick('descriptive');
 					},
 					icon: 'display-descriptive'
 				},
@@ -112,7 +131,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 					</portlet:resourceURL>
 
 					handler: function(event) {
-						updateDisplayStyle('<%= listDisplayStyle.toString() %>', 2);
+						onButtonClick('list');
 					},
 					icon: 'display-list'
 				}
@@ -136,43 +155,17 @@ String keywords = ParamUtil.getString(request, "keywords");
 
 	buttonRow.setData('displayStyleToolbar', displayStyleToolbar);
 
-	var entriesContainer = A.one('#<portlet:namespace />documentContainer');
+	function updateDisplayStyle(config) {
+		var displayStyle = config['<portlet:namespace />displayStyle'];
 
-	var updateDisplayStyle = function(url, index) {
-		entriesContainer.plug(A.LoadingMask);
+		displayStyleToolbar.item(0).StateInteraction.set('active', displayStyle === 'icon');
+		displayStyleToolbar.item(1).StateInteraction.set('active', displayStyle === 'descriptive');
+		displayStyleToolbar.item(2).StateInteraction.set('active', displayStyle === 'list');
 
-		entriesContainer.loadingmask.toggle();
-
-		A.io.request(
-			url,
+		Liferay.fire(
+			'<portlet:namespace />dataRequest',
 			{
-				after: {
-					success: function(event, id, obj) {
-						entriesContainer.unplug(A.LoadingMask);
-
-						A.one('#<portlet:namespace />displayStyleToolbar').empty();
-
-						displayStyleToolbar.item(0).StateInteraction.set('active', false);
-						displayStyleToolbar.item(1).StateInteraction.set('active', false);
-						displayStyleToolbar.item(2).StateInteraction.set('active', false);
-
-						displayStyleToolbar.item(index).StateInteraction.set('active', true);
-
-						var responseData = this.get('responseData');
-
-						var content = A.Node.create(responseData);
-
-						var displayStyleButtonsContainer = A.one('#<portlet:namespace />displayStyleButtonsContainer');
-						var displayStyleButtons = content.one('#<portlet:namespace />displayStyleButtons');
-
-						displayStyleButtonsContainer.plug(A.Plugin.ParseContent);
-						displayStyleButtonsContainer.setContent(displayStyleButtons);
-
-						var entries = content.one('#<portlet:namespace />entries');
-
-						entriesContainer.setContent(entries);
-					}
-				}
+				requestParams: config
 			}
 		);
 	}
