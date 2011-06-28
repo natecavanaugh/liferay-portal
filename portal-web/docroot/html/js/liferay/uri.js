@@ -75,24 +75,23 @@ AUI().add(
 					parse: function(str) {
 						var instance = this;
 
-						if (!Lang.isString(str)) {
-							return {};
-						}
-
-						var key = instance.get('key');
-						var parser  = instance.get('parser');
-						var strictMode = instance.get('strictMode');
-						var matches = parser[strictMode ? 'strict' : 'loose'].exec(str);
-
 						var uri = {};
-						var index = 14;
 
-						while (index--) {
-							uri[key[index]] = matches[index] || '';
+						if (Lang.isString(str)) {
+							var key = instance.get('key');
+							var parser  = instance.get('parser');
+							var strictMode = instance.get('strictMode');
+							var matches = parser[strictMode ? 'strict' : 'loose'].exec(str);
+
+							var index = 14;
+
+							while (index--) {
+								uri[key[index]] = matches[index] || '';
+							}
+
+							instance._createMap(uri, 'query');
+							instance._createMap(uri, 'hash');
 						}
-
-						instance._createMap(uri, 'query');
-						instance._createMap(uri, 'hash');
 
 						return uri;
 					},
