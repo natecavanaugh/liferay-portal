@@ -337,7 +337,7 @@
 				#end
 			</ul>
 		</div>
-	</div>	
+	</div>
 #end
 
 #macro(aui_drop_down $nav_items $orientation)
