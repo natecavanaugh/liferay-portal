@@ -3,7 +3,7 @@ AUI().add(
 	function(A) {
 		var AObject = A.Object;
 
-		var Doc = A.config.doc;
+		var DOC = A.config.doc;
 
 		var NAME = 'liferayhistoryhtml5';
 
@@ -13,7 +13,7 @@ AUI().add(
 			}
 		);
 
-		var Win = A.config.win;
+		var WIN = A.config.win;
 
 		var History = A.Component.create(
 			{
@@ -28,7 +28,7 @@ AUI().add(
 						options = options || {};
 
 						if (!options.url) {
-							var currentURI = URI.parse(Doc.location.href);
+							var currentURI = URI.parse(DOC.location.href);
 
 							var queryMap = currentURI.queryMap;
 
@@ -45,7 +45,7 @@ AUI().add(
 					_init: function (config) {
 						var instance = this;
 
-						var currentURI = URI.parse(Doc.location.href);
+						var currentURI = URI.parse(DOC.location.href);
 
 						if (!AObject.isEmpty(currentURI.hashMap)) {
 							A.mix(currentURI.queryMap, currentURI.hashMap, true);
@@ -56,14 +56,14 @@ AUI().add(
 
 							currentURI = URI.toString(currentURI);
 
-							Win.history.replaceState(null, null, currentURI);
+							WIN.history.replaceState(null, null, currentURI);
 						}
 
 						config = config || {};
 
 						if (!AObject.owns(config, 'initialState')) {
-							if (Win.history) {
-								var bookmarkedState = Win.history.state;
+							if (WIN.history) {
+								var bookmarkedState = WIN.history.state;
 							}
 
 							var initialState = A.merge(hashState, bookmarkedState);
