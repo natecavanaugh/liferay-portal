@@ -134,11 +134,11 @@ body #banner .logo a {
 }
 
 #navigation .yui3-menu .yui3-menu-content {
-	border: none;
+	border-width: 0;
 }
 
 #navigation .yui3-menu .yui3-menu-content ul {
-	border: none;
+	border-width: 0;
 	padding: 2px;
 }
 
@@ -148,17 +148,16 @@ body #banner .logo a {
 
 #navigation .yui3-menu li .yui3-menu-content {
 	background: #414445;
-	border: none;
+	border-width: 0;
 }
 
-#navigation .yui3-menu .yui3-menu-content li ul li ul {
+#navigation .yui3-menu .yui3-menu-content li li ul {
 	background: #414445;
 }
 
-#navigation .yui3-menu-horizontal .yui3-menuitem-content,
-#navigation .yui3-menu-horizontal .yui3-menu-label
+#navigation .yui3-menu-horizontal .yui3-menuitem-content, #navigation .yui3-menu-horizontal .yui3-menu-label
  {
-	border: none;
+	border-width: 0;
 }
 
 /* ---------- Portlet wrapper and icons ---------- */
