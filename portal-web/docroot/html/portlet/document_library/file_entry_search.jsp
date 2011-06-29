@@ -42,21 +42,28 @@ long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folder
 <aui:script use="aui-io-plugin">
 	var documentLibraryContainer = A.one('#<portlet:namespace />documentLibraryContainer');
 
+	documentLibraryContainer.plug(A.LoadingMask);
+
+	var entriesContainer = A.one('#<portlet:namespace />documentContainer');
+
 	Liferay.provide(
 		window,
 		'<portlet:namespace />searchFileEntry',
 		function() {
-			entriesContainer.loadingmask.show();
+			documentLibraryContainer.loadingmask.show();
 
 			A.io.request(
 				document.<portlet:namespace />fm1.action,
 				{
+					data: {
+						'<portlet:namespace />viewDisplayStyleButtons': true
+					},
 					form: {
 						id: document.<portlet:namespace />fm1
 					},
 					after: {
 						success: function(event, id, obj) {
-							entriesContainer.loadingmask.hide();
+							documentLibraryContainer.loadingmask.hide();
 
 							var responseData = this.get('responseData');
 

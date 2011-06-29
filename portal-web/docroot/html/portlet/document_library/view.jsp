@@ -214,7 +214,7 @@ if (folder != null) {
 	<liferay-util:include page="/html/portlet/document_library/display_style_buttons.jsp" />
 </span>
 
-<aui:script use="aui-paginator,liferay-list-view,liferay-History">
+<aui:script use="aui-paginator,liferay-list-view,liferay-history">
 	<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" varImpl="mainURL">
 	</liferay-portlet:resourceURL>
 
@@ -299,7 +299,7 @@ if (folder != null) {
 	}
 
 	function afterHistoryChange(event) {
-		if (event.src === A.HistoryHash.SRC_HASH) {
+		if (event.src === Liferay.History.SRC_HASH || event.src === Liferay.History.SRC_POPSTATE) {
 			var state = History.get();
 
 			var requestParams = {};

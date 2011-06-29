@@ -289,7 +289,7 @@ if (folder != null) {
 					</liferay-portlet:resourceURL>
 
 					<li class="folder">
-						<a data-direction-right="<%= Boolean.TRUE.toString() %>" data-refresh-folders="<%= Boolean.TRUE.toString() %>" data-resource-url="<%= viewFoldersURL.toString() %>" data-show-siblings="<%= Boolean.TRUE.toString() %>" class="expand-folder" href="<%= viewURL.toString() %>">
+						<a data-direction-right="<%= Boolean.TRUE.toString() %>" data-folder-id="<%= String.valueOf(parentFolderId) %>" data-refresh-folders="<%= Boolean.TRUE.toString() %>" data-resource-url="<%= viewFoldersURL.toString() %>" data-show-siblings="<%= Boolean.TRUE.toString() %>" class="expand-folder" href="<%= viewURL.toString() %>">
 							<liferay-ui:icon cssClass="expand-folder-arrow" image="../aui/carat-1-l" />
 						</a>
 
@@ -331,7 +331,7 @@ if (folder != null) {
 
 						<li class="folder <%= (curFolder.getFolderId() == folderId) ? "selected" : StringPool.BLANK %>">
 							<c:if test="<%= foldersCount > 0 %>">
-								<a data-refresh-folders="<%= Boolean.TRUE.toString() %>" data-resource-url="<%= viewFoldersURL.toString() %>" data-show-siblings="<%= Boolean.TRUE.toString() %>" class="expand-folder" href="<%= viewURL.toString() %>">
+								<a data-folder-id="<%= String.valueOf(curFolder.getFolderId()) %>" data-refresh-folders="<%= Boolean.TRUE.toString() %>" data-resource-url="<%= viewFoldersURL.toString() %>" data-show-siblings="<%= Boolean.FALSE.toString() %>" class="expand-folder" href="<%= viewURL.toString() %>">
 									<liferay-ui:icon cssClass="expand-folder-arrow" image="../aui/carat-1-r" />
 								</a>
 							</c:if>

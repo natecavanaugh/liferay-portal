@@ -52,6 +52,9 @@ String displayStyle = ParamUtil.getString(request, "displayStyle");
 if (Validator.isNull(displayStyle)) {
 	displayStyle = portalPreferences.getValue(PortletKeys.DOCUMENT_LIBRARY, "display-style", "icon");
 }
+
+int start = ParamUtil.getInteger(request, "start");
+int end = ParamUtil.getInteger(request, "end", SearchContainer.DEFAULT_DELTA);
 %>
 
 <div id="<portlet:namespace />entries">
@@ -135,10 +138,10 @@ if (Validator.isNull(displayStyle)) {
 				SearchContext searchContext = SearchContextFactory.getInstance(request);
 
 				searchContext.setAttribute("paginationType", "more");
-				searchContext.setEnd(searchContainer.getEnd());
+				searchContext.setEnd(end);
 				searchContext.setFolderIds(folderIdsArray);
 				searchContext.setKeywords(keywords);
-				searchContext.setStart(searchContainer.getStart());
+				searchContext.setStart(start);
 
 				results = indexer.search(searchContext);
 
