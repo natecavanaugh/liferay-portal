@@ -65,8 +65,9 @@
 			padding: 0 0.5em 0 0.5em;
 		}
 
-		.results-header {
-			background: #AEB9BE;
+		.tag-details {
+			font-weight: bold;
+			vertical-align: middle;
 		}
 	}
 
@@ -158,11 +159,10 @@
 		}
 	}
 
-	.tags-admin-list-container .results-header {
-		background: #D3DADD;
-
+	.tags-admin-list-container {
 		.tag-admin-check {
 			float: left;
+			margin-left: 8px;
 
 			input {
 				float: none;
@@ -323,10 +323,6 @@
 		.yui3-widget-bd .asset-tag-layer .aui-field {
 			width: 200px;
 		}
-	}
-
-	.tags-admin-list-container .results-header {
-		zoom: 1;
 	}
 }
 

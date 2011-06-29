@@ -46,27 +46,32 @@
 	<div class="tags-admin-content-wrapper">
 		<aui:layout cssClass="tags-admin-content">
 			<aui:column columnWidth="35" cssClass="tags-admin-list-container">
-				<div class="results-header">
-					<aui:input cssClass="tag-admin-check" label="tags" name="checkAllTags" type="checkbox" title='<%= LanguageUtil.get(pageContext, "check-all-tags") %>' />
 
-					<liferay-ui:icon-menu
-						align="auto"
-						message="actions"
-						showWhenSingleIcon="true"
-					>
-						<liferay-ui:icon
-							id="deleteSelectedTags"
-							image="delete"
-							url="javascript:;"
-						/>
+				<div class="lfr-header-row">
+					<div class="lfr-header-row-content">
+						<aui:input cssClass="tag-admin-check" label="tags" name="checkAllTags" type="checkbox" title='<%= LanguageUtil.get(pageContext, "check-all-tags") %>' />
 
-						<liferay-ui:icon
-							id="mergeSelectedTags"
-							image="../common/all_pages"
-							message="merge"
-							url="javascript:;"
-						/>
-					</liferay-ui:icon-menu>
+						<span class="actions-button" id="<portlet:namespace />actionsButtonContainer">
+							<liferay-ui:icon-menu
+								align="auto"
+								message="actions"
+								showWhenSingleIcon="true"
+							>
+								<liferay-ui:icon
+									id="deleteSelectedTags"
+									image="delete"
+									url="javascript:;"
+								/>
+
+								<liferay-ui:icon
+									id="mergeSelectedTags"
+									image="../common/all_pages"
+									message="merge"
+									url="javascript:;"
+								/>
+							</liferay-ui:icon-menu>
+						</span>
+					</div>
 				</div>
 
 				<div class="tags-admin-list lfr-component"></div>
@@ -75,8 +80,12 @@
 			</aui:column>
 
 			<aui:column columnWidth="65" cssClass="tags-admin-edit-tag">
-				<div class="results-header">
-					<liferay-ui:message key="tag-details" />
+				<div class="lfr-header-row">
+					<div class="lfr-header-row-content">
+						<span class="tag-details">
+							<liferay-ui:message key="tag-details" />
+						</span>
+					</div>
 				</div>
 
 				<div class="tag-view-container"></div>
