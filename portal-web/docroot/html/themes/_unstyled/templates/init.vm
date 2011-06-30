@@ -328,6 +328,10 @@
 						#set($menu_item_label = "$menu_item_label yui3-menu-label")
 					#end
 
+					#if ($nav_item.isSelected())
+						#set($menu_item = "$menu_item selected")
+					#end
+
 					<li class="$menu_item">
 						<a class="$menu_item_label" href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
 						#if ($nav_item.hasChildren())

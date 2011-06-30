@@ -155,9 +155,21 @@ body #banner .logo a {
 	background: #414445;
 }
 
+#navigation .yui3-menu .yui3-menu-label {
+	background: url(../images/arrows/09_down.png) no-repeat right; 
+}
+
+#navigation .yui3-menu li li .yui3-menu-label {
+	background: url(../images/arrows/09_right.png) no-repeat right; 
+}
+
 #navigation .yui3-menu-horizontal .yui3-menuitem-content, #navigation .yui3-menu-horizontal .yui3-menu-label
  {
 	border-width: 0;
+}
+
+#navigation .yui-menuitem-active {
+	background: #313334;
 }
 
 /* ---------- Portlet wrapper and icons ---------- */
