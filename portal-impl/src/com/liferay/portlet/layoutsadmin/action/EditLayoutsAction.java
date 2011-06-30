@@ -188,6 +188,9 @@ public class EditLayoutsAction extends PortletAction {
 			else if (cmd.equals("select_layout_set_branch")) {
 				selectLayoutSetBranch(actionRequest);
 			}
+			else if (cmd.equals("select_layout_variation")) {
+				selectLayoutVariation(actionRequest);
+			}
 			else if (cmd.equals("unschedule_copy_from_live")) {
 				StagingUtil.unscheduleCopyFromLive(actionRequest);
 			}
@@ -575,6 +578,25 @@ public class EditLayoutsAction extends PortletAction {
 
 		StagingUtil.setRecentLayoutSetBranchId(
 			request, layoutSetBranch.getLayoutSetBranchId());
+	}
+
+	protected void selectLayoutVariation(ActionRequest actionRequest)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long layoutSetBranchId = ParamUtil.getLong(
+			actionRequest, "layoutSetBranchId");
+
+		String variationName = ParamUtil.getString(
+			actionRequest, "variationName");
+
+		HttpServletRequest request = PortalUtil.getHttpServletRequest(
+			actionRequest);
+
+		StagingUtil.setRecentVariationName(
+			request, layoutSetBranchId, themeDisplay.getPlid(), variationName);
 	}
 
 	protected void updateDisplayOrder(ActionRequest actionRequest)

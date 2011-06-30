@@ -120,6 +120,33 @@
 				}
 			}
 
+			.layout-info {
+				.staging-tabs {
+					background-color: #777;
+					overflow: visible;
+					padding-top: 1em;
+
+					.tab {
+                    	background-color: #CCC;
+						border-top-color: #DDD;
+						border-left-color: #EEE;
+						color: #333;
+						font-size: 1em;
+
+						&.selected {
+							background-color: #777;
+							color: #FFF;
+						}
+					}
+				}
+			}
+
+			.variation-tabs-content {
+				border: 1px solid #AAA;
+				border-radius: 4px;
+				padding: 1em;
+			}
+
 			.layout-title {
 				font-size: 1.2em;
 
