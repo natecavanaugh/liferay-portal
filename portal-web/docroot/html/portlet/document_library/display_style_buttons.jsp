@@ -19,7 +19,7 @@
 <%
 long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folderId"));
 
-long fileEntryTypeId = ParamUtil.getLong(request, "fileEntryTypeId");
+long fileEntryTypeId = ParamUtil.getLong(request, "fileEntryTypeId", -1);
 
 String displayStyle = ParamUtil.getString(request, "displayStyle");
 
@@ -37,7 +37,6 @@ String keywords = ParamUtil.getString(request, "keywords");
 		var config = {
 			'<portlet:namespace />struts_action': '<%= Validator.isNull(keywords) ? "/document_library/view" : "/document_library/search" %>',
 			'<portlet:namespace />displayStyle': displayStyle,
-			'<portlet:namespace />fileEntryTypeId': '<%= String.valueOf(fileEntryTypeId) %>',
 			'<portlet:namespace />folderId': '<%= String.valueOf(folderId) %>',
 			'<portlet:namespace />saveDisplayStyle': <%= Boolean.TRUE.toString() %>
 		};
@@ -46,7 +45,11 @@ String keywords = ParamUtil.getString(request, "keywords");
 			config['<portlet:namespace />viewEntries'] = <%= Boolean.TRUE.toString() %>;
 		}
 		else {
-			config['<portlet:namespace />keywords'] = '<%= keywords %>';
+			config['<portlet:namespace />keywords'] = '<%= HtmlUtil.escapeJS(keywords) %>';
+		}
+
+		if (<%= fileEntryTypeId != -1 %>) {
+			config['<portlet:namespace />fileEntryTypeId'] = '<%= String.valueOf(fileEntryTypeId) %>';
 		}
 
 		updateDisplayStyle(config);
@@ -72,8 +75,11 @@ String keywords = ParamUtil.getString(request, "keywords");
 							</c:otherwise>
 						</c:choose>
 
+						<c:if test="<%= fileEntryTypeId != -1 %>">
+							<portlet:param name="fileEntryTypeId" value="<%= String.valueOf(fileEntryTypeId) %>" />
+						</c:if>
+
 						<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
-						<portlet:param name="fileEntryTypeId" value="<%= String.valueOf(fileEntryTypeId) %>" />
 						<portlet:param name="displayStyle" value="icon" />
 						<portlet:param name="saveDisplayStyle" value="<%= Boolean.TRUE.toString() %>" />
 					</portlet:resourceURL>
@@ -98,8 +104,11 @@ String keywords = ParamUtil.getString(request, "keywords");
 							</c:otherwise>
 						</c:choose>
 
+						<c:if test="<%= fileEntryTypeId != -1 %>">
+							<portlet:param name="fileEntryTypeId" value="<%= String.valueOf(fileEntryTypeId) %>" />
+						</c:if>
+
 						<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
-						<portlet:param name="fileEntryTypeId" value="<%= String.valueOf(fileEntryTypeId) %>" />
 						<portlet:param name="displayStyle" value="descriptive" />
 						<portlet:param name="saveDisplayStyle" value="<%= Boolean.TRUE.toString() %>" />
 					</portlet:resourceURL>
@@ -124,8 +133,11 @@ String keywords = ParamUtil.getString(request, "keywords");
 							</c:otherwise>
 						</c:choose>
 
+						<c:if test="<%= fileEntryTypeId != -1 %>">
+							<portlet:param name="fileEntryTypeId" value="<%= String.valueOf(fileEntryTypeId) %>" />
+						</c:if>
+
 						<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
-						<portlet:param name="fileEntryTypeId" value="<%= String.valueOf(fileEntryTypeId) %>" />
 						<portlet:param name="displayStyle" value="list" />
 						<portlet:param name="saveDisplayStyle" value="<%= Boolean.TRUE.toString() %>" />
 					</portlet:resourceURL>

@@ -63,19 +63,7 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 <div id="<portlet:namespace />documentLibraryContainer">
 	<aui:layout cssClass="view">
 		<aui:column columnWidth="<%= 20 %>" cssClass="navigation-pane" first="<%= true %>">
-			<div class="lfr-header-row">
-				<div class="lfr-header-row-content" id="<portlet:namespace />parentFolderTitleContainer">
-					<div class="parent-folder-title" id="<portlet:namespace />parentFolderTitle"></div>
-				</div>
-			</div>
-
-			<div class="portlet-msg-error aui-helper-hidden" id="<portlet:namespace />errorContainer">
-				<liferay-ui:message key="your-request-failed-to-complete" />
-			</div>
-
-			<div class="body-row">
-				<div id="<portlet:namespace />folderContainer"></div>
-			</div>
+			<liferay-util:include page="/html/portlet/document_library/view_folders.jsp" />
 		</aui:column>
 
 		<aui:column columnWidth="<%= showFolderMenu ? 80 : 100 %>" cssClass="context-pane" last="<%= true %>">
@@ -105,7 +93,9 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 				<aui:input name="fileEntryIds" type="hidden" />
 				<aui:input name="fileShortcutIds" type="hidden" />
 
-				<div class="document-container" id="<portlet:namespace />documentContainer"></div>
+				<div class="document-container" id="<portlet:namespace />documentContainer">
+					<liferay-util:include page="/html/portlet/document_library/view_entries.jsp" />
+				</div>
 
 				<div class="document-entries-paginator"></div>
 			</aui:form>
@@ -147,7 +137,7 @@ if (folder != null) {
 		function(action, url) {
 			document.<portlet:namespace />fm2.method = "post";
 			document.<portlet:namespace />fm2.<portlet:namespace /><%= Constants.CMD %>.value = action;
-			document.<portlet:namespace />fm2.<portlet:namespace />folderIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm2, '<portlet:namespace /><%= RowChecker.ALL_ROW_IDS %>Checkbox', '<portlet:namespace /><%= RowChecker.ROW_IDS  + StringPool.UNDERLINE + Folder.class.getName() %>Checkbox');
+			document.<portlet:namespace />fm2.<portlet:namespace />folderIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm2, '<portlet:namespace /><%= RowChecker.ALL_ROW_IDS %>Checkbox', '<portlet:namespace /><%= RowChecker.ROW_IDS + StringPool.UNDERLINE + Folder.class.getName() %>Checkbox');
 			document.<portlet:namespace />fm2.<portlet:namespace />fileEntryIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm2, '<portlet:namespace /><%= RowChecker.ALL_ROW_IDS %>Checkbox', '<portlet:namespace /><%= RowChecker.ROW_IDS + StringPool.UNDERLINE + FileEntry.class.getName() %>Checkbox');
 			document.<portlet:namespace />fm2.<portlet:namespace />fileShortcutIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm2, '<portlet:namespace /><%= RowChecker.ALL_ROW_IDS %>Checkbox', '<portlet:namespace /><%= RowChecker.ROW_IDS + StringPool.UNDERLINE + DLFileShortcut.class.getName() %>Checkbox');
 
@@ -232,9 +222,10 @@ if (folder != null) {
 
 	var DEFAULT_PARAMS = {
 		'<portlet:namespace />struts_action': '/document_library/view',
-		'<portlet:namespace />displayStyle': '<%= displayStyle %>',
+		'<portlet:namespace />displayStyle': '<%= HtmlUtil.escapeJS(displayStyle) %>',
 		'<portlet:namespace />folderId': '<%= folderId %>',
 		'<portlet:namespace />showSiblings': <%= Boolean.TRUE.toString() %>,
+		'<portlet:namespace />viewBreadcrumb': <%= Boolean.TRUE.toString() %>,
 		'<portlet:namespace />viewEntries': <%= Boolean.TRUE.toString() %>,
 		'<portlet:namespace />viewFolders': <%= Boolean.TRUE.toString() %>
 	};
@@ -277,12 +268,12 @@ if (folder != null) {
 
 		var data = {
 			'<portlet:namespace />folderId': '<%= DLFolderConstants.DEFAULT_PARENT_FOLDER_ID %>',
-			'<portlet:namespace />displayStyle': History.get('<portlet:namespace />displayStyle') || '<%= displayStyle %>',
+			'<portlet:namespace />displayStyle': History.get('<portlet:namespace />displayStyle') || '<%= HtmlUtil.escape(displayStyle) %>',
 			'<portlet:namespace />viewFolders': <%= Boolean.TRUE.toString() %>
 		};
 
 		if (!AObject.isEmpty(requestParams)) {
-	        A.mix(data, requestParams, true);
+			A.mix(data, requestParams, true);
 		}
 
 		documentLibraryContainer.loadingmask.show();
@@ -361,7 +352,6 @@ if (folder != null) {
 			'<portlet:namespace />viewAddButton': <%= Boolean.TRUE.toString() %>,
 			'<portlet:namespace />viewBreadcrumb': <%= Boolean.TRUE.toString() %>,
 			'<portlet:namespace />viewDisplayStyleButtons': <%= Boolean.TRUE.toString() %>,
-			'<portlet:namespace />viewEntries': <%= Boolean.TRUE.toString() %>,
 			'<portlet:namespace />viewFileEntrySearch': <%= Boolean.TRUE.toString() %>,
 		};
 
@@ -371,6 +361,10 @@ if (folder != null) {
 
 		if (dataNavigation) {
 			config['<portlet:namespace />navigation'] = dataNavigation;
+		}
+
+		if (dataRefreshEntries) {
+			config['<portlet:namespace />viewEntries'] = dataRefreshEntries;
 		}
 
 		if (dataShowSiblings) {
@@ -462,7 +456,6 @@ if (folder != null) {
 	function onDataRetrieveSuccess(event) {
 		var data = event.data;
 
-		var data = event.data;
 		var responseData = event.responseData;
 
 		documentLibraryContainer.loadingmask.hide();
@@ -483,6 +476,8 @@ if (folder != null) {
 			setParentFolderTitle(content);
 
 			syncDisplayStyleToolbar(content);
+
+			setSearchResults(content)
 		}
 	}
 
@@ -497,7 +492,7 @@ if (folder != null) {
 	}
 
 	function setButtons(content) {
-	   var addButton = content.one('#<portlet:namespace />addButton');
+		var addButton = content.one('#<portlet:namespace />addButton');
 
 		if (addButton) {
 			var addButtonContainer = A.one('#<portlet:namespace />addButtonContainer');
@@ -506,7 +501,7 @@ if (folder != null) {
 			addButtonContainer.setContent(addButton);
 		}
 
-	    var displayStyleButtons = content.one('#<portlet:namespace />displayStyleButtons');
+	var displayStyleButtons = content.one('#<portlet:namespace />displayStyleButtons');
 
 		if (displayStyleButtons) {
 			displayStyleToolbarNode.empty();
@@ -553,10 +548,14 @@ if (folder != null) {
 			var currentFolders = listView.get('data');
 
 			var currentFolderId = currentFolders && currentFolders.attr('data-folderId');
+			var currentParentFolderId = currentFolders && currentFolders.attr('data-parent-folderId');
+
+			var showSiblings = currentFolders && currentFolders.attr('data-show-siblings');
 
 			var folderId = folders && folders.attr('data-folderId');
+			var parentFolderId = folders && folders.attr('data-parent-folderId');
 
-			if ((folderId == '0') || (folderId != currentFolderId)) {
+			if ((folderId == '0') || (parentFolderId != currentParentFolderId)) {
 				listView.set('data', folders);
 			}
 		}
@@ -569,6 +568,15 @@ if (folder != null) {
 			var parentFolderTitleContainer = A.one('#<portlet:namespace />parentFolderTitleContainer');
 
 			parentFolderTitleContainer.setContent(parentFolderTitle);
+		}
+	}
+
+	function setSearchResults(content) {
+		var searchResults = content.one('#<portlet:namespace />searchResults');
+
+		if (searchResults) {
+			entriesContainer.plug(A.Plugin.ParseContent);
+			entriesContainer.setContent(searchResults);
 		}
 	}
 
@@ -693,11 +701,11 @@ if (folder != null) {
 
 			Liferay.fire(
 				EVENT_DATA_REQUEST,
-	            {
+				{
 					requestParams: {
 						'<portlet:namespace />struts_action': '/document_library/view',
 						'<portlet:namespace />action': 'browseFolder',
-						'<portlet:namespace />end': <%= SearchContainer.DEFAULT_DELTA %>,
+						'<portlet:namespace />end': entryPaginator.get('rowsPerPage'),
 						'<portlet:namespace />folderId': event.currentTarget.attr('data-folderId'),
 						'<portlet:namespace />showSiblings': <%= Boolean.TRUE.toString() %>,
 						'<portlet:namespace />start': 0,
@@ -717,6 +725,14 @@ if (folder != null) {
 
 	documentLibraryContainer.plug(A.LoadingMask);
 
-	mainEntry();
+	if (!History.html5) {
+		mainEntry();
+	}
+	else {
+		var state = History.get();
 
+		if (!AObject.isEmpty(state)) {
+			mainEntry();
+		}
+	}
 </aui:script>

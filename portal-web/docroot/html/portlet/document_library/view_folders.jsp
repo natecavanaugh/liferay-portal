@@ -89,8 +89,12 @@ if (folder != null) {
 	</div>
 </div>
 
+<div class="portlet-msg-error aui-helper-hidden" id="<portlet:namespace />errorContainer">
+	<liferay-ui:message key="your-request-failed-to-complete" />
+</div>
+
 <div class="body-row">
-	<div data-folderId="<%= folderId %>" id="<portlet:namespace />folderContainer">
+	<div class="aui-liferaylistview-content" data-folderId="<%= folderId %>" data-parent-folderId="<%= parentFolderId %>" id="<portlet:namespace />folderContainer">
 		<ul>
 			<c:choose>
 				<c:when test="<%= (folderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) && (parentFolderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID && showRootFolder) %>">

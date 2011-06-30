@@ -385,7 +385,6 @@ for (int i = 0; i < results.size(); i++) {
 		'viewEntriesLoaded',
 		{
 			page: <%= end / (end - start) %>,
-			paginationURL: '<%= paginationURL %>',
 			rowsPerPage:  <%= (end - start) %>,
 			total: <%= total %>
 		}
