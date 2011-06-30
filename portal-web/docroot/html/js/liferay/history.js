@@ -1,8 +1,6 @@
 AUI().add(
 	'liferay-history',
 	function(A) {
-		var History;
-
 		var Do = A.Do;
 
 		var HistoryBase = A.HistoryBase;
@@ -14,6 +12,8 @@ AUI().add(
 		var REGEX_ESCAPE_REGEX = /[-[\]{}()*+?.,\\^$|#\s]/g;
 
 		var WIN = A.config.win;
+
+		var History;
 
 		if (HistoryBase.html5) {
 			var HistoryHTML5 = createHistoryHTML5Module();
@@ -173,7 +173,7 @@ AUI().add(
 			return currentURI;
 		}
 
-		History.SRC_ADD = HistoryBase.SRC_ADD,
+		History.SRC_ADD = HistoryBase.SRC_ADD;
 		History.SRC_HASH = A.HistoryHash.SRC_HASH;
 		History.SRC_POPSTATE = A.HistoryHTML5.SRC_POPSTATE;
 		History.SRC_REPLACE = HistoryBase.SRC_REPLACE;
