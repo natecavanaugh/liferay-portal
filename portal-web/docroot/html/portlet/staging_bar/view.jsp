@@ -64,7 +64,7 @@ if (layout != null) {
 		<div class="staging-tabs">
 			<c:if test="<%= liveGroup != null %>">
 				<span class="tab-container">
-					<aui:a cssClass='<%= "tab" + (!group.isStagingGroup() ? " selected" : StringPool.BLANK) %>' href="<%= !group.isStagingGroup() ? null : liveFriendlyURL %>" label="live" />
+					<aui:a cssClass='<%= "tab first" + (!group.isStagingGroup() ? " selected" : StringPool.BLANK) %>' href="<%= !group.isStagingGroup() ? null : liveFriendlyURL %>" label="live" />
 				</span>
 			</c:if>
 
@@ -78,7 +78,10 @@ if (layout != null) {
 					<c:when test="<%= !layoutSetBranches.isEmpty() %>">
 
 						<%
-						for (LayoutSetBranch layoutSetBranch : layoutSetBranches) {
+						for (int i = 0; i < layoutSetBranches.size(); i++) {
+							LayoutSetBranch layoutSetBranch = layoutSetBranches.get(i);
+
+							boolean first = (i == 0) && (liveGroup == null);
 							boolean selected = group.isStagingGroup() && (layoutRevision != null) && (layoutSetBranch.getLayoutSetBranchId() == layoutRevision.getLayoutSetBranchId());
 						%>
 
@@ -91,7 +94,7 @@ if (layout != null) {
 							</portlet:actionURL>
 
 							<span class="tab-container">
-								<aui:a cssClass='<%= "layout-set-branch tab" + (selected ? " selected" : StringPool.BLANK) %>' href="<%= selected ? null : layoutSetBranchURL %>" label="<%= layoutSetBranch.getName() %>" />
+								<aui:a cssClass='<%= "layout-set-branch tab" + (first ? " first" : StringPool.BLANK) + (selected ? " selected" : StringPool.BLANK) %>' href="<%= selected ? null : layoutSetBranchURL %>" label="<%= layoutSetBranch.getName() %>" />
 
 								<liferay-ui:staging extended="<%= false %>" layoutSetBranchId="<%= layoutSetBranch.getLayoutSetBranchId() %>" />
 							</span>
@@ -123,7 +126,7 @@ if (layout != null) {
 													{
 														width: 820
 													},
-												id: '<portlet:namespace />',
+												id: '<portlet:namespace />layoutSetBranches',
 												title: '<liferay-ui:message key="manage-backstages" />',
 												uri: event.currentTarget.attr('href')
 											}
@@ -153,12 +156,26 @@ if (layout != null) {
 			<aui:layout>
 				<c:choose>
 					<c:when test="<%= group.isStagingGroup() || group.isStagedRemotely() %>">
+
+						<%
+						LayoutSetBranch layoutSetBranch = LayoutSetBranchLocalServiceUtil.getLayoutSetBranch(layoutRevision.getLayoutSetBranchId());
+
+						int numberOfPages = themeDisplay.getLayouts().size();
+						%>
+						<div class="backstage-info">
+							<c:if test="<%= Validator.isNotNull(layoutSetBranch.getDescription()) %>">
+								<span class="backstage-description"><%= layoutSetBranch.getDescription() %></span>
+							</c:if>
+
+							<span class="backstage-pages"><liferay-ui:message arguments="<%= numberOfPages %>" key='<%= numberOfPages == 1 ? "1-page" : "x-pages" %>' /></span>
+						</div>
+
 						<aui:column>
 							<img alt="" class="staging-icon" src="<%= themeDisplay.getPathThemeImages() %>/staging_bar/backstage.png" />
 						</aui:column>
 
 						<c:if test="<%= layoutRevision != null %>">
-							<aui:column columnWidth="50">
+							<aui:column columnWidth="90">
 								<portlet:actionURL var="editLayoutRevisonURL">
 									<portlet:param name="struts_action" value="/staging_bar/edit_layouts" />
 									<portlet:param name="groupId" value="<%= String.valueOf(layoutRevision.getGroupId()) %>" />
@@ -173,9 +190,9 @@ if (layout != null) {
 
 									<div class="layout-info">
 										<div class="layout-title">
-											<label><liferay-ui:message key="page" /></label>
+											<label><liferay-ui:message key="current-page" />:</label>
 
-											<em><%= layoutRevision.getName(locale) %></em>
+											<span class="layout-breadcrumb"><liferay-ui:breadcrumb showCurrentGroup="<%= false %>" showGuestGroup="<%= false %>" showParentGroups="<%= false %>" showPortletBreadcrumb="<%= false %>" /> </span>
 										</div>
 
 										<aui:model-context bean="<%= layoutRevision %>" model="<%= LayoutRevision.class %>" />
