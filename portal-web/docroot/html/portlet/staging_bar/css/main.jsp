@@ -54,6 +54,7 @@
 		position: relative;
 	}
 
+
 	.staging-bar {
 		background-color: #777;
 
@@ -124,7 +125,7 @@
 				.staging-tabs {
 					background-color: #777;
 					overflow: visible;
-					padding-top: 1em;
+					margin-top: 1em;
 
 					.tab {
                     	background-color: #CCC;
@@ -183,6 +184,14 @@
 				}
 			}
 
+			.manage-page-variations a {
+				color: #DDD;
+			}
+
+			.layout-actions .manage-page-variations {
+				margin-left: 3em;
+			}
+
 			.layout-revision-id {
 				font-size: 0.6em;
 			}
@@ -239,5 +248,13 @@
 
 	.layout-set-results {
 		min-height: 300px;
+	}
+}
+
+.webkit .layout-info .staging-tabs .tab {
+	padding-bottom: 4px;
+
+	&.selected {
+		padding-bottom: 5px;
 	}
 }

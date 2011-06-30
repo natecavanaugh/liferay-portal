@@ -24,29 +24,6 @@ long layoutRevisionId = StagingUtil.getRecentLayoutRevisionId(request, layoutSet
 List<LayoutRevision> layoutRevisions = LayoutRevisionLocalServiceUtil.getLayoutRevisions(layoutSetBranchId, LayoutRevisionConstants.DEFAULT_PARENT_LAYOUT_REVISION_ID, plid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new LayoutRevisionIdComparator(true));
 %>
 
-<div class="aui-helper-hidden" id="<portlet:namespace />addVariation">
-	<portlet:actionURL var="addVariationURL">
-		<portlet:param name="struts_action" value="/staging_bar/edit_layouts" />
-		<portlet:param name="<%= Constants.CMD %>" value="add_root_revision" />
-		<portlet:param name="redirect" value="<%= PortalUtil.getLayoutFullURL(themeDisplay) %>" />
-		<portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" />
-		<portlet:param name="mergeLayoutRevisionId" value="<%= String.valueOf(layoutRevisionId) %>" />
-		<portlet:param name="workflowAction" value="<%= String.valueOf(WorkflowConstants.ACTION_SAVE_DRAFT) %>" />
-	</portlet:actionURL>
-
-	<aui:form name="fmVariation" action="<%= addVariationURL %>" method="post">
-		<div class="portlet-msg-info">
-			<liferay-ui:message key="new-page-variation-help" />
-		</div>
-
-		<aui:input label="page-variation-name" name="variationName" />
-
-		<aui:button-row>
-			<aui:button type="submit" />
-		</aui:button-row>
-	</aui:form>
-</div>
-
 <div id="<portlet:namespace />revisionsToolbar"></div>
 
 <aui:script use="aui-toolbar,liferay-staging" position="inline">
@@ -66,13 +43,6 @@ List<LayoutRevision> layoutRevisions = LayoutRevisionLocalServiceUtil.getLayoutR
 					},
 					icon: 'trash',
 					label: '<liferay-ui:message key="clear-history" />'
-				},
-				{
-					handler: function (event) {
-						Liferay.Staging.Branching.addVariation('<%= addVariationURL %>');
-					},
-					icon: 'copy',
-					label: '<liferay-ui:message key="new-page-variation" />'
 				}
 			]
 		}

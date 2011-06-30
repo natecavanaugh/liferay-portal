@@ -61,6 +61,7 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeServiceUtil;
 import com.liferay.portal.service.LayoutRevisionLocalServiceUtil;
+import com.liferay.portal.service.LayoutRevisionServiceUtil;
 import com.liferay.portal.service.LayoutServiceUtil;
 import com.liferay.portal.service.LayoutSetBranchLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -144,7 +145,7 @@ public class EditLayoutsAction extends PortletAction {
 			else if (cmd.equals(Constants.DELETE)) {
 				SitesUtil.deleteLayout(actionRequest, actionResponse);
 			}
-			else if (cmd.equals("add_root_revision")) {
+			else if (cmd.equals("add_layout_variation")) {
 				addRootRevision(actionRequest);
 			}
 			else if (cmd.equals("copy_from_live")) {
@@ -155,6 +156,9 @@ public class EditLayoutsAction extends PortletAction {
 			}
 			else if (cmd.equals("delete_layout_revision")) {
 				deleteLayoutRevision(actionRequest);
+			}
+			else if (cmd.equals("delete_layout_variation")) {
+				deleteLayoutVariation(actionRequest);
 			}
 			else if (cmd.equals("enable")) {
 				enableLayout(actionRequest);
@@ -345,7 +349,7 @@ public class EditLayoutsAction extends PortletAction {
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			actionRequest);
 
-		LayoutRevisionLocalServiceUtil.addLayoutRevision(
+		LayoutRevisionServiceUtil.addLayoutRevision(
 			serviceContext.getUserId(), layoutRevision.getLayoutSetBranchId(),
 			LayoutRevisionConstants.DEFAULT_PARENT_LAYOUT_REVISION_ID,
 			false, variationName, layoutRevision.getPlid(),
@@ -494,6 +498,22 @@ public class EditLayoutsAction extends PortletAction {
 				layoutRevision.getPlid(),
 				layoutRevision.getParentLayoutRevisionId());
 		}
+	}
+
+	protected void deleteLayoutVariation(ActionRequest actionRequest)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String variationName = ParamUtil.getString(
+			actionRequest, "variationName");
+
+		long layoutSetBranchId = ParamUtil.getLong(
+			actionRequest, "layoutSetBranchId");
+
+		LayoutRevisionServiceUtil.deleteLayoutRevisions(
+			layoutSetBranchId, themeDisplay.getPlid(), variationName);
 	}
 
 	protected void deleteThemeSettings(

@@ -189,6 +189,42 @@ if (layout != null) {
 									<aui:input name="layoutSetBranchId" type="hidden" value="<%= layoutRevision.getLayoutSetBranchId() %>" />
 									<aui:input name="updateRecentLayoutRevisionId" type="hidden" value="<%= false %>" />
 
+									<liferay-util:buffer var="managePageVariationsLink">
+										<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>" var="rootRevisionsURL">
+											<portlet:param name="struts_action" value="/staging_bar/view_root_layout_revisions" />
+											<portlet:param name="layoutSetBranchId" value="<%= String.valueOf(layoutSetBranch.getLayoutSetBranchId()) %>" />
+										</portlet:renderURL>
+
+										<liferay-ui:icon cssClass="manage-page-variations" id="manageRootRevisions" image="configuration" label="<%= true %>" message="manage-page-variations" url="<%= rootRevisionsURL %>" />
+
+										<aui:script use="aui-base">
+											var rootRevisionsLink = A.one('#<portlet:namespace />manageRootRevisions');
+
+											if (rootRevisionsLink) {
+												rootRevisionsLink.detach('click');
+
+												rootRevisionsLink.on(
+													'click',
+													function(event) {
+														event.preventDefault();
+
+														Liferay.Util.openWindow(
+															{
+																dialog:
+																	{
+																		width: 820
+																	},
+																id: '<portlet:namespace />rootRevisions',
+																title: '<liferay-ui:message key="manage-page-variations" />',
+																uri: event.currentTarget.attr('href')
+															}
+														);
+													}
+												);
+											}
+										</aui:script>
+									</liferay-util:buffer>
+
 									<div class="layout-info">
 										<div class="layout-title">
 											<label><liferay-ui:message key="current-page" />:</label>
@@ -229,6 +265,7 @@ if (layout != null) {
 												}
 												%>
 
+												<%= managePageVariationsLink %>
 											</div>
 										</c:if>
 
@@ -237,6 +274,8 @@ if (layout != null) {
 
 											<div class="layout-actions">
 												<span class="backstage-toolbar" id="<portlet:namespace />backstageToolbar"></span>
+
+												<%= (rootRevisions.size() > 1) ? StringPool.BLANK : managePageVariationsLink %>
 											</div>
 										</div>
 									</div>

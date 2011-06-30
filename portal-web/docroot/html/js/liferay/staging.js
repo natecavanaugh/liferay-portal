@@ -20,10 +20,10 @@ AUI().add(
 				branchDialog.show();
 			},
 
-			addVariation: function(formAction) {
+			addRootLayoutRevision: function() {
 				var instance = this;
 
-				var variationDialog = instance._getVariationDialog(formAction);
+				var variationDialog = instance._getVariationDialog();
 
 				variationDialog.show();
 			},
@@ -68,7 +68,7 @@ AUI().add(
 				return branchDialog;
 			},
 
-			_getVariationDialog: function(formAction) {
+			_getVariationDialog: function() {
 				var instance = this;
 
 				var variationDialog = instance._variationDialog;
@@ -81,7 +81,7 @@ AUI().add(
 							align: {
 								points: ['tc', 'tc']
 							},
-							bodyContent: A.one('#' + namespace + 'addVariation').show(),
+							bodyContent: A.one('#' + namespace + 'addRootLayoutRevision').show(),
 							title: Liferay.Language.get('new-page-variation'),
 							modal: true,
 							width: 530
