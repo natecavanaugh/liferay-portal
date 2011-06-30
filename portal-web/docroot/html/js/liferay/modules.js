@@ -51,8 +51,7 @@
 			'dynamic-select': ['aui-base'],
 			'form': ['aui-base', 'aui-form-validator'],
 			'form-navigator': ['aui-base'],
-			'history': ['liferay-history-html5', 'liferay-uri'],
-			'history-html5': ['history', 'liferay-uri'],
+			'history': ['history', 'querystring-parse-simple', 'querystring-stringify-simple'],
 			'hudcrumbs': ['aui-base', 'plugin'],
 			'icon': ['aui-base'],
 			'input-move-boxes': ['aui-base', 'aui-toolbar'],
@@ -78,8 +77,7 @@
 			'undo-manager': ['aui-data-set', 'base', 'substitute'],
 			'upload': ['aui-base', 'aui-swf', 'collection', 'substitute', 'swfupload'],
 			'util-list-fields': ['aui-base'],
-			'util-window': ['aui-dialog', 'aui-dialog-iframe'],
-			'uri': ['aui-base']
+			'util-window': ['aui-dialog', 'aui-dialog-iframe']
 		};
 
 		for (var i in moduleList) {
