@@ -56,8 +56,6 @@
 
 
 	.staging-bar {
-		background-color: #777;
-
 		.staging-tabs {
 			background-color: #DDD;
 			overflow: visible;
@@ -93,13 +91,30 @@
 					font-weight: bold;
 					padding-bottom: 3px;
 				}
+
+				&.live {
+					background-color: #339900;
+					border-left-color: #CCC;
+					border-right-color: #007700;
+					border-top-color: #009900;
+					color: #FFF;
+					padding-left: 20px;
+
+				}
 			}
 		}
 
 		.staging-tabs-content {
-			border-bottom: 1px solid #636364;
+			background-color: #777;
+			border-bottom: 1px solid #666;
 			color: #EEE;
 			padding: 1em;
+
+			&.content-live {
+				background-color: #339900;
+				border-top: 1px solid #999;
+				color: #FFF;
+			}
 
 			.staging-icon {
 				float: left;

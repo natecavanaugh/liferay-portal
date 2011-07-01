@@ -65,7 +65,7 @@ if (layout != null) {
 		<div class="staging-tabs">
 			<c:if test="<%= liveGroup != null %>">
 				<span class="tab-container">
-					<aui:a cssClass='<%= "tab first" + (!group.isStagingGroup() ? " selected" : StringPool.BLANK) %>' href="<%= !group.isStagingGroup() ? null : liveFriendlyURL %>" label="live" />
+					<aui:a cssClass='<%= "tab live first" + (!group.isStagingGroup() ? " selected" : StringPool.BLANK) %>' href="<%= !group.isStagingGroup() ? null : liveFriendlyURL %>" label="live" />
 				</span>
 			</c:if>
 
@@ -153,7 +153,7 @@ if (layout != null) {
 			</c:if>
 		</div>
 
-		<div class="staging-tabs-content">
+		<div class="staging-tabs-content content-<%= !group.isStagingGroup() ? "live" : "staging" %>">
 			<aui:layout>
 				<c:choose>
 					<c:when test="<%= group.isStagingGroup() || group.isStagedRemotely() %>">
