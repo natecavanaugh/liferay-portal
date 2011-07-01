@@ -5,8 +5,6 @@ AUI().add(
 
 		var AObject = A.Object;
 
-		var Do = A.Do;
-
 		var HistoryBase = A.HistoryBase;
 
 		var QueryString = A.QueryString;
@@ -56,14 +54,13 @@ AUI().add(
 						}
 					),
 
-					_updateURI: function(state, uri) {
+					_updateURI: function(state) {
 						var instance = this;
 
-						uri = uri || LOCATION.href;
-
-						var uriData = uri.split(/\?|#/g);
-
-						var currentURI = uriData.shift();
+						var uriData = [
+							LOCATION.search.substr(1),
+							LOCATION.hash.substr(1)
+						];
 
 						var hash = uriData[1];
 						var query = uriData[0];
@@ -93,7 +90,7 @@ AUI().add(
 
 						uriData[0] = QueryString.stringify(queryMap);
 
-						uriData.unshift(currentURI, '?');
+						uriData.unshift(LOCATION.protocol, '//', LOCATION.host, LOCATION.pathname, '?');
 
 						return uriData.join('');
 					}
