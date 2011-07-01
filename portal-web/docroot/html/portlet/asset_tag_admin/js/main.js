@@ -25,7 +25,7 @@ AUI().add(
 
 		var EVENT_SUBMIT = 'submit';
 
-		var History = Liferay.History;
+		var History = Liferay.HistoryManager;
 
 		var INVALID_VALUE = A.Attribute.INVALID_VALUE;
 
