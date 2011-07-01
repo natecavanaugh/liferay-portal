@@ -52,48 +52,7 @@ AUI().add(
 						function(str) {
 							return QueryString.parse(str);
 						}
-					),
-
-					_updateURI: function(state) {
-						var instance = this;
-
-						var uriData = [
-							LOCATION.search.substr(1),
-							LOCATION.hash.substr(1)
-						];
-
-						var hash = uriData[1];
-						var query = uriData[0];
-
-						var queryMap = instance._parse(query);
-
-						if (!state && hash) {
-							var hashMap = instance._parse(hash);
-
-							if (!isEmpty(hashMap)) {
-								state = hashMap;
-
-								uriData.pop();
-							}
-						}
-
-						A.mix(queryMap, state, true);
-
-						AObject.each(
-							queryMap,
-							function(item, index, collection) {
-								if (!isValue(item)) {
-									delete queryMap[index];
-								}
-							}
-						);
-
-						uriData[0] = QueryString.stringify(queryMap);
-
-						uriData.unshift(LOCATION.protocol, '//', LOCATION.host, LOCATION.pathname, '?');
-
-						return uriData.join('');
-					}
+					)
 				}
 			}
 		);
@@ -133,6 +92,47 @@ AUI().add(
 
 					History.superclass._init.apply(instance, arguments);
 				}
+			};
+
+			History.prototype._updateURI = function(state) {
+				var instance = this;
+
+				var uriData = [
+					LOCATION.search.substr(1),
+					LOCATION.hash.substr(1)
+				];
+
+				var hash = uriData[1];
+				var query = uriData[0];
+
+				var queryMap = instance._parse(query);
+
+				if (!state && hash) {
+					var hashMap = instance._parse(hash);
+
+					if (!isEmpty(hashMap)) {
+						state = hashMap;
+
+						uriData.pop();
+					}
+				}
+
+				A.mix(queryMap, state, true);
+
+				AObject.each(
+					queryMap,
+					function(item, index, collection) {
+						if (!isValue(item)) {
+							delete queryMap[index];
+						}
+					}
+				);
+
+				uriData[0] = QueryString.stringify(queryMap);
+
+				uriData.unshift(LOCATION.protocol, '//', LOCATION.host, LOCATION.pathname, '?');
+
+				return uriData.join('');
 			};
 		}
 
