@@ -18,7 +18,7 @@
 String collapsed = GetterUtil.getString(SessionClicks.get(request, _LIFERAY_JS_CONSOLE_COLLPASED_SESSION_CLICKS_KEY, null), "false");
 %>
 
-<div id="liferayJSConsole"></div>
+<div class="yui3-skin-sam" id="liferayJSConsole"></div>
 
 <aui:script>
 	AUI().use(

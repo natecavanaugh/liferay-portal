@@ -6,7 +6,7 @@
 #set ($theme_timestamp = $themeDisplay.getTheme().getTimestamp())
 #set ($theme_settings = $themeDisplay.getThemeSettings())
 
-#set ($css_class = $theme_display.getColorScheme().getCssClass() + " yui3-skin-sam")
+#set ($css_class = $theme_display.getColorScheme().getCssClass())
 
 #if ($layout)
 	#set ($page_group = $layout.getGroup())
