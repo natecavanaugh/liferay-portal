@@ -314,6 +314,8 @@
 
 	#if($validator.isNotNull($orientation))
 		#set($menu_class = "$menu_class yui3-menu-${orientation}")
+	#else
+		#set($menu_class = "$menu_class yui3-menu-hidden")
 	#end
 
 	<div class="$menu_class" id="yui3-menu-$aui_guid">
@@ -345,6 +347,11 @@
 #end
 
 #macro(aui_drop_down $nav_items $orientation)
+	#if ($aui_guid == 0)
+		<link href="$theme_display.getPathJavaScript()/aui/node-menunav/assets/node-menunav-core.css" rel="stylesheet" type="text/css" />
+	#end
+	
+
 	#set($menu_id = $aui_guid + 1)
 
 	#aui_drop_down_ul($nav_items)

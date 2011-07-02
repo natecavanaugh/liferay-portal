@@ -115,61 +115,56 @@ body #banner .logo a {
 
 #navigation a {
 	color: #FFF;
-	font-size: 1.1em;
+	display: block;
 	font-weight: bold;
 	margin: 0 1px;
 	padding: 3px 15px;
 	text-decoration: none;
+    text-align: left;
+    white-space: nowrap;
 }
 
-#navigation .selected a, #navigation li.hover a, #navigation a:hover, #navigation a:focus, #navigation .yui3-dd-dragging, .lfr-navigation-proxy {
-	background: #313334;
+#navigation .selected a, #navigation li.hover a, #navigation a:hover, #navigation a:focus, #navigation .yui3-dd-dragging, .lfr-navigation-proxy, #navigation .yui3-menuitem-active a, #navigation .yui3-menu-label-menuvisible {
+	background: #222;
 	color: #FFF;
 	outline: 0;
 	text-shadow: -1px -1px #000;
+}
+
+#navigation .selected a {
+	background: #313334;
 }
 
 #navigation .yui3-dd-drop a {
 	cursor: move;
 }
 
-#navigation .yui3-menu .yui3-menu-content {
-	border-width: 0;
+#navigation .yui3-menu-content {
+	background-image: none;
+	line-height: 2;
 }
 
-#navigation .yui3-menu .yui3-menu-content ul {
-	border-width: 0;
+#navigation .yui3-menu-content ul {
 	padding: 2px;
 }
 
-#navigation .yui3-menu .yui3-menu-content li ul {
+#navigation .yui3-menu-content li ul {
 	padding: 4px;
 }
 
-#navigation .yui3-menu li .yui3-menu-content {
-	background: #414445;
-	border-width: 0;
-}
-
-#navigation .yui3-menu .yui3-menu-content li li ul {
+#navigation li .yui3-menu-content {
 	background: #414445;
 }
 
 #navigation .yui3-menu .yui3-menu-label {
-	background: url(../images/arrows/09_down.png) no-repeat right; 
+	background-image: url(../images/arrows/06_down.png);
+	background-repeat: no-repeat;
+	background-position: 95% 50%;
+	padding-right: 20px;
 }
 
 #navigation .yui3-menu li li .yui3-menu-label {
-	background: url(../images/arrows/09_right.png) no-repeat right; 
-}
-
-#navigation .yui3-menu-horizontal .yui3-menuitem-content, #navigation .yui3-menu-horizontal .yui3-menu-label
- {
-	border-width: 0;
-}
-
-#navigation .yui-menuitem-active {
-	background: #313334;
+	background-image: url(../images/arrows/06_right.png);
 }
 
 /* ---------- Portlet wrapper and icons ---------- */
@@ -323,4 +318,10 @@ body #banner .logo a {
 	-webkit-border-bottom-left-radius: 0;
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
+}
+
+#navigation ul .yui3-menu-content {
+	-moz-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.4);
+	box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.4);
 }
