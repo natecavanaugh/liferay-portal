@@ -133,11 +133,14 @@ hr, .separator {
 
 	a {
 		color: #FFF;
+		display: block;
 		font-size: 1.1em;
 		font-weight: bold;
 		margin: 0 1px;
 		padding: 3px 15px;
+		text-align: left;
 		text-decoration: none;
+	    white-space: nowrap;
 	}
 
 	.yui3-dd-drop a {
@@ -145,8 +148,8 @@ hr, .separator {
 	}
 }
 
-#navigation a:focus, #navigation a:hover, #navigation .child-menu li a, #navigation li.hover a, #navigation .selected a, #navigation .yui3-dd-dragging, .lfr-navigation-proxy {
-	background: #313334;
+#navigation a:focus, #navigation a:hover, #navigation .child-menu li a, #navigation li.hover a, #navigation .selected a, #navigation .yui3-dd-dragging, .lfr-navigation-proxy, #navigation .yui3-menuitem-active a, #navigation .yui3-menu-label-menuvisible {
+	background: #222;
 	color: #FFF;
 	outline: 0;
 	text-shadow: -1px -1px #000;
@@ -159,6 +162,10 @@ hr, .separator {
 		position: absolute;
 		width: 200px;
 		z-index: 250;
+	}
+
+	.selected a {
+		background: #313334;
 	}
 
 	.child-menu {
@@ -200,43 +207,32 @@ hr, .separator {
 	cursor: move;
 }
 
-#navigation .yui3-menu .yui3-menu-content {
-	border-width: 0;
+#navigation .yui3-menu-content {
+	background-image: none;
+	line-height: 2;
 }
 
-#navigation .yui3-menu .yui3-menu-content ul {
-	border-width: 0;
+#navigation .yui3-menu-content ul {
 	padding: 2px;
 }
 
-#navigation .yui3-menu .yui3-menu-content li ul {
+#navigation .yui3-menu-content li ul {
 	padding: 4px;
 }
 
-#navigation .yui3-menu li .yui3-menu-content {
-	background: #414445;
-	border-width: 0;
-}
-
-#navigation .yui3-menu .yui3-menu-content li li ul {
+#navigation li .yui3-menu-content {
 	background: #414445;
 }
 
 #navigation .yui3-menu .yui3-menu-label {
-	background: url(../images/arrows/09_down.png) no-repeat right; 
+	background-image: url(../images/arrows/06_down.png);
+	background-repeat: no-repeat;
+	background-position: 95% 50%;
+	padding-right: 20px;
 }
 
 #navigation .yui3-menu li li .yui3-menu-label {
-	background: url(../images/arrows/09_right.png) no-repeat right; 
-}
-
-#navigation .yui3-menu-horizontal .yui3-menuitem-content, #navigation .yui3-menu-horizontal .yui3-menu-label
- {
-	border-width: 0;
-}
-
-#navigation .yui-menuitem-active {
-	background: #313334;
+	background-image: url(../images/arrows/06_right.png);
 }
 
 /* ---------- Portlet wrapper and icons ---------- */
@@ -489,6 +485,11 @@ hr, .separator {
 }
 
 .aui-combobox .aui-toolbar-first {
+
 	@include border-top-left-radius(0);
 	@include border-bottom-left-radius(0);
+}
+
+#navigation ul .yui3-menu-content {
+	@include box-shadow(2px 3px 3px rgba(0, 0, 0, 0.4));
 }
