@@ -30,6 +30,11 @@ AUI().add(
 					recordsetId: {
 						value: 0,
 						validator: Lang.isNumber
+					},
+
+					structure: {
+						value: [],
+						validator: Lang.isArray
 					}
 				},
 
@@ -150,11 +155,34 @@ AUI().add(
 					_normalizeRecordData: function(data) {
 						var instance = this;
 
+						var recordset = instance.get('recordset');
+						var structure = instance.get('structure');
+
 						var normalized = {};
 
 						A.each(
 							data,
 							function(item, index, collection) {
+								var field = SpreadSheet.findStructureFieldByAttribute(
+									structure,
+									'key',
+									index
+								);
+
+								if (field !== null) {
+									var type = field.type;
+
+									if ((type === 'radio') || (type === 'select')) {
+										var option = SpreadSheet.findStructureFieldByAttribute(
+											field.options,
+											'label',
+											item
+										);
+
+										item = option.value;
+									}
+								}
+
 								normalized[index] = instance._normalizeValue(item);
 							}
 						);
@@ -236,7 +264,7 @@ AUI().add(
 									config.options = [label];
 								}
 								else if ((type === 'radio') || (type === 'select')) {
-									var structureField = instance.findStructureFieldByKey(structure, item.key);
+									var structureField = instance.findStructureFieldByAttribute(structure, 'key', item.key);
 
 									config.options = instance.getCellEditorOptions(structureField.options);
 								}
@@ -272,7 +300,7 @@ AUI().add(
 					return emptyRows;
 				},
 
-				findStructureFieldByKey: function(structure, key) {
+				findStructureFieldByAttribute: function(structure, attributeName, attributeValue) {
 					var found = null;
 
 					AArray.some(
@@ -280,7 +308,7 @@ AUI().add(
 						function(item, index, collection) {
 							found = item;
 
-							return (found.key === key);
+							return (found[attributeName] === attributeValue);
 						}
 					);
 
@@ -293,7 +321,7 @@ AUI().add(
 					AArray.each(
 						options,
 						function(item, index, collection) {
-							normalized[item.name] = item.value;
+							normalized[item.label] = item.label;
 						}
 					);
 
