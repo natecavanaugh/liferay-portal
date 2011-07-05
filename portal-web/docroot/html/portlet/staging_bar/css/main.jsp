@@ -273,3 +273,61 @@
 		padding-bottom: 5px;
 	}
 }
+
+/* ---------- History ---------- */
+
+.variation-selector {
+	display: block;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin: 20px;
+}
+
+.layout-revision-container {
+	margin: 20px;
+	padding: 0;
+
+	.aproximate-date {
+		color: #999999;
+    	font-weight: bold;
+	}
+
+	.current-version {
+		color: green;
+		display: block;
+	}
+
+	.current-version-pointer img {
+		left: 10px;
+		position: absolute;
+	}
+
+	.layout-variation-name {
+		color: #666;
+		font-variant: small-caps;
+		margin-bottom: 0.1em;
+	}
+
+	.layout-revision-current {
+		color: #666;
+	}
+
+	.real-date {
+		color: #999999;
+    	display: block;
+    	text-align: right;
+	}
+
+	.taglib-workflow-status .workflow-status {
+		background: none;
+
+		.workflow-status-published {
+			color: green;
+			font-weight: bold;
+		}
+	}
+
+	.lfr-menu-list {
+		z-index: 1002;
+	}
+}
