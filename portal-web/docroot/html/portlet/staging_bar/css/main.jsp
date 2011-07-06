@@ -44,7 +44,7 @@
 			a {
 				background-color: #EEE;
 				background-position: 50% 4px;
-				border-radius: 15px;
+				border-radius: 100%;
 				padding: 0 15px 0 0;
 			}
 		}
@@ -52,27 +52,24 @@
 
 	.tab-container {
 		position: relative;
-		margin-left: 5px;
 	}
 
-	.staging-bar {
-		background-color: #777;
 
+	.staging-bar {
 		.staging-tabs {
 			background-color: #DDD;
-			overflow: hidden;
+			overflow: visible;
 			padding-top: 1em;
 
 			.tab {
 				background-color: #EEE;
 				border: 1px solid #999;
+				border-left-color: #CCC;
+				border-top-color: #AAA;
 				border-bottom: none;
 				font-size: 1.5em;
-				margin: 0.5em 0 0;
 				min-width: 8em;
-				padding: 10px 30px 5px 10px;
-				position: relative;
-				top: 2px;
+				padding: 10px 30px 2px 10px;
 
 				-moz-border-radius-topleft: 4px;
 				-moz-border-radius-topright: 4px;
@@ -81,6 +78,10 @@
 				border-top-left-radius: 4px;
 				border-top-right-radius: 4px;
 
+				&.first {
+					margin-left: 0.5em;
+				}
+
 				&.selected {
 					background-color: #777;
 					border-right-color: #999;
@@ -88,22 +89,122 @@
 					border-left-color: #EEE;
 					color: #FFF;
 					font-weight: bold;
+					padding-bottom: 3px;
+				}
+
+				&.live {
+					background-color: #339900;
+					border-left-color: #CCC;
+					border-right-color: #007700;
+					border-top-color: #009900;
+					color: #FFF;
+					padding-left: 20px;
+
 				}
 			}
 		}
 
 		.staging-tabs-content {
-			border-bottom: 1px solid #636364;
+			background-color: #777;
+			border-bottom: 1px solid #666;
 			color: #EEE;
 			padding: 1em;
+
+			&.content-live {
+				background-color: #339900;
+				border-top: 1px solid #999;
+				color: #FFF;
+			}
 
 			.staging-icon {
 				float: left;
 				margin-right: 1em;
 			}
 
+			.backstage-info {
+            	font-size: 1.1em;
+				margin-bottom: 1em;
+
+            	.backstage-description {
+                	font-style: italic;
+					border-right: 1px solid  #AAA;
+					padding: 0 0.5em 0;
+				}
+
+				.backstage-pages {
+                	padding-left: 0.5em;
+				}
+			}
+
+			.layout-info {
+				.staging-tabs {
+					background-color: #777;
+					overflow: visible;
+					margin-top: 1em;
+
+					.tab {
+                    	background-color: #CCC;
+						border-top-color: #DDD;
+						border-left-color: #EEE;
+						color: #333;
+						font-size: 1em;
+
+						&.selected {
+							background-color: #777;
+							color: #FFF;
+						}
+					}
+				}
+			}
+
+			.variation-tabs-content {
+				border: 1px solid #AAA;
+				border-radius: 4px;
+				padding: 1em;
+			}
+
 			.layout-title {
-				font-size: 1.3em;
+				font-size: 1.2em;
+
+				label {
+					float: left;
+				}
+
+				.layout-breadcrumb {
+					font-size: 1em;
+
+					.breadcrumbs a {
+						color: #EEE;
+					}
+
+					.breadcrumbs-horizontal {
+						margin-bottom: 0;
+						overflow: hidden;
+						padding-left: 0.5em;
+
+
+						li {
+							background-image: url(<%= themeImagesPath %>/arrows/09_right.png);
+
+							&.last {
+								background-image: none;
+								font-weight: bold;
+								text-decoration: none;
+								position: relative;
+								top: -0.2em;
+							}
+						}
+
+					}
+				}
+			}
+
+			.manage-page-variations a {
+				color: #DDD;
+			}
+
+			.layout-actions .manage-page-variations {
+				margin-left: 3em;
 			}
 
 			.layout-revision-id {
@@ -162,5 +263,13 @@
 
 	.layout-set-results {
 		min-height: 300px;
+	}
+}
+
+.webkit .layout-info .staging-tabs .tab {
+	padding-bottom: 4px;
+
+	&.selected {
+		padding-bottom: 5px;
 	}
 }
