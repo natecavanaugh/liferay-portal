@@ -427,7 +427,7 @@ public class GroupFinderImpl
 
 		Long userId = (Long)params.get("usersGroups");
 		boolean inherit = GetterUtil.getBoolean(
-			String.valueOf(params.get("inherit")), true);
+			(Serializable)params.get("inherit"), true);
 
 		LinkedHashMap<String, Object> params1 = params;
 
