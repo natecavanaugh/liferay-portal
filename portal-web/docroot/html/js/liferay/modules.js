@@ -51,7 +51,7 @@
 			'dynamic-select': ['aui-base'],
 			'form': ['aui-base', 'aui-form-validator'],
 			'form-navigator': ['aui-base'],
-			'history': ['history', 'querystring'],
+			'history': getHistoryRequirements(),
 			'hudcrumbs': ['aui-base', 'plugin'],
 			'icon': ['aui-base'],
 			'input-move-boxes': ['aui-base', 'aui-toolbar'],
@@ -88,6 +88,29 @@
 		}
 
 		return modules;
+	};
+
+	var getHistoryRequirements = function() {
+		var DOC = A.config.doc;
+
+		var DOCMODE = DOC.documentMode;
+
+		var WIN = A.config.win;
+
+		var requirements = ['history-base', 'querystring-parse-simple', 'querystring-stringify-simple'];
+
+		if (WIN.history && WIN.history.pushState && WIN.history.replaceState && ('onpopstate' in WIN || A.UA.gecko >= 2)) {
+			requirements.push('history-html5');
+		}
+		else {
+			requirements.push('history-hash');
+
+			if (A.UA.ie && !('onhashchange' in WIN || 'onhashchange' in DOC) && (!DOCMODE || DOCMODE > 7)) {
+				requirements.push('history-hash-ie');
+			}
+		}
+
+		return requirements;
 	};
 
 	GROUPS.liferay = {
