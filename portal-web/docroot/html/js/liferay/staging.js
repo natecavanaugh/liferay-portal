@@ -234,7 +234,7 @@ AUI().add(
 					graphDialog.bodyNode.delegate(
 						'click',
 						instance._selectRevision,
-						'li.layout-revision a.selection-handle'
+						'a.layout-revision.selection-handle'
 					);
 
 					instance._graphDialog = graphDialog;
@@ -324,6 +324,6 @@ AUI().add(
 	},
 	'',
 	{
-		requires: ['aui-dialog', 'aui-io-plugin', 'aui-toolbar', 'liferay-portlet-url']
+		requires: ['aui-button', 'aui-dialog', 'aui-io-plugin', 'aui-toolbar', 'liferay-portlet-url']
 	}
 );
