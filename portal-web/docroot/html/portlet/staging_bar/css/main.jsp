@@ -236,7 +236,7 @@
 					color: #FFF;
 				}
 
-				.workflow-status-approved {
+				.workflow-status-approved, .workflow-status-ready-for-publication {
 					color: #9F3;
 				}
 
@@ -320,8 +320,9 @@
 
 	.taglib-workflow-status .workflow-status {
 		background: none;
+		padding-left: 0;
 
-		.workflow-status-published {
+		.workflow-status-ready-for-publication {
 			color: green;
 			font-weight: bold;
 		}
