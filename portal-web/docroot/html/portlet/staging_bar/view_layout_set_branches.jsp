@@ -26,11 +26,10 @@ LayoutSetBranch layoutSetBranch = LayoutSetBranchLocalServiceUtil.getUserLayoutS
 <liferay-ui:error key="<%= LayoutSetBranchNameException.class.getName() + LayoutSetBranchNameException.TOO_LONG %>" message='<%= LanguageUtil.format(pageContext, "please-enter-a-value-between-x-and-x-characters-long", new Object[] {4, 100}) %>' />
 <liferay-ui:error key="<%= LayoutSetBranchNameException.class.getName() + LayoutSetBranchNameException.TOO_SHORT %>" message='<%= LanguageUtil.format(pageContext, "please-enter-a-value-between-x-and-x-characters-long", new Object[] {4, 100}) %>' />
 
-<liferay-util:html-top>
-	<liferay-util:include page="/html/portlet/staging_bar/add_layout_set_branch.jsp" />
-</liferay-util:html-top>
-
 <c:if test="<%= GroupPermissionUtil.contains(permissionChecker, stagingGroup.getGroupId(), ActionKeys.ADD_LAYOUT_SET_BRANCH) %>">
+	<liferay-util:html-top>
+		<liferay-util:include page="/html/portlet/staging_bar/add_layout_set_branch.jsp" />
+	</liferay-util:html-top>
 
 	<%
 	String taglibOnClick = "javascript:Liferay.Staging.Branching.addBranch('" + renderResponse.getNamespace() + "');";

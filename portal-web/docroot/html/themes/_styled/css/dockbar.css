@@ -108,39 +108,6 @@ html > .lfr-dockbar-pinned {
 	color: #999;
 }
 
-/* ---------- Staging Dockbar ---------- */
-
-.layout-revision-container {
-	margin: 0 0 0 0.5em;
-	padding: 0;
-}
-
-.layout-revision-container-root {
-	margin: 0 0 0 2em;
-}
-
-.layout-revision {
-	list-style-image: url(../images/navigation/bullet.png);
-	margin: 1px 0;
-	padding: 6px 0;
-}
-
-.layout-revision-current {
-	list-style-image: url(../images/arrows/01_right.png);
-}
-
-.layout-revision-head {
-	list-style-image: url(../images/arrows/02_plus.png);
-}
-
-.layout-revision-current.layout-revision-head {
-	list-style-image: url(../images/arrows/02_right.png);
-}
-
-.layout-revision-container .lfr-menu-list {
-	z-index: 1002;
-}
-
 /* ---------- Menus ---------- */
 
 .aui-dockbarmenu-hidden {

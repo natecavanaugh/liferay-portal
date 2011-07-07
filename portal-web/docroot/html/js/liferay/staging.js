@@ -20,10 +20,10 @@ AUI().add(
 				branchDialog.show();
 			},
 
-			addVariation: function(formAction) {
+			addRootLayoutRevision: function() {
 				var instance = this;
 
-				var variationDialog = instance._getVariationDialog(formAction);
+				var variationDialog = instance._getVariationDialog();
 
 				variationDialog.show();
 			},
@@ -68,7 +68,7 @@ AUI().add(
 				return branchDialog;
 			},
 
-			_getVariationDialog: function(formAction) {
+			_getVariationDialog: function() {
 				var instance = this;
 
 				var variationDialog = instance._variationDialog;
@@ -81,7 +81,7 @@ AUI().add(
 							align: {
 								points: ['tc', 'tc']
 							},
-							bodyContent: A.one('#' + namespace + 'addVariation').show(),
+							bodyContent: A.one('#' + namespace + 'addRootLayoutRevision').show(),
 							title: Liferay.Language.get('new-page-variation'),
 							modal: true,
 							width: 530
@@ -214,7 +214,7 @@ AUI().add(
 							draggable: true,
 							modal: true,
 							title: Liferay.Language.get('history'),
-							width: 400
+							width: 600
 						}
 					).plug(
 						A.Plugin.IO,
@@ -234,7 +234,7 @@ AUI().add(
 					graphDialog.bodyNode.delegate(
 						'click',
 						instance._selectRevision,
-						'li.layout-revision a.selection-handle'
+						'a.layout-revision.selection-handle'
 					);
 
 					instance._graphDialog = graphDialog;
@@ -324,6 +324,6 @@ AUI().add(
 	},
 	'',
 	{
-		requires: ['aui-dialog', 'aui-io-plugin', 'aui-toolbar', 'liferay-portlet-url']
+		requires: ['aui-button', 'aui-dialog', 'aui-io-plugin', 'aui-toolbar', 'liferay-portlet-url']
 	}
 );
