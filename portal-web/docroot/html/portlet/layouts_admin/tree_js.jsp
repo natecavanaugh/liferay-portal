@@ -306,16 +306,16 @@ if (!selectableTree) {
 					}
 				}
 
-				History.add({
-					'<portlet:namespace />selPlid': plid
-				});
+				History.add(
+					{
+						'<portlet:namespace />selPlid': plid
+					}
+				);
 			}
 		});
 
 		function compareItemId(item, id) {
-			var curPlid = TreeUtil.extractPlid(item);
-
-			return curPlid == id;
+			return (TreeUtil.extractPlid(item) == id);
 		}
 
 		function findNodeByPlid(node, plid) {
