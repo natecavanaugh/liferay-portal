@@ -14,7 +14,7 @@
  */
 --%>
 
-<aui:script use="aui-datepicker,liferay-portlet-dynamic-data-mapping">
+<aui:script use="aui-datepicker,liferay-portlet-dynamic-data-mapping,transition">
 	var FormBuilderTextField = A.FormBuilderTextField;
 	var FormBuilderTypes = A.FormBuilder.types;
 
@@ -136,6 +136,9 @@
 				fieldNamespace: {
 					value: 'ddm'
 				},
+				style: {
+					value: ''
+				},
 				templateNode: {
 					valueFn: function() {
 						return A.Node.create(TPL_TEMPLATE_NODE);
@@ -143,7 +146,7 @@
 				}
 			},
 
-			UI_ATTRS: ['label'],
+			UI_ATTRS: ['label', 'style'],
 
 			EXTENDS: A.FormBuilderField,
 
@@ -167,6 +170,12 @@
 								name: 'label',
 								type: 'textarea',
 								value: instance.get('label')
+							},
+							{
+								labelText: Liferay.Language.get('style'),
+								name: 'style',
+								type: 'textarea',
+								value: instance.get('style')
 							}
 						],
 					   formNode
@@ -181,6 +190,29 @@
 					var instance = this;
 
 					instance.get('templateNode').setContent(val);
+				},
+
+				_uiSetStyle: function(val) {
+					var instance = this;
+
+					var styles = val.replace(/\n/g, '').split(';');
+					var templateNode = instance.get('templateNode');
+
+					templateNode.setStyle('');
+
+					A.Array.each(
+						styles,
+						function(item, index, collection) {
+							var rule = item.split(':');
+
+							if (rule.length == 2) {
+								var key = A.Transition._toCamel(rule[0]);
+								var value = A.Lang.trim(rule[1]);
+
+								templateNode.setStyle(key, value);
+							}
+						}
+					);
 				}
 			}
 		}
