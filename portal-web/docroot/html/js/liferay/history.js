@@ -139,9 +139,10 @@ AUI().add(
 		var HistoryManager = new History();
 
 		HistoryManager.SRC_ADD = HistoryBase.SRC_ADD;
+		HistoryManager.SRC_REPLACE = HistoryBase.SRC_REPLACE;
+
 		HistoryManager.SRC_HASH = A.HistoryHash ? A.HistoryHash.SRC_HASH : 'hash';
 		HistoryManager.SRC_POPSTATE = A.HistoryHTML5 ? A.HistoryHTML5.SRC_POPSTATE : 'popstate';
-		HistoryManager.SRC_REPLACE = HistoryBase.SRC_REPLACE;
 
 		HistoryManager.HTML5 = HTML5;
 
