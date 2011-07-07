@@ -91,26 +91,27 @@
 	};
 
 	var getHistoryRequirements = function() {
-		var DOC = A.config.doc;
+		var CONFIG = A.config;
 
-		var DOCMODE = DOC.documentMode;
+		var DOC = CONFIG.doc;
+		var WIN = CONFIG.win;
 
-		var WIN = A.config.win;
+		var HISTORY = WIN.history;
 
-		var requirements = ['history-base', 'querystring-parse-simple', 'querystring-stringify-simple'];
+		var hasNativeHistory = (
+			HISTORY &&
+			HISTORY.pushState &&
+			HISTORY.replaceState &&
+			('onpopstate' in WIN || A.UA.gecko >= 2)
+		);
 
-		if (WIN.history && WIN.history.pushState && WIN.history.replaceState && ('onpopstate' in WIN || A.UA.gecko >= 2)) {
-			requirements.push('history-html5');
+		var module = 'history-hash';
+
+		if (hasNativeHistory) {
+			module = 'history-html5';
 		}
-		else {
-			requirements.push('history-hash');
 
-			if (A.UA.ie && !('onhashchange' in WIN || 'onhashchange' in DOC) && (!DOCMODE || DOCMODE > 7)) {
-				requirements.push('history-hash-ie');
-			}
-		}
-
-		return requirements;
+		return ['history-base', 'querystring-parse-simple', module];
 	};
 
 	GROUPS.liferay = {
