@@ -23,24 +23,43 @@ AUI().add(
 			{
 				ATTRS: {
 					portletNamespace: {
-						value: STR_EMPTY,
-						validator: Lang.isString
+						validator: Lang.isString,
+						value: STR_EMPTY
 					},
 
 					recordsetId: {
-						value: 0,
-						validator: Lang.isNumber
+						validator: Lang.isNumber,
+						value: 0
 					},
 
 					structure: {
-						value: [],
-						validator: Lang.isArray
+						validator: Lang.isArray,
+						value: []
 					}
+				},
+
+				DATATYPE_VALIDATOR: {
+					'date': 'date',
+					'double': 'number',
+					'integer': 'digits',
+					'long': 'digits'
 				},
 
 				EXTENDS: A.DataTable.Base,
 
 				NAME: 'spreadsheet',
+
+				TYPE_EDITOR: {
+					'checkbox': A.CheckboxCellEditor,
+					'ddm-date': A.DateCellEditor,
+					'ddm-decimal': A.TextCellEditor,
+					'ddm-integer': A.TextCellEditor,
+					'ddm-number': A.TextCellEditor,
+					'radio': A.RadioCellEditor,
+					'select': A.DropDownCellEditor,
+					'text': A.TextCellEditor,
+					'textarea': A.TextAreaCellEditor
+				},
 
 				prototype: {
 					initializer: function() {
@@ -69,17 +88,17 @@ AUI().add(
 					addRecord: function(displayIndex, fieldsMap, callback) {
 						var instance = this;
 
-						callback = A.bind(callback || EMPTY_FN, instance);
+						callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
 
 						var recordsetId = instance.get('recordsetId');
 
 						var serviceParameterTypes = [
-         					'long',
-         					'long',
-         					'int',
-         					'java.util.Map<java.lang.String, java.io.Serializable>',
-         					'com.liferay.portal.service.ServiceContext'
-         				];
+							'long',
+							'long',
+							'int',
+							'java.util.Map<java.lang.String, java.io.Serializable>',
+							'com.liferay.portal.service.ServiceContext'
+						];
 
 						DDLRecord.addRecord(
 							{
@@ -102,7 +121,7 @@ AUI().add(
 					updateMinDisplayRows: function(minDisplayRows, callback) {
 						var instance = this;
 
-						callback = A.bind(callback || EMPTY_FN, instance);
+						callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
 
 						var recordsetId = instance.get('recordsetId');
 
@@ -124,15 +143,15 @@ AUI().add(
 					updateRecord: function(recordId, displayIndex, fieldsMap, merge, callback) {
 						var instance = this;
 
-						callback = A.bind(callback || EMPTY_FN, instance);
+						callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
 
 						var serviceParameterTypes = [
-           					'long',
-           					'java.util.Map<java.lang.String, java.io.Serializable>',
-           					'int',
-           					'boolean',
-           					'com.liferay.portal.service.ServiceContext'
-           				];
+							'long',
+							'java.util.Map<java.lang.String, java.io.Serializable>',
+							'int',
+							'boolean',
+							'com.liferay.portal.service.ServiceContext'
+						];
 
 						DDLRecord.updateRecord(
 							{
@@ -163,21 +182,13 @@ AUI().add(
 						A.each(
 							data,
 							function(item, index, collection) {
-								var field = SpreadSheet.findStructureFieldByAttribute(
-									structure,
-									'key',
-									index
-								);
+								var field = SpreadSheet.findStructureFieldByAttribute(structure, 'key', index);
 
 								if (field !== null) {
 									var type = field.type;
 
 									if ((type === 'radio') || (type === 'select')) {
-										var option = SpreadSheet.findStructureFieldByAttribute(
-											field.options,
-											'label',
-											item
-										);
+										var option = SpreadSheet.findStructureFieldByAttribute(field.options, 'label', item);
 
 										item = option.value;
 									}
@@ -195,10 +206,6 @@ AUI().add(
 
 					_normalizeValue: function(value) {
 						var instance = this;
-
-						if (Lang.isArray(value)) {
-							value = value.join();
-						}
 
 						return String(value);
 					},
@@ -341,25 +348,6 @@ AUI().add(
 					);
 
 					return recordModel;
-				},
-
-				DATATYPE_VALIDATOR: {
-					'date': 'date',
-					'double': 'number',
-					'integer': 'digits',
-					'long': 'digits'
-				},
-
-				TYPE_EDITOR: {
-					'checkbox': A.CheckboxCellEditor,
-					'ddm-date': A.DateCellEditor,
-					'ddm-decimal': A.TextCellEditor,
-					'ddm-integer': A.TextCellEditor,
-					'ddm-number': A.TextCellEditor,
-					'radio': A.RadioCellEditor,
-					'select': A.DropDownCellEditor,
-					'text': A.TextCellEditor,
-					'textarea': A.TextAreaCellEditor
 				}
 			}
 		);
