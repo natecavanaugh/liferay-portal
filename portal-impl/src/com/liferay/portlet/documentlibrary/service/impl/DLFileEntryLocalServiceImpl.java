@@ -42,6 +42,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileVersion;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.asset.model.AssetEntry;
@@ -50,6 +51,7 @@ import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.DuplicateFolderNameException;
 import com.liferay.portlet.documentlibrary.FileNameException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
+import com.liferay.portlet.documentlibrary.NoSuchFileEntryMetadataException;
 import com.liferay.portlet.documentlibrary.NoSuchFileException;
 import com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
 import com.liferay.portlet.documentlibrary.NoSuchFolderException;
@@ -65,7 +67,6 @@ import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryImpl;
 import com.liferay.portlet.documentlibrary.service.base.DLFileEntryLocalServiceBaseImpl;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
-import com.liferay.portlet.documentlibrary.util.comparator.FileVersionVersionComparator;
 import com.liferay.portlet.documentlibrary.util.comparator.RepositoryModelModifiedDateComparator;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
@@ -76,7 +77,6 @@ import com.liferay.portlet.expando.model.ExpandoColumnConstants;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -233,7 +233,8 @@ public class DLFileEntryLocalServiceImpl
 		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByPrimaryKey(
 			fileEntryId);
 
-		DLFileVersion dlFileVersion = getLatestFileVersion(fileEntryId);
+		DLFileVersion dlFileVersion =
+			dlFileVersionLocalService.getLatestFileVersion(fileEntryId, false);
 
 		dlFileVersionPersistence.remove(dlFileVersion);
 
@@ -273,7 +274,8 @@ public class DLFileEntryLocalServiceImpl
 		String version = getNextVersion(
 			dlFileEntry, majorVersion, serviceContext.getWorkflowAction());
 
-		DLFileVersion dlFileVersion = getLatestFileVersion(fileEntryId);
+		DLFileVersion dlFileVersion =
+			dlFileVersionLocalService.getLatestFileVersion(fileEntryId, false);
 
 		dlFileVersion.setVersion(version);
 		dlFileVersion.setChangeLog(changeLog);
@@ -385,7 +387,10 @@ public class DLFileEntryLocalServiceImpl
 
 		dlFileEntryPersistence.update(dlFileEntry, false);
 
-		DLFileVersion dlFileVersion = getLatestFileVersion(fileEntryId);
+		DLFileVersion dlFileVersion =
+			dlFileVersionLocalService.getLatestFileVersion(fileEntryId, false);
+
+		long dlFileVersionId = dlFileVersion.getFileVersionId();
 
 		String version = dlFileVersion.getVersion();
 
@@ -394,13 +399,10 @@ public class DLFileEntryLocalServiceImpl
 
 			ServiceContext serviceContext = new ServiceContext();
 
-			HashMap<Long, Fields> fieldsMap = new HashMap<Long, Fields>();
+			serviceContext.setCompanyId(user.getCompanyId());
+			serviceContext.setUserId(userId);
 
-			if (dlFileVersion.getFileEntryTypeId() > 0) {
-				fieldsMap = getDocumentMetadataFieldsMap(
-					dlFileVersion.getFileEntryTypeId(),
-					dlFileVersion.getFileVersionId());
-			}
+			HashMap<Long, Fields> fieldsMap = new HashMap<Long, Fields>();
 
 			serviceContext.setAttribute("fieldsMap", fieldsMap);
 
@@ -414,12 +416,26 @@ public class DLFileEntryLocalServiceImpl
 				dlFileVersion.getSize(), WorkflowConstants.STATUS_DRAFT,
 				serviceContext);
 
+			try {
+				DLStoreUtil.deleteFile(
+					dlFileEntry.getCompanyId(), PortletKeys.DOCUMENT_LIBRARY,
+					dlFileEntry.getDataRepositoryId(), dlFileEntry.getName(),
+					DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION);
+			}
+			catch (NoSuchFileException nsfe) {
+			}
+
 			DLStoreUtil.copyFileVersion(
 				user.getCompanyId(), PortletKeys.DOCUMENT_LIBRARY,
 				dlFileEntry.getGroupId(), dlFileEntry.getDataRepositoryId(),
 				dlFileEntry.getName(), version,
 				DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION,
 				dlFileVersion.getTitle(), serviceContext);
+
+			copyFileEntryMetadata(
+				dlFileEntry.getCompanyId(), dlFileVersion.getFileEntryTypeId(),
+				fileEntryId, dlFileVersionId, dlFileVersion.getFileVersionId(),
+				serviceContext);
 
 			// Index
 
@@ -572,29 +588,6 @@ public class DLFileEntryLocalServiceImpl
 		return dlFileEntryPersistence.findByUUID_G(uuid, groupId);
 	}
 
-	public DLFileVersion getFileVersion(long fileVersionId)
-		throws PortalException, SystemException {
-
-		return dlFileVersionPersistence.findByPrimaryKey(fileVersionId);
-	}
-
-	public DLFileVersion getFileVersion(long fileEntryId, String version)
-		throws PortalException, SystemException {
-
-		return dlFileVersionPersistence.findByF_V(fileEntryId, version);
-	}
-
-	public List<DLFileVersion> getFileVersions(long fileEntryId, int status)
-		throws SystemException {
-
-		if (status == WorkflowConstants.STATUS_ANY) {
-			return dlFileVersionPersistence.findByFileEntryId(fileEntryId);
-		}
-		else {
-			return dlFileVersionPersistence.findByF_S(fileEntryId, status);
-		}
-	}
-
 	public List<DLFileEntry> getGroupFileEntries(
 			long groupId, int start, int end)
 		throws SystemException {
@@ -649,41 +642,6 @@ public class DLFileEntryLocalServiceImpl
 		}
 	}
 
-	public DLFileVersion getLatestFileVersion(long fileEntryId)
-		throws PortalException, SystemException {
-
-		return getLatestFileVersion(fileEntryId, false);
-	}
-
-	public DLFileVersion getLatestFileVersion(
-			long fileEntryId, boolean excludeWorkingCopy)
-		throws PortalException, SystemException {
-
-		List<DLFileVersion> dlFileVersions =
-			dlFileVersionPersistence.findByFileEntryId(fileEntryId);
-
-		if (dlFileVersions.isEmpty()) {
-			throw new NoSuchFileVersionException(
-				"No file versions found for fileEntryId " + fileEntryId);
-		}
-
-		dlFileVersions = ListUtil.copy(dlFileVersions);
-
-		Collections.sort(dlFileVersions, new FileVersionVersionComparator());
-
-		DLFileVersion dlFileVersion = dlFileVersions.get(0);
-
-		String version = dlFileVersion.getVersion();
-
-		if (excludeWorkingCopy &&
-			version.equals(DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION)) {
-
-			return dlFileVersions.get(1);
-		}
-
-		return dlFileVersion;
-	}
-
 	public List<DLFileEntry> getNoAssetFileEntries() throws SystemException {
 		return dlFileEntryFinder.findByNoAssets();
 	}
@@ -723,7 +681,8 @@ public class DLFileEntryLocalServiceImpl
 	public boolean isFileEntryCheckedOut(long fileEntryId)
 		throws PortalException, SystemException {
 
-		DLFileVersion dlFileVersion = getLatestFileVersion(fileEntryId);
+		DLFileVersion dlFileVersion =
+			dlFileVersionLocalService.getLatestFileVersion(fileEntryId, false);
 
 		String version = dlFileVersion.getVersion();
 
@@ -764,7 +723,7 @@ public class DLFileEntryLocalServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		DLFileVersion dlFileVersion = dlFileEntryLocalService.getFileVersion(
+		DLFileVersion dlFileVersion = dlFileVersionLocalService.getFileVersion(
 			fileEntryId, version);
 
 		if (!dlFileVersion.isApproved()) {
@@ -1106,8 +1065,9 @@ public class DLFileEntryLocalServiceImpl
 
 		dlFileEntryPersistence.update(dlFileEntry, false);
 
-		List<DLFileVersion> dlFileVersions = getFileVersions(
-			dlFileEntry.getFileEntryId(), WorkflowConstants.STATUS_ANY);
+		List<DLFileVersion> dlFileVersions =
+			dlFileVersionLocalService.getFileVersions(
+				dlFileEntry.getFileEntryId(), WorkflowConstants.STATUS_ANY);
 
 		for (DLFileVersion dlFileVersion : dlFileVersions) {
 			convertExtraSettings(dlFileEntry, dlFileVersion, keys);
@@ -1132,6 +1092,63 @@ public class DLFileEntryLocalServiceImpl
 
 			expandoBridge.setAttribute(key, serializable);
 		}
+	}
+
+	protected void copyFileEntryMetadata(
+			long companyId, long fileEntryTypeId, long fileEntryId,
+			long fromFileVersionId, long toFileVersionId,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		Map<String, Fields> fieldsMap = new HashMap<String, Fields>();
+
+		List<DDMStructure> ddmStructures = null;
+
+		if (fileEntryTypeId > 0) {
+			DLFileEntryType dlFileEntryType =
+				dlFileEntryTypeLocalService.getFileEntryType(fileEntryTypeId);
+
+			ddmStructures = dlFileEntryType.getDDMStructures();
+
+			for (DDMStructure ddmStructure : ddmStructures) {
+				DLFileEntryMetadata dlFileEntryMetadata =
+					dlFileEntryMetadataLocalService.getFileEntryMetadata(
+						ddmStructure.getStructureId(), fromFileVersionId);
+
+				Fields fields = StorageEngineUtil.getFields(
+					dlFileEntryMetadata.getDDMStorageId());
+
+				fieldsMap.put(ddmStructure.getStructureKey(), fields);
+			}
+
+			dlFileEntryMetadataLocalService.updateFileEntryMetadata(
+				companyId, ddmStructures, fileEntryTypeId, fileEntryId,
+				toFileVersionId, fieldsMap, serviceContext);
+		}
+
+		long classNameId = PortalUtil.getClassNameId(DLFileEntry.class);
+
+		ddmStructures = ddmStructureLocalService.getClassStructures(
+			classNameId);
+
+		for (DDMStructure ddmStructure : ddmStructures) {
+			try {
+				DLFileEntryMetadata fileEntryMetadata =
+					dlFileEntryMetadataLocalService.getFileEntryMetadata(
+						ddmStructure.getStructureId(), fromFileVersionId);
+
+				Fields fields = StorageEngineUtil.getFields(
+					fileEntryMetadata.getDDMStorageId());
+
+				fieldsMap.put(ddmStructure.getStructureKey(), fields);
+			}
+			catch (NoSuchFileEntryMetadataException nsfme) {
+			}
+		}
+
+		dlFileEntryMetadataLocalService.updateFileEntryMetadata(
+			companyId, ddmStructures, fileEntryTypeId, fileEntryId,
+			toFileVersionId, fieldsMap, serviceContext);
 	}
 
 	protected void deleteFileEntry(DLFileEntry dlFileEntry)
@@ -1217,32 +1234,6 @@ public class DLFileEntryLocalServiceImpl
 		indexer.delete(fileModel);
 	}
 
-	protected HashMap<Long, Fields> getDocumentMetadataFieldsMap(
-			long fileEntryTypeId, long fileVersionId)
-		throws PortalException, SystemException {
-
-		HashMap<Long, Fields> fieldsMap = new HashMap<Long, Fields>();
-
-		DLFileEntryType fileEntryType =
-			dlFileEntryTypeLocalService.getFileEntryType(fileEntryTypeId);
-
-		List<DDMStructure> ddmStructures = fileEntryType.getDDMStructures();
-
-		for (DDMStructure ddmStructure : ddmStructures) {
-			DLFileEntryMetadata dlFileEntryMetadata =
-				dlFileEntryMetadataLocalService.getFileEntryMetadata(
-					ddmStructure.getStructureId(),
-					fileVersionId);
-
-			Fields fields = StorageEngineUtil.getFields(
-				dlFileEntryMetadata.getDDMStorageId());
-
-			fieldsMap.put(ddmStructure.getStructureId(), fields);
-		}
-
-		return fieldsMap;
-	}
-
 	protected String getExtension(String title, ServiceContext serviceContext) {
 		String sourceFileName = (String)serviceContext.getAttribute(
 			"sourceFileName");
@@ -1261,8 +1252,9 @@ public class DLFileEntryLocalServiceImpl
 		String version = dlFileEntry.getVersion();
 
 		try {
-			DLFileVersion dlFileVersion = getLatestFileVersion(
-				dlFileEntry.getFileEntryId(), true);
+			DLFileVersion dlFileVersion =
+				dlFileVersionLocalService.getLatestFileVersion(
+					dlFileEntry.getFileEntryId(), true);
 
 			version = dlFileVersion.getVersion();
 		}
@@ -1425,8 +1417,9 @@ public class DLFileEntryLocalServiceImpl
 
 		boolean checkedOut = dlFileEntry.isCheckedOut();
 
-		DLFileVersion dlFileVersion = getLatestFileVersion(
-			fileEntryId, !checkedOut);
+		DLFileVersion dlFileVersion =
+			dlFileVersionLocalService.getLatestFileVersion(
+				fileEntryId, !checkedOut);
 
 		boolean autoCheckIn = !checkedOut && dlFileVersion.isApproved();
 
@@ -1438,7 +1431,8 @@ public class DLFileEntryLocalServiceImpl
 		}
 
 		if (checkedOut || autoCheckIn) {
-			dlFileVersion = getLatestFileVersion(fileEntryId);
+			dlFileVersion = dlFileVersionLocalService.getLatestFileVersion(
+				fileEntryId, false);
 		}
 
 		try {

@@ -45,13 +45,13 @@
 
 		var moduleList = {
 			'asset-categories-selector': ['aui-tree', 'liferay-asset-tags-selector'],
-			'asset-tags-selector': ['aui-autocomplete', 'aui-dialog', 'aui-io-request', 'aui-live-search', 'aui-textboxlist', 'aui-form-textfield', 'datasource-cache', 'liferay-service-datasource', 'substitute'],
+			'asset-tags-selector': ['array-extras', 'async-queue', 'aui-autocomplete', 'aui-dialog', 'aui-io-request', 'aui-live-search', 'aui-textboxlist', 'aui-form-textfield', 'datasource-cache', 'liferay-service-datasource', 'substitute'],
 			'auto-fields': ['aui-base', 'aui-data-set', 'aui-io-request', 'aui-parse-content', 'aui-sortable', 'base', 'liferay-undo-manager'],
 			'dockbar': ['aui-button-item', 'aui-dialog', 'aui-io-plugin', 'aui-io-request', 'aui-overlay-context', 'aui-overlay-manager', 'event-touch', 'node-focusmanager'],
 			'dynamic-select': ['aui-base'],
 			'form': ['aui-base', 'aui-form-validator'],
 			'form-navigator': ['aui-base'],
-			'history': ['history', 'querystring'],
+			'history': getHistoryRequirements(),
 			'hudcrumbs': ['aui-base', 'plugin'],
 			'icon': ['aui-base'],
 			'input-move-boxes': ['aui-base', 'aui-toolbar'],
@@ -88,6 +88,30 @@
 		}
 
 		return modules;
+	};
+
+	var getHistoryRequirements = function() {
+		var CONFIG = A.config;
+
+		var DOC = CONFIG.doc;
+		var WIN = CONFIG.win;
+
+		var HISTORY = WIN.history;
+
+		var hasNativeHistory = (
+			HISTORY &&
+			HISTORY.pushState &&
+			HISTORY.replaceState &&
+			('onpopstate' in WIN || A.UA.gecko >= 2)
+		);
+
+		var module = 'history-hash';
+
+		if (hasNativeHistory) {
+			module = 'history-html5';
+		}
+
+		return ['history-base', 'querystring-parse-simple', module];
 	};
 
 	GROUPS.liferay = {

@@ -571,6 +571,10 @@ public class DLFileVersionWrapper implements DLFileVersion {
 		return _dlFileVersion.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portlet.documentlibrary.model.DLFileVersion> toCacheModel() {
+		return _dlFileVersion.toCacheModel();
+	}
+
 	public com.liferay.portlet.documentlibrary.model.DLFileVersion toEscapedModel() {
 		return new DLFileVersionWrapper(_dlFileVersion.toEscapedModel());
 	}
@@ -582,6 +586,11 @@ public class DLFileVersionWrapper implements DLFileVersion {
 
 	public java.lang.String toXmlString() {
 		return _dlFileVersion.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_dlFileVersion.save();
 	}
 
 	public com.liferay.portal.kernel.util.UnicodeProperties getExtraSettingsProperties() {

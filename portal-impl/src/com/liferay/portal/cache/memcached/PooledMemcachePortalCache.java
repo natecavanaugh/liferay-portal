@@ -14,9 +14,9 @@
 
 package com.liferay.portal.cache.memcached;
 
-import com.liferay.portal.kernel.cache.BasePortalCache;
 import com.liferay.portal.kernel.cache.CacheListener;
 import com.liferay.portal.kernel.cache.CacheListenerScope;
+import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -34,7 +34,7 @@ import net.spy.memcached.MemcachedClientIF;
 /**
  * @author Michael C. Han
  */
-public class PooledMemcachePortalCache extends BasePortalCache {
+public class PooledMemcachePortalCache implements PortalCache {
 
 	public PooledMemcachePortalCache(
 		String name, MemcachedClientFactory memcachedClientFactory, int timeout,
@@ -46,7 +46,6 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 		_timeoutTimeUnit = timeoutTimeUnit;
 	}
 
-	@Override
 	public void destroy() {
 		try {
 			_memcachedClientFactory.close();
@@ -55,7 +54,7 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 		}
 	}
 
-	public Collection<Object> get(Collection<String> keys) {
+	public Collection<Object> get(Collection<Serializable> keys) {
 		MemcachedClientIF memcachedClient = null;
 
 		try {
@@ -67,8 +66,8 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 
 		List<String> processedKeys = new ArrayList<String>(keys.size());
 
-		for (String key : keys) {
-			String processedKey = processKey(_name.concat(key));
+		for (Serializable key : keys) {
+			String processedKey = _name.concat(String.valueOf(key));
 
 			processedKeys.add(processedKey);
 		}
@@ -107,7 +106,7 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 		return values.values();
 	}
 
-	public Object get(String key) {
+	public Object get(Serializable key) {
 		MemcachedClientIF memcachedClient = null;
 
 		try {
@@ -117,7 +116,7 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 			return null;
 		}
 
-		String processedKey = processKey(_name.concat(key));
+		String processedKey = _name.concat(String.valueOf(key));
 
 		try {
 			Future<Object> future = null;
@@ -151,11 +150,11 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 		return _name;
 	}
 
-	public void put(String key, Object value) {
+	public void put(Serializable key, Object value) {
 		put(key, value, _timeToLive);
 	}
 
-	public void put(String key, Object value, int timeToLive) {
+	public void put(Serializable key, Object value, int timeToLive) {
 		MemcachedClientIF memcachedClient = null;
 
 		try {
@@ -165,7 +164,7 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 			return;
 		}
 
-		String processedKey = processKey(_name.concat(key));
+		String processedKey = _name.concat(String.valueOf(key));
 
 		try {
 			memcachedClient.set(processedKey, timeToLive, value);
@@ -180,11 +179,11 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 		}
 	}
 
-	public void put(String key, Serializable value) {
+	public void put(Serializable key, Serializable value) {
 		put(key, value, _timeToLive);
 	}
 
-	public void put(String key, Serializable value, int timeToLive) {
+	public void put(Serializable key, Serializable value, int timeToLive) {
 		MemcachedClientIF memcachedClient = null;
 
 		try {
@@ -194,7 +193,7 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 			return;
 		}
 
-		String processedKey = processKey(_name.concat(key));
+		String processedKey = _name.concat(String.valueOf(key));
 
 		try {
 			memcachedClient.set(processedKey, timeToLive, value);
@@ -219,7 +218,7 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 		throw new UnsupportedOperationException();
 	}
 
-	public void remove(String key) {
+	public void remove(Serializable key) {
 		MemcachedClientIF memcachedClient = null;
 
 		try {
@@ -229,7 +228,7 @@ public class PooledMemcachePortalCache extends BasePortalCache {
 			return;
 		}
 
-		String processedKey = processKey(_name.concat(key));
+		String processedKey = _name.concat(String.valueOf(key));
 
 		try {
 			memcachedClient.delete(processedKey);

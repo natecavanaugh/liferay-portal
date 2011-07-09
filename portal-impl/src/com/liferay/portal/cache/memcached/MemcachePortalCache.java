@@ -14,9 +14,9 @@
 
 package com.liferay.portal.cache.memcached;
 
-import com.liferay.portal.kernel.cache.BasePortalCache;
 import com.liferay.portal.kernel.cache.CacheListener;
 import com.liferay.portal.kernel.cache.CacheListenerScope;
+import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -34,7 +34,7 @@ import net.spy.memcached.MemcachedClientIF;
 /**
  * @author Michael C. Han
  */
-public class MemcachePortalCache extends BasePortalCache {
+public class MemcachePortalCache implements PortalCache {
 
 	public MemcachePortalCache(
 		String name, MemcachedClientIF memcachedClient, int timeout,
@@ -46,16 +46,15 @@ public class MemcachePortalCache extends BasePortalCache {
 		_timeoutTimeUnit = timeoutTimeUnit;
 	}
 
-	@Override
 	public void destroy() {
 		_memcachedClient.shutdown();
 	}
 
-	public Collection<Object> get(Collection<String> keys) {
+	public Collection<Object> get(Collection<Serializable> keys) {
 		List<String> processedKeys = new ArrayList<String>(keys.size());
 
-		for (String key : keys) {
-			String processedKey = processKey(_name.concat(key));
+		for (Serializable key : keys) {
+			String processedKey = _name.concat(String.valueOf(key));
 
 			processedKeys.add(processedKey);
 		}
@@ -89,8 +88,8 @@ public class MemcachePortalCache extends BasePortalCache {
 		return values.values();
 	}
 
-	public Object get(String key) {
-		String processedKey = processKey(_name.concat(key));
+	public Object get(Serializable key) {
+		String processedKey = _name.concat(String.valueOf(key));
 
 		Future<Object> future = null;
 
@@ -125,12 +124,12 @@ public class MemcachePortalCache extends BasePortalCache {
 		return _name;
 	}
 
-	public void put(String key, Object value) {
+	public void put(Serializable key, Object value) {
 		put(key, value, _timeToLive);
 	}
 
-	public void put(String key, Object value, int timeToLive) {
-		String processedKey = processKey(_name.concat(key));
+	public void put(Serializable key, Object value, int timeToLive) {
+		String processedKey = _name.concat(String.valueOf(key));
 
 		try {
 			_memcachedClient.set(processedKey, timeToLive, value);
@@ -142,12 +141,12 @@ public class MemcachePortalCache extends BasePortalCache {
 		}
 	}
 
-	public void put(String key, Serializable value) {
+	public void put(Serializable key, Serializable value) {
 		put(key, value, _timeToLive);
 	}
 
-	public void put(String key, Serializable value, int timeToLive) {
-		String processedKey = processKey(_name.concat(key));
+	public void put(Serializable key, Serializable value, int timeToLive) {
+		String processedKey = _name.concat(String.valueOf(key));
 
 		try {
 			_memcachedClient.set(processedKey, timeToLive, value);
@@ -169,8 +168,8 @@ public class MemcachePortalCache extends BasePortalCache {
 		throw new UnsupportedOperationException();
 	}
 
-	public void remove(String key) {
-		String processedKey = processKey(_name.concat(key));
+	public void remove(Serializable key) {
+		String processedKey = _name.concat(String.valueOf(key));
 
 		try {
 			_memcachedClient.delete(processedKey);

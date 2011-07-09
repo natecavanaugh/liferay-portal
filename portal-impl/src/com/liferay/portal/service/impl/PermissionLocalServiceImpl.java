@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.OrgGroupPermission;
 import com.liferay.portal.model.Organization;
@@ -362,6 +363,24 @@ public class PermissionLocalServiceImpl extends PermissionLocalServiceBaseImpl {
 			userId, permission.getPermissionId());
 	}
 
+	/**
+	 * Returns <code>true</code> if the user has permission to perform the
+	 * action on the resource.
+	 *
+	 * @param  userId the primary key of the user
+	 * @param  groupId the primary key of the group containing the resource
+	 * @param  resources representations of the resource at each scope level
+	 *         returned by {@link
+	 *         com.liferay.portal.security.permission.AdvancedPermissionChecker#getResources(
+	 *         long, long, String, String, String)}
+	 * @param  actionId the actionID
+	 * @param  permissionCheckerBag the permission checker bag
+	 * @return <code>true</code> if the user has permission to perform the
+	 *         action on the resource; <code>false</code> otherwise
+	 * @throws PortalException if a resource action with the resource name and
+	 *         action ID could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
 	public boolean hasUserPermissions(
 			long userId, long groupId, List<Resource> resources,
 			String actionId, PermissionCheckerBag permissionCheckerBag)
@@ -474,6 +493,18 @@ public class PermissionLocalServiceImpl extends PermissionLocalServiceBaseImpl {
 		return false;
 	}
 
+	public void setContainerResourcePermissions(
+			String name, String roleName, String actionId)
+		throws PortalException, SystemException {
+
+		List<Company> companies = companyPersistence.findAll();
+
+		for (Company company : companies) {
+			setContainerResourcePermissions(
+				company.getCompanyId(), name, roleName, actionId);
+		}
+	}
+	
 	public void setGroupPermissions(
 			long groupId, String[] actionIds, long resourceId)
 		throws PortalException, SystemException {
@@ -1037,6 +1068,80 @@ public class PermissionLocalServiceImpl extends PermissionLocalServiceBaseImpl {
 			"Checking user permissions block " + block + " for " + userId +
 				" " + resourceId + " " + actionId + " takes " +
 					stopWatch.getTime() + " ms");
+	}
+
+	protected void setContainerResourcePermissions(
+			long companyId, String name, String roleName, String actionId)
+		throws PortalException, SystemException {
+
+		ResourceCode resourceCode = resourceCodePersistence.fetchByC_N_S(
+			companyId, name, ResourceConstants.SCOPE_INDIVIDUAL);
+
+		if (resourceCode == null) {
+			long codeId = counterLocalService.increment(
+				ResourceCode.class.getName());
+
+			resourceCode = resourceCodePersistence.create(codeId);
+
+			resourceCode.setCompanyId(companyId);
+			resourceCode.setName(name);
+			resourceCode.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
+
+			resourceCodePersistence.update(resourceCode, false);
+		}
+
+		List<Group> groups = groupPersistence.findByCompanyId(companyId);
+
+		for (Group group : groups) {
+			String primKey = Long.toString(group.getGroupId());
+
+			Resource resource = resourcePersistence.fetchByC_P(
+				resourceCode.getCodeId(), primKey);
+
+			if (resource == null) {
+				long resourceId = counterLocalService.increment(
+					Resource.class.getName());
+
+				resource = resourcePersistence.create(resourceId);
+
+				resource.setCodeId(resourceCode.getCodeId());
+				resource.setPrimKey(primKey);
+
+				resourcePersistence.update(resource, false);
+			}
+
+			Permission permission = permissionPersistence.fetchByA_R(
+				actionId, resource.getResourceId());
+
+			if (permission == null) {
+				long permissionId = counterLocalService.increment(
+					Permission.class.getName());
+
+				permission = permissionPersistence.create(permissionId);
+
+				permission.setCompanyId(companyId);
+				permission.setActionId(actionId);
+				permission.setResourceId(resource.getResourceId());
+
+				permissionPersistence.update(permission, false);
+			}
+
+			if ((PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5) ||
+				roleName.equals(RoleConstants.SITE_MEMBER)) {
+
+				Role role = rolePersistence.findByC_N(companyId, roleName);
+
+				permissionPersistence.addRole(
+				permission.getPermissionId(), role);
+			}
+			else {
+				long defaultUserId = userLocalService.getDefaultUserId(
+				companyId);
+
+				permissionPersistence.addUser(
+				permission.getPermissionId(), defaultUserId);
+			}
+		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

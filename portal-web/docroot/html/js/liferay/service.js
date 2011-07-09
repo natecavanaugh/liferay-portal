@@ -121,6 +121,14 @@ Liferay.Service.registerClass(
 );
 
 Liferay.Service.registerClass(
+	Liferay.Service.Portal, "LayoutRevision",
+	{
+		addLayoutRevision: true,
+		deleteLayoutRevisions: true
+	}
+);
+
+Liferay.Service.registerClass(
 	Liferay.Service.Portal, "LayoutSet",
 	{
 		updateLookAndFeel: true,
@@ -686,7 +694,6 @@ Liferay.Service.registerClass(
 		getFileEntry: true,
 		getFileEntryByUuidAndGroupId: true,
 		getFileEntryLock: true,
-		getFileVersion: true,
 		getFoldersFileEntriesCount: true,
 		getGroupFileEntries: true,
 		getGroupFileEntriesCount: true,
@@ -718,6 +725,14 @@ Liferay.Service.registerClass(
 		deleteFileShortcut: true,
 		getFileShortcut: true,
 		updateFileShortcut: true
+	}
+);
+
+Liferay.Service.registerClass(
+	Liferay.Service.DL, "DLFileVersion",
+	{
+		getFileVersion: true,
+		getLatestFileVersion: true
 	}
 );
 

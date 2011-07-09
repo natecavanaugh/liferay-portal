@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.ResourceAction;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.ResourcePermission;
@@ -230,12 +231,38 @@ public class ResourcePermissionLocalServiceImpl
 		}
 	}
 
+	/**
+	 * Returns <code>true</code> if the role has permission to perform the
+	 * action on the resource.
+	 *
+	 * <p>
+	 * Depending on the scope, the value of <code>primKey</code> will have
+	 * different meanings. For more information, see {@link
+	 * com.liferay.portal.model.impl.ResourcePermissionImpl}.
+	 * </p>
+	 *
+	 * @param  companyId the primary key of the company
+	 * @param  name the resource's name, which can be either a class name or a
+	 *         portlet ID
+	 * @param  scope the resource's scope
+	 * @param  primKey the primary key
+	 * @param  roleId the primary key of the role
+	 * @param  actionId the action ID
+	 * @return <code>true</code> if the role has permission to perform the
+	 *         action on the resource; <code>false</code> otherwise
+	 * @throws PortalException if a resource action with the resource name and
+	 *         action ID could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
 	public boolean hasResourcePermission(
 			long companyId, String name, int scope, String primKey, long roleId,
 			String actionId)
 		throws PortalException, SystemException {
 
 		ResourcePermission resourcePermission = null;
+
+		// It is faster to cache the results of the query without the role ID
+		// and search the list manually than to use a single query.
 
 		for (ResourcePermission curResourcePermission :
 				resourcePermissionPersistence.findByC_N_S_P(
@@ -382,6 +409,23 @@ public class ResourcePermissionLocalServiceImpl
 		PermissionCacheUtil.clearCache();
 	}
 
+	public void setContainerResourcePermissions(
+			String name, String roleName, long actionIdsLong)
+		throws SystemException {
+
+		List<Role> roles = rolePersistence.findByName(roleName);
+
+		for (Role role : roles) {
+			List<Group> groups = groupPersistence.findByCompanyId(
+				role.getCompanyId());
+
+			for (Group group : groups) {
+				setContainerResourcePermissions(
+					group, role, name, actionIdsLong);
+			}
+		}
+	}
+	
 	public void setOwnerResourcePermissions(
 			long companyId, String name, int scope, String primKey, long roleId,
 			long ownerId, String[] actionIds)
@@ -483,6 +527,60 @@ public class ResourcePermissionLocalServiceImpl
 		PermissionCacheUtil.clearCache();
 
 		SearchEngineUtil.updatePermissionFields(name, primKey);
+	}
+
+	protected void setContainerResourcePermissions(
+			Group group, Role role, String name, long actionIdsLong)
+		throws SystemException {
+
+		String primKey = String.valueOf(group.getGroupId());
+
+		ResourcePermission resourcePermission =
+			resourcePermissionPersistence.fetchByC_N_S_P_R(
+				group.getCompanyId(), name, ResourceConstants.SCOPE_INDIVIDUAL,
+				primKey, role.getRoleId());
+
+		if (resourcePermission == null) {
+			long resourcePermissionId = counterLocalService.increment(
+				ResourcePermission.class.getName());
+
+			resourcePermission = resourcePermissionPersistence.create(
+				resourcePermissionId);
+
+			resourcePermission.setCompanyId(group.getCompanyId());
+			resourcePermission.setName(name);
+			resourcePermission.setScope(ResourceConstants.SCOPE_INDIVIDUAL);
+			resourcePermission.setPrimKey(primKey);
+			resourcePermission.setRoleId(role.getRoleId());
+
+			List<String> defaultActionIds = null;
+
+			String roleName = role.getName();
+
+			if (roleName.equals(RoleConstants.GUEST)) {
+				defaultActionIds =
+					ResourceActionsUtil.getModelResourceGuestDefaultActions(
+						name);
+			}
+			else if (roleName.equals(RoleConstants.SITE_MEMBER)) {
+				defaultActionIds =
+					ResourceActionsUtil.getModelResourceGroupDefaultActions(
+						name);
+			}
+
+			List<ResourceAction> resourceActions =
+				resourceActionLocalService.getResourceActions(name);
+
+			for (ResourceAction resourceAction : resourceActions) {
+				if (defaultActionIds.contains(resourceAction.getActionId())) {
+					actionIdsLong |= resourceAction.getBitwiseValue();
+				}
+			}
+		}
+
+		resourcePermission.setActionIds(actionIdsLong);
+
+		resourcePermissionPersistence.update(resourcePermission, false);
 	}
 
 	protected void updateResourcePermission(
