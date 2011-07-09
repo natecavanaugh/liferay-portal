@@ -42,6 +42,8 @@ if (!selectableTree) {
 <div class="lfr-tree" id="<portlet:namespace /><%= HtmlUtil.escape(treeId) %>Output"></div>
 
 <aui:script use="<%= modules %>">
+	var Lang = A.Lang;
+
 	var LAYOUT_URL = '<%= portletURL + StringPool.AMPERSAND + portletDisplay.getNamespace() + "selPlid=" %>';
 
 	var TreeUtil = {
@@ -55,6 +57,7 @@ if (!selectableTree) {
 			var treeInstance = event.target;
 
 			var rootNode = treeInstance.item(0);
+
 			var loadingEl = A.one('#<portlet:namespace />treeLoading');
 
 			loadingEl.hide();
@@ -67,7 +70,7 @@ if (!selectableTree) {
 		},
 
 		createLink: function(label, plid) {
-			return '<a class="layout-tree" href="' + LAYOUT_URL + plid + '">'+ Liferay.Util.escapeHTML(label) +'</a>';
+			return '<a class="layout-tree" href="' + LAYOUT_URL + plid + '">' + Liferay.Util.escapeHTML(label) + '</a>';
 		},
 
 		extractLayoutId: function(node) {
@@ -105,10 +108,10 @@ if (!selectableTree) {
 					newNode.label = node.name;
 
 					if (node.layoutRevisionId) {
-						newNode.label = [newNode.label, " [", node.layoutSetBranchName, " ", node.layoutRevisionId, "]"].join('');
+						newNode.label = Lang.sub(' [{layoutSetBranchName} {layoutRevisionId}]', node);
 
 						if (node.incomplete) {
-							newNode.label = [newNode.label, "incomplete"].join('');
+							newNode.label = [newNode.label, 'incomplete'].join('');
 						}
 					}
 
@@ -279,40 +282,37 @@ if (!selectableTree) {
 		}
 	).render();
 
-	<%
-	if (!selectableTree) {
-	%>
-		var Lang = A.Lang;
+	<c:if test="<%= !selectableTree %>">
+		var History = Liferay.HistoryManager;
 
 		var DEFAULT_PLID = '0';
 
 		var HISTORY_SELECTED_PLID = '<portlet:namespace />selPlid';
 
-		var History = Liferay.HistoryManager;
-
 		var layoutsContainer = A.one('#<portlet:namespace />layoutsContainer');
 
-		treeview.after('lastSelectedChange', function(event) {
-			var node = event.newVal;
+		treeview.after(
+			'lastSelectedChange',
+			function(event) {
+				var node = event.newVal;
 
-			var plid = TreeUtil.extractPlid(node);
+				var plid = TreeUtil.extractPlid(node);
 
-			var currentValue = History.get(HISTORY_SELECTED_PLID);
+				var currentValue = History.get(HISTORY_SELECTED_PLID);
 
-			if (plid != currentValue) {
-				if (plid == DEFAULT_PLID) {
-					if (Lang.isValue(currentValue)) {
+				if (plid != currentValue) {
+					if (plid == DEFAULT_PLID && Lang.isValue(currentValue)) {
 						plid = null;
 					}
-				}
 
-				History.add(
-					{
-						'<portlet:namespace />selPlid': plid
-					}
-				);
+					History.add(
+						{
+							'<portlet:namespace />selPlid': plid
+						}
+					);
+				}
 			}
-		});
+		);
 
 		function compareItemId(item, id) {
 			return (TreeUtil.extractPlid(item) == id);
@@ -353,32 +353,33 @@ if (!selectableTree) {
 			return foundItem;
 		}
 
-		History.after('change', function(event) {
-			if (event.src == History.SRC_HASH || event.src == History.SRC_POPSTATE) {
-				var nodePlid = event.newVal[HISTORY_SELECTED_PLID];
+		History.after(
+			'change',
+			function(event) {
+				if (event.src == History.SRC_HASH || event.src == History.SRC_POPSTATE) {
+					var nodePlid = event.newVal[HISTORY_SELECTED_PLID];
 
-				if (Lang.isValue(nodePlid)) {
-					var node = findNodeByPlid(null, nodePlid);
+					if (Lang.isValue(nodePlid)) {
+						var node = findNodeByPlid(null, nodePlid);
 
-					if (node) {
-						var lastSelected = treeview.get('lastSelected');
+						if (node) {
+							var lastSelected = treeview.get('lastSelected');
 
-						if (lastSelected) {
-							lastSelected.unselect();
+							if (lastSelected) {
+								lastSelected.unselect();
+							}
+
+							node.select();
+
+							var io = layoutsContainer.io;
+
+							io.set('uri', LAYOUT_URL + nodePlid);
+
+							io.start();
 						}
-
-						node.select();
-
-						var io = layoutsContainer.io;
-
-						io.set('uri', LAYOUT_URL + nodePlid );
-
-						io.start();
 					}
 				}
 			}
-		});
-	<%
-	}
-	%>
+		);
+	</c:if>
 </aui:script>
