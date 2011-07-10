@@ -328,19 +328,20 @@
 		<div class="yui3-menu-content">
 			<ul>
 				#foreach ($nav_item in $nav_items)
-					#set($menu_item = "yui3-menuitem")
+					#set($menu_item = "lfr-nav-item")
 					#set($menu_item_label = "yui3-menuitem-content")
 
 					#if ($nav_item.hasChildren())
-						#set($menu_item = "")
 						#set($menu_item_label = "$menu_item_label yui3-menu-label")
+					#else
+						#set($menu_item = "$menu_item yui3-menuitem")
 					#end
 
 					#if ($nav_item.isSelected())
 						#set($menu_item = "$menu_item selected")
 					#end
 
-					<li class="$menu_item">
+					<li class="$menu_item" data-layoutId="$nav_item.getLayout().getLayoutId()">
 						<a class="$menu_item_label" href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
 						#if ($nav_item.hasChildren())
 							#aui_drop_down_ul($nav_item.getChildren() "")
@@ -356,13 +357,14 @@
 	#if ($aui_guid == 0)
 		<link href="$theme_display.getPathJavaScript()/aui/node-menunav/assets/node-menunav-core.css" rel="stylesheet" type="text/css" />
 	#end
-	
 
 	#set($menu_id = $aui_guid + 1)
 
 	#aui_drop_down_ul($nav_items)
 
 	<script type="text/javascript">
+		Liferay.Data.NAV_ITEM_SELECTOR = '.lfr-nav-item';
+
 		AUI().use(
 			'node-menunav',
 			function(A) {

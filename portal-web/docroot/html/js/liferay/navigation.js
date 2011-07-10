@@ -81,14 +81,19 @@ AUI().add(
 						if (navBlock) {
 							instance._updateURL = themeDisplay.getPathMain() + '/layouts_admin/update_page';
 
-							var items = navBlock.all('> ul > li');
+							var navItemSelector = Liferay.Data.NAV_ITEM_SELECTOR || '> ul > li';
+
+							var items = navBlock.all(navItemSelector);
+
 							var layoutIds = instance.get('layoutIds');
 
 							items.each(
 								function(item, index, collection) {
-									item._LFR_layoutId = layoutIds[index];
+									item.attr('data-layoutId', layoutIds[index]);
 								}
 							);
+
+							instance._navItemSelector = navItemSelector;
 
 							instance._makeAddable();
 							instance._makeDeletable();
@@ -356,7 +361,9 @@ AUI().add(
 						if (instance.get('isModifiable')) {
 							var navBlock = instance.get('navBlock');
 
-							var navItems = navBlock.all('> ul > li').filter(':not(.selected)');
+							var navItemSelector = instance._navItemSelector;
+
+							var navItems = navBlock.all(navItemSelector).filter(':not(.selected)');
 
 							navBlock.delegate(
 								['click', 'touchstart'],
@@ -367,7 +374,7 @@ AUI().add(
 							navBlock.delegate(
 								'keydown',
 								A.bind(instance._handleKeyDown, instance),
-								'> ul > li:not(.selected) a'
+								navItemSelector + ':not(.selected) a'
 							);
 
 							navBlock.delegate(
@@ -524,7 +531,7 @@ AUI().add(
 								cmd: 'delete',
 								doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
 								groupId: themeDisplay.getParentGroupId(),
-								layoutId: tab._LFR_layoutId,
+								layoutId: tab.attr('data-layoutId'),
 								privateLayout: themeDisplay.isPrivateLayout()
 							};
 
@@ -640,7 +647,7 @@ AUI().add(
 
 									newTab.setStyle('cursor', 'move');
 
-									listItem._LFR_layoutId = data.layoutId;
+									listItem.attr('data-layoutId', data.layoutId);
 
 									listItem.append(newTab);
 
@@ -678,13 +685,13 @@ AUI().add(
 					_saveSortables: function(node) {
 						var instance = this;
 
-						var priority = instance.get('navBlock').all('li').indexOf(node);
+						var priority = node.ancestor().all('> li').indexOf(node);
 
 						var data = {
 							cmd: 'priority',
 							doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
 							groupId: themeDisplay.getParentGroupId(),
-							layoutId: node._LFR_layoutId,
+							layoutId: node.attr('data-layoutId'),
 							priority: priority,
 							privateLayout: themeDisplay.isPrivateLayout()
 						};
@@ -700,7 +707,7 @@ AUI().add(
 					_toggleDeleteButton: function(event, action) {
 						var instance = this;
 
-						var deleteTab = event.currentTarget.one('.delete-tab');
+						var deleteTab = event.currentTarget.one('> .delete-tab');
 
 						if (deleteTab) {
 							deleteTab[action]('aui-helper-hidden');
