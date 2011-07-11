@@ -28,7 +28,9 @@ if (showParentGroups) {
 }
 
 if (showLayout) {
-	_buildLayoutBreadcrumb(selLayout, selLayoutParam, true, portletURL, themeDisplay, sb);
+	if(!selLayout.getLayoutSet().getGroup().isLayoutPrototype()){
+		_buildLayoutBreadcrumb(selLayout, selLayoutParam, true, portletURL, themeDisplay, sb);
+	}
 }
 
 if (showPortletBreadcrumb) {
