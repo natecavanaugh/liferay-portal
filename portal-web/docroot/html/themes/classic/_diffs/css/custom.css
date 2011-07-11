@@ -113,97 +113,58 @@ body #banner .logo a {
 	z-index: 1;
 }
 
-#navigation ul {
-	list-style: none;
-	margin: 0;
-	padding: 3px;
-}
-
-.ie7 #navigation ul {
-	padding: 2px;
-}
-
-#navigation li, #navigation a {
-	display: inline-block;
-}
-
-.ie6 #navigation li, .ie7 #navigation li, .ie6 #navigation a, .ie7 #navigation a {
-	display: inline;
-	zoom: 1;
-	z-index: 200;
-}
-
-#navigation li {
-	position: relative;
-	vertical-align: top;
-}
-
 #navigation a {
 	color: #FFF;
-	font-size: 1.1em;
+	display: block;
 	font-weight: bold;
 	margin: 0 1px;
 	padding: 3px 15px;
 	text-decoration: none;
+    text-align: left;
+    white-space: nowrap;
 }
 
-.ie6 #navigation a, .ie7 #navigation a {
-	padding: 4px 15px;
+#navigation .selected a, #navigation li.hover a, #navigation a:hover, #navigation a:focus, #navigation .yui3-dd-dragging, .lfr-navigation-proxy, #navigation .yui3-menuitem-active a, #navigation .yui3-menu-label-menuvisible {
+	background: #222;
+	color: #FFF;
+	outline: 0;
+	text-shadow: -1px -1px #000;
+}
+
+#navigation .selected a {
+	background: #313334;
 }
 
 #navigation .yui3-dd-drop a {
 	cursor: move;
 }
 
-#navigation .selected a, #navigation li.hover a, #navigation a:hover, #navigation a:focus, #navigation .child-menu li a, #navigation .yui3-dd-dragging, .lfr-navigation-proxy {
-	background: #313334;
-	color: #FFF;
-	outline: 0;
-	text-shadow: -1px -1px #000;
+#navigation .yui3-menu-content {
+	background-image: none;
+	line-height: 2;
 }
 
-#navigation li.hover .child-menu {
-	background: #1E2529;
-	display: block;
-	position: absolute;
-	width: 200px;
-	z-index: 250;
+#navigation .yui3-menu-content ul {
+	padding: 2px;
 }
 
-.ie6 #navigation ul.child-menu-visible, .ie6 #navigation li.hover .child-menu, .ie7 #navigation ul.child-menu-visible, .ie7 #navigation li.hover ul.child-menu {
-	left: 0;
-	top: 25px;
+#navigation .yui3-menu-content li ul {
+	padding: 4px;
 }
 
-#navigation .child-menu {
-	display: none;
+#navigation li .yui3-menu-content {
+	background: #414445;
 }
 
-#navigation .child-menu li {
-	border-width: 0 0 1px;
-	display: block;
-	float: none;
-	margin: 0;
+#navigation .yui3-menu .yui3-menu-label {
+	background-image: url(../images/arrows/06_down.png);
+	background-repeat: no-repeat;
+	background-position: 95% 50%;
+	padding-right: 20px;
 }
 
-#navigation .child-menu li a {
-	cursor: pointer !important;
-}
-
-.ie7 #navigation .child-menu li a {
-	zoom: 1;
-}
-
-#navigation .child-menu li a:hover, #navigation li a.active {
-	background-color: #020509;
-}
-
-#navigation .child-menu .selected a {
-	background: #020509 url(../images/navigation/bullet_selected.png) no-repeat 5px 50%;
-}
-
-.nav-menu-style-arrows ul {
-	list-style-image: url(../images/navigation/bullet_selected.png);
+#navigation .yui3-menu li li .yui3-menu-label {
+	background-image: url(../images/arrows/06_right.png);
 }
 
 /* ---------- Portlet wrapper and icons ---------- */
@@ -357,4 +318,10 @@ body #banner .logo a {
 	-webkit-border-bottom-left-radius: 0;
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
+}
+
+#navigation ul .yui3-menu-content {
+	-moz-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.4);
+	box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.4);
 }
