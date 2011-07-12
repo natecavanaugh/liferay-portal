@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.UserGroupModel;
 import com.liferay.portal.model.UserGroupSoap;
@@ -64,9 +65,11 @@ public class UserGroupModelImpl extends BaseModelImpl<UserGroup>
 			{ "parentUserGroupId", Types.BIGINT },
 			{ "name", Types.VARCHAR },
 			{ "description", Types.VARCHAR },
+			{ "publicLayoutSetPrototypeId", Types.BIGINT },
+			{ "privateLayoutSetPrototypeId", Types.BIGINT },
 			{ "addedByLDAPImport", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table UserGroup (userGroupId LONG not null primary key,companyId LONG,parentUserGroupId LONG,name VARCHAR(75) null,description STRING null,addedByLDAPImport BOOLEAN)";
+	public static final String TABLE_SQL_CREATE = "create table UserGroup (userGroupId LONG not null primary key,companyId LONG,parentUserGroupId LONG,name VARCHAR(75) null,description STRING null,publicLayoutSetPrototypeId LONG,privateLayoutSetPrototypeId LONG,addedByLDAPImport BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table UserGroup";
 	public static final String ORDER_BY_JPQL = " ORDER BY userGroup.name ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY UserGroup.name ASC";
@@ -94,6 +97,8 @@ public class UserGroupModelImpl extends BaseModelImpl<UserGroup>
 		model.setParentUserGroupId(soapModel.getParentUserGroupId());
 		model.setName(soapModel.getName());
 		model.setDescription(soapModel.getDescription());
+		model.setPublicLayoutSetPrototypeId(soapModel.getPublicLayoutSetPrototypeId());
+		model.setPrivateLayoutSetPrototypeId(soapModel.getPrivateLayoutSetPrototypeId());
 		model.setAddedByLDAPImport(soapModel.getAddedByLDAPImport());
 
 		return model;
@@ -231,6 +236,24 @@ public class UserGroupModelImpl extends BaseModelImpl<UserGroup>
 	}
 
 	@JSON
+	public long getPublicLayoutSetPrototypeId() {
+		return _publicLayoutSetPrototypeId;
+	}
+
+	public void setPublicLayoutSetPrototypeId(long publicLayoutSetPrototypeId) {
+		_publicLayoutSetPrototypeId = publicLayoutSetPrototypeId;
+	}
+
+	@JSON
+	public long getPrivateLayoutSetPrototypeId() {
+		return _privateLayoutSetPrototypeId;
+	}
+
+	public void setPrivateLayoutSetPrototypeId(long privateLayoutSetPrototypeId) {
+		_privateLayoutSetPrototypeId = privateLayoutSetPrototypeId;
+	}
+
+	@JSON
 	public boolean getAddedByLDAPImport() {
 		return _addedByLDAPImport;
 	}
@@ -283,6 +306,8 @@ public class UserGroupModelImpl extends BaseModelImpl<UserGroup>
 		userGroupImpl.setParentUserGroupId(getParentUserGroupId());
 		userGroupImpl.setName(getName());
 		userGroupImpl.setDescription(getDescription());
+		userGroupImpl.setPublicLayoutSetPrototypeId(getPublicLayoutSetPrototypeId());
+		userGroupImpl.setPrivateLayoutSetPrototypeId(getPrivateLayoutSetPrototypeId());
 		userGroupImpl.setAddedByLDAPImport(getAddedByLDAPImport());
 
 		userGroupImpl.resetOriginalValues();
@@ -344,8 +369,43 @@ public class UserGroupModelImpl extends BaseModelImpl<UserGroup>
 	}
 
 	@Override
+	public CacheModel<UserGroup> toCacheModel() {
+		UserGroupCacheModel userGroupCacheModel = new UserGroupCacheModel();
+
+		userGroupCacheModel.userGroupId = getUserGroupId();
+
+		userGroupCacheModel.companyId = getCompanyId();
+
+		userGroupCacheModel.parentUserGroupId = getParentUserGroupId();
+
+		userGroupCacheModel.name = getName();
+
+		String name = userGroupCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			userGroupCacheModel.name = null;
+		}
+
+		userGroupCacheModel.description = getDescription();
+
+		String description = userGroupCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			userGroupCacheModel.description = null;
+		}
+
+		userGroupCacheModel.publicLayoutSetPrototypeId = getPublicLayoutSetPrototypeId();
+
+		userGroupCacheModel.privateLayoutSetPrototypeId = getPrivateLayoutSetPrototypeId();
+
+		userGroupCacheModel.addedByLDAPImport = getAddedByLDAPImport();
+
+		return userGroupCacheModel;
+	}
+
+	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{userGroupId=");
 		sb.append(getUserGroupId());
@@ -357,6 +417,10 @@ public class UserGroupModelImpl extends BaseModelImpl<UserGroup>
 		sb.append(getName());
 		sb.append(", description=");
 		sb.append(getDescription());
+		sb.append(", publicLayoutSetPrototypeId=");
+		sb.append(getPublicLayoutSetPrototypeId());
+		sb.append(", privateLayoutSetPrototypeId=");
+		sb.append(getPrivateLayoutSetPrototypeId());
 		sb.append(", addedByLDAPImport=");
 		sb.append(getAddedByLDAPImport());
 		sb.append("}");
@@ -365,7 +429,7 @@ public class UserGroupModelImpl extends BaseModelImpl<UserGroup>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(22);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.UserGroup");
@@ -392,6 +456,14 @@ public class UserGroupModelImpl extends BaseModelImpl<UserGroup>
 		sb.append(getDescription());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>publicLayoutSetPrototypeId</column-name><column-value><![CDATA[");
+		sb.append(getPublicLayoutSetPrototypeId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>privateLayoutSetPrototypeId</column-name><column-value><![CDATA[");
+		sb.append(getPrivateLayoutSetPrototypeId());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>addedByLDAPImport</column-name><column-value><![CDATA[");
 		sb.append(getAddedByLDAPImport());
 		sb.append("]]></column-value></column>");
@@ -413,6 +485,8 @@ public class UserGroupModelImpl extends BaseModelImpl<UserGroup>
 	private String _name;
 	private String _originalName;
 	private String _description;
+	private long _publicLayoutSetPrototypeId;
+	private long _privateLayoutSetPrototypeId;
 	private boolean _addedByLDAPImport;
 	private transient ExpandoBridge _expandoBridge;
 	private UserGroup _escapedModelProxy;

@@ -85,10 +85,13 @@ public class DLAppServiceSoap {
 		}
 	}
 
-	public static void checkInFileEntry(long fileEntryId,
-		java.lang.String lockUuid) throws RemoteException {
+	public static void checkInFileEntry(long fileEntryId, boolean major,
+		java.lang.String changeLog,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
 		try {
-			DLAppServiceUtil.checkInFileEntry(fileEntryId, lockUuid);
+			DLAppServiceUtil.checkInFileEntry(fileEntryId, major, changeLog,
+				serviceContext);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -97,13 +100,10 @@ public class DLAppServiceSoap {
 		}
 	}
 
-	public static void checkInFileEntry(long fileEntryId, boolean major,
-		java.lang.String changeLog,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws RemoteException {
+	public static void checkInFileEntry(long fileEntryId,
+		java.lang.String lockUuid) throws RemoteException {
 		try {
-			DLAppServiceUtil.checkInFileEntry(fileEntryId, major, changeLog,
-				serviceContext);
+			DLAppServiceUtil.checkInFileEntry(fileEntryId, lockUuid);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -184,108 +184,6 @@ public class DLAppServiceSoap {
 		}
 	}
 
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getFileEntries(
-		long repositoryId, long folderId) throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getFileEntries(repositoryId, folderId);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getFileEntries(
-		long repositoryId, long folderId, int start, int end)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getFileEntries(repositoryId, folderId, start,
-					end);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getFileEntries(
-		long repositoryId, long folderId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getFileEntries(repositoryId, folderId, start,
-					end, obc);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getFileEntries(
-		long repositoryId, long folderId, long fileEntryTypeId)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getFileEntries(repositoryId, folderId,
-					fileEntryTypeId);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getFileEntries(
-		long repositoryId, long folderId, long fileEntryTypeId, int start,
-		int end) throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getFileEntries(repositoryId, folderId,
-					fileEntryTypeId, start, end);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getFileEntries(
-		long repositoryId, long folderId, long fileEntryTypeId, int start,
-		int end, com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getFileEntries(repositoryId, folderId,
-					fileEntryTypeId, start, end, obc);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
 	public static int getFileEntriesAndFileShortcutsCount(long repositoryId,
 		long folderId, int status) throws RemoteException {
 		try {
@@ -346,61 +244,12 @@ public class DLAppServiceSoap {
 		}
 	}
 
-	public static java.util.List<com.liferay.portal.kernel.repository.model.Folder> getFolders(
-		long repositoryId, long parentFolderId) throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.Folder> returnValue =
-				DLAppServiceUtil.getFolders(repositoryId, parentFolderId);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.Folder> getFolders(
-		long repositoryId, long parentFolderId, int start, int end)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.Folder> returnValue =
-				DLAppServiceUtil.getFolders(repositoryId, parentFolderId,
-					start, end);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.Folder> getFolders(
-		long repositoryId, long parentFolderId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.Folder> returnValue =
-				DLAppServiceUtil.getFolders(repositoryId, parentFolderId,
-					start, end, obc);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
 	public static int getFoldersAndFileEntriesAndFileShortcutsCount(
-		long repositoryId, long folderId, int status) throws RemoteException {
+		long repositoryId, long folderId, int status,
+		boolean includeMountFolders) throws RemoteException {
 		try {
 			int returnValue = DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(repositoryId,
-					folderId, status);
+					folderId, status, includeMountFolders);
 
 			return returnValue;
 		}
@@ -426,81 +275,26 @@ public class DLAppServiceSoap {
 		}
 	}
 
+	public static int getFoldersCount(long repositoryId, long parentFolderId,
+		boolean includeMountFolders) throws RemoteException {
+		try {
+			int returnValue = DLAppServiceUtil.getFoldersCount(repositoryId,
+					parentFolderId, includeMountFolders);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static int getFoldersFileEntriesCount(long repositoryId,
 		Long[] folderIds, int status) throws RemoteException {
 		try {
 			int returnValue = DLAppServiceUtil.getFoldersFileEntriesCount(repositoryId,
 					ListUtil.toList(folderIds), status);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
-		long repositoryId, long userId, int start, int end)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getGroupFileEntries(repositoryId, userId,
-					start, end);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
-		long repositoryId, long userId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getGroupFileEntries(repositoryId, userId,
-					start, end, obc);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
-		long repositoryId, long userId, long rootFolderId, int start, int end)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getGroupFileEntries(repositoryId, userId,
-					rootFolderId, start, end);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
-		long repositoryId, long userId, long rootFolderId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws RemoteException {
-		try {
-			java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> returnValue =
-				DLAppServiceUtil.getGroupFileEntries(repositoryId, userId,
-					rootFolderId, start, end, obc);
 
 			return returnValue;
 		}

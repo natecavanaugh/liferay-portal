@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.Repository;
 import com.liferay.portal.model.impl.RepositoryImpl;
@@ -41,6 +42,7 @@ import com.liferay.portal.model.impl.RepositoryModelImpl;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryPersistence;
+import com.liferay.portlet.documentlibrary.service.persistence.DLFileVersionPersistence;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFolderPersistence;
 import com.liferay.portlet.expando.service.persistence.ExpandoValuePersistence;
 
@@ -1123,6 +1125,8 @@ public class RepositoryPersistenceImpl extends BasePersistenceImpl<Repository>
 	protected WorkflowInstanceLinkPersistence workflowInstanceLinkPersistence;
 	@BeanReference(type = DLFileEntryPersistence.class)
 	protected DLFileEntryPersistence dlFileEntryPersistence;
+	@BeanReference(type = DLFileVersionPersistence.class)
+	protected DLFileVersionPersistence dlFileVersionPersistence;
 	@BeanReference(type = DLFolderPersistence.class)
 	protected DLFolderPersistence dlFolderPersistence;
 	@BeanReference(type = ExpandoValuePersistence.class)
@@ -1140,6 +1144,16 @@ public class RepositoryPersistenceImpl extends BasePersistenceImpl<Repository>
 	private static Repository _nullRepository = new RepositoryImpl() {
 			public Object clone() {
 				return this;
+			}
+
+			public CacheModel<Repository> toCacheModel() {
+				return _nullRepositoryCacheModel;
+			}
+		};
+
+	private static CacheModel<Repository> _nullRepositoryCacheModel = new CacheModel<Repository>() {
+			public Repository toEntityModel() {
+				return _nullRepository;
 			}
 		};
 }

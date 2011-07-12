@@ -48,8 +48,12 @@ import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeService;
 import com.liferay.portlet.documentlibrary.service.DLFileRankLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFileShortcutLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFileShortcutService;
+import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalService;
+import com.liferay.portlet.documentlibrary.service.DLFileVersionService;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFolderService;
+import com.liferay.portlet.documentlibrary.service.DLSyncLocalService;
+import com.liferay.portlet.documentlibrary.service.DLSyncService;
 import com.liferay.portlet.documentlibrary.service.persistence.DLContentFinder;
 import com.liferay.portlet.documentlibrary.service.persistence.DLContentPersistence;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryFinder;
@@ -499,6 +503,44 @@ public abstract class DLAppLocalServiceBaseImpl implements DLAppLocalService,
 	}
 
 	/**
+	 * Returns the document library file version local service.
+	 *
+	 * @return the document library file version local service
+	 */
+	public DLFileVersionLocalService getDLFileVersionLocalService() {
+		return dlFileVersionLocalService;
+	}
+
+	/**
+	 * Sets the document library file version local service.
+	 *
+	 * @param dlFileVersionLocalService the document library file version local service
+	 */
+	public void setDLFileVersionLocalService(
+		DLFileVersionLocalService dlFileVersionLocalService) {
+		this.dlFileVersionLocalService = dlFileVersionLocalService;
+	}
+
+	/**
+	 * Returns the document library file version remote service.
+	 *
+	 * @return the document library file version remote service
+	 */
+	public DLFileVersionService getDLFileVersionService() {
+		return dlFileVersionService;
+	}
+
+	/**
+	 * Sets the document library file version remote service.
+	 *
+	 * @param dlFileVersionService the document library file version remote service
+	 */
+	public void setDLFileVersionService(
+		DLFileVersionService dlFileVersionService) {
+		this.dlFileVersionService = dlFileVersionService;
+	}
+
+	/**
 	 * Returns the document library file version persistence.
 	 *
 	 * @return the document library file version persistence
@@ -588,6 +630,42 @@ public abstract class DLAppLocalServiceBaseImpl implements DLAppLocalService,
 	 */
 	public void setDLFolderFinder(DLFolderFinder dlFolderFinder) {
 		this.dlFolderFinder = dlFolderFinder;
+	}
+
+	/**
+	 * Returns the d l sync local service.
+	 *
+	 * @return the d l sync local service
+	 */
+	public DLSyncLocalService getDLSyncLocalService() {
+		return dlSyncLocalService;
+	}
+
+	/**
+	 * Sets the d l sync local service.
+	 *
+	 * @param dlSyncLocalService the d l sync local service
+	 */
+	public void setDLSyncLocalService(DLSyncLocalService dlSyncLocalService) {
+		this.dlSyncLocalService = dlSyncLocalService;
+	}
+
+	/**
+	 * Returns the d l sync remote service.
+	 *
+	 * @return the d l sync remote service
+	 */
+	public DLSyncService getDLSyncService() {
+		return dlSyncService;
+	}
+
+	/**
+	 * Sets the d l sync remote service.
+	 *
+	 * @param dlSyncService the d l sync remote service
+	 */
+	public void setDLSyncService(DLSyncService dlSyncService) {
+		this.dlSyncService = dlSyncService;
 	}
 
 	/**
@@ -926,6 +1004,10 @@ public abstract class DLAppLocalServiceBaseImpl implements DLAppLocalService,
 	protected DLFileShortcutService dlFileShortcutService;
 	@BeanReference(type = DLFileShortcutPersistence.class)
 	protected DLFileShortcutPersistence dlFileShortcutPersistence;
+	@BeanReference(type = DLFileVersionLocalService.class)
+	protected DLFileVersionLocalService dlFileVersionLocalService;
+	@BeanReference(type = DLFileVersionService.class)
+	protected DLFileVersionService dlFileVersionService;
 	@BeanReference(type = DLFileVersionPersistence.class)
 	protected DLFileVersionPersistence dlFileVersionPersistence;
 	@BeanReference(type = DLFolderLocalService.class)
@@ -936,6 +1018,10 @@ public abstract class DLAppLocalServiceBaseImpl implements DLAppLocalService,
 	protected DLFolderPersistence dlFolderPersistence;
 	@BeanReference(type = DLFolderFinder.class)
 	protected DLFolderFinder dlFolderFinder;
+	@BeanReference(type = DLSyncLocalService.class)
+	protected DLSyncLocalService dlSyncLocalService;
+	@BeanReference(type = DLSyncService.class)
+	protected DLSyncService dlSyncService;
 	@BeanReference(type = CounterLocalService.class)
 	protected CounterLocalService counterLocalService;
 	@BeanReference(type = LockLocalService.class)

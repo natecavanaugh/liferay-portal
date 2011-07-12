@@ -32,6 +32,8 @@ import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryService;
+import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalService;
+import com.liferay.portlet.documentlibrary.service.DLFileVersionService;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFolderService;
 
@@ -49,11 +51,14 @@ public class LiferayRepository
 		RepositoryService repositoryService,
 		DLFileEntryLocalService dlFileEntryLocalService,
 		DLFileEntryService dlFileEntryService,
+		DLFileVersionLocalService dlFileVersionLocalService,
+		DLFileVersionService dlFileVersionService,
 		DLFolderLocalService dlFolderLocalService,
 		DLFolderService dlFolderService, long repositoryId) {
 
 		super(
 			repositoryService, dlFileEntryLocalService, dlFileEntryService,
+			dlFileVersionLocalService, dlFileVersionService,
 			dlFolderLocalService, dlFolderService, repositoryId);
 	}
 
@@ -61,12 +66,15 @@ public class LiferayRepository
 		RepositoryService repositoryService,
 		DLFileEntryLocalService dlFileEntryLocalService,
 		DLFileEntryService dlFileEntryService,
+		DLFileVersionLocalService dlFileVersionLocalService,
+		DLFileVersionService dlFileVersionService,
 		DLFolderLocalService dlFolderLocalService,
 		DLFolderService dlFolderService, long folderId,
 		long fileEntryId, long fileVersionId) {
 
 		super(
 			repositoryService, dlFileEntryLocalService, dlFileEntryService,
+			dlFileVersionLocalService, dlFileVersionService,
 			dlFolderLocalService, dlFolderService, folderId, fileEntryId,
 			fileVersionId);
 	}
@@ -102,12 +110,6 @@ public class LiferayRepository
 		dlFileEntryService.cancelCheckOut(fileEntryId);
 	}
 
-	public void checkInFileEntry(long fileEntryId, String lockUuid)
-		throws PortalException, SystemException {
-
-		dlFileEntryService.checkInFileEntry(fileEntryId, lockUuid);
-	}
-
 	public void checkInFileEntry(
 			long fileEntryId, boolean major, String changeLog,
 			ServiceContext serviceContext)
@@ -115,6 +117,12 @@ public class LiferayRepository
 
 		dlFileEntryService.checkInFileEntry(
 			fileEntryId, major, changeLog, serviceContext);
+	}
+
+	public void checkInFileEntry(long fileEntryId, String lockUuid)
+		throws PortalException, SystemException {
+
+		dlFileEntryService.checkInFileEntry(fileEntryId, lockUuid);
 	}
 
 	public FileEntry checkOutFileEntry(long fileEntryId)
@@ -260,7 +268,7 @@ public class LiferayRepository
 	public FileVersion getFileVersion(long fileVersionId)
 		throws PortalException, SystemException {
 
-		DLFileVersion dlFileVersion = dlFileEntryService.getFileVersion(
+		DLFileVersion dlFileVersion = dlFileVersionService.getFileVersion(
 			fileVersionId);
 
 		return new LiferayFileVersion(dlFileVersion);
@@ -284,38 +292,47 @@ public class LiferayRepository
 	}
 
 	public List<Folder> getFolders(
-			long parentFolderId, int start, int end, OrderByComparator obc)
+			long parentFolderId, boolean includeMountfolders, int start,
+			int end, OrderByComparator obc)
 		throws SystemException {
 
 		List<DLFolder> dlFolders = dlFolderService.getFolders(
-			getGroupId(), toFolderId(parentFolderId), start, end, obc);
+			getGroupId(), toFolderId(parentFolderId), includeMountfolders,
+			start, end, obc);
 
 		return toFolders(dlFolders);
 	}
 
 	public List<Object> getFoldersAndFileEntriesAndFileShortcuts(
-			long folderId, int status, int start, int end,
-			OrderByComparator obc)
+			long folderId, int status, boolean includeMountFolders, int start,
+			int end, OrderByComparator obc)
 		throws SystemException {
 
 		List<Object> dlFoldersAndFileEntriesAndFileShortcuts =
 			dlFolderService.getFoldersAndFileEntriesAndFileShortcuts(
-				getGroupId(), toFolderId(folderId), status, start, end, obc);
+				getGroupId(), toFolderId(folderId), status, includeMountFolders,
+				start, end, obc);
 
 		return toFileEntriesAndFolders(dlFoldersAndFileEntriesAndFileShortcuts);
 	}
 
 	public int getFoldersAndFileEntriesAndFileShortcutsCount(
-			long folderId, int status)
+			long folderId, int status, boolean includeMountFolders)
 		throws SystemException {
 
 		return dlFolderService.getFoldersAndFileEntriesAndFileShortcutsCount(
-			getGroupId(), toFolderId(folderId), status);
+			getGroupId(), toFolderId(folderId), status, includeMountFolders);
 	}
 
 	public int getFoldersCount(long parentFolderId) throws SystemException {
+		return getFoldersCount(parentFolderId, true);
+	}
+
+	public int getFoldersCount(long parentFolderId, boolean includeMountfolders)
+		throws SystemException {
+
 		return dlFolderService.getFoldersCount(
-			getGroupId(), toFolderId(parentFolderId));
+			getGroupId(), toFolderId(parentFolderId), includeMountfolders);
 	}
 
 	public int getFoldersFileEntriesCount(List<Long> folderIds, int status)
@@ -323,6 +340,23 @@ public class LiferayRepository
 
 		return dlFileEntryService.getFoldersFileEntriesCount(
 			getGroupId(), toFolderIds(folderIds), status);
+	}
+
+	public List<Folder> getMountFolders(
+			long parentFolderId, int start, int end, OrderByComparator obc)
+		throws SystemException {
+
+		List<DLFolder> dlFolders = dlFolderService.getMountFolders(
+			getGroupId(), toFolderId(parentFolderId), start, end, obc);
+
+		return toFolders(dlFolders);
+	}
+
+	public int getMountFoldersCount(long parentFolderId)
+		throws SystemException {
+
+		return dlFolderService.getMountFoldersCount(
+			getGroupId(), toFolderId(parentFolderId));
 	}
 
 	public List<FileEntry> getRepositoryFileEntries(

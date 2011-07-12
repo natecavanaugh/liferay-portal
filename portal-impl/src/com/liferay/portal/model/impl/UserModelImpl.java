@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserModel;
 import com.liferay.portal.model.UserSoap;
@@ -973,6 +974,250 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		userModelImpl._originalPortraitId = userModelImpl._portraitId;
 
 		userModelImpl._setOriginalPortraitId = false;
+	}
+
+	@Override
+	public CacheModel<User> toCacheModel() {
+		UserCacheModel userCacheModel = new UserCacheModel();
+
+		userCacheModel.uuid = getUuid();
+
+		String uuid = userCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			userCacheModel.uuid = null;
+		}
+
+		userCacheModel.userId = getUserId();
+
+		userCacheModel.companyId = getCompanyId();
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			userCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			userCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			userCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			userCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		userCacheModel.defaultUser = getDefaultUser();
+
+		userCacheModel.contactId = getContactId();
+
+		userCacheModel.password = getPassword();
+
+		String password = userCacheModel.password;
+
+		if ((password != null) && (password.length() == 0)) {
+			userCacheModel.password = null;
+		}
+
+		userCacheModel.passwordEncrypted = getPasswordEncrypted();
+
+		userCacheModel.passwordReset = getPasswordReset();
+
+		Date passwordModifiedDate = getPasswordModifiedDate();
+
+		if (passwordModifiedDate != null) {
+			userCacheModel.passwordModifiedDate = passwordModifiedDate.getTime();
+		}
+		else {
+			userCacheModel.passwordModifiedDate = Long.MIN_VALUE;
+		}
+
+		userCacheModel.digest = getDigest();
+
+		String digest = userCacheModel.digest;
+
+		if ((digest != null) && (digest.length() == 0)) {
+			userCacheModel.digest = null;
+		}
+
+		userCacheModel.reminderQueryQuestion = getReminderQueryQuestion();
+
+		String reminderQueryQuestion = userCacheModel.reminderQueryQuestion;
+
+		if ((reminderQueryQuestion != null) &&
+				(reminderQueryQuestion.length() == 0)) {
+			userCacheModel.reminderQueryQuestion = null;
+		}
+
+		userCacheModel.reminderQueryAnswer = getReminderQueryAnswer();
+
+		String reminderQueryAnswer = userCacheModel.reminderQueryAnswer;
+
+		if ((reminderQueryAnswer != null) &&
+				(reminderQueryAnswer.length() == 0)) {
+			userCacheModel.reminderQueryAnswer = null;
+		}
+
+		userCacheModel.graceLoginCount = getGraceLoginCount();
+
+		userCacheModel.screenName = getScreenName();
+
+		String screenName = userCacheModel.screenName;
+
+		if ((screenName != null) && (screenName.length() == 0)) {
+			userCacheModel.screenName = null;
+		}
+
+		userCacheModel.emailAddress = getEmailAddress();
+
+		String emailAddress = userCacheModel.emailAddress;
+
+		if ((emailAddress != null) && (emailAddress.length() == 0)) {
+			userCacheModel.emailAddress = null;
+		}
+
+		userCacheModel.facebookId = getFacebookId();
+
+		userCacheModel.openId = getOpenId();
+
+		String openId = userCacheModel.openId;
+
+		if ((openId != null) && (openId.length() == 0)) {
+			userCacheModel.openId = null;
+		}
+
+		userCacheModel.portraitId = getPortraitId();
+
+		userCacheModel.languageId = getLanguageId();
+
+		String languageId = userCacheModel.languageId;
+
+		if ((languageId != null) && (languageId.length() == 0)) {
+			userCacheModel.languageId = null;
+		}
+
+		userCacheModel.timeZoneId = getTimeZoneId();
+
+		String timeZoneId = userCacheModel.timeZoneId;
+
+		if ((timeZoneId != null) && (timeZoneId.length() == 0)) {
+			userCacheModel.timeZoneId = null;
+		}
+
+		userCacheModel.greeting = getGreeting();
+
+		String greeting = userCacheModel.greeting;
+
+		if ((greeting != null) && (greeting.length() == 0)) {
+			userCacheModel.greeting = null;
+		}
+
+		userCacheModel.comments = getComments();
+
+		String comments = userCacheModel.comments;
+
+		if ((comments != null) && (comments.length() == 0)) {
+			userCacheModel.comments = null;
+		}
+
+		userCacheModel.firstName = getFirstName();
+
+		String firstName = userCacheModel.firstName;
+
+		if ((firstName != null) && (firstName.length() == 0)) {
+			userCacheModel.firstName = null;
+		}
+
+		userCacheModel.middleName = getMiddleName();
+
+		String middleName = userCacheModel.middleName;
+
+		if ((middleName != null) && (middleName.length() == 0)) {
+			userCacheModel.middleName = null;
+		}
+
+		userCacheModel.lastName = getLastName();
+
+		String lastName = userCacheModel.lastName;
+
+		if ((lastName != null) && (lastName.length() == 0)) {
+			userCacheModel.lastName = null;
+		}
+
+		userCacheModel.jobTitle = getJobTitle();
+
+		String jobTitle = userCacheModel.jobTitle;
+
+		if ((jobTitle != null) && (jobTitle.length() == 0)) {
+			userCacheModel.jobTitle = null;
+		}
+
+		Date loginDate = getLoginDate();
+
+		if (loginDate != null) {
+			userCacheModel.loginDate = loginDate.getTime();
+		}
+		else {
+			userCacheModel.loginDate = Long.MIN_VALUE;
+		}
+
+		userCacheModel.loginIP = getLoginIP();
+
+		String loginIP = userCacheModel.loginIP;
+
+		if ((loginIP != null) && (loginIP.length() == 0)) {
+			userCacheModel.loginIP = null;
+		}
+
+		Date lastLoginDate = getLastLoginDate();
+
+		if (lastLoginDate != null) {
+			userCacheModel.lastLoginDate = lastLoginDate.getTime();
+		}
+		else {
+			userCacheModel.lastLoginDate = Long.MIN_VALUE;
+		}
+
+		userCacheModel.lastLoginIP = getLastLoginIP();
+
+		String lastLoginIP = userCacheModel.lastLoginIP;
+
+		if ((lastLoginIP != null) && (lastLoginIP.length() == 0)) {
+			userCacheModel.lastLoginIP = null;
+		}
+
+		Date lastFailedLoginDate = getLastFailedLoginDate();
+
+		if (lastFailedLoginDate != null) {
+			userCacheModel.lastFailedLoginDate = lastFailedLoginDate.getTime();
+		}
+		else {
+			userCacheModel.lastFailedLoginDate = Long.MIN_VALUE;
+		}
+
+		userCacheModel.failedLoginAttempts = getFailedLoginAttempts();
+
+		userCacheModel.lockout = getLockout();
+
+		Date lockoutDate = getLockoutDate();
+
+		if (lockoutDate != null) {
+			userCacheModel.lockoutDate = lockoutDate.getTime();
+		}
+		else {
+			userCacheModel.lockoutDate = Long.MIN_VALUE;
+		}
+
+		userCacheModel.agreedToTermsOfUse = getAgreedToTermsOfUse();
+
+		userCacheModel.emailAddressVerified = getEmailAddressVerified();
+
+		userCacheModel.status = getStatus();
+
+		return userCacheModel;
 	}
 
 	@Override

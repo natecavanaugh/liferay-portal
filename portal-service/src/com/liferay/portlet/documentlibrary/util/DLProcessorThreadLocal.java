@@ -12,24 +12,25 @@
  * details.
  */
 
-package com.liferay.portal.kernel.cache;
+package com.liferay.portlet.documentlibrary.util;
+
+import com.liferay.portal.kernel.util.AutoResetThreadLocal;
 
 /**
- * @author Michael C. Han
+ * @author Mika Koivisto
  */
-public abstract class BasePortalCache implements PortalCache {
+public class DLProcessorThreadLocal {
 
-	public void destroy() {
+	public static boolean isEnabled() {
+		return _enabled.get().booleanValue();
 	}
 
-	public boolean isDebug() {
-		return _debug;
+	public static void setEnabled(boolean enabled) {
+		_enabled.set(enabled);
 	}
 
-	public void setDebug(boolean debug) {
-		_debug = debug;
-	}
-
-	private boolean _debug;
+	private static ThreadLocal<Boolean> _enabled =
+		new AutoResetThreadLocal<Boolean>(
+			DLProcessorThreadLocal.class + "._enabled", true);
 
 }

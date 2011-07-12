@@ -78,10 +78,13 @@ public class DLFileEntryServiceSoap {
 		}
 	}
 
-	public static void checkInFileEntry(long fileEntryId,
-		java.lang.String lockUuid) throws RemoteException {
+	public static void checkInFileEntry(long fileEntryId, boolean major,
+		java.lang.String changeLog,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
 		try {
-			DLFileEntryServiceUtil.checkInFileEntry(fileEntryId, lockUuid);
+			DLFileEntryServiceUtil.checkInFileEntry(fileEntryId, major,
+				changeLog, serviceContext);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -90,13 +93,10 @@ public class DLFileEntryServiceSoap {
 		}
 	}
 
-	public static void checkInFileEntry(long fileEntryId, boolean major,
-		java.lang.String changeLog,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws RemoteException {
+	public static void checkInFileEntry(long fileEntryId,
+		java.lang.String lockUuid) throws RemoteException {
 		try {
-			DLFileEntryServiceUtil.checkInFileEntry(fileEntryId, major,
-				changeLog, serviceContext);
+			DLFileEntryServiceUtil.checkInFileEntry(fileEntryId, lockUuid);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -279,20 +279,6 @@ public class DLFileEntryServiceSoap {
 					groupId);
 
 			return com.liferay.portlet.documentlibrary.model.DLFileEntrySoap.toSoapModel(returnValue);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static com.liferay.portlet.documentlibrary.model.DLFileVersionSoap getFileVersion(
-		long fileVersionId) throws RemoteException {
-		try {
-			com.liferay.portlet.documentlibrary.model.DLFileVersion returnValue = DLFileEntryServiceUtil.getFileVersion(fileVersionId);
-
-			return com.liferay.portlet.documentlibrary.model.DLFileVersionSoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

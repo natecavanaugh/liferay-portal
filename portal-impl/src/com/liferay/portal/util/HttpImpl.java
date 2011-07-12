@@ -187,17 +187,25 @@ public class HttpImpl implements Http {
 			url = url.substring(0, pos);
 		}
 
-		if (url.indexOf(CharPool.QUESTION) == -1) {
-			url += StringPool.QUESTION;
-		}
+		StringBundler sb = new StringBundler(7);
 
-		if (!url.endsWith(StringPool.QUESTION) &&
+		sb.append(url);
+
+		if (url.indexOf(CharPool.QUESTION) == -1) {
+			sb.append(StringPool.QUESTION);
+		}
+		else if (!url.endsWith(StringPool.QUESTION) &&
 			!url.endsWith(StringPool.AMPERSAND)) {
 
-			url += StringPool.AMPERSAND;
+			sb.append(StringPool.AMPERSAND);
 		}
 
-		return url + name + StringPool.EQUAL + encodeURL(value) + anchor;
+		sb.append(name);
+		sb.append(StringPool.EQUAL);
+		sb.append(encodeURL(value));
+		sb.append(anchor);
+
+		return sb.toString();
 	}
 
 	public String decodePath(String path) {

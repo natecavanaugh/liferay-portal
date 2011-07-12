@@ -666,6 +666,7 @@ Liferay.Service.registerClass(
 		getFoldersFileEntriesCount: true,
 		getGroupFileEntries: true,
 		getGroupFileEntriesCount: true,
+		getMountFolders: true,
 		getSubfolderIds: true,
 		lockFolder: true,
 		moveFileEntry: true,
@@ -694,7 +695,6 @@ Liferay.Service.registerClass(
 		getFileEntry: true,
 		getFileEntryByUuidAndGroupId: true,
 		getFileEntryLock: true,
-		getFileVersion: true,
 		getFoldersFileEntriesCount: true,
 		getGroupFileEntries: true,
 		getGroupFileEntriesCount: true,
@@ -730,6 +730,14 @@ Liferay.Service.registerClass(
 );
 
 Liferay.Service.registerClass(
+	Liferay.Service.DL, "DLFileVersion",
+	{
+		getFileVersion: true,
+		getLatestFileVersion: true
+	}
+);
+
+Liferay.Service.registerClass(
 	Liferay.Service.DL, "DLFolder",
 	{
 		addFolder: true,
@@ -740,6 +748,8 @@ Liferay.Service.registerClass(
 		getFolders: true,
 		getFoldersAndFileEntriesAndFileShortcutsCount: true,
 		getFoldersCount: true,
+		getMountFolders: true,
+		getMountFoldersCount: true,
 		getSubfolderIds: true,
 		hasFolderLock: true,
 		hasInheritableLock: true,
