@@ -52,7 +52,7 @@
 			'form': ['aui-base', 'aui-form-validator'],
 			'form-navigator': ['aui-base'],
 			'history': getHistoryRequirements(),
-			'history-html5': ['liferay-history', 'history-html5', 'querystring-stringify-simple'],
+			'history-html5': ['history-html5', 'querystring-stringify-simple'],
 			'history-manager': ['liferay-history'],
 			'hudcrumbs': ['aui-base', 'plugin'],
 			'icon': ['aui-base'],
