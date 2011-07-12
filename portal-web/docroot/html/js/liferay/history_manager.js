@@ -3,6 +3,8 @@ AUI().add(
 	function(A) {
 		var HistoryBase = A.HistoryBase;
 
+		var EVENT_STATE_CHANGE = 'stateChange';
+
 		var HistoryManager = new Liferay.History();
 
 		HistoryManager.SRC_ADD = HistoryBase.SRC_ADD;
@@ -12,6 +14,22 @@ AUI().add(
 		HistoryManager.SRC_POPSTATE = A.HistoryHTML5 ? A.HistoryHTML5.SRC_POPSTATE : 'popstate';
 
 		HistoryManager.HTML5 = HistoryBase.html5;
+
+		HistoryManager.publish(
+			EVENT_STATE_CHANGE,
+			{
+				broadcast: 2
+			}
+		);
+
+		HistoryManager.after(
+			'change',
+			function(event) {
+				if (event.src === HistoryManager.SRC_HASH || event.src === HistoryManager.SRC_POPSTATE) {
+					HistoryManager.fire(EVENT_STATE_CHANGE, event);
+				}
+			}
+		);
 
 		Liferay.HistoryManager = HistoryManager;
 	},
