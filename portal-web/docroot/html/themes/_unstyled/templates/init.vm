@@ -248,7 +248,7 @@
 #end
 
 #if($layout.getGroup().isLayoutPrototype())
-	#set ($the_title = $layout.getGroup().getDescriptiveName())
+	#set ($the_title = $page_group.getDescriptiveName())
 #end
 
 #set ($the_title = $htmlUtil.escape($the_title))
