@@ -31,7 +31,7 @@ PortletURL portletURL = (PortletURL)request.getAttribute("edit_pages.jsp-portlet
 String modules = "aui-io-request,aui-tree-view,dataschema-xml,datatype-xml";
 
 if (!selectableTree) {
-	modules += ",liferay-history";
+	modules += ",liferay-history-manager";
 }
 %>
 
