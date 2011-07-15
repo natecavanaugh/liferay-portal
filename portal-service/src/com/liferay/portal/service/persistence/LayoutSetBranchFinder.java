@@ -12,25 +12,14 @@
  * details.
  */
 
-package com.liferay.portal.model;
+package com.liferay.portal.service.persistence;
 
 /**
- * <a href="BranchConstants.java.html"><b><i>View Source</i></b></a>
- *
- * @author Raymond Augé
+ * @author Brian Wing Shun Chan
  */
-public class LayoutSetBranchConstants {
-
-	public static final long ALL_BRANCHES = 0;
-
-	public static final String MASTER_BRANCH_DESCRIPTION_PRIVATE =
-		"main-private-pages-variation-of-x";
-
-	public static final String MASTER_BRANCH_DESCRIPTION_PUBLIC =
-		"main-public-pages-variation-of-x";
-
-	public static final String MASTER_BRANCH_NAME = "main-variation";
-
-	public static final long NO_BRANCHES = -1;
-
+public interface LayoutSetBranchFinder {
+	public com.liferay.portal.model.LayoutSetBranch findByMaster(long groupId,
+		boolean privateLayout)
+		throws com.liferay.portal.NoSuchLayoutSetBranchException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

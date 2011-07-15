@@ -1275,14 +1275,15 @@ public class StagingImpl implements Staging {
 			Locale locale = LocaleUtil.getDefault();
 
 			String description = LanguageUtil.format(
-				locale, LayoutSetBranchConstants.MASTER_BRANCH_DESCRIPTION,
+				locale,
+				LayoutSetBranchConstants.MASTER_BRANCH_DESCRIPTION_PUBLIC,
 				liveGroup.getDescriptiveName());
 
 			try {
 				LayoutSetBranchLocalServiceUtil.addLayoutSetBranch(
 					userId, targetGroupId, false,
 					LayoutSetBranchConstants.MASTER_BRANCH_NAME,
-					description, LayoutSetBranchConstants.ALL_BRANCHES,
+					description, true, LayoutSetBranchConstants.ALL_BRANCHES,
 					serviceContext);
 			}
 			catch (LayoutSetBranchNameException lsbne) {
@@ -1293,14 +1294,15 @@ public class StagingImpl implements Staging {
 			Locale locale = LocaleUtil.getDefault();
 
 			String description = LanguageUtil.format(
-				locale, LayoutSetBranchConstants.MASTER_BRANCH_DESCRIPTION,
+				locale,
+				LayoutSetBranchConstants.MASTER_BRANCH_DESCRIPTION_PRIVATE,
 				liveGroup.getDescriptiveName());
 
 			try {
 				LayoutSetBranchLocalServiceUtil.addLayoutSetBranch(
 					userId, targetGroupId, true,
 					LayoutSetBranchConstants.MASTER_BRANCH_NAME,
-					description, LayoutSetBranchConstants.ALL_BRANCHES,
+					description, true, LayoutSetBranchConstants.ALL_BRANCHES,
 					serviceContext);
 			}
 			catch (LayoutSetBranchNameException lsbne) {

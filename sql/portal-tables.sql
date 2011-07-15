@@ -1001,7 +1001,8 @@ create table LayoutSetBranch (
 	modifiedDate DATE null,
 	privateLayout BOOLEAN,
 	name VARCHAR(75) null,
-	description STRING null
+	description STRING null,
+	master BOOLEAN
 );
 
 create table LayoutSetPrototype (
