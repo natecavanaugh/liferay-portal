@@ -122,6 +122,10 @@
 		margin: 0 0 0.5em 0.5em;
 	}
 
+	.reminder .aui-field-element {
+		width: 100%;
+	}
+
 	.section {
 		float: left;
 		margin-left: 10px;
