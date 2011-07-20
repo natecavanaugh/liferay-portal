@@ -1204,6 +1204,7 @@ public class ServicePreAction extends Action {
 		}
 
 		// Dynamic Site Template
+
 		if (layout != null) {
 			try {
 				if (processLayoutSetPrototype(layout)) {
