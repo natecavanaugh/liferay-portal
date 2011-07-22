@@ -56,7 +56,7 @@ while (itr.hasNext()) {
 
 	Portlet portlet = PortletLocalServiceUtil.getPortletById(user.getCompanyId(), portletId);
 
-	if (portlet != null) {
+	if ((portlet != null) && PortletPermissionUtil.contains(permissionChecker, layout, portlet, ActionKeys.ADD_TO_PAGE)) {
 		portlets.add(portlet);
 
 		PortletApp portletApp = portlet.getPortletApp();
@@ -66,11 +66,7 @@ while (itr.hasNext()) {
 
 			ResourceBundle resourceBundle = curPortletConfig.getResourceBundle(locale);
 
-			try {
-				externalPortletCategory = resourceBundle.getString(portletCategory.getName());
-			}
-			catch (MissingResourceException mre) {
-			}
+			externalPortletCategory = ResourceBundleUtil.getString(resourceBundle, portletCategory.getName());
 		}
 	}
 }

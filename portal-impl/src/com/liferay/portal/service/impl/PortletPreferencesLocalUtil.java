@@ -16,17 +16,21 @@ package com.liferay.portal.service.impl;
 
 import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
 import com.liferay.portal.kernel.cache.PortalCache;
-import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.cache.key.CacheKeyGenerator;
+import com.liferay.portal.kernel.cache.key.CacheKeyGeneratorUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.BasePreferencesImpl;
 
+import java.io.Serializable;
+
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Michael Young
+ * @author Shuyang Zhou
  */
 public class PortletPreferencesLocalUtil {
 
@@ -38,7 +42,7 @@ public class PortletPreferencesLocalUtil {
 	}
 
 	protected static void clearPreferencesPool(long ownerId, int ownerType) {
-		String key = _encodeKey(ownerId, ownerType);
+		Serializable key = _encodeKey(ownerId, ownerType);
 
 		_portalCache.remove(key);
 	}
@@ -46,14 +50,13 @@ public class PortletPreferencesLocalUtil {
 	protected static Map<String, BasePreferencesImpl> getPreferencesPool(
 		long ownerId, int ownerType) {
 
-		String key = _encodeKey(ownerId, ownerType);
+		Serializable key = _encodeKey(ownerId, ownerType);
 
 		Map<String, BasePreferencesImpl> preferencesPool =
 			(Map<String, BasePreferencesImpl>)_portalCache.get(key);
 
 		if (preferencesPool == null) {
-			preferencesPool =
-				new ConcurrentHashMap<String, BasePreferencesImpl>();
+			preferencesPool = new HashMap<String, BasePreferencesImpl>();
 
 			_portalCache.put(key, preferencesPool);
 		}
@@ -61,16 +64,16 @@ public class PortletPreferencesLocalUtil {
 		return preferencesPool;
 	}
 
-	private static String _encodeKey(long ownerId, int ownerType) {
-		StringBundler sb = new StringBundler(5);
+	private static Serializable _encodeKey(long ownerId, int ownerType) {
+		CacheKeyGenerator cacheKeyGenerator =
+			CacheKeyGeneratorUtil.getCacheKeyGenerator(
+				CACHE_NAME);
 
-		sb.append(CACHE_NAME);
-		sb.append(StringPool.POUND);
-		sb.append(StringUtil.toHexString(ownerId));
-		sb.append(StringPool.POUND);
-		sb.append(StringUtil.toHexString(ownerType));
+		cacheKeyGenerator.append(StringUtil.toHexString(ownerId));
+		cacheKeyGenerator.append(StringPool.POUND);
+		cacheKeyGenerator.append(StringUtil.toHexString(ownerType));
 
-		return sb.toString();
+		return cacheKeyGenerator.finish();
 	}
 
 	private static PortalCache _portalCache = MultiVMPoolUtil.getCache(

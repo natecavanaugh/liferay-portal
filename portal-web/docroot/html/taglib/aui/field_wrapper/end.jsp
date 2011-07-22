@@ -14,26 +14,15 @@
  */
 --%>
 
-<%@ include file="/html/taglib/init.jsp" %>
-
-<%
-String helpMessage = GetterUtil.getString((String)request.getAttribute("aui:field-wrapper:helpMessage"));
-String inlineLabel = GetterUtil.getString((String)request.getAttribute("aui:field-wrapper:inlineLabel"));
-String label = GetterUtil.getString((String)request.getAttribute("aui:field-wrapper:label"));
-String name = GetterUtil.getString((String)request.getAttribute("aui:field-wrapper:name"));
-
-boolean showForLabel = false;
-
-if (Validator.isNotNull(name)) {
-	showForLabel = true;
-
-	name = namespace + name;
-}
-%>
+<%@ include file="/html/taglib/aui/field_wrapper/init.jsp" %>
 
 		<c:if test='<%= inlineLabel.equals("right") %>'>
 			<label <%= AUIUtil.buildLabel(inlineLabel, showForLabel, name) %>>
 				<liferay-ui:message key="<%= label %>" />
+
+				<c:if test="<%= required %>">
+					<span class="aui-label-required">(<liferay-ui:message key="required" />)</span>
+				</c:if>
 
 				<c:if test="<%= Validator.isNotNull(helpMessage) %>">
 					<liferay-ui:icon-help message="<%= helpMessage %>" />

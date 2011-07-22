@@ -168,6 +168,13 @@ public class LayoutSetBranchLocalServiceWrapper
 		return _layoutSetBranchLocalService.getLayoutSetBranch(layoutSetBranchId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _layoutSetBranchLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the layout set branchs.
 	*
@@ -198,7 +205,7 @@ public class LayoutSetBranchLocalServiceWrapper
 	}
 
 	/**
-	* Updates the layout set branch in the database. Also notifies the appropriate model listeners.
+	* Updates the layout set branch in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param layoutSetBranch the layout set branch
 	* @return the layout set branch that was updated
@@ -211,7 +218,7 @@ public class LayoutSetBranchLocalServiceWrapper
 	}
 
 	/**
-	* Updates the layout set branch in the database. Also notifies the appropriate model listeners.
+	* Updates the layout set branch in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param layoutSetBranch the layout set branch
 	* @param merge whether to merge the layout set branch with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -245,13 +252,13 @@ public class LayoutSetBranchLocalServiceWrapper
 
 	public com.liferay.portal.model.LayoutSetBranch addLayoutSetBranch(
 		long userId, long groupId, boolean privateLayout,
-		java.lang.String name, java.lang.String description,
+		java.lang.String name, java.lang.String description, boolean master,
 		long copyLayoutSetBranchId,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSetBranchLocalService.addLayoutSetBranch(userId, groupId,
-			privateLayout, name, description, copyLayoutSetBranchId,
+			privateLayout, name, description, master, copyLayoutSetBranchId,
 			serviceContext);
 	}
 

@@ -19,7 +19,7 @@ fieldset, img {
 	border: 0;
 }
 
-address, caption, cite, code, dfn, em, strong, th, var {
+address, caption, cite, code, dfn, th, var {
 	font-style: normal;
 	font-weight: normal;
 }
@@ -196,20 +196,6 @@ code, pre {
 
 .important {
 	font-weight: bold;
-}
-
-/* ---------- Staging area ---------- */
-
-body.staging, body.live-view {
-	border: 10px solid #F00;
-}
-
-body.live-view {
-	border-color: #FC0;
-}
-
-.portal-iframe.staging {
-	border: none;
 }
 
 /* ---------- Main content body ---------- */

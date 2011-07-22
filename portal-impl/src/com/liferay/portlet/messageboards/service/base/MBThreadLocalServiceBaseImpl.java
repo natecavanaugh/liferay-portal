@@ -29,7 +29,9 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.LockLocalService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -77,6 +79,8 @@ import com.liferay.portlet.ratings.service.persistence.RatingsStatsPersistence;
 import com.liferay.portlet.social.service.SocialActivityLocalService;
 import com.liferay.portlet.social.service.persistence.SocialActivityFinder;
 import com.liferay.portlet.social.service.persistence.SocialActivityPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -266,6 +270,11 @@ public abstract class MBThreadLocalServiceBaseImpl
 		return mbThreadPersistence.findByPrimaryKey(threadId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return mbThreadPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the message boards threads.
 	 *
@@ -294,7 +303,7 @@ public abstract class MBThreadLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the message boards thread in the database. Also notifies the appropriate model listeners.
+	 * Updates the message boards thread in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param mbThread the message boards thread
 	 * @return the message boards thread that was updated
@@ -305,7 +314,7 @@ public abstract class MBThreadLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the message boards thread in the database. Also notifies the appropriate model listeners.
+	 * Updates the message boards thread in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param mbThread the message boards thread
 	 * @param merge whether to merge the message boards thread with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -1204,6 +1213,16 @@ public abstract class MBThreadLocalServiceBaseImpl
 		this.socialActivityFinder = socialActivityFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.messageboards.model.MBThread",
+			mbThreadLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.messageboards.model.MBThread");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -1343,6 +1362,8 @@ public abstract class MBThreadLocalServiceBaseImpl
 	protected SocialActivityPersistence socialActivityPersistence;
 	@BeanReference(type = SocialActivityFinder.class)
 	protected SocialActivityFinder socialActivityFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(MBThreadLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

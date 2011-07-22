@@ -14,7 +14,6 @@
 
 package com.liferay.portal.dao.orm.common;
 
-import com.liferay.portal.kernel.cache.CacheKVP;
 import com.liferay.portal.kernel.cache.CacheRegistryItem;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.cache.MultiVMPool;
@@ -41,6 +40,7 @@ import org.apache.commons.collections.map.LRUMap;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Shuyang Zhou
  */
 public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 
@@ -90,9 +90,9 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 
 		Object primaryKey = null;
 
-		Map<String, Object> localCache = null;
+		Map<Serializable, Object> localCache = null;
 
-		String localCacheKey = null;
+		Serializable localCacheKey = null;
 
 		if (_localCacheAvailable) {
 			localCache = _localCache.get();
@@ -106,7 +106,7 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 			PortalCache portalCache = _getPortalCache(
 				finderPath.getClassName(), true);
 
-			String cacheKey = finderPath.encodeCacheKey(args);
+			Serializable cacheKey = finderPath.encodeCacheKey(args);
 
 			primaryKey = portalCache.get(cacheKey);
 
@@ -141,9 +141,9 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 		Object primaryKey = _resultToPrimaryKey(result);
 
 		if (_localCacheAvailable) {
-			Map<String, Object> localCache = _localCache.get();
+			Map<Serializable, Object> localCache = _localCache.get();
 
-			String localCacheKey = finderPath.encodeLocalCacheKey(args);
+			Serializable localCacheKey = finderPath.encodeLocalCacheKey(args);
 
 			localCache.put(localCacheKey, primaryKey);
 		}
@@ -151,15 +151,16 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 		PortalCache portalCache = _getPortalCache(
 			finderPath.getClassName(), true);
 
-		String cacheKey = finderPath.encodeCacheKey(args);
+		Serializable cacheKey = finderPath.encodeCacheKey(args);
 
 		portalCache.put(cacheKey, primaryKey);
 	}
 
 	public void removeCache(String className) {
+		_portalCaches.remove(className);
+
 		String groupKey = _GROUP_KEY_PREFIX.concat(className);
 
-		_portalCaches.remove(groupKey);
 		_multiVMPool.removeCache(groupKey);
 	}
 
@@ -172,9 +173,9 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 		}
 
 		if (_localCacheAvailable) {
-			Map<String, Object> localCache = _localCache.get();
+			Map<Serializable, Object> localCache = _localCache.get();
 
-			String localCacheKey = finderPath.encodeLocalCacheKey(args);
+			Serializable localCacheKey = finderPath.encodeLocalCacheKey(args);
 
 			localCache.remove(localCacheKey);
 		}
@@ -182,7 +183,7 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 		PortalCache portalCache = _getPortalCache(
 			finderPath.getClassName(), true);
 
-		String cacheKey = finderPath.encodeCacheKey(args);
+		Serializable cacheKey = finderPath.encodeCacheKey(args);
 
 		portalCache.remove(cacheKey);
 	}
@@ -194,22 +195,20 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 	private PortalCache _getPortalCache(
 		String className, boolean createIfAbsent) {
 
-		String groupKey = _GROUP_KEY_PREFIX.concat(className);
-
-		PortalCache portalCache = _portalCaches.get(groupKey);
+		PortalCache portalCache = _portalCaches.get(className);
 
 		if ((portalCache == null) && createIfAbsent) {
+			String groupKey = _GROUP_KEY_PREFIX.concat(className);
+
 			portalCache = _multiVMPool.getCache(
 				groupKey, PropsValues.VALUE_OBJECT_FINDER_BLOCKING_CACHE);
 
 			PortalCache previousPortalCache = _portalCaches.putIfAbsent(
-				groupKey, portalCache);
+				className, portalCache);
 
 			if (previousPortalCache != null) {
 				portalCache = previousPortalCache;
 			}
-
-			portalCache.setDebug(true);
 		}
 
 		return portalCache;
@@ -219,17 +218,7 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 		FinderPath finderPath, SessionFactory sessionFactory,
 		Object primaryKey) {
 
-		if (primaryKey instanceof CacheKVP) {
-			CacheKVP cacheKVP = (CacheKVP)primaryKey;
-
-			Class<?> modelClass = cacheKVP.getModelClass();
-			Serializable primaryKeyObj = cacheKVP.getPrimaryKeyObj();
-
-			return EntityCacheUtil.loadResult(
-				finderPath.isEntityCacheEnabled(), modelClass, primaryKeyObj,
-				sessionFactory);
-		}
-		else if (primaryKey instanceof List<?>) {
+		if (primaryKey instanceof List<?>) {
 			List<Object> cachedList = (List<Object>)primaryKey;
 
 			if (cachedList.isEmpty()) {
@@ -247,6 +236,13 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 
 			return list;
 		}
+		else if (BaseModel.class.isAssignableFrom(
+					finderPath.getResultClass())) {
+
+			return EntityCacheUtil.loadResult(
+				finderPath.isEntityCacheEnabled(), finderPath.getResultClass(),
+				(Serializable)primaryKey, sessionFactory);
+		}
 		else {
 			return primaryKey;
 		}
@@ -256,10 +252,7 @@ public class FinderCacheImpl implements CacheRegistryItem, FinderCache {
 		if (result instanceof BaseModel<?>) {
 			BaseModel<?> model = (BaseModel<?>)result;
 
-			Class<?> modelClass = model.getClass();
-			Serializable primaryKeyObj = model.getPrimaryKeyObj();
-
-			return new CacheKVP(modelClass, primaryKeyObj);
+			return model.getPrimaryKeyObj();
 		}
 		else if (result instanceof List<?>) {
 			List<Object> list = (List<Object>)result;

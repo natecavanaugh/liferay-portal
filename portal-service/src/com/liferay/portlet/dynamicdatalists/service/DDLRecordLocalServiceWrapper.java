@@ -164,6 +164,13 @@ public class DDLRecordLocalServiceWrapper implements DDLRecordLocalService {
 		return _ddlRecordLocalService.getDDLRecord(recordId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _ddlRecordLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the d d l record with the UUID in the group.
 	*
@@ -210,7 +217,7 @@ public class DDLRecordLocalServiceWrapper implements DDLRecordLocalService {
 	}
 
 	/**
-	* Updates the d d l record in the database. Also notifies the appropriate model listeners.
+	* Updates the d d l record in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param ddlRecord the d d l record
 	* @return the d d l record that was updated
@@ -223,7 +230,7 @@ public class DDLRecordLocalServiceWrapper implements DDLRecordLocalService {
 	}
 
 	/**
-	* Updates the d d l record in the database. Also notifies the appropriate model listeners.
+	* Updates the d d l record in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param ddlRecord the d d l record
 	* @param merge whether to merge the d d l record with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

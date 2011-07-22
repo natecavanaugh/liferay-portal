@@ -165,6 +165,13 @@ public class SocialRequestLocalServiceWrapper
 		return _socialRequestLocalService.getSocialRequest(requestId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _socialRequestLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the social request with the UUID in the group.
 	*
@@ -212,7 +219,7 @@ public class SocialRequestLocalServiceWrapper
 	}
 
 	/**
-	* Updates the social request in the database. Also notifies the appropriate model listeners.
+	* Updates the social request in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param socialRequest the social request
 	* @return the social request that was updated
@@ -225,7 +232,7 @@ public class SocialRequestLocalServiceWrapper
 	}
 
 	/**
-	* Updates the social request in the database. Also notifies the appropriate model listeners.
+	* Updates the social request in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param socialRequest the social request
 	* @param merge whether to merge the social request with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

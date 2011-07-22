@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.cache.ThreadLocalCacheManager;
 import com.liferay.portal.kernel.deploy.hot.HotDeployUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.PluginPackage;
@@ -38,12 +39,16 @@ import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalLifecycleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ReleaseInfo;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Element;
@@ -97,6 +102,7 @@ import java.io.IOException;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.portlet.PortletConfig;
@@ -557,6 +563,10 @@ public class MainServlet extends ActionServlet {
 		ServletContext servletContext = getServletContext();
 
 		request.setAttribute(WebKeys.CTX, servletContext);
+
+		String contextPath = request.getContextPath();
+
+		servletContext.setAttribute(WebKeys.CTX_PATH, contextPath);
 	}
 
 	protected void checkTilesDefinitionsFactory() {
@@ -868,6 +878,25 @@ public class MainServlet extends ActionServlet {
 	protected void initResourceActions(List<Portlet> portlets)
 		throws Exception {
 
+		if (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM < 6) {
+			if (_log.isWarnEnabled()) {
+				StringBundler sb = new StringBundler(8);
+
+				sb.append("Liferay is configured to use permission algorithm ");
+				sb.append(PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM);
+				sb.append(". Versions after 6.1 will only support algorithm ");
+				sb.append("6 and above. Please sign in as an administrator, ");
+				sb.append("go to the Control Panel, select \"Server ");
+				sb.append("Administration\", select the \"Data Migration\" ");
+				sb.append("tab, and convert from this legacy permission ");
+				sb.append("algorithm as soon as possible.");
+
+				_log.warn(sb.toString());
+			}
+
+			return;
+		}
+
 		Iterator<Portlet> itr = portlets.iterator();
 
 		while (itr.hasNext()) {
@@ -1013,8 +1042,17 @@ public class MainServlet extends ActionServlet {
 
 		response.setContentType(ContentTypes.TEXT_HTML_UTF8);
 
+		Locale locale = LocaleUtil.getDefault();
+
+		String companyInactiveMessage = LanguageUtil.get(
+			locale,
+			"this-instance-is-inactive-please-contact-the-administrator");
+
 		String html = ContentUtil.get(
 			"com/liferay/portal/dependencies/company_inactive.html");
+
+		html = StringUtil.replace(
+			html, "[$COMPANY_INACTIVE_MESSAGE$]", companyInactiveMessage);
 
 		ServletOutputStream servletOutputStream = response.getOutputStream();
 
@@ -1172,8 +1210,20 @@ public class MainServlet extends ActionServlet {
 
 		response.setContentType(ContentTypes.TEXT_HTML_UTF8);
 
+		String shutdownMessage = ShutdownUtil.getMessage();
+
+		if (Validator.isNull(shutdownMessage)) {
+			Locale locale = LocaleUtil.getDefault();
+
+			shutdownMessage = LanguageUtil.get(
+				locale, "the-system-is-shutdown-please-try-again-later");
+		}
+
 		String html = ContentUtil.get(
 			"com/liferay/portal/dependencies/shutdown.html");
+
+		html = StringUtil.replace(
+			html, "[$SHUTDOWN_MESSAGE$]", shutdownMessage);
 
 		ServletOutputStream servletOutputStream = response.getOutputStream();
 

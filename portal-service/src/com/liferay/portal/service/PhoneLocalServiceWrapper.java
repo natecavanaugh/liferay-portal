@@ -160,6 +160,13 @@ public class PhoneLocalServiceWrapper implements PhoneLocalService {
 		return _phoneLocalService.getPhone(phoneId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _phoneLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the phones.
 	*
@@ -189,7 +196,7 @@ public class PhoneLocalServiceWrapper implements PhoneLocalService {
 	}
 
 	/**
-	* Updates the phone in the database. Also notifies the appropriate model listeners.
+	* Updates the phone in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param phone the phone
 	* @return the phone that was updated
@@ -202,7 +209,7 @@ public class PhoneLocalServiceWrapper implements PhoneLocalService {
 	}
 
 	/**
-	* Updates the phone in the database. Also notifies the appropriate model listeners.
+	* Updates the phone in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param phone the phone
 	* @param merge whether to merge the phone with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

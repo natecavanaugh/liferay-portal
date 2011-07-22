@@ -37,7 +37,6 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
-import com.liferay.portlet.journal.model.JournalArticle;
 
 import java.io.Serializable;
 
@@ -180,10 +179,6 @@ public class ThemeDisplay implements Serializable {
 
 	public Locale getLocale() {
 		return _locale;
-	}
-
-	public JournalArticle getMainJournalArticle() {
-		return _mainJournalArticle;
 	}
 
 	public long getParentGroupId() {
@@ -335,6 +330,23 @@ public class ThemeDisplay implements Serializable {
 		}
 		else {
 			return _scopeGroup.getDescriptiveName();
+		}
+	}
+
+	public long getScopeGroupIdOrLiveGroupId()
+		throws PortalException, SystemException {
+
+		if (_scopeGroupId == 0) {
+			return _scopeGroupId;
+		}
+
+		Group group = GroupLocalServiceUtil.getGroup(_scopeGroupId);
+
+		if (group.isStagingGroup()) {
+			return group.getLiveGroupId();
+		}
+		else {
+			return _scopeGroupId;
 		}
 	}
 
@@ -860,10 +872,6 @@ public class ThemeDisplay implements Serializable {
 		setLookAndFeel(getPathContext(), theme, colorScheme);
 	}
 
-	public void setMainJournalArticle(JournalArticle mainJournalArticle) {
-		_mainJournalArticle = mainJournalArticle;
-	}
-
 	public void setParentGroupId(long parentGroupId) {
 		_parentGroupId = parentGroupId;
 
@@ -1269,7 +1277,6 @@ public class ThemeDisplay implements Serializable {
 	private boolean _lifecycleRender;
 	private boolean _lifecycleResource;
 	private Locale _locale;
-	private JournalArticle _mainJournalArticle;
 	private Group _parentGroup;
 	private long _parentGroupId;
 	private String _pathApplet = StringPool.BLANK;

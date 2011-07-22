@@ -1059,6 +1059,232 @@ public class DLFolderUtil {
 	}
 
 	/**
+	* Returns all the document library folders where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @return the matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> findByG_P_M(
+		long groupId, long parentFolderId, boolean mountPoint)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_P_M(groupId, parentFolderId, mountPoint);
+	}
+
+	/**
+	* Returns a range of all the document library folders where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @param start the lower bound of the range of document library folders
+	* @param end the upper bound of the range of document library folders (not inclusive)
+	* @return the range of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> findByG_P_M(
+		long groupId, long parentFolderId, boolean mountPoint, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_P_M(groupId, parentFolderId, mountPoint, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the document library folders where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @param start the lower bound of the range of document library folders
+	* @param end the upper bound of the range of document library folders (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> findByG_P_M(
+		long groupId, long parentFolderId, boolean mountPoint, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_P_M(groupId, parentFolderId, mountPoint, start,
+			end, orderByComparator);
+	}
+
+	/**
+	* Returns the first document library folder in the ordered set where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching document library folder
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFolder findByG_P_M_First(
+		long groupId, long parentFolderId, boolean mountPoint,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFolderException {
+		return getPersistence()
+				   .findByG_P_M_First(groupId, parentFolderId, mountPoint,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last document library folder in the ordered set where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching document library folder
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a matching document library folder could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFolder findByG_P_M_Last(
+		long groupId, long parentFolderId, boolean mountPoint,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFolderException {
+		return getPersistence()
+				   .findByG_P_M_Last(groupId, parentFolderId, mountPoint,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the document library folders before and after the current document library folder in the ordered set where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param folderId the primary key of the current document library folder
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library folder
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFolder[] findByG_P_M_PrevAndNext(
+		long folderId, long groupId, long parentFolderId, boolean mountPoint,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFolderException {
+		return getPersistence()
+				   .findByG_P_M_PrevAndNext(folderId, groupId, parentFolderId,
+			mountPoint, orderByComparator);
+	}
+
+	/**
+	* Returns all the document library folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @return the matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> filterFindByG_P_M(
+		long groupId, long parentFolderId, boolean mountPoint)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_P_M(groupId, parentFolderId, mountPoint);
+	}
+
+	/**
+	* Returns a range of all the document library folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @param start the lower bound of the range of document library folders
+	* @param end the upper bound of the range of document library folders (not inclusive)
+	* @return the range of matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> filterFindByG_P_M(
+		long groupId, long parentFolderId, boolean mountPoint, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_P_M(groupId, parentFolderId, mountPoint,
+			start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the document library folders that the user has permissions to view where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @param start the lower bound of the range of document library folders
+	* @param end the upper bound of the range of document library folders (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> filterFindByG_P_M(
+		long groupId, long parentFolderId, boolean mountPoint, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_P_M(groupId, parentFolderId, mountPoint,
+			start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the document library folders before and after the current document library folder in the ordered set of document library folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* @param folderId the primary key of the current document library folder
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next document library folder
+	* @throws com.liferay.portlet.documentlibrary.NoSuchFolderException if a document library folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFolder[] filterFindByG_P_M_PrevAndNext(
+		long folderId, long groupId, long parentFolderId, boolean mountPoint,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portlet.documentlibrary.NoSuchFolderException {
+		return getPersistence()
+				   .filterFindByG_P_M_PrevAndNext(folderId, groupId,
+			parentFolderId, mountPoint, orderByComparator);
+	}
+
+	/**
 	* Returns the document library folder where groupId = &#63; and parentFolderId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.documentlibrary.NoSuchFolderException} if it could not be found.
 	*
 	* @param groupId the group ID
@@ -1241,6 +1467,20 @@ public class DLFolderUtil {
 	}
 
 	/**
+	* Removes all the document library folders where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_P_M(long groupId, long parentFolderId,
+		boolean mountPoint)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_P_M(groupId, parentFolderId, mountPoint);
+	}
+
+	/**
 	* Removes the document library folder where groupId = &#63; and parentFolderId = &#63; and name = &#63; from the database.
 	*
 	* @param groupId the group ID
@@ -1378,6 +1618,37 @@ public class DLFolderUtil {
 	}
 
 	/**
+	* Returns the number of document library folders where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @return the number of matching document library folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_P_M(long groupId, long parentFolderId,
+		boolean mountPoint)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_P_M(groupId, parentFolderId, mountPoint);
+	}
+
+	/**
+	* Returns the number of document library folders that the user has permission to view where groupId = &#63; and parentFolderId = &#63; and mountPoint = &#63;.
+	*
+	* @param groupId the group ID
+	* @param parentFolderId the parent folder ID
+	* @param mountPoint the mount point
+	* @return the number of matching document library folders that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_P_M(long groupId, long parentFolderId,
+		boolean mountPoint)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_P_M(groupId, parentFolderId, mountPoint);
+	}
+
+	/**
 	* Returns the number of document library folders where groupId = &#63; and parentFolderId = &#63; and name = &#63;.
 	*
 	* @param groupId the group ID
@@ -1401,6 +1672,233 @@ public class DLFolderUtil {
 	public static int countAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().countAll();
+	}
+
+	/**
+	* Returns all the document library file entry types associated with the document library folder.
+	*
+	* @param pk the primary key of the document library folder
+	* @return the document library file entry types associated with the document library folder
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> getDLFileEntryTypes(
+		long pk) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getDLFileEntryTypes(pk);
+	}
+
+	/**
+	* Returns a range of all the document library file entry types associated with the document library folder.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param pk the primary key of the document library folder
+	* @param start the lower bound of the range of document library folders
+	* @param end the upper bound of the range of document library folders (not inclusive)
+	* @return the range of document library file entry types associated with the document library folder
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> getDLFileEntryTypes(
+		long pk, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getDLFileEntryTypes(pk, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the document library file entry types associated with the document library folder.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* </p>
+	*
+	* @param pk the primary key of the document library folder
+	* @param start the lower bound of the range of document library folders
+	* @param end the upper bound of the range of document library folders (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of document library file entry types associated with the document library folder
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> getDLFileEntryTypes(
+		long pk, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .getDLFileEntryTypes(pk, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the number of document library file entry types associated with the document library folder.
+	*
+	* @param pk the primary key of the document library folder
+	* @return the number of document library file entry types associated with the document library folder
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int getDLFileEntryTypesSize(long pk)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getDLFileEntryTypesSize(pk);
+	}
+
+	/**
+	* Returns <code>true</code> if the document library file entry type is associated with the document library folder.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryTypePK the primary key of the document library file entry type
+	* @return <code>true</code> if the document library file entry type is associated with the document library folder; <code>false</code> otherwise
+	* @throws SystemException if a system exception occurred
+	*/
+	public static boolean containsDLFileEntryType(long pk,
+		long dlFileEntryTypePK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().containsDLFileEntryType(pk, dlFileEntryTypePK);
+	}
+
+	/**
+	* Returns <code>true</code> if the document library folder has any document library file entry types associated with it.
+	*
+	* @param pk the primary key of the document library folder to check for associations with document library file entry types
+	* @return <code>true</code> if the document library folder has any document library file entry types associated with it; <code>false</code> otherwise
+	* @throws SystemException if a system exception occurred
+	*/
+	public static boolean containsDLFileEntryTypes(long pk)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().containsDLFileEntryTypes(pk);
+	}
+
+	/**
+	* Adds an association between the document library folder and the document library file entry type. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryTypePK the primary key of the document library file entry type
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void addDLFileEntryType(long pk, long dlFileEntryTypePK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().addDLFileEntryType(pk, dlFileEntryTypePK);
+	}
+
+	/**
+	* Adds an association between the document library folder and the document library file entry type. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryType the document library file entry type
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void addDLFileEntryType(long pk,
+		com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().addDLFileEntryType(pk, dlFileEntryType);
+	}
+
+	/**
+	* Adds an association between the document library folder and the document library file entry types. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryTypePKs the primary keys of the document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void addDLFileEntryTypes(long pk, long[] dlFileEntryTypePKs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().addDLFileEntryTypes(pk, dlFileEntryTypePKs);
+	}
+
+	/**
+	* Adds an association between the document library folder and the document library file entry types. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryTypes the document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void addDLFileEntryTypes(long pk,
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().addDLFileEntryTypes(pk, dlFileEntryTypes);
+	}
+
+	/**
+	* Clears all associations between the document library folder and its document library file entry types. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder to clear the associated document library file entry types from
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void clearDLFileEntryTypes(long pk)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().clearDLFileEntryTypes(pk);
+	}
+
+	/**
+	* Removes the association between the document library folder and the document library file entry type. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryTypePK the primary key of the document library file entry type
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeDLFileEntryType(long pk, long dlFileEntryTypePK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeDLFileEntryType(pk, dlFileEntryTypePK);
+	}
+
+	/**
+	* Removes the association between the document library folder and the document library file entry type. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryType the document library file entry type
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeDLFileEntryType(long pk,
+		com.liferay.portlet.documentlibrary.model.DLFileEntryType dlFileEntryType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeDLFileEntryType(pk, dlFileEntryType);
+	}
+
+	/**
+	* Removes the association between the document library folder and the document library file entry types. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryTypePKs the primary keys of the document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeDLFileEntryTypes(long pk, long[] dlFileEntryTypePKs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeDLFileEntryTypes(pk, dlFileEntryTypePKs);
+	}
+
+	/**
+	* Removes the association between the document library folder and the document library file entry types. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryTypes the document library file entry types
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeDLFileEntryTypes(long pk,
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeDLFileEntryTypes(pk, dlFileEntryTypes);
+	}
+
+	/**
+	* Sets the document library file entry types associated with the document library folder, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryTypePKs the primary keys of the document library file entry types to be associated with the document library folder
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void setDLFileEntryTypes(long pk, long[] dlFileEntryTypePKs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().setDLFileEntryTypes(pk, dlFileEntryTypePKs);
+	}
+
+	/**
+	* Sets the document library file entry types associated with the document library folder, removing and adding associations as necessary. Also notifies the appropriate model listeners and clears the mapping table finder cache.
+	*
+	* @param pk the primary key of the document library folder
+	* @param dlFileEntryTypes the document library file entry types to be associated with the document library folder
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void setDLFileEntryTypes(long pk,
+		java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntryType> dlFileEntryTypes)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().setDLFileEntryTypes(pk, dlFileEntryTypes);
 	}
 
 	public static DLFolderPersistence getPersistence() {

@@ -402,6 +402,10 @@ public class DDLRecordWrapper implements DDLRecord {
 		return _ddlRecord.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portlet.dynamicdatalists.model.DDLRecord> toCacheModel() {
+		return _ddlRecord.toCacheModel();
+	}
+
 	public com.liferay.portlet.dynamicdatalists.model.DDLRecord toEscapedModel() {
 		return new DDLRecordWrapper(_ddlRecord.toEscapedModel());
 	}
@@ -413,6 +417,11 @@ public class DDLRecordWrapper implements DDLRecord {
 
 	public java.lang.String toXmlString() {
 		return _ddlRecord.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_ddlRecord.persist();
 	}
 
 	public com.liferay.portlet.dynamicdatamapping.storage.Field getField(

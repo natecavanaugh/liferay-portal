@@ -72,7 +72,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Brian Wing Shun Chan
  */
-public class LayoutImpl extends LayoutModelImpl implements Layout {
+public class LayoutImpl extends LayoutBaseImpl {
 
 	public static int validateFriendlyURL(String friendlyURL) {
 		if (friendlyURL.length() < 2) {
@@ -111,9 +111,7 @@ public class LayoutImpl extends LayoutModelImpl implements Layout {
 		String[] keywords = PropsUtil.getArray(
 			PropsKeys.LAYOUT_FRIENDLY_URL_KEYWORDS);
 
-		for (int i = 0; i < keywords.length; i++) {
-			String keyword = keywords[i];
-
+		for (String keyword : keywords) {
 			if ((friendlyURL.indexOf(
 					StringPool.SLASH + keyword + StringPool.SLASH) != -1) ||
 				(friendlyURL.endsWith(StringPool.SLASH + keyword))) {
@@ -288,7 +286,11 @@ public class LayoutImpl extends LayoutModelImpl implements Layout {
 	}
 
 	public LayoutType getLayoutType() {
-		return new LayoutTypePortletImpl(this);
+		if (_layoutType == null) {
+			_layoutType = new LayoutTypePortletImpl(this);
+		}
+
+		return _layoutType;
 	}
 
 	public long getParentPlid() throws PortalException, SystemException {
@@ -748,6 +750,7 @@ public class LayoutImpl extends LayoutModelImpl implements Layout {
 	private static Log _log = LogFactoryUtil.getLog(LayoutImpl.class);
 
 	private LayoutSet _layoutSet;
+	private LayoutType _layoutType;
 	private UnicodeProperties _typeSettingsProperties;
 
 }

@@ -173,6 +173,13 @@ public class BookmarksEntryLocalServiceUtil {
 		return getService().getBookmarksEntry(entryId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the bookmarks entry with the UUID in the group.
 	*
@@ -219,7 +226,7 @@ public class BookmarksEntryLocalServiceUtil {
 	}
 
 	/**
-	* Updates the bookmarks entry in the database. Also notifies the appropriate model listeners.
+	* Updates the bookmarks entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param bookmarksEntry the bookmarks entry
 	* @return the bookmarks entry that was updated
@@ -232,7 +239,7 @@ public class BookmarksEntryLocalServiceUtil {
 	}
 
 	/**
-	* Updates the bookmarks entry in the database. Also notifies the appropriate model listeners.
+	* Updates the bookmarks entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param bookmarksEntry the bookmarks entry
 	* @param merge whether to merge the bookmarks entry with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

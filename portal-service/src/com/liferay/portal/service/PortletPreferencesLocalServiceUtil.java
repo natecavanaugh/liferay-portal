@@ -173,6 +173,13 @@ public class PortletPreferencesLocalServiceUtil {
 		return getService().getPortletPreferences(portletPreferencesId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the portlet preferenceses.
 	*
@@ -203,7 +210,7 @@ public class PortletPreferencesLocalServiceUtil {
 	}
 
 	/**
-	* Updates the portlet preferences in the database. Also notifies the appropriate model listeners.
+	* Updates the portlet preferences in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param portletPreferences the portlet preferences
 	* @return the portlet preferences that was updated
@@ -216,7 +223,7 @@ public class PortletPreferencesLocalServiceUtil {
 	}
 
 	/**
-	* Updates the portlet preferences in the database. Also notifies the appropriate model listeners.
+	* Updates the portlet preferences in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param portletPreferences the portlet preferences
 	* @param merge whether to merge the portlet preferences with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -329,6 +336,21 @@ public class PortletPreferencesLocalServiceUtil {
 		com.liferay.portal.model.PortletPreferencesIds portletPreferencesIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getPreferences(portletPreferencesIds);
+	}
+
+	public static javax.portlet.PortletPreferences getStrictPreferences(
+		long companyId, long ownerId, int ownerType, long plid,
+		java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getStrictPreferences(companyId, ownerId, ownerType, plid,
+			portletId);
+	}
+
+	public static javax.portlet.PortletPreferences getStrictPreferences(
+		com.liferay.portal.model.PortletPreferencesIds portletPreferencesIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getStrictPreferences(portletPreferencesIds);
 	}
 
 	public static com.liferay.portal.model.PortletPreferences updatePreferences(

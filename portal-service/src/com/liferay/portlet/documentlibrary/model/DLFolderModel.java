@@ -17,6 +17,7 @@ package com.liferay.portlet.documentlibrary.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -282,6 +283,41 @@ public interface DLFolderModel extends BaseModel<DLFolder>, GroupedModel {
 	 */
 	public void setLastPostDate(Date lastPostDate);
 
+	/**
+	 * Returns the default file entry type ID of this document library folder.
+	 *
+	 * @return the default file entry type ID of this document library folder
+	 */
+	public long getDefaultFileEntryTypeId();
+
+	/**
+	 * Sets the default file entry type ID of this document library folder.
+	 *
+	 * @param defaultFileEntryTypeId the default file entry type ID of this document library folder
+	 */
+	public void setDefaultFileEntryTypeId(long defaultFileEntryTypeId);
+
+	/**
+	 * Returns the override file entry types of this document library folder.
+	 *
+	 * @return the override file entry types of this document library folder
+	 */
+	public boolean getOverrideFileEntryTypes();
+
+	/**
+	 * Returns <code>true</code> if this document library folder is override file entry types.
+	 *
+	 * @return <code>true</code> if this document library folder is override file entry types; <code>false</code> otherwise
+	 */
+	public boolean isOverrideFileEntryTypes();
+
+	/**
+	 * Sets whether this document library folder is override file entry types.
+	 *
+	 * @param overrideFileEntryTypes the override file entry types of this document library folder
+	 */
+	public void setOverrideFileEntryTypes(boolean overrideFileEntryTypes);
+
 	public boolean isNew();
 
 	public void setNew(boolean n);
@@ -307,6 +343,8 @@ public interface DLFolderModel extends BaseModel<DLFolder>, GroupedModel {
 	public int compareTo(DLFolder dlFolder);
 
 	public int hashCode();
+
+	public CacheModel<DLFolder> toCacheModel();
 
 	public DLFolder toEscapedModel();
 

@@ -44,6 +44,10 @@ public class WorkflowConstants {
 
 	public static final String CONTEXT_SERVICE_CONTEXT = "serviceContext";
 
+	public static final String CONTEXT_TASK_COMMENTS = "taskComments";
+
+	public static final String CONTEXT_TRANSITION_NAME = "transitionName";
+
 	public static final String CONTEXT_USER_ID = "userId";
 
 	public static final long DEFAULT_GROUP_ID = 0;
@@ -57,6 +61,10 @@ public class WorkflowConstants {
 	public static final String LABEL_DRAFT = "draft";
 
 	public static final String LABEL_EXPIRED = "expired";
+
+	public static final String LABEL_INACTIVE = "inactive";
+
+	public static final String LABEL_INCOMPLETE = "incomplete";
 
 	public static final String LABEL_PENDING = "pending";
 
@@ -92,6 +100,12 @@ public class WorkflowConstants {
 		else if (status == STATUS_EXPIRED) {
 			return LABEL_EXPIRED;
 		}
+		else if (status == STATUS_INACTIVE) {
+			return LABEL_INACTIVE;
+		}
+		else if (status == STATUS_INCOMPLETE) {
+			return LABEL_INCOMPLETE;
+		}
 		else if (status == STATUS_PENDING) {
 			return LABEL_PENDING;
 		}
@@ -115,6 +129,12 @@ public class WorkflowConstants {
 		}
 		else if (label.equals(LABEL_EXPIRED)) {
 			return STATUS_EXPIRED;
+		}
+		else if (label.equals(LABEL_INACTIVE)) {
+			return STATUS_INACTIVE;
+		}
+		else if (label.equals(LABEL_INCOMPLETE)) {
+			return STATUS_INCOMPLETE;
 		}
 		else if (label.equals(LABEL_PENDING)) {
 			return STATUS_PENDING;

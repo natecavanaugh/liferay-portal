@@ -173,6 +173,13 @@ public class ResourceActionLocalServiceUtil {
 		return getService().getResourceAction(resourceActionId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the resource actions.
 	*
@@ -203,7 +210,7 @@ public class ResourceActionLocalServiceUtil {
 	}
 
 	/**
-	* Updates the resource action in the database. Also notifies the appropriate model listeners.
+	* Updates the resource action in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param resourceAction the resource action
 	* @return the resource action that was updated
@@ -216,7 +223,7 @@ public class ResourceActionLocalServiceUtil {
 	}
 
 	/**
-	* Updates the resource action in the database. Also notifies the appropriate model listeners.
+	* Updates the resource action in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param resourceAction the resource action
 	* @param merge whether to merge the resource action with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

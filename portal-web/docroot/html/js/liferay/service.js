@@ -121,6 +121,14 @@ Liferay.Service.registerClass(
 );
 
 Liferay.Service.registerClass(
+	Liferay.Service.Portal, "LayoutRevision",
+	{
+		addLayoutRevision: true,
+		deleteLayoutRevisions: true
+	}
+);
+
+Liferay.Service.registerClass(
 	Liferay.Service.Portal, "LayoutSet",
 	{
 		updateLookAndFeel: true,
@@ -658,6 +666,7 @@ Liferay.Service.registerClass(
 		getFoldersFileEntriesCount: true,
 		getGroupFileEntries: true,
 		getGroupFileEntriesCount: true,
+		getMountFolders: true,
 		getSubfolderIds: true,
 		lockFolder: true,
 		moveFileEntry: true,
@@ -686,7 +695,6 @@ Liferay.Service.registerClass(
 		getFileEntry: true,
 		getFileEntryByUuidAndGroupId: true,
 		getFileEntryLock: true,
-		getFileVersion: true,
 		getFoldersFileEntriesCount: true,
 		getGroupFileEntries: true,
 		getGroupFileEntriesCount: true,
@@ -722,6 +730,14 @@ Liferay.Service.registerClass(
 );
 
 Liferay.Service.registerClass(
+	Liferay.Service.DL, "DLFileVersion",
+	{
+		getFileVersion: true,
+		getLatestFileVersion: true
+	}
+);
+
+Liferay.Service.registerClass(
 	Liferay.Service.DL, "DLFolder",
 	{
 		addFolder: true,
@@ -732,6 +748,8 @@ Liferay.Service.registerClass(
 		getFolders: true,
 		getFoldersAndFileEntriesAndFileShortcutsCount: true,
 		getFoldersCount: true,
+		getMountFolders: true,
+		getMountFoldersCount: true,
 		getSubfolderIds: true,
 		hasFolderLock: true,
 		hasInheritableLock: true,
@@ -742,6 +760,13 @@ Liferay.Service.registerClass(
 		unlockFolder: true,
 		updateFolder: true,
 		verifyInheritableLock: true
+	}
+);
+
+Liferay.Service.registerClass(
+	Liferay.Service.DL, "DLSync",
+	{
+		getDLSyncUpdate: true
 	}
 );
 
@@ -900,6 +925,9 @@ Liferay.Service.registerClass(
 		copyStructure: true,
 		deleteStructure: true,
 		getStructure: true,
+		getStructures: true,
+		search: true,
+		searchCount: true,
 		updateStructure: true
 	}
 );

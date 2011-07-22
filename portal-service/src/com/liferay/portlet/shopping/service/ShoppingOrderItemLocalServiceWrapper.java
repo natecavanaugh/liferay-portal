@@ -166,6 +166,13 @@ public class ShoppingOrderItemLocalServiceWrapper
 		return _shoppingOrderItemLocalService.getShoppingOrderItem(orderItemId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _shoppingOrderItemLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the shopping order items.
 	*
@@ -196,7 +203,7 @@ public class ShoppingOrderItemLocalServiceWrapper
 	}
 
 	/**
-	* Updates the shopping order item in the database. Also notifies the appropriate model listeners.
+	* Updates the shopping order item in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param shoppingOrderItem the shopping order item
 	* @return the shopping order item that was updated
@@ -209,7 +216,7 @@ public class ShoppingOrderItemLocalServiceWrapper
 	}
 
 	/**
-	* Updates the shopping order item in the database. Also notifies the appropriate model listeners.
+	* Updates the shopping order item in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param shoppingOrderItem the shopping order item
 	* @param merge whether to merge the shopping order item with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

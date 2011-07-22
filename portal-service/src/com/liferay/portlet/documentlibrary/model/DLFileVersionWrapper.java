@@ -571,6 +571,10 @@ public class DLFileVersionWrapper implements DLFileVersion {
 		return _dlFileVersion.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portlet.documentlibrary.model.DLFileVersion> toCacheModel() {
+		return _dlFileVersion.toCacheModel();
+	}
+
 	public com.liferay.portlet.documentlibrary.model.DLFileVersion toEscapedModel() {
 		return new DLFileVersionWrapper(_dlFileVersion.toEscapedModel());
 	}
@@ -584,6 +588,11 @@ public class DLFileVersionWrapper implements DLFileVersion {
 		return _dlFileVersion.toXmlString();
 	}
 
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_dlFileVersion.persist();
+	}
+
 	public com.liferay.portal.kernel.util.UnicodeProperties getExtraSettingsProperties() {
 		return _dlFileVersion.getExtraSettingsProperties();
 	}
@@ -592,6 +601,18 @@ public class DLFileVersionWrapper implements DLFileVersion {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlFileVersion.getFileEntry();
+	}
+
+	public com.liferay.portlet.documentlibrary.model.DLFolder getFolder()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _dlFileVersion.getFolder();
+	}
+
+	public long getFolderId()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _dlFileVersion.getFolderId();
 	}
 
 	public java.lang.String getIcon() {

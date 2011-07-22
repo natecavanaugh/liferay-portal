@@ -164,6 +164,13 @@ public class RatingsEntryLocalServiceWrapper implements RatingsEntryLocalService
 		return _ratingsEntryLocalService.getRatingsEntry(entryId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _ratingsEntryLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the ratings entries.
 	*
@@ -194,7 +201,7 @@ public class RatingsEntryLocalServiceWrapper implements RatingsEntryLocalService
 	}
 
 	/**
-	* Updates the ratings entry in the database. Also notifies the appropriate model listeners.
+	* Updates the ratings entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param ratingsEntry the ratings entry
 	* @return the ratings entry that was updated
@@ -207,7 +214,7 @@ public class RatingsEntryLocalServiceWrapper implements RatingsEntryLocalService
 	}
 
 	/**
-	* Updates the ratings entry in the database. Also notifies the appropriate model listeners.
+	* Updates the ratings entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param ratingsEntry the ratings entry
 	* @param merge whether to merge the ratings entry with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -257,6 +264,19 @@ public class RatingsEntryLocalServiceWrapper implements RatingsEntryLocalService
 		java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _ratingsEntryLocalService.getEntries(className, classPK);
+	}
+
+	public java.util.List<com.liferay.portlet.ratings.model.RatingsEntry> getEntries(
+		java.lang.String className, long classPK, double score)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _ratingsEntryLocalService.getEntries(className, classPK, score);
+	}
+
+	public int getEntriesCount(java.lang.String className, long classPK,
+		double score)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _ratingsEntryLocalService.getEntriesCount(className, classPK,
+			score);
 	}
 
 	public com.liferay.portlet.ratings.model.RatingsEntry getEntry(

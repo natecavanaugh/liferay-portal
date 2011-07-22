@@ -1662,6 +1662,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		// Social
 
 		socialActivityLocalService.deleteUserActivities(user.getUserId());
+		socialEquityLogLocalService.deactivateUserEquityLogs(user.getUserId());
+		socialEquityUserLocalService.deleteSocialEquityUser(user.getUserId());
 		socialRequestLocalService.deleteReceiverUserRequests(user.getUserId());
 		socialRequestLocalService.deleteUserRequests(user.getUserId());
 
@@ -1728,6 +1730,22 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		catch (EncryptorException ee) {
 			throw new SystemException(ee);
 		}
+	}
+
+	/**
+	 * Returns the user with the screen name.
+	 *
+	 * @param  companyId the primary key of the user's company
+	 * @param  screenName the user's screen name
+	 * @return the user with the screen name, or <code>null</code> if a user
+	 *         with the screen name could not be found
+	 */
+	public User fetchUserByScreenName(long companyId, String screenName)
+		throws SystemException {
+
+		screenName = getScreenName(screenName);
+
+		return userPersistence.fetchByC_SN(companyId, screenName);
 	}
 
 	/**
@@ -4280,9 +4298,15 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		User user = userPersistence.findByPrimaryKey(userId);
 
+		boolean oldActive = user.isActive();
+
 		user.setStatus(status);
 
 		userPersistence.update(user, false);
+
+		if (!user.isActive() && oldActive) {
+			socialEquityUserLocalService.clearRanks(user.getUserId());
+		}
 
 		Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
 

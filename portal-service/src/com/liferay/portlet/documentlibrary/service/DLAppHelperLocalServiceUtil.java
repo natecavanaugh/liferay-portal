@@ -67,7 +67,8 @@ public class DLAppHelperLocalServiceUtil {
 
 	public static void addFolder(
 		com.liferay.portal.kernel.repository.model.Folder folder,
-		com.liferay.portal.service.ServiceContext serviceContext) {
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.SystemException {
 		getService().addFolder(folder, serviceContext);
 	}
 
@@ -79,15 +80,18 @@ public class DLAppHelperLocalServiceUtil {
 	}
 
 	public static void deleteFolder(
-		com.liferay.portal.kernel.repository.model.Folder folder) {
+		com.liferay.portal.kernel.repository.model.Folder folder)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		getService().deleteFolder(folder);
 	}
 
 	public static void getFileAsStream(long userId,
-		com.liferay.portal.kernel.repository.model.FileEntry fileEntry)
+		com.liferay.portal.kernel.repository.model.FileEntry fileEntry,
+		boolean incrementCounter)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().getFileAsStream(userId, fileEntry);
+		getService().getFileAsStream(userId, fileEntry, incrementCounter);
 	}
 
 	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileShortcut> getFileShortcuts(
@@ -118,6 +122,23 @@ public class DLAppHelperLocalServiceUtil {
 				   .updateAsset(userId, fileEntry, fileVersion,
 			assetCategoryIds, assetTagNames, assetLinkEntryIds, mimeType,
 			addDraftAssetEntry, visible);
+	}
+
+	public static void updateFileEntry(
+		com.liferay.portal.kernel.repository.model.FileEntry fileEntry,
+		com.liferay.portal.kernel.repository.model.FileVersion fileVersion,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().updateFileEntry(fileEntry, fileVersion, serviceContext);
+	}
+
+	public static void updateFolder(
+		com.liferay.portal.kernel.repository.model.Folder folder,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().updateFolder(folder, serviceContext);
 	}
 
 	public static void updateStatus(long userId,

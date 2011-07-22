@@ -14,10 +14,59 @@
 
 package com.liferay.portal.service.impl;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.LayoutRevision;
+import com.liferay.portal.model.LayoutSetBranch;
+import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.LayoutRevisionServiceBaseImpl;
+import com.liferay.portal.service.permission.GroupPermissionUtil;
 
 /**
  * @author Raymond Augé
+ * @author Julio Camarero
  */
 public class LayoutRevisionServiceImpl extends LayoutRevisionServiceBaseImpl {
+
+	public LayoutRevision addLayoutRevision(
+			long userId, long layoutSetBranchId, long layoutBranchId,
+			long parentLayoutRevisionId, boolean head, long plid,
+			boolean privateLayout, String name, String title,
+			String description, String keywords, String robots,
+			String typeSettings, boolean iconImage, long iconImageId,
+			String themeId, String colorSchemeId, String wapThemeId,
+			String wapColorSchemeId, String css, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		LayoutSetBranch layoutSetBranch =
+			layoutSetBranchPersistence.findByPrimaryKey(layoutSetBranchId);
+
+		GroupPermissionUtil.check(
+			getPermissionChecker(), layoutSetBranch.getGroupId(),
+			ActionKeys.ADD_LAYOUT_BRANCH);
+
+		return layoutRevisionLocalService.addLayoutRevision(
+			userId, layoutSetBranchId, layoutBranchId,
+			parentLayoutRevisionId, head, plid, privateLayout, name, title,
+			description, keywords, robots, typeSettings, iconImage, iconImageId,
+			themeId, colorSchemeId, wapThemeId, wapColorSchemeId, css,
+			serviceContext);
+	}
+
+	public void deleteLayoutRevisions(
+			long layoutSetBranchId, long layoutBranchId, long plid)
+		throws PortalException, SystemException {
+
+		LayoutSetBranch layoutSetBranch =
+			layoutSetBranchPersistence.findByPrimaryKey(layoutSetBranchId);
+
+		GroupPermissionUtil.check(
+			getPermissionChecker(), layoutSetBranch.getGroupId(),
+			ActionKeys.DELETE_LAYOUT_BRANCH);
+
+		layoutRevisionLocalService.deleteLayoutRevisions(
+			layoutSetBranchId, layoutBranchId, plid);
+	}
+
 }

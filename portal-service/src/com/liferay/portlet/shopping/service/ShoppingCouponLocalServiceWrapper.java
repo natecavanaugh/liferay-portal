@@ -165,6 +165,13 @@ public class ShoppingCouponLocalServiceWrapper
 		return _shoppingCouponLocalService.getShoppingCoupon(couponId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _shoppingCouponLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the shopping coupons.
 	*
@@ -195,7 +202,7 @@ public class ShoppingCouponLocalServiceWrapper
 	}
 
 	/**
-	* Updates the shopping coupon in the database. Also notifies the appropriate model listeners.
+	* Updates the shopping coupon in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param shoppingCoupon the shopping coupon
 	* @return the shopping coupon that was updated
@@ -208,7 +215,7 @@ public class ShoppingCouponLocalServiceWrapper
 	}
 
 	/**
-	* Updates the shopping coupon in the database. Also notifies the appropriate model listeners.
+	* Updates the shopping coupon in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param shoppingCoupon the shopping coupon
 	* @param merge whether to merge the shopping coupon with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.service.LayoutBranchLocalServiceUtil;
 import com.liferay.portal.service.LayoutRevisionLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetBranchLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -165,6 +166,30 @@ public class LayoutStagingHandler implements InvocationHandler {
 
 			layoutRevisionId = StagingUtil.getRecentLayoutRevisionId(
 				user, layoutSetBranchId, layout.getPlid());
+
+			if (layoutRevisionId > 0) {
+				try {
+					layoutRevision =
+						LayoutRevisionLocalServiceUtil.getLayoutRevision(
+							layoutRevisionId);
+
+					if (layoutRevision.getStatus() !=
+							WorkflowConstants.STATUS_INACTIVE) {
+
+						return layoutRevision;
+					}
+
+					StagingUtil.setRecentLayoutRevisionId(
+						user, layoutSetBranchId, layout.getPlid(),
+						LayoutRevisionConstants.
+							DEFAULT_PARENT_LAYOUT_REVISION_ID);
+
+					layoutRevisionId = StagingUtil.getRecentLayoutRevisionId(
+						user, layoutSetBranchId, layout.getPlid());
+				}
+				catch (NoSuchLayoutRevisionException nslre) {
+				}
+			}
 		}
 
 		if (layoutRevisionId > 0) {
@@ -182,7 +207,7 @@ public class LayoutStagingHandler implements InvocationHandler {
 		}
 		catch (NoSuchLayoutRevisionException nslre) {
 			List<LayoutRevision> layoutRevisions =
-				LayoutRevisionLocalServiceUtil.getLayoutRevisions(
+				LayoutRevisionLocalServiceUtil.getChildLayoutRevisions(
 					layoutSetBranchId,
 					LayoutRevisionConstants.DEFAULT_PARENT_LAYOUT_REVISION_ID,
 					layout.getPlid());
@@ -192,10 +217,17 @@ public class LayoutStagingHandler implements InvocationHandler {
 			}
 		}
 
+		LayoutBranch layoutBranch =
+			LayoutBranchLocalServiceUtil.addLayoutBranch(
+				layoutSetBranchId, layout.getPlid(),
+				LayoutBranchConstants.MASTER_BRANCH_NAME,
+				LayoutBranchConstants.MASTER_BRANCH_DESCRIPTION, true,
+				serviceContext);
+
 		layoutRevision = LayoutRevisionLocalServiceUtil.addLayoutRevision(
 			serviceContext.getUserId(), layoutSetBranchId,
-			LayoutRevisionConstants.DEFAULT_PARENT_LAYOUT_REVISION_ID,
-			false, LayoutRevisionConstants.DEFAULT_LAYOUT_VARIATION_NAME,
+			layoutBranch.getLayoutBranchId(),
+			LayoutRevisionConstants.DEFAULT_PARENT_LAYOUT_REVISION_ID, false,
 			layout.getPlid(), layout.isPrivateLayout(), layout.getName(),
 			layout.getTitle(), layout.getDescription(), layout.getKeywords(),
 			layout.getRobots(), layout.getTypeSettings(), layout.getIconImage(),

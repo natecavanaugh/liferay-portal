@@ -161,6 +161,13 @@ public class OrgLaborLocalServiceWrapper implements OrgLaborLocalService {
 		return _orgLaborLocalService.getOrgLabor(orgLaborId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _orgLaborLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the org labors.
 	*
@@ -191,7 +198,7 @@ public class OrgLaborLocalServiceWrapper implements OrgLaborLocalService {
 	}
 
 	/**
-	* Updates the org labor in the database. Also notifies the appropriate model listeners.
+	* Updates the org labor in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param orgLabor the org labor
 	* @return the org labor that was updated
@@ -204,7 +211,7 @@ public class OrgLaborLocalServiceWrapper implements OrgLaborLocalService {
 	}
 
 	/**
-	* Updates the org labor in the database. Also notifies the appropriate model listeners.
+	* Updates the org labor in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param orgLabor the org labor
 	* @param merge whether to merge the org labor with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

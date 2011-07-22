@@ -232,12 +232,24 @@ public class FileUtil {
 		return getFile().toList(fileName);
 	}
 
+	public static void touch(File file) throws IOException {
+		getFile().touch(file);
+	}
+
+	public static void touch(String fileName) throws IOException {
+		getFile().touch(fileName);
+	}
+
 	public static Properties toProperties(FileInputStream fis) {
 		return getFile().toProperties(fis);
 	}
 
 	public static Properties toProperties(String fileName) {
 		return getFile().toProperties(fileName);
+	}
+
+	public static void unzip(File source, File destination) {
+		getFile().unzip(source, destination);
 	}
 
 	public static void write(String fileName, String s) throws IOException {

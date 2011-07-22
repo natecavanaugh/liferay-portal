@@ -163,6 +163,13 @@ public class AssetLinkLocalServiceWrapper implements AssetLinkLocalService {
 		return _assetLinkLocalService.getAssetLink(linkId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _assetLinkLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the asset links.
 	*
@@ -193,7 +200,7 @@ public class AssetLinkLocalServiceWrapper implements AssetLinkLocalService {
 	}
 
 	/**
-	* Updates the asset link in the database. Also notifies the appropriate model listeners.
+	* Updates the asset link in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param assetLink the asset link
 	* @return the asset link that was updated
@@ -206,7 +213,7 @@ public class AssetLinkLocalServiceWrapper implements AssetLinkLocalService {
 	}
 
 	/**
-	* Updates the asset link in the database. Also notifies the appropriate model listeners.
+	* Updates the asset link in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param assetLink the asset link
 	* @param merge whether to merge the asset link with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

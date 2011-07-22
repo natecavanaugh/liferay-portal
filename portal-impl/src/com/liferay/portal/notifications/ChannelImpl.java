@@ -32,9 +32,10 @@ import com.liferay.portal.util.PropsValues;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -66,7 +67,10 @@ public class ChannelImpl extends BaseChannelImpl {
 
 		try {
 			for (String notificationEventUuid : notificationEventUuids) {
-				_unconfirmedNotificationEvents.remove(notificationEventUuid);
+				Map<String, NotificationEvent> unconfirmedNotificationEvents =
+					_getUnconfirmedNotificationEvents();
+
+				unconfirmedNotificationEvents.remove(notificationEventUuid);
 			}
 
 			if (PropsValues.USER_NOTIFICATION_EVENT_CONFIRMATION_ENABLED) {
@@ -89,8 +93,11 @@ public class ChannelImpl extends BaseChannelImpl {
 		_reentrantLock.lock();
 
 		try {
+			Map<String, NotificationEvent> unconfirmedNotificationEvents =
+				_getUnconfirmedNotificationEvents();
+
 			NotificationEvent notificationEvent =
-				_unconfirmedNotificationEvents.remove(notificationEventUuid);
+				unconfirmedNotificationEvents.remove(notificationEventUuid);
 
 			if (PropsValues.USER_NOTIFICATION_EVENT_CONFIRMATION_ENABLED &&
 				(notificationEvent != null)) {
@@ -112,7 +119,10 @@ public class ChannelImpl extends BaseChannelImpl {
 		_reentrantLock.lock();
 
 		try {
-			_notificationEvents.clear();
+			TreeSet<NotificationEvent> notificationEvents =
+				_getNotificationEvents();
+
+			notificationEvents.clear();
 		}
 		finally {
 			_reentrantLock.unlock();
@@ -123,7 +133,10 @@ public class ChannelImpl extends BaseChannelImpl {
 		_reentrantLock.lock();
 
 		try {
-			Iterator<NotificationEvent> itr = _notificationEvents.iterator();
+			TreeSet<NotificationEvent> notificationEvents =
+				_getNotificationEvents();
+
+			Iterator<NotificationEvent> itr = notificationEvents.iterator();
 
 			while (itr.hasNext()) {
 				NotificationEvent notificationEvent = itr.next();
@@ -181,7 +194,10 @@ public class ChannelImpl extends BaseChannelImpl {
 		_reentrantLock.lock();
 
 		try {
-			_notificationEvents.removeAll(notificationEvents);
+			TreeSet<NotificationEvent> notificationEventsSet =
+				_getNotificationEvents();
+
+			notificationEventsSet.removeAll(notificationEvents);
 		}
 		finally {
 			_reentrantLock.unlock();
@@ -197,7 +213,10 @@ public class ChannelImpl extends BaseChannelImpl {
 		_reentrantLock.lock();
 
 		try {
-			Iterator<NotificationEvent> itr = _notificationEvents.iterator();
+			TreeSet<NotificationEvent> notificationEvents =
+				_getNotificationEvents();
+
+			Iterator<NotificationEvent> itr = notificationEvents.iterator();
 
 			while (itr.hasNext()) {
 				NotificationEvent notificationEvent = itr.next();
@@ -285,27 +304,35 @@ public class ChannelImpl extends BaseChannelImpl {
 		_reentrantLock.lock();
 
 		try {
-
 			long currentTime = System.currentTimeMillis();
 
-			Iterator<NotificationEvent> itr1 = _notificationEvents.iterator();
+			TreeSet<NotificationEvent> notificationEvents =
+				_getNotificationEvents();
+
+			Iterator<NotificationEvent> itr1 = notificationEvents.iterator();
 
 			while (itr1.hasNext()) {
 				NotificationEvent notificationEvent = itr1.next();
 
-				boolean remove = isRemoveNotificationEvent(
-					notificationEvent, currentTime);
+				if (isRemoveNotificationEvent(
+						notificationEvent, currentTime)) {
 
-				if (remove) {
 					itr1.remove();
 				}
 			}
 
+			Map<String, NotificationEvent> unconfirmedNotificationEvents =
+				_getUnconfirmedNotificationEvents();
+
 			List<String> invalidNotificationEventUuids = new ArrayList<String>(
-				_unconfirmedNotificationEvents.size());
+				unconfirmedNotificationEvents.size());
+
+			Set<Map.Entry<String, NotificationEvent>>
+				unconfirmedNotificationEventsSet =
+					unconfirmedNotificationEvents.entrySet();
 
 			Iterator<Map.Entry<String, NotificationEvent>> itr2 =
-				_unconfirmedNotificationEvents.entrySet().iterator();
+				unconfirmedNotificationEventsSet.iterator();
 
 			while (itr2.hasNext()) {
 				Map.Entry<String, NotificationEvent> entry =
@@ -339,14 +366,20 @@ public class ChannelImpl extends BaseChannelImpl {
 	protected List<NotificationEvent> doGetNotificationEvents(boolean flush)
 		throws Exception {
 
-		List<NotificationEvent> notificationEvents =
-			new ArrayList<NotificationEvent>(
-				_notificationEvents.size() +
-					_unconfirmedNotificationEvents.size());
-
 		long currentTime = System.currentTimeMillis();
 
-		for (NotificationEvent notificationEvent : _notificationEvents) {
+		TreeSet<NotificationEvent> notificationEventsSet =
+			_getNotificationEvents();
+
+		Map<String, NotificationEvent> unconfirmedNotificationEvents =
+			_getUnconfirmedNotificationEvents();
+
+		List<NotificationEvent> notificationEvents =
+			new ArrayList<NotificationEvent>(
+				notificationEventsSet.size() +
+					unconfirmedNotificationEvents.size());
+
+		for (NotificationEvent notificationEvent : notificationEventsSet) {
 			if (isRemoveNotificationEvent(notificationEvent, currentTime)) {
 				break;
 			}
@@ -356,17 +389,21 @@ public class ChannelImpl extends BaseChannelImpl {
 		}
 
 		if (flush) {
-			_notificationEvents.clear();
+			notificationEventsSet.clear();
 		}
-		else if (_notificationEvents.size() != notificationEvents.size()) {
-			_notificationEvents.retainAll(notificationEvents);
+		else if (notificationEventsSet.size() != notificationEvents.size()) {
+			notificationEventsSet.retainAll(notificationEvents);
 		}
 
 		List<String> invalidNotificationEventUuids = new ArrayList<String>(
-			_unconfirmedNotificationEvents.size());
+			unconfirmedNotificationEvents.size());
+
+		Set<Map.Entry<String, NotificationEvent>>
+			unconfirmedNotificationEventsSet =
+				unconfirmedNotificationEvents.entrySet();
 
 		Iterator<Map.Entry<String, NotificationEvent>> itr =
-			_unconfirmedNotificationEvents.entrySet().iterator();
+			unconfirmedNotificationEventsSet.iterator();
 
 		while (itr.hasNext()) {
 			Map.Entry<String, NotificationEvent> entry = itr.next();
@@ -403,8 +440,11 @@ public class ChannelImpl extends BaseChannelImpl {
 			UserNotificationEventLocalServiceUtil.getUserNotificationEvents(
 				getUserId());
 
+		Map<String, NotificationEvent> unconfirmedNotificationEvents =
+			_getUnconfirmedNotificationEvents();
+
 		List<String> invalidNotificationEventUuids = new ArrayList<String>(
-			_unconfirmedNotificationEvents.size());
+			unconfirmedNotificationEvents.size());
 
 		long currentTime = System.currentTimeMillis();
 
@@ -431,7 +471,7 @@ public class ChannelImpl extends BaseChannelImpl {
 						notificationEvent.getUuid());
 				}
 				else {
-					_unconfirmedNotificationEvents.put(
+					unconfirmedNotificationEvents.put(
 						notificationEvent.getUuid(), notificationEvent);
 				}
 			}
@@ -472,29 +512,53 @@ public class ChannelImpl extends BaseChannelImpl {
 		if (PropsValues.USER_NOTIFICATION_EVENT_CONFIRMATION_ENABLED &&
 			notificationEvent.isDeliveryRequired()) {
 
-			_unconfirmedNotificationEvents.put(
+			Map<String, NotificationEvent> unconfirmedNotificationEvents =
+				_getUnconfirmedNotificationEvents();
+
+			unconfirmedNotificationEvents.put(
 				notificationEvent.getUuid(), notificationEvent);
 		}
 		else {
-			_notificationEvents.add(notificationEvent);
+			TreeSet<NotificationEvent> notificationEvents =
+				_getNotificationEvents();
 
-			if (_notificationEvents.size() >
+			notificationEvents.add(notificationEvent);
+
+			if (notificationEvents.size() >
 					PropsValues.NOTIFICATIONS_MAX_EVENTS) {
 
 				NotificationEvent firstNotificationEvent =
-					_notificationEvents.first();
+					notificationEvents.first();
 
-				_notificationEvents.remove(firstNotificationEvent);
+				notificationEvents.remove(firstNotificationEvent);
 			}
 		}
 	}
 
+	private TreeSet<NotificationEvent> _getNotificationEvents() {
+		if (_notificationEvents == null) {
+			_notificationEvents = new TreeSet<NotificationEvent>(_comparator);
+		}
+
+		return _notificationEvents;
+	}
+
+	private Map<String, NotificationEvent> _getUnconfirmedNotificationEvents() {
+		if (_unconfirmedNotificationEvents == null) {
+			_unconfirmedNotificationEvents =
+				new HashMap<String, NotificationEvent>();
+		}
+
+		return _unconfirmedNotificationEvents;
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(ChannelImpl.class);
 
-	private TreeSet<NotificationEvent> _notificationEvents =
-		new TreeSet<NotificationEvent>(new NotificationEventComparator());
+	private static Comparator<NotificationEvent> _comparator =
+		new NotificationEventComparator();
+
+	private TreeSet<NotificationEvent> _notificationEvents;
 	private ReentrantLock _reentrantLock = new ReentrantLock();
-	private Map<String, NotificationEvent> _unconfirmedNotificationEvents =
-		new LinkedHashMap<String, NotificationEvent>();
+	private Map<String, NotificationEvent> _unconfirmedNotificationEvents;
 
 }

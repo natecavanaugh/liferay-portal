@@ -160,6 +160,13 @@ public class ShardLocalServiceWrapper implements ShardLocalService {
 		return _shardLocalService.getShard(shardId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _shardLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the shards.
 	*
@@ -189,7 +196,7 @@ public class ShardLocalServiceWrapper implements ShardLocalService {
 	}
 
 	/**
-	* Updates the shard in the database. Also notifies the appropriate model listeners.
+	* Updates the shard in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param shard the shard
 	* @return the shard that was updated
@@ -202,7 +209,7 @@ public class ShardLocalServiceWrapper implements ShardLocalService {
 	}
 
 	/**
-	* Updates the shard in the database. Also notifies the appropriate model listeners.
+	* Updates the shard in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param shard the shard
 	* @param merge whether to merge the shard with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

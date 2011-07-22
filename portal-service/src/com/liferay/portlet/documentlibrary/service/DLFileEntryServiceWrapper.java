@@ -47,12 +47,6 @@ public class DLFileEntryServiceWrapper implements DLFileEntryService {
 		_dlFileEntryService.cancelCheckOut(fileEntryId);
 	}
 
-	public void checkInFileEntry(long fileEntryId, java.lang.String lockUuid)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_dlFileEntryService.checkInFileEntry(fileEntryId, lockUuid);
-	}
-
 	public void checkInFileEntry(long fileEntryId, boolean major,
 		java.lang.String changeLog,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -60,6 +54,12 @@ public class DLFileEntryServiceWrapper implements DLFileEntryService {
 			com.liferay.portal.kernel.exception.SystemException {
 		_dlFileEntryService.checkInFileEntry(fileEntryId, major, changeLog,
 			serviceContext);
+	}
+
+	public void checkInFileEntry(long fileEntryId, java.lang.String lockUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_dlFileEntryService.checkInFileEntry(fileEntryId, lockUuid);
 	}
 
 	public com.liferay.portlet.documentlibrary.model.DLFileEntry checkOutFileEntry(
@@ -104,6 +104,14 @@ public class DLFileEntryServiceWrapper implements DLFileEntryService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlFileEntryService.getFileAsStream(fileEntryId, version);
+	}
+
+	public java.io.InputStream getFileAsStream(long fileEntryId,
+		java.lang.String version, boolean incrementCounter)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _dlFileEntryService.getFileAsStream(fileEntryId, version,
+			incrementCounter);
 	}
 
 	public java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntry> getFileEntries(
@@ -157,13 +165,6 @@ public class DLFileEntryServiceWrapper implements DLFileEntryService {
 
 	public com.liferay.portal.model.Lock getFileEntryLock(long fileEntryId) {
 		return _dlFileEntryService.getFileEntryLock(fileEntryId);
-	}
-
-	public com.liferay.portlet.documentlibrary.model.DLFileVersion getFileVersion(
-		long fileVersionId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _dlFileEntryService.getFileVersion(fileVersionId);
 	}
 
 	public int getFoldersFileEntriesCount(long groupId,

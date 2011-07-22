@@ -35,7 +35,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
  */
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
-public interface PasswordTrackerLocalService {
+public interface PasswordTrackerLocalService extends PersistedModelLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -159,6 +159,12 @@ public interface PasswordTrackerLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	/**
 	* Returns a range of all the password trackers.
 	*
@@ -187,7 +193,7 @@ public interface PasswordTrackerLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the password tracker in the database. Also notifies the appropriate model listeners.
+	* Updates the password tracker in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param passwordTracker the password tracker
 	* @return the password tracker that was updated
@@ -198,7 +204,7 @@ public interface PasswordTrackerLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the password tracker in the database. Also notifies the appropriate model listeners.
+	* Updates the password tracker in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param passwordTracker the password tracker
 	* @param merge whether to merge the password tracker with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.util.PwdGenerator;
 import com.liferay.util.SystemProperties;
+import com.liferay.util.ant.ExpandTask;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,6 +56,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.tika.Tika;
 import org.apache.tools.ant.DirectoryScanner;
 
@@ -667,6 +669,18 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		catch (IOException ioe) {
 			return new Properties();
 		}
+	}
+
+	public void touch(File file) throws IOException {
+		FileUtils.touch(file);
+	}
+
+	public void touch(String fileName) throws IOException {
+		touch(new File(fileName));
+	}
+
+	public void unzip(File source, File destination) {
+		ExpandTask.expand(source, destination);
 	}
 
 	public void write(String fileName, String s) throws IOException {

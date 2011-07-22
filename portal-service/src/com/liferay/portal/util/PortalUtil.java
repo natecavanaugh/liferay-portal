@@ -20,10 +20,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.model.BaseModel;
-import com.liferay.portal.model.BreadcrumbEntry;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
@@ -576,6 +576,13 @@ public class PortalUtil {
 		return getPortal().getLayoutFullURL(groupId, portletId);
 	}
 
+	public static String getLayoutFullURL(
+			long groupId, String portletId, boolean secure)
+		throws PortalException, SystemException {
+
+		return getPortal().getLayoutFullURL(groupId, portletId, secure);
+	}
+
 	public static String getLayoutFullURL(ThemeDisplay themeDisplay)
 		throws PortalException, SystemException {
 
@@ -760,8 +767,15 @@ public class PortalUtil {
 		return getPortal().getPortalLibDir();
 	}
 
+	/**
+	 * @deprecated {@link #getPortalPort(boolean)}
+	 */
 	public static int getPortalPort() {
 		return getPortal().getPortalPort();
+	}
+
+	public static int getPortalPort(boolean secure) {
+		return getPortal().getPortalPort(secure);
 	}
 
 	public static Properties getPortalProperties() {

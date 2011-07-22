@@ -164,6 +164,13 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService {
 		return _blogsEntryLocalService.getBlogsEntry(entryId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _blogsEntryLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the blogs entry with the UUID in the group.
 	*
@@ -211,7 +218,7 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService {
 	}
 
 	/**
-	* Updates the blogs entry in the database. Also notifies the appropriate model listeners.
+	* Updates the blogs entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param blogsEntry the blogs entry
 	* @return the blogs entry that was updated
@@ -224,7 +231,7 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService {
 	}
 
 	/**
-	* Updates the blogs entry in the database. Also notifies the appropriate model listeners.
+	* Updates the blogs entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param blogsEntry the blogs entry
 	* @param merge whether to merge the blogs entry with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

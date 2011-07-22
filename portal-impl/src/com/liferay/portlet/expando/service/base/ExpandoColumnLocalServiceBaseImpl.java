@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -49,6 +51,8 @@ import com.liferay.portlet.expando.service.persistence.ExpandoColumnPersistence;
 import com.liferay.portlet.expando.service.persistence.ExpandoRowPersistence;
 import com.liferay.portlet.expando.service.persistence.ExpandoTablePersistence;
 import com.liferay.portlet.expando.service.persistence.ExpandoValuePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -241,6 +245,11 @@ public abstract class ExpandoColumnLocalServiceBaseImpl
 		return expandoColumnPersistence.findByPrimaryKey(columnId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return expandoColumnPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the expando columns.
 	 *
@@ -269,7 +278,7 @@ public abstract class ExpandoColumnLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the expando column in the database. Also notifies the appropriate model listeners.
+	 * Updates the expando column in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param expandoColumn the expando column
 	 * @return the expando column that was updated
@@ -281,7 +290,7 @@ public abstract class ExpandoColumnLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the expando column in the database. Also notifies the appropriate model listeners.
+	 * Updates the expando column in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param expandoColumn the expando column
 	 * @param merge whether to merge the expando column with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -662,6 +671,16 @@ public abstract class ExpandoColumnLocalServiceBaseImpl
 		this.userFinder = userFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.expando.model.ExpandoColumn",
+			expandoColumnLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.expando.model.ExpandoColumn");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -745,6 +764,8 @@ public abstract class ExpandoColumnLocalServiceBaseImpl
 	protected UserPersistence userPersistence;
 	@BeanReference(type = UserFinder.class)
 	protected UserFinder userFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(ExpandoColumnLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

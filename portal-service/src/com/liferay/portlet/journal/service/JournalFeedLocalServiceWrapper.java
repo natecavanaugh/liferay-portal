@@ -163,6 +163,13 @@ public class JournalFeedLocalServiceWrapper implements JournalFeedLocalService {
 		return _journalFeedLocalService.getJournalFeed(id);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalFeedLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the journal feed with the UUID in the group.
 	*
@@ -210,7 +217,7 @@ public class JournalFeedLocalServiceWrapper implements JournalFeedLocalService {
 	}
 
 	/**
-	* Updates the journal feed in the database. Also notifies the appropriate model listeners.
+	* Updates the journal feed in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param journalFeed the journal feed
 	* @return the journal feed that was updated
@@ -223,7 +230,7 @@ public class JournalFeedLocalServiceWrapper implements JournalFeedLocalService {
 	}
 
 	/**
-	* Updates the journal feed in the database. Also notifies the appropriate model listeners.
+	* Updates the journal feed in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param journalFeed the journal feed
 	* @param merge whether to merge the journal feed with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

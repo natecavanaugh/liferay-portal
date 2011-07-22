@@ -165,6 +165,13 @@ public class DLFileShortcutLocalServiceWrapper
 		return _dlFileShortcutLocalService.getDLFileShortcut(fileShortcutId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _dlFileShortcutLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the document library file shortcut with the UUID in the group.
 	*
@@ -212,7 +219,7 @@ public class DLFileShortcutLocalServiceWrapper
 	}
 
 	/**
-	* Updates the document library file shortcut in the database. Also notifies the appropriate model listeners.
+	* Updates the document library file shortcut in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param dlFileShortcut the document library file shortcut
 	* @return the document library file shortcut that was updated
@@ -225,7 +232,7 @@ public class DLFileShortcutLocalServiceWrapper
 	}
 
 	/**
-	* Updates the document library file shortcut in the database. Also notifies the appropriate model listeners.
+	* Updates the document library file shortcut in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param dlFileShortcut the document library file shortcut
 	* @param merge whether to merge the document library file shortcut with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

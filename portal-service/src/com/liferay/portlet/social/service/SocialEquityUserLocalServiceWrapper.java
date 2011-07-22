@@ -166,6 +166,13 @@ public class SocialEquityUserLocalServiceWrapper
 		return _socialEquityUserLocalService.getSocialEquityUser(equityUserId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _socialEquityUserLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the social equity users.
 	*
@@ -196,7 +203,7 @@ public class SocialEquityUserLocalServiceWrapper
 	}
 
 	/**
-	* Updates the social equity user in the database. Also notifies the appropriate model listeners.
+	* Updates the social equity user in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param socialEquityUser the social equity user
 	* @return the social equity user that was updated
@@ -209,7 +216,7 @@ public class SocialEquityUserLocalServiceWrapper
 	}
 
 	/**
-	* Updates the social equity user in the database. Also notifies the appropriate model listeners.
+	* Updates the social equity user in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param socialEquityUser the social equity user
 	* @param merge whether to merge the social equity user with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -240,6 +247,11 @@ public class SocialEquityUserLocalServiceWrapper
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_socialEquityUserLocalService.setBeanIdentifier(beanIdentifier);
+	}
+
+	public void clearRanks(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_socialEquityUserLocalService.clearRanks(userId);
 	}
 
 	public com.liferay.portlet.social.model.SocialEquityValue getContributionEquity(

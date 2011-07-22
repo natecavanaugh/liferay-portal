@@ -52,6 +52,7 @@ if (configParams != null) {
 
 String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-editor:cssClass"));
 String cssClasses = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-editor:cssClasses"));
+String editorImpl = (String)request.getAttribute("liferay-ui:input-editor:editorImpl");
 String name = namespace + GetterUtil.getString((String)request.getAttribute("liferay-ui:input-editor:name"));
 String initMethod = (String)request.getAttribute("liferay-ui:input-editor:initMethod");
 
@@ -61,22 +62,29 @@ if (Validator.isNotNull(onChangeMethod)) {
 	onChangeMethod = namespace + onChangeMethod;
 }
 
+boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-editor:skipEditorLoading"));
 String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolbarSet");
 %>
 
-<liferay-util:html-top outputKey="js_editor_ckeditor">
-	<style type="text/css">
-		table.cke_dialog {
-			position: absolute !important;
-		}
-	</style>
+<c:if test="<%= !skipEditorLoading %>">
+	<liferay-util:html-top outputKey="js_editor_ckeditor">
+		<style type="text/css">
+			table.cke_dialog {
+				position: absolute !important;
+			}
+		</style>
 
-	<%
-	long javaScriptLastModified = ServletContextUtil.getLastModified(application, "/html/js/", true);
-	%>
+		<%
+		long javaScriptLastModified = ServletContextUtil.getLastModified(application, "/html/js/", true);
+		%>
 
-	<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getPathJavaScript() + "/editor/ckeditor/ckeditor.js", javaScriptLastModified)) %>" type="text/javascript"></script>
-</liferay-util:html-top>
+		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getPathJavaScript() + "/editor/ckeditor/ckeditor.js", javaScriptLastModified)) %>" type="text/javascript"></script>
+
+		<script type="text/javascript">
+			Liferay.namespace('EDITORS')['<%= editorImpl %>'] = true;
+		</script>
+	</liferay-util:html-top>
+</c:if>
 
 <aui:script>
 	window['<%= name %>'] = {
@@ -150,8 +158,8 @@ String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolba
 		CKEDITOR.replace(
 			'<%= name %>',
 			{
-				customConfig: '<%= themeDisplay.getPathJavaScript() %>/editor/ckeditor/<%= ckEditorConfigFileName %>?p_l_id=<%= plid %>&p_p_id=<%= HttpUtil.encodeURL(portletId) %>&p_main_path=<%= HttpUtil.encodeURL(mainPath) %>&doAsUserId=<%= HttpUtil.encodeURL(doAsUserId) %>&doAsGroupId=<%= HttpUtil.encodeURL(String.valueOf(doAsGroupId)) %>&cssPath=<%= HttpUtil.encodeURL(themeDisplay.getPathThemeCss()) %>&cssClasses=<%= HttpUtil.encodeURL(cssClasses) %>&imagesPath=<%= HttpUtil.encodeURL(themeDisplay.getPathThemeImages()) %>&languageId=<%= HttpUtil.encodeURL(LocaleUtil.toLanguageId(locale)) %><%= configParamsSB.toString() %>',
-				filebrowserBrowseUrl: '<%= themeDisplay.getPathJavaScript() %>/editor/ckeditor/editor/filemanager/browser/liferay/browser.html?Connector=<%= connectorURL %>',
+				customConfig: '<%= PortalUtil.getPathContext() %>/html/js/editor/ckeditor/<%= ckEditorConfigFileName %>?p_l_id=<%= plid %>&p_p_id=<%= HttpUtil.encodeURL(portletId) %>&p_main_path=<%= HttpUtil.encodeURL(mainPath) %>&doAsUserId=<%= HttpUtil.encodeURL(doAsUserId) %>&doAsGroupId=<%= HttpUtil.encodeURL(String.valueOf(doAsGroupId)) %>&cssPath=<%= HttpUtil.encodeURL(themeDisplay.getPathThemeCss()) %>&cssClasses=<%= HttpUtil.encodeURL(cssClasses) %>&imagesPath=<%= HttpUtil.encodeURL(themeDisplay.getPathThemeImages()) %>&languageId=<%= HttpUtil.encodeURL(LocaleUtil.toLanguageId(locale)) %><%= configParamsSB.toString() %>',
+				filebrowserBrowseUrl: '<%= PortalUtil.getPathContext() %>/html/js/editor/ckeditor/editor/filemanager/browser/liferay/browser.html?Connector=<%= connectorURL %>',
 				filebrowserUploadUrl: null,
 				toolbar: '<%= TextFormatter.format(HtmlUtil.escape(toolbarSet), TextFormatter.M) %>'
 			}
@@ -214,7 +222,7 @@ String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolba
 							try {
 								window['<%= name %>'].onChangeCallback();
 							}
-							catch(e) {
+							catch (e) {
 							}
 						},
 						300

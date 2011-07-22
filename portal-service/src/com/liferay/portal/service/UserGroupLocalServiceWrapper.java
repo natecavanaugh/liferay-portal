@@ -163,6 +163,13 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService {
 		return _userGroupLocalService.getUserGroup(userGroupId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _userGroupLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the user groups.
 	*
@@ -193,7 +200,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService {
 	}
 
 	/**
-	* Updates the user group in the database. Also notifies the appropriate model listeners.
+	* Updates the user group in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param userGroup the user group
 	* @return the user group that was updated
@@ -206,7 +213,7 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService {
 	}
 
 	/**
-	* Updates the user group in the database. Also notifies the appropriate model listeners.
+	* Updates the user group in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param userGroup the user group
 	* @param merge whether to merge the user group with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -248,11 +255,18 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService {
 	}
 
 	public com.liferay.portal.model.UserGroup addUserGroup(long userId,
-		long companyId, java.lang.String name, java.lang.String description)
+		long companyId, java.lang.String name, java.lang.String description,
+		long publicLayoutSetPrototypeId, long privateLayoutSetPrototypeId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.addUserGroup(userId, companyId, name,
-			description);
+			description, publicLayoutSetPrototypeId, privateLayoutSetPrototypeId);
+	}
+
+	public void addUserUserGroups(long userId, long[] userGroupIds)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_userGroupLocalService.addUserUserGroups(userId, userGroupIds);
 	}
 
 	public void clearUserUserGroups(long userId)
@@ -347,11 +361,13 @@ public class UserGroupLocalServiceWrapper implements UserGroupLocalService {
 	}
 
 	public com.liferay.portal.model.UserGroup updateUserGroup(long companyId,
-		long userGroupId, java.lang.String name, java.lang.String description)
+		long userGroupId, java.lang.String name, java.lang.String description,
+		long publicLayoutSetPrototypeId, long privateLayoutSetPrototypeId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _userGroupLocalService.updateUserGroup(companyId, userGroupId,
-			name, description);
+			name, description, publicLayoutSetPrototypeId,
+			privateLayoutSetPrototypeId);
 	}
 
 	public UserGroupLocalService getWrappedUserGroupLocalService() {

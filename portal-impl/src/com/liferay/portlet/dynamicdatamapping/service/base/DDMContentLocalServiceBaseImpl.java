@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -54,6 +56,8 @@ import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMStructureLi
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMStructurePersistence;
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplateFinder;
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplatePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -246,6 +250,11 @@ public abstract class DDMContentLocalServiceBaseImpl
 		return ddmContentPersistence.findByPrimaryKey(contentId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return ddmContentPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the d d m content with the UUID in the group.
 	 *
@@ -288,7 +297,7 @@ public abstract class DDMContentLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the d d m content in the database. Also notifies the appropriate model listeners.
+	 * Updates the d d m content in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param ddmContent the d d m content
 	 * @return the d d m content that was updated
@@ -300,7 +309,7 @@ public abstract class DDMContentLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the d d m content in the database. Also notifies the appropriate model listeners.
+	 * Updates the d d m content in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param ddmContent the d d m content
 	 * @param merge whether to merge the d d m content with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -773,6 +782,16 @@ public abstract class DDMContentLocalServiceBaseImpl
 		this.userFinder = userFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.dynamicdatamapping.model.DDMContent",
+			ddmContentLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.dynamicdatamapping.model.DDMContent");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -866,6 +885,8 @@ public abstract class DDMContentLocalServiceBaseImpl
 	protected UserPersistence userPersistence;
 	@BeanReference(type = UserFinder.class)
 	protected UserFinder userFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(DDMContentLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

@@ -165,6 +165,13 @@ public class ExpandoColumnLocalServiceWrapper
 		return _expandoColumnLocalService.getExpandoColumn(columnId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _expandoColumnLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the expando columns.
 	*
@@ -195,7 +202,7 @@ public class ExpandoColumnLocalServiceWrapper
 	}
 
 	/**
-	* Updates the expando column in the database. Also notifies the appropriate model listeners.
+	* Updates the expando column in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param expandoColumn the expando column
 	* @return the expando column that was updated
@@ -208,7 +215,7 @@ public class ExpandoColumnLocalServiceWrapper
 	}
 
 	/**
-	* Updates the expando column in the database. Also notifies the appropriate model listeners.
+	* Updates the expando column in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param expandoColumn the expando column
 	* @param merge whether to merge the expando column with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

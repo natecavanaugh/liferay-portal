@@ -14,26 +14,9 @@
  */
 --%>
 
-<%@ include file="/html/taglib/init.jsp" %>
+<%@ include file="/html/taglib/aui/field_wrapper/init.jsp" %>
 
 <%
-String cssClass = GetterUtil.getString((String)request.getAttribute("aui:field-wrapper:cssClass"));
-boolean first = GetterUtil.getBoolean((String)request.getAttribute("aui:field-wrapper:first"));
-String helpMessage = GetterUtil.getString((String)request.getAttribute("aui:field-wrapper:helpMessage"));
-boolean inlineField = GetterUtil.getBoolean((String)request.getAttribute("aui:field-wrapper:inlineField"));
-String inlineLabel = GetterUtil.getString((String)request.getAttribute("aui:field-wrapper:inlineLabel"));
-String label = GetterUtil.getString((String)request.getAttribute("aui:field-wrapper:label"));
-String name = GetterUtil.getString((String)request.getAttribute("aui:field-wrapper:name"));
-boolean last = GetterUtil.getBoolean((String)request.getAttribute("aui:field-wrapper:last"));
-
-boolean showForLabel = false;
-
-if (Validator.isNotNull(name)) {
-	showForLabel = true;
-
-	name = namespace + name;
-}
-
 String fieldCss = AUIUtil.buildCss(AUIUtil.FIELD_PREFIX, "wrapper", inlineField, false, false, first, last, cssClass);
 %>
 
@@ -42,6 +25,10 @@ String fieldCss = AUIUtil.buildCss(AUIUtil.FIELD_PREFIX, "wrapper", inlineField,
 		<c:if test='<%= Validator.isNotNull(label) && !inlineLabel.equals("right") %>'>
 			<label <%= AUIUtil.buildLabel(inlineLabel, showForLabel, name) %>>
 				<liferay-ui:message key="<%= label %>" />
+
+				<c:if test="<%= required %>">
+					<span class="aui-label-required">(<liferay-ui:message key="required" />)</span>
+				</c:if>
 
 				<c:if test="<%= Validator.isNotNull(helpMessage) %>">
 					<liferay-ui:icon-help message="<%= helpMessage %>" />

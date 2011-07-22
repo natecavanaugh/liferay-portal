@@ -166,6 +166,13 @@ public class JournalArticleImageLocalServiceWrapper
 		return _journalArticleImageLocalService.getJournalArticleImage(articleImageId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalArticleImageLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the journal article images.
 	*
@@ -197,7 +204,7 @@ public class JournalArticleImageLocalServiceWrapper
 	}
 
 	/**
-	* Updates the journal article image in the database. Also notifies the appropriate model listeners.
+	* Updates the journal article image in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param journalArticleImage the journal article image
 	* @return the journal article image that was updated
@@ -210,7 +217,7 @@ public class JournalArticleImageLocalServiceWrapper
 	}
 
 	/**
-	* Updates the journal article image in the database. Also notifies the appropriate model listeners.
+	* Updates the journal article image in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param journalArticleImage the journal article image
 	* @param merge whether to merge the journal article image with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

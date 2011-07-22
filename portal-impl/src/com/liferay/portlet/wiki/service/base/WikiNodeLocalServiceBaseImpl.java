@@ -29,8 +29,10 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.service.GroupService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.SubscriptionLocalService;
@@ -54,6 +56,8 @@ import com.liferay.portlet.wiki.service.persistence.WikiNodePersistence;
 import com.liferay.portlet.wiki.service.persistence.WikiPageFinder;
 import com.liferay.portlet.wiki.service.persistence.WikiPagePersistence;
 import com.liferay.portlet.wiki.service.persistence.WikiPageResourcePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -243,6 +247,11 @@ public abstract class WikiNodeLocalServiceBaseImpl
 		return wikiNodePersistence.findByPrimaryKey(nodeId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return wikiNodePersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the wiki node with the UUID in the group.
 	 *
@@ -285,7 +294,7 @@ public abstract class WikiNodeLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the wiki node in the database. Also notifies the appropriate model listeners.
+	 * Updates the wiki node in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param wikiNode the wiki node
 	 * @return the wiki node that was updated
@@ -296,7 +305,7 @@ public abstract class WikiNodeLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the wiki node in the database. Also notifies the appropriate model listeners.
+	 * Updates the wiki node in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param wikiNode the wiki node
 	 * @param merge whether to merge the wiki node with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -764,6 +773,16 @@ public abstract class WikiNodeLocalServiceBaseImpl
 		this.userFinder = userFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.wiki.model.WikiNode",
+			wikiNodeLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.wiki.model.WikiNode");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -857,6 +876,8 @@ public abstract class WikiNodeLocalServiceBaseImpl
 	protected UserPersistence userPersistence;
 	@BeanReference(type = UserFinder.class)
 	protected UserFinder userFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(WikiNodeLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

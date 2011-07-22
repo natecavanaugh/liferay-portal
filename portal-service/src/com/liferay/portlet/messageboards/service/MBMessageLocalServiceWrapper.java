@@ -164,6 +164,13 @@ public class MBMessageLocalServiceWrapper implements MBMessageLocalService {
 		return _mbMessageLocalService.getMBMessage(messageId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbMessageLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the message-boards message with the UUID in the group.
 	*
@@ -210,7 +217,7 @@ public class MBMessageLocalServiceWrapper implements MBMessageLocalService {
 	}
 
 	/**
-	* Updates the message-boards message in the database. Also notifies the appropriate model listeners.
+	* Updates the message-boards message in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param mbMessage the message-boards message
 	* @return the message-boards message that was updated
@@ -223,7 +230,7 @@ public class MBMessageLocalServiceWrapper implements MBMessageLocalService {
 	}
 
 	/**
-	* Updates the message-boards message in the database. Also notifies the appropriate model listeners.
+	* Updates the message-boards message in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param mbMessage the message-boards message
 	* @param merge whether to merge the message-boards message with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -582,11 +589,12 @@ public class MBMessageLocalServiceWrapper implements MBMessageLocalService {
 
 	public com.liferay.portlet.messageboards.model.MBMessage updateDiscussionMessage(
 		long userId, long messageId, java.lang.String className, long classPK,
-		java.lang.String subject, java.lang.String body, int workflowAction)
+		java.lang.String subject, java.lang.String body,
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mbMessageLocalService.updateDiscussionMessage(userId,
-			messageId, className, classPK, subject, body, workflowAction);
+			messageId, className, classPK, subject, body, serviceContext);
 	}
 
 	public com.liferay.portlet.messageboards.model.MBMessage updateMessage(

@@ -282,6 +282,17 @@
 		</licenses>
 	</library>
 	<library>
+		<file-name>development/jasper.jar</file-name>
+		<version>6.0.32</version>
+		<project-name>Tomcat</project-name>
+		<project-url>http://tomcat.apache.org</project-url>
+		<licenses>
+			<license>
+				<license-name>Apache License 2.0</license-name>
+			</license>
+		</licenses>
+	</library>
+	<library>
 		<file-name>development/jass.jar</file-name>
 		<version></version>
 		<project-name>Jass</project-name>
@@ -341,7 +352,7 @@
 	</library>
 	<library>
 		<file-name>development/jetty.jar</file-name>
-		<version>6.1.24</version>
+		<version>6.1.26</version>
 		<project-name>Jetty</project-name>
 		<project-url>http://www.mortbay.org/jetty</project-url>
 		<licenses>
@@ -352,7 +363,7 @@
 	</library>
 	<library>
 		<file-name>development/jetty-util.jar</file-name>
-		<version>6.1.24</version>
+		<version>6.1.26</version>
 		<project-name>Jetty</project-name>
 		<project-url>http://www.mortbay.org/jetty</project-url>
 		<licenses>
@@ -1227,7 +1238,7 @@
 	</library>
 	<library>
 		<file-name>portal/chemistry-opencmis-client-api.jar</file-name>
-		<version>0.3</version>
+		<version>0.4.0</version>
 		<project-name>OpenCMIS</project-name>
 		<project-url>http://chemistry.apache.org/java/opencmis.html</project-url>
 		<licenses>
@@ -1238,7 +1249,7 @@
 	</library>
 	<library>
 		<file-name>portal/chemistry-opencmis-client-bindings.jar</file-name>
-		<version>0.3</version>
+		<version>0.4.0</version>
 		<project-name>OpenCMIS</project-name>
 		<project-url>http://chemistry.apache.org/java/opencmis.html</project-url>
 		<licenses>
@@ -1249,7 +1260,7 @@
 	</library>
 	<library>
 		<file-name>portal/chemistry-opencmis-client-impl.jar</file-name>
-		<version>0.3</version>
+		<version>0.4.0</version>
 		<project-name>OpenCMIS</project-name>
 		<project-url>http://chemistry.apache.org/java/opencmis.html</project-url>
 		<licenses>
@@ -1260,7 +1271,7 @@
 	</library>
 	<library>
 		<file-name>portal/chemistry-opencmis-commons-api.jar</file-name>
-		<version>0.3</version>
+		<version>0.4.0</version>
 		<project-name>OpenCMIS</project-name>
 		<project-url>http://chemistry.apache.org/java/opencmis.html</project-url>
 		<licenses>
@@ -1271,7 +1282,7 @@
 	</library>
 	<library>
 		<file-name>portal/chemistry-opencmis-commons-impl.jar </file-name>
-		<version>0.3</version>
+		<version>0.4.0</version>
 		<project-name>OpenCMIS</project-name>
 		<project-url>http://chemistry.apache.org/java/opencmis.html</project-url>
 		<licenses>
@@ -2124,7 +2135,7 @@
 	</library>
 	<library>
 		<file-name>portal/jodd.jar</file-name>
-		<version>3.2.6</version>
+		<version>3.2.7 B2</version>
 		<project-name>Jodd</project-name>
 		<project-url>http://jodd.org</project-url>
 		<licenses>
@@ -2135,7 +2146,7 @@
 	</library>
 	<library>
 		<file-name>portal/jodd-wot.jar</file-name>
-		<version>3.2.6</version>
+		<version>3.2.7 B2</version>
 		<project-name>Jodd</project-name>
 		<project-url>http://jodd.org</project-url>
 		<licenses>
@@ -2307,9 +2318,20 @@
 	</library>
 	<library>
 		<file-name>portal/log4j.jar</file-name>
-		<version>1.2.15</version>
+		<version>1.2.16</version>
 		<project-name>Log4j</project-name>
 		<project-url>http://logging.apache.org/log4j</project-url>
+		<licenses>
+			<license>
+				<license-name>Apache License 2.0</license-name>
+			</license>
+		</licenses>
+	</library>
+	<library>
+		<file-name>portal/log4j-extras.jar</file-name>
+		<version>1.1</version>
+		<project-name>Log4j Extras</project-name>
+		<project-url>http://logging.apache.org/log4j/companions/extras</project-url>
 		<licenses>
 			<license>
 				<license-name>Apache License 2.0</license-name>
@@ -3239,10 +3261,14 @@
 		<version>3.4.1012</version>
 		<project-name>Xuggler</project-name>
 		<project-url>http://www.xuggle.com</project-url>
-		<licenses>			
+		<licenses>
 			<license>
 				<license-name>LGPL 3</license-name>
-			</license>			
+			</license>
 		</licenses>
+		<comments>
+			This includes a public patch from
+			http://code.google.com/p/xuggle/issues/detail?id=252.
+		</comments>
 	</library>
 </libraries>

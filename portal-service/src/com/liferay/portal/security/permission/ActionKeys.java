@@ -15,6 +15,8 @@
 package com.liferay.portal.security.permission;
 
 /**
+ * Contains constant versions of common action IDs.
+ *
  * @author Charles May
  * @author Brian Wing Shun Chan
  */
@@ -62,6 +64,8 @@ public class ActionKeys {
 	public static final String ADD_INSTANCE = "ADD_INSTANCE";
 
 	public static final String ADD_ITEM = "ADD_ITEM";
+
+	public static final String ADD_LAYOUT_BRANCH = "ADD_LAYOUT_BRANCH";
 
 	public static final String ADD_LAYOUT_PROTOTYPE = "ADD_LAYOUT_PROTOTYPE";
 
@@ -137,6 +141,8 @@ public class ActionKeys {
 	public static final String DELETE = "DELETE";
 
 	public static final String DELETE_DISCUSSION = "DELETE_DISCUSSION";
+
+	public static final String DELETE_LAYOUT_BRANCH = "DELETE_LAYOUT_BRANCH";
 
 	public static final String DELETE_USER = "DELETE_USER";
 

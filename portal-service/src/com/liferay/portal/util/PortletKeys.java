@@ -98,6 +98,8 @@ public class PortletKeys {
 
 	public static final String LAYOUT_CONFIGURATION = "87";
 
+	public static final String LAYOUT_SET_PROTOTYPE = "149";
+
 	public static final String LAYOUTS_ADMIN = "88";
 
 	public static final String LIFERAY_PORTAL = "LIFERAY_PORTAL";
@@ -172,6 +174,8 @@ public class PortletKeys {
 
 	public static final String RECENT_DOCUMENTS = "64";
 
+	public static final String RELATED_ASSETS = "175";
+
 	public static final String REQUESTS = "121";
 
 	public static final String ROLES_ADMIN = "128";
@@ -215,6 +219,8 @@ public class PortletKeys {
 	public static final String WIKI = "36";
 
 	public static final String WIKI_ADMIN = "154";
+
+	public static final String WIKI_DISPLAY = "54";
 
 	public static final String WORKFLOW_CONFIGURATION = "152";
 

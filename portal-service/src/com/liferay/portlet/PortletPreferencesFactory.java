@@ -73,6 +73,11 @@ public interface PortletPreferencesFactory {
 			HttpServletRequest request, String portletId)
 		throws PortalException, SystemException;
 
+	public PortletPreferencesIds getPortletPreferencesIds(
+			long scopeGroupId, long userId, Layout layout, String portletId,
+			boolean modeEditGuest)
+		throws PortalException, SystemException;
+
 	public PortletPreferences getPortletSetup(
 			HttpServletRequest request, String portletId)
 		throws PortalException, SystemException;
@@ -101,6 +106,10 @@ public interface PortletPreferencesFactory {
 	public PortletPreferences getPreferences(HttpServletRequest request);
 
 	public PreferencesValidator getPreferencesValidator(Portlet portlet);
+
+	public PortletPreferences getStrictLayoutPortletSetup(
+			Layout layout, String portletId)
+		throws SystemException;
 
 	public String toXML(PortalPreferences portalPreferences);
 

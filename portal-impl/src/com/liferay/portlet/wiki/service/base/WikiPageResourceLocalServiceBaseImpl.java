@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -48,6 +50,8 @@ import com.liferay.portlet.wiki.service.persistence.WikiNodePersistence;
 import com.liferay.portlet.wiki.service.persistence.WikiPageFinder;
 import com.liferay.portlet.wiki.service.persistence.WikiPagePersistence;
 import com.liferay.portlet.wiki.service.persistence.WikiPageResourcePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -241,6 +245,11 @@ public abstract class WikiPageResourceLocalServiceBaseImpl
 		return wikiPageResourcePersistence.findByPrimaryKey(resourcePrimKey);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return wikiPageResourcePersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the wiki page resources.
 	 *
@@ -269,7 +278,7 @@ public abstract class WikiPageResourceLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the wiki page resource in the database. Also notifies the appropriate model listeners.
+	 * Updates the wiki page resource in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param wikiPageResource the wiki page resource
 	 * @return the wiki page resource that was updated
@@ -281,7 +290,7 @@ public abstract class WikiPageResourceLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the wiki page resource in the database. Also notifies the appropriate model listeners.
+	 * Updates the wiki page resource in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param wikiPageResource the wiki page resource
 	 * @param merge whether to merge the wiki page resource with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -641,6 +650,16 @@ public abstract class WikiPageResourceLocalServiceBaseImpl
 		this.userFinder = userFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.wiki.model.WikiPageResource",
+			wikiPageResourceLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.wiki.model.WikiPageResource");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -722,6 +741,8 @@ public abstract class WikiPageResourceLocalServiceBaseImpl
 	protected UserPersistence userPersistence;
 	@BeanReference(type = UserFinder.class)
 	protected UserFinder userFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(WikiPageResourceLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

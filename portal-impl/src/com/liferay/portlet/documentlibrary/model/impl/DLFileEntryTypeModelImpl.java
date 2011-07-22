@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -132,17 +133,29 @@ public class DLFileEntryTypeModelImpl extends BaseModelImpl<DLFileEntryType>
 		return DLFileEntryType.class.getName();
 	}
 
-	public static final String MAPPING_TABLE_DLFILEENTRYTYPE_DDMSTRUCTURE_NAME = "DLFileEntryType_DDMStructure";
-	public static final Object[][] MAPPING_TABLE_DLFILEENTRYTYPE_DDMSTRUCTURE_COLUMNS =
+	public static final String MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME = "DLFileEntryTypes_DLFolders";
+	public static final Object[][] MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_COLUMNS =
+		{
+			{ "fileEntryTypeId", Types.BIGINT },
+			{ "folderId", Types.BIGINT }
+		};
+	public static final String MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_SQL_CREATE =
+		"create table DLFileEntryTypes_DLFolders (fileEntryTypeId LONG not null,folderId LONG not null,primary key (fileEntryTypeId, folderId))";
+	public static final boolean FINDER_CACHE_ENABLED_DLFILEENTRYTYPES_DLFOLDERS = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
+				"value.object.finder.cache.enabled.DLFileEntryTypes_DLFolders"),
+			true);
+	public static final String MAPPING_TABLE_DLFILEENTRYTYPES_DDMSTRUCTURES_NAME =
+		"DLFileEntryTypes_DDMStructures";
+	public static final Object[][] MAPPING_TABLE_DLFILEENTRYTYPES_DDMSTRUCTURES_COLUMNS =
 		{
 			{ "fileEntryTypeId", Types.BIGINT },
 			{ "structureId", Types.BIGINT }
 		};
-	public static final String MAPPING_TABLE_DLFILEENTRYTYPE_DDMSTRUCTURE_SQL_CREATE =
-		"create table DLFileEntryType_DDMStructure (fileEntryTypeId LONG not null,structureId LONG not null,primary key (fileEntryTypeId, structureId))";
-	public static final boolean FINDER_CACHE_ENABLED_DLFILEENTRYTYPE_DDMSTRUCTURE =
+	public static final String MAPPING_TABLE_DLFILEENTRYTYPES_DDMSTRUCTURES_SQL_CREATE =
+		"create table DLFileEntryTypes_DDMStructures (fileEntryTypeId LONG not null,structureId LONG not null,primary key (fileEntryTypeId, structureId))";
+	public static final boolean FINDER_CACHE_ENABLED_DLFILEENTRYTYPES_DDMSTRUCTURES =
 		GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
-				"value.object.finder.cache.enabled.DLFileEntryType_DDMStructure"),
+				"value.object.finder.cache.enabled.DLFileEntryTypes_DDMStructures"),
 			true);
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.documentlibrary.model.DLFileEntryType"));
@@ -366,6 +379,63 @@ public class DLFileEntryTypeModelImpl extends BaseModelImpl<DLFileEntryType>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<DLFileEntryType> toCacheModel() {
+		DLFileEntryTypeCacheModel dlFileEntryTypeCacheModel = new DLFileEntryTypeCacheModel();
+
+		dlFileEntryTypeCacheModel.fileEntryTypeId = getFileEntryTypeId();
+
+		dlFileEntryTypeCacheModel.groupId = getGroupId();
+
+		dlFileEntryTypeCacheModel.companyId = getCompanyId();
+
+		dlFileEntryTypeCacheModel.userId = getUserId();
+
+		dlFileEntryTypeCacheModel.userName = getUserName();
+
+		String userName = dlFileEntryTypeCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			dlFileEntryTypeCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			dlFileEntryTypeCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			dlFileEntryTypeCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			dlFileEntryTypeCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			dlFileEntryTypeCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		dlFileEntryTypeCacheModel.name = getName();
+
+		String name = dlFileEntryTypeCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			dlFileEntryTypeCacheModel.name = null;
+		}
+
+		dlFileEntryTypeCacheModel.description = getDescription();
+
+		String description = dlFileEntryTypeCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			dlFileEntryTypeCacheModel.description = null;
+		}
+
+		return dlFileEntryTypeCacheModel;
 	}
 
 	@Override

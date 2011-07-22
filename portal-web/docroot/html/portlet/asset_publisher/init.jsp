@@ -16,6 +16,7 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
+<%@ page import="com.liferay.portal.NoSuchModelException" %>
 <%@ page import="com.liferay.portal.kernel.repository.model.FileEntry" %>
 <%@ page import="com.liferay.portal.kernel.search.Hits" %>
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayPortletResponse" %>
@@ -54,7 +55,7 @@
 <%@ page import="com.liferay.portlet.imagegallery.service.IGImageLocalServiceUtil" %>
 <%@ page import="com.liferay.portlet.journal.model.JournalArticle" %>
 <%@ page import="com.liferay.portlet.journal.model.JournalStructure" %>
-<%@ page import="com.liferay.portlet.journal.service.JournalStructureLocalServiceUtil" %>
+<%@ page import="com.liferay.portlet.journal.service.JournalStructureServiceUtil" %>
 <%@ page import="com.liferay.util.RSSUtil" %>
 <%@ page import="com.liferay.util.xml.DocUtil" %>
 
@@ -135,21 +136,18 @@ if (Validator.isNotNull(assetTagName)) {
 	PortalUtil.setPageKeywords(assetTagName, request);
 }
 
+boolean showLinkedAssets = GetterUtil.getBoolean(preferences.getValue("showLinkedAssets", null), false);
 boolean showOnlyLayoutAssets = GetterUtil.getBoolean(preferences.getValue("showOnlyLayoutAssets", null));
 
 if (showOnlyLayoutAssets) {
 	assetEntryQuery.setLayout(layout);
 }
 
-boolean showLinkedAssets = GetterUtil.getBoolean(preferences.getValue("showLinkedAssets", null), false);
+if (portletName.equals(PortletKeys.RELATED_ASSETS)) {
+	AssetEntry layoutAssetEntry = (AssetEntry)request.getAttribute(WebKeys.LAYOUT_ASSET_ENTRY);
 
-if (showLinkedAssets) {
-	JournalArticle mainJournalArticle = themeDisplay.getMainJournalArticle();
-
-	if (mainJournalArticle != null) {
-		AssetEntry mainAssetEntry = AssetEntryLocalServiceUtil.getEntry(JournalArticle.class.getName(), mainJournalArticle.getResourcePrimKey());
-
-		assetEntryQuery.setLinkedAssetEntryId(mainAssetEntry.getEntryId());
+	if (layoutAssetEntry != null) {
+		assetEntryQuery.setLinkedAssetEntryId(layoutAssetEntry.getEntryId());
 	}
 }
 
@@ -185,6 +183,7 @@ if (defaultAssetPublisherPortletId.equals(portletResource)) {
 	defaultAssetPublisher = true;
 }
 
+boolean enableRelatedAssets = GetterUtil.getBoolean(preferences.getValue("enableRelatedAssets", null), true);
 boolean enableRatings = GetterUtil.getBoolean(preferences.getValue("enableRatings", null));
 boolean enableComments = GetterUtil.getBoolean(preferences.getValue("enableComments", null));
 boolean enableCommentRatings = GetterUtil.getBoolean(preferences.getValue("enableCommentRatings", null));
@@ -200,7 +199,6 @@ boolean enableFlags = GetterUtil.getBoolean(preferences.getValue("enableFlags", 
 String defaultMetadataFields = StringPool.BLANK;
 String allMetadataFields = "create-date,modified-date,publish-date,expiration-date,priority,author,view-count,categories,tags,ratings";
 
-boolean showAssetLinks = GetterUtil.getBoolean(preferences.getValue("showAssetLinks", null), true);
 String[] metadataFields = StringUtil.split(preferences.getValue("metadataFields", defaultMetadataFields));
 
 boolean enableRSS = GetterUtil.getBoolean(preferences.getValue("enableRss", null));

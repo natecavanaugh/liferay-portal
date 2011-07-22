@@ -145,6 +145,42 @@ public class UserGroupWrapper implements UserGroup {
 	}
 
 	/**
+	* Returns the public layout set prototype ID of this user group.
+	*
+	* @return the public layout set prototype ID of this user group
+	*/
+	public long getPublicLayoutSetPrototypeId() {
+		return _userGroup.getPublicLayoutSetPrototypeId();
+	}
+
+	/**
+	* Sets the public layout set prototype ID of this user group.
+	*
+	* @param publicLayoutSetPrototypeId the public layout set prototype ID of this user group
+	*/
+	public void setPublicLayoutSetPrototypeId(long publicLayoutSetPrototypeId) {
+		_userGroup.setPublicLayoutSetPrototypeId(publicLayoutSetPrototypeId);
+	}
+
+	/**
+	* Returns the private layout set prototype ID of this user group.
+	*
+	* @return the private layout set prototype ID of this user group
+	*/
+	public long getPrivateLayoutSetPrototypeId() {
+		return _userGroup.getPrivateLayoutSetPrototypeId();
+	}
+
+	/**
+	* Sets the private layout set prototype ID of this user group.
+	*
+	* @param privateLayoutSetPrototypeId the private layout set prototype ID of this user group
+	*/
+	public void setPrivateLayoutSetPrototypeId(long privateLayoutSetPrototypeId) {
+		_userGroup.setPrivateLayoutSetPrototypeId(privateLayoutSetPrototypeId);
+	}
+
+	/**
 	* Returns the added by l d a p import of this user group.
 	*
 	* @return the added by l d a p import of this user group
@@ -226,6 +262,10 @@ public class UserGroupWrapper implements UserGroup {
 		return _userGroup.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.UserGroup> toCacheModel() {
+		return _userGroup.toCacheModel();
+	}
+
 	public com.liferay.portal.model.UserGroup toEscapedModel() {
 		return new UserGroupWrapper(_userGroup.toEscapedModel());
 	}
@@ -237,6 +277,11 @@ public class UserGroupWrapper implements UserGroup {
 
 	public java.lang.String toXmlString() {
 		return _userGroup.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_userGroup.persist();
 	}
 
 	public com.liferay.portal.model.Group getGroup()

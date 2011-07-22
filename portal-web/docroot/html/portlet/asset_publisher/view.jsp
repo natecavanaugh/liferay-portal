@@ -81,7 +81,7 @@ if (enableTagBasedNavigation && selectionStyle.equals("manual") && ((assetEntryQ
 Group group = themeDisplay.getScopeGroup();
 %>
 
-<c:if test="<%= (group != null) && (!group.hasStagingGroup() || group.isStagingGroup()) %>">
+<c:if test="<%= (group != null) && (!group.hasStagingGroup() || group.isStagingGroup()) && !portletName.equals(PortletKeys.RELATED_ASSETS) %>">
 	<aui:form name="fm">
 
 		<%
@@ -130,6 +130,12 @@ if (!paginationType.equals("none")) {
 	AssetUtil.addPortletBreadcrumbEntry(request, assetTagName, currentURL);
 	%>
 
+</c:if>
+
+<c:if test='<%= portletName.equals(PortletKeys.RELATED_ASSETS) && (assetEntryQuery.getLinkedAssetEntryId() > 0) %>'>
+	<h1 class="related-assets-title">
+		<%= LanguageUtil.format(pageContext, "content-related-to-x", AssetEntryServiceUtil.getEntry(assetEntryQuery.getLinkedAssetEntryId()).getTitle(locale)) %>
+	</h1>
 </c:if>
 
 <c:choose>

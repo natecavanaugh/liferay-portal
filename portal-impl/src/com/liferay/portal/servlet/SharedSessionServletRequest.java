@@ -14,6 +14,8 @@
 
 package com.liferay.portal.servlet;
 
+import com.liferay.portal.kernel.servlet.filters.compoundsessionid.CompoundSessionIdHttpSession;
+import com.liferay.portal.kernel.servlet.filters.compoundsessionid.CompoundSessionIdSplitterUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,13 @@ public class SharedSessionServletRequest extends HttpServletRequestWrapper {
 		super(request);
 
 		_portalSession = request.getSession();
+
+		if (CompoundSessionIdSplitterUtil.hasSessionDelimiter() &&
+			!(_portalSession instanceof CompoundSessionIdHttpSession)) {
+
+			_portalSession = new CompoundSessionIdHttpSession(_portalSession);
+		}
+
 		_shared = shared;
 	}
 
@@ -62,6 +71,18 @@ public class SharedSessionServletRequest extends HttpServletRequestWrapper {
 
 	protected HttpSession getSharedSessionWrapper(
 		HttpSession portalSession, HttpSession portletSession) {
+
+		if (CompoundSessionIdSplitterUtil.hasSessionDelimiter() &&
+			!(portalSession instanceof CompoundSessionIdHttpSession)) {
+
+			portalSession = new CompoundSessionIdHttpSession(portalSession);
+		}
+
+		if (CompoundSessionIdSplitterUtil.hasSessionDelimiter() &&
+			!(portletSession instanceof CompoundSessionIdHttpSession)) {
+
+			portletSession = new CompoundSessionIdHttpSession(portletSession);
+		}
 
 		if (ServerDetector.isJetty()) {
 			return new JettySharedSessionWrapper(portalSession, portletSession);

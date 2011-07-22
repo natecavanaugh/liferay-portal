@@ -162,6 +162,7 @@
 		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
 		<reference package-path="com.liferay.portlet.asset" entity="AssetLink" />
 		<reference package-path="com.liferay.portlet.asset" entity="AssetTag" />
+		<reference package-path="com.liferay.portlet.dynamicdatamapping" entity="DDMStructure" />
 		<reference package-path="com.liferay.portlet.expando" entity="ExpandoValue" />
 
 		<!-- Transactions -->
@@ -227,7 +228,8 @@
 
 		<!-- Relationships -->
 
-		<column name="ddmStructure" type="Collection" entity="com.liferay.portlet.dynamicdatamapping.DDMStructure" mapping-table="DLFileEntryType_DDMStructure" />
+		<column name="folders" type="Collection" entity="DLFolder" mapping-table="DLFileEntryTypes_DLFolders" />
+		<column name="ddmStructure" type="Collection" entity="com.liferay.portlet.dynamicdatamapping.DDMStructure" mapping-table="DLFileEntryTypes_DDMStructures" />
 
 		<!-- Finder methods -->
 
@@ -242,6 +244,8 @@
 
 		<!-- References -->
 
+		<reference package-path="com.liferay.portal" entity="WorkflowDefinitionLink" />
+		<reference package-path="com.liferay.portal" entity="WorkflowInstanceLink" />
 		<reference package-path="com.liferay.portlet.dynamicdatamapping" entity="DDMStructure" />
 	</entity>
 	<entity name="DLFileRank" human-name="document library file rank" local-service="true" remote-service="false">
@@ -340,7 +344,7 @@
 		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
 		<reference package-path="com.liferay.portlet.asset" entity="AssetTag" />
 	</entity>
-	<entity name="DLFileVersion" human-name="document library file version" local-service="false" remote-service="false">
+	<entity name="DLFileVersion" human-name="document library file version" local-service="true" remote-service="true">
 
 		<!-- PK fields -->
 
@@ -422,6 +426,12 @@
 		<column name="name" type="String" />
 		<column name="description" type="String" />
 		<column name="lastPostDate" type="Date" />
+		<column name="defaultFileEntryTypeId" type="long" />
+		<column name="overrideFileEntryTypes" type="boolean" />
+
+		<!-- Relationships -->
+
+		<column name="fileEntryTypes" type="Collection" entity="DLFileEntryType" mapping-table="DLFileEntryTypes_DLFolders" />
 
 		<!-- Order -->
 
@@ -449,6 +459,11 @@
 			<finder-column name="parentFolderId" />
 			<finder-column name="name" />
 		</finder>
+		<finder name="G_P_M" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="parentFolderId" />
+			<finder-column name="mountPoint" />
+		</finder>
 		<finder name="G_P_N" return-type="DLFolder" unique="true">
 			<finder-column name="groupId" />
 			<finder-column name="parentFolderId" />
@@ -463,6 +478,46 @@
 		<reference package-path="com.liferay.portal" entity="WorkflowInstanceLink" />
 		<reference package-path="com.liferay.portlet.expando" entity="ExpandoValue" />
 	</entity>
+	<entity name="DLSync" local-service="true" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="syncId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="fileId" type="String" />
+		<column name="repositoryId" type="long" />
+		<column name="event" type="String" />
+		<column name="type" type="String" />
+
+		<!-- Order -->
+
+		<order by="desc">
+			<order-column name="companyId" />
+			<order-column name="repositoryId" />
+			<order-column name="modifiedDate" />
+			<order-column name="type" case-sensitive="false" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="FileId" return-type="DLSync" unique="true">
+			<finder-column name="fileId" />
+		</finder>
+		<finder name="C_M_R" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="modifiedDate" comparator="&gt;=" />
+			<finder-column name="repositoryId" />
+		</finder>
+		<tx-required>getFileDeltaAsStream</tx-required>
+	</entity>
 	<exceptions>
 		<exception>DirectoryName</exception>
 		<exception>DuplicateDirectory</exception>
@@ -474,6 +529,7 @@
 		<exception>FileShortcutPermission</exception>
 		<exception>FileSize</exception>
 		<exception>FolderName</exception>
+		<exception>InvalidFileEntryType</exception>
 		<exception>NoSuchDirectory</exception>
 		<exception>NoSuchFile</exception>
 		<exception>RepositoryName</exception>

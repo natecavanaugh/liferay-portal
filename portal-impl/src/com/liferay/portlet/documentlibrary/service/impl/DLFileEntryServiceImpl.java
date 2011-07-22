@@ -23,7 +23,6 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
-import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryImpl;
 import com.liferay.portlet.documentlibrary.service.base.DLFileEntryServiceBaseImpl;
@@ -69,20 +68,6 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		dlFileEntryLocalService.cancelCheckOut(getUserId(), fileEntryId);
 	}
 
-	public void checkInFileEntry(long fileEntryId, String lockUuid)
-		throws PortalException, SystemException {
-
-		try {
-			DLFileEntryPermission.check(
-				getPermissionChecker(), fileEntryId, ActionKeys.UPDATE);
-		}
-		catch (NoSuchFileEntryException nsfee) {
-		}
-
-		dlFileEntryLocalService.checkInFileEntry(
-			getUserId(), fileEntryId, lockUuid);
-	}
-
 	public void checkInFileEntry(
 			long fileEntryId, boolean major, String changeLog,
 			ServiceContext serviceContext)
@@ -97,6 +82,20 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 
 		dlFileEntryLocalService.checkInFileEntry(
 			getUserId(), fileEntryId, major, changeLog, serviceContext);
+	}
+
+	public void checkInFileEntry(long fileEntryId, String lockUuid)
+		throws PortalException, SystemException {
+
+		try {
+			DLFileEntryPermission.check(
+				getPermissionChecker(), fileEntryId, ActionKeys.UPDATE);
+		}
+		catch (NoSuchFileEntryException nsfee) {
+		}
+
+		dlFileEntryLocalService.checkInFileEntry(
+			getUserId(), fileEntryId, lockUuid);
 	}
 
 	public DLFileEntry checkOutFileEntry(long fileEntryId)
@@ -168,6 +167,17 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 
 		return dlFileEntryLocalService.getFileAsStream(
 			getGuestOrUserId(), fileEntryId, version);
+	}
+
+	public InputStream getFileAsStream(
+			long fileEntryId, String version, boolean incrementCounter)
+		throws PortalException, SystemException {
+
+		DLFileEntryPermission.check(
+			getPermissionChecker(), fileEntryId, ActionKeys.VIEW);
+
+		return dlFileEntryLocalService.getFileAsStream(
+			getGuestOrUserId(), fileEntryId, version, incrementCounter);
 	}
 
 	public List<DLFileEntry> getFileEntries(
@@ -243,19 +253,6 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		catch (Exception e) {
 			return null;
 		}
-	}
-
-	public DLFileVersion getFileVersion(long fileVersionId)
-		throws PortalException, SystemException {
-
-		DLFileVersion fileVersion = dlFileEntryLocalService.getFileVersion(
-			fileVersionId);
-
-		DLFileEntryPermission.check(
-			getPermissionChecker(), fileVersion.getFileEntryId(),
-			ActionKeys.VIEW);
-
-		return fileVersion;
 	}
 
 	public int getFoldersFileEntriesCount(

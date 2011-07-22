@@ -65,6 +65,8 @@ public interface PropsKeys {
 
 	public static final String AMAZON_ASSOCIATE_TAG = "amazon.associate.tag";
 
+	public static final String AMAZON_SECRET_ACCESS_KEY = "amazon.secret.access.key";
+
 	public static final String ANNOUNCEMENTS_EMAIL_BODY = "announcements.email.body";
 
 	public static final String ANNOUNCEMENTS_EMAIL_FROM_ADDRESS = "announcements.email.from.address";
@@ -358,6 +360,10 @@ public interface PropsKeys {
 	public static final String COMPANY_DEFAULT_HOME_URL = "company.default.home.url";
 
 	public static final String COMPANY_DEFAULT_WEB_ID = "company.default.web.id";
+
+	public static final String COMPANY_ENCRYPTION_ALGORITHM = "company.encryption.algorithm";
+
+	public static final String COMPANY_ENCRYPTION_KEY_SIZE = "company.encryption.key.size";
 
 	public static final String COMPANY_LOGIN_PREPOPULATE_DOMAIN = "company.login.prepopulate.domain";
 
@@ -1119,6 +1125,8 @@ public interface PropsKeys {
 
 	public static final String LDAP_USER_DEFAULT_OBJECT_CLASSES = "ldap.user.default.object.classes";
 
+	public static final String LDAP_USER_IGNORE_ATTRIBUTES = "ldap.user.ignore.attributes";
+
 	public static final String LDAP_USER_IMPL = "ldap.user.impl";
 
 	public static final String LDAP_USER_MAPPINGS = "ldap.user.mappings";
@@ -1561,6 +1569,8 @@ public interface PropsKeys {
 
 	public static final String RESOURCE_REPOSITORIES_ROOT = "resource.repositories.root";
 
+	public static final String REST_PROXY_DOMAINS_ALLOWED = "rest.proxy.domains.allowed";
+
 	public static final String ROBOTS_TXT_WITH_SITEMAP = "robots.txt.with.sitemap";
 
 	public static final String ROBOTS_TXT_WITHOUT_SITEMAP = "robots.txt.without.sitemap";
@@ -1645,6 +1655,8 @@ public interface PropsKeys {
 
 	public static final String SESSION_ENABLE_URL_WITH_SESSION_ID = "session.enable.url.with.session.id";
 
+	public static final String SESSION_ID_DELIMITER = "session.id.delimiter";
+
 	public static final String SESSION_PHISHING_PROTECTED_ATTRIBUTES = "session.phishing.protected.attributes";
 
 	public static final String SESSION_SHARED_ATTRIBUTES = "session.shared.attributes";
@@ -1724,6 +1736,18 @@ public interface PropsKeys {
 	public static final String SITEMINDER_USER_HEADER = "siteminder.user.header";
 
 	public static final String SITES_CONTROL_PANEL_MEMBERS_VISIBLE = "sites.control.panel.members.visible";
+
+	public static final String SITES_FORM_ADD_ADVANCED = "sites.form.add.advanced";
+
+	public static final String SITES_FORM_ADD_MAIN = "sites.form.add.main";
+
+	public static final String SITES_FORM_ADD_SEO = "sites.form.add.seo";
+
+	public static final String SITES_FORM_UPDATE_ADVANCED = "sites.form.update.advanced";
+
+	public static final String SITES_FORM_UPDATE_MAIN = "sites.form.update.main";
+
+	public static final String SITES_FORM_UPDATE_SEO = "sites.form.update.seo";
 
 	public static final String SOCIAL_BOOKMARK_JSP = "social.bookmark.jsp";
 

@@ -29,8 +29,10 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.service.GroupService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -63,6 +65,8 @@ import com.liferay.portlet.social.service.persistence.SocialEquitySettingPersist
 import com.liferay.portlet.social.service.persistence.SocialEquityUserPersistence;
 import com.liferay.portlet.social.service.persistence.SocialRelationPersistence;
 import com.liferay.portlet.social.service.persistence.SocialRequestPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -256,6 +260,11 @@ public abstract class SocialEquitySettingLocalServiceBaseImpl
 		return socialEquitySettingPersistence.findByPrimaryKey(equitySettingId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return socialEquitySettingPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the social equity settings.
 	 *
@@ -284,7 +293,7 @@ public abstract class SocialEquitySettingLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the social equity setting in the database. Also notifies the appropriate model listeners.
+	 * Updates the social equity setting in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param socialEquitySetting the social equity setting
 	 * @return the social equity setting that was updated
@@ -296,7 +305,7 @@ public abstract class SocialEquitySettingLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the social equity setting in the database. Also notifies the appropriate model listeners.
+	 * Updates the social equity setting in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param socialEquitySetting the social equity setting
 	 * @param merge whether to merge the social equity setting with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -942,6 +951,16 @@ public abstract class SocialEquitySettingLocalServiceBaseImpl
 		this.userFinder = userFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.social.model.SocialEquitySetting",
+			socialEquitySettingLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.social.model.SocialEquitySetting");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -1053,6 +1072,8 @@ public abstract class SocialEquitySettingLocalServiceBaseImpl
 	protected UserPersistence userPersistence;
 	@BeanReference(type = UserFinder.class)
 	protected UserFinder userFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(SocialEquitySettingLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

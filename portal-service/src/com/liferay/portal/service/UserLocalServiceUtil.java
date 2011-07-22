@@ -172,6 +172,13 @@ public class UserLocalServiceUtil {
 		return getService().getUser(userId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the users.
 	*
@@ -202,7 +209,7 @@ public class UserLocalServiceUtil {
 	}
 
 	/**
-	* Updates the user in the database. Also notifies the appropriate model listeners.
+	* Updates the user in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param user the user
 	* @return the user that was updated
@@ -215,7 +222,7 @@ public class UserLocalServiceUtil {
 	}
 
 	/**
-	* Updates the user in the database. Also notifies the appropriate model listeners.
+	* Updates the user in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param user the user
 	* @param merge whether to merge the user with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -915,6 +922,20 @@ public class UserLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().encryptUserId(name);
+	}
+
+	/**
+	* Returns the user with the screen name.
+	*
+	* @param companyId the primary key of the user's company
+	* @param screenName the user's screen name
+	* @return the user with the screen name, or <code>null</code> if a user
+	with the screen name could not be found
+	*/
+	public static com.liferay.portal.model.User fetchUserByScreenName(
+		long companyId, java.lang.String screenName)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchUserByScreenName(companyId, screenName);
 	}
 
 	/**

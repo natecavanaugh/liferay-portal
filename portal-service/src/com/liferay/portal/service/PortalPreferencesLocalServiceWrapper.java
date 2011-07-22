@@ -166,6 +166,13 @@ public class PortalPreferencesLocalServiceWrapper
 		return _portalPreferencesLocalService.getPortalPreferences(portalPreferencesId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _portalPreferencesLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the portal preferenceses.
 	*
@@ -196,7 +203,7 @@ public class PortalPreferencesLocalServiceWrapper
 	}
 
 	/**
-	* Updates the portal preferences in the database. Also notifies the appropriate model listeners.
+	* Updates the portal preferences in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param portalPreferences the portal preferences
 	* @return the portal preferences that was updated
@@ -209,7 +216,7 @@ public class PortalPreferencesLocalServiceWrapper
 	}
 
 	/**
-	* Updates the portal preferences in the database. Also notifies the appropriate model listeners.
+	* Updates the portal preferences in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param portalPreferences the portal preferences
 	* @param merge whether to merge the portal preferences with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

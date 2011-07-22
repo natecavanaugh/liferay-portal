@@ -1,11 +1,10 @@
 AUI().add(
 	'liferay-tags-admin',
 	function(A) {
-		var Lang = A.Lang;
-
-		var Node = A.Node;
-
 		var AObject = A.Object;
+		var HistoryManager = Liferay.HistoryManager;
+		var Lang = A.Lang;
+		var Node = A.Node;
 
 		var owns = AObject.owns;
 
@@ -155,11 +154,7 @@ AUI().add(
 
 						instance._createTagSearch();
 
-						var history = new A.HistoryHash();
-
-						history.on('change', instance._onHistoryChange, instance);
-
-						instance._history = history;
+						HistoryManager.on('stateChange', instance._onStateChange, instance);
 
 						instance._loadData();
 
@@ -652,12 +647,10 @@ AUI().add(
 
 							var paginatorMap = instance._getTagsPaginatorMap();
 
-							var history = instance._history;
-
 							AObject.each(
 								paginatorMap,
 								function(item, index, collection) {
-									config[index] = Number(history.get(item.historyEntry)) || item.defaultValue;
+									config[index] = Number(HistoryManager.get(item.historyEntry)) || item.defaultValue;
 								}
 							);
 
@@ -1059,10 +1052,10 @@ AUI().add(
 
 					_mergeTag: function(fromId, toId, callback) {
 						var serviceParameterTypes = [
-           					'long',
-           					'long',
-           					'boolean'
-           				];
+							'long',
+							'long',
+							'boolean'
+						];
 
 						Liferay.Service.Asset.AssetTag.mergeTags(
 							{
@@ -1100,6 +1093,43 @@ AUI().add(
 						instance._showTagPanel(action);
 					},
 
+					_onStateChange: function(event) {
+						var instance = this;
+
+						var changed = event.changed;
+						var removed = event.removed;
+
+						var paginatorState = {};
+
+						var paginatorMap = instance._getTagsPaginatorMap();
+
+						AObject.each(
+							paginatorMap,
+							function(item, index, collection) {
+								var historyEntry = item.historyEntry;
+
+								var value;
+
+								if (owns(changed, historyEntry)) {
+									value = item.formatter(changed[historyEntry].newVal);
+								}
+								else if (owns(removed, historyEntry)) {
+									value = item.defaultValue;
+								}
+
+								if (value) {
+									paginatorState[index] = value;
+								}
+							}
+						);
+
+						if (AObject.size(paginatorState)) {
+							instance._tagsPaginator.setState(paginatorState);
+
+							instance._reloadData();
+						}
+					},
+
 					_onTagChangePermissions: function(event) {
 						var instance = this;
 
@@ -1121,45 +1151,6 @@ AUI().add(
 						);
 
 						instance._updateTag(form);
-					},
-
-					_onHistoryChange: function(event) {
-						var instance = this;
-
-						if (event.src === A.HistoryHash.SRC_HASH) {
-							var changed = event.changed;
-							var removed = event.removed;
-
-							var paginatorState = {};
-
-							var paginatorMap = instance._getTagsPaginatorMap();
-
-							AObject.each(
-								paginatorMap,
-								function(item, index, collection) {
-									var historyEntry = item.historyEntry;
-
-									var value;
-
-									if (owns(changed, historyEntry)) {
-										value = item.formatter(changed[historyEntry].newVal);
-									}
-									else if (owns(removed, historyEntry)) {
-										value = item.defaultValue;
-									}
-
-									if (value) {
-										paginatorState[index] = value;
-									}
-								}
-							);
-
-							if (AObject.size(paginatorState)) {
-								instance._tagsPaginator.setState(paginatorState);
-
-								instance._reloadData();
-							}
-						}
 					},
 
 					_onTagsListClick: function(event) {
@@ -1233,8 +1224,6 @@ AUI().add(
 
 						var paginatorMap = instance._getTagsPaginatorMap();
 
-						var history = instance._history;
-
 						AObject.each(
 							paginatorMap,
 							function(item, index, collection) {
@@ -1246,7 +1235,7 @@ AUI().add(
 									var value = INVALID_VALUE;
 
 									if (newItemValue === item.defaultValue &&
-										Lang.isValue(history.get(historyEntry))) {
+										Lang.isValue(HistoryManager.get(historyEntry))) {
 
 										value = null;
 									}
@@ -1262,7 +1251,7 @@ AUI().add(
 						);
 
 						if (!AObject.isEmpty(historyState)) {
-							history.add(historyState);
+							HistoryManager.add(historyState);
 						}
 
 						instance._reloadData();
@@ -1665,6 +1654,6 @@ AUI().add(
 	},
 	'',
 	{
-		requires: ['aui-dialog', 'aui-dialog-iframe', 'aui-loading-mask', 'aui-paginator', 'autocomplete-base', 'aui-tree-view', 'dd', 'json', 'history-hash', 'liferay-portlet-url', 'liferay-util-window']
+		requires: ['aui-dialog', 'aui-dialog-iframe', 'aui-loading-mask', 'aui-paginator', 'autocomplete-base', 'aui-tree-view', 'dd', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
 	}
 );

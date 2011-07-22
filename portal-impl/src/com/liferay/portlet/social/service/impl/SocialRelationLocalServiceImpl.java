@@ -121,6 +121,17 @@ public class SocialRelationLocalServiceImpl
 		socialRelationPersistence.removeByUserId2(userId);
 	}
 
+	public void deleteRelations(long userId1, long userId2)
+		throws PortalException, SystemException {
+
+		List<SocialRelation> relations = socialRelationPersistence.findByU1_U2(
+			userId1, userId2);
+
+		for (SocialRelation relation : relations) {
+			deleteRelation(relation);
+		}
+	}
+
 	public List<SocialRelation> getInverseRelations(
 			long userId, int type, int start, int end)
 		throws SystemException {
@@ -154,8 +165,22 @@ public class SocialRelationLocalServiceImpl
 		return socialRelationPersistence.findByU1_T(userId, type, start, end);
 	}
 
+	public List<SocialRelation> getRelations(
+			long userId1, long userId2, int start, int end)
+		throws SystemException {
+
+		return socialRelationPersistence.findByU1_U2(
+			userId1, userId2, start, end);
+	}
+
 	public int getRelationsCount(long userId, int type) throws SystemException {
 		return socialRelationPersistence.countByU1_T(userId, type);
+	}
+
+	public int getRelationsCount(long userId1, long userId2)
+		throws SystemException {
+
+		return socialRelationPersistence.countByU1_U2(userId1, userId2);
 	}
 
 	public boolean hasRelation(long userId1, long userId2, int type)

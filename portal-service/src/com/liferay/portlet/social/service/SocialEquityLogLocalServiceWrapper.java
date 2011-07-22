@@ -166,6 +166,13 @@ public class SocialEquityLogLocalServiceWrapper
 		return _socialEquityLogLocalService.getSocialEquityLog(equityLogId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _socialEquityLogLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the social equity logs.
 	*
@@ -196,7 +203,7 @@ public class SocialEquityLogLocalServiceWrapper
 	}
 
 	/**
-	* Updates the social equity log in the database. Also notifies the appropriate model listeners.
+	* Updates the social equity log in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param socialEquityLog the social equity log
 	* @return the social equity log that was updated
@@ -209,7 +216,7 @@ public class SocialEquityLogLocalServiceWrapper
 	}
 
 	/**
-	* Updates the social equity log in the database. Also notifies the appropriate model listeners.
+	* Updates the social equity log in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param socialEquityLog the social equity log
 	* @param merge whether to merge the social equity log with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -329,6 +336,11 @@ public class SocialEquityLogLocalServiceWrapper
 			com.liferay.portal.kernel.exception.SystemException {
 		_socialEquityLogLocalService.deactivateEquityLogs(className, classPK,
 			actionId, extraData);
+	}
+
+	public void deactivateUserEquityLogs(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_socialEquityLogLocalService.deactivateUserEquityLogs(userId);
 	}
 
 	public void incrementSocialEquityAssetEntry_IQ(long assetEntryId,

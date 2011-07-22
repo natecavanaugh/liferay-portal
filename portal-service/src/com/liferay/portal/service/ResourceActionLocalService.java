@@ -35,7 +35,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
  */
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
-public interface ResourceActionLocalService {
+public interface ResourceActionLocalService extends PersistedModelLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -159,6 +159,12 @@ public interface ResourceActionLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	/**
 	* Returns a range of all the resource actions.
 	*
@@ -187,7 +193,7 @@ public interface ResourceActionLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the resource action in the database. Also notifies the appropriate model listeners.
+	* Updates the resource action in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param resourceAction the resource action
 	* @return the resource action that was updated
@@ -198,7 +204,7 @@ public interface ResourceActionLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the resource action in the database. Also notifies the appropriate model listeners.
+	* Updates the resource action in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param resourceAction the resource action
 	* @param merge whether to merge the resource action with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

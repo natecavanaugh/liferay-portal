@@ -263,6 +263,33 @@ public class LayoutSetBranchWrapper implements LayoutSetBranch {
 		_layoutSetBranch.setDescription(description);
 	}
 
+	/**
+	* Returns the master of this layout set branch.
+	*
+	* @return the master of this layout set branch
+	*/
+	public boolean getMaster() {
+		return _layoutSetBranch.getMaster();
+	}
+
+	/**
+	* Returns <code>true</code> if this layout set branch is master.
+	*
+	* @return <code>true</code> if this layout set branch is master; <code>false</code> otherwise
+	*/
+	public boolean isMaster() {
+		return _layoutSetBranch.isMaster();
+	}
+
+	/**
+	* Sets whether this layout set branch is master.
+	*
+	* @param master the master of this layout set branch
+	*/
+	public void setMaster(boolean master) {
+		_layoutSetBranch.setMaster(master);
+	}
+
 	public boolean isNew() {
 		return _layoutSetBranch.isNew();
 	}
@@ -319,6 +346,10 @@ public class LayoutSetBranchWrapper implements LayoutSetBranch {
 		return _layoutSetBranch.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.LayoutSetBranch> toCacheModel() {
+		return _layoutSetBranch.toCacheModel();
+	}
+
 	public com.liferay.portal.model.LayoutSetBranch toEscapedModel() {
 		return new LayoutSetBranchWrapper(_layoutSetBranch.toEscapedModel());
 	}
@@ -332,8 +363,9 @@ public class LayoutSetBranchWrapper implements LayoutSetBranch {
 		return _layoutSetBranch.toXmlString();
 	}
 
-	public boolean isMaster() {
-		return _layoutSetBranch.isMaster();
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_layoutSetBranch.persist();
 	}
 
 	public LayoutSetBranch getWrappedLayoutSetBranch() {

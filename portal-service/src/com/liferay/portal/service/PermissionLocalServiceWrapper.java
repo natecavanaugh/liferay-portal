@@ -162,6 +162,13 @@ public class PermissionLocalServiceWrapper implements PermissionLocalService {
 		return _permissionLocalService.getPermission(permissionId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _permissionLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the permissions.
 	*
@@ -192,7 +199,7 @@ public class PermissionLocalServiceWrapper implements PermissionLocalService {
 	}
 
 	/**
-	* Updates the permission in the database. Also notifies the appropriate model listeners.
+	* Updates the permission in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param permission the permission
 	* @return the permission that was updated
@@ -205,7 +212,7 @@ public class PermissionLocalServiceWrapper implements PermissionLocalService {
 	}
 
 	/**
-	* Updates the permission in the database. Also notifies the appropriate model listeners.
+	* Updates the permission in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param permission the permission
 	* @param merge whether to merge the permission with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -365,6 +372,24 @@ public class PermissionLocalServiceWrapper implements PermissionLocalService {
 			resourceId);
 	}
 
+	/**
+	* Returns <code>true</code> if the user has permission to perform the
+	* action on the resource.
+	*
+	* @param userId the primary key of the user
+	* @param groupId the primary key of the group containing the resource
+	* @param resources representations of the resource at each scope level
+	returned by {@link
+	com.liferay.portal.security.permission.AdvancedPermissionChecker#getResources(
+	long, long, String, String, String)}
+	* @param actionId the actionID
+	* @param permissionCheckerBag the permission checker bag
+	* @return <code>true</code> if the user has permission to perform the
+	action on the resource; <code>false</code> otherwise
+	* @throws PortalException if a resource action with the resource name and
+	action ID could not be found
+	* @throws SystemException if a system exception occurred
+	*/
 	public boolean hasUserPermissions(long userId, long groupId,
 		java.util.List<com.liferay.portal.model.Resource> resources,
 		java.lang.String actionId,
@@ -373,6 +398,14 @@ public class PermissionLocalServiceWrapper implements PermissionLocalService {
 			com.liferay.portal.kernel.exception.SystemException {
 		return _permissionLocalService.hasUserPermissions(userId, groupId,
 			resources, actionId, permissionCheckerBag);
+	}
+
+	public void setContainerResourcePermissions(java.lang.String name,
+		java.lang.String roleName, java.lang.String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_permissionLocalService.setContainerResourcePermissions(name, roleName,
+			actionId);
 	}
 
 	public void setGroupPermissions(long groupId, java.lang.String[] actionIds,

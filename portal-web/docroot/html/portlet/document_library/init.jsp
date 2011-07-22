@@ -19,6 +19,7 @@
 <%@ page import="com.liferay.portal.DuplicateLockException" %>
 <%@ page import="com.liferay.portal.InvalidRepositoryException" %>
 <%@ page import="com.liferay.portal.NoSuchRepositoryException" %>
+<%@ page import="com.liferay.portal.NoSuchWorkflowDefinitionLinkException" %>
 <%@ page import="com.liferay.portal.kernel.repository.model.FileEntry" %>
 <%@ page import="com.liferay.portal.kernel.repository.model.FileVersion" %>
 <%@ page import="com.liferay.portal.kernel.repository.model.Folder" %>
@@ -28,9 +29,14 @@
 <%@ page import="com.liferay.portal.kernel.search.IndexerRegistryUtil" %>
 <%@ page import="com.liferay.portal.kernel.search.SearchContext" %>
 <%@ page import="com.liferay.portal.kernel.search.SearchContextFactory" %>
+<%@ page import="com.liferay.portal.kernel.workflow.WorkflowDefinition" %>
+<%@ page import="com.liferay.portal.kernel.workflow.WorkflowDefinitionManagerUtil" %>
+<%@ page import="com.liferay.portal.kernel.workflow.WorkflowEngineManagerUtil" %>
+<%@ page import="com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil" %>
 <%@ page import="com.liferay.portal.repository.util.RepositoryFactoryUtil" %>
 <%@ page import="com.liferay.portlet.asset.model.AssetEntry" %>
 <%@ page import="com.liferay.portlet.asset.model.AssetRenderer" %>
+<%@ page import="com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil" %>
 <%@ page import="com.liferay.portlet.asset.service.AssetEntryServiceUtil" %>
 <%@ page import="com.liferay.portlet.asset.service.persistence.AssetEntryQuery" %>
 <%@ page import="com.liferay.portlet.documentlibrary.DuplicateFileException" %>
@@ -65,6 +71,7 @@
 <%@ page import="com.liferay.portlet.documentlibrary.service.permission.DLFileEntryPermission" %>
 <%@ page import="com.liferay.portlet.documentlibrary.service.permission.DLFileShortcutPermission" %>
 <%@ page import="com.liferay.portlet.documentlibrary.service.permission.DLFolderPermission" %>
+<%@ page import="com.liferay.portlet.documentlibrary.util.AudioProcessor" %>
 <%@ page import="com.liferay.portlet.documentlibrary.util.DLUtil" %>
 <%@ page import="com.liferay.portlet.documentlibrary.util.DocumentConversionUtil" %>
 <%@ page import="com.liferay.portlet.documentlibrary.util.PDFProcessor" %>
@@ -141,6 +148,7 @@ else if (!portletId.equals(PortletKeys.DOCUMENT_LIBRARY) && !ArrayUtil.contains(
 	folderColumns = ArrayUtil.append(folderColumns, "action");
 }
 
+boolean enableRelatedAssets = GetterUtil.getBoolean(preferences.getValue("enableRelatedAssets", null), true);
 int fileEntriesPerPage = PrefsParamUtil.getInteger(preferences, request, "fileEntriesPerPage", SearchContainer.DEFAULT_DELTA);
 
 String defaultFileEntryColumns = "name,size";

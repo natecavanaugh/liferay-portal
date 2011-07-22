@@ -28,6 +28,14 @@ long repositoryId = BeanParamUtil.getLong(folder, request, "repositoryId");
 Folder parentFolder = null;
 
 long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+
+boolean workflowEnabled = WorkflowEngineManagerUtil.isDeployed() && (WorkflowHandlerRegistryUtil.getWorkflowHandler(DLFileEntry.class.getName()) != null);
+
+List<WorkflowDefinition> workflowDefinitions = null;
+
+if (workflowEnabled) {
+	workflowDefinitions = WorkflowDefinitionManagerUtil.getActiveWorkflowDefinitions(company.getCompanyId(), 0, 100, null);
+}
 %>
 
 <liferay-util:include page="/html/portlet/document_library/top_links.jsp" />
@@ -36,7 +44,15 @@ long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", D
 	<portlet:param name="struts_action" value="/document_library/edit_folder" />
 </portlet:actionURL>
 
-<aui:form action="<%= editFolderURL %>" method="post" name="fm">
+<liferay-util:buffer var="removeFileEntryTypeIcon">
+	<liferay-ui:icon
+		image="unlink"
+		label="<%= true %>"
+		message="remove"
+	/>
+</liferay-util:buffer>
+
+<aui:form action="<%= editFolderURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "savePage();" %>'>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (folder == null) ? Constants.ADD : Constants.UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="folderId" type="hidden" value="<%= folderId %>" />
@@ -96,6 +112,147 @@ long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", D
 			</liferay-ui:custom-attributes-available>
 		</c:if>
 
+		<c:if test="<%= (folder != null) && (folder.getModel() instanceof DLFolder) %>">
+
+			<%
+			DLFolder dlFolder = (DLFolder)folder.getModel();
+
+			List<DLFileEntryType> folderDLFileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(scopeGroupId, folderId, false);
+
+			String headerNames = null;
+
+			if (workflowEnabled) {
+				headerNames = "name,default,workflow,null";
+			}
+			else {
+				headerNames = "name,default,null";
+			}
+			%>
+
+			<aui:field-wrapper label="document-type-restrictions" helpMessage="document-type-restrictions-help">
+				<div>
+					<table class="lfr-table">
+					<tr>
+						<td class="lfr-label">
+							<liferay-ui:message key="override-inherited-restrictions" />
+						</td>
+						<td>
+							<liferay-ui:input-checkbox defaultValue="<%= dlFolder.isOverrideFileEntryTypes() %>"  param="overrideFileEntryTypes" />
+						</td>
+					</tr>
+					</table>
+				</div>
+
+				<div id="<portlet:namespace />overrideParentSettings">
+					<c:if test="<%= workflowEnabled %>">
+						<div class='<%= folderDLFileEntryTypes.isEmpty() ? StringPool.BLANK : "aui-helper-hidden" %>' id="<portlet:namespace />defaultWorkflow">
+							<aui:select label="default-workflow-for-all-document-types" name="workflowDefinition0">
+
+								<aui:option label='<%= LanguageUtil.get(pageContext, "no-workflow") %>' value="" />
+
+								<%
+								WorkflowDefinitionLink workflowDefinitionLink = null;
+
+								try {
+									workflowDefinitionLink = WorkflowDefinitionLinkLocalServiceUtil.getWorkflowDefinitionLink(company.getCompanyId(), repositoryId, DLFolderConstants.getClassName(), folderId, 0, true);
+								}
+								catch (NoSuchWorkflowDefinitionLinkException nswdle) {
+								}
+
+								for (WorkflowDefinition workflowDefinition : workflowDefinitions) {
+									boolean selected = false;
+
+									if ((workflowDefinitionLink != null) && (workflowDefinitionLink.getWorkflowDefinitionName().equals(workflowDefinition.getName())) && (workflowDefinitionLink.getWorkflowDefinitionVersion() == workflowDefinition.getVersion())) {
+										selected = true;
+									}
+								%>
+
+									<aui:option label='<%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %>' selected='<%= selected %>' value="<%= workflowDefinition.getName() + StringPool.AT + workflowDefinition.getVersion() %>" />
+
+								<%
+								}
+								%>
+
+							</aui:select>
+						</div>
+					</c:if>
+
+					<liferay-ui:search-container
+						id='<%= renderResponse.getNamespace() + "fileEntryTypeSearchContainer" %>'
+						headerNames="<%= headerNames %>"
+					>
+						<liferay-ui:search-container-results
+							results="<%= folderDLFileEntryTypes %>"
+							total="<%= (folderDLFileEntryTypes != null) ? folderDLFileEntryTypes.size() : 0 %>"
+						/>
+
+						<liferay-ui:search-container-row
+							className="com.liferay.portlet.documentlibrary.model.DLFileEntryType"
+							escapedModel="<%= true %>"
+							keyProperty="fileEntryTypeId"
+							modelVar="dlFileEntryType"
+						>
+							<liferay-ui:search-container-column-text
+								name="name"
+								value="<%= dlFileEntryType.getName() %>"
+							/>
+
+							<liferay-ui:search-container-column-text name="default">
+								<input class="default-file-entry-type" type="radio" name="defaultFileEntryTypeId" <%= (dlFolder.getDefaultFileEntryTypeId() == dlFileEntryType.getFileEntryTypeId()) ? "checked=\"true\"" : "" %> value="<%= dlFileEntryType.getFileEntryTypeId() %>" />
+							</liferay-ui:search-container-column-text>
+
+							<c:if test="<%= workflowEnabled %>">
+								<liferay-ui:search-container-column-text name="workflow">
+									<select name='workflowDefinition<%= dlFileEntryType.getFileEntryTypeId() %>'>
+
+										<option label="<%= LanguageUtil.get(pageContext, "no-workflow") %>" value=''></option>
+
+										<%
+										WorkflowDefinitionLink workflowDefinitionLink = null;
+
+										try {
+											workflowDefinitionLink = WorkflowDefinitionLinkLocalServiceUtil.getWorkflowDefinitionLink(company.getCompanyId(), repositoryId, DLFolderConstants.getClassName(), folderId, dlFileEntryType.getFileEntryTypeId(), true);
+										}
+										catch (NoSuchWorkflowDefinitionLinkException nswdle) {
+										}
+
+										for (WorkflowDefinition workflowDefinition : workflowDefinitions) {
+											boolean selected = false;
+
+											if ((workflowDefinitionLink != null) && (workflowDefinitionLink.getWorkflowDefinitionName().equals(workflowDefinition.getName())) && (workflowDefinitionLink.getWorkflowDefinitionVersion() == workflowDefinition.getVersion())) {
+												selected = true;
+											}
+										%>
+
+											<option label='<%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %>' <%= selected ? "selected='true'" : "" %> value="<%= workflowDefinition.getName() + StringPool.AT + workflowDefinition.getVersion() %>" />
+
+										<%
+										}
+										%>
+
+									</select>
+								</liferay-ui:search-container-column-text>
+							</c:if>
+
+							<liferay-ui:search-container-column-text>
+								<a class="modify-link" data-rowId="<%= dlFileEntryType.getFileEntryTypeId() %>" href="javascript:;"><%= removeFileEntryTypeIcon %></a>
+							</liferay-ui:search-container-column-text>
+						</liferay-ui:search-container-row>
+
+						<liferay-ui:search-iterator paginate="<%= false %>" />
+					</liferay-ui:search-container>
+
+					<liferay-ui:icon
+						cssClass="modify-link select-file-entry-type"
+						image="add"
+						label="<%= true %>"
+						message="select-document-type"
+						url='<%= "javascript:" + renderResponse.getNamespace() + "openFileEntryTypeSelector();" %>'
+					/>
+				</div>
+			</aui:field-wrapper>
+		</c:if>
+
 		<c:if test="<%= folder == null %>">
 			<aui:field-wrapper label="permissions">
 				<liferay-ui:input-permissions
@@ -111,6 +268,126 @@ long parentFolderId = BeanParamUtil.getLong(folder, request, "parentFolderId", D
 		</aui:button-row>
 	</aui:fieldset>
 </aui:form>
+
+<aui:script>
+	var documentTypesChanged = false;
+
+	function <portlet:namespace />openFileEntryTypeSelector() {
+		Liferay.Util.openWindow(
+			{
+				dialog: {
+					stack: false,
+					width: 680
+				},
+				title: '<liferay-ui:message key="document-types" />',
+				uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/document_library/select_file_entry_type" /><portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" /></portlet:renderURL>'
+			}
+		);
+	}
+
+	function <portlet:namespace />savePage() {
+		var message = '<%= LanguageUtil.get(pageContext, workflowEnabled ? "change-document-types-and-workflow-message" : "change-document-types-message")  %>';
+
+		var submit = true;
+
+		if (documentTypesChanged) {
+			if (!confirm(message)) {
+				submit = false;
+			}
+		}
+
+		if (submit) {
+			submitForm(document.<portlet:namespace />fm);
+		}
+	}
+
+	Liferay.provide(
+		window,
+		'<portlet:namespace />selectFileEntryType',
+		function(fileEntryTypeId, fileEntryTypeName, dialog) {
+			var A = AUI();
+
+			var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />fileEntryTypeSearchContainer');
+
+			var fileEntryTypeDefault = '<input class="default-file-entry-type" type="radio" name="defaultFileEntryTypeId" checked="true" value="' + fileEntryTypeId + '" />';
+
+			var fileEntryTypeLink = '<a class="modify-link" data-rowId="' + fileEntryTypeId + '" href="javascript:;"><%= UnicodeFormatter.toString(removeFileEntryTypeIcon) %></a>';
+
+			<c:choose>
+				<c:when test="<%= workflowEnabled %>">
+					var defaultWorkflow = A.one('#<portlet:namespace />defaultWorkflow');
+
+					var workflowDefinitions = '<select name="workflowDefinition' + fileEntryTypeId + '"><option label="<%= LanguageUtil.get(pageContext, "no-workflow") %>" value="" />';
+
+					<%
+					for (WorkflowDefinition workflowDefinition : workflowDefinitions) {
+					%>
+
+						workflowDefinitions = workflowDefinitions + '<option label="<%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %>" value="<%= workflowDefinition.getName() + StringPool.AT + workflowDefinition.getVersion() %>" />';
+
+					<%
+					}
+					%>
+
+					workflowDefinitions = workflowDefinitions + '</select>';
+
+					defaultWorkflow.hide();
+
+					documentTypesChanged = true;
+
+					A.one('#<portlet:namespace />fileEntryTypeSearchContainer').all('default-file-entry-type').set('checked', 'false');
+
+					searchContainer.addRow([fileEntryTypeName, fileEntryTypeDefault, workflowDefinitions, fileEntryTypeLink], fileEntryTypeId);
+				</c:when>
+				<c:otherwise>
+					A.one('#<portlet:namespace />fileEntryTypeSearchContainer').all('default-file-entry-type').set('checked', 'false');
+
+					searchContainer.addRow([fileEntryTypeName, fileEntryTypeDefault, fileEntryTypeLink], fileEntryTypeId);
+				</c:otherwise>
+			</c:choose>
+
+			searchContainer.updateDataStore();
+
+			if (dialog) {
+				dialog.close();
+			}
+		},
+		['liferay-search-container']
+	);
+
+	Liferay.Util.toggleBoxes('<portlet:namespace />overrideFileEntryTypesCheckbox', '<portlet:namespace />overrideParentSettings');
+</aui:script>
+
+<aui:script use="liferay-search-container">
+	var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />fileEntryTypeSearchContainer');
+
+	searchContainer.get('contentBox').delegate(
+		'click',
+		function(event) {
+			var A = AUI();
+
+			var link = event.currentTarget;
+
+			var tr = link.ancestor('tr');
+
+			searchContainer.deleteRow(tr, link.getAttribute('data-rowId'));
+
+			documentTypesChanged = true;
+
+			var button = A.one('#<portlet:namespace />fileEntryTypeSearchContainer .default-file-entry-type');
+
+			if (button) {
+				button.set('checked', 'true');
+			}
+			else {
+				var defaultWorkflow = A.one('#<portlet:namespace />defaultWorkflow');
+
+				defaultWorkflow.show();
+			}
+		},
+		'.modify-link'
+	);
+</aui:script>
 
 <%
 if (folder == null) {

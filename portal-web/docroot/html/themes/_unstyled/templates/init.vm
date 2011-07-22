@@ -247,6 +247,10 @@
 	#set ($the_title = $languageUtil.get($locale, $tilesTitle))
 #end
 
+#if ($page_group.isLayoutPrototype())
+	#set ($the_title = $page_group.getDescriptiveName())
+#end
+
 #set ($the_title = $htmlUtil.escape($the_title))
 
 #if ($layouts)
@@ -258,6 +262,12 @@
 #if ($navItems)
 	#set ($nav_items = $navItems)
 	#set ($has_navigation = ($nav_items && $nav_items.size() > 0))
+#end
+
+#set ($nav_css_class = "sort-pages modify-pages")
+
+#if (!$has_navigation)
+	#set ($nav_css_class = $nav_css_class + " aui-helper-hidden")
 #end
 
 ## ---------- Staging ---------- ##

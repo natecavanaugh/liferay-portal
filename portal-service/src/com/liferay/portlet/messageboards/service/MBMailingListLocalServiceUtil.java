@@ -173,6 +173,13 @@ public class MBMailingListLocalServiceUtil {
 		return getService().getMBMailingList(mailingListId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the message boards mailing list with the UUID in the group.
 	*
@@ -219,7 +226,7 @@ public class MBMailingListLocalServiceUtil {
 	}
 
 	/**
-	* Updates the message boards mailing list in the database. Also notifies the appropriate model listeners.
+	* Updates the message boards mailing list in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param mbMailingList the message boards mailing list
 	* @return the message boards mailing list that was updated
@@ -232,7 +239,7 @@ public class MBMailingListLocalServiceUtil {
 	}
 
 	/**
-	* Updates the message boards mailing list in the database. Also notifies the appropriate model listeners.
+	* Updates the message boards mailing list in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param mbMailingList the message boards mailing list
 	* @param merge whether to merge the message boards mailing list with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

@@ -76,8 +76,8 @@ public class JournalArticleFinderImpl
 		String[] titles = null;
 		String[] descriptions = null;
 		String[] contents = null;
-		String[] structureIds = null;
-		String[] templateIds = null;
+		String[] structureIds = CustomSQLUtil.keywords(structureId, false);
+		String[] templateIds = CustomSQLUtil.keywords(templateId, false);
 		boolean andOperator = false;
 
 		if (Validator.isNotNull(keywords)) {
@@ -85,8 +85,6 @@ public class JournalArticleFinderImpl
 			titles = CustomSQLUtil.keywords(keywords);
 			descriptions = CustomSQLUtil.keywords(keywords, false);
 			contents = CustomSQLUtil.keywords(keywords, false);
-			structureIds = CustomSQLUtil.keywords(keywords, false);
-			templateIds = CustomSQLUtil.keywords(keywords, false);
 		}
 		else {
 			andOperator = true;
@@ -107,8 +105,8 @@ public class JournalArticleFinderImpl
 			boolean andOperator)
 		throws SystemException {
 
-		String[] structureIds = CustomSQLUtil.keywords(structureId);
-		String[] templateIds = CustomSQLUtil.keywords(templateId);
+		String[] structureIds = CustomSQLUtil.keywords(structureId, false);
+		String[] templateIds = CustomSQLUtil.keywords(templateId, false);
 
 		return countByC_G_C_A_V_T_D_C_T_S_T_D_S_R(
 			companyId, groupId, classNameId, articleId, version, title,
@@ -160,8 +158,8 @@ public class JournalArticleFinderImpl
 		String[] titles = null;
 		String[] descriptions = null;
 		String[] contents = null;
-		String[] structureIds = null;
-		String[] templateIds = null;
+		String[] structureIds = CustomSQLUtil.keywords(structureId, false);
+		String[] templateIds = CustomSQLUtil.keywords(templateId, false);
 		boolean andOperator = false;
 
 		if (Validator.isNotNull(keywords)) {
@@ -169,8 +167,6 @@ public class JournalArticleFinderImpl
 			titles = CustomSQLUtil.keywords(keywords);
 			descriptions = CustomSQLUtil.keywords(keywords, false);
 			contents = CustomSQLUtil.keywords(keywords, false);
-			structureIds = CustomSQLUtil.keywords(keywords, false);
-			templateIds = CustomSQLUtil.keywords(keywords, false);
 		}
 		else {
 			andOperator = true;
@@ -245,8 +241,8 @@ public class JournalArticleFinderImpl
 		String[] titles = null;
 		String[] descriptions = null;
 		String[] contents = null;
-		String[] structureIds = null;
-		String[] templateIds = null;
+		String[] structureIds = CustomSQLUtil.keywords(structureId, false);
+		String[] templateIds = CustomSQLUtil.keywords(templateId, false);
 		boolean andOperator = false;
 
 		if (Validator.isNotNull(keywords)) {
@@ -254,8 +250,6 @@ public class JournalArticleFinderImpl
 			titles = CustomSQLUtil.keywords(keywords);
 			descriptions = CustomSQLUtil.keywords(keywords, false);
 			contents = CustomSQLUtil.keywords(keywords, false);
-			structureIds = CustomSQLUtil.keywords(keywords, false);
-			templateIds = CustomSQLUtil.keywords(keywords, false);
 		}
 		else {
 			andOperator = true;
@@ -381,8 +375,8 @@ public class JournalArticleFinderImpl
 		String[] titles = null;
 		String[] descriptions = null;
 		String[] contents = null;
-		String[] structureIds = null;
-		String[] templateIds = null;
+		String[] structureIds = CustomSQLUtil.keywords(structureId, false);
+		String[] templateIds = CustomSQLUtil.keywords(templateId, false);
 		boolean andOperator = false;
 
 		if (Validator.isNotNull(keywords)) {
@@ -390,8 +384,6 @@ public class JournalArticleFinderImpl
 			titles = CustomSQLUtil.keywords(keywords);
 			descriptions = CustomSQLUtil.keywords(keywords, false);
 			contents = CustomSQLUtil.keywords(keywords, false);
-			structureIds = CustomSQLUtil.keywords(keywords, false);
-			templateIds = CustomSQLUtil.keywords(keywords, false);
 		}
 		else {
 			andOperator = true;
@@ -581,14 +573,7 @@ public class JournalArticleFinderImpl
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "articleId", StringPool.LIKE, false, articleIds);
 
-			if (version == null) {
-				sql = StringUtil.replace(
-					sql, "(version = ?) [$AND_OR_CONNECTOR$]", "");
-			}
-			else if (version <= 0) {
-				sql = StringUtil.replace(
-					sql, "COUNT(*", "COUNT(DISTINCT articleId");
-
+			if ((version == null) || (version <= 0)) {
 				sql = StringUtil.replace(
 					sql, "(version = ?) [$AND_OR_CONNECTOR$]", "");
 			}
@@ -600,15 +585,30 @@ public class JournalArticleFinderImpl
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "content", StringPool.LIKE, false, contents);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "structureId", StringPool.EQUAL, false, structureIds);
+				sql, "structureId", StringPool.LIKE, false, structureIds);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "templateId", StringPool.EQUAL, false, templateIds);
+				sql, "templateId", StringPool.LIKE, false, templateIds);
 
 			if (status == WorkflowConstants.STATUS_ANY) {
 				sql = StringUtil.replace(sql, "(status = ?) AND", "");
 			}
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
+
+			if ((articleIds != null) &&
+				((articleIds.length > 1) ||
+				 ((articleIds.length == 1) && (articleIds[0] != null))) &&
+				(version == null)) {
+
+				sql = StringUtil.replace(
+					sql, "MAX(version) AS tempVersion",
+					"version AS tempVersion");
+				sql = StringUtil.replace(sql, "[$GROUP_BY_CLAUSE$]", "");
+			}
+			else {
+				sql = StringUtil.replace(
+					sql, "[$GROUP_BY_CLAUSE$]", "GROUP BY groupId, articleId");
+			}
 
 			if (inlineSQLHelper) {
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
@@ -723,17 +723,31 @@ public class JournalArticleFinderImpl
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "content", StringPool.LIKE, false, contents);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "structureId", StringPool.EQUAL, false, structureIds);
+				sql, "structureId", StringPool.LIKE, false, structureIds);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "templateId", StringPool.EQUAL, false, templateIds);
+				sql, "templateId", StringPool.LIKE, false, templateIds);
 
 			if (status == WorkflowConstants.STATUS_ANY) {
 				sql = StringUtil.replace(sql, "(status = ?) AND", "");
 			}
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
-			sql = StringUtil.replace(
-				sql, "[$GROUP_BY_CLAUSE$]", "GROUP BY groupId, articleId");
+
+			if ((articleIds != null) &&
+				((articleIds.length > 1) ||
+				 ((articleIds.length == 1) && (articleIds[0] != null))) &&
+				(version == null)) {
+
+				sql = StringUtil.replace(
+					sql, "MAX(version) AS tempVersion",
+					"version AS tempVersion");
+				sql = StringUtil.replace(sql, "[$GROUP_BY_CLAUSE$]", "");
+			}
+			else {
+				sql = StringUtil.replace(
+					sql, "[$GROUP_BY_CLAUSE$]", "GROUP BY groupId, articleId");
+			}
+
 			sql = CustomSQLUtil.replaceOrderBy(sql, orderByComparator);
 
 			if (inlineSQLHelper) {

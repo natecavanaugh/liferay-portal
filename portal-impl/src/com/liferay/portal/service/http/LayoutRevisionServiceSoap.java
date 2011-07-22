@@ -14,6 +14,12 @@
 
 package com.liferay.portal.service.http;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.service.LayoutRevisionServiceUtil;
+
+import java.rmi.RemoteException;
+
 /**
  * <p>
  * This class provides a SOAP utility for the
@@ -58,4 +64,46 @@ package com.liferay.portal.service.http;
  * @generated
  */
 public class LayoutRevisionServiceSoap {
+	public static com.liferay.portal.model.LayoutRevisionSoap addLayoutRevision(
+		long userId, long layoutSetBranchId, long layoutBranchId,
+		long parentLayoutRevisionId, boolean head, long plid,
+		boolean privateLayout, java.lang.String name, java.lang.String title,
+		java.lang.String description, java.lang.String keywords,
+		java.lang.String robots, java.lang.String typeSettings,
+		boolean iconImage, long iconImageId, java.lang.String themeId,
+		java.lang.String colorSchemeId, java.lang.String wapThemeId,
+		java.lang.String wapColorSchemeId, java.lang.String css,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
+		try {
+			com.liferay.portal.model.LayoutRevision returnValue = LayoutRevisionServiceUtil.addLayoutRevision(userId,
+					layoutSetBranchId, layoutBranchId, parentLayoutRevisionId,
+					head, plid, privateLayout, name, title, description,
+					keywords, robots, typeSettings, iconImage, iconImageId,
+					themeId, colorSchemeId, wapThemeId, wapColorSchemeId, css,
+					serviceContext);
+
+			return com.liferay.portal.model.LayoutRevisionSoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static void deleteLayoutRevisions(long layoutSetBranchId,
+		long layoutBranchId, long plid) throws RemoteException {
+		try {
+			LayoutRevisionServiceUtil.deleteLayoutRevisions(layoutSetBranchId,
+				layoutBranchId, plid);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(LayoutRevisionServiceSoap.class);
 }

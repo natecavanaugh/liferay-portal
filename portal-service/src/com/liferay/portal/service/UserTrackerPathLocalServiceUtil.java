@@ -173,6 +173,13 @@ public class UserTrackerPathLocalServiceUtil {
 		return getService().getUserTrackerPath(userTrackerPathId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the user tracker paths.
 	*
@@ -203,7 +210,7 @@ public class UserTrackerPathLocalServiceUtil {
 	}
 
 	/**
-	* Updates the user tracker path in the database. Also notifies the appropriate model listeners.
+	* Updates the user tracker path in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param userTrackerPath the user tracker path
 	* @return the user tracker path that was updated
@@ -216,7 +223,7 @@ public class UserTrackerPathLocalServiceUtil {
 	}
 
 	/**
-	* Updates the user tracker path in the database. Also notifies the appropriate model listeners.
+	* Updates the user tracker path in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param userTrackerPath the user tracker path
 	* @param merge whether to merge the user tracker path with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

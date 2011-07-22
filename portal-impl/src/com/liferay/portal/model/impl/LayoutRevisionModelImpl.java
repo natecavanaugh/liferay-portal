@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.LayoutRevision;
 import com.liferay.portal.model.LayoutRevisionModel;
 import com.liferay.portal.model.LayoutRevisionSoap;
@@ -78,10 +79,10 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 			{ "createDate", Types.TIMESTAMP },
 			{ "modifiedDate", Types.TIMESTAMP },
 			{ "layoutSetBranchId", Types.BIGINT },
+			{ "layoutBranchId", Types.BIGINT },
 			{ "parentLayoutRevisionId", Types.BIGINT },
 			{ "head", Types.BOOLEAN },
 			{ "major", Types.BOOLEAN },
-			{ "variationName", Types.VARCHAR },
 			{ "plid", Types.BIGINT },
 			{ "privateLayout", Types.BOOLEAN },
 			{ "name", Types.VARCHAR },
@@ -102,7 +103,7 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 			{ "statusByUserName", Types.VARCHAR },
 			{ "statusDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table LayoutRevision (layoutRevisionId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,layoutSetBranchId LONG,parentLayoutRevisionId LONG,head BOOLEAN,major BOOLEAN,variationName VARCHAR(75) null,plid LONG,privateLayout BOOLEAN,name STRING null,title STRING null,description STRING null,keywords STRING null,robots STRING null,typeSettings TEXT null,iconImage BOOLEAN,iconImageId LONG,themeId VARCHAR(75) null,colorSchemeId VARCHAR(75) null,wapThemeId VARCHAR(75) null,wapColorSchemeId VARCHAR(75) null,css STRING null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table LayoutRevision (layoutRevisionId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,layoutSetBranchId LONG,layoutBranchId LONG,parentLayoutRevisionId LONG,head BOOLEAN,major BOOLEAN,plid LONG,privateLayout BOOLEAN,name STRING null,title STRING null,description STRING null,keywords STRING null,robots STRING null,typeSettings TEXT null,iconImage BOOLEAN,iconImageId LONG,themeId VARCHAR(75) null,colorSchemeId VARCHAR(75) null,wapThemeId VARCHAR(75) null,wapColorSchemeId VARCHAR(75) null,css STRING null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table LayoutRevision";
 	public static final String ORDER_BY_JPQL = " ORDER BY layoutRevision.layoutRevisionId DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY LayoutRevision.layoutRevisionId DESC";
@@ -133,10 +134,10 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setModifiedDate(soapModel.getModifiedDate());
 		model.setLayoutSetBranchId(soapModel.getLayoutSetBranchId());
+		model.setLayoutBranchId(soapModel.getLayoutBranchId());
 		model.setParentLayoutRevisionId(soapModel.getParentLayoutRevisionId());
 		model.setHead(soapModel.getHead());
 		model.setMajor(soapModel.getMajor());
-		model.setVariationName(soapModel.getVariationName());
 		model.setPlid(soapModel.getPlid());
 		model.setPrivateLayout(soapModel.getPrivateLayout());
 		model.setName(soapModel.getName());
@@ -302,6 +303,15 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 	}
 
 	@JSON
+	public long getLayoutBranchId() {
+		return _layoutBranchId;
+	}
+
+	public void setLayoutBranchId(long layoutBranchId) {
+		_layoutBranchId = layoutBranchId;
+	}
+
+	@JSON
 	public long getParentLayoutRevisionId() {
 		return _parentLayoutRevisionId;
 	}
@@ -344,20 +354,6 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 
 	public void setMajor(boolean major) {
 		_major = major;
-	}
-
-	@JSON
-	public String getVariationName() {
-		if (_variationName == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _variationName;
-		}
-	}
-
-	public void setVariationName(String variationName) {
-		_variationName = variationName;
 	}
 
 	@JSON
@@ -1085,10 +1081,10 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 		layoutRevisionImpl.setCreateDate(getCreateDate());
 		layoutRevisionImpl.setModifiedDate(getModifiedDate());
 		layoutRevisionImpl.setLayoutSetBranchId(getLayoutSetBranchId());
+		layoutRevisionImpl.setLayoutBranchId(getLayoutBranchId());
 		layoutRevisionImpl.setParentLayoutRevisionId(getParentLayoutRevisionId());
 		layoutRevisionImpl.setHead(getHead());
 		layoutRevisionImpl.setMajor(getMajor());
-		layoutRevisionImpl.setVariationName(getVariationName());
 		layoutRevisionImpl.setPlid(getPlid());
 		layoutRevisionImpl.setPrivateLayout(getPrivateLayout());
 		layoutRevisionImpl.setName(getName());
@@ -1184,6 +1180,174 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 	}
 
 	@Override
+	public CacheModel<LayoutRevision> toCacheModel() {
+		LayoutRevisionCacheModel layoutRevisionCacheModel = new LayoutRevisionCacheModel();
+
+		layoutRevisionCacheModel.layoutRevisionId = getLayoutRevisionId();
+
+		layoutRevisionCacheModel.groupId = getGroupId();
+
+		layoutRevisionCacheModel.companyId = getCompanyId();
+
+		layoutRevisionCacheModel.userId = getUserId();
+
+		layoutRevisionCacheModel.userName = getUserName();
+
+		String userName = layoutRevisionCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			layoutRevisionCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			layoutRevisionCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			layoutRevisionCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			layoutRevisionCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			layoutRevisionCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		layoutRevisionCacheModel.layoutSetBranchId = getLayoutSetBranchId();
+
+		layoutRevisionCacheModel.layoutBranchId = getLayoutBranchId();
+
+		layoutRevisionCacheModel.parentLayoutRevisionId = getParentLayoutRevisionId();
+
+		layoutRevisionCacheModel.head = getHead();
+
+		layoutRevisionCacheModel.major = getMajor();
+
+		layoutRevisionCacheModel.plid = getPlid();
+
+		layoutRevisionCacheModel.privateLayout = getPrivateLayout();
+
+		layoutRevisionCacheModel.name = getName();
+
+		String name = layoutRevisionCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			layoutRevisionCacheModel.name = null;
+		}
+
+		layoutRevisionCacheModel.title = getTitle();
+
+		String title = layoutRevisionCacheModel.title;
+
+		if ((title != null) && (title.length() == 0)) {
+			layoutRevisionCacheModel.title = null;
+		}
+
+		layoutRevisionCacheModel.description = getDescription();
+
+		String description = layoutRevisionCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			layoutRevisionCacheModel.description = null;
+		}
+
+		layoutRevisionCacheModel.keywords = getKeywords();
+
+		String keywords = layoutRevisionCacheModel.keywords;
+
+		if ((keywords != null) && (keywords.length() == 0)) {
+			layoutRevisionCacheModel.keywords = null;
+		}
+
+		layoutRevisionCacheModel.robots = getRobots();
+
+		String robots = layoutRevisionCacheModel.robots;
+
+		if ((robots != null) && (robots.length() == 0)) {
+			layoutRevisionCacheModel.robots = null;
+		}
+
+		layoutRevisionCacheModel.typeSettings = getTypeSettings();
+
+		String typeSettings = layoutRevisionCacheModel.typeSettings;
+
+		if ((typeSettings != null) && (typeSettings.length() == 0)) {
+			layoutRevisionCacheModel.typeSettings = null;
+		}
+
+		layoutRevisionCacheModel.iconImage = getIconImage();
+
+		layoutRevisionCacheModel.iconImageId = getIconImageId();
+
+		layoutRevisionCacheModel.themeId = getThemeId();
+
+		String themeId = layoutRevisionCacheModel.themeId;
+
+		if ((themeId != null) && (themeId.length() == 0)) {
+			layoutRevisionCacheModel.themeId = null;
+		}
+
+		layoutRevisionCacheModel.colorSchemeId = getColorSchemeId();
+
+		String colorSchemeId = layoutRevisionCacheModel.colorSchemeId;
+
+		if ((colorSchemeId != null) && (colorSchemeId.length() == 0)) {
+			layoutRevisionCacheModel.colorSchemeId = null;
+		}
+
+		layoutRevisionCacheModel.wapThemeId = getWapThemeId();
+
+		String wapThemeId = layoutRevisionCacheModel.wapThemeId;
+
+		if ((wapThemeId != null) && (wapThemeId.length() == 0)) {
+			layoutRevisionCacheModel.wapThemeId = null;
+		}
+
+		layoutRevisionCacheModel.wapColorSchemeId = getWapColorSchemeId();
+
+		String wapColorSchemeId = layoutRevisionCacheModel.wapColorSchemeId;
+
+		if ((wapColorSchemeId != null) && (wapColorSchemeId.length() == 0)) {
+			layoutRevisionCacheModel.wapColorSchemeId = null;
+		}
+
+		layoutRevisionCacheModel.css = getCss();
+
+		String css = layoutRevisionCacheModel.css;
+
+		if ((css != null) && (css.length() == 0)) {
+			layoutRevisionCacheModel.css = null;
+		}
+
+		layoutRevisionCacheModel.status = getStatus();
+
+		layoutRevisionCacheModel.statusByUserId = getStatusByUserId();
+
+		layoutRevisionCacheModel.statusByUserName = getStatusByUserName();
+
+		String statusByUserName = layoutRevisionCacheModel.statusByUserName;
+
+		if ((statusByUserName != null) && (statusByUserName.length() == 0)) {
+			layoutRevisionCacheModel.statusByUserName = null;
+		}
+
+		Date statusDate = getStatusDate();
+
+		if (statusDate != null) {
+			layoutRevisionCacheModel.statusDate = statusDate.getTime();
+		}
+		else {
+			layoutRevisionCacheModel.statusDate = Long.MIN_VALUE;
+		}
+
+		return layoutRevisionCacheModel;
+	}
+
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(63);
 
@@ -1203,14 +1367,14 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 		sb.append(getModifiedDate());
 		sb.append(", layoutSetBranchId=");
 		sb.append(getLayoutSetBranchId());
+		sb.append(", layoutBranchId=");
+		sb.append(getLayoutBranchId());
 		sb.append(", parentLayoutRevisionId=");
 		sb.append(getParentLayoutRevisionId());
 		sb.append(", head=");
 		sb.append(getHead());
 		sb.append(", major=");
 		sb.append(getMajor());
-		sb.append(", variationName=");
-		sb.append(getVariationName());
 		sb.append(", plid=");
 		sb.append(getPlid());
 		sb.append(", privateLayout=");
@@ -1294,6 +1458,10 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 		sb.append(getLayoutSetBranchId());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>layoutBranchId</column-name><column-value><![CDATA[");
+		sb.append(getLayoutBranchId());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>parentLayoutRevisionId</column-name><column-value><![CDATA[");
 		sb.append(getParentLayoutRevisionId());
 		sb.append("]]></column-value></column>");
@@ -1304,10 +1472,6 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 		sb.append(
 			"<column><column-name>major</column-name><column-value><![CDATA[");
 		sb.append(getMajor());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>variationName</column-name><column-value><![CDATA[");
-		sb.append(getVariationName());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>plid</column-name><column-value><![CDATA[");
@@ -1406,12 +1570,12 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 	private long _layoutSetBranchId;
 	private long _originalLayoutSetBranchId;
 	private boolean _setOriginalLayoutSetBranchId;
+	private long _layoutBranchId;
 	private long _parentLayoutRevisionId;
 	private boolean _head;
 	private boolean _originalHead;
 	private boolean _setOriginalHead;
 	private boolean _major;
-	private String _variationName;
 	private long _plid;
 	private long _originalPlid;
 	private boolean _setOriginalPlid;

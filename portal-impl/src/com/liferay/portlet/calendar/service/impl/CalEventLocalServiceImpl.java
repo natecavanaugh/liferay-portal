@@ -345,6 +345,9 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 					Recurrence recurrence = event.getRecurrenceObj();
 
 					Calendar tzICal = CalendarFactoryUtil.getCalendar(
+						TimeZoneUtil.getTimeZone(StringPool.UTC));
+
+					tzICal.set(
 						cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 						cal.get(Calendar.DATE));
 
@@ -501,7 +504,7 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 			// Time zone insensitive
 
 			Calendar tzICal = CalendarFactoryUtil.getCalendar(
-				TimeZoneUtil.getDefault());
+				TimeZoneUtil.getTimeZone(StringPool.UTC));
 
 			tzICal.set(
 				cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
@@ -592,7 +595,9 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 		List<CalEvent> events = eventsPool.get(key);
 
 		if (events == null) {
-			if (types != null) {
+			if ((types != null) && (types.length > 0) &&
+				((types.length > 1) || Validator.isNotNull(types[0]))) {
+
 				events = calEventPersistence.findByG_T_R(groupId, types, true);
 			}
 			else {
@@ -609,6 +614,9 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 			// Time zone insensitive
 
 			Calendar tzICal = CalendarFactoryUtil.getCalendar(
+				TimeZoneUtil.getTimeZone(StringPool.UTC));
+
+			tzICal.set(
 				cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DATE));
 
@@ -896,7 +904,9 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 	protected Calendar getRecurrenceCal(
 		Calendar cal, Calendar tzICal, CalEvent event) {
 
-		Calendar eventCal = CalendarFactoryUtil.getCalendar();
+		Calendar eventCal = CalendarFactoryUtil.getCalendar(
+			TimeZoneUtil.getTimeZone(StringPool.UTC));
+
 		eventCal.setTime(event.getStartDate());
 
 		Calendar recurrenceCal = (Calendar)tzICal.clone();

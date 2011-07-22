@@ -209,6 +209,20 @@ public interface WorkflowDefinitionLinkModel extends AttachedModel,
 	public void setClassPK(long classPK);
 
 	/**
+	 * Returns the type p k of this workflow definition link.
+	 *
+	 * @return the type p k of this workflow definition link
+	 */
+	public long getTypePK();
+
+	/**
+	 * Sets the type p k of this workflow definition link.
+	 *
+	 * @param typePK the type p k of this workflow definition link
+	 */
+	public void setTypePK(long typePK);
+
+	/**
 	 * Returns the workflow definition name of this workflow definition link.
 	 *
 	 * @return the workflow definition name of this workflow definition link
@@ -262,6 +276,8 @@ public interface WorkflowDefinitionLinkModel extends AttachedModel,
 	public int compareTo(WorkflowDefinitionLink workflowDefinitionLink);
 
 	public int hashCode();
+
+	public CacheModel<WorkflowDefinitionLink> toCacheModel();
 
 	public WorkflowDefinitionLink toEscapedModel();
 

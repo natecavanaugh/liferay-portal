@@ -166,6 +166,13 @@ public class ShoppingCategoryLocalServiceWrapper
 		return _shoppingCategoryLocalService.getShoppingCategory(categoryId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _shoppingCategoryLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the shopping categories.
 	*
@@ -196,7 +203,7 @@ public class ShoppingCategoryLocalServiceWrapper
 	}
 
 	/**
-	* Updates the shopping category in the database. Also notifies the appropriate model listeners.
+	* Updates the shopping category in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param shoppingCategory the shopping category
 	* @return the shopping category that was updated
@@ -209,7 +216,7 @@ public class ShoppingCategoryLocalServiceWrapper
 	}
 
 	/**
-	* Updates the shopping category in the database. Also notifies the appropriate model listeners.
+	* Updates the shopping category in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param shoppingCategory the shopping category
 	* @param merge whether to merge the shopping category with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

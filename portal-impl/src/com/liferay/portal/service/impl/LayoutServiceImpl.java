@@ -21,8 +21,10 @@ import com.liferay.portal.kernel.scheduler.CronTrigger;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineUtil;
 import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.Trigger;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.messaging.LayoutsLocalPublisherRequest;
 import com.liferay.portal.messaging.LayoutsRemotePublisherRequest;
@@ -39,6 +41,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.LayoutServiceBaseImpl;
 import com.liferay.portal.service.permission.GroupPermissionUtil;
 import com.liferay.portal.service.permission.LayoutPermissionUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -180,21 +183,68 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 	}
 
 	public long getDefaultPlid(
-			long groupId, boolean privateLayout, String portletId)
+			long groupId, long scopeGroupId, boolean privateLayout,
+			String portletId)
 		throws PortalException, SystemException {
 
-		if (groupId > 0) {
-			List<Layout> layouts = layoutPersistence.filterFindByG_P(
-				groupId, privateLayout);
+		if (groupId <= 0) {
+			return LayoutConstants.DEFAULT_PLID;
+		}
 
-			for (Layout layout : layouts) {
-				if (layout.isTypePortlet()) {
-					LayoutTypePortlet layoutTypePortlet =
-						(LayoutTypePortlet)layout.getLayoutType();
+		String scopeGroupLayoutUuid = null;
 
-					if (layoutTypePortlet.hasPortletId(portletId)) {
-						return layout.getPlid();
-					}
+		Group scopeGroup = groupLocalService.getGroup(scopeGroupId);
+
+		if (scopeGroup.isLayout()) {
+			Layout scopeGroupLayout = layoutLocalService.getLayout(
+				scopeGroup.getClassPK());
+
+			scopeGroupLayoutUuid = scopeGroupLayout.getUuid();
+		}
+
+		List<Layout> layouts = layoutPersistence.filterFindByG_P(
+			groupId, privateLayout);
+
+		for (Layout layout : layouts) {
+			if (!layout.isTypePortlet()) {
+				continue;
+			}
+
+			LayoutTypePortlet layoutTypePortlet =
+				(LayoutTypePortlet)layout.getLayoutType();
+
+			if (!layoutTypePortlet.hasPortletId(portletId)) {
+				continue;
+			}
+
+			javax.portlet.PortletPreferences jxPreferences =
+				PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+					layout, portletId);
+
+			String scopeType = GetterUtil.getString(
+				jxPreferences.getValue("lfr-scope-type", null));
+
+			if (scopeGroup.isLayout()) {
+				String scopeLayoutUuid = GetterUtil.getString(
+					jxPreferences.getValue("lfrScopeLayoutUuid", null));
+
+				if (Validator.isNotNull(scopeType) &&
+					Validator.isNotNull(scopeLayoutUuid) &&
+					scopeLayoutUuid.equals(scopeGroupLayoutUuid)) {
+
+					return layout.getPlid();
+				}
+			}
+			else if (scopeGroup.isCompany()) {
+				if (Validator.isNotNull(scopeType) &&
+					scopeType.equals("company")) {
+
+					return layout.getPlid();
+				}
+			}
+			else {
+				if (Validator.isNull(scopeType)) {
+					return layout.getPlid();
 				}
 			}
 		}

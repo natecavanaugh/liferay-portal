@@ -219,6 +219,24 @@ public class LayoutRevisionWrapper implements LayoutRevision {
 	}
 
 	/**
+	* Returns the layout branch ID of this layout revision.
+	*
+	* @return the layout branch ID of this layout revision
+	*/
+	public long getLayoutBranchId() {
+		return _layoutRevision.getLayoutBranchId();
+	}
+
+	/**
+	* Sets the layout branch ID of this layout revision.
+	*
+	* @param layoutBranchId the layout branch ID of this layout revision
+	*/
+	public void setLayoutBranchId(long layoutBranchId) {
+		_layoutRevision.setLayoutBranchId(layoutBranchId);
+	}
+
+	/**
 	* Returns the parent layout revision ID of this layout revision.
 	*
 	* @return the parent layout revision ID of this layout revision
@@ -288,24 +306,6 @@ public class LayoutRevisionWrapper implements LayoutRevision {
 	*/
 	public void setMajor(boolean major) {
 		_layoutRevision.setMajor(major);
-	}
-
-	/**
-	* Returns the variation name of this layout revision.
-	*
-	* @return the variation name of this layout revision
-	*/
-	public java.lang.String getVariationName() {
-		return _layoutRevision.getVariationName();
-	}
-
-	/**
-	* Sets the variation name of this layout revision.
-	*
-	* @param variationName the variation name of this layout revision
-	*/
-	public void setVariationName(java.lang.String variationName) {
-		_layoutRevision.setVariationName(variationName);
 	}
 
 	/**
@@ -1270,6 +1270,10 @@ public class LayoutRevisionWrapper implements LayoutRevision {
 		return _layoutRevision.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.model.LayoutRevision> toCacheModel() {
+		return _layoutRevision.toCacheModel();
+	}
+
 	public com.liferay.portal.model.LayoutRevision toEscapedModel() {
 		return new LayoutRevisionWrapper(_layoutRevision.toEscapedModel());
 	}
@@ -1281,6 +1285,11 @@ public class LayoutRevisionWrapper implements LayoutRevision {
 
 	public java.lang.String toXmlString() {
 		return _layoutRevision.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_layoutRevision.persist();
 	}
 
 	public java.util.List<com.liferay.portal.model.LayoutRevision> getChildren()
@@ -1306,6 +1315,12 @@ public class LayoutRevisionWrapper implements LayoutRevision {
 
 	public java.lang.String getHTMLTitle(java.lang.String localeLanguageId) {
 		return _layoutRevision.getHTMLTitle(localeLanguageId);
+	}
+
+	public com.liferay.portal.model.LayoutBranch getLayoutBranch()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _layoutRevision.getLayoutBranch();
 	}
 
 	public com.liferay.portal.model.LayoutSet getLayoutSet()

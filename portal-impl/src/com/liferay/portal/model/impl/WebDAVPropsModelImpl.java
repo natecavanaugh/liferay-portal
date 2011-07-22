@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.WebDAVProps;
 import com.liferay.portal.model.WebDAVPropsModel;
 import com.liferay.portal.service.ServiceContext;
@@ -298,6 +299,47 @@ public class WebDAVPropsModelImpl extends BaseModelImpl<WebDAVProps>
 		webDAVPropsModelImpl._originalClassPK = webDAVPropsModelImpl._classPK;
 
 		webDAVPropsModelImpl._setOriginalClassPK = false;
+	}
+
+	@Override
+	public CacheModel<WebDAVProps> toCacheModel() {
+		WebDAVPropsCacheModel webDAVPropsCacheModel = new WebDAVPropsCacheModel();
+
+		webDAVPropsCacheModel.webDavPropsId = getWebDavPropsId();
+
+		webDAVPropsCacheModel.companyId = getCompanyId();
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			webDAVPropsCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			webDAVPropsCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			webDAVPropsCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			webDAVPropsCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		webDAVPropsCacheModel.classNameId = getClassNameId();
+
+		webDAVPropsCacheModel.classPK = getClassPK();
+
+		webDAVPropsCacheModel.props = getProps();
+
+		String props = webDAVPropsCacheModel.props;
+
+		if ((props != null) && (props.length() == 0)) {
+			webDAVPropsCacheModel.props = null;
+		}
+
+		return webDAVPropsCacheModel;
 	}
 
 	@Override

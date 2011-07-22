@@ -161,6 +161,13 @@ public class WikiPageLocalServiceWrapper implements WikiPageLocalService {
 		return _wikiPageLocalService.getWikiPage(pageId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _wikiPageLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the wiki page with the UUID in the group.
 	*
@@ -207,7 +214,7 @@ public class WikiPageLocalServiceWrapper implements WikiPageLocalService {
 	}
 
 	/**
-	* Updates the wiki page in the database. Also notifies the appropriate model listeners.
+	* Updates the wiki page in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param wikiPage the wiki page
 	* @return the wiki page that was updated
@@ -220,7 +227,7 @@ public class WikiPageLocalServiceWrapper implements WikiPageLocalService {
 	}
 
 	/**
-	* Updates the wiki page in the database. Also notifies the appropriate model listeners.
+	* Updates the wiki page in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param wikiPage the wiki page
 	* @param merge whether to merge the wiki page with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

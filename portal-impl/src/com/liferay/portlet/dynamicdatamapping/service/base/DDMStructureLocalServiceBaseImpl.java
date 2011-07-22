@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -58,6 +60,8 @@ import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMStructureLi
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMStructurePersistence;
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplateFinder;
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplatePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -250,6 +254,11 @@ public abstract class DDMStructureLocalServiceBaseImpl
 		return ddmStructurePersistence.findByPrimaryKey(structureId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return ddmStructurePersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the d d m structure with the UUID in the group.
 	 *
@@ -292,7 +301,7 @@ public abstract class DDMStructureLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the d d m structure in the database. Also notifies the appropriate model listeners.
+	 * Updates the d d m structure in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param ddmStructure the d d m structure
 	 * @return the d d m structure that was updated
@@ -304,7 +313,7 @@ public abstract class DDMStructureLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the d d m structure in the database. Also notifies the appropriate model listeners.
+	 * Updates the d d m structure in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param ddmStructure the d d m structure
 	 * @param merge whether to merge the d d m structure with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -853,6 +862,16 @@ public abstract class DDMStructureLocalServiceBaseImpl
 		this.dlFileEntryTypeFinder = dlFileEntryTypeFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.dynamicdatamapping.model.DDMStructure",
+			ddmStructureLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.dynamicdatamapping.model.DDMStructure");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -954,6 +973,8 @@ public abstract class DDMStructureLocalServiceBaseImpl
 	protected DLFileEntryTypePersistence dlFileEntryTypePersistence;
 	@BeanReference(type = DLFileEntryTypeFinder.class)
 	protected DLFileEntryTypeFinder dlFileEntryTypeFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(DDMStructureLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

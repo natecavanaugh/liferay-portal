@@ -164,6 +164,13 @@ public class DDMTemplateLocalServiceWrapper implements DDMTemplateLocalService {
 		return _ddmTemplateLocalService.getDDMTemplate(templateId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _ddmTemplateLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the d d m template with the UUID in the group.
 	*
@@ -211,7 +218,7 @@ public class DDMTemplateLocalServiceWrapper implements DDMTemplateLocalService {
 	}
 
 	/**
-	* Updates the d d m template in the database. Also notifies the appropriate model listeners.
+	* Updates the d d m template in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param ddmTemplate the d d m template
 	* @return the d d m template that was updated
@@ -224,7 +231,7 @@ public class DDMTemplateLocalServiceWrapper implements DDMTemplateLocalService {
 	}
 
 	/**
-	* Updates the d d m template in the database. Also notifies the appropriate model listeners.
+	* Updates the d d m template in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param ddmTemplate the d d m template
 	* @param merge whether to merge the d d m template with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

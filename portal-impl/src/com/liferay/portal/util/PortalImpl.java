@@ -44,6 +44,7 @@ import com.liferay.portal.kernel.servlet.ServletContextUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.StringServletResponse;
 import com.liferay.portal.kernel.servlet.WebDirDetector;
+import com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -74,7 +75,6 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.model.BaseModel;
-import com.liferay.portal.model.BreadcrumbEntry;
 import com.liferay.portal.model.ClassName;
 import com.liferay.portal.model.ColorScheme;
 import com.liferay.portal.model.Company;
@@ -97,7 +97,6 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.Theme;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
-import com.liferay.portal.model.impl.BreadcrumbEntryImpl;
 import com.liferay.portal.model.impl.LayoutTypePortletImpl;
 import com.liferay.portal.plugin.PluginPackageUtil;
 import com.liferay.portal.security.auth.AuthException;
@@ -111,6 +110,7 @@ import com.liferay.portal.security.permission.ResourceActionsUtil;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.GroupServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
@@ -188,6 +188,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -562,18 +563,24 @@ public class PortalImpl implements Portal {
 		HttpServletRequest request, String title, String url,
 		Map<String, Object> data) {
 
-		List<BreadcrumbEntry> portletBreadcrumbs =
+		List<BreadcrumbEntry> breadcrumbEntries =
 			(List<BreadcrumbEntry>)request.getAttribute(
 				WebKeys.PORTLET_BREADCRUMBS);
 
-		if (portletBreadcrumbs == null) {
-			portletBreadcrumbs = new ArrayList<BreadcrumbEntry>();
+		if (breadcrumbEntries == null) {
+			breadcrumbEntries = new ArrayList<BreadcrumbEntry>();
 
 			request.setAttribute(
-				WebKeys.PORTLET_BREADCRUMBS, portletBreadcrumbs);
+				WebKeys.PORTLET_BREADCRUMBS, breadcrumbEntries);
 		}
 
-		portletBreadcrumbs.add(new BreadcrumbEntryImpl(title, url, data));
+		BreadcrumbEntry breadcrumbEntry = new BreadcrumbEntry();
+
+		breadcrumbEntry.setData(data);
+		breadcrumbEntry.setTitle(title);
+		breadcrumbEntry.setURL(url);
+
+		breadcrumbEntries.add(breadcrumbEntry);
 	}
 
 	public void addPortletDefaultResource(
@@ -1153,7 +1160,8 @@ public class PortalImpl implements Portal {
 			group.getCompanyId());
 
 		sb.append(
-			getPortalURL(company.getVirtualHostname(), getPortalPort(), false));
+			getPortalURL(
+				company.getVirtualHostname(), getPortalPort(false), false));
 		sb.append(PortalUtil.getPathFriendlyURLPrivateGroup());
 		sb.append(GroupConstants.CONTROL_PANEL_FRIENDLY_URL);
 		sb.append(PropsValues.CONTROL_PANEL_LAYOUT_FRIENDLY_URL);
@@ -1709,15 +1717,23 @@ public class PortalImpl implements Portal {
 			friendlyURL = _PUBLIC_GROUP_SERVLET_MAPPING;
 		}
 
-		if (themeDisplay.isWidget()) {
-			friendlyURL = PropsValues.WIDGET_SERVLET_MAPPING + friendlyURL;
-		}
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(portalURL);
+		sb.append(_pathContext);
 
 		if (themeDisplay.isI18n()) {
-			friendlyURL = themeDisplay.getI18nPath() + friendlyURL;
+			sb.append(themeDisplay.getI18nPath());
 		}
 
-		return portalURL + _pathContext + friendlyURL + group.getFriendlyURL();
+		if (themeDisplay.isWidget()) {
+			sb.append(PropsValues.WIDGET_SERVLET_MAPPING);
+		}
+
+		sb.append(friendlyURL);
+		sb.append(group.getFriendlyURL());
+
+		return sb.toString();
 	}
 
 	public String[] getGroupPermissions(HttpServletRequest request) {
@@ -1899,17 +1915,7 @@ public class PortalImpl implements Portal {
 		UnicodeProperties typeSettingsProperties =
 			layout.getLayoutType().getTypeSettingsProperties();
 
-		Iterator<Map.Entry<String, String>> itr =
-			typeSettingsProperties.entrySet().iterator();
-
-		while (itr.hasNext()) {
-			Map.Entry<String, String> entry = itr.next();
-
-			String key = entry.getKey();
-			String value = entry.getValue();
-
-			variables.put(key, value);
-		}
+		variables.putAll(typeSettingsProperties);
 
 		LayoutSettings layoutSettings = LayoutSettings.getInstance(layout);
 
@@ -2078,6 +2084,13 @@ public class PortalImpl implements Portal {
 	public String getLayoutFullURL(long groupId, String portletId)
 		throws PortalException, SystemException {
 
+		return getLayoutFullURL(groupId, portletId, false);
+	}
+
+	public String getLayoutFullURL(
+			long groupId, String portletId, boolean secure)
+		throws PortalException, SystemException {
+
 		long plid = getPlidFromPortletId(groupId, portletId);
 
 		if (plid == LayoutConstants.DEFAULT_PLID) {
@@ -2113,7 +2126,7 @@ public class PortalImpl implements Portal {
 		}
 
 		String portalURL = getPortalURL(
-			virtualHostname, getPortalPort(), false);
+			virtualHostname, getPortalPort(secure), secure);
 
 		sb.append(portalURL);
 
@@ -2614,8 +2627,20 @@ public class PortalImpl implements Portal {
 		return _portalLibDir;
 	}
 
+	/**
+	 * @deprecated {@link #getPortalPort(boolean)}
+	 */
 	public int getPortalPort() {
 		return _portalPort.get();
+	}
+
+	public int getPortalPort(boolean secure) {
+		if (secure) {
+			return _securePortalPort.get();
+		}
+		else {
+			return _portalPort.get();
+		}
 	}
 
 	public Properties getPortalProperties() {
@@ -3077,12 +3102,7 @@ public class PortalImpl implements Portal {
 				Group doAsGroup = GroupLocalServiceUtil.fetchGroup(doAsGroupId);
 
 				if ((doAsGroupId <= 0) || (doAsGroup == null)) {
-					Group guestGroup = GroupLocalServiceUtil.fetchGroup(
-						group.getCompanyId(), GroupConstants.GUEST);
-
-					if (guestGroup != null) {
-						doAsGroupId = guestGroup.getGroupId();
-					}
+					doAsGroupId = getDefaultScopeGroupId(group.getCompanyId());
 				}
 
 				if (doAsGroupId > 0) {
@@ -3114,7 +3134,19 @@ public class PortalImpl implements Portal {
 				if (liveGroup.isStaged() &&
 					!liveGroup.isStagedPortlet(portletId)) {
 
-					scopeGroupId = liveGroup.getGroupId();
+					Layout liveGroupLayout =
+						LayoutLocalServiceUtil.fetchLayoutByUuidAndGroupId(
+							layout.getUuid(), liveGroup.getGroupId());
+
+					if ((liveGroupLayout != null) &&
+						liveGroupLayout.hasScopeGroup()) {
+
+						scopeGroupId = getScopeGroupId(
+							liveGroupLayout, portletId);
+					}
+					else {
+						scopeGroupId = liveGroup.getGroupId();
+					}
 				}
 			}
 		}
@@ -4428,7 +4460,10 @@ public class PortalImpl implements Portal {
 				WebKeys.THEME_DISPLAY);
 
 			try {
-				if (!PortletPermissionUtil.contains(
+				Layout layout = themeDisplay.getLayout();
+
+				if (!layout.isTypeControlPanel() &&
+					!PortletPermissionUtil.contains(
 						themeDisplay.getPermissionChecker(),
 						themeDisplay.getPlid(), portlet.getPortletId(),
 						ActionKeys.CONFIGURATION)) {
@@ -4645,11 +4680,20 @@ public class PortalImpl implements Portal {
 	 * Sets the port obtained on the first request to the portal.
 	 */
 	public void setPortalPort(HttpServletRequest request) {
-		if (_portalPort.get() == -1) {
-			int portalPort = request.getServerPort();
+		if (request.isSecure()) {
+			if (_securePortalPort.get() == -1) {
+				int securePortalPort = request.getServerPort();
 
-			if (_portalPort.compareAndSet(-1, portalPort)) {
-				notifyPortalPortEventListeners(portalPort);
+				_securePortalPort.compareAndSet(-1, securePortalPort);
+			}
+		}
+		else {
+			if (_portalPort.get() == -1) {
+				int portalPort = request.getServerPort();
+
+				if (_portalPort.compareAndSet(-1, portalPort)) {
+					notifyPortalPortEventListeners(portalPort);
+				}
 			}
 		}
 	}
@@ -4979,6 +5023,33 @@ public class PortalImpl implements Portal {
 		}
 
 		return filteredPortlets;
+	}
+
+	protected long getDefaultScopeGroupId(long companyId)
+		throws PortalException , SystemException {
+
+		long doAsGroupId = 0;
+
+		Collection<Portlet> portlets = PortalUtil.getControlPanelPortlets(
+			companyId, PortletCategoryKeys.CONTENT);
+
+		List<Group> groups = GroupServiceUtil.getManageableSites(portlets, 1);
+
+		if (!groups.isEmpty()) {
+			Group group = groups.get(0);
+
+			doAsGroupId = group.getGroupId();
+		}
+		else {
+			Group guestGroup = GroupLocalServiceUtil.fetchGroup(
+				companyId, GroupConstants.GUEST);
+
+			if (guestGroup != null) {
+				doAsGroupId = guestGroup.getGroupId();
+			}
+		}
+
+		return doAsGroupId;
 	}
 
 	protected long getDoAsUserId(
@@ -5345,6 +5416,7 @@ public class PortalImpl implements Portal {
 	private Set<String> _portletAddDefaultResourceCheckWhitelist;
 	private Set<String> _portletAddDefaultResourceCheckWhitelistActions;
 	private Set<String> _reservedParams;
+	private final AtomicInteger _securePortalPort = new AtomicInteger(-1);
 	private String[] _sortedSystemGroups;
 	private String[] _sortedSystemOrganizationRoles;
 	private String[] _sortedSystemRoles;

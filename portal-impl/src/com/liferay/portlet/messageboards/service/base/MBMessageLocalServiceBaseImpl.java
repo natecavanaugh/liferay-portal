@@ -31,11 +31,13 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.CompanyLocalService;
 import com.liferay.portal.service.CompanyService;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.service.GroupService;
 import com.liferay.portal.service.LockLocalService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.PortletPreferencesLocalService;
 import com.liferay.portal.service.PortletPreferencesService;
 import com.liferay.portal.service.ResourceLocalService;
@@ -107,6 +109,8 @@ import com.liferay.portlet.social.service.SocialEquityLogLocalService;
 import com.liferay.portlet.social.service.persistence.SocialActivityFinder;
 import com.liferay.portlet.social.service.persistence.SocialActivityPersistence;
 import com.liferay.portlet.social.service.persistence.SocialEquityLogPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -298,6 +302,11 @@ public abstract class MBMessageLocalServiceBaseImpl
 		return mbMessagePersistence.findByPrimaryKey(messageId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return mbMessagePersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the message-boards message with the UUID in the group.
 	 *
@@ -340,7 +349,7 @@ public abstract class MBMessageLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the message-boards message in the database. Also notifies the appropriate model listeners.
+	 * Updates the message-boards message in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param mbMessage the message-boards message
 	 * @return the message-boards message that was updated
@@ -352,7 +361,7 @@ public abstract class MBMessageLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the message-boards message in the database. Also notifies the appropriate model listeners.
+	 * Updates the message-boards message in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param mbMessage the message-boards message
 	 * @param merge whether to merge the message-boards message with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -1788,6 +1797,16 @@ public abstract class MBMessageLocalServiceBaseImpl
 		this.socialEquityLogPersistence = socialEquityLogPersistence;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.messageboards.model.MBMessage",
+			mbMessageLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.messageboards.model.MBMessage");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -1985,6 +2004,8 @@ public abstract class MBMessageLocalServiceBaseImpl
 	protected SocialEquityLogLocalService socialEquityLogLocalService;
 	@BeanReference(type = SocialEquityLogPersistence.class)
 	protected SocialEquityLogPersistence socialEquityLogPersistence;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(MBMessageLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

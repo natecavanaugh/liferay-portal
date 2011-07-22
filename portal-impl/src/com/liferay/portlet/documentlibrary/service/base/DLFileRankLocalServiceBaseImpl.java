@@ -29,8 +29,10 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.LayoutLocalService;
 import com.liferay.portal.service.LayoutService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -55,8 +57,12 @@ import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeService;
 import com.liferay.portlet.documentlibrary.service.DLFileRankLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFileShortcutLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFileShortcutService;
+import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalService;
+import com.liferay.portlet.documentlibrary.service.DLFileVersionService;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalService;
 import com.liferay.portlet.documentlibrary.service.DLFolderService;
+import com.liferay.portlet.documentlibrary.service.DLSyncLocalService;
+import com.liferay.portlet.documentlibrary.service.DLSyncService;
 import com.liferay.portlet.documentlibrary.service.persistence.DLContentFinder;
 import com.liferay.portlet.documentlibrary.service.persistence.DLContentPersistence;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryFinder;
@@ -70,6 +76,9 @@ import com.liferay.portlet.documentlibrary.service.persistence.DLFileShortcutPer
 import com.liferay.portlet.documentlibrary.service.persistence.DLFileVersionPersistence;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFolderFinder;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFolderPersistence;
+import com.liferay.portlet.documentlibrary.service.persistence.DLSyncPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -262,6 +271,11 @@ public abstract class DLFileRankLocalServiceBaseImpl
 		return dlFileRankPersistence.findByPrimaryKey(fileRankId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return dlFileRankPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the document library file ranks.
 	 *
@@ -290,7 +304,7 @@ public abstract class DLFileRankLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the document library file rank in the database. Also notifies the appropriate model listeners.
+	 * Updates the document library file rank in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param dlFileRank the document library file rank
 	 * @return the document library file rank that was updated
@@ -302,7 +316,7 @@ public abstract class DLFileRankLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the document library file rank in the database. Also notifies the appropriate model listeners.
+	 * Updates the document library file rank in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param dlFileRank the document library file rank
 	 * @param merge whether to merge the document library file rank with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -744,6 +758,44 @@ public abstract class DLFileRankLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the document library file version local service.
+	 *
+	 * @return the document library file version local service
+	 */
+	public DLFileVersionLocalService getDLFileVersionLocalService() {
+		return dlFileVersionLocalService;
+	}
+
+	/**
+	 * Sets the document library file version local service.
+	 *
+	 * @param dlFileVersionLocalService the document library file version local service
+	 */
+	public void setDLFileVersionLocalService(
+		DLFileVersionLocalService dlFileVersionLocalService) {
+		this.dlFileVersionLocalService = dlFileVersionLocalService;
+	}
+
+	/**
+	 * Returns the document library file version remote service.
+	 *
+	 * @return the document library file version remote service
+	 */
+	public DLFileVersionService getDLFileVersionService() {
+		return dlFileVersionService;
+	}
+
+	/**
+	 * Sets the document library file version remote service.
+	 *
+	 * @param dlFileVersionService the document library file version remote service
+	 */
+	public void setDLFileVersionService(
+		DLFileVersionService dlFileVersionService) {
+		this.dlFileVersionService = dlFileVersionService;
+	}
+
+	/**
 	 * Returns the document library file version persistence.
 	 *
 	 * @return the document library file version persistence
@@ -833,6 +885,60 @@ public abstract class DLFileRankLocalServiceBaseImpl
 	 */
 	public void setDLFolderFinder(DLFolderFinder dlFolderFinder) {
 		this.dlFolderFinder = dlFolderFinder;
+	}
+
+	/**
+	 * Returns the d l sync local service.
+	 *
+	 * @return the d l sync local service
+	 */
+	public DLSyncLocalService getDLSyncLocalService() {
+		return dlSyncLocalService;
+	}
+
+	/**
+	 * Sets the d l sync local service.
+	 *
+	 * @param dlSyncLocalService the d l sync local service
+	 */
+	public void setDLSyncLocalService(DLSyncLocalService dlSyncLocalService) {
+		this.dlSyncLocalService = dlSyncLocalService;
+	}
+
+	/**
+	 * Returns the d l sync remote service.
+	 *
+	 * @return the d l sync remote service
+	 */
+	public DLSyncService getDLSyncService() {
+		return dlSyncService;
+	}
+
+	/**
+	 * Sets the d l sync remote service.
+	 *
+	 * @param dlSyncService the d l sync remote service
+	 */
+	public void setDLSyncService(DLSyncService dlSyncService) {
+		this.dlSyncService = dlSyncService;
+	}
+
+	/**
+	 * Returns the d l sync persistence.
+	 *
+	 * @return the d l sync persistence
+	 */
+	public DLSyncPersistence getDLSyncPersistence() {
+		return dlSyncPersistence;
+	}
+
+	/**
+	 * Sets the d l sync persistence.
+	 *
+	 * @param dlSyncPersistence the d l sync persistence
+	 */
+	public void setDLSyncPersistence(DLSyncPersistence dlSyncPersistence) {
+		this.dlSyncPersistence = dlSyncPersistence;
 	}
 
 	/**
@@ -1070,6 +1176,16 @@ public abstract class DLFileRankLocalServiceBaseImpl
 		this.userFinder = userFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.documentlibrary.model.DLFileRank",
+			dlFileRankLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.documentlibrary.model.DLFileRank");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -1159,6 +1275,10 @@ public abstract class DLFileRankLocalServiceBaseImpl
 	protected DLFileShortcutService dlFileShortcutService;
 	@BeanReference(type = DLFileShortcutPersistence.class)
 	protected DLFileShortcutPersistence dlFileShortcutPersistence;
+	@BeanReference(type = DLFileVersionLocalService.class)
+	protected DLFileVersionLocalService dlFileVersionLocalService;
+	@BeanReference(type = DLFileVersionService.class)
+	protected DLFileVersionService dlFileVersionService;
 	@BeanReference(type = DLFileVersionPersistence.class)
 	protected DLFileVersionPersistence dlFileVersionPersistence;
 	@BeanReference(type = DLFolderLocalService.class)
@@ -1169,6 +1289,12 @@ public abstract class DLFileRankLocalServiceBaseImpl
 	protected DLFolderPersistence dlFolderPersistence;
 	@BeanReference(type = DLFolderFinder.class)
 	protected DLFolderFinder dlFolderFinder;
+	@BeanReference(type = DLSyncLocalService.class)
+	protected DLSyncLocalService dlSyncLocalService;
+	@BeanReference(type = DLSyncService.class)
+	protected DLSyncService dlSyncService;
+	@BeanReference(type = DLSyncPersistence.class)
+	protected DLSyncPersistence dlSyncPersistence;
 	@BeanReference(type = CounterLocalService.class)
 	protected CounterLocalService counterLocalService;
 	@BeanReference(type = LayoutLocalService.class)
@@ -1195,6 +1321,8 @@ public abstract class DLFileRankLocalServiceBaseImpl
 	protected UserPersistence userPersistence;
 	@BeanReference(type = UserFinder.class)
 	protected UserFinder userFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(DLFileRankLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

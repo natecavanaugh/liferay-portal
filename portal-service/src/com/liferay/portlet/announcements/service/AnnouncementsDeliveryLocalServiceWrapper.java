@@ -166,6 +166,13 @@ public class AnnouncementsDeliveryLocalServiceWrapper
 		return _announcementsDeliveryLocalService.getAnnouncementsDelivery(deliveryId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _announcementsDeliveryLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the announcements deliveries.
 	*
@@ -197,7 +204,7 @@ public class AnnouncementsDeliveryLocalServiceWrapper
 	}
 
 	/**
-	* Updates the announcements delivery in the database. Also notifies the appropriate model listeners.
+	* Updates the announcements delivery in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param announcementsDelivery the announcements delivery
 	* @return the announcements delivery that was updated
@@ -210,7 +217,7 @@ public class AnnouncementsDeliveryLocalServiceWrapper
 	}
 
 	/**
-	* Updates the announcements delivery in the database. Also notifies the appropriate model listeners.
+	* Updates the announcements delivery in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param announcementsDelivery the announcements delivery
 	* @param merge whether to merge the announcements delivery with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

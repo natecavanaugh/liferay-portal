@@ -164,6 +164,13 @@ public class DDMContentLocalServiceWrapper implements DDMContentLocalService {
 		return _ddmContentLocalService.getDDMContent(contentId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _ddmContentLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the d d m content with the UUID in the group.
 	*
@@ -211,7 +218,7 @@ public class DDMContentLocalServiceWrapper implements DDMContentLocalService {
 	}
 
 	/**
-	* Updates the d d m content in the database. Also notifies the appropriate model listeners.
+	* Updates the d d m content in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param ddmContent the d d m content
 	* @return the d d m content that was updated
@@ -224,7 +231,7 @@ public class DDMContentLocalServiceWrapper implements DDMContentLocalService {
 	}
 
 	/**
-	* Updates the d d m content in the database. Also notifies the appropriate model listeners.
+	* Updates the d d m content in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param ddmContent the d d m content
 	* @param merge whether to merge the d d m content with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

@@ -26,6 +26,10 @@ update ClassName_ set value = 'com.liferay.portal.model.UserPersonalSite' where 
 drop index IX_975996C0 on Company;
 alter table Company add active_ BOOLEAN;
 
+COMMIT_TRANSACTION;
+
+update Company set active_ = TRUE;
+
 create table DDLRecord (
 	uuid_ VARCHAR(75) null,
 	recordId LONG not null primary key,
@@ -156,10 +160,16 @@ create table DLFileEntryType (
 	description STRING null
 );
 
-create table DLFileEntryType_DDMStructure (
+create table DLFileEntryTypes_DDMStructures (
 	fileEntryTypeId LONG not null,
 	structureId LONG not null,
 	primary key (fileEntryTypeId, structureId)
+);
+
+create table DLFileEntryTypes_DLFolders (
+	fileEntryTypeId LONG not null,
+	folderId LONG not null,
+	primary key (fileEntryTypeId, folderId)
 );
 
 alter table DLFileEntry add repositoryId LONG;
@@ -197,10 +207,24 @@ update DLFileVersion set repositoryId = groupId;
 
 alter table DLFolder add repositoryId LONG;
 alter table DLFolder add mountPoint BOOLEAN;
+alter table DLFolder add defaultFileEntryTypeId LONG;
+alter table DLFolder add overrideFileEntryTypes BOOLEAN;
 
 COMMIT_TRANSACTION;
 
 update DLFolder set repositoryId = groupId;
+update DLFolder set mountPoint = FALSE;
+
+create table DLSync (
+	syncId LONG not null primary key,
+	companyId LONG,
+	createDate DATE null,
+	modifiedDate DATE null,
+	fileId VARCHAR(75) null,
+	repositoryId LONG,
+	event VARCHAR(75) null,
+	type_ VARCHAR(75) null
+);
 
 alter table Group_ add site BOOLEAN;
 
@@ -233,6 +257,19 @@ update Layout set modifiedDate = CURRENT_TIMESTAMP;
 
 COMMIT_TRANSACTION;
 
+create table LayoutBranch (
+	LayoutBranchId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	layoutSetBranchId LONG,
+	plid LONG,
+	name VARCHAR(75) null,
+	description VARCHAR(75) null,
+	master BOOLEAN
+);
+
 create table LayoutRevision (
 	layoutRevisionId LONG not null primary key,
 	groupId LONG,
@@ -242,10 +279,10 @@ create table LayoutRevision (
 	createDate DATE null,
 	modifiedDate DATE null,
 	layoutSetBranchId LONG,
+	layoutBranchId LONG,
 	parentLayoutRevisionId LONG,
 	head BOOLEAN,
 	major BOOLEAN,
-	variationName VARCHAR(75) null,
 	plid LONG,
 	privateLayout BOOLEAN,
 	name STRING null,
@@ -279,7 +316,8 @@ create table LayoutSetBranch (
 	modifiedDate DATE null,
 	privateLayout BOOLEAN,
 	name VARCHAR(75) null,
-	description STRING null
+	description STRING null,
+	master BOOLEAN
 );
 
 alter table LayoutSetPrototype add uuid_ VARCHAR(75) null;
@@ -353,6 +391,10 @@ update User_ set status = 5 where active_ = FALSE;
 
 alter table User_ drop column active_;
 
+alter table UserGroup add publicLayoutSetPrototypeId LONG;
+alter table UserGroup add privateLayoutSetPrototypeId LONG;
+alter table UserGroup add addedByLDAPImport BOOLEAN;
+
 create table UserGroups_Teams (
 	userGroupId LONG not null,
 	teamId LONG not null,
@@ -378,3 +420,4 @@ create table VirtualHost (
 );
 
 alter table WorkflowDefinitionLink add classPK LONG;
+alter table WorkflowDefinitionLink add typePK LONG;

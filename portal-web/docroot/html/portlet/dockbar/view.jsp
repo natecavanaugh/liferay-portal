@@ -28,7 +28,7 @@ List<Portlet> portlets = new ArrayList<Portlet>();
 for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 	Portlet portlet = PortletLocalServiceUtil.getPortletById(portletId);
 
-	if ((portlet != null) && portlet.isInclude() && portlet.isActive() && portlet.hasAddPortletPermission(user.getUserId())) {
+	if ((portlet != null) && portlet.isInclude() && portlet.isActive() && PortletPermissionUtil.contains(permissionChecker, layout, portlet, ActionKeys.ADD_TO_PAGE)) {
 		portlets.add(portlet);
 	}
 }
@@ -77,7 +77,7 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 													boolean portletUsed = layoutTypePortlet.hasPortletId(portlet.getPortletId());
 													boolean portletLocked = (!portletInstanceable && portletUsed);
 
-													if (!PortletPermissionUtil.contains(permissionChecker, plid, portlet.getPortletId(), ActionKeys.ADD_TO_PAGE)) {
+													if (!PortletPermissionUtil.contains(permissionChecker, layout, portlet.getPortletId(), ActionKeys.ADD_TO_PAGE)) {
 														continue;
 													}
 												%>
@@ -140,27 +140,27 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 								</li>
 							</c:if>
 
+							<c:if test="<%= themeDisplay.isShowSiteSettingsIcon() && !group.isLayoutPrototype() %>">
+								<li class="settings use-dialog">
+									<aui:a href="<%= themeDisplay.getURLSiteSettings().toString() %>" label="site-settings" title="edit-site-settings" />
+								</li>
+							</c:if>
+
 							<c:if test="<%= themeDisplay.isShowSiteMapSettingsIcon() %>">
 								<li class="sitemap use-dialog">
 									<aui:a href="<%= themeDisplay.getURLSiteMapSettings().toString() %>" label="site-pages" title="manage-site-pages" />
 								</li>
 							</c:if>
 
-							<c:if test="<%= themeDisplay.isShowSiteContentIcon() %>">
-								<li class="manage-site-content use-dialog">
-									<aui:a href="<%= themeDisplay.getURLSiteContent() %>" label="site-content" title="manage-site-content" />
-								</li>
-							</c:if>
-
-							<c:if test="<%= themeDisplay.isShowSiteSettingsIcon() && !group.isLayoutPrototype() %>">
-								<li class="settings use-dialog">
-									<aui:a href="<%= themeDisplay.getURLSiteSettings().toString() %>" label="site-settings" title="manage-site-settings" />
-								</li>
-							</c:if>
-
 							<c:if test="<%= themeDisplay.isShowManageSiteMembershipsIcon() && !group.isLayoutPrototype() %>">
 								<li class="manage-site-memberships use-dialog">
 									<aui:a href="<%= themeDisplay.getURLManageSiteMemberships().toString() %>" label="site-memberships" title="manage-site-memberships" />
+								</li>
+							</c:if>
+
+							<c:if test="<%= themeDisplay.isShowSiteContentIcon() %>">
+								<li class="manage-site-content use-dialog">
+									<aui:a href="<%= themeDisplay.getURLSiteContent() %>" label="site-content" title="manage-site-content" />
 								</li>
 							</c:if>
 						</ul>
@@ -425,7 +425,7 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 							},
 							on: {
 								success: function(event, id, obj) {
-									window.location.reload();
+									window.location.href = themeDisplay.getLayoutURL();
 								}
 							}
 						}

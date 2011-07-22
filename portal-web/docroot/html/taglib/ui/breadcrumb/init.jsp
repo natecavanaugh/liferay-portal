@@ -16,6 +16,8 @@
 
 <%@ include file="/html/taglib/init.jsp" %>
 
+<%@ page import="com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry" %>
+
 <%
 Layout selLayout = (Layout)request.getAttribute("liferay-ui:breadcrumb:selLayout");
 
@@ -38,6 +40,10 @@ boolean showGuestGroup = GetterUtil.getBoolean((String)request.getAttribute("lif
 boolean showParentGroups = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:breadcrumb:showParentGroups"));
 boolean showLayout = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:breadcrumb:showLayout"));
 boolean showPortletBreadcrumb = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:breadcrumb:showPortletBreadcrumb"));
+
+Group group = selLayout.getGroup();
+
+showLayout = showLayout && !group.isLayoutPrototype();
 %>
 
 <%!
@@ -167,22 +173,22 @@ private void _buildParentGroupsBreadcrumb(LayoutSet layoutSet, PortletURL portle
 }
 
 private void _buildPortletBreadcrumb(HttpServletRequest request, boolean showCurrentGroup, boolean showCurrentPortlet, ThemeDisplay themeDisplay, StringBundler sb) throws Exception {
-	List<BreadcrumbEntry> portletBreadcrumbs = PortalUtil.getPortletBreadcrumbs(request);
+	List<BreadcrumbEntry> breadcrumbEntries = PortalUtil.getPortletBreadcrumbs(request);
 
-	if (portletBreadcrumbs == null) {
+	if (breadcrumbEntries == null) {
 		return;
 	}
 
-	for (BreadcrumbEntry portletBreadcrumb : portletBreadcrumbs) {
-		Map<String, Object> breadcrumbData = portletBreadcrumb.getData();
+	for (BreadcrumbEntry breadcrumbEntry : breadcrumbEntries) {
+		Map<String, Object> data = breadcrumbEntry.getData();
 
-		String breadcrumbText = portletBreadcrumb.getTitle();
-		String breadcrumbURL = portletBreadcrumb.getUrl();
+		String breadcrumbTitle = breadcrumbEntry.getTitle();
+		String breadcrumbURL = breadcrumbEntry.getURL();
 
 		if (!showCurrentGroup) {
 			String parentGroupName = themeDisplay.getParentGroupName();
 
-			if (parentGroupName.equals(breadcrumbText)) {
+			if (parentGroupName.equals(breadcrumbTitle)) {
 				continue;
 			}
 		}
@@ -192,7 +198,7 @@ private void _buildPortletBreadcrumb(HttpServletRequest request, boolean showCur
 
 			String portletTitle = PortalUtil.getPortletTitle(portletDisplay.getId(), themeDisplay.getUser());
 
-			if (portletTitle.equals(breadcrumbText)) {
+			if (portletTitle.equals(breadcrumbTitle)) {
 				continue;
 			}
 		}
@@ -209,11 +215,11 @@ private void _buildPortletBreadcrumb(HttpServletRequest request, boolean showCur
 			sb.append("<a href=\"");
 			sb.append(HtmlUtil.escape(breadcrumbURL));
 			sb.append("\"");
-			sb.append(AUIUtil.buildData(breadcrumbData));
+			sb.append(AUIUtil.buildData(data));
 			sb.append(">");
 		}
 
-		sb.append(HtmlUtil.escape(breadcrumbText));
+		sb.append(HtmlUtil.escape(breadcrumbTitle));
 
 		if (Validator.isNotNull(breadcrumbURL)) {
 			sb.append("</a>");

@@ -16,6 +16,7 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
+<%@ page import="com.liferay.portal.kernel.editor.EditorUtil" %>
 <%@ page import="com.liferay.portal.kernel.xml.Document" %>
 <%@ page import="com.liferay.portal.kernel.xml.Element" %>
 <%@ page import="com.liferay.portal.kernel.xml.Node" %>
@@ -90,6 +91,7 @@
 <%@ page import="com.liferay.portlet.journal.service.JournalArticleServiceUtil" %>
 <%@ page import="com.liferay.portlet.journal.service.JournalFeedLocalServiceUtil" %>
 <%@ page import="com.liferay.portlet.journal.service.JournalStructureLocalServiceUtil" %>
+<%@ page import="com.liferay.portlet.journal.service.JournalStructureServiceUtil" %>
 <%@ page import="com.liferay.portlet.journal.service.JournalTemplateLocalServiceUtil" %>
 <%@ page import="com.liferay.portlet.journal.service.permission.JournalArticlePermission" %>
 <%@ page import="com.liferay.portlet.journal.service.permission.JournalFeedPermission" %>

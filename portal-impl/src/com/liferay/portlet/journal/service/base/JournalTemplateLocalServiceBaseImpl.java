@@ -29,8 +29,10 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.ImageLocalService;
 import com.liferay.portal.service.ImageService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -69,6 +71,8 @@ import com.liferay.portlet.journal.service.persistence.JournalStructureFinder;
 import com.liferay.portlet.journal.service.persistence.JournalStructurePersistence;
 import com.liferay.portlet.journal.service.persistence.JournalTemplateFinder;
 import com.liferay.portlet.journal.service.persistence.JournalTemplatePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -262,6 +266,11 @@ public abstract class JournalTemplateLocalServiceBaseImpl
 		return journalTemplatePersistence.findByPrimaryKey(id);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return journalTemplatePersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the journal template with the UUID in the group.
 	 *
@@ -304,7 +313,7 @@ public abstract class JournalTemplateLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the journal template in the database. Also notifies the appropriate model listeners.
+	 * Updates the journal template in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param journalTemplate the journal template
 	 * @return the journal template that was updated
@@ -316,7 +325,7 @@ public abstract class JournalTemplateLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the journal template in the database. Also notifies the appropriate model listeners.
+	 * Updates the journal template in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param journalTemplate the journal template
 	 * @param merge whether to merge the journal template with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -1074,6 +1083,16 @@ public abstract class JournalTemplateLocalServiceBaseImpl
 		this.expandoValuePersistence = expandoValuePersistence;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.journal.model.JournalTemplate",
+			journalTemplateLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.journal.model.JournalTemplate");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -1197,6 +1216,8 @@ public abstract class JournalTemplateLocalServiceBaseImpl
 	protected ExpandoValueService expandoValueService;
 	@BeanReference(type = ExpandoValuePersistence.class)
 	protected ExpandoValuePersistence expandoValuePersistence;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(JournalTemplateLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

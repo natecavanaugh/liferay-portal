@@ -173,6 +173,13 @@ public class AssetVocabularyLocalServiceUtil {
 		return getService().getAssetVocabulary(vocabularyId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the asset vocabulary with the UUID in the group.
 	*
@@ -219,7 +226,7 @@ public class AssetVocabularyLocalServiceUtil {
 	}
 
 	/**
-	* Updates the asset vocabulary in the database. Also notifies the appropriate model listeners.
+	* Updates the asset vocabulary in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param assetVocabulary the asset vocabulary
 	* @return the asset vocabulary that was updated
@@ -232,7 +239,7 @@ public class AssetVocabularyLocalServiceUtil {
 	}
 
 	/**
-	* Updates the asset vocabulary in the database. Also notifies the appropriate model listeners.
+	* Updates the asset vocabulary in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param assetVocabulary the asset vocabulary
 	* @param merge whether to merge the asset vocabulary with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

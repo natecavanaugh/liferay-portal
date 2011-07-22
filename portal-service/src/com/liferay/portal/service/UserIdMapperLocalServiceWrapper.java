@@ -164,6 +164,13 @@ public class UserIdMapperLocalServiceWrapper implements UserIdMapperLocalService
 		return _userIdMapperLocalService.getUserIdMapper(userIdMapperId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _userIdMapperLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the user ID mappers.
 	*
@@ -194,7 +201,7 @@ public class UserIdMapperLocalServiceWrapper implements UserIdMapperLocalService
 	}
 
 	/**
-	* Updates the user ID mapper in the database. Also notifies the appropriate model listeners.
+	* Updates the user ID mapper in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param userIdMapper the user ID mapper
 	* @return the user ID mapper that was updated
@@ -207,7 +214,7 @@ public class UserIdMapperLocalServiceWrapper implements UserIdMapperLocalService
 	}
 
 	/**
-	* Updates the user ID mapper in the database. Also notifies the appropriate model listeners.
+	* Updates the user ID mapper in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param userIdMapper the user ID mapper
 	* @param merge whether to merge the user ID mapper with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

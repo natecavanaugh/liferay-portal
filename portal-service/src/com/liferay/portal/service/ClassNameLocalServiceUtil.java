@@ -173,6 +173,13 @@ public class ClassNameLocalServiceUtil {
 		return getService().getClassName(classNameId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the class names.
 	*
@@ -203,7 +210,7 @@ public class ClassNameLocalServiceUtil {
 	}
 
 	/**
-	* Updates the class name in the database. Also notifies the appropriate model listeners.
+	* Updates the class name in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param className the class name
 	* @return the class name that was updated
@@ -216,7 +223,7 @@ public class ClassNameLocalServiceUtil {
 	}
 
 	/**
-	* Updates the class name in the database. Also notifies the appropriate model listeners.
+	* Updates the class name in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param className the class name
 	* @param merge whether to merge the class name with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

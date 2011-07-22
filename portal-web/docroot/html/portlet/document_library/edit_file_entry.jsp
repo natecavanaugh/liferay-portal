@@ -70,10 +70,10 @@ if (fileEntry != null) {
 	}
 }
 
-DLFileEntryType fileEntryType = null;
+DLFileEntryType dlFileEntryType = null;
 
 if (fileEntryTypeId > 0) {
-	fileEntryType = DLFileEntryTypeLocalServiceUtil.getFileEntryType(fileEntryTypeId);
+	dlFileEntryType = DLFileEntryTypeLocalServiceUtil.getFileEntryType(fileEntryTypeId);
 }
 
 long assetClassPK = 0;
@@ -85,12 +85,12 @@ else if (fileEntry != null) {
 	assetClassPK = fileEntry.getFileEntryId();
 }
 
-Boolean isCheckedOut = Boolean.FALSE;
-Boolean hasLock = Boolean.FALSE;
+boolean checkedOut = false;
+boolean hasLock = false;
 Lock lock = null;
 
 if (fileEntry != null) {
-	isCheckedOut = fileEntry.isCheckedOut();
+	checkedOut = fileEntry.isCheckedOut();
 	hasLock = fileEntry.hasLock();
 	lock = fileEntry.getLock();
 }
@@ -109,7 +109,7 @@ portletURL.setParameter("fileEntryId", String.valueOf(fileEntryId));
 	<liferay-util:include page="/html/portlet/document_library/top_links.jsp" />
 </c:if>
 
-<c:if test="<%= isCheckedOut %>">
+<c:if test="<%= checkedOut %>">
 	<c:choose>
 		<c:when test="<%= hasLock %>">
 			<div class="portlet-msg-success">
@@ -142,8 +142,8 @@ String header = LanguageUtil.get(pageContext, "new-document");
 if (fileVersion != null) {
 	header = fileVersion.getTitle();
 }
-else if (fileEntryType != null) {
-	header = LanguageUtil.format(pageContext, "new-x", new Object[] {fileEntryType.getName()});
+else if (dlFileEntryType != null) {
+	header = LanguageUtil.format(pageContext, "new-x", new Object[] {dlFileEntryType.getName()});
 }
 %>
 
@@ -265,19 +265,18 @@ else if (fileEntryType != null) {
 			<aui:input name="description" />
 
 			<%
-			List<DLFileEntryType> fileEntryTypes = DLFileEntryTypeServiceUtil.getFileEntryTypes(scopeGroupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			List<DLFileEntryType> dlFileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(scopeGroupId, folderId, true);
 			%>
 
 			<c:choose>
 				<c:when test="<%= !cmd.equals(Constants.ADD) %>">
 					<aui:select changesContext="<%= true %>" label="document-type" name="fileEntryTypeId" onChange='<%= renderResponse.getNamespace() + "changeFileEntryType();" %>'>
-						<aui:option label="none" value="0" />
 
 						<%
-						for (DLFileEntryType curFileEntryType : fileEntryTypes) {
+						for (DLFileEntryType curDLFileEntryType : dlFileEntryTypes) {
 						%>
 
-							<aui:option label="<%= curFileEntryType.getName() %>" selected="<%= (fileEntryTypeId == curFileEntryType.getPrimaryKey()) %>" value="<%= curFileEntryType.getPrimaryKey() %>" />
+							<aui:option label="<%= curDLFileEntryType.getName() %>" selected="<%= (fileEntryTypeId == curDLFileEntryType.getPrimaryKey()) %>" value="<%= curDLFileEntryType.getPrimaryKey() %>" />
 
 						<%
 						}
@@ -293,7 +292,7 @@ else if (fileEntryType != null) {
 			<%
 			if (fileEntryTypeId > 0) {
 				try {
-					List<DDMStructure> ddmStructures = fileEntryType.getDDMStructures();
+					List<DDMStructure> ddmStructures = dlFileEntryType.getDDMStructures();
 
 					for (DDMStructure ddmStructure : ddmStructures) {
 						Fields fields = null;
@@ -307,7 +306,7 @@ else if (fileEntryType != null) {
 						}
 			%>
 
-						<%= DDMXSDUtil.getHTML(pageContext, ddmStructure.getXsd(), fields, String.valueOf(ddmStructure.getPrimaryKey())) %>
+						<%= DDMXSDUtil.getHTML(pageContext, ddmStructure.getXsd(), fields, String.valueOf(ddmStructure.getPrimaryKey()), locale) %>
 
 			<%
 					}
@@ -393,18 +392,18 @@ else if (fileEntryType != null) {
 				publishButtonLabel = "submit-for-publication";
 			}
 
-			if ((isCheckedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
+			if ((checkedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
 				publishButtonLabel = "save";
 			}
 			%>
 
 			<c:if test="<%= PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED %>">
-				<aui:button disabled="<%= isCheckedOut && !hasLock %>" onClick='<%= renderResponse.getNamespace() + "saveFileEntry(true);" %>' name="saveButton" value="<%= saveButtonLabel %>" />
+				<aui:button disabled="<%= checkedOut && !hasLock %>" onClick='<%= renderResponse.getNamespace() + "saveFileEntry(true);" %>' name="saveButton" value="<%= saveButtonLabel %>" />
 			</c:if>
 
-			<aui:button disabled="<%= isCheckedOut && !hasLock || (pending && PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) %>" name="publishButton" type="submit" value="<%= publishButtonLabel %>" />
+			<aui:button disabled="<%= checkedOut && !hasLock || (pending && PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) %>" name="publishButton" type="submit" value="<%= publishButtonLabel %>" />
 
-			<c:if test="<%= (fileEntry != null) && ((isCheckedOut && hasLock) || !isCheckedOut) %>">
+			<c:if test="<%= (fileEntry != null) && ((checkedOut && hasLock) || !checkedOut) %>">
 				<c:choose>
 					<c:when test="<%= !hasLock %>">
 						<aui:button onClick='<%= renderResponse.getNamespace() + "checkOut();" %>' value="checkout" />

@@ -55,6 +55,7 @@ import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.util.AudioProcessor;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.documentlibrary.util.DocumentConversionUtil;
 import com.liferay.portlet.documentlibrary.util.PDFProcessor;
@@ -346,6 +347,7 @@ public class WebServerServlet extends HttpServlet {
 			fileEntry.getFileEntryId(), version);
 
 		InputStream inputStream = fileEntry.getContentStream(version);
+		long contentLength = 0;
 
 		FileVersion fileVersion = fileEntry.getFileVersion(version);
 
@@ -368,6 +370,7 @@ public class WebServerServlet extends HttpServlet {
 			request, "documentThumbnail");
 		int previewFileIndex = ParamUtil.getInteger(
 			request, "previewFileIndex");
+		boolean audioPreview = ParamUtil.getBoolean(request, "audioPreview");
 		boolean videoPreview = ParamUtil.getBoolean(request, "videoPreview");
 		boolean videoThumbnail = ParamUtil.getBoolean(
 			request, "videoThumbnail");
@@ -379,57 +382,71 @@ public class WebServerServlet extends HttpServlet {
 			if (convertedFile != null) {
 				fileName = FileUtil.stripExtension(fileName).concat(
 					StringPool.PERIOD).concat(targetExtension);
-
 				inputStream = new FileInputStream(convertedFile);
+				contentLength = convertedFile.length();
 
 				converted = true;
 			}
 		}
 		else if (documentThumbnail) {
+			fileName = FileUtil.stripExtension(fileName).concat(
+				StringPool.PERIOD).concat(PDFProcessor.THUMBNAIL_TYPE);
+
 			File thumbnailFile = PDFProcessor.getThumbnailFile(tempFileId);
 
 			inputStream = new FileInputStream(thumbnailFile);
-
-			fileName = FileUtil.stripExtension(fileName).concat(
-				StringPool.PERIOD).concat(PDFProcessor.THUMBNAIL_TYPE);
+			contentLength = thumbnailFile.length();
 
 			converted = true;
 		}
 		else if (previewFileIndex > 0) {
+			fileName = FileUtil.stripExtension(fileName).concat(
+				StringPool.PERIOD).concat(PDFProcessor.PREVIEW_TYPE);
+
 			File previewFile = PDFProcessor.getPreviewFile(
 				tempFileId, previewFileIndex);
 
 			inputStream = new FileInputStream(previewFile);
+			contentLength = previewFile.length();
 
+			converted = true;
+		}
+		else if (audioPreview) {
 			fileName = FileUtil.stripExtension(fileName).concat(
-				StringPool.PERIOD).concat(PDFProcessor.PREVIEW_TYPE);
+				StringPool.PERIOD).concat(AudioProcessor.PREVIEW_TYPE);
+
+			File previewFile = AudioProcessor.getPreviewFile(tempFileId);
+
+			inputStream = new FileInputStream(previewFile);
+			contentLength = previewFile.length();
 
 			converted = true;
 		}
 		else if (videoPreview) {
+			fileName = FileUtil.stripExtension(fileName).concat(
+				StringPool.PERIOD).concat(VideoProcessor.PREVIEW_TYPE);
+
 			File previewFile = VideoProcessor.getPreviewFile(tempFileId);
 
 			inputStream = new FileInputStream(previewFile);
-
-			fileName = FileUtil.stripExtension(fileName).concat(
-				StringPool.PERIOD).concat(VideoProcessor.PREVIEW_TYPE);
+			contentLength = previewFile.length();
 
 			converted = true;
 		}
 		else if (videoThumbnail) {
+			fileName = FileUtil.stripExtension(fileName).concat(
+				StringPool.PERIOD).concat(VideoProcessor.THUMBNAIL_TYPE);
+
 			File thumbnailFile = VideoProcessor.getThumbnailFile(
 				tempFileId);
 
 			inputStream = new FileInputStream(thumbnailFile);
-
-			fileName = FileUtil.stripExtension(fileName).concat(
-				StringPool.PERIOD).concat(VideoProcessor.THUMBNAIL_TYPE);
+			contentLength = thumbnailFile.length();
 
 			converted = true;
 		}
 
 		String contentType = fileEntry.getMimeType(version);
-		long contentLength = 0;
 
 		if (!converted) {
 			if (DLUtil.compareVersions(version, fileEntry.getVersion()) >= 0) {

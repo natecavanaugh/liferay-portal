@@ -27,6 +27,7 @@ import com.liferay.portal.upgrade.v6_1_0.UpgradeLayout;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeLock;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeMessageBoards;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeNavigation;
+import com.liferay.portal.upgrade.v6_1_0.UpgradePermission;
 import com.liferay.portal.upgrade.v6_1_0.UpgradePortletPreferences;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeResourcePermission;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeScheduler;
@@ -35,6 +36,7 @@ import com.liferay.portal.upgrade.v6_1_0.UpgradeScopes;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeSubscription;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeUserName;
 import com.liferay.portal.upgrade.v6_1_0.UpgradeVirtualHost;
+import com.liferay.portal.upgrade.v6_1_0.UpgradeWorkflow;
 
 /**
  * @author Jorge Ferrer
@@ -61,6 +63,7 @@ public class UpgradeProcess_6_1_0 extends UpgradeProcess {
 		upgrade(UpgradeLock.class);
 		upgrade(UpgradeMessageBoards.class);
 		upgrade(UpgradeNavigation.class);
+		upgrade(UpgradePermission.class);
 		upgrade(UpgradePortletPreferences.class);
 		upgrade(UpgradeResourcePermission.class);
 		upgrade(UpgradeScheduler.class);
@@ -68,6 +71,7 @@ public class UpgradeProcess_6_1_0 extends UpgradeProcess {
 		upgrade(UpgradeSubscription.class);
 		upgrade(UpgradeUserName.class);
 		upgrade(UpgradeVirtualHost.class);
+		upgrade(UpgradeWorkflow.class);
 	}
 
 }

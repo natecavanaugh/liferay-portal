@@ -518,6 +518,15 @@
 		color: orange;
 	}
 
+	.document-library-breadcrumb {
+		background-color: #EBEBEB;
+		background-image: url(<%= themeImagesPath %>/application/button_bg_selected.png);
+
+		ul {
+			margin-bottom: 0;
+		}
+	}
+
 	.aui-liferaylistview-content {
 		ul .expand-folder {
 			height: 10px;

@@ -61,7 +61,6 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.Theme;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.impl.ColorSchemeImpl;
-import com.liferay.portal.model.impl.ThemeImpl;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
@@ -103,6 +102,8 @@ import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.PortalPreferences;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.PortletURLImpl;
+import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.journal.NoSuchArticleException;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleServiceUtil;
@@ -706,7 +707,7 @@ public class ServicePreAction extends Action {
 				return true;
 			}
 			else {
-				if (controlPanelCategory != null) {
+				if (Validator.isNotNull(controlPanelCategory)) {
 					return true;
 				}
 				else {
@@ -1433,9 +1434,7 @@ public class ServicePreAction extends Action {
 
 		boolean wapTheme = BrowserSnifferUtil.isWap(request);
 
-		if ((layout != null) &&
-			group.isControlPanel()) {
-
+		if ((layout != null) && group.isControlPanel()) {
 			String themeId = PrefsPropsUtil.getString(
 				companyId, PropsKeys.CONTROL_PANEL_LAYOUT_REGULAR_THEME_ID);
 			String colorSchemeId =
@@ -1453,39 +1452,10 @@ public class ServicePreAction extends Action {
 				colorScheme = ThemeLocalServiceUtil.getColorScheme(
 					companyId, theme.getThemeId(), colorSchemeId, false);
 			}
-		}
-		else if (layout != null) {
-			if (wapTheme) {
-				theme = layout.getWapTheme();
-				colorScheme = layout.getWapColorScheme();
-			}
-			else {
-				theme = layout.getTheme();
-				colorScheme = layout.getColorScheme();
-			}
-		}
-		else {
-			String themeId = null;
-			String colorSchemeId = null;
 
-			if (wapTheme) {
-				themeId = ThemeImpl.getDefaultWapThemeId(companyId);
-				colorSchemeId = ColorSchemeImpl.getDefaultWapColorSchemeId();
-			}
-			else {
-				themeId = ThemeImpl.getDefaultRegularThemeId(companyId);
-				colorSchemeId =
-					ColorSchemeImpl.getDefaultRegularColorSchemeId();
-			}
-
-			theme = ThemeLocalServiceUtil.getTheme(
-				companyId, themeId, wapTheme);
-			colorScheme = ThemeLocalServiceUtil.getColorScheme(
-				companyId, theme.getThemeId(), colorSchemeId, wapTheme);
+			request.setAttribute(WebKeys.THEME, theme);
+			request.setAttribute(WebKeys.COLOR_SCHEME, colorScheme);
 		}
-
-		request.setAttribute(WebKeys.THEME, theme);
-		request.setAttribute(WebKeys.COLOR_SCHEME, colorScheme);
 
 		boolean themeCssFastLoad = SessionParamUtil.getBoolean(
 			request, "css_fast_load", PropsValues.THEME_CSS_FAST_LOAD);
@@ -1639,7 +1609,9 @@ public class ServicePreAction extends Action {
 
 		// Session
 
-		if (!CookieKeys.hasSessionId(request)) {
+		if (PropsValues.SESSION_ENABLE_URL_WITH_SESSION_ID &&
+			!CookieKeys.hasSessionId(request)) {
+
 			themeDisplay.setAddSessionIdToURL(true);
 			themeDisplay.setSessionId(session.getId());
 		}
@@ -1839,7 +1811,7 @@ public class ServicePreAction extends Action {
 				siteSettingsURL.setPortletMode(PortletMode.VIEW);
 
 				siteSettingsURL.setParameter(
-					"struts_action", "/site_settings/edit_settings");
+					"struts_action", "/sites_admin/edit_site");
 
 				siteSettingsURL.setParameter(
 					"groupId", String.valueOf(scopeGroupId));
@@ -2041,7 +2013,13 @@ public class ServicePreAction extends Action {
 				JournalArticle mainJournalArticle =
 					JournalArticleServiceUtil.getArticle(mainJournalArticleId);
 
-				themeDisplay.setMainJournalArticle(mainJournalArticle);
+				AssetEntry layoutAssetEntry =
+					AssetEntryLocalServiceUtil.getEntry(
+						JournalArticle.class.getName(),
+						mainJournalArticle.getResourcePrimKey());
+
+				request.setAttribute(
+					WebKeys.LAYOUT_ASSET_ENTRY, layoutAssetEntry);
 			}
 			catch (NoSuchArticleException nsae) {
 				if (_log.isWarnEnabled()) {

@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Team;
 import com.liferay.portal.model.User;
@@ -48,6 +49,7 @@ import java.util.Map;
 
 /**
  * @author Charles May
+ * @author Miguel Pastor
  */
 public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 
@@ -68,7 +70,8 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	}
 
 	public UserGroup addUserGroup(
-			long userId, long companyId, String name, String description)
+			long userId, long companyId, String name, String description,
+			long publicLayoutSetPrototypeId, long privateLayoutSetPrototypeId)
 		throws PortalException, SystemException {
 
 		// User Group
@@ -84,6 +87,8 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 			UserGroupConstants.DEFAULT_PARENT_USER_GROUP_ID);
 		userGroup.setName(name);
 		userGroup.setDescription(description);
+		userGroup.setPublicLayoutSetPrototypeId(publicLayoutSetPrototypeId);
+		userGroup.setPrivateLayoutSetPrototypeId(privateLayoutSetPrototypeId);
 		userGroup.setAddedByLDAPImport(
 			LDAPUserGroupTransactionThreadLocal.isOriginatesFromLDAP());
 
@@ -102,6 +107,20 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 			userGroup.getUserGroupId(), false, false, false);
 
 		return userGroup;
+	}
+
+	public void addUserUserGroups(long userId, long[] userGroupIds)
+		throws PortalException, SystemException {
+
+		copyUserGroupLayouts(userGroupIds, userId);
+
+		userPersistence.addUserGroups(userId, userGroupIds);
+
+		Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+
+		indexer.reindex(userId);
+
+		PermissionCacheUtil.clearCache();
 	}
 
 	public void clearUserUserGroups(long userId) throws SystemException {
@@ -328,7 +347,8 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	}
 
 	public UserGroup updateUserGroup(
-			long companyId, long userGroupId, String name, String description)
+			long companyId, long userGroupId, String name, String description,
+			long publicLayoutSetPrototypeId, long privateLayoutSetPrototypeId)
 		throws PortalException, SystemException {
 
 		validate(userGroupId, companyId, name);
@@ -338,6 +358,8 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 
 		userGroup.setName(name);
 		userGroup.setDescription(description);
+		userGroup.setPublicLayoutSetPrototypeId(publicLayoutSetPrototypeId);
+		userGroup.setPrivateLayoutSetPrototypeId(privateLayoutSetPrototypeId);
 
 		userGroupPersistence.update(userGroup, false);
 
@@ -352,16 +374,26 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 
 		UserGroup userGroup = userGroupLocalService.getUserGroup(userGroupId);
 
-		long groupId = userGroup.getGroup().getGroupId();
+		if (userGroup.getPrivateLayoutSetPrototypeId() > 0) {
+			LayoutSetPrototype layoutSetPrototype =
+				layoutSetPrototypeLocalService.getLayoutSetPrototype(
+					userGroup.getPrivateLayoutSetPrototypeId());
 
-		if (userGroup.hasPrivateLayouts()) {
+			Group group = layoutSetPrototype.getGroup();
+
 			files[0] = layoutLocalService.exportLayoutsAsFile(
-				groupId, true, null, parameterMap, null, null);
+				group.getGroupId(), true, null, parameterMap, null, null);
 		}
 
-		if (userGroup.hasPublicLayouts()) {
+		if (userGroup.getPublicLayoutSetPrototypeId() > 0) {
+			LayoutSetPrototype layoutSetPrototype =
+				layoutSetPrototypeLocalService.getLayoutSetPrototype(
+					userGroup.getPublicLayoutSetPrototypeId());
+
+			Group group = layoutSetPrototype.getGroup();
+
 			files[1] = layoutLocalService.exportLayoutsAsFile(
-				groupId, false, null, parameterMap, null, null);
+				group.getGroupId(), true, null, parameterMap, null, null);
 		}
 
 		return files;

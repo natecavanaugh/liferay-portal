@@ -29,10 +29,12 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.CompanyLocalService;
 import com.liferay.portal.service.CompanyService;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.service.GroupService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -110,6 +112,8 @@ import com.liferay.portlet.wiki.service.WikiPageService;
 import com.liferay.portlet.wiki.service.persistence.WikiPageFinder;
 import com.liferay.portlet.wiki.service.persistence.WikiPagePersistence;
 import com.liferay.portlet.wiki.service.persistence.WikiPageResourcePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -302,6 +306,11 @@ public abstract class AssetEntryLocalServiceBaseImpl
 		return assetEntryPersistence.findByPrimaryKey(entryId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return assetEntryPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the asset entries.
 	 *
@@ -330,7 +339,7 @@ public abstract class AssetEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the asset entry in the database. Also notifies the appropriate model listeners.
+	 * Updates the asset entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param assetEntry the asset entry
 	 * @return the asset entry that was updated
@@ -342,7 +351,7 @@ public abstract class AssetEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the asset entry in the database. Also notifies the appropriate model listeners.
+	 * Updates the asset entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param assetEntry the asset entry
 	 * @param merge whether to merge the asset entry with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -1856,6 +1865,16 @@ public abstract class AssetEntryLocalServiceBaseImpl
 		this.wikiPageResourcePersistence = wikiPageResourcePersistence;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.asset.model.AssetEntry",
+			assetEntryLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.asset.model.AssetEntry");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -2061,6 +2080,8 @@ public abstract class AssetEntryLocalServiceBaseImpl
 	protected WikiPageResourceLocalService wikiPageResourceLocalService;
 	@BeanReference(type = WikiPageResourcePersistence.class)
 	protected WikiPageResourcePersistence wikiPageResourcePersistence;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(AssetEntryLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

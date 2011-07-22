@@ -164,6 +164,13 @@ public class PortletItemLocalServiceWrapper implements PortletItemLocalService {
 		return _portletItemLocalService.getPortletItem(portletItemId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _portletItemLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the portlet items.
 	*
@@ -194,7 +201,7 @@ public class PortletItemLocalServiceWrapper implements PortletItemLocalService {
 	}
 
 	/**
-	* Updates the portlet item in the database. Also notifies the appropriate model listeners.
+	* Updates the portlet item in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param portletItem the portlet item
 	* @return the portlet item that was updated
@@ -207,7 +214,7 @@ public class PortletItemLocalServiceWrapper implements PortletItemLocalService {
 	}
 
 	/**
-	* Updates the portlet item in the database. Also notifies the appropriate model listeners.
+	* Updates the portlet item in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param portletItem the portlet item
 	* @param merge whether to merge the portlet item with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

@@ -164,6 +164,13 @@ public class EmailAddressLocalServiceWrapper implements EmailAddressLocalService
 		return _emailAddressLocalService.getEmailAddress(emailAddressId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _emailAddressLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the email addresses.
 	*
@@ -194,7 +201,7 @@ public class EmailAddressLocalServiceWrapper implements EmailAddressLocalService
 	}
 
 	/**
-	* Updates the email address in the database. Also notifies the appropriate model listeners.
+	* Updates the email address in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param emailAddress the email address
 	* @return the email address that was updated
@@ -207,7 +214,7 @@ public class EmailAddressLocalServiceWrapper implements EmailAddressLocalService
 	}
 
 	/**
-	* Updates the email address in the database. Also notifies the appropriate model listeners.
+	* Updates the email address in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param emailAddress the email address
 	* @param merge whether to merge the email address with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

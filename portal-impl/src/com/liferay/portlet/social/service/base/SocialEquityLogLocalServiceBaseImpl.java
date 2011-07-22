@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -63,6 +65,8 @@ import com.liferay.portlet.social.service.persistence.SocialEquitySettingPersist
 import com.liferay.portlet.social.service.persistence.SocialEquityUserPersistence;
 import com.liferay.portlet.social.service.persistence.SocialRelationPersistence;
 import com.liferay.portlet.social.service.persistence.SocialRequestPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -256,6 +260,11 @@ public abstract class SocialEquityLogLocalServiceBaseImpl
 		return socialEquityLogPersistence.findByPrimaryKey(equityLogId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return socialEquityLogPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the social equity logs.
 	 *
@@ -284,7 +293,7 @@ public abstract class SocialEquityLogLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the social equity log in the database. Also notifies the appropriate model listeners.
+	 * Updates the social equity log in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param socialEquityLog the social equity log
 	 * @return the social equity log that was updated
@@ -296,7 +305,7 @@ public abstract class SocialEquityLogLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the social equity log in the database. Also notifies the appropriate model listeners.
+	 * Updates the social equity log in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param socialEquityLog the social equity log
 	 * @param merge whether to merge the social equity log with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -944,6 +953,16 @@ public abstract class SocialEquityLogLocalServiceBaseImpl
 		this.assetEntryFinder = assetEntryFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.social.model.SocialEquityLog",
+			socialEquityLogLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.social.model.SocialEquityLog");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -1055,6 +1074,8 @@ public abstract class SocialEquityLogLocalServiceBaseImpl
 	protected AssetEntryPersistence assetEntryPersistence;
 	@BeanReference(type = AssetEntryFinder.class)
 	protected AssetEntryFinder assetEntryFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(SocialEquityLogLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }

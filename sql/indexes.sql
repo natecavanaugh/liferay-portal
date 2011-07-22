@@ -190,8 +190,11 @@ create index IX_D49AB5D1 on DLFileEntryMetadata (uuid_);
 
 create index IX_4501FD9C on DLFileEntryType (groupId);
 
-create index IX_BCDA0038 on DLFileEntryType_DDMStructure (fileEntryTypeId);
-create index IX_16520FB on DLFileEntryType_DDMStructure (structureId);
+create index IX_8373EC7C on DLFileEntryTypes_DDMStructures (fileEntryTypeId);
+create index IX_F147CF3F on DLFileEntryTypes_DDMStructures (structureId);
+
+create index IX_5BB6AD6C on DLFileEntryTypes_DLFolders (fileEntryTypeId);
+create index IX_6E00A2EC on DLFileEntryTypes_DLFolders (folderId);
 
 create unique index IX_38F0315 on DLFileRank (companyId, userId, fileEntryId);
 create index IX_A65A1F8B on DLFileRank (fileEntryId);
@@ -211,11 +214,15 @@ create unique index IX_E2815081 on DLFileVersion (fileEntryId, version);
 create index IX_A74DB14C on DLFolder (companyId);
 create index IX_F2EA1ACE on DLFolder (groupId);
 create index IX_49C37475 on DLFolder (groupId, parentFolderId);
+create index IX_2A048EA0 on DLFolder (groupId, parentFolderId, mountPoint);
 create unique index IX_902FD874 on DLFolder (groupId, parentFolderId, name);
 create index IX_51556082 on DLFolder (parentFolderId, name);
 create index IX_EE29C715 on DLFolder (repositoryId);
 create index IX_CBC408D8 on DLFolder (uuid_);
 create unique index IX_3CC1DED2 on DLFolder (uuid_, groupId);
+
+create index IX_B53EC783 on DLSync (companyId, modifiedDate, repositoryId);
+create unique index IX_F9821AB4 on DLSync (fileId);
 
 create index IX_1BB072CA on EmailAddress (companyId);
 create index IX_49D2DEC4 on EmailAddress (companyId, classNameId);
@@ -357,16 +364,18 @@ create index IX_23922F7D on Layout (iconImageId);
 create index IX_D0822724 on Layout (uuid_);
 create unique index IX_CED31606 on Layout (uuid_, groupId);
 
+create unique index IX_A705FF94 on LayoutBranch (layoutSetBranchId, plid, master);
+
 create index IX_30616AAA on LayoutPrototype (companyId);
 create index IX_557A639F on LayoutPrototype (companyId, active_);
 
 create index IX_314B621A on LayoutRevision (layoutSetBranchId);
 create index IX_A9AC086E on LayoutRevision (layoutSetBranchId, head);
 create index IX_E10AC39 on LayoutRevision (layoutSetBranchId, head, plid);
+create index IX_13984800 on LayoutRevision (layoutSetBranchId, layoutBranchId, plid);
 create index IX_4A84AF43 on LayoutRevision (layoutSetBranchId, parentLayoutRevisionId, plid);
 create index IX_B7B914E5 on LayoutRevision (layoutSetBranchId, plid);
 create index IX_70DA9ECB on LayoutRevision (layoutSetBranchId, plid, status);
-create index IX_AE2994E9 on LayoutRevision (layoutSetBranchId, plid, variationName);
 create index IX_7FFAE700 on LayoutRevision (layoutSetBranchId, status);
 create index IX_9329C9D6 on LayoutRevision (plid);
 
@@ -516,6 +525,7 @@ create index IX_F15C1C4F on PortletPreferences (plid);
 create index IX_D340DB76 on PortletPreferences (plid, portletId);
 
 create index IX_16184D57 on RatingsEntry (classNameId, classPK);
+create index IX_A1A8CB8B on RatingsEntry (classNameId, classPK, score);
 create unique index IX_B47E3C11 on RatingsEntry (userId, classNameId, classPK);
 
 create unique index IX_A6E99284 on RatingsStats (classNameId, classPK);
@@ -637,6 +647,7 @@ create unique index IX_E4F84168 on SocialEquityGroupSetting (groupId, classNameI
 create index IX_AC18D8F8 on SocialEquityLog (assetEntryId, actionId, actionDate, active_, type_, extraData);
 create index IX_541BDA0F on SocialEquityLog (assetEntryId, actionId, active_, extraData);
 create index IX_E8DA181D on SocialEquityLog (assetEntryId, type_, active_);
+create index IX_3C8A04B2 on SocialEquityLog (userId);
 create index IX_18F55CAF on SocialEquityLog (userId, actionId, actionDate, active_, type_, extraData);
 create unique index IX_A0FA597E on SocialEquityLog (userId, assetEntryId, actionId, actionDate, active_, type_, extraData);
 create index IX_DAE54B49 on SocialEquityLog (userId, assetEntryId, actionId, active_, extraData);
@@ -655,6 +666,7 @@ create index IX_95135D1C on SocialRelation (companyId, type_);
 create index IX_C31A64C6 on SocialRelation (type_);
 create index IX_5A40CDCC on SocialRelation (userId1);
 create index IX_4B52BE89 on SocialRelation (userId1, type_);
+create index IX_B5C9C690 on SocialRelation (userId1, userId2);
 create unique index IX_12A92145 on SocialRelation (userId1, userId2, type_);
 create index IX_5A40D18D on SocialRelation (userId2);
 create index IX_3F9C2FA8 on SocialRelation (userId2, type_);
@@ -799,5 +811,6 @@ create index IX_A8B0D276 on WorkflowDefinitionLink (companyId);
 create index IX_A4DB1F0F on WorkflowDefinitionLink (companyId, workflowDefinitionName, workflowDefinitionVersion);
 create index IX_B6EE8C9E on WorkflowDefinitionLink (groupId, companyId, classNameId);
 create index IX_1E5B9905 on WorkflowDefinitionLink (groupId, companyId, classNameId, classPK);
+create index IX_705B40EE on WorkflowDefinitionLink (groupId, companyId, classNameId, classPK, typePK);
 
 create index IX_415A7007 on WorkflowInstanceLink (groupId, companyId, classNameId, classPK);

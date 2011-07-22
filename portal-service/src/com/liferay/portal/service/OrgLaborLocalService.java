@@ -35,7 +35,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
  */
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
-public interface OrgLaborLocalService {
+public interface OrgLaborLocalService extends PersistedModelLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -156,6 +156,12 @@ public interface OrgLaborLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	/**
 	* Returns a range of all the org labors.
 	*
@@ -184,7 +190,7 @@ public interface OrgLaborLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the org labor in the database. Also notifies the appropriate model listeners.
+	* Updates the org labor in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param orgLabor the org labor
 	* @return the org labor that was updated
@@ -195,7 +201,7 @@ public interface OrgLaborLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the org labor in the database. Also notifies the appropriate model listeners.
+	* Updates the org labor in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param orgLabor the org labor
 	* @param merge whether to merge the org labor with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -54,6 +55,7 @@ import org.apache.commons.configuration.MapConfiguration;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Shuyang Zhou
  */
 public class ConfigurationImpl
 	implements com.liferay.portal.kernel.configuration.Configuration {
@@ -172,71 +174,145 @@ public class ConfigurationImpl
 				compositeConfiguration);
 
 			configurations.add(0, newConfiguration);
+
+			clearCache();
 		}
 		catch (Exception e) {
 			_log.error("The properties could not be added", e);
 		}
 	}
 
-	public boolean contains(String key) {
-		ComponentProperties componentProperties = getComponentProperties();
+	public void clearCache() {
+		_values.clear();
+	}
 
-		return componentProperties.containsKey(key);
+	public boolean contains(String key) {
+		Object value = _values.get(key);
+
+		if (value == null) {
+			ComponentProperties componentProperties = getComponentProperties();
+
+			value = componentProperties.getProperty(key);
+
+			if (value == null) {
+				value = _nullValue;
+			}
+
+			_values.put(key, value);
+		}
+
+		if (value == _nullValue) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 
 	public String get(String key) {
-		if (_PRINT_DUPLICATE_CALLS_TO_GET) {
-			if (_keys.contains(key)) {
-				System.out.println("Duplicate call to get " + key);
+		Object value = _values.get(key);
+
+		if (value == null) {
+			ComponentProperties componentProperties = getComponentProperties();
+
+			value = componentProperties.getString(key);
+
+			if (value == null) {
+				value = _nullValue;
 			}
-			else {
-				_keys.add(key);
-			}
+
+			_values.put(key, value);
+		}
+		else if (_PRINT_DUPLICATE_CALLS_TO_GET) {
+			System.out.println("Duplicate call to get " + key);
 		}
 
-		ComponentProperties componentProperties = getComponentProperties();
-
-		return componentProperties.getString(key);
+		if (value instanceof String) {
+			return (String)value;
+		}
+		else {
+			return null;
+		}
 	}
 
 	public String get(String key, Filter filter) {
-		ComponentProperties componentProperties = getComponentProperties();
+		String filterCacheKey = buildFilterCacheKey(key, filter, false);
 
-		return componentProperties.getString(key, getEasyConfFilter(filter));
-	}
+		Object value = null;
 
-	public String[] getArray(String key) {
-		ComponentProperties componentProperties = getComponentProperties();
-
-		String[] array = componentProperties.getStringArray(key);
-
-		if (array == null) {
-			return new String[0];
+		if (filterCacheKey != null) {
+			value = _values.get(filterCacheKey);
 		}
-		else if (array.length > 0) {
 
-			// Commons Configuration parses an empty property into a String
-			// array with one String containing one space. It also leaves a
-			// trailing array member if you set a property in more than one
-			// line.
+		if (value == null) {
+			ComponentProperties componentProperties = getComponentProperties();
 
-			if (Validator.isNull(array[array.length - 1])) {
-				String[] subArray = new String[array.length - 1];
+			value = componentProperties.getString(
+				key, getEasyConfFilter(filter));
 
-				System.arraycopy(array, 0, subArray, 0, subArray.length);
+			if (filterCacheKey != null) {
+				if (value == null) {
+					value = _nullValue;
+				}
 
-				array = subArray;
+				_values.put(filterCacheKey, value);
 			}
 		}
 
-		return array;
+		if (value instanceof String) {
+			return (String)value;
+		}
+		else {
+			return null;
+		}
+
+	}
+
+	public String[] getArray(String key) {
+		String cacheKey = _ARRAY_KEY_PREFIX.concat(key);
+
+		Object value = _values.get(cacheKey);
+
+		if (value == null) {
+			ComponentProperties componentProperties = getComponentProperties();
+
+			String[] array = componentProperties.getStringArray(key);
+
+			value = fixArrayValue(cacheKey, array);
+		}
+
+		if (value instanceof String[]) {
+			return (String[])value;
+		}
+		else {
+			return _emptyArray;
+		}
 	}
 
 	public String[] getArray(String key, Filter filter) {
-		ComponentProperties componentProperties = getComponentProperties();
+		String filterCacheKey = buildFilterCacheKey(key, filter, true);
 
-		return componentProperties.getStringArray(
-			key, getEasyConfFilter(filter));
+		Object value = null;
+
+		if (filterCacheKey != null) {
+			value = _values.get(filterCacheKey);
+		}
+
+		if (value == null) {
+			ComponentProperties componentProperties = getComponentProperties();
+
+			String[] array = componentProperties.getStringArray(
+				key, getEasyConfFilter(filter));
+
+			value = fixArrayValue(filterCacheKey, array);
+		}
+
+		if (value instanceof String[]) {
+			return (String[])value;
+		}
+		else {
+			return _emptyArray;
+		}
 	}
 
 	public Properties getProperties() {
@@ -317,6 +393,8 @@ public class ConfigurationImpl
 					aggregatedProperties.removeConfiguration(configuration);
 				}
 			}
+
+			clearCache();
 		}
 		catch (Exception e) {
 			_log.error("The properties could not be removed", e);
@@ -327,6 +405,70 @@ public class ConfigurationImpl
 		ComponentProperties componentProperties = getComponentProperties();
 
 		componentProperties.setProperty(key, value);
+
+		_values.put(key, value);
+	}
+
+	protected String buildFilterCacheKey(
+		String key, Filter filter, boolean arrayValue) {
+
+		if (filter.getVariables() != null) {
+			return null;
+		}
+
+		String[] selectors = filter.getSelectors();
+
+		int length = 0;
+
+		if (arrayValue) {
+			length = selectors.length + 2;
+		}
+		else {
+			length = selectors.length + 1;
+		}
+
+		StringBundler sb = new StringBundler(length);
+
+		if (arrayValue) {
+			sb.append(_ARRAY_KEY_PREFIX);
+		}
+
+		sb.append(key);
+		sb.append(selectors);
+
+		return sb.toString();
+	}
+
+	protected Object fixArrayValue(String cacheKey, String[] array) {
+		if (cacheKey == null) {
+			return array;
+		}
+
+		Object value = _nullValue;
+
+		if ((array != null) && (array.length > 0)) {
+
+			// Commons Configuration parses an empty property into a String
+			// array with one String containing one space. It also leaves a
+			// trailing array member if you set a property in more than one
+			// line.
+
+			if (Validator.isNull(array[array.length - 1])) {
+				String[] subArray = new String[array.length - 1];
+
+				System.arraycopy(array, 0, subArray, 0, subArray.length);
+
+				array = subArray;
+			}
+
+			if (array.length > 0) {
+				value = array;
+			}
+		}
+
+		_values.put(cacheKey, value);
+
+		return value;
 	}
 
 	protected ComponentProperties getComponentProperties() {
@@ -406,12 +548,18 @@ public class ConfigurationImpl
 		}
 	}
 
+	private static final String _ARRAY_KEY_PREFIX = "ARRAY_";
+
 	private static final boolean _PRINT_DUPLICATE_CALLS_TO_GET = false;
 
 	private static Log _log = LogFactoryUtil.getLog(ConfigurationImpl.class);
 
+	private static String[] _emptyArray = new String[0];
+	private static Object _nullValue = new Object();
+
 	private ComponentConfiguration _componentConfiguration;
-	private Set<String> _keys = new HashSet<String>();
 	private Set<String> _printedSources = new HashSet<String>();
+	private Map<String, Object> _values =
+		new ConcurrentHashMap<String, Object>();
 
 }

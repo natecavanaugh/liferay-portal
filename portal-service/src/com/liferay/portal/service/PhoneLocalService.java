@@ -35,7 +35,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
  */
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
-public interface PhoneLocalService {
+public interface PhoneLocalService extends PersistedModelLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -156,6 +156,12 @@ public interface PhoneLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	/**
 	* Returns a range of all the phones.
 	*
@@ -183,7 +189,7 @@ public interface PhoneLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the phone in the database. Also notifies the appropriate model listeners.
+	* Updates the phone in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param phone the phone
 	* @return the phone that was updated
@@ -194,7 +200,7 @@ public interface PhoneLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the phone in the database. Also notifies the appropriate model listeners.
+	* Updates the phone in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param phone the phone
 	* @param merge whether to merge the phone with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

@@ -25,7 +25,7 @@
 <%
 Portlet portlet = (Portlet)request.getAttribute(WebKeys.RENDER_PORTLET);
 
-PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(layout, portletDisplay.getId());
+PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getStrictLayoutPortletSetup(layout, portletDisplay.getId());
 
 RenderResponseImpl renderResponseImpl = (RenderResponseImpl)PortletResponseImpl.getPortletResponseImpl(renderResponse);
 
@@ -67,13 +67,7 @@ portletDisplay.setTitle(portletTitle);
 
 // Portlet description
 
-String portletDescription = StringPool.BLANK;
-
-try {
-	portletDescription = resourceBundle.getString(JavaConstants.JAVAX_PORTLET_DESCRIPTION);
-}
-catch (MissingResourceException mre) {
-}
+String portletDescription = ResourceBundleUtil.getString(resourceBundle, JavaConstants.JAVAX_PORTLET_DESCRIPTION);
 
 if (Validator.isNull(portletDescription)) {
 	portletDescription = PortalUtil.getPortletDescription(portlet.getPortletId(), locale);

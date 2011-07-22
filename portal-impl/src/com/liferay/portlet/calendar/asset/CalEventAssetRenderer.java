@@ -16,6 +16,7 @@ package com.liferay.portlet.calendar.asset;
 
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -32,6 +33,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.WindowState;
 
 /**
  * @author Juan Fernández
@@ -62,7 +64,7 @@ public class CalEventAssetRenderer extends BaseAssetRenderer {
 	}
 
 	public String getSummary(Locale locale) {
-		return _event.getDescription();
+		return HtmlUtil.extractText(_event.getDescription());
 	}
 
 	public String getTitle(Locale locale) {
@@ -80,6 +82,23 @@ public class CalEventAssetRenderer extends BaseAssetRenderer {
 			PortletRequest.RENDER_PHASE);
 
 		portletURL.setParameter("struts_action", "/calendar/edit_event");
+		portletURL.setParameter("eventId", String.valueOf(_event.getEventId()));
+
+		return portletURL;
+	}
+
+	@Override
+	public PortletURL getURLView(
+			LiferayPortletResponse liferayPortletResponse,
+			WindowState windowState)
+		throws Exception {
+
+		PortletURL portletURL = liferayPortletResponse.createLiferayPortletURL(
+			PortletKeys.CALENDAR, PortletRequest.RENDER_PHASE);
+
+		portletURL.setWindowState(windowState);
+
+		portletURL.setParameter("struts_action", "/calendar/view_event");
 		portletURL.setParameter("eventId", String.valueOf(_event.getEventId()));
 
 		return portletURL;

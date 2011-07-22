@@ -335,6 +335,51 @@ public class DLFolderWrapper implements DLFolder {
 		_dlFolder.setLastPostDate(lastPostDate);
 	}
 
+	/**
+	* Returns the default file entry type ID of this document library folder.
+	*
+	* @return the default file entry type ID of this document library folder
+	*/
+	public long getDefaultFileEntryTypeId() {
+		return _dlFolder.getDefaultFileEntryTypeId();
+	}
+
+	/**
+	* Sets the default file entry type ID of this document library folder.
+	*
+	* @param defaultFileEntryTypeId the default file entry type ID of this document library folder
+	*/
+	public void setDefaultFileEntryTypeId(long defaultFileEntryTypeId) {
+		_dlFolder.setDefaultFileEntryTypeId(defaultFileEntryTypeId);
+	}
+
+	/**
+	* Returns the override file entry types of this document library folder.
+	*
+	* @return the override file entry types of this document library folder
+	*/
+	public boolean getOverrideFileEntryTypes() {
+		return _dlFolder.getOverrideFileEntryTypes();
+	}
+
+	/**
+	* Returns <code>true</code> if this document library folder is override file entry types.
+	*
+	* @return <code>true</code> if this document library folder is override file entry types; <code>false</code> otherwise
+	*/
+	public boolean isOverrideFileEntryTypes() {
+		return _dlFolder.isOverrideFileEntryTypes();
+	}
+
+	/**
+	* Sets whether this document library folder is override file entry types.
+	*
+	* @param overrideFileEntryTypes the override file entry types of this document library folder
+	*/
+	public void setOverrideFileEntryTypes(boolean overrideFileEntryTypes) {
+		_dlFolder.setOverrideFileEntryTypes(overrideFileEntryTypes);
+	}
+
 	public boolean isNew() {
 		return _dlFolder.isNew();
 	}
@@ -391,6 +436,10 @@ public class DLFolderWrapper implements DLFolder {
 		return _dlFolder.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portlet.documentlibrary.model.DLFolder> toCacheModel() {
+		return _dlFolder.toCacheModel();
+	}
+
 	public com.liferay.portlet.documentlibrary.model.DLFolder toEscapedModel() {
 		return new DLFolderWrapper(_dlFolder.toEscapedModel());
 	}
@@ -402,6 +451,11 @@ public class DLFolderWrapper implements DLFolder {
 
 	public java.lang.String toXmlString() {
 		return _dlFolder.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_dlFolder.persist();
 	}
 
 	public java.util.List<com.liferay.portlet.documentlibrary.model.DLFolder> getAncestors()

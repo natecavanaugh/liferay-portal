@@ -165,6 +165,13 @@ public class SocialRelationLocalServiceWrapper
 		return _socialRelationLocalService.getSocialRelation(relationId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _socialRelationLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the social relations.
 	*
@@ -195,7 +202,7 @@ public class SocialRelationLocalServiceWrapper
 	}
 
 	/**
-	* Updates the social relation in the database. Also notifies the appropriate model listeners.
+	* Updates the social relation in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param socialRelation the social relation
 	* @return the social relation that was updated
@@ -208,7 +215,7 @@ public class SocialRelationLocalServiceWrapper
 	}
 
 	/**
-	* Updates the social relation in the database. Also notifies the appropriate model listeners.
+	* Updates the social relation in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param socialRelation the social relation
 	* @param merge whether to merge the social relation with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -272,6 +279,12 @@ public class SocialRelationLocalServiceWrapper
 		_socialRelationLocalService.deleteRelations(userId);
 	}
 
+	public void deleteRelations(long userId1, long userId2)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_socialRelationLocalService.deleteRelations(userId1, userId2);
+	}
+
 	public java.util.List<com.liferay.portlet.social.model.SocialRelation> getInverseRelations(
 		long userId, int type, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -304,9 +317,21 @@ public class SocialRelationLocalServiceWrapper
 		return _socialRelationLocalService.getRelations(userId, type, start, end);
 	}
 
+	public java.util.List<com.liferay.portlet.social.model.SocialRelation> getRelations(
+		long userId1, long userId2, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _socialRelationLocalService.getRelations(userId1, userId2,
+			start, end);
+	}
+
 	public int getRelationsCount(long userId, int type)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialRelationLocalService.getRelationsCount(userId, type);
+	}
+
+	public int getRelationsCount(long userId1, long userId2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _socialRelationLocalService.getRelationsCount(userId1, userId2);
 	}
 
 	public boolean hasRelation(long userId1, long userId2, int type)

@@ -32,45 +32,51 @@ long folderId = fileEntry.getFolderId();
 String extension = fileEntry.getExtension();
 String title = fileEntry.getTitle();
 
+Folder folder = fileEntry.getFolder();
+FileVersion fileVersion = (FileVersion)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FILE_VERSION);
+
+boolean versionSpecific = false;
+
+if (fileVersion != null) {
+	versionSpecific = true;
+}
+else if ((user.getUserId() == fileEntry.getUserId()) || permissionChecker.isCompanyAdmin() || permissionChecker.isGroupAdmin(scopeGroupId) || DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE)) {
+	fileVersion = fileEntry.getLatestFileVersion();
+}
+else {
+	fileVersion = fileEntry.getFileVersion();
+}
+
+long fileVersionId = fileVersion.getFileVersionId();
+
+long fileEntryTypeId = 0;
+
+if (fileVersion.getModel() instanceof DLFileVersion) {
+	DLFileVersion dlFileVersion = (DLFileVersion)fileVersion.getModel();
+
+	fileEntryTypeId = dlFileVersion.getFileEntryTypeId();
+}
+
+Lock lock = fileEntry.getLock();
+
 String[] conversions = new String[0];
 
 if (PrefsPropsUtil.getBoolean(PropsKeys.OPENOFFICE_SERVER_ENABLED, PropsValues.OPENOFFICE_SERVER_ENABLED)) {
 	conversions = (String[]) DocumentConversionUtil.getConversions(extension);
 }
 
-Folder folder = fileEntry.getFolder();
-FileVersion fileVersion = fileEntry.getFileVersion();
-
-long fileVersionId = 0;
-
-long fileEntryTypeId = ParamUtil.getLong(request, "fileEntryTypeId");
-
-if (fileEntry != null) {
-	fileVersion = fileEntry.getLatestFileVersion();
-
-	fileVersionId = fileVersion.getFileVersionId();
-
-	if ((fileEntryTypeId == 0) && (fileVersion.getModel() instanceof DLFileVersion)) {
-		DLFileVersion dlFileVersion = (DLFileVersion)fileVersion.getModel();
-
-		fileEntryTypeId = dlFileVersion.getFileEntryTypeId();
-	}
-}
-
 long assetClassPK = 0;
 
-if ((fileVersion != null) && !fileVersion.isApproved() && (fileVersion.getVersion() != DLFileEntryConstants.DEFAULT_VERSION)) {
+if (!fileVersion.isApproved() && (fileVersion.getVersion() != DLFileEntryConstants.DEFAULT_VERSION)) {
 	assetClassPK = fileVersion.getFileVersionId();
+	title = fileVersion.getTitle();
+	extension = fileVersion.getExtension();
 }
-else if (fileEntry != null) {
+else {
 	assetClassPK = fileEntry.getFileEntryId();
 }
 
-Boolean isCheckedOut = fileEntry.isCheckedOut();
-Boolean hasLock = fileEntry.hasLock();
-Lock lock = fileEntry.getLock();
-
-String fileUrl = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + folderId + StringPool.SLASH + HttpUtil.encodeURL(title);
+String fileUrl = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + folderId + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle());
 String webDavUrl = StringPool.BLANK;
 
 if (portletDisplay.isWebDAVEnabled()) {
@@ -93,7 +99,7 @@ if (portletDisplay.isWebDAVEnabled()) {
 	}
 
 	sb.append(StringPool.SLASH);
-	sb.append(HttpUtil.encodeURL(title, true));
+	sb.append(HttpUtil.encodeURL(fileEntry.getTitle(), true));
 
 	Group group = themeDisplay.getScopeGroup();
 
@@ -101,6 +107,10 @@ if (portletDisplay.isWebDAVEnabled()) {
 }
 
 User userDisplay = UserLocalServiceUtil.getUserById(fileEntry.getUserId());
+
+AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.getEntry(DLFileEntryConstants.getClassName(), assetClassPK);
+
+request.setAttribute(WebKeys.LAYOUT_ASSET_ENTRY, layoutAssetEntry);
 
 request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 %>
@@ -118,7 +128,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 <c:if test="<%= folder != null %>">
 
 	<%
-	String versionText = LanguageUtil.format(pageContext, "version-x", fileEntry.getVersion());
+	String versionText = LanguageUtil.format(pageContext, "version-x", fileVersion.getVersion());
 
 	if (Validator.isNull(fileEntry.getVersion())) {
 		versionText = LanguageUtil.get(pageContext, "not-approved");
@@ -140,9 +150,9 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 				</div>
 			</div>
 
-			<c:if test="<%= isCheckedOut %>">
+			<c:if test="<%= fileEntry.isCheckedOut() && DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) %>">
 				<c:choose>
-					<c:when test="<%= hasLock %>">
+					<c:when test="<%= fileEntry.hasLock() %>">
 						<div class="portlet-msg-lock portlet-msg-success">
 							<c:choose>
 								<c:when test="<%= lock.isNeverExpires() %>">
@@ -169,22 +179,33 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 
 			<div class="body-row">
 				<div class="document-info">
-					<h2 class="document-title"><%= fileEntry.getTitle() %></h2>
+					<h2 class="document-title">
+						<c:choose>
+							<c:when test="<%= versionSpecific %>">
+								<%= fileVersion.getTitle() %>
+
+								(<liferay-ui:message key="version" /> <%= fileVersion.getVersion() %>)
+							</c:when>
+							<c:otherwise>
+								<%= title %>
+							</c:otherwise>
+						</c:choose>
+					</h2>
 
 					<span class="document-thumbnail">
 
 						<%
-						String thumbnailSrc = themeDisplay.getPathThemeImages() + "/file_system/large/" + DLUtil.getGenericName(fileEntry.getExtension()) + ".png";
+						String thumbnailSrc = themeDisplay.getPathThemeImages() + "/file_system/large/" + DLUtil.getGenericName(extension) + ".png";
 
-						if (PDFProcessor.hasImages(fileEntry)) {
-							thumbnailSrc = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle()) + "?version=" + fileEntry.getVersion() + "&documentThumbnail=1";
+						if (PDFProcessor.hasImages(fileEntry, fileVersion.getVersion())) {
+							thumbnailSrc = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(title) + "?version=" + fileVersion.getVersion() + "&documentThumbnail=1";
 						}
-						else if (VideoProcessor.hasVideo(fileEntry)){
-							thumbnailSrc = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle()) + "?version=" + fileEntry.getVersion() + "&videoThumbnail=1";
+						else if (VideoProcessor.hasVideo(fileEntry, fileVersion.getVersion())){
+							thumbnailSrc = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(title) + "?version=" + fileVersion.getVersion() + "&videoThumbnail=1";
 						}
 						%>
 
-						<img border="no" class="thumbnail" src="<%= thumbnailSrc %>" />
+						<img alt="" border="no" class="thumbnail" src="<%= thumbnailSrc %>" />
 					</span>
 
 					<span class="user-date">
@@ -200,15 +221,17 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						</span>
 					</c:if>
 
-					<div class="entry-links">
-						<liferay-ui:asset-links
-							className="<%= DLFileEntryConstants.getClassName() %>"
-							classPK="<%= assetClassPK %>"
-						/>
-					</div>
+					<c:if test="<%= enableRelatedAssets %>">
+						<div class="entry-links">
+							<liferay-ui:asset-links
+								className="<%= DLFileEntryConstants.getClassName() %>"
+								classPK="<%= assetClassPK %>"
+							/>
+						</div>
+					</c:if>
 
 					<span class="document-description">
-						<%= HtmlUtil.escape(fileEntry.getDescription()) %>
+						<%= HtmlUtil.escape(fileVersion.getDescription()) %>
 					</span>
 
 					<c:if test="<%= fileEntry.isSupportsSocial() %>">
@@ -239,21 +262,27 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						String previewFileURL = null;
 						String videoThumbnailURL = null;
 
-						boolean supportedVideo = VideoProcessor.isSupportedVideo(fileEntry);
+						boolean supportedAudio = AudioProcessor.isSupportedAudio(fileEntry, fileVersion.getVersion());
+						boolean supportedVideo = VideoProcessor.isSupportedVideo(fileEntry, fileVersion.getVersion());
 
-						if (supportedVideo) {
-							previewFileCount = 0;
-
-							if (VideoProcessor.hasVideo(fileEntry)) {
+						if (supportedAudio) {
+							if (AudioProcessor.hasAudio(fileEntry, fileVersion.getVersion())) {
 								previewFileCount = 1;
 							}
 
-							previewFileURL = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle()) + HtmlUtil.escapeURL("?version=") + fileEntry.getVersion() + HtmlUtil.escapeURL("&videoPreview=1");
-							videoThumbnailURL = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle()) + HtmlUtil.escapeURL("?version=") + fileEntry.getVersion() + HtmlUtil.escapeURL("&videoThumbnail=1");
+							previewFileURL = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + title + "?version=" + fileVersion.getVersion() + "&audioPreview=1";
+						}
+						else if (supportedVideo) {
+							if (VideoProcessor.hasVideo(fileEntry, fileVersion.getVersion())) {
+								previewFileCount = 1;
+							}
+
+							previewFileURL = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(title) + HtmlUtil.escapeURL("?version=") + fileVersion.getVersion() + HtmlUtil.escapeURL("&videoPreview=1");
+							videoThumbnailURL = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(title) + HtmlUtil.escapeURL("?version=") + fileVersion.getVersion() + HtmlUtil.escapeURL("&videoThumbnail=1");
 						}
 						else {
-							previewFileCount = PDFProcessor.getPreviewFileCount(fileEntry);
-							previewFileURL = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle()) + "?version=" + fileEntry.getVersion() + "&previewFileIndex=";
+							previewFileCount = PDFProcessor.getPreviewFileCount(fileEntry, fileVersion.getVersion());
+							previewFileURL = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(title) + "?version=" + fileVersion.getVersion() + "&previewFileIndex=";
 						}
 						%>
 
@@ -265,7 +294,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							</c:when>
 							<c:otherwise>
 								<c:choose>
-									<c:when test ="<%= !supportedVideo %>">
+									<c:when test ="<%= !supportedAudio && !supportedVideo %>">
 										<div class="lfr-preview-file" id="<portlet:namespace />previewFile">
 											<div class="lfr-preview-file-content" id="<portlet:namespace />previewFileContent">
 												<div class="lfr-preview-file-image-current-column">
@@ -324,8 +353,13 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 
 											so.addParam('allowFullScreen', 'true');
 
-											so.addVariable('<%= VideoProcessor.PREVIEW_TYPE %>', '<%= previewFileURL %>');
-											so.addVariable('<%= VideoProcessor.THUMBNAIL_TYPE %>', '<%= videoThumbnailURL %>');
+											if (<%= supportedAudio %>) {
+												so.addVariable('<%= AudioProcessor.PREVIEW_TYPE %>', '<%= previewFileURL %>');
+											}
+											else if (<%= supportedVideo %>) {
+												so.addVariable('<%= VideoProcessor.PREVIEW_TYPE %>', '<%= previewFileURL %>');
+												so.addVariable('<%= VideoProcessor.THUMBNAIL_TYPE %>', '<%= videoThumbnailURL %>');
+											}
 
 											so.write('<portlet:namespace />previewFileContent');
 										</aui:script>
@@ -349,7 +383,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							formName="fm2"
 							ratingsEnabled="<%= enableCommentRatings %>"
 							redirect="<%= currentURL %>"
-							subject="<%= fileEntry.getTitle() %>"
+							subject="<%= title %>"
 							userId="<%= fileEntry.getUserId() %>"
 						/>
 					</liferay-ui:panel>
@@ -364,25 +398,25 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 
 			<div class="body-row asset-details">
 				<div class="asset-details-content">
-					<h3 class="version <%= isCheckedOut ? "document-locked" : StringPool.BLANK %>">
-						<liferay-ui:message key="version" /> <%= fileEntry.getVersion() %>
+					<h3 class="version <%= fileEntry.isCheckedOut() ? "document-locked" : StringPool.BLANK %>">
+						<liferay-ui:message key="version" /> <%= fileVersion.getVersion() %>
 					</h3>
 
 					<div class="lfr-asset-icon lfr-asset-author">
-						<liferay-ui:message arguments="<%= fileEntry.getVersionUserName() %>" key="last-updated-by-x" />
+						<liferay-ui:message arguments="<%= fileVersion.getUserName() %>" key="last-updated-by-x" />
 					</div>
 
 					<div class="lfr-asset-icon lfr-asset-date">
-						<%= dateFormatDateTime.format(fileEntry.getModifiedDate()) %>
+						<%= dateFormatDateTime.format(fileVersion.getModifiedDate()) %>
 					</div>
 
 					<div class="lfr-asset-summary">
 						<aui:workflow-status model="<%= DLFileEntry.class %>" status="<%= fileVersion.getStatus() %>" />
 					</div>
 
-					<c:if test="<%= Validator.isNotNull(fileEntry.getDescription()) %>">
+					<c:if test="<%= Validator.isNotNull(fileVersion.getDescription()) %>">
 						<blockquote class="lfr-asset-description">
-							<%= fileEntry.getDescription() %>
+							<%= fileVersion.getDescription() %>
 						</blockquote>
 					</c:if>
 
@@ -392,7 +426,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 								image="download"
 								label="<%= true %>"
 								message='<%= LanguageUtil.get(pageContext, "download") + " (" + TextFormatter.formatKB(fileEntry.getSize(), locale) + "k)" %>'
-								url='<%= themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle()) %>'
+								url='<%= themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle()) + "?version=" + fileVersion.getVersion() %>'
 							/>
 						</c:if>
 					</span>
@@ -498,7 +532,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 
 									<liferay-ui:panel collapsible="<%= true %>" cssClass="metadata" extended="<%= true %>" persistState="<%= true %>" title="<%= ddmStructure.getName(LocaleUtil.getDefault()) %>">
 
-										<%= DDMXSDUtil. getHTML(pageContext, ddmStructure.getXsd(), fields, String.valueOf(ddmStructure.getPrimaryKey()), true) %>
+										<%= DDMXSDUtil.getHTML(pageContext, ddmStructure.getXsd(), fields, String.valueOf(ddmStructure.getPrimaryKey()), true, locale) %>
 
 									</liferay-ui:panel>
 
@@ -529,7 +563,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 
 									<liferay-ui:panel collapsible="<%= true %>" cssClass="lfr-asset-metadata" persistState="<%= true %>" title="<%= name %>">
 
-										<%= DDMXSDUtil.getHTML(pageContext, ddmStructure.getXsd(), fields, String.valueOf(ddmStructure.getPrimaryKey()), true) %>
+										<%= DDMXSDUtil.getHTML(pageContext, ddmStructure.getXsd(), fields, String.valueOf(ddmStructure.getPrimaryKey()), true, locale) %>
 
 									</liferay-ui:panel>
 
@@ -563,6 +597,8 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 								headerNames.add("status");
 							}
 
+							headerNames.add(StringPool.BLANK);
+
 							searchContainer.setHeaderNames(headerNames);
 
 							if (comparableFileEntry) {
@@ -585,34 +621,23 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							for (int i = 0; i < results.size(); i++) {
 								FileVersion curFileVersion = (FileVersion)results.get(i);
 
-								ResultRow row = new ResultRow(new Object[] {fileEntry, curFileVersion, results.size(), conversions, isCheckedOut, hasLock}, String.valueOf(curFileVersion.getVersion()), i);
-
-								StringBundler sb = new StringBundler(10);
-
-								sb.append(themeDisplay.getPortalURL());
-								sb.append(themeDisplay.getPathContext());
-								sb.append("/documents/");
-								sb.append(themeDisplay.getScopeGroupId());
-								sb.append(StringPool.SLASH);
-								sb.append(folderId);
-								sb.append(StringPool.SLASH);
-								sb.append(HttpUtil.encodeURL(title));
-								sb.append("?version=");
-								sb.append(String.valueOf(curFileVersion.getVersion()));
-
-								String rowHREF = sb.toString();
+								ResultRow row = new ResultRow(new Object[] {fileEntry, curFileVersion, results.size(), conversions, fileEntry.isCheckedOut(), fileEntry.hasLock()}, String.valueOf(curFileVersion.getVersion()), i);
 
 								// Statistics
 
-								row.addText(String.valueOf(curFileVersion.getVersion()), rowHREF);
-								row.addText(dateFormatDateTime.format(curFileVersion.getCreateDate()), rowHREF);
-								row.addText(TextFormatter.formatKB(curFileVersion.getSize(), locale) + "k", rowHREF);
+								row.addText(String.valueOf(curFileVersion.getVersion()));
+								row.addText(dateFormatDateTime.format(curFileVersion.getCreateDate()));
+								row.addText(TextFormatter.formatKB(curFileVersion.getSize(), locale) + "k");
 
 								// Status
 
 								if (showNonApprovedDocuments) {
 									row.addText(LanguageUtil.get(pageContext, WorkflowConstants.toLabel(curFileVersion.getStatus())));
 								}
+
+								// Action
+
+								row.addJSP("right", SearchEntry.DEFAULT_VALIGN, "/html/portlet/document_library/file_entry_history_action.jsp");
 
 								// Add result row
 
@@ -732,89 +757,93 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 			activeState: false,
 			boundingBox: buttonRow,
 			children: [
-				{
-
-					<portlet:renderURL var="editURL">
-						<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
-						<portlet:param name="redirect" value="<%= currentURL %>" />
-						<portlet:param name="backURL" value="<%= currentURL %>" />
-						<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
-					</portlet:renderURL>
-
-					handler: function(event) {
-						location.href = '<%= editURL.toString() %>';
-					},
-					icon: 'edit',
-					label: '<liferay-ui:message key="edit" />'
-				},
-				{
-
-					<portlet:renderURL var="moveURL">
-						<portlet:param name="struts_action" value="/document_library/move_file_entry" />
-						<portlet:param name="redirect" value="<%= currentURL %>" />
-						<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
-					</portlet:renderURL>
-
-					handler: function(event) {
-						location.href = '<%= moveURL.toString() %>';
-					},
-					icon: 'move',
-					label: '<liferay-ui:message key="move" />'
-				},
-
-				<c:if test="<%= !fileEntry.isCheckedOut() %>">
-
+				<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) && (!fileEntry.isCheckedOut() || fileEntry.hasLock()) %>">
 					{
 
+						<portlet:renderURL var="editURL">
+							<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
+							<portlet:param name="redirect" value="<%= currentURL %>" />
+							<portlet:param name="backURL" value="<%= currentURL %>" />
+							<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+						</portlet:renderURL>
+
 						handler: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
-							submitForm(document.<portlet:namespace />fm);
+							location.href = '<%= editURL.toString() %>';
 						},
-						icon: 'lock',
-						label: '<liferay-ui:message key="checkout" />'
+						icon: 'edit',
+						label: '<liferay-ui:message key="edit" />'
+					},
+					{
+
+						<portlet:renderURL var="moveURL">
+							<portlet:param name="struts_action" value="/document_library/move_file_entry" />
+							<portlet:param name="redirect" value="<%= currentURL %>" />
+							<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+						</portlet:renderURL>
+
+						handler: function(event) {
+							location.href = '<%= moveURL.toString() %>';
+						},
+						icon: 'move',
+						label: '<liferay-ui:message key="move" />'
 					},
 
+					<c:if test="<%= !fileEntry.isCheckedOut() %>">
+
+						{
+
+							handler: function(event) {
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
+								submitForm(document.<portlet:namespace />fm);
+							},
+							icon: 'lock',
+							label: '<liferay-ui:message key="checkout" />'
+						},
+
+					</c:if>
+
+					<c:if test="<%= fileEntry.isCheckedOut() && fileEntry.hasLock() %>">
+
+						{
+
+							handler: function(event) {
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CANCEL_CHECKOUT %>';
+								submitForm(document.<portlet:namespace />fm);
+							},
+							icon: 'undo',
+							label: '<liferay-ui:message key="cancel-checkout" />'
+						},
+
+						{
+
+							handler: function(event) {
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKIN %>';
+								submitForm(document.<portlet:namespace />fm);
+							},
+							icon: 'unlock',
+							label: '<liferay-ui:message key="checkin" />'
+						},
+
+					</c:if>
 				</c:if>
 
-				<c:if test="<%= fileEntry.isCheckedOut() %>">
-
+				<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.PERMISSIONS) %>">
 					{
 
-						handler: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CANCEL_CHECKOUT %>';
-							submitForm(document.<portlet:namespace />fm);
-						},
-						icon: 'undo',
-						label: '<liferay-ui:message key="cancel-checkout" />'
-					},
-
-					{
+						<liferay-security:permissionsURL
+							modelResource="<%= DLFileEntryConstants.getClassName() %>"
+							modelResourceDescription="<%= fileEntry.getTitle() %>"
+							resourcePrimKey="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
+							var="permissionsURL"
+						/>
 
 						handler: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKIN %>';
-							submitForm(document.<portlet:namespace />fm);
+							location.href = '<%= permissionsURL.toString() %>';
 						},
-						icon: 'unlock',
-						label: '<liferay-ui:message key="checkin" />'
-					},
-
+						icon: 'permissions',
+						label: '<liferay-ui:message key="permissions" />'
+					}
 				</c:if>
-
-				{
-
-					<liferay-security:permissionsURL
-						modelResource="<%= DLFileEntryConstants.getClassName() %>"
-						modelResourceDescription="<%= fileEntry.getTitle() %>"
-						resourcePrimKey="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
-						var="permissionsURL"
-					/>
-
-					handler: function(event) {
-						location.href = '<%= permissionsURL.toString() %>';
-					},
-					icon: 'permissions',
-					label: '<liferay-ui:message key="permissions" />'
-				}
 			]
 		}
 	).render();

@@ -55,18 +55,18 @@ import com.liferay.portal.messaging.LayoutsLocalPublisherRequest;
 import com.liferay.portal.messaging.LayoutsRemotePublisherRequest;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutBranch;
 import com.liferay.portal.model.LayoutRevision;
-import com.liferay.portal.model.LayoutRevisionConstants;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutSetBranchConstants;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.HttpPrincipal;
-import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutBranchLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutRevisionLocalServiceUtil;
 import com.liferay.portal.service.LayoutServiceUtil;
@@ -348,18 +348,16 @@ public class StagingImpl implements Staging {
 	}
 
 	public void disableStaging(
-			long scopeGroupId, long liveGroupId, ServiceContext serviceContext)
+			Group scopeGroup, Group liveGroup, ServiceContext serviceContext)
 		throws Exception {
 
-		disableStaging(null, scopeGroupId, liveGroupId, serviceContext);
+		disableStaging(null, scopeGroup, liveGroup, serviceContext);
 	}
 
 	public void disableStaging(
-			PortletRequest portletRequest, long scopeGroupId, long liveGroupId,
+			PortletRequest portletRequest, Group scopeGroup, Group liveGroup,
 			ServiceContext serviceContext)
 		throws Exception {
-
-		Group liveGroup = GroupLocalServiceUtil.getGroup(liveGroupId);
 
 		UnicodeProperties typeSettingsProperties =
 			liveGroup.getTypeSettingsProperties();
@@ -390,7 +388,7 @@ public class StagingImpl implements Staging {
 
 		if (liveGroup.hasStagingGroup()) {
 			if ((portletRequest != null) &&
-				(scopeGroupId != liveGroup.getGroupId())) {
+				(scopeGroup.getGroupId() != liveGroup.getGroupId())) {
 
 				String redirect = ParamUtil.getString(
 					portletRequest, "pagesRedirect");
@@ -398,7 +396,7 @@ public class StagingImpl implements Staging {
 				redirect = HttpUtil.removeParameter(redirect, "refererPlid");
 
 				redirect = StringUtil.replace(
-					redirect, String.valueOf(scopeGroupId),
+					redirect, String.valueOf(scopeGroup.getGroupId()),
 					String.valueOf(liveGroup.getGroupId()));
 
 				portletRequest.setAttribute(WebKeys.REDIRECT, redirect);
@@ -425,15 +423,13 @@ public class StagingImpl implements Staging {
 	}
 
 	public void enableLocalStaging(
-			long userId, long scopeGroupId, long liveGroupId,
+			long userId, Group scopeGroup, Group liveGroup,
 			boolean branchingPublic, boolean branchingPrivate,
 			ServiceContext serviceContext)
 		throws Exception {
 
-		Group liveGroup = GroupLocalServiceUtil.getGroup(liveGroupId);
-
 		if (liveGroup.isStagedRemotely()) {
-			disableStaging(scopeGroupId, liveGroupId, serviceContext);
+			disableStaging(scopeGroup, liveGroup, serviceContext);
 		}
 
 		UnicodeProperties typeSettingsProperties =
@@ -505,18 +501,16 @@ public class StagingImpl implements Staging {
 	}
 
 	public void enableRemoteStaging(
-			long userId, long scopeGroupId, long liveGroupId,
+			long userId, Group scopeGroup, Group liveGroup,
 			boolean branchingPublic, boolean branchingPrivate,
 			String remoteAddress, long remoteGroupId, int remotePort,
 			boolean secureConnection, ServiceContext serviceContext)
 		throws Exception {
 
-		Group liveGroup = GroupLocalServiceUtil.getGroup(liveGroupId);
-
 		validate(remoteAddress, remoteGroupId, remotePort, secureConnection);
 
 		if (liveGroup.hasStagingGroup()) {
-			disableStaging(scopeGroupId, liveGroupId, serviceContext);
+			disableStaging(scopeGroup, liveGroup, serviceContext);
 		}
 
 		UnicodeProperties typeSettingsProperties =
@@ -583,7 +577,7 @@ public class StagingImpl implements Staging {
 
 	public long getRecentLayoutRevisionId(
 			HttpServletRequest request, long layoutSetBranchId, long plid)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		PortalPreferences portalPreferences =
 			PortletPreferencesFactoryUtil.getPortalPreferences(request);
@@ -594,7 +588,7 @@ public class StagingImpl implements Staging {
 
 	public long getRecentLayoutRevisionId(
 			User user, long layoutSetBranchId, long plid)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		PortalPreferences portalPreferences = getPortalPreferences(user);
 
@@ -1034,6 +1028,28 @@ public class StagingImpl implements Staging {
 		publishToRemote(portletRequest, true);
 	}
 
+	public void setRecentLayoutBranchId(
+		HttpServletRequest request, long layoutSetBranchId, long plid,
+		long layoutBranchId)
+		throws SystemException {
+
+		PortalPreferences portalPreferences =
+			PortletPreferencesFactoryUtil.getPortalPreferences(request);
+
+		setRecentLayoutBranchId(
+			portalPreferences, layoutSetBranchId, plid, layoutBranchId);
+	}
+
+	public void setRecentLayoutBranchId(
+		User user, long layoutSetBranchId, long plid, long layoutBranchId)
+		throws SystemException {
+
+		PortalPreferences portalPreferences = getPortalPreferences(user);
+
+		setRecentLayoutBranchId(
+			portalPreferences, layoutSetBranchId, plid, layoutBranchId);
+	}
+
 	public void setRecentLayoutRevisionId(
 			HttpServletRequest request, long layoutSetBranchId, long plid,
 			long layoutRevisionId)
@@ -1072,28 +1088,6 @@ public class StagingImpl implements Staging {
 		portalPreferences.setValue(
 			Staging.class.getName(), getRecentLayoutSetBranchIdKey(),
 			String.valueOf(layoutSetBranchId));
-	}
-
-	public void setRecentVariationName(
-			HttpServletRequest request, long layoutSetBranchId, long plid,
-			String variationName)
-		throws SystemException {
-
-		PortalPreferences portalPreferences =
-			PortletPreferencesFactoryUtil.getPortalPreferences(request);
-
-		setRecentVariationName(
-			portalPreferences, layoutSetBranchId, plid, variationName);
-	}
-
-	public void setRecentVariationName(
-			User user, long layoutSetBranchId, long plid, String variationName)
-		throws SystemException {
-
-		PortalPreferences portalPreferences = getPortalPreferences(user);
-
-		setRecentVariationName(
-			portalPreferences, layoutSetBranchId, plid, variationName);
 	}
 
 	public void unscheduleCopyFromLive(PortletRequest portletRequest)
@@ -1185,16 +1179,24 @@ public class StagingImpl implements Staging {
 		typeSettingsProperties.setProperty(
 			"last-import-user-uuid", lastImportUserUuid);
 
-		String variationName = GetterUtil.getString(
-			layoutElement.attributeValue("variation-name"));
+		String layoutBranchId = GetterUtil.getString(
+			layoutElement.attributeValue("layout-branch-id"));
 
 		typeSettingsProperties.setProperty(
-			"last-import-variation-name", variationName);
+			"last-import-layout-branch-id", layoutBranchId);
+
+		String layoutBranchName = GetterUtil.getString(
+			layoutElement.attributeValue("layout-branch-name"));
+
+		typeSettingsProperties.setProperty(
+			"last-import-layout-branch-name", layoutBranchName);
 
 		layout.setTypeSettingsProperties(typeSettingsProperties);
 	}
 
-	public void updateStaging(PortletRequest portletRequest) throws Exception {
+	public void updateStaging(PortletRequest portletRequest, Group liveGroup)
+		throws Exception {
+
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
@@ -1203,14 +1205,13 @@ public class StagingImpl implements Staging {
 
 		long userId = permissionChecker.getUserId();
 
-		long scopeGroupId = themeDisplay.getScopeGroupId();
-
-		long liveGroupId = ParamUtil.getLong(portletRequest, "liveGroupId");
+		Group scopeGroup = themeDisplay.getScopeGroup();
 
 		if (!GroupPermissionUtil.contains(
-				permissionChecker, liveGroupId, ActionKeys.MANAGE_STAGING)) {
+				permissionChecker, liveGroup.getGroupId(),
+				ActionKeys.MANAGE_STAGING)) {
 
-			throw new PrincipalException();
+			return;
 		}
 
 		int stagingType = ParamUtil.getInteger(portletRequest, "stagingType");
@@ -1225,11 +1226,11 @@ public class StagingImpl implements Staging {
 
 		if (stagingType == StagingConstants.TYPE_NOT_STAGED) {
 			disableStaging(
-				portletRequest, scopeGroupId, liveGroupId, serviceContext);
+				portletRequest, scopeGroup, liveGroup, serviceContext);
 		}
 		else if (stagingType == StagingConstants.TYPE_LOCAL_STAGING) {
 			enableLocalStaging(
-				userId, scopeGroupId, liveGroupId, branchingPublic,
+				userId, scopeGroup, liveGroup, branchingPublic,
 				branchingPrivate, serviceContext);
 		}
 		else if (stagingType == StagingConstants.TYPE_REMOTE_STAGING) {
@@ -1242,7 +1243,7 @@ public class StagingImpl implements Staging {
 				portletRequest, "secureConnection");
 
 			enableRemoteStaging(
-				userId, scopeGroupId, liveGroupId, branchingPublic,
+				userId, scopeGroup, liveGroup, branchingPublic,
 				branchingPrivate, remoteAddress, remoteGroupId, remotePort,
 				secureConnection, serviceContext);
 		}
@@ -1281,14 +1282,15 @@ public class StagingImpl implements Staging {
 			Locale locale = LocaleUtil.getDefault();
 
 			String description = LanguageUtil.format(
-				locale, LayoutSetBranchConstants.MASTER_BRANCH_DESCRIPTION,
+				locale,
+				LayoutSetBranchConstants.MASTER_BRANCH_DESCRIPTION_PUBLIC,
 				liveGroup.getDescriptiveName());
 
 			try {
 				LayoutSetBranchLocalServiceUtil.addLayoutSetBranch(
 					userId, targetGroupId, false,
 					LayoutSetBranchConstants.MASTER_BRANCH_NAME,
-					description, LayoutSetBranchConstants.ALL_BRANCHES,
+					description, true, LayoutSetBranchConstants.ALL_BRANCHES,
 					serviceContext);
 			}
 			catch (LayoutSetBranchNameException lsbne) {
@@ -1299,14 +1301,15 @@ public class StagingImpl implements Staging {
 			Locale locale = LocaleUtil.getDefault();
 
 			String description = LanguageUtil.format(
-				locale, LayoutSetBranchConstants.MASTER_BRANCH_DESCRIPTION,
+				locale,
+				LayoutSetBranchConstants.MASTER_BRANCH_DESCRIPTION_PRIVATE,
 				liveGroup.getDescriptiveName());
 
 			try {
 				LayoutSetBranchLocalServiceUtil.addLayoutSetBranch(
 					userId, targetGroupId, true,
 					LayoutSetBranchConstants.MASTER_BRANCH_NAME,
-					description, LayoutSetBranchConstants.ALL_BRANCHES,
+					description, true, LayoutSetBranchConstants.ALL_BRANCHES,
 					serviceContext);
 			}
 			catch (LayoutSetBranchNameException lsbne) {
@@ -1521,10 +1524,33 @@ public class StagingImpl implements Staging {
 		return portalPreferences;
 	}
 
+	protected long getRecentLayoutBranchId(
+		PortalPreferences portalPreferences, long layoutSetBranchId,
+		long plid) {
+
+		return GetterUtil.getLong(
+			portalPreferences.getValue(
+				Staging.class.getName(),
+				getRecentLayoutBranchIdKey(layoutSetBranchId, plid)));
+	}
+
+	protected String getRecentLayoutBranchIdKey(
+		long layoutSetBranchId, long plid) {
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("layoutBranchId-");
+		sb.append(layoutSetBranchId);
+		sb.append(StringPool.DASH);
+		sb.append(plid);
+
+		return sb.toString();
+	}
+
 	protected long getRecentLayoutRevisionId(
 			PortalPreferences portalPreferences, long layoutSetBranchId,
 			long plid)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		long layoutRevisionId = GetterUtil.getLong(
 			portalPreferences.getValue(
@@ -1535,13 +1561,21 @@ public class StagingImpl implements Staging {
 			return layoutRevisionId;
 		}
 
-		String variationName = getRecentVariationName(
+		long layoutBranchId = getRecentLayoutBranchId(
 			portalPreferences, layoutSetBranchId, plid);
+
+		if (layoutBranchId <= 0) {
+			LayoutBranch layoutBranch =
+				LayoutBranchLocalServiceUtil.getMasterLayoutBranch(
+					layoutSetBranchId, plid);
+
+			layoutBranchId = layoutBranch.getLayoutBranchId();
+		}
 
 		try {
 			LayoutRevision layoutRevision =
 				LayoutRevisionLocalServiceUtil.getLayoutRevision(
-					layoutSetBranchId, plid, variationName);
+					layoutSetBranchId, layoutBranchId, plid);
 
 			if (layoutRevision != null) {
 				layoutRevisionId = layoutRevision.getLayoutRevisionId();
@@ -1568,30 +1602,6 @@ public class StagingImpl implements Staging {
 
 	protected String getRecentLayoutSetBranchIdKey() {
 		return "layoutSetBranchId";
-	}
-
-	protected String getRecentVariationName(
-		PortalPreferences portalPreferences, long layoutSetBranchId,
-		long plid) {
-
-		return GetterUtil.getString(
-			portalPreferences.getValue(
-				Staging.class.getName(),
-				getRecentVariationNameKey(layoutSetBranchId, plid),
-				LayoutRevisionConstants.DEFAULT_LAYOUT_VARIATION_NAME));
-	}
-
-	protected String getRecentVariationNameKey(
-		long layoutSetBranchId, long plid) {
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("variationName-");
-		sb.append(layoutSetBranchId);
-		sb.append(StringPool.DASH);
-		sb.append(plid);
-
-		return sb.toString();
 	}
 
 	protected void publishLayouts(
@@ -1949,24 +1959,33 @@ public class StagingImpl implements Staging {
 		}
 	}
 
+	protected void setRecentLayoutBranchId(
+		PortalPreferences portalPreferences, long layoutSetBranchId, long plid,
+		long layoutBranchId) {
+
+		portalPreferences.setValue(
+			Staging.class.getName(),
+			getRecentLayoutBranchIdKey(layoutSetBranchId, plid),
+			String.valueOf(layoutBranchId));
+	}
+
 	protected void setRecentLayoutRevisionId(
 			PortalPreferences portalPreferences, long layoutSetBranchId,
 			long plid, long layoutRevisionId)
 		throws SystemException {
 
-		String variationName =
-			LayoutRevisionConstants.DEFAULT_LAYOUT_VARIATION_NAME;
+		long layoutBranchId = 0;
 
 		try {
 			LayoutRevision layoutRevision =
 				LayoutRevisionLocalServiceUtil.getLayoutRevision(
 					layoutRevisionId);
 
-			variationName = layoutRevision.getVariationName();
+			layoutBranchId = layoutRevision.getLayoutBranchId();
 
 			LayoutRevision lastLayoutRevision =
 				LayoutRevisionLocalServiceUtil.getLayoutRevision(
-					layoutSetBranchId, plid, variationName);
+					layoutSetBranchId, layoutBranchId, plid);
 
 			if (lastLayoutRevision.getLayoutRevisionId() == layoutRevisionId) {
 				deleteRecentLayoutRevisionId(
@@ -1984,16 +2003,8 @@ public class StagingImpl implements Staging {
 
 		portalPreferences.setValue(
 			Staging.class.getName(),
-			getRecentVariationNameKey(layoutSetBranchId, plid), variationName);
-	}
-
-	protected void setRecentVariationName(
-		PortalPreferences portalPreferences, long layoutSetBranchId, long plid,
-		String variationName) {
-
-		portalPreferences.setValue(
-			Staging.class.getName(),
-			getRecentVariationNameKey(layoutSetBranchId, plid),	variationName);
+			getRecentLayoutBranchIdKey(layoutSetBranchId, plid),
+			String.valueOf(layoutBranchId));
 	}
 
 	protected void validate(

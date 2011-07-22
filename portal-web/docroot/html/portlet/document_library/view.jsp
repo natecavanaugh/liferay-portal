@@ -81,6 +81,10 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 				</div>
 			</div>
 
+			<div class="document-library-breadcrumb" id="<portlet:namespace />breadcrumbContainer">
+				<liferay-util:include page="/html/portlet/document_library/breadcrumb.jsp" />
+			</div>
+
 			<liferay-portlet:renderURL varImpl="editFileEntryURL">
 				<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
 			</liferay-portlet:renderURL>
@@ -101,10 +105,6 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 			</aui:form>
 		</aui:column>
 	</aui:layout>
-
-	<div class="document-library-breadcrumb" id="<portlet:namespace />breadcrumbContainer">
-		<liferay-util:include page="/html/portlet/document_library/breadcrumb.jsp" />
-	</div>
 </div>
 
 <%
@@ -204,7 +204,7 @@ if (folder != null) {
 	<liferay-util:include page="/html/portlet/document_library/display_style_buttons.jsp" />
 </span>
 
-<aui:script use="aui-paginator,liferay-list-view,liferay-history">
+<aui:script use="aui-paginator,liferay-list-view,liferay-history-manager">
 	<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" varImpl="mainURL">
 	</liferay-portlet:resourceURL>
 
@@ -238,7 +238,7 @@ if (folder != null) {
 
 	var displayStyleToolbarNode = A.one('#<portlet:namespace />displayStyleToolbar');
 
-	var History = Liferay.History;
+	var History = Liferay.HistoryManager;
 
 	var ioRequest;
 
@@ -289,30 +289,28 @@ if (folder != null) {
 		ioRequest.start();
 	}
 
-	function afterHistoryChange(event) {
-		if (event.src === Liferay.History.SRC_HASH || event.src === Liferay.History.SRC_POPSTATE) {
-			var state = History.get();
+	function afterStateChange(event) {
+		var state = History.get();
 
-			var requestParams = {};
+		var requestParams = {};
 
-			AObject.each(
-				state,
-				function(value, key, collection) {
-					if (key.indexOf('<portlet:namespace />') == 0) {
-						requestParams[key] = value;
-					}
+		AObject.each(
+			state,
+			function(value, key, collection) {
+				if (key.indexOf('<portlet:namespace />') == 0) {
+					requestParams[key] = value;
+				}
+			}
+		);
+
+		if (!AObject.isEmpty(requestParams)) {
+			Liferay.fire(
+				EVENT_DATA_REQUEST,
+				{
+					requestParams: requestParams,
+					src: SRC_HISTORY
 				}
 			);
-
-			if (!AObject.isEmpty(requestParams)) {
-				Liferay.fire(
-					EVENT_DATA_REQUEST,
-					{
-						requestParams: requestParams,
-						src: SRC_HISTORY
-					}
-				);
-			}
 		}
 	}
 
@@ -721,7 +719,7 @@ if (folder != null) {
 		'a[data-folder=true], #<portlet:namespace />breadcrumbContainer a'
 	);
 
-	History.after('change', afterHistoryChange);
+	History.after('stateChange', afterStateChange);
 
 	documentLibraryContainer.plug(A.LoadingMask);
 

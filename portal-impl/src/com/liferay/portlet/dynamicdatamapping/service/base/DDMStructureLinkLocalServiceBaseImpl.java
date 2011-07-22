@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -54,6 +56,8 @@ import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMStructureLi
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMStructurePersistence;
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplateFinder;
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplatePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -247,6 +251,11 @@ public abstract class DDMStructureLinkLocalServiceBaseImpl
 		return ddmStructureLinkPersistence.findByPrimaryKey(structureLinkId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return ddmStructureLinkPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the d d m structure links.
 	 *
@@ -275,7 +284,7 @@ public abstract class DDMStructureLinkLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the d d m structure link in the database. Also notifies the appropriate model listeners.
+	 * Updates the d d m structure link in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param ddmStructureLink the d d m structure link
 	 * @return the d d m structure link that was updated
@@ -287,7 +296,7 @@ public abstract class DDMStructureLinkLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the d d m structure link in the database. Also notifies the appropriate model listeners.
+	 * Updates the d d m structure link in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param ddmStructureLink the d d m structure link
 	 * @param merge whether to merge the d d m structure link with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -762,6 +771,16 @@ public abstract class DDMStructureLinkLocalServiceBaseImpl
 		this.userFinder = userFinder;
 	}
 
+	public void afterPropertiesSet() {
+		persistedModelLocalServiceRegistry.register("com.liferay.portlet.dynamicdatamapping.model.DDMStructureLink",
+			ddmStructureLinkLocalService);
+	}
+
+	public void destroy() {
+		persistedModelLocalServiceRegistry.unregister(
+			"com.liferay.portlet.dynamicdatamapping.model.DDMStructureLink");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -855,6 +874,8 @@ public abstract class DDMStructureLinkLocalServiceBaseImpl
 	protected UserPersistence userPersistence;
 	@BeanReference(type = UserFinder.class)
 	protected UserFinder userFinder;
+	@BeanReference(type = PersistedModelLocalServiceRegistry.class)
+	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
 	private static Log _log = LogFactoryUtil.getLog(DDMStructureLinkLocalServiceBaseImpl.class);
 	private String _beanIdentifier;
 }
