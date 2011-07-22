@@ -264,8 +264,6 @@ if (folder != null) {
 	function afterDataRequest(event) {
 		var requestParams = event.requestParams;
 
-		var itemChosen = listView.get('item');
-
 		var data = {
 			'<portlet:namespace />folderId': '<%= DLFolderConstants.DEFAULT_PARENT_FOLDER_ID %>',
 			'<portlet:namespace />displayStyle': History.get('<portlet:namespace />displayStyle') || '<%= HtmlUtil.escape(displayStyle) %>',
@@ -541,19 +539,12 @@ if (folder != null) {
 
 	function setFolders(content) {
 		var folders = content.one('#<portlet:namespace />folderContainer');
+		var item = listView.get('item');
 
-		if (folders) {
-			var currentFolders = listView.get('data');
+		if (folders && item) {
+			var refreshFolders = item.attr('data-refresh-folders');
 
-			var currentFolderId = currentFolders && currentFolders.attr('data-folderId');
-			var currentParentFolderId = currentFolders && currentFolders.attr('data-parent-folderId');
-
-			var showSiblings = currentFolders && currentFolders.attr('data-show-siblings');
-
-			var folderId = folders && folders.attr('data-folderId');
-			var parentFolderId = folders && folders.attr('data-parent-folderId');
-
-			if ((folderId == '0') || (parentFolderId != currentParentFolderId)) {
+			if (refreshFolders) {
 				listView.set('data', folders);
 			}
 		}
@@ -723,10 +714,7 @@ if (folder != null) {
 
 	documentLibraryContainer.plug(A.LoadingMask);
 
-	if (!History.html5) {
-		mainEntry();
-	}
-	else {
+	if (!History.HTML5) {
 		var state = History.get();
 
 		if (!AObject.isEmpty(state)) {
