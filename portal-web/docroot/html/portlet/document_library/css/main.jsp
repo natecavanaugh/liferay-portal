@@ -465,6 +465,11 @@
 		}
 	}
 
+	.document-library-breadcrumb ul {
+		margin-bottom: 6px;
+		padding: 4px 10px 0 10px;
+	}
+
 	.view {
 		border: 1px solid #7B7B7B;
 

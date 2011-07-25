@@ -16,12 +16,12 @@
 
 <%@ include file="/html/portlet/document_library/init.jsp" %>
 
-<liferay-ui:icon-menu align="left" direction="down" icon="" message="sort-by" showExpanded="<%= false %>" showWhenSingleIcon="<%= false %>">
+<%
+String orderByCol = ParamUtil.getString(request, "orderByCol");
+String orderByType = ParamUtil.getString(request, "orderByType");
+%>
 
-	<%
-	String orderByCol = ParamUtil.getString(request, "orderByCol");
-	String orderByType = ParamUtil.getString(request, "orderByType");
-	%>
+<liferay-ui:icon-menu align="left" direction="down" icon="" message="sort-by" showExpanded="<%= false %>" showWhenSingleIcon="<%= false %>">
 
 	<portlet:resourceURL var="sortByTitle">
 		<portlet:param name="struts_action" value="/document_library/view" />
@@ -32,7 +32,7 @@
 	</portlet:resourceURL>
 
 	<%
-	String taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + sortByTitle.toString() + "')";
+	String taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('title')";
 	%>
 
 	<liferay-ui:icon
@@ -50,7 +50,7 @@
 	</portlet:resourceURL>
 
 	<%
-	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + sortByCreationDate.toString() + "')";
+	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('creationDate')";
 	%>
 
 	<liferay-ui:icon
@@ -68,7 +68,7 @@
 	</portlet:resourceURL>
 
 	<%
-	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + sortByModifiedDate.toString() + "')";
+		taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('modifiedDate')";
 	%>
 
 	<liferay-ui:icon
@@ -86,7 +86,7 @@
 	</portlet:resourceURL>
 
 	<%
-	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + sortByReadCount.toString() + "')";
+		taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('readCount')";
 	%>
 
 	<liferay-ui:icon
@@ -104,7 +104,7 @@
 	</portlet:resourceURL>
 
 	<%
-	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + sortBySize.toString() + "')";
+	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('size')";
 	%>
 
 	<liferay-ui:icon
@@ -115,37 +115,26 @@
 </liferay-ui:icon-menu>
 
 <aui:script use="aui-base">
+	var documentLibraryContainer = A.one('#<portlet:namespace />documentLibraryContainer');
+
 	var entriesContainer = A.one('#<portlet:namespace />documentContainer');
 
 	Liferay.provide(
 		window,
 		'<portlet:namespace />sortEntries',
-		function(url) {
-			entriesContainer.plug(A.LoadingMask);
+		function (orderByCol) {
+			var config = {
+				'<portlet:namespace />struts_action': '/document_library/view',
+				'<portlet:namespace />viewEntries': <%= Boolean.TRUE.toString() %>,
+				'<portlet:namespace />viewSortButton': <%= Boolean.TRUE.toString() %>,
+				'<portlet:namespace />orderByCol': orderByCol,
+				'<portlet:namespace />orderByType': '<%= (orderByCol.equals("title") && orderByType.equals("asc")) ? "desc" : "asc" %>'
+			};
 
-			entriesContainer.loadingmask.toggle();
-
-			A.io.request(
-				url,
+			Liferay.fire(
+				'<portlet:namespace />dataRequest',
 				{
-					after: {
-						success: function(event, id, obj) {
-							entriesContainer.unplug(A.LoadingMask);
-
-							var responseData = this.get('responseData');
-
-							var content = A.Node.create(responseData);
-
-							var sortButtonContainer = A.one('#<portlet:namespace />sortButtonContainer');
-							var sortButton = content.one('#<portlet:namespace />sortButton')
-
-							sortButtonContainer.setContent(sortButton);
-
-							var entries = content.one('#<portlet:namespace />entries');
-
-							entriesContainer.setContent(entries);
-						}
-					}
+					requestParams: config
 				}
 			);
 		},
