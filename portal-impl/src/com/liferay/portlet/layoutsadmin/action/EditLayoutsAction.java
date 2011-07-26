@@ -578,8 +578,11 @@ public class EditLayoutsAction extends PortletAction {
 		long[] layoutIds = StringUtil.split(
 			ParamUtil.getString(actionRequest, "layoutIds"), 0L);
 
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			actionRequest);
+
 		LayoutServiceUtil.setLayouts(
-			groupId, privateLayout, parentLayoutId, layoutIds);
+			groupId, privateLayout, parentLayoutId, layoutIds, serviceContext);
 	}
 
 	protected Object[] updateLayout(
