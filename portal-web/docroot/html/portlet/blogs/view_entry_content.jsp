@@ -67,12 +67,12 @@ AssetEntry assetEntry = (AssetEntry)request.getAttribute("view_entry_content.jsp
 				<portlet:param name="urlTitle" value="<%= entry.getUrlTitle() %>" />
 			</portlet:renderURL>
 			
-			<c:if test='<%= enableSocialBookmarks && socialBookmarksPosition.equals("top") %>'>
+			<c:if test='<%= enableSocialBookmarks && socialBookmarksDisplayPosition.equals("top") %>'>
 				<liferay-ui:social-bookmarks
 					url="<%= bookmarkURL.toString() %>"
 					title="<%= entry.getTitle() %>"
 					target="_blank"
-					displayStyle="<%= socialBookmarksDisplay %>"
+					displayStyle="<%= socialBookmarksDisplayStyle %>"
 				/>
 			</c:if>
 
@@ -240,12 +240,12 @@ AssetEntry assetEntry = (AssetEntry)request.getAttribute("view_entry_content.jsp
 						</div>
 					</c:if>
 					
-					<c:if test='<%= enableSocialBookmarks && socialBookmarksPosition.equals("bottom") %>'>
+					<c:if test='<%= enableSocialBookmarks && socialBookmarksDisplayPosition.equals("bottom") %>'>
 						<liferay-ui:social-bookmarks
 							url="<%= bookmarkURL.toString() %>"
 							title="<%= entry.getTitle() %>"
 							target="_blank"
-							displayStyle="<%= socialBookmarksDisplay %>"
+							displayStyle="<%= socialBookmarksDisplayStyle %>"
 						/>
 					</c:if>
 

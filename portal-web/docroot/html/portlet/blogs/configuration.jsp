@@ -307,16 +307,16 @@ String editorContent = emailBody;
 				<aui:fieldset>
 					<aui:input name="preferences--enableSocialBookmarks--" type="checkbox" value="<%= enableSocialBookmarks %>" />
 					
-					<div id="<portlet:namespace />socialBookmarksOptions">
-						<aui:select label="social-bookmarks-display" name="preferences--socialBookmarksDisplay--">
-							<aui:option label="simple" selected='<%= socialBookmarksDisplay.equals("simple") %>' />
-							<aui:option label="vertical" selected='<%= socialBookmarksDisplay.equals("vertical") %>' />
-							<aui:option label="horizontal" selected='<%= socialBookmarksDisplay.equals("horizontal") %>' />
+					<div class="social-boomarks-options" id="<portlet:namespace />socialBookmarksOptions">
+						<aui:select label="display-style" name="preferences--socialBookmarksDisplayStyle--">
+							<aui:option label="simple" selected='<%= socialBookmarksDisplayStyle.equals("simple") %>' />
+							<aui:option label="vertical" selected='<%= socialBookmarksDisplayStyle.equals("vertical") %>' />
+							<aui:option label="horizontal" selected='<%= socialBookmarksDisplayStyle.equals("horizontal") %>' />
 						</aui:select>
 
-						<aui:select label="social-bookmarks-position" name="preferences--socialBookmarksPosition--">
-							<aui:option label="top" selected='<%= socialBookmarksPosition.equals("top") %>' />
-							<aui:option label="bottom" selected='<%= socialBookmarksPosition.equals("bottom") %>' />	
+						<aui:select label="display-position" name="preferences--socialBookmarksDisplayPosition--">
+							<aui:option label="top" selected='<%= socialBookmarksDisplayPosition.equals("top") %>' />
+							<aui:option label="bottom" selected='<%= socialBookmarksDisplayPosition.equals("bottom") %>' />
 						</aui:select>
 					</div>
 				</aui:fieldset>
