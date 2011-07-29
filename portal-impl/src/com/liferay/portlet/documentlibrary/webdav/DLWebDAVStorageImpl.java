@@ -187,7 +187,7 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 			}
 
 			DLAppServiceUtil.addFileEntry(
-				groupId, parentFolderId, mimeType, title, description,
+				groupId, parentFolderId, title, mimeType, title, description,
 				changeLog, file, serviceContext);
 
 			return status;
@@ -382,8 +382,8 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 				serviceContext.setAddGuestPermissions(true);
 
 				FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
-					groupId, parentFolderId, contentType, title, description,
-					changeLog, file, serviceContext);
+					groupId, parentFolderId, title, contentType, title,
+					description, changeLog, file, serviceContext);
 
 				resource = toResource(webDavRequest, fileEntry, false);
 			}
@@ -651,8 +651,6 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 			String title = WebDAVUtil.getResourceName(pathArray);
 			String description = StringPool.BLANK;
 			String changeLog = StringPool.BLANK;
-			long contentLength = GetterUtil.getLong(
-				request.getHeader(HttpHeaders.CONTENT_LENGTH));
 
 			ServiceContext serviceContext = new ServiceContext();
 
@@ -697,8 +695,8 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 			}
 			catch (NoSuchFileEntryException nsfee) {
 				DLAppServiceUtil.addFileEntry(
-					groupId, parentFolderId, contentType, title, description,
-					changeLog, file, serviceContext);
+					groupId, parentFolderId, title, contentType, title,
+					description, changeLog, file, serviceContext);
 			}
 
 			if (_log.isInfoEnabled()) {
