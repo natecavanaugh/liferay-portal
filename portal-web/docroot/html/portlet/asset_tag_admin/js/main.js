@@ -1472,7 +1472,7 @@ AUI().add(
 						output.addClass(typeClass);
 						output.html(message);
 
-						output.show();
+						output.show('fadeIn');
 
 						instance._hideMessageTask();
 					},
