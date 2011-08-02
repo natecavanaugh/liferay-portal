@@ -22,12 +22,7 @@
 		font-size: 1.2em;
 		margin-bottom: 0;
 
-		li.aui-state-default,
-		.first,
-		.last,
-		.aui-tab-content,
-		.aui-tab-label,
-		.aui-tab-label a {
+		.aui-tab-content, .aui-tab-label, .aui-tab-label a, .first, .last, li.aui-state-default {
 			background: transparent none;
 			border-color: transparent;
 			border-width: 0 0;
@@ -93,8 +88,7 @@
 			color: #EEE;
 			padding: 0.5em 1em;
 
-			.taglib-text,
-			.aui-tabview-list a {
+			.aui-tabview-list a, .taglib-text {
 				text-decoration: none
 			}
 
