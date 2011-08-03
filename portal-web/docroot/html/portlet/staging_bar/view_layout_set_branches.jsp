@@ -19,7 +19,9 @@
 <%
 List<LayoutSetBranch> layoutSetBranches = LayoutSetBranchLocalServiceUtil.getLayoutSetBranches(stagingGroup.getGroupId(), privateLayout);
 
-LayoutSetBranch layoutSetBranch = LayoutSetBranchLocalServiceUtil.getUserLayoutSetBranch(themeDisplay.getUserId(), stagingGroup.getGroupId(), privateLayout, 0);
+LayoutSetBranch currentLayoutSetBranch = LayoutSetBranchLocalServiceUtil.getUserLayoutSetBranch(themeDisplay.getUserId(), stagingGroup.getGroupId(), privateLayout, 0);
+
+request.setAttribute("view_layout_set_branches.jsp-currentLayoutSetBranchId", String.valueOf(currentLayoutSetBranch.getLayoutSetBranchId()));
 %>
 
 <liferay-ui:error key="<%= LayoutSetBranchNameException.class.getName() + LayoutSetBranchNameException.DUPLICATE %>" message="a-branch-with-that-name-already-exists" />
@@ -66,14 +68,18 @@ LayoutSetBranch layoutSetBranch = LayoutSetBranchLocalServiceUtil.getUserLayoutS
 			>
 
 				<%
-				if (layoutSetBranch.equals(curLayoutSetBranch)) {
+				if (currentLayoutSetBranch.equals(curLayoutSetBranch)) {
 					buffer.append("<strong>");
 				}
 
 				buffer.append(LanguageUtil.get(pageContext, curLayoutSetBranch.getName()));
 
-				if (layoutSetBranch.equals(curLayoutSetBranch)) {
-					buffer.append(" (*)</strong>");
+				if (curLayoutSetBranch.isMaster()) {
+					buffer.append(" (*)");
+				}
+
+				if (currentLayoutSetBranch.equals(curLayoutSetBranch)) {
+					buffer.append("</strong>");
 				}
 				%>
 
@@ -99,3 +105,21 @@ LayoutSetBranch layoutSetBranch = LayoutSetBranchLocalServiceUtil.getUserLayoutS
 		}
 	);
 </aui:script>
+
+<c:if test='<%= themeDisplay.isStatePopUp() && SessionMessages.contains(renderRequest, portletName + ".doConfigure") %>'>
+	<aui:script use="aui-base">
+		if (window.parent) {
+			var stagingBarPortletBoundaryId = '#p_p_id_<%= PortletKeys.STAGING_BAR %>_';
+
+			var data;
+
+			<c:if test='<%= SessionMessages.contains(renderRequest, portletName + ".notAjaxable") %>'>
+				data = {
+					portletAjaxable: false
+				};
+			</c:if>
+
+			Liferay.Util.getOpener().Liferay.Portlet.refresh(stagingBarPortletBoundaryId, data);
+		}
+	</aui:script>
+</c:if>
