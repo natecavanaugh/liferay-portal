@@ -77,6 +77,7 @@
 <%@ page import="com.liferay.portlet.documentlibrary.util.DocumentConversionUtil" %>
 <%@ page import="com.liferay.portlet.documentlibrary.util.PDFProcessor" %>
 <%@ page import="com.liferay.portlet.documentlibrary.util.VideoProcessor" %>
+<%@ page import="com.liferay.portlet.dynamicdatamapping.NoSuchStructureException" %>
 <%@ page import="com.liferay.portlet.dynamicdatamapping.model.DDMStructure" %>
 <%@ page import="com.liferay.portlet.dynamicdatamapping.search.StructureSearch" %>
 <%@ page import="com.liferay.portlet.dynamicdatamapping.search.StructureSearchTerms" %>
