@@ -88,7 +88,7 @@ if (layout != null) {
 
 				<c:choose>
 					<c:when test="<%= !layoutSetBranches.isEmpty() %>">
-						<c:if test="<%= group.isStagingGroup() || layoutSetBranches.size() < _MAX_INLINE_BRANCHES %>">
+						<c:if test="<%= group.isStagingGroup() || layoutSetBranches.size() <= _MAX_INLINE_BRANCHES %>">
 
 							<%
 							for (int i = 0; i < layoutSetBranches.size(); i++) {
@@ -145,7 +145,7 @@ if (layout != null) {
 							<li class="aui-state-default aui-tab go-to-layout-set-branches-tab">
 								<span class="aui-tab-content">
 									<span class="aui-tab-label">
-										<liferay-ui:icon-menu align="left" cssClass="layoutset-branches-menu" direction="down" extended="<%= false %>" icon='<%= themeDisplay.getPathThemeImages() + "/dock/staging.png" %>' message='<%= layout.isPrivateLayout() ? "private-pages-variations" : "public-pages-variations" %>'>
+										<liferay-ui:icon-menu align="left" cssClass="layoutset-branches-menu" direction="down" extended="<%= false %>" icon='<%= themeDisplay.getPathThemeImages() + "/dock/staging.png" %>' message='<%= LanguageUtil.format(pageContext, "site-pages-variations-x", layoutSetBranches.size()) %>'>
 
 											<%
 											for (int i = 0; i < layoutSetBranches.size(); i++) {
@@ -186,7 +186,7 @@ if (layout != null) {
 						<li class="aui-state-default aui-tab last manage-layout-set-branches-tab">
 							<span class="aui-tab-content">
 								<span class="aui-tab-label">
-									<liferay-ui:icon cssClass="manage-layout-set-branches" id="manageLayoutSetBranches" image="configuration" label="<%= true %>" message='<%= layout.isPrivateLayout() ? "manage-private-pages-variations" : "manage-public-pages-variations" %>' url="<%= layoutSetBranchesURL %>" />
+									<liferay-ui:icon cssClass="manage-layout-set-branches" id="manageLayoutSetBranches" image="configuration" label="<%= true %>" message="manage-site-pages-variations" url="<%= layoutSetBranchesURL %>" />
 								</span>
 							</span>
 						</li>
@@ -209,7 +209,7 @@ if (layout != null) {
 														width: 820
 													},
 												id: '<portlet:namespace />layoutSetBranches',
-												title: '<liferay-ui:message key='<%= layout.isPrivateLayout() ? "manage-private-pages-variations" : "manage-public-pages-variations" %>' />',
+												title: '<liferay-ui:message key="manage-site-pages-variations" />',
 												uri: event.currentTarget.attr('href')
 											}
 										);
