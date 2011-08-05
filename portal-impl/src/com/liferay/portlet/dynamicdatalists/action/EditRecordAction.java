@@ -187,7 +187,8 @@ public class EditRecordAction extends PortletAction {
 		if (recordId <= 0) {
 			record = DDLRecordServiceUtil.addRecord(
 				themeDisplay.getScopeGroupId(), recordSetId,
-				DDLRecordConstants.DISPLAY_INDEX_DEFAULT, fields, serviceContext);
+				DDLRecordConstants.DISPLAY_INDEX_DEFAULT, fields,
+				serviceContext);
 		}
 		else {
 			record = DDLRecordServiceUtil.updateRecord(

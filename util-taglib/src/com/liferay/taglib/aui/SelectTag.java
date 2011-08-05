@@ -85,7 +85,7 @@ public class SelectTag extends BaseSelectTag {
 				value = ParamUtil.getString(request, name, value);
 			}
 		}
-		
+
 		setNamespacedAttribute(request, "bean", bean);
 		setNamespacedAttribute(request, "id", id);
 		setNamespacedAttribute(request, "label", label);

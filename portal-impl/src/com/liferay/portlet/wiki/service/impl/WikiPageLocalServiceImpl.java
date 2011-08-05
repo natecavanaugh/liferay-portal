@@ -1672,12 +1672,12 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 			"[$PAGE_URL$]", pageURL);
 		subscriptionSender.setContextUserPrefix("PAGE");
 		subscriptionSender.setFrom(fromAddress, fromName);
-		subscriptionSender.setGroupId(node.getGroupId());
 		subscriptionSender.setHtmlFormat(true);
 		subscriptionSender.setMailId(
 			"wiki_page", page.getNodeId(), page.getPageId());
 		subscriptionSender.setPortletId(PortletKeys.WIKI);
 		subscriptionSender.setReplyToAddress(fromAddress);
+		subscriptionSender.setScopeGroupId(node.getGroupId());
 		subscriptionSender.setSubject(subject);
 		subscriptionSender.setUserId(page.getUserId());
 

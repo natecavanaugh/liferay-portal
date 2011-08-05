@@ -702,21 +702,32 @@ public class PortalImpl implements Portal {
 			return url;
 		}
 
-		String domain = StringUtil.split(
-			HttpUtil.getDomain(url), CharPool.COLON)[0];
+		String domain = HttpUtil.getDomain(url);
+
+		int pos = -1;
+
+		if ((pos = domain.indexOf(CharPool.COLON)) != -1) {
+			domain = domain.substring(0, pos);
+		}
 
 		try {
-			CompanyLocalServiceUtil.getCompanyByVirtualHost(domain);
+			Company company = CompanyLocalServiceUtil.fetchCompanyByVirtualHost(
+				domain);
 
-			return url;
+			if (company != null) {
+				return url;
+			}
 		}
 		catch (Exception e) {
 		}
 
 		try {
-			LayoutSetLocalServiceUtil.getLayoutSet(domain);
+			LayoutSet layoutSet = LayoutSetLocalServiceUtil.fetchLayoutSet(
+				domain);
 
-			return url;
+			if (layoutSet != null) {
+				return url;
+			}
 		}
 		catch (Exception e) {
 		}

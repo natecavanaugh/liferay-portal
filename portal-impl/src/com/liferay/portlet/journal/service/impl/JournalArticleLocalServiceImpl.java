@@ -2977,11 +2977,11 @@ public class JournalArticleLocalServiceImpl
 			"[$ARTICLE_VERSION$]", article.getVersion());
 		subscriptionSender.setContextUserPrefix("ARTICLE");
 		subscriptionSender.setFrom(fromAddress, fromName);
-		subscriptionSender.setGroupId(article.getGroupId());
 		subscriptionSender.setHtmlFormat(true);
 		subscriptionSender.setMailId("journal_article", article.getId());
 		subscriptionSender.setPortletId(PortletKeys.JOURNAL);
 		subscriptionSender.setReplyToAddress(fromAddress);
+		subscriptionSender.setScopeGroupId(article.getGroupId());
 		subscriptionSender.setSubject(subject);
 		subscriptionSender.setUserId(article.getUserId());
 
