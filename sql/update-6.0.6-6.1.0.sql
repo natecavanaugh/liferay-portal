@@ -351,6 +351,52 @@ update MBMessage set format = 'bbcode';
 alter table MBThread add companyId LONG;
 alter table MBThread add rootMessageUserId LONG;
 
+create table MDRAction (
+	uuid_ VARCHAR(75) null,
+	actionId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	ruleGroupId LONG,
+	ruleId LONG,
+	name STRING null,
+	description STRING null,
+	type_ VARCHAR(75) null,
+	typeSettings VARCHAR(75) null
+);
+
+create table MDRRule (
+	uuid_ VARCHAR(75) null,
+	ruleId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	ruleGroupId LONG,
+	name STRING null,
+	description STRING null,
+	type_ VARCHAR(75) null,
+	typeSettings VARCHAR(75) null
+);
+
+create table MDRRuleGroup (
+	uuid_ VARCHAR(75) null,
+	ruleGroupId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	name STRING null,
+	description STRING null
+);
+
 alter table PollsVote add companyId LONG;
 alter table PollsVote add userName VARCHAR(75) null;
 alter table PollsVote add createDate DATE null,;

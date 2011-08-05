@@ -1193,6 +1193,52 @@ create table MBThread (
 	statusDate DATE null
 );
 
+create table MDRAction (
+	uuid_ VARCHAR(75) null,
+	actionId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	ruleGroupId LONG,
+	ruleId LONG,
+	name STRING null,
+	description STRING null,
+	type_ VARCHAR(75) null,
+	typeSettings VARCHAR(75) null
+);
+
+create table MDRRule (
+	uuid_ VARCHAR(75) null,
+	ruleId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	ruleGroupId LONG,
+	name STRING null,
+	description STRING null,
+	type_ VARCHAR(75) null,
+	typeSettings VARCHAR(75) null
+);
+
+create table MDRRuleGroup (
+	uuid_ VARCHAR(75) null,
+	ruleGroupId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	name STRING null,
+	description STRING null
+);
+
 create table MembershipRequest (
 	membershipRequestId LONG not null primary key,
 	groupId LONG,

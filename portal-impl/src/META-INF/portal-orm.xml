@@ -2607,6 +2607,92 @@
 			<transient name="statusByUserUuid" />
 		</attributes>
 	</mapped-superclass>
+	<mapped-superclass class="com.liferay.portlet.mobiledevicerules.model.impl.MDRActionModelImpl">
+		<attributes>
+			<id name="actionId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="ruleGroupId" />
+			<basic name="ruleId" />
+			<basic name="name" />
+			<basic name="description" />
+			<basic name="type">
+				<column name="TYPE_" />
+			</basic>
+			<basic name="typeSettings" />
+			<transient name="descriptionMap" />
+			<transient name="nameMap" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleModelImpl">
+		<attributes>
+			<id name="ruleId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="ruleGroupId" />
+			<basic name="name" />
+			<basic name="description" />
+			<basic name="type">
+				<column name="TYPE_" />
+			</basic>
+			<basic name="typeSettings" />
+			<transient name="descriptionMap" />
+			<transient name="nameMap" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleGroupModelImpl">
+		<attributes>
+			<id name="ruleGroupId" />
+			<basic name="uuid">
+				<column name="UUID_" />
+			</basic>
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="name" />
+			<basic name="description" />
+			<transient name="descriptionMap" />
+			<transient name="nameMap" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portlet.polls.model.impl.PollsChoiceModelImpl">
 		<attributes>
 			<id name="choiceId" />
@@ -3929,6 +4015,18 @@
 	</entity>
 	<entity class="com.liferay.portlet.messageboards.model.impl.MBThreadImpl" name="MBThread">
 		<table name="MBThread" />
+		<attributes />
+	</entity>
+	<entity class="com.liferay.portlet.mobiledevicerules.model.impl.MDRActionImpl" name="MDRAction">
+		<table name="MDRAction" />
+		<attributes />
+	</entity>
+	<entity class="com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleImpl" name="MDRRule">
+		<table name="MDRRule" />
+		<attributes />
+	</entity>
+	<entity class="com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleGroupImpl" name="MDRRuleGroup">
+		<table name="MDRRuleGroup" />
 		<attributes />
 	</entity>
 	<entity class="com.liferay.portlet.polls.model.impl.PollsChoiceImpl" name="PollsChoice">
