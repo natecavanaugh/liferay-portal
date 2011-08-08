@@ -581,6 +581,8 @@
 			}
 
 			form.submit();
+
+			form.attr('target', '');
 		},
 
 		_escapeHTML: function(match) {
@@ -957,7 +959,13 @@
 			if (link) {
 				var url = link.attr('href');
 
-				submitForm(document.hrefFm, url);
+				var newWindow = (link.attr('target') == '_blank');
+
+				if (newWindow) {
+					A.one(document.hrefFm).attr('target', '_blank');
+				}
+
+				submitForm(document.hrefFm, url, !newWindow);
 
 				Util._submitLocked = null;
 			}
