@@ -254,7 +254,6 @@ if (template == null) {
 		Liferay.Util.openWindow(
 			{
 				dialog: {
-					stack: false,
 					width: 680
 				},
 				title: '<liferay-ui:message key="structure" />',
@@ -310,6 +309,7 @@ if (template == null) {
 		{
 			button: '#<portlet:namespace />editorButton',
 			id: '<portlet:namespace />xslContent',
+			stack: true,
 			textarea: '<portlet:namespace />xslContent',
 			title: '<liferay-ui:message key="editor" />',
 			uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/journal/edit_template_xsl" /></portlet:renderURL>&<portlet:namespace />langType=' + document.<portlet:namespace />fm1.<portlet:namespace />langType.value
