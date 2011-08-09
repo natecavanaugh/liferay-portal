@@ -190,6 +190,10 @@
 		</init-param>
 	</filter>
 	<filter>
+		<filter-name>HTML 5 Degrade Filter</filter-name>
+		<filter-class>com.liferay.portal.servlet.filters.html5degrade.Html5DegradeFilter</filter-class>
+	</filter>
+	<filter>
 		<filter-name>Ignore Filter - FTL</filter-name>
 		<filter-class>com.liferay.portal.servlet.filters.ignore.IgnoreFilter</filter-class>
 	</filter>
@@ -995,6 +999,30 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>-->
+	<filter-mapping>
+		<filter-name>HTML 5 Degrade Filter</filter-name>
+		<url-pattern>/c/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>HTML 5 Degrade Filter</filter-name>
+		<url-pattern>/group/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>HTML 5 Degrade Filter</filter-name>
+		<url-pattern>/user/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>HTML 5 Degrade Filter</filter-name>
+		<url-pattern>/web/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
 	<filter-mapping>
 		<filter-name>Strip Filter</filter-name>
 		<url-pattern>/c/*</url-pattern>
