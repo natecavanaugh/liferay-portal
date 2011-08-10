@@ -59,7 +59,6 @@ import com.liferay.portlet.asset.util.AssetEntryValidator;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.bookmarks.model.BookmarksEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
-import com.liferay.portlet.imagegallery.model.IGImage;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.wiki.model.WikiPage;
@@ -844,16 +843,6 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 			long classNameId = PortalUtil.getClassNameId(
 				DLFileEntry.class.getName());
 			long classPK = fileEntryId;
-
-			return assetEntryPersistence.findByC_C(classNameId, classPK);
-		}
-		else if (portletId.equals(PortletKeys.IMAGE_GALLERY_DISPLAY)) {
-			long imageId = GetterUtil.getLong(
-				document.get(Field.ENTRY_CLASS_PK));
-
-			long classNameId = PortalUtil.getClassNameId(
-				IGImage.class.getName());
-			long classPK = imageId;
 
 			return assetEntryPersistence.findByC_C(classNameId, classPK);
 		}

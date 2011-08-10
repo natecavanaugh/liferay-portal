@@ -25,8 +25,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
-import com.liferay.portlet.imagegallery.model.IGFolder;
-import com.liferay.portlet.imagegallery.model.IGImage;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -308,13 +306,12 @@ public class UpgradeImageGallery extends UpgradeProcess {
 		try {
 			con = DataAccess.getConnection();
 
-			StringBundler sb = new StringBundler(5);
+			StringBundler sb = new StringBundler(4);
 
 			sb.append("update ResourcePermission set name = '");
 			sb.append(DLFolder.class.getName());
-			sb.append("' where name = '");
-			sb.append(IGFolder.class.getName());
-			sb.append("'");
+			sb.append("' where name = 'com.liferay.portlet.imagegallery.");
+			sb.append("model.IGFolder'");
 
 			ps = con.prepareStatement(sb.toString());
 
@@ -354,7 +351,7 @@ public class UpgradeImageGallery extends UpgradeProcess {
 				long custom1ImageId = rs.getLong("custom1ImageId");
 				long custom2ImageId = rs.getLong("custom2ImageId");
 
-				Object[] image = getImage(imageId);
+				Object[] image = getImage(largeImageId);
 
 				if (image == null) {
 					continue;
@@ -404,13 +401,12 @@ public class UpgradeImageGallery extends UpgradeProcess {
 		try {
 			con = DataAccess.getConnection();
 
-			StringBundler sb = new StringBundler(5);
+			StringBundler sb = new StringBundler(4);
 
 			sb.append("update ResourcePermission set name = '");
 			sb.append(DLFileEntry.class.getName());
-			sb.append("' where name = '");
-			sb.append(IGImage.class.getName());
-			sb.append("'");
+			sb.append("' where name = 'com.liferay.portlet.imagegallery.");
+			sb.append("model.IGImage'");
 
 			ps = con.prepareStatement(sb.toString());
 

@@ -165,7 +165,6 @@ import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.expando.ValueDataException;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.model.ExpandoColumnConstants;
-import com.liferay.portlet.imagegallery.model.IGImage;
 import com.liferay.portlet.journal.asset.JournalArticleAssetRendererFactory;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleConstants;
@@ -5406,7 +5405,6 @@ public class PortalImpl implements Portal {
 			"[$CLASS_NAME_ID_COM.LIFERAY.PORTLET.CALENDAR.MODEL.CALEVENT$]",
 			"[$CLASS_NAME_ID_COM.LIFERAY.PORTLET.DOCUMENTLIBRARY.MODEL." +
 				"DLFILEENTRY$]",
-			"[$CLASS_NAME_ID_COM.LIFERAY.PORTLET.IMAGEGALLERY.MODEL.IGIMAGE$]",
 			"[$CLASS_NAME_ID_COM.LIFERAY.PORTLET.MESSAGEBOARDS.MODEL." +
 				"MBMESSAGE$]",
 			"[$CLASS_NAME_ID_COM.LIFERAY.PORTLET.WIKI.MODEL.WIKIPAGE$]",
@@ -5442,7 +5440,6 @@ public class PortalImpl implements Portal {
 			PortalUtil.getClassNameId(BookmarksEntry.class),
 			PortalUtil.getClassNameId(CalEvent.class),
 			PortalUtil.getClassNameId(DLFileEntry.class),
-			PortalUtil.getClassNameId(IGImage.class),
 			PortalUtil.getClassNameId(MBMessage.class),
 			PortalUtil.getClassNameId(WikiPage.class),
 			ResourceConstants.SCOPE_COMPANY,

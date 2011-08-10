@@ -439,12 +439,6 @@ public class Creole10Parser]]></replacevalue>
 		</antcall>
 	</target>
 
-	<target name="build-service-portlet-imagegallery">
-		<antcall target="build-service">
-			<param name="service.file" value="${basedir}/src/com/liferay/portlet/imagegallery/service.xml" />
-		</antcall>
-	</target>
-
 	<target name="build-service-portlet-journal">
 		<antcall target="build-service">
 			<param name="service.file" value="${basedir}/src/com/liferay/portlet/journal/service.xml" />
@@ -516,7 +510,6 @@ public class Creole10Parser]]></replacevalue>
 		<antcall target="build-service-portlet-dynamicdatamapping" />
 		<antcall target="build-service-portlet-expando" />
 		<antcall target="build-service-portlet-flags" />
-		<antcall target="build-service-portlet-imagegallery" />
 		<antcall target="build-service-portlet-journal" />
 		<antcall target="build-service-portlet-messageboards" />
 		<antcall target="build-service-portlet-mobiledevicerules" />
@@ -716,12 +709,6 @@ public class Creole10Parser]]></replacevalue>
 		</antcall>
 	</target>
 
-	<target name="build-wsdd-portlet-imagegallery">
-		<antcall target="build-wsdd">
-			<param name="service.file" value="${basedir}/src/com/liferay/portlet/imagegallery/service.xml" />
-		</antcall>
-	</target>
-
 	<target name="build-wsdd-portlet-journal">
 		<antcall target="build-wsdd">
 			<param name="service.file" value="${basedir}/src/com/liferay/portlet/journal/service.xml" />
@@ -787,7 +774,6 @@ public class Creole10Parser]]></replacevalue>
 		<antcall target="build-wsdd-portlet-dynamicdatamapping" />
 		<antcall target="build-wsdd-portlet-expando" />
 		<antcall target="build-wsdd-portlet-flags" />
-		<antcall target="build-wsdd-portlet-imagegallery" />
 		<antcall target="build-wsdd-portlet-journal" />
 		<antcall target="build-wsdd-portlet-messageboards" />
 		<antcall target="build-wsdd-portlet-mobiledevicerules" />

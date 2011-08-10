@@ -2165,58 +2165,6 @@
 			<transient name="primaryKeyObj" />
 		</attributes>
 	</mapped-superclass>
-	<mapped-superclass class="com.liferay.portlet.imagegallery.model.impl.IGFolderModelImpl">
-		<attributes>
-			<id name="folderId" />
-			<basic name="uuid">
-				<column name="UUID_" />
-			</basic>
-			<basic name="groupId" />
-			<basic name="companyId" />
-			<basic name="userId" />
-			<basic name="userName" />
-			<basic name="createDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="modifiedDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="parentFolderId" />
-			<basic name="name" />
-			<basic name="description" />
-			<transient name="primaryKey" />
-			<transient name="primaryKeyObj" />
-			<transient name="userUuid" />
-		</attributes>
-	</mapped-superclass>
-	<mapped-superclass class="com.liferay.portlet.imagegallery.model.impl.IGImageModelImpl">
-		<attributes>
-			<id name="imageId" />
-			<basic name="uuid">
-				<column name="UUID_" />
-			</basic>
-			<basic name="groupId" />
-			<basic name="companyId" />
-			<basic name="userId" />
-			<basic name="userName" />
-			<basic name="createDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="modifiedDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="folderId" />
-			<basic name="name" />
-			<basic name="description" />
-			<basic name="smallImageId" />
-			<basic name="largeImageId" />
-			<basic name="custom1ImageId" />
-			<basic name="custom2ImageId" />
-			<transient name="primaryKey" />
-			<transient name="primaryKeyObj" />
-			<transient name="userUuid" />
-		</attributes>
-	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portlet.journal.model.impl.JournalArticleModelImpl">
 		<attributes>
 			<id name="id">
@@ -2412,6 +2360,8 @@
 			<basic name="smallImage" />
 			<basic name="smallImageId" />
 			<basic name="smallImageURL" />
+			<transient name="descriptionMap" />
+			<transient name="nameMap" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
@@ -3583,6 +3533,7 @@
 			<transient name="maximizeHelp" />
 			<transient name="openSearchClass" />
 			<transient name="parentStrutsPath" />
+			<transient name="permissionPropagatorClass" />
 			<transient name="pluginPackage" />
 			<transient name="pollerProcessorClass" />
 			<transient name="popMessageListenerClass" />
@@ -3949,16 +3900,6 @@
 			<transient name="shortArray" />
 			<transient name="string" />
 			<transient name="stringArray" />
-		</attributes>
-	</entity>
-	<entity class="com.liferay.portlet.imagegallery.model.impl.IGFolderImpl" name="IGFolder">
-		<table name="IGFolder" />
-		<attributes />
-	</entity>
-	<entity class="com.liferay.portlet.imagegallery.model.impl.IGImageImpl" name="IGImage">
-		<table name="IGImage" />
-		<attributes>
-			<transient name="imageType" />
 		</attributes>
 	</entity>
 	<entity class="com.liferay.portlet.journal.model.impl.JournalArticleImpl" name="JournalArticle">

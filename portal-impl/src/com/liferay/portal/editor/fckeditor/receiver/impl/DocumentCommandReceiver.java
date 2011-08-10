@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.servlet.ImageServletTokenUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -28,11 +29,13 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFolder;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.model.impl.DLFolderImpl;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.util.ImageProcessor;
 
 import java.io.File;
 
@@ -173,16 +176,39 @@ public class DocumentCommandReceiver extends BaseCommandReceiver {
 			fileElement.setAttribute("desc", fileEntry.getTitle());
 			fileElement.setAttribute("size", getSize(fileEntry.getSize()));
 
-			StringBundler url = new StringBundler(6);
+			boolean hasImages = ImageProcessor.hasImages(
+				fileEntry.getFileVersion());
 
-			url.append("/documents/");
-			url.append(group.getGroupId());
-			url.append(StringPool.SLASH);
-			url.append(fileEntry.getFolderId());
-			url.append(StringPool.SLASH);
-			url.append(HttpUtil.encodeURL(fileEntry.getTitle()));
+			StringBundler sb = null;
 
-			fileElement.setAttribute("url", url.toString());
+			if (hasImages) {
+				sb = new StringBundler(7);
+
+				ThemeDisplay themeDisplay = commandArgument.getThemeDisplay();
+
+				sb.append(themeDisplay.getPathImage());
+				sb.append("/image_gallery?uuid=");
+				sb.append(fileEntry.getUuid());
+				sb.append("&groupId=");
+				sb.append(folder.getGroupId());
+				sb.append("&t=");
+
+				long largeImageId = fileEntry.getLargeImageId();
+
+				sb.append(ImageServletTokenUtil.getToken(largeImageId));
+			}
+			else {
+				sb = new StringBundler(6);
+
+				sb.append("/documents/");
+				sb.append(group.getGroupId());
+				sb.append(StringPool.SLASH);
+				sb.append(fileEntry.getFolderId());
+				sb.append(StringPool.SLASH);
+				sb.append(HttpUtil.encodeURL(fileEntry.getTitle()));
+			}
+
+			fileElement.setAttribute("url", sb.toString());
 		}
 	}
 
