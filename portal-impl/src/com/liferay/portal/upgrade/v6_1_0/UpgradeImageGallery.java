@@ -14,17 +14,26 @@
 
 package com.liferay.portal.upgrade.v6_1_0;
 
-import com.liferay.portal.convert.ConvertImageGallery;
-import com.liferay.portal.convert.ConvertProcess;
 import com.liferay.portal.image.DLHook;
+import com.liferay.portal.image.FileSystemHook;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
+import com.liferay.portal.kernel.image.Hook;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Image;
+import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
+import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
+
+import java.io.InputStream;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -216,15 +225,7 @@ public class UpgradeImageGallery extends UpgradeProcess {
 		updateIGFolderPermissions();
 		updateIGImagePermissions();
 
-		if (!PropsValues.IMAGE_HOOK_IMPL.equals(DLHook.class.getName())) {
-			ConvertProcess convertProcess = new ConvertImageGallery();
-
-			String[] parameters = {DLHook.class.getName()};
-
-			convertProcess.setParameterValues(parameters);
-
-			convertProcess.convert();
-		}
+		migrateImageFiles();
 	}
 
 	protected Object[] getImage(long imageId) throws Exception {
@@ -254,6 +255,113 @@ public class UpgradeImageGallery extends UpgradeProcess {
 		}
 
 		return image;
+	}
+
+	protected void migrateFile(
+			long repositoryId, long companyId, String name, Image image)
+		throws Exception {
+
+		ClassLoader classLoader = PortalClassLoaderUtil.getClassLoader();
+
+		String sourceHookClassName = FileSystemHook.class.getName();
+
+		if (Validator.isNotNull(PropsValues.IMAGE_HOOK_IMPL)) {
+			sourceHookClassName = PropsValues.IMAGE_HOOK_IMPL;
+		}
+
+		Hook sourceHook = (Hook)classLoader.loadClass(
+			sourceHookClassName).newInstance();
+
+		InputStream is = sourceHook.getImageAsStream(image);
+
+		byte[] bytes = FileUtil.getBytes(is);
+
+		if (name == null) {
+			name = image.getImageId() + StringPool.PERIOD + image.getType();
+		}
+
+		if (DLStoreUtil.hasFile(companyId, repositoryId, name)) {
+			DLStoreUtil.deleteFile(companyId, repositoryId, name);
+		}
+
+		DLStoreUtil.addFile(companyId, repositoryId, name, true, bytes);
+	}
+
+	protected void migrateImage(long imageId, boolean migrateOnlyLargeImage)
+		throws Exception {
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			con = DataAccess.getConnection();
+
+			ps = con.prepareStatement(
+				"select groupId, companyId, folderId, name from DLFileEntry " +
+					"where largeImageId = " + imageId);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				long companyId = rs.getLong("companyId");
+				long groupId = rs.getLong("groupId");
+				long folderId = rs.getLong("folderId");
+				String name = rs.getString("name");
+
+				long repositoryId = DLFolderConstants.getDataRepositoryId(
+					groupId, folderId);
+
+				Image image = ImageLocalServiceUtil.getImage(imageId);
+
+				try {
+					migrateFile(repositoryId, companyId, name, image);
+				}
+				catch (Exception e) {
+				}
+			}
+			else if (!migrateOnlyLargeImage) {
+				Image image = ImageLocalServiceUtil.getImage(imageId);
+
+				try {
+					migrateFile(0, 0, null, image);
+				}
+				catch (Exception e) {
+				}
+			}
+		}
+		finally {
+			DataAccess.cleanUp(con, ps, rs);
+		}
+	}
+
+	protected void migrateImageFiles() throws Exception {
+		boolean migrateOnlyLargeImage = false;
+
+		if (PropsValues.IMAGE_HOOK_IMPL.equals(DLHook.class.getName())) {
+			migrateOnlyLargeImage = true;
+		}
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			con = DataAccess.getConnection();
+
+			ps = con.prepareStatement("select imageId from Image");
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				long imageId = rs.getLong("imageId");
+
+				migrateImage(imageId, migrateOnlyLargeImage);
+			}
+		}
+		finally {
+			DataAccess.cleanUp(con, ps, rs);
+		}
 	}
 
 	protected void updateIGFolderEntries() throws Exception {

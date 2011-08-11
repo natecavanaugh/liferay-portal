@@ -33,6 +33,8 @@ public class UpgradeUserName extends UpgradeProcess {
 	protected void doUpgrade() throws Exception {
 		updateTable("BookmarksEntry", false);
 		updateTable("BookmarksFolder", false);
+		updateTable("IGFolder", false);
+		updateTable("IGImage", false);
 		updateTable("PollsVote", true);
 	}
 
