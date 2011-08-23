@@ -597,17 +597,13 @@
 		_handleQuote: function(element, listTagsIn, listTagsOut) {
 			var cite = element.getAttribute(TAG_CITE);
 
-			var openTag;
+			var openTag = '[quote]';
 
 			if (cite) {
-				openTag = '[quote=', cite, ']';
-			}
-			else {
-				openTag = '[quote]';
+				openTag = '[quote=' + cite + ']';
 			}
 
 			listTagsIn.push(openTag);
-
 			listTagsOut.push('[/quote]');
 		},
 
