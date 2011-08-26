@@ -218,9 +218,9 @@ if (workflowEnabled) {
 
 							<c:if test="<%= workflowEnabled %>">
 								<liferay-ui:search-container-column-text name="workflow">
-									<select name='workflowDefinition<%= dlFileEntryType.getFileEntryTypeId() %>'>
+									<aui:select label='<%= LanguageUtil.format(pageContext, "default-workflow-for-x-document-type", dlFileEntryType.getName()) %>' name='<%= "workflowDefinition" + dlFileEntryType.getFileEntryTypeId() %>'>
 
-										<option label="<%= LanguageUtil.get(pageContext, "no-workflow") %>" value=''></option>
+										<aui:option label='<%= LanguageUtil.get(pageContext, "no-workflow") %>' value="" />
 
 										<%
 										WorkflowDefinitionLink workflowDefinitionLink = null;
@@ -239,13 +239,13 @@ if (workflowEnabled) {
 											}
 										%>
 
-											<option label='<%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %>' <%= selected ? "selected='true'" : "" %> value="<%= workflowDefinition.getName() + StringPool.AT + workflowDefinition.getVersion() %>" />
+											<aui:option label='<%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %>' selected='<%= selected %>' value="<%= workflowDefinition.getName() + StringPool.AT + workflowDefinition.getVersion() %>" />
 
 										<%
 										}
 										%>
 
-									</select>
+									</aui:select>
 								</liferay-ui:search-container-column-text>
 							</c:if>
 
@@ -332,19 +332,24 @@ if (workflowEnabled) {
 				<c:when test="<%= workflowEnabled %>">
 					var defaultWorkflow = A.one('#<portlet:namespace />defaultWorkflow');
 
-					var workflowDefinitions = '<select name="workflowDefinition' + fileEntryTypeId + '"><option label="<%= LanguageUtil.get(pageContext, "no-workflow") %>" value="" />';
+					var workflowDefinitions = '<span class="aui-field aui-field-select aui-field-menu">' +
+						'<span class="aui-field-content">' +
+						'<label class="aui-field-label" for="workflowDefinition' + fileEntryTypeId + '">Default Workflow for ' + fileEntryTypeName + ' Document Type</label>' +
+						'<span class="aui-field-element ">' +
+						'<select name="workflowDefinition' + fileEntryTypeId + '">' +
+						'<option label="<%= LanguageUtil.get(pageContext, "no-workflow") %>" value="" /><%= LanguageUtil.get(pageContext, "no-workflow") %></option>';
 
 					<%
 					for (WorkflowDefinition workflowDefinition : workflowDefinitions) {
 					%>
 
-						workflowDefinitions = workflowDefinitions + '<option label="<%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %>" value="<%= workflowDefinition.getName() + StringPool.AT + workflowDefinition.getVersion() %>" />';
+						workflowDefinitions = workflowDefinitions + '<option label="<%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %>" value="<%= workflowDefinition.getName() + StringPool.AT + workflowDefinition.getVersion() %>" /><%= workflowDefinition.getName() + " (" + LanguageUtil.format(locale, "version-x", workflowDefinition.getVersion()) + ")" %></option>';
 
 					<%
 					}
 					%>
 
-					workflowDefinitions = workflowDefinitions + '</select>';
+					workflowDefinitions = workflowDefinitions + '</select></span></span></span>';
 
 					defaultWorkflow.hide();
 
