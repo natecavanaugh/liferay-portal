@@ -30,7 +30,6 @@ String content = BeanParamUtil.getString(entry, request, "content");
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="entryId" type="hidden" value="<%= entryId %>" />
-	<aui:input name="content" type="hidden" />
 	<aui:input name="alert" type="hidden" value="<%= portletName.equals(PortletKeys.ALERTS) %>" />
 
 	<liferay-ui:header
@@ -86,6 +85,8 @@ String content = BeanParamUtil.getString(entry, request, "content");
 
 		<aui:field-wrapper label="content">
 			<liferay-ui:input-editor editorImpl="<%= EDITOR_WYSIWYG_IMPL_KEY %>"/>
+
+			<aui:input name="content" type="hidden" />
 		</aui:field-wrapper>
 
 		<aui:select name="type">
