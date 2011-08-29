@@ -10,6 +10,8 @@ AUI().add(
 
 		var ACTION_ADD = 0;
 
+        var ACTION_ADD_SUBCATEGORY = 4;
+
 		var ACTION_EDIT = 1;
 
 		var ACTION_MOVE = 2;
@@ -1223,14 +1225,14 @@ AUI().add(
 						}
 					},
 
-					_initializeCategoryPanelAdd: function(callback) {
+					_initializeCategoryPanelAdd: function(callback, action) {
 						var instance = this;
 
 						var categoryFormAdd = instance._categoryPanelAdd.get('contentBox').one('form.update-category-form');
 
 						categoryFormAdd.detach(EVENT_SUBMIT);
 
-						categoryFormAdd.on(EVENT_SUBMIT, instance._onCategoryFormSubmit, instance, categoryFormAdd);
+						categoryFormAdd.on(EVENT_SUBMIT, instance._onCategoryFormSubmit, instance, categoryFormAdd, action);
 
 						var closeButton = categoryFormAdd.one('.aui-button-input-cancel');
 
@@ -1454,7 +1456,7 @@ AUI().add(
 						}
 					},
 
-					_onCategoryFormSubmit: function(event, form) {
+					_onCategoryFormSubmit: function(event, form, action) {
 						var instance = this;
 
 						event.halt();
@@ -1471,6 +1473,13 @@ AUI().add(
 							var parentCategoryElId = '#' + instance._prefixedPortletId + 'parentCategoryId';
 
 							var parentCategoryId = instance._selectedParentCategoryId;
+
+                            if (action == ACTION_ADD) {
+                                parentCategoryId = 0;
+                            }
+                            else  if (action == ACTION_ADD_SUBCATEGORY) {
+                                parentCategoryId = instance._selectedCategoryId;
+                            }
 
 							form.one(parentCategoryElId).val(parentCategoryId);
 
@@ -1551,6 +1560,12 @@ AUI().add(
 							event.halt();
 
 							instance._onChangePermissions(event);
+						}
+                        else if (targetId == 'addSubCategoryButton') {
+							event.halt();
+
+							instance._hidePanels();
+							instance._showCategoryPanel(ACTION_ADD_SUBCATEGORY);
 						}
 					},
 
@@ -1942,8 +1957,8 @@ AUI().add(
 					_showCategoryPanel: function(action) {
 						var instance = this;
 
-						if (action == ACTION_ADD) {
-							instance._showCategoryPanelAdd();
+						if (action == ACTION_ADD || action == ACTION_ADD_SUBCATEGORY) {
+							instance._showCategoryPanelAdd(action);
 						}
 						else if (action == ACTION_EDIT) {
 							instance._showCategoryPanelEdit();
@@ -1953,50 +1968,56 @@ AUI().add(
 						}
 					},
 
-					_showCategoryPanelAdd: function() {
-						var instance = this;
+                    _showCategoryPanelAdd: function(action) {
+                        var instance = this;
 
-						var categoryPanelAdd = instance._categoryPanelAdd;
+                        var forceStart = false;
+                        var categoryPanelAdd = instance._categoryPanelAdd;
 
-						if (!categoryPanelAdd) {
-							categoryPanelAdd = instance._createCategoryPanelAdd();
+                        if (!categoryPanelAdd) {
+                            categoryPanelAdd = instance._createCategoryPanelAdd();
+                        }
+                        else {
+                            forceStart = true;
 
-							var categoryURL = instance._createURL(CATEGORY, ACTION_ADD, LIFECYCLE_RENDER);
+                            instance._currentCategoryPanelAddIOHandle.detach();
+                        }
 
-							categoryPanelAdd.show();
+                        var categoryURL = instance._createURL(CATEGORY, ACTION_ADD, LIFECYCLE_RENDER);
 
-							categoryPanelAdd._syncUIPosAlign();
+                        categoryPanelAdd.show();
 
-							var afterSuccess = A.bind(
+                        categoryPanelAdd._syncUIPosAlign();
+
+                        categoryPanelAdd.plug(
+                            A.Plugin.IO,
+                            {
+                                uri: categoryURL.toString(),
+                                after: {
+                                    success: instance._currentCategoryPanelAddInitListener
+                                }
+                            }
+                        );
+
+                        instance._currentCategoryPanelAddIOHandle = categoryPanelAdd.io.after(
+                        	'success',
+                            A.bind(
 								instance._initializeCategoryPanelAdd,
 								instance,
 								function() {
 									instance._feedVocabularySelect(instance._vocabularies, instance._selectedVocabularyId);
 
 									instance._focusCategoryPanelAdd();
-								}
-							);
+								},
+								action
+							),
+							instance
+						);
 
-							categoryPanelAdd.plug(
-								A.Plugin.IO,
-								{
-									uri: categoryURL.toString(),
-									after: {
-										success: afterSuccess
-									}
-								}
-							);
-						}
-						else {
-							instance._feedVocabularySelect(instance._vocabularies, instance._selectedVocabularyId);
-
-							categoryPanelAdd.show();
-
-							categoryPanelAdd._syncUIPosAlign();
-
-							instance._focusCategoryPanelAdd();
-						}
-					},
+                        if (forceStart) {
+                            categoryPanelAdd.io.start();
+                        }
+                    },
 
 					_showCategoryPanelEdit: function() {
 						var instance = this;
