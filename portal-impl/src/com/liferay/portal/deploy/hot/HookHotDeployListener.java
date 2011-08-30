@@ -228,6 +228,8 @@ public class HookHotDeployListener
 		"passwords.passwordpolicytoolkit.generator",
 		"passwords.passwordpolicytoolkit.static",
 		"portlet.add.default.resource.check.enabled",
+		"portlet.add.default.resource.check.whitelist",
+		"portlet.add.default.resource.check.whitelist.actions",
 		"sanitizer.impl",
 		"servlet.session.create.events",
 		"servlet.session.destroy.events",
@@ -1962,6 +1964,20 @@ public class HookHotDeployListener
 			LanguageUtil.init();
 		}
 
+		if (containsKey(
+				portalProperties,
+				PORTLET_ADD_DEFAULT_RESOURCE_CHECK_WHITELIST)) {
+
+			PortalUtil.resetPortletAddDefaultResourceCheckWhitelist();
+		}
+
+		if (containsKey(
+				portalProperties,
+				PORTLET_ADD_DEFAULT_RESOURCE_CHECK_WHITELIST_ACTIONS)) {
+
+			PortalUtil.resetPortletAddDefaultResourceCheckWhitelistActions();
+		}
+
 		CacheUtil.clearCache();
 
 		JavaScriptBundleUtil.clearCache();
@@ -2158,6 +2174,8 @@ public class HookHotDeployListener
 			"dockbar.add.portlets",
 			"layout.static.portlets.all",
 			"layout.types",
+			"portlet.add.default.resource.check.whitelist",
+			"portlet.add.default.resource.check.whitelist.actions",
 			"session.phishing.protected.attributes",
 			"users.form.add.identification",
 			"users.form.add.main",

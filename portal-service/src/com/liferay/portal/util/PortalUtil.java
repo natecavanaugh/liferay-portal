@@ -841,6 +841,12 @@ public class PortalUtil {
 		return getPortal().getPortletAddDefaultResourceCheckWhitelist();
 	}
 
+	public static Set<String>
+		getPortletAddDefaultResourceCheckWhitelistActions() {
+
+		return getPortal().getPortletAddDefaultResourceCheckWhitelistActions();
+	}
+
 	/**
 	 * @deprecated {@link #getPortletBreadcrumbs(HttpServletRequest)}
 	 */
@@ -1396,6 +1402,17 @@ public class PortalUtil {
 		return getPortal().renderPortlet(
 			servletContext, request, response, portlet, queryString, columnId,
 			columnPos, columnCount, path, writeOutput);
+	}
+
+	public static Set<String> resetPortletAddDefaultResourceCheckWhitelist() {
+		return getPortal().resetPortletAddDefaultResourceCheckWhitelist();
+	}
+
+	public static Set<String>
+		resetPortletAddDefaultResourceCheckWhitelistActions() {
+
+		return getPortal().
+			resetPortletAddDefaultResourceCheckWhitelistActions();
 	}
 
 	/**

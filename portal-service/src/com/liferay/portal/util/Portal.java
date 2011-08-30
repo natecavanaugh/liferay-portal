@@ -765,6 +765,8 @@ public interface Portal {
 
 	public Set<String> getPortletAddDefaultResourceCheckWhitelist();
 
+	public Set<String> getPortletAddDefaultResourceCheckWhitelistActions();
+
 	/**
 	 * @deprecated Renamed to {@link #getPortletBreadcrumbs(HttpServletRequest)}
 	 */
@@ -1038,6 +1040,10 @@ public interface Portal {
 			String columnId, Integer columnPos, Integer columnCount,
 			String path, boolean writeOutput)
 		throws IOException, ServletException;
+
+	public Set<String> resetPortletAddDefaultResourceCheckWhitelist();
+
+	public Set<String> resetPortletAddDefaultResourceCheckWhitelistActions();
 
 	public void sendError(
 			Exception e, ActionRequest actionRequest,
