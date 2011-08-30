@@ -1,6 +1,7 @@
 require 'java'
 require 'rubygems'
-require 'sass'
+require 'fileutils'
+require 'compass'
 
 java_import com.liferay.portal.kernel.log.LogFactoryUtil
 java_import com.liferay.portal.servlet.filters.dynamiccss.DynamicCSSFilter

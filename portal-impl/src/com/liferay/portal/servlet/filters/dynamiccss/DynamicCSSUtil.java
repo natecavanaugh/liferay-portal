@@ -45,7 +45,7 @@ public class DynamicCSSUtil {
 
 			_rubyExecutor.eval(
 				null, new HashMap<String, Object>(), null,
-				"require 'rubygems'\nrequire 'sass'");
+				"require 'rubygems'\nrequire 'fileutils'\nrequire 'compass'");
 		}
 		catch (Exception e) {
 			_log.error(e, e);
