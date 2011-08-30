@@ -650,6 +650,23 @@ AUI().add(
 								);
 							}
 						);
+
+						Liferay.publish(
+							'updatedLayout',
+							{
+								defaultFn: function(event) {
+									columns.each(
+										function(item, index, collection) {
+											var overlayMask = item.getData('customizationControls');
+
+											if (overlayMask) {
+												item.setData('customizationControls', null);
+											}
+										}
+									);
+								}
+							}
+						);
 					}
 				}
 
