@@ -8,6 +8,13 @@ java_import com.liferay.portal.servlet.filters.dynamiccss.DynamicCSSFilter
 
 log = LogFactoryUtil.getLog(DynamicCSSFilter.java_class)
 
+Compass.add_project_configuration
+Compass.configuration.project_path ||= 'html/'
+
+load_paths = []
+
+load_paths += Compass.configuration.sass_load_paths
+
 engine = Sass::Engine.new(
 	$content,
 	{
@@ -15,7 +22,7 @@ engine = Sass::Engine.new(
 		:filename => $cssRealPath,
 		:full_exception => log.isDebugEnabled,
 		:syntax => :scss,
-		:load_paths => ['html/'],
+		:load_paths => load_paths,
 		:ugly => true
 	}
 )
