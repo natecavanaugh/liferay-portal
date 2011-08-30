@@ -639,7 +639,7 @@ AUI().add(
 
 								columns.each(
 									function(item, index, collection) {
-										var overlayMask = item.getData('customizatonControls');
+										var overlayMask = item.getData('customizationControls');
 
 										if (!overlayMask) {
 											overlayMask = instance._createCustomizationMask(item);
