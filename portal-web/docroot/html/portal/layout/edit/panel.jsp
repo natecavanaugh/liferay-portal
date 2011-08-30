@@ -102,8 +102,14 @@ String panelTreeKey = "panelSelectedPortletsPanelTree";
 					label: label<%= i %>,
 					leaf: <%= treeNodeView.isLeaf() %>,
 					on: {
-						check: A.rbind(onCheck, window, objId<%= i %>),
-						uncheck: A.rbind(onUncheck, window, objId<%= i %>)
+						checkedChange: function(event) {
+							if (event.newVal) {
+								onCheck(event, objId<%= i %>);
+							}
+							else {
+								onUncheck(event, objId<%= i %>);
+							}
+						}
 					}
 				}
 			)
