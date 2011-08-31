@@ -149,14 +149,6 @@ body.portal-popup:after, body.portal-popup:before {
 	margin-bottom: 5px;
 }
 
-.panel-page-application .lfr-panel {
-	background: url(../images/custom/panel_top_gradient.png) 0 0 repeat-x;
-}
-
-.panel-page-application .lfr-panel-content {
-	background: url(../images/custom/panel_bottom_gradient.png) 0 bottom repeat-x;
-}
-
 .panel-page-application .lfr-panel-container .lfr-extended.lfr-collapsible .lfr-panel-titlebar {
 	border-top: none;
 }
