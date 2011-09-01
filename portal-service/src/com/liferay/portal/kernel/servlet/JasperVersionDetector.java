@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.servlet;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -34,32 +36,28 @@ import java.util.jar.Manifest;
 public class JasperVersionDetector {
 
 	public static String getJasperVersion() {
-		if (_jasperVersion != null) {
-			return _jasperVersion;
-		}
+		return _instance._jasperVersion;
+	}
 
-		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-
-		URL url = classLoader.getResource(
-			"/org/apache/jasper/JasperException.class");
-
-		if (url == null) {
-			_jasperVersion = StringPool.BLANK;
-
-			return _jasperVersion;
-		}
-
-		String path = url.getPath();
-
-		int pos = path.indexOf(CharPool.EXCLAMATION);
-
-		if (pos == -1) {
-			_jasperVersion = StringPool.BLANK;
-
-			return _jasperVersion;
-		}
-
+	private JasperVersionDetector() {
 		try {
+			Class<?> clazz = getClass();
+
+			URL url = clazz.getResource(
+				"/org/apache/jasper/JasperException.class");
+
+			if (url == null) {
+				return;
+			}
+
+			String path = url.getPath();
+
+			int pos = path.indexOf(CharPool.EXCLAMATION);
+
+			if (pos == -1) {
+				return;
+			}
+
 			URI jarFileURI = new URI(path.substring(0, pos));
 
 			JarFile jarFile = new JarFile(new File(jarFileURI));
@@ -72,12 +70,16 @@ public class JasperVersionDetector {
 				attributes.getValue("Specification-Version"));
 		}
 		catch (Exception e) {
-			_jasperVersion = StringPool.BLANK;
+			_log.error(e, e);
 		}
-
-		return _jasperVersion;
 	}
 
-	private static String _jasperVersion;
+	private static Log _log = LogFactoryUtil.getLog(
+		JasperVersionDetector.class);
+
+	private static JasperVersionDetector _instance =
+		new JasperVersionDetector();
+
+	private String _jasperVersion = StringPool.BLANK;
 
 }

@@ -87,9 +87,9 @@ web.server.display.node=true</echo>
 
 		<antcall target="replace-remote-file">
 			<param name="remote.host" value="${vm.host}" />
-			<param name="remote.file" value="/liferay-portal-${lp.version}/tomcat-6.0.33/bin/startup.bat" />
+			<param name="remote.file" value="/liferay-portal-${lp.version}/tomcat-${app.server.tomcat.version}/bin/startup.bat" />
 			<param name="remote.replace.token" value='set "CATALINA_HOME=%cd%"' />
-			<param name="remote.replace.value" value="set CATALINA_HOME=C:\liferay-portal-${lp.version}\tomcat-6.0.33" />
+			<param name="remote.replace.value" value="set CATALINA_HOME=C:\liferay-portal-${lp.version}\tomcat-${app.server.tomcat.version}" />
 		</antcall>
 	</target>
 
