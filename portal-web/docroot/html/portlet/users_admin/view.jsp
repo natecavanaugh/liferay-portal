@@ -55,7 +55,17 @@ String portletURLString = portletURL.toString();
 
 	<c:choose>
 		<c:when test="<%= usersListView.equals(UserConstants.LIST_VIEW_FLAT_ORGANIZATIONS) %>">
+			<portlet:renderURL var="headerBackURL">
+				<portlet:param name="struts_action" value="/users_admin/view" />
+			</portlet:renderURL>
+			
+			<% 
+			String usersOrganizationsHome = LanguageUtil.get(pageContext, "users-and-organizations-home");
+			%>
+			
 			<liferay-ui:header
+				backLabel="<%= usersOrganizationsHome %>"
+				backURL="<%= headerBackURL.toString() %>"
 				title="organizations"
 			/>
 
@@ -69,7 +79,17 @@ String portletURLString = portletURL.toString();
 			<%@ include file="/html/portlet/users_admin/view_flat_user_groups.jspf" %>
 		</c:when>
 		<c:when test="<%= usersListView.equals(UserConstants.LIST_VIEW_FLAT_USERS) %>">
+			<portlet:renderURL var="headerBackURL">
+				<portlet:param name="struts_action" value="/users_admin/view" />
+			</portlet:renderURL>
+		
+			<% 
+			String usersOrganizationsHome = LanguageUtil.get(pageContext, "users-and-organizations-home");
+			%>
+		
 			<liferay-ui:header
+				backLabel="<%= usersOrganizationsHome %>"
+				backURL="<%= headerBackURL.toString() %>"
 				title="users"
 			/>
 

@@ -285,6 +285,10 @@
 	.permission-group {
 		margin: 10px 0 0 10px;
 	}
+	
+	.view-all-link {
+		font-weight: normal;
+	}
 }
 
 .lfr-floating-container {

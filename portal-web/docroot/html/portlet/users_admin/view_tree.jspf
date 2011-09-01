@@ -300,13 +300,51 @@ int organizationsCount = OrganizationLocalServiceUtil.searchCount(company.getCom
 			%>
 
 			<c:if test="<%= showOrganizations %>">
-				<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="usersAdminOrganizationsPanel" persistState="<%= true %>" title='<%= (organization == null) ? "organizations" : (organizationsCount == 1) ? LanguageUtil.format(pageContext, "x-suborganization", String.valueOf(organizationsCount)) : LanguageUtil.format(pageContext, "x-suborganizations", String.valueOf(organizationsCount)) %>'>
+			
+				<liferay-util:buffer var="organizationsPanelTitle">
+					
+					<%= (organization == null) ? LanguageUtil.get(pageContext,"top-level-organizations") : (organizationsCount == 1) ? LanguageUtil.format(pageContext, "x-suborganization", String.valueOf(organizationsCount)) : LanguageUtil.format(pageContext, "x-suborganizations", String.valueOf(organizationsCount)) %>
+					
+					<c:if test="<%= organization == null %>">
+						<portlet:renderURL var="viewOrgsURL">
+							<portlet:param name="struts_action" value="/users_admin/view" />
+							<portlet:param name="tabs1" value="users" />
+							<portlet:param name="usersListView" value="<%= UserConstants.LIST_VIEW_FLAT_ORGANIZATIONS %>" />
+							<portlet:param name="saveUsersListView" value="<%= Boolean.TRUE.toString() %>" />
+						</portlet:renderURL>
+						
+						<%= StringPool.NBSP %>
+											
+						(<a class="view-all-link" href="<%= viewOrgsURL %>" id="usersAdminAllOrganizationsLink"><liferay-ui:message key="view-all-organizations" /></a>)
+					</c:if>
+				</liferay-util:buffer>
+			
+				<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="usersAdminOrganizationsPanel" persistState="<%= true %>" title='<%= organizationsPanelTitle %>'>
 					<%= organizationsTree %>
 				</liferay-ui:panel>
 			</c:if>
 
-			<c:if test="<%= showUsers %>">
-				<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="usersAdminUsersPanel" persistState="<%= true %>" title='<%= (organization == null) ? "users-without-organization" : (usersCount == 1) ? LanguageUtil.format(pageContext, "x-user", String.valueOf(usersCount)) : LanguageUtil.format(pageContext, "x-users", String.valueOf(usersCount)) %>'>
+			<c:if test="<%= showUsers %>">			
+				
+				<liferay-util:buffer var="usersPanelTitle">
+					
+					<%= (organization == null) ? LanguageUtil.get(pageContext,"users-without-organization") : (usersCount == 1) ? LanguageUtil.format(pageContext, "x-user", String.valueOf(usersCount)) : LanguageUtil.format(pageContext, "x-users", String.valueOf(usersCount)) %>
+					
+					<c:if test="<%= organization == null %>">
+						<portlet:renderURL var="viewUsersURL">
+							<portlet:param name="struts_action" value="/users_admin/view" />
+							<portlet:param name="tabs1" value="users" />
+							<portlet:param name="usersListView" value="<%= UserConstants.LIST_VIEW_FLAT_USERS %>" />
+							<portlet:param name="saveUsersListView" value="<%= Boolean.TRUE.toString() %>" />
+						</portlet:renderURL>
+						
+						<%= StringPool.NBSP %>
+									
+						(<a class="view-all-link" href="<%= viewUsersURL %>" id="usersAdminAllUsersLink"><liferay-ui:message key="view-all-users" /></a>)
+					</c:if>
+				</liferay-util:buffer>
+			
+				<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="usersAdminUsersPanel" persistState="<%= true %>" title='<%= usersPanelTitle %>'>
 
 					<%
 					boolean organizationContextView = true;
@@ -364,3 +402,40 @@ private Long[][] _filterSuborganizations(Long[][]leftAndRightOrganizationIds, Lo
 	return leftAndRightParentOrganizationIds;
 }
 %>
+<c:if test="<%= organization == null %>">
+	<aui:script use="liferay-panel">
+		var panelContainer = Liferay.Panel.get('usersAdminOrganizationPanelContainer');
+		
+		var organizationsTrigger = A.one('#usersAdminAllOrganizationsLink');
+	
+		if (panelContainer && organizationsTrigger) {
+			organizationsTrigger.on(
+				'click',
+				function(event) {
+					panelContainer.once(
+						'collapse',
+						function(event) {
+							event.preventDefault();
+						}
+					);
+				}
+			);
+		}
+		
+		var usersTrigger = A.one('#usersAdminAllUsersLink');
+		
+		if (panelContainer && usersTrigger) {
+			usersTrigger.on(
+				'click',
+				function(event) {
+					panelContainer.once(
+						'collapse',
+						function(event) {
+							event.preventDefault();
+						}
+					);
+				}
+			);
+		}
+	</aui:script>
+</c:if>
