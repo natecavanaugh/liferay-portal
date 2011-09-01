@@ -54,7 +54,7 @@
 		}
 
 		if (suborganizationsCount > 0 && organizationUserCount > 0) {
-			buffer.append(" " + LanguageUtil.get(pageContext, "and").toLowerCase() + " ");
+			buffer.append(StringPool.SPACE + LanguageUtil.get(pageContext, "and").toLowerCase() + StringPool.SPACE);
 		}
 
 		if (organizationUserCount > 0){
