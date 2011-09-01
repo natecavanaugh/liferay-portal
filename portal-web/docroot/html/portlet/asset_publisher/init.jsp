@@ -75,8 +75,19 @@ if (Validator.isNull(selectionStyle)) {
 }
 
 boolean defaultScope = GetterUtil.getBoolean(preferences.getValue("defaultScope", null), true);
+long oneGroupId = GetterUtil.getLong(preferences.getValue("defaultScope", null));
 
-long[] groupIds = AssetPublisherUtil.getGroupIds(preferences, scopeGroupId, layout);
+long[] groupIds = null;
+
+if (defaultScope) {
+	groupIds = new long[] {scopeGroupId};
+}
+else if (oneGroupId > 0) {
+	groupIds = new long[] {oneGroupId};
+}
+else {
+	groupIds = AssetPublisherUtil.getGroupIds(preferences, scopeGroupId, layout);
+}
 
 long[] availableClassNameIds = AssetRendererFactoryRegistryUtil.getClassNameIds();
 
@@ -88,7 +99,16 @@ if (ArrayUtil.contains(availableClassNameIds, layoutRevisionClassNameId)) {
 
 boolean anyAssetType = GetterUtil.getBoolean(preferences.getValue("anyAssetType", Boolean.TRUE.toString()));
 
-long[] classNameIds = AssetPublisherUtil.getClassNameIds(preferences, availableClassNameIds);
+long oneClassNameId = GetterUtil.getLong(preferences.getValue("anyAssetType", null));
+
+long[] classNameIds = null;
+
+if (oneClassNameId > 0) {
+	classNameIds = new long[] {oneClassNameId};
+}
+else {
+	classNameIds = AssetPublisherUtil.getClassNameIds(preferences, availableClassNameIds);
+}
 
 String customUserAttributes = GetterUtil.getString(preferences.getValue("customUserAttributes", StringPool.BLANK));
 
