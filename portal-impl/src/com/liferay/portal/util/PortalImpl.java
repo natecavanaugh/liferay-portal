@@ -3473,14 +3473,16 @@ public class PortalImpl implements Portal {
 
 		// Theme and color scheme
 
-		if (uri.endsWith(".jsp")) {
+		if (uri.endsWith(".css") || uri.endsWith(".jsp")) {
 			if ((parameterMap == null) ||
 				(!parameterMap.containsKey("themeId"))) {
 
 				sb.append("&themeId=");
 				sb.append(theme.getThemeId());
 			}
+		}
 
+		if (uri.endsWith(".jsp")) {
 			if ((parameterMap == null) ||
 				(!parameterMap.containsKey("colorSchemeId"))) {
 

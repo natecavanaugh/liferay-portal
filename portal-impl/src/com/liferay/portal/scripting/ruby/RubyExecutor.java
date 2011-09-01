@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jruby.RubyInstanceConfig.CompileMode;
 import org.jruby.RubyInstanceConfig;
+import org.jruby.RubyInstanceConfig.CompileMode;
 import org.jruby.embed.LocalContextScope;
 import org.jruby.embed.ScriptingContainer;
 import org.jruby.embed.internal.LocalContextProvider;
@@ -78,11 +78,11 @@ public class RubyExecutor extends BaseScriptingExecutor {
 
 		_loadPaths = new ArrayList<String>(3);
 
-		_loadPaths.add("META-INF/jruby.home/lib/ruby/1.8");
+		// Order of load paths matters
+
 		_loadPaths.add("META-INF/jruby.home/lib/ruby/site_ruby/1.8");
-		_loadPaths.add(
-			"file:" + _basePath +
-				"WEB-INF/lib/ruby-gems.jar!/gems/haml-3.0.25/lib");
+		_loadPaths.add("META-INF/jruby.home/lib/ruby/site_ruby/shared");
+		_loadPaths.add("META-INF/jruby.home/lib/ruby/1.8");
 
 		rubyInstanceConfig.setLoadPaths(_loadPaths);
 
