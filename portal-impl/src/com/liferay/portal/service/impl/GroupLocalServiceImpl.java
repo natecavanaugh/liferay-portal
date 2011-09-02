@@ -1475,6 +1475,15 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		return groupPersistence.findByC_N(companyId, name);
 	}
 
+	public List<Group> search(
+			long companyId, LinkedHashMap<String, Object> params, int start,
+			int end)
+		throws SystemException {
+
+		return groupFinder.findByCompanyId(
+			companyId, params, start, end, new GroupNameComparator(true));
+	}
+
 	/**
 	 * Returns a name ordered range of all the groups that match the class name
 	 * IDs, name, and description, optionally including the user's inherited
@@ -1667,37 +1676,6 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	}
 
 	/**
-	 * Returns the number of groups and immediate organization groups that
-	 * match the name and description, optionally including the user's
-	 * inherited organization groups and user groups. System and staged groups
-	 * are not included.
-	 *
-	 * @param  companyId the primary key of the company
-	 * @param  name the group's name (optionally <code>null</code>)
-	 * @param  description the group's description (optionally
-	 *         <code>null</code>)
-	 * @param  params the finder params (optionally <code>null</code>). To
-	 *         include the user's inherited organization groups and user groups
-	 *         in the search, add entries having &quot;usersGroups&quot; and
-	 *         &quot;inherit&quot; as keys mapped to the the user's ID. For
-	 *         more information see {@link
-	 *         com.liferay.portal.service.persistence.GroupFinder}
-	 * @return the number of matching groups
-	 * @throws SystemException if a system exception occurred
-	 */
-	@ThreadLocalCachable
-	public int searchCount(
-			long companyId, String name, String description,
-			LinkedHashMap<String, Object> params)
-		throws SystemException {
-
-		String realName = getRealName(companyId, name);
-
-		return groupFinder.countByC_N_D(
-			companyId, name, realName, description, params);
-	}
-
-	/**
 	 * Returns the number of groups that match the class name IDs, name, and
 	 * description, optionally including the user's inherited organization
 	 * groups and user groups. System and staged groups are not included.
@@ -1727,6 +1705,37 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 		return groupFinder.countByC_C_N_D(
 			companyId, classNameIds, name, realName, description, params);
+	}
+
+	/**
+	 * Returns the number of groups and immediate organization groups that
+	 * match the name and description, optionally including the user's
+	 * inherited organization groups and user groups. System and staged groups
+	 * are not included.
+	 *
+	 * @param  companyId the primary key of the company
+	 * @param  name the group's name (optionally <code>null</code>)
+	 * @param  description the group's description (optionally
+	 *         <code>null</code>)
+	 * @param  params the finder params (optionally <code>null</code>). To
+	 *         include the user's inherited organization groups and user groups
+	 *         in the search, add entries having &quot;usersGroups&quot; and
+	 *         &quot;inherit&quot; as keys mapped to the the user's ID. For
+	 *         more information see {@link
+	 *         com.liferay.portal.service.persistence.GroupFinder}
+	 * @return the number of matching groups
+	 * @throws SystemException if a system exception occurred
+	 */
+	@ThreadLocalCachable
+	public int searchCount(
+			long companyId, String name, String description,
+			LinkedHashMap<String, Object> params)
+		throws SystemException {
+
+		String realName = getRealName(companyId, name);
+
+		return groupFinder.countByC_N_D(
+			companyId, name, realName, description, params);
 	}
 
 	/**

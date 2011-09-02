@@ -240,6 +240,10 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		message.setCreateDate(serviceContext.getCreateDate(now));
 		message.setModifiedDate(serviceContext.getModifiedDate(now));
 
+		if (threadId > 0) {
+			message.setThreadId(threadId);
+		}
+
 		if (priority != MBThreadConstants.PRIORITY_NOT_GIVEN) {
 			message.setPriority(priority);
 		}

@@ -967,6 +967,14 @@ public class GroupLocalServiceUtil {
 		return getService().loadGetGroup(companyId, name);
 	}
 
+	public static java.util.List<com.liferay.portal.model.Group> search(
+		long companyId,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().search(companyId, params, start, end);
+	}
+
 	/**
 	* Returns a name ordered range of all the groups that match the class name
 	* IDs, name, and description, optionally including the user's inherited
@@ -1147,32 +1155,6 @@ public class GroupLocalServiceUtil {
 	}
 
 	/**
-	* Returns the number of groups and immediate organization groups that
-	* match the name and description, optionally including the user's
-	* inherited organization groups and user groups. System and staged groups
-	* are not included.
-	*
-	* @param companyId the primary key of the company
-	* @param name the group's name (optionally <code>null</code>)
-	* @param description the group's description (optionally
-	<code>null</code>)
-	* @param params the finder params (optionally <code>null</code>). To
-	include the user's inherited organization groups and user groups
-	in the search, add entries having &quot;usersGroups&quot; and
-	&quot;inherit&quot; as keys mapped to the the user's ID. For
-	more information see {@link
-	com.liferay.portal.service.persistence.GroupFinder}
-	* @return the number of matching groups
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int searchCount(long companyId, java.lang.String name,
-		java.lang.String description,
-		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().searchCount(companyId, name, description, params);
-	}
-
-	/**
 	* Returns the number of groups that match the class name IDs, name, and
 	* description, optionally including the user's inherited organization
 	* groups and user groups. System and staged groups are not included.
@@ -1199,6 +1181,32 @@ public class GroupLocalServiceUtil {
 		return getService()
 				   .searchCount(companyId, classNameIds, name, description,
 			params);
+	}
+
+	/**
+	* Returns the number of groups and immediate organization groups that
+	* match the name and description, optionally including the user's
+	* inherited organization groups and user groups. System and staged groups
+	* are not included.
+	*
+	* @param companyId the primary key of the company
+	* @param name the group's name (optionally <code>null</code>)
+	* @param description the group's description (optionally
+	<code>null</code>)
+	* @param params the finder params (optionally <code>null</code>). To
+	include the user's inherited organization groups and user groups
+	in the search, add entries having &quot;usersGroups&quot; and
+	&quot;inherit&quot; as keys mapped to the the user's ID. For
+	more information see {@link
+	com.liferay.portal.service.persistence.GroupFinder}
+	* @return the number of matching groups
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int searchCount(long companyId, java.lang.String name,
+		java.lang.String description,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().searchCount(companyId, name, description, params);
 	}
 
 	/**

@@ -330,7 +330,6 @@ public class OrganizationFinderImpl
 		sql = StringUtil.replace(sql, "[$WHERE$]", getWhere(params1));
 
 		sb.append(sql);
-
 		sb.append(")");
 
 		if (Validator.isNotNull(userId)) {
@@ -340,9 +339,7 @@ public class OrganizationFinderImpl
 			sql = StringUtil.replace(sql, "[$WHERE$]", getWhere(params2));
 
 			sb.append(" UNION (");
-
 			sb.append(sql);
-
 			sb.append(")");
 		}
 
@@ -509,7 +506,6 @@ public class OrganizationFinderImpl
 		sb.setIndex(0);
 
 		sb.append(sql);
-
 		sb.append(")");
 
 		if (Validator.isNotNull(userId)) {
@@ -530,7 +526,6 @@ public class OrganizationFinderImpl
 			sb.setIndex(0);
 
 			sb.append(sql);
-
 			sb.append(")");
 		}
 
@@ -730,7 +725,6 @@ public class OrganizationFinderImpl
 			sb.setIndex(0);
 
 			sb.append(sql);
-
 			sb.append(") UNION (");
 
 			if (Validator.isNotNull(type)) {
@@ -762,7 +756,6 @@ public class OrganizationFinderImpl
 			sb.setIndex(0);
 
 			sb.append(sql);
-
 			sb.append(")");
 
 			sql = sb.toString();
@@ -895,7 +888,6 @@ public class OrganizationFinderImpl
 			sb.setIndex(0);
 
 			sb.append(sql);
-
 			sb.append(") UNION (");
 
 			if (Validator.isNotNull(type)) {
