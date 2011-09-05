@@ -1,4 +1,44 @@
-(function() {
+;(function() {
+	var toHex = function(val) {
+		val = parseInt(val, 10).toString(16);
+
+		if (val.length === 1) {
+			val = '0' + val;
+		}
+
+		return val;
+	};
+
+	var MAP_HANDLERS = {
+		a: '_handleLink',
+		blockquote: '_handleQuote',
+		br: '_handleBreak',
+		caption: '_handleTableCaption',
+		cite: '_handleCite',
+		font: '_handleFont',
+		img: '_handleImage',
+		li: '_handleListItem',
+		ol: '_handleOrderedList',
+		table: '_handleTable',
+		td: '_handleTableCell',
+		th: '_handleTableHeader',
+		tr: '_handleTableRow',
+		u: '_handleUnderline',
+		ul: '_handleUnorderedList',
+
+		em: '_handleEm',
+		i: '_handleEm',
+
+		s: '_handleLineThrough',
+		strike: '_handleLineThrough',
+
+		code: '_handlePre',
+		pre: '_handlePre',
+
+		b: '_handleStrong',
+		strong: '_handleStrong'
+	};
+
 	var NEW_LINE = '\n';
 
 	var REGEX_COLOR_RGB = /^rgb\s*\(\s*([01]?\d\d?|2[0-4]\d|25[0-5])\,\s*([01]?\d\d?|2[0-4]\d|25[0-5])\,\s*([01]?\d\d?|2[0-4]\d|25[0-5])\s*\)$/;
@@ -99,7 +139,7 @@
 			for (var i = 0; i < length; i++) {
 				var image = TEMPLATE_IMAGE.replace('{image}', imagePath + emoticonImages[i]);
 
-				var escapedSymbol = emoticonSymbols[i].replace(REGEX_ESCAPE_REGEX, "\\$&");
+				var escapedSymbol = emoticonSymbols[i].replace(REGEX_ESCAPE_REGEX, '\\$&');
 
 				data = data.replace(new RegExp(escapedSymbol, 'g'), image);
 			}
@@ -137,6 +177,7 @@
 			var instance = this;
 
 			var node = document.createElement(TAG_DIV);
+
 			node.innerHTML = data;
 
 			instance._handle(node);
@@ -149,20 +190,14 @@
 		},
 
 		_convertRGBToHex: function(color) {
-			var red, green, blue;
-
 			color = color.replace(
 				REGEX_COLOR_RGB,
-				function(mstr, red, green, blue, offset, string) {
-					var r = parseInt(red, 10).toString(16);
-					var g = parseInt(green, 10).toString(16);
-					var b = parseInt(blue, 10).toString(16);
+				function(match, red, green, blue, offset, string) {
+					var r = toHex(red);
+					var g = toHex(green);
+					var b = toHex(blue);
 
-					r = r.length == 1 ? '0' + r : r;
-					g = g.length == 1 ? '0' + g : g;
-					b = b.length == 1 ? '0' + b : b;
-
-					color = "#" + r + g + b;
+					color = '#' + r + g + b;
 
 					return color;
 				}
@@ -173,6 +208,7 @@
 
 		_getBodySize: function() {
 			var body = document.body;
+
 			var style;
 
 			if (document.defaultView.getComputedStyle) {
@@ -188,18 +224,21 @@
 		_getEmoticonSymbol: function(element) {
 			var instance = this;
 
+			var emoticonSymbol = null;
+
 			var imagePath = element.getAttribute('src');
 
 			if (imagePath) {
 				var image = imagePath.substring(imagePath.lastIndexOf('/') + 1);
+
 				var imageIndex = instance._getImageIndex(CKEDITOR.config.smiley_images, image);
 
 				if (imageIndex >= 0) {
-					return CKEDITOR.config.smiley_symbols[imageIndex];
+					emoticonSymbol = CKEDITOR.config.smiley_symbols[imageIndex];
 				}
 			}
 
-			return null;
+			return emoticonSymbol;
 		},
 
 		_getFontSize: function(fontSize) {
@@ -208,15 +247,16 @@
 			var bodySize;
 
 			if (REGEX_PX.test(fontSize)) {
-				return instance._getFontSizePX(fontSize);
+				fontSize = instance._getFontSizePX(fontSize);
 			}
 			else if (REGEX_EM.test(fontSize)) {
 				bodySize = instance._getBodySize();
 
 				fontSize = parseFloat(fontSize, 10);
+
 				fontSize = Math.round((fontSize * bodySize)) + 'px';
 
-				return instance._getFontSize(fontSize);
+				fontSize = instance._getFontSize(fontSize);
 			}
 			else if (REGEX_PERCENT.test(fontSize)) {
 				bodySize = instance._getBodySize();
@@ -224,53 +264,59 @@
 				fontSize = parseFloat(fontSize, 10);
 				fontSize = Math.round(((fontSize * bodySize) / 100)) + 'px';
 
-				return instance._getFontSize(fontSize);
+				fontSize = instance._getFontSize(fontSize);
 			}
 
 			return fontSize;
 		},
 
 		_getFontSizePX: function(fontSize) {
-			fontSize = parseInt(fontSize, 10);
+			var sizeValue = parseInt(fontSize, 10);
 
-			if (fontSize <= 10) {
-				return '1';
+			if (sizeValue <= 10) {
+				sizeValue = '1';
 			}
-			else if (fontSize <= 12) {
-				return '2';
+			else if (sizeValue <= 12) {
+				sizeValue = '2';
 			}
-			else if (fontSize <= 16) {
-				return '3';
+			else if (sizeValue <= 16) {
+				sizeValue = '3';
 			}
-			else if (fontSize <= 18) {
-				return '4';
+			else if (sizeValue <= 18) {
+				sizeValue = '4';
 			}
-			else if (fontSize <= 24) {
-				return '5';
+			else if (sizeValue <= 24) {
+				sizeValue = '5';
 			}
-			else if (fontSize <= 32) {
-				return '6';
+			else if (sizeValue <= 32) {
+				sizeValue = '6';
 			}
 			else {
-				return '7';
+				sizeValue = '7';
 			}
+
+			return sizeValue;
 		},
 
 		_getImageIndex: function(array, image) {
+			var index = -1;
+
 			if (array.lastIndexOf) {
-				return array.lastIndexOf(image);
+				index = array.lastIndexOf(image);
 			}
 			else {
 				for (var i = array.length - 1; i >= 0; i--) {
 					var item = array[i];
 
 					if (image === item) {
-						return i;
+						index = i;
+
+						break;
 					}
 				}
 			}
 
-			return -1;
+			return index;
 		},
 
 		_isAllWS: function(node) {
@@ -282,10 +328,8 @@
 
 			var nodeType = node.nodeType;
 
-			var result = (node.isElementContentWhitespace || nodeType == 8) ||
+			return (node.isElementContentWhitespace || nodeType == 8) ||
 				((nodeType == 3) && instance._isAllWS(node));
-
-			return result;
 		},
 
 		_isLastItemNewLine: function() {
@@ -304,8 +348,10 @@
 			}
 
 			var children = node.childNodes;
-			var length = children.length;
+
 			var pushTagList = instance._pushTagList;
+
+			var length = children.length;
 
 			for (var i = 0; i < length; i++) {
 				var listTagsIn = [];
@@ -316,22 +362,20 @@
 
 				var child = children[i];
 
-				if (instance._isIgnorable(child) && !instance._inPRE) {
-					continue;
+				if (instance._inPRE || !instance._isIgnorable(child)) {
+					instance._handleElementStart(child, listTagsIn, listTagsOut);
+					instance._handleStyles(child, stylesTagsIn, stylesTagsOut);
+
+					pushTagList.call(instance, listTagsIn);
+					pushTagList.call(instance, stylesTagsIn);
+
+					instance._handle(child);
+
+					instance._handleElementEnd(child, listTagsIn, listTagsOut);
+
+					pushTagList.call(instance, stylesTagsOut.reverse());
+					pushTagList.call(instance, listTagsOut);
 				}
-
-				instance._handleElementStart(child, listTagsIn, listTagsOut);
-				instance._handleStyles(child, stylesTagsIn, stylesTagsOut);
-
-				pushTagList.call(instance, listTagsIn);
-				pushTagList.call(instance, stylesTagsIn);
-
-				instance._handle(child);
-
-				instance._handleElementEnd(child, listTagsIn, listTagsOut);
-
-				pushTagList.call(instance, stylesTagsOut.reverse());
-				pushTagList.call(instance, listTagsOut);
 			}
 
 			instance._handleData(node.data, node);
@@ -343,10 +387,8 @@
 			if (instance._inPRE) {
 				listTagsIn.push(NEW_LINE);
 			}
-			else {
-				if (instance._allowNewLine(element)) {
-					listTagsIn.push(NEW_LINE);
-				}
+			else if (instance._allowNewLine(element)) {
+				listTagsIn.push(NEW_LINE);
 			}
 		},
 
@@ -355,18 +397,20 @@
 
 			var parentNode = element.parentNode;
 
-			if (parentNode && parentNode.tagName && parentNode.tagName.toLowerCase() == TAG_BLOCKQUOTE) {
-				if (!parentNode.getAttribute(TAG_CITE)) {
-					var endResult = instance._endResult;
+			if (parentNode &&
+				parentNode.tagName &&
+				(parentNode.tagName.toLowerCase() == TAG_BLOCKQUOTE) &&
+				!parentNode.getAttribute(TAG_CITE)) {
 
-					for (var i = (endResult.length - 1); i >= 0; i--) {
-						if (endResult[i] === '[quote]') {
-							endResult[i] = '[quote=';
+				var endResult = instance._endResult;
 
-							listTagsOut.push(']');
+				for (var i = (endResult.length - 1); i >= 0; i--) {
+					if (endResult[i] === '[quote]') {
+						endResult[i] = '[quote=';
 
-							break;
-						}
+						listTagsOut.push(']');
+
+						break;
 					}
 				}
 			}
@@ -411,68 +455,17 @@
 			if (tagName) {
 				tagName = tagName.toLowerCase();
 
-				if (tagName == TAG_BR) {
-					instance._handleBreak(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'strong' || tagName == 'b') {
-					instance._handleStrong(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'em' || tagName == 'i') {
-					instance._handleEm(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'u') {
-					instance._handleUnderline(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'a') {
-					instance._handleLink(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'img') {
-					instance._handleImage(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'strike' || tagName == 's') {
-					instance._handleLineThrough(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'font') {
-					instance._handleFont(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_BLOCKQUOTE) {
-					instance._handleQuote(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_CITE) {
-					instance._handleCite(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'ul') {
-					instance._handleUnorderedList(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'ol') {
-					instance._handleOrderedList(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_LI) {
-					instance._handleListItem(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_PRE || tagName == TAG_CODE) {
-					instance._handlePre(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_TABLE) {
-					instance._handleTable(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'th') {
-					instance._handleTableHeader(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'tr') {
-					instance._handleTableRow(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_TD) {
-					instance._handleTableCell(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'caption') {
-					instance._handleTableCaption(element, listTagsIn, listTagsOut);
+				var handlerName = MAP_HANDLERS[tagName];
+
+				if (handlerName) {
+					instance[handlerName](element, listTagsIn, listTagsOut);
 				}
 			}
 		},
 
 		_handleEm: function(element, listTagsIn, listTagsOut) {
 			listTagsIn.push('[i]');
+
 			listTagsOut.push('[/i]');
 		},
 
@@ -486,6 +479,7 @@
 
 				if (size >= 1 && size <= 7) {
 					listTagsIn.push('[size=', size, ']');
+
 					listTagsIn.push('[/size]');
 				}
 			}
@@ -496,6 +490,7 @@
 				color = instance._convertRGBToHex(color);
 
 				listTagsIn.push('[color=', color, ']');
+
 				listTagsIn.push('[/color]');
 			}
 		},
@@ -545,6 +540,7 @@
 
 		_handleLineThrough: function(element, listTagsIn, listTagsOut) {
 			listTagsIn.push('[s]');
+
 			listTagsOut.push('[/s]');
 		},
 
@@ -571,6 +567,7 @@
 			instance._inPRE = true;
 
 			listTagsIn.push('[code]');
+
 			listTagsOut.push('[/code]');
 		},
 
@@ -584,11 +581,13 @@
 			}
 
 			listTagsIn.push(openTag);
+
 			listTagsOut.push('[/quote]');
 		},
 
 		_handleStrong: function(element, listTagsIn, listTagsOut) {
 			listTagsIn.push('[b]');
+
 			listTagsOut.push('[/b]');
 		},
 
@@ -599,6 +598,7 @@
 
 			if (alignment == 'center') {
 				stylesTagsIn.push('[center]');
+
 				stylesTagsOut.push('[/center]');
 			}
 		},
@@ -610,6 +610,7 @@
 
 			if (alignment == 'justify') {
 				stylesTagsIn.push('[justify]');
+
 				stylesTagsOut.push('[/justify]');
 			}
 		},
@@ -621,6 +622,7 @@
 
 			if (alignment == 'left') {
 				stylesTagsIn.push('[left]');
+
 				stylesTagsOut.push('[/left]');
 			}
 		},
@@ -632,6 +634,7 @@
 
 			if (alignment == 'right') {
 				stylesTagsIn.push('[right]');
+
 				stylesTagsOut.push('[/right]');
 			}
 		},
@@ -643,6 +646,7 @@
 
 			if (fontWeight.toLowerCase() == 'bold') {
 				stylesTagsIn.push('[b]');
+
 				stylesTagsOut.push('[/b]');
 			}
 		},
@@ -658,6 +662,7 @@
 				color = instance._convertRGBToHex(color);
 
 				stylesTagsIn.push('[color=', color, ']');
+
 				stylesTagsOut.push('[/color]');
 			}
 		},
@@ -669,6 +674,7 @@
 
 			if (fontFamily) {
 				stylesTagsIn.push('[font=', fontFamily, ']');
+
 				stylesTagsOut.push('[/font]');
 			}
 		},
@@ -684,6 +690,7 @@
 				fontSize = instance._getFontSize(fontSize);
 
 				stylesTagsIn.push('[size=', fontSize, ']');
+
 				stylesTagsOut.push('[/size]');
 			}
 		},
@@ -695,6 +702,7 @@
 
 			if (fontStyle.toLowerCase() == 'italic') {
 				stylesTagsIn.push('[i]');
+
 				stylesTagsOut.push('[/i]');
 			}
 		},
@@ -706,10 +714,12 @@
 
 			if (textDecoration == 'line-through') {
 				stylesTagsIn.push('[s]');
+
 				stylesTagsOut.push('[/s]');
 			}
 			else if (textDecoration == 'underline') {
 				stylesTagsIn.push('[u]');
+
 				stylesTagsOut.push('[/u]');
 			}
 		},
@@ -719,66 +729,73 @@
 
 			var tagName = element.tagName;
 
-			if (tagName && tagName.toLowerCase() == 'a') {
-				return;
-			}
+			if (!tagName || tagName.toLowerCase() == 'a') {
+				var style = element.style;
 
-			var style = element.style;
-
-			if (style) {
-				instance._handleStyleAlignCenter(element, stylesTagsIn, stylesTagsOut);
-
-				instance._handleStyleAlignJustify(element, stylesTagsIn, stylesTagsOut);
-
-				instance._handleStyleAlignLeft(element, stylesTagsIn, stylesTagsOut);
-
-				instance._handleStyleAlignRight(element, stylesTagsIn, stylesTagsOut);
-
-				instance._handleStyleBold(element, stylesTagsIn, stylesTagsOut);
-
-				instance._handleStyleColor(element, stylesTagsIn, stylesTagsOut);
-
-				instance._handleStyleFontFamily(element, stylesTagsIn, stylesTagsOut);
-
-				instance._handleStyleFontSize(element, stylesTagsIn, stylesTagsOut);
-
-				instance._handleStyleItalic(element, stylesTagsIn, stylesTagsOut);
-
-				instance._handleStyleTextDecoration(element, stylesTagsIn, stylesTagsOut);
+				if (style) {
+					instance._handleStyleAlignCenter(element, stylesTagsIn, stylesTagsOut);
+					instance._handleStyleAlignJustify(element, stylesTagsIn, stylesTagsOut);
+					instance._handleStyleAlignLeft(element, stylesTagsIn, stylesTagsOut);
+					instance._handleStyleAlignRight(element, stylesTagsIn, stylesTagsOut);
+					instance._handleStyleBold(element, stylesTagsIn, stylesTagsOut);
+					instance._handleStyleColor(element, stylesTagsIn, stylesTagsOut);
+					instance._handleStyleFontFamily(element, stylesTagsIn, stylesTagsOut);
+					instance._handleStyleFontSize(element, stylesTagsIn, stylesTagsOut);
+					instance._handleStyleItalic(element, stylesTagsIn, stylesTagsOut);
+					instance._handleStyleTextDecoration(element, stylesTagsIn, stylesTagsOut);
+				}
 			}
 		},
 
 		_handleTable: function(element, listTagsIn, listTagsOut) {
+			var instance = this;
+
 			listTagsIn.push('[table]', NEW_LINE);
+
 			listTagsOut.push('[/table]');
 		},
 
 		_handleTableCaption: function(element, listTagsIn, listTagsOut) {
+			var instance = this;
+
 			var parentNode = element.parentNode;
 
-			if (parentNode && parentNode.tagName && parentNode.tagName.toLowerCase() == TAG_TABLE) {
+			if (parentNode && parentNode.tagName && (parentNode.tagName.toLowerCase() == TAG_TABLE)) {
 				listTagsIn.push('[tr]', NEW_LINE, '[th]');
+
 				listTagsOut.push('[/th]', NEW_LINE, '[/tr]', NEW_LINE);
 			}
 		},
 
 		_handleTableCell: function(element, listTagsIn, listTagsOut) {
+			var instance = this;
+
 			listTagsIn.push('[td]');
+
 			listTagsOut.push('[/td]', NEW_LINE);
 		},
 
 		_handleTableHeader: function(element, listTagsIn, listTagsOut) {
+			var instance = this;
+
 			listTagsIn.push('[th]');
+
 			listTagsOut.push('[/th]', NEW_LINE);
 		},
 
 		_handleTableRow: function(element, listTagsIn, listTagsOut) {
+			var instance = this;
+
 			listTagsIn.push('[tr]', NEW_LINE);
+
 			listTagsOut.push('[/tr]', NEW_LINE);
 		},
 
 		_handleUnderline: function(element, listTagsIn, listTagsOut) {
+			var instance = this;
+
 			listTagsIn.push('[u]');
+
 			listTagsOut.push('[/u]');
 		},
 
@@ -786,19 +803,19 @@
 			var instance = this;
 
 			listTagsIn.push('[list]');
+
 			listTagsOut.push('[/list]');
 		},
 
 		_pushTagList: function(tagsList) {
 			var instance = this;
 
-			var endResult, i, length, tag;
+			var endResult = instance._endResult;
 
-			endResult = instance._endResult;
-			length = tagsList.length;
+			var length = tagsList.length;
 
-			for (i = 0; i < length; i++) {
-				tag = tagsList[i];
+			for (var i = 0; i < length; i++) {
+				var tag = tagsList[i];
 
 				endResult.push(tag);
 			}

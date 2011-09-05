@@ -41,6 +41,7 @@ Liferay.Service.registerClass(
 	Liferay.Service.Portal, "Country",
 	{
 		addCountry: true,
+		fetchCountry: true,
 		getCountries: true,
 		getCountry: true,
 		getCountryByA2: true,

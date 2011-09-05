@@ -32,6 +32,12 @@ COMMIT_TRANSACTION;
 
 update Company set active_ = TRUE;
 
+alter table Country add zipRequired BOOLEAN;
+
+COMMIT_TRANSACTION;
+
+update Country set zipRequired = TRUE;
+
 create table DDLRecord (
 	uuid_ VARCHAR(75) null,
 	recordId LONG not null primary key,
