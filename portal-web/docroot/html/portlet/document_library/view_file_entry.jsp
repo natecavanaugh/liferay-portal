@@ -523,15 +523,6 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 
 
 					<aui:workflow-status model="<%= DLFileEntry.class %>" status="<%= fileVersion.getStatus() %>" />
-
-					<liferay-ui:custom-attributes-available className="<%= DLFileEntryConstants.getClassName() %>">
-						<liferay-ui:custom-attribute-list
-							className="<%= DLFileEntryConstants.getClassName() %>"
-							classPK="<%= fileVersionId %>"
-							editable="<%= false %>"
-							label="<%= true %>"
-						/>
-					</liferay-ui:custom-attributes-available>
 				</div>
 
 				<%
@@ -604,6 +595,17 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						catch (Exception e) {
 						}
 						%>
+
+						<liferay-ui:panel collapsible="<%= true %>" cssClass="custom-fields" persistState="<%= true %>" title="custom-fields">
+							<liferay-ui:custom-attributes-available className="<%= DLFileEntryConstants.getClassName() %>">
+								<liferay-ui:custom-attribute-list
+									className="<%= DLFileEntryConstants.getClassName() %>"
+									classPK="<%= fileVersionId %>"
+									editable="<%= false %>"
+									label="<%= true %>"
+								/>
+							</liferay-ui:custom-attributes-available>
+						</liferay-ui:panel>
 
 						<liferay-ui:panel collapsible="<%= true %>" cssClass="version-history" id="documentLibraryVersionHistoryPanel" persistState="<%= true %>" title="version-history">
 
