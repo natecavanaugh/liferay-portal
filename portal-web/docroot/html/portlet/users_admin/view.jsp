@@ -59,12 +59,8 @@ String portletURLString = portletURL.toString();
 				<portlet:param name="struts_action" value="/users_admin/view" />
 			</portlet:renderURL>
 			
-			<% 
-			String usersOrganizationsHome = LanguageUtil.get(pageContext, "users-and-organizations-home");
-			%>
-			
 			<liferay-ui:header
-				backLabel="<%= usersOrganizationsHome %>"
+				backLabel='<%= LanguageUtil.get(pageContext, "users-and-organizations-home") %>'
 				backURL="<%= headerBackURL.toString() %>"
 				title="organizations"
 			/>
@@ -83,12 +79,8 @@ String portletURLString = portletURL.toString();
 				<portlet:param name="struts_action" value="/users_admin/view" />
 			</portlet:renderURL>
 		
-			<% 
-			String usersOrganizationsHome = LanguageUtil.get(pageContext, "users-and-organizations-home");
-			%>
-		
 			<liferay-ui:header
-				backLabel="<%= usersOrganizationsHome %>"
+				backLabel='<%= LanguageUtil.get(pageContext, "users-and-organizations-home") %>'
 				backURL="<%= headerBackURL.toString() %>"
 				title="users"
 			/>

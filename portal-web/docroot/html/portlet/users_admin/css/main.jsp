@@ -287,7 +287,13 @@
 	}
 	
 	.view-all-link {
+		color: #666;
 		font-weight: normal;
+		margin-left: 0.5em;
+	}
+
+	.lfr-asset-column-details {
+		margin-top: 1em;
 	}
 }
 
