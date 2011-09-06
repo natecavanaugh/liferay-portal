@@ -729,13 +729,7 @@
 
 			var tagName = element.tagName;
 
-			if (tagName && tagName.toLowerCase() == 'a') {
-				return;
-			}
-
-			var style = element.style;
-
-			if (style) {
+			if ((!tagName || tagName.toLowerCase() != 'a') && element.style) {
 				instance._handleStyleAlignCenter(element, stylesTagsIn, stylesTagsOut);
 				instance._handleStyleAlignJustify(element, stylesTagsIn, stylesTagsOut);
 				instance._handleStyleAlignLeft(element, stylesTagsIn, stylesTagsOut);
