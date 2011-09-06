@@ -239,6 +239,13 @@
 			font-size: 13px;
 			padding-top: 5px;
 		}
+
+		.structure-field {
+			border-bottom: 1px #CCC solid;
+			border-left: 2px #CCC solid;
+			margin: 7px 3px 0 3px;
+			padding: 7px 2px 0 5px;
+		}
 	}
 
 	.component-group .aui-tree-placeholder {
