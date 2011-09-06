@@ -362,7 +362,7 @@ public class EditPermissionsAction extends EditConfigurationAction {
 
 			if (permissionPropagator != null) {
 				permissionPropagator.propagateRolePermissions(
-					actionRequest, modelResource, roleIds);
+					actionRequest, modelResource, resourcePrimKey, roleIds);
 			}
 		}
 	}

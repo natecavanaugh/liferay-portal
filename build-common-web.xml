@@ -45,12 +45,15 @@
 					nowarn="${javac.nowarn}"
 					srcdir="docroot/WEB-INF/src"
 				/>
-
-				<mkdir dir="docroot/WEB-INF/classes/META-INF" />
-
-				<manifest file="docroot/WEB-INF/classes/META-INF/MANIFEST.MF" />
 			</then>
 		</if>
+
+		<mkdir dir="docroot/WEB-INF/classes/META-INF" />
+
+		<manifest file="docroot/WEB-INF/classes/META-INF/MANIFEST.MF">
+			<attribute name="Extension-List" value="crypto" />
+			<attribute name="crypto-Extension-Name" value="javax.crypto" />
+		</manifest>
 	</target>
 
 	<target name="deploy" depends="compile">

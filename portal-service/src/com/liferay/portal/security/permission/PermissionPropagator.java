@@ -22,7 +22,8 @@ import javax.portlet.ActionRequest;
 public interface PermissionPropagator {
 
 	public void propagateRolePermissions(
-			ActionRequest actionRequest, String className, long[] roleIds)
+			ActionRequest actionRequest, String className, String primKey,
+			long[] roleIds)
 		throws Exception;
 
 }

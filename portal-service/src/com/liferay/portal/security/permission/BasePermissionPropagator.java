@@ -33,10 +33,6 @@ import javax.portlet.ActionRequest;
  */
 public abstract class BasePermissionPropagator implements PermissionPropagator {
 
-	public abstract void propagateRolePermissions(
-			ActionRequest actionRequest, String className, long[] roleIds)
-		throws Exception;
-
 	protected Set<String> getActionIds(String className) {
 		List<String> actionIds = ResourceActionsUtil.getModelResourceActions(
 			className);

@@ -15,7 +15,7 @@
 package com.liferay.portlet.wiki.security.permission;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.security.permission.BasePermissionPropagator;
 import com.liferay.portlet.wiki.model.WikiNode;
 import com.liferay.portlet.wiki.model.WikiPage;
@@ -31,16 +31,16 @@ import javax.portlet.ActionRequest;
  */
 public class WikiPermissionPropagatorImpl extends BasePermissionPropagator {
 
-	@Override
 	public void propagateRolePermissions(
-			ActionRequest actionRequest, String className, long[] roleIds)
+			ActionRequest actionRequest, String className, String primKey,
+			long[] roleIds)
 		throws Exception {
 
 		if (!className.equals(WikiNode.class.getName())) {
 			return;
 		}
 
-		long nodeId = ParamUtil.getLong(actionRequest, "resourcePrimKey");
+		long nodeId = GetterUtil.getLong(primKey);
 
 		List<WikiPage> wikiPages = WikiPageLocalServiceUtil.getPages(
 			nodeId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
