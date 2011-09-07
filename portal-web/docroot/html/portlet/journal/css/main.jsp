@@ -415,6 +415,39 @@
 			}
 		}
 	}
+
+	.display-page-item-container {
+		margin-top: 1em;
+		margin-bottom: 1em;
+
+		.display-page-item {
+			background-color: #DEE7F8;
+			border: 1px solid #CAD8F3;
+			border-radius: 14px;
+			padding: 5px 28px 5px 11px;
+			position: relative;
+
+			.display-page-item-remove {
+				border-radius: 14px;
+				cursor: pointer;
+				display: block;
+				height: 16px;
+				position: absolute;
+				overflow: hidden;
+				right: 8px;
+				top: 3px;
+				width: 16px;
+
+				&:hover {
+					background-color: #CAD8F3;
+				}
+			}
+		}
+	}
+
+	.display-page-toolbar-container {
+		margin-top: 0.5em;
+	}
 }
 
 .portlet-journal-edit-mode {
@@ -544,6 +577,30 @@
 
 	.taglib-form-navigator .form-navigator, .lfr-table .article-translation-toolbar, .journal-article-general-fields, .article-toolbar {
 		display: none;
+	}
+}
+
+.display-page-dialog {
+	.aui-dialog-ft {
+		background-color: #EDF5FF;
+		border: 1px solid gray;
+		margin-left: 3px;
+		margin-right: 3px;
+	}
+
+	.aui-tree-label {
+		a {
+			color: black;
+		}
+
+		.layout-page-unacceptable {
+			color: gray;
+		}
+	}
+
+	.selected-page-message {
+		font-weight: bold;
+		text-align: left;
 	}
 }
 
