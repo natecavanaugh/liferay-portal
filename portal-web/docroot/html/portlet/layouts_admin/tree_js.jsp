@@ -16,17 +16,17 @@
 
 <%@ include file="/html/portlet/layouts_admin/init.jsp" %>
 
-<%
-long groupId = ((Long)request.getAttribute("edit_pages.jsp-groupId")).longValue();
-long selPlid = ((Long)request.getAttribute("edit_pages.jsp-selPlid")).longValue();
-boolean privateLayout = ((Boolean)request.getAttribute("edit_pages.jsp-privateLayout")).booleanValue();
+<%@ include file="/html/portlet/layouts_admin/init_attributes.jspf" %>
 
-String rootNodeName = (String)request.getAttribute("edit_pages.jsp-rootNodeName");
+<%
+String treeLoadingId = PortalUtil.generateRandomKey(request, "treeLoading");
+
+boolean checkContentDisplayPage = ParamUtil.getBoolean(request, "checkContentDisplayPage", false);
+boolean expandFirstNode = ParamUtil.getBoolean(request, "expandFirstNode", true);
+boolean saveState = ParamUtil.getBoolean(request, "saveState", true);
 
 boolean selectableTree = ParamUtil.getBoolean(request, "selectableTree");
 String treeId = ParamUtil.getString(request, "treeId");
-
-PortletURL portletURL = (PortletURL)request.getAttribute("edit_pages.jsp-portletURL");
 
 String modules = "aui-io-request,aui-tree-view,dataschema-xml,datatype-xml";
 
@@ -34,12 +34,6 @@ if (!selectableTree) {
 	modules += ",liferay-history-manager";
 }
 %>
-
-<div class="lfr-tree-loading" id="<portlet:namespace />treeLoading">
-	<span class="aui-icon aui-icon-loading lfr-tree-loading-icon"></span>
-</div>
-
-<div class="lfr-tree" id="<portlet:namespace /><%= HtmlUtil.escape(treeId) %>Output"></div>
 
 <aui:script use="<%= modules %>">
 	var Lang = A.Lang;
@@ -58,19 +52,37 @@ if (!selectableTree) {
 
 			var rootNode = treeInstance.item(0);
 
-			var loadingEl = A.one('#<portlet:namespace />treeLoading');
+			var loadingEl = A.one('#<portlet:namespace />treeLoading<%= treeLoadingId %>');
 
 			loadingEl.hide();
 
-			TreeUtil.restoreNodeState(rootNode);
+			<c:choose>
+				<c:when test="<%= saveState %>">
+					TreeUtil.restoreNodeState(rootNode);
+				</c:when>
+				<c:when test="<%= expandFirstNode %>">
+					rootNode.expand();
+				</c:when>
+			</c:choose>
 		},
 
 		createId: function(layoutId, plid) {
 			return '<%= HtmlUtil.escape(treeId) %>' + TreeUtil.PREFIX_LAYOUT_ID + layoutId + TreeUtil.PREFIX_PLID + plid;
 		},
 
-		createLink: function(label, plid) {
-			return '<a class="layout-tree" href="' + LAYOUT_URL + plid + '">' + Liferay.Util.escapeHTML(label) + '</a>';
+		createLink: function(data) {
+			var className = 'layout-tree';
+
+			var contentDisplayPage = data.contentDisplayPage;
+			var label = data.label;
+			var plid = data.plid;
+			var uuid = data.uuid;
+
+			if (<%= checkContentDisplayPage %> && !contentDisplayPage) {
+				className += ' layout-page-unacceptable';
+			}
+
+			return '<a class="' + className + '" data-uuid="' + uuid + '" href="' + LAYOUT_URL + plid + '">' + Liferay.Util.escapeHTML(label) + '</a>';
 		},
 
 		extractLayoutId: function(node) {
@@ -88,6 +100,7 @@ if (!selectableTree) {
 				json,
 				function(node) {
 					var newNode = {
+						<c:if test="<%= saveState %>">
 						after: {
 							checkedChange: function(event) {
 								var plid = TreeUtil.extractPlid(event.target);
@@ -95,6 +108,7 @@ if (!selectableTree) {
 								TreeUtil.updateSessionTreeClick(plid, event.newVal, '<%= HtmlUtil.escape(treeId) %>SelectedNode');
 							}
 						},
+						</c:if>
 						alwaysShowHitArea: node.hasChildren,
 						expanded : node.selLayoutAncestor,
 						id: TreeUtil.createId(node.layoutId, node.plid),
@@ -112,7 +126,14 @@ if (!selectableTree) {
 					}
 
 					if (!<%= selectableTree %>) {
-						newNode.label = TreeUtil.createLink(newNode.label, node.plid);
+						newNode.label = TreeUtil.createLink(
+							{
+								label: newNode.label,
+								plid: node.plid,
+								uuid: node.uuid,
+								contentDisplayPage: node.contentDisplayPage
+							}
+						);
 					}
 
 					output.push(newNode);
@@ -163,8 +184,10 @@ if (!selectableTree) {
 					priority: index
 				}
 			);
-		},
+		}
 
+		<c:if test="<%= saveState %>">
+		,
 		updateSessionTreeClick: function(id, open, treeId) {
 			var sessionClickURL = themeDisplay.getPathMain() + '/portal/session_tree_js_click';
 
@@ -181,6 +204,7 @@ if (!selectableTree) {
 				}
 			);
 		}
+		</c:if>
 	};
 
 	var getLayoutsURL = themeDisplay.getPathMain() + '/layouts_admin/get_layouts';
@@ -191,12 +215,19 @@ if (!selectableTree) {
 	var RootNodeType = A.TreeNodeTask;
 	var TreeViewType = A.TreeView;
 
-	if (!<%= selectableTree %>) {
+	<c:if test="<%= !selectableTree %>">
 		RootNodeType = A.TreeNodeIO;
 		TreeViewType = A.TreeViewDD;
 
-		rootLabel = TreeUtil.createLink(rootLabel, TreeUtil.DEFAULT_PARENT_LAYOUT_ID);
-	}
+		<c:if test="<%= !checkContentDisplayPage %>">
+		rootLabel = TreeUtil.createLink(
+			{
+				label: rootLabel,
+				plid: TreeUtil.DEFAULT_PARENT_LAYOUT_ID
+			}
+		);
+		</c:if>
+	</c:if>
 
 	var rootNode = new RootNodeType(
 		{
@@ -214,6 +245,7 @@ if (!selectableTree) {
 	var treeview = new TreeViewType(
 		{
 			after: {
+				<c:if test="<%= saveState %>">
 				collapse: function(event) {
 					var id = event.tree.node.get('id');
 
@@ -224,6 +256,7 @@ if (!selectableTree) {
 
 					TreeUtil.updateSessionTreeClick(id, true, '<%= HtmlUtil.escape(treeId) %>');
 				},
+				</c:if>
 				render: TreeUtil.afterRenderTree
 			},
 			boundingBox: '#' + treeElId,
@@ -246,9 +279,11 @@ if (!selectableTree) {
 				url: getLayoutsURL
 			},
 			on: {
+				<c:if test="<%= saveState %>">
 				append: function(event) {
 					TreeUtil.restoreNodeState(event.tree.node);
 				},
+				</c:if>
 				dropAppend: function(event) {
 					var tree = event.tree;
 
@@ -279,6 +314,23 @@ if (!selectableTree) {
 			type: 'pages'
 		}
 	).render();
+
+	<c:if test="<%= !saveState && checkContentDisplayPage %>">
+		treeview.on(
+			'append',
+			function(event) {
+				var node = event.tree.node;
+
+				var plid = TreeUtil.extractPlid(node);
+
+				if (plid == '<%= selPlid %>') {
+					node.select();
+				}
+			}
+		);
+	</c:if>
+
+	A.one('#' + treeElId).setData('treeInstance', treeview);
 
 	<c:if test="<%= !selectableTree %>">
 		var History = Liferay.HistoryManager;
@@ -379,3 +431,9 @@ if (!selectableTree) {
 		);
 	</c:if>
 </aui:script>
+
+<div class="lfr-tree-loading" id="<portlet:namespace />treeLoading<%= treeLoadingId %>">
+	<span class="aui-icon aui-icon-loading lfr-tree-loading-icon"></span>
+</div>
+
+<div class="lfr-tree" id="<portlet:namespace /><%= HtmlUtil.escape(treeId) %>Output"></div>
