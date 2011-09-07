@@ -94,9 +94,9 @@
 		}
 	}
 
-	&.alt td {
-		background: #F5F8FB;
-		border-width: 1px 0;
+	td.sort-column {
+		background: #E6ECEF;
+		}
 	}
 
 	&.hover td {
@@ -599,6 +599,10 @@
 
 .aui-paginator-current-page-report {
 	margin-left: 2em;
+}
+
+.taglib-page-iterator .search-pages .page-links {
+	padding: 0;
 }
 
 /* ---------- Application Column View ---------- */
