@@ -105,7 +105,7 @@ boolean showSelectListIcon = PortletPermissionUtil.contains(permissionChecker, l
 				</liferay-portlet:renderURL>
 
 				<liferay-ui:icon
-					image="add_template"
+					image="add_location"
 					message="add-list-template"
 					url="<%= addListTemplateURL %>"
 				/>
