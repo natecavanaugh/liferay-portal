@@ -425,7 +425,7 @@ public class SourceFormatter {
 				x = 0;
 			}
 			else {
-				x = x + 5;
+				x = x + 4;
 			}
 		}
 		else if (fileName.endsWith("-hook/build.xml")) {
@@ -1702,6 +1702,10 @@ public class SourceFormatter {
 		String fileName, String importLine, boolean checkFile) {
 
 		String content = _jspContents.get(fileName);
+
+		if (Validator.isNull(content)) {
+			return false;
+		}
 
 		if (checkFile && content.contains(importLine)) {
 			return true;

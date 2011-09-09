@@ -451,8 +451,7 @@ create index IX_8CB0A24A on MBThreadFlag (threadId);
 create index IX_A28004B on MBThreadFlag (userId);
 create index IX_33781904 on MBThreadFlag (userId, threadId);
 
-create index IX_8D25AE4C on MDRAction (classNameId, classPK);
-create index IX_A7610C37 on MDRAction (ruleGroupId);
+create index IX_FD90786C on MDRAction (ruleGroupInstanceId);
 create index IX_77BB5E9D on MDRAction (uuid_);
 create unique index IX_75BE36AD on MDRAction (uuid_, groupId);
 
@@ -463,6 +462,12 @@ create unique index IX_F3EFDCB3 on MDRRule (uuid_, groupId);
 create index IX_5849891C on MDRRuleGroup (groupId);
 create index IX_7F26B2A6 on MDRRuleGroup (uuid_);
 create unique index IX_46665CC4 on MDRRuleGroup (uuid_, groupId);
+
+create index IX_C95A08D8 on MDRRuleGroupInstance (classNameId, classPK);
+create unique index IX_808A0036 on MDRRuleGroupInstance (classNameId, classPK, ruleGroupId);
+create index IX_BF3E642B on MDRRuleGroupInstance (ruleGroupId);
+create index IX_B6A6BD91 on MDRRuleGroupInstance (uuid_);
+create unique index IX_9CBC6A39 on MDRRuleGroupInstance (uuid_, groupId);
 
 create index IX_8A1CC4B on MembershipRequest (groupId);
 create index IX_C28C72EC on MembershipRequest (groupId, statusId);
@@ -737,6 +742,7 @@ create index IX_E60EA987 on UserIdMapper (userId);
 create unique index IX_D1C44A6E on UserIdMapper (userId, type_);
 
 create index IX_3E5D78C4 on UserNotificationEvent (userId);
+create index IX_3DBB361A on UserNotificationEvent (userId, archived);
 create index IX_ECD8CFEA on UserNotificationEvent (uuid_);
 
 create index IX_29BA1CF5 on UserTracker (companyId);
