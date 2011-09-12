@@ -158,6 +158,8 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 		EntityCacheUtil.removeResult(ShardModelImpl.ENTITY_CACHE_ENABLED,
 			ShardImpl.class, shard.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
 			new Object[] { shard.getName() });
 
@@ -269,6 +271,8 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		ShardModelImpl shardModelImpl = (ShardModelImpl)shard;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
@@ -319,6 +323,8 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 		if (!isNew &&
 				(!Validator.equals(shard.getName(),
 					shardModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
 				new Object[] { shardModelImpl.getOriginalName() });
 		}
@@ -333,6 +339,8 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 		if (!isNew &&
 				((shard.getClassNameId() != shardModelImpl.getOriginalClassNameId()) ||
 				(shard.getClassPK() != shardModelImpl.getOriginalClassPK()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
 				new Object[] {
 					Long.valueOf(shardModelImpl.getOriginalClassNameId()),
@@ -1022,10 +1030,8 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1045,8 +1051,8 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

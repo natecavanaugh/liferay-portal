@@ -170,6 +170,8 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 		EntityCacheUtil.removeResult(WikiPageResourceModelImpl.ENTITY_CACHE_ENABLED,
 			WikiPageResourceImpl.class, wikiPageResource.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_T,
 			new Object[] {
 				Long.valueOf(wikiPageResource.getNodeId()),
@@ -286,6 +288,8 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		WikiPageResourceModelImpl wikiPageResourceModelImpl = (WikiPageResourceModelImpl)wikiPageResource;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_T,
@@ -343,6 +347,8 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 				((wikiPageResource.getNodeId() != wikiPageResourceModelImpl.getOriginalNodeId()) ||
 				!Validator.equals(wikiPageResource.getTitle(),
 					wikiPageResourceModelImpl.getOriginalTitle()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_T,
 				new Object[] {
 					Long.valueOf(wikiPageResourceModelImpl.getOriginalNodeId()),
@@ -1272,10 +1278,8 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1295,8 +1299,8 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

@@ -162,6 +162,8 @@ public class ResourcePersistenceImpl extends BasePersistenceImpl<Resource>
 		EntityCacheUtil.removeResult(ResourceModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceImpl.class, resource.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
 			new Object[] {
 				Long.valueOf(resource.getCodeId()),
@@ -271,6 +273,8 @@ public class ResourcePersistenceImpl extends BasePersistenceImpl<Resource>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		ResourceModelImpl resourceModelImpl = (ResourceModelImpl)resource;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
@@ -320,6 +324,8 @@ public class ResourcePersistenceImpl extends BasePersistenceImpl<Resource>
 				((resource.getCodeId() != resourceModelImpl.getOriginalCodeId()) ||
 				!Validator.equals(resource.getPrimKey(),
 					resourceModelImpl.getOriginalPrimKey()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
 				new Object[] {
 					Long.valueOf(resourceModelImpl.getOriginalCodeId()),
@@ -1209,10 +1215,8 @@ public class ResourcePersistenceImpl extends BasePersistenceImpl<Resource>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1232,8 +1236,8 @@ public class ResourcePersistenceImpl extends BasePersistenceImpl<Resource>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

@@ -159,6 +159,8 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		EntityCacheUtil.removeResult(VirtualHostModelImpl.ENTITY_CACHE_ENABLED,
 			VirtualHostImpl.class, virtualHost.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_HOSTNAME,
 			new Object[] { virtualHost.getHostname() });
 
@@ -272,6 +274,8 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		VirtualHostModelImpl virtualHostModelImpl = (VirtualHostModelImpl)virtualHost;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_HOSTNAME,
@@ -323,6 +327,8 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		if (!isNew &&
 				(!Validator.equals(virtualHost.getHostname(),
 					virtualHostModelImpl.getOriginalHostname()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_HOSTNAME,
 				new Object[] { virtualHostModelImpl.getOriginalHostname() });
 		}
@@ -337,6 +343,8 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		if (!isNew &&
 				((virtualHost.getCompanyId() != virtualHostModelImpl.getOriginalCompanyId()) ||
 				(virtualHost.getLayoutSetId() != virtualHostModelImpl.getOriginalLayoutSetId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_L,
 				new Object[] {
 					Long.valueOf(virtualHostModelImpl.getOriginalCompanyId()),
@@ -1029,10 +1037,8 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1052,8 +1058,8 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

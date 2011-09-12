@@ -225,6 +225,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 		EntityCacheUtil.removeResult(RoleModelImpl.ENTITY_CACHE_ENABLED,
 			RoleImpl.class, role.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
 			new Object[] { Long.valueOf(role.getCompanyId()), role.getName() });
 
@@ -365,6 +367,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		RoleModelImpl roleModelImpl = (RoleModelImpl)role;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
@@ -421,6 +425,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				((role.getCompanyId() != roleModelImpl.getOriginalCompanyId()) ||
 				!Validator.equals(role.getName(),
 					roleModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
 				new Object[] {
 					Long.valueOf(roleModelImpl.getOriginalCompanyId()),
@@ -442,6 +448,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				((role.getCompanyId() != roleModelImpl.getOriginalCompanyId()) ||
 				(role.getClassNameId() != roleModelImpl.getOriginalClassNameId()) ||
 				(role.getClassPK() != roleModelImpl.getOriginalClassPK()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C_C,
 				new Object[] {
 					Long.valueOf(roleModelImpl.getOriginalCompanyId()),
@@ -4448,10 +4456,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -4471,8 +4477,8 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

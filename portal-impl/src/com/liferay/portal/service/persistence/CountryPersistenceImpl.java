@@ -180,6 +180,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		EntityCacheUtil.removeResult(CountryModelImpl.ENTITY_CACHE_ENABLED,
 			CountryImpl.class, country.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
 			new Object[] { country.getName() });
 
@@ -291,6 +293,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		CountryModelImpl countryModelImpl = (CountryModelImpl)country;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
@@ -341,6 +345,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		if (!isNew &&
 				(!Validator.equals(country.getName(),
 					countryModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
 				new Object[] { countryModelImpl.getOriginalName() });
 		}
@@ -355,6 +361,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		if (!isNew &&
 				(!Validator.equals(country.getA2(),
 					countryModelImpl.getOriginalA2()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A2,
 				new Object[] { countryModelImpl.getOriginalA2() });
 		}
@@ -369,6 +377,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		if (!isNew &&
 				(!Validator.equals(country.getA3(),
 					countryModelImpl.getOriginalA3()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A3,
 				new Object[] { countryModelImpl.getOriginalA3() });
 		}
@@ -1682,10 +1692,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1705,8 +1713,8 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

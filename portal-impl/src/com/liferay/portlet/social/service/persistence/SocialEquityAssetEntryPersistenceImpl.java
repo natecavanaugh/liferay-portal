@@ -155,6 +155,8 @@ public class SocialEquityAssetEntryPersistenceImpl extends BasePersistenceImpl<S
 			SocialEquityAssetEntryImpl.class,
 			socialEquityAssetEntry.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ASSETENTRYID,
 			new Object[] { Long.valueOf(
 					socialEquityAssetEntry.getAssetEntryId()) });
@@ -266,6 +268,8 @@ public class SocialEquityAssetEntryPersistenceImpl extends BasePersistenceImpl<S
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		SocialEquityAssetEntryModelImpl socialEquityAssetEntryModelImpl = (SocialEquityAssetEntryModelImpl)socialEquityAssetEntry;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ASSETENTRYID,
@@ -314,6 +318,8 @@ public class SocialEquityAssetEntryPersistenceImpl extends BasePersistenceImpl<S
 
 		if (!isNew &&
 				(socialEquityAssetEntry.getAssetEntryId() != socialEquityAssetEntryModelImpl.getOriginalAssetEntryId())) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ASSETENTRYID,
 				new Object[] {
 					Long.valueOf(
@@ -773,10 +779,8 @@ public class SocialEquityAssetEntryPersistenceImpl extends BasePersistenceImpl<S
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -796,8 +800,8 @@ public class SocialEquityAssetEntryPersistenceImpl extends BasePersistenceImpl<S
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}
