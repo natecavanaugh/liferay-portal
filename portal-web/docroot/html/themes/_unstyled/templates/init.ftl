@@ -151,9 +151,7 @@
 	<#assign toggle_controls_url = "javascript:;" />
 </#if>
 
-<#if permissionChecker.isOmniadmin() && portalUtil.isUpdateAvailable()>
-	<#assign update_available_url = htmlUtil.escape(theme_display.getURLUpdateManager().toString()) />
-</#if>
+<#assign update_available_url = false />
 
 <#-- ---------- Page ---------- -->
 
