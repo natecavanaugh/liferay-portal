@@ -45,7 +45,6 @@
 
 	th.sort-column {
 		background: #EBEBEB url(../images/application/state_active_bg.png) 0 0 repeat-x;
-		border: 1px solid #ccc;
 		color: #1F1E1E;
 	}
 
@@ -587,6 +586,30 @@
 
 .aui-paginator-current-page-report {
 	margin-left: 2em;
+}
+
+/* ---------- Application Column View ---------- */
+
+.aui-app-column-view {
+	border: 1px solid #7b7b7b;
+
+	.aui-column {
+		.aui-column-content {
+			border: 1px solid #7b7b7b;
+			border-width: 0 1px 0 0;
+			zoom: 1;
+
+			&:after {
+				clear: both;
+				content: "";
+				display: block;
+			}
+		}
+
+		&.last .aui-column-content, &.aui-column-last .aui-column-content {
+			border-width: 0;
+		}
+	}
 }
 
 /* ---------- Header row ---------- */
