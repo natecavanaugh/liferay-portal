@@ -241,6 +241,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 		EntityCacheUtil.removeResult(AssetEntryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetEntryImpl.class, assetEntry.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_CU,
 			new Object[] {
 				Long.valueOf(assetEntry.getGroupId()),
@@ -377,6 +379,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		AssetEntryModelImpl assetEntryModelImpl = (AssetEntryModelImpl)assetEntry;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_CU,
@@ -433,6 +437,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				((assetEntry.getGroupId() != assetEntryModelImpl.getOriginalGroupId()) ||
 				!Validator.equals(assetEntry.getClassUuid(),
 					assetEntryModelImpl.getOriginalClassUuid()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_CU,
 				new Object[] {
 					Long.valueOf(assetEntryModelImpl.getOriginalGroupId()),
@@ -456,6 +462,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 		if (!isNew &&
 				((assetEntry.getClassNameId() != assetEntryModelImpl.getOriginalClassNameId()) ||
 				(assetEntry.getClassPK() != assetEntryModelImpl.getOriginalClassPK()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
 				new Object[] {
 					Long.valueOf(assetEntryModelImpl.getOriginalClassNameId()),
@@ -2818,10 +2826,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -2841,8 +2847,8 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

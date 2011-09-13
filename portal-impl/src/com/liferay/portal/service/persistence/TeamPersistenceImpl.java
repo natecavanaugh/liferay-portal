@@ -167,6 +167,8 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 		EntityCacheUtil.removeResult(TeamModelImpl.ENTITY_CACHE_ENABLED,
 			TeamImpl.class, team.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
 			new Object[] { Long.valueOf(team.getGroupId()), team.getName() });
 	}
@@ -290,6 +292,8 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		TeamModelImpl teamModelImpl = (TeamModelImpl)team;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
@@ -339,6 +343,8 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				((team.getGroupId() != teamModelImpl.getOriginalGroupId()) ||
 				!Validator.equals(team.getName(),
 					teamModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
 				new Object[] {
 					Long.valueOf(teamModelImpl.getOriginalGroupId()),
@@ -1595,10 +1601,8 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1618,8 +1622,8 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

@@ -206,6 +206,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 		EntityCacheUtil.removeResult(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
 			WikiNodeImpl.class, wikiNode.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] { wikiNode.getUuid(), Long.valueOf(
 					wikiNode.getGroupId()) });
@@ -319,6 +321,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		WikiNodeModelImpl wikiNodeModelImpl = (WikiNodeModelImpl)wikiNode;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -381,6 +385,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				(!Validator.equals(wikiNode.getUuid(),
 					wikiNodeModelImpl.getOriginalUuid()) ||
 				(wikiNode.getGroupId() != wikiNodeModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					wikiNodeModelImpl.getOriginalUuid(),
@@ -402,6 +408,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 				((wikiNode.getGroupId() != wikiNodeModelImpl.getOriginalGroupId()) ||
 				!Validator.equals(wikiNode.getName(),
 					wikiNodeModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N,
 				new Object[] {
 					Long.valueOf(wikiNodeModelImpl.getOriginalGroupId()),
@@ -2745,10 +2753,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -2768,8 +2774,8 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

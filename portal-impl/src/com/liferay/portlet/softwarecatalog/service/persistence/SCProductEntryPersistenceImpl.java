@@ -208,6 +208,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		EntityCacheUtil.removeResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryImpl.class, scProductEntry.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA,
 			new Object[] {
 				scProductEntry.getRepoGroupId(),
@@ -330,6 +332,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		SCProductEntryModelImpl scProductEntryModelImpl = (SCProductEntryModelImpl)scProductEntry;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA,
@@ -382,6 +386,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 					scProductEntryModelImpl.getOriginalRepoGroupId()) ||
 				!Validator.equals(scProductEntry.getRepoArtifactId(),
 					scProductEntryModelImpl.getOriginalRepoArtifactId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_RG_RA,
 				new Object[] {
 					scProductEntryModelImpl.getOriginalRepoGroupId(),
@@ -2904,10 +2910,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -2927,8 +2931,8 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

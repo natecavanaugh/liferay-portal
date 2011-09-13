@@ -175,6 +175,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 		EntityCacheUtil.removeResult(SCProductVersionModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductVersionImpl.class, scProductVersion.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
 			new Object[] { scProductVersion.getDirectDownloadURL() });
 	}
@@ -293,6 +295,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		SCProductVersionModelImpl scProductVersionModelImpl = (SCProductVersionModelImpl)scProductVersion;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
@@ -339,6 +343,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 		if (!isNew &&
 				(!Validator.equals(scProductVersion.getDirectDownloadURL(),
 					scProductVersionModelImpl.getOriginalDirectDownloadURL()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_DIRECTDOWNLOADURL,
 				new Object[] {
 					scProductVersionModelImpl.getOriginalDirectDownloadURL()
@@ -1241,10 +1247,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1264,8 +1268,8 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

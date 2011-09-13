@@ -188,6 +188,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 		EntityCacheUtil.removeResult(PortletItemModelImpl.ENTITY_CACHE_ENABLED,
 			PortletItemImpl.class, portletItem.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N_P_C,
 			new Object[] {
 				Long.valueOf(portletItem.getGroupId()),
@@ -302,6 +304,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		PortletItemModelImpl portletItemModelImpl = (PortletItemModelImpl)portletItem;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N_P_C,
@@ -358,6 +362,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 				!Validator.equals(portletItem.getPortletId(),
 					portletItemModelImpl.getOriginalPortletId()) ||
 				(portletItem.getClassNameId() != portletItemModelImpl.getOriginalClassNameId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_N_P_C,
 				new Object[] {
 					Long.valueOf(portletItemModelImpl.getOriginalGroupId()),
@@ -1853,10 +1859,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1876,8 +1880,8 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

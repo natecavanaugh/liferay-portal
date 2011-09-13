@@ -162,6 +162,8 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 		EntityCacheUtil.removeResult(PortletModelImpl.ENTITY_CACHE_ENABLED,
 			PortletImpl.class, portlet.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
 			new Object[] {
 				Long.valueOf(portlet.getCompanyId()),
@@ -271,6 +273,8 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		PortletModelImpl portletModelImpl = (PortletModelImpl)portlet;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
@@ -320,6 +324,8 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 				((portlet.getCompanyId() != portletModelImpl.getOriginalCompanyId()) ||
 				!Validator.equals(portlet.getPortletId(),
 					portletModelImpl.getOriginalPortletId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
 				new Object[] {
 					Long.valueOf(portletModelImpl.getOriginalCompanyId()),
@@ -1215,10 +1221,8 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1238,8 +1242,8 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

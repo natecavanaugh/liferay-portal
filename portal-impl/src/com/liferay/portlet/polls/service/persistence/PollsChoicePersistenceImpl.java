@@ -180,6 +180,8 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 		EntityCacheUtil.removeResult(PollsChoiceModelImpl.ENTITY_CACHE_ENABLED,
 			PollsChoiceImpl.class, pollsChoice.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_Q_N,
 			new Object[] {
 				Long.valueOf(pollsChoice.getQuestionId()),
@@ -295,6 +297,8 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		PollsChoiceModelImpl pollsChoiceModelImpl = (PollsChoiceModelImpl)pollsChoice;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_Q_N,
@@ -351,6 +355,8 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 				((pollsChoice.getQuestionId() != pollsChoiceModelImpl.getOriginalQuestionId()) ||
 				!Validator.equals(pollsChoice.getName(),
 					pollsChoiceModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_Q_N,
 				new Object[] {
 					Long.valueOf(pollsChoiceModelImpl.getOriginalQuestionId()),
@@ -1694,10 +1700,8 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1717,8 +1721,8 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

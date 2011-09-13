@@ -151,6 +151,8 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 		EntityCacheUtil.removeResult(PortalPreferencesModelImpl.ENTITY_CACHE_ENABLED,
 			PortalPreferencesImpl.class, portalPreferences.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_O_O,
 			new Object[] {
 				Long.valueOf(portalPreferences.getOwnerId()),
@@ -262,6 +264,8 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		PortalPreferencesModelImpl portalPreferencesModelImpl = (PortalPreferencesModelImpl)portalPreferences;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_O_O,
@@ -311,6 +315,8 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 		if (!isNew &&
 				((portalPreferences.getOwnerId() != portalPreferencesModelImpl.getOriginalOwnerId()) ||
 				(portalPreferences.getOwnerType() != portalPreferencesModelImpl.getOriginalOwnerType()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_O_O,
 				new Object[] {
 					Long.valueOf(
@@ -789,10 +795,8 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -812,8 +816,8 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

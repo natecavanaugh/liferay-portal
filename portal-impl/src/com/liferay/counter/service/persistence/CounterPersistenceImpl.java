@@ -134,6 +134,8 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	public void clearCache(Counter counter) {
 		EntityCacheUtil.removeResult(CounterModelImpl.ENTITY_CACHE_ENABLED,
 			CounterImpl.class, counter.getPrimaryKey());
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
 	}
 
 	/**
@@ -235,6 +237,8 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 		}
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
 
 		EntityCacheUtil.removeResult(CounterModelImpl.ENTITY_CACHE_ENABLED,
 			CounterImpl.class, counter.getPrimaryKey());
@@ -507,10 +511,8 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -530,8 +532,8 @@ public class CounterPersistenceImpl extends BasePersistenceImpl<Counter>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}
