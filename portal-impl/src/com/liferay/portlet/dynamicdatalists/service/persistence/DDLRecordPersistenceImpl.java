@@ -193,6 +193,8 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 		EntityCacheUtil.removeResult(DDLRecordModelImpl.ENTITY_CACHE_ENABLED,
 			DDLRecordImpl.class, ddlRecord.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] {
 				ddlRecord.getUuid(), Long.valueOf(ddlRecord.getGroupId())
@@ -305,6 +307,8 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		DDLRecordModelImpl ddlRecordModelImpl = (DDLRecordModelImpl)ddlRecord;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -360,6 +364,8 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 				(!Validator.equals(ddlRecord.getUuid(),
 					ddlRecordModelImpl.getOriginalUuid()) ||
 				(ddlRecord.getGroupId() != ddlRecordModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					ddlRecordModelImpl.getOriginalUuid(),
@@ -2115,10 +2121,8 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -2138,8 +2142,8 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

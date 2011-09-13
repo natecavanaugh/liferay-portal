@@ -282,6 +282,8 @@ public class SocialEquityLogPersistenceImpl extends BasePersistenceImpl<SocialEq
 		EntityCacheUtil.removeResult(SocialEquityLogModelImpl.ENTITY_CACHE_ENABLED,
 			SocialEquityLogImpl.class, socialEquityLog.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_AEI_AID_AD_A_T_E,
 			new Object[] {
 				Long.valueOf(socialEquityLog.getUserId()),
@@ -399,6 +401,8 @@ public class SocialEquityLogPersistenceImpl extends BasePersistenceImpl<SocialEq
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		SocialEquityLogModelImpl socialEquityLogModelImpl = (SocialEquityLogModelImpl)socialEquityLog;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_AEI_AID_AD_A_T_E,
@@ -462,6 +466,8 @@ public class SocialEquityLogPersistenceImpl extends BasePersistenceImpl<SocialEq
 				(socialEquityLog.getType() != socialEquityLogModelImpl.getOriginalType()) ||
 				!Validator.equals(socialEquityLog.getExtraData(),
 					socialEquityLogModelImpl.getOriginalExtraData()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_AEI_AID_AD_A_T_E,
 				new Object[] {
 					Long.valueOf(socialEquityLogModelImpl.getOriginalUserId()),
@@ -4360,10 +4366,8 @@ public class SocialEquityLogPersistenceImpl extends BasePersistenceImpl<SocialEq
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -4383,8 +4387,8 @@ public class SocialEquityLogPersistenceImpl extends BasePersistenceImpl<SocialEq
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

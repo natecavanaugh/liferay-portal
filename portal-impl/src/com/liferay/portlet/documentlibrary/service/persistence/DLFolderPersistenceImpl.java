@@ -281,6 +281,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		EntityCacheUtil.removeResult(DLFolderModelImpl.ENTITY_CACHE_ENABLED,
 			DLFolderImpl.class, dlFolder.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] { dlFolder.getUuid(), Long.valueOf(
 					dlFolder.getGroupId()) });
@@ -412,6 +414,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		DLFolderModelImpl dlFolderModelImpl = (DLFolderModelImpl)dlFolder;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -478,6 +482,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				(!Validator.equals(dlFolder.getUuid(),
 					dlFolderModelImpl.getOriginalUuid()) ||
 				(dlFolder.getGroupId() != dlFolderModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					dlFolderModelImpl.getOriginalUuid(),
@@ -497,6 +503,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 		if (!isNew &&
 				(dlFolder.getRepositoryId() != dlFolderModelImpl.getOriginalRepositoryId())) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_REPOSITORYID,
 				new Object[] {
 					Long.valueOf(dlFolderModelImpl.getOriginalRepositoryId())
@@ -515,6 +523,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				(dlFolder.getParentFolderId() != dlFolderModelImpl.getOriginalParentFolderId()) ||
 				!Validator.equals(dlFolder.getName(),
 					dlFolderModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_P_N,
 				new Object[] {
 					Long.valueOf(dlFolderModelImpl.getOriginalGroupId()),
@@ -5223,10 +5233,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -5246,8 +5254,8 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

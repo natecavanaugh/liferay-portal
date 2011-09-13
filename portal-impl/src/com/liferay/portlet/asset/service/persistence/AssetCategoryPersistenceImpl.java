@@ -292,6 +292,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		EntityCacheUtil.removeResult(AssetCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			AssetCategoryImpl.class, assetCategory.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] {
 				assetCategory.getUuid(),
@@ -426,6 +428,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		AssetCategoryModelImpl assetCategoryModelImpl = (AssetCategoryModelImpl)assetCategory;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -500,6 +504,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				(!Validator.equals(assetCategory.getUuid(),
 					assetCategoryModelImpl.getOriginalUuid()) ||
 				(assetCategory.getGroupId() != assetCategoryModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					assetCategoryModelImpl.getOriginalUuid(),
@@ -523,6 +529,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				!Validator.equals(assetCategory.getName(),
 					assetCategoryModelImpl.getOriginalName()) ||
 				(assetCategory.getVocabularyId() != assetCategoryModelImpl.getOriginalVocabularyId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_P_N_V,
 				new Object[] {
 					Long.valueOf(
@@ -5502,10 +5510,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -5525,8 +5531,8 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

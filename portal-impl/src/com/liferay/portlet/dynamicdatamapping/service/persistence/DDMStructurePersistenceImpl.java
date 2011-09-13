@@ -226,6 +226,8 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 		EntityCacheUtil.removeResult(DDMStructureModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStructureImpl.class, ddmStructure.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] {
 				ddmStructure.getUuid(), Long.valueOf(ddmStructure.getGroupId())
@@ -346,6 +348,8 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		DDMStructureModelImpl ddmStructureModelImpl = (DDMStructureModelImpl)ddmStructure;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -408,6 +412,8 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				(!Validator.equals(ddmStructure.getUuid(),
 					ddmStructureModelImpl.getOriginalUuid()) ||
 				(ddmStructure.getGroupId() != ddmStructureModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					ddmStructureModelImpl.getOriginalUuid(),
@@ -430,6 +436,8 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 				((ddmStructure.getGroupId() != ddmStructureModelImpl.getOriginalGroupId()) ||
 				!Validator.equals(ddmStructure.getStructureKey(),
 					ddmStructureModelImpl.getOriginalStructureKey()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_S,
 				new Object[] {
 					Long.valueOf(ddmStructureModelImpl.getOriginalGroupId()),
@@ -3715,10 +3723,8 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -3738,8 +3744,8 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

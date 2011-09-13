@@ -165,6 +165,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 		EntityCacheUtil.removeResult(DLSyncModelImpl.ENTITY_CACHE_ENABLED,
 			DLSyncImpl.class, dlSync.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_FILEID,
 			new Object[] { Long.valueOf(dlSync.getFileId()) });
 	}
@@ -270,6 +272,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		DLSyncModelImpl dlSyncModelImpl = (DLSyncModelImpl)dlSync;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_FILEID,
@@ -314,6 +318,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 
 		if (!isNew &&
 				(dlSync.getFileId() != dlSyncModelImpl.getOriginalFileId())) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_FILEID,
 				new Object[] { Long.valueOf(dlSyncModelImpl.getOriginalFileId()) });
 		}
@@ -1248,10 +1254,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1271,8 +1275,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

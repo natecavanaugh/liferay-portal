@@ -261,6 +261,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 		EntityCacheUtil.removeResult(CalEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalEventImpl.class, calEvent.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] { calEvent.getUuid(), Long.valueOf(
 					calEvent.getGroupId()) });
@@ -371,6 +373,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		CalEventModelImpl calEventModelImpl = (CalEventModelImpl)calEvent;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -457,6 +461,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 				(!Validator.equals(calEvent.getUuid(),
 					calEventModelImpl.getOriginalUuid()) ||
 				(calEvent.getGroupId() != calEventModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					calEventModelImpl.getOriginalUuid(),
@@ -6684,10 +6690,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -6707,8 +6711,8 @@ public class CalEventPersistenceImpl extends BasePersistenceImpl<CalEvent>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

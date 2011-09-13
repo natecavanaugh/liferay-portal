@@ -294,6 +294,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 		EntityCacheUtil.removeResult(SocialRequestModelImpl.ENTITY_CACHE_ENABLED,
 			SocialRequestImpl.class, socialRequest.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] {
 				socialRequest.getUuid(),
@@ -417,6 +419,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		SocialRequestModelImpl socialRequestModelImpl = (SocialRequestModelImpl)socialRequest;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -482,6 +486,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				(!Validator.equals(socialRequest.getUuid(),
 					socialRequestModelImpl.getOriginalUuid()) ||
 				(socialRequest.getGroupId() != socialRequestModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					socialRequestModelImpl.getOriginalUuid(),
@@ -506,6 +512,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 				(socialRequest.getClassPK() != socialRequestModelImpl.getOriginalClassPK()) ||
 				(socialRequest.getType() != socialRequestModelImpl.getOriginalType()) ||
 				(socialRequest.getReceiverUserId() != socialRequestModelImpl.getOriginalReceiverUserId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_C_C_T_R,
 				new Object[] {
 					Long.valueOf(socialRequestModelImpl.getOriginalUserId()),
@@ -4858,10 +4866,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -4881,8 +4887,8 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

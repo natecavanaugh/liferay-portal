@@ -284,6 +284,8 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 		EntityCacheUtil.removeResult(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadImpl.class, mbThread.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ROOTMESSAGEID,
 			new Object[] { Long.valueOf(mbThread.getRootMessageId()) });
 	}
@@ -389,6 +391,8 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		MBThreadModelImpl mbThreadModelImpl = (MBThreadModelImpl)mbThread;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ROOTMESSAGEID,
@@ -433,6 +437,8 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		if (!isNew &&
 				(mbThread.getRootMessageId() != mbThreadModelImpl.getOriginalRootMessageId())) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_ROOTMESSAGEID,
 				new Object[] {
 					Long.valueOf(mbThreadModelImpl.getOriginalRootMessageId())
@@ -8585,10 +8591,8 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -8608,8 +8612,8 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

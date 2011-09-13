@@ -195,6 +195,8 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 		EntityCacheUtil.removeResult(MBMailingListModelImpl.ENTITY_CACHE_ENABLED,
 			MBMailingListImpl.class, mbMailingList.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] {
 				mbMailingList.getUuid(),
@@ -315,6 +317,8 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		MBMailingListModelImpl mbMailingListModelImpl = (MBMailingListModelImpl)mbMailingList;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -377,6 +381,8 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 				(!Validator.equals(mbMailingList.getUuid(),
 					mbMailingListModelImpl.getOriginalUuid()) ||
 				(mbMailingList.getGroupId() != mbMailingListModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					mbMailingListModelImpl.getOriginalUuid(),
@@ -398,6 +404,8 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 		if (!isNew &&
 				((mbMailingList.getGroupId() != mbMailingListModelImpl.getOriginalGroupId()) ||
 				(mbMailingList.getCategoryId() != mbMailingListModelImpl.getOriginalCategoryId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C,
 				new Object[] {
 					Long.valueOf(mbMailingListModelImpl.getOriginalGroupId()),
@@ -1949,10 +1957,8 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1972,8 +1978,8 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

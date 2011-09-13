@@ -289,6 +289,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		EntityCacheUtil.removeResult(GroupModelImpl.ENTITY_CACHE_ENABLED,
 			GroupImpl.class, group.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_LIVEGROUPID,
 			new Object[] { Long.valueOf(group.getLiveGroupId()) });
 
@@ -478,6 +480,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		GroupModelImpl groupModelImpl = (GroupModelImpl)group;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_LIVEGROUPID,
@@ -559,6 +563,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 
 		if (!isNew &&
 				(group.getLiveGroupId() != groupModelImpl.getOriginalLiveGroupId())) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_LIVEGROUPID,
 				new Object[] {
 					Long.valueOf(groupModelImpl.getOriginalLiveGroupId())
@@ -575,6 +581,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				((group.getCompanyId() != groupModelImpl.getOriginalCompanyId()) ||
 				!Validator.equals(group.getName(),
 					groupModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
 				new Object[] {
 					Long.valueOf(groupModelImpl.getOriginalCompanyId()),
@@ -596,6 +604,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				((group.getCompanyId() != groupModelImpl.getOriginalCompanyId()) ||
 				!Validator.equals(group.getFriendlyURL(),
 					groupModelImpl.getOriginalFriendlyURL()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_F,
 				new Object[] {
 					Long.valueOf(groupModelImpl.getOriginalCompanyId()),
@@ -620,6 +630,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				((group.getCompanyId() != groupModelImpl.getOriginalCompanyId()) ||
 				(group.getClassNameId() != groupModelImpl.getOriginalClassNameId()) ||
 				(group.getClassPK() != groupModelImpl.getOriginalClassPK()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C_C,
 				new Object[] {
 					Long.valueOf(groupModelImpl.getOriginalCompanyId()),
@@ -645,6 +657,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				(group.getLiveGroupId() != groupModelImpl.getOriginalLiveGroupId()) ||
 				!Validator.equals(group.getName(),
 					groupModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_L_N,
 				new Object[] {
 					Long.valueOf(groupModelImpl.getOriginalCompanyId()),
@@ -674,6 +688,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				(group.getLiveGroupId() != groupModelImpl.getOriginalLiveGroupId()) ||
 				!Validator.equals(group.getName(),
 					groupModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C_L_N,
 				new Object[] {
 					Long.valueOf(groupModelImpl.getOriginalCompanyId()),
@@ -3223,10 +3239,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -3246,8 +3260,8 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

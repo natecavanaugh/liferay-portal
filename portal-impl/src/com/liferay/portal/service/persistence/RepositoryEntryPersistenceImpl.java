@@ -195,6 +195,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 		EntityCacheUtil.removeResult(RepositoryEntryModelImpl.ENTITY_CACHE_ENABLED,
 			RepositoryEntryImpl.class, repositoryEntry.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] {
 				repositoryEntry.getUuid(),
@@ -317,6 +319,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		RepositoryEntryModelImpl repositoryEntryModelImpl = (RepositoryEntryModelImpl)repositoryEntry;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -380,6 +384,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 				(!Validator.equals(repositoryEntry.getUuid(),
 					repositoryEntryModelImpl.getOriginalUuid()) ||
 				(repositoryEntry.getGroupId() != repositoryEntryModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					repositoryEntryModelImpl.getOriginalUuid(),
@@ -402,6 +408,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 				((repositoryEntry.getRepositoryId() != repositoryEntryModelImpl.getOriginalRepositoryId()) ||
 				!Validator.equals(repositoryEntry.getMappedId(),
 					repositoryEntryModelImpl.getOriginalMappedId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_M,
 				new Object[] {
 					Long.valueOf(
@@ -1970,10 +1978,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -1993,8 +1999,8 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

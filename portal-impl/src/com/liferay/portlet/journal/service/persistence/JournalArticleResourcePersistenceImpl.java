@@ -203,6 +203,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 			JournalArticleResourceImpl.class,
 			journalArticleResource.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 			new Object[] {
 				journalArticleResource.getUuid(),
@@ -327,6 +329,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		JournalArticleResourceModelImpl journalArticleResourceModelImpl = (JournalArticleResourceModelImpl)journalArticleResource;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -391,6 +395,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 				(!Validator.equals(journalArticleResource.getUuid(),
 					journalArticleResourceModelImpl.getOriginalUuid()) ||
 				(journalArticleResource.getGroupId() != journalArticleResourceModelImpl.getOriginalGroupId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
 				new Object[] {
 					journalArticleResourceModelImpl.getOriginalUuid(),
@@ -414,6 +420,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 				((journalArticleResource.getGroupId() != journalArticleResourceModelImpl.getOriginalGroupId()) ||
 				!Validator.equals(journalArticleResource.getArticleId(),
 					journalArticleResourceModelImpl.getOriginalArticleId()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_A,
 				new Object[] {
 					Long.valueOf(
@@ -1985,10 +1993,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -2008,8 +2014,8 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}

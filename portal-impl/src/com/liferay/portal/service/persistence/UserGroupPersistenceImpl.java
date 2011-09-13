@@ -184,6 +184,8 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 		EntityCacheUtil.removeResult(UserGroupModelImpl.ENTITY_CACHE_ENABLED,
 			UserGroupImpl.class, userGroup.getPrimaryKey());
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
 			new Object[] {
 				Long.valueOf(userGroup.getCompanyId()),
@@ -324,6 +326,8 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST);
 
+		FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 		UserGroupModelImpl userGroupModelImpl = (UserGroupModelImpl)userGroup;
 
 		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
@@ -373,6 +377,8 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				((userGroup.getCompanyId() != userGroupModelImpl.getOriginalCompanyId()) ||
 				!Validator.equals(userGroup.getName(),
 					userGroupModelImpl.getOriginalName()))) {
+			FinderCacheUtil.removeResult(FINDER_PATH_FIND_ALL, FINDER_ARGS_EMPTY);
+
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N,
 				new Object[] {
 					Long.valueOf(userGroupModelImpl.getOriginalCompanyId()),
@@ -2450,10 +2456,8 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countAll() throws SystemException {
-		Object[] finderArgs = new Object[0];
-
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL,
-				finderArgs, this);
+				FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -2473,8 +2477,8 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY, count);
 
 				closeSession(session);
 			}
