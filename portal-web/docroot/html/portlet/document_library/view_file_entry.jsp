@@ -116,7 +116,7 @@ boolean hasVideo = VideoProcessor.hasVideo(fileEntry, fileVersion.getVersion());
 
 User userDisplay = UserLocalServiceUtil.getUserById(fileEntry.getUserId());
 
-AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.getEntry(DLFileEntryConstants.getClassName(), assetClassPK);
+AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.fetchEntry(DLFileEntryConstants.getClassName(), assetClassPK);
 
 request.setAttribute(WebKeys.LAYOUT_ASSET_ENTRY, layoutAssetEntry);
 
