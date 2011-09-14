@@ -763,8 +763,8 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 
 			preferences.store();
 		}
-		catch (LocaleException e) {
-			throw e;
+		catch (LocaleException le) {
+			throw le;
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
