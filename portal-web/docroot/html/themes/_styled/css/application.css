@@ -45,6 +45,7 @@
 
 	th.sort-column {
 		background: #EBEBEB url(../images/application/state_active_bg.png) 0 0 repeat-x;
+		border: 1px solid #ccc;
 		color: #1F1E1E;
 	}
 
@@ -75,15 +76,19 @@
 }
 
 .results-row {
+	&.alt td {
+		background: #f5f8fb;
+	}
+
 	td {
 		background: none;
 		border: 1px solid;
 		border-color: #D7D7D7 #E7E7E7;
 		padding: 5px 10px;
-	}
 
-	td.sort-column {
-		background: #E6ECEF;
+		&.sort-column {
+			background: #e2f1fc;
+		}
 	}
 
 	&.hover td {
@@ -588,28 +593,8 @@
 	margin-left: 2em;
 }
 
-/* ---------- Application Column View ---------- */
-
-.aui-app-column-view {
-	border: 1px solid #7b7b7b;
-
-	.aui-column {
-		.aui-column-content {
-			border: 1px solid #7b7b7b;
-			border-width: 0 1px 0 0;
-			zoom: 1;
-
-			&:after {
-				clear: both;
-				content: "";
-				display: block;
-			}
-		}
-
-		&.last .aui-column-content, &.aui-column-last .aui-column-content {
-			border-width: 0;
-		}
-	}
+.taglib-page-iterator .search-pages .page-links {
+	padding: 0;
 }
 
 /* ---------- Header row ---------- */
@@ -619,6 +604,16 @@
 
 	.lfr-actions.show-arrow.direction-down .lfr-trigger strong a {
 		background: url(../images/arrows/08_down.png) 100% -5px no-repeat;
+	}
+
+	.aui-toolbar {
+		.aui-toolbar-item {
+			border-right-width: 0;
+		}
+
+		.aui-toolbar-last {
+			border-right-width: 1px;
+		}
 	}
 }
 
