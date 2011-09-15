@@ -27,6 +27,8 @@
 		}
 
 		.category-actions {
+			float: none;
+			display: inline-block;
 			margin-left: 0.3em;
 			margin-right: 0;
 		}
