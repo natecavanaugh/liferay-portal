@@ -23,12 +23,15 @@ import com.liferay.portal.util.PortalUtil;
 
 import java.io.InputStream;
 
+import java.net.URL;
+
 import javax.servlet.ServletContext;
 
 import org.apache.velocity.exception.ResourceNotFoundException;
 
 /**
  * @author Alexander Chow
+ * @author Raymond Augé
  */
 public class ServletVelocityResourceListener extends VelocityResourceListener {
 
@@ -36,49 +39,63 @@ public class ServletVelocityResourceListener extends VelocityResourceListener {
 	public InputStream getResourceStream(String source)
 		throws ResourceNotFoundException {
 
-		InputStream is = null;
+		try {
+			return doGetResourceStream(source);
+		}
+		catch (Exception e) {
+			throw new ResourceNotFoundException(source);
+		}
+	}
 
+	protected InputStream doGetResourceStream(String source) throws Exception {
 		int pos = source.indexOf(SERVLET_SEPARATOR);
 
-		if (pos != -1) {
-			String servletContextName = source.substring(0, pos);
-
-			if (Validator.isNull(servletContextName)) {
-				servletContextName = PortalUtil.getPathContext();
-			}
-
-			ServletContext servletContext = ServletContextPool.get(
-				servletContextName);
-
-			if (servletContext != null) {
-				String name =
-					source.substring(pos + SERVLET_SEPARATOR.length());
-
-				if (_log.isDebugEnabled()) {
-					_log.debug(
-						name + " is associated with the servlet context " +
-							servletContextName + " " + servletContext);
-				}
-
-				is = servletContext.getResourceAsStream(name);
-
-				if ((is == null) && (name.endsWith("/init_custom.vm"))) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							"The template " + name + " should be created");
-					}
-
-					is = new UnsyncByteArrayInputStream(new byte[0]);
-				}
-			}
-			else {
-				_log.error(
-					source + " is not valid because " + servletContextName +
-						" does not map to a servlet context");
-			}
+		if (pos == -1) {
+			return null;
 		}
 
-		return is;
+		String servletContextName = source.substring(0, pos);
+
+		if (Validator.isNull(servletContextName)) {
+			servletContextName = PortalUtil.getPathContext();
+		}
+
+		ServletContext servletContext = ServletContextPool.get(
+			servletContextName);
+
+		if (servletContext == null) {
+			_log.error(
+				source + " is not valid because " + servletContextName +
+					" does not map to a servlet context");
+
+			return null;
+		}
+
+		String name = source.substring(pos + SERVLET_SEPARATOR.length());
+
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+				name + " is associated with the servlet context " +
+					servletContextName + " " + servletContext);
+		}
+
+		URL url = servletContext.getResource(name);
+
+		if (url != null) {
+			return url.openStream();
+		}
+
+		if (name.endsWith("/init_custom.vm")) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"The template " + name +
+						" should be created");
+			}
+
+			return new UnsyncByteArrayInputStream(new byte[0]);
+		}
+
+		return null;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

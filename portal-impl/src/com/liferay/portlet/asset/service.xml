@@ -167,6 +167,15 @@
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
 		</finder>
+		<finder name="Visible" return-type="Collection">
+			<finder-column name="visible" />
+		</finder>
+		<finder name="PublishDate" return-type="Collection">
+			<finder-column name="publishDate" />
+		</finder>
+		<finder name="ExpirationDate" return-type="Collection">
+			<finder-column name="expirationDate" />
+		</finder>
 		<finder name="G_CU" return-type="AssetEntry">
 			<finder-column name="groupId" />
 			<finder-column name="classUuid" />

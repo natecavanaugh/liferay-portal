@@ -58,6 +58,7 @@ import com.sun.syndication.io.FeedException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -99,18 +100,6 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			redirectTitle, serviceContext);
 	}
 
-	public void addPageAttachments(
-			long nodeId, String title,
-			List<ObjectValuePair<String, File>> files)
-		throws PortalException, SystemException {
-
-		WikiNodePermission.check(
-			getPermissionChecker(), nodeId, ActionKeys.ADD_ATTACHMENT);
-
-		wikiPageLocalService.addPageAttachments(
-			getUserId(), nodeId, title, files);
-	}
-
 	public void addPageAttachment(
 			long nodeId, String title, String fileName,	File file)
 		throws PortalException, SystemException {
@@ -122,15 +111,28 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, fileName, file);
 	}
 
+	public void addPageAttachments(
+			long nodeId, String title,
+			List<ObjectValuePair<String, InputStream>> inputStream)
+		throws PortalException, SystemException {
+
+		WikiNodePermission.check(
+			getPermissionChecker(), nodeId, ActionKeys.ADD_ATTACHMENT);
+
+		wikiPageLocalService.addPageAttachments(
+			getUserId(), nodeId, title, inputStream);
+	}
+
 	public String addTempPageAttachment(
-			long nodeId, String fileName, String tempFolderName, File file)
+			long nodeId, String fileName, String tempFolderName,
+			InputStream inputStream)
 		throws IOException, PortalException, SystemException {
 
 		WikiNodePermission.check(
 			getPermissionChecker(), nodeId, ActionKeys.ADD_ATTACHMENT);
 
 		return wikiPageLocalService.addTempPageAttachment(
-			getUserId(), fileName, tempFolderName, file);
+			getUserId(), fileName, tempFolderName, inputStream);
 	}
 
 	public void changeParent(

@@ -124,7 +124,7 @@ public class LayoutTypePortletImpl
 			}
 
 			return LayoutLocalServiceUtil.fetchLayoutByUuidAndGroupId(
-				layout.getUuid(), group.getGroupId());
+				layout.getTemplateLayoutUuid(), group.getGroupId());
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -1359,10 +1359,16 @@ public class LayoutTypePortletImpl
 		Boolean customizable = null;
 		Boolean columnDisabled = null;
 
-		if (hasTemplate() && (customizable = isCustomizable()) &&
-			(columnDisabled = isColumnDisabled(columnId))) {
+		if (hasTemplate()) {
+			customizable = isCustomizable();
 
-			return getTemplateProperty(columnId);
+			if (customizable) {
+				columnDisabled = isColumnDisabled(columnId);
+
+				if (columnDisabled) {
+					return getTemplateProperty(columnId);
+				}
+			}
 		}
 
 		if (hasUserPreferences() &&

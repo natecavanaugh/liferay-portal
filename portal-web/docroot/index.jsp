@@ -15,7 +15,10 @@
 --%>
 
 <%@ page import="com.liferay.portal.kernel.servlet.HttpHeaders" %>
+<%@ page import="com.liferay.portal.model.Layout" %>
+<%@ page import="com.liferay.portal.model.LayoutConstants" %>
 <%@ page import="com.liferay.portal.model.LayoutSet" %>
+<%@ page import="com.liferay.portal.service.LayoutLocalServiceUtil" %>
 <%@ page import="com.liferay.portal.util.PortalUtil" %>
 <%@ page import="com.liferay.portal.util.WebKeys" %>
 
@@ -32,7 +35,16 @@ String redirect = null;
 LayoutSet layoutSet = (LayoutSet)request.getAttribute(WebKeys.VIRTUAL_HOST_LAYOUT_SET);
 
 if (layoutSet != null) {
-	redirect = PortalUtil.getPathMain();
+	long defaultPlid = LayoutLocalServiceUtil.getDefaultPlid(layoutSet.getGroupId(), layoutSet.isPrivateLayout());
+
+	if (defaultPlid != LayoutConstants.DEFAULT_PLID) {
+		Layout layout = LayoutLocalServiceUtil.getLayout(defaultPlid);
+
+		redirect = layout.getFriendlyURL();
+	}
+	else {
+		redirect = PortalUtil.getPathMain();
+	}
 }
 else {
 	redirect = PortalUtil.getHomeURL(request);
