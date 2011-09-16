@@ -28,6 +28,14 @@
 	th {
 		background: #D9D9D9 url(../images/application/subheader_bg.png) 0 0 repeat-x;
 		border: 1px solid #ccc;
+
+		&.first {
+			border-left-width: 0;
+		}
+
+		&.last {
+			border-right-width: 0;
+		}
 	}
 
 	th, td {
@@ -68,20 +76,19 @@
 }
 
 .results-row {
+	&.alt td {
+		background: #f5f8fb;
+	}
+
 	td {
 		background: none;
 		border: 1px solid;
 		border-color: #D7D7D7 #E7E7E7;
 		padding: 5px 10px;
-	}
 
-	&.alt td {
-		background: #EEF0FF;
-		border-width: 1px 0;
-	}
-
-	td.sort-column {
-		background: #E6ECEF;
+		&.sort-column {
+			background: #e2f1fc;
+		}
 	}
 
 	&.hover td {
@@ -586,6 +593,24 @@
 	margin-left: 2em;
 }
 
+.taglib-page-iterator .search-pages .page-links {
+	padding: 0;
+}
+
+/* ---------- App Column View ---------- */
+
+.aui-app-column-view {
+	border: 1px solid #C9C9C9;
+
+	.aui-column-content {
+		border-right: 1px solid #C9C9C9;
+	}
+
+	.aui-column-last {
+		border-right-width: 0;
+	}
+}
+
 /* ---------- Header row ---------- */
 
 .lfr-header-row {
@@ -593,6 +618,16 @@
 
 	.lfr-actions.show-arrow.direction-down .lfr-trigger strong a {
 		background: url(../images/arrows/08_down.png) 100% -5px no-repeat;
+	}
+
+	.aui-toolbar {
+		.aui-toolbar-item {
+			border-right-width: 0;
+		}
+
+		.aui-toolbar-last {
+			border-right-width: 1px;
+		}
 	}
 }
 

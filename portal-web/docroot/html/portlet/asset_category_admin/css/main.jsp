@@ -42,7 +42,6 @@
 		.results-header {
 			background: #F0F5F7;
 			font-weight: bold;
-			margin: 2px 0;
 			padding: 5px 10px;
 			position: relative;
 		}
@@ -50,13 +49,16 @@
 
 	.categories-admin-content {
 		li.vocabulary-category {
-			padding: 1px 0;
 		}
 
 		li.vocabulary-category, li.vocabulary-item {
 			font-weight: bold;
 			list-style: none;
 		}
+	}
+
+	.categories-search-combobox {
+		background: #CCC;
 	}
 
 	.categories-admin-search, .categories-admin-select-search {
@@ -156,10 +158,6 @@
 			}
 		}
 
-		li {
-			border: 1px solid transparent;
-		}
-
 		.selected {
 			a {
 				color: #000;
@@ -217,8 +215,11 @@
 			}
 		}
 
+		.aui-tree-node-selected {
+		}
+
 		.aui-tree-node-selected .aui-tree-label {
-			background-color: #6F7D83;
+			background-color: #D3E8F1;
 			color: #FFF;
 			cursor: move;
 		}
