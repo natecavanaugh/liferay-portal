@@ -83,13 +83,13 @@
 		padding: 5px 10px;
 
 		&.sort-column {
-			background: #E6ECEF;
+			background: #E2F1FC;
 		}
+	
 	}
 
 	&.alt td {
 		background: #F5F8FB;
-		border-width: 1px 0;
 	}
 
 	&.hover td {
