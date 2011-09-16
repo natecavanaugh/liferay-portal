@@ -207,7 +207,7 @@
 				</c:if>
 			},
 			delay: 5000,
-			links: '#imageGalleryAssetInfoPanelContainer .image-thumbnail',
+			links: '#imageGalleryAssetInfoContainer .image-thumbnail',
 			maxHeight: maxHeight,
 			maxWidth: maxWidth,
 			playingLabel: '(<liferay-ui:message key="playing" />)'
