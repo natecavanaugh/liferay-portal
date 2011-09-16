@@ -238,6 +238,7 @@
 		}
 
 		.aui-tree-node-selected .aui-tree-label {
+			background-color: #D3E8F1;
 			color: #FFF;
 			cursor: move;
 		}
