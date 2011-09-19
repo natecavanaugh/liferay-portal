@@ -76,7 +76,6 @@
 	}
 
 	.categories-treeview-container {
-		padding: 5px;
 	}
 
 	.select-vocabularies, .select-categories {
@@ -84,7 +83,7 @@
 	}
 
 	.select-categories {
-		margin-left: 12px;
+		margin-left: 8px;
 	}
 
 	.vocabulary-list-container-content, .vocabulary-categories-container-content, .vocabulary-edit-category-content {
@@ -215,11 +214,36 @@
 			}
 		}
 
+		.aui-tree-node {
+			background: #F5F5F5;
+		}
+
+		.aui-tree-node-checked {
+			/*background: #00A2EA;*/
+		}
+
+		.aui-tree-node-content {
+			.aui-tree-hitarea {
+				height: 32px;
+			}
+
+			&.aui-tree-collapsed .aui-tree-hitarea {
+				background-position: 0 50%;
+			}
+
+			.aui-tree-node-checkbox-container, .aui-tree-label {
+				display: inline-block;
+				position: relative;
+				top: 8px;
+				vertical-align: middle;
+			}
+		}
+
 		.aui-tree-node-selected {
+			background: #6F7D83;
 		}
 
 		.aui-tree-node-selected .aui-tree-label {
-			background-color: #D3E8F1;
 			color: #FFF;
 			cursor: move;
 		}
