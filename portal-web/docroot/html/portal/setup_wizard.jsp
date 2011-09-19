@@ -207,7 +207,7 @@ boolean setupWizardFinished = GetterUtil.getBoolean((Boolean)session.getServletC
 												<liferay-ui:message key="your-configuration-has-finished-sucessfully" />
 												<br />
 												<span class="tooltip">
-													<liferay-ui:message key="this-configuration-has-been-saved-in" arguments='<%= "<span>" + PropsValues.LIFERAY_HOME + StringPool.SLASH + SetupWizardUtil._PROPERTIES_FILE_NAME + "</span>" %>'/>
+													<liferay-ui:message key="this-configuration-has-been-saved-in" arguments='<%= "<span>" + PropsValues.LIFERAY_HOME + StringPool.SLASH + SetupWizardUtil.PROPERTIES_FILE_NAME + "</span>" %>'/>
 												</span>
 											</p>
 											<p>

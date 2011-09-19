@@ -17,7 +17,7 @@
 <%@ page import="com.liferay.portal.kernel.servlet.taglib.aui.ValidatorTag" %>
 
 <%
-if (themeDisplay != null && themeDisplay.isAddSessionIdToURL()) {
+if (themeDisplay.isAddSessionIdToURL()) {
 	action = PortalUtil.getURLWithSessionId(action, themeDisplay.getSessionId());
 }
 
