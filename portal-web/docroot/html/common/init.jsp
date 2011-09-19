@@ -88,6 +88,7 @@
 <%@ page import="com.liferay.portal.kernel.servlet.SessionMessages" %>
 <%@ page import="com.liferay.portal.kernel.servlet.StringServletResponse" %>
 <%@ page import="com.liferay.portal.kernel.staging.LayoutStagingUtil" %>
+<%@ page import="com.liferay.portal.kernel.upload.UploadException" %>
 <%@ page import="com.liferay.portal.kernel.util.ArrayUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.BooleanWrapper" %>
 <%@ page import="com.liferay.portal.kernel.util.CalendarFactoryUtil" %>
@@ -195,7 +196,6 @@
 <%@ page import="com.liferay.util.log4j.Levels" %>
 <%@ page import="com.liferay.util.portlet.PortletRequestUtil" %>
 <%@ page import="com.liferay.util.servlet.DynamicServletRequest" %>
-<%@ page import="com.liferay.util.servlet.UploadException" %>
 <%@ page import="com.liferay.util.xml.XMLFormatter" %>
 
 <%@ page import="java.io.Serializable" %>
