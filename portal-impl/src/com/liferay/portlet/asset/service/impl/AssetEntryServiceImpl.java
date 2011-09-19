@@ -98,10 +98,10 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 		return assetEntryLocalService.getEntry(entryId);
 	}
 
-	public void incrementViewCounter(String className, long classPK)
+	public AssetEntry incrementViewCounter(String className, long classPK)
 		throws PortalException, SystemException {
 
-		assetEntryLocalService.incrementViewCounter(
+		return assetEntryLocalService.incrementViewCounter(
 			getGuestOrUserId(), className, classPK, 1);
 	}
 

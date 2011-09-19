@@ -309,6 +309,8 @@ public class PropsValues {
 
 	public static final String DATABASE_MYSQL_ENGINE = PropsUtil.get(PropsKeys.DATABASE_MYSQL_ENGINE);
 
+	public static final String DEFAULT_ADMIN_EMAIL_ADDRESS = PropsUtil.get(PropsKeys.DEFAULT_ADMIN_EMAIL_ADDRESS);
+
 	public static final String DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX = PropsUtil.get(PropsKeys.DEFAULT_ADMIN_EMAIL_ADDRESS_PREFIX);
 
 	public static final String DEFAULT_ADMIN_FIRST_NAME = PropsUtil.get(PropsKeys.DEFAULT_ADMIN_FIRST_NAME);
@@ -1220,6 +1222,10 @@ public class PropsValues {
 	public static final boolean SESSION_TRACKER_MEMORY_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.SESSION_TRACKER_MEMORY_ENABLED));
 
 	public static final boolean SESSION_TRACKER_PERSISTENCE_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.SESSION_TRACKER_PERSISTENCE_ENABLED));
+
+	public static final String[] SETUP_DATABASE_DRIVERS_LIST = PropsUtil.getArray(PropsUtil.get(PropsKeys.SETUP_DATABASE_DRIVERS_LIST));
+
+	public static final boolean SETUP_WIZARD_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.SETUP_WIZARD_ENABLED));
 
 	public static final String SHARD_DEFAULT_NAME = PropsUtil.get(PropsKeys.SHARD_DEFAULT_NAME);
 

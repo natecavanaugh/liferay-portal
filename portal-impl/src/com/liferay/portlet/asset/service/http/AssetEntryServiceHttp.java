@@ -263,8 +263,8 @@ public class AssetEntryServiceHttp {
 		}
 	}
 
-	public static void incrementViewCounter(HttpPrincipal httpPrincipal,
-		java.lang.String className, long classPK)
+	public static com.liferay.portlet.asset.model.AssetEntry incrementViewCounter(
+		HttpPrincipal httpPrincipal, java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -274,8 +274,10 @@ public class AssetEntryServiceHttp {
 			MethodHandler methodHandler = new MethodHandler(methodKey,
 					className, classPK);
 
+			Object returnObj = null;
+
 			try {
-				TunnelUtil.invoke(httpPrincipal, methodHandler);
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
 			}
 			catch (Exception e) {
 				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
@@ -288,6 +290,8 @@ public class AssetEntryServiceHttp {
 
 				throw new com.liferay.portal.kernel.exception.SystemException(e);
 			}
+
+			return (com.liferay.portlet.asset.model.AssetEntry)returnObj;
 		}
 		catch (com.liferay.portal.kernel.exception.SystemException se) {
 			_log.error(se, se);
