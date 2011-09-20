@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.util.ContentUtil;
@@ -281,19 +282,17 @@ public class ShoppingPreferences {
 
 	public double getMinOrder() {
 		return GetterUtil.getDouble(_portletPreferences.getValue(
-			"min-order", StringPool.BLANK));
+			"minOrder", StringPool.BLANK));
 	}
 
 	public void setMinOrder(double minOrder) throws ReadOnlyException {
-		_portletPreferences.setValue("min-order", String.valueOf(minOrder));
+		_portletPreferences.setValue("minOrder", String.valueOf(minOrder));
 	}
 
-	public String getEmailFromAddress() {
-		String emailFromAddress = PropsUtil.get(
+	public String getEmailFromAddress(long companyId) throws SystemException {
+		return PortalUtil.getEmailFromAddress(
+			_portletPreferences, companyId,
 			PropsKeys.SHOPPING_EMAIL_FROM_ADDRESS);
-
-		return _portletPreferences.getValue(
-			"emailFromAddress", emailFromAddress);
 	}
 
 	public void setEmailFromAddress(String emailFromAddress)
@@ -302,11 +301,10 @@ public class ShoppingPreferences {
 		_portletPreferences.setValue("emailFromAddress", emailFromAddress);
 	}
 
-	public String getEmailFromName() {
-		String emailFromName = PropsUtil.get(
+	public String getEmailFromName(long companyId) throws SystemException {
+		return PortalUtil.getEmailFromAddress(
+			_portletPreferences, companyId,
 			PropsKeys.SHOPPING_EMAIL_FROM_NAME);
-
-		return _portletPreferences.getValue("emailFromName", emailFromName);
 	}
 
 	public void setEmailFromName(String emailFromName)
