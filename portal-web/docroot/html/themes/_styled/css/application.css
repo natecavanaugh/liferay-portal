@@ -615,6 +615,10 @@
 		top: 0;
 	}
 
+	.aui-column-content {
+		margin-right: 1px;
+	}
+
 	.results-header {
 		border-bottom: 1px solid #C9C9C9;
 	}
