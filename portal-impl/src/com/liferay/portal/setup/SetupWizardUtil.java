@@ -35,15 +35,16 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * @author Manuel de la Peña
  * @author Julio Camarero
  * @author Brian Wing Shun Chan
  */
 public class SetupWizardUtil {
 
-	private static Log _log = LogFactoryUtil.getLog(SetupWizardUtil.class);
-
-	private static final String _PROPERTIES_FILE_NAME =
+	public static final String PROPERTIES_FILE_NAME =
 		"portal-setup-wizard.properties";
+
+	private static Log _log = LogFactoryUtil.getLog(SetupWizardUtil.class);
 
 	private final static String _PROPERTIES_PREFIX = "properties--";
 
@@ -196,7 +197,7 @@ public class SetupWizardUtil {
 
 		try {
 			FileUtil.write(
-				PropsValues.LIFERAY_HOME, _PROPERTIES_FILE_NAME,
+				PropsValues.LIFERAY_HOME, PROPERTIES_FILE_NAME,
 				unicodeProperties.toString());
 
 			return true;
