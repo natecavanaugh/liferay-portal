@@ -602,12 +602,21 @@
 .aui-app-column-view {
 	border: 1px solid #C9C9C9;
 
-	.aui-column-content {
-		border-right: 1px solid #C9C9C9;
+	.aui-layout {
+		position: relative;
 	}
 
-	.aui-column-last {
-		border-right-width: 0;
+	.aui-column:before {
+		border-right: 1px solid #C9C9C9;
+		bottom: 0;
+		content: "";
+		margin-left: -1px;
+		position: absolute;
+		top: 0;
+	}
+
+	.results-header {
+		border-bottom: 1px solid #C9C9C9;
 	}
 }
 

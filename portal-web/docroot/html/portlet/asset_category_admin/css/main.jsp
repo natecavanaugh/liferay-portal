@@ -72,7 +72,7 @@
 		background-repeat: no-repeat;
 		background-position: 5px 50%;
 		padding-left: 25px;
-		width: 250px;
+		width: 210px;
 	}
 
 	.categories-treeview-container {
@@ -107,7 +107,7 @@
 		margin-top: -8px;
 		padding: 0;
 		position: absolute;
-		right: 0;
+		right: 5px;
 		top: 50%;
 		width: 16px;
 	}
@@ -218,13 +218,17 @@
 			background: #F5F5F5;
 		}
 
+		.aui-tree-node-over {
+			background: #D3DADD;
+		}
+
 		.aui-tree-node-checked {
 			/*background: #00A2EA;*/
 		}
 
 		.aui-tree-node-content {
 			.aui-tree-hitarea {
-				height: 32px;
+				height: 33px;
 			}
 
 			&.aui-tree-collapsed .aui-tree-hitarea {
