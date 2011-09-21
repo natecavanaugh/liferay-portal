@@ -602,7 +602,7 @@
 .aui-app-column-view {
 	border: 1px solid #C9C9C9;
 
-	.aui-layout {
+	.aui-layout-content {
 		position: relative;
 	}
 
@@ -613,14 +613,6 @@
 		margin-left: -1px;
 		position: absolute;
 		top: 0;
-	}
-
-	.aui-column-content {
-		margin-right: 1px;
-	}
-
-	.results-header {
-		border-bottom: 1px solid #C9C9C9;
 	}
 }
 
