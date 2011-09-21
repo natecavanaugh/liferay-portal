@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsValues;
@@ -31,7 +32,7 @@ import com.xuggle.xuggler.IContainer;
 import java.io.File;
 import java.io.InputStream;
 
-import jodd.util.StringPool;
+import java.text.DecimalFormat;
 
 import org.apache.tika.metadata.Metadata;
 
@@ -95,13 +96,17 @@ public class XugglerRawMetadataProcessor extends BaseRawMetadataProcessor {
 	protected String convertTime(long microseconds) {
 		long milliseconds = microseconds / 1000L;
 
-		StringBundler sb = new StringBundler(5);
+		StringBundler sb = new StringBundler(7);
 
-		sb.append(milliseconds / Time.HOUR);
+		sb.append(_decimalFormatter.format(milliseconds / Time.HOUR));
 		sb.append(StringPool.COLON);
-		sb.append(milliseconds % Time.HOUR / Time.MINUTE);
+		sb.append(
+			_decimalFormatter.format(milliseconds % Time.HOUR / Time.MINUTE));
 		sb.append(StringPool.COLON);
-		sb.append(milliseconds % Time.MINUTE / Time.SECOND);
+		sb.append(
+			_decimalFormatter.format(milliseconds % Time.MINUTE / Time.SECOND));
+		sb.append(StringPool.PERIOD);
+		sb.append(_decimalFormatter.format(milliseconds % Time.SECOND / 10));
 
 		return sb.toString();
 	}
@@ -125,10 +130,9 @@ public class XugglerRawMetadataProcessor extends BaseRawMetadataProcessor {
 
 			long microseconds = container.getDuration();
 
-			metadata.add(Metadata.TOTAL_TIME, convertTime(microseconds));
+			metadata.set(XMPDM.DURATION, convertTime(microseconds));
 
 			return metadata;
-
 		}
 		finally {
 			if (container.isOpened()) {
@@ -152,5 +156,7 @@ public class XugglerRawMetadataProcessor extends BaseRawMetadataProcessor {
 
 	private static Log _log = LogFactoryUtil.getLog(
 		XugglerRawMetadataProcessor.class);
+
+	private static DecimalFormat _decimalFormatter = new DecimalFormat("00");
 
 }

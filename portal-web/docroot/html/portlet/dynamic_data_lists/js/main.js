@@ -270,7 +270,44 @@ AUI().add(
 								if (type === 'checkbox') {
 									elementName = label;
 
-									config.options = [label];
+									config.options = {
+										'true': Liferay.Language.get('true')
+									};
+
+									config.inputFormatter = function(value) {
+										return String(value.length > 0);
+									};
+
+									item.formatter = function(obj) {
+										var data = obj.record.get('data');
+
+										var value = data[item.name];
+
+										if (value !== STR_EMPTY) {
+											value = Liferay.Language.get(value);
+										}
+
+										return value;
+									};
+								}
+								else if (type === 'ddm-date') {
+									config.inputFormatter = function(value) {
+										return A.DataType.Date.parse(value).getTime();
+									};
+
+									item.formatter = function(obj) {
+										var data = obj.record.get('data');
+
+										var value = data[item.name];
+
+										if (value !== STR_EMPTY) {
+											value = parseInt(value, 10);
+
+											value = A.DataType.Date.format(new Date(value));
+										}
+
+										return value;
+									};
 								}
 								else if ((type === 'radio') || (type === 'select')) {
 									var structureField = instance.findStructureFieldByAttribute(structure, 'key', item.key);
