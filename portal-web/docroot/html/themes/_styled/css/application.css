@@ -614,6 +614,10 @@
 		position: absolute;
 		top: 0;
 	}
+
+	.aui-column-content {
+		border-right: 1px solid transparent;
+	}
 }
 
 /* ---------- Header row ---------- */
