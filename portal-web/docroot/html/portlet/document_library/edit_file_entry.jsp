@@ -276,7 +276,7 @@ else if (dlFileEntryType != null) {
 			<c:if test="<%= (folder == null) || (folder.getModel() instanceof DLFolder) %>">
 
 				<%
-				List<DLFileEntryType> dlFileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(groupIds, folderId, true);
+				List<DLFileEntryType> dlFileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(DLUtil.getGroupIds(themeDisplay), folderId, true);
 				%>
 
 				<c:choose>

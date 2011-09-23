@@ -212,13 +212,13 @@ public class EditFileEntryTypeAction extends PortletAction {
 			Group scopeGroup = GroupLocalServiceUtil.getGroup(groupId);
 
 			if (scopeGroup.isLayout()) {
-				  groupId = scopeGroup.getParentGroupId();
+				groupId = scopeGroup.getParentGroupId();
 			}
 
 			DLFileEntryType fileEntryType =
 				DLFileEntryTypeServiceUtil.addFileEntryType(
-					groupId, name, description,
-					ddmStructureIds, serviceContext);
+					groupId, name, description, ddmStructureIds,
+					serviceContext);
 
 			// Add dynamic data mapping structure
 

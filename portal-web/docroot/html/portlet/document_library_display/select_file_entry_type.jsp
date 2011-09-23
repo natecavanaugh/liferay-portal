@@ -31,15 +31,7 @@ basicDocumentType.setName(LanguageUtil.get(pageContext, "basic-document"));
 
 fileEntryTypes.add(basicDocumentType);
 
-Group scopeGroup = themeDisplay.getScopeGroup();
-
-long[] groupIds = new long[] {scopeGroupId, themeDisplay.getCompanyGroupId()};
-
-if (scopeGroup.isLayout()) {
-	groupIds = new long[] {scopeGroup.getParentGroupId(), themeDisplay.getCompanyGroupId()};
-}
-
-fileEntryTypes.addAll(DLFileEntryTypeServiceUtil.getFileEntryTypes(groupIds, QueryUtil.ALL_POS, QueryUtil.ALL_POS));
+fileEntryTypes.addAll(DLFileEntryTypeServiceUtil.getFileEntryTypes(DLUtil.getGroupIds(themeDisplay), QueryUtil.ALL_POS, QueryUtil.ALL_POS));
 %>
 
 <liferay-ui:search-container

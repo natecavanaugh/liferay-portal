@@ -70,7 +70,6 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 	}
 
 	public int getFileEntryTypesCount(long[] groupIds) throws SystemException {
-
 		return dlFileEntryTypePersistence.filterCountByGroupId(groupIds);
 	}
 

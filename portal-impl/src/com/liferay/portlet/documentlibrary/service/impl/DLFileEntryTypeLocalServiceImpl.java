@@ -144,12 +144,6 @@ public class DLFileEntryTypeLocalServiceImpl
 		return dlFileEntryTypePersistence.findByPrimaryKey(fileEntryTypeId);
 	}
 
-	public List<DLFileEntryType> getFileEntryTypes(long[] groupIds)
-		throws SystemException {
-
-		return dlFileEntryTypePersistence.findByGroupId(groupIds);
-	}
-
 	public List<DLFileEntryType> getFileEntryTypes(
 			long groupId, int start, int end)
 		throws SystemException {
@@ -163,6 +157,12 @@ public class DLFileEntryTypeLocalServiceImpl
 
 		return dlFileEntryTypePersistence.findByG_N_D(
 			groupId, name, description);
+	}
+
+	public List<DLFileEntryType> getFileEntryTypes(long[] groupIds)
+		throws SystemException {
+
+		return dlFileEntryTypePersistence.findByGroupId(groupIds);
 	}
 
 	public List<DLFileEntryType> getFolderFileEntryTypes(

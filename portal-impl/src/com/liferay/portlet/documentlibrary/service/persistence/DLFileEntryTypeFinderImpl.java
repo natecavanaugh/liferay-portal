@@ -72,10 +72,9 @@ public class DLFileEntryTypeFinderImpl
 			boolean andOperator)
 		throws SystemException {
 
+		long[] groupIds = new long[] {groupId};
 		String[] names = CustomSQLUtil.keywords(name);
 		String[] descriptions = CustomSQLUtil.keywords(description, false);
-
-		long[] groupIds = new long[] {groupId};
 
 		return countByC_G_N_D_S(
 			companyId, groupIds, names, descriptions, andOperator);
@@ -96,8 +95,8 @@ public class DLFileEntryTypeFinderImpl
 
 			String sql = CustomSQLUtil.get(COUNT_BY_C_G_N_D_S);
 
-			sql = StringUtil.replace(sql, "[$GROUPID$]", getGroupIds(groupIds));
-
+			sql = StringUtil.replace(
+				sql, "[$GROUP_ID$]", getGroupIds(groupIds));
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "lower(name)", StringPool.LIKE, false, names);
 			sql = CustomSQLUtil.replaceKeywords(
@@ -201,8 +200,8 @@ public class DLFileEntryTypeFinderImpl
 
 			String sql = CustomSQLUtil.get(FIND_BY_C_G_N_D_S);
 
-			sql = StringUtil.replace(sql, "[$GROUPID$]", getGroupIds(groupIds));
-
+			sql = StringUtil.replace(
+				sql, "[$GROUP_ID$]", getGroupIds(groupIds));
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "lower(name)", StringPool.LIKE, false, names);
 			sql = CustomSQLUtil.replaceKeywords(
