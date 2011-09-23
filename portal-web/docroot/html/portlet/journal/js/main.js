@@ -1789,9 +1789,12 @@ AUI().add(
 					var dynConAttributes = null;
 
 					if (fieldInstance.get('localized')) {
-						dynConAttributes = {
-							'language-id': fieldInstance.get('localizedValue')
-						};
+						var localizedValue = fieldInstance.get('localizedValue');
+						if (localizedValue !== 'false') {
+							dynConAttributes = {
+									'language-id': localizedValue
+							};
+						}
 					}
 
 					var nodeTypeContent = instance.getNodeTypeContent();
