@@ -19,9 +19,9 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance;
-import com.liferay.portlet.mobiledevicerules.permission.MDRRuleGroupInstancePermissionUtil;
-import com.liferay.portlet.mobiledevicerules.permission.MobileDeviceRulesPermissionUtil;
 import com.liferay.portlet.mobiledevicerules.service.base.MDRRuleGroupInstanceServiceBaseImpl;
+import com.liferay.portlet.mobiledevicerules.service.permission.MDRPermissionUtil;
+import com.liferay.portlet.mobiledevicerules.service.permission.MDRRuleGroupInstancePermissionUtil;
 
 /**
  * @author Edward C. Han
@@ -34,7 +34,7 @@ public class MDRRuleGroupInstanceServiceImpl
 			int priority, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		MobileDeviceRulesPermissionUtil.check(
+		MDRPermissionUtil.check(
 			getPermissionChecker(), groupId,
 			ActionKeys.ADD_RULE_GROUP_INSTANCE);
 
@@ -46,8 +46,7 @@ public class MDRRuleGroupInstanceServiceImpl
 		throws PortalException, SystemException {
 
 		MDRRuleGroupInstancePermissionUtil.check(
-			getPermissionChecker(), ruleGroupInstance.getGroupId(),
-			ruleGroupInstance, ActionKeys.DELETE);
+			getPermissionChecker(), ruleGroupInstance, ActionKeys.DELETE);
 
 		mdrRuleGroupInstanceLocalService.deleteRuleGroupInstance(
 			ruleGroupInstance);
@@ -58,12 +57,12 @@ public class MDRRuleGroupInstanceServiceImpl
 		throws PortalException, SystemException {
 
 		MDRRuleGroupInstance ruleGroupInstance =
-			mdrRuleGroupInstanceLocalService.getMDRRuleGroupInstance(
+			mdrRuleGroupInstancePersistence.findByPrimaryKey(
 				ruleGroupInstanceId);
 
 		MDRRuleGroupInstancePermissionUtil.check(
-			getPermissionChecker(), ruleGroupInstance.getGroupId(),
-			ruleGroupInstance.getRuleGroupInstanceId(), ActionKeys.UPDATE);
+			getPermissionChecker(), ruleGroupInstance.getRuleGroupInstanceId(),
+			ActionKeys.UPDATE);
 
 		return mdrRuleGroupInstanceLocalService.updateRuleGroupInstance(
 			ruleGroupInstanceId, priority);

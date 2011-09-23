@@ -1028,8 +1028,7 @@ Liferay.Service.registerClass(
 		deleteAction: true,
 		fetchAction: true,
 		getAction: true,
-		updateAction: true,
-		updateMDRAction: true
+		updateAction: true
 	}
 );
 
@@ -1051,8 +1050,6 @@ Liferay.Service.registerClass(
 		copyRuleGroup: true,
 		deleteRuleGroup: true,
 		fetchRuleGroup: true,
-		findByGroupId: true,
-		filterCountByGroupId: true,
 		getRuleGroup: true,
 		updateRuleGroup: true
 	}

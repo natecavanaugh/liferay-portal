@@ -23,9 +23,11 @@ import java.util.Collection;
  * @author Edward Han
  */
 public interface RuleHandler {
-	public boolean evaluateRule(MDRRule rule, ThemeDisplay themeDisplay);
+
+	public boolean evaluateRule(MDRRule mdrRule, ThemeDisplay themeDisplay);
 
 	public Collection<String> getPropertyNames();
 
 	public String getType();
+
 }

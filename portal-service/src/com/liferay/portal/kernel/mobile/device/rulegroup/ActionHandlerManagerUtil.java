@@ -29,39 +29,45 @@ import javax.servlet.http.HttpServletResponse;
  * @author Edward Han
  */
 public class ActionHandlerManagerUtil {
+
 	public static void applyActions(
-			List<MDRAction> actions, HttpServletRequest request,
+			List<MDRAction> mdrActions, HttpServletRequest request,
 			HttpServletResponse response)
 		throws PortalException, SystemException {
 
-		_actionHandlerManager.applyActions(actions, request, response);
+		getActionHandlerManager().applyActions(mdrActions, request, response);
 	}
 
 	public static ActionHandler getActionHandler(String actionType) {
-		return _actionHandlerManager.getActionHandler(actionType);
+		return getActionHandlerManager().getActionHandler(actionType);
+	}
+
+	public static ActionHandlerManager getActionHandlerManager() {
+		return _actionHandlerManager;
 	}
 
 	public static Collection<ActionHandler> getActionHandlers() {
-		return _actionHandlerManager.getActionHandlers();
+		return getActionHandlerManager().getActionHandlers();
 	}
 
 	public static Collection<String> getActionHandlerTypes() {
-		return _actionHandlerManager.getActionHandlerTypes();
+		return getActionHandlerManager().getActionHandlerTypes();
 	}
 
 	public static void registerActionHandler(ActionHandler actionHandler) {
-		_actionHandlerManager.registerActionHandler(actionHandler);
+		getActionHandlerManager().registerActionHandler(actionHandler);
+	}
+
+	public static ActionHandler unregisterActionHandler(String actionType) {
+		return getActionHandlerManager().unregisterActionHandler(actionType);
 	}
 
 	public void setActionHandlerManager(
-			ActionHandlerManager actionHandlerManager) {
+		ActionHandlerManager actionHandlerManager) {
 
 		_actionHandlerManager = actionHandlerManager;
 	}
 
-	public static ActionHandler unregisterActionHandler(String actionType) {
-		return _actionHandlerManager.unregisterActionHandler(actionType);
-	}
-
 	private static ActionHandlerManager _actionHandlerManager;
+
 }

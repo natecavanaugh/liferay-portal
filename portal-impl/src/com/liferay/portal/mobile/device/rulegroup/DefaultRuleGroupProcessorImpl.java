@@ -14,12 +14,13 @@
 
 package com.liferay.portal.mobile.device.rulegroup;
 
+import com.liferay.portal.kernel.bean.BeanReference;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mobile.device.rulegroup.RuleGroupProcessor;
 import com.liferay.portal.kernel.mobile.device.rulegroup.rule.RuleHandler;
-import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -44,20 +45,22 @@ public class DefaultRuleGroupProcessorImpl implements RuleGroupProcessor {
 	public MDRRuleGroupInstance evaluateRuleGroups(ThemeDisplay themeDisplay)
 		throws SystemException {
 
-		long plid = themeDisplay.getLayout().getPlid();
-		long layoutSetId = themeDisplay.getLayoutSet().getLayoutSetId();
+		Layout layout = themeDisplay.getLayout();
 
-		//	Layout
-		MDRRuleGroupInstance ruleGroupInstance = evaluateRuleGroupInstances(
-			Layout.class.getName(), plid, themeDisplay);
+		MDRRuleGroupInstance mdrRuleGroupInstance = evaluateRuleGroupInstances(
+			Layout.class.getName(), layout.getPlid(), themeDisplay);
 
-		//	LayoutSet
-		if (ruleGroupInstance == null) {
-			ruleGroupInstance = evaluateRuleGroupInstances(
-				LayoutSet.class.getName(), layoutSetId, themeDisplay);
+		if (mdrRuleGroupInstance != null) {
+			return mdrRuleGroupInstance;
 		}
 
-		return ruleGroupInstance;
+		LayoutSet layoutSet = themeDisplay.getLayoutSet();
+
+		mdrRuleGroupInstance = evaluateRuleGroupInstances(
+			LayoutSet.class.getName(), layoutSet.getLayoutSetId(),
+			themeDisplay);
+
+		return mdrRuleGroupInstance;
 	}
 
 	public RuleHandler getRuleHandler(String ruleType) {
@@ -76,26 +79,23 @@ public class DefaultRuleGroupProcessorImpl implements RuleGroupProcessor {
 		RuleHandler oldRuleHandler = _ruleHandlers.put(
 			ruleHandler.getType(), ruleHandler);
 
-		if (oldRuleHandler != null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"RuleHandler with key: " + ruleHandler.getType() +
-						" has already been registered. Replacing with " +
-						ruleHandler);
-			}
+		if ((oldRuleHandler != null) && _log.isWarnEnabled()) {
+			_log.warn(
+				"Replacing existing rule handler type " +
+					ruleHandler.getType());
 		}
 	}
 
-	public void setMdrRuleGroupLocalService(
-		MDRRuleGroupLocalService mdrRuleGroupLocalService) {
-
-		_mdrRuleGroupLocalService = mdrRuleGroupLocalService;
-	}
-
-	public void setMdrRuleGroupInstanceLocalService(
+	public void setMDRRuleGroupInstanceLocalService(
 		MDRRuleGroupInstanceLocalService mdrRuleGroupInstanceLocalService) {
 
 		_mdrRuleGroupInstanceLocalService = mdrRuleGroupInstanceLocalService;
+	}
+
+	public void setMDRRuleGroupLocalService(
+		MDRRuleGroupLocalService mdrRuleGroupLocalService) {
+
+		_mdrRuleGroupLocalService = mdrRuleGroupLocalService;
 	}
 
 	public void setRuleHandlers(Collection<RuleHandler> ruleHandlers) {
@@ -108,40 +108,52 @@ public class DefaultRuleGroupProcessorImpl implements RuleGroupProcessor {
 		return _ruleHandlers.remove(ruleType);
 	}
 
+	protected boolean evaluateRule(MDRRule rule, ThemeDisplay themeDisplay) {
+		RuleHandler ruleHandler = _ruleHandlers.get(rule.getType());
+
+		if (ruleHandler != null) {
+			return ruleHandler.evaluateRule(rule, themeDisplay);
+		}
+		else if (_log.isWarnEnabled()) {
+			_log.warn(
+				"No rule handler registered for type " +  rule.getType());
+		}
+
+		return false;
+	}
+
 	protected MDRRuleGroupInstance evaluateRuleGroupInstances(
 			String className, long classPK, ThemeDisplay themeDisplay)
 		throws SystemException {
 
-		OrderByComparator orderByComparator =
-			new RuleGroupInstancePriorityComparator();
-
-		List<MDRRuleGroupInstance> ruleGroupInstances =
+		List<MDRRuleGroupInstance> mdrRuleGroupInstances =
 			_mdrRuleGroupInstanceLocalService.getRuleGroupInstances(
-				className, classPK, 0, Integer.MAX_VALUE, orderByComparator);
+				className, classPK, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				new RuleGroupInstancePriorityComparator());
 
-		for (MDRRuleGroupInstance ruleGroupInstance : ruleGroupInstances) {
-			long ruleGroupId = ruleGroupInstance.getRuleGroupId();
+		for (MDRRuleGroupInstance mdrRuleGroupInstance :
+				mdrRuleGroupInstances) {
 
-			MDRRuleGroup ruleGroup = _mdrRuleGroupLocalService.fetchRuleGroup(
-				ruleGroupId);
+			MDRRuleGroup mdrRuleGroup =
+				_mdrRuleGroupLocalService.fetchRuleGroup(
+					mdrRuleGroupInstance.getRuleGroupId());
 
-			if (ruleGroup == null) {
+			if (mdrRuleGroup == null) {
 				if (_log.isWarnEnabled()) {
 					_log.warn(
-						"RuleGroupInstance " +
-							ruleGroupInstance.getRuleGroupInstanceId() +
-							" with unknown RuleGroup, skipping");
+						"Rule group instance " +
+							mdrRuleGroupInstance.getRuleGroupInstanceId() +
+								" has invalid rule group");
 				}
+
+				continue;
 			}
-			else {
-				Collection<MDRRule> rules = ruleGroup.getRules();
 
-				for (MDRRule rule : rules) {
-					boolean result = evaluateRule(rule, themeDisplay);
+			Collection<MDRRule> mdrRules = mdrRuleGroup.getRules();
 
-					if (result) {
-						return ruleGroupInstance;
-					}
+			for (MDRRule mdrRule : mdrRules) {
+				if (evaluateRule(mdrRule, themeDisplay)) {
+					return mdrRuleGroupInstance;
 				}
 			}
 		}
@@ -149,27 +161,13 @@ public class DefaultRuleGroupProcessorImpl implements RuleGroupProcessor {
 		return null;
 	}
 
-	protected boolean evaluateRule(MDRRule rule, ThemeDisplay themeDisplay) {
-		RuleHandler ruleHandler = _ruleHandlers.get(rule.getType());
-
-		if (ruleHandler != null) {
-			return ruleHandler.evaluateRule(rule, themeDisplay);
-		}
-		else {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"No RuleHandler registered for type:" +  rule.getType());
-			}
-		}
-
-		return false;
-	}
-
 	private static Log _log = LogFactoryUtil.getLog(
 		DefaultRuleGroupProcessorImpl.class);
 
-	private MDRRuleGroupLocalService _mdrRuleGroupLocalService;
+	@BeanReference(type = MDRRuleGroupInstanceLocalService.class)
 	private MDRRuleGroupInstanceLocalService _mdrRuleGroupInstanceLocalService;
+	@BeanReference(type = MDRRuleGroupLocalService.class)
+	private MDRRuleGroupLocalService _mdrRuleGroupLocalService;
 	private Map<String, RuleHandler> _ruleHandlers =
 		new HashMap<String, RuleHandler>();
 

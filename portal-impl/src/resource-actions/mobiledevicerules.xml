@@ -9,10 +9,8 @@
 				<action-key>CONFIGURATION</action-key>
 				<action-key>VIEW</action-key>
 			</supports>
-			<site-member-defaults>
-			</site-member-defaults>
-			<guest-defaults>
-			</guest-defaults>
+			<site-member-defaults />
+			<guest-defaults />
 			<guest-unsupported>
 				<action-key>CONFIGURATION</action-key>
 			</guest-unsupported>
@@ -33,10 +31,8 @@
 				<action-key>CONFIGURATION</action-key>
 				<action-key>VIEW</action-key>
 			</supports>
-			<site-member-defaults>
-			</site-member-defaults>
-			<guest-defaults>
-			</guest-defaults>
+			<site-member-defaults />
+			<guest-defaults />
 			<guest-unsupported>
 				<action-key>ADD_RULE_GROUP</action-key>
 				<action-key>ADD_RULE_GROUP_INSTANCE</action-key>
@@ -59,10 +55,8 @@
 				<action-key>UPDATE</action-key>
 				<action-key>VIEW</action-key>
 			</supports>
-			<site-member-defaults>
-			</site-member-defaults>
-			<guest-defaults>
-			</guest-defaults>
+			<site-member-defaults />
+			<guest-defaults />
 			<guest-unsupported>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>
@@ -82,10 +76,8 @@
 				<action-key>UPDATE</action-key>
 				<action-key>VIEW</action-key>
 			</supports>
-			<site-member-defaults>
-			</site-member-defaults>
-			<guest-defaults>
-			</guest-defaults>
+			<site-member-defaults />
+			<guest-defaults />
 			<guest-unsupported>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>

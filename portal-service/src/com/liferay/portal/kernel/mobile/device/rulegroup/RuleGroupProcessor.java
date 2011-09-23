@@ -25,8 +25,8 @@ import java.util.Collection;
  * @author Edward Han
  */
 public interface RuleGroupProcessor {
-	public MDRRuleGroupInstance evaluateRuleGroups(
-			ThemeDisplay themeDisplay)
+
+	public MDRRuleGroupInstance evaluateRuleGroups(ThemeDisplay themeDisplay)
 		throws SystemException;
 
 	public RuleHandler getRuleHandler(String ruleType);
@@ -38,4 +38,5 @@ public interface RuleGroupProcessor {
 	public void registerRuleHandler(RuleHandler ruleHandler);
 
 	public RuleHandler unregisterRuleHandler(String ruleType);
+
 }

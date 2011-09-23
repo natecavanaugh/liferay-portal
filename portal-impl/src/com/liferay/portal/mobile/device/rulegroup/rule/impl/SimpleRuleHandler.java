@@ -31,32 +31,44 @@ import java.util.Collections;
  */
 public class SimpleRuleHandler implements RuleHandler {
 
-	public static final String PARAMETER_OS = "os";
-	public static final String PARAMETER_TABLET = "tablet";
+	public static String getHandlerType() {
+		return SimpleRuleHandler.class.getName();
+	}
 
-	public boolean evaluateRule(MDRRule rule, ThemeDisplay themeDisplay) {
+	public boolean evaluateRule(MDRRule mdrRule, ThemeDisplay themeDisplay) {
 		Device device = themeDisplay.getDevice();
 
 		if (device == null) {
 			return false;
 		}
 
-		UnicodeProperties ruleTypeSettings =
-			rule.getTypeSettingsProperties();
-
-		String os = ruleTypeSettings.get(PARAMETER_OS);
-		String tablet = ruleTypeSettings.get(PARAMETER_TABLET);
+		UnicodeProperties typeSettingsProperties =
+			mdrRule.getTypeSettingsProperties();
 
 		boolean result = true;
 
+		String os = typeSettingsProperties.get("os");
+
 		if (Validator.isNotNull(os)) {
-			result = os.equals(device.getOS());
+			if (os.equals(device.getOS())) {
+				result = true;
+			}
+			else {
+				result = false;
+			}
 		}
 
-		if (Validator.isNotNull(tablet)) {
-			boolean tabletRequired = GetterUtil.get(tablet, false);
+		String tablet = typeSettingsProperties.get("tablet");
 
-			result = result && (tabletRequired == device.isTablet());
+		if (Validator.isNotNull(tablet)) {
+			boolean tabletBoolean = GetterUtil.getBoolean(tablet);
+
+			if (result && (tabletBoolean == device.isTablet())) {
+				result = true;
+			}
+			else {
+				result = false;
+			}
 		}
 
 		return result;
@@ -64,10 +76,6 @@ public class SimpleRuleHandler implements RuleHandler {
 
 	public Collection<String> getPropertyNames() {
 		return _propertyNames;
-	}
-
-	public static String getHandlerType() {
-		return SimpleRuleHandler.class.getName();
 	}
 
 	public String getType() {
@@ -79,8 +87,8 @@ public class SimpleRuleHandler implements RuleHandler {
 	static {
 		_propertyNames = new ArrayList<String>(2);
 
-		_propertyNames.add(PARAMETER_OS);
-		_propertyNames.add(PARAMETER_TABLET);
+		_propertyNames.add("os");
+		_propertyNames.add("tablet");
 
 		_propertyNames = Collections.unmodifiableCollection(_propertyNames);
 	}

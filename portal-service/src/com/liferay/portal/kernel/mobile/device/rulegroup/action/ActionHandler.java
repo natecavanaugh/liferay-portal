@@ -27,12 +27,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author Edward Han
  */
 public interface ActionHandler {
+
 	public void applyAction(
-			MDRAction action, HttpServletRequest request,
+			MDRAction mdrAction, HttpServletRequest request,
 			HttpServletResponse response)
 		throws PortalException, SystemException;
 
 	public Collection<String> getPropertyNames();
 
 	public String getType();
+
 }

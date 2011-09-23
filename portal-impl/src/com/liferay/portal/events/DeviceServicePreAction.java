@@ -16,7 +16,6 @@ package com.liferay.portal.events;
 
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mobile.device.Device;
@@ -41,15 +40,14 @@ import javax.servlet.http.HttpSession;
  */
 public class DeviceServicePreAction extends Action {
 
+	@Override
 	public void run(HttpServletRequest request, HttpServletResponse response)
 		throws ActionException {
 
 		HttpSession session = request.getSession();
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
-
-		// Device
 
 		Device device = (Device)session.getAttribute(WebKeys.DEVICE);
 
@@ -61,45 +59,40 @@ public class DeviceServicePreAction extends Action {
 
 		themeDisplay.setDevice(device);
 
-		if (UnknownDevice.getInstance().equals(device)) {
+		UnknownDevice unknownDevice = UnknownDevice.getInstance();
+
+		if (device.equals(unknownDevice)) {
 			return;
 		}
 
-		//	Rule Group
-
-		MDRRuleGroupInstance ruleGroupInstance = null;
+		MDRRuleGroupInstance mdrRuleGroupInstance = null;
 
 		try {
-			ruleGroupInstance = RuleGroupProcessorUtil.evaluateRuleGroups(
+			mdrRuleGroupInstance = RuleGroupProcessorUtil.evaluateRuleGroups(
 				themeDisplay);
 
 			if (_log.isDebugEnabled()) {
 				_log.debug(
-					"RuleGroup evaluation returned RuleGroupInstance: " +
-						ruleGroupInstance.getRuleGroupInstanceId());
+					"Rule group evaluation returned rule group instance " +
+						mdrRuleGroupInstance.getRuleGroupInstanceId());
 			}
 		}
-		catch (SystemException e) {
+		catch (Exception e) {
 			throw new ActionException(
-				"Error while retrieving rule group", e);
+				"Unable to retrieve rule group", e);
 		}
 
-		themeDisplay.setRuleGroupInstance(ruleGroupInstance);
+		themeDisplay.setMDRRuleGroupInstance(mdrRuleGroupInstance);
 
-		//	Apply actions
+		try {
+			List<MDRAction> mdrActions = MDRActionLocalServiceUtil.getActions(
+				mdrRuleGroupInstance.getRuleGroupInstanceId());
 
-		if (ruleGroupInstance != null) {
-			try {
-				List<MDRAction> actions = MDRActionLocalServiceUtil.getActions(
-					ruleGroupInstance.getRuleGroupInstanceId());
-
-				ActionHandlerManagerUtil.applyActions(
-					actions, request, response);
-			}
-			catch (Exception e) {
-				throw new ActionException(
-					"Error while applying device profile", e);
-			}
+			ActionHandlerManagerUtil.applyActions(
+				mdrActions, request, response);
+		}
+		catch (Exception e) {
+			throw new ActionException("Unable to apply device profile", e);
 		}
 	}
 

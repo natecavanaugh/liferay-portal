@@ -182,6 +182,10 @@ public class ThemeDisplay implements Serializable {
 		return _locale;
 	}
 
+	public MDRRuleGroupInstance getMDRRuleGroupInstance() {
+		return _mdrRuleGroupInstance;
+	}
+
 	public Group getParentGroup() {
 		return _parentGroup;
 	}
@@ -319,10 +323,6 @@ public class ThemeDisplay implements Serializable {
 
 	public long getRefererPlid() {
 		return _refererPlid;
-	}
-
-	public MDRRuleGroupInstance getRuleGroupInstance() {
-		return _ruleGroupInstance;
 	}
 
 	public Group getScopeGroup() {
@@ -877,6 +877,12 @@ public class ThemeDisplay implements Serializable {
 		setLookAndFeel(getPathContext(), theme, colorScheme);
 	}
 
+	public void setMDRRuleGroupInstance(
+		MDRRuleGroupInstance mdrRuleGroupInstance) {
+
+		_mdrRuleGroupInstance = mdrRuleGroupInstance;
+	}
+
 	public void setParentGroupId(long parentGroupId) {
 		_parentGroupId = parentGroupId;
 
@@ -999,10 +1005,6 @@ public class ThemeDisplay implements Serializable {
 
 	public void setRefererPlid(long refererPlid) {
 		_refererPlid = refererPlid;
-	}
-
-	public void setRuleGroupInstance(MDRRuleGroupInstance ruleGroupInstance) {
-		_ruleGroupInstance = ruleGroupInstance;
 	}
 
 	public void setScopeGroupId(long scopeGroupId) {
@@ -1282,6 +1284,7 @@ public class ThemeDisplay implements Serializable {
 	private boolean _lifecycleRender;
 	private boolean _lifecycleResource;
 	private Locale _locale;
+	private MDRRuleGroupInstance _mdrRuleGroupInstance;
 	private Group _parentGroup;
 	private long _parentGroupId;
 	private String _pathApplet = StringPool.BLANK;
@@ -1310,7 +1313,6 @@ public class ThemeDisplay implements Serializable {
 	private int _realCompanyLogoWidth;
 	private User _realUser;
 	private long _refererPlid;
-	private MDRRuleGroupInstance _ruleGroupInstance;
 	private Group _scopeGroup;
 	private long _scopeGroupId;
 	private boolean _secure;

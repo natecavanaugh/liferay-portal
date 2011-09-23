@@ -25,36 +25,42 @@ import java.util.Collection;
  * @author Edward Han
  */
 public class RuleGroupProcessorUtil {
+
 	public static MDRRuleGroupInstance evaluateRuleGroups(
 			ThemeDisplay themeDisplay)
 		throws SystemException {
 
-		return _ruleGroupProcessor.evaluateRuleGroups(themeDisplay);
+		return getRuleGroupProcessor().evaluateRuleGroups(themeDisplay);
+	}
+
+	public static RuleGroupProcessor getRuleGroupProcessor() {
+		return _ruleGroupProcessor;
 	}
 
 	public static RuleHandler getRuleHandler(String ruleType) {
-		return _ruleGroupProcessor.getRuleHandler(ruleType);
+		return getRuleGroupProcessor().getRuleHandler(ruleType);
 	}
 
 	public static Collection<RuleHandler> getRuleHandlers() {
-		return _ruleGroupProcessor.getRuleHandlers();
+		return getRuleGroupProcessor().getRuleHandlers();
 	}
 
 	public static Collection<String> getRuleHandlerTypes() {
-		return _ruleGroupProcessor.getRuleHandlerTypes();
+		return getRuleGroupProcessor().getRuleHandlerTypes();
 	}
 
 	public static void registerRuleHandler(RuleHandler ruleHandler) {
-		_ruleGroupProcessor.registerRuleHandler(ruleHandler);
+		getRuleGroupProcessor().registerRuleHandler(ruleHandler);
+	}
+
+	public static RuleHandler unregisterRuleHandler(String ruleType) {
+		return getRuleGroupProcessor().unregisterRuleHandler(ruleType);
 	}
 
 	public void setRuleGroupProcessor(RuleGroupProcessor ruleGroupProcessor) {
 		_ruleGroupProcessor = ruleGroupProcessor;
 	}
 
-	public static RuleHandler unregisterRuleHandler(String ruleType) {
-		return _ruleGroupProcessor.unregisterRuleHandler(ruleType);
-	}
-
 	private static RuleGroupProcessor _ruleGroupProcessor;
+
 }

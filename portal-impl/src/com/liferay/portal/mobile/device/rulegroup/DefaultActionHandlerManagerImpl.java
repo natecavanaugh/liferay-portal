@@ -35,13 +35,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author Edward C. Han
  */
 public class DefaultActionHandlerManagerImpl implements ActionHandlerManager {
+
 	public void applyActions(
-			List<MDRAction> actions, HttpServletRequest request,
+			List<MDRAction> mdrActions, HttpServletRequest request,
 			HttpServletResponse response)
 		throws PortalException, SystemException {
 
-		for (MDRAction action : actions) {
-			applyAction(action, request, response);
+		for (MDRAction mdrAction : mdrActions) {
+			applyAction(mdrAction, request, response);
 		}
 	}
 
@@ -62,13 +63,10 @@ public class DefaultActionHandlerManagerImpl implements ActionHandlerManager {
 		ActionHandler oldActionHandler = _deviceActionHandlers.put(
 			actionHandler.getType(), actionHandler);
 
-		if (oldActionHandler != null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"ActionHandler with key: " + actionHandler.getType() +
-					" has already been registered. Replacing with " +
-					actionHandler);
-			}
+		if ((oldActionHandler != null) && _log.isWarnEnabled()) {
+			_log.warn(
+				"Replacing existing action handler type " +
+					actionHandler.getType());
 		}
 	}
 
@@ -83,21 +81,19 @@ public class DefaultActionHandlerManagerImpl implements ActionHandlerManager {
 	}
 
 	protected void applyAction(
-			MDRAction action, HttpServletRequest request,
+			MDRAction mdrAction, HttpServletRequest request,
 			HttpServletResponse response)
 		throws PortalException, SystemException {
 
-		ActionHandler actionHandler = _deviceActionHandlers.get(action.getType());
+		ActionHandler actionHandler = _deviceActionHandlers.get(
+			mdrAction.getType());
 
 		if (actionHandler != null) {
-			actionHandler.applyAction(action, request, response);
+			actionHandler.applyAction(mdrAction, request, response);
 		}
-		else {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"No ActionHandler registered for type: " +
-					action.getType());
-			}
+		else if (_log.isWarnEnabled()) {
+			_log.warn(
+				"No action handler registered for type " + mdrAction.getType());
 		}
 	}
 
@@ -106,4 +102,5 @@ public class DefaultActionHandlerManagerImpl implements ActionHandlerManager {
 
 	private Map<String, ActionHandler> _deviceActionHandlers =
 		new HashMap<String, ActionHandler>();
+
 }

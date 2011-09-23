@@ -29,8 +29,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author Edward Han
  */
 public interface ActionHandlerManager {
+
 	public void applyActions(
-			List<MDRAction> actions, HttpServletRequest request,
+			List<MDRAction> mdrActions, HttpServletRequest request,
 			HttpServletResponse response)
 		throws PortalException, SystemException;
 
@@ -43,4 +44,5 @@ public interface ActionHandlerManager {
 	public void registerActionHandler(ActionHandler actionHandler);
 
 	public ActionHandler unregisterActionHandler(String actionType);
+
 }

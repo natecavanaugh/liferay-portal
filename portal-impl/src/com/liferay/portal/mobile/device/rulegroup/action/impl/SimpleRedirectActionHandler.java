@@ -14,10 +14,7 @@
 
 package com.liferay.portal.mobile.device.rulegroup.action.impl;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portlet.mobiledevicerules.model.MDRAction;
 
@@ -45,27 +42,26 @@ public class SimpleRedirectActionHandler extends BaseRedirectActionHandler {
 		return getHandlerType();
 	}
 
+	@Override
 	protected String getURL(
-			MDRAction action, HttpServletRequest request,
-			HttpServletResponse response)
-		throws PortalException, SystemException {
+		MDRAction mdrAction, HttpServletRequest request,
+		HttpServletResponse response) {
 
 		UnicodeProperties typeSettingsProperties =
-			action.getTypeSettingsProperties();
+			mdrAction.getTypeSettingsProperties();
 
-		return GetterUtil.get(
-			typeSettingsProperties.getProperty(URL), StringPool.BLANK);
+		return GetterUtil.getString(
+			typeSettingsProperties.getProperty("url"));
 	}
-
-	private static final String URL = "url";
 
 	private static Collection<String> _propertyNames;
 
 	static {
 		_propertyNames = new ArrayList<String>(1);
 
-		_propertyNames.add(URL);
+		_propertyNames.add("url");
 
 		_propertyNames = Collections.unmodifiableCollection(_propertyNames);
 	}
+
 }

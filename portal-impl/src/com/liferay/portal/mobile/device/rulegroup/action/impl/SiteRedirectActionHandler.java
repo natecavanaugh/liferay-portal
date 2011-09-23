@@ -14,6 +14,7 @@
 
 package com.liferay.portal.mobile.device.rulegroup.action.impl;
 
+import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -62,37 +63,37 @@ public class SiteRedirectActionHandler extends BaseRedirectActionHandler {
 		_layoutLocalService = layoutLocalService;
 	}
 
+	@Override
 	protected String getURL(
-			MDRAction action, HttpServletRequest request,
+			MDRAction mdrAction, HttpServletRequest request,
 			HttpServletResponse response)
 		throws PortalException, SystemException {
 
 		UnicodeProperties typeSettingsProperties =
-			action.getTypeSettingsProperties();
+			mdrAction.getTypeSettingsProperties();
 
-		long layoutId = GetterUtil.get(
-			typeSettingsProperties.getProperty(LAYOUT_ID), 0L);
+		long layoutId = GetterUtil.getLong(
+			typeSettingsProperties.getProperty("layoutId"));
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(
-				WebKeys.THEME_DISPLAY);
+			WebKeys.THEME_DISPLAY);
 
-		long currentLayoutId = themeDisplay.getLayout().getLayoutId();
+		Layout themeDisplayLayout = themeDisplay.getLayout();
 
-		if (currentLayoutId == layoutId) {
+		if (layoutId == themeDisplayLayout.getLayoutId()) {
 			return null;
 		}
 
 		Layout layout = _layoutLocalService.fetchLayout(layoutId);
 
-		long groupId = GetterUtil.get(
-			typeSettingsProperties.getProperty(GROUP_ID), 0L);
+		long groupId = GetterUtil.getLong(
+			typeSettingsProperties.getProperty("groupId"));
 
 		if ((layout != null) && (layout.getGroupId() != groupId)) {
 			if (_log.isWarnEnabled()) {
 				_log.warn(
-					"layoutId " + layoutId +
-						" does not belong to group with ID: " + groupId +
-						". Using default public page");
+					"Layout " + layout.getPlid() +
+						" does not belong to group " + groupId);
 			}
 
 			layout = null;
@@ -100,22 +101,18 @@ public class SiteRedirectActionHandler extends BaseRedirectActionHandler {
 
 		if (layout == null) {
 			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Using default public group layout, invalid plid: " +
-						layoutId);
+				_log.warn("Using default public layout");
 			}
-
-			long currentGroupId = themeDisplay.getLayout().getGroupId();
 
 			Group group = null;
 
-			if (currentGroupId != groupId) {
+			if (groupId != themeDisplayLayout.getGroupId()) {
 				group = _groupLocalService.fetchGroup(groupId);
 			}
 
 			if (group == null) {
 				if (_log.isWarnEnabled()) {
-					_log.warn("Group does not exist: " + groupId);
+					_log.warn("No group found with group ID " + groupId);
 				}
 
 				return null;
@@ -128,32 +125,32 @@ public class SiteRedirectActionHandler extends BaseRedirectActionHandler {
 		if (layout != null) {
 			return PortalUtil.getLayoutURL(layout, themeDisplay);
 		}
-		else {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to resolve default layout");
-			}
 
-			return null;
+		if (_log.isWarnEnabled()) {
+			_log.warn("Unable to resolve default layout");
 		}
-	}
 
-	private static final String GROUP_ID = "groupId";
-	private static final String LAYOUT_ID = "layoutId";
+		return null;
+	}
 
 	private static Log _log = LogFactoryUtil.getLog(
 		SiteRedirectActionHandler.class);
 
 	private static Collection<String> _propertyNames;
 
+	@BeanReference(type = GroupLocalService.class)
 	private GroupLocalService _groupLocalService;
+
+	@BeanReference(type = LayoutLocalService.class)
 	private LayoutLocalService _layoutLocalService;
 
 	static {
 		_propertyNames = new ArrayList<String>(2);
 
-		_propertyNames.add(GROUP_ID);
-		_propertyNames.add(LAYOUT_ID);
+		_propertyNames.add("groupId");
+		_propertyNames.add("layoutId");
 
 		_propertyNames = Collections.unmodifiableCollection(_propertyNames);
 	}
+
 }

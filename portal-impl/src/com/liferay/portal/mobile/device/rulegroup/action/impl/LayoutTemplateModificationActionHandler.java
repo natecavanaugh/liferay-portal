@@ -14,11 +14,8 @@
 
 package com.liferay.portal.mobile.device.rulegroup.action.impl;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.mobile.device.rulegroup.action.ActionHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTypePortletConstants;
@@ -36,37 +33,34 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author Edward Han
  */
-public class LayoutTemplateModificationActionHandler
-	implements ActionHandler {
+public class LayoutTemplateModificationActionHandler implements ActionHandler {
+
+	public static String getHandlerType() {
+		return LayoutTemplateModificationActionHandler.class.getName();
+	}
 
 	public void applyAction(
-			MDRAction action, HttpServletRequest request,
-			HttpServletResponse response)
-		throws PortalException, SystemException {
+		MDRAction mdrAction, HttpServletRequest request,
+		HttpServletResponse response) {
 
-		UnicodeProperties typeSettingsProperties =
-			action.getTypeSettingsProperties();
+		UnicodeProperties mdrActionTypeSettingsProperties =
+			mdrAction.getTypeSettingsProperties();
 
-		String layoutTemplateId = GetterUtil.get(
-			typeSettingsProperties.getProperty(LAYOUT_TEMPLATE_ID),
-				StringPool.BLANK);
+		String layoutTemplateId = GetterUtil.getString(
+			mdrActionTypeSettingsProperties.getProperty("layoutTemplateId"));
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
 		Layout layout = themeDisplay.getLayout();
 
-		UnicodeProperties layoutTypeSettings =
+		UnicodeProperties layoutTypeSettingsProperties =
 			layout.getTypeSettingsProperties();
 
-		layoutTypeSettings.setProperty(
+		layoutTypeSettingsProperties.setProperty(
 			LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID, layoutTemplateId);
 
-		layout.setTypeSettingsProperties(layoutTypeSettings);
-	}
-
-	public static String getHandlerType() {
-		return LayoutTemplateModificationActionHandler.class.getName();
+		layout.setTypeSettingsProperties(layoutTypeSettingsProperties);
 	}
 
 	public Collection<String> getPropertyNames() {
@@ -77,15 +71,14 @@ public class LayoutTemplateModificationActionHandler
 		return getHandlerType();
 	}
 
-	private static final String LAYOUT_TEMPLATE_ID = "layoutTemplateId";
-
 	private static Collection<String> _propertyNames;
 
 	static {
 		_propertyNames = new ArrayList<String>(1);
 
-		_propertyNames.add(LAYOUT_TEMPLATE_ID);
+		_propertyNames.add("layoutTemplateId");
 
 		_propertyNames = Collections.unmodifiableCollection(_propertyNames);
 	}
+
 }

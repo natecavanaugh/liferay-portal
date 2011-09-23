@@ -68,8 +68,7 @@ import javax.servlet.ServletContext;
 public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 
 	public ColorScheme fetchColorScheme(
-			long companyId, String themeId, String colorSchemeId)
-		throws SystemException {
+		long companyId, String themeId, String colorSchemeId) {
 
 		colorSchemeId = GetterUtil.getString(colorSchemeId);
 
@@ -84,12 +83,12 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 		return colorSchemesMap.get(colorSchemeId);
 	}
 
-	public Theme fetchTheme(long companyId, String themeId)
-		throws SystemException {
-
+	public Theme fetchTheme(long companyId, String themeId) {
 		themeId = GetterUtil.getString(themeId);
 
-		return _getThemes(companyId).get(themeId);
+		Map<String, Theme> themes = _getThemes(companyId);
+
+		return themes.get(themeId);
 	}
 
 	public ColorScheme getColorScheme(
@@ -141,7 +140,9 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 
 		themeId = GetterUtil.getString(themeId);
 
-		Theme theme = _getThemes(companyId).get(themeId);
+		Map<String, Theme> themes = _getThemes(companyId);
+
+		Theme theme = themes.get(themeId);
 
 		if (theme == null) {
 			if (_log.isWarnEnabled()) {
@@ -187,9 +188,11 @@ public class ThemeLocalServiceImpl extends ThemeLocalServiceBaseImpl {
 	}
 
 	public List<Theme> getThemes(long companyId) {
-		List<Theme> themes = ListUtil.fromMapValues(_getThemes(companyId));
+		Map<String, Theme> themes = _getThemes(companyId);
 
-		return ListUtil.sort(themes);
+		List<Theme> themesList = ListUtil.fromMapValues(themes);
+
+		return ListUtil.sort(themesList);
 	}
 
 	public List<Theme> getThemes(

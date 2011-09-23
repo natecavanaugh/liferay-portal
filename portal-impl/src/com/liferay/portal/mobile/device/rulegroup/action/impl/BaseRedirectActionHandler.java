@@ -31,45 +31,44 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author Edward Han
  */
-public abstract class BaseRedirectActionHandler
-	implements ActionHandler {
+public abstract class BaseRedirectActionHandler implements ActionHandler {
 
 	public void applyAction(
-			MDRAction action, HttpServletRequest request,
+			MDRAction mdrAction, HttpServletRequest request,
 			HttpServletResponse response)
 		throws PortalException, SystemException {
 
-		String url = getURL(action, request, response);
+		String url = getURL(mdrAction, request, response);
 
 		if (Validator.isNull(url)) {
 			if (_log.isInfoEnabled()) {
-				_log.info("No URL to redirect to located");
+				_log.info("URL is null");
 			}
+
+			return;
 		}
-		else {
-			String requestURL = request.getRequestURL().toString();
 
-			if (StringUtil.contains(requestURL, url)) {
-				if (_log.isInfoEnabled()) {
-					_log.info(
-						"Skipping redirect. Current URL contains redirect URL");
-				}
+		String requestURL = String.valueOf(request.getRequestURL());
 
-				return;
+		if (StringUtil.contains(requestURL, url)) {
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					"Skipping redirect. Current URL contains redirect URL.");
 			}
 
-			try {
-				response.sendRedirect(url);
-			}
-			catch (IOException ioe) {
-				throw new PortalException(
-					"Unable to send redirect for url: " + url, ioe);
-			}
+			return;
+		}
+
+		try {
+			response.sendRedirect(url);
+		}
+		catch (IOException ioe) {
+			throw new PortalException("Unable to redirect to " + url, ioe);
 		}
 	}
 
 	protected abstract String getURL(
-			MDRAction action, HttpServletRequest request,
+			MDRAction mdrAction, HttpServletRequest request,
 			HttpServletResponse response)
 		throws PortalException, SystemException;
 
