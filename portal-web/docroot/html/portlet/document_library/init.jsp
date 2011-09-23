@@ -189,7 +189,6 @@ long[] groupIds = new long[] {scopeGroupId, themeDisplay.getCompanyGroupId()};
 if (scopeGroup.isLayout()) {
 	groupIds = new long[] {scopeGroup.getParentGroupId(), themeDisplay.getCompanyGroupId()};
 }
-
 %>
 
 <%!
