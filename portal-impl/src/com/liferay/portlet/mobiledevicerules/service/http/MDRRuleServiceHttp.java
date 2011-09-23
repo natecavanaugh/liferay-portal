@@ -55,7 +55,7 @@ import com.liferay.portlet.mobiledevicerules.service.MDRRuleServiceUtil;
  */
 public class MDRRuleServiceHttp {
 	public static com.liferay.portlet.mobiledevicerules.model.MDRRule addRule(
-		HttpPrincipal httpPrincipal, long groupId, long ruleGroupId,
+		HttpPrincipal httpPrincipal, long ruleGroupId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		java.lang.String type, java.lang.String typeSettings,
@@ -66,7 +66,7 @@ public class MDRRuleServiceHttp {
 			MethodKey methodKey = new MethodKey(MDRRuleServiceUtil.class.getName(),
 					"addRule", _addRuleParameterTypes0);
 
-			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
+			MethodHandler methodHandler = new MethodHandler(methodKey,
 					ruleGroupId, nameMap, descriptionMap, type, typeSettings,
 					serviceContext);
 
@@ -97,7 +97,7 @@ public class MDRRuleServiceHttp {
 	}
 
 	public static com.liferay.portlet.mobiledevicerules.model.MDRRule addRule(
-		HttpPrincipal httpPrincipal, long groupId, long ruleGroupId,
+		HttpPrincipal httpPrincipal, long ruleGroupId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		java.lang.String type,
@@ -109,7 +109,7 @@ public class MDRRuleServiceHttp {
 			MethodKey methodKey = new MethodKey(MDRRuleServiceUtil.class.getName(),
 					"addRule", _addRuleParameterTypes1);
 
-			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
+			MethodHandler methodHandler = new MethodHandler(methodKey,
 					ruleGroupId, nameMap, descriptionMap, type, typeSettings,
 					serviceContext);
 
@@ -247,8 +247,7 @@ public class MDRRuleServiceHttp {
 		HttpPrincipal httpPrincipal, long ruleId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		java.lang.String type,
-		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties,
+		java.lang.String type, java.lang.String typeSettings,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -257,8 +256,7 @@ public class MDRRuleServiceHttp {
 					"updateRule", _updateRuleParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, ruleId,
-					nameMap, descriptionMap, type, typeSettingsProperties,
-					serviceContext);
+					nameMap, descriptionMap, type, typeSettings, serviceContext);
 
 			Object returnObj = null;
 
@@ -290,7 +288,8 @@ public class MDRRuleServiceHttp {
 		HttpPrincipal httpPrincipal, long ruleId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		java.lang.String type, java.lang.String typeSettings,
+		java.lang.String type,
+		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -299,7 +298,8 @@ public class MDRRuleServiceHttp {
 					"updateRule", _updateRuleParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, ruleId,
-					nameMap, descriptionMap, type, typeSettings, serviceContext);
+					nameMap, descriptionMap, type, typeSettingsProperties,
+					serviceContext);
 
 			Object returnObj = null;
 
@@ -329,12 +329,12 @@ public class MDRRuleServiceHttp {
 
 	private static Log _log = LogFactoryUtil.getLog(MDRRuleServiceHttp.class);
 	private static final Class<?>[] _addRuleParameterTypes0 = new Class[] {
-			long.class, long.class, java.util.Map.class, java.util.Map.class,
+			long.class, java.util.Map.class, java.util.Map.class,
 			java.lang.String.class, java.lang.String.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
 	private static final Class<?>[] _addRuleParameterTypes1 = new Class[] {
-			long.class, long.class, java.util.Map.class, java.util.Map.class,
+			long.class, java.util.Map.class, java.util.Map.class,
 			java.lang.String.class,
 			com.liferay.portal.kernel.util.UnicodeProperties.class,
 			com.liferay.portal.service.ServiceContext.class
@@ -350,13 +350,13 @@ public class MDRRuleServiceHttp {
 		};
 	private static final Class<?>[] _updateRuleParameterTypes5 = new Class[] {
 			long.class, java.util.Map.class, java.util.Map.class,
-			java.lang.String.class,
-			com.liferay.portal.kernel.util.UnicodeProperties.class,
+			java.lang.String.class, java.lang.String.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
 	private static final Class<?>[] _updateRuleParameterTypes6 = new Class[] {
 			long.class, java.util.Map.class, java.util.Map.class,
-			java.lang.String.class, java.lang.String.class,
+			java.lang.String.class,
+			com.liferay.portal.kernel.util.UnicodeProperties.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
 }

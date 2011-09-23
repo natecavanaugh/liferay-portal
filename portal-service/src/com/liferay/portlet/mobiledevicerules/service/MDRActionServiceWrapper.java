@@ -29,7 +29,18 @@ public class MDRActionServiceWrapper implements MDRActionService {
 	}
 
 	public com.liferay.portlet.mobiledevicerules.model.MDRAction addMDRAction(
-		long groupId, java.lang.String className, long classPK,
+		long ruleGroupInstanceId,
+		java.util.Map<java.util.Locale, java.lang.String> nameMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		java.lang.String type, java.lang.String typeSettings,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mdrActionService.addMDRAction(ruleGroupInstanceId, nameMap,
+			descriptionMap, type, typeSettings, serviceContext);
+	}
+
+	public com.liferay.portlet.mobiledevicerules.model.MDRAction addMDRAction(
 		long ruleGroupInstanceId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
@@ -38,23 +49,8 @@ public class MDRActionServiceWrapper implements MDRActionService {
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _mdrActionService.addMDRAction(groupId, className, classPK,
-			ruleGroupInstanceId, nameMap, descriptionMap, type,
-			typeSettingsProperties, serviceContext);
-	}
-
-	public com.liferay.portlet.mobiledevicerules.model.MDRAction addMDRAction(
-		long groupId, java.lang.String className, long classPK,
-		long ruleGroupInstanceId,
-		java.util.Map<java.util.Locale, java.lang.String> nameMap,
-		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		java.lang.String type, java.lang.String typeSettings,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _mdrActionService.addMDRAction(groupId, className, classPK,
-			ruleGroupInstanceId, nameMap, descriptionMap, type, typeSettings,
-			serviceContext);
+		return _mdrActionService.addMDRAction(ruleGroupInstanceId, nameMap,
+			descriptionMap, type, typeSettingsProperties, serviceContext);
 	}
 
 	public void deleteAction(
@@ -82,6 +78,18 @@ public class MDRActionServiceWrapper implements MDRActionService {
 		long actionId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		java.lang.String type, java.lang.String typeSettings,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mdrActionService.updateAction(actionId, nameMap,
+			descriptionMap, type, typeSettings, serviceContext);
+	}
+
+	public com.liferay.portlet.mobiledevicerules.model.MDRAction updateAction(
+		long actionId,
+		java.util.Map<java.util.Locale, java.lang.String> nameMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		java.lang.String type,
 		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -89,18 +97,6 @@ public class MDRActionServiceWrapper implements MDRActionService {
 			com.liferay.portal.kernel.exception.SystemException {
 		return _mdrActionService.updateAction(actionId, nameMap,
 			descriptionMap, type, typeSettingsProperties, serviceContext);
-	}
-
-	public com.liferay.portlet.mobiledevicerules.model.MDRAction updateMDRAction(
-		long actionId,
-		java.util.Map<java.util.Locale, java.lang.String> nameMap,
-		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		java.lang.String type, java.lang.String typeSettings,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _mdrActionService.updateMDRAction(actionId, nameMap,
-			descriptionMap, type, typeSettings, serviceContext);
 	}
 
 	public MDRActionService getWrappedMDRActionService() {

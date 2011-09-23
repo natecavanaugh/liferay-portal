@@ -57,14 +57,12 @@ public class ThemeLocalServiceUtil {
 	}
 
 	public static com.liferay.portal.model.ColorScheme fetchColorScheme(
-		long companyId, java.lang.String themeId, java.lang.String colorSchemeId)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		long companyId, java.lang.String themeId, java.lang.String colorSchemeId) {
 		return getService().fetchColorScheme(companyId, themeId, colorSchemeId);
 	}
 
 	public static com.liferay.portal.model.Theme fetchTheme(long companyId,
-		java.lang.String themeId)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		java.lang.String themeId) {
 		return getService().fetchTheme(companyId, themeId);
 	}
 

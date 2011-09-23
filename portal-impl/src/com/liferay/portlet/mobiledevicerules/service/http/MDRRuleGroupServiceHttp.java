@@ -273,107 +273,13 @@ public class MDRRuleGroupServiceHttp {
 		}
 	}
 
-	public static java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup> findByGroupId(
-		HttpPrincipal httpPrincipal, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		try {
-			MethodKey methodKey = new MethodKey(MDRRuleGroupServiceUtil.class.getName(),
-					"findByGroupId", _findByGroupIdParameterTypes6);
-
-			MethodHandler methodHandler = new MethodHandler(methodKey, groupId);
-
-			Object returnObj = null;
-
-			try {
-				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
-			}
-			catch (Exception e) {
-				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
-					throw (com.liferay.portal.kernel.exception.SystemException)e;
-				}
-
-				throw new com.liferay.portal.kernel.exception.SystemException(e);
-			}
-
-			return (java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup>)returnObj;
-		}
-		catch (com.liferay.portal.kernel.exception.SystemException se) {
-			_log.error(se, se);
-
-			throw se;
-		}
-	}
-
-	public static java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup> findByGroupId(
-		HttpPrincipal httpPrincipal, long groupId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		try {
-			MethodKey methodKey = new MethodKey(MDRRuleGroupServiceUtil.class.getName(),
-					"findByGroupId", _findByGroupIdParameterTypes7);
-
-			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
-					start, end);
-
-			Object returnObj = null;
-
-			try {
-				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
-			}
-			catch (Exception e) {
-				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
-					throw (com.liferay.portal.kernel.exception.SystemException)e;
-				}
-
-				throw new com.liferay.portal.kernel.exception.SystemException(e);
-			}
-
-			return (java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup>)returnObj;
-		}
-		catch (com.liferay.portal.kernel.exception.SystemException se) {
-			_log.error(se, se);
-
-			throw se;
-		}
-	}
-
-	public static int filterCountByGroupId(HttpPrincipal httpPrincipal,
-		long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		try {
-			MethodKey methodKey = new MethodKey(MDRRuleGroupServiceUtil.class.getName(),
-					"filterCountByGroupId", _filterCountByGroupIdParameterTypes8);
-
-			MethodHandler methodHandler = new MethodHandler(methodKey, groupId);
-
-			Object returnObj = null;
-
-			try {
-				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
-			}
-			catch (Exception e) {
-				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
-					throw (com.liferay.portal.kernel.exception.SystemException)e;
-				}
-
-				throw new com.liferay.portal.kernel.exception.SystemException(e);
-			}
-
-			return ((Integer)returnObj).intValue();
-		}
-		catch (com.liferay.portal.kernel.exception.SystemException se) {
-			_log.error(se, se);
-
-			throw se;
-		}
-	}
-
 	public static com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup getRuleGroup(
 		HttpPrincipal httpPrincipal, long ruleGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(MDRRuleGroupServiceUtil.class.getName(),
-					"getRuleGroup", _getRuleGroupParameterTypes9);
+					"getRuleGroup", _getRuleGroupParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
 					ruleGroupId);
@@ -413,7 +319,7 @@ public class MDRRuleGroupServiceHttp {
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(MDRRuleGroupServiceUtil.class.getName(),
-					"updateRuleGroup", _updateRuleGroupParameterTypes10);
+					"updateRuleGroup", _updateRuleGroupParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
 					ruleGroupId, nameMap, descriptionMap, serviceContext);
@@ -466,19 +372,10 @@ public class MDRRuleGroupServiceHttp {
 	private static final Class<?>[] _fetchRuleGroupParameterTypes5 = new Class[] {
 			long.class
 		};
-	private static final Class<?>[] _findByGroupIdParameterTypes6 = new Class[] {
+	private static final Class<?>[] _getRuleGroupParameterTypes6 = new Class[] {
 			long.class
 		};
-	private static final Class<?>[] _findByGroupIdParameterTypes7 = new Class[] {
-			long.class, int.class, int.class
-		};
-	private static final Class<?>[] _filterCountByGroupIdParameterTypes8 = new Class[] {
-			long.class
-		};
-	private static final Class<?>[] _getRuleGroupParameterTypes9 = new Class[] {
-			long.class
-		};
-	private static final Class<?>[] _updateRuleGroupParameterTypes10 = new Class[] {
+	private static final Class<?>[] _updateRuleGroupParameterTypes7 = new Class[] {
 			long.class, java.util.Map.class, java.util.Map.class,
 			com.liferay.portal.service.ServiceContext.class
 		};

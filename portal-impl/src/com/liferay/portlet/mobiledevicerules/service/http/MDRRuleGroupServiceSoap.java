@@ -142,50 +142,6 @@ public class MDRRuleGroupServiceSoap {
 		}
 	}
 
-	public static com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupSoap[] findByGroupId(
-		long groupId) throws RemoteException {
-		try {
-			java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup> returnValue =
-				MDRRuleGroupServiceUtil.findByGroupId(groupId);
-
-			return com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupSoap.toSoapModels(returnValue);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupSoap[] findByGroupId(
-		long groupId, int start, int end) throws RemoteException {
-		try {
-			java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup> returnValue =
-				MDRRuleGroupServiceUtil.findByGroupId(groupId, start, end);
-
-			return com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupSoap.toSoapModels(returnValue);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static int filterCountByGroupId(long groupId)
-		throws RemoteException {
-		try {
-			int returnValue = MDRRuleGroupServiceUtil.filterCountByGroupId(groupId);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
 	public static com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupSoap getRuleGroup(
 		long ruleGroupId) throws RemoteException {
 		try {

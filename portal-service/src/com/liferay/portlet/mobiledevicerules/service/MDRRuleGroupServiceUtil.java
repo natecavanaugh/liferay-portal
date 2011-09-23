@@ -85,23 +85,6 @@ public class MDRRuleGroupServiceUtil {
 		return getService().fetchRuleGroup(ruleGroupId);
 	}
 
-	public static java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup> findByGroupId(
-		long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().findByGroupId(groupId);
-	}
-
-	public static java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup> findByGroupId(
-		long groupId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().findByGroupId(groupId, start, end);
-	}
-
-	public static int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().filterCountByGroupId(groupId);
-	}
-
 	public static com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup getRuleGroup(
 		long ruleGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException,

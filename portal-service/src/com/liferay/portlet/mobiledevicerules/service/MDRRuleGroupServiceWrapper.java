@@ -77,23 +77,6 @@ public class MDRRuleGroupServiceWrapper implements MDRRuleGroupService {
 		return _mdrRuleGroupService.fetchRuleGroup(ruleGroupId);
 	}
 
-	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup> findByGroupId(
-		long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _mdrRuleGroupService.findByGroupId(groupId);
-	}
-
-	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup> findByGroupId(
-		long groupId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _mdrRuleGroupService.findByGroupId(groupId, start, end);
-	}
-
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _mdrRuleGroupService.filterCountByGroupId(groupId);
-	}
-
 	public com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup getRuleGroup(
 		long ruleGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException,

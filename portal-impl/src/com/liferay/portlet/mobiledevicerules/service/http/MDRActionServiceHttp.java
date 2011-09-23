@@ -55,12 +55,10 @@ import com.liferay.portlet.mobiledevicerules.service.MDRActionServiceUtil;
  */
 public class MDRActionServiceHttp {
 	public static com.liferay.portlet.mobiledevicerules.model.MDRAction addMDRAction(
-		HttpPrincipal httpPrincipal, long groupId, java.lang.String className,
-		long classPK, long ruleGroupInstanceId,
+		HttpPrincipal httpPrincipal, long ruleGroupInstanceId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		java.lang.String type,
-		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties,
+		java.lang.String type, java.lang.String typeSettings,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -68,9 +66,9 @@ public class MDRActionServiceHttp {
 			MethodKey methodKey = new MethodKey(MDRActionServiceUtil.class.getName(),
 					"addMDRAction", _addMDRActionParameterTypes0);
 
-			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
-					className, classPK, ruleGroupInstanceId, nameMap,
-					descriptionMap, type, typeSettingsProperties, serviceContext);
+			MethodHandler methodHandler = new MethodHandler(methodKey,
+					ruleGroupInstanceId, nameMap, descriptionMap, type,
+					typeSettings, serviceContext);
 
 			Object returnObj = null;
 
@@ -99,11 +97,11 @@ public class MDRActionServiceHttp {
 	}
 
 	public static com.liferay.portlet.mobiledevicerules.model.MDRAction addMDRAction(
-		HttpPrincipal httpPrincipal, long groupId, java.lang.String className,
-		long classPK, long ruleGroupInstanceId,
+		HttpPrincipal httpPrincipal, long ruleGroupInstanceId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		java.lang.String type, java.lang.String typeSettings,
+		java.lang.String type,
+		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -111,9 +109,9 @@ public class MDRActionServiceHttp {
 			MethodKey methodKey = new MethodKey(MDRActionServiceUtil.class.getName(),
 					"addMDRAction", _addMDRActionParameterTypes1);
 
-			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
-					className, classPK, ruleGroupInstanceId, nameMap,
-					descriptionMap, type, typeSettings, serviceContext);
+			MethodHandler methodHandler = new MethodHandler(methodKey,
+					ruleGroupInstanceId, nameMap, descriptionMap, type,
+					typeSettingsProperties, serviceContext);
 
 			Object returnObj = null;
 
@@ -249,56 +247,13 @@ public class MDRActionServiceHttp {
 		HttpPrincipal httpPrincipal, long actionId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		java.lang.String type,
-		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		try {
-			MethodKey methodKey = new MethodKey(MDRActionServiceUtil.class.getName(),
-					"updateAction", _updateActionParameterTypes5);
-
-			MethodHandler methodHandler = new MethodHandler(methodKey,
-					actionId, nameMap, descriptionMap, type,
-					typeSettingsProperties, serviceContext);
-
-			Object returnObj = null;
-
-			try {
-				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
-			}
-			catch (Exception e) {
-				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
-					throw (com.liferay.portal.kernel.exception.PortalException)e;
-				}
-
-				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
-					throw (com.liferay.portal.kernel.exception.SystemException)e;
-				}
-
-				throw new com.liferay.portal.kernel.exception.SystemException(e);
-			}
-
-			return (com.liferay.portlet.mobiledevicerules.model.MDRAction)returnObj;
-		}
-		catch (com.liferay.portal.kernel.exception.SystemException se) {
-			_log.error(se, se);
-
-			throw se;
-		}
-	}
-
-	public static com.liferay.portlet.mobiledevicerules.model.MDRAction updateMDRAction(
-		HttpPrincipal httpPrincipal, long actionId,
-		java.util.Map<java.util.Locale, java.lang.String> nameMap,
-		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		java.lang.String type, java.lang.String typeSettings,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(MDRActionServiceUtil.class.getName(),
-					"updateMDRAction", _updateMDRActionParameterTypes6);
+					"updateAction", _updateActionParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
 					actionId, nameMap, descriptionMap, type, typeSettings,
@@ -330,17 +285,59 @@ public class MDRActionServiceHttp {
 		}
 	}
 
+	public static com.liferay.portlet.mobiledevicerules.model.MDRAction updateAction(
+		HttpPrincipal httpPrincipal, long actionId,
+		java.util.Map<java.util.Locale, java.lang.String> nameMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		java.lang.String type,
+		com.liferay.portal.kernel.util.UnicodeProperties typeSettingsProperties,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		try {
+			MethodKey methodKey = new MethodKey(MDRActionServiceUtil.class.getName(),
+					"updateAction", _updateActionParameterTypes6);
+
+			MethodHandler methodHandler = new MethodHandler(methodKey,
+					actionId, nameMap, descriptionMap, type,
+					typeSettingsProperties, serviceContext);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
+					throw (com.liferay.portal.kernel.exception.PortalException)e;
+				}
+
+				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
+					throw (com.liferay.portal.kernel.exception.SystemException)e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(e);
+			}
+
+			return (com.liferay.portlet.mobiledevicerules.model.MDRAction)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(MDRActionServiceHttp.class);
 	private static final Class<?>[] _addMDRActionParameterTypes0 = new Class[] {
-			long.class, java.lang.String.class, long.class, long.class,
-			java.util.Map.class, java.util.Map.class, java.lang.String.class,
-			com.liferay.portal.kernel.util.UnicodeProperties.class,
+			long.class, java.util.Map.class, java.util.Map.class,
+			java.lang.String.class, java.lang.String.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
 	private static final Class<?>[] _addMDRActionParameterTypes1 = new Class[] {
-			long.class, java.lang.String.class, long.class, long.class,
-			java.util.Map.class, java.util.Map.class, java.lang.String.class,
+			long.class, java.util.Map.class, java.util.Map.class,
 			java.lang.String.class,
+			com.liferay.portal.kernel.util.UnicodeProperties.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
 	private static final Class<?>[] _deleteActionParameterTypes2 = new Class[] {
@@ -354,13 +351,13 @@ public class MDRActionServiceHttp {
 		};
 	private static final Class<?>[] _updateActionParameterTypes5 = new Class[] {
 			long.class, java.util.Map.class, java.util.Map.class,
-			java.lang.String.class,
-			com.liferay.portal.kernel.util.UnicodeProperties.class,
+			java.lang.String.class, java.lang.String.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
-	private static final Class<?>[] _updateMDRActionParameterTypes6 = new Class[] {
+	private static final Class<?>[] _updateActionParameterTypes6 = new Class[] {
 			long.class, java.util.Map.class, java.util.Map.class,
-			java.lang.String.class, java.lang.String.class,
+			java.lang.String.class,
+			com.liferay.portal.kernel.util.UnicodeProperties.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
 }

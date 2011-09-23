@@ -58,13 +58,11 @@ public interface ThemeLocalService {
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.model.ColorScheme fetchColorScheme(
-		long companyId, java.lang.String themeId, java.lang.String colorSchemeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		long companyId, java.lang.String themeId, java.lang.String colorSchemeId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.model.Theme fetchTheme(long companyId,
-		java.lang.String themeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		java.lang.String themeId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.model.ColorScheme getColorScheme(long companyId,
