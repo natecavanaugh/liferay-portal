@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.mobiledevicerules.permission;
+package com.liferay.portlet.mobiledevicerules.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -23,40 +23,46 @@ import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance;
  * @author Michael C. Han
  */
 public class MDRRuleGroupInstancePermissionUtil {
+
 	public static void check(
-			PermissionChecker permissionChecker, long groupId,
-			long ruleGroupInstanceId, String actionId)
+			PermissionChecker permissionChecker, long ruleGroupInstanceId,
+			String actionId)
 		throws PortalException, SystemException {
 
-		_mdrRuleGroupInstancePermission.check(
-			permissionChecker, groupId, ruleGroupInstanceId, actionId);
+		getMDRRuleGroupInstancePermission().check(
+			permissionChecker, ruleGroupInstanceId, actionId);
 	}
 
 	public static void check(
-			PermissionChecker permissionChecker, long groupId,
+			PermissionChecker permissionChecker,
 			MDRRuleGroupInstance ruleGroupInstance, String actionId)
-		throws PortalException, SystemException {
+		throws PortalException {
 
-		_mdrRuleGroupInstancePermission.check(
-			permissionChecker, groupId, ruleGroupInstance, actionId);
+		getMDRRuleGroupInstancePermission().check(
+			permissionChecker, ruleGroupInstance, actionId);
 	}
 
 	public static boolean contains(
-			PermissionChecker permissionChecker, long groupId,
-			long ruleGroupInstanceId, String actionId)
+			PermissionChecker permissionChecker, long ruleGroupInstanceId,
+			String actionId)
 		throws PortalException, SystemException {
 
-		return _mdrRuleGroupInstancePermission.contains(
-			permissionChecker, groupId, ruleGroupInstanceId, actionId);
+		return getMDRRuleGroupInstancePermission().contains(
+			permissionChecker, ruleGroupInstanceId, actionId);
 	}
 
 	public static boolean contains(
-			PermissionChecker permissionChecker, long groupId,
-			MDRRuleGroupInstance ruleGroupInstance, String actionId)
-		throws PortalException, SystemException {
+		PermissionChecker permissionChecker,
+		MDRRuleGroupInstance ruleGroupInstance, String actionId) {
 
-		return _mdrRuleGroupInstancePermission.contains(
-			permissionChecker, groupId, ruleGroupInstance, actionId);
+		return getMDRRuleGroupInstancePermission().contains(
+			permissionChecker, ruleGroupInstance, actionId);
+	}
+
+	public static MDRRuleGroupInstancePermission
+		getMDRRuleGroupInstancePermission() {
+
+		return _mdrRuleGroupInstancePermission;
 	}
 
 	public void setMDRRuleGroupInstancePermission(

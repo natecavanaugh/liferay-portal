@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.mobiledevicerules.permission;
+package com.liferay.portlet.mobiledevicerules.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -27,50 +27,43 @@ import com.liferay.portlet.mobiledevicerules.service.MDRRuleGroupLocalServiceUti
 public class MDRRuleGroupPermissionImpl implements MDRRuleGroupPermission {
 
 	public void check(
-			PermissionChecker permissionChecker, long groupId,
-			long ruleGroupId, String actionId)
+			PermissionChecker permissionChecker, long ruleGroupId,
+			String actionId)
 		throws PortalException, SystemException {
 
-		boolean hasPermission = contains(
-			permissionChecker, groupId, ruleGroupId, actionId);
-
-		if (!hasPermission) {
+		if (!contains(permissionChecker, ruleGroupId, actionId)) {
 			throw new PrincipalException();
 		}
 	}
 
 	public void check(
-			PermissionChecker permissionChecker, long groupId,
-			MDRRuleGroup ruleGroup, String actionId)
-		throws PortalException, SystemException {
+			PermissionChecker permissionChecker, MDRRuleGroup ruleGroup,
+			String actionId)
+		throws PortalException {
 
-		boolean hasPermission = contains(
-			permissionChecker, groupId, ruleGroup, actionId);
-
-		if (!hasPermission) {
+		if (!contains(permissionChecker, ruleGroup, actionId)) {
 			throw new PrincipalException();
 		}
 	}
 
 	public boolean contains(
-			PermissionChecker permissionChecker, long groupId, long ruleGroupId,
+			PermissionChecker permissionChecker, long ruleGroupId,
 			String actionId)
 		throws PortalException, SystemException {
 
 		MDRRuleGroup ruleGroup = MDRRuleGroupLocalServiceUtil.getMDRRuleGroup(
 			ruleGroupId);
 
-		return contains(permissionChecker, groupId, ruleGroup, actionId);
+		return contains(permissionChecker, ruleGroup, actionId);
 	}
 
 	public boolean contains(
-			PermissionChecker permissionChecker, long groupId,
-			MDRRuleGroup ruleGroup, String actionId)
-		throws PortalException, SystemException {
+		PermissionChecker permissionChecker, MDRRuleGroup ruleGroup,
+		String actionId) {
 
 		return permissionChecker.hasPermission(
-			groupId, MDRRuleGroup.class.getName(), ruleGroup.getRuleGroupId(),
-			actionId);
+			ruleGroup.getGroupId(), MDRRuleGroup.class.getName(),
+			ruleGroup.getRuleGroupId(), actionId);
 	}
 
 }

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.mobiledevicerules.permission;
+package com.liferay.portlet.mobiledevicerules.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -23,40 +23,44 @@ import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup;
  * @author Michael C. Han
  */
 public class MDRRuleGroupPermissionUtil {
+
 	public static void check(
-		PermissionChecker permissionChecker, long groupId,
-		long ruleGroupId, String actionId)
+			PermissionChecker permissionChecker, long ruleGroupId,
+			String actionId)
 		throws PortalException, SystemException {
 
-		_mdrRuleGroupPermission.check(
-			permissionChecker, groupId, ruleGroupId, actionId);
+		getMDRRuleGroupPermission().check(
+			permissionChecker, ruleGroupId, actionId);
 	}
 
 	public static void check(
-			PermissionChecker permissionChecker, long groupId,
-			MDRRuleGroup ruleGroup, String actionId)
-		throws PortalException, SystemException {
+			PermissionChecker permissionChecker, MDRRuleGroup ruleGroup,
+			String actionId)
+		throws PortalException {
 
-		_mdrRuleGroupPermission.check(
-			permissionChecker, groupId, ruleGroup, actionId);
+		getMDRRuleGroupPermission().check(
+			permissionChecker, ruleGroup, actionId);
 	}
 
 	public static boolean contains(
-			PermissionChecker permissionChecker, long groupId,
-			long ruleGroupId, String actionId)
+			PermissionChecker permissionChecker, long ruleGroupId,
+			String actionId)
 		throws PortalException, SystemException {
 
-		return _mdrRuleGroupPermission.contains(
-			permissionChecker, groupId, ruleGroupId, actionId);
+		return getMDRRuleGroupPermission().contains(
+			permissionChecker, ruleGroupId, actionId);
 	}
 
 	public static boolean contains(
-			PermissionChecker permissionChecker, long groupId,
-			MDRRuleGroup ruleGroup, String actionId)
-		throws PortalException, SystemException {
+		PermissionChecker permissionChecker, MDRRuleGroup ruleGroup,
+		String actionId) {
 
-		return _mdrRuleGroupPermission.contains(
-			permissionChecker, groupId, ruleGroup, actionId);
+		return getMDRRuleGroupPermission().contains(
+			permissionChecker, ruleGroup, actionId);
+	}
+
+	public static MDRRuleGroupPermission getMDRRuleGroupPermission() {
+		return _mdrRuleGroupPermission;
 	}
 
 	public void setMDRRuleGroupPermission(

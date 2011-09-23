@@ -12,21 +12,34 @@
  * details.
  */
 
-package com.liferay.portlet.mobiledevicerules.permission;
+package com.liferay.portlet.mobiledevicerules.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
 /**
  * @author Edward Han
  */
-public interface MobileDeviceRulesPermission {
+public class MDRPermissionImpl implements MDRPermission {
 
 	public void check(
 			PermissionChecker permissionChecker, long groupId, String actionId)
-		throws PortalException;
+		throws PortalException {
+
+		if (!contains(permissionChecker, groupId, actionId)) {
+			throw new PrincipalException();
+		}
+	}
 
 	public boolean contains(
-		PermissionChecker permissionChecker, long groupId, String actionId);
+		PermissionChecker permissionChecker, long groupId, String actionId) {
+
+		return permissionChecker.hasPermission(
+			groupId, _CLASS_NAME, groupId, actionId);
+	}
+
+	private static final String _CLASS_NAME =
+		"com.liferay.portlet.mobiledevicerules";
 
 }
