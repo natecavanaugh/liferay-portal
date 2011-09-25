@@ -23,8 +23,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.CacheConfiguration.CacheEventListenerFactoryConfiguration;
+import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ConfigurationFactory;
 
@@ -113,17 +113,22 @@ public class EhcacheConfigurationUtil {
 			return;
 		}
 
-		List<CacheEventListenerFactoryConfiguration> configObjects =
-					cacheConfiguration.getCacheEventListenerConfigurations();
+		List<CacheEventListenerFactoryConfiguration>
+			cacheEventListenerFactoryConfigurations =
+				cacheConfiguration.getCacheEventListenerConfigurations();
 
 		boolean usingLiferayCacheEventListenerFactory = false;
 
-		for (CacheEventListenerFactoryConfiguration configObj : configObjects) {
-			String cacheListenerFactoryClassName =
-				configObj.getFullyQualifiedClassPath();
+		for (CacheEventListenerFactoryConfiguration
+				cacheEventListenerFactoryConfiguration :
+					cacheEventListenerFactoryConfigurations) {
 
-			if (LiferayCacheEventListenerFactory.class.getName().equals(
-					cacheListenerFactoryClassName)) {
+			String className =
+				cacheEventListenerFactoryConfiguration.
+					getFullyQualifiedClassPath();
+
+			if (className.equals(
+					LiferayCacheEventListenerFactory.class.getName())) {
 
 				usingLiferayCacheEventListenerFactory = true;
 
