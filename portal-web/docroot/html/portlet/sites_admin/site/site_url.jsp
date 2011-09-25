@@ -96,7 +96,7 @@ String privateVirtualHost = ParamUtil.getString(request, "privateVirtualHost", B
 	<aui:input label="public-pages" name="publicVirtualHost" type="text" value="<%= publicVirtualHost %>" />
 
 	<aui:input label="private-pages" name="privateVirtualHost" type="text" value="<%= privateVirtualHost %>">
-		<aui:validator errorMessage="please-enter-a-unique-virtual-host" name="custom" >
+		<aui:validator errorMessage="please-enter-a-unique-virtual-host" name="custom">
 			function(val, fieldNode, ruleValue) {
 				return (val != A.one('#<portlet:namespace />publicVirtualHost').val());
 			}
@@ -141,6 +141,7 @@ String privateVirtualHost = ParamUtil.getString(request, "privateVirtualHost", B
 	</aui:fieldset>
 
 	<aui:fieldset label="staging-virtual-hosts">
+
 		<%
 		LayoutSet stagingPublicLayoutSet = LayoutSetLocalServiceUtil.getLayoutSet(stagingGroupId, false);
 
@@ -156,7 +157,7 @@ String privateVirtualHost = ParamUtil.getString(request, "privateVirtualHost", B
 		%>
 
 		<aui:input label="private-pages" name="stagingPrivateVirtualHost" type="text" value="<%= stagingPrivateVirtualHost %>">
-			<aui:validator errorMessage="please-enter-a-unique-virtual-host" name="custom" >
+			<aui:validator errorMessage="please-enter-a-unique-virtual-host" name="custom">
 				function(val, fieldNode, ruleValue) {
 					return (val != A.one('#<portlet:namespace />stagingPublicVirtualHost').val());
 				}
