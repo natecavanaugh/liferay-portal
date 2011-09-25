@@ -17,8 +17,6 @@
 <%@ include file="/html/portlet/layouts_admin/init.jsp" %>
 
 <%
-Locale defaultLocale = LocaleUtil.getDefault();
-
 Group selGroup = (Group)request.getAttribute(WebKeys.GROUP);
 
 Group group = (Group)request.getAttribute("edit_pages.jsp-group");
@@ -192,6 +190,7 @@ String[][] categorySections = {mainSections};
 												label: '<liferay-ui:message key="add-child-page" />'
 											},
 										</c:if>
+
 										{
 											handler: function(event) {
 												Liferay.Util.openWindow(
@@ -216,6 +215,7 @@ String[][] categorySections = {mainSections};
 											icon: 'circle-minus',
 											label: '<liferay-ui:message key="delete" />'
 										},
+
 										<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, liveGroupId, ActionKeys.MANAGE_LAYOUTS) %>">
 											{
 												type: 'ToolbarSpacer'
@@ -237,12 +237,12 @@ String[][] categorySections = {mainSections};
 														<portlet:renderURL var="exportPagesURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 															<portlet:param name="struts_action" value="/layouts_admin/export_layouts" />
 															<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.EXPORT %>" />
+															<portlet:param name="redirect" value="<%= currentURL %>" />
 															<portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />
-															<portlet:param name="layoutIds" value="<%= String.valueOf(layoutId) %>" />
 															<portlet:param name="liveGroupId" value="<%= String.valueOf(liveGroupId) %>" />
 															<portlet:param name="privateLayout" value="<%= String.valueOf(privateLayout) %>" />
-															<portlet:param name="redirect" value="<%= currentURL %>" />
-															<portlet:param name="rootNodeName" value="<%= selLayout.getName(defaultLocale) %>" />
+															<portlet:param name="layoutIds" value="<%= String.valueOf(layoutId) %>" />
+															<portlet:param name="rootNodeName" value="<%= selLayout.getName(locale) %>" />
 														</portlet:renderURL>
 
 														exportPopup.plug(
