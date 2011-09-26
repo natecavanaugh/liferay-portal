@@ -109,7 +109,7 @@ public class LangBuilder {
 			_createProperties(content, "hr"); // Croatian
 			_createProperties(content, "cs"); // Czech
 			_createProperties(content, "nl"); // Dutch (Netherlands)
-			_createProperties(content, "nl_BE"); // Dutch (Belgium)
+			_createProperties(content, "nl_BE", "nl"); // Dutch (Belgium)
 			_createProperties(content, "et"); // Estonian
 			_createProperties(content, "fi"); // Finnish
 			_createProperties(content, "fr"); // French
@@ -127,7 +127,7 @@ public class LangBuilder {
 			_createProperties(content, "fa"); // Persian
 			_createProperties(content, "pl"); // Polish
 			_createProperties(content, "pt_BR"); // Portuguese (Brazil)
-			_createProperties(content, "pt_PT"); // Portuguese (Portugal)
+			_createProperties(content, "pt_PT", "pt_BR"); // Portuguese (Portugal)
 			_createProperties(content, "ro"); // Romanian
 			_createProperties(content, "ru"); // Russian
 			_createProperties(content, "sr_RS"); // Serbian (Cyrillic)
@@ -148,6 +148,13 @@ public class LangBuilder {
 	private void _createProperties(String content, String languageId)
 		throws IOException {
 
+		_createProperties(content, languageId, null);
+	}
+
+	private void _createProperties(
+			String content, String languageId, String parentLanguageId)
+		throws IOException {
+
 		File propertiesFile = new File(
 			_langDir + "/" + _langFile + "_" + languageId + ".properties");
 
@@ -156,6 +163,21 @@ public class LangBuilder {
 		if (propertiesFile.exists()) {
 			properties = PropertiesUtil.load(
 				new FileInputStream(propertiesFile), StringPool.UTF8);
+		}
+
+		Properties parentProperties = null;
+
+		if (parentLanguageId != null) {
+			File parentPropertiesFile = new File(
+				_langDir + "/" + _langFile + "_" + parentLanguageId +
+					".properties");
+
+			if (parentPropertiesFile.exists()) {
+				parentProperties = new Properties();
+
+				parentProperties = PropertiesUtil.load(
+					new FileInputStream(parentPropertiesFile), StringPool.UTF8);
+			}
 		}
 
 		String translationId = "en_" + languageId;
@@ -195,11 +217,21 @@ public class LangBuilder {
 
 				String translatedText = properties.getProperty(key);
 
+				if ((translatedText == null) && (parentProperties != null)) {
+					translatedText = parentProperties.getProperty(key);
+				}
+
 				if ((translatedText == null) && (_renameKeys != null)) {
 					String renameKey = _renameKeys.getProperty(key);
 
 					if (renameKey != null) {
 						translatedText = properties.getProperty(key);
+
+						if ((translatedText == null) &&
+							(parentProperties != null)) {
+
+							translatedText = parentProperties.getProperty(key);
+						}
 					}
 				}
 
@@ -422,7 +454,7 @@ public class LangBuilder {
 
 			// Automatic translator does not support Arabic, Basque, Bulgarian,
 			// Catalan, Czech, Croatian, Finnish, Galician, Hebrew, Hindi,
-			// Hungarian, Indonesian, Norwegian Bokmål,Persian, Polish,
+			// Hungarian, Indonesian, Norwegian Bokmål, Persian, Polish,
 			// Romanian, Russian, Serbian, Slovak, Slovene, Swedish, Turkish,
 			// Ukrainian, or Vietnamese
 
