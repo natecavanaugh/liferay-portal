@@ -177,5 +177,25 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 				monitorHeight: <%= resizeAutomatically %>
 			}
 		);
+
+		iframe.on(
+			'load',
+			function() {
+				var height = A.Plugin.ResizeIframe.getContentHeight(iframe);
+
+				if (height == null) {
+					if (themeDisplay.isStateMaximized()) {
+						height = <%= heightMaximized %>;
+					}
+					else {
+						height = <%= heightNormal %>;
+					}
+
+					iframe.setStyle('height', height);
+					iframe.resizeiframe.set('monitorHeight', false);
+				}
+			}
+		);
+
 	}
 </aui:script>
