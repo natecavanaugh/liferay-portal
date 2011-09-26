@@ -70,9 +70,7 @@ public class RepositoryTest extends TestCase {
 
 		RepositoryServiceUtil.unmountRepositories(getGroupId());
 
-		for (int i = 0; i < repositoryIds.length; i++) {
-			long repositoryId = repositoryIds[i];
-
+		for (long repositoryId : repositoryIds) {
 			try {
 				RepositoryServiceUtil.getLocalRepositoryImpl(repositoryId);
 
