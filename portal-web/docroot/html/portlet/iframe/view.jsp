@@ -170,25 +170,32 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 <aui:script use="aui-resize-iframe">
 	var iframe = A.one('#<portlet:namespace />iframe');
 
-	iframe.on('load', function() {
-		if (iframe) {
-			iframe.plug(A.Plugin.ResizeIframe);
+	if (iframe) {
+		iframe.plug(
+			A.Plugin.ResizeIframe,
+			{
+				monitorHeight: <%= resizeAutomatically %>
+			}
+		);
 
+		iframe.on(
+			'load',
+			function() {
 				var height = A.Plugin.ResizeIframe.getContentHeight(iframe);
 
 				if (height == null) {
 					if (themeDisplay.isStateMaximized()) {
-						height = A.getDoc().get('docHeight');
+						height = <%= heightMaximized %>;
 					}
 					else {
-						height = 600;
-
-						iframe.resizeiframe.set('monitorHeight', false);
+						height = <%= heightNormal %>;
 					}
+
+					iframe.setStyle('height', height);
+					iframe.resizeiframe.set('monitorHeight', false);
 				}
+			}
+		);
 
-				iframe.setStyle('height', height);
-
-		}
-	});
+	}
 </aui:script>
