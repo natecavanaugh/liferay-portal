@@ -111,7 +111,7 @@ public class DLContentLocalServiceImpl extends DLContentLocalServiceBaseImpl {
 
 	public void deleteContentsByDirectory(
 			long companyId, String portletId, long repositoryId, String dirName)
-		throws PortalException, SystemException {
+		throws SystemException {
 
 		if (!dirName.endsWith(StringPool.SLASH)) {
 			dirName = dirName.concat(StringPool.SLASH);
@@ -121,15 +121,6 @@ public class DLContentLocalServiceImpl extends DLContentLocalServiceBaseImpl {
 
 		dlContentPersistence.removeByC_P_R_LikeP(
 			companyId, portletId, repositoryId, dirName);
-	}
-
-	public DLContent getContent(
-			long companyId, String portletId, long repositoryId, String path,
-			String version)
-		throws NoSuchContentException, SystemException {
-
-		return dlContentPersistence.findByC_P_R_P_V(
-			companyId, portletId, repositoryId, path, version);
 	}
 
 	public DLContent getContent(
@@ -154,12 +145,13 @@ public class DLContentLocalServiceImpl extends DLContentLocalServiceBaseImpl {
 			companyId, repositoryId, path, version);
 	}
 
-	public List<DLContent> getContents(
-			long companyId, String portletId, long repositoryId, String path)
-		throws SystemException {
+	public DLContent getContent(
+			long companyId, String portletId, long repositoryId, String path,
+			String version)
+		throws NoSuchContentException, SystemException {
 
-		return dlContentPersistence.findByC_P_R_P(
-			companyId, portletId, repositoryId, path);
+		return dlContentPersistence.findByC_P_R_P_V(
+			companyId, portletId, repositoryId, path, version);
 	}
 
 	public List<DLContent> getContents(long companyId, long repositoryId)
@@ -173,6 +165,14 @@ public class DLContentLocalServiceImpl extends DLContentLocalServiceBaseImpl {
 		throws SystemException {
 
 		return dlContentPersistence.findByC_R_P(companyId, repositoryId, path);
+	}
+
+	public List<DLContent> getContents(
+			long companyId, String portletId, long repositoryId, String path)
+		throws SystemException {
+
+		return dlContentPersistence.findByC_P_R_P(
+			companyId, portletId, repositoryId, path);
 	}
 
 	public List<DLContent> getContentsByDirectory(
@@ -190,12 +190,11 @@ public class DLContentLocalServiceImpl extends DLContentLocalServiceBaseImpl {
 	}
 
 	public boolean hasContent(
-			long companyId, String portletId, long repositoryId, String path,
-			String version)
+			long companyId, long repositoryId, String path, String version)
 		throws SystemException {
 
-		int count = dlContentPersistence.countByC_P_R_P_V(
-			companyId, portletId, repositoryId, path, version);
+		int count = dlContentPersistence.countByC_R_P_V(
+			companyId, repositoryId, path, version);
 
 		if (count > 0) {
 			return true;
@@ -206,11 +205,12 @@ public class DLContentLocalServiceImpl extends DLContentLocalServiceBaseImpl {
 	}
 
 	public boolean hasContent(
-			long companyId, long repositoryId, String path, String version)
+			long companyId, String portletId, long repositoryId, String path,
+			String version)
 		throws SystemException {
 
-		int count = dlContentPersistence.countByC_R_P_V(
-			companyId, repositoryId, path, version);
+		int count = dlContentPersistence.countByC_P_R_P_V(
+			companyId, portletId, repositoryId, path, version);
 
 		if (count > 0) {
 			return true;

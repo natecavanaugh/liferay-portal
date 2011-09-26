@@ -235,8 +235,6 @@ public class DLContentPersistenceTest extends BasePersistenceTestCase {
 
 		assertEquals(existingDLContentModelImpl.getCompanyId(),
 			existingDLContentModelImpl.getOriginalCompanyId());
-		assertTrue(Validator.equals(existingDLContentModelImpl.getPortletId(),
-				existingDLContentModelImpl.getOriginalPortletId()));
 		assertEquals(existingDLContentModelImpl.getRepositoryId(),
 			existingDLContentModelImpl.getOriginalRepositoryId());
 		assertTrue(Validator.equals(existingDLContentModelImpl.getPath(),
@@ -246,6 +244,8 @@ public class DLContentPersistenceTest extends BasePersistenceTestCase {
 
 		assertEquals(existingDLContentModelImpl.getCompanyId(),
 			existingDLContentModelImpl.getOriginalCompanyId());
+		assertTrue(Validator.equals(existingDLContentModelImpl.getPortletId(),
+				existingDLContentModelImpl.getOriginalPortletId()));
 		assertEquals(existingDLContentModelImpl.getRepositoryId(),
 			existingDLContentModelImpl.getOriginalRepositoryId());
 		assertTrue(Validator.equals(existingDLContentModelImpl.getPath(),

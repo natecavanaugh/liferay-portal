@@ -35,8 +35,6 @@ public class ServiceTestSuite extends TestSuite {
 
 		testSuite.addTestSuite(CounterLocalServiceTest.class);
 
-		testSuite.addTestSuite(DLContentLocalServiceTest.class);
-
 		testSuite.addTestSuite(ResourceLocalServiceTest.class);
 		testSuite.addTestSuite(UserServiceTest.class);
 
@@ -44,6 +42,7 @@ public class ServiceTestSuite extends TestSuite {
 		testSuite.addTestSuite(BookmarksEntryServiceTest.class);
 
 		testSuite.addTestSuite(DLAppServiceTest.class);
+		testSuite.addTestSuite(DLContentLocalServiceTest.class);
 
 		testSuite.addTestSuite(MBMessageServiceTest.class);
 
