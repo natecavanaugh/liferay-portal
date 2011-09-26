@@ -1790,9 +1790,10 @@ AUI().add(
 
 					if (fieldInstance.get('localized')) {
 						var localizedValue = fieldInstance.get('localizedValue');
+
 						if (localizedValue !== 'false') {
 							dynConAttributes = {
-									'language-id': localizedValue
+								'language-id': localizedValue
 							};
 						}
 					}
