@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -1236,28 +1237,25 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		LocalRepository fromRepository = getLocalRepository(0, fileEntryId, 0);
+		LocalRepository fromLocalRepository = getLocalRepository(
+			0, fileEntryId, 0);
+		LocalRepository toLocalRepository = getLocalRepository(
+			newFolderId, serviceContext);
 
-		LocalRepository toRepository =
-			getLocalRepository(newFolderId, serviceContext);
+		if (fromLocalRepository.getRepositoryId() ==
+				toLocalRepository.getRepositoryId()) {
 
-		long fromRepositoryId = fromRepository.getRepositoryId();
+			// Move file entries within repository
 
-		long toRepositoryId = toRepository.getRepositoryId();
-
-		if (fromRepositoryId == toRepositoryId) {
-
-			// move files inside repo
-
-			return fromRepository.moveFileEntry(
+			return fromLocalRepository.moveFileEntry(
 				userId, fileEntryId, newFolderId, serviceContext);
 		}
 
-		// move file between different repos
+		// Move file entries between repositories
 
-		return moveFileEntryBetweenDifferentRepos(
-			userId, fileEntryId, newFolderId, fromRepository,
-			toRepository, serviceContext);
+		return moveFileEntries(
+			userId, fileEntryId, newFolderId, fromLocalRepository,
+			toLocalRepository, serviceContext);
 	}
 
 	/**
@@ -1605,51 +1603,42 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 			folderId, parentFolderId, name, description, serviceContext);
 	}
 
-	protected FileEntry deepCopyFileEntry(
-			long userId, LocalRepository toRepository, FileEntry fileEntry,
+	protected FileEntry copyFileEntry(
+			long userId, LocalRepository toLocalRepository, FileEntry fileEntry,
 			long newFolderId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		List<FileVersion> fileVersions =
-			fileEntry.getFileVersions(WorkflowConstants.STATUS_ANY);
+		List<FileVersion> fileVersions = fileEntry.getFileVersions(
+			WorkflowConstants.STATUS_ANY);
 
-		int fileVersionsSize = fileVersions.size();
+		FileVersion latestFileVersion = fileVersions.get(
+			fileVersions.size() - 1);
 
-		FileVersion currentFileVersion =
-			fileVersions.get(fileVersionsSize - 1);
+		FileEntry destinationFileEntry = toLocalRepository.addFileEntry(
+			userId, newFolderId, fileEntry.getNameWithExtension(),
+			latestFileVersion.getMimeType(), latestFileVersion.getTitle(),
+			latestFileVersion.getDescription(), StringPool.BLANK,
+			latestFileVersion.getContentStream(false),
+			latestFileVersion.getSize(), serviceContext);
 
-		FileEntry destinationFileEntry =
-				toRepository.addFileEntry(
-					userId, newFolderId,
-					fileEntry.getNameWithExtension(),
-					currentFileVersion.getMimeType(),
-					currentFileVersion.getTitle(),
-					currentFileVersion.getDescription(), StringPool.BLANK,
-					currentFileVersion.getContentStream(false),
-					currentFileVersion.getSize(),
-					serviceContext);
+		for (int i = fileVersions.size() - 2; i >= 0 ; i--) {
+			FileVersion fileVersion = fileVersions.get(i);
 
-		for (int i = fileVersionsSize - 2; i >= 0 ; i--) {
-			currentFileVersion = fileVersions.get(i);
 			FileVersion previousFileVersion = fileVersions.get(i + 1);
 
 			try {
-				destinationFileEntry =
-					toRepository.updateFileEntry(
-						userId,
-						destinationFileEntry.getFileEntryId(),
-						fileEntry.getNameWithExtension(),
-						destinationFileEntry.getMimeType(),
-						destinationFileEntry.getTitle(),
-						destinationFileEntry.getDescription(),
-						StringPool.BLANK,
-						isMajorVersion(currentFileVersion,
-							previousFileVersion),
-						currentFileVersion.getContentStream(false),
-						currentFileVersion.getSize(), serviceContext);
+				destinationFileEntry = toLocalRepository.updateFileEntry(
+					userId, destinationFileEntry.getFileEntryId(),
+					fileEntry.getNameWithExtension(),
+					destinationFileEntry.getMimeType(),
+					destinationFileEntry.getTitle(),
+					destinationFileEntry.getDescription(), StringPool.BLANK,
+					isMajorVersion(fileVersion, previousFileVersion),
+					fileVersion.getContentStream(false), fileVersion.getSize(),
+					serviceContext);
 			}
 			catch (PortalException pe) {
-				toRepository.deleteFileEntry(
+				toLocalRepository.deleteFileEntry(
 					destinationFileEntry.getFileEntryId());
 
 				throw  pe;
@@ -1659,17 +1648,17 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 		return destinationFileEntry;
 	}
 
-	protected void deleteWithErrorHandling(
+	protected void deleteFileEntry(
 			long oldFileEntryId, long newFileEntryId,
-			LocalRepository sourceRepository,
-			LocalRepository destinationRepository)
+			LocalRepository sourceLocalRepository,
+			LocalRepository destinationLocalRepository)
 		throws PortalException, SystemException {
 
 		try {
-			sourceRepository.deleteFileEntry(oldFileEntryId);
+			sourceLocalRepository.deleteFileEntry(oldFileEntryId);
 		}
 		catch (PortalException pe) {
-			destinationRepository.deleteFileEntry(newFileEntryId);
+			destinationLocalRepository.deleteFileEntry(newFileEntryId);
 
 			throw pe;
 		}
@@ -1707,29 +1696,32 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 	}
 
 	protected boolean isMajorVersion(
-		FileVersion previousVersion, FileVersion currentVersion) {
+		FileVersion previousFileVersion, FileVersion currentFileVersion) {
 
-		long currVersion = Long.getLong(currentVersion.getVersion());
-		long prevVersion = Long.getLong(previousVersion.getVersion());
+		long currentVersion = GetterUtil.getLong(
+			currentFileVersion.getVersion());
+		long previousVersion = GetterUtil.getLong(
+			previousFileVersion.getVersion());
 
-		return (currVersion - prevVersion) >= 1;
+		return (currentVersion - previousVersion) >= 1;
 	}
 
-	protected FileEntry moveFileEntryBetweenDifferentRepos(
+	protected FileEntry moveFileEntries(
 			long userId, long fileEntryId, long newFolderId,
-			LocalRepository fromRepository, LocalRepository toRepository,
-			ServiceContext serviceContext)
+			LocalRepository fromLocalRepository,
+			LocalRepository toLocalRepository, ServiceContext serviceContext)
 		throws SystemException, PortalException {
 
-		FileEntry sourceFileEntry = fromRepository.getFileEntry(fileEntryId);
+		FileEntry sourceFileEntry = fromLocalRepository.getFileEntry(
+			fileEntryId);
 
-		FileEntry destinationFileEntry =
-			deepCopyFileEntry(userId, toRepository, sourceFileEntry,
-				newFolderId, serviceContext);
+		FileEntry destinationFileEntry = copyFileEntry(
+			userId, toLocalRepository, sourceFileEntry, newFolderId,
+			serviceContext);
 
-		deleteWithErrorHandling(
+		deleteFileEntry(
 			fileEntryId, destinationFileEntry.getFileEntryId(),
-			fromRepository, toRepository);
+			fromLocalRepository, toLocalRepository);
 
 		registerDLProcessorCallback(destinationFileEntry);
 
@@ -1737,7 +1729,6 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 	}
 
 	protected void registerDLProcessorCallback(final FileEntry fileEntry) {
-
 		TransactionCommitCallbackUtil.registerCallback(
 			new Callable<Void>() {
 

@@ -1793,18 +1793,20 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		Repository fromRepository = getRepository(0, fileEntryId, 0);
-
 		Repository toRepository = getRepository(newFolderId, serviceContext);
 
-		if (isSameRepository(fromRepository, toRepository)) {
+		if (fromRepository.getRepositoryId() ==
+				toRepository.getRepositoryId()) {
 
-			// move file inside repo
+			// Move file entries within repository
 
 			return fromRepository.moveFileEntry(
 				fileEntryId, newFolderId, serviceContext);
 		}
 
-		return moveFileEntryBetweenDifferentRepos(
+		// Move file entries between repositories
+
+		return moveFileEntries(
 			fileEntryId, newFolderId, fromRepository, toRepository,
 			serviceContext);
 	}
@@ -1824,20 +1826,20 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		Repository fromRepository = getRepository(folderId, 0, 0);
-
 		Repository toRepository = getRepository(parentFolderId, serviceContext);
 
-		if (isSameRepository(fromRepository, toRepository)) {
+		if (fromRepository.getRepositoryId() ==
+				toRepository.getRepositoryId()) {
 
-			// move files inside repo
+			// Move file entries within repository
 
 			return fromRepository.moveFolder(
 				folderId, parentFolderId, serviceContext);
 		}
 
-		// moving between different repos
+		// Move file entries between repositories
 
-		return moveFolderBetweenDifferentRepos(
+		return moveFolders(
 			folderId, parentFolderId, fromRepository, toRepository,
 			serviceContext);
 	}
@@ -2412,45 +2414,39 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			});
 	}
 
-	protected FileEntry deepCopyFileEntry(
+	protected FileEntry copyFileEntry(
 			Repository toRepository, FileEntry fileEntry, long newFolderId,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		List<FileVersion> fileVersions =
-			fileEntry.getFileVersions(WorkflowConstants.STATUS_ANY);
+		List<FileVersion> fileVersions = fileEntry.getFileVersions(
+			WorkflowConstants.STATUS_ANY);
 
-		int fileVersionsSize = fileVersions.size();
+		FileVersion latestFileVersion = fileVersions.get(
+			fileVersions.size() - 1);
 
-		FileVersion currentFileVersion = fileVersions.get(fileVersionsSize - 1);
+		FileEntry destinationFileEntry = toRepository.addFileEntry(
+			newFolderId, fileEntry.getNameWithExtension(),
+			latestFileVersion.getMimeType(), latestFileVersion.getTitle(),
+			latestFileVersion.getDescription(), StringPool.BLANK,
+			latestFileVersion.getContentStream(false),
+			latestFileVersion.getSize(), serviceContext);
 
-		FileEntry destinationFileEntry =
-			toRepository.addFileEntry(
-				newFolderId, fileEntry.getNameWithExtension(),
-				currentFileVersion.getMimeType(),
-				currentFileVersion.getTitle(),
-				currentFileVersion.getDescription(), StringPool.BLANK,
-				currentFileVersion.getContentStream(false),
-				currentFileVersion.getSize(),
-				serviceContext);
+		for (int i = fileVersions.size() - 2; i >= 0 ; i--) {
+			FileVersion fileVersion = fileVersions.get(i);
 
-		for (int i = fileVersionsSize - 2; i >= 0 ; i--) {
-			currentFileVersion = fileVersions.get(i);
 			FileVersion previousFileVersion = fileVersions.get(i + 1);
 
 			try {
-				destinationFileEntry =
-					toRepository.updateFileEntry(
-						destinationFileEntry.getFileEntryId(),
-						fileEntry.getNameWithExtension(),
-						destinationFileEntry.getMimeType(),
-						destinationFileEntry.getTitle(),
-						destinationFileEntry.getDescription(),
-						StringPool.BLANK,
-						isMajorVersion(
-							previousFileVersion, currentFileVersion),
-						currentFileVersion.getContentStream(false),
-						currentFileVersion.getSize(), serviceContext);
+				destinationFileEntry = toRepository.updateFileEntry(
+					destinationFileEntry.getFileEntryId(),
+					fileEntry.getNameWithExtension(),
+					destinationFileEntry.getMimeType(),
+					destinationFileEntry.getTitle(),
+					destinationFileEntry.getDescription(), StringPool.BLANK,
+					isMajorVersion(previousFileVersion, fileVersion),
+					fileVersion.getContentStream(false), fileVersion.getSize(),
+					serviceContext);
 			}
 			catch (PortalException pe) {
 				toRepository.deleteFileEntry(
@@ -2463,7 +2459,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		return destinationFileEntry;
 	}
 
-	protected void deleteWithErrorHandling(
+	protected void deleteFileEntry(
 			long oldFileEntryId, long newFileEntryId,
 			Repository fromRepository, Repository toRepository)
 		throws PortalException, SystemException {
@@ -2492,7 +2488,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		if (folderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			repository = getRepository(serviceContext.getScopeGroupId());
-		} else {
+		}
+		else {
 			repository = getRepository(folderId, 0, 0);
 		}
 
@@ -2508,95 +2505,92 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	protected boolean isMajorVersion(
-		FileVersion previousVersion, FileVersion currentVersion) {
+		FileVersion previousFileVersion, FileVersion currentFileVersion) {
 
-		long currVersion = Long.getLong(currentVersion.getVersion());
-		long prevVersion = Long.getLong(previousVersion.getVersion());
+		long currentVersion = GetterUtil.getLong(
+			currentFileVersion.getVersion());
+		long previousVersion = GetterUtil.getLong(
+			previousFileVersion.getVersion());
 
-		return (currVersion - prevVersion) >= 1;
+		return (currentVersion - previousVersion) >= 1;
 	}
 
-	protected boolean isSameRepository(Repository a, Repository b) {
-		long fromRepositoryId = a.getRepositoryId();
-		long toRepositoryId = b.getRepositoryId();
-
-		return fromRepositoryId == toRepositoryId;
-	}
-
-	protected FileEntry moveFileEntryBetweenDifferentRepos(
+	protected FileEntry moveFileEntries(
 			long fileEntryId, long newFolderId, Repository fromRepository,
 			Repository toRepository, ServiceContext serviceContext)
 		throws SystemException, PortalException {
 
 		FileEntry sourceFileEntry = fromRepository.getFileEntry(fileEntryId);
 
-		FileEntry destinationFileEntry =
-			deepCopyFileEntry(toRepository, sourceFileEntry,
-				newFolderId, serviceContext);
+		FileEntry destinationFileEntry = copyFileEntry(
+			toRepository, sourceFileEntry, newFolderId, serviceContext);
 
-		deleteWithErrorHandling(
-			fileEntryId, destinationFileEntry.getFileEntryId(),
-			fromRepository, toRepository);
+		deleteFileEntry(
+			fileEntryId, destinationFileEntry.getFileEntryId(), fromRepository,
+			toRepository);
 
 		registerDLProcessorCallback(destinationFileEntry);
 
 		return destinationFileEntry;
 	}
 
-	protected Folder moveFolderBetweenDifferentRepos(
+	protected Folder moveFolders(
 			long folderId, long parentFolderId, Repository fromRepository,
 			Repository toRepository, ServiceContext serviceContext)
 		throws PortalException, SystemException{
 
-		// create the new destination folder
-
 		Folder folder = fromRepository.getFolder(folderId);
 
-		Folder newFolder =
-			toRepository.addFolder(parentFolderId, folder.getName(),
-				folder.getDescription(), serviceContext);
+		Folder newFolder = toRepository.addFolder(
+			parentFolderId, folder.getName(), folder.getDescription(),
+			serviceContext);
 
-		long newFolderId = newFolder.getFolderId();
-
-		// move all the hierarchy to the new folder
-
-		List<Object> foldersAndFiles =
+		List<Object> foldersAndFileEntriesAndFileShortcuts =
 			getFoldersAndFileEntriesAndFileShortcuts(
 				fromRepository.getRepositoryId(), folderId,
-				WorkflowConstants.STATUS_ANY,true, QueryUtil.ALL_POS,
+				WorkflowConstants.STATUS_ANY, true, QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS);
 
 		try {
-			for (Object item : foldersAndFiles) {
-				if (item instanceof FileEntry) {
-					FileEntry fileEntry = (FileEntry)item;
+			for (Object folderAndFileEntryAndFileShortcut :
+					foldersAndFileEntriesAndFileShortcuts) {
 
-					FileEntry destinationFileEntry =
-						deepCopyFileEntry(toRepository, fileEntry,
-							newFolderId, serviceContext);
+				if (folderAndFileEntryAndFileShortcut instanceof FileEntry) {
+					FileEntry fileEntry =
+						(FileEntry)folderAndFileEntryAndFileShortcut;
+
+					FileEntry destinationFileEntry = copyFileEntry(
+						toRepository, fileEntry, newFolder.getFolderId(),
+						serviceContext);
 
 					registerDLProcessorCallback(destinationFileEntry);
 
-				} else if (item instanceof Folder) {
-					Folder currentFolder = (Folder)item;
+				}
+				else if (folderAndFileEntryAndFileShortcut instanceof Folder) {
+					Folder currentFolder =
+						(Folder)folderAndFileEntryAndFileShortcut;
 
-					moveFolderBetweenDifferentRepos(
-						currentFolder.getFolderId(), newFolderId,
+					moveFolders(
+						currentFolder.getFolderId(), newFolder.getFolderId(),
 						fromRepository, toRepository, serviceContext);
 
-				} else if (item instanceof DLFileShortcut) {
+				}
+				else if (folderAndFileEntryAndFileShortcut
+							instanceof DLFileShortcut) {
 
 					if (newFolder.isSupportsShortcuts()) {
-						DLFileShortcut fileShorcut = (DLFileShortcut)item;
+						DLFileShortcut dlFileShorcut =
+							(DLFileShortcut)folderAndFileEntryAndFileShortcut;
 
 						dlFileShortcutService.addFileShortcut(
-							fileShorcut.getGroupId(),newFolderId,
-							fileShorcut.getToFileEntryId(), serviceContext);
+							dlFileShorcut.getGroupId(), newFolder.getFolderId(),
+							dlFileShorcut.getToFileEntryId(), serviceContext);
 					}
 				}
 			}
-		} catch (PortalException pe) {
-			toRepository.deleteFolder(newFolderId);
+		}
+		catch (PortalException pe) {
+			toRepository.deleteFolder(newFolder.getFolderId());
 
 			throw  pe;
 		}
@@ -2605,7 +2599,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			fromRepository.deleteFolder(folderId);
 		}
 		catch (PortalException pe) {
-			toRepository.deleteFolder(newFolderId);
+			toRepository.deleteFolder(newFolder.getFolderId());
 
 			throw pe;
 		}
@@ -2614,7 +2608,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	protected void registerDLProcessorCallback(final FileEntry fileEntry) {
-
 		TransactionCommitCallbackUtil.registerCallback(
 			new Callable<Void>() {
 
