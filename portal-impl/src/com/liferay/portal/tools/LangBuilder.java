@@ -63,86 +63,88 @@ public class LangBuilder {
 		boolean langPlugin = GetterUtil.getBoolean(
 			arguments.get("lang.plugin"));
 
-		new LangBuilder(langDir, langFile, langPlugin);
-	}
-
-	public LangBuilder(String langDir, String langFile, boolean langPlugin) {
 		try {
-			_langDir = langDir;
-			_langFile = langFile;
-
-			if (langPlugin) {
-				_portalLanguageProperties = new Properties();
-
-				Class<?> clazz = getClass();
-
-				ClassLoader classLoader = clazz.getClassLoader();
-
-				InputStream is = classLoader.getResourceAsStream(
-					"content/Language.properties");
-
-				_portalLanguageProperties.load(is);
-			}
-
-			File renameKeysFile = new File(_langDir + "/rename.properties");
-
-			if (renameKeysFile.exists()) {
-				_renameKeys = PropertiesUtil.load(
-					FileUtil.read(renameKeysFile));
-			}
-
-			String content = _orderProperties(
-				new File(_langDir + "/" + _langFile + ".properties"));
-
-			// Locales that are not invoked by _createProperties should still be
-			// rewritten to use the rignt line separator
-
-			_orderProperties(
-				new File(_langDir + "/" + _langFile + "_en_GB.properties"));
-
-			_createProperties(content, "ar"); // Arabic
-			_createProperties(content, "eu"); // Basque
-			_createProperties(content, "bg"); // Bulgarian
-			_createProperties(content, "ca"); // Catalan
-			_createProperties(content, "zh_CN"); // Chinese (China)
-			_createProperties(content, "zh_TW"); // Chinese (Taiwan)
-			_createProperties(content, "hr"); // Croatian
-			_createProperties(content, "cs"); // Czech
-			_createProperties(content, "nl"); // Dutch (Netherlands)
-			_createProperties(content, "nl_BE", "nl"); // Dutch (Belgium)
-			_createProperties(content, "et"); // Estonian
-			_createProperties(content, "fi"); // Finnish
-			_createProperties(content, "fr"); // French
-			_createProperties(content, "gl"); // Galician
-			_createProperties(content, "de"); // German
-			_createProperties(content, "el"); // Greek
-			_createProperties(content, "iw"); // Hebrew
-			_createProperties(content, "hi_IN"); // Hindi (India)
-			_createProperties(content, "hu"); // Hungarian
-			_createProperties(content, "in"); // Indonesian
-			_createProperties(content, "it"); // Italian
-			_createProperties(content, "ja"); // Japanese
-			_createProperties(content, "ko"); // Korean
-			_createProperties(content, "nb"); // Norwegian Bokmål
-			_createProperties(content, "fa"); // Persian
-			_createProperties(content, "pl"); // Polish
-			_createProperties(content, "pt_BR"); // Portuguese (Brazil)
-			_createProperties(content, "pt_PT", "pt_BR"); // Portuguese (Portugal)
-			_createProperties(content, "ro"); // Romanian
-			_createProperties(content, "ru"); // Russian
-			_createProperties(content, "sr_RS"); // Serbian (Cyrillic)
-			_createProperties(content, "sr_RS_latin"); // Serbian (Latin)
-			_createProperties(content, "sk"); // Slovak
-			_createProperties(content, "sl"); // Slovene
-			_createProperties(content, "es"); // Spanish
-			_createProperties(content, "sv"); // Swedish
-			_createProperties(content, "tr"); // Turkish
-			_createProperties(content, "uk"); // Ukrainian
-			_createProperties(content, "vi"); // Vietnamese
+			new LangBuilder(langDir, langFile, langPlugin);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public LangBuilder(String langDir, String langFile, boolean langPlugin)
+		throws Exception {
+
+		_langDir = langDir;
+		_langFile = langFile;
+
+		if (langPlugin) {
+			_portalLanguageProperties = new Properties();
+
+			Class<?> clazz = getClass();
+
+			ClassLoader classLoader = clazz.getClassLoader();
+
+			InputStream is = classLoader.getResourceAsStream(
+				"content/Language.properties");
+
+			_portalLanguageProperties.load(is);
+		}
+
+		File renameKeysFile = new File(_langDir + "/rename.properties");
+
+		if (renameKeysFile.exists()) {
+			_renameKeys = PropertiesUtil.load(
+				FileUtil.read(renameKeysFile));
+		}
+
+		String content = _orderProperties(
+			new File(_langDir + "/" + _langFile + ".properties"));
+
+		// Locales that are not invoked by _createProperties should still be
+		// rewritten to use the rignt line separator
+
+		_orderProperties(
+			new File(_langDir + "/" + _langFile + "_en_GB.properties"));
+
+		_createProperties(content, "ar"); // Arabic
+		_createProperties(content, "eu"); // Basque
+		_createProperties(content, "bg"); // Bulgarian
+		_createProperties(content, "ca"); // Catalan
+		_createProperties(content, "zh_CN"); // Chinese (China)
+		_createProperties(content, "zh_TW"); // Chinese (Taiwan)
+		_createProperties(content, "hr"); // Croatian
+		_createProperties(content, "cs"); // Czech
+		_createProperties(content, "nl"); // Dutch (Netherlands)
+		_createProperties(content, "nl_BE", "nl"); // Dutch (Belgium)
+		_createProperties(content, "et"); // Estonian
+		_createProperties(content, "fi"); // Finnish
+		_createProperties(content, "fr"); // French
+		_createProperties(content, "gl"); // Galician
+		_createProperties(content, "de"); // German
+		_createProperties(content, "el"); // Greek
+		_createProperties(content, "iw"); // Hebrew
+		_createProperties(content, "hi_IN"); // Hindi (India)
+		_createProperties(content, "hu"); // Hungarian
+		_createProperties(content, "in"); // Indonesian
+		_createProperties(content, "it"); // Italian
+		_createProperties(content, "ja"); // Japanese
+		_createProperties(content, "ko"); // Korean
+		_createProperties(content, "nb"); // Norwegian Bokmål
+		_createProperties(content, "fa"); // Persian
+		_createProperties(content, "pl"); // Polish
+		_createProperties(content, "pt_BR"); // Portuguese (Brazil)
+		_createProperties(content, "pt_PT", "pt_BR"); // Portuguese (Portugal)
+		_createProperties(content, "ro"); // Romanian
+		_createProperties(content, "ru"); // Russian
+		_createProperties(content, "sr_RS"); // Serbian (Cyrillic)
+		_createProperties(content, "sr_RS_latin"); // Serbian (Latin)
+		_createProperties(content, "sk"); // Slovak
+		_createProperties(content, "sl"); // Slovene
+		_createProperties(content, "es"); // Spanish
+		_createProperties(content, "sv"); // Swedish
+		_createProperties(content, "tr"); // Turkish
+		_createProperties(content, "uk"); // Ukrainian
+		_createProperties(content, "vi"); // Vietnamese
 	}
 
 	private void _createProperties(String content, String languageId)
