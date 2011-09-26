@@ -30,7 +30,8 @@ public class AddPortletRDDuplicateTest extends BaseTestCase {
 			}
 
 			try {
-				if (selenium.isVisible("link=Recent Documents Test Page")) {
+				if (selenium.isVisible(
+							"link=Recently Downloaded Documents Test Page")) {
 					break;
 				}
 			}
@@ -41,12 +42,14 @@ public class AddPortletRDDuplicateTest extends BaseTestCase {
 		}
 
 		selenium.saveScreenShotAndSource();
-		selenium.clickAt("link=Recent Documents Test Page",
-			RuntimeVariables.replace(""));
+		selenium.clickAt("link=Recently Downloaded Documents Test Page",
+			RuntimeVariables.replace("Recently Downloaded Documents Test Page"));
 		selenium.waitForPageToLoad("30000");
 		selenium.saveScreenShotAndSource();
-		selenium.clickAt("_145_addApplication", RuntimeVariables.replace(""));
-		Thread.sleep(5000);
+		assertTrue(selenium.isPartialText("//a[@id='_145_addApplication']",
+				"More"));
+		selenium.clickAt("//a[@id='_145_addApplication']",
+			RuntimeVariables.replace("More"));
 
 		for (int second = 0;; second++) {
 			if (second >= 60) {
@@ -54,7 +57,8 @@ public class AddPortletRDDuplicateTest extends BaseTestCase {
 			}
 
 			try {
-				if (selenium.isVisible("layout_configuration_content")) {
+				if (selenium.isVisible(
+							"//input[@id='layout_configuration_content']")) {
 					break;
 				}
 			}
@@ -65,7 +69,7 @@ public class AddPortletRDDuplicateTest extends BaseTestCase {
 		}
 
 		selenium.saveScreenShotAndSource();
-		selenium.typeKeys("layout_configuration_content",
+		selenium.typeKeys("//input[@id='layout_configuration_content']",
 			RuntimeVariables.replace("r"));
 		selenium.saveScreenShotAndSource();
 
@@ -75,7 +79,8 @@ public class AddPortletRDDuplicateTest extends BaseTestCase {
 			}
 
 			try {
-				if (selenium.isVisible("//div[@title='Recent Documents']")) {
+				if (selenium.isVisible(
+							"//div[@title='Recently Downloaded Documents']")) {
 					break;
 				}
 			}
@@ -86,6 +91,7 @@ public class AddPortletRDDuplicateTest extends BaseTestCase {
 		}
 
 		selenium.saveScreenShotAndSource();
-		assertFalse(selenium.isVisible("//div[@title='Recent Documents']/p/a"));
+		assertFalse(selenium.isVisible(
+				"//div[@title='Recently Downloaded Documents']/p/a"));
 	}
 }
