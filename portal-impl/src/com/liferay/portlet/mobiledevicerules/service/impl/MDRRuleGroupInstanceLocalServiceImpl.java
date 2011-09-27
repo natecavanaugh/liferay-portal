@@ -21,7 +21,6 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.mobiledevicerules.NoSuchRuleGroupInstanceException;
-import com.liferay.portlet.mobiledevicerules.model.MDRRule;
 import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup;
 import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance;
 import com.liferay.portlet.mobiledevicerules.service.base.MDRRuleGroupInstanceLocalServiceBaseImpl;
@@ -40,7 +39,6 @@ public class MDRRuleGroupInstanceLocalServiceImpl
 			int priority, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		//	Done to ensure the ruleGroup exists
 		MDRRuleGroup ruleGroup = mdrRuleGroupLocalService.getMDRRuleGroup(
 			ruleGroupId);
 
