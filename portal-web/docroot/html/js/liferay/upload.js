@@ -171,7 +171,7 @@ AUI().add(
 				var li = A.Node.create(
 					'<li class="upload-file" id="' + fileId + '">' +
 						'<input class="aui-helper-hidden select-file" data-fileName="' + fileName + '" id="' + fileId + 'checkbox" name="' + instance._namespace('selectUploadedFileCheckbox') + '" type="checkbox" value="' + fileName + '" />' +
-						'<span class="file-title">' + fileName + '</span>' +
+						'<span class="file-title" title="' + fileName + '">' + fileName + '</span>' +
 						'<span class="progress-bar">' +
 							'<span class="progress" id="' + fileId + 'progress"></span>' +
 						'</span>' +
@@ -213,12 +213,12 @@ AUI().add(
 				if (error_code == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
 					var ul = instance.getFileListUl();
 
-					ul.append('<li class="upload-file upload-error"><span class="file-title">' + file.name + '</span> <span class="error-message">' + instance._invalidFileSizeText + '</span></li>');
+					ul.append('<li class="upload-file upload-error"><span class="file-title" title="' + file.name + '" >' + file.name + '</span> <span class="error-message">' + instance._invalidFileSizeText + '</span></li>');
 				}
 				else if (error_code == SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE) {
 					var ul = instance.getFileListUl();
 
-					ul.append('<li class="upload-file upload-error"><span class="file-title">' + file.name + '</span> <span class="error-message">' + instance._zeroByteFileText + '</span></li>');
+					ul.append('<li class="upload-file upload-error"><span class="file-title" title="' + file.name + '" >' + file.name + '</span> <span class="error-message">' + instance._zeroByteFileText + '</span></li>');
 				}
 			},
 
@@ -358,7 +358,7 @@ AUI().add(
 
 					var message = instance._errorMessages[msg] || instance._unexpectedUploadErrorText;
 
-					ul.append('<li class="upload-file upload-error"><span class="file-title">' + file.name + '</span><span class="error-message">' + message + '</span></li>');
+					ul.append('<li class="upload-file upload-error"><span class="file-title" title="' + file.name + '">' + file.name + '</span><span class="error-message">' + message + '</span></li>');
 				}
 
 				if (instance._onUploadError) {
@@ -466,7 +466,7 @@ AUI().add(
 
 					var pendingFileTpl = '<li class="upload-file upload-complete pending-file selectable">' +
 						'<input class="select-file" data-fileName="{0}" name="{1}" type="checkbox" value="{0}" />' +
-						'<span class="file-title">{0}</span>' +
+						'<span class="file-title" title="{0}">{0}</span>' +
 						'<a class="lfr-button delete-button" href="javascript:;">{2}</a>' +
 					'</li>';
 
@@ -1034,6 +1034,7 @@ AUI().add(
 
 						if (selectedFilesCountContainer != null) {
 							selectedFilesCountContainer.setContent(selectedFilesText);
+							selectedFilesCountContainer.attr('title', selectedFilesText);
 						}
 					}
 
