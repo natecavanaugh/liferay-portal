@@ -617,7 +617,7 @@
 	}
 
 	.aui-column-content {
-		border-right: 1px solid transparent;
+		padding: 0;
 
 		.lfr-message-response {
 			margin: 10px;
