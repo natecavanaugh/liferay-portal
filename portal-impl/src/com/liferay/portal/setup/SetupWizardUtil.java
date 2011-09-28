@@ -150,8 +150,15 @@ public class SetupWizardUtil {
 		ScreenNameGenerator screenNameGenerator =
 			ScreenNameGeneratorFactory.getInstance();
 
-		String defaultAdminScreenName = screenNameGenerator.generate(
-			0, 0, "test");
+		String defaultAdminScreenName = null;
+
+		try {
+			defaultAdminScreenName = screenNameGenerator.generate(
+				0, 0, defaultAdminEmailAddress);
+		}
+		catch (Exception e) {
+			defaultAdminScreenName = "test";
+		}
 
 		PropsValues.DEFAULT_ADMIN_SCREEN_NAME = defaultAdminScreenName;
 
@@ -295,7 +302,7 @@ public class SetupWizardUtil {
 
 		try {
 			FileUtil.write(
-				PropsValues.LIFERAY_HOME, _PROPERTIES_FILE_NAME,
+				PropsValues.LIFERAY_HOME, PROPERTIES_FILE_NAME,
 				unicodeProperties.toString());
 
 			return true;
@@ -307,7 +314,7 @@ public class SetupWizardUtil {
 		}
 	}
 
-	private static final String _PROPERTIES_FILE_NAME =
+	public static final String PROPERTIES_FILE_NAME =
 		"portal-setup-wizard.properties";
 
 	private final static String _PROPERTIES_PREFIX = "properties--";
