@@ -62,6 +62,10 @@ public interface MDRRuleService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public void deleteRule(long ruleId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	public void deleteRule(
 		com.liferay.portlet.mobiledevicerules.model.MDRRule rule)
 		throws com.liferay.portal.kernel.exception.PortalException,

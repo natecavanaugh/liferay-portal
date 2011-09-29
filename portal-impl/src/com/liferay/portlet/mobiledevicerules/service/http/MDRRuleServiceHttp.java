@@ -139,13 +139,44 @@ public class MDRRuleServiceHttp {
 		}
 	}
 
+	public static void deleteRule(HttpPrincipal httpPrincipal, long ruleId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		try {
+			MethodKey methodKey = new MethodKey(MDRRuleServiceUtil.class.getName(),
+					"deleteRule", _deleteRuleParameterTypes2);
+
+			MethodHandler methodHandler = new MethodHandler(methodKey, ruleId);
+
+			try {
+				TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
+					throw (com.liferay.portal.kernel.exception.PortalException)e;
+				}
+
+				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
+					throw (com.liferay.portal.kernel.exception.SystemException)e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(e);
+			}
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
 	public static void deleteRule(HttpPrincipal httpPrincipal,
 		com.liferay.portlet.mobiledevicerules.model.MDRRule rule)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(MDRRuleServiceUtil.class.getName(),
-					"deleteRule", _deleteRuleParameterTypes2);
+					"deleteRule", _deleteRuleParameterTypes3);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, rule);
 
@@ -177,7 +208,7 @@ public class MDRRuleServiceHttp {
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(MDRRuleServiceUtil.class.getName(),
-					"fetchRule", _fetchRuleParameterTypes3);
+					"fetchRule", _fetchRuleParameterTypes4);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, ruleId);
 
@@ -213,7 +244,7 @@ public class MDRRuleServiceHttp {
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(MDRRuleServiceUtil.class.getName(),
-					"getRule", _getRuleParameterTypes4);
+					"getRule", _getRuleParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, ruleId);
 
@@ -253,7 +284,7 @@ public class MDRRuleServiceHttp {
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(MDRRuleServiceUtil.class.getName(),
-					"updateRule", _updateRuleParameterTypes5);
+					"updateRule", _updateRuleParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, ruleId,
 					nameMap, descriptionMap, type, typeSettings, serviceContext);
@@ -295,7 +326,7 @@ public class MDRRuleServiceHttp {
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(MDRRuleServiceUtil.class.getName(),
-					"updateRule", _updateRuleParameterTypes6);
+					"updateRule", _updateRuleParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, ruleId,
 					nameMap, descriptionMap, type, typeSettingsProperties,
@@ -340,20 +371,23 @@ public class MDRRuleServiceHttp {
 			com.liferay.portal.service.ServiceContext.class
 		};
 	private static final Class<?>[] _deleteRuleParameterTypes2 = new Class[] {
+			long.class
+		};
+	private static final Class<?>[] _deleteRuleParameterTypes3 = new Class[] {
 			com.liferay.portlet.mobiledevicerules.model.MDRRule.class
 		};
-	private static final Class<?>[] _fetchRuleParameterTypes3 = new Class[] {
+	private static final Class<?>[] _fetchRuleParameterTypes4 = new Class[] {
 			long.class
 		};
-	private static final Class<?>[] _getRuleParameterTypes4 = new Class[] {
+	private static final Class<?>[] _getRuleParameterTypes5 = new Class[] {
 			long.class
 		};
-	private static final Class<?>[] _updateRuleParameterTypes5 = new Class[] {
+	private static final Class<?>[] _updateRuleParameterTypes6 = new Class[] {
 			long.class, java.util.Map.class, java.util.Map.class,
 			java.lang.String.class, java.lang.String.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
-	private static final Class<?>[] _updateRuleParameterTypes6 = new Class[] {
+	private static final Class<?>[] _updateRuleParameterTypes7 = new Class[] {
 			long.class, java.util.Map.class, java.util.Map.class,
 			java.lang.String.class,
 			com.liferay.portal.kernel.util.UnicodeProperties.class,

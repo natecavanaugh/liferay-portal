@@ -37,7 +37,7 @@ public class MDRActionServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portlet.mobiledevicerules.service.impl.MDRActionServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
-	public static com.liferay.portlet.mobiledevicerules.model.MDRAction addMDRAction(
+	public static com.liferay.portlet.mobiledevicerules.model.MDRAction addAction(
 		long ruleGroupInstanceId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
@@ -46,11 +46,11 @@ public class MDRActionServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .addMDRAction(ruleGroupInstanceId, nameMap, descriptionMap,
+				   .addAction(ruleGroupInstanceId, nameMap, descriptionMap,
 			type, typeSettings, serviceContext);
 	}
 
-	public static com.liferay.portlet.mobiledevicerules.model.MDRAction addMDRAction(
+	public static com.liferay.portlet.mobiledevicerules.model.MDRAction addAction(
 		long ruleGroupInstanceId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
@@ -60,8 +60,14 @@ public class MDRActionServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .addMDRAction(ruleGroupInstanceId, nameMap, descriptionMap,
+				   .addAction(ruleGroupInstanceId, nameMap, descriptionMap,
 			type, typeSettingsProperties, serviceContext);
+	}
+
+	public static void deleteAction(long actionId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteAction(actionId);
 	}
 
 	public static void deleteAction(

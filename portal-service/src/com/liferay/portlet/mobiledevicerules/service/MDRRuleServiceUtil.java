@@ -64,6 +64,12 @@ public class MDRRuleServiceUtil {
 			typeSettings, serviceContext);
 	}
 
+	public static void deleteRule(long ruleId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteRule(ruleId);
+	}
+
 	public static void deleteRule(
 		com.liferay.portlet.mobiledevicerules.model.MDRRule rule)
 		throws com.liferay.portal.kernel.exception.PortalException,

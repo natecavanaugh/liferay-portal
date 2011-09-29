@@ -65,6 +65,17 @@ import java.rmi.RemoteException;
  * @generated
  */
 public class MDRRuleServiceSoap {
+	public static void deleteRule(long ruleId) throws RemoteException {
+		try {
+			MDRRuleServiceUtil.deleteRule(ruleId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static void deleteRule(
 		com.liferay.portlet.mobiledevicerules.model.MDRRuleSoap rule)
 		throws RemoteException {

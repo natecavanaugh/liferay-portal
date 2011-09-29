@@ -84,12 +84,57 @@ public class MDRRuleGroupInstanceServiceSoap {
 		}
 	}
 
+	public static void deleteRuleGroupInstance(long ruleGroupInstanceId)
+		throws RemoteException {
+		try {
+			MDRRuleGroupInstanceServiceUtil.deleteRuleGroupInstance(ruleGroupInstanceId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static void deleteRuleGroupInstance(
 		com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstanceSoap ruleGroupInstance)
 		throws RemoteException {
 		try {
 			MDRRuleGroupInstanceServiceUtil.deleteRuleGroupInstance(com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleGroupInstanceModelImpl.toModel(
 					ruleGroupInstance));
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstanceSoap[] getRuleGroupInstances(
+		java.lang.String className, long classPK, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance> returnValue =
+				MDRRuleGroupInstanceServiceUtil.getRuleGroupInstances(className,
+					classPK, start, end, orderByComparator);
+
+			return com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstanceSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static int getRuleGroupInstancesCount(java.lang.String className,
+		long classPK) throws RemoteException {
+		try {
+			int returnValue = MDRRuleGroupInstanceServiceUtil.getRuleGroupInstancesCount(className,
+					classPK);
+
+			return returnValue;
 		}
 		catch (Exception e) {
 			_log.error(e, e);

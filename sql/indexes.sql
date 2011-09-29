@@ -469,6 +469,7 @@ create unique index IX_46665CC4 on MDRRuleGroup (uuid_, groupId);
 
 create index IX_C95A08D8 on MDRRuleGroupInstance (classNameId, classPK);
 create unique index IX_808A0036 on MDRRuleGroupInstance (classNameId, classPK, ruleGroupId);
+create index IX_22DAB85C on MDRRuleGroupInstance (groupId, classNameId, classPK);
 create index IX_BF3E642B on MDRRuleGroupInstance (ruleGroupId);
 create index IX_B6A6BD91 on MDRRuleGroupInstance (uuid_);
 create unique index IX_9CBC6A39 on MDRRuleGroupInstance (uuid_, groupId);
@@ -577,9 +578,9 @@ create index IX_88705859 on ResourcePermission (companyId, name, primKey, ownerI
 create index IX_C94C7708 on ResourcePermission (companyId, name, primKey, roleId, actionIds);
 create index IX_60B99860 on ResourcePermission (companyId, name, scope);
 create index IX_2200AA69 on ResourcePermission (companyId, name, scope, primKey);
-create unique index IX_8D83D0CE on ResourcePermission (companyId, name, scope, primKey, roleId);
+create index IX_8D83D0CE on ResourcePermission (companyId, name, scope, primKey, roleId);
 create index IX_D2E2B644 on ResourcePermission (companyId, name, scope, primKey, roleId, actionIds);
-create unique index IX_4A1F4402 on ResourcePermission (companyId, name, scope, primKey, roleId, ownerId, actionIds);
+create index IX_4A1F4402 on ResourcePermission (companyId, name, scope, primKey, roleId, ownerId, actionIds);
 create index IX_A37A0588 on ResourcePermission (roleId);
 create index IX_F4555981 on ResourcePermission (scope);
 

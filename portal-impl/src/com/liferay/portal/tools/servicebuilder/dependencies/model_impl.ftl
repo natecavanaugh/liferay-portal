@@ -1,3 +1,5 @@
+<#setting number_format = "0">
+
 <#assign parentPKColumn = "">
 
 <#if entity.isHierarchicalTree()>
@@ -176,6 +178,32 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		</#if>
 
 		);
+
+		<#assign columnBitmaskEnabled = true>
+
+		<#if entity.finderColumnsList?size == 0>
+			public static final boolean COLUMN_BITMASK_ENABLED = false;
+
+			<#assign columnBitmaskEnabled = false>
+		</#if>
+
+		<#if entity.finderColumnsList?size &gt; 64>
+			public static final boolean COLUMN_BITMASK_ENABLED = false;
+
+			<#assign columnBitmaskEnabled = false >
+		</#if>
+
+		<#if columnBitmaskEnabled>
+			public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(${propsUtil}.get("value.object.column.bitmask.enabled.${packagePath}.model.${entity.name}"), true);
+
+			<#assign columnBitmask = 1>
+
+			<#list entity.finderColumnsList as column>
+				public static long ${column.name?upper_case}_COLUMN_BITMASK = ${columnBitmask}L;
+
+				<#assign columnBitmask = columnBitmask * 2 >
+			</#list>
+		</#if>
 	</#if>
 
 	<#if entity.hasRemoteService()>
@@ -211,14 +239,6 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 			return models;
 		}
 	</#if>
-
-	public Class<?> getModelClass() {
-		return ${entity.name}.class;
-	}
-
-	public String getModelClassName() {
-		return ${entity.name}.class.getName();
-	}
 
 	<#list entity.columnList as column>
 		<#if column.mappingTable??>
@@ -327,6 +347,14 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		);
 	}
 
+	public Class<?> getModelClass() {
+		return ${entity.name}.class;
+	}
+
+	public String getModelClassName() {
+		return ${entity.name}.class.getName();
+	}
+
 	<#list entity.regularColList as column>
 		<#if column.name == "classNameId">
 			public String getClassName() {
@@ -423,7 +451,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 		public void set${column.methodName}(${column.type} ${column.name}) {
 			<#if column.name == "uuid">
-				<#if column.isFetchFinderPath()>
+				<#if column.isFinderPath()>
 					if (_originalUuid == null) {
 						_originalUuid = _uuid;
 					}
@@ -431,7 +459,11 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 				_uuid = uuid;
 			<#else>
-				<#if column.isFetchFinderPath() || ((parentPKColumn != "") && (parentPKColumn.name == column.name))>
+				<#if column.isFinderPath() || ((parentPKColumn != "") && (parentPKColumn.name == column.name))>
+					<#if columnBitmaskEnabled>
+						_columnBitmask |= ${column.name?upper_case}_COLUMN_BITMASK;
+					</#if>
+
 					<#if column.isPrimitiveType()>
 						if (!_setOriginal${column.methodName}) {
 							_setOriginal${column.methodName} = true;
@@ -508,7 +540,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 			}
 		</#if>
 
-		<#if column.isFetchFinderPath() || ((parentPKColumn != "") && (parentPKColumn.name == column.name))>
+		<#if column.isFinderPath() || ((parentPKColumn != "") && (parentPKColumn.name == column.name))>
 			public ${column.type} getOriginal${column.methodName}() {
 				<#if column.type == "String" && column.isConvertNull()>
 					return GetterUtil.getString(_original${column.methodName});
@@ -517,6 +549,27 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 				</#if>
 			}
 		</#if>
+	</#list>
+
+	<#list cacheFields as cacheField>
+		<#assign variableName = serviceBuilder.getVariableName(cacheField)>
+		<#assign methodName = textFormatter.format(variableName, 6)>
+		<#assign typeName = cacheField.getType().getFullyQualifiedName()>
+
+		public ${typeName} get${methodName}() {
+			<#if cacheField.getType().isPrimitive()>
+				<#if typeName == "boolean">
+					return false;
+				<#else>
+					return 0;
+				</#if>
+			<#else>
+				return null;
+			</#if>
+		}
+
+		public void set${methodName}(${typeName} ${variableName}) {
+		}
 	</#list>
 
 	<#if entity.isWorkflowEnabled()>
@@ -561,6 +614,12 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 			else {
 				return false;
 			}
+		}
+	</#if>
+
+	<#if columnBitmaskEnabled>
+		public long getColumnBitmask() {
+			return _columnBitmask;
 		}
 	</#if>
 
@@ -735,7 +794,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 	@Override
 	public void resetOriginalValues() {
 		<#list entity.regularColList as column>
-			<#if column.isFetchFinderPath() || ((parentPKColumn != "") && (parentPKColumn.name == column.name))>
+			<#if column.isFinderPath() || ((parentPKColumn != "") && (parentPKColumn.name == column.name))>
 				<#if !cloneCastModelImpl??>
 					<#assign cloneCastModelImpl = true>
 
@@ -750,9 +809,13 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 			</#if>
 
 			<#if (column.type == "Blob") && column.lazy>
-				_${column.name}BlobModel = null;
+				${entity.varName}ModelImpl._${column.name}BlobModel = null;
 			</#if>
 		</#list>
+
+		<#if columnBitmaskEnabled>
+			${entity.varName}ModelImpl._columnBitmask = 0;
+		</#if>
 	}
 
 	@Override
@@ -784,6 +847,12 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 			</#if>
 		</#list>
 
+		<#list cacheFields as cacheField>
+			<#assign methodName = textFormatter.format(serviceBuilder.getVariableName(cacheField), 6)>
+
+			${entity.varName}CacheModel.${cacheField.name} = get${methodName}();
+		</#list>
+
 		return ${entity.varName}CacheModel;
 	}
 
@@ -792,16 +861,18 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		StringBundler sb = new StringBundler(${entity.regularColList?size * 2 + 1});
 
 		<#list entity.regularColList as column>
-			<#if column_index == 0>
-				sb.append("{${column.name}=");
-				sb.append(get${column.methodName}());
-			<#elseif column_has_next>
-				sb.append(", ${column.name}=");
-				sb.append(get${column.methodName}());
-			<#else>
-				sb.append(", ${column.name}=");
-				sb.append(get${column.methodName}());
-				sb.append("}");
+			<#if (column.type != "Blob") || !column.lazy>
+				<#if column_index == 0>
+					sb.append("{${column.name}=");
+					sb.append(get${column.methodName}());
+				<#elseif column_has_next>
+					sb.append(", ${column.name}=");
+					sb.append(get${column.methodName}());
+				<#else>
+					sb.append(", ${column.name}=");
+					sb.append(get${column.methodName}());
+					sb.append("}");
+				</#if>
 			</#if>
 		</#list>
 
@@ -816,9 +887,11 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		sb.append("</model-name>");
 
 		<#list entity.regularColList as column>
-			sb.append("<column><column-name>${column.name}</column-name><column-value><![CDATA[");
-			sb.append(get${column.methodName}());
-			sb.append("]]></column-value></column>");
+			<#if (column.type != "Blob") || !column.lazy>
+				sb.append("<column><column-name>${column.name}</column-name><column-value><![CDATA[");
+				sb.append(get${column.methodName}());
+				sb.append("]]></column-value></column>");
+			</#if>
 		</#list>
 
 		sb.append("</model>");
@@ -840,7 +913,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 				private String _${column.userUuidName};
 			</#if>
 
-			<#if column.isFetchFinderPath() || ((parentPKColumn != "") && (parentPKColumn.name == column.name))>
+			<#if column.isFinderPath() || ((parentPKColumn != "") && (parentPKColumn.name == column.name))>
 				private ${column.type} _original${column.methodName};
 
 				<#if column.isPrimitiveType()>
@@ -852,6 +925,10 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 	<#if (entity.PKClassName == "long") && !stringUtil.startsWith(entity.name, "Expando")>
 		private transient ExpandoBridge _expandoBridge;
+	</#if>
+
+	<#if columnBitmaskEnabled>
+		private long _columnBitmask;
 	</#if>
 
 	private ${entity.name} _escapedModelProxy;

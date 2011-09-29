@@ -72,12 +72,10 @@ public class MDRRuleGroupServiceImpl extends MDRRuleGroupServiceBaseImpl {
 	public void deleteRuleGroup(long ruleGroupId)
 		throws PortalException, SystemException {
 
-		MDRRuleGroup ruleGroup = mdrRuleGroupLocalService.fetchRuleGroup(
+		MDRRuleGroup ruleGroup = mdrRuleGroupPersistence.findByPrimaryKey(
 			ruleGroupId);
 
-		if (ruleGroup != null) {
-			deleteRuleGroup(ruleGroup);
-		}
+		deleteRuleGroup(ruleGroup);
 	}
 
 	public void deleteRuleGroup(MDRRuleGroup ruleGroup)

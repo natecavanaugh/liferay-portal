@@ -781,6 +781,7 @@ Liferay.Service.registerClass(
 		getFolder: true,
 		getFolderIds: true,
 		getFolders: true,
+		getFoldersAndFileEntriesAndFileShortcuts: true,
 		getFoldersAndFileEntriesAndFileShortcutsCount: true,
 		getFoldersCount: true,
 		getMountFolders: true,
@@ -1024,7 +1025,7 @@ Liferay.Service.register("Liferay.Service.MDR", "com.liferay.portlet.mobiledevic
 Liferay.Service.registerClass(
 	Liferay.Service.MDR, "MDRAction",
 	{
-		addMDRAction: true,
+		addAction: true,
 		deleteAction: true,
 		fetchAction: true,
 		getAction: true,
@@ -1060,6 +1061,8 @@ Liferay.Service.registerClass(
 	{
 		addRuleGroupInstance: true,
 		deleteRuleGroupInstance: true,
+		getRuleGroupInstances: true,
+		getRuleGroupInstancesCount: true,
 		updateRuleGroupInstance: true
 	}
 );

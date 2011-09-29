@@ -59,6 +59,14 @@ public class MDRRuleServiceImpl extends MDRRuleServiceBaseImpl {
 			serviceContext);
 	}
 
+	public void deleteRule(long ruleId)
+		throws PortalException, SystemException {
+
+		MDRRule rule = mdrRulePersistence.findByPrimaryKey(ruleId);
+
+		deleteRule(rule);
+	}
+
 	public void deleteRule(MDRRule rule)
 		throws PortalException, SystemException {
 

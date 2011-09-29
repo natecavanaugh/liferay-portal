@@ -53,6 +53,12 @@ public class MDRRuleServiceWrapper implements MDRRuleService {
 			type, typeSettings, serviceContext);
 	}
 
+	public void deleteRule(long ruleId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_mdrRuleService.deleteRule(ruleId);
+	}
+
 	public void deleteRule(
 		com.liferay.portlet.mobiledevicerules.model.MDRRule rule)
 		throws com.liferay.portal.kernel.exception.PortalException,

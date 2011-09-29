@@ -267,6 +267,14 @@ public class ClassNameLocalServiceWrapper implements ClassNameLocalService {
 		return _classNameLocalService.getClassNameId(value);
 	}
 
+	public java.lang.String getRegistryName() {
+		return _classNameLocalService.getRegistryName();
+	}
+
+	public void invalidate() {
+		_classNameLocalService.invalidate();
+	}
+
 	public ClassNameLocalService getWrappedClassNameLocalService() {
 		return _classNameLocalService;
 	}

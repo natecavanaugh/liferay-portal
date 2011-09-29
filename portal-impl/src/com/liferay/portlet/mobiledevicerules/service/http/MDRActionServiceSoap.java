@@ -65,6 +65,17 @@ import java.rmi.RemoteException;
  * @generated
  */
 public class MDRActionServiceSoap {
+	public static void deleteAction(long actionId) throws RemoteException {
+		try {
+			MDRActionServiceUtil.deleteAction(actionId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static void deleteAction(
 		com.liferay.portlet.mobiledevicerules.model.MDRActionSoap action)
 		throws RemoteException {
