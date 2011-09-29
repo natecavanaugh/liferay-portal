@@ -91,7 +91,7 @@
 						}
 						%>
 
-						<a class="image-thumbnail slide-show" <%= (supportedAudio || supportedVideo) ? "data-options=\"width=640&height=500&thumbnailURL=" + HtmlUtil.escapeURL(themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HtmlUtil.escapeURL(HttpUtil.encodeURL(fileVersion.getTitle())) + HtmlUtil.escapeURL("?version=") + fileVersion.getVersion() + HtmlUtil.escapeURL("&videoThumbnail=1")) + "\"" : StringPool.BLANK %> href="<%= href %>" largeImageId="<%= (largeImage != null) ? largeImage.getImageId() : 0 %>" fileEntryId="<%= fileEntry.getFileEntryId() %>" title="<%= HtmlUtil.escape(fileEntry.getTitle()) + " - " + HtmlUtil.escape(fileEntry.getDescription()) %>">
+						<a class="image-thumbnail" <%= (supportedAudio || supportedVideo) ? "data-options=\"width=640&height=500&thumbnailURL=" + HtmlUtil.escapeURL(themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getFolderId() + StringPool.SLASH + HtmlUtil.escapeURL(HttpUtil.encodeURL(fileVersion.getTitle())) + HtmlUtil.escapeURL("?version=") + fileVersion.getVersion() + HtmlUtil.escapeURL("&videoThumbnail=1")) + "\"" : StringPool.BLANK %> href="<%= href %>" largeImageId="<%= (largeImage != null) ? largeImage.getImageId() : 0 %>" fileEntryId="<%= fileEntry.getFileEntryId() %>" title="<%= HtmlUtil.escape(fileEntry.getTitle()) + " - " + HtmlUtil.escape(fileEntry.getDescription()) %>">
 							<img alt="<%= HtmlUtil.escape(fileEntry.getTitle()) + " - " + HtmlUtil.escape(fileEntry.getDescription()) %>" border="no" src="<%= src %>" style="<%= style %>" />
 
 							<span class="image-title"><%= HtmlUtil.escape(fileVersion.getTitle()) %></span>
@@ -149,7 +149,7 @@
 				viewFolderURL.setParameter("folderId", String.valueOf(curFolder.getFolderId()));
 				%>
 
-				<a class="image-thumbnail" href="<%= viewFolderURL.toString() %>" title="<%= HtmlUtil.escape(curFolder.getName()) + " - " + HtmlUtil.escape(curFolder.getDescription()) %>">
+				<a class="folder-thumbnail" href="<%= viewFolderURL.toString() %>" title="<%= HtmlUtil.escape(curFolder.getName()) + " - " + HtmlUtil.escape(curFolder.getDescription()) %>">
 					<img alt="" border="no" src="<%= themeDisplay.getPathThemeImages() + "/file_system/large/folder_full_document.png" %>" style="height: <%= PropsValues.DL_FILE_ENTRY_THUMBNAIL_HEIGHT %>; width: <%= PropsValues.DL_FILE_ENTRY_THUMBNAIL_WIDTH %>;" />
 
 					<span class="image-title"><%= HtmlUtil.escape(StringUtil.shorten(curFolder.getName(), 60)) %></span>
@@ -226,7 +226,7 @@ embeddedPlayerURL.setParameter("struts_action", "/image_gallery_display/embedded
 				</c:if>
 			},
 			delay: 5000,
-			links: '#<portlet:namespace />imageGalleryAssetInfo .slide-show',
+			links: '#<portlet:namespace />imageGalleryAssetInfo .image-thumbnail',
 			maxHeight: maxHeight,
 			maxWidth: maxWidth,
 			playingLabel: '(<liferay-ui:message key="playing" />)',
