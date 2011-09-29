@@ -234,14 +234,14 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 	}
 
 	public DLFileEntry[] getFileEntriesPrevAndNext(
-		long fileEntryId, OrderByComparator orderByComparator)
+			long fileEntryId, OrderByComparator obc)
 		throws PortalException, SystemException {
 
 		DLFileEntry dlFileEntry = getFileEntry(fileEntryId);
 
 		return dlFileEntryPersistence.filterFindByG_F_PrevAndNext(
 			fileEntryId, dlFileEntry.getGroupId(), dlFileEntry.getFolderId(),
-			orderByComparator);
+			obc);
 	}
 
 	public DLFileEntry getFileEntry(long fileEntryId)
