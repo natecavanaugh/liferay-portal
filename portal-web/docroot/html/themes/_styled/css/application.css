@@ -76,6 +76,10 @@
 }
 
 .results-row {
+	&.alt td {
+		background: #f5f8fb;
+	}
+
 	td {
 		background: none;
 		border: 1px solid;
