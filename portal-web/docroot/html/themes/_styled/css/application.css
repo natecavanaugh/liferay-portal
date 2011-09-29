@@ -625,6 +625,16 @@
 	}
 }
 
+.ie8 .lfr-app-column-view {
+	.aui-column-content {
+		border-right: 1px solid transparent;
+	}
+
+	.aui-column-last .aui-column-content {
+		border-right-width: 0;
+	}
+}
+
 /* ---------- Header row ---------- */
 
 .lfr-header-row {
