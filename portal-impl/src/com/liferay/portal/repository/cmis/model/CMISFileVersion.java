@@ -24,9 +24,11 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
 import com.liferay.portal.repository.cmis.CMISRepository;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.CMISRepositoryLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
+import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 
@@ -69,6 +71,15 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 
 	public InputStream getContentStream(boolean incrementCounter) {
 		ContentStream contentStream = _document.getContentStream();
+
+		try {
+			DLAppHelperLocalServiceUtil.getFileAsStream(
+				PrincipalThreadLocal.getUserId(), getFileEntry(),
+				incrementCounter);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
 
 		return contentStream.getStream();
 	}

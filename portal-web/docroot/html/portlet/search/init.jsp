@@ -16,7 +16,49 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ page import="com.liferay.portal.kernel.repository.model.FileEntry" %><%@ page import="com.liferay.portal.kernel.search.Document" %><%@ page import="com.liferay.portal.kernel.search.FacetedSearcher" %><%@ page import="com.liferay.portal.kernel.search.Hits" %><%@ page import="com.liferay.portal.kernel.search.Indexer" %><%@ page import="com.liferay.portal.kernel.search.IndexerRegistryUtil" %><%@ page import="com.liferay.portal.kernel.search.OpenSearch" %><%@ page import="com.liferay.portal.kernel.search.OpenSearchUtil" %><%@ page import="com.liferay.portal.kernel.search.SearchContext" %><%@ page import="com.liferay.portal.kernel.search.SearchContextFactory" %><%@ page import="com.liferay.portal.kernel.search.Summary" %><%@ page import="com.liferay.portal.kernel.search.facet.AssetEntriesFacet" %><%@ page import="com.liferay.portal.kernel.search.facet.Facet" %><%@ page import="com.liferay.portal.kernel.search.facet.ScopeFacet" %><%@ page import="com.liferay.portal.kernel.search.facet.collector.FacetCollector" %><%@ page import="com.liferay.portal.kernel.search.facet.collector.TermCollector" %><%@ page import="com.liferay.portal.kernel.search.facet.config.FacetConfiguration" %><%@ page import="com.liferay.portal.kernel.search.facet.config.FacetConfigurationUtil" %><%@ page import="com.liferay.portal.kernel.search.facet.util.FacetFactoryUtil" %><%@ page import="com.liferay.portal.kernel.search.facet.util.RangeParserUtil" %><%@ page import="com.liferay.portal.kernel.util.DateFormatFactoryUtil" %><%@ page import="com.liferay.portal.kernel.xml.Element" %><%@ page import="com.liferay.portal.kernel.xml.SAXReaderUtil" %><%@ page import="com.liferay.portal.security.permission.comparator.ModelResourceComparator" %><%@ page import="com.liferay.portal.service.PortletLocalServiceUtil" %><%@ page import="com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil" %><%@ page import="com.liferay.portlet.asset.NoSuchCategoryException" %><%@ page import="com.liferay.portlet.asset.model.AssetCategory" %><%@ page import="com.liferay.portlet.asset.model.AssetEntry" %><%@ page import="com.liferay.portlet.asset.model.AssetRenderer" %><%@ page import="com.liferay.portlet.asset.model.AssetRendererFactory" %><%@ page import="com.liferay.portlet.asset.model.AssetVocabulary" %><%@ page import="com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil" %><%@ page import="com.liferay.portlet.asset.service.AssetCategoryServiceUtil" %><%@ page import="com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil" %><%@ page import="com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil" %><%@ page import="com.liferay.portlet.asset.service.AssetVocabularyServiceUtil" %><%@ page import="com.liferay.portlet.documentlibrary.model.DLFileEntryConstants" %><%@ page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil" %><%@ page import="com.liferay.util.PropertyComparator" %><%@ page import="java.util.Comparator" %><%@ page import="java.util.LinkedList" %>
+<%@ page import="com.liferay.portal.kernel.repository.model.FileEntry" %>
+<%@ page import="com.liferay.portal.kernel.search.Document" %>
+<%@ page import="com.liferay.portal.kernel.search.FacetedSearcher" %>
+<%@ page import="com.liferay.portal.kernel.search.Hits" %>
+<%@ page import="com.liferay.portal.kernel.search.Indexer" %>
+<%@ page import="com.liferay.portal.kernel.search.IndexerRegistryUtil" %>
+<%@ page import="com.liferay.portal.kernel.search.OpenSearch" %>
+<%@ page import="com.liferay.portal.kernel.search.OpenSearchUtil" %>
+<%@ page import="com.liferay.portal.kernel.search.SearchContext" %>
+<%@ page import="com.liferay.portal.kernel.search.SearchContextFactory" %>
+<%@ page import="com.liferay.portal.kernel.search.Summary" %>
+<%@ page import="com.liferay.portal.kernel.search.facet.AssetEntriesFacet" %>
+<%@ page import="com.liferay.portal.kernel.search.facet.Facet" %>
+<%@ page import="com.liferay.portal.kernel.search.facet.ScopeFacet" %>
+<%@ page import="com.liferay.portal.kernel.search.facet.collector.FacetCollector" %>
+<%@ page import="com.liferay.portal.kernel.search.facet.collector.TermCollector" %>
+<%@ page import="com.liferay.portal.kernel.search.facet.config.FacetConfiguration" %>
+<%@ page import="com.liferay.portal.kernel.search.facet.config.FacetConfigurationUtil" %>
+<%@ page import="com.liferay.portal.kernel.search.facet.util.FacetFactoryUtil" %>
+<%@ page import="com.liferay.portal.kernel.search.facet.util.RangeParserUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.DateFormatFactoryUtil" %>
+<%@ page import="com.liferay.portal.kernel.xml.Element" %>
+<%@ page import="com.liferay.portal.kernel.xml.SAXReaderUtil" %>
+<%@ page import="com.liferay.portal.security.permission.comparator.ModelResourceComparator" %>
+<%@ page import="com.liferay.portal.service.PortletLocalServiceUtil" %>
+<%@ page import="com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil" %>
+<%@ page import="com.liferay.portlet.asset.NoSuchCategoryException" %>
+<%@ page import="com.liferay.portlet.asset.model.AssetCategory" %>
+<%@ page import="com.liferay.portlet.asset.model.AssetEntry" %>
+<%@ page import="com.liferay.portlet.asset.model.AssetRenderer" %>
+<%@ page import="com.liferay.portlet.asset.model.AssetRendererFactory" %>
+<%@ page import="com.liferay.portlet.asset.model.AssetVocabulary" %>
+<%@ page import="com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil" %>
+<%@ page import="com.liferay.portlet.asset.service.AssetCategoryServiceUtil" %>
+<%@ page import="com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil" %>
+<%@ page import="com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil" %>
+<%@ page import="com.liferay.portlet.asset.service.AssetVocabularyServiceUtil" %>
+<%@ page import="com.liferay.portlet.documentlibrary.model.DLFileEntryConstants" %>
+<%@ page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil" %>
+<%@ page import="com.liferay.util.PropertyComparator" %>
+
+<%@ page import="java.util.Comparator" %>
+<%@ page import="java.util.LinkedList" %>
 
 <%
 PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(request);
@@ -50,15 +92,15 @@ if (Validator.isNull(searchConfiguration)) {
 	sb.append("{facets: [");
 
 	if (displayAssetTypeFacet) {
-		sb.append("{className: 'com.liferay.portal.kernel.search.facet.AssetEntriesFacet', data: {frequencyThreshold: 1, values: ['com.liferay.portlet.bookmarks.model.BookmarksEntry','com.liferay.portlet.blogs.model.BlogsEntry','com.liferay.portlet.calendar.model.CalEvent','com.liferay.portlet.documentlibrary.model.DLFileEntry','com.liferay.portlet.journal.model.JournalArticle','com.liferay.portlet.messageboards.model.MBMessage','com.liferay.portlet.wiki.model.WikiPage','com.liferay.portal.model.User']}, displayStyle: 'asset-entries', fieldName: 'entryClassName', label: 'asset-type', order: 'OrderHitsDesc', static: false, weight: 1.5},");
+		sb.append("{className: 'com.liferay.portal.kernel.search.facet.AssetEntriesFacet', data: {frequencyThreshold: 1, values: ['com.liferay.portlet.bookmarks.model.BookmarksEntry','com.liferay.portlet.blogs.model.BlogsEntry','com.liferay.portlet.calendar.model.CalEvent','com.liferay.portlet.documentlibrary.model.DLFileEntry','com.liferay.portlet.journal.model.JournalArticle','com.liferay.portlet.messageboards.model.MBMessage','com.liferay.portlet.wiki.model.WikiPage','com.liferay.portal.model.User']}, displayStyle: 'asset_entries', fieldName: 'entryClassName', label: 'asset-type', order: 'OrderHitsDesc', static: false, weight: 1.5},");
 	}
 
 	if (displayAssetTagsFacet) {
-		sb.append("{className: 'com.liferay.portal.kernel.search.facet.MultiValueFacet', data: {displayStyle: 'list', frequencyThreshold: 1, maxTerms: 10, showAssetCount: true}, displayStyle: 'asset-tags', fieldName: 'assetTagNames', label: 'tag', order: 'OrderHitsDesc', static: false, weight: 1.4},");
+		sb.append("{className: 'com.liferay.portal.kernel.search.facet.MultiValueFacet', data: {displayStyle: 'list', frequencyThreshold: 1, maxTerms: 10, showAssetCount: true}, displayStyle: 'asset_tags', fieldName: 'assetTagNames', label: 'tag', order: 'OrderHitsDesc', static: false, weight: 1.4},");
 	}
 
 	if (displayAssetCategoriesFacet) {
-		sb.append("{className: 'com.liferay.portal.kernel.search.facet.MultiValueFacet', data: {displayStyle: 'list', frequencyThreshold: 1, maxTerms: 10, showAssetCount: true}, displayStyle: 'asset-tags', fieldName: 'assetCategoryNames', label: 'category', order: 'OrderHitsDesc', static: false, weight: 1.3},");
+		sb.append("{className: 'com.liferay.portal.kernel.search.facet.MultiValueFacet', data: {displayStyle: 'list', frequencyThreshold: 1, maxTerms: 10, showAssetCount: true}, displayStyle: 'asset_tags', fieldName: 'assetCategoryNames', label: 'category', order: 'OrderHitsDesc', static: false, weight: 1.3},");
 	}
 
 	if (displayModifiedRangeFacet) {

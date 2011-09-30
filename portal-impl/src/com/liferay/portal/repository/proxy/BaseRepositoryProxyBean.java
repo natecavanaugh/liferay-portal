@@ -32,6 +32,7 @@ import com.liferay.portal.model.Lock;
 import com.liferay.portal.service.CompanyLocalService;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalService;
+import com.liferay.portlet.asset.service.AssetEntryLocalService;
 import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalService;
 
 import java.io.File;
@@ -463,10 +464,20 @@ public class BaseRepositoryProxyBean
 		_baseRepository.revertFileEntry(fileEntryId, version, serviceContext);
 	}
 
+	public Hits search(SearchContext searchContext) throws SearchException {
+		return _baseRepository.search(searchContext);
+	}
+
 	public Hits search(SearchContext searchContext, Query query)
 		throws SearchException {
 
 		return _baseRepository.search(searchContext, query);
+	}
+
+	public void setAssetEntryLocalService(
+		AssetEntryLocalService assetEntryLocalService) {
+
+		_baseRepository.setAssetEntryLocalService(assetEntryLocalService);
 	}
 
 	public void setCompanyId(long companyId) {

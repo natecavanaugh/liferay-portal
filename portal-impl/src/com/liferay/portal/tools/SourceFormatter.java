@@ -1204,7 +1204,7 @@ public class SourceFormatter {
 					// Set convertImportsToSingleLine to false to revert imports
 					// from a single line to multiple lines
 
-					boolean convertImportsToSingleLine = true;
+					boolean convertImportsToSingleLine = false;
 
 					if (convertImportsToSingleLine) {
 						newContent =

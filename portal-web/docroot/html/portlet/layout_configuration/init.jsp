@@ -16,4 +16,5 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ page import="java.util.regex.Matcher" %><%@ page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.regex.Matcher" %>
+<%@ page import="java.util.regex.Pattern" %>

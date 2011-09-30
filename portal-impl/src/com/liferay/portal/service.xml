@@ -577,6 +577,11 @@
 			<finder-column name="layoutSetBranchId" />
 			<finder-column name="plid" />
 		</finder>
+        <finder name="L_P_N" return-type="LayoutBranch" unique="true">
+			<finder-column name="layoutSetBranchId" />
+            <finder-column name="plid" />
+			<finder-column name="name" />
+		</finder>
 		<finder name="L_P_M" return-type="LayoutBranch">
 			<finder-column name="layoutSetBranchId" />
 			<finder-column name="plid" />
@@ -1488,6 +1493,7 @@
 
 		<!-- References -->
 
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
 		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLAppHelper" />
 		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLFileEntry" />
 		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLFileVersion" />
@@ -2552,6 +2558,7 @@
 		<exception>InvalidRepository</exception>
 		<exception>LARFile</exception>
 		<exception>LARType</exception>
+        <exception>LayoutBranchName</exception>
 		<exception>LayoutSetBranchName</exception>
 		<exception>LayoutFriendlyURL</exception>
 		<exception>LayoutHidden</exception>

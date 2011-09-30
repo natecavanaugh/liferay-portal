@@ -50,9 +50,12 @@ import com.liferay.portal.repository.cmis.model.CMISFileVersion;
 import com.liferay.portal.repository.cmis.model.CMISFolder;
 import com.liferay.portal.repository.cmis.search.CMISQueryBuilder;
 import com.liferay.portal.security.auth.PrincipalException;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.persistence.RepositoryEntryUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.DuplicateFolderNameException;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
@@ -68,6 +71,7 @@ import com.liferay.portlet.documentlibrary.util.comparator.RepositoryModelSizeCo
 
 import java.io.InputStream;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import java.util.ArrayList;
@@ -1069,7 +1073,26 @@ public class CMISRepository extends BaseCmisRepository {
 		long fileEntryId = (Long)ids[0];
 		String uuid = (String)ids[1];
 
-		return new CMISFileEntry(this, uuid, fileEntryId, document);
+		FileEntry fileEntry = new CMISFileEntry(
+			this, uuid, fileEntryId, document);
+
+		try {
+			AssetEntry assetEntry = AssetEntryLocalServiceUtil.fetchEntry(
+				DLFileEntryConstants.getClassName(), fileEntryId);
+
+			if (assetEntry == null) {
+				FileVersion fileVersion = fileEntry.getFileVersion();
+
+				dlAppHelperLocalService.addFileEntry(
+					PrincipalThreadLocal.getUserId(), fileEntry, fileVersion,
+					new ServiceContext());
+			}
+		}
+		catch (Exception e) {
+			_log.error("Unable to update asset", e);
+		}
+
+		return fileEntry;
 	}
 
 	@Override
@@ -1543,8 +1566,17 @@ public class CMISRepository extends BaseCmisRepository {
 			documents[index] = document;
 
 			if (queryConfig.isScoreEnabled()) {
-				scores[index] = (Float)queryResult.getPropertyValueByQueryName(
-					"SCORE");
+				Object scoreObj = queryResult.getPropertyValueByQueryName(
+					"HITS");
+
+				if (scoreObj instanceof BigDecimal) {
+					BigDecimal scoreBigDecimal = (BigDecimal)scoreObj;
+
+					scores[index] = scoreBigDecimal.floatValue();
+				}
+				else {
+					scores[index] = (Float)scoreObj;
+				}
 			}
 			else {
 				scores[index] = 1;

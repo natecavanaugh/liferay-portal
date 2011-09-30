@@ -565,18 +565,13 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 
 	@Override
 	public DLFileVersion toEscapedModel() {
-		if (isEscapedModel()) {
-			return (DLFileVersion)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (DLFileVersion)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (DLFileVersion)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -704,7 +699,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 
 		dlFileVersionModelImpl._setOriginalStatus = false;
 
-		_columnBitmask = 0;
+		dlFileVersionModelImpl._columnBitmask = 0;
 	}
 
 	@Override

@@ -671,6 +671,9 @@ public class PortalRequestProcessor extends TilesRequestProcessor {
 		if (!SetupWizardUtil.isSetupFinished(request)) {
 			return _PATH_PORTAL_SETUP_WIZARD;
 		}
+		else if (path.equals(_PATH_PORTAL_SETUP_WIZARD)) {
+			return _PATH_PORTAL_LAYOUT;
+		}
 
 		// Authenticated users can always log out
 

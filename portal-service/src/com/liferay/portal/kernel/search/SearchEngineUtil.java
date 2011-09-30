@@ -39,6 +39,8 @@ public class SearchEngineUtil {
 	 */
 	public static final int ALL_POS = -1;
 
+	public static final String GENERIC_ENGINE_ID = "GENERIC_ENGINE";
+
 	public static final String SYSTEM_ENGINE_ID = "SYSTEM_ENGINE";
 
 	public static void addDocument(long companyId, Document document)

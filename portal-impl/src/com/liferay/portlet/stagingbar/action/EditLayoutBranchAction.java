@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.stagingbar.action;
 
+import com.liferay.portal.LayoutBranchNameException;
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -74,7 +75,12 @@ public class EditLayoutBranchAction extends EditLayoutsAction {
 			sendRedirect(actionRequest, actionResponse);
 		}
 		catch (Exception e) {
-			if (e instanceof PrincipalException ||
+			if (e instanceof LayoutBranchNameException) {
+				SessionErrors.add(actionRequest, e.getClass().getName(), e);
+
+				sendRedirect(actionRequest, actionResponse);
+			}
+			else if (e instanceof PrincipalException ||
 				e instanceof SystemException) {
 
 				SessionErrors.add(actionRequest, e.getClass().getName());
@@ -136,6 +142,8 @@ public class EditLayoutBranchAction extends EditLayoutsAction {
 
 		LayoutBranchServiceUtil.deleteLayoutBranch(layoutBranchId);
 
+		SessionMessages.add(actionRequest, "pageVariationDeleted");
+
 		if (layoutBranchId == currentLayoutBranchId) {
 			SessionMessages.add(
 				actionRequest,
@@ -160,10 +168,14 @@ public class EditLayoutBranchAction extends EditLayoutsAction {
 		if (layoutBranchId <= 0) {
 			LayoutBranchServiceUtil.addLayoutBranch(
 				layoutRevisionId, name, description, false, serviceContext);
+
+			SessionMessages.add(actionRequest, "pageVariationAdded");
 		}
 		else {
 			LayoutBranchServiceUtil.updateLayoutBranch(
 				layoutBranchId, name, description, serviceContext);
+
+			SessionMessages.add(actionRequest, "pageVariationUpdated");
 		}
 	}
 

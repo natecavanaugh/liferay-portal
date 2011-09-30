@@ -360,6 +360,7 @@ create unique index IX_CED31606 on Layout (uuid_, groupId);
 create index IX_6C226433 on LayoutBranch (layoutSetBranchId);
 create index IX_2C42603E on LayoutBranch (layoutSetBranchId, plid);
 create index IX_A705FF94 on LayoutBranch (layoutSetBranchId, plid, master);
+create unique index IX_FD57097D on LayoutBranch (layoutSetBranchId, plid, name);
 
 create index IX_30616AAA on LayoutPrototype (companyId);
 create index IX_557A639F on LayoutPrototype (companyId, active_);

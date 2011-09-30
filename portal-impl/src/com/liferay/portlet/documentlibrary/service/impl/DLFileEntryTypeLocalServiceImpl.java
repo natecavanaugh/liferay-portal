@@ -62,7 +62,8 @@ public class DLFileEntryTypeLocalServiceImpl
 		long fileEntryTypeId = counterLocalService.increment();
 
 		long dynamicStructureId = updateDynamicStructure(
-			fileEntryTypeId, groupId, name, description, serviceContext);
+			userId, fileEntryTypeId, groupId, name, description,
+			serviceContext);
 
 		if (dynamicStructureId > 0) {
 			ddmStructureIds = ArrayUtil.append(
@@ -134,11 +135,12 @@ public class DLFileEntryTypeLocalServiceImpl
 		DLFileEntryType dlFileEntryType =
 			dlFileEntryTypePersistence.findByPrimaryKey(fileEntryTypeId);
 
-		DDMStructure ddmStructure = ddmStructureService.fetchStructure(
+		DDMStructure ddmStructure = ddmStructureLocalService.fetchStructure(
 			dlFileEntryType.getGroupId(), "auto_" + fileEntryTypeId);
 
 		if (ddmStructure != null) {
-			ddmStructureService.deleteStructure(ddmStructure.getStructureId());
+			ddmStructureLocalService.deleteStructure(
+				ddmStructure.getStructureId());
 		}
 
 		dlFileEntryTypePersistence.remove(fileEntryTypeId);
@@ -240,7 +242,7 @@ public class DLFileEntryTypeLocalServiceImpl
 	}
 
 	public void updateFileEntryType(
-			long fileEntryTypeId, String name, String description,
+			long userId, long fileEntryTypeId, String name, String description,
 			long[] ddmStructureIds, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
@@ -248,8 +250,8 @@ public class DLFileEntryTypeLocalServiceImpl
 			dlFileEntryTypePersistence.findByPrimaryKey(fileEntryTypeId);
 
 		long dynamicStructureId = updateDynamicStructure(
-			fileEntryTypeId, dlFileEntryType.getGroupId(), name, description,
-			serviceContext);
+			userId, fileEntryTypeId, dlFileEntryType.getGroupId(), name,
+			description, serviceContext);
 
 		if (dynamicStructureId > 0) {
 			ddmStructureIds = ArrayUtil.append(
@@ -396,8 +398,8 @@ public class DLFileEntryTypeLocalServiceImpl
 	}
 
 	protected long updateDynamicStructure(
-			long fileEntryTypeId, long groupId, String name, String description,
-			ServiceContext serviceContext)
+			long userId, long fileEntryTypeId, long groupId, String name,
+			String description, ServiceContext serviceContext)
 		throws SystemException, PortalException {
 
 		String ddmStructureKey = "auto_" + fileEntryTypeId;
@@ -419,19 +421,19 @@ public class DLFileEntryTypeLocalServiceImpl
 
 		String xsd = ParamUtil.getString(serviceContext, "xsd");
 
-		DDMStructure ddmStructure = ddmStructureService.fetchStructure(
+		DDMStructure ddmStructure = ddmStructureLocalService.fetchStructure(
 			groupId, ddmStructureKey);
 
 		try {
 			if (ddmStructure == null) {
-				ddmStructure = ddmStructureService.addStructure(
-					groupId,
+				ddmStructure = ddmStructureLocalService.addStructure(
+					userId, groupId,
 					PortalUtil.getClassNameId(DLFileEntryMetadata.class),
 					ddmStructureKey, nameMap, descriptionMap, xsd, "xml",
 					serviceContext);
 			}
 			else {
-				ddmStructure = ddmStructureService.updateStructure(
+				ddmStructure = ddmStructureLocalService.updateStructure(
 					ddmStructure.getStructureId(), nameMap, descriptionMap, xsd,
 					serviceContext);
 			}
@@ -440,7 +442,7 @@ public class DLFileEntryTypeLocalServiceImpl
 		}
 		catch (StructureXsdException sxe) {
 			if (ddmStructure != null) {
-				ddmStructureService.deleteStructure(
+				ddmStructureLocalService.deleteStructure(
 					ddmStructure.getStructureId());
 			}
 		}

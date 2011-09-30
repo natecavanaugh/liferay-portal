@@ -2647,6 +2647,10 @@
 			<role-name>administrator</role-name>
 		</security-role-ref>
 	</portlet>
+	<custom-portlet-mode>
+		<portlet-mode>edit_guest</portlet-mode>
+		<portal-managed>true</portal-managed>
+	</custom-portlet-mode>
 	<custom-window-state>
 		<window-state>exclusive</window-state>
 	</custom-window-state>

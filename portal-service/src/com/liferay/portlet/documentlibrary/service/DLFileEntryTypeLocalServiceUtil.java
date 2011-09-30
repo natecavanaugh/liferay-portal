@@ -339,14 +339,14 @@ public class DLFileEntryTypeLocalServiceUtil {
 		return getService().searchCount(companyId, groupIds, keywords);
 	}
 
-	public static void updateFileEntryType(long fileEntryTypeId,
+	public static void updateFileEntryType(long userId, long fileEntryTypeId,
 		java.lang.String name, java.lang.String description,
 		long[] ddmStructureIds,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
-			.updateFileEntryType(fileEntryTypeId, name, description,
+			.updateFileEntryType(userId, fileEntryTypeId, name, description,
 			ddmStructureIds, serviceContext);
 	}
 

@@ -1721,7 +1721,7 @@ public interface PropsKeys {
 
 	public static final String SESSION_VERIFY_SERIALIZABLE_ATTRIBUTE = "session.verify.serializable.attribute";
 
-	public static final String SETUP_DATABASE_DRIVERS_LIST = "setup.database.drivers.list";
+	public static final String SETUP_DATABASE_TYPES = "setup.database.types";
 
 	public static final String SETUP_WIZARD_ENABLED = "setup.wizard.enabled";
 

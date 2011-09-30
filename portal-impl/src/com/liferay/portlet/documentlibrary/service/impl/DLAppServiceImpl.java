@@ -24,10 +24,7 @@ import com.liferay.portal.kernel.repository.Repository;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
-import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Hits;
-import com.liferay.portal.kernel.search.Indexer;
-import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.Query;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
@@ -43,7 +40,6 @@ import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.spring.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
-import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.base.DLAppServiceBaseImpl;
@@ -209,11 +205,12 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(repositoryId);
 
-		final FileEntry fileEntry = repository.addFileEntry(
-			folderId, sourceFileName, mimeType, title, description,
-			changeLog, file, serviceContext);
+		FileEntry fileEntry = repository.addFileEntry(
+			folderId, sourceFileName, mimeType, title, description, changeLog,
+			file, serviceContext);
 
-		registerDLProcessorCallback(fileEntry);
+		dlAppHelperLocalService.addFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 
 		return fileEntry;
 	}
@@ -273,11 +270,12 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(repositoryId);
 
-		final FileEntry fileEntry = repository.addFileEntry(
+		FileEntry fileEntry = repository.addFileEntry(
 			folderId, sourceFileName, mimeType, title, description, changeLog,
 			is, size, serviceContext);
 
-		registerDLProcessorCallback(fileEntry);
+		dlAppHelperLocalService.addFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 
 		return fileEntry;
 	}
@@ -441,6 +439,11 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		repository.checkInFileEntry(
 			fileEntryId, majorVersion, changeLog, serviceContext);
+
+		FileEntry fileEntry = getFileEntry(fileEntryId);
+
+		dlAppHelperLocalService.updateFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 	}
 
 	/**
@@ -472,6 +475,15 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		Repository repository = getRepository(0, fileEntryId, 0);
 
 		repository.checkInFileEntry(fileEntryId, lockUuid);
+
+		FileEntry fileEntry = getFileEntry(fileEntryId);
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setWorkflowAction(WorkflowConstants.ACTION_PUBLISH);
+
+		dlAppHelperLocalService.updateFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 	}
 
 	/**
@@ -499,7 +511,11 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
-		repository.checkOutFileEntry(fileEntryId);
+		FileEntry fileEntry = repository.checkOutFileEntry(fileEntryId);
+
+		dlAppHelperLocalService.updateAsset(
+			getUserId(), fileEntry, fileEntry.getLatestFileVersion(),
+			fileEntryId);
 	}
 
 	/**
@@ -534,7 +550,14 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
-		return repository.checkOutFileEntry(fileEntryId, owner, expirationTime);
+		FileEntry fileEntry = repository.checkOutFileEntry(
+			fileEntryId, owner, expirationTime);
+
+		dlAppHelperLocalService.updateAsset(
+			getUserId(), fileEntry, fileEntry.getLatestFileVersion(),
+			fileEntryId);
+
+		return fileEntry;
 	}
 
 	/**
@@ -580,7 +603,11 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
+		FileEntry fileEntry = repository.getFileEntry(fileEntryId);
+
 		repository.deleteFileEntry(fileEntryId);
+
+		dlAppHelperLocalService.deleteFileEntry(fileEntry);
 	}
 
 	/**
@@ -598,7 +625,11 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(repositoryId);
 
+		FileEntry fileEntry = repository.getFileEntry(folderId, title);
+
 		repository.deleteFileEntry(folderId, title);
+
+		dlAppHelperLocalService.deleteFileEntry(fileEntry);
 	}
 
 	/**
@@ -1929,6 +1960,11 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		Repository repository = getRepository(0, fileEntryId, 0);
 
 		repository.revertFileEntry(fileEntryId, version, serviceContext);
+
+		FileEntry fileEntry = getFileEntry(fileEntryId);
+
+		dlAppHelperLocalService.updateFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 	}
 
 	public Hits search(
@@ -1938,12 +1974,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		try {
 			Repository repository = getRepository(repositoryId);
 
-			Indexer indexer = IndexerRegistryUtil.getIndexer(
-				DLFileEntryConstants.getClassName());
-
-			BooleanQuery fullQuery = indexer.getFullQuery(searchContext);
-
-			return repository.search(searchContext, fullQuery);
+			return repository.search(searchContext);
 		}
 		catch (Exception e) {
 			throw new SearchException(e);
@@ -2126,11 +2157,12 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
-		final FileEntry fileEntry = repository.updateFileEntry(
+		FileEntry fileEntry = repository.updateFileEntry(
 			fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, file, serviceContext);
 
-		registerDLProcessorCallback(fileEntry);
+		dlAppHelperLocalService.updateFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 
 		return fileEntry;
 	}
@@ -2188,11 +2220,12 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
-		final FileEntry fileEntry = repository.updateFileEntry(
+		FileEntry fileEntry = repository.updateFileEntry(
 			fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, is, size, serviceContext);
 
-		registerDLProcessorCallback(fileEntry);
+		dlAppHelperLocalService.updateFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 
 		return fileEntry;
 	}
@@ -2211,14 +2244,15 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
-		final FileEntry fileEntry = repository.updateFileEntry(
+		FileEntry fileEntry = repository.updateFileEntry(
 			fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, file, serviceContext);
 
 		repository.checkInFileEntry(
 			fileEntryId, majorVersion, changeLog, serviceContext);
 
-		registerDLProcessorCallback(fileEntry);
+		dlAppHelperLocalService.updateFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 
 		return fileEntry;
 	}
@@ -2232,14 +2266,15 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
-		final FileEntry fileEntry = repository.updateFileEntry(
+		FileEntry fileEntry = repository.updateFileEntry(
 			fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, is, size, serviceContext);
 
 		repository.checkInFileEntry(
 			fileEntryId, majorVersion, changeLog, serviceContext);
 
-		registerDLProcessorCallback(fileEntry);
+		dlAppHelperLocalService.updateFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 
 		return fileEntry;
 	}
@@ -2407,6 +2442,10 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			}
 		}
 
+		dlAppHelperLocalService.addFileEntry(
+			getUserId(), destinationFileEntry,
+			destinationFileEntry.getFileVersion(), serviceContext);
+
 		return destinationFileEntry;
 	}
 
@@ -2432,6 +2471,10 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 						curDestFolder.getGroupId(),
 						srcFileEntry.getFileEntryId(),
 						curDestFolder.getFolderId(), serviceContext);
+
+					dlAppHelperLocalService.addFileEntry(
+						getUserId(), fileEntry, fileEntry.getFileVersion(),
+						serviceContext);
 
 					fileEntries.add(fileEntry);
 				}
@@ -2485,10 +2528,18 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		try {
+			FileEntry fileEntry = fromRepository.getFileEntry(oldFileEntryId);
+
 			fromRepository.deleteFileEntry(oldFileEntryId);
+
+			dlAppHelperLocalService.deleteFileEntry(fileEntry);
 		}
 		catch (PortalException pe) {
+			FileEntry fileEntry = toRepository.getFileEntry(newFileEntryId);
+
 			toRepository.deleteFileEntry(newFileEntryId);
+
+			dlAppHelperLocalService.deleteFileEntry(fileEntry);
 
 			throw pe;
 		}
@@ -2549,8 +2600,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			fileEntryId, destinationFileEntry.getFileEntryId(), fromRepository,
 			toRepository);
 
-		registerDLProcessorCallback(destinationFileEntry);
-
 		return destinationFileEntry;
 	}
 
@@ -2579,12 +2628,9 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 					FileEntry fileEntry =
 						(FileEntry)folderAndFileEntryAndFileShortcut;
 
-					FileEntry destinationFileEntry = copyFileEntry(
+					copyFileEntry(
 						toRepository, fileEntry, newFolder.getFolderId(),
 						serviceContext);
-
-					registerDLProcessorCallback(destinationFileEntry);
-
 				}
 				else if (folderAndFileEntryAndFileShortcut instanceof Folder) {
 					Folder currentFolder =
@@ -2625,19 +2671,6 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		}
 
 		return newFolder;
-	}
-
-	protected void registerDLProcessorCallback(final FileEntry fileEntry) {
-		TransactionCommitCallbackUtil.registerCallback(
-			new Callable<Void>() {
-
-				public Void call() throws Exception {
-					DLProcessorRegistryUtil.trigger(fileEntry);
-
-					return null;
-				}
-
-			});
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(DLAppServiceImpl.class);

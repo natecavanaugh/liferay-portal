@@ -80,11 +80,9 @@ public class EditLayoutSetBranchAction extends EditLayoutsAction {
 		}
 		catch (Exception e) {
 			if (e instanceof LayoutSetBranchNameException) {
-				LayoutSetBranchNameException lsbne =
-					(LayoutSetBranchNameException)e;
+				SessionErrors.add(actionRequest, e.getClass().getName(), e);
 
-				SessionErrors.add(
-					actionRequest, e.getClass().getName() + lsbne.getType());
+				sendRedirect(actionRequest, actionResponse);
 			}
 			else if (e instanceof PrincipalException ||
 					 e instanceof SystemException) {
@@ -153,6 +151,8 @@ public class EditLayoutSetBranchAction extends EditLayoutsAction {
 		}
 
 		LayoutSetBranchServiceUtil.deleteLayoutSetBranch(layoutSetBranchId);
+
+		SessionMessages.add(actionRequest, "sitePageVariationDeleted");
 	}
 
 	protected void mergeLayoutSetBranch(ActionRequest actionRequest)
@@ -169,6 +169,8 @@ public class EditLayoutSetBranchAction extends EditLayoutsAction {
 
 		LayoutSetBranchServiceUtil.mergeLayoutSetBranch(
 			layoutSetBranchId, mergeLayoutSetBranchId, serviceContext);
+
+		SessionMessages.add(actionRequest, "sitePageVariationMerged");
 	}
 
 	protected void updateLayoutSetBranch(ActionRequest actionRequest)
@@ -193,10 +195,14 @@ public class EditLayoutSetBranchAction extends EditLayoutsAction {
 			LayoutSetBranchServiceUtil.addLayoutSetBranch(
 				groupId, privateLayout, name, description, false,
 				copyLayoutSetBranchId, serviceContext);
+
+			SessionMessages.add(actionRequest, "sitePageVariationAdded");
 		}
 		else {
 			LayoutSetBranchServiceUtil.updateLayoutSetBranch(
 				groupId, layoutSetBranchId, name, description, serviceContext);
+
+			SessionMessages.add(actionRequest, "sitePageVariationUpdated");
 		}
 	}
 

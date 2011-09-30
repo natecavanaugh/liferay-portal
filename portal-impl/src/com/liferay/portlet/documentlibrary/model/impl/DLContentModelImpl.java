@@ -284,18 +284,13 @@ public class DLContentModelImpl extends BaseModelImpl<DLContent>
 
 	@Override
 	public DLContent toEscapedModel() {
-		if (isEscapedModel()) {
-			return (DLContent)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (DLContent)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (DLContent)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -393,9 +388,9 @@ public class DLContentModelImpl extends BaseModelImpl<DLContent>
 
 		dlContentModelImpl._originalVersion = dlContentModelImpl._version;
 
-		_dataBlobModel = null;
+		dlContentModelImpl._dataBlobModel = null;
 
-		_columnBitmask = 0;
+		dlContentModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -457,8 +452,6 @@ public class DLContentModelImpl extends BaseModelImpl<DLContent>
 		sb.append(getPath());
 		sb.append(", version=");
 		sb.append(getVersion());
-		sb.append(", data=");
-		sb.append(getData());
 		sb.append(", size=");
 		sb.append(getSize());
 		sb.append("}");
@@ -500,10 +493,6 @@ public class DLContentModelImpl extends BaseModelImpl<DLContent>
 		sb.append(
 			"<column><column-name>version</column-name><column-value><![CDATA[");
 		sb.append(getVersion());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>data</column-name><column-value><![CDATA[");
-		sb.append(getData());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>size</column-name><column-value><![CDATA[");

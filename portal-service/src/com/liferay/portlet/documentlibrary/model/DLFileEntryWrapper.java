@@ -582,10 +582,6 @@ public class DLFileEntryWrapper implements DLFileEntry {
 		return _dlFileEntry.isEscapedModel();
 	}
 
-	public void setEscapedModel(boolean escapedModel) {
-		_dlFileEntry.setEscapedModel(escapedModel);
-	}
-
 	public java.io.Serializable getPrimaryKeyObj() {
 		return _dlFileEntry.getPrimaryKeyObj();
 	}
@@ -727,6 +723,11 @@ public class DLFileEntryWrapper implements DLFileEntry {
 	public void setExtraSettingsProperties(
 		com.liferay.portal.kernel.util.UnicodeProperties extraSettingsProperties) {
 		_dlFileEntry.setExtraSettingsProperties(extraSettingsProperties);
+	}
+
+	public void setFileVersion(
+		com.liferay.portlet.documentlibrary.model.DLFileVersion dlFileVersion) {
+		_dlFileEntry.setFileVersion(dlFileVersion);
 	}
 
 	public DLFileEntry getWrappedDLFileEntry() {

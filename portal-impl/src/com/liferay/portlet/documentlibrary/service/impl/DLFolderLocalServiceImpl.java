@@ -109,7 +109,7 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 			dlFolderPersistence.update(parentDLFolder, false);
 		}
 
-		// DLApp
+		// App helper
 
 		dlAppHelperLocalService.addFolder(
 			new LiferayFolder(dlFolder), serviceContext);
@@ -481,7 +481,7 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 				serviceContext);
 		}
 
-		// DLApp
+		// App helper
 
 		dlAppHelperLocalService.updateFolder(
 			new LiferayFolder(dlFolder), serviceContext);
@@ -583,7 +583,7 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 		expandoValueLocalService.deleteValues(
 			DLFolder.class.getName(), dlFolder.getFolderId());
 
-		// DLApp
+		// App helper
 
 		dlAppHelperLocalService.deleteFolder(new LiferayFolder(dlFolder));
 
