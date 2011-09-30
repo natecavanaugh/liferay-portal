@@ -240,11 +240,11 @@
 			padding-top: 5px;
 		}
 
-		.structure-field {
+		.structure-field .structure-field {
 			border-bottom: 1px #CCC solid;
-			border-left: 2px #CCC solid;
-			margin: 7px 3px 0 3px;
-			padding: 7px 2px 0 5px;
+			border-left: 10px solid #E0E0E0;
+			margin: 7px 0 0 5px;
+			padding: 7px 0 0 10px;
 		}
 	}
 
