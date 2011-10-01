@@ -44,7 +44,7 @@
 	@include border-radius(1px 4px 4px 1px);
 }
 
-body > .lfr-menu-list, body > .lfr-menu-list ul, .lfr-actions, .aui-dialog-content, .aui-dialog .yui3-widget-hd, .modify-pages .delete-tab, input[type="submit"], input[type="button"], input[type="reset"], button, .tags-search-combobox .aui-field-input-text, .staging-icon-menu-container .staging-icon-menu.lfr-actions .lfr-trigger strong a, .active-area-proxy {
+body > .lfr-menu-list, body > .lfr-menu-list ul, .lfr-actions, .aui-dialog-content, .aui-dialog .yui3-widget-hd, .modify-pages .delete-tab, input[type="submit"], input[type="button"], input[type="reset"], button, .tags-search-combobox .aui-field-input-text, .staging-icon-menu-container .staging-icon-menu.lfr-actions .lfr-trigger strong a {
 	@include border-radius(4px);
 }
 
@@ -102,4 +102,11 @@ body > .lfr-menu-list, body > .lfr-menu-list ul, .lfr-actions, .aui-dialog-conte
 	@include box-shadow(inset 0 0.75em 0.75em rgba(255, 255, 255, 0.55));
 	@include background-image(linear-gradient(0 0, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.06) 50%, rgba(0, 0, 0, 0.06) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0))); 
 	background-size: 100px 100px;
+}
+
+.lfr-app-column-view {
+	.aui-paginator-container {
+		@include background-image(linear-gradient(bottom, rgb(228,228,228) 25%, rgb(222,223,223) 50%, rgb(235,236,238) 75%));
+		@include box-shadow(0 -1px 0 #DDD);
+	}
 }

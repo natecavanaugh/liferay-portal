@@ -623,6 +623,15 @@
 			margin: 10px;
 		}
 	}
+
+	.aui-paginator-container {
+		border-bottom-color: #EEE;
+		border-top: 1px solid #FFF;
+		border-width: 1px 0;
+		text-align: center;
+		padding: 10px;
+		position: relative;
+	}
 }
 
 .ie8 .lfr-app-column-view {
