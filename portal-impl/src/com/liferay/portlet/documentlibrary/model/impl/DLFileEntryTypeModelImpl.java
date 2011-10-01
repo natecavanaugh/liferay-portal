@@ -326,18 +326,13 @@ public class DLFileEntryTypeModelImpl extends BaseModelImpl<DLFileEntryType>
 
 	@Override
 	public DLFileEntryType toEscapedModel() {
-		if (isEscapedModel()) {
-			return (DLFileEntryType)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (DLFileEntryType)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (DLFileEntryType)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -430,7 +425,7 @@ public class DLFileEntryTypeModelImpl extends BaseModelImpl<DLFileEntryType>
 
 		dlFileEntryTypeModelImpl._originalDescription = dlFileEntryTypeModelImpl._description;
 
-		_columnBitmask = 0;
+		dlFileEntryTypeModelImpl._columnBitmask = 0;
 	}
 
 	@Override

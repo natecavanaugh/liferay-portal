@@ -82,7 +82,7 @@ public class DLFileEntryTypeServiceImpl extends DLFileEntryTypeServiceBaseImpl {
 			getPermissionChecker(), fileEntryTypeId, ActionKeys.UPDATE);
 
 		dlFileEntryTypeLocalService.updateFileEntryType(
-			fileEntryTypeId, name, description, ddmStructureIds,
+			getUserId(), fileEntryTypeId, name, description, ddmStructureIds,
 			serviceContext);
 	}
 

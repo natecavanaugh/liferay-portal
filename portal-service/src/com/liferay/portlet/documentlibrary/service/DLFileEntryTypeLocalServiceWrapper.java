@@ -334,14 +334,14 @@ public class DLFileEntryTypeLocalServiceWrapper
 			keywords);
 	}
 
-	public void updateFileEntryType(long fileEntryTypeId,
+	public void updateFileEntryType(long userId, long fileEntryTypeId,
 		java.lang.String name, java.lang.String description,
 		long[] ddmStructureIds,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		_dlFileEntryTypeLocalService.updateFileEntryType(fileEntryTypeId, name,
-			description, ddmStructureIds, serviceContext);
+		_dlFileEntryTypeLocalService.updateFileEntryType(userId,
+			fileEntryTypeId, name, description, ddmStructureIds, serviceContext);
 	}
 
 	public void updateFolderFileEntryTypes(

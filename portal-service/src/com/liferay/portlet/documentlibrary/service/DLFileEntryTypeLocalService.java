@@ -294,7 +294,7 @@ public interface DLFileEntryTypeLocalService extends PersistedModelLocalService 
 		java.lang.String keywords)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public void updateFileEntryType(long fileEntryTypeId,
+	public void updateFileEntryType(long userId, long fileEntryTypeId,
 		java.lang.String name, java.lang.String description,
 		long[] ddmStructureIds,
 		com.liferay.portal.service.ServiceContext serviceContext)

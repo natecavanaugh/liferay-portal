@@ -234,18 +234,13 @@ public class DLFileEntryMetadataModelImpl extends BaseModelImpl<DLFileEntryMetad
 
 	@Override
 	public DLFileEntryMetadata toEscapedModel() {
-		if (isEscapedModel()) {
-			return (DLFileEntryMetadata)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (DLFileEntryMetadata)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (DLFileEntryMetadata)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -346,7 +341,7 @@ public class DLFileEntryMetadataModelImpl extends BaseModelImpl<DLFileEntryMetad
 
 		dlFileEntryMetadataModelImpl._setOriginalFileVersionId = false;
 
-		_columnBitmask = 0;
+		dlFileEntryMetadataModelImpl._columnBitmask = 0;
 	}
 
 	@Override

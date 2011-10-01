@@ -24,10 +24,13 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Image;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileVersion;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.spring.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.asset.NoSuchEntryException;
 import com.liferay.portlet.asset.model.AssetEntry;
@@ -36,15 +39,19 @@ import com.liferay.portlet.asset.model.AssetLinkConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
+import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.model.DLSyncConstants;
 import com.liferay.portlet.documentlibrary.service.base.DLAppHelperLocalServiceBaseImpl;
 import com.liferay.portlet.documentlibrary.social.DLActivityKeys;
 import com.liferay.portlet.documentlibrary.util.DLPreviewableProcessor;
+import com.liferay.portlet.documentlibrary.util.DLProcessorRegistryUtil;
 
 import java.io.Serializable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * @author Alexander Chow
@@ -53,9 +60,15 @@ public class DLAppHelperLocalServiceImpl
 	extends DLAppHelperLocalServiceBaseImpl {
 
 	public void addFileEntry(
-			FileEntry fileEntry, FileVersion fileVersion,
+			long userId, FileEntry fileEntry, FileVersion fileVersion,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
+
+		updateAsset(
+			userId, fileEntry, fileVersion,
+			serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames(),
+			serviceContext.getAssetLinkEntryIds());
 
 		if (PropsValues.DL_FILE_ENTRY_COMMENTS_ENABLED) {
 			mbMessageLocalService.addDiscussionMessage(
@@ -63,6 +76,14 @@ public class DLAppHelperLocalServiceImpl
 				fileEntry.getGroupId(), DLFileEntryConstants.getClassName(),
 				fileEntry.getFileEntryId(), WorkflowConstants.ACTION_PUBLISH);
 		}
+
+		if (fileVersion instanceof LiferayFileVersion) {
+			DLFileVersion dlFileVersion = (DLFileVersion)fileVersion.getModel();
+
+			startWorkflowInstance(userId, dlFileVersion, serviceContext);
+		}
+
+		registerDLProcessorCallback(fileEntry);
 	}
 
 	public void addFolder(Folder folder, ServiceContext serviceContext)
@@ -182,46 +203,68 @@ public class DLAppHelperLocalServiceImpl
 		return null;
 	}
 
-	protected long getFileEntryTypeId(FileEntry fileEntry)
+	public AssetEntry updateAsset(
+			long userId, FileEntry fileEntry, FileVersion fileVersion,
+			long assetClassPk)
 		throws PortalException, SystemException {
 
-		FileVersion latestFileVersion = null;
+		long[] assetCategoryIds = assetCategoryLocalService.getCategoryIds(
+			DLFileEntryConstants.getClassName(), assetClassPk);
+		String[] assetTagNames = assetTagLocalService.getTagNames(
+			DLFileEntryConstants.getClassName(), assetClassPk);
 
-		if (fileEntry.getModel() instanceof DLFileEntry) {
-			DLFileEntry dlFileEntry = (DLFileEntry)fileEntry.getModel();
+		AssetEntry assetEntry = assetEntryLocalService.getEntry(
+			DLFileEntryConstants.getClassName(), assetClassPk);
 
-			latestFileVersion = new LiferayFileVersion(
-				dlFileEntry.getLatestFileVersion(true));
-		}
-		else {
-			latestFileVersion = fileEntry.getLatestFileVersion();
-		}
+		List<AssetLink> assetLinks = assetLinkLocalService.getDirectLinks(
+			assetEntry.getEntryId());
 
-		FileEntry latestFileEntry = latestFileVersion.getFileEntry();
+		long[] assetLinkIds = StringUtil.split(
+			ListUtil.toString(assetLinks, AssetLink.ENTRY_ID2_ACCESSOR), 0L);
 
-		LiferayFileEntry liferayFileEntry = null;
-
-		if (latestFileEntry instanceof LiferayFileEntry) {
-			liferayFileEntry = (LiferayFileEntry)latestFileEntry;
-		}
-
-		if (liferayFileEntry == null) {
-			return 0;
-		}
-
-		DLFileEntry dlFileEntry = liferayFileEntry.getDLFileEntry();
-
-		return dlFileEntry.getFileEntryTypeId();
+		return updateAsset(
+			userId, fileEntry, fileVersion, assetCategoryIds, assetTagNames,
+			assetLinkIds);
 	}
 
 	public AssetEntry updateAsset(
 			long userId, FileEntry fileEntry, FileVersion fileVersion,
 			long[] assetCategoryIds, String[] assetTagNames,
-			long[] assetLinkEntryIds, String mimeType,
-			boolean addDraftAssetEntry, boolean visible, int height, int width)
+			long[] assetLinkEntryIds)
 		throws PortalException, SystemException {
 
 		AssetEntry assetEntry = null;
+
+		int height = 0;
+		int width = 0;
+
+		boolean addDraftAssetEntry = false;
+
+		if (fileEntry instanceof LiferayFileEntry) {
+			DLFileEntry dlFileEntry = (DLFileEntry)fileEntry.getModel();
+			DLFileVersion dlFileVersion = (DLFileVersion)fileVersion.getModel();
+
+			long largeImageId = dlFileEntry.getLargeImageId();
+
+			if (dlFileVersion != null) {
+				largeImageId = dlFileVersion.getLargeImageId();
+			}
+
+			Image largeImage = imageLocalService.getImage(largeImageId);
+
+			if (largeImage != null) {
+				height = largeImage.getHeight();
+				width = largeImage.getWidth();
+			}
+
+			if (!dlFileVersion.isApproved()) {
+				String version = dlFileVersion.getVersion();
+
+				if (!version.equals(DLFileEntryConstants.VERSION_DEFAULT)) {
+					addDraftAssetEntry = true;
+				}
+			}
+		}
 
 		long fileEntryTypeId = getFileEntryTypeId(fileEntry);
 
@@ -231,7 +274,7 @@ public class DLAppHelperLocalServiceImpl
 				DLFileEntryConstants.getClassName(),
 				fileVersion.getFileVersionId(), fileEntry.getUuid(),
 				fileEntryTypeId, assetCategoryIds, assetTagNames, false, null,
-				null, null, null, mimeType, fileEntry.getTitle(),
+				null, null, null, fileEntry.getMimeType(), fileEntry.getTitle(),
 				fileEntry.getDescription(), null, null, null, height, width,
 				null, false);
 		}
@@ -240,8 +283,9 @@ public class DLAppHelperLocalServiceImpl
 				userId, fileEntry.getGroupId(),
 				DLFileEntryConstants.getClassName(),
 				fileEntry.getFileEntryId(), fileEntry.getUuid(),
-				fileEntryTypeId, assetCategoryIds, assetTagNames, visible,
-				null, null, null, null, mimeType, fileEntry.getTitle(),
+				fileEntryTypeId, assetCategoryIds, assetTagNames,
+				fileVersion.isApproved(), null, null, null, null,
+				fileEntry.getMimeType(), fileEntry.getTitle(),
 				fileEntry.getDescription(), null, null, null, height, width,
 				null, false);
 
@@ -256,9 +300,9 @@ public class DLAppHelperLocalServiceImpl
 					dlFileShortcut.getFileShortcutId(),
 					dlFileShortcut.getUuid(), fileEntryTypeId,
 					assetCategoryIds, assetTagNames, true,
-					null, null, null, null, mimeType, fileEntry.getTitle(),
-					fileEntry.getDescription(), null, null, null, height, width,
-					null, false);
+					null, null, null, null, fileEntry.getMimeType(),
+					fileEntry.getTitle(), fileEntry.getDescription(), null,
+					null, null, height, width, null, false);
 			}
 		}
 
@@ -269,11 +313,35 @@ public class DLAppHelperLocalServiceImpl
 		return assetEntry;
 	}
 
-	@SuppressWarnings("unused")
 	public void updateFileEntry(
-			FileEntry fileEntry, FileVersion fileVersion,
+			long userId, FileEntry fileEntry, FileVersion fileVersion,
+			boolean checkIn, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		updateAsset(
+			userId, fileEntry, fileVersion,
+			serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames(),
+			serviceContext.getAssetLinkEntryIds());
+
+		if (checkIn && (fileVersion instanceof LiferayFileVersion) &&
+		 	(serviceContext.getWorkflowAction() ==
+		 		WorkflowConstants.ACTION_PUBLISH)) {
+
+			DLFileVersion dlFileVersion = (DLFileVersion)fileVersion.getModel();
+
+			startWorkflowInstance(userId, dlFileVersion, serviceContext);
+		}
+
+		registerDLProcessorCallback(fileEntry);
+	}
+
+	public void updateFileEntry(
+			long userId, FileEntry fileEntry, FileVersion fileVersion,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
+
+		updateFileEntry(userId, fileEntry, fileVersion, false, serviceContext);
 	}
 
 	public void updateFolder(Folder folder, ServiceContext serviceContext)
@@ -399,6 +467,18 @@ public class DLAppHelperLocalServiceImpl
 		}
 	}
 
+	protected long getFileEntryTypeId(FileEntry fileEntry)
+		throws PortalException, SystemException {
+
+		if (fileEntry instanceof LiferayFileEntry) {
+			DLFileEntry dlFileEntry = (DLFileEntry)fileEntry.getModel();
+
+			return dlFileEntry.getLatestFileVersion(true).getFileEntryTypeId();
+		}
+
+		return 0;
+	}
+
 	protected boolean isStagingGroup(long groupId) {
 		try {
 			Group group = groupLocalService.getGroup(groupId);
@@ -408,6 +488,35 @@ public class DLAppHelperLocalServiceImpl
 		catch (Exception e) {
 			return false;
 		}
+	}
+
+	protected void registerDLProcessorCallback(final FileEntry fileEntry) {
+		TransactionCommitCallbackUtil.registerCallback(
+			new Callable<Void>() {
+
+				public Void call() throws Exception {
+					DLProcessorRegistryUtil.trigger(fileEntry);
+
+					return null;
+				}
+
+			});
+	}
+
+	protected void startWorkflowInstance(
+			long userId, DLFileVersion dlFileVersion,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		Map<String, Serializable> workflowContext =
+			new HashMap<String, Serializable>();
+
+		workflowContext.put("event", DLSyncConstants.EVENT_ADD);
+
+		WorkflowHandlerRegistryUtil.startWorkflowInstance(
+			dlFileVersion.getCompanyId(), dlFileVersion.getGroupId(), userId,
+			DLFileEntry.class.getName(), dlFileVersion.getFileVersionId(),
+			dlFileVersion, serviceContext, workflowContext);
 	}
 
 }
