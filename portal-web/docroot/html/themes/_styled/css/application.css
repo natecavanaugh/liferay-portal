@@ -625,8 +625,8 @@
 	}
 
 	.aui-paginator-container {
+		border: 1px solid #FFF;
 		border-bottom-color: #EEE;
-		border-top: 1px solid #FFF;
 		border-width: 1px 0;
 		text-align: center;
 		padding: 10px;
