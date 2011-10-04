@@ -500,8 +500,6 @@
 	}
 
 	.view {
-		border: 1px solid #7B7B7B;
-
 		.portlet-msg-info, .portlet-msg-success {
 			border-width: 0 0 1px;
 			margin: 0 auto;
@@ -510,11 +508,6 @@
 		.view-content {
 			background-color: #FAFAFA;
 		}
-	}
-
-	.context-pane-content {
-		border-left: 1px solid #7B7B7B;
-		position: relative;
 	}
 
 	.taglib-search-iterator-page-iterator-top, .taglib-search-iterator-page-iterator-bottom, .aui-paginator-container, .document-library-breadcrumb {
