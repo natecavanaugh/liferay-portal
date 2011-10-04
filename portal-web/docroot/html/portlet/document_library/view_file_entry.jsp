@@ -526,12 +526,10 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 								for (DDMStructure ddmStructure : ddmStructures) {
 									Fields fields = null;
 
-									long ddmStructureId = ddmStructure.getStructureId();
-
 									try {
-										DLFileEntryMetadata fileEntryMetadata = DLFileEntryMetadataLocalServiceUtil.getFileEntryMetadata(ddmStructureId, fileVersionId);
+										DLFileEntryMetadata fileEntryMetadata = DLFileEntryMetadataLocalServiceUtil.getFileEntryMetadata(ddmStructure.getStructureId(), fileVersionId);
 
-										fields = StorageEngineUtil.getFields(ddmStructureId, fileEntryMetadata.getDDMStorageId());
+										fields = StorageEngineUtil.getFields(fileEntryMetadata.getDDMStorageId());
 									}
 									catch (Exception e) {
 									}
@@ -569,12 +567,10 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							for (DDMStructure ddmStructure : ddmStructures) {
 								Fields fields = null;
 
-								long ddmStructureId = ddmStructure.getStructureId();
-
 								try {
 									DLFileEntryMetadata fileEntryMetadata = DLFileEntryMetadataLocalServiceUtil.getFileEntryMetadata(ddmStructure.getStructureId(), fileVersionId);
 
-									fields = StorageEngineUtil.getFields(ddmStructureId, fileEntryMetadata.getDDMStorageId());
+									fields = StorageEngineUtil.getFields(fileEntryMetadata.getDDMStorageId());
 								}
 								catch (Exception e) {
 								}
