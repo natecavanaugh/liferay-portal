@@ -73,7 +73,8 @@ boolean passwordUpdated = GetterUtil.getBoolean((Boolean)session.getAttribute(We
 
 							<div id="defaultDatabaseOptions">
 								<strong><liferay-ui:message key="default-database" /> (<liferay-ui:message key="database.hypersonic" />)</strong>
-								<liferay-ui:message key="hypersonic-is-an-embedded-database-useful-for-development-and-demo'ing-purposes" />
+
+								<liferay-ui:message key="this-database-is-useful-for-development-and-demo'ing-purposes" />
 
 								<a href="javascript;" id="customDatabaseOptionsLink">
 									(<liferay-ui:message key="change" />)
@@ -92,9 +93,14 @@ boolean passwordUpdated = GetterUtil.getBoolean((Boolean)session.getAttribute(We
 										String databaseType = PropsValues.SETUP_DATABASE_TYPES[i];
 										String driverClassName = PropsUtil.get(PropsKeys.SETUP_DATABASE_DRIVER_CLASS_NAME, new com.liferay.portal.kernel.configuration.Filter(databaseType));
 										String url = PropsUtil.get(PropsKeys.SETUP_DATABASE_URL, new com.liferay.portal.kernel.configuration.Filter(databaseType));
+
+										Map<String,Object> data = new HashMap<String,Object>();
+
+										data.put("driverClassName", driverClassName);
+										data.put("url", url);
 									%>
 
-										<aui:option label='<%= "database." + databaseType %>' data-url="<%=url%>" data-driverClassName="<%=driverClassName%>" selected="<%= PropsValues.JDBC_DEFAULT_URL.contains(databaseType) %>" value="<%= databaseType %>" />
+										<aui:option data="<%= data %>" label='<%= "database." + databaseType %>' selected="<%= PropsValues.JDBC_DEFAULT_URL.contains(databaseType) %>" value="<%= databaseType %>" />
 
 									<%
 									}
@@ -106,9 +112,9 @@ boolean passwordUpdated = GetterUtil.getBoolean((Boolean)session.getAttribute(We
 									<liferay-ui:message key="in-order-to-use-this-database" />
 								</span>
 
-								<aui:input id="jdbcDefaultURL" label="jdbc-default-url" name="<%= "properties--" + PropsKeys.JDBC_DEFAULT_URL + "--" %>" value="<%= PropsValues.JDBC_DEFAULT_URL %>" />
+								<aui:input id="jdbcDefaultURL" label="jdbc-default-url" name='<%= "properties--" + PropsKeys.JDBC_DEFAULT_URL + "--" %>' value="<%= PropsValues.JDBC_DEFAULT_URL %>" />
 
-								<aui:input id="jdbcDefaultDriverName" label="jdbc-driver-classname" name="<%= "properties--" + PropsKeys.JDBC_DEFAULT_DRIVER_CLASS_NAME + "--" %>" value="<%= PropsValues.JDBC_DEFAULT_DRIVER_CLASS_NAME %>" />
+								<aui:input id="jdbcDefaultDriverClassname" label="jdbc-default-driver-classname" name='<%= "properties--" + PropsKeys.JDBC_DEFAULT_DRIVER_CLASS_NAME + "--" %>' value="<%= PropsValues.JDBC_DEFAULT_DRIVER_CLASS_NAME %>" />
 
 								<aui:input label="user-name" name='<%= "properties--" + PropsKeys.JDBC_DEFAULT_USERNAME + "--" %>' value="<%= PropsValues.JDBC_DEFAULT_USERNAME %>" />
 
@@ -131,9 +137,9 @@ boolean passwordUpdated = GetterUtil.getBoolean((Boolean)session.getAttribute(We
 						var defaultDatabaseOptionsLink = A.one('#defaultDatabaseOptionsLink');
 
 						var jdbcDefaultURL = A.one('#<portlet:namespace />jdbcDefaultURL');
-						var jdbcDefaultDriverClassName = A.one('#<portlet:namespace />jdbcDefaultDriverName');
+						var jdbcDefaultDriverClassName = A.one('#<portlet:namespace />jdbcDefaultDriverClassname');
 
-						if (databaseSelector.val() != 'hypersonic') {
+						if (!defaultDatabase.val()) {
 							defaultDatabaseOptions.hide();
 
 							customDatabaseOptions.show();
