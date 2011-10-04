@@ -83,7 +83,7 @@
 				<div class="tags-paginator"></div>
 			</aui:column>
 
-			<aui:column columnWidth="65" cssClass="tags-admin-edit-tag">
+			<aui:column columnWidth="65" cssClass="tags-admin-edit-tag aui-column-last">
 				<div class="results-header">
 					<liferay-ui:message key="tag-details" />
 				</div>

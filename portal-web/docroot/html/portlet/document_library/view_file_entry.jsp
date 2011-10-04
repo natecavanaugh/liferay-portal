@@ -150,7 +150,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 	/>
 </c:if>
 
-<div class="view">
+<div class="view lfr-app-column-view">
 	<aui:layout>
 		<aui:column columnWidth="<%= 65 %>" cssClass="lfr-asset-column-details" first="<%= true %>">
 			<div class="lfr-header-row">

@@ -164,7 +164,7 @@ if ((selLayout != null) && !group.isLayoutPrototype()) {
 		</aui:column>
 	</c:if>
 
-	<aui:column columnWidth="<%= group.isLayoutPrototype() ? 100 : 75 %>" cssClass="manage-layout">
+	<aui:column columnWidth="<%= group.isLayoutPrototype() ? 100 : 75 %>" cssClass="manage-layout aui-column-last">
 		<div id="<portlet:namespace />layoutsContainer">
 			<c:choose>
 				<c:when test="<%= selPlid > 0 %>">
