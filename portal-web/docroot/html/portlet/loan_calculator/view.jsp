@@ -40,73 +40,6 @@ integerFormat.setMinimumFractionDigits(0);
 NumberFormat percentFormat = NumberFormat.getPercentInstance(locale);
 %>
 
-<!--
-<form action="<liferay-portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/loan_calculator/view" /></liferay-portlet:renderURL>" id="<portlet:namespace />fm" method="post" name="<portlet:namespace />fm">
-
-<table class="lfr-table">
-<tr>
-	<td>
-		<liferay-ui:message key="loan-amount" />
-	</td>
-	<td>
-		<input name="<portlet:namespace />loanAmount" size="5" type="text" value="<%= integerFormat.format(loanAmount) %>" />
-	</td>
-</tr>
-<tr>
-	<td>
-		<liferay-ui:message key="interest-rate" />
-	</td>
-	<td>
-		<input name="<portlet:namespace />interest" size="5" type="text" value="<%= doubleFormat.format(interest) %>" />
-	</td>
-</tr>
-<tr>
-	<td>
-		<liferay-ui:message key="years" />
-	</td>
-	<td>
-		<input name="<portlet:namespace />years" size="5" type="text" value="<%= years %>" />
-	</td>
-</tr>
-<tr>
-	<td>
-		<liferay-ui:message key="monthly-payment" />
-	</td>
-	<td>
-		<strong><%= integerFormat.format(amountPerPayment) %></strong>
-	</td>
-</tr>
-<tr>
-	<td>
-		<liferay-ui:message key="interest-paid" />
-	</td>
-	<td>
-		<strong><%= integerFormat.format(interestPaid) %></strong>
-	</td>
-</tr>
-<tr>
-	<td>
-		<liferay-ui:message key="total-paid" />
-	</td>
-	<td>
-		<strong><%= integerFormat.format(totalPaid) %></strong>
-	</td>
-</tr>
-</table>
-
-<br />
-
-<input type="submit" value="<liferay-ui:message key="calculate" />" />
-
-</form>
-
-<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />loanAmount);
-	</aui:script>
-</c:if>-->
-
-
 <style type="text/css">
 	.interest-details {
 		margin: 1em 0;
@@ -123,9 +56,7 @@ NumberFormat percentFormat = NumberFormat.getPercentInstance(locale);
 	<aui:column cssClass="aui-fieldset" columnWidth="25">
 		<aui:input label="loan-amount" name="loanAmount" size="5" value="<%= integerFormat.format(loanAmount) %>" data-myAttribute="test" />
 
-		<aui:input label="interest-rate" name="loanAmount" size="5" value="<%= doubleFormat.format(interest) %>" />
-
-		<aui:input label="my-interest-rate" name="loanAmount2" type="checkbox" value="<%= doubleFormat.format(interest) %>" />
+		<aui:input label="interest-rate" name="interest" size="5" value="<%= doubleFormat.format(interest) %>" />
 
 		<aui:input label="years" name="years" size="5" value="<%= years %>" />
 
@@ -151,15 +82,15 @@ NumberFormat percentFormat = NumberFormat.getPercentInstance(locale);
 	</aui:button-row>
 </aui:form>
 
-<aui:script use="aui-chart">
+<aui:script use="aui-chart,aui-io-request,aui-parse-content">
 	new A.PieChart(
 		{
-	        dataField: 'count',
+			dataField: 'count',
 			dataSource: (new A.DataSource.Local(
 					{
 						source: [
 							{ response: 'Principle', count: <%= totalPaid - interestPaid %> },
-					        { response: 'Interest', count: <%= interestPaid %> }
+							{ response: 'Interest', count: <%= interestPaid %> }
 						]
 					}
 				).plug(
@@ -170,7 +101,7 @@ NumberFormat percentFormat = NumberFormat.getPercentInstance(locale);
 						}
 					}
 				)),
-	        categoryField: 'response',
+			categoryField: 'response',
 			width: 400,
 			height: 300,
 			dataTipFunction: function(item, index, series) {
@@ -200,11 +131,9 @@ NumberFormat percentFormat = NumberFormat.getPercentInstance(locale);
 					}
 				}
 			}
-	    }
-	   ).render('#chart');
-</aui:script>
+		}
+	).render('#chart');
 
-<aui:script use="aui-io-request,aui-parse-content">
 	var form = A.one('#<portlet:namespace />fm');
 	var parentNode = form.get('parentNode');
 
