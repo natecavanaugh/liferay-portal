@@ -25,3 +25,16 @@
 		font-weight: normal;
 	}
 }
+
+.portlet-communities {
+	.organizations-msg-info {
+		background: url(<%= themeImagesPath %>/common/organization_icon.png) #FEFEFE no-repeat 6px 50%;
+		border: 1px solid #BBB;
+		color: #34404F;
+		display: block;
+		font-weight: bold;
+		margin: 2px auto 14px;
+		padding: 6px 6px 6px 30px;
+		text-align: left;
+	}
+}
