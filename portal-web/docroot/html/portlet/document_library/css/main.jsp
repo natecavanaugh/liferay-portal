@@ -207,20 +207,46 @@
 			text-decoration: none;
 		}
 
+		.document-thumbnail {
+			img {
+				background: #EAEAEA;
+				border: 1px solid #CCC;
+				margin: 0;
+				padding: 5px;
+			}
+		}
+
+		&:hover .document-thumbnail img {
+			background-color: #B0D2E1;
+			border-color: #7ABFDD;
+		}
+
+		&.selected .document-thumbnail img {
+			background-color: #B0D2E1;
+			border-color: #057CB0;
+		}
+
 		&.descriptive {
 			display: block;
-			height: 140px;
 			margin: 5px;
-			padding-bottom: 5px;
-			padding-top: 5px;
+			padding: 5px 0;
+			padding-left: 20px;
 			position: relative;
 			text-align: left;
+
+			&:after {
+				clear: both;
+				content: ".";
+				display: block;
+				height: 0;
+				visibility: hidden;
+			}
 
 			.entry-title {
 				display: block;
 				font-size: 1.15em;
 				font-weight: bold;
-				padding: 1.4em 0 0;
+				padding: 5px 0 0;
 			}
 
 			.document-description {
@@ -245,7 +271,7 @@
 
 			.document-thumbnail {
 				float: left;
-				margin: 5px 10px;
+				margin: 5px 10px 5px 5px;
 				position: relative;
 				text-align: center;
 			}
@@ -263,7 +289,7 @@
 			}
 
 			&:hover .document-selector, &.selected .document-selector {
-				clip: auto;
+				clip: rect(auto auto auto auto);
 				position: absolute;
 			}
 
@@ -274,16 +300,18 @@
 
 		&.icon {
 			display: inline-block;
+			float: left;
 			margin: 5px;
 			padding: 10px 0;
 			position: relative;
 			vertical-align: top;
 			width: 200px;
+			height: 160px;
 
 			.document-action {
 				overflow: hidden;
 				position: absolute;
-				right: 10px;
+				right: 5px;
 			}
 
 			.document-selector {
@@ -342,7 +370,7 @@
 		}
 
 		&:hover .overlay, &.hover .overlay, &.selected .document-selector {
-			clip: auto;
+			clip: rect(auto auto auto auto);
 		}
 	}
 
@@ -363,7 +391,7 @@
 		}
 
 		&:hover .overlay, &.hover .overlay {
-			clip: auto;
+			clip: rect(auto auto auto auto);
 		}
 	}
 
@@ -453,28 +481,32 @@
 			}
 		}
 
-		.aui-icon-edit, .aui-icon-move, .aui-icon-lock, .aui-icon-unlock, .aui-icon-permissions {
+		.aui-icon-download, .aui-icon-edit, .aui-icon-lock, .aui-icon-move, .aui-icon-permissions, .aui-icon-unlock {
 			background: url() no-repeat 0 0;
+		}
+
+		.aui-icon-download {
+			background-image: url(<%= themeImagesPath %>/common/download.png);
 		}
 
 		.aui-icon-edit {
 			background-image: url(<%= themeImagesPath %>/common/edit.png);
 		}
 
-		.aui-icon-move {
-			background-image: url(<%= themeImagesPath %>/common/submit.png);
-		}
-
 		.aui-icon-lock {
 			background-image: url(<%= themeImagesPath %>/common/lock.png);
 		}
 
-		.aui-icon-unlock {
-			background-image: url(<%= themeImagesPath %>/common/unlock.png);
+		.aui-icon-move {
+			background-image: url(<%= themeImagesPath %>/common/submit.png);
 		}
 
 		.aui-icon-permissions {
 			background-image: url(<%= themeImagesPath %>/common/permissions.png);
+		}
+
+		.aui-icon-unlock {
+			background-image: url(<%= themeImagesPath %>/common/unlock.png);
 		}
 	}
 
@@ -794,4 +826,12 @@
 	background: #FFFFE0 url(<%= themeImagesPath %>/portlet/pop_up.png) no-repeat 10px 50%;
 	font-size: 1.2em;
 	padding: 0.3em 0.3em 0.3em 2em;
+}
+
+.ie6, .ie7 {
+	.portlet-document-library, .portlet-document-library-display {
+		.document-display-style.descriptive {
+			zoom: 1;
+		}
+	}
 }

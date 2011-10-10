@@ -12,22 +12,41 @@
  * details.
  */
 
-package com.liferay.portlet.usersadmin.search;
+package com.liferay.mail.model;
 
-import com.liferay.portal.kernel.dao.search.DAOParamUtil;
-
-import javax.portlet.PortletRequest;
+import java.io.File;
 
 /**
- * @author Charles May
+ * @author Barrie Selack
+ * @author Brian Wing Shun Chan
  */
-public class UserGroupSearchTerms extends UserGroupDisplayTerms {
+public class Attachment {
 
-	public UserGroupSearchTerms(PortletRequest portletRequest) {
-		super(portletRequest);
-
-		description = DAOParamUtil.getLike(portletRequest, DESCRIPTION);
-		name = DAOParamUtil.getLike(portletRequest, NAME);
+	public Attachment() {
 	}
+
+	public Attachment(File file, String fileName) {
+		_file = file;
+		_fileName = fileName;
+	}
+
+	public File getFile() {
+		return _file;
+	}
+
+	public String getFileName() {
+		return _fileName;
+	}
+
+	public void setFile(File file) {
+		_file = file;
+	}
+
+	public void setFileName(String fileName) {
+		_fileName = fileName;
+	}
+
+	private File _file;
+	private String _fileName;
 
 }

@@ -17,6 +17,8 @@
 <%@ include file="/html/portlet/document_library/init.jsp" %>
 
 <%
+String navigation = ParamUtil.getString(request, "navigation", "documents-home");
+
 Folder folder = (Folder)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FOLDER);
 
 long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folderId"));
@@ -25,13 +27,13 @@ long repositoryId = GetterUtil.getLong((String)request.getAttribute("view.jsp-re
 
 long fileEntryTypeId = ParamUtil.getLong(request, "fileEntryTypeId");
 
+String dlFileEntryTypeName = null;
+
 int status = WorkflowConstants.STATUS_APPROVED;
 
 if (permissionChecker.isCompanyAdmin() || permissionChecker.isGroupAdmin(scopeGroupId)) {
 	status = WorkflowConstants.STATUS_ANY;
 }
-
-String navigation = ParamUtil.getString(request, "navigation","documents-home");
 
 long categoryId = ParamUtil.getLong(request, "categoryId");
 String tagName = ParamUtil.getString(request, "tag");
@@ -110,6 +112,10 @@ int total = 0;
 if (fileEntryTypeId > 0) {
 	Indexer indexer = IndexerRegistryUtil.getIndexer(DLFileEntryConstants.getClassName());
 
+	DLFileEntryType dlFileEntryType = DLFileEntryTypeLocalServiceUtil.getFileEntryType(fileEntryTypeId);
+
+	dlFileEntryTypeName = dlFileEntryType.getName();
+
 	SearchContext searchContext = SearchContextFactory.getInstance(request);
 
 	searchContext.setEnd(searchContainer.getEnd());
@@ -178,9 +184,18 @@ request.setAttribute("view_entries.jsp-total", String.valueOf(total));
 %>
 
 <c:if test="<%= results.isEmpty() %>">
-	<div class="portlet-msg-info">
-		<%= LanguageUtil.get(pageContext, "there-are-no-documents-in-this-folder") %>
-	</div>
+	<c:choose>
+		<c:when test="<%= Validator.isNotNull(dlFileEntryTypeName) %>">
+			<div class="portlet-msg-info">
+				<%= LanguageUtil.format(pageContext, "there-are-no-x-files-in-this-folder", StringUtil.lowerCase(dlFileEntryTypeName)) %>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<div class="portlet-msg-info">
+				<%= LanguageUtil.get(pageContext, "there-are-no-documents-or-media-files-in-this-folder") %>
+			</div>
+		</c:otherwise>
+	</c:choose>
 </c:if>
 
 <%

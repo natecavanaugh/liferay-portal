@@ -17,6 +17,8 @@
 <%@ include file="/html/portlet/document_library/init.jsp" %>
 
 <%
+String navigation = ParamUtil.getString(request, "navigation", "documents-home");
+
 long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folderId"));
 
 long fileEntryTypeId = ParamUtil.getLong(request, "fileEntryTypeId", -1);
@@ -37,8 +39,9 @@ String keywords = ParamUtil.getString(request, "keywords");
 		function onButtonClick(displayStyle) {
 			var config = {
 				'<portlet:namespace />struts_action': '<%= Validator.isNull(keywords) ? "/document_library/view" : "/document_library/search" %>',
-				'<portlet:namespace />displayStyle': displayStyle,
+				'<portlet:namespace />navigation': '<%= navigation %>',
 				'<portlet:namespace />folderId': '<%= String.valueOf(folderId) %>',
+				'<portlet:namespace />displayStyle': displayStyle,
 				'<portlet:namespace />saveDisplayStyle': <%= Boolean.TRUE.toString() %>
 			};
 
