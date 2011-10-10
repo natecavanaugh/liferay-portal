@@ -133,14 +133,13 @@ public class VideoProcessor extends DefaultPreviewableProcessor {
 		File thumbnailTempFile = getThumbnailTempFile(tempFileId);
 
 		try {
-
-			LiferayVideoThumbnailGenerator liferayVideoThumbnailGenerator =
-				new	LiferayVideoThumbnailGenerator(
-					file.getCanonicalPath(), thumbnailTempFile,THUMBNAIL_TYPE,
-					height, width);
-
 			try {
-				liferayVideoThumbnailGenerator.convert();
+				LiferayVideoThumbnailConverter liferayVideoThumbnailConverter =
+					new LiferayVideoThumbnailConverter(
+						file.getCanonicalPath(), thumbnailTempFile,
+						THUMBNAIL_TYPE, height, width);
+
+				liferayVideoThumbnailConverter.convert();
 			}
 			catch (Exception e) {
 				_log.error(e, e);
@@ -381,14 +380,13 @@ public class VideoProcessor extends DefaultPreviewableProcessor {
 			DestinationNames.DOCUMENT_LIBRARY_VIDEO_PROCESSOR, fileVersion);
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(VideoProcessor.class);
-
 	private static int _SAMPLE_RATE = 44100;
+
+	private static Log _log = LogFactoryUtil.getLog(VideoProcessor.class);
 
 	private static VideoProcessor _instance = new VideoProcessor();
 
 	private static List<Long> _fileVersionIds = new Vector<Long>();
-
 	private static Set<String> _videoMimeTypes = SetUtil.fromArray(
 		PropsValues.DL_FILE_ENTRY_PREVIEW_VIDEO_MIME_TYPES);
 

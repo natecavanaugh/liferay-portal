@@ -28,12 +28,13 @@ import com.xuggle.xuggler.IStreamCoder;
 /**
  * @author Juan González
  * @author Sergio González
+ * @author Brian Wing Shun Chan
  */
 public class LiferayAudioConverter extends LiferayConverter {
 
-	public LiferayAudioConverter(String srcFile, String destFile, int rate) {
-		_inputUrl = srcFile;
-		_outputUrl = destFile;
+	public LiferayAudioConverter(String inputURL, String outputURL, int rate) {
+		_inputURL = inputURL;
+		_outputURL = outputURL;
 		_rate = rate;
 	}
 
@@ -44,12 +45,10 @@ public class LiferayAudioConverter extends LiferayConverter {
 		finally {
 			if (_inputIContainer.isOpened()) {
 				_inputIContainer.close();
-				_inputIContainer = null;
 			}
 
 			if (_outputIContainer.isOpened()) {
 				_outputIContainer.close();
-				_outputIContainer = null;
 			}
 		}
 	}
@@ -58,45 +57,37 @@ public class LiferayAudioConverter extends LiferayConverter {
 		_inputIContainer = IContainer.make();
 		_outputIContainer = IContainer.make();
 
-		int returnValue = 0;
+		openContainer(_inputIContainer, _inputURL, false);
+		openContainer(_outputIContainer, _outputURL, true);
 
-		openContainer(_inputIContainer, _inputUrl, false);
-		openContainer(_outputIContainer, _outputUrl, true);
+		int inputStreamsCount = _inputIContainer.getNumStreams();
 
-		int numOfStreams = _inputIContainer.getNumStreams();
-
-		if (numOfStreams < 0) {
-			throw new RuntimeException("Input file doesn't have any stream");
+		if (inputStreamsCount < 0) {
+			throw new RuntimeException("Input URL does not have any streams");
 		}
 
-		IAudioResampler[] iAudioResamplers = new IAudioResampler[numOfStreams];
+		IAudioResampler[] iAudioResamplers =
+			new IAudioResampler[inputStreamsCount];
 
-		IAudioSamples[] inputIAudioSamples = new IAudioSamples[numOfStreams];
-		IAudioSamples[] outputIAudioSamples = new IAudioSamples[numOfStreams];
+		IAudioSamples[] inputIAudioSamples =
+			new IAudioSamples[inputStreamsCount];
+		IAudioSamples[] outputIAudioSamples =
+			new IAudioSamples[inputStreamsCount];
 
-		IStream[] inputIStreams = new IStream[numOfStreams];
-		IStream[] outputIStreams = new IStream[numOfStreams];
+		IStream[] outputIStreams = new IStream[inputStreamsCount];
 
-		IStreamCoder[] inputIStreamCoders = new IStreamCoder[numOfStreams];
-		IStreamCoder[] outputIStreamCoders = new IStreamCoder[numOfStreams];
+		IStreamCoder[] inputIStreamCoders = new IStreamCoder[inputStreamsCount];
+		IStreamCoder[] outputIStreamCoders =
+			new IStreamCoder[inputStreamsCount];
 
-		for (int i = 0; i < numOfStreams; i++) {
-			iAudioResamplers[i] = null;
-
-			inputIAudioSamples[i] = null;
-			outputIAudioSamples[i] = null;
-
+		for (int i = 0; i < inputStreamsCount; i++) {
 			IStream inputIStream = _inputIContainer.getStream(i);
 
 			IStreamCoder inputIStreamCoder = inputIStream.getStreamCoder();
 
-			ICodec.Type inputICodecType = inputIStreamCoder.getCodecType();
-
-			inputIStreams[i] = inputIStream;
-			outputIStreams[i] = null;
-
 			inputIStreamCoders[i] = inputIStreamCoder;
-			outputIStreamCoders[i] = null;
+
+			ICodec.Type inputICodecType = inputIStreamCoder.getCodecType();
 
 			if (inputICodecType == ICodec.Type.CODEC_TYPE_AUDIO) {
 				int channels = _channels;
@@ -114,7 +105,7 @@ public class LiferayAudioConverter extends LiferayConverter {
 				prepareAudio(
 					iAudioResamplers, inputIAudioSamples, outputIAudioSamples,
 					inputIStreamCoder, outputIStreamCoders, _outputIContainer,
-					outputIStreams, inputICodecType, _outputUrl, channels, rate,
+					outputIStreams, inputICodecType, _outputURL, channels, rate,
 					i);
 			}
 
@@ -122,30 +113,23 @@ public class LiferayAudioConverter extends LiferayConverter {
 			openStreamCoder(outputIStreamCoders[i]);
 		}
 
-		returnValue = _outputIContainer.writeHeader();
-
-		if (returnValue < 0) {
-			throw new RuntimeException("Cannot write container header");
+		if (_outputIContainer.writeHeader() < 0) {
+			throw new RuntimeException("Unable to write container header");
 		}
-
-		IAudioSamples inputIAudioSample = null;
-		IAudioSamples resampledIAudioSample = null;
 
 		IPacket inputIPacket = IPacket.make();
 		IPacket outputIPacket = IPacket.make();
 
-		int lastPacketSize = -1;
+		int previousPacketSize = -1;
 
 		_inputIContainer.readNextPacket(inputIPacket);
 
 		while (_inputIContainer.readNextPacket(inputIPacket) == 0) {
-			int currentPacketSize = inputIPacket.getSize();
+			if (_log.isDebugEnabled()) {
+				_log.debug("Current packet size " + inputIPacket.getSize());
+			}
 
 			int streamIndex = inputIPacket.getStreamIndex();
-
-			IStream iStream = _inputIContainer.getStream(streamIndex);
-
-			long timeStampOffset = getStreamTimeStampOffset(iStream);
 
 			IStreamCoder inputIStreamCoder = inputIStreamCoders[streamIndex];
 			IStreamCoder outputIStreamCoder = outputIStreamCoders[streamIndex];
@@ -154,63 +138,43 @@ public class LiferayAudioConverter extends LiferayConverter {
 				continue;
 			}
 
-			IAudioResampler iAudioResampler = iAudioResamplers[streamIndex];
+			if (inputIStreamCoder.getCodecType() ==
+					ICodec.Type.CODEC_TYPE_AUDIO) {
 
-			inputIAudioSample = inputIAudioSamples[streamIndex];
-			resampledIAudioSample = outputIAudioSamples[streamIndex];
+				IStream iStream = _inputIContainer.getStream(streamIndex);
 
-			ICodec.Type inputICodecType = inputIStreamCoder.getCodecType();
+				long timeStampOffset = getStreamTimeStampOffset(iStream);
 
-			if (_log.isDebugEnabled()) {
-				_log.debug("Current packet size: " + currentPacketSize);
-			}
-
-			if (inputICodecType == ICodec.Type.CODEC_TYPE_AUDIO) {
 				decodeAudio(
-					iAudioResampler, inputIAudioSample, resampledIAudioSample,
-					inputIPacket, outputIPacket, inputIStreamCoder,
-					outputIStreamCoder,	_outputIContainer, currentPacketSize,
-					lastPacketSize,	streamIndex, timeStampOffset);
+					iAudioResamplers[streamIndex],
+					inputIAudioSamples[streamIndex],
+					outputIAudioSamples[streamIndex], inputIPacket,
+					outputIPacket, inputIStreamCoder, outputIStreamCoder,
+					_outputIContainer, inputIPacket.getSize(),
+					previousPacketSize, streamIndex, timeStampOffset);
 			}
 
-			lastPacketSize = inputIPacket.getSize();
+			previousPacketSize = inputIPacket.getSize();
 		}
 
-		numOfStreams = _inputIContainer.getNumStreams();
+		flush(outputIStreamCoders, _outputIContainer);
 
-		flushData(outputIStreamCoders, _outputIContainer, numOfStreams);
-
-		returnValue = _outputIContainer.writeTrailer();
-
-		if (returnValue < 0) {
-			throw new RuntimeException("Cannot write trailer to output file");
+		if (_outputIContainer.writeTrailer() < 0) {
+			throw new RuntimeException(
+				"Unable to write trailer to output file");
 		}
 
-		cleanStreamCoders(
-			inputIStreamCoders, outputIStreamCoders, numOfStreams);
-
-		iAudioResamplers = null;
-
-		inputIAudioSamples = null;
-		outputIAudioSamples = null;
-
-		inputIStreamCoders = null;
-		outputIStreamCoders = null;
+		cleanUp(inputIStreamCoders, outputIStreamCoders);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
 		LiferayAudioConverter.class);
 
 	private int _channels = 1;
-
-	private String _inputUrl = null;
-
-	private String _outputUrl = null;
-
-	private IContainer _inputIContainer = null;
-
-	private IContainer _outputIContainer = null;
-
-	private int _rate = 0;
+	private IContainer _inputIContainer;
+	private String _inputURL;
+	private IContainer _outputIContainer;
+	private String _outputURL;
+	private int _rate;
 
 }

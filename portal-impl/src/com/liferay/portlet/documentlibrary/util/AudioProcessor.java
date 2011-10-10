@@ -266,8 +266,6 @@ public class AudioProcessor extends DefaultPreviewableProcessor {
 			DestinationNames.DOCUMENT_LIBRARY_AUDIO_PROCESSOR, fileVersion);
 	}
 
-	private static final int _CHANNELS = 2;
-
 	private static int _SAMPLE_RATE = 44100;
 
 	private static Log _log = LogFactoryUtil.getLog(AudioProcessor.class);
@@ -276,7 +274,6 @@ public class AudioProcessor extends DefaultPreviewableProcessor {
 
 	private static Set<String> _audioMimeTypes = SetUtil.fromArray(
 		PropsValues.DL_FILE_ENTRY_PREVIEW_AUDIO_MIME_TYPES);
-
 	private static List<Long> _fileVersionIds = new Vector<Long>();
 
 }

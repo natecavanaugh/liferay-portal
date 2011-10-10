@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import com.xuggle.xuggler.Global;
 import com.xuggle.xuggler.IAudioResampler;
+import com.xuggle.xuggler.IAudioSamples.Format;
 import com.xuggle.xuggler.IAudioSamples;
 import com.xuggle.xuggler.ICodec;
 import com.xuggle.xuggler.IContainer;
@@ -44,98 +45,99 @@ import javax.imageio.ImageIO;
 /**
  * @author Juan González
  * @author Sergio González
+ * @author Brian Wing Shun Chan
  */
 public abstract class LiferayConverter {
 
-	protected void cleanStreamCoders(
-		IStreamCoder[] inputIStreamCoders, IStreamCoder[] outputIStreamCoders,
-		int numOfStreams) {
+	protected void cleanUp(
+		IStreamCoder[] inputIStreamCoders, IStreamCoder[] outputIStreamCoders) {
 
-		for (int i = 0; i < numOfStreams; i++) {
-			if (outputIStreamCoders[i] != null) {
-				outputIStreamCoders[i].close();
+		for (int i = 0; i < inputIStreamCoders.length; i++) {
+			IStreamCoder inputIStreamCoder = inputIStreamCoders[i];
+
+			if (inputIStreamCoder != null) {
+				inputIStreamCoder.close();
 			}
 
-			outputIStreamCoders[i] = null;
+			IStreamCoder outputIStreamCoder = outputIStreamCoders[i];
 
-			if (inputIStreamCoders[i] != null) {
-				inputIStreamCoders[i].close();
+			if (outputIStreamCoder != null) {
+				outputIStreamCoder.close();
 			}
-
-			inputIStreamCoders[i] = null;
 		}
-
-		inputIStreamCoders = null;
-		outputIStreamCoders = null;
 	}
 
 	protected int countNonKeyAfterKey(
-		IPacket inputIPacket, Boolean keyPacketFound, int countNonKeyAfterKey) {
+		IPacket inputIPacket, Boolean keyPacketFound, int nonKeyAfterKeyCount) {
 
 		if (inputIPacket.isKey()) {
-			countNonKeyAfterKey = 0;
+			nonKeyAfterKeyCount = 0;
 		}
 		else if (keyPacketFound) {
-			countNonKeyAfterKey++;
+			nonKeyAfterKeyCount++;
 		}
 
-		return countNonKeyAfterKey;
+		return nonKeyAfterKeyCount;
 	}
 
-	protected IAudioResampler createAudioResampler(
+	protected IAudioResampler createIAudioResampler(
 			IStreamCoder inputIStreamCoder, IStreamCoder outputIStreamCoder)
 		throws Exception {
 
 		IAudioResampler iAudioResampler = null;
 
-		if ((inputIStreamCoder.getSampleRate() !=
-				outputIStreamCoder.getSampleRate()) ||
-			(inputIStreamCoder.getChannels() !=
-				outputIStreamCoder.getChannels()) ||
-			!inputIStreamCoder.getSampleFormat().equals(
-				outputIStreamCoder.getSampleFormat())) {
+		Format inputSampleFormat = inputIStreamCoder.getSampleFormat();
+		Format outputSampleFormat = inputIStreamCoder.getSampleFormat();
 
-			iAudioResampler =
-				IAudioResampler.make(
-					outputIStreamCoder.getChannels(),
-					inputIStreamCoder.getChannels(),
-					outputIStreamCoder.getSampleRate(),
-					inputIStreamCoder.getSampleRate(),
-					outputIStreamCoder.getSampleFormat(),
-					inputIStreamCoder.getSampleFormat());
+		if ((inputIStreamCoder.getChannels() ==
+				outputIStreamCoder.getChannels()) &&
+			(inputIStreamCoder.getSampleRate() ==
+				outputIStreamCoder.getSampleRate()) &&
+			inputSampleFormat.equals(outputSampleFormat)) {
 
-			if (iAudioResampler == null) {
-				throw new RuntimeException("Audio resampling is not supported");
-			}
+			return iAudioResampler;
+		}
+
+		iAudioResampler = IAudioResampler.make(
+			outputIStreamCoder.getChannels(), inputIStreamCoder.getChannels(),
+			outputIStreamCoder.getSampleRate(),
+			inputIStreamCoder.getSampleRate(),
+			outputIStreamCoder.getSampleFormat(),
+			inputIStreamCoder.getSampleFormat());
+
+		if (iAudioResampler == null) {
+			throw new RuntimeException("Audio resampling is not supported");
 		}
 
 		return iAudioResampler;
 	}
 
-	protected IVideoResampler createVideoResampler(
+	protected IVideoResampler createIVideoResampler(
 			IStreamCoder inputIStreamCoder, IStreamCoder outputIStreamCoder,
 			int height, int width)
 		throws Exception {
 
 		IVideoResampler iVideoResampler = null;
 
-		int inputHeight = inputIStreamCoder.getHeight();
-		int inputWidth = inputIStreamCoder.getWidth();
+		IPixelFormat.Type inputIPixelFormatType =
+			inputIStreamCoder.getPixelType();
+		IPixelFormat.Type outputIPixelFormatType =
+			outputIStreamCoder.getPixelType();
 
-		IPixelFormat.Type inputPixelType = inputIStreamCoder.getPixelType();
-		IPixelFormat.Type outputPixelType = outputIStreamCoder.getPixelType();
+		if ((height == inputIStreamCoder.getHeight()) &&
+			(width == inputIStreamCoder.getWidth()) &&
+			inputIPixelFormatType.equals(outputIPixelFormatType)) {
 
-		if (!(height == inputHeight && width == inputWidth) ||
-			!(inputPixelType.equals(outputPixelType))) {
+			return iVideoResampler;
+		}
 
-			iVideoResampler = IVideoResampler.make(
-				width, height, outputIStreamCoder.getPixelType(),
-				inputIStreamCoder.getWidth(), inputIStreamCoder.getHeight(),
-				inputIStreamCoder.getPixelType());
+		iVideoResampler = IVideoResampler.make(
+			width, height, outputIStreamCoder.getPixelType(),
+			inputIStreamCoder.getWidth(), inputIStreamCoder.getHeight(),
+			inputIStreamCoder.getPixelType());
 
-			if (iVideoResampler == null) {
-				throw new RuntimeException("Video resampling is not supported");
-			}
+		if (iVideoResampler == null) {
+			throw new RuntimeException("Video resampling is not supported");
 		}
 
 		return iVideoResampler;
@@ -146,28 +148,24 @@ public abstract class LiferayConverter {
 			IAudioSamples resampledIAudioSample, IPacket inputIPacket,
 			IPacket outputIPacket, IStreamCoder inputIStreamCoder,
 			IStreamCoder outputIStreamCoder, IContainer outputIContainer,
-			int curPacketSize, int lastPacketSize, int streamIndex,
+			int currentPacketSize, int previousPacketSize, int streamIndex,
 			long timeStampOffset)
 		throws Exception {
 
-		int returnValue = 0;
-
 		int offset = 0;
-
-		IAudioSamples outputIAudioSample = null;
 
 		while (offset < inputIPacket.getSize()) {
 			boolean stopDecoding = false;
 
-			returnValue = inputIStreamCoder.decodeAudio(
+			int value = inputIStreamCoder.decodeAudio(
 				inputIAudioSample, inputIPacket, offset);
 
-			if (returnValue <= 0) {
-				if ((curPacketSize == lastPacketSize) &&
-					(lastPacketSize != -1)) {
+			if (value <= 0) {
+				if ((previousPacketSize == currentPacketSize) &&
+					(previousPacketSize != -1)) {
 
 					throw new RuntimeException(
-						"Cannot decode audio stream: " + streamIndex);
+						"Unable to decode audio stream " + streamIndex);
 				}
 				else {
 					stopDecoding = true;
@@ -176,9 +174,9 @@ public abstract class LiferayConverter {
 
 			updateAudioTimeStamp(inputIAudioSample, timeStampOffset);
 
-			offset += returnValue;
+			offset += value;
 
-			outputIAudioSample = resampleAudio(
+			IAudioSamples outputIAudioSample = resampleAudio(
 				iAudioResampler, inputIAudioSample, resampledIAudioSample);
 
 			encodeAudio(
@@ -187,7 +185,7 @@ public abstract class LiferayConverter {
 
 			if (stopDecoding) {
 				if (_log.isDebugEnabled()) {
-					_log.debug("Stop decoding audio stream: " + streamIndex);
+					_log.debug("Stop decoding audio stream " + streamIndex);
 				}
 
 				break;
@@ -200,83 +198,70 @@ public abstract class LiferayConverter {
 			IVideoPicture resampledIVideoPicture, IPacket inputIPacket,
 			IPacket outputIPacket, IStreamCoder inputIStreamCoder,
 			IStreamCoder outputIStreamCoder, IContainer outputIContainer,
-			File thumbnailFile,	String thumbnailExtension, int thumbnailHeight,
+			File thumbnailFile, String thumbnailExtension, int thumbnailHeight,
 			int thumbnailWidth, long timeStampOffset)
 		throws Exception {
 
-		int returnValue = inputIStreamCoder.decodeVideo(
+		int value = inputIStreamCoder.decodeVideo(
 			inputIVideoPicture, inputIPacket, 0);
 
-		if (returnValue <= 0) {
-			return returnValue;
+		if (value <= 0) {
+			return value;
 		}
 
 		updateVideoTimeStamp(inputIVideoPicture, timeStampOffset);
 
-		if (inputIVideoPicture.isComplete()) {
-			if (thumbnailFile != null) {
-				BufferedImage image = null;
-
-				if (_converterType == null) {
-					_converterType = ConverterFactory.findRegisteredConverter(
-						ConverterFactory.XUGGLER_BGR_24);
-				}
-
-				if (_converterType == null) {
-					throw new UnsupportedOperationException(
-						"No converter \"" +	ConverterFactory.XUGGLER_BGR_24 +
-							"\" found");
-				}
-
-				if (_videoConverter == null) {
-					_videoConverter = ConverterFactory.createConverter(
-						_converterType.getDescriptor(),
-						inputIVideoPicture);
-				}
-
-				image = _videoConverter.toImage(inputIVideoPicture);
-
-				thumbnailFile.createNewFile();
-
-				RenderedImage renderedImage = ImageProcessorUtil.scale(
-					image, thumbnailHeight,	thumbnailWidth);
-
-				ImageIO.write(
-					renderedImage, thumbnailExtension,
-					new FileOutputStream(thumbnailFile));
-
-				return THUMBNAIL_GENERATED;
-			}
-			else {
-				IVideoPicture outputIVideoPicture = null;
-
-				outputIVideoPicture = resampleVideo(
-					iVideoResampler, inputIVideoPicture,
-					resampledIVideoPicture);
-
-				outputIVideoPicture.setQuality(0);
-
-				encodeVideo(
-					outputIStreamCoder, outputIVideoPicture, outputIPacket,
-					outputIContainer);
-			}
+		if (!inputIVideoPicture.isComplete()) {
+			return 1;
 		}
 
+		if (thumbnailFile != null) {
+			BufferedImage bufferedImage = null;
+
+			if (_converterFactoryType == null) {
+				_converterFactoryType =
+					ConverterFactory.findRegisteredConverter(
+						ConverterFactory.XUGGLER_BGR_24);
+			}
+
+			if (_converterFactoryType == null) {
+				throw new UnsupportedOperationException(
+					"No converter found for " +
+						ConverterFactory.XUGGLER_BGR_24);
+			}
+
+			if (_videoIConverter == null) {
+				_videoIConverter = ConverterFactory.createConverter(
+					_converterFactoryType.getDescriptor(),
+					inputIVideoPicture);
+			}
+
+			bufferedImage = _videoIConverter.toImage(inputIVideoPicture);
+
+			thumbnailFile.createNewFile();
+
+			RenderedImage renderedImage = ImageProcessorUtil.scale(
+				bufferedImage, thumbnailHeight, thumbnailWidth);
+
+			ImageIO.write(
+				renderedImage, thumbnailExtension,
+				new FileOutputStream(thumbnailFile));
+
+			return DECODE_VIDEO_THUMBNAIL;
+		}
+
+		IVideoPicture outputIVideoPicture = null;
+
+		outputIVideoPicture = resampleVideo(
+			iVideoResampler, inputIVideoPicture, resampledIVideoPicture);
+
+		outputIVideoPicture.setQuality(0);
+
+		encodeVideo(
+			outputIStreamCoder, outputIVideoPicture, outputIPacket,
+			outputIContainer);
+
 		return 1;
-	}
-
-	protected int decodeVideo(
-			IVideoResampler iVideoResampler, IVideoPicture inputIVideoPicture,
-			IVideoPicture resampledIVideoPicture, IPacket inputIPacket,
-			IPacket outputIPacket, IStreamCoder inputIStreamCoder,
-			IStreamCoder outputIStreamCoder, IContainer outputIContainer,
-			long timeStampOffset)
-		throws Exception {
-
-		return decodeVideo(
-			iVideoResampler, inputIVideoPicture, resampledIVideoPicture,
-			inputIPacket, outputIPacket, inputIStreamCoder, outputIStreamCoder,
-			outputIContainer, null, null, 0, 0, timeStampOffset);
 	}
 
 	protected void encodeAudio(
@@ -284,26 +269,23 @@ public abstract class LiferayConverter {
 			IAudioSamples outputIAudioSample, IContainer outputIContainer)
 		throws Exception {
 
-		int numSamplesConsumed = 0;
+		int consumedSamplesCount = 0;
 
-		int returnValue = 0;
+		while (consumedSamplesCount < outputIAudioSample.getNumSamples()) {
+			int value = outputIStreamCoder.encodeAudio(
+				outputIPacket, outputIAudioSample, consumedSamplesCount);
 
-		while (numSamplesConsumed < outputIAudioSample.getNumSamples()) {
-			returnValue = outputIStreamCoder.encodeAudio(
-				outputIPacket, outputIAudioSample, numSamplesConsumed);
-
-			if (returnValue <= 0) {
-				throw new RuntimeException(
-					"Cannot encode audio");
+			if (value <= 0) {
+				throw new RuntimeException("Unable to encode audio");
 			}
 
-			numSamplesConsumed += returnValue;
+			consumedSamplesCount += value;
 
 			if (outputIPacket.isComplete()) {
-				returnValue = outputIContainer.writePacket(outputIPacket, true);
+				value = outputIContainer.writePacket(outputIPacket, true);
 
-				if (returnValue < 0) {
-					throw new RuntimeException("Cannot write audio packet");
+				if (value < 0) {
+					throw new RuntimeException("Unable to write audio packet");
 				}
 			}
 		}
@@ -314,44 +296,40 @@ public abstract class LiferayConverter {
 			IPacket outputIPacket, IContainer outputIContainer)
 		throws Exception {
 
-		int returnValue = outputIStreamCoder.encodeVideo(
-			outputIPacket, outputIVideoPicture, 0);
+		if (outputIStreamCoder.encodeVideo(
+				outputIPacket, outputIVideoPicture, 0) < 0) {
 
-		if (returnValue < 0) {
-			throw new RuntimeException("Cannot encode video");
+			throw new RuntimeException("Unable to encode video");
 		}
 
 		if (outputIPacket.isComplete()) {
-			returnValue = outputIContainer.writePacket(outputIPacket, true);
-
-			if (returnValue < 0) {
-				throw new RuntimeException("Cannot write video packet");
+			if (outputIContainer.writePacket(outputIPacket, true) < 0) {
+				throw new RuntimeException("Unable to write video packet");
 			}
 		}
 	}
 
-	protected void flushData(
-		IStreamCoder[] outputIStreamCoders, IContainer outputIContainer,
-		int numOfStreams) {
+	protected void flush(
+		IStreamCoder[] outputIStreamCoders, IContainer outputIContainer) {
 
-		for (int i = 0; i < numOfStreams; i++) {
-			if (outputIStreamCoders[i] != null) {
-				IPacket outputTempIPacket = IPacket.make();
+		for (IStreamCoder outputIStreamCoder : outputIStreamCoders) {
+			if (outputIStreamCoder == null) {
+				continue;
+			}
 
-				if (outputIStreamCoders[i].getCodecType() ==
-						ICodec.Type.CODEC_TYPE_AUDIO) {
+			IPacket iPacket = IPacket.make();
 
-					outputIStreamCoders[i].encodeAudio(
-						outputTempIPacket, null, 0);
-				}
-				else {
-					outputIStreamCoders[i].encodeVideo(
-						outputTempIPacket, null, 0);
-				}
+			if (outputIStreamCoder.getCodecType() ==
+					ICodec.Type.CODEC_TYPE_AUDIO) {
 
-				if (outputTempIPacket.isComplete()) {
-					outputIContainer.writePacket(outputTempIPacket, true);
-				}
+				outputIStreamCoder.encodeAudio(iPacket, null, 0);
+			}
+			else {
+				outputIStreamCoder.encodeVideo(iPacket, null, 0);
+			}
+
+			if (iPacket.isComplete()) {
+				outputIContainer.writePacket(iPacket, true);
 			}
 		}
 	}
@@ -362,17 +340,17 @@ public abstract class LiferayConverter {
 		if ((iStream.getStartTime() != Global.NO_PTS) &&
 			(iStream.getStartTime() > 0) && (iStream.getTimeBase() != null)) {
 
-			IRational defTimeBase =	IRational.make(
+			IRational iRational = IRational.make(
 				1, (int)Global.DEFAULT_PTS_PER_SECOND);
 
-			timeStampOffset = defTimeBase.rescale(
+			timeStampOffset = iRational.rescale(
 				iStream.getStartTime(), iStream.getTimeBase());
 		}
 
 		return timeStampOffset;
 	}
 
-	protected boolean keyPacketFound(
+	protected boolean isKeyPacketFound(
 		IPacket inputIPacket, boolean keyPacketFound) {
 
 		if (inputIPacket.isKey() && !keyPacketFound) {
@@ -382,25 +360,50 @@ public abstract class LiferayConverter {
 		return keyPacketFound;
 	}
 
-	protected void openContainer(IContainer container, String url,
-			boolean writeContainer)
+	protected boolean isStartDecoding(
+		IPacket inputIPacket, IStreamCoder inputIStreamCoder,
+		boolean keyPacketFound, int nonKeyAfterKeyCount,
+		boolean onlyDecodeKeyPackets) {
+
+		if (onlyDecodeKeyPackets && !inputIPacket.isKey()) {
+			return false;
+		}
+
+		ICodec.ID iCodecID = inputIStreamCoder.getCodecID();
+
+		if (iCodecID.equals(ICodec.ID.CODEC_ID_MJPEG)) {
+			return true;
+		}
+		else if (iCodecID.equals(ICodec.ID.CODEC_ID_MPEG2VIDEO)) {
+			if (nonKeyAfterKeyCount != 1) {
+				return true;
+			}
+
+			return false;
+		}
+
+		return keyPacketFound;
+	}
+
+	protected void openContainer(
+			IContainer iContainer, String url, boolean writeContainer)
 		throws Exception {
 
-		int returnValue = 0;
+		int value = 0;
 
 		if (writeContainer) {
-			returnValue = container.open(url, IContainer.Type.WRITE, null);
+			value = iContainer.open(url, IContainer.Type.WRITE, null);
 		}
 		else {
-			returnValue = container.open(url, IContainer.Type.READ, null);
+			value = iContainer.open(url, IContainer.Type.READ, null);
 		}
 
-		if (returnValue < 0) {
+		if (value < 0) {
 			if (writeContainer) {
-				throw new RuntimeException("Cannot open output url");
+				throw new RuntimeException("Unable to open output URL");
 			}
 			else {
-				throw new RuntimeException("Cannot open input url");
+				throw new RuntimeException("Unable to open input URL");
 			}
 		}
 	}
@@ -408,14 +411,8 @@ public abstract class LiferayConverter {
 	protected void openStreamCoder(IStreamCoder iStreamCoder)
 		throws Exception {
 
-		int returnValue = 0;
-
-		if (iStreamCoder != null) {
-			returnValue = iStreamCoder.open();
-
-			if (returnValue < 0) {
-				throw new RuntimeException("Cannot open coder");
-			}
+		if ((iStreamCoder != null) && (iStreamCoder.open() < 0)) {
+			throw new RuntimeException("Unable to open coder");
 		}
 	}
 
@@ -425,38 +422,35 @@ public abstract class LiferayConverter {
 			IAudioSamples[] outputIAudioSamples, IStreamCoder inputIStreamCoder,
 			IStreamCoder[] outputIStreamCoders, IContainer outputIContainer,
 			IStream[] outputIStreams, ICodec.Type inputICodecType,
-			String outputUrl, int channels, int rate, int index)
+			String outputURL, int channels, int rate, int index)
 		throws Exception {
 
 		IStream outputIStream = outputIContainer.addNewStream(index);
 
-		IStreamCoder outputIStreamCoder =
-			outputIStream.getStreamCoder();
+		outputIStreams[index] = outputIStream;
+
+		IStreamCoder outputIStreamCoder = outputIStream.getStreamCoder();
 
 		outputIStreamCoders[index] = outputIStreamCoder;
 
-		outputIStreams[index] = outputIStream;
+		outputIStreamCoder.setBitRate(inputIStreamCoder.getBitRate());
+		outputIStreamCoder.setChannels(channels);
 
 		ICodec iCodec = ICodec.guessEncodingCodec(
-			null, null, outputUrl, null, inputICodecType);
+			null, null, outputURL, null, inputICodecType);
 
 		if (iCodec == null) {
 			throw new RuntimeException(
-				"Cannot guess " + inputICodecType +	" encoder for " +
-					outputUrl);
+				"Unable to determine " + inputICodecType + " encoder for " +
+					outputURL);
 		}
-
-		outputIStreamCoder.setBitRate(inputIStreamCoder.getBitRate());
-
-		outputIStreamCoder.setChannels(channels);
 
 		outputIStreamCoder.setCodec(iCodec);
 
 		outputIStreamCoder.setGlobalQuality(0);
-
 		outputIStreamCoder.setSampleRate(rate);
 
-		iAudioResamplers[index] = createAudioResampler(
+		iAudioResamplers[index] = createIAudioResampler(
 			inputIStreamCoder, outputIStreamCoder);
 
 		inputIAudioSamples[index] = IAudioSamples.make(
@@ -470,77 +464,35 @@ public abstract class LiferayConverter {
 			IAudioSamples resampledIAudioSample)
 		throws Exception {
 
-		IAudioSamples outputIAudioSample = null;
+		if ((iAudioResampler == null) ||
+			(inputIAudioSample.getNumSamples() <= 0)) {
 
-		if ((iAudioResampler != null) &&
-			(inputIAudioSample.getNumSamples() > 0)) {
-
-			iAudioResampler.resample(
-				resampledIAudioSample, inputIAudioSample,
-				inputIAudioSample.getNumSamples());
-
-			outputIAudioSample = resampledIAudioSample;
-		}
-		else {
-			outputIAudioSample = inputIAudioSample;
+			return inputIAudioSample;
 		}
 
-		return outputIAudioSample;
+		iAudioResampler.resample(
+			resampledIAudioSample, inputIAudioSample,
+			inputIAudioSample.getNumSamples());
+
+		return resampledIAudioSample;
 	}
 
 	protected IVideoPicture resampleVideo(
-		IVideoResampler iVideoResampler, IVideoPicture inputIVideoPicture,
-		IVideoPicture resampledIVideoPicture)
+			IVideoResampler iVideoResampler, IVideoPicture inputIVideoPicture,
+			IVideoPicture resampledIVideoPicture)
 		throws Exception {
 
-		IVideoPicture outputIVideoPicture = null;
-
-		int returnValue = 0;
-
-		if (iVideoResampler != null) {
-			returnValue = iVideoResampler.resample(
-				resampledIVideoPicture, inputIVideoPicture);
-
-			if (returnValue < 0) {
-				throw new RuntimeException("Cannot resample video");
-			}
-
-			outputIVideoPicture = resampledIVideoPicture;
-		}
-		else {
-			outputIVideoPicture = inputIVideoPicture;
+		if (iVideoResampler == null) {
+			return inputIVideoPicture;
 		}
 
-		return outputIVideoPicture;
-	}
+		if (iVideoResampler.resample(
+				resampledIVideoPicture, inputIVideoPicture) < 0) {
 
-	protected boolean startDecoding(
-		IPacket inputIPacket, IStreamCoder inputIStreamCoder,
-		int countNonKeyAfterKey, boolean onlyDecodeKeyPackets,
-		boolean keyPacketFound) {
-
-		boolean startDecoding = keyPacketFound;
-
-		if (inputIStreamCoder.getCodecID().equals(
-			ICodec.ID.CODEC_ID_MJPEG)) {
-
-			startDecoding = true;
-		}
-		else if (inputIStreamCoder.getCodecID().equals(
-			ICodec.ID.CODEC_ID_MPEG2VIDEO)) {
-
-			startDecoding = false;
-
-			if (countNonKeyAfterKey != 1) {
-				startDecoding = true;
-			}
+			throw new RuntimeException("Unable to resample video");
 		}
 
-		if (onlyDecodeKeyPackets && !inputIPacket.isKey()) {
-			startDecoding = false;
-		}
-
-		return startDecoding;
+		return resampledIVideoPicture;
 	}
 
 	protected void updateAudioTimeStamp(
@@ -557,16 +509,15 @@ public abstract class LiferayConverter {
 
 		if (inputIVideoPicture.getTimeStamp() != Global.NO_PTS) {
 			inputIVideoPicture.setTimeStamp(
-				inputIVideoPicture.getTimeStamp() -	timeStampOffset);
+				inputIVideoPicture.getTimeStamp() - timeStampOffset);
 		}
 	}
 
-	private ConverterFactory.Type _converterType;
-
-	private IConverter _videoConverter;
-
-	protected static final int THUMBNAIL_GENERATED = 2;
+	protected static final int DECODE_VIDEO_THUMBNAIL = 2;
 
 	private static Log _log = LogFactoryUtil.getLog(LiferayConverter.class);
+
+	private ConverterFactory.Type _converterFactoryType;
+	private IConverter _videoIConverter;
 
 }
