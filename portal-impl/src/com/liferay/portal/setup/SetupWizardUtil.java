@@ -18,15 +18,19 @@ import com.liferay.portal.dao.jdbc.util.DataSourceSwapper;
 import com.liferay.portal.events.StartupAction;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
+import com.liferay.portal.kernel.dao.jdbc.DataAccess;
+import com.liferay.portal.kernel.dao.jdbc.DataSourceFactoryUtil;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CentralizedThreadLocal;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
@@ -37,6 +41,7 @@ import com.liferay.portal.security.auth.ScreenNameGenerator;
 import com.liferay.portal.security.auth.ScreenNameGeneratorFactory;
 import com.liferay.portal.service.QuartzLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
@@ -44,11 +49,21 @@ import com.liferay.portal.util.WebKeys;
 
 import java.io.IOException;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import javax.sql.DataSource;
+
+import org.apache.struts.Globals;
 
 /**
  * @author Manuel de la Peña
@@ -79,14 +94,45 @@ public class SetupWizardUtil {
 		return true;
 	}
 
-	public static void processSetup(HttpServletRequest request)
+	public static void processPortalLanguage(
+		HttpServletRequest request, HttpServletResponse response) {
+
+		String languageId = _getParameter(
+			request, PropsKeys.DEFAULT_LOCALE, PropsValues.DEFAULT_LOCALE);
+
+		Locale locale = LocaleUtil.fromLanguageId(languageId);
+
+		List<Locale> availableLocales = ListUtil.fromArray(
+			LanguageUtil.getAvailableLocales());
+
+		if (availableLocales.contains(locale)) {
+			PropsValues.DEFAULT_LOCALE = languageId;
+
+			HttpSession session = request.getSession();
+
+			session.setAttribute(Globals.LOCALE_KEY, locale);
+			session.setAttribute(
+				PropsKeys.DEFAULT_LOCALE, LocaleUtil.toLanguageId(locale));
+
+			LanguageUtil.updateCookie(request, response, locale);
+
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
+
+			themeDisplay.setLanguageId(languageId);
+			themeDisplay.setLocale(locale);
+		}
+	}
+
+	public static void processSetup(
+			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
 		UnicodeProperties unicodeProperties =
 			PropertiesParamUtil.getProperties(request, _PROPERTIES_PREFIX);
 
 		_processAdminProperties(request, unicodeProperties);
-		_processDatabaseProperties(request, unicodeProperties);
+		processPortalLanguage(request, response);
 
 		unicodeProperties.put(
 			PropsKeys.SETUP_WIZARD_ENABLED, String.valueOf(false));
@@ -110,7 +156,7 @@ public class SetupWizardUtil {
 
 		name = _PROPERTIES_PREFIX.concat(name).concat(StringPool.DOUBLE_DASH);
 
-		return ParamUtil.getString(request, name);
+		return ParamUtil.getString(request, name, defaultValue);
 	}
 
 	private static void _processAdminProperties(
@@ -169,75 +215,45 @@ public class SetupWizardUtil {
 			PropsKeys.DEFAULT_ADMIN_SCREEN_NAME, defaultAdminScreenName);
 	}
 
-	private static void _processDatabaseProperties(
-			HttpServletRequest request, UnicodeProperties unicodeProperties)
-		throws Exception {
+	public static void testDatabase(HttpServletRequest request)
+		throws ClassNotFoundException, SQLException {
 
-		boolean defaultDatabase = ParamUtil.getBoolean(
-			request, "defaultDatabase", true);
+		String driverClassName = _getParameter(
+			request, PropsKeys.JDBC_DEFAULT_DRIVER_CLASS_NAME,
+			PropsValues.JDBC_DEFAULT_DRIVER_CLASS_NAME);
+		String url = _getParameter(
+			request, PropsKeys.JDBC_DEFAULT_URL, null);
+		String userName = _getParameter(
+			request, PropsKeys.JDBC_DEFAULT_USERNAME, null);
+		String password = _getParameter(
+			request, PropsKeys.JDBC_DEFAULT_PASSWORD, null);
 
-		if (defaultDatabase) {
-			return;
-		}
+		_checkConnection(driverClassName, url, userName, password);
+	}
 
-		String jdbcDefaultDriverClassName = null;
-		String jdbcDefaultURL = null;
+	private static void _checkConnection(
+			String driverClassName, String url, String userName,
+			String password)
+		throws ClassNotFoundException, SQLException {
 
-		String databaseType = ParamUtil.getString(request, "databaseType");
-		String databaseName = ParamUtil.getString(
-			request, "databaseName", "lportal");
+		Class.forName(driverClassName);
 
-		if (databaseType.equals("db2")) {
-			jdbcDefaultDriverClassName = "com.ibm.db2.jcc.DB2Driver";
+		Connection connection = null;
 
-			StringBundler sb = new StringBundler(5);
+		try {
+			DataSource dataSource = DataSourceFactoryUtil.initDataSource(
+				driverClassName, url, userName, password);
 
-			sb.append("jdbc:db2://localhost:50000/");
-			sb.append(databaseName);
-			sb.append(":deferPrepares=false;fullyMaterializeInputStreams=");
-			sb.append("true;fullyMaterializeLobData=true;");
-			sb.append("progresssiveLocators=2;progressiveStreaming=2;");
-
-			jdbcDefaultURL = sb.toString();
+			connection = dataSource.getConnection();
 		}
-		else if (databaseType.equals("derby")) {
-			jdbcDefaultDriverClassName = "org.apache.derby.jdbc.EmbeddedDriver";
-			jdbcDefaultURL = "jdbc:derby:" + databaseName;
+		catch(Exception e) {
+			if ( e instanceof SQLException) {
+				throw (SQLException)e;
+			}
 		}
-		else if (databaseType.equals("ingres")) {
-			jdbcDefaultDriverClassName = "com.ingres.jdbc.IngresDriver";
-			jdbcDefaultURL = "jdbc:ingres://localhost:II7/" + databaseName;
+		finally {
+			DataAccess.cleanUp(connection);
 		}
-		else if (databaseType.equals("mysql")) {
-			jdbcDefaultDriverClassName = "com.mysql.jdbc.Driver";
-			jdbcDefaultURL =
-				"jdbc:mysql://localhost/" + databaseName +
-					"?useUnicode=true&characterEncoding=UTF-8&" +
-						"useFastDateParsing=false";
-		}
-		else if (databaseType.equals("oracle")) {
-			jdbcDefaultDriverClassName =
-				"oracle.jdbc.this.get_driver().OracleDriver";
-			jdbcDefaultURL = "jdbc:oracle:thin:@localhost:1521:xe";
-		}
-		else if (databaseType.equals("postgresql")) {
-			jdbcDefaultDriverClassName = "org.postgresql.Driver";
-			jdbcDefaultURL = "jdbc:postgresql://localhost:5432/" + databaseName;
-		}
-		else if (databaseType.equals("sqlserver")) {
-			jdbcDefaultDriverClassName = "net.sourceforge.jtds.jdbc.Driver";
-			jdbcDefaultURL = "jdbc:jtds:sqlserver://localhost/" + databaseName;
-		}
-		else if (databaseType.equals("sybase")) {
-			jdbcDefaultDriverClassName = "net.sourceforge.jtds.jdbc.Driver";
-			jdbcDefaultURL =
-				"jdbc:jtds:sybase://localhost:5000/" + databaseName;
-		}
-
-		unicodeProperties.put(
-			PropsKeys.JDBC_DEFAULT_DRIVER_CLASS_NAME,
-			jdbcDefaultDriverClassName);
-		unicodeProperties.put(PropsKeys.JDBC_DEFAULT_URL, jdbcDefaultURL);
 	}
 
 	private static void _reloadServletContext(
