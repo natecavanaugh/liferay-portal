@@ -22,12 +22,27 @@
 	<div class="lfr-header-row">
 		<div class="lfr-header-row-content">
 			<div class="categories-admin-actions toolbar">
-				<c:if test="<%= AssetPermission.contains(permissionChecker, themeDisplay.getParentGroupId(), ActionKeys.ADD_VOCABULARY) %>">
-					<aui:button cssClass="add-vocabulary-button" name="addVocabularyButton" value="add-vocabulary" />
-				</c:if>
+				<liferay-ui:icon-menu
+					cssClass="aui-button category-actions"
+					direction="down"
+					icon=""
+					message="actions"
+					showExpanded="<%= false %>"
+					showWhenSingleIcon="true"
+				>
+					<liferay-ui:icon
+						id="deleteSelectedItems"
+						image="delete"
+						url="javascript:;"
+					/>
+				</liferay-ui:icon-menu>
 
 				<c:if test="<%= AssetPermission.contains(permissionChecker, themeDisplay.getParentGroupId(), ActionKeys.ADD_CATEGORY) %>">
 					<aui:button name="addCategoryButton" value="add-category" />
+				</c:if>
+
+				<c:if test="<%= AssetPermission.contains(permissionChecker, themeDisplay.getParentGroupId(), ActionKeys.ADD_VOCABULARY) %>">
+					<aui:button cssClass="add-vocabulary-button" name="addVocabularyButton" value="add-vocabulary" />
 				</c:if>
 
 				<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, themeDisplay.getParentGroupId(), ActionKeys.PERMISSIONS) %>">
@@ -41,21 +56,6 @@
 
 					<aui:button cssClass="permissions-button" data-url="<%= permissionsURL %>" name="categoryPermissionsButton" value="permissions" />
 				</c:if>
-
-				<liferay-ui:icon-menu
-					cssClass="category-actions"
-					direction="down"
-					icon=""
-					message="actions"
-					showExpanded="<%= false %>"
-					showWhenSingleIcon="true"
-				>
-					<liferay-ui:icon
-						id="deleteSelectedItems"
-						image="delete"
-						url="javascript:;"
-					/>
-				</liferay-ui:icon-menu>
 			</div>
 
 			<div class="lfr-search-combobox search-button-container categories-search-combobox">
