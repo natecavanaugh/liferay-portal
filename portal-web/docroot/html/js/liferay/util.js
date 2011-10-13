@@ -671,11 +671,21 @@
 			iframeBody.addClass('aui-dialog-iframe-popup');
 
 			var closeButton = iframeBody.one('.aui-button-input-cancel');
+			var hideLink = iframeBody.one('.aui-link-hide');
+
+			var dialog = iframePlugin.get('host');
 
 			if (closeButton) {
-				var dialog = iframePlugin.get('host');
-
 				closeButton.on('click', dialog.close, dialog);
+			}
+
+			if (hideLink) {
+				hideLink.on(
+					'click',
+					function(){
+						dialog.set('visible', false, {src: 'hideLink'});
+					}
+				);
 			}
 
 			var rolesSearchContainer = iframeBody.one('#rolesSearchContainerSearchContainer');
