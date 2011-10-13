@@ -2113,7 +2113,7 @@ AUI().add(
 
 						button.val(buttonValue);
 					},
-					'[id="' + instance.portletNamespace + 'journalImageDeleteButton"]'
+					'#' + instance.portletNamespace + 'journalImageDeleteButton'
 				);
 
 				container.delegate(
