@@ -354,6 +354,10 @@ public class SocialActivityCounterWrapper implements SocialActivityCounter {
 		_socialActivityCounter.persist();
 	}
 
+	public boolean isPeriodActive() {
+		return _socialActivityCounter.isPeriodActive();
+	}
+
 	public SocialActivityCounter getWrappedSocialActivityCounter() {
 		return _socialActivityCounter;
 	}

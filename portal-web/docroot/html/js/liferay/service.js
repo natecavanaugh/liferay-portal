@@ -1151,6 +1151,17 @@ Liferay.Service.registerClass(
 
 Liferay.Service.register("Liferay.Service.Social", "com.liferay.portlet.social.service");
 
+Liferay.Service.registerClass(
+	Liferay.Service.Social, "SocialActivitySetting",
+	{
+		getActivityDefinition: true,
+		getActivityDefinitions: true,
+		getJSONActivityDefinitions: true,
+		updateActivitySettings: true,
+		updateGroupSetting: true
+	}
+);
+
 Liferay.Service.register("Liferay.Service.SC", "com.liferay.portlet.softwarecatalog.service");
 
 Liferay.Service.registerClass(

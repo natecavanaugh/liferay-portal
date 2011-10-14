@@ -24,6 +24,12 @@ import java.io.Serializable;
  */
 public class SocialActivityCounterDefinition implements Serializable {
 
+	public static final int LIMIT_PERIOD_DAY = 1;
+
+	public static final int LIMIT_PERIOD_LIFETIME = 2;
+
+	public static final int LIMIT_PERIOD_PERIOD = 3;
+
 	@Override
 	public SocialActivityCounterDefinition clone() {
 		SocialActivityCounterDefinition activityCounterDefinition =
@@ -92,13 +98,13 @@ public class SocialActivityCounterDefinition implements Serializable {
 
 	public void setLimitPeriod(String limitPeriod) {
 		if (limitPeriod.equalsIgnoreCase("day")) {
-			setLimitPeriod(_LIMIT_PERIOD_DAY);
+			setLimitPeriod(LIMIT_PERIOD_DAY);
 		}
 		else if (limitPeriod.equalsIgnoreCase("lifetime")) {
-			setLimitPeriod(_LIMIT_PERIOD_LIFETIME);
+			setLimitPeriod(LIMIT_PERIOD_LIFETIME);
 		}
 		else {
-			setLimitPeriod(_LIMIT_PERIOD_PERIOD);
+			setLimitPeriod(LIMIT_PERIOD_PERIOD);
 		}
 	}
 
@@ -125,12 +131,6 @@ public class SocialActivityCounterDefinition implements Serializable {
 			setOwnerType(SocialActivityCounterConstants.TYPE_CREATOR);
 		}
 	}
-
-	private static final int _LIMIT_PERIOD_DAY = 1;
-
-	private static final int _LIMIT_PERIOD_LIFETIME = 2;
-
-	private static final int _LIMIT_PERIOD_PERIOD = 3;
 
 	private int _increment;
 	private int _limitType;

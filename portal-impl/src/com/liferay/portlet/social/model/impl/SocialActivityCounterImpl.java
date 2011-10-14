@@ -14,12 +14,23 @@
 
 package com.liferay.portlet.social.model.impl;
 
+import com.liferay.portlet.social.util.SocialStatsUtil;
+
 /**
- * @author Brian Wing Shun Chan
+ * @author Zsolt Berentey
  */
 public class SocialActivityCounterImpl extends SocialActivityCounterBaseImpl {
 
-	public SocialActivityCounterImpl() {
+	public boolean isPeriodActive() {
+		if (getStartPeriod() == SocialStatsUtil.getCurrentStartPeriod()) {
+			if ((getEndPeriod() == -1) ||
+				(getEndPeriod() == SocialStatsUtil.getCurrentEndPeriod())) {
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

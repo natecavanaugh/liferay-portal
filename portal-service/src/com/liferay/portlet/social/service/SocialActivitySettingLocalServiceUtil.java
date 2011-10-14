@@ -256,6 +256,46 @@ public class SocialActivitySettingLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static com.liferay.portlet.social.model.SocialActivityDefinition getActivityDefinition(
+		long groupId, java.lang.String className, int activityKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getActivityDefinition(groupId, className, activityKey);
+	}
+
+	public static java.util.List<com.liferay.portlet.social.model.SocialActivityDefinition> getActivityDefinitions(
+		long groupId, java.lang.String className)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getActivityDefinitions(groupId, className);
+	}
+
+	public static java.util.List<com.liferay.portlet.social.model.SocialActivitySetting> getGroupSettings(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getGroupSettings(groupId);
+	}
+
+	public static boolean isModelEnabled(long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().isModelEnabled(groupId, classNameId);
+	}
+
+	public static void updateActivitySettings(long groupId,
+		java.lang.String className, int activityKey,
+		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> counters)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.updateActivitySettings(groupId, className, activityKey, counters);
+	}
+
+	public static void updateGroupSetting(long groupId,
+		java.lang.String className, boolean enabled)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().updateGroupSetting(groupId, className, enabled);
+	}
+
 	public static SocialActivitySettingLocalService getService() {
 		if (_service == null) {
 			_service = (SocialActivitySettingLocalService)PortalBeanLocatorUtil.locate(SocialActivitySettingLocalService.class.getName());

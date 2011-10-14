@@ -30,6 +30,47 @@ public class SocialActivitySettingServiceWrapper
 		_socialActivitySettingService = socialActivitySettingService;
 	}
 
+	public com.liferay.portlet.social.model.SocialActivityDefinition getActivityDefinition(
+		long groupId, java.lang.String className, int activityKey)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _socialActivitySettingService.getActivityDefinition(groupId,
+			className, activityKey);
+	}
+
+	public java.util.List<com.liferay.portlet.social.model.SocialActivityDefinition> getActivityDefinitions(
+		long groupId, java.lang.String className)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _socialActivitySettingService.getActivityDefinitions(groupId,
+			className);
+	}
+
+	public com.liferay.portal.kernel.json.JSONArray getJSONActivityDefinitions(
+		long groupId, java.lang.String className)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _socialActivitySettingService.getJSONActivityDefinitions(groupId,
+			className);
+	}
+
+	public void updateActivitySettings(long groupId,
+		java.lang.String className, int activityKey,
+		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> counters)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_socialActivitySettingService.updateActivitySettings(groupId,
+			className, activityKey, counters);
+	}
+
+	public void updateGroupSetting(long groupId, java.lang.String className,
+		boolean enabled)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_socialActivitySettingService.updateGroupSetting(groupId, className,
+			enabled);
+	}
+
 	public SocialActivitySettingService getWrappedSocialActivitySettingService() {
 		return _socialActivitySettingService;
 	}

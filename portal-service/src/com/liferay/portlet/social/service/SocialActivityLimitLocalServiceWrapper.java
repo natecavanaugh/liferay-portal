@@ -250,6 +250,16 @@ public class SocialActivityLimitLocalServiceWrapper
 		_socialActivityLimitLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	public com.liferay.portlet.social.model.SocialActivityLimit addActivityLimit(
+		long companyId, long groupId, long userId, long classNameId,
+		long classPK, int activityType, java.lang.String counterName,
+		int limitPeriod)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _socialActivityLimitLocalService.addActivityLimit(companyId,
+			groupId, userId, classNameId, classPK, activityType, counterName,
+			limitPeriod);
+	}
+
 	public SocialActivityLimitLocalService getWrappedSocialActivityLimitLocalService() {
 		return _socialActivityLimitLocalService;
 	}
