@@ -666,14 +666,14 @@
 		function(event) {
 			var iframePlugin = event.currentTarget;
 
-			var iframeBody = iframePlugin.node.get('contentWindow.document.body');
+			var iframeBody = A.one(event.doc.body);
 
 			iframeBody.addClass('aui-dialog-iframe-popup');
 
 			var closeButton = iframeBody.one('.aui-button-input-cancel');
 
 			if (closeButton) {
-				var dialog = iframePlugin.get('host');
+				var dialog = event.dialog;
 
 				closeButton.on('click', dialog.close, dialog);
 			}
@@ -740,7 +740,7 @@
 			var totalOn = 0;
 			var inputs = A.one(form).all('input[type=checkbox]');
 
-			allBox = A.one(allBox);
+			allBox = A.one(allBox) || A.one(form).one('input[name=' + allBox + ']');
 
 			if (!isArray(name)) {
 				name = [name];

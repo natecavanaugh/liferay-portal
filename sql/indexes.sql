@@ -169,7 +169,7 @@ create index IX_17692B58 on DDMStructureLink (structureId);
 create index IX_DB24DDDD on DDMTemplate (groupId);
 create index IX_33BEF579 on DDMTemplate (language);
 create index IX_C9757A51 on DDMTemplate (structureId);
-create index IX_D9A5303B on DDMTemplate (structureId, type_, mode);
+create index IX_5B019FE8 on DDMTemplate (structureId, type_, mode_);
 create index IX_C4F283C8 on DDMTemplate (type_);
 create index IX_F2A243A7 on DDMTemplate (uuid_);
 create unique index IX_1AA75CE3 on DDMTemplate (uuid_, groupId);
@@ -198,6 +198,8 @@ create index IX_D49AB5D1 on DLFileEntryMetadata (uuid_);
 
 create index IX_4501FD9C on DLFileEntryType (groupId);
 create unique index IX_E9B6A85B on DLFileEntryType (groupId, name);
+create index IX_90724726 on DLFileEntryType (uuid_);
+create unique index IX_1399D844 on DLFileEntryType (uuid_, groupId);
 
 create index IX_8373EC7C on DLFileEntryTypes_DDMStructures (fileEntryTypeId);
 create index IX_F147CF3F on DLFileEntryTypes_DDMStructures (structureId);
@@ -679,9 +681,9 @@ create index IX_AABC18E9 on SocialActivityAchievement (groupId, userId, firstInG
 create unique index IX_D4390CAA on SocialActivityAchievement (groupId, userId, name);
 
 create index IX_A4B9A23B on SocialActivityCounter (classNameId, classPK);
-create unique index IX_F1E9638F on SocialActivityCounter (groupId, classNameId, classPK, name, type_, endPeriod);
-create unique index IX_1F8CF3D6 on SocialActivityCounter (groupId, classNameId, classPK, name, type_, startPeriod);
-create index IX_8B05455C on SocialActivityCounter (groupId, classNameId, classPK, type_);
+create unique index IX_1B7E3B67 on SocialActivityCounter (groupId, classNameId, classPK, name, ownerType, endPeriod);
+create unique index IX_374B35AE on SocialActivityCounter (groupId, classNameId, classPK, name, ownerType, startPeriod);
+create index IX_926CDD04 on SocialActivityCounter (groupId, classNameId, classPK, ownerType);
 
 create index IX_B15863FA on SocialActivityLimit (classNameId, classPK);
 create unique index IX_F1C1A617 on SocialActivityLimit (groupId, userId, classNameId, classPK, activityType, activityCounterName);
