@@ -204,6 +204,24 @@ public class DLFileVersionWrapper implements DLFileVersion,
 	}
 
 	/**
+	* Returns the folder ID of this document library file version.
+	*
+	* @return the folder ID of this document library file version
+	*/
+	public long getFolderId() {
+		return _dlFileVersion.getFolderId();
+	}
+
+	/**
+	* Sets the folder ID of this document library file version.
+	*
+	* @param folderId the folder ID of this document library file version
+	*/
+	public void setFolderId(long folderId) {
+		_dlFileVersion.setFolderId(folderId);
+	}
+
+	/**
 	* Returns the file entry ID of this document library file version.
 	*
 	* @return the file entry ID of this document library file version
@@ -602,16 +620,8 @@ public class DLFileVersionWrapper implements DLFileVersion,
 		return _dlFileVersion.getFileEntry();
 	}
 
-	public com.liferay.portlet.documentlibrary.model.DLFolder getFolder()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+	public com.liferay.portlet.documentlibrary.model.DLFolder getFolder() {
 		return _dlFileVersion.getFolder();
-	}
-
-	public long getFolderId()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _dlFileVersion.getFolderId();
 	}
 
 	public java.lang.String getIcon() {

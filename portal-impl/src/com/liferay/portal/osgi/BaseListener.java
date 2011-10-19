@@ -12,29 +12,21 @@
  * details.
  */
 
-package com.liferay.portal.kernel.adaptor;
-
-import com.liferay.portal.kernel.exception.PortalException;
+package com.liferay.portal.osgi;
 
 /**
  * @author Raymond Augé
  */
-public class AdaptorException extends PortalException {
+public class BaseListener {
 
-	public AdaptorException() {
-		super();
+	protected String getLogMessage(String state, Object object) {
+		return getLogMessage(state, String.valueOf(object));
 	}
 
-	public AdaptorException(String msg) {
-		super(msg);
+	protected String getLogMessage(String state, String message) {
+		return String.format(_LOG_MESSAGE_FORMAT, state, message);
 	}
 
-	public AdaptorException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public AdaptorException(Throwable cause) {
-		super(cause);
-	}
+	private static final String _LOG_MESSAGE_FORMAT = "%1$18s %2$s";
 
 }

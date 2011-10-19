@@ -234,9 +234,18 @@ public class DLFolderFinderImpl
 			sql = StringUtil.replace(
 				sql, "[$FOLDER_PARENT_FOLDER_ID$]",
 				getFolderId(folderId, "DLFolder"));
-			sql = StringUtil.replace(
-				sql, "[$FILE_ENTRY_FOLDER_ID$]",
-				getFolderId(folderId, "DLFileEntry"));
+
+			if (status == WorkflowConstants.STATUS_ANY) {
+				sql = StringUtil.replace(
+					sql, "[$FILE_ENTRY_FOLDER_ID$]",
+					getFolderId(folderId, "DLFileEntry"));
+			}
+			else {
+				sql = StringUtil.replace(
+					sql, "[$FILE_ENTRY_FOLDER_ID$]",
+					getFolderId(folderId, "DLFileVersion"));
+			}
+
 			sql = StringUtil.replace(
 				sql, "[$FILE_SHORTCUT_FOLDER_ID$]",
 				getFolderId(folderId, "DLFileShortcut"));
@@ -266,7 +275,7 @@ public class DLFolderFinderImpl
 
 			int count = 0;
 
-			Iterator<Long> itr = q.list().iterator();
+			Iterator<Long> itr = q.iterate();
 
 			while (itr.hasNext()) {
 				Long l = itr.next();
@@ -330,9 +339,17 @@ public class DLFolderFinderImpl
 
 			sql = sb.toString();
 
-			sql = StringUtil.replace(
-				sql, "[$FILE_ENTRY_FOLDER_ID$]",
-				getFolderId(folderId, "DLFileEntry"));
+			if (status == WorkflowConstants.STATUS_ANY) {
+				sql = StringUtil.replace(
+					sql, "[$FILE_ENTRY_FOLDER_ID$]",
+					getFolderId(folderId, "DLFileEntry"));
+			}
+			else {
+				sql = StringUtil.replace(
+					sql, "[$FILE_ENTRY_FOLDER_ID$]",
+					getFolderId(folderId, "DLFileVersion"));
+			}
+
 			sql = StringUtil.replace(
 				sql, "[$FILE_SHORTCUT_FOLDER_ID$]",
 				getFolderId(folderId, "DLFileShortcut"));
@@ -355,7 +372,7 @@ public class DLFolderFinderImpl
 
 			int count = 0;
 
-			Iterator<Long> itr = q.list().iterator();
+			Iterator<Long> itr = q.iterate();
 
 			while (itr.hasNext()) {
 				Long l = itr.next();

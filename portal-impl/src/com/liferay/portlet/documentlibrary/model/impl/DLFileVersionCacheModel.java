@@ -20,6 +20,8 @@ import com.liferay.portal.model.CacheModel;
 
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 
+import java.io.Serializable;
+
 import java.util.Date;
 
 /**
@@ -29,10 +31,11 @@ import java.util.Date;
  * @see DLFileVersion
  * @generated
  */
-public class DLFileVersionCacheModel implements CacheModel<DLFileVersion> {
+public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
+	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(45);
 
 		sb.append("{fileVersionId=");
 		sb.append(fileVersionId);
@@ -48,6 +51,8 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion> {
 		sb.append(createDate);
 		sb.append(", repositoryId=");
 		sb.append(repositoryId);
+		sb.append(", folderId=");
+		sb.append(folderId);
 		sb.append(", fileEntryId=");
 		sb.append(fileEntryId);
 		sb.append(", extension=");
@@ -104,6 +109,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion> {
 		}
 
 		dlFileVersionImpl.setRepositoryId(repositoryId);
+		dlFileVersionImpl.setFolderId(folderId);
 		dlFileVersionImpl.setFileEntryId(fileEntryId);
 
 		if (extension == null) {
@@ -187,6 +193,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion> {
 	public String userName;
 	public long createDate;
 	public long repositoryId;
+	public long folderId;
 	public long fileEntryId;
 	public String extension;
 	public String mimeType;

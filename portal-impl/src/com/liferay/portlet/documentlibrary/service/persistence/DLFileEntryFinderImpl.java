@@ -74,7 +74,7 @@ public class DLFileEntryFinderImpl
 
 			q.addScalar(COUNT_COLUMN_NAME, Type.LONG);
 
-			Iterator<Long> itr = q.list().iterator();
+			Iterator<Long> itr = q.iterate();
 
 			if (itr.hasNext()) {
 				Long count = itr.next();
@@ -274,7 +274,7 @@ public class DLFileEntryFinderImpl
 				qPos.add(folderId);
 			}
 
-			Iterator<Long> itr = q.list().iterator();
+			Iterator<Long> itr = q.iterate();
 
 			if (itr.hasNext()) {
 				Long count = itr.next();
@@ -302,7 +302,7 @@ public class DLFileEntryFinderImpl
 		StringBundler sb = new StringBundler(folderIds.size() * 2 - 1);
 
 		for (int i = 0; i < folderIds.size(); i++) {
-			sb.append("DLFileEntry.folderId = ? ");
+			sb.append("DLFileVersion.folderId = ? ");
 
 			if ((i + 1) != folderIds.size()) {
 				sb.append("OR ");

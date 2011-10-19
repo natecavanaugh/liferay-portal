@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
@@ -75,16 +76,24 @@ public class DLFileVersionImpl extends DLFileVersionBaseImpl {
 		return DLFileEntryLocalServiceUtil.getFileEntry(getFileEntryId());
 	}
 
-	public DLFolder getFolder() throws PortalException, SystemException {
-		DLFileEntry dlFileEntry = getFileEntry();
+	public DLFolder getFolder() {
+		DLFolder dlFolder = null;
 
-		return dlFileEntry.getFolder();
-	}
+		if (getFolderId() > 0) {
+			try {
+				dlFolder = DLFolderLocalServiceUtil.getFolder(getFolderId());
+			}
+			catch (Exception e) {
+				dlFolder = new DLFolderImpl();
 
-	public long getFolderId() throws PortalException, SystemException {
-		DLFileEntry dlFileEntry = getFileEntry();
+				_log.error(e, e);
+			}
+		}
+		else {
+			dlFolder = new DLFolderImpl();
+		}
 
-		return dlFileEntry.getFolderId();
+		return dlFolder;
 	}
 
 	public String getIcon() {

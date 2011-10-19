@@ -12,26 +12,25 @@
  * details.
  */
 
-package com.liferay.portal.adaptor.osgi;
+package com.liferay.portal.kernel.memory;
+
+import java.io.File;
 
 /**
- * @author Raymond Augé
+ * @author Shuyang Zhou
  */
-public class OSGiConstants {
+public class DeleteFileFinalizeAction implements FinalizeAction {
 
-	public static final String PORTAL_SERVICE = "portal.service";
+	public DeleteFileFinalizeAction(String fileName) {
+		_fileName = fileName;
+	}
 
-	public static final String PORTAL_SERVICE_BEAN_NAME =
-		"portal.service.bean.name";
+	public void doFinalize() {
+		File file = new File(_fileName);
 
-	public static final String PORTAL_SERVICE_CORE = "portal.service.core";
+		file.delete();
+	}
 
-	public static final String PORTAL_SERVICE_PREVIOUS =
-		"portal.service.previous";
-
-	public static final String PORTAL_SERVICE_TYPE = "portal.service.type";
-
-	public static final String PORTAL_SERVICE_WRAPPER =
-		"portal.service.wrapper";
+	private final String _fileName;
 
 }

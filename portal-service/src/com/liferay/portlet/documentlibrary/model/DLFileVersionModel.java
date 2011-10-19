@@ -177,6 +177,20 @@ public interface DLFileVersionModel extends BaseModel<DLFileVersion>,
 	public void setRepositoryId(long repositoryId);
 
 	/**
+	 * Returns the folder ID of this document library file version.
+	 *
+	 * @return the folder ID of this document library file version
+	 */
+	public long getFolderId();
+
+	/**
+	 * Sets the folder ID of this document library file version.
+	 *
+	 * @param folderId the folder ID of this document library file version
+	 */
+	public void setFolderId(long folderId);
+
+	/**
 	 * Returns the file entry ID of this document library file version.
 	 *
 	 * @return the file entry ID of this document library file version

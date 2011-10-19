@@ -12,13 +12,26 @@
  * details.
  */
 
-package com.liferay.portal.kernel.adaptor;
+package com.liferay.portal.osgi;
 
 /**
  * @author Raymond Augé
  */
-public interface AdaptorFactory {
+public class OSGiConstants {
 
-	public Adaptor newAdaptor();
+	public static final String PORTAL_SERVICE = "portal.service";
+
+	public static final String PORTAL_SERVICE_BEAN_NAME =
+		"portal.service.bean.name";
+
+	public static final String PORTAL_SERVICE_CORE = "portal.service.core";
+
+	public static final String PORTAL_SERVICE_PREVIOUS =
+		"portal.service.previous";
+
+	public static final String PORTAL_SERVICE_TYPE = "portal.service.type";
+
+	public static final String PORTAL_SERVICE_WRAPPER =
+		"portal.service.wrapper";
 
 }

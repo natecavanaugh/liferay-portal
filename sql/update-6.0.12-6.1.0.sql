@@ -147,7 +147,7 @@ create table DDMTemplate (
 	name STRING null,
 	description STRING null,
 	type_ VARCHAR(75) null,
-	mode VARCHAR(75) null,
+	mode_ VARCHAR(75) null,
 	language VARCHAR(75) null,
 	script TEXT null
 );
@@ -174,6 +174,7 @@ create table DLFileEntryMetadata (
 );
 
 create table DLFileEntryType (
+	uuid_ VARCHAR(75) null,
 	fileEntryTypeId LONG not null primary key,
 	groupId LONG,
 	companyId LONG,
@@ -215,6 +216,7 @@ COMMIT_TRANSACTION;
 update DLFileShortcut set repositoryId = groupId;
 
 alter table DLFileVersion add repositoryId LONG;
+alter table DLFileVersion add folderId LONG;
 alter table DLFileVersion add fileEntryTypeId LONG;
 
 COMMIT_TRANSACTION;
@@ -487,7 +489,7 @@ create table SocialActivityCounter (
 	classNameId LONG,
 	classPK LONG,
 	name VARCHAR(75) null,
-	type_ INTEGER,
+	ownerType INTEGER,
 	currentValue INTEGER,
 	totalValue INTEGER,
 	graceValue INTEGER,
