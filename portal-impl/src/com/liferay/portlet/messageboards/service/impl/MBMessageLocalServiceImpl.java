@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
@@ -63,7 +64,6 @@ import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
-import com.liferay.portlet.messageboards.MessageBodyException;
 import com.liferay.portlet.messageboards.MessageSubjectException;
 import com.liferay.portlet.messageboards.NoSuchDiscussionException;
 import com.liferay.portlet.messageboards.RequiredMessageException;
@@ -232,6 +232,9 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			messageId, "text/" + format, body);
 
 		validate(subject, body);
+
+		subject = getSubject(subject, body);
+		body = getBody(subject, body);
 
 		MBMessage message = mbMessagePersistence.create(messageId);
 
@@ -691,11 +694,6 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		// Expando
 
 		expandoValueLocalService.deleteValues(
-			MBMessage.class.getName(), message.getMessageId());
-
-		// Social
-
-		socialActivityLocalService.deleteActivities(
 			MBMessage.class.getName(), message.getMessageId());
 
 		// Ratings
@@ -1365,6 +1363,9 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 
 		validate(subject, body);
 
+		subject = getSubject(subject, body);
+		body = getBody(subject, body);
+
 		message.setModifiedDate(serviceContext.getModifiedDate(now));
 		message.setSubject(subject);
 		message.setBody(body);
@@ -1581,7 +1582,6 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 					// Social
 
 					if (!message.isAnonymous() && !user.isDefaultUser()) {
-						int activityType = MBActivityKeys.ADD_MESSAGE;
 						long receiverUserId = 0;
 						MBMessage socialEquityLogMessage = message;
 						String actionId = ActionKeys.ADD_MESSAGE;
@@ -1591,7 +1591,6 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 								message.getParentMessageId());
 
 						if (parentMessage != null) {
-							activityType = MBActivityKeys.REPLY_MESSAGE;
 							receiverUserId = parentMessage.getUserId();
 
 							if (receiverUserId != userId) {
@@ -1603,7 +1602,19 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 						socialActivityLocalService.addActivity(
 							userId, message.getGroupId(),
 							MBMessage.class.getName(), message.getMessageId(),
-							activityType, StringPool.BLANK, receiverUserId);
+							MBActivityKeys.ADD_MESSAGE, StringPool.BLANK,
+							receiverUserId);
+
+						if ((parentMessage != null) &&
+							(receiverUserId != userId)) {
+
+							socialActivityLocalService.addActivity(
+								userId, parentMessage.getGroupId(),
+								MBMessage.class.getName(),
+								parentMessage.getMessageId(),
+								MBActivityKeys.REPLY_MESSAGE, StringPool.BLANK,
+								0);
+						}
 
 						socialEquityLogLocalService.addEquityLogs(
 							userId, MBMessage.class.getName(),
@@ -1783,6 +1794,22 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 					socialActivity.getActivityId());
 			}
 		}
+	}
+
+	protected String getBody(String subject, String body) {
+		if (Validator.isNull(body)) {
+			return subject;
+		}
+
+		return body;
+	}
+
+	protected String getSubject(String subject, String body) {
+		if (Validator.isNull(subject)) {
+			return StringUtil.shorten(body);
+		}
+
+		return subject;
 	}
 
 	protected void notifyDiscussionSubscribers(
@@ -2103,12 +2130,8 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 	protected void validate(String subject, String body)
 		throws PortalException {
 
-		if (Validator.isNull(subject)) {
+		if (Validator.isNull(subject) && Validator.isNull(body)) {
 			throw new MessageSubjectException();
-		}
-
-		if (Validator.isNull(body)) {
-			throw new MessageBodyException();
 		}
 	}
 

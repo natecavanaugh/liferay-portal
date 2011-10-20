@@ -41,17 +41,9 @@ public interface DLFileVersion extends DLFileVersionModel, PersistedModel {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public com.liferay.portlet.documentlibrary.model.DLFolder getFolder()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public long getFolderId()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
+	public com.liferay.portlet.documentlibrary.model.DLFolder getFolder();
 
 	public java.lang.String getIcon();
-
-	public java.lang.String getImageType();
 
 	public void setExtraSettings(java.lang.String extraSettings);
 

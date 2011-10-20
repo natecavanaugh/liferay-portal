@@ -246,7 +246,7 @@ public class HookHotDeployListener
 		"theme.portlet.sharing.default",
 		"theme.shortcut.icon",
 		"upgrade.processes",
-		"user.notification.event.confirmation.enabled",
+		"user.notification.hotDeployEvent.confirmation.enabled",
 		"users.email.address.generator",
 		"users.email.address.required",
 		"users.form.add.identification",
@@ -278,21 +278,27 @@ public class HookHotDeployListener
 		}
 	}
 
-	public void invokeDeploy(HotDeployEvent event) throws HotDeployException {
+	public void invokeDeploy(HotDeployEvent hotDeployEvent)
+		throws HotDeployException {
+
 		try {
-			doInvokeDeploy(event);
+			doInvokeDeploy(hotDeployEvent);
 		}
 		catch (Throwable t) {
-			throwHotDeployException(event, "Error registering hook for ", t);
+			throwHotDeployException(
+				hotDeployEvent, "Error registering hook for ", t);
 		}
 	}
 
-	public void invokeUndeploy(HotDeployEvent event) throws HotDeployException {
+	public void invokeUndeploy(HotDeployEvent hotDeployEvent)
+		throws HotDeployException {
+
 		try {
-			doInvokeUndeploy(event);
+			doInvokeUndeploy(hotDeployEvent);
 		}
 		catch (Throwable t) {
-			throwHotDeployException(event, "Error unregistering hook for ", t);
+			throwHotDeployException(
+				hotDeployEvent, "Error unregistering hook for ", t);
 		}
 	}
 
@@ -485,8 +491,10 @@ public class HookHotDeployListener
 		}
 	}
 
-	protected void doInvokeDeploy(HotDeployEvent event) throws Exception {
-		ServletContext servletContext = event.getServletContext();
+	protected void doInvokeDeploy(HotDeployEvent hotDeployEvent)
+		throws Exception {
+
+		ServletContext servletContext = hotDeployEvent.getServletContext();
 
 		String servletContextName = servletContext.getServletContextName();
 
@@ -501,13 +509,11 @@ public class HookHotDeployListener
 			return;
 		}
 
-		if (_log.isInfoEnabled()) {
-			_log.info("Registering hook for " + servletContextName);
-		}
+		logRegistration(servletContextName);
 
 		_servletContextNames.add(servletContextName);
 
-		ClassLoader portletClassLoader = event.getContextClassLoader();
+		ClassLoader portletClassLoader = hotDeployEvent.getContextClassLoader();
 
 		initLogger(portletClassLoader);
 
@@ -683,7 +689,7 @@ public class HookHotDeployListener
 
 				_customJspBagsMap.put(servletContextName, customJspBag);
 
-				PluginPackage pluginPackage = event.getPluginPackage();
+				PluginPackage pluginPackage = hotDeployEvent.getPluginPackage();
 
 				initCustomJspBag(
 					servletContextName, pluginPackage.getName(), customJspBag);
@@ -944,8 +950,10 @@ public class HookHotDeployListener
 		}
 	}
 
-	protected void doInvokeUndeploy(HotDeployEvent event) throws Exception {
-		ServletContext servletContext = event.getServletContext();
+	protected void doInvokeUndeploy(HotDeployEvent hotDeployEvent)
+		throws Exception {
+
+		ServletContext servletContext = hotDeployEvent.getServletContext();
 
 		String servletContextName = servletContext.getServletContextName();
 
@@ -1856,6 +1864,12 @@ public class HookHotDeployListener
 		}
 	}
 
+	protected void logRegistration(String servletContextName) {
+		if (_log.isInfoEnabled()) {
+			_log.info("Registering hook for " + servletContextName);
+		}
+	}
+
 	protected void resetPortalProperties(
 			String servletContextName, Properties portalProperties,
 			boolean initPhase)
@@ -2155,7 +2169,7 @@ public class HookHotDeployListener
 		"theme.loader.new.theme.id.on.import",
 		"theme.portlet.decorate.default",
 		"theme.portlet.sharing.default",
-		"user.notification.event.confirmation.enabled",
+		"user.notification.hotDeployEvent.confirmation.enabled",
 		"users.email.address.required",
 		"users.screen.name.always.autogenerate"
 	};
