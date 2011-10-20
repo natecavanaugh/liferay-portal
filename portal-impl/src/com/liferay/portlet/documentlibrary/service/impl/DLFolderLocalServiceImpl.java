@@ -40,6 +40,7 @@ import com.liferay.portlet.documentlibrary.service.base.DLFolderLocalServiceBase
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -109,7 +110,7 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 			dlFolderPersistence.update(parentDLFolder, false);
 		}
 
-		// DLApp
+		// App helper
 
 		dlAppHelperLocalService.addFolder(
 			new LiferayFolder(dlFolder), serviceContext);
@@ -149,6 +150,10 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 		DLFolder dlFolder = dlFolderPersistence.findByPrimaryKey(folderId);
 
 		deleteFolder(dlFolder);
+	}
+
+	public DLFolder fetchFolder(long folderId) throws SystemException {
+		return dlFolderPersistence.fetchByPrimaryKey(folderId);
 	}
 
 	public List<DLFolder> getCompanyFolders(long companyId, int start, int end)
@@ -226,7 +231,7 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 
 	public List<DLFolder> getFolders(
 			long groupId, long parentFolderId, boolean includeMountfolders,
-			int start, int end,	OrderByComparator obc)
+			int start, int end, OrderByComparator obc)
 		throws SystemException {
 
 		if (includeMountfolders) {
@@ -254,7 +259,19 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 		throws SystemException {
 
 		return dlFolderFinder.findF_FE_FS_ByG_F_S(
-			groupId, folderId, status, includeMountFolders, start, end, obc);
+			groupId, folderId, status, null, includeMountFolders, start, end,
+			obc);
+	}
+
+	public List<Object> getFoldersAndFileEntriesAndFileShortcuts(
+			long groupId, long folderId, int status, String[] mimeTypes,
+			boolean includeMountFolders, int start, int end,
+			OrderByComparator obc)
+		throws SystemException {
+
+		return dlFolderFinder.findF_FE_FS_ByG_F_S(
+			groupId, folderId, status, mimeTypes, includeMountFolders, start,
+			end, obc);
 	}
 
 	public int getFoldersAndFileEntriesAndFileShortcutsCount(
@@ -263,7 +280,16 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 		throws SystemException {
 
 		return dlFolderFinder.countF_FE_FS_ByG_F_S(
-			groupId, folderId, status, includeMountFolders);
+			groupId, folderId, status, null, includeMountFolders);
+	}
+
+	public int getFoldersAndFileEntriesAndFileShortcutsCount(
+			long groupId, long folderId, int status, String[] mimeTypes,
+			boolean includeMountFolders)
+		throws SystemException {
+
+		return dlFolderFinder.countF_FE_FS_ByG_F_S(
+			groupId, folderId, status, mimeTypes, includeMountFolders);
 	}
 
 	public int getFoldersCount(long groupId, long parentFolderId)
@@ -436,6 +462,10 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 
 		// Folder
 
+		if (!overrideFileEntryTypes) {
+			fileEntryTypeIds = Collections.emptyList();
+		}
+
 		DLFolder dlFolder = dlFolderPersistence.findByPrimaryKey(folderId);
 
 		parentFolderId = getParentFolderId(dlFolder, parentFolderId);
@@ -460,7 +490,7 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 				serviceContext);
 		}
 
-		// DLApp
+		// App helper
 
 		dlAppHelperLocalService.updateFolder(
 			new LiferayFolder(dlFolder), serviceContext);
@@ -562,7 +592,7 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 		expandoValueLocalService.deleteValues(
 			DLFolder.class.getName(), dlFolder.getFolderId());
 
-		// DLApp
+		// App helper
 
 		dlAppHelperLocalService.deleteFolder(new LiferayFolder(dlFolder));
 

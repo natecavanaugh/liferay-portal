@@ -39,6 +39,29 @@ else {
 request.setAttribute("view_layout_branches.jsp-currenttLayoutBranchId", String.valueOf(currentLayoutRevision.getLayoutBranchId()));
 %>
 
+<liferay-ui:success key="pageVariationAdded" message="page-variation-was-added" />
+<liferay-ui:success key="pageVariationDeleted" message="page-variation-was-deleted" />
+<liferay-ui:success key="pageVariationUpdated" message="page-variation-was-updated" />
+
+<liferay-ui:error exception="<%= LayoutBranchNameException.class %>">
+
+	<%
+	LayoutBranchNameException lbne = (LayoutBranchNameException)errorException;
+	%>
+
+	<c:if test="<%= lbne.getType() == LayoutBranchNameException.DUPLICATE %>">
+		<liferay-ui:message key="a-page-variation-with-that-name-already-exists" />
+	</c:if>
+
+	<c:if test="<%= lbne.getType() == LayoutBranchNameException.TOO_LONG %>">
+		<liferay-ui:message arguments="<%= new Object[] {4, 100} %>" key="please-enter-a-value-between-x-and-x-characters-long" />
+	</c:if>
+
+	<c:if test="<%= lbne.getType() == LayoutBranchNameException.TOO_SHORT %>">
+		<liferay-ui:message arguments="<%= new Object[] {4, 100} %>" key="please-enter-a-value-between-x-and-x-characters-long" />
+	</c:if>
+</liferay-ui:error>
+
 <div class="portlet-msg-info">
 	<liferay-ui:message key="page-variations-help" />
 </div>
@@ -123,16 +146,4 @@ request.setAttribute("view_layout_branches.jsp-currenttLayoutBranchId", String.v
 			namespace: '<portlet:namespace />'
 		}
 	);
-
-	<c:if test='<%= themeDisplay.isStatePopUp() && SessionMessages.contains(renderRequest, portletName + ".doConfigure") %>'>
-		var data = null;
-
-		<c:if test='<%= SessionMessages.contains(renderRequest, portletName + ".notAjaxable") %>'>
-			data = {
-				portletAjaxable: false
-			};
-		</c:if>
-
-		Liferay.Util.getOpener().Liferay.Portlet.refresh('#p_p_id_<%= PortletKeys.STAGING_BAR %>_', data);
-	</c:if>
 </aui:script>

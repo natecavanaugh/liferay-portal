@@ -146,13 +146,11 @@ public class DLIndexer extends BaseIndexer {
 		long[] groupIds = searchContext.getGroupIds();
 
 		if ((groupIds != null) && (groupIds.length > 0)) {
-			for (long groupId : searchContext.getGroupIds()) {
-				List<DLFileEntryType> dlFileEntryTypes =
-					DLFileEntryTypeLocalServiceUtil.getFileEntryTypes(groupId);
+			List<DLFileEntryType> dlFileEntryTypes =
+				DLFileEntryTypeLocalServiceUtil.getFileEntryTypes(groupIds);
 
-				for (DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
-					ddmStructuresSet.addAll(dlFileEntryType.getDDMStructures());
-				}
+			for (DLFileEntryType dlFileEntryType : dlFileEntryTypes) {
+				ddmStructuresSet.addAll(dlFileEntryType.getDDMStructures());
 			}
 		}
 
@@ -160,11 +158,11 @@ public class DLIndexer extends BaseIndexer {
 			addSearchDDMStruture(searchQuery, searchContext, ddmStructure);
 		}
 
-		addSearchTerm(searchQuery, searchContext, Field.USER_NAME, true);
+		addSearchTerm(searchQuery, searchContext, Field.USER_NAME, false);
 
-		addSearchTerm(searchQuery, searchContext, "extension", true);
+		addSearchTerm(searchQuery, searchContext, "extension", false);
 		addSearchTerm(searchQuery, searchContext, "fileEntryTypeId", false);
-		addSearchTerm(searchQuery, searchContext, "path", true);
+		addSearchTerm(searchQuery, searchContext, "path", false);
 
 		LinkedHashMap<String, Object> params =
 			(LinkedHashMap<String, Object>)searchContext.getAttribute("params");
