@@ -61,7 +61,7 @@ String portletURLString = portletURL.toString();
 			<liferay-ui:header
 				backLabel="users-and-organizations-home"
 				backURL="<%= headerBackURL.toString() %>"
-				title="organizations"
+				title='<%= usersListView.equals(UserConstants.LIST_VIEW_FLAT_ORGANIZATIONS) ? "organizations" : "users" %>'
 			/>
 		</c:if>
 	</c:if>

@@ -516,7 +516,7 @@ create table SocialActivitySetting (
 	classNameId LONG,
 	activityType INTEGER,
 	name VARCHAR(75) null,
-	value VARCHAR(75) null
+	value VARCHAR(1024) null
 );
 
 update Role_ set name = 'Site Administrator' where name = 'Community Administrator';

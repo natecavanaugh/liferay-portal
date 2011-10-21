@@ -21,9 +21,11 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.Tuple;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.util.JavaFieldsParser;
 import com.liferay.portlet.social.model.SocialAchievement;
 import com.liferay.portlet.social.model.SocialActivityCounterConstants;
 import com.liferay.portlet.social.model.SocialActivityCounterDefinition;
@@ -139,6 +141,8 @@ public class SocialConfigurationUtil {
 			return;
 		}
 
+		xml = JavaFieldsParser.parse(classLoader, xml);
+
 		Document document = SAXReaderUtil.read(xml);
 
 		Element rootElement = document.getRootElement();
@@ -219,12 +223,14 @@ public class SocialConfigurationUtil {
 		String processorClassName = GetterUtil.getString(
 			activityElement.elementText("processor-class"));
 
-		SocialActivityProcessor activityProcessor =
-			(SocialActivityProcessor)ProxyFactory.newInstance(
-				classLoader, SocialActivityProcessor.class,
-				processorClassName);
+		if (Validator.isNotNull(processorClassName)) {
+			SocialActivityProcessor activityProcessor =
+				(SocialActivityProcessor)ProxyFactory.newInstance(
+					classLoader, SocialActivityProcessor.class,
+					processorClassName);
 
-		activityDefinition.setActivityProcessor(activityProcessor);
+			activityDefinition.setActivityProcessor(activityProcessor);
+		}
 
 		_readActivityContribution(activityElement, activityDefinition);
 		_readActivityParticipation(activityElement, activityDefinition);

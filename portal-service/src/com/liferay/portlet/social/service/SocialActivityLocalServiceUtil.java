@@ -403,7 +403,8 @@ public class SocialActivityLocalServiceUtil {
 	*/
 	public static void deleteActivities(
 		com.liferay.portlet.asset.model.AssetEntry assetEntry)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		getService().deleteActivities(assetEntry);
 	}
 

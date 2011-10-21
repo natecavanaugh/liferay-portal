@@ -1908,7 +1908,7 @@ create table SocialActivitySetting (
 	classNameId LONG,
 	activityType INTEGER,
 	name VARCHAR(75) null,
-	value VARCHAR(75) null
+	value VARCHAR(1024) null
 );
 
 create table SocialEquityAssetEntry (

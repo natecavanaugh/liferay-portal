@@ -555,7 +555,7 @@ create table SocialActivitySetting (
 	classNameId LONG,
 	activityType INTEGER,
 	name VARCHAR(75) null,
-	value VARCHAR(75) null
+	value VARCHAR(1024) null
 );
 
 alter table SocialEquityLog add extraData VARCHAR(255) null;
