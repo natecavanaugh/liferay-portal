@@ -242,7 +242,7 @@ public class SocialActivityLocalServiceImpl
 			}
 		}
 
-		//socialActivityCounterLocalService.addActivityStats(activity);
+		socialActivityCounterLocalService.addActivityCounters(activity);
 	}
 
 	/**
@@ -331,11 +331,13 @@ public class SocialActivityLocalServiceImpl
 	 *
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void deleteActivities(AssetEntry assetEntry) throws SystemException {
+	public void deleteActivities(AssetEntry assetEntry)
+		throws PortalException, SystemException {
+
 		socialActivityPersistence.removeByC_C(
 			assetEntry.getClassNameId(), assetEntry.getClassPK());
 
-		//socialActivityCounterLocalService.deleteActivityCounters(assetEntry);
+		socialActivityCounterLocalService.deleteActivityCounters(assetEntry);
 	}
 
 	/**
@@ -398,8 +400,8 @@ public class SocialActivityLocalServiceImpl
 			socialActivityPersistence.remove(activity);
 		}
 
-		//socialActivityCounterLocalService.deleteActivityCounters(
-		//	PortalUtil.getClassNameId(User.class.getName()), userId);
+		socialActivityCounterLocalService.deleteActivityCounters(
+			PortalUtil.getClassNameId(User.class.getName()), userId);
 	}
 
 	/**

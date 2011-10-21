@@ -156,27 +156,30 @@ int total = 0;
 
 				List resultRows = searchContainer.getResultRows();
 
-				for (int i = 0; i < hits.getDocs().length; i++) {
-					Document doc = hits.doc(i);
+				Document[] docs = hits.getDocs();
 
-					// Folder and document
+				if (docs != null) {
+					for (Document doc : docs) {
 
-					long fileEntryId = GetterUtil.getLong(doc.get(Field.ENTRY_CLASS_PK));
+						// Folder and document
 
-					FileEntry fileEntry = null;
+						long fileEntryId = GetterUtil.getLong(doc.get(Field.ENTRY_CLASS_PK));
 
-					try {
-						fileEntry = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
-					}
-					catch (Exception e) {
-						if (_log.isWarnEnabled()) {
-							_log.warn("Document library search index is stale and contains file entry {" + fileEntryId + "}");
+						FileEntry fileEntry = null;
+
+						try {
+							fileEntry = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
+						}
+						catch (Exception e) {
+							if (_log.isWarnEnabled()) {
+								_log.warn("Document library search index is stale and contains file entry {" + fileEntryId + "}");
+							}
+
+							continue;
 						}
 
-						continue;
+						results.add(fileEntry);
 					}
-
-					results.add(fileEntry);
 				}
 
 				total = results.size();
@@ -284,7 +287,7 @@ int total = 0;
 			<%
 			}
 			catch (Exception e) {
-				_log.error(e.getMessage());
+				_log.error(e, e);
 			}
 			%>
 

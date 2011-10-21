@@ -974,16 +974,14 @@ public class SourceFormatter {
 				}
 			}
 
-			String trimmedLine = StringUtil.trim(line);
+			String trimmedLine = StringUtil.trimLeading(line);
 
 			if (trimmedLine.contains(StringPool.TAB) &&
 				!trimmedLine.contains(StringPool.DOUBLE_SLASH) &&
 				!trimmedLine.startsWith(StringPool.STAR)) {
 
-				if (!fileName.endsWith("ConverterUtil.java")) {
-					_sourceFormatterHelper.printError(
-						fileName, "tab: " + fileName + " " + lineCount);
-				}
+				_sourceFormatterHelper.printError(
+					fileName, "tab: " + fileName + " " + lineCount);
 			}
 
 			if (line.contains("  {") && !line.matches("\\s*\\*.*")) {
@@ -1262,6 +1260,16 @@ public class SourceFormatter {
 
 				_sourceFormatterHelper.printError(
 					fileName, "aui:button " + fileName + " " + lineCount);
+			}
+
+			String trimmedLine = StringUtil.trimLeading(line);
+
+			if (trimmedLine.contains(StringPool.TAB) &&
+				!trimmedLine.contains(StringPool.DOUBLE_SLASH) &&
+				!trimmedLine.startsWith(StringPool.STAR)) {
+
+				_sourceFormatterHelper.printError(
+					fileName, "tab: " + fileName + " " + lineCount);
 			}
 
 			int x = line.indexOf("<%@ include file");
@@ -1746,29 +1754,35 @@ public class SourceFormatter {
 			return false;
 		}
 
-		if (checkFile && content.contains(importLine)) {
+		int x = importLine.indexOf("page");
+
+		if (x == -1) {
+			return false;
+		}
+
+		if (checkFile && content.contains(importLine.substring(x))) {
 			return true;
 		}
 
-		int x = content.indexOf("<%@ include file=");
-
-		if (x == -1) {
-			return false;
-		}
-
-		x = content.indexOf(StringPool.QUOTE, x);
-
-		if (x == -1) {
-			return false;
-		}
-
-		int y = content.indexOf(StringPool.QUOTE, x + 1);
+		int y = content.indexOf("<%@ include file=");
 
 		if (y == -1) {
 			return false;
 		}
 
-		String includeFileName = content.substring(x + 1, y);
+		y = content.indexOf(StringPool.QUOTE, y);
+
+		if (y == -1) {
+			return false;
+		}
+
+		int z = content.indexOf(StringPool.QUOTE, y + 1);
+
+		if (z == -1) {
+			return false;
+		}
+
+		String includeFileName = content.substring(y + 1, z);
 
 		String docrootPath = fileName.substring(
 			0, fileName.indexOf("docroot") + 7);
