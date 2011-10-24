@@ -625,6 +625,19 @@
 	}
 }
 
+.chrome {
+	.portlet-journal {
+		.lfr-translation-manager-add-menu {
+			display: inline;
+			padding-top: 1em;
+
+			li a img {
+				vertical-align: text-bottom;
+			}
+		}
+	}
+}
+
 .journal-component {
 	background: transparent url() no-repeat scroll 3px 3px;
 }
