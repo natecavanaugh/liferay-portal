@@ -204,8 +204,14 @@ request.setAttribute("record_set_action.jsp-selRecordSet", selRecordSet);
 
 			var displayRecordSetId = A.one('.displaying-record-set-id');
 
-			displayRecordSetId.set('innerHTML', recordSetName + ' (<%= LanguageUtil.get(pageContext, "modified") %>)');
+			displayRecordSetId.set('innerHTML', recordSetName + ' (<liferay-ui:message key="modified" />)');
 			displayRecordSetId.addClass('modified');
+
+			var dialog = Liferay.Util.getWindow();
+
+			if (dialog) {
+				dialog.set('title', recordSetName + ' - <liferay-ui:message key="configuration" />');
+			}
 		},
 		['aui-base']
 	);
