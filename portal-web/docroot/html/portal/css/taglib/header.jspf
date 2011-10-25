@@ -14,19 +14,68 @@
  */
 --%>
 
+.taglib-header {
+	position: relative;
+}
+
 .taglib-header .header-title {
 	margin: 0.1em;
+	vertical-align: middle;
+	display: inline-block;
+/*	padding-left: 20px;*/
+}
+
+.taglib-header .header-back-to {
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 1.1em;
+	
+/*	text-overflow: ellipsis;*/
+	
+	background: #eee;
+	border: 1px solid #aaa;
+	position: absolute;
+	left: -20px;
+	border-radius: 4px;
+	line-height: 0;
+/*	height: 2em;*/
+/*	top: 50%;*/
+/*	margin-top: -1em;*/
+	height: 100%;
 }
 
 .taglib-header .header-back-to a {
-	float: right;
+/*	float: right;*/
 	font-weight: bold;
-	padding: 1em 0.2em;
+/*	padding: 1em 0.2em;*/
 	text-decoration: none;
+	line-height: 2.5;
+	white-space: nowrap;
+	display: inline-block;
+	width: 15px;
+	overflow: hidden;
+	position: relative;
+	text-indent: -9999em;
+	height: 100%;
+	background: url(<%= themeImagesPath %>/arrows/04_left.png) no-repeat 5px 50%;
+	border-radius: 4px;
+
+	&:hover, &:focus {
+		width: auto;
+		overflow: visible;
+		text-indent: 0;
+		padding: 0 5px;
+		background-color: #CCC;
+
+		&:after {
+			display: none;
+		}
+	}
 }
 
 .taglib-header {
 	border-bottom: 1px solid #C8C9CA;
 	color: #555;
 	margin-bottom: 1em;
+	margin-left: 20px;
 }
