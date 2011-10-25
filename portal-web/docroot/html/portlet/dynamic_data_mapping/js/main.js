@@ -10,7 +10,9 @@ AUI().add(
 
 		var DEFAULTS_FORM_VALIDATOR = AUI.defaults.FormValidator;
 
-		var LOCALIZABLE_FIELD_ATTRS = ['label', 'predefinedValue', 'tip'];
+		var LOCALIZABLE_FIELD_ATTRS = AArray(['label', 'predefinedValue', 'tip']);
+
+		var XML_ATTRIBUTES_FIELD_ATTRS = AArray(['dataType', 'name', 'options', 'type']);
 
 		var STR_BLANK = '';
 
@@ -349,24 +351,26 @@ AUI().add(
 									function(item2, index2, collection2) {
 										var attributeName = item2.attributeName;
 
-										var attributeTag = instance._createDynamicNode(
-											'entry',
-											{
-												name: attributeName
+										if (XML_ATTRIBUTES_FIELD_ATTRS.indexOf(attributeName) === -1) {
+											var attributeTag = instance._createDynamicNode(
+												'entry',
+												{
+													name: attributeName
+												}
+											);
+
+											var attributeValue = instance.getFieldLocalizedValue(field, attributeName, item1);
+
+											if (attributeName === 'folder') {
+												attributeValue = A.JSON.stringify(attributeValue);
 											}
-										);
 
-										var attributeValue = instance.getFieldLocalizedValue(field, attributeName, item1);
-
-										if (attributeName === 'folder') {
-											attributeValue = A.JSON.stringify(attributeValue);
+											buffer.push(
+												attributeTag.openTag,
+												STR_CDATA_OPEN + attributeValue + STR_CDATA_CLOSE,
+												attributeTag.closeTag
+											);
 										}
-
-										buffer.push(
-											attributeTag.openTag,
-											STR_CDATA_OPEN + attributeValue + STR_CDATA_CLOSE,
-											attributeTag.closeTag
-										);
 									}
 								);
 
