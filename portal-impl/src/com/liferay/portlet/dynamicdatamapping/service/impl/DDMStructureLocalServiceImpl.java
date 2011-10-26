@@ -148,15 +148,16 @@ public class DDMStructureLocalServiceImpl
 	}
 
 	public DDMStructure copyStructure(
-			long userId, long structureId, ServiceContext serviceContext)
+			long userId, long structureId, Map<Locale, String> nameMap,
+			Map<Locale, String> descriptionMap, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		DDMStructure structure = getStructure(structureId);
 
 		return addStructure(
 			 userId, structure.getGroupId(), structure.getClassNameId(), null,
-			 structure.getNameMap(), structure.getDescriptionMap(),
-			 structure.getXsd(), structure.getStorageType(), serviceContext);
+			 nameMap, descriptionMap, structure.getXsd(),
+			 structure.getStorageType(), serviceContext);
 	}
 
 	public void deleteStructure(DDMStructure structure)
