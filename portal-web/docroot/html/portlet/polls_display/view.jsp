@@ -17,6 +17,8 @@
 <%@ include file="/html/portlet/polls_display/init.jsp" %>
 
 <%
+String taglibOnClick = "Liferay.Portlet.openConfiguration(\'#p_p_id_" + portletDisplay.getId() + "_\', \'" + portletDisplay.getId() + "\', \'" + portletDisplay.getURLConfiguration() + " \', \'" + portletDisplay.getNamespace() + "\'); return false;";
+
 PollsQuestion question = (PollsQuestion)request.getAttribute(WebKeys.POLLS_QUESTION);
 %>
 
@@ -28,7 +30,7 @@ PollsQuestion question = (PollsQuestion)request.getAttribute(WebKeys.POLLS_QUEST
 		%>
 
 		<div class="portlet-configuration portlet-msg-info">
-			<a href="<%= portletDisplay.getURLConfiguration() %>">
+			<a href="<%= portletDisplay.getURLConfiguration() %>" onClick="<%= taglibOnClick %>">
 				<liferay-ui:message key="please-configure-this-portlet-to-make-it-visible-to-all-users" />
 			</a>
 		</div>
@@ -171,6 +173,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (showEditPollIcon || sho
 					image="configuration"
 					message="select-web-content"
 					method="get"
+					onClick="<%= taglibOnClick %>"
 					url="<%= portletDisplay.getURLConfiguration() %>"
 				/>
 			</c:if>

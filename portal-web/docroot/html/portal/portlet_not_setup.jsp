@@ -17,11 +17,13 @@
 <%@ include file="/html/portlet/init.jsp" %>
 
 <%
+String taglibOnClick = "Liferay.Portlet.openConfiguration(\'#p_p_id_" + portletDisplay.getId() + "_\', \'" + portletDisplay.getId() + "\', \'" + portletDisplay.getURLConfiguration() + " \', \'" + portletDisplay.getNamespace() + "\'); return false;";
+
 renderRequest.setAttribute(WebKeys.PORTLET_CONFIGURATOR_VISIBILITY, Boolean.TRUE);
 %>
 
 <div class="portlet-configuration portlet-msg-info">
-	<a href="<%= portletDisplay.getURLConfiguration() %>">
+	<a href="<%= portletDisplay.getURLConfiguration() %>" onClick="<%= taglibOnClick %>">
 		<liferay-ui:message key="please-configure-this-portlet-to-make-it-visible-to-all-users" />
 	</a>
 </div>

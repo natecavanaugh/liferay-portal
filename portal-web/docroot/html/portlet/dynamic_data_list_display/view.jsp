@@ -144,11 +144,17 @@ boolean showSelectListIcon = PortletPermissionUtil.contains(permissionChecker, l
 			</c:if>
 
 			<c:if test="<%= showSelectListIcon %>">
+
+				<%
+				String taglibOnClick = "Liferay.Portlet.openConfiguration(\'#p_p_id_" + portletDisplay.getId() + "_\', \'" + portletDisplay.getId() + "\', \'" + portletDisplay.getURLConfiguration() + " \', \'" + portletDisplay.getNamespace() + "\'); return false;";
+				%>
+
 				<liferay-ui:icon
 					cssClass="portlet-configuration"
 					image="configuration"
 					message="select-list"
 					method="get"
+					onClick="<%= taglibOnClick %>"
 					url="<%= portletDisplay.getURLConfiguration() %>"
 				/>
 			</c:if>
