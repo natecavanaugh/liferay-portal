@@ -174,7 +174,8 @@ public class StripFilter extends BasePortalFilter {
 		String lifecycle = ParamUtil.getString(request, "p_p_lifecycle");
 
 		if ((lifecycle.equals("1") &&
-			 LiferayWindowState.isExclusive(request)) ||
+			 (LiferayWindowState.isExclusive(request) ||
+				 LiferayWindowState.isExclusiveStateful(request))) ||
 			lifecycle.equals("2")) {
 
 			return false;

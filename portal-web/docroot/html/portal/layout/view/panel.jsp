@@ -15,7 +15,7 @@
 --%>
 <%@ include file="/html/portal/init.jsp" %>
 
-<c:if test="<%= !themeDisplay.isStateExclusive() && !themeDisplay.isStatePopUp() %>">
+<c:if test="<%= !themeDisplay.isStateExclusive() && !themeDisplay.isStateExclusiveStateful() && !themeDisplay.isStatePopUp() %>">
 	<div id="main-content">
 		<table class="lfr-panel-page">
 		<tr>
@@ -26,13 +26,13 @@
 </c:if>
 
 <%
-if (themeDisplay.isStateExclusive() || themeDisplay.isStatePopUp() || layoutTypePortlet.hasStateMax()) {
+if (themeDisplay.isStateExclusive() || themeDisplay.isStateExclusiveStateful() || themeDisplay.isStatePopUp() || layoutTypePortlet.hasStateMax()) {
 	String ppid = ParamUtil.getString(request, "p_p_id");
 
 	String velocityTemplateId = null;
 	String velocityTemplateContent = null;
 
-	if (themeDisplay.isStateExclusive()) {
+	if (themeDisplay.isStateExclusive() || themeDisplay.isStateExclusiveStateful()) {
 		velocityTemplateId = theme.getThemeId() + LayoutTemplateConstants.STANDARD_SEPARATOR + "exclusive";
 		velocityTemplateContent = LayoutTemplateLocalServiceUtil.getContent("exclusive", true, theme.getThemeId());
 	}
@@ -71,7 +71,7 @@ else {
 }
 %>
 
-<c:if test="<%= !themeDisplay.isStateExclusive() && !themeDisplay.isStatePopUp() %>">
+<c:if test="<%= !themeDisplay.isStateExclusive() && !themeDisplay.isStateExclusiveStateful() && !themeDisplay.isStatePopUp() %>">
 			</td>
 		</tr>
 		</table>

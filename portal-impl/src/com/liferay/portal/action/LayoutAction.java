@@ -383,6 +383,7 @@ public class LayoutAction extends Action {
 		// Manually check the p_p_id. See LEP-1724.
 
 		if (themeDisplay.isStateExclusive() ||
+			themeDisplay.isStateExclusiveStateful() ||
 			Validator.isNotNull(ParamUtil.getString(request, "p_p_id"))) {
 
 			if (layout.isTypePanel()) {
@@ -680,7 +681,9 @@ public class LayoutAction extends Action {
 					includeLayoutContent(
 						request, response, themeDisplay, layout);
 
-					if (themeDisplay.isStateExclusive()) {
+					if (themeDisplay.isStateExclusive() ||
+						themeDisplay.isStateExclusiveStateful()) {
+
 						renderExclusive(request, response, themeDisplay);
 
 						return null;

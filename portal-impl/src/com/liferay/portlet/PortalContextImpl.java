@@ -54,6 +54,7 @@ public class PortalContextImpl implements PortalContext {
 		windowStates.add(WindowState.MINIMIZED);
 		windowStates.add(WindowState.NORMAL);
 		windowStates.add(LiferayWindowState.EXCLUSIVE);
+		windowStates.add(LiferayWindowState.EXCLUSIVE_STATEFUL);
 		windowStates.add(LiferayWindowState.POP_UP);
 	}
 

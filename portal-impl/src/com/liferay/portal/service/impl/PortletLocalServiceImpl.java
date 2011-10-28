@@ -1725,6 +1725,9 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 				mimeTypeWindowStates.add(
 					LiferayWindowState.EXCLUSIVE.toString().toLowerCase());
 				mimeTypeWindowStates.add(
+					LiferayWindowState.EXCLUSIVE_STATEFUL.toString().
+						toLowerCase());
+				mimeTypeWindowStates.add(
 					LiferayWindowState.POP_UP.toString().toLowerCase());
 			}
 

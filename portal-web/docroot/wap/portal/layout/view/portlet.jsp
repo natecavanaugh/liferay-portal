@@ -45,7 +45,7 @@ else {
 	String velocityTemplateId = null;
 	String velocityTemplateContent = null;
 
-	if (themeDisplay.isStateExclusive()) {
+	if (themeDisplay.isStateExclusive() || themeDisplay.isStateExclusiveStateful()) {
 		velocityTemplateId = theme.getThemeId() + LayoutTemplateConstants.STANDARD_SEPARATOR + "exclusive";
 		velocityTemplateContent = LayoutTemplateLocalServiceUtil.getWapContent("exclusive", true, theme.getThemeId());
 	}

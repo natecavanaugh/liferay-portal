@@ -661,6 +661,10 @@ public class ThemeDisplay implements Serializable {
 		return _stateExclusive;
 	}
 
+	public boolean isStateExclusiveStateful() {
+		return _stateExclusiveStateful;
+	}
+
 	public boolean isStateMaximized() {
 		return _stateMaximized;
 	}
@@ -1118,6 +1122,10 @@ public class ThemeDisplay implements Serializable {
 		_stateExclusive = stateExclusive;
 	}
 
+	public void setStateExclusiveStateful(boolean stateExclusiveStateful) {
+		_stateExclusiveStateful = stateExclusiveStateful;
+	}
+
 	public void setStateMaximized(boolean stateMaximized) {
 		_stateMaximized = stateMaximized;
 	}
@@ -1343,6 +1351,7 @@ public class ThemeDisplay implements Serializable {
 	private boolean _showStagingIcon;
 	private boolean _signedIn;
 	private boolean _stateExclusive;
+	private boolean _stateExclusiveStateful;
 	private boolean _stateMaximized;
 	private boolean _statePopUp;
 	private Theme _theme;
