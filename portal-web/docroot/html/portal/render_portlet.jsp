@@ -96,6 +96,9 @@ WindowState windowState = WindowState.NORMAL;
 if (themeDisplay.isStateExclusive()) {
 	windowState = LiferayWindowState.EXCLUSIVE;
 }
+else if (themeDisplay.isStateExclusiveStateful()) {
+	windowState = LiferayWindowState.EXCLUSIVE_STATEFUL;
+}
 else if (themeDisplay.isStatePopUp()) {
 	windowState = LiferayWindowState.POP_UP;
 }
@@ -200,7 +203,7 @@ boolean showExportImportIcon = false;
 boolean showHelpIcon = false;
 boolean showMaxIcon = portlet.hasWindowState(responseContentType, WindowState.MAXIMIZED);
 boolean showMinIcon = portlet.hasWindowState(responseContentType, WindowState.MINIMIZED);
-boolean showMoveIcon = !stateMax && !themeDisplay.isStateExclusive();
+boolean showMoveIcon = !stateMax && !themeDisplay.isStateExclusive() && !themeDisplay.isStateExclusiveStateful();
 boolean showPortletCssIcon = false;
 boolean showPortletIcon = (portletResourcePortlet != null) ? Validator.isNotNull(portletResourcePortlet.getIcon()) : Validator.isNotNull(portlet.getIcon());
 boolean showPrintIcon = portlet.hasPortletMode(responseContentType, LiferayPortletMode.PRINT);
@@ -375,6 +378,7 @@ portletDisplay.setColumnPos(columnPos.intValue());
 portletDisplay.setColumnCount(columnCount.intValue());
 
 portletDisplay.setStateExclusive(themeDisplay.isStateExclusive());
+portletDisplay.setStateExclusiveStateful(themeDisplay.isStateExclusiveStateful());
 portletDisplay.setStateMax(stateMax);
 portletDisplay.setStateMin(stateMin);
 portletDisplay.setStateNormal(windowState.equals(WindowState.NORMAL));
@@ -764,7 +768,7 @@ if (portlet.isActive() && portlet.isReady() && access && supportsMimeType) {
 			request.setAttribute(WebKeys.PORTLET_CONFIGURATOR_VISIBILITY, portletVisibility);
 		}
 
-		if (themeDisplay.isFacebook() || themeDisplay.isStateExclusive()) {
+		if (themeDisplay.isFacebook() || themeDisplay.isStateExclusive() || themeDisplay.isStateExclusiveStateful()) {
 			renderRequestImpl.setAttribute(WebKeys.STRING_SERVLET_RESPONSE, stringResponse);
 		}
 	}
@@ -793,7 +797,7 @@ if ((layout.isTypePanel() || layout.isTypeControlPanel()) && !portletDisplay.get
 }
 %>
 
-<c:if test="<%= !themeDisplay.isFacebook() && !themeDisplay.isStateExclusive() && !themeDisplay.isWapTheme() %>">
+<c:if test="<%= !themeDisplay.isFacebook() && !themeDisplay.isStateExclusive() && !themeDisplay.isStateExclusiveStateful() && !themeDisplay.isWapTheme() %>">
 
 	<%
 	if (themeDisplay.isStatePopUp() || themeDisplay.isWidget()) {
@@ -1000,7 +1004,7 @@ else {
 }
 %>
 
-<c:if test="<%= !themeDisplay.isFacebook() && !themeDisplay.isStateExclusive() && !themeDisplay.isWapTheme() %>">
+<c:if test="<%= !themeDisplay.isFacebook() && !themeDisplay.isStateExclusive() && !themeDisplay.isStateExclusiveStateful() && !themeDisplay.isWapTheme() %>">
 			<aui:script position='<%= themeDisplay.isIsolated() ? "inline" : "auto" %>'>
 				Liferay.Portlet.onLoad(
 					{
@@ -1104,7 +1108,7 @@ if (showPortletCssIcon) {
 SessionMessages.clear(renderRequestImpl);
 SessionErrors.clear(renderRequestImpl);
 
-if (themeDisplay.isFacebook() || themeDisplay.isStateExclusive()) {
+if (themeDisplay.isFacebook() || themeDisplay.isStateExclusive() || themeDisplay.isStateExclusiveStateful()) {
 	request.setAttribute(JavaConstants.JAVAX_PORTLET_REQUEST, renderRequestImpl);
 	request.setAttribute(JavaConstants.JAVAX_PORTLET_RESPONSE, renderResponseImpl);
 }
