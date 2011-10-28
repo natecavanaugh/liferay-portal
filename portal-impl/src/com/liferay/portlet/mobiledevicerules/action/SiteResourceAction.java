@@ -45,7 +45,6 @@ public class SiteResourceAction extends PortletAction {
 	}
 
 	private static final String _SITE_URL_ACTION_LAYOUTS_JSP =
-		"/html/portlet/mobile_device_rules_admin/action/" +
-			"site_url_action_layouts.jsp";
+		"/html/portlet/mobile_device_rules/action/site_url_action_layouts.jsp";
 
 }

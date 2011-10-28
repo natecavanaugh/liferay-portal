@@ -82,8 +82,7 @@ public class EditRuleGroupAction extends PortletAction {
 			if (e instanceof PrincipalException) {
 				SessionErrors.add(actionRequest, e.getClass().getName());
 
-				setForward(
-					actionRequest, "portlet.mobile_device_rules_admin.error");
+				setForward(actionRequest, "portlet.mobile_device_rules.error");
 			}
 			else if (e instanceof NoSuchRuleGroupException) {
 				SessionErrors.add(actionRequest, e.getClass().getName());
@@ -109,7 +108,7 @@ public class EditRuleGroupAction extends PortletAction {
 			WebKeys.MOBILE_DEVICE_RULES_RULE_GROUP, ruleGroup);
 
 		return mapping.findForward(
-			"portlet.mobile_device_rules_admin.edit_rule_group");
+			"portlet.mobile_device_rules.edit_rule_group");
 	}
 
 	protected MDRRuleGroup copyRuleGroup(ActionRequest actionRequest)
@@ -144,7 +143,7 @@ public class EditRuleGroupAction extends PortletAction {
 		PortletURL portletURL = liferayPortletResponse.createRenderURL();
 
 		portletURL.setParameter(
-			"struts_action", "/mobile_device_rules_admin/edit_rule_group");
+			"struts_action", "/mobile_device_rules/edit_rule_group");
 
 		String redirect = ParamUtil.getString(actionRequest, "redirect");
 

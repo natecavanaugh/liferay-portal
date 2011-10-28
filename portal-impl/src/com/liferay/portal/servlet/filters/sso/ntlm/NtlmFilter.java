@@ -194,10 +194,10 @@ public class NtlmFilter extends BasePortalFilter {
 
 				authorization = Base64.encode(challengeMessage);
 
+				response.setContentLength(0);
 				response.setHeader(
 					HttpHeaders.WWW_AUTHENTICATE, "NTLM " + authorization);
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				response.setContentLength(0);
 
 				response.flushBuffer();
 
@@ -208,57 +208,55 @@ public class NtlmFilter extends BasePortalFilter {
 
 				return;
 			}
-			else {
-				byte[] serverChallenge = (byte[])_portalCache.get(
-					request.getRemoteAddr());
 
-				if (serverChallenge == null) {
-					response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "NTLM");
-					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-					response.setContentLength(0);
+			byte[] serverChallenge = (byte[])_portalCache.get(
+				request.getRemoteAddr());
 
-					response.flushBuffer();
+			if (serverChallenge == null) {
+				response.setContentLength(0);
+				response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "NTLM");
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-					return;
+				response.flushBuffer();
+
+				return;
+			}
+
+			NtlmUserAccount ntlmUserAccount = null;
+
+			try {
+				ntlmUserAccount = ntlmManager.authenticate(
+					src, serverChallenge);
+			}
+			catch (Exception e) {
+				if (_log.isErrorEnabled()) {
+					_log.error("Unable to perform NTLM authentication", e);
 				}
+			}
+			finally {
+				_portalCache.remove(request.getRemoteAddr());
+			}
 
-				NtlmUserAccount ntlmUserAccount = null;
+			if (ntlmUserAccount == null) {
+				response.setContentLength(0);
+				response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "NTLM");
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-				try {
-					ntlmUserAccount = ntlmManager.authenticate(
-						src, serverChallenge);
-				}
-				catch (Exception e) {
-					if (_log.isErrorEnabled()) {
-						_log.error("Unable to perform NTLM authentication", e);
-					}
-				}
-				finally {
-					_portalCache.remove(request.getRemoteAddr());
-				}
+				response.flushBuffer();
 
-				if (ntlmUserAccount == null) {
-					response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "NTLM");
-					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-					response.setContentLength(0);
+				return;
+			}
 
-					response.flushBuffer();
+			if (_log.isDebugEnabled()) {
+				_log.debug("NTLM remote user " + ntlmUserAccount.getUserName());
+			}
 
-					return;
-				}
+			request.setAttribute(
+				WebKeys.NTLM_REMOTE_USER, ntlmUserAccount.getUserName());
 
-				if (_log.isDebugEnabled()) {
-					_log.debug(
-						"NTLM remote user " + ntlmUserAccount.getUserName());
-				}
-
-				request.setAttribute(
-					WebKeys.NTLM_REMOTE_USER, ntlmUserAccount.getUserName());
-
-				if (session != null) {
-					session.setAttribute(
-						WebKeys.NTLM_USER_ACCOUNT, ntlmUserAccount);
-				}
+			if (session != null) {
+				session.setAttribute(
+					WebKeys.NTLM_USER_ACCOUNT, ntlmUserAccount);
 			}
 		}
 
@@ -273,9 +271,9 @@ public class NtlmFilter extends BasePortalFilter {
 			}
 
 			if (ntlmUserAccount == null) {
+				response.setContentLength(0);
 				response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "NTLM");
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				response.setContentLength(0);
 
 				response.flushBuffer();
 

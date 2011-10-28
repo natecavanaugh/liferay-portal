@@ -70,8 +70,7 @@ public class EditRuleGroupInstanceAction extends PortletAction {
 			if (e instanceof PrincipalException) {
 				SessionErrors.add(actionRequest, e.getClass().getName());
 
-				setForward(
-					actionRequest, "portlet.mobile_device_rules_admin.error");
+				setForward(actionRequest, "portlet.mobile_device_rules.error");
 			}
 			else if (e instanceof NoSuchRuleGroupException) {
 				SessionErrors.add(actionRequest, e.getClass().getName());
@@ -108,8 +107,7 @@ public class EditRuleGroupInstanceAction extends PortletAction {
 			WebKeys.MOBILE_DEVICE_RULES_RULE_GROUP, ruleGroup);
 
 		return mapping.findForward(
-			"portlet.mobile_device_rules_admin." +
-				"edit_rule_group_instance_priorities");
+			"portlet.mobile_device_rules.edit_rule_group_instance_priorities");
 	}
 
 	protected void deleteRuleGroupInstance(ActionRequest actionRequest)

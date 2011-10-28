@@ -16,6 +16,7 @@ package com.liferay.util.bridges.alloy;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
@@ -48,6 +49,7 @@ import java.lang.reflect.Method;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -335,6 +337,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 			WebKeys.THEME_DISPLAY);
 
 		company = themeDisplay.getCompany();
+		locale = themeDisplay.getLocale();
 		user = themeDisplay.getUser();
 	}
 
@@ -366,9 +369,13 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	}
 
 	protected void renderError(String message) {
-		renderRequest.setAttribute("message", message);
+		portletRequest.setAttribute("message", message);
 
 		render(_VIEW_PATH_ERROR);
+	}
+
+	protected String translate(String pattern, Object... arguments) {
+		return LanguageUtil.format(locale, pattern, arguments);
 	}
 
 	protected void updateAttachedModel(BaseModel<?> baseModel)
@@ -486,6 +493,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	protected String lifecycle;
 	protected LiferayPortletConfig liferayPortletConfig;
 	protected LiferayPortletResponse liferayPortletResponse;
+	protected Locale locale;
 	protected Map<String, Method> methodsMap;
 	protected MimeResponse mimeResponse;
 	protected PageContext pageContext;

@@ -85,8 +85,7 @@ public class EditRuleAction extends PortletAction {
 			if (e instanceof PrincipalException) {
 				SessionErrors.add(actionRequest, e.getClass().getName());
 
-				setForward(
-					actionRequest, "portlet.mobile_device_rules_admin.error");
+				setForward(actionRequest, "portlet.mobile_device_rules.error");
 			}
 			else if (e instanceof NoSuchActionException ||
 					 e instanceof NoSuchRuleGroupException ||
@@ -130,8 +129,7 @@ public class EditRuleAction extends PortletAction {
 		renderRequest.setAttribute(
 			WebKeys.MOBILE_DEVICE_RULES_RULE_GROUP, ruleGroup);
 
-		return mapping.findForward(
-			"portlet.mobile_device_rules_admin.edit_rule");
+		return mapping.findForward("portlet.mobile_device_rules.edit_rule");
 	}
 
 	@Override
@@ -240,6 +238,6 @@ public class EditRuleAction extends PortletAction {
 	}
 
 	private static final String _SIMPLE_RULE_EDIT_RJSP =
-		"/html/portlet/mobile_device_rules_admin/rule/simple_rule.jsp";
+		"/html/portlet/mobile_device_rules/rule/simple_rule.jsp";
 
 }

@@ -1168,6 +1168,42 @@
 			<forward name="portlet.message_boards.view_message" path="portlet.message_boards.view_message" />
 		</action>
 
+		<!-- Mobile Device Rules -->
+
+		<action path="/mobile_device_rules/edit_action" type="com.liferay.portlet.mobiledevicerules.action.EditActionAction">
+			<forward name="portlet.mobile_device_rules.edit_action" path="portlet.mobile_device_rules.edit_action" />
+			<forward name="portlet.mobile_device_rules.error" path="portlet.mobile_device_rules.error" />
+		</action>
+
+		<action path="/mobile_device_rules/edit_rule" type="com.liferay.portlet.mobiledevicerules.action.EditRuleAction">
+			<forward name="portlet.mobile_device_rules.edit_rule" path="portlet.mobile_device_rules.edit_rule" />
+			<forward name="portlet.mobile_device_rules.error" path="portlet.mobile_device_rules.error" />
+		</action>
+
+		<action path="/mobile_device_rules/edit_rule_group" type="com.liferay.portlet.mobiledevicerules.action.EditRuleGroupAction">
+			<forward name="portlet.mobile_device_rules.edit_rule_group" path="portlet.mobile_device_rules.edit_rule_group" />
+			<forward name="portlet.mobile_device_rules.error" path="portlet.mobile_device_rules.error" />
+		</action>
+
+		<action path="/mobile_device_rules/edit_rule_group_instance" type="com.liferay.portlet.mobiledevicerules.action.EditRuleGroupInstanceAction">
+			<forward name="portlet.mobile_device_rules.edit_rule_group_instance_priorities" path="portlet.mobile_device_rules.edit_rule_group_instance_priorities" />
+			<forward name="portlet.mobile_device_rules.error" path="portlet.mobile_device_rules.error" />
+		</action>
+
+		<action path="/mobile_device_rules/edit_action_editor" type="com.liferay.portlet.mobiledevicerules.action.EditActionAction" />
+
+		<action path="/mobile_device_rules/edit_rule_editor" type="com.liferay.portlet.mobiledevicerules.action.EditRuleAction" />
+
+		<action path="/mobile_device_rules/edit_rule_group_instance_editor" type="com.liferay.portlet.mobiledevicerules.action.EditRuleGroupInstanceAction" />
+
+		<action path="/mobile_device_rules/view" forward="portlet.mobile_device_rules.view" />
+
+		<action path="/mobile_device_rules/view_actions" forward="portlet.mobile_device_rules.view_actions" />
+
+		<action path="/mobile_device_rules/view_group_layouts" type="com.liferay.portlet.mobiledevicerules.action.SiteResourceAction" />
+
+		<action path="/mobile_device_rules/view_rules" forward="portlet.mobile_device_rules.view_rules" />
+
 		<!-- Monitoring -->
 
 		<action path="/monitoring/edit_session" type="com.liferay.portlet.monitoring.action.EditSessionAction">
@@ -1695,6 +1731,12 @@
 
 		<action path="/sites_admin/view_teams" forward="portlet.sites_admin.view_teams" />
 
+		<!-- Social Activity Admin -->
+
+		<action path="/social_activity_admin/view" type="com.liferay.portlet.socialactivityadmin.action.ViewAction">
+			<forward name="portlet.social_activity_admin.view" path="portlet.social_activity_admin.view" />
+		</action>
+
 		<!-- Social Equity Admin -->
 
 		<action path="/social_equity_admin/view" type="com.liferay.portlet.socialequityadmin.action.ViewAction">
@@ -1770,19 +1812,19 @@
 
 		<action path="/update_manager/view" forward="portlet.update_manager.view" />
 
-        <!-- User Groups Admin -->
+		<!-- User Groups Admin -->
 
-        <action path="/user_groups_admin/edit_layouts" type="com.liferay.portlet.layoutsadmin.action.EditLayoutsAction">
+		<action path="/user_groups_admin/edit_layouts" type="com.liferay.portlet.layoutsadmin.action.EditLayoutsAction">
 			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
 			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
 		</action>
 
-        <action path="/user_groups_admin/edit_user" type="com.liferay.portlet.usersadmin.action.EditUserAction">
+		<action path="/user_groups_admin/edit_user" type="com.liferay.portlet.usersadmin.action.EditUserAction">
 			<forward name="portlet.users_admin.edit_user" path="portlet.users_admin.edit_user" />
 			<forward name="portlet.users_admin.error" path="portlet.users_admin.error" />
 		</action>
 
-        <action path="/user_groups_admin/edit_user_group" type="com.liferay.portlet.usergroupsadmin.action.EditUserGroupAction">
+		<action path="/user_groups_admin/edit_user_group" type="com.liferay.portlet.usergroupsadmin.action.EditUserGroupAction">
 			<forward name="portlet.user_groups_admin.edit_user_group" path="portlet.user_groups_admin.edit_user_group" />
 			<forward name="portlet.user_groups_admin.error" path="portlet.user_groups_admin.error" />
 		</action>
@@ -1792,24 +1834,24 @@
 			<forward name="portlet.user_groups_admin.error" path="portlet.user_groups_admin.error" />
 		</action>
 
-        <action path="/user_groups_admin/export_layouts" type="com.liferay.portlet.layoutsadmin.action.ExportLayoutsAction">
+		<action path="/user_groups_admin/export_layouts" type="com.liferay.portlet.layoutsadmin.action.ExportLayoutsAction">
 			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
 			<forward name="portlet.layouts_admin.export_layouts" path="portlet.layouts_admin.export_layouts" />
 		</action>
 
-        <action path="/user_groups_admin/get_users_count" type="com.liferay.portlet.usersadmin.action.GetUsersCountAction" />
+		<action path="/user_groups_admin/get_users_count" type="com.liferay.portlet.usersadmin.action.GetUsersCountAction" />
 
-        <action path="/user_groups_admin/import_layouts" type="com.liferay.portlet.layoutsadmin.action.ImportLayoutsAction">
+		<action path="/user_groups_admin/import_layouts" type="com.liferay.portlet.layoutsadmin.action.ImportLayoutsAction">
 			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
 			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
 			<forward name="portlet.layouts_admin.export_layouts" path="portlet.layouts_admin.export_layouts" />
 		</action>
 
-        <action path="/user_groups_admin/select_user_group" forward="portlet.user_groups_admin.select_user_group" />
+		<action path="/user_groups_admin/select_user_group" forward="portlet.user_groups_admin.select_user_group" />
 
 		<action path="/user_groups_admin/view" forward="portlet.user_groups_admin.view" />
 
-        <action path="/user_groups_admin/view_users" forward="portlet.users_admin.view" />
+		<action path="/user_groups_admin/view_users" forward="portlet.users_admin.view" />
 
 		<!-- Users Admin -->
 
@@ -1853,7 +1895,7 @@
 			<forward name="portlet.sites_admin.error" path="portlet.sites_admin.error" />
 		</action>
 
-        <action path="/users_admin/export_layouts" type="com.liferay.portlet.layoutsadmin.action.ExportLayoutsAction">
+		<action path="/users_admin/export_layouts" type="com.liferay.portlet.layoutsadmin.action.ExportLayoutsAction">
 			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
 			<forward name="portlet.layouts_admin.export_layouts" path="portlet.layouts_admin.export_layouts" />
 		</action>
@@ -1864,7 +1906,7 @@
 
 		<action path="/users_admin/get_users_count" type="com.liferay.portlet.usersadmin.action.GetUsersCountAction" />
 
-        <action path="/users_admin/import_layouts" type="com.liferay.portlet.layoutsadmin.action.ImportLayoutsAction">
+		<action path="/users_admin/import_layouts" type="com.liferay.portlet.layoutsadmin.action.ImportLayoutsAction">
 			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
 			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
 			<forward name="portlet.layouts_admin.export_layouts" path="portlet.layouts_admin.export_layouts" />
@@ -1884,7 +1926,7 @@
 
 		<action path="/users_admin/view_teams" forward="portlet.sites_admin.view_teams" />
 
-        <action path="/users_admin/view_users" forward="portlet.users_admin.view" />
+		<action path="/users_admin/view_users" forward="portlet.users_admin.view" />
 
 		<!-- Wiki -->
 
