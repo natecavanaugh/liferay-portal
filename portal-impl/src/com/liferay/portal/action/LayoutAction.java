@@ -375,7 +375,9 @@ public class LayoutAction extends Action {
 			}
 
 			if (layout != null) {
-				if (themeDisplay.isStateExclusive()) {
+				if (themeDisplay.isStateExclusive() ||
+					themeDisplay.isStateExclusiveStateful()) {
+
 					PortletContainerUtil.render(request, response, portlet);
 
 					return null;

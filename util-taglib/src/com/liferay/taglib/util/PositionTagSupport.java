@@ -80,7 +80,8 @@ public class PositionTagSupport extends BaseBodyTagSupport implements BodyTag {
 
 			if (themeDisplay.isIsolated() ||
 				themeDisplay.isLifecycleResource() ||
-				themeDisplay.isStateExclusive()) {
+				themeDisplay.isStateExclusive() ||
+				themeDisplay.isStateExclusiveStateful()) {
 
 				position = _POSITION_INLINE;
 			}
