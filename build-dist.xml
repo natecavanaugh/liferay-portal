@@ -413,8 +413,10 @@
 			</or>
 			<then>
 				<fail>
-					Please set the appropriate properties. Do not run this task unless you really
-					know what you are doing as it can cause loss of data.
+.
+
+Please set the appropriate properties. Do not run this task unless you really
+know what you are doing as it can cause loss of data.
 				</fail>
 			</then>
 		</if>

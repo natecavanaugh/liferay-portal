@@ -272,7 +272,7 @@ public class Creole10Parser]]></replacevalue>
 				<available file="${jdk.src.dir}/src/j2se/src/share/classes/com/sun/tools/doclets/internal/toolkit/util/SourceToHTMLConverter.java" />
 			</not>
 			<then>
-				<fail message="The JDK source code is either incompatible or extracted incorrectly." />
+				<fail>The JDK source code is either incompatible or extracted incorrectly.</fail>
 			</then>
 		</if>
 
