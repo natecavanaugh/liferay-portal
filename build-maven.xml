@@ -24,23 +24,28 @@
 			<equals arg1="${gpg.keyname}" arg2="" />
 			<then>
 				<fail>
-					Set gpg.keyname and gpg.passphrase in release.${user.name}.properties.
+.
 
-					See http://www.sonatype.com/people/2010/01/how-to-generate-pgp-signatures-with-maven/ for gpg setup instructions.
+Set the properties "gpg.keyname" and "gpg.passphrase" in
+release.${user.name}.properties.
+
+See http://www.sonatype.com/people/2010/01/how-to-generate-pgp-signatures-with-maven
+for GPG setup instructions.
 				</fail>
 			</then>
 		</if>
+
 		<tstamp>
-			<format property="work.dir" pattern="yyyyMMddkkmmssSSS" />
+			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 		</tstamp>
 
 		<antcall target="prepare-maven">
-			<param name="work.dir" value="${work.dir}" />
+			<param name="tstamp.value" value="${tstamp.value}" />
 		</antcall>
 
-		<ant dir="${work.dir}" target="deploy" inheritall="false"/>
+		<ant dir="${tstamp.value}" target="deploy" inheritall="false" />
 
-		<delete dir="${work.dir}" />
+		<delete dir="${tstamp.value}" />
 	</target>
 
 	<target name="deploy-release-artifacts">
@@ -61,18 +66,18 @@
 
 	<target name="install-artifacts">
 		<tstamp>
-			<format property="work.dir" pattern="yyyyMMddkkmmssSSS" />
+			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 		</tstamp>
 
 		<antcall target="prepare-maven">
 			<param name="lp.maven.repository.id" value="" />
 			<param name="lp.maven.repository.url" value="" />
-			<param name="work.dir" value="${work.dir}" />
+			<param name="tstamp.value" value="${tstamp.value}" />
 		</antcall>
 
-		<ant dir="${work.dir}" target="install" inheritall="false" />
+		<ant dir="${tstamp.value}" target="install" inheritall="false" />
 
-		<delete dir="${work.dir}" />
+		<delete dir="${tstamp.value}" />
 	</target>
 
 	<target name="install-release-artifacts">
@@ -114,11 +119,11 @@
 			</not>
 			<then>
 				<fail>
-					dist/liferay-portal-${lp.version}.war not available. 
+.
 
-					Run first
-					ant all
-					ant -f build-dist.xml zip-portal-war
+dist/liferay-portal-${lp.version}.war is not available.
+
+Run "ant -f build-dist.xml all zip-portal-war" to generate that file.
 				</fail>
 			</then>
 		</if>
@@ -128,36 +133,16 @@
 
 		<ant dir="util-taglib" target="taglibdoc" inheritAll="false" />
 
-		<mkdir dir="${work.dir}/dist" />
-		<mkdir dir="${work.dir}/lib" />
-		<mkdir dir="${work.dir}/license" />
+		<mkdir dir="${tstamp.value}" />
 
-		<copy todir="${work.dir}">
+		<copy todir="${tstamp.value}">
 			<fileset
 				dir="tools/maven"
 				includes="build.xml,readme.txt"
 			/>
 		</copy>
 
-		<copy todir="${work.dir}/license">
-			<fileset
-				dir="lib"
-				includes="versions.html"
-			/>
-			<fileset
-				dir="."
-				includes="copyright.txt"
-			/>
-		</copy>
-
-		<copy todir="${work.dir}/lib">
-			<fileset
-				dir="lib/development"
-				includes="ant-contrib.jar,antelope.jar"
-			/>
-		</copy>
-
-		<copy file="tools/maven/build.properties" tofile="${work.dir}/build.properties">
+		<copy file="tools/maven/build.properties" tofile="${tstamp.value}/build.properties">
 			<filterset>
 				<filter token="gpg.keyname" value="" />
 				<filter token="gpg.passphrase" value="" />
@@ -167,7 +152,9 @@
 			</filterset>
 		</copy>
 
-		<copy todir="${work.dir}/dist">
+		<mkdir dir="${tstamp.value}/dist" />
+
+		<copy todir="${tstamp.value}/dist">
 			<fileset
 				dir="portal-client"
 				includes="portal-client.jar,portal-client-javadoc.jar,portal-client-sources.jar"
@@ -202,67 +189,53 @@
 			/>
 		</copy>
 
-		<zip destfile="${work.dir}/dist/util-taglib-tlddoc.jar">
+		<copy
+			file="dist/liferay-portal-${lp.version}.war"
+			tofile="${tstamp.value}/dist/portal-web.war"
+		/>
+
+		<zip destfile="${tstamp.value}/dist/util-taglib-tlddoc.jar">
 			<zipfileset dir="${doc.dir}/taglibs" />
 		</zip>
 
-		<copy file="dist/liferay-portal-${lp.version}.war" tofile="${work.dir}/dist/portal-web.war" />
+		<copy todir="${tstamp.value}/dist">
+			<fileset dir="tools/maven" excludes="build.*,readme.txt" />
+			<filterset>
+				<filter token="version" value="${lp.maven.version}" />
+			</filterset>
+			<mapper>
+				<chainedmapper>
+					<mapper type="glob" from="*.xml" to="*.pom" />
+				</chainedmapper>
+			</mapper>
+		</copy>
 
-		<copy file="tools/maven/portal-client.xml" tofile="${work.dir}/dist/portal-client.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
+		<mkdir dir="${tstamp.value}/lib" />
+
+		<copy todir="${tstamp.value}/lib">
+			<fileset
+				dir="lib/development"
+				includes="ant-contrib.jar,antelope.jar"
+			/>
 		</copy>
-		<copy file="tools/maven/portal-impl.xml" tofile="${work.dir}/dist/portal-impl.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
-		</copy>
-		<copy file="tools/maven/portal-parent.xml" tofile="${work.dir}/dist/portal-parent.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
-		</copy>
-		<copy file="tools/maven/portal-service.xml" tofile="${work.dir}/dist/portal-service.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
-		</copy>
-		<copy file="tools/maven/portal-web.xml" tofile="${work.dir}/dist/portal-web.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
-		</copy>
-		<copy file="tools/maven/tunnel-web.xml" tofile="${work.dir}/dist/tunnel-web.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
-		</copy>
-		<copy file="tools/maven/support-tomcat.xml" tofile="${work.dir}/dist/support-tomcat.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
-		</copy>
-		<copy file="tools/maven/util-bridges.xml" tofile="${work.dir}/dist/util-bridges.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
-		</copy>
-		<copy file="tools/maven/util-java.xml" tofile="${work.dir}/dist/util-java.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
-		</copy>
-		<copy file="tools/maven/util-taglib.xml" tofile="${work.dir}/dist/util-taglib.pom">
-			<filterset>
-				<filter token="version" value="${lp.maven.version}" />
-			</filterset>
+
+		<mkdir dir="${tstamp.value}/license" />
+
+		<copy todir="${tstamp.value}/license">
+			<fileset
+				dir="lib"
+				includes="versions.html"
+			/>
+			<fileset
+				dir="."
+				includes="copyright.txt"
+			/>
 		</copy>
 	</target>
 
 	<target name="zip-maven">
 		<tstamp>
-			<format property="work.dir" pattern="yyyyMMddkkmmssSSS" />
+			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 		</tstamp>
 
 		<antcall target="prepare-maven">
@@ -271,19 +244,18 @@
 			<param name="lp.maven.repository.id" value="liferay" />
 			<param name="lp.maven.repository.url" value="http://localhost/nexus/content/repositories/liferay-release" />
 			<param name="lp.maven.version" value="${lp.version}" />
-			<param name="work.dir" value="${work.dir}" />
+			<param name="tstamp.value" value="${tstamp.value}" />
 		</antcall>
 
 		<mkdir dir="dist" />
 
 		<zip destfile="dist/liferay-portal-maven-${lp.version}.zip">
 			<zipfileset
-				dir="${work.dir}"
+				dir="${tstamp.value}"
 				prefix="liferay-portal-maven-${lp.version}"
 			/>
 		</zip>
 
-		<delete dir="${work.dir}" />
+		<delete dir="${tstamp.value}" />
 	</target>
-
 </project>

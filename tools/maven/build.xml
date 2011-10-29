@@ -31,7 +31,7 @@
 	<taskdef classpathref="lib.classpath" resource="ise/antelope/tasks/antlib.xml" uri="antlib:ise.antelope.tasks" />
 
 	<target name="deploy">
-		<echo>Deploying artifacts to ${lp.maven.repository.url}</echo>
+		<echo>Deploying artifacts to ${lp.maven.repository.url}.</echo>
 
 		<antcall target="deploy-artifact">
 			<param name="artifact.id" value="portal-client" />
@@ -231,7 +231,7 @@
 	</target>
 
 	<target name="install">
-		<echo>Installing artifacts to local repository</echo>
+		<echo>Installing artifacts to local repository.</echo>
 
 		<antcall target="install-artifact">
 			<param name="artifact.id" value="portal-client" />
