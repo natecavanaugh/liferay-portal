@@ -135,12 +135,12 @@ public class UpgradeImageGallery extends UpgradeProcess {
 
 			sb.append("insert into DLFileVersion (fileVersionId, groupId, ");
 			sb.append("companyId, userId, userName, createDate, ");
-			sb.append("repositoryId, folderId, fileEntryId, extension, mimeType, ");
-			sb.append("title, description, changeLog, extraSettings, ");
-			sb.append("fileEntryTypeId, version, size_, status, ");
-			sb.append("statusByUserId, statusByUserName, statusDate) values (");
-			sb.append("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ");
-			sb.append("?, ?, ?, ?)");
+			sb.append("repositoryId, folderId, fileEntryId, extension, ");
+			sb.append("mimeType, title, description, changeLog, ");
+			sb.append("extraSettings, fileEntryTypeId, version, size_, ");
+			sb.append("status, statusByUserId, statusByUserName, statusDate) ");
+			sb.append("values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ");
+			sb.append("?, ?, ?, ?, ?, ?, ?)");
 
 			String sql = sb.toString();
 
