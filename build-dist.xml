@@ -620,29 +620,6 @@ know what you are doing as it can cause loss of data.
 	</target>
 
 	<target name="dist">
-		<for param="pom.file">
-			<path>
-				<fileset
-					dir="support-maven"
-					includes="pom.xml,**/pom.xml"
-				/>
-			</path>
-			<sequential>
-				<loadfile property="pom.file.content" srcfile="@{pom.file}" />
-
-				<antelope:stringutil string="${pom.file.content}" property="pom.file.content.index">
-					<indexof string="${lp.version}-" fromindex="0" />
-				</antelope:stringutil>
-
-				<if>
-					<equals arg1="${pom.file.content.index}" arg2="-1" />
-					<then>
-						<fail>Please update pom.xml with the correct version.</fail>
-					</then>
-				</if>
-			</sequential>
-		</for>
-
 		<if>
 			<available file="${patching.tool.source.dir}" type="dir" />
 			<then>
