@@ -20,6 +20,10 @@ package com.liferay.portal.kernel.util;
  */
 public class FriendlyURLNormalizerUtil {
 
+	public static FriendlyURLNormalizer getFriendlyURLNormalizer() {
+		return _friendlyURLNormalizer;
+	}
+
 	public static String normalize(String friendlyURL) {
 		return getFriendlyURLNormalizer().normalize(friendlyURL);
 	}
@@ -28,11 +32,9 @@ public class FriendlyURLNormalizerUtil {
 		return getFriendlyURLNormalizer().normalize(friendlyURL, replaceChars);
 	}
 
-	public static FriendlyURLNormalizer getFriendlyURLNormalizer() {
-		return _friendlyURLNormalizer;
-	}
+	public void setFriendlyURLNormalizer(
+		FriendlyURLNormalizer friendlyURLNormalizer) {
 
-	public void setFriendlyURLNormalizer(FriendlyURLNormalizer friendlyURLNormalizer) {
 		_friendlyURLNormalizer = friendlyURLNormalizer;
 	}
 
