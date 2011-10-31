@@ -90,7 +90,9 @@ public class RepositoryServiceImpl extends RepositoryServiceBaseImpl {
 				createRepositoryImpl(repositoryId, classNameId);
 			}
 			catch (Exception e) {
-				_log.error(e.getMessage());
+				if (_log.isWarnEnabled()) {
+					_log.warn(e.getMessage());
+				}
 
 				throw new InvalidRepositoryException(e);
 			}
