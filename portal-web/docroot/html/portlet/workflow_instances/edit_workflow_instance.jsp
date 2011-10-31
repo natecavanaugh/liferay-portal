@@ -253,24 +253,24 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 						<c:choose>
 							<c:when test="<%= workflowLog.getType() == WorkflowLog.TASK_COMPLETION %>">
 								<div>
-									<%= LanguageUtil.format(pageContext, "x-completed-the-task-x", new Object[] {HtmlUtil.escape(actorName), workflowLog.getState()}) %>
+									<liferay-ui:message arguments="<%= new Object[] {HtmlUtil.escape(actorName), workflowLog.getState()} %>" key="x-completed-the-task-x" />
 								</div>
 							</c:when>
 							<c:when test="<%= workflowLog.getType() == WorkflowLog.TASK_UPDATE %>">
 								<div>
-									<%= LanguageUtil.format(pageContext, "x-updated-the-due-date", HtmlUtil.escape(actorName)) %>
+									<liferay-ui:message arguments="<%= HtmlUtil.escape(actorName) %>" key="x-updated-the-due-date" />
 								</div>
 							</c:when>
 							<c:when test="<%= workflowLog.getType() == WorkflowLog.TRANSITION %>">
 								<div>
-									<%= LanguageUtil.format(pageContext, "x-changed-the-state-from-x-to-x", new Object[] {HtmlUtil.escape(actorName), workflowLog.getPreviousState(), workflowLog.getState()}) %>
+									<liferay-ui:message arguments="<%= new Object[] {HtmlUtil.escape(actorName), workflowLog.getPreviousState(), workflowLog.getState()} %>" key="x-changed-the-state-from-x-to-x" />
 								</div>
 							</c:when>
 							<c:otherwise>
 								<c:choose>
 									<c:when test="<%= (curUser != null) && (workflowLog.getAuditUserId() == curUser.getUserId()) %>">
 										<div>
-											<%= LanguageUtil.format(pageContext, curUser.isMale() ? "x-assigned-the-task-to-himself" : "x-assigned-the-task-to-herself", HtmlUtil.escape(curUser.getFullName())) %>
+											<liferay-ui:message arguments="<%= HtmlUtil.escape(curUser.getFullName()) %>" key='<%= curUser.isMale() ? "x-assigned-the-task-to-himself" : "x-assigned-the-task-to-herself" %>' />
 										</div>
 									</c:when>
 									<c:otherwise>
@@ -281,23 +281,20 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 										%>
 
 											<div>
-												<%= LanguageUtil.format(pageContext, "x-assigned-the-task-to-x", new Object[] {assignerName, actorName}) %>
+												<liferay-ui:message arguments="<%= new Object[] {HtmlUtil.escape(assignerName), HtmlUtil.escape(actorName)} %>" key="x-assigned-the-task-to-x" />
 
-												<c:if test="<%= (workflowLog.getPreviousUserId() != 0) %>">
-
-													<%= LanguageUtil.format(pageContext, "previous-assignee-was-x", PortalUtil.getUserName(workflowLog.getPreviousUserId(), StringPool.BLANK)) %>
-
+												<c:if test="<%= workflowLog.getPreviousUserId() != 0 %>">
+													<liferay-ui:message arguments="<%= PortalUtil.getUserName(workflowLog.getPreviousUserId(), StringPool.BLANK) %>" key="previous-assignee-was-x" />
 												</c:if>
 											</div>
 
 										<%
 										}
 										else {
-											String previousActorName = curRole.getDescriptiveName();
 										%>
 
 											<div>
-												<%= LanguageUtil.format(pageContext, "task-initially-assigned-to-the-x-role", new Object[] {actorName}) %>
+												<liferay-ui:message arguments="<%= HtmlUtil.escape(actorName) %>" key="task-initially-assigned-to-the-x-role" />
 											</div>
 
 										<%
