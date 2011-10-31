@@ -65,9 +65,8 @@ public class GetArticleAction extends Action {
 
 			String languageId = LanguageUtil.getLanguageId(request);
 
-			JournalArticle article =
-				JournalArticleServiceUtil.getLatestArticle(
-					groupId, articleId, WorkflowConstants.STATUS_APPROVED);
+			JournalArticle article = JournalArticleServiceUtil.getLatestArticle(
+				groupId, articleId, WorkflowConstants.STATUS_APPROVED);
 
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 				WebKeys.THEME_DISPLAY);
