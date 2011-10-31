@@ -187,6 +187,7 @@ public class SampleSQLBuilder {
 			}
 
 			// Clean up previous output
+
 			FileUtil.delete(_outputDir + "/sample-" + _dbType + ".sql");
 			FileUtil.deltree(_outputDir + "/output");
 
@@ -620,9 +621,11 @@ public class SampleSQLBuilder {
 
 		File outputFolder = new File(_outputDir, "output");
 
-		if ((!_outputMerge) && (!_tempDir.renameTo(outputFolder))) {
-			// This will only happen when temp and output folders belong to
-			// different FileSystem
+		if (!_outputMerge && !_tempDir.renameTo(outputFolder)) {
+
+			// This will only happen when temp and output folders are on
+			// different file systems
+
 			FileUtil.copyDirectory(_tempDir, outputFolder);
 		}
 	}
