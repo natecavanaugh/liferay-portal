@@ -52,7 +52,7 @@ public class DLProcessorRegistryImpl implements DLProcessorRegistry {
 				DLFileEntry dlFileEntry = (DLFileEntry)fileEntry.getModel();
 
 				latestFileVersion = new LiferayFileVersion(
-					dlFileEntry.getLatestFileVersion(true));
+					dlFileEntry.getLatestFileVersion(false));
 			}
 			else {
 				latestFileVersion = fileEntry.getLatestFileVersion();
