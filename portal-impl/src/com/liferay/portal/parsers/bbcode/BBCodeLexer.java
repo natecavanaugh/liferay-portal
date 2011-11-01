@@ -16,8 +16,9 @@ package com.liferay.portal.parsers.bbcode;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-/*
-  * @author Iliyan Peychev
+
+/**
+ * @author Iliyan Peychev
  */
 public class BBCodeLexer {
 
