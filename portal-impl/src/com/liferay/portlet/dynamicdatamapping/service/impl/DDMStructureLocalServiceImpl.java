@@ -58,13 +58,13 @@ import java.util.Set;
  * @author Bruno Basto
  * @author Marcellus Tavares
  */
-public class DDMStructureLocalServiceImpl 
+public class DDMStructureLocalServiceImpl
 	extends DDMStructureLocalServiceBaseImpl {
 
 	public DDMStructure addStructure(
 			long userId, long groupId, long classNameId, String structureKey,
 			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
-			String xsd, String storageType, int type, 
+			String xsd, String storageType, int type,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
@@ -158,7 +158,7 @@ public class DDMStructureLocalServiceImpl
 		return addStructure(
 			 userId, structure.getGroupId(), structure.getClassNameId(), null,
 			 structure.getNameMap(), structure.getDescriptionMap(),
-			 structure.getXsd(), structure.getStorageType(), 
+			 structure.getXsd(), structure.getStorageType(),
 			 structure.getType(), serviceContext);
 	}
 
@@ -297,8 +297,8 @@ public class DDMStructureLocalServiceImpl
 
 	public List<DDMStructure> search(
 			long companyId, long[] groupIds, long[] classNameIds, String name,
-			String description, String storageType, int type, 
-			boolean andOperator, int start, int end, 
+			String description, String storageType, int type,
+			boolean andOperator, int start, int end,
 			OrderByComparator orderByComparator)
 		throws SystemException {
 

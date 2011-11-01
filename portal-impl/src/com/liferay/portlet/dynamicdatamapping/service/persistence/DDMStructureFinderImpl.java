@@ -179,14 +179,14 @@ public class DDMStructureFinderImpl
 
 		return findByC_G_C_N_D_S_T(
 			companyId, groupIds, classNameIds, names, descriptions, null,
-			DDMStructureConstants.TYPE_DEFAULT, andOperator, start, end, 
+			DDMStructureConstants.TYPE_DEFAULT, andOperator, start, end,
 			orderByComparator);
 	}
 
 	public List<DDMStructure> findByC_G_C_N_D_S_T(
 			long companyId, long[] groupIds, long[] classNameIds, String name,
-			String description, String storageType, int type, 
-			boolean andOperator, int start, int end, 
+			String description, String storageType, int type,
+			boolean andOperator, int start, int end,
 			OrderByComparator orderByComparator)
 		throws SystemException {
 
