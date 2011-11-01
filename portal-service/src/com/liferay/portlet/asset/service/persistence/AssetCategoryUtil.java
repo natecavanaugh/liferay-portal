@@ -2040,6 +2040,10 @@ public class AssetCategoryUtil {
 		getPersistence().rebuildTree(groupId, force);
 	}
 
+	public static void setRebuildTreeEnabled(boolean rebuildTreeEnabled) {
+		getPersistence().setRebuildTreeEnabled(rebuildTreeEnabled);
+	}
+
 	public static AssetCategoryPersistence getPersistence() {
 		if (_persistence == null) {
 			_persistence = (AssetCategoryPersistence)PortalBeanLocatorUtil.locate(AssetCategoryPersistence.class.getName());

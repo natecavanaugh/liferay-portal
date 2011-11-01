@@ -1672,6 +1672,8 @@ public interface AssetCategoryPersistence extends BasePersistence<AssetCategory>
 	public void rebuildTree(long groupId, boolean force)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public void setRebuildTreeEnabled(boolean rebuildTreeEnabled);
+
 	public AssetCategory remove(AssetCategory assetCategory)
 		throws SystemException;
 }

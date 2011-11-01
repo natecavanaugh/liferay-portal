@@ -6370,6 +6370,10 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	 */
 	public void rebuildTree(long groupId, boolean force)
 		throws SystemException {
+		if (!rebuildTreeEnabled) {
+			return;
+		}
+
 		if (force || (countOrphanTreeNodes(groupId) > 0)) {
 			rebuildTree(groupId, 0, 1);
 
@@ -6378,6 +6382,10 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+	}
+
+	public void setRebuildTreeEnabled(boolean rebuildTreeEnabled) {
+		this.rebuildTreeEnabled = rebuildTreeEnabled;
 	}
 
 	protected long countOrphanTreeNodes(long groupId) throws SystemException {
@@ -6408,6 +6416,10 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected void expandTree(AssetCategory assetCategory)
 		throws SystemException {
+		if (!rebuildTreeEnabled) {
+			return;
+		}
+
 		long groupId = assetCategory.getGroupId();
 
 		long lastRightCategoryId = getLastRightCategoryId(groupId,
@@ -6478,6 +6490,10 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 	protected long rebuildTree(long groupId, long parentCategoryId,
 		long leftCategoryId) throws SystemException {
+		if (!rebuildTreeEnabled) {
+			return 0;
+		}
+
 		List<Long> categoryIds = null;
 
 		Session session = null;
@@ -6519,6 +6535,10 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 	}
 
 	protected void shrinkTree(AssetCategory assetCategory) {
+		if (!rebuildTreeEnabled) {
+			return;
+		}
+
 		long groupId = assetCategory.getGroupId();
 
 		long leftCategoryId = assetCategory.getLeftCategoryId();
@@ -6778,6 +6798,7 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		private AssetCategoryPersistenceImpl _persistenceImpl;
 	}
 
+	protected boolean rebuildTreeEnabled = true;
 	protected ExpandTreeLeftCategoryId expandTreeLeftCategoryId;
 	protected ExpandTreeRightCategoryId expandTreeRightCategoryId;
 	protected ShrinkTreeLeftCategoryId shrinkTreeLeftCategoryId;
