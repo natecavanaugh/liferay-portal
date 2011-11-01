@@ -34,13 +34,14 @@ import javax.jcr.Session;
  */
 public class JCRFactoryUtil {
 
-	public static JCRFactory getJCRFactory() {
-		if (_jcrFactory == null) {
-			_jcrFactory = (JCRFactory)PortalBeanLocatorUtil.locate(
-				_JCR_FACTORY);
+	public static void closeSession(Session session) {
+		if (session != null) {
+			session.logout();
 		}
+	}
 
-		return _jcrFactory;
+	public static Session createSession() throws RepositoryException {
+		return createSession(null);
 	}
 
 	public static Session createSession(String workspaceName)
@@ -50,37 +51,33 @@ public class JCRFactoryUtil {
 			workspaceName = JCRFactory.WORKSPACE_NAME;
 		}
 
-		if (PropsValues.JCR_LIFERAY_SESSION_DELEGATED) {
-			ClosableSessionMap closableSessionMap = _sessions.get();
-
-			if (closableSessionMap.get(workspaceName) == null) {
-				Session session = getJCRFactory().createSession(workspaceName);
-
-				Object sessionProxy = ProxyUtil.newProxyInstance(
-					PortalClassLoaderUtil.getClassLoader(),
-					new Class<?>[] {Closeable.class, Map.class, Session.class},
-					new JCRSessionInvocationHandler(session));
-
-				closableSessionMap.put(workspaceName, (Closeable)sessionProxy);
-			}
-
-			return (Session)closableSessionMap.get(workspaceName);
-		}
-		else {
+		if (!PropsValues.JCR_WRAP_SESSION) {
 			return getJCRFactory().createSession(workspaceName);
 		}
-	}
 
-	public static Session createSession() throws RepositoryException {
-		return createSession(null);
-	}
+		CloseableSessionMap closableSessionMap = _closeableSessionMaps.get();
 
-	public static void closeSession(Session session) {
-		if (!PropsValues.JCR_LIFERAY_SESSION_DELEGATED) {
-			if (session != null) {
-				session.logout();
-			}
+		if (!closableSessionMap.containsKey(workspaceName)) {
+			Session session = getJCRFactory().createSession(workspaceName);
+
+			Object sessionProxy = ProxyUtil.newProxyInstance(
+				PortalClassLoaderUtil.getClassLoader(),
+				new Class<?>[] {Closeable.class, Map.class, Session.class},
+				new JCRSessionInvocationHandler(session));
+
+			closableSessionMap.put(workspaceName, (Closeable)sessionProxy);
 		}
+
+		return (Session)closableSessionMap.get(workspaceName);
+	}
+
+	public static JCRFactory getJCRFactory() {
+		if (_jcrFactory == null) {
+			_jcrFactory = (JCRFactory)PortalBeanLocatorUtil.locate(
+				JCRFactory.class.getName());
+		}
+
+		return _jcrFactory;
 	}
 
 	public static void initialize() throws RepositoryException {
@@ -95,15 +92,12 @@ public class JCRFactoryUtil {
 		getJCRFactory().shutdown();
 	}
 
-	private static final String _JCR_FACTORY = JCRFactory.class.getName();
-
+	private static ThreadLocal<CloseableSessionMap> _closeableSessionMaps =
+		new AutoResetThreadLocal<CloseableSessionMap>(
+			JCRFactoryUtil.class + "._session", new CloseableSessionMap());
 	private static JCRFactory _jcrFactory;
 
-	private static ThreadLocal<ClosableSessionMap> _sessions =
-		new AutoResetThreadLocal<ClosableSessionMap>(
-			JCRFactoryUtil.class + "._session", new ClosableSessionMap());
-
-	private static class ClosableSessionMap extends HashMap<String,Closeable>
+	private static class CloseableSessionMap extends HashMap<String, Closeable>
 		implements Closeable {
 
 		public void close() throws IOException {

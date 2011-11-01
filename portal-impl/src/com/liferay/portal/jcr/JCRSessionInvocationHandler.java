@@ -22,9 +22,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Map;
 
 import javax.jcr.Binary;
 import javax.jcr.Session;
@@ -38,59 +37,53 @@ public class JCRSessionInvocationHandler implements InvocationHandler {
 		_session = session;
 
 		if (_log.isDebugEnabled()) {
-			_log.debug("starting a new session " + _session);
+			_log.debug("Starting session " + _session);
 		}
 	}
 
-	public Object invoke(
-			Object proxy, Method method, Object[] args)
+	public Object invoke(Object proxy, Method method, Object[] arguments)
 		throws Throwable {
 
-		if (method.getName().equals("close")) {
+		String methodName = method.getName();
+
+		if (methodName.equals("close")) {
 			if (_log.isDebugEnabled()) {
-				_log.debug("closing a session " + _session);
+				_log.debug("Closing session " + _session);
 			}
 
-			Iterator<Entry<String, Binary>> iterator =
-				_valuesMap.entrySet().iterator();
-
-			while (iterator.hasNext()) {
-				Binary binary = iterator.next().getValue();
+			for (Entry<String, Binary> entry : _binaries.entrySet()) {
+				Binary binary = entry.getValue();
 
 				binary.dispose();
-
-				iterator.remove();
 			}
 
 			_session.logout();
 
-			_valuesMap = null;
-			_session = null;
-
 			return null;
 		}
-		else if (method.getName().equals("logout")) {
+		else if (methodName.equals("logout")) {
 			if (_log.isDebugEnabled()) {
-				_log.debug("skipping logout for session " + _session);
+				_log.debug("Skipping logout for session " + _session);
 			}
 
 			return null;
 		}
-		else if (method.getName().equals("put")) {
-			String key = (String)args[0];
-			Binary value = (Binary)args[1];
+		else if (methodName.equals("put")) {
+			String key = (String)arguments[0];
+			Binary binary = (Binary)arguments[1];
 
 			if (_log.isDebugEnabled()) {
-				_log.debug("tacking a Binary in session " + _session);
+				_log.debug(
+					"Tracking binary " + key + " for session " + _session);
 			}
 
-			_valuesMap.put(key, value);
+			_binaries.put(key, binary);
 
 			return null;
 		}
 
 		try {
-			return method.invoke(_session, args);
+			return method.invoke(_session, arguments);
 		}
 		catch (InvocationTargetException ite) {
 			throw ite.getCause();
@@ -100,10 +93,10 @@ public class JCRSessionInvocationHandler implements InvocationHandler {
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static Log _log = LogFactoryUtil.getLog(
 		JCRSessionInvocationHandler.class);
 
-	private Map<String,Binary> _valuesMap = new HashMap<String,Binary>();
+	private Map<String, Binary> _binaries = new HashMap<String, Binary>();
 	private Session _session;
 
 }

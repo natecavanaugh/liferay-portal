@@ -307,7 +307,7 @@ public class CentralizedThreadLocal<T> extends ThreadLocal<T> {
 					closable.close();
 				}
 				catch (IOException ioe) {
-					_log.error(ioe);
+					_log.error(ioe, ioe);
 				}
 			}
 		}

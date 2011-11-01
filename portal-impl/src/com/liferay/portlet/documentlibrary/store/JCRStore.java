@@ -19,8 +19,6 @@ import com.liferay.portal.jcr.JCRFactory;
 import com.liferay.portal.jcr.JCRFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -986,6 +984,7 @@ public class JCRStore extends BaseStore {
 			String[] nameParts = name.split(StringPool.SLASH, 2);
 
 			node = getFolderNode(node, nameParts[0]);
+
 			return getFolderNode(node, nameParts[1]);
 		}
 
@@ -1008,7 +1007,5 @@ public class JCRStore extends BaseStore {
 
 		return getFolderNode(companyNode, JCRFactory.NODE_DOCUMENTLIBRARY);
 	}
-
-	private static Log _log = LogFactoryUtil.getLog(JCRStore.class);
 
 }
