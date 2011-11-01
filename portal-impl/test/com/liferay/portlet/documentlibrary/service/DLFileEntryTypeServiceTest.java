@@ -39,11 +39,12 @@ public class DLFileEntryTypeServiceTest extends BaseServiceTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 
-		SimpleAction action = new AddDefaultDocumentLibraryStructuresAction();
+		SimpleAction simpleAction =
+			new AddDefaultDocumentLibraryStructuresAction();
 
 		String companyIdString = String.valueOf(TestPropsValues.getCompanyId());
 
-		action.run(new String[] {companyIdString});
+		simpleAction.run(new String[] {companyIdString});
 
 		_folder = DLAppLocalServiceUtil.addFolder(
 			TestPropsValues.getUserId(), TestPropsValues.getGroupId(),
