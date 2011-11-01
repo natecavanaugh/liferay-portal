@@ -28,19 +28,22 @@ public class MethodParameter {
 	}
 
 	public Class<?>[] getGenericTypes() throws ClassNotFoundException {
-		if (_initialized == false) {
-
-			String[] genericSignatures =
-				_extractTopLevelGenericSignatures(_signatures);
-
-			if (genericSignatures == null) {
-				_genericTypes = null;
-			}
-			else {
-				_genericTypes = _loadGenericTypes(genericSignatures);
-			}
-			_initialized = true;
+		if (_initialized) {
+			return _genericTypes;
 		}
+
+		String[] genericSignatures = _extractTopLevelGenericSignatures(
+			_signatures);
+
+		if (genericSignatures == null) {
+			_genericTypes = null;
+		}
+		else {
+			_genericTypes = _loadGenericTypes(genericSignatures);
+		}
+
+		_initialized = true;
+
 		return _genericTypes;
 	}
 
@@ -56,10 +59,6 @@ public class MethodParameter {
 		return _type;
 	}
 
-	/**
-	 * Extracts top level generic signatures for given type signature.
-	 * Returns <code>null</code> when generics information is not available.
-	 */
 	private static String[] _extractTopLevelGenericSignatures(
 		String signature) {
 
@@ -67,43 +66,45 @@ public class MethodParameter {
 			return null;
 		}
 
-		int leftBracketIndex = signature.indexOf('<');
+		int leftBracketIndex = signature.indexOf(CharPool.LESS_THAN);
 
 		if (leftBracketIndex == -1) {
 			return null;
 		}
 
-		int rightBracketIndex = signature.lastIndexOf('>');
+		int rightBracketIndex = signature.lastIndexOf(CharPool.GREATER_THAN);
 
 		if (rightBracketIndex == -1) {
 			return null;
 		}
 
-		String generics =
-			signature.substring(leftBracketIndex + 1, rightBracketIndex);
+		String generics = signature.substring(
+			leftBracketIndex + 1, rightBracketIndex);
 
-		int total = generics.length();
-		StringBuilder sb = new StringBuilder(total);
+		StringBuilder sb = new StringBuilder(generics.length());
 
 		ArrayList<String> list = new ArrayList<String>();
 
-		int i = 0;
-		int innerLevel = 0;
-		while (i < total) {
+		int level = 0;
+
+		for (int i = 0; i < generics.length(); i++) {
 			char c = generics.charAt(i);
 
 			if (c == '<') {
-				innerLevel++;
-			} else if (c == '>') {
-				innerLevel--;
-			} else if (innerLevel == 0) {
+				level++;
+			}
+			else if (c == '>') {
+				level--;
+			}
+			else if (level == 0) {
 				sb.append(c);
+
 				if (c == ';') {
 					list.add(sb.toString());
+
 					sb.setLength(0);
 				}
 			}
-			i++;
 		}
 
 		return list.toArray(new String[list.size()]);
@@ -118,27 +119,43 @@ public class MethodParameter {
 
 		Class<?>[] types = new Class<?>[signatures.length];
 
-		int total = signatures.length;
-		for (int i = 0; i < total; i++) {
+		for (int i = 0; i < signatures.length; i++) {
 			String className = signatures[i];
 
 			char c = className.charAt(0);
-			switch (c) {
-				case 'B': types[i] = byte.class; continue;
-				case 'C': types[i] = char.class; continue;
-				case 'D': types[i] = double.class; continue;
-				case 'F': types[i] = float.class; continue;
-				case 'I': types[i] = int.class; continue;
-				case 'J': types[i] = long.class; continue;
-				case 'S': types[i] = short.class; continue;
-				case 'Z': types[i] = boolean.class; continue;
-				case 'V': types[i] = void.class; continue;
-				case 'L': className =
-					 className.substring(1, className.length() - 1);
-				case '[':
-					// uses less-known feature of class loaders for loading
-					// array type using bytecode-like signature.
-					className = className.replace('/', '.');
+
+			if (c == 'B') {
+				types[i] = byte.class;
+			}
+			else if (c == 'C') {
+				types[i] = char.class;
+			}
+			else if (c == 'D') {
+				types[i] = double.class;
+			}
+			else if (c == 'F') {
+				types[i] = float.class;
+			}
+			else if (c == 'I') {
+				types[i] = int.class;
+			}
+			else if (c == 'J') {
+				types[i] = long.class;
+			}
+			else if (c == 'L') {
+				className = className.substring(1, className.length() - 1);
+			}
+			else if (c == 'S') {
+				types[i] = short.class;
+			}
+			else if (c == 'Z') {
+				types[i] = boolean.class;
+			}
+			else if (c == 'V') {
+				types[i] = void.class;
+			}
+			else if (c == CharPool.OPEN_BRACKET) {
+				className = className.replace(CharPool.SLASH, CharPool.PERIOD);
 			}
 
 			types[i] = contextClassLoader.loadClass(className);

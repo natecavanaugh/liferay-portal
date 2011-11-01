@@ -162,13 +162,13 @@ public class JSONWebServiceActionsManagerImpl
 	}
 
 	private int _countMatchedElements(
-		String[] targetArray, MethodParameter[] subjectArray) {
+		String[] parameterNames, MethodParameter[] methodParameters) {
 
 		int matched = 0;
 
-		for (String target : targetArray) {
-			for (MethodParameter subject : subjectArray) {
-				if (subject.getName().equals(target)) {
+		for (String parameterName : parameterNames) {
+			for (MethodParameter methodParameter : methodParameters) {
+				if (parameterName.equals(methodParameter.getName())) {
 					matched++;
 
 					break;
@@ -223,21 +223,21 @@ public class JSONWebServiceActionsManagerImpl
 				}
 			}
 
-			MethodParameter[] jsonWebServiceActionConfigParameters =
+			MethodParameter[] jsonWebServiceActionConfigMethodParameters =
 				jsonWebServiceActionConfig.getMethodParameters();
 
-			int methodArgumentsCount =
-				jsonWebServiceActionConfigParameters.length;
+			int methodParametersCount =
+				jsonWebServiceActionConfigMethodParameters.length;
 
-			if ((hint != -1) && (methodArgumentsCount != hint)) {
+			if ((hint != -1) && (methodParametersCount != hint)) {
 				continue;
 			}
 
 			int count = _countMatchedElements(
-				parameterNames, jsonWebServiceActionConfigParameters);
+				parameterNames, jsonWebServiceActionConfigMethodParameters);
 
 			if (count > max) {
-				if ((hint != -1) || (count >= methodArgumentsCount)) {
+				if ((hint != -1) || (count >= methodParametersCount)) {
 					max = count;
 
 					index = i;

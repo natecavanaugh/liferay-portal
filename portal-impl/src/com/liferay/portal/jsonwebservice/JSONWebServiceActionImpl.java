@@ -85,7 +85,7 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 		return parameterType.newInstance();
 	}
 
-	private List _generifyList(List<?> list, Class<?>[] types) {
+	private List<?> _generifyList(List<?> list, Class<?>[] types) {
 		if (types == null) {
 			return list;
 		}
@@ -94,7 +94,7 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 			return list;
 		}
 
-		List newList = new ArrayList(list.size());
+		List<Object> newList = new ArrayList<Object>(list.size());
 
 		for (Object entry : list) {
 			if (entry != null) {
@@ -107,7 +107,7 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 		return newList;
 	}
 
-	private Map _generifyMap(Map<?,?> map, Class<?>[] types) {
+	private Map<?, ?> _generifyMap(Map<?, ?> map, Class<?>[] types) {
 		if (types == null) {
 			return map;
 		}
@@ -116,12 +116,13 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 			return map;
 		}
 
-		Map newMap = new HashMap(map.size());
+		Map<Object, Object> newMap = new HashMap<Object, Object>(map.size());
 
-		for (Map.Entry entry : map.entrySet()) {
+		for (Map.Entry<?, ?> entry : map.entrySet()) {
 			Object key = ReflectUtil.castType(entry.getKey(), types[0]);
 
 			Object value = entry.getValue();
+
 			if (value != null) {
 				value = ReflectUtil.castType(value, types[1]);
 			}
@@ -174,21 +175,16 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 					parameterValue = _createDefaultParameterValue(
 						parameterName, parameterType);
 				}
-				else if (parameterType.equals(Locale.class)) {
-					parameterValue = LocaleUtil.fromLanguageId(
-						value.toString());
-				}
-				else if (parameterType.equals(Map.class)) {
-					Map map = JSONFactoryUtil.looseDeserialize(
-						value.toString(), HashMap.class);
+				else if (parameterType.equals(Calendar.class)) {
+					Calendar calendar = Calendar.getInstance();
 
-					map = _generifyMap(
-						map, methodParameters[i].getGenericTypes());
+					calendar.setLenient(false);
+					calendar.setTimeInMillis(Long.parseLong(value.toString()));
 
-					parameterValue = map;
+					parameterValue = calendar;
 				}
 				else if (parameterType.equals(List.class)) {
-					List list = JSONFactoryUtil.looseDeserialize(
+					List<?> list = JSONFactoryUtil.looseDeserialize(
 						value.toString(), ArrayList.class);
 
 					list = _generifyList(
@@ -196,13 +192,18 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 
 					parameterValue = list;
 				}
-				else if (parameterType.equals(Calendar.class)) {
-					Calendar calendar = Calendar.getInstance();
+				else if (parameterType.equals(Locale.class)) {
+					parameterValue = LocaleUtil.fromLanguageId(
+						value.toString());
+				}
+				else if (parameterType.equals(Map.class)) {
+					Map<?, ?> map = JSONFactoryUtil.looseDeserialize(
+						value.toString(), HashMap.class);
 
-					calendar.setTimeInMillis(Long.parseLong(value.toString()));
-					calendar.setLenient(false);
+					map = _generifyMap(
+						map, methodParameters[i].getGenericTypes());
 
-					parameterValue = calendar;
+					parameterValue = map;
 				}
 				else {
 					parameterValue = ReflectUtil.castType(value, parameterType);

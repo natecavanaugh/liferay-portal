@@ -25,8 +25,8 @@ public class MethodParametersResolverUtil {
 		return _methodParametersResolver;
 	}
 
-	public static MethodParameter[] resolveParameters(Method method) {
-		return getMethodParametersResolver().resolveParameters(method);
+	public static MethodParameter[] resolveMethodParameters(Method method) {
+		return getMethodParametersResolver().resolveMethodParameters(method);
 	}
 
 	public void setMethodParametersResolver(

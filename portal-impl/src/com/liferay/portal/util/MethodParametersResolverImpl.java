@@ -32,36 +32,37 @@ import jodd.paramo.Paramo;
  */
 public class MethodParametersResolverImpl implements MethodParametersResolver {
 
-	public MethodParameter[] resolveParameters(Method method) {
-		MethodParameter[] parameters = _methodParameters.get(method);
+	public MethodParameter[] resolveMethodParameters(Method method) {
+		MethodParameter[] methodParameters = _methodParameters.get(method);
 
-		if (parameters == null) {
-			try {
-				Class<?>[] methodParameterTypes = method.getParameterTypes();
-
-				jodd.paramo.MethodParameter[] methodParameters =
-					Paramo.resolveParameters(method);
-
-				parameters = new MethodParameter[methodParameters.length];
-
-				for (int i = 0; i < methodParameters.length; i++) {
-					parameters[i] = new MethodParameter(
-						methodParameters[i].getName(),
-						methodParameters[i].getSignature(),
-						methodParameterTypes[i]
-					);
-				}
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-
-				return null;
-			}
-
-			_methodParameters.put(method, parameters);
+		if (methodParameters != null) {
+			return methodParameters;
 		}
 
-		return parameters;
+		try {
+			Class<?>[] methodParameterTypes = method.getParameterTypes();
+
+			jodd.paramo.MethodParameter[] joddMethodParameters =
+				Paramo.resolveParameters(method);
+
+			methodParameters = new MethodParameter[joddMethodParameters.length];
+
+			for (int i = 0; i < joddMethodParameters.length; i++) {
+				methodParameters[i] = new MethodParameter(
+					joddMethodParameters[i].getName(),
+					joddMethodParameters[i].getSignature(),
+					methodParameterTypes[i]);
+			}
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			return null;
+		}
+
+		_methodParameters.put(method, methodParameters);
+
+		return methodParameters;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

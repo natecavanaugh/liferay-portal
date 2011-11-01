@@ -39,18 +39,18 @@ public class JSONWebServiceActionConfig
 		_path = path;
 		_method = method;
 
-		_parameters =
-			MethodParametersResolverUtil.resolveParameters(actionMethod);
+		_methodParameters =
+			MethodParametersResolverUtil.resolveMethodParameters(actionMethod);
 
-		StringBundler sb = new StringBundler(_parameters.length * 2 + 4);
+		StringBundler sb = new StringBundler(_methodParameters.length * 2 + 4);
 
 		sb.append(_path);
 		sb.append(CharPool.MINUS);
-		sb.append(_parameters.length);
+		sb.append(_methodParameters.length);
 
-		for (MethodParameter parameter : _parameters) {
+		for (MethodParameter methodParameter : _methodParameters) {
 			sb.append(CharPool.MINUS);
-			sb.append(parameter.getName());
+			sb.append(methodParameter.getName());
 		}
 
 		_fullPath = sb.toString();
@@ -75,7 +75,7 @@ public class JSONWebServiceActionConfig
 	}
 
 	public MethodParameter[] getMethodParameters() {
-		return _parameters;
+		return _methodParameters;
 	}
 
 	public String getPath() {
@@ -102,8 +102,8 @@ public class JSONWebServiceActionConfig
 		sb.append(_fullPath);
 		sb.append(", method=");
 		sb.append(_method);
-		sb.append(", parameterNames=");
-		sb.append(_parameters);
+		sb.append(", _methodParameters=");
+		sb.append(_methodParameters);
 		sb.append(", path=");
 		sb.append(_path);
 		sb.append("}");
@@ -115,7 +115,7 @@ public class JSONWebServiceActionConfig
 	private Method _actionMethod;
 	private String _fullPath;
 	private String _method;
-	private MethodParameter[] _parameters;
+	private MethodParameter[] _methodParameters;
 	private String _path;
 	private String _servletContextName;
 

@@ -2693,7 +2693,7 @@ public class JournalArticleLocalServiceImpl
 					staticContent = SanitizerUtil.sanitize(
 						user.getCompanyId(), groupId, user.getUserId(),
 						JournalArticle.class.getName(), 0,
-						ContentTypes.TEXT_HTML,	staticContent);
+						ContentTypes.TEXT_HTML, staticContent);
 
 					staticContentElement.setText(staticContent);
 				}

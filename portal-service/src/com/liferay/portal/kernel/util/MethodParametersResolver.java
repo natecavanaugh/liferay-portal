@@ -21,6 +21,6 @@ import java.lang.reflect.Method;
  */
 public interface MethodParametersResolver {
 
-	public MethodParameter[] resolveParameters(Method method);
+	public MethodParameter[] resolveMethodParameters(Method method);
 
 }
