@@ -528,7 +528,7 @@ public class DDMStructureLocalServiceImpl
 			String type = element.attributeValue("type", StringPool.BLANK);
 
 			if (Validator.isNull(name) ||
-				name.startsWith(DDMStructureConstants.RESERVED)) {
+				name.startsWith(DDMStructureConstants.XSD_NAME_RESERVED)) {
 
 				throw new StructureXsdException();
 			}

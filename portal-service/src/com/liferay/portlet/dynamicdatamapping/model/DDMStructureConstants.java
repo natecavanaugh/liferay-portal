@@ -20,10 +20,10 @@ package com.liferay.portlet.dynamicdatamapping.model;
  */
 public class DDMStructureConstants {
 
-	public static final String RESERVED = "reserved";
-
 	public static final int TYPE_AUTO = 1;
 
 	public static final int TYPE_DEFAULT = 0;
+
+	public static final String XSD_NAME_RESERVED = "reserved";
 
 }
