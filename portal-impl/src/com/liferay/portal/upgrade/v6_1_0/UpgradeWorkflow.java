@@ -15,6 +15,7 @@
 package com.liferay.portal.upgrade.v6_1_0;
 
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryTypeConstants;
@@ -27,15 +28,24 @@ public class UpgradeWorkflow extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		long fileEntryClassNameId = PortalUtil.getClassNameId(
-			DLFileEntry.class);
+		StringBundler sb = new StringBundler();
+
+		sb.append("update WorkflowDefinitionLink set classNameId = ");
+
 		long folderClassNameId = PortalUtil.getClassNameId(DLFolder.class);
 
-		runSQL(
-			"update WorkflowDefinitionLink set classNameId = " +
-				folderClassNameId + ", typePK = " +
-					DLFileEntryTypeConstants.ALL_FILE_ENTRY_TYPES_ID +
-						" where classNameId = " + fileEntryClassNameId);
+		sb.append(folderClassNameId);
+
+		sb.append(", typePK = ");
+		sb.append(DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_ALL);
+		sb.append(" where classNameId = ");
+
+		long fileEntryClassNameId = PortalUtil.getClassNameId(
+			DLFileEntry.class);
+
+		sb.append(fileEntryClassNameId);
+
+		runSQL(sb.toString());
 	}
 
 }

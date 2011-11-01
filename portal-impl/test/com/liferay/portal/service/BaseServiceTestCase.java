@@ -93,8 +93,8 @@ public class BaseServiceTestCase extends BaseTestCase {
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setCompanyId(TestPropsValues.getCompanyId());
-		serviceContext.setUserId(TestPropsValues.getUserId());
 		serviceContext.setScopeGroupId(TestPropsValues.getGroupId());
+		serviceContext.setUserId(TestPropsValues.getUserId());
 
 		return serviceContext;
 	}

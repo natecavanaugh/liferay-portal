@@ -31,6 +31,7 @@ import com.liferay.portlet.documentlibrary.NoSuchMetadataSetException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryTypeConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
@@ -217,8 +218,11 @@ public class DLFileEntryTypeLocalServiceImpl
 			dlFileEntryTypes = new ArrayList<DLFileEntryType>(
 				getFileEntryTypes(groupIds));
 
-			dlFileEntryTypes.add(
-				0, dlFileEntryTypePersistence.fetchByPrimaryKey(0));
+			DLFileEntryType dlFileEntryType =
+				dlFileEntryTypePersistence.fetchByPrimaryKey(
+					DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
+
+			dlFileEntryTypes.add(0, dlFileEntryType);
 		}
 
 		return dlFileEntryTypes;

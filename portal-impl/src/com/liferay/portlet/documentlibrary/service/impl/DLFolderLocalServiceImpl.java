@@ -431,12 +431,12 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 
 		if (fileEntryTypeIds.isEmpty()) {
 			fileEntryTypeIds.add(
-				DLFileEntryTypeConstants.ALL_FILE_ENTRY_TYPES_ID);
+				DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_ALL);
 		}
 		else {
 			workflowDefinitions.add(
 				new ObjectValuePair<Long, String>(
-					DLFileEntryTypeConstants.ALL_FILE_ENTRY_TYPES_ID,
+					DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_ALL,
 					StringPool.BLANK));
 		}
 

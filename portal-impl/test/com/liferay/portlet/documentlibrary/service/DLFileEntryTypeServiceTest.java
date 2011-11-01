@@ -46,7 +46,9 @@ public class DLFileEntryTypeServiceTest extends BaseServiceTestCase {
 			TestPropsValues.getUserId(), TestPropsValues.getGroupId(),
 			_folder.getFolderId(), "SubFolder AA", "", getServiceContext());
 
-		_basicDocument = DLFileEntryTypeLocalServiceUtil.getFileEntryType(0);
+		_basicDocumentDLFileEntryType =
+			DLFileEntryTypeLocalServiceUtil.getFileEntryType(
+				DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT);
 
 		_dlFileEntryTypes =
 			DLFileEntryTypeLocalServiceUtil.getFileEntryTypes(
@@ -56,20 +58,22 @@ public class DLFileEntryTypeServiceTest extends BaseServiceTestCase {
 			String name = dlFileEntryType.getName();
 
 			if (name.equals(DLFileEntryTypeConstants.NAME_IMAGE)) {
-				_image = dlFileEntryType;
+				_imageDLFileEntryType = dlFileEntryType;
 			}
 			else if (name.equals(DLFileEntryTypeConstants.NAME_VIDEO)) {
-				_video = dlFileEntryType;
+				_videoDLFileEntryType = dlFileEntryType;
 			}
 		}
 
 		assertNotNull(
 			DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT + " cannot be null",
-			_basicDocument);
+			_basicDocumentDLFileEntryType);
 		assertNotNull(
-			DLFileEntryTypeConstants.NAME_IMAGE + " cannot be null", _image);
+			DLFileEntryTypeConstants.NAME_IMAGE + " cannot be null",
+			_imageDLFileEntryType);
 		assertNotNull(
-			DLFileEntryTypeConstants.NAME_VIDEO + " cannot be null", _video);
+			DLFileEntryTypeConstants.NAME_VIDEO + " cannot be null",
+			_videoDLFileEntryType);
 	}
 
 	@Override
@@ -80,26 +84,30 @@ public class DLFileEntryTypeServiceTest extends BaseServiceTestCase {
 	}
 
 	public void testFileEntryTypeRestrictions() throws Exception {
-		String name = "Test.txt";
-
-		byte[] bytes = _CONTENT.getBytes();
 
 		// Configure folder
 
 		DLFolderLocalServiceUtil.updateFolder(
 			_folder.getFolderId(), _folder.getParentFolderId(),
-			_folder.getName(), _folder.getDescription(), _image.getPrimaryKey(),
+			_folder.getName(), _folder.getDescription(),
+			_imageDLFileEntryType.getPrimaryKey(),
 			ListUtil.toList(
-				new long[] {_image.getPrimaryKey(), _video.getPrimaryKey()}),
+				new long[] {
+					_imageDLFileEntryType.getPrimaryKey(),
+					_videoDLFileEntryType.getPrimaryKey()
+				}),
 			true, getServiceContext());
 
 		// Add file to folder
+
+		String name = "Test.txt";
+		byte[] bytes = _CONTENT.getBytes();
 
 		FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
 			TestPropsValues.getGroupId(), _folder.getFolderId(), name,
 			ContentTypes.TEXT_PLAIN, name, "", "", bytes, getServiceContext());
 
-		assertFileEntryType(fileEntry, _image);
+		assertFileEntryType(fileEntry, _imageDLFileEntryType);
 
 		// Add file to subfolder
 
@@ -107,20 +115,21 @@ public class DLFileEntryTypeServiceTest extends BaseServiceTestCase {
 			TestPropsValues.getGroupId(), _subfolder.getFolderId(), name,
 			ContentTypes.TEXT_PLAIN, name, "", "", bytes, getServiceContext());
 
-		assertFileEntryType(fileEntry, _image);
+		assertFileEntryType(fileEntry, _imageDLFileEntryType);
 
 		// Configure subfolder
 
 		DLFolderLocalServiceUtil.updateFolder(
 			_subfolder.getFolderId(), _subfolder.getParentFolderId(),
 			_subfolder.getName(), _subfolder.getDescription(),
-			_basicDocument.getPrimaryKey(),
-			ListUtil.toList(new long[] {_basicDocument.getPrimaryKey()}), true,
-			getServiceContext());
+			_basicDocumentDLFileEntryType.getPrimaryKey(),
+			ListUtil.toList(
+				new long[] {_basicDocumentDLFileEntryType.getPrimaryKey()}),
+			true, getServiceContext());
 
 		fileEntry = DLAppServiceUtil.getFileEntry(fileEntry.getFileEntryId());
 
-		assertFileEntryType(fileEntry, _basicDocument);
+		assertFileEntryType(fileEntry, _basicDocumentDLFileEntryType);
 	}
 
 	protected void assertFileEntryType(
@@ -130,18 +139,18 @@ public class DLFileEntryTypeServiceTest extends BaseServiceTestCase {
 
 		assertEquals(
 			"File should be of file entry type " +
-				dlFileEntryType.getPrimaryKey(),
+				dlFileEntryType.getFileEntryTypeId(),
 			dlFileEntryType.getPrimaryKey(), dlFileEntry.getFileEntryTypeId());
 	}
 
 	private static final String _CONTENT =
 		"Content: Enterprise. Open Source. For Life.";
 
-	private DLFileEntryType _basicDocument;
-	private DLFileEntryType _image;
-	private DLFileEntryType _video;
-	private Folder _folder;
-	private Folder _subfolder;
+	private DLFileEntryType _basicDocumentDLFileEntryType;
 	private List<DLFileEntryType> _dlFileEntryTypes;
+	private Folder _folder;
+	private DLFileEntryType _imageDLFileEntryType;
+	private Folder _subfolder;
+	private DLFileEntryType _videoDLFileEntryType;
 
 }

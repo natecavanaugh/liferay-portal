@@ -119,8 +119,7 @@ public class DLFileEntryTypeFinderImpl
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "lower(name)", StringPool.LIKE, false, names);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "description", StringPool.LIKE, false,
-				descriptions);
+				sql, "description", StringPool.LIKE, false, descriptions);
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -183,8 +182,7 @@ public class DLFileEntryTypeFinderImpl
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "lower(name)", StringPool.LIKE, false, names);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "description", StringPool.LIKE, false,
-				descriptions);
+				sql, "description", StringPool.LIKE, false, descriptions);
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
 			if (orderByComparator != null) {
@@ -245,20 +243,19 @@ public class DLFileEntryTypeFinderImpl
 	}
 
 	protected String getWhere(boolean includeBasicFileEntryType) {
-		if (includeBasicFileEntryType) {
-			StringBundler sb = new StringBundler(5);
-
-			sb.append("((companyId = 0) AND (groupId = 0) AND (");
-			sb.append("(lower(name) LIKE ? [$AND_OR_NULL_CHECK$]) ");
-			sb.append("[$AND_OR_CONNECTOR$] ");
-			sb.append("(description LIKE ? [$AND_OR_NULL_CHECK$]) ");
-			sb.append(")) OR ");
-
-			return sb.toString();
-		}
-		else {
+		if (!includeBasicFileEntryType) {
 			return StringPool.BLANK;
 		}
+
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("((companyId = 0) AND (groupId = 0) AND (");
+		sb.append("(lower(name) LIKE ? [$AND_OR_NULL_CHECK$]) ");
+		sb.append("[$AND_OR_CONNECTOR$] ");
+		sb.append("(description LIKE ? [$AND_OR_NULL_CHECK$]) ");
+		sb.append(")) OR ");
+
+		return sb.toString();
 	}
 
 }

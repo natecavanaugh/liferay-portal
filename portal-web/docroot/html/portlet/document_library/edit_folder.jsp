@@ -152,7 +152,7 @@ if (workflowEnabled) {
 				<div id="<portlet:namespace />overrideParentSettings">
 					<c:if test="<%= workflowEnabled %>">
 						<div class='<%= (rootFolder || fileEntryTypes.isEmpty()) ? StringPool.BLANK : "aui-helper-hidden" %>' id="<portlet:namespace />defaultWorkflow">
-							<aui:select label="default-workflow-for-all-document-types" name='<%= "workflowDefinition" + DLFileEntryTypeConstants.ALL_FILE_ENTRY_TYPES_ID %>'>
+							<aui:select label="default-workflow-for-all-document-types" name='<%= "workflowDefinition" + DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_ALL %>'>
 
 								<aui:option label="no-workflow" value="" />
 
@@ -160,7 +160,7 @@ if (workflowEnabled) {
 								WorkflowDefinitionLink workflowDefinitionLink = null;
 
 								try {
-									workflowDefinitionLink = WorkflowDefinitionLinkLocalServiceUtil.getWorkflowDefinitionLink(company.getCompanyId(), repositoryId, DLFolderConstants.getClassName(), folderId, DLFileEntryTypeConstants.ALL_FILE_ENTRY_TYPES_ID, true);
+									workflowDefinitionLink = WorkflowDefinitionLinkLocalServiceUtil.getWorkflowDefinitionLink(company.getCompanyId(), repositoryId, DLFolderConstants.getClassName(), folderId, DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_ALL, true);
 								}
 								catch (NoSuchWorkflowDefinitionLinkException nswdle) {
 								}
@@ -366,7 +366,7 @@ if (workflowEnabled) {
 
 			searchContainer.updateDataStore();
 
-	        var select = A.one('#<portlet:namespace />defaultFileEntryTypeId');
+			var select = A.one('#<portlet:namespace />defaultFileEntryTypeId');
 
 			var selectContainer = A.one('#<portlet:namespace />overrideParentSettings .default-document-type');
 
@@ -403,7 +403,7 @@ if (workflowEnabled) {
 
 			searchContainer.deleteRow(tr, link.getAttribute('data-rowId'));
 
-	        A.one('#<portlet:namespace />defaultFileEntryTypeId-' + link.getAttribute('data-rowId')).remove();
+			A.one('#<portlet:namespace />defaultFileEntryTypeId-' + link.getAttribute('data-rowId')).remove();
 
 			documentTypesChanged = true;
 

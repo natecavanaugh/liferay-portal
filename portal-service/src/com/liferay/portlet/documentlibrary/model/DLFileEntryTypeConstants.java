@@ -21,7 +21,9 @@ package com.liferay.portlet.documentlibrary.model;
  */
 public class DLFileEntryTypeConstants {
 
-	public static final long ALL_FILE_ENTRY_TYPES_ID = -1;
+	public static final long FILE_ENTRY_TYPE_ID_ALL = -1;
+
+	public static final long FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT = 0;
 
 	public static final String NAME_BASIC_DOCUMENT = "Basic Document";
 

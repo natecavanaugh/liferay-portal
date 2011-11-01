@@ -77,18 +77,16 @@ public class DLFileEntryWorkflowHandler extends BaseWorkflowHandler {
 		}
 
 		try {
-			long typePK = dlFileVersion.getFileEntryTypeId();
-
 			return WorkflowDefinitionLinkLocalServiceUtil.
 				getWorkflowDefinitionLink(
 					companyId, groupId, DLFolder.class.getName(), folderId,
-					typePK, true);
+					dlFileVersion.getFileEntryTypeId(), true);
 		}
 		catch (NoSuchWorkflowDefinitionLinkException nswdle) {
 			return WorkflowDefinitionLinkLocalServiceUtil.
 				getWorkflowDefinitionLink(
 					companyId, groupId, DLFolder.class.getName(), folderId,
-					DLFileEntryTypeConstants.ALL_FILE_ENTRY_TYPES_ID, true);
+					DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_ALL, true);
 		}
 	}
 

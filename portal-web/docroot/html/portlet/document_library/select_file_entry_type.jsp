@@ -22,7 +22,7 @@
 
 <liferay-portlet:renderURL varImpl="portletURL">
 	<portlet:param name="struts_action" value="/document_library/select_file_entry_type" />
-	<portlet:param name="includeBasicFileEntryType" value="true" />
+	<portlet:param name="includeBasicFileEntryType" value="1" />
 </liferay-portlet:renderURL>
 
 <aui:form action="<%= portletURL.toString() %>" method="post" name="fm">
