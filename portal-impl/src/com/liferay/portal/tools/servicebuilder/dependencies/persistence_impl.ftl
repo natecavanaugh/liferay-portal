@@ -3569,6 +3569,10 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		 * @param force whether to force the rebuild even if the tree is not stale
 		 */
 		public void rebuildTree(long ${scopeColumn.name}, boolean force) throws SystemException {
+			if (!rebuildTreeEnabled) {
+				return;
+			}
+
 			if (force || (countOrphanTreeNodes(${scopeColumn.name}) > 0)) {
 				rebuildTree(${scopeColumn.name}, 0, 1);
 
@@ -3577,6 +3581,10 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
 				FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 			}
+		}
+
+		public void setRebuildTreeEnabled(boolean rebuildTreeEnabled) {
+			this.rebuildTreeEnabled = rebuildTreeEnabled;
 		}
 
 		protected long countOrphanTreeNodes(long ${scopeColumn.name}) throws SystemException {
@@ -3604,6 +3612,10 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		}
 
 		protected void expandTree(${entity.name} ${entity.varName}) throws SystemException {
+			if (!rebuildTreeEnabled) {
+				return;
+			}
+
 			long ${scopeColumn.name} = ${entity.varName}.get${scopeColumn.methodName}();
 
 			long lastRight${pkColumn.methodName} = getLastRight${pkColumn.methodName}(${scopeColumn.name}, ${entity.varName}.getParent${pkColumn.methodName}());
@@ -3669,6 +3681,10 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		}
 
 		protected long rebuildTree(long ${scopeColumn.name}, long parent${pkColumn.methodName}, long left${pkColumn.methodName}) throws SystemException {
+			if (!rebuildTreeEnabled) {
+				return 0;
+			}
+
 			List<Long> ${pkColumn.names} = null;
 
 			Session session = null;
@@ -3708,6 +3724,10 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		}
 
 		protected void shrinkTree(${entity.name} ${entity.varName}) {
+			if (!rebuildTreeEnabled) {
+				return;
+			}
+
 			long ${scopeColumn.name} = ${entity.varName}.get${scopeColumn.methodName}();
 
 			long left${pkColumn.methodName} = ${entity.varName}.getLeft${pkColumn.methodName}();
@@ -3961,6 +3981,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	</#list>
 
 	<#if entity.isHierarchicalTree()>
+		protected boolean rebuildTreeEnabled = true;
 		protected ExpandTreeLeft${pkColumn.methodName} expandTreeLeft${pkColumn.methodName};
 		protected ExpandTreeRight${pkColumn.methodName} expandTreeRight${pkColumn.methodName};
 		protected ShrinkTreeLeft${pkColumn.methodName} shrinkTreeLeft${pkColumn.methodName};
