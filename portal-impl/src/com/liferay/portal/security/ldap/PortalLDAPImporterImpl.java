@@ -474,7 +474,7 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 		int birthdayDay = birthdayCal.get(Calendar.DAY_OF_MONTH);
 		int birthdayYear = birthdayCal.get(Calendar.YEAR);
 
-		User user =  UserLocalServiceUtil.addUser(
+		User user = UserLocalServiceUtil.addUser(
 			ldapUser.getCreatorUserId(), companyId, autoPassword, password,
 			password, ldapUser.isAutoScreenName(), ldapUser.getScreenName(),
 			ldapUser.getEmailAddress(), 0, StringPool.BLANK,
@@ -486,10 +486,13 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 			ldapUser.getUserGroupIds(), ldapUser.isSendEmail(),
 			ldapUser.getServiceContext());
 
-		if (ldapUser.isUpdatePortrait() &&
-			Validator.isNotNull(ldapUser.getPortraitBytes())) {
-				UserLocalServiceUtil.updatePortrait(
-					user.getUserId(), ldapUser.getPortraitBytes());
+		if (ldapUser.isUpdatePortrait()) {
+			byte[] portraitBytes = ldapUser.getPortraitBytes();
+
+			if ((portraitBytes != null) && (portraitBytes.length > 0)) {
+				user = UserLocalServiceUtil.updatePortrait(
+					user.getUserId(), portraitBytes);
+			}
 		}
 
 		return user;
@@ -873,7 +876,7 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 				user = addUser(companyId, ldapUser, password);
 			}
 
-			String modifiedDate = LDAPUtil.getAttributeValue(
+			String modifiedDate = LDAPUtil.getAttributeString(
 				attributes, "modifyTimestamp");
 
 			user = updateUser(
@@ -1171,9 +1174,11 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 		}
 
 		if (ldapUser.isUpdatePortrait()) {
-			if (Validator.isNotNull(ldapUser.getPortraitBytes())) {
+			byte[] portraitBytes = ldapUser.getPortraitBytes();
+
+			if ((portraitBytes != null) && (portraitBytes.length > 0)) {
 				UserLocalServiceUtil.updatePortrait(
-					user.getUserId(), ldapUser.getPortraitBytes());
+					user.getUserId(), portraitBytes);
 			}
 			else {
 				UserLocalServiceUtil.deletePortrait(user.getUserId());

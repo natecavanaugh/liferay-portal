@@ -55,10 +55,10 @@ public class BaseLDAPToPortalConverter implements LDAPToPortalConverter {
 			long companyId, Attributes attributes, Properties groupMappings)
 		throws Exception {
 
-		String groupName = LDAPUtil.getAttributeValue(
+		String groupName = LDAPUtil.getAttributeString(
 			attributes, groupMappings, GroupConverterKeys.GROUP_NAME).
 				toLowerCase();
-		String description = LDAPUtil.getAttributeValue(
+		String description = LDAPUtil.getAttributeString(
 			attributes, groupMappings, GroupConverterKeys.DESCRIPTION);
 
 		LDAPGroup ldapGroup = new LDAPGroup();
@@ -89,24 +89,24 @@ public class BaseLDAPToPortalConverter implements LDAPToPortalConverter {
 		boolean autoScreenName = PrefsPropsUtil.getBoolean(
 			companyId, PropsKeys.USERS_SCREEN_NAME_ALWAYS_AUTOGENERATE);
 
-		String screenName = LDAPUtil.getAttributeValue(
+		String screenName = LDAPUtil.getAttributeString(
 			attributes, userMappings, UserConverterKeys.SCREEN_NAME).
 				toLowerCase();
-		String emailAddress = LDAPUtil.getAttributeValue(
+		String emailAddress = LDAPUtil.getAttributeString(
 			attributes, userMappings, UserConverterKeys.EMAIL_ADDRESS);
 		String openId = StringPool.BLANK;
 		Locale locale = LocaleUtil.getDefault();
-		String firstName = LDAPUtil.getAttributeValue(
+		String firstName = LDAPUtil.getAttributeString(
 			attributes, userMappings, UserConverterKeys.FIRST_NAME);
-		String middleName = LDAPUtil.getAttributeValue(
+		String middleName = LDAPUtil.getAttributeString(
 			attributes, userMappings, UserConverterKeys.MIDDLE_NAME);
-		String lastName = LDAPUtil.getAttributeValue(
+		String lastName = LDAPUtil.getAttributeString(
 			attributes, userMappings, UserConverterKeys.LAST_NAME);
-		String uuid = LDAPUtil.getAttributeValue(
+		String uuid = LDAPUtil.getAttributeString(
 			attributes, userMappings, UserConverterKeys.UUID);
 
 		if (Validator.isNull(firstName) || Validator.isNull(lastName)) {
-			String fullName = LDAPUtil.getAttributeValue(
+			String fullName = LDAPUtil.getAttributeString(
 				attributes, userMappings, UserConverterKeys.FULL_NAME);
 
 			FullNameGenerator fullNameGenerator =
@@ -125,7 +125,7 @@ public class BaseLDAPToPortalConverter implements LDAPToPortalConverter {
 		int birthdayMonth = Calendar.JANUARY;
 		int birthdayDay = 1;
 		int birthdayYear = 1970;
-		String jobTitle = LDAPUtil.getAttributeValue(
+		String jobTitle = LDAPUtil.getAttributeString(
 			attributes, userMappings, UserConverterKeys.JOB_TITLE);
 		long[] groupIds = null;
 		long[] organizationIds = null;
@@ -199,6 +199,20 @@ public class BaseLDAPToPortalConverter implements LDAPToPortalConverter {
 		ldapUser.setGroupIds(groupIds);
 		ldapUser.setOrganizationIds(organizationIds);
 		ldapUser.setPasswordReset(passwordReset);
+
+		Object portrait = LDAPUtil.getAttributeObject(
+			attributes, userMappings.getProperty(UserConverterKeys.PORTRAIT));
+
+		if (portrait != null) {
+			byte[] portraitBytes = (byte[])portrait;
+
+			if (portraitBytes.length > 0) {
+				ldapUser.setPortraitBytes((byte[])portrait);
+			}
+
+			ldapUser.setUpdatePortrait(true);
+		}
+
 		ldapUser.setRoleIds(roleIds);
 		ldapUser.setSendEmail(sendEmail);
 		ldapUser.setServiceContext(serviceContext);
@@ -207,23 +221,6 @@ public class BaseLDAPToPortalConverter implements LDAPToPortalConverter {
 		ldapUser.setUserExpandoAttributes(userExpandoAttributes);
 		ldapUser.setUserGroupIds(userGroupIds);
 		ldapUser.setUserGroupRoles(userGroupRoles);
-
-		Object defaultPortrait = Boolean.FALSE;
-
-		Object portrait = LDAPUtil.getAttributeValueAsObject(
-			attributes, userMappings.getProperty(UserConverterKeys.PORTRAIT),
-			defaultPortrait);
-
-		if (defaultPortrait.equals(portrait)) {
-			ldapUser.setUpdatePortrait(Boolean.FALSE);
-		}
-		else {
-			ldapUser.setUpdatePortrait(Boolean.TRUE);
-
-			if (Validator.isNotNull(portrait)) {
-				ldapUser.setPortraitBytes((byte[])portrait);
-			}
-		}
 
 		return ldapUser;
 	}
@@ -237,7 +234,7 @@ public class BaseLDAPToPortalConverter implements LDAPToPortalConverter {
 		for (Object key : expandoMappings.keySet()) {
 			String name = (String)key;
 
-			String value = LDAPUtil.getAttributeValue(
+			String value = LDAPUtil.getAttributeString(
 				attributes, expandoMappings, name);
 
 			if (Validator.isNotNull(value)) {

@@ -61,6 +61,8 @@ public class BasePortalToLDAPConverter implements PortalToLDAPConverter {
 		_reservedUserFieldNames.put(
 			UserConverterKeys.PASSWORD, UserConverterKeys.PASSWORD);
 		_reservedUserFieldNames.put(
+			UserConverterKeys.PORTRAIT, UserConverterKeys.PORTRAIT);
+		_reservedUserFieldNames.put(
 			UserConverterKeys.SCREEN_NAME, UserConverterKeys.SCREEN_NAME);
 	}
 
@@ -341,19 +343,19 @@ public class BasePortalToLDAPConverter implements PortalToLDAPConverter {
 	}
 
 	protected void addAttributeMapping(
-		String attributeName, String attributeValue, Attributes attributes) {
+		String attributeName, Object attributeValue, Attributes attributes) {
 
-		if (Validator.isNotNull(attributeName) &&
-			Validator.isNotNull(attributeValue)) {
-
+		if (Validator.isNotNull(attributeName) && (attributeValue != null)) {
 			attributes.put(attributeName, attributeValue);
 		}
 	}
 
 	protected void addAttributeMapping(
-		String attributeName, Object attributeValue, Attributes attributes) {
+		String attributeName, String attributeValue, Attributes attributes) {
 
-		if (Validator.isNotNull(attributeName) && attributeValue != null) {
+		if (Validator.isNotNull(attributeName) &&
+			Validator.isNotNull(attributeValue)) {
+
 			attributes.put(attributeName, attributeValue);
 		}
 	}
@@ -393,15 +395,13 @@ public class BasePortalToLDAPConverter implements PortalToLDAPConverter {
 			String ldapAttributeName = (String)entry.getValue();
 
 			try {
-				if (!UserConverterKeys.PORTRAIT.equals(fieldName)) {
-					Object attributeValue = PropertyUtils.getProperty(
-						object, fieldName);
+				Object attributeValue = PropertyUtils.getProperty(
+					object, fieldName);
 
-					if (attributeValue != null) {
-						addModificationItem(
-							ldapAttributeName, attributeValue.toString(),
-							modifications);
-					}
+				if (attributeValue != null) {
+					addModificationItem(
+						ldapAttributeName, attributeValue.toString(),
+						modifications);
 				}
 			}
 			catch (Exception e) {
@@ -418,27 +418,30 @@ public class BasePortalToLDAPConverter implements PortalToLDAPConverter {
 	}
 
 	protected byte[] getUserPortrait(User user) {
-		byte[] imageBytes = null;
+		byte[] bytes = null;
 
-		if (user.getPortraitId() != 0) {
-			Image image = null;
+		if (user.getPortraitId() == 0) {
+			return bytes;
+		}
 
-			try {
-				image = ImageLocalServiceUtil.getImage(user.getPortraitId());
+		Image image = null;
 
-				if (image != null) {
-					imageBytes = image.getTextObj();
-				}
+		try {
+			image = ImageLocalServiceUtil.getImage(user.getPortraitId());
+
+			if (image != null) {
+				bytes = image.getTextObj();
 			}
-			catch (Exception e) {
-				if (_log.isWarnEnabled()) {
-					_log.warn("Unable to get the portrait for user " +
-						user.getUserId(), e);
-				}
+		}
+		catch (Exception e) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to get the portrait for user " + user.getUserId(),
+					e);
 			}
 		}
 
-		return imageBytes;
+		return bytes;
 	}
 
 	protected void populateCustomAttributeModifications(

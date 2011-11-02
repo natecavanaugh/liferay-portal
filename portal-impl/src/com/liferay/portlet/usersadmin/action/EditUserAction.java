@@ -512,6 +512,12 @@ public class EditUserAction extends PortletAction {
 
 		User user = PortalUtil.getSelectedUser(actionRequest);
 
+		boolean deleteLogo = ParamUtil.getBoolean(actionRequest, "deleteLogo");
+
+		if (deleteLogo) {
+			UserServiceUtil.deletePortrait(user.getUserId());
+		}
+
 		Contact contact = user.getContact();
 
 		String oldPassword = AdminUtil.getUpdateUserPassword(
@@ -615,12 +621,6 @@ public class EditUserAction extends PortletAction {
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			User.class.getName(), actionRequest);
-
-		boolean deleteLogo = ParamUtil.getBoolean(actionRequest, "deleteLogo");
-
-		if (deleteLogo) {
-			UserServiceUtil.deletePortrait(user.getUserId());
-		}
 
 		user = UserServiceUtil.updateUser(
 			user.getUserId(), oldPassword, newPassword1, newPassword2,

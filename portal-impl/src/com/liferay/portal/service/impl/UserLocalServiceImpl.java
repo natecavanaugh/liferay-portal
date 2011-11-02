@@ -4399,7 +4399,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			throw new ImageSizeException(ioe);
 		}
 
-		return userPersistence.update(user, false);
+		userPersistence.update(user, false);
+
+		return user;
 	}
 
 	/**
