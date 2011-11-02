@@ -523,10 +523,10 @@ public class GroupFinderImpl
 			qPos.add(companyId);
 			qPos.add(name);
 
-			List<Group> list = q.list();
+			List<Group> groups = q.list();
 
-			if (!list.isEmpty()) {
-				return list.get(0);
+			if (!groups.isEmpty()) {
+				return groups.get(0);
 			}
 		}
 		catch (Exception e) {
