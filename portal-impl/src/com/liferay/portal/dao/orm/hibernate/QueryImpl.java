@@ -197,12 +197,12 @@ public class QueryImpl implements Query {
 	}
 
 	public Query setLockMode(String alias, LockMode lockMode) {
-		org.hibernate.LockMode realLockMode = LockModeTranslator.translate(
+		org.hibernate.LockMode hibernateLockMode = LockModeTranslator.translate(
 			lockMode);
 
-		LockOptions lockOptions = new LockOptions(realLockMode);
+		LockOptions lockOptions = new LockOptions(hibernateLockMode);
 
-		lockOptions.setAliasSpecificLockMode(alias, realLockMode);
+		lockOptions.setAliasSpecificLockMode(alias, hibernateLockMode);
 
 		_query.setLockOptions(lockOptions);
 

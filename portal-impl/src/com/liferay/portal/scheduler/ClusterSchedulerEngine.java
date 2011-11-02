@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.cluster.ClusterNodeResponses;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.cluster.FutureClusterResponses;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
@@ -756,21 +755,24 @@ public class ClusterSchedulerEngine
 					lock = LockLocalServiceUtil.lock(
 						_LOCK_CLASS_NAME, _LOCK_CLASS_NAME,
 						_localClusterNodeAddress,
-						PropsValues.MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
+						PropsValues.
+							MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
 				}
 				else {
 					lock = LockLocalServiceUtil.lock(
 						_LOCK_CLASS_NAME, _LOCK_CLASS_NAME, owner,
 						_localClusterNodeAddress,
-						PropsValues.MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
+						PropsValues.
+							MEMORY_CLUSTER_SCHEDULER_LOCK_CACHE_ENABLED);
 				}
 
 				break;
 			}
-			catch(SystemException se) {
-				_log.warn(
-					"Failed scheduler cluster master competition, " +
-					"start to retry");
+			catch (Exception e) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Unable to lock memory scheduler cluster. Retrying.");
+				}
 			}
 		}
 

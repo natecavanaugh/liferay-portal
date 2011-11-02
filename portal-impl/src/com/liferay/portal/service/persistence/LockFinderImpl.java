@@ -20,9 +20,9 @@ import com.liferay.portal.kernel.dao.orm.Query;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Lock;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.util.dao.orm.CustomSQLUtil;
 
 import java.util.List;
 
@@ -32,6 +32,9 @@ import java.util.List;
 public class LockFinderImpl
 	extends BasePersistenceImpl<Lock> implements LockFinder {
 
+	public static String FIND_BY_C_K =
+		LockFinder.class.getName() + ".findByC_K";
+
 	public Lock fetchByC_K(String className, String key, LockMode lockMode)
 		throws SystemException {
 
@@ -39,42 +42,29 @@ public class LockFinderImpl
 			return lockPersistence.fetchByC_K(className, key);
 		}
 
-		if (Validator.isNull(className)) {
-			throw new IllegalArgumentException("null className");
-		}
-
-		if ((Validator.isNull(key))) {
-			throw new IllegalArgumentException("null key");
-		}
-
 		Session session = null;
 
 		try {
 			session = openSession();
 
-			Query q = session.createQuery(_SQL_SELECT_BY_CK);
+			String sql = CustomSQLUtil.get(FIND_BY_C_K);
+
+			Query q = session.createQuery(sql);
 
 			q.setLockMode("lock", lockMode);
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
-			if (className != null) {
-				qPos.add(className);
+			qPos.add(className);
+			qPos.add(key);
+
+			List<Lock> locks = q.list();
+
+			if (!locks.isEmpty()) {
+				return locks.get(0);
 			}
 
-			if (key != null) {
-				qPos.add(key);
-			}
-
-			List<Lock> list = q.list();
-
-			Lock lock = null;
-
-			if (!list.isEmpty()) {
-				lock = list.get(0);
-			}
-
-			return lock;
+			return null;
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -83,9 +73,6 @@ public class LockFinderImpl
 			closeSession(session);
 		}
 	}
-
-	private static final String _SQL_SELECT_BY_CK =
-		"SELECT lock FROM Lock lock WHERE lock.className = ? AND lock.key = ?";
 
 	@BeanReference(type = LockPersistence.class)
 	protected LockPersistence lockPersistence;
