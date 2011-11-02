@@ -171,6 +171,19 @@
 				fieldNamespace: {
 					value: 'ddm'
 				},
+				folder: {
+					setter: function(val) {
+						if (!A.Lang.isObject(val)) {
+							val = A.JSON.parse(val);
+						}
+
+						return val
+					},
+					value: {
+						folderId: <%= DLFolderConstants.DEFAULT_PARENT_FOLDER_ID %>,
+						folderName: '<liferay-ui:message key="home" />'
+					}
+				},
 				tip: {
 					value: '<%= LanguageUtil.format(locale, "upload-documents-no-larger-than-x-k", PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE) / 1024, false) %>'
 				}
