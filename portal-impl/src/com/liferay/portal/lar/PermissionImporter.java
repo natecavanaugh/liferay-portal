@@ -228,7 +228,7 @@ public class PermissionImporter {
 
 			if ((userId > 0) &&
 				((PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5) ||
-				(PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6))) {
+				 (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6))) {
 
 				Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
 
