@@ -197,19 +197,19 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 		try {
 			File file = uploadPortletRequest.getFile("logoFileName");
 
-            if (useLogo && !file.exists()) {
-				if (hasLogo ) {
+			if (useLogo && !file.exists()) {
+				if (hasLogo) {
 					return;
 				}
 
-                throw new UploadException("No logo uploaded for use");
-            }
+				throw new UploadException("No logo uploaded for use");
+			}
 
-            if (file.exists()) {
-                inputStream = new ByteArrayFileInputStream(file, 1024);
-            }
+			if (file.exists()) {
+				inputStream = new ByteArrayFileInputStream(file, 1024);
+			}
 
-            if (inputStream != null) {
+			if (inputStream != null) {
 				inputStream.mark(0);
 			}
 
