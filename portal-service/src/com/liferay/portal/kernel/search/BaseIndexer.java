@@ -81,10 +81,6 @@ public abstract class BaseIndexer implements Indexer {
 	public static final int INDEX_FILTER_SEARCH_LIMIT = GetterUtil.getInteger(
 		PropsUtil.get(PropsKeys.INDEX_FILTER_SEARCH_LIMIT));
 
-	private static final boolean _FILTER_SEARCH = false;
-
-	private static final boolean _INDEXER_ENABLED = true;
-
 	public void delete(long companyId, String uid) throws SearchException {
 		try {
 			SearchEngineUtil.deleteDocument(companyId, uid);
@@ -923,6 +919,10 @@ public abstract class BaseIndexer implements Indexer {
 	protected void setStagingAware(boolean stagingAware) {
 		_stagingAware = stagingAware;
 	}
+
+	private static final boolean _FILTER_SEARCH = false;
+
+	private static final boolean _INDEXER_ENABLED = true;
 
 	private static Log _log = LogFactoryUtil.getLog(BaseIndexer.class);
 
