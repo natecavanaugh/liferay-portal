@@ -23,9 +23,24 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.model.*;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutConstants;
+import com.liferay.portal.model.LayoutPrototype;
+import com.liferay.portal.model.LayoutSet;
+import com.liferay.portal.model.LayoutTypePortlet;
+import com.liferay.portal.model.LayoutTypePortletConstants;
+import com.liferay.portal.model.PortletConstants;
+import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.service.*;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
+import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.util.PortletKeys;
 
@@ -65,15 +80,9 @@ public class AddDefaultLayoutPrototypesAction extends SimpleAction {
 			return;
 		}
 
-		String portletId = addPortletId(layout, PortletKeys.BLOGS, "column-1");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
-
-        portletId = addPortletId(layout, PortletKeys.TAGS_CLOUD, "column-2");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
-
-        portletId = addPortletId(layout, PortletKeys.RECENT_BLOGGERS,
-            "column-2");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
+		addPortletId(layout, PortletKeys.BLOGS, "column-1");
+		addPortletId(layout, PortletKeys.TAGS_CLOUD, "column-2");
+		addPortletId(layout, PortletKeys.RECENT_BLOGGERS, "column-2");
 	}
 
 	protected Layout addLayout(
@@ -144,6 +153,9 @@ public class AddDefaultLayoutPrototypesAction extends SimpleAction {
 
 		updateLayout(layout);
 
+		addResourcePermissions(
+			layout.getCompanyId(), portletId, layout.getPlid());
+
 		return portletId;
 	}
 
@@ -163,20 +175,12 @@ public class AddDefaultLayoutPrototypesAction extends SimpleAction {
 			return;
 		}
 
-		String portletId = addPortletId(
-            layout, PortletKeys.TAGS_ENTRIES_NAVIGATION, "column-1");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
-
-        portletId = addPortletId(
+		addPortletId(layout, PortletKeys.TAGS_ENTRIES_NAVIGATION, "column-1");
+		addPortletId(
 			layout, PortletKeys.TAGS_CATEGORIES_NAVIGATION, "column-1");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
-
-        portletId = addPortletId(layout, PortletKeys.SEARCH, "column-2");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
-
-        portletId = addPortletId(
+		addPortletId(layout, PortletKeys.SEARCH, "column-2");
+		String portletId = addPortletId(
 			layout, PortletKeys.ASSET_PUBLISHER, "column-2");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
 
 		UnicodeProperties typeSettingsProperties =
 			layout.getTypeSettingsProperties();
@@ -206,16 +210,10 @@ public class AddDefaultLayoutPrototypesAction extends SimpleAction {
 			return;
 		}
 
-		String portletId = addPortletId(layout, PortletKeys.WIKI, "column-1");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
-
-        portletId = addPortletId(
+		addPortletId(layout, PortletKeys.WIKI, "column-1");
+		addPortletId(
 			layout, PortletKeys.TAGS_CATEGORIES_NAVIGATION, "column-2");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
-
-        portletId = addPortletId(layout, PortletKeys.TAGS_ENTRIES_NAVIGATION,
-            "column-2");
-        addResourcePermissions(companyId, portletId, layout.getPlid());
+		addPortletId(layout, PortletKeys.TAGS_ENTRIES_NAVIGATION, "column-2");
 	}
 
 	protected void doRun(long companyId) throws Exception {
@@ -236,36 +234,27 @@ public class AddDefaultLayoutPrototypesAction extends SimpleAction {
 			layout.getTypeSettings());
 	}
 
-    protected void addResourcePermissions(long companyId, String portletId,
-        long plid)
-            throws SystemException, PortalException {
-        String resourceName = PortletConstants.getRootPortletId(portletId);
-        String primaryKey = PortletPermissionUtil.getPrimaryKey(plid,
-            portletId);
+    protected void addResourcePermissions(
+			long companyId, String portletId, long plid)
+        throws SystemException, PortalException {
 
-        //Guest
+		String resourceName = PortletConstants.getRootPortletId(portletId);
 
-        long roleId = RoleLocalServiceUtil.getRole(companyId, RoleConstants
-            .GUEST).getRoleId();
-        ResourcePermissionLocalServiceUtil.setResourcePermissions(
-            companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
-            primaryKey, roleId, new String[]{ActionKeys.VIEW});
+		String primaryKey = PortletPermissionUtil.getPrimaryKey(
+			plid, portletId);
 
-        //Site Member
+		Role guest = RoleLocalServiceUtil.getRole(companyId, RoleConstants.GUEST);
+		Role siteMember = RoleLocalServiceUtil.getRole(companyId, RoleConstants.SITE_MEMBER);
+		Role owner = RoleLocalServiceUtil.getRole(companyId, RoleConstants.OWNER);
 
-        roleId = RoleLocalServiceUtil.getRole(companyId, RoleConstants
-            .SITE_MEMBER).getRoleId();
-        ResourcePermissionLocalServiceUtil.setResourcePermissions(
-            companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
-            primaryKey, roleId, new String[]{ActionKeys.VIEW});
+		long[] roleIds = new long[] {
+			guest.getRoleId(), siteMember.getRoleId(), owner.getRoleId()};
 
-        //Owner
-
-        roleId = RoleLocalServiceUtil.getRole(companyId, RoleConstants.OWNER)
-            .getRoleId();
-        ResourcePermissionLocalServiceUtil.setResourcePermissions(
-            companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
-            primaryKey, roleId, new String[]{ActionKeys.ADD_TO_PAGE});
+		for (long roleId : roleIds) {
+			ResourcePermissionLocalServiceUtil.setResourcePermissions(
+				companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
+				primaryKey, roleId, new String[]{ActionKeys.VIEW});
+		}
     }
 
 }
