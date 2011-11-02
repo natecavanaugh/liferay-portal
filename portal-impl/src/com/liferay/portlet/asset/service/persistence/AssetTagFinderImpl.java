@@ -34,8 +34,6 @@ import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.model.impl.AssetTagImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
-import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -247,11 +245,9 @@ public class AssetTagFinderImpl
 
 				AssetTag assetTag = new AssetTagImpl();
 
-				assetTag.setTagId(
-					GetterUtil.getLong((Serializable)array[0]));
-				assetTag.setName(GetterUtil.getString((Serializable)array[1]));
-				assetTag.setAssetCount(
-					GetterUtil.getInteger((Serializable)array[2]));
+				assetTag.setTagId(GetterUtil.getLong(array[0]));
+				assetTag.setName(GetterUtil.getString(array[1]));
+				assetTag.setAssetCount(GetterUtil.getInteger(array[2]));
 
 				assetTags.add(assetTag);
 			}

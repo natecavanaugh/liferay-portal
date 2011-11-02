@@ -36,8 +36,6 @@ import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
-import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -373,8 +371,7 @@ public class GroupFinderImpl
 		}
 
 		Long userId = (Long)params.get("usersGroups");
-		boolean inherit = GetterUtil.getBoolean(
-			(Serializable)params.get("inherit"), true);
+		boolean inherit = GetterUtil.getBoolean(params.get("inherit"), true);
 
 		boolean doUnion = Validator.isNotNull(userId) && inherit;
 
@@ -572,8 +569,7 @@ public class GroupFinderImpl
 		}
 
 		Long userId = (Long)params.get("usersGroups");
-		boolean inherit = GetterUtil.getBoolean(
-			(Serializable)params.get("inherit"), true);
+		boolean inherit = GetterUtil.getBoolean(params.get("inherit"), true);
 
 		boolean doUnion = Validator.isNotNull(userId) && inherit;
 
