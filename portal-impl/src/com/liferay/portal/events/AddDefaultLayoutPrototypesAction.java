@@ -17,8 +17,6 @@ package com.liferay.portal.events;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.SimpleAction;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -153,10 +151,27 @@ public class AddDefaultLayoutPrototypesAction extends SimpleAction {
 
 		updateLayout(layout);
 
-		addResourcePermissions(
-			layout.getCompanyId(), portletId, layout.getPlid());
+		addResourcePermissions(layout, portletId, RoleConstants.GUEST);
+		addResourcePermissions(layout, portletId, RoleConstants.OWNER);
+		addResourcePermissions(layout, portletId, RoleConstants.SITE_MEMBER);
 
 		return portletId;
+	}
+
+	protected void addResourcePermissions(
+			Layout layout, String portletId, String roleName)
+		throws Exception {
+
+		String rootPortletId = PortletConstants.getRootPortletId(portletId);
+		String primaryKey = PortletPermissionUtil.getPrimaryKey(
+			layout.getPlid(), portletId);
+		Role role = RoleLocalServiceUtil.getRole(
+			layout.getCompanyId(), roleName);
+
+		ResourcePermissionLocalServiceUtil.setResourcePermissions(
+			layout.getCompanyId(), rootPortletId,
+			ResourceConstants.SCOPE_INDIVIDUAL,
+			primaryKey, role.getRoleId(), new String[] {ActionKeys.VIEW});
 	}
 
 	protected void addWebContentPage(
@@ -233,28 +248,5 @@ public class AddDefaultLayoutPrototypesAction extends SimpleAction {
 			layout.getGroupId(), layout.isPrivateLayout(), layout.getLayoutId(),
 			layout.getTypeSettings());
 	}
-
-    protected void addResourcePermissions(
-			long companyId, String portletId, long plid)
-        throws SystemException, PortalException {
-
-		String resourceName = PortletConstants.getRootPortletId(portletId);
-
-		String primaryKey = PortletPermissionUtil.getPrimaryKey(
-			plid, portletId);
-
-		Role guest = RoleLocalServiceUtil.getRole(companyId, RoleConstants.GUEST);
-		Role siteMember = RoleLocalServiceUtil.getRole(companyId, RoleConstants.SITE_MEMBER);
-		Role owner = RoleLocalServiceUtil.getRole(companyId, RoleConstants.OWNER);
-
-		long[] roleIds = new long[] {
-			guest.getRoleId(), siteMember.getRoleId(), owner.getRoleId()};
-
-		for (long roleId : roleIds) {
-			ResourcePermissionLocalServiceUtil.setResourcePermissions(
-				companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
-				primaryKey, roleId, new String[]{ActionKeys.VIEW});
-		}
-    }
 
 }
