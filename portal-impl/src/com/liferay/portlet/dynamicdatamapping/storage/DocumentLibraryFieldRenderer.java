@@ -15,11 +15,13 @@
 package com.liferay.portlet.dynamicdatamapping.storage;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -45,13 +47,22 @@ public class DocumentLibraryFieldRenderer extends BaseFieldRenderer {
 			return StringPool.BLANK;
 		}
 
-		String fieldValueJSON = GetterUtil.getString(fieldValue);
+		JSONObject fieldValueJSON = null;
 
-		JSONObject fieldValueJSONObject = JSONFactoryUtil.createJSONObject(
-			fieldValueJSON);
+		try {
+			fieldValueJSON = JSONFactoryUtil.createJSONObject(
+				String.valueOf(fieldValue));
+		}
+		catch (JSONException e) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to parse JSON", e);
+			}
 
-		long fileEntryGroupId = fieldValueJSONObject.getLong("groupId");
-		String fileEntryUUID = fieldValueJSONObject.getString("uuid");
+			return StringPool.BLANK;
+		}
+
+		long fileEntryGroupId = fieldValueJSON.getLong("groupId");
+		String fileEntryUUID = fieldValueJSON.getString("uuid");
 
 		try {
 			FileEntry fileEntry = DLAppServiceUtil.getFileEntryByUuidAndGroupId(
@@ -71,5 +82,8 @@ public class DocumentLibraryFieldRenderer extends BaseFieldRenderer {
 
 		return StringPool.BLANK;
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		DocumentLibraryFieldRenderer.class);
 
 }
