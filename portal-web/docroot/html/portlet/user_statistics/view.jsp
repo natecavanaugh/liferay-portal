@@ -14,41 +14,44 @@
  */
 --%>
 
-<%@ include file="/html/portlet/users_stats/init.jsp" %>
+<%@ include file="/html/portlet/user_statistics/init.jsp" %>
 
 <%
 PortletURL portletURL = renderResponse.createRenderURL();
 
-List<String> rankingCounters = new ArrayList<String>();
+List<String> rankingNamesList = new ArrayList<String>();
 
 if (rankByParticipation) {
-	rankingCounters.add(SocialActivityCounterConstants.NAME_PARTICIPATION);
+	rankingNamesList.add(SocialActivityCounterConstants.NAME_PARTICIPATION);
 }
 
 if (rankByContribution) {
-	rankingCounters.add(SocialActivityCounterConstants.NAME_CONTRIBUTION);
+	rankingNamesList.add(SocialActivityCounterConstants.NAME_CONTRIBUTION);
 }
 
-List<String> selectedCounters = new ArrayList<String>();
+String[] rankingNames = rankingNamesList.toArray(new String[rankingNamesList.size()]);
 
-selectedCounters.add(SocialActivityCounterConstants.NAME_CONTRIBUTION);
-selectedCounters.add(SocialActivityCounterConstants.NAME_PARTICIPATION);
-
-if (displayAdditionalCounters) {
-	for (int displayCounterIndex : displayCounterIndexes) {
-		selectedCounters.add(PrefsParamUtil.getString(preferences, request, "displayCounter" + displayCounterIndex));
-	}
-}
-
-if (rankingCounters.size() > 0) {
-
+if (!rankingNamesList.isEmpty()) {
 	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, 5, portletURL, null, null);
 
-	int total = SocialActivityCounterLocalServiceUtil.getUserActivityCounters(scopeGroupId, rankingCounters.toArray(new String[rankingCounters.size()]));
+	int total = SocialActivityCounterLocalServiceUtil.getUserActivityCounters(scopeGroupId, rankingNames);
 
 	searchContainer.setTotal(total);
 
-	List<Tuple> results = SocialActivityCounterLocalServiceUtil.getUserActivityCounters(scopeGroupId, rankingCounters.toArray(new String[rankingCounters.size()]), selectedCounters.toArray(new String[selectedCounters.size()]), searchContainer.getStart(), searchContainer.getEnd());
+	List<String> selectedNamesList = new ArrayList<String>();
+
+	selectedNamesList.add(SocialActivityCounterConstants.NAME_CONTRIBUTION);
+	selectedNamesList.add(SocialActivityCounterConstants.NAME_PARTICIPATION);
+
+	String[] selectedNames = selectedNamesList.toArray(new String[selectedNamesList.size()]);
+
+	if (displayAdditionalCounters) {
+		for (int displayCounterNameIndex : displayCounterNameIndexes) {
+			selectedNamesList.add(PrefsParamUtil.getString(preferences, request, "displayCounterName" + displayCounterNameIndex));
+		}
+	}
+
+	List<Tuple> results = SocialActivityCounterLocalServiceUtil.getUserActivityCounters(scopeGroupId, rankingNames, selectedNames, searchContainer.getStart(), searchContainer.getEnd());
 
 	searchContainer.setResults(results);
 
@@ -61,24 +64,22 @@ if (rankingCounters.size() > 0) {
 
 		// User display
 
-		row.addJSP("/html/portlet/users_stats/user_display.jsp", application, request, response);
+		row.addJSP("/html/portlet/user_statistics/user_display.jsp", application, request, response);
 
 		// Add result row
 
 		resultRows.add(row);
 	}
 
-	String rankingCountersMessage = LanguageUtil.format(pageContext, rankingCounters.get(0), StringPool.BLANK);
+	String rankingNamesMessage = LanguageUtil.format(pageContext, rankingNames[0], StringPool.BLANK);
 
-	if (rankingCounters.size() > 1) {
-		for (int i = 1; i < rankingCounters.size(); i++) {
-			rankingCountersMessage = LanguageUtil.format(pageContext, "x-and-y", new Object[] {rankingCountersMessage, rankingCounters.get(i)});
-		}
+	for (int i = 1; i < rankingNames.length; i++) {
+		rankingNamesMessage = LanguageUtil.format(pageContext, "x-and-y", new Object[] {rankingNamesMessage, rankingNames[i]});
 	}
 	%>
 
 	<div class="top-users">
-		<liferay-ui:message arguments="<%= String.valueOf(total) %>" key="top-users-out-of-x" /> <%= LanguageUtil.format(pageContext,"ranking-is-based-on-x", rankingCountersMessage) %>
+		<liferay-ui:message arguments="<%= total %>" key="top-users-out-of-x" /> <%= LanguageUtil.format(pageContext, "ranking-is-based-on-x", rankingNamesMessage) %>
 	</div>
 
 	<c:if test="<%= total > 0 %>">

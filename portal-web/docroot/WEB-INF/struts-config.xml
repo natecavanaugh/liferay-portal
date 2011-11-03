@@ -1484,6 +1484,8 @@
 			<forward name="portlet.portlet_configuration.error" path="portlet.portlet_configuration.error" />
 		</action>
 
+		<action path="/portlet_configuration/edit_user_statistics_display_counters" forward="portlet.user_statistics.edit_display_counters" />
+
 		<action path="/portlet_configuration/export_import" type="com.liferay.portlet.portletconfiguration.action.ExportImportAction">
 			<forward name="portlet.portlet_configuration.error" path="portlet.portlet_configuration.error" />
 			<forward name="portlet.portlet_configuration.export_import" path="portlet.portlet_configuration.export_import" />
@@ -1496,8 +1498,6 @@
 		<action path="/portlet_configuration/update_look_and_feel" type="com.liferay.portlet.portletconfiguration.action.UpdateLookAndFeelAction" />
 
 		<action path="/portlet_configuration/update_title" type="com.liferay.portlet.portletconfiguration.action.UpdateTitleAction" />
-
-		<action path="/portlet_configuration/edit_display_counters" forward="portlet.users_stats.edit_display_counters" />
 
 		<!-- Portlet CSS -->
 
@@ -1733,10 +1733,10 @@
 
 		<action path="/sites_admin/view_teams" forward="portlet.sites_admin.view_teams" />
 
-		<!-- Social Activity Admin -->
+		<!-- Social Activity -->
 
-		<action path="/social_activity_admin/view" type="com.liferay.portlet.socialactivityadmin.action.ViewAction">
-			<forward name="portlet.social_activity_admin.view" path="portlet.social_activity_admin.view" />
+		<action path="/social_activity/view" type="com.liferay.portlet.socialactivity.action.ViewAction">
+			<forward name="portlet.social_activity.view" path="portlet.social_activity.view" />
 		</action>
 
 		<!-- Social Equity Admin -->

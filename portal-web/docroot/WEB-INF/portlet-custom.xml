@@ -2705,16 +2705,33 @@
 		</security-role-ref>
 	</portlet>
 	<portlet>
-		<portlet-name>200</portlet-name>
-		<display-name>Users statistics</display-name>
+		<portlet-name>179</portlet-name>
+		<display-name>Social Activity</display-name>
+		<portlet-class>com.liferay.portlet.StrutsPortlet</portlet-class>
+		<init-param>
+			<name>view-action</name>
+			<value>/social_activity/view</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<resource-bundle>com.liferay.portlet.StrutsResourceBundle</resource-bundle>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+	</portlet>
+	<portlet>
+		<portlet-name>180</portlet-name>
+		<display-name>User Statistics</display-name>
 		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
 		<init-param>
 			<name>view-jsp</name>
-			<value>/html/portlet/users_stats/view.jsp</value>
+			<value>/html/portlet/user_statistics/view.jsp</value>
 		</init-param>
 		<init-param>
 			<name>config-jsp</name>
-			<value>/html/portlet/users_stats/configuration.jsp</value>
+			<value>/html/portlet/user_statistics/configuration.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -2747,23 +2764,6 @@
 		</security-role-ref>
 		<security-role-ref>
 			<role-name>user</role-name>
-		</security-role-ref>
-	</portlet>
-	<portlet>
-		<portlet-name>202</portlet-name>
-		<display-name>Social Activity Admin</display-name>
-		<portlet-class>com.liferay.portlet.StrutsPortlet</portlet-class>
-		<init-param>
-			<name>view-action</name>
-			<value>/social_activity_admin/view</value>
-		</init-param>
-		<expiration-cache>0</expiration-cache>
-		<supports>
-			<mime-type>text/html</mime-type>
-		</supports>
-		<resource-bundle>com.liferay.portlet.StrutsResourceBundle</resource-bundle>
-		<security-role-ref>
-			<role-name>administrator</role-name>
 		</security-role-ref>
 	</portlet>
 	<custom-portlet-mode>

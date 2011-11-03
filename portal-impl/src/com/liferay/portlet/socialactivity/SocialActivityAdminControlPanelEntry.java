@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.socialactivityadmin;
+package com.liferay.portlet.socialactivity;
 
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.security.permission.PermissionChecker;
@@ -25,19 +25,19 @@ import com.liferay.portlet.BaseControlPanelEntry;
 public class SocialActivityAdminControlPanelEntry
 	extends BaseControlPanelEntry {
 
+	public boolean isVisible(
+			PermissionChecker permissionChecker, Portlet portlet)
+		throws Exception {
+
+		return false;
+	}
+
 	@Override
 	public boolean isVisible(
 			Portlet portlet, String category, ThemeDisplay themeDisplay)
 		throws Exception {
 
 		return super.isVisible(portlet, category, themeDisplay);
-	}
-
-	public boolean isVisible(
-			PermissionChecker permissionChecker, Portlet portlet)
-		throws Exception {
-
-		return false;
 	}
 
 }
