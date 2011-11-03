@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.service.ClassNameServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.GroupServiceUtil;
 import com.liferay.portlet.asset.AssetCategoryException;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetCategoryConstants;
@@ -49,7 +48,7 @@ public class BaseAssetEntryValidator implements AssetEntryValidator {
 			AssetVocabularyLocalServiceUtil.getGroupVocabularies(
 				groupId, false);
 
-		Group group = GroupServiceUtil.getGroup(groupId);
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
 
 		if (!group.isCompany()) {
 			try {
