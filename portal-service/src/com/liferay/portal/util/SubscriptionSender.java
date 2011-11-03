@@ -14,7 +14,7 @@
 
 package com.liferay.portal.util;
 
-import com.liferay.mail.model.Attachment;
+import com.liferay.mail.model.FileAttachment;
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -63,22 +63,22 @@ import javax.mail.internet.InternetAddress;
  */
 public class SubscriptionSender implements Serializable {
 
-	public void addAttachment(File file) {
-		addAttachment(file, null);
+	public void addFileAttachment(File file) {
+		addFileAttachment(file, null);
 	}
 
-	public void addAttachment(File file, String fileName) {
+	public void addFileAttachment(File file, String fileName) {
 		if (file == null) {
 			return;
 		}
 
-		if (attachments == null) {
-			attachments = new ArrayList<Attachment>();
+		if (fileAttachments == null) {
+			fileAttachments = new ArrayList<FileAttachment>();
 		}
 
-		Attachment attachment = new Attachment(file, fileName);
+		FileAttachment attachment = new FileAttachment(file, fileName);
 
-		attachments.add(attachment);
+		fileAttachments.add(attachment);
 	}
 
 	public void addPersistedSubscribers(String className, long classPK) {
@@ -550,10 +550,10 @@ public class SubscriptionSender implements Serializable {
 		MailMessage mailMessage = new MailMessage(
 			from, to, processedSubject, processedBody, htmlFormat);
 
-		if (attachments != null) {
-			for (Attachment attachment : attachments) {
-				mailMessage.addAttachment(
-					attachment.getFile(), attachment.getFileName());
+		if (fileAttachments != null) {
+			for (FileAttachment fileAttachment : fileAttachments) {
+				mailMessage.addFileAttachment(
+					fileAttachment.getFile(), fileAttachment.getFileName());
 			}
 		}
 
@@ -588,10 +588,11 @@ public class SubscriptionSender implements Serializable {
 		MailServiceUtil.sendEmail(mailMessage);
 	}
 
-	protected List<Attachment> attachments = new ArrayList<Attachment>();
 	protected String body;
 	protected boolean bulk;
 	protected long companyId;
+	protected List<FileAttachment> fileAttachments =
+		new ArrayList<FileAttachment>();
 	protected String fromAddress;
 	protected String fromName;
 	protected long groupId;
