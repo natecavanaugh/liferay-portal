@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/users_stats/init.jsp" %>
+<%@ include file="/html/portlet/user_statistics/init.jsp" %>
 
 <%
 String tabs2 = ParamUtil.getString(request, "tabs2");
@@ -31,25 +31,25 @@ String redirect = ParamUtil.getString(request, "redirect");
 	<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL.toString() %>" />
 
 	<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="topUsersRankingsPanel" persistState="<%= true %>" title="ranking">
-		<aui:input label='<%= LanguageUtil.format(pageContext, "rank-on-x", LanguageUtil.format(pageContext, "participation", false), false) %>' name="preferences--rankByParticipation--" type="checkbox" value="<%= rankByParticipation %>" />
+		<aui:input label="rank-by-contribution" name="preferences--rankByContribution--" type="checkbox" value="<%= rankByContribution %>" />
 
-		<aui:input label='<%= LanguageUtil.format(pageContext, "rank-on-x", LanguageUtil.format(pageContext, "contribution", false), false) %>' name="preferences--rankByContribution--" type="checkbox" value="<%= rankByContribution %>" />
+		<aui:input label="rank-by-participation" name="preferences--rankByParticipation--" type="checkbox" value="<%= rankByParticipation %>" />
 	</liferay-ui:panel>
 
 	<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="topUsersCountersPanel" persistState="<%= true %>" title="counters">
-		<div id="<portlet:namespace />displayCounters">
+		<div id="<portlet:namespace />displayCounterNames">
 			<aui:input label='display-additional-counters' name="preferences--displayAdditionalCounters--" type="checkbox" value="<%= displayAdditionalCounters %>" />
 
 			<aui:fieldset label="">
 
 				<%
-				for (int displayCounterIndex : displayCounterIndexes) {
-					request.setAttribute("configuration.jsp-index", String.valueOf(displayCounterIndex));
+				for (int displayCounterNameIndex : displayCounterNameIndexes) {
+					request.setAttribute("configuration.jsp-index", String.valueOf(displayCounterNameIndex));
 				%>
 
 					<div class="lfr-form-row">
 						<div class="row-fields">
-							<liferay-util:include page="/html/portlet/users_stats/edit_display_counter.jsp" />
+							<liferay-util:include page="/html/portlet/user_statistics/edit_display_counter.jsp" />
 						</div>
 					</div>
 
@@ -63,9 +63,9 @@ String redirect = ParamUtil.getString(request, "redirect");
 		<aui:script use="liferay-auto-fields">
 			var autoFields = new Liferay.AutoFields(
 				{
-					contentBox: '#<portlet:namespace />displayCounters > fieldset',
-					fieldIndexes: '<portlet:namespace />preferences--displayCounterIndexes--',
-					url: '<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/portlet_configuration/edit_display_counters" /></portlet:renderURL>'
+					contentBox: '#<portlet:namespace />displayCounterNames > fieldset',
+					fieldIndexes: '<portlet:namespace />preferences--displayCounterNameIndexes--',
+					url: '<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/portlet_configuration/edit_user_statistics_display_counters" /></portlet:renderURL>'
 				}
 			).render();
 		</aui:script>

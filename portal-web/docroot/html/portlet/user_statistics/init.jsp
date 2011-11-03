@@ -32,17 +32,18 @@ if (Validator.isNotNull(portletResource)) {
 }
 
 boolean displayAdditionalCounters = GetterUtil.getBoolean(PrefsParamUtil.getString(preferences, request, "displayAdditionalCounters"), true);
-boolean rankByParticipation = GetterUtil.getBoolean(PrefsParamUtil.getString(preferences, request, "rankByParticipation"), true);
-boolean rankByContribution = GetterUtil.getBoolean(PrefsParamUtil.getString(preferences, request, "rankByContribution"), true);
 
-String displayCounterIndexesParam = PrefsParamUtil.getString(preferences, request, "displayCounterIndexes");
+int[] displayCounterNameIndexes = null;
 
-int[] displayCounterIndexes = null;
+String displayCounterNameIndexesParam = PrefsParamUtil.getString(preferences, request, "displayCounterNameIndexes");
 
-if (Validator.isNotNull(displayCounterIndexesParam)) {
-	displayCounterIndexes = StringUtil.split(displayCounterIndexesParam, 0);
+if (Validator.isNotNull(displayCounterNameIndexesParam)) {
+	displayCounterNameIndexes = StringUtil.split(displayCounterNameIndexesParam, 0);
 }
 else {
-	displayCounterIndexes = new int[] {0};
+	displayCounterNameIndexes = new int[] {0};
 }
+
+boolean rankByContribution = GetterUtil.getBoolean(PrefsParamUtil.getString(preferences, request, "rankByContribution"), true);
+boolean rankByParticipation = GetterUtil.getBoolean(PrefsParamUtil.getString(preferences, request, "rankByParticipation"), true);
 %>

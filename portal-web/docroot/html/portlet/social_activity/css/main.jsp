@@ -16,7 +16,7 @@
 
 <%@ include file="/html/portlet/css_init.jsp" %>
 
-.portlet-social-activity-admin h4 {
+.portlet-social-activity h4 {
 	font-size: 1.2em;
 	margin-bottom: 10px;
 }

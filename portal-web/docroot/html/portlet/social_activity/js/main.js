@@ -33,13 +33,11 @@ AUI().add(
 
 		var STR_CONTENT_FIELD = 'content-field';
 
-		var STR_CONTRIBUTION = 'Contribution';
+		var STR_CONTRIBUTION_INCREMENT = 'contributionIncrement';
 
 		var STR_CONTRIBUTION_LIMIT_PERIOD = 'contributionLimitPeriod';
 
 		var STR_CONTRIBUTION_LIMIT_VALUE = 'contributionLimitValue';
-
-		var STR_CONTRIBUTION_VALUE = 'contributionValue';
 
 		var STR_DATA_MODEL_NAME = 'data-modelName';
 
@@ -49,19 +47,17 @@ AUI().add(
 
 		var STR_EXPAND = Liferay.Language.get('expand');
 
-		var STR_JSON_SETTINGS = 'jsonSettings';
-
 		var STR_LANGUAGE_KEY = 'languageKey';
 
 		var STR_LOCALIZED_NAME = 'localizedName';
 
-		var STR_PARTICIPATION = 'Participation';
+		var STR_PARTICIPATION_INCREMENT = 'participationIncrement';
 
 		var STR_PARTICIPATION_LIMIT_PERIOD = 'participationLimitPeriod';
 
 		var STR_PARTICIPATION_LIMIT_VALUE = 'participationLimitValue';
 
-		var STR_PARTICIPATION_VALUE = 'participationValue';
+		var STR_SAVE = Liferay.Language.get('save');
 
 		var STR_SELECTED = 'selected';
 
@@ -72,6 +68,8 @@ AUI().add(
 		var STR_SETTINGS_DISPLAY = 'settings-display';
 
 		var STR_SETTINGS_FIELD = 'settings-field';
+
+		var STR_SETTINGS_JSON = 'settingsJSON';
 
 		var STR_SETTINGS_LIMIT = 'settings-limit';
 
@@ -105,13 +103,13 @@ AUI().add(
 
 		var TPL_BUTTON_HOLDER = '<div class="' + [STR_SETTINGS_BUTTON_HOLDER].join(STR_SPACE) + ' aui-button aui-button-submit">' +
 				'<span class="aui-button-content">' +
-					'<input class="aui-button-input aui-button-input-submit" type="submit" value="Save"/>' +
+					'<input class="aui-button-input aui-button-input-submit" type="submit" value="' + STR_SAVE + '" />' +
 				'</span>' +
 			'</div>';
 
 		var TPL_BOUNDING_BOX_SETTINGS_FIELD = '<li class="' + [CSS_TOKEN, STR_SETTINGS_FIELD, STR_ACTION_FIELD].join(STR_SPACE) + '"></li>';
 
-		var TPL_CONTRIBUTION_VALUE = '<span class="contribution-value"></span>';
+		var TPL_CONTRIBUTION_INCREMENT = '<span class="contribution-increment"></span>';
 
 		var TPL_FIELD = new A.Template(
 			'<span class="settings-label">{labelText}</span>',
@@ -119,17 +117,17 @@ AUI().add(
 				'<div class="field-values">',
 					'<span class="field field-text">{firstText}</span>',
 
-					'<select id="{languageKey}_participationValue" class="settings-field-node">',
-						'<tpl for="participationValues">',
-							'<option {[ (values == parent.participationValue) ? "selected" : "" ]} title="{.}" value="{.}">{.}</option>',
+					'<select id="{languageKey}_participationIncrement" class="settings-field-node">',
+						'<tpl for="participationIncrements">',
+							'<option {[ (values == parent.participationIncrement) ? "selected" : "" ]} title="{.}" value="{.}">{.}</option>',
 						'</tpl>',
 					'</select>',
 
 					'<span class="field field-text">{secondText}</span>',
 
-					'<select id="{languageKey}_contributionValue" class="settings-field-node">',
-						'<tpl for="contributionValues">',
-							'<option {[ (values == parent.contributionValue) ? "selected" : "" ]} title="{.}" value="{.}">{.}</option>',
+					'<select id="{languageKey}_contributionIncrement" class="settings-field-node">',
+						'<tpl for="contributionIncrements">',
+							'<option {[ (values == parent.contributionIncrement) ? "selected" : "" ]} title="{.}" value="{.}">{.}</option>',
 						'</tpl>',
 					'</select>',
 
@@ -155,9 +153,10 @@ AUI().add(
 							'</select>',
 							'<select id="{parent.languageKey}_{type}LimitPeriod" class="settings-field-node">',
 								'<tpl for="limitPeriods">',
-									'<option {[ (values == parent.limitPeriod) ? "selected" : "" ]} title="{.}" value="{$index}">{.}</option>',
+									'<option {[ ($index == parent.limitPeriod) ? "selected" : "" ]} title="{.}" value="{$index}">{.}</option>',
 								'</tpl>',
 							'</select>',
+							'<span class="field field-text">.</span>',
 						'</div>',
 					'</tpl>',
 				'</div>',
@@ -166,7 +165,7 @@ AUI().add(
 
 		var TPL_SETTINGS_DISPLAY = new A.Template(
 			'<div class="settings-header yui3-widget-hd">',
-				'<div class="settings-header-label">{headerText}:</div>',
+				'<div class="settings-header-label">{headerText}</div>',
 				'<ul class="settings-actions">',
 					'<li class="actions-conjunction aui-helper-hidden">{conjunctionText}</li>',
 				'</ul>',
@@ -199,7 +198,7 @@ AUI().add(
 
 						var socialActivityForm = A.one(SELECTOR_UPDATE_SOCIAL_ACTIVITY_FORM);
 
-						var settingsInput = instance._getItemByName(socialActivityForm, STR_JSON_SETTINGS);
+						var settingsInput = instance._getItemByName(socialActivityForm, STR_SETTINGS_JSON);
 
 						var settings = instance.byId(STR_SETTINGS);
 
@@ -314,7 +313,7 @@ AUI().add(
 						var instance = this;
 
 						return {
-							actions: settingsDisplay.getJSONSettings(),
+							actions: settingsDisplay.getSettingsJSON(),
 							modelName: instance._originalConfig.modelName
 						};
 					},
@@ -403,13 +402,13 @@ AUI().add(
 
 						var originalConfig = instance._originalConfig;
 
-						var strings = originalConfig.strings;
+						var activityDefinitionLanguageKeys = originalConfig.activityDefinitionLanguageKeys;
 
 						var settingsNode = TPL_SETTINGS_DISPLAY.render(
 							{
 								conjunctionText: Liferay.Language.get('or').toLowerCase(),
 								headerText: Liferay.Language.get('social-activity-setting-header-label'),
-								saveText: Liferay.Language.get('save')
+								saveText: STR_SAVE
 							}
 						);
 
@@ -419,7 +418,7 @@ AUI().add(
 						A.each(
 							originalConfig.dataSet,
 							function(item, index, collection) {
-								item.localizedName = strings[item.modelName][item.languageKey];
+								item.localizedName = activityDefinitionLanguageKeys[item.modelName + '.' + item.languageKey];
 
 								item.settingsDisplay = instance;
 								item.counterSettings = originalConfig.counterSettings;
@@ -458,18 +457,18 @@ AUI().add(
 						instance.after('settings-field:collapsedChange', instance._afterSettingsFieldCollapsed);
 					},
 
-					getJSONSettings: function() {
+					getSettingsJSON: function() {
 						var instance = this;
 
-						var jsonSettings = [];
+						var settingsJSON = [];
 
 						var settingsFields = instance._settingsFields;
 
 						for (var i in settingsFields) {
-							jsonSettings.push(settingsFields[i].getJSONSettings());
+							settingsJSON.push(settingsFields[i].getSettingsJSON());
 						}
 
-						return jsonSettings;
+						return settingsJSON;
 					},
 
 					_afterSettingsFieldCollapsed: function(event) {
@@ -579,15 +578,15 @@ AUI().add(
 						value: false
 					},
 
+					contributionIncrement: {
+						value: 0
+					},
+
 					contributionLimitPeriod: {
 						value: 1
 					},
 
 					contributionLimitValue: {
-						value: 0
-					},
-
-					contributionValue: {
 						value: 0
 					},
 
@@ -599,15 +598,15 @@ AUI().add(
 						value: STR_BLANK
 					},
 
+					participationIncrement: {
+						value: 0
+					},
+
 					participationLimitPeriod: {
 						value: 1
 					},
 
 					participationLimitValue: {
-						value: 0
-					},
-
-					participationValue: {
 						value: 0
 					},
 
@@ -619,7 +618,7 @@ AUI().add(
 
 				NAME: STR_SETTINGS_FIELD,
 
-				UI_ATTRS: ['collapsed', 'contributionValue'],
+				UI_ATTRS: ['collapsed', 'contributionIncrement'],
 
 				prototype: {
 					BOUNDING_TEMPLATE: TPL_BOUNDING_BOX_SETTINGS_FIELD,
@@ -632,7 +631,7 @@ AUI().add(
 						instance._counterSettings = config.counterSettings;
 						instance._settingsDisplay = config.settingsDisplay;
 
-						var valueKey = STR_BLANK;
+						var incrementKey = STR_BLANK;
 						var limitValueKey = STR_BLANK;
 						var limitPeriodKey = STR_BLANK;
 
@@ -641,12 +640,12 @@ AUI().add(
 						for (var i = 0; i < counters.length; i++) {
 							var action = counters[i];
 
-							valueKey = STR_CONTRIBUTION_VALUE;
+							incrementKey = STR_CONTRIBUTION_INCREMENT;
 							limitValueKey = STR_CONTRIBUTION_LIMIT_VALUE;
 							limitPeriodKey = STR_CONTRIBUTION_LIMIT_PERIOD;
 
 							if (action.name == 'participation') {
-								valueKey = STR_PARTICIPATION_VALUE;
+								incrementKey = STR_PARTICIPATION_INCREMENT;
 								limitValueKey = STR_PARTICIPATION_LIMIT_VALUE;
 								limitPeriodKey = STR_PARTICIPATION_LIMIT_PERIOD;
 							}
@@ -654,7 +653,7 @@ AUI().add(
 								continue;
 							}
 
-							attrs[valueKey] = action.increment;
+							attrs[incrementKey] = action.increment;
 							attrs[limitValueKey] = action.limitValue;
 							attrs[limitPeriodKey] = action.limitPeriod;
 						}
@@ -671,8 +670,6 @@ AUI().add(
 
 						var counterSettings = instance._counterSettings;
 
-						var text = Liferay.Language.get('social-activity-setting-limit-firsttext');
-
 						var limitNode = TPL_FIELD.render(
 							{
 								buttons: [
@@ -686,20 +683,20 @@ AUI().add(
 										type: 'close'
 									}
 								],
-								contributionValue: instance.get(STR_CONTRIBUTION_VALUE),
-								contributionValues: counterSettings.contributionValues,
-								firstText: Liferay.Language.get('social-activity-setting-firsttext'),
+								contributionIncrement: instance.get(STR_CONTRIBUTION_INCREMENT),
+								contributionIncrements: counterSettings.contributionIncrements,
+								firstText: Liferay.Language.get('social-activity-setting-first-text'),
 								labelText: instance.get(STR_LOCALIZED_NAME),
 								languageKey: instance.get(STR_LANGUAGE_KEY),
-								participationValue: instance.get(STR_PARTICIPATION_VALUE),
-								participationValues: counterSettings.participationValues,
+								participationIncrement: instance.get(STR_PARTICIPATION_INCREMENT),
+								participationIncrements: counterSettings.participationIncrements,
 								rows: [
 									{
 										limitPeriod: instance.get(STR_CONTRIBUTION_LIMIT_PERIOD),
 										limitPeriods: COL_LIMIT_TYPE,
 										limitValue: instance.get(STR_CONTRIBUTION_LIMIT_VALUE),
 										limitValues: counterSettings.contributionLimitValues,
-										text: Lang.sub(text, [STR_CONTRIBUTION]),
+										text: Liferay.Language.get('social-activity-setting-contribution-limit-first-text'),
 										type: 'contribution'
 									},
 									{
@@ -707,13 +704,13 @@ AUI().add(
 										limitPeriods: COL_LIMIT_TYPE,
 										limitValue: instance.get(STR_PARTICIPATION_LIMIT_VALUE),
 										limitValues: counterSettings.participationLimitValues,
-										text: Lang.sub(text, [STR_PARTICIPATION]),
+										text: Liferay.Language.get('social-activity-setting-participation-limit-first-text'),
 										type: 'participation'
 									}
 								],
-								secondText: Liferay.Language.get('social-activity-setting-secondtext'),
-								thirdText: Liferay.Language.get('social-activity-setting-thirdtext'),
-								fourthText: Lang.sub(Liferay.Language.get('social-activity-setting-fourthtext'), [TPL_CONTRIBUTION_VALUE])
+								secondText: Liferay.Language.get('social-activity-setting-second-text'),
+								thirdText: Liferay.Language.get('social-activity-setting-third-text'),
+								fourthText: Lang.sub(Liferay.Language.get('social-activity-setting-fourth-text'), [TPL_CONTRIBUTION_INCREMENT])
 							}
 						);
 
@@ -734,19 +731,19 @@ AUI().add(
 						instance.set('collapsed', !instance.get(STR_ACTIVE));
 					},
 
-					getJSONSettings: function() {
+					getSettingsJSON: function() {
 						var instance = this;
 
 						return instance.getAttrs(
 							[
 								STR_ACTIVITY_TYPE,
-								STR_CONTRIBUTION_LIMIT_VALUE,
+								STR_CONTRIBUTION_INCREMENT,
 								STR_CONTRIBUTION_LIMIT_PERIOD,
-								STR_CONTRIBUTION_VALUE,
+								STR_CONTRIBUTION_LIMIT_VALUE,
 								STR_LANGUAGE_KEY,
-								STR_PARTICIPATION_LIMIT_VALUE,
+								STR_PARTICIPATION_INCREMENT,
 								STR_PARTICIPATION_LIMIT_PERIOD,
-								STR_PARTICIPATION_VALUE
+								STR_PARTICIPATION_LIMIT_VALUE
 							]
 						);
 					},
@@ -762,7 +759,7 @@ AUI().add(
 					_getActive: function() {
 						var instance = this;
 
-						return (instance.get(STR_CONTRIBUTION_VALUE) > 0 || instance.get(STR_PARTICIPATION_VALUE) > 0);
+						return (instance.get(STR_CONTRIBUTION_INCREMENT) > 0 || instance.get(STR_PARTICIPATION_INCREMENT) > 0);
 					},
 
 					_selectOnChange: function(event) {
@@ -780,12 +777,12 @@ AUI().add(
 					_setToDefaultValue: function() {
 						var instance = this;
 
-						instance.reset(STR_CONTRIBUTION_VALUE);
-						instance.reset(STR_CONTRIBUTION_LIMIT_VALUE);
+						instance.reset(STR_CONTRIBUTION_INCREMENT);
 						instance.reset(STR_CONTRIBUTION_LIMIT_PERIOD);
-						instance.reset(STR_PARTICIPATION_VALUE);
-						instance.reset(STR_PARTICIPATION_LIMIT_VALUE);
+						instance.reset(STR_CONTRIBUTION_LIMIT_VALUE);
+						instance.reset(STR_PARTICIPATION_INCREMENT);
 						instance.reset(STR_PARTICIPATION_LIMIT_PERIOD);
+						instance.reset(STR_PARTICIPATION_LIMIT_VALUE);
 					},
 
 					_uiSetCollapsed: function(value) {
@@ -797,16 +794,16 @@ AUI().add(
 						boundingBox.toggleClass(CSS_TOKEN, value);
 					},
 
-					_uiSetContributionValue: function(value, src) {
+					_uiSetContributionIncrement: function(value, src) {
 						var instance = this;
 
-						var contributionValueNode = instance.get(STR_CONTENT_BOX).one('.contribution-value');
+						var contributionIncrementNode = instance.get(STR_CONTENT_BOX).one('.contribution-increment');
 
-						if (contributionValueNode) {
-							contributionValueNode.html(value);
+						if (contributionIncrementNode) {
+							contributionIncrementNode.html(value);
 
 							if (src == STR_UI) {
-								var parent = contributionValueNode.ancestor();
+								var parent = contributionIncrementNode.ancestor();
 
 								parent.setStyle('backgroundColor', SocialActivity.FADE_COLOR_START);
 
