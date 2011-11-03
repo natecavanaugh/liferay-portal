@@ -89,7 +89,7 @@ public class SitesUtil {
 		if ((renderResponse == null) ||
 			portletName.equals(PortletKeys.GROUP_PAGES) ||
 			portletName.equals(PortletKeys.MY_PAGES)) {
-			
+
 			return;
 		}
 
