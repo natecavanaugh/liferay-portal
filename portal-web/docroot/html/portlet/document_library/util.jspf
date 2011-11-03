@@ -47,7 +47,10 @@ private static final String _getPreviewURL(FileEntry fileEntry, FileVersion file
 
 	if (appendToken) {
 		sb.append("&t=");
-		sb.append(fileVersion.getModifiedDate().getTime());
+
+		Date modifiedDate = fileVersion.getModifiedDate();
+
+		sb.append(modifiedDate.getTime());
 	}
 
 	sb.append(queryString);

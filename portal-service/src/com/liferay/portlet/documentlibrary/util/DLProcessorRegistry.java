@@ -22,9 +22,9 @@ import com.liferay.portal.kernel.repository.model.FileVersion;
  */
 public interface DLProcessorRegistry {
 
-	public void cleanup(FileEntry fileEntry);
+	public void cleanUp(FileEntry fileEntry);
 
-	public void cleanup(FileVersion fileVersion);
+	public void cleanUp(FileVersion fileVersion);
 
 	public void register(DLProcessor dlProcessor);
 

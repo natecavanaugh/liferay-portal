@@ -49,12 +49,12 @@ import java.util.Vector;
  */
 public class ImageProcessor extends DLPreviewableProcessor {
 
-	public void cleanup(FileEntry fileEntry) {
+	public void cleanUp(FileEntry fileEntry) {
 		deleteFiles(fileEntry, null);
 	}
 
-	public void cleanup(FileVersion fileVersion) {
-		String type = _instance._getImageType(fileVersion);
+	public void cleanUp(FileVersion fileVersion) {
+		String type = _instance._getType(fileVersion);
 
 		deleteFiles(fileVersion, type);
 	}
@@ -66,7 +66,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 	public static InputStream getCustom1AsStream(FileVersion fileVersion)
 		throws Exception {
 
-		String type = _instance._getImageType(fileVersion);
+		String type = _instance._getType(fileVersion);
 
 		return _instance._getCustomAsStream(fileVersion, type, 1);
 	}
@@ -74,7 +74,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 	public static long getCustom1FileSize(FileVersion fileVersion)
 		throws Exception {
 
-		String type = _instance._getImageType(fileVersion);
+		String type = _instance._getType(fileVersion);
 
 		return _instance._getCustomFileSize(fileVersion, type, 1);
 	}
@@ -82,7 +82,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 	public static InputStream getCustom2AsStream(FileVersion fileVersion)
 		throws Exception {
 
-		String type = _instance._getImageType(fileVersion);
+		String type = _instance._getType(fileVersion);
 
 		return _instance._getCustomAsStream(fileVersion, type, 2);
 	}
@@ -90,7 +90,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 	public static long getCustom2FileSize(FileVersion fileVersion)
 		throws Exception {
 
-		String type = _instance._getImageType(fileVersion);
+		String type = _instance._getType(fileVersion);
 
 		return _instance._getCustomFileSize(fileVersion, type, 2);
 	}
@@ -102,7 +102,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 	public static InputStream getThumbnailAsStream(FileVersion fileVersion)
 		throws Exception {
 
-		String type = _instance._getImageType(fileVersion);
+		String type = _instance._getType(fileVersion);
 
 		return _instance.doGetThumbnailAsStream(fileVersion, type);
 	}
@@ -110,7 +110,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 	public static long getThumbnailFileSize(FileVersion fileVersion)
 		throws Exception {
 
-		String type = _instance._getImageType(fileVersion);
+		String type = _instance._getType(fileVersion);
 
 		return _instance.doGetThumbnailFileSize(fileVersion, type);
 	}
@@ -165,7 +165,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 				return;
 			}
 
-			String type = _instance._getImageType(fileVersion);
+			String type = _instance._getType(fileVersion);
 
 			_saveThumbnailImage(
 				fileVersion, renderedImage,
@@ -244,7 +244,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 			_getCustomFilePath(fileVersion, type, index));
 	}
 
-	private String _getImageType(FileVersion fileVersion) {
+	private String _getType(FileVersion fileVersion) {
 		String type = fileVersion.getExtension();
 
 		if (type.equals("jpeg")) {
@@ -256,7 +256,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 
 	private boolean _hasCustomImage(FileVersion fileVersion, int index) {
 		try {
-			String type = _getImageType(fileVersion);
+			String type = _getType(fileVersion);
 
 			return DLStoreUtil.hasFile(
 				fileVersion.getCompanyId(), REPOSITORY_ID,
@@ -300,7 +300,7 @@ public class ImageProcessor extends DLPreviewableProcessor {
 
 	private boolean _hasThumbnailImage(FileVersion fileVersion) {
 		try {
-			String imageType = _getImageType(fileVersion);
+			String imageType = _getType(fileVersion);
 
 			return DLStoreUtil.hasFile(
 				fileVersion.getCompanyId(), REPOSITORY_ID,

@@ -26,11 +26,11 @@ import java.io.InputStream;
 public abstract class DefaultPreviewableProcessor
 	extends DLPreviewableProcessor {
 
-	public void cleanup(FileEntry fileEntry) {
+	public void cleanUp(FileEntry fileEntry) {
 		deleteFiles(fileEntry, getThumbnailType());
 	}
 
-	public void cleanup(FileVersion fileVersion) {
+	public void cleanUp(FileVersion fileVersion) {
 		deleteFiles(fileVersion, getThumbnailType());
 	}
 

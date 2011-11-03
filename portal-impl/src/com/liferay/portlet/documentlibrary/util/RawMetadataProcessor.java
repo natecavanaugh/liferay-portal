@@ -54,10 +54,10 @@ import java.util.Map;
  */
 public class RawMetadataProcessor implements DLProcessor {
 
-	public void cleanup(FileEntry fileEntry) {
+	public void cleanUp(FileEntry fileEntry) {
 	}
 
-	public void cleanup(FileVersion fileVersion) {
+	public void cleanUp(FileVersion fileVersion) {
 	}
 
 	/**

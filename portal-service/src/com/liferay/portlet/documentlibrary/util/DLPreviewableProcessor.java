@@ -75,7 +75,9 @@ public abstract class DLPreviewableProcessor implements DLProcessor {
 			fileEntry.getFileEntryId(), -1, thumbnailType);
 	}
 
-	public static void deleteFiles(FileVersion fileVersion, String thumbnailType) {
+	public static void deleteFiles(
+		FileVersion fileVersion, String thumbnailType) {
+
 		deleteFiles(
 			fileVersion.getCompanyId(), fileVersion.getRepositoryId(),
 			fileVersion.getFileEntryId(), fileVersion.getFileVersionId(),
@@ -95,16 +97,15 @@ public abstract class DLPreviewableProcessor implements DLProcessor {
 		}
 
 		try {
-			String directoryPath =
-				getPathSegment(groupId, fileEntryId, fileVersionId, false);
+			String dirName = getPathSegment(
+				groupId, fileEntryId, fileVersionId, false);
 
 			if (fileVersionId > 0) {
-				directoryPath = directoryPath.concat(StringPool.PERIOD);
-				directoryPath = directoryPath.concat(thumbnailType);
+				dirName = dirName.concat(StringPool.PERIOD);
+				dirName = dirName.concat(thumbnailType);
 			}
 
-			DLStoreUtil.deleteDirectory(
-				companyId, REPOSITORY_ID, directoryPath);
+			DLStoreUtil.deleteDirectory(companyId, REPOSITORY_ID, dirName);
 		}
 		catch (Exception e) {
 		}

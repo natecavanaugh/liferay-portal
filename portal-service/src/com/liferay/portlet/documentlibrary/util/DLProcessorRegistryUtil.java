@@ -22,12 +22,12 @@ import com.liferay.portal.kernel.repository.model.FileVersion;
  */
 public class DLProcessorRegistryUtil {
 
-	public static void cleanup(FileEntry fileEntry) {
-		getDLProcessorRegistry().cleanup(fileEntry);
+	public static void cleanUp(FileEntry fileEntry) {
+		getDLProcessorRegistry().cleanUp(fileEntry);
 	}
 
-	public static void cleanup(FileVersion fileVersion) {
-		getDLProcessorRegistry().cleanup(fileVersion);
+	public static void cleanUp(FileVersion fileVersion) {
+		getDLProcessorRegistry().cleanUp(fileVersion);
 	}
 
 	public static DLProcessorRegistry getDLProcessorRegistry() {

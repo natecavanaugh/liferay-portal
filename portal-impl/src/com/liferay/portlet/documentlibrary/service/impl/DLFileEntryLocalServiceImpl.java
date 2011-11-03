@@ -1581,12 +1581,13 @@ public class DLFileEntryLocalServiceImpl
 			int status, Date statusDate, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
+		dlFileVersion.setModifiedDate(statusDate);
+
 		if (Validator.isNotNull(sourceFileName)) {
 			dlFileVersion.setExtension(extension);
 			dlFileVersion.setMimeType(mimeType);
 		}
 
-		dlFileVersion.setModifiedDate(statusDate);
 		dlFileVersion.setTitle(title);
 		dlFileVersion.setDescription(description);
 		dlFileVersion.setChangeLog(changeLog);

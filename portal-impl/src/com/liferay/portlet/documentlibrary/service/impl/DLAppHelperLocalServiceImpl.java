@@ -109,7 +109,7 @@ public class DLAppHelperLocalServiceImpl
 
 		// File previews
 
-		DLProcessorRegistryUtil.cleanup(fileEntry);
+		DLProcessorRegistryUtil.cleanUp(fileEntry);
 
 		// File ranks
 

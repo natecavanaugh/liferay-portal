@@ -32,9 +32,9 @@ import com.liferay.portal.kernel.repository.model.FileVersion;
  */
 public interface DLProcessor {
 
-	public void cleanup(FileEntry fileEntry);
+	public void cleanUp(FileEntry fileEntry);
 
-	public void cleanup(FileVersion fileVersion);
+	public void cleanUp(FileVersion fileVersion);
 
 	/**
 	 * Launches the processor's work with respect to the given file version.
