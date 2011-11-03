@@ -701,7 +701,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 					article.getLayoutUuid(), displayDateMonth, displayDateDay,
 					displayDateYear, displayDateHour, displayDateMinute,
 					expirationDateMonth, expirationDateDay, expirationDateYear,
-					expirationDateHour,	expirationDateMinute, neverExpire,
+					expirationDateHour, expirationDateMinute, neverExpire,
 					reviewDateMonth, reviewDateDay, reviewDateYear,
 					reviewDateHour, reviewDateMinute, neverReview,
 					article.isIndexable(), article.isSmallImage(),
