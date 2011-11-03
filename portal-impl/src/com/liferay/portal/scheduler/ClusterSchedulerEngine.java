@@ -772,7 +772,7 @@ public class ClusterSchedulerEngine
 				if (_log.isWarnEnabled()) {
 					_log.warn(
 						"Unable to obtain memory scheduler cluster lock. " +
-						"Retrying.");
+							"Trying again.");
 				}
 			}
 		}

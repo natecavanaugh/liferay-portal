@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Lock;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.base.LockLocalServiceBaseImpl;
@@ -200,7 +201,7 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 
 			lock.setNew(true);
 		}
-		else if (lock.getOwner().equals(expectedOwner)) {
+		else if (Validator.equals(lock.getOwner(), expectedOwner)) {
 			lock.setCreateDate(new Date());
 			lock.setClassName(className);
 			lock.setKey(key);
@@ -265,7 +266,7 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 			return;
 		}
 
-		if (lock.getOwner().equals(owner)) {
+		if (Validator.equals(lock.getOwner(), owner)) {
 			deleteLock(lock);
 		}
 	}
