@@ -20,12 +20,12 @@ import java.io.File;
  * @author Barrie Selack
  * @author Brian Wing Shun Chan
  */
-public class Attachment {
+public class FileAttachment {
 
-	public Attachment() {
+	public FileAttachment() {
 	}
 
-	public Attachment(File file, String fileName) {
+	public FileAttachment(File file, String fileName) {
 		_file = file;
 		_fileName = fileName;
 	}
