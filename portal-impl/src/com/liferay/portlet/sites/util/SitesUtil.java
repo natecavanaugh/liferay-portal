@@ -82,34 +82,35 @@ public class SitesUtil {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			com.liferay.portal.kernel.util.WebKeys.THEME_DISPLAY);
 
-		Locale locale = themeDisplay.getLocale();
-
 		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
 
 		String portletName = portletDisplay.getPortletName();
 
-		if ((renderResponse != null) &&
-			!portletName.equals(PortletKeys.GROUP_PAGES) &&
-			!portletName.equals(PortletKeys.MY_PAGES)) {
+		if ((renderResponse == null) ||
+			portletName.equals(PortletKeys.GROUP_PAGES) ||
+			portletName.equals(PortletKeys.MY_PAGES)) {
+			
+			return;
+		}
 
-			if (group.isLayoutPrototype()) {
-				PortalUtil.addPortletBreadcrumbEntry(
-					request, LanguageUtil.get(locale, "page-template"), null);
+		Locale locale = themeDisplay.getLocale();
 
-				PortalUtil.addPortletBreadcrumbEntry(
-					request, group.getDescriptiveName(),
-					redirectURL.toString());
-			}
-			else {
-				PortalUtil.addPortletBreadcrumbEntry(
-					request, group.getDescriptiveName(), null);
-			}
+		if (group.isLayoutPrototype()) {
+			PortalUtil.addPortletBreadcrumbEntry(
+				request, LanguageUtil.get(locale, "page-template"), null);
 
-			if (!group.isLayoutPrototype()) {
-				PortalUtil.addPortletBreadcrumbEntry(
-					request, LanguageUtil.get(locale, pagesName),
-					redirectURL.toString());
-			}
+			PortalUtil.addPortletBreadcrumbEntry(
+				request, group.getDescriptiveName(), redirectURL.toString());
+		}
+		else {
+			PortalUtil.addPortletBreadcrumbEntry(
+				request, group.getDescriptiveName(), null);
+		}
+
+		if (!group.isLayoutPrototype()) {
+			PortalUtil.addPortletBreadcrumbEntry(
+				request, LanguageUtil.get(locale, pagesName),
+				redirectURL.toString());
 		}
 	}
 
