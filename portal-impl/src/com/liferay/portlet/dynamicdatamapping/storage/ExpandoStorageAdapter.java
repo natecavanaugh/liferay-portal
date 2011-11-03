@@ -290,8 +290,8 @@ public class ExpandoStorageAdapter extends BaseStorageAdapter {
 			expression = _parseExpression(condition);
 		}
 
-		DDMStructure ddmStructure =
-			DDMStructureLocalServiceUtil.getDDMStructure(ddmStructureId);
+		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
+			ddmStructureId);
 
 		for (long expandoRowId : expandoRowIds) {
 			List<ExpandoValue> expandoValues =
@@ -312,10 +312,12 @@ public class ExpandoStorageAdapter extends BaseStorageAdapter {
 					if (ddmStructure.hasField(fieldName) &&
 						((fieldNames == null) ||
 						((fieldNames != null) &&
-							fieldNames.contains(fieldName)))) {
+						 fieldNames.contains(fieldName)))) {
 
-						fields.put(
-							new Field(ddmStructureId, fieldName, fieldValue));
+						Field field = new Field(
+							ddmStructureId, fieldName, fieldValue);
+
+						fields.put(field);
 					}
 				}
 
