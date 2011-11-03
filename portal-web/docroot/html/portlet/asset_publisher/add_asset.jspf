@@ -123,27 +123,28 @@ public PortletURL getAddPortletURL(LiferayPortletRequest liferayPortletRequest, 
 
 		addPortletURL.setParameter("referringPortletResource", portletDisplay.getId());
 
-		Map<Long, String> vocabularyMap = new HashMap<Long, String>();
+		Map<Long, String> assetVocabularyAssetCategoryIds = new HashMap<Long, String>();
 
 		for (long assetCategoryId : allAssetCategoryIds) {
 			AssetCategory assetCategory = AssetCategoryLocalServiceUtil.getAssetCategory(assetCategoryId);
 
-			long vocabularyId = assetCategory.getVocabularyId();
+			long assetVocabularyId = assetCategory.getVocabularyId();
 
-			if (vocabularyMap.containsKey(vocabularyId)) {
-				vocabularyMap.put(vocabularyId, vocabularyMap.get(vocabularyId) + "," + String.valueOf(assetCategoryId));
+			if (assetVocabularyAssetCategoryIds.containsKey(assetVocabularyId)) {
+				String assetCategoryIds = assetVocabularyAssetCategoryIds.get(assetVocabularyId);
+
+				assetVocabularyAssetCategoryIds.put(assetVocabularyId, assetCategoryIds + StringPool.COMMA + assetCategoryId);
 			}
 			else {
-				vocabularyMap.put(vocabularyId, String.valueOf(assetCategoryId));
+				assetVocabularyAssetCategoryIds.put(assetVocabularyId, String.valueOf(assetCategoryId));
 			}
 		}
 
-		Iterator itr = vocabularyMap.entrySet().iterator();
+		for (Map.Entry<Long, String> entry : assetVocabularyAssetCategoryIds.entrySet()) {
+			long assetVocabularyId = entry.getKey();
+			String assetCategoryIds = entry.getValue();
 
-		while (itr.hasNext()) {
-			Map.Entry e = (Map.Entry)itr.next();
-
-			addPortletURL.setParameter("assetCategoryIds" + StringPool.UNDERLINE + e.getKey(), (String) e.getValue());
+			addPortletURL.setParameter("assetCategoryIds" + StringPool.UNDERLINE + assetVocabularyId, assetCategoryIds);
 		}
 
 		addPortletURL.setParameter("assetTagNames", StringUtil.merge(allAssetTagNames));
