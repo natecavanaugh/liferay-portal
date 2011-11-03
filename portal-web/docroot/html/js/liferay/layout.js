@@ -36,6 +36,8 @@ AUI().add(
 		var Layout = {
 			EMPTY_COLUMNS: {},
 
+			INITIALIZED: false,
+
 			OVER_NESTED_PORTLET: false,
 
 			PROXY_NODE: A.Node.create('<div class="lfr-portlet-proxy aui-portal-layout-proxy"></div>'),
@@ -179,6 +181,8 @@ AUI().add(
 
 				Liferay.after('closePortlet', Layout._afterPortletClose);
 				Liferay.on('closePortlet', Layout._onPortletClose);
+
+				Layout.INITIALIZED = true;
 			},
 
 			bindDragDropListeners: function() {
@@ -544,7 +548,7 @@ AUI().add(
 				Layout.updateCurrentPortletInfo(portlet);
 
 				if (portlet.test('.portlet-nested-portlets')) {
-					Layout.closeNestedPortlets(portlet);					
+					Layout.closeNestedPortlets(portlet);
 				}
 
 				event.column = column;
