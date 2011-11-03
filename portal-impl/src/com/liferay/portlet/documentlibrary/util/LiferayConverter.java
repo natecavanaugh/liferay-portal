@@ -250,7 +250,7 @@ public abstract class LiferayConverter {
 			return DECODE_VIDEO_THUMBNAIL;
 		}
 
-		if (outputIStreamCoder != null && outputIContainer != null) {
+		if ((outputIStreamCoder != null) && (outputIContainer != null)) {
 			IVideoPicture outputIVideoPicture = null;
 
 			outputIVideoPicture = resampleVideo(
@@ -336,16 +336,14 @@ public abstract class LiferayConverter {
 		}
 	}
 
-	abstract protected IContainer getInputIContainer();
+	protected abstract IContainer getInputIContainer();
 
 	protected long getSeekTimeStamp(int percentage) throws Exception {
 		IContainer inputIContainer = getInputIContainer();
 
-		long seekTimeStamp = VIDEO_THUMBNAIL_NOT_FOUND;
+		long seekTimeStamp = -1;
 
-		long videoMicroseconds = inputIContainer.getDuration();
-
-		long videoSeconds = videoMicroseconds / 1000000L;
+		long videoSeconds = inputIContainer.getDuration() / 1000000L;
 
 		long seekSeconds = ((videoSeconds * percentage) / 100L);
 
@@ -354,19 +352,17 @@ public abstract class LiferayConverter {
 
 			IStreamCoder inputIStreamCoder = inputIStream.getStreamCoder();
 
-			ICodec.Type codecType = inputIStreamCoder.getCodecType();
+			if (inputIStreamCoder.getCodecType() !=
+					ICodec.Type.CODEC_TYPE_VIDEO) {
 
-			if (codecType != ICodec.Type.CODEC_TYPE_VIDEO) {
 				continue;
 			}
 
-			IRational timeBase = inputIStream.getTimeBase();
+			IRational iRational = inputIStream.getTimeBase();
 
-			long denominator = timeBase.getDenominator();
-
-			long numerator = timeBase.getNumerator();
-
-			long timeStampOffset = (denominator / numerator) * seekSeconds;
+			long timeStampOffset =
+				iRational.getDenominator() / iRational.getNumerator() *
+					seekSeconds;
 
 			seekTimeStamp = inputIContainer.getStartTime() + timeStampOffset;
 
@@ -551,9 +547,9 @@ public abstract class LiferayConverter {
 
 			IStreamCoder inputIStreamCoder = inputIStream.getStreamCoder();
 
-			ICodec.Type codecType = inputIStreamCoder.getCodecType();
+			if (inputIStreamCoder.getCodecType() !=
+					ICodec.Type.CODEC_TYPE_VIDEO) {
 
-			if (codecType != ICodec.Type.CODEC_TYPE_VIDEO) {
 				continue;
 			}
 
@@ -613,9 +609,9 @@ public abstract class LiferayConverter {
 
 			IStreamCoder inputIStreamCoder = inputIStream.getStreamCoder();
 
-			ICodec.Type codecType = inputIStreamCoder.getCodecType();
+			if (inputIStreamCoder.getCodecType() !=
+					ICodec.Type.CODEC_TYPE_VIDEO) {
 
-			if (codecType != ICodec.Type.CODEC_TYPE_VIDEO) {
 				continue;
 			}
 
@@ -651,12 +647,9 @@ public abstract class LiferayConverter {
 
 	protected static final int DECODE_VIDEO_THUMBNAIL = 2;
 
-	protected static final int VIDEO_THUMBNAIL_NOT_FOUND = -1;
-
 	private static Log _log = LogFactoryUtil.getLog(LiferayConverter.class);
 
 	private ConverterFactory.Type _converterFactoryType;
-
 	private IConverter _videoIConverter;
 
 }
