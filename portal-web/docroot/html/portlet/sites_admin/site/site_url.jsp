@@ -91,13 +91,7 @@ String privateVirtualHost = ParamUtil.getString(request, "privateVirtualHost", B
 	String taglibLabel = "site-friendly-url";
 
 	if (!liveGroup.hasStagingGroup()) {
-		StringBundler sb = new StringBundler(3);
-
-		sb.append("<span class=\"aui-helper-hidden-accessible\">");
-		sb.append(LanguageUtil.get(pageContext, taglibLabel));
-		sb.append("</span>");
-
-		taglibLabel = sb.toString();
+		taglibLabel = "<span class=\"aui-helper-hidden-accessible\">" + LanguageUtil.get(pageContext, taglibLabel) + "</span>";
 	}
 	%>
 
