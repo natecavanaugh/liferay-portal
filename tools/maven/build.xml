@@ -108,8 +108,8 @@
 				<if>
 					<not>
 						<and>
-							<equals arg1="${packaging}" arg2="war" />
 							<equals arg1="${packaging}" arg2="pom" />
+							<equals arg1="${packaging}" arg2="war" />
 						</and>
 					</not>
 					<then>
@@ -165,7 +165,7 @@
 									<arg value="-DrepositoryId=${lp.maven.repository.id}" />
 									<arg value="-Durl=${lp.maven.repository.url}" />
 									<arg value="-Dversion=${lp.version.maven}" />
-								</exec>								
+								</exec>
 							</then>
 						</if>
 					</then>
@@ -187,8 +187,8 @@
 				<if>
 					<not>
 						<and>
-							<equals arg1="${packaging}" arg2="war" />
 							<equals arg1="${packaging}" arg2="pom" />
+							<equals arg1="${packaging}" arg2="war" />
 						</and>
 					</not>
 					<then>
@@ -232,7 +232,7 @@
 									<arg value="-DrepositoryId=${lp.maven.repository.id}" />
 									<arg value="-Durl=${lp.maven.repository.url}" />
 									<arg value="-Dversion=${lp.version.maven}" />
-								</exec>								
+								</exec>
 							</then>
 						</if>
 					</then>
@@ -309,8 +309,8 @@
 		<if>
 			<not>
 				<and>
-					<equals arg1="${packaging}" arg2="war" />
 					<equals arg1="${packaging}" arg2="pom" />
+					<equals arg1="${packaging}" arg2="war" />
 				</and>
 			</not>
 			<then>
@@ -348,7 +348,7 @@
 							<arg value="-DgroupId=com.liferay.portal" />
 							<arg value="-Dpackaging=jar" />
 							<arg value="-Dversion=${lp.version.maven}" />
-						</exec>								
+						</exec>
 					</then>
 				</if>
 			</then>
