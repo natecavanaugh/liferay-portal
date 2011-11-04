@@ -1589,6 +1589,8 @@ public interface PropsKeys {
 
 	public static final String PORTLET_URL_ESCAPE_XML = "portlet.url.escape.xml";
 
+	public static final String PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS = "portlet.url.refresh.url.reserved.parameters";
+
 	public static final String PORTLET_VIRTUAL_PATH = "portlet.virtual.path";
 
 	public static final String PORTLET_XML_VALIDATE = "portlet.xml.validate";
@@ -1606,8 +1608,6 @@ public interface PropsKeys {
 	public static final String RELEASE_INFO_BUILD_NUMBER = "release.info.build.number";
 
 	public static final String RELEASE_INFO_PREVIOUS_BUILD_NUMBER = "release.info.previous.build.number";
-
-	public static final String RESERVED_REFRESH_URL_PARAMETERS = "reserved.refresh.url.parameters";
 
 	public static final String REQUEST_HEADER_AUTH_IMPORT_FROM_LDAP = "request.header.auth.import.from.ldap";
 

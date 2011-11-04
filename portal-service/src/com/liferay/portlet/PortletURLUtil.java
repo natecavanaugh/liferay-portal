@@ -220,10 +220,9 @@ public class PortletURLUtil {
 
 			Map<String, String[]> parameters = request.getParameterMap();
 
-			String[] reservedRefreshURLParameters = PropsUtil.getArray(
-				PropsKeys.RESERVED_REFRESH_URL_PARAMETERS);
+			for (String parameter :
+					PropsValues.PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS) {
 
-			for (String parameter : reservedRefreshURLParameters) {
 				parameters.remove(namespace.concat(parameter));
 			}
 
