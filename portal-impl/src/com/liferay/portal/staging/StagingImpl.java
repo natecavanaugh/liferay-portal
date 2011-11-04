@@ -1160,7 +1160,7 @@ public class StagingImpl implements Staging {
 
 		String cmd = MapUtil.getString(parameterMap, "cmd");
 
-		if (cmd.equals("publish_to_live")) {
+		if (cmd.equals(Constants.PUBLISH_TO_LIVE)) {
 			UnicodeProperties typeSettingsProperties =
 				layout.getTypeSettingsProperties();
 
