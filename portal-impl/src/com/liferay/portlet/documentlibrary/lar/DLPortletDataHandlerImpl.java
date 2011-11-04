@@ -1331,9 +1331,9 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 			return false;
 		}
 
-		Group global = GroupLocalServiceUtil.getCompanyGroup(companyId);
+		Group group = GroupLocalServiceUtil.getCompanyGroup(companyId);
 
-		if (dlFileEntryType.getGroupId() == global.getGroupId()) {
+		if (dlFileEntryType.getGroupId() == group.getGroupId()) {
 			return false;
 		}
 
