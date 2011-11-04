@@ -27,6 +27,7 @@ long layoutId = ((Long)request.getAttribute("edit_pages.jsp-layoutId")).longValu
 Layout selLayout = (Layout)request.getAttribute("edit_pages.jsp-selLayout");
 
 PortletURL redirectURL = ((PortletURL)request.getAttribute("edit_pages.jsp-redirectURL"));
+
 String closeRedirect = ParamUtil.getString(request, "closeRedirect");
 
 List<LayoutPrototype> layoutPrototypes = LayoutPrototypeServiceUtil.search(company.getCompanyId(), Boolean.TRUE, null);
