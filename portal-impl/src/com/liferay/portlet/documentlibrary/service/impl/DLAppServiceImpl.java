@@ -403,7 +403,19 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
+		FileEntry fileEntry = repository.getFileEntry(fileEntryId);
+
+		DLProcessorRegistryUtil.cleanUp(
+			fileEntry.getLatestFileVersion());
+
 		repository.cancelCheckOut(fileEntryId);
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setWorkflowAction(WorkflowConstants.ACTION_PUBLISH);
+
+		dlAppHelperLocalService.updateFileEntry(
+			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 	}
 
 	/**
@@ -936,6 +948,25 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		Repository repository = getRepository(repositoryId);
 
 		return repository.getFileEntriesCount(folderId, fileEntryTypeId);
+	}
+
+	/**
+	 * Returns the file entries before and after the current file entry in the
+	 * ordered set
+	 *
+	 * @param  fileEntryId the primary key of the file entry
+	 * @param  obc Comparator used to sort the file entries
+	 * @return the previous, current, and next file entries
+	 * @throws PortalException if the file entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public FileEntry[] getFileEntriesPrevAndNext(
+			long fileEntryId, OrderByComparator obc)
+		throws PortalException, SystemException {
+
+		Repository repository = getRepository(0, fileEntryId, 0);
+
+		return repository.getFileEntriesPrevAndNext(fileEntryId, obc);
 	}
 
 	/**
@@ -2161,6 +2192,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, file, serviceContext);
 
+		DLProcessorRegistryUtil.cleanUp(fileEntry.getLatestFileVersion());
+
 		dlAppHelperLocalService.updateFileEntry(
 			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 
@@ -2224,6 +2257,11 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, is, size, serviceContext);
 
+		if (is != null) {
+			DLProcessorRegistryUtil.cleanUp(
+				fileEntry.getLatestFileVersion());
+		}
+
 		dlAppHelperLocalService.updateFileEntry(
 			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
 
@@ -2248,6 +2286,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, file, serviceContext);
 
+		DLProcessorRegistryUtil.cleanUp(fileEntry.getLatestFileVersion());
+
 		repository.checkInFileEntry(
 			fileEntryId, majorVersion, changeLog, serviceContext);
 
@@ -2269,6 +2309,11 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		FileEntry fileEntry = repository.updateFileEntry(
 			fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, is, size, serviceContext);
+
+		if (is != null) {
+			DLProcessorRegistryUtil.cleanUp(
+				fileEntry.getLatestFileVersion());
+		}
 
 		repository.checkInFileEntry(
 			fileEntryId, majorVersion, changeLog, serviceContext);

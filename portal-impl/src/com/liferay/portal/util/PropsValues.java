@@ -449,6 +449,8 @@ public class PropsValues {
 
 	public static final String[] DL_FILE_ENTRY_PREVIEW_VIDEO_MIME_TYPES = PropsUtil.getArray(PropsKeys.DL_FILE_ENTRY_PREVIEW_VIDEO_MIME_TYPES);
 
+	public static final int DL_FILE_ENTRY_PREVIEW_VIDEO_THUMBNAIL_PERCENTAGE = GetterUtil.getInteger(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_PREVIEW_VIDEO_THUMBNAIL_PERCENTAGE));
+
 	public static final int DL_FILE_ENTRY_PREVIEW_VIDEO_WIDTH = GetterUtil.getInteger(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_PREVIEW_VIDEO_WIDTH));
 
 	public static final boolean DL_FILE_ENTRY_READ_COUNT_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_READ_COUNT_ENABLED));
@@ -608,6 +610,8 @@ public class PropsValues {
 	public static final int IG_IMAGE_THUMBNAIL_MAX_DIMENSION = GetterUtil.getInteger(PropsUtil.get(PropsKeys.IG_IMAGE_THUMBNAIL_MAX_DIMENSION));
 
 	public static final String[] IG_IMAGE_THUMBNAIL_MIME_TYPES = PropsUtil.getArray(PropsKeys.IG_IMAGE_THUMBNAIL_MIME_TYPES);
+
+	public static final boolean IG_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.IG_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED));
 
 	public static final boolean IG_PUBLISH_TO_LIVE_BY_DEFAULT = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.IG_PUBLISH_TO_LIVE_BY_DEFAULT));
 

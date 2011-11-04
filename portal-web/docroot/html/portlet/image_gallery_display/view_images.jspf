@@ -27,7 +27,7 @@
 	</c:otherwise>
 </c:choose>
 
-<div>
+<div id="<portlet:namespace />imageGalleryAssetInfo">
 
 	<%
 	for (int i = 0; i < results.size(); i++) {
@@ -53,25 +53,25 @@
 						int playerHeight = 500;
 
 						if (AudioProcessor.hasAudio(fileVersion)) {
-							href = _getPreviewURL(fileEntry, fileVersion.getVersion(), themeDisplay, HtmlUtil.escapeURL("&audioPreview=1") + "&supportedAudio=1&mediaGallery=1", false);
+							href = _getPreviewURL(fileEntry, fileVersion, themeDisplay, HtmlUtil.escapeURL("&audioPreview=1") + "&supportedAudio=1&mediaGallery=1", false);
 
 							playerHeight = 43;
 						}
 						else if (ImageProcessor.hasImages(fileVersion)) {
-							href = _getPreviewURL(fileEntry, fileVersion.getVersion(), themeDisplay, StringPool.BLANK);
-							src = _getPreviewURL(fileEntry, fileVersion.getVersion(), themeDisplay, "&imageThumbnail=1");
+							href = _getPreviewURL(fileEntry, fileVersion, themeDisplay, StringPool.BLANK);
+							src = _getPreviewURL(fileEntry, fileVersion, themeDisplay, "&imageThumbnail=1");
 						}
 						else if (PDFProcessor.hasImages(fileVersion)) {
-							href = _getPreviewURL(fileEntry, fileVersion.getVersion(), themeDisplay, "&documentThumbnail=1");
-							src = _getPreviewURL(fileEntry, fileVersion.getVersion(), themeDisplay, "&previewFileIndex=1");
+							href = _getPreviewURL(fileEntry, fileVersion, themeDisplay, "&documentThumbnail=1");
+							src = _getPreviewURL(fileEntry, fileVersion, themeDisplay, "&previewFileIndex=1");
 						}
 						else if (VideoProcessor.hasVideo(fileVersion)) {
-							href = _getPreviewURL(fileEntry, fileVersion.getVersion(), themeDisplay, HtmlUtil.escapeURL("&videoPreview=1") + "&supportedVideo=1&mediaGallery=1", false);
-							src = _getPreviewURL(fileEntry, fileVersion.getVersion(), themeDisplay, "&videoThumbnail=1");
+							href = _getPreviewURL(fileEntry, fileVersion, themeDisplay, HtmlUtil.escapeURL("&videoPreview=1") + "&supportedVideo=1&mediaGallery=1", false);
+							src = _getPreviewURL(fileEntry, fileVersion, themeDisplay, "&videoThumbnail=1");
 						}
 						%>
 
-						<a class="image-thumbnail preview" <%= (supportedAudio || supportedVideo) ? "data-options=\"height=" + playerHeight + "&thumbnailURL=" + HtmlUtil.escapeURL(_getPreviewURL(fileEntry, fileVersion.getVersion(), themeDisplay, "&videoThumbnail=1")) + "&width=640\"" : StringPool.BLANK %> href="<%= href %>" fileEntryId="<%= fileEntry.getFileEntryId() %>" title="<%= HtmlUtil.escape(fileEntry.getTitle()) + " - " + HtmlUtil.escape(fileEntry.getDescription()) %>">
+						<a class="image-thumbnail" <%= (supportedAudio || supportedVideo) ? "data-options=\"height=" + playerHeight + "&thumbnailURL=" + HtmlUtil.escapeURL(_getPreviewURL(fileEntry, fileVersion, themeDisplay, "&videoThumbnail=1")) + "&width=640\"" : StringPool.BLANK %> href="<%= href %>" fileEntryId="<%= fileEntry.getFileEntryId() %>" title="<%= HtmlUtil.escape(fileEntry.getTitle()) + " - " + HtmlUtil.escape(fileEntry.getDescription()) %>">
 							<img alt="<%= HtmlUtil.escape(fileEntry.getTitle()) + " - " + HtmlUtil.escape(fileEntry.getDescription()) %>" border="no" src="<%= src %>" />
 
 							<span class="image-title"><%= HtmlUtil.escape(fileVersion.getTitle()) %></span>
@@ -129,7 +129,7 @@
 				viewFolderURL.setParameter("folderId", String.valueOf(curFolder.getFolderId()));
 				%>
 
-				<a class="image-thumbnail" href="<%= viewFolderURL.toString() %>" title="<%= HtmlUtil.escape(curFolder.getName()) + " - " + HtmlUtil.escape(curFolder.getDescription()) %>">
+				<a class="folder-thumbnail" href="<%= viewFolderURL.toString() %>" title="<%= HtmlUtil.escape(curFolder.getName()) + " - " + HtmlUtil.escape(curFolder.getDescription()) %>">
 
 					<%
 					int curFoldersCount = DLAppServiceUtil.getFoldersCount(curFolder.getRepositoryId(), curFolder.getFolderId());
@@ -218,7 +218,7 @@ embeddedPlayerURL.setParameter("struts_action", "/image_gallery_display/embedded
 				</c:if>
 			},
 			delay: 5000,
-			links: '#<portlet:namespace />imageGalleryAssetInfo .image-thumbnail.preview',
+			links: '#<portlet:namespace />imageGalleryAssetInfo .image-thumbnail',
 			maxHeight: maxHeight,
 			maxWidth: maxWidth,
 			playingLabel: '(<liferay-ui:message key="playing" />)',

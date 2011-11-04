@@ -32,6 +32,40 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class DLProcessorRegistryImpl implements DLProcessorRegistry {
 
+	public void cleanUp(FileEntry fileEntry) {
+		if (!DLProcessorThreadLocal.isEnabled()) {
+			return;
+		}
+
+		for (String dlProcessorClassName : _DL_FILE_ENTRY_PROCESSORS) {
+			DLProcessor dlProcessor = (DLProcessor)InstancePool.get(
+				dlProcessorClassName);
+
+			dlProcessor.cleanUp(fileEntry);
+		}
+
+		for (DLProcessor dlProcessor : _dlProcessors) {
+			dlProcessor.cleanUp(fileEntry);
+		}
+	}
+
+	public void cleanUp(FileVersion fileVersion) {
+		if (!DLProcessorThreadLocal.isEnabled()) {
+			return;
+		}
+
+		for (String dlProcessorClassName : _DL_FILE_ENTRY_PROCESSORS) {
+			DLProcessor dlProcessor = (DLProcessor)InstancePool.get(
+				dlProcessorClassName);
+
+			dlProcessor.cleanUp(fileVersion);
+		}
+
+		for (DLProcessor dlProcessor : _dlProcessors) {
+			dlProcessor.cleanUp(fileVersion);
+		}
+	}
+
 	public void register(DLProcessor dlProcessor) {
 		_dlProcessors.add(dlProcessor);
 	}

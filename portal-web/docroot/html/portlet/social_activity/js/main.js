@@ -413,7 +413,9 @@ AUI().add(
 						);
 
 						var bodyNode = settingsNode.one('.container-drop-box');
-						var actionsNode = settingsNode.one('.settings-actions');
+						var headerNode = settingsNode.one('.settings-header');
+
+						var actionsNode = headerNode.one('.settings-actions');
 
 						A.each(
 							originalConfig.dataSet,
@@ -439,8 +441,9 @@ AUI().add(
 							}
 						);
 
-						instance.bodyNode = bodyNode;
 						instance.actionsNode = actionsNode;
+						instance.bodyNode = bodyNode;
+						instance.headerNode = headerNode;
 
 						instance._handleConjunction();
 
@@ -505,13 +508,17 @@ AUI().add(
 
 						var children = actionsNode.all(SELECTOR_SETTINGS_FIELD);
 
-						if (children.size() > 1) {
+						var childrenSize = children.size();
+
+						if (childrenSize > 1) {
 							actionsNode.insert(actionsConjunction, children.last());
 
 							actionsConjunction.show();
 						}
 						else {
 							actionsConjunction.hide();
+
+							instance.headerNode.toggle(childrenSize == 1);
 						}
 					},
 

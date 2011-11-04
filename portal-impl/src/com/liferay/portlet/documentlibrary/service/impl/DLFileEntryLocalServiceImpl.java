@@ -65,7 +65,6 @@ import com.liferay.portlet.documentlibrary.model.DLSyncConstants;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryImpl;
 import com.liferay.portlet.documentlibrary.service.base.DLFileEntryLocalServiceBaseImpl;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
-import com.liferay.portlet.documentlibrary.util.DLPreviewableProcessor;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.documentlibrary.util.comparator.RepositoryModelModifiedDateComparator;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
@@ -244,9 +243,6 @@ public class DLFileEntryLocalServiceImpl
 		}
 		catch (NoSuchFileException nsfe) {
 		}
-
-		DLPreviewableProcessor.deleteFiles(
-			new LiferayFileVersion(dlFileVersion));
 
 		lockLocalService.unlock(DLFileEntry.class.getName(), fileEntryId);
 	}
@@ -642,6 +638,17 @@ public class DLFileEntryLocalServiceImpl
 		throws SystemException {
 
 		return dlFileEntryPersistence.countByG_F(groupId, folderId);
+	}
+
+	public DLFileEntry[] getFileEntriesPrevAndNext(
+			long fileEntryId, OrderByComparator obc)
+		throws PortalException, SystemException {
+
+		DLFileEntry dlFileEntry = getFileEntry(fileEntryId);
+
+		return dlFileEntryPersistence.findByG_F_PrevAndNext(
+			fileEntryId, dlFileEntry.getGroupId(), dlFileEntry.getFolderId(),
+			obc);
 	}
 
 	public DLFileEntry getFileEntry(long fileEntryId)
@@ -1108,6 +1115,7 @@ public class DLFileEntryLocalServiceImpl
 		dlFileVersion.setUserId(versionUserId);
 		dlFileVersion.setUserName(versionUserName);
 		dlFileVersion.setCreateDate(modifiedDate);
+		dlFileVersion.setModifiedDate(modifiedDate);
 		dlFileVersion.setRepositoryId(dlFileEntry.getRepositoryId());
 		dlFileVersion.setFolderId(dlFileEntry.getFolderId());
 		dlFileVersion.setFileEntryId(dlFileEntry.getFileEntryId());
@@ -1583,6 +1591,8 @@ public class DLFileEntryLocalServiceImpl
 			Map<String, Fields> fieldsMap, String version, long size,
 			int status, Date statusDate, ServiceContext serviceContext)
 		throws PortalException, SystemException {
+
+		dlFileVersion.setModifiedDate(statusDate);
 
 		if (Validator.isNotNull(sourceFileName)) {
 			dlFileVersion.setExtension(extension);

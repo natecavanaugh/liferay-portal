@@ -537,6 +537,8 @@ public interface PropsKeys {
 
 	public static final String DL_FILE_ENTRY_PREVIEW_VIDEO_MIME_TYPES = "dl.file.entry.preview.video.mime.types";
 
+	public static final String DL_FILE_ENTRY_PREVIEW_VIDEO_THUMBNAIL_PERCENTAGE = "dl.file.entry.preview.video.thumbnail.percentage";
+
 	public static final String DL_FILE_ENTRY_PREVIEW_VIDEO_WIDTH = "dl.file.entry.preview.video.width";
 
 	public static final String DL_FILE_ENTRY_PROCESSORS = "dl.file.entry.processors";
@@ -752,6 +754,8 @@ public interface PropsKeys {
 	public static final String IG_IMAGE_THUMBNAIL_MAX_DIMENSION = "ig.image.thumbnail.max.dimension";
 
 	public static final String IG_IMAGE_THUMBNAIL_MIME_TYPES = "ig.image.thumbnail.mime.types";
+
+	public static final String IG_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED = "ig.previous.and.next.navigation.enabled";
 
 	public static final String IG_PUBLISH_TO_LIVE_BY_DEFAULT = "ig.publish.to.live.by.default";
 

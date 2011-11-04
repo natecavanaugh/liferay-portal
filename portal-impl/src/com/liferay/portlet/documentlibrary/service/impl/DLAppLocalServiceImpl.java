@@ -36,6 +36,7 @@ import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.base.DLAppLocalServiceBaseImpl;
+import com.liferay.portlet.documentlibrary.util.DLProcessorRegistryUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -615,6 +616,25 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 		LocalRepository localRepository = getLocalRepository(repositoryId);
 
 		return localRepository.getFileEntriesCount(folderId);
+	}
+
+	/**
+	 * Returns the file entries before and after the current file entry in the
+	 * ordered set
+	 *
+	 * @param  fileEntryId the primary key of the file entry
+	 * @param  obc Comparator used to sort the file entries
+	 * @return the previous, current, and next file entries
+	 * @throws PortalException if the file entry could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public FileEntry[] getFileEntriesPrevAndNext(
+			long fileEntryId, OrderByComparator obc)
+		throws PortalException, SystemException {
+
+		LocalRepository localRepository = getLocalRepository(0, fileEntryId, 0);
+
+		return localRepository.getFileEntriesPrevAndNext(fileEntryId, obc);
 	}
 
 	/**
@@ -1441,6 +1461,8 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 			userId, fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, file, serviceContext);
 
+		DLProcessorRegistryUtil.cleanUp(fileEntry.getLatestFileVersion());
+
 		dlAppHelperLocalService.updateFileEntry(
 			userId, fileEntry, fileEntry.getFileVersion(), serviceContext);
 
@@ -1505,6 +1527,10 @@ public class DLAppLocalServiceImpl extends DLAppLocalServiceBaseImpl {
 		FileEntry fileEntry = localRepository.updateFileEntry(
 			userId, fileEntryId, sourceFileName, mimeType, title, description,
 			changeLog, majorVersion, is, size, serviceContext);
+
+		if (is != null) {
+			DLProcessorRegistryUtil.cleanUp(fileEntry.getLatestFileVersion());
+		}
 
 		dlAppHelperLocalService.updateFileEntry(
 			userId, fileEntry, fileEntry.getFileVersion(), serviceContext);
