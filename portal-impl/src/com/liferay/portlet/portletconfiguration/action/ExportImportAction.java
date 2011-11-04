@@ -103,7 +103,7 @@ public class ExportImportAction extends EditConfigurationAction {
 
 				sendRedirect(actionRequest, actionResponse);
 			}
-			else if (cmd.equals(Constants.PUBLISH_TO_LIVE)) {
+			else if (cmd.equals("publish_to_live")) {
 				StagingUtil.publishToLive(actionRequest, portlet);
 
 				sendRedirect(actionRequest, actionResponse);
