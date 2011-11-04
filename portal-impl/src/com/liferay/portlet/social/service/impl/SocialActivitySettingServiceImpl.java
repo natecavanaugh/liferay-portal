@@ -142,7 +142,7 @@ public class SocialActivitySettingServiceImpl
 
 	public void updateActivitySettings(
 			long groupId, String className, int activityType,
-			List<SocialActivityCounterDefinition> counters)
+			List<SocialActivityCounterDefinition> activityCounterDefinitions)
 		throws PortalException, SystemException {
 
 		PermissionChecker permissionChecker = getPermissionChecker();
@@ -152,7 +152,7 @@ public class SocialActivitySettingServiceImpl
 		}
 
 		socialActivitySettingLocalService.updateActivitySettings(
-			groupId, className, activityType, counters);
+			groupId, className, activityType, activityCounterDefinitions);
 	}
 
 }

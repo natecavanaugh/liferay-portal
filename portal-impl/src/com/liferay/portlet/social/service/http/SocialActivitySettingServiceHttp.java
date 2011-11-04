@@ -240,7 +240,7 @@ public class SocialActivitySettingServiceHttp {
 
 	public static void updateActivitySettings(HttpPrincipal httpPrincipal,
 		long groupId, java.lang.String className, int activityType,
-		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> counters)
+		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> activityCounterDefinitions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -249,7 +249,7 @@ public class SocialActivitySettingServiceHttp {
 					_updateActivitySettingsParameterTypes5);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
-					className, activityType, counters);
+					className, activityType, activityCounterDefinitions);
 
 			try {
 				TunnelUtil.invoke(httpPrincipal, methodHandler);

@@ -143,11 +143,11 @@ public class SocialActivitySettingServiceSoap {
 
 	public static void updateActivitySettings(long groupId,
 		java.lang.String className, int activityType,
-		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> counters)
+		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> activityCounterDefinitions)
 		throws RemoteException {
 		try {
 			SocialActivitySettingServiceUtil.updateActivitySettings(groupId,
-				className, activityType, counters);
+				className, activityType, activityCounterDefinitions);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

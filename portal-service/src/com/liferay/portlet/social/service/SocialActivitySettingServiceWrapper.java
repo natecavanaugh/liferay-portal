@@ -76,11 +76,11 @@ public class SocialActivitySettingServiceWrapper
 
 	public void updateActivitySettings(long groupId,
 		java.lang.String className, int activityType,
-		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> counters)
+		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> activityCounterDefinitions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_socialActivitySettingService.updateActivitySettings(groupId,
-			className, activityType, counters);
+			className, activityType, activityCounterDefinitions);
 	}
 
 	/**

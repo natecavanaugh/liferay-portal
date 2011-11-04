@@ -78,11 +78,12 @@ public class SocialActivitySettingServiceUtil {
 
 	public static void updateActivitySettings(long groupId,
 		java.lang.String className, int activityType,
-		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> counters)
+		java.util.List<com.liferay.portlet.social.model.SocialActivityCounterDefinition> activityCounterDefinitions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
-			.updateActivitySettings(groupId, className, activityType, counters);
+			.updateActivitySettings(groupId, className, activityType,
+			activityCounterDefinitions);
 	}
 
 	public static SocialActivitySettingService getService() {

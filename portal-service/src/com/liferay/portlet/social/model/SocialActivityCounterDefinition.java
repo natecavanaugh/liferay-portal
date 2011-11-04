@@ -47,18 +47,17 @@ public class SocialActivityCounterDefinition implements Serializable {
 	public boolean equals(
 		SocialActivityCounterDefinition activityCounterDefinition) {
 
-		if ((Validator.isNotNull(activityCounterDefinition)) &&
-			(Validator.equals(
-				_enabled, activityCounterDefinition._enabled)) &&
-			(Validator.equals(
-				_increment, activityCounterDefinition._increment)) &&
-			(Validator.equals(
-				_limitValue, activityCounterDefinition._limitValue)) &&
-			(Validator.equals(
-				_limitPeriod, activityCounterDefinition._limitPeriod)) &&
-			(Validator.equals(_name, activityCounterDefinition._name)) &&
-			(Validator.equals(
-				_ownerType, activityCounterDefinition._ownerType))) {
+		if (Validator.isNotNull(activityCounterDefinition) &&
+			Validator.equals(_enabled, activityCounterDefinition._enabled) &&
+			Validator.equals(
+				_increment, activityCounterDefinition._increment) &&
+			Validator.equals(
+				_limitPeriod, activityCounterDefinition._limitPeriod) &&
+			Validator.equals(
+				_limitValue, activityCounterDefinition._limitValue) &&
+			Validator.equals(_name, activityCounterDefinition._name) &&
+			Validator.equals(
+				_ownerType, activityCounterDefinition._ownerType)) {
 
 			return true;
 		}

@@ -99,9 +99,7 @@ public class SocialActivityCounterLocalServiceImpl
 				activity.getGroupId(), activity.getClassName(),
 				activity.getType());
 
-		if ((activityDefinition == null) ||
-			!activityDefinition.isEnabled()) {
-
+		if ((activityDefinition == null) || !activityDefinition.isEnabled()) {
 			return;
 		}
 
@@ -116,9 +114,8 @@ public class SocialActivityCounterLocalServiceImpl
 				activityDefinition.getActivityCounterDefinitions()) {
 
 			if (activityCounterDefinition.isEnabled() &&
-				(activityCounterDefinition.getIncrement() != 0) &&
-				checkActivityLimit(
-					user, activity, activityCounterDefinition)) {
+				(activityCounterDefinition.getIncrement() > 0) &&
+				checkActivityLimit(user, activity, activityCounterDefinition)) {
 
 				incrementActivityCounter(
 					activity.getGroupId(), user, activity.getAssetEntry(),

@@ -119,10 +119,6 @@ public class SocialActivityDefinition implements Serializable {
 		_activityType = activityKey;
 	}
 
-	public void setEnabled(boolean enabled) {
-		_enabled = enabled;
-	}
-
 	public void setCounters(
 		List<SocialActivityCounterDefinition> activityCounterDefinitions) {
 
@@ -134,6 +130,10 @@ public class SocialActivityDefinition implements Serializable {
 			_activityCounterDefinitions.put(
 				activityCounterDefinition.getName(), activityCounterDefinition);
 		}
+	}
+
+	public void setEnabled(boolean enabled) {
+		_enabled = enabled;
 	}
 
 	public void setLanguageKey(String languageKey) {

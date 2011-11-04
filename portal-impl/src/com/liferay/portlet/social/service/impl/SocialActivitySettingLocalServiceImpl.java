@@ -166,8 +166,8 @@ public class SocialActivitySettingLocalServiceImpl
 				activityCounterDefinition.getName());
 
 		if ((defaultActivityCounterDefinition != null) &&
-			(defaultActivityCounterDefinition.equals(
-				activityCounterDefinition))) {
+			defaultActivityCounterDefinition.equals(
+				activityCounterDefinition)) {
 
 			if (activitySetting != null) {
 				socialActivitySettingPersistence.remove(activitySetting);
@@ -210,8 +210,8 @@ public class SocialActivitySettingLocalServiceImpl
 		for (SocialActivityCounterDefinition activityCounterDefinition :
 				activityCounterDefinitions) {
 
-			updateActivitySetting(groupId, className, activityType,
-				activityCounterDefinition);
+			updateActivitySetting(
+				groupId, className, activityType, activityCounterDefinition);
 		}
 	}
 
@@ -243,9 +243,7 @@ public class SocialActivitySettingLocalServiceImpl
 		for (SocialActivitySetting activitySetting : activitySettings) {
 			String name = activitySetting.getName();
 
-			if (name.equals(
-					SocialActivitySettingConstants.NAME_ENABLED)) {
-
+			if (name.equals(SocialActivitySettingConstants.NAME_ENABLED)) {
 				activityDefinition.setEnabled(
 					GetterUtil.getBoolean(
 						activitySetting.getValue(),
