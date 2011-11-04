@@ -43,14 +43,14 @@ public class WebContextListener
 	}
 
 	@Override
-	protected void doPortalInit() {
-		HotDeployUtil.fireDeployEvent(
+	protected void doPortalDestroy() {
+		HotDeployUtil.fireUndeployEvent(
 			new HotDeployEvent(_servletContext, _webClassLoader));
 	}
 
 	@Override
-	protected void doPortalDestroy() {
-		HotDeployUtil.fireUndeployEvent(
+	protected void doPortalInit() {
+		HotDeployUtil.fireDeployEvent(
 			new HotDeployEvent(_servletContext, _webClassLoader));
 	}
 
