@@ -156,8 +156,11 @@ public class AssetEntryFinderImpl
 		else {
 			sb.append("SELECT DISTINCT {AssetEntry.*} ");
 
-			if (entryQuery.getOrderByCol1().equals("ratings") ||
-				entryQuery.getOrderByCol2().equals("ratings")) {
+			String orderByCol1 = entryQuery.getOrderByCol1();
+			String orderByCol2 = entryQuery.getOrderByCol2();
+
+			if (orderByCol1.equals("ratings") ||
+				orderByCol2.equals("ratings")) {
 
 				sb.append(", RatingsEntry.score ");
 			}
