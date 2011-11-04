@@ -583,7 +583,7 @@ public class ClusterSchedulerEngine
 
 		Address address = (Address)getDeserializedObject(lock.getOwner());
 
-		if (ClusterExecutorUtil.getLocalClusterNodeAddress().equals(address)) {
+		if (address.equals(ClusterExecutorUtil.getLocalClusterNodeAddress())) {
 			if (methodKey == _getScheduledJobsMethodKey3) {
 				return methodHandler.invoke(false);
 			}
@@ -894,6 +894,10 @@ public class ClusterSchedulerEngine
 		}
 	}
 
+	@BeanReference(
+		name="com.liferay.portal.scheduler.ClusterSchedulerEngineService")
+	protected SchedulerEngine schedulerEngine;
+
 	private static final String _LOCK_CLASS_NAME =
 		SchedulerEngine.class.getName();
 
@@ -910,10 +914,6 @@ public class ClusterSchedulerEngine
 	private static MethodKey _getScheduledJobsMethodKey3 = new MethodKey(
 		SchedulerEngineUtil.class.getName(), "getScheduledJobs",
 		StorageType.class);
-
-	@BeanReference(
-		name="com.liferay.portal.scheduler.ClusterSchedulerEngineService")
-	protected SchedulerEngine schedulerEngine;
 
 	private String _beanIdentifier;
 	private ClusterEventListener _clusterEventListener;
