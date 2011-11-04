@@ -97,12 +97,11 @@ public class EditGroupAction extends PortletAction {
 				String oldFriendlyURL = (String)returnValue[1];
 				String oldStagingFriendlyURL = (String)returnValue[2];
 
+				redirect = HttpUtil.setParameter(
+					redirect, "doAsGroupId", group.getGroupId());
 				closeRedirect = updateCloseRedirect(
 					closeRedirect, group, themeDisplay, oldFriendlyURL,
 					oldStagingFriendlyURL);
-
-				redirect = HttpUtil.setParameter(
-					redirect, "doAsGroupId", group.getGroupId());
 			}
 			else if (cmd.equals(Constants.DEACTIVATE) ||
 					 cmd.equals(Constants.RESTORE)) {
