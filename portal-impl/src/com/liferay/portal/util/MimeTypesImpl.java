@@ -43,7 +43,6 @@ import org.apache.tika.detect.Detector;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
-import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypesReaderMetKeys;
 
 import org.w3c.dom.Document;
@@ -71,7 +70,7 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 			read(url.openStream());
 		}
 		catch (Exception e) {
-			_log.error("Problems populating extensions map", e);
+			_log.error("Unable to populate extensions map", e);
 		}
 	}
 
@@ -187,27 +186,29 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 		Element element = document.getDocumentElement();
 
 		if ((element == null) ||
-			!element.getTagName().equals(MIME_INFO_TAG)) {
+			!MIME_INFO_TAG.equals(element.getTagName())) {
 
 			throw new SystemException("Invalid configuration file");
 		}
 
-		NodeList nodes = element.getChildNodes();
+		NodeList nodeList = element.getChildNodes();
 
-		for (int i = 0; i < nodes.getLength(); i++) {
-			Node node = nodes.item(i);
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node node = nodeList.item(i);
 
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element childElement = (Element)node;
+			if (node.getNodeType() != Node.ELEMENT_NODE) {
+				continue;
+			}
 
-				if (childElement.getTagName().equals(MIME_TYPE_TAG)) {
-					readMimeType(childElement);
-				}
+			Element childElement = (Element)node;
+
+			if (MIME_TYPE_TAG.equals(childElement.getTagName())) {
+				readMimeType(childElement);
 			}
 		}
 	}
 
-	protected void readMimeType(Element element) throws MimeTypeException {
+	protected void readMimeType(Element element) {
 		Set<String> mimeTypes = new HashSet<String>();
 
 		Set<String> extensions = new HashSet<String>();
@@ -216,35 +217,42 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 
 		mimeTypes.add(name);
 
-		NodeList nodes = element.getChildNodes();
+		NodeList nodeList = element.getChildNodes();
 
-		for (int i = 0; i < nodes.getLength(); i++) {
-			Node node = nodes.item(i);
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node node = nodeList.item(i);
 
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element childElement = (Element)node;
+			if (node.getNodeType() != Node.ELEMENT_NODE) {
+				continue;
+			}
 
-				if (childElement.getTagName().equals(GLOB_TAG)) {
-					boolean isRegex = GetterUtil.getBoolean(
-						childElement.getAttribute(ISREGEX_ATTR));
+			Element childElement = (Element)node;
 
-					String pattern = childElement.getAttribute(PATTERN_ATTR);
+			if (ALIAS_TAG.equals(childElement.getTagName())) {
+				String alias = childElement.getAttribute(ALIAS_TYPE_ATTR);
 
-					if (!isRegex && pattern.startsWith("*")) {
-						String extension = pattern.substring(1);
+				mimeTypes.add(alias);
+			}
+			else if (GLOB_TAG.equals(childElement.getTagName())) {
+				boolean isRegex = GetterUtil.getBoolean(
+					childElement.getAttribute(ISREGEX_ATTR));
 
-						if (!extension.contains("*") &&
-							!extension.contains("?") &&
-							!extension.contains("[")) {
-
-							extensions.add(extension);
-						}
-					}
+				if (isRegex) {
+					continue;
 				}
-				else if (childElement.getTagName().equals(ALIAS_TAG)) {
-					String alias = childElement.getAttribute(ALIAS_TYPE_ATTR);
 
-					mimeTypes.add(alias);
+				String pattern = childElement.getAttribute(PATTERN_ATTR);
+
+				if (!pattern.startsWith("*")) {
+					continue;
+				}
+
+				String extension = pattern.substring(1);
+
+				if (!extension.contains("*") && !extension.contains("?") &&
+					!extension.contains("[")) {
+
+					extensions.add(extension);
 				}
 			}
 		}
@@ -257,7 +265,6 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 	private static Log _log = LogFactoryUtil.getLog(MimeTypesImpl.class);
 
 	private Detector _detector;
-
 	private Map<String, Set<String>> _extensionsMap =
 		new HashMap<String, Set<String>>();
 

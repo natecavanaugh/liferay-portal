@@ -57,7 +57,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
@@ -313,13 +312,7 @@ public class DLUtil {
 	}
 
 	public static Set<String> getAllMediaGalleryMimeTypes() {
-		Set<String> allMimeTypes = new TreeSet<String>();
-
-		allMimeTypes.addAll(_AUDIO_MIME_TYPES);
-		allMimeTypes.addAll(_VIDEO_MIME_TYPES);
-		allMimeTypes.addAll(_IMAGE_MIME_TYPES);
-
-		return allMimeTypes;
+		return _instance._allMediaGalleryMimeTypes;
 	}
 
 	public static String getDividedPath(long id) {
@@ -375,12 +368,9 @@ public class DLUtil {
 	public static String[] getMediaGalleryMimeTypes(
 		PortletPreferences portletPreferences, PortletRequest portletRequest) {
 
-		Set<String> allMimeTypes = getAllMediaGalleryMimeTypes();
-
-		String defaultMimeTypes = StringUtil.merge(allMimeTypes);
-
 		String mimeTypes = PrefsParamUtil.getString(
-			portletPreferences, portletRequest, "mimeTypes", defaultMimeTypes);
+			portletPreferences, portletRequest, "mimeTypes",
+			_instance._allMediaGalleryMimeTypesString);
 
 		String[] mimeTypesArray = StringUtil.split(mimeTypes);
 
@@ -458,6 +448,21 @@ public class DLUtil {
 	}
 
 	private DLUtil() {
+		_allMediaGalleryMimeTypes.addAll(
+			SetUtil.fromArray(
+				PropsUtil.getArray(
+					PropsKeys.DL_FILE_ENTRY_PREVIEW_AUDIO_MIME_TYPES)));
+		_allMediaGalleryMimeTypes.addAll(
+			SetUtil.fromArray(
+				PropsUtil.getArray(
+					PropsKeys.DL_FILE_ENTRY_PREVIEW_VIDEO_MIME_TYPES)));
+		_allMediaGalleryMimeTypes.addAll(
+			SetUtil.fromArray(
+				PropsUtil.getArray(PropsKeys.IG_IMAGE_THUMBNAIL_MIME_TYPES)));
+
+		_allMediaGalleryMimeTypesString = StringUtil.merge(
+			_allMediaGalleryMimeTypes);
+
 		String[] fileIcons = null;
 
 		try {
@@ -520,28 +525,18 @@ public class DLUtil {
 		}
 	}
 
-	private static final Set<String> _AUDIO_MIME_TYPES =
-		SetUtil.fromArray(PropsUtil.getArray(
-			PropsKeys.DL_FILE_ENTRY_PREVIEW_AUDIO_MIME_TYPES));
-
 	private static final String _DEFAULT_FILE_ICON = "page";
 
 	private static final String _DEFAULT_GENERIC_NAME = "default";
 
-	private static final long _DIVISOR = 256;
-
-	private static final Set<String> _IMAGE_MIME_TYPES =
-		SetUtil.fromArray(PropsUtil.getArray(
-			PropsKeys.IG_IMAGE_THUMBNAIL_MIME_TYPES));
-
-	private static final Set<String> _VIDEO_MIME_TYPES =
-		SetUtil.fromArray(PropsUtil.getArray(
-			PropsKeys.DL_FILE_ENTRY_PREVIEW_VIDEO_MIME_TYPES));
+	private static final long _DIVISOR = 256;;
 
 	private static Log _log = LogFactoryUtil.getLog(DLUtil.class);
 
 	private static DLUtil _instance = new DLUtil();
 
+	private Set<String> _allMediaGalleryMimeTypes = new HashSet<String>();
+	private String _allMediaGalleryMimeTypesString;
 	private Set<String> _fileIcons = new HashSet<String>();
 	private Map<String, String> _genericNames = new HashMap<String, String>();
 

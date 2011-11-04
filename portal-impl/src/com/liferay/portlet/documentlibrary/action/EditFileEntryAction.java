@@ -618,15 +618,11 @@ public class EditFileEntryAction extends PortletAction {
 		InputStream inputStream = null;
 
 		try {
-			inputStream = uploadPortletRequest.getFileAsStream("file");
-
 			String contentType = uploadPortletRequest.getContentType("file");
 
-			long size = uploadPortletRequest.getSize("file");
+			String portletName = portletConfig.getPortletName();
 
-			if (portletConfig.getPortletName().equals(
-					PortletKeys.MEDIA_GALLERY_DISPLAY)) {
-
+			if (portletName.equals(PortletKeys.MEDIA_GALLERY_DISPLAY)) {
 				String portletResource = ParamUtil.getString(
 					actionRequest, "portletResource");
 
@@ -641,6 +637,10 @@ public class EditFileEntryAction extends PortletAction {
 					throw new FileMimeTypeException(contentType);
 				}
 			}
+
+			inputStream = uploadPortletRequest.getFileAsStream("file");
+
+			long size = uploadPortletRequest.getSize("file");
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
 				DLFileEntry.class.getName(), actionRequest);
