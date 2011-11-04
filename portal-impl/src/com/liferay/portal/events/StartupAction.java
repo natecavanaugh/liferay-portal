@@ -93,18 +93,25 @@ public class StartupAction extends SimpleAction {
 
 		// Security manager
 
-		if (PropsValues.PORTAL_SECURITY_MANAGER_ENABLE.equals("liferay")) {
+		String portalSecurityManagerStrategy =
+			PropsValues.PORTAL_SECURITY_MANAGER_STRATEGY;
+
+		if (portalSecurityManagerStrategy.equals("smart")) {
+			if (ServerDetector.isWebSphere()) {
+				portalSecurityManagerStrategy = "none";
+			}
+			else {
+				portalSecurityManagerStrategy = "liferay";
+			}
+		}
+
+		if (portalSecurityManagerStrategy.equals("liferay")) {
 			if (System.getSecurityManager() == null) {
 				System.setSecurityManager(new PortalSecurityManager());
 			}
 		}
-		else if (PropsValues.PORTAL_SECURITY_MANAGER_ENABLE.equals("none")) {
+		else if (portalSecurityManagerStrategy.equals("none")) {
 			System.setSecurityManager(null);
-		}
-		else if (PropsValues.PORTAL_SECURITY_MANAGER_ENABLE.equals("smart")) {
-			if (ServerDetector.isWebSphere()) {
-				System.setSecurityManager(null);
-			}
 		}
 
 		// FreeMarker

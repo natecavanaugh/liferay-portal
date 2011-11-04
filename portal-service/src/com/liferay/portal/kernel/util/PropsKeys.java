@@ -1567,7 +1567,7 @@ public interface PropsKeys {
 
 	public static final String PORTAL_PROXY_PATH = "portal.proxy.path";
 
-	public static final String PORTAL_SECURITY_MANAGER_ENABLE = "portal.security.manager.enable";
+	public static final String PORTAL_SECURITY_MANAGER_STRATEGY = "portal.security.manager.strategy";
 
 	public static final String PORTLET_ADD_DEFAULT_RESOURCE_CHECK_ENABLED = "portlet.add.default.resource.check.enabled";
 
