@@ -704,8 +704,8 @@ public class EditLayoutsAction extends PortletAction {
 		String closeRedirect, Group group, Layout layout,
 		String oldLayoutFriendlyURL) {
 
-		if (Validator.isNull(oldLayoutFriendlyURL) ||
-			Validator.isNull(closeRedirect)) {
+		if (Validator.isNull(closeRedirect) ||
+			Validator.isNull(oldLayoutFriendlyURL)) {
 
 			return closeRedirect;
 		}

@@ -251,7 +251,7 @@ public class EditGroupAction extends PortletAction {
 			String oldFriendlyURL, String oldStagingFriendlyURL)
 		throws SystemException, PortalException {
 
-		if (group == null || Validator.isNull(closeRedirect)) {
+		if (Validator.isNull(closeRedirect) || (group == null)) {
 			return closeRedirect;
 		}
 
