@@ -54,6 +54,17 @@ import java.util.Set;
 public class PollerRequestHandlerImpl
 	implements PollerRequestHandler, MessageListener {
 
+	public PollerHeader getPollerHeader(String pollerRequestString) {
+		if (Validator.isNull(pollerRequestString)) {
+			return null;
+		}
+
+		Map<String, Object>[] pollerRequestChunks =
+			parsePollerRequestParameters(pollerRequestString);
+
+		return parsePollerRequestHeader(pollerRequestChunks);
+	}
+
 	public JSONObject processRequest(String path, String pollerRequestString)
 		throws Exception {
 
@@ -98,17 +109,6 @@ public class PollerRequestHandlerImpl
 		else {
 			return null;
 		}
-	}
-
-	public PollerHeader getPollerRequestHeader(String pollerRequestString) {
-		if (Validator.isNull(pollerRequestString)) {
-			return null;
-		}
-
-		Map<String, Object>[] pollerRequestChunks =
-			parsePollerRequestParameters(pollerRequestString);
-
-		return parsePollerRequestHeader(pollerRequestChunks);
 	}
 
 	public void receive(Message message) {

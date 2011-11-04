@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.poller.PollerHeader;
  */
 public interface PollerRequestHandler {
 
-	public PollerHeader getPollerRequestHeader(String pollerRequestString);
+	public PollerHeader getPollerHeader(String pollerRequestString);
 
 	public JSONObject processRequest(String path, String pollerRequestString)
 		throws Exception;

@@ -22,15 +22,12 @@ import com.liferay.portal.kernel.poller.PollerHeader;
  */
 public class PollerRequestHandlerUtil {
 
-	public static PollerRequestHandler getPollerRequestHandler() {
-		return _pollerRequestHandler;
+	public static PollerHeader getPollerHeader(String pollerRequestString) {
+		return getPollerRequestHandler().getPollerHeader(pollerRequestString);
 	}
 
-	public static PollerHeader getPollerRequestHeader(
-		String pollerRequestString) {
-
-		return getPollerRequestHandler().getPollerRequestHeader(
-			pollerRequestString);
+	public static PollerRequestHandler getPollerRequestHandler() {
+		return _pollerRequestHandler;
 	}
 
 	public static JSONObject processRequest(

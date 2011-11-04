@@ -78,9 +78,8 @@ public class PollerServlet extends HttpServlet {
 		String pollerRequestString = ParamUtil.getString(
 			request, "pollerRequest");
 
-		PollerHeader pollerHeader =
-			PollerRequestHandlerUtil.getPollerRequestHeader(
-				pollerRequestString);
+		PollerHeader pollerHeader = PollerRequestHandlerUtil.getPollerHeader(
+			pollerRequestString);
 
 		if (pollerHeader == null) {
 			return StringPool.BLANK;
