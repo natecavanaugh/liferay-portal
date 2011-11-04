@@ -221,7 +221,7 @@ public class PortletURLUtil {
 			Map<String, String[]> parameters = request.getParameterMap();
 
 			for (String parameter :
-					PropsValues.PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS) {
+					_PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS) {
 
 				parameters.remove(namespace.concat(parameter));
 			}
@@ -257,5 +257,9 @@ public class PortletURLUtil {
 	}
 
 	private static final int _CURRENT_URL_PARAMETER_THRESHOLD = 32768;
+
+	private static String[] _PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS =
+		PropsUtil.getArray(
+			PropsKeys.PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS);
 
 }
