@@ -114,7 +114,7 @@ if (!paginationType.equals("none")) {
 	<c:choose>
 		<c:when test='<%= (assetCategoryId > 0) && Validator.isNotNull(assetTagName) && selectionStyle.equals("dynamic") %>'>
 			<h1 class="asset-categorization-title">
-				<%= LanguageUtil.format(pageContext, "content-with-x-x-and-tag-x", new String[] {assetVocabularyTitle, assetCategoryTitle, assetTagName)) %>
+				<liferay-ui:message arguments="<%= new String[] {assetVocabularyTitle, assetCategoryTitle, assetTagName} %>" key="content-with-x-x-and-tag-x" />
 			</h1>
 
 			<%
@@ -126,7 +126,7 @@ if (!paginationType.equals("none")) {
 		<c:otherwise>
 			<c:if test='<%= (assetCategoryId > 0) && selectionStyle.equals("dynamic") %>'>
 				<h1 class="asset-categorization-title">
-					<%= LanguageUtil.format(pageContext, "content-with-x-x", new String[] {assetVocabularyTitle, assetCategoryTitle}) %>
+					<liferay-ui:message arguments="<%= new String[] {assetVocabularyTitle, assetCategoryTitle} %>" key="content-with-x-x" />
 				</h1>
 
 				<%
@@ -137,7 +137,7 @@ if (!paginationType.equals("none")) {
 
 			<c:if test='<%= Validator.isNotNull(assetTagName) && selectionStyle.equals("dynamic") %>'>
 				<h1 class="asset-categorization-title">
-					<%= LanguageUtil.format(pageContext, "content-with-tag-x", assetTagName) %>
+					<liferay-ui:message arguments="<%= assetTagName %>" key="content-with-tag-x" />
 				</h1>
 
 				<%
@@ -155,7 +155,7 @@ if (!paginationType.equals("none")) {
 			AssetEntry assetEntry = AssetEntryServiceUtil.getEntry(assetEntryQuery.getLinkedAssetEntryId());
 			%>
 
-			<%= LanguageUtil.format(pageContext, "content-related-to-x", assetEntry.getTitle(locale)) %>
+			<liferay-ui:message arguments="<%= assetEntry.getTitle(locale) %>" key="content-related-to-x" />
 		</h1>
 	</c:if>
 </c:if>
