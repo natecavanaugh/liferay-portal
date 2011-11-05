@@ -1169,8 +1169,6 @@ public class PropsValues {
 
 	public static final boolean PORTLET_URL_ESCAPE_XML = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PORTLET_URL_ESCAPE_XML));
 
-	public static final String[] PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS = PropsUtil.getArray(PropsKeys.PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS);
-
 	public static final String PORTLET_VIRTUAL_PATH = PropsUtil.get(PropsKeys.PORTLET_VIRTUAL_PATH);
 
 	public static final boolean PORTLET_XML_VALIDATE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PORTLET_XML_VALIDATE));
