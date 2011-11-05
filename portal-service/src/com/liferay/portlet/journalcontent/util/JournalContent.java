@@ -47,10 +47,6 @@ public interface JournalContent {
 		String xmlRequest);
 
 	public String getContent(
-		long groupId, String articleId, String viewMode, String languageId,
-		ThemeDisplay themeDisplay);
-
-	public String getContent(
 		long groupId, String articleId, String templateId, String viewMode,
 		String languageId, String xmlRequest);
 
@@ -62,6 +58,10 @@ public interface JournalContent {
 		long groupId, String articleId, String templateId, String viewMode,
 		String languageId, ThemeDisplay themeDisplay, String xmlRequest);
 
+	public String getContent(
+		long groupId, String articleId, String viewMode, String languageId,
+		ThemeDisplay themeDisplay);
+
 	public JournalArticleDisplay getDisplay(
 		long groupId, String articleId, double version, String templateId,
 		String viewMode, String languageId, ThemeDisplay themeDisplay, int page,
@@ -70,14 +70,6 @@ public interface JournalContent {
 	public JournalArticleDisplay getDisplay(
 		long groupId, String articleId, String viewMode, String languageId,
 		String xmlRequest);
-
-	public JournalArticleDisplay getDisplay(
-		long groupId, String articleId, String viewMode, String languageId,
-		ThemeDisplay themeDisplay);
-
-	public JournalArticleDisplay getDisplay(
-		long groupId, String articleId, String viewMode, String languageId,
-		ThemeDisplay themeDisplay, int page);
 
 	public JournalArticleDisplay getDisplay(
 		long groupId, String articleId, String templateId, String viewMode,
@@ -91,5 +83,13 @@ public interface JournalContent {
 		long groupId, String articleId, String templateId, String viewMode,
 		String languageId, ThemeDisplay themeDisplay, int page,
 		String xmlRequest);
+
+	public JournalArticleDisplay getDisplay(
+		long groupId, String articleId, String viewMode, String languageId,
+		ThemeDisplay themeDisplay);
+
+	public JournalArticleDisplay getDisplay(
+		long groupId, String articleId, String viewMode, String languageId,
+		ThemeDisplay themeDisplay, int page);
 
 }

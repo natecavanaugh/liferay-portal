@@ -81,14 +81,6 @@ public class JournalArticleAssetRenderer extends BaseAssetRenderer {
 		}
 	}
 
-	public Date getDisplayDate() {
-		return _article.getDisplayDate();
-	}
-
-	public Date getExpirationDate() {
-		return _article.getExpirationDate();
-	}
-
 	public long getGroupId() {
 		return _article.getGroupId();
 	}
@@ -198,6 +190,25 @@ public class JournalArticleAssetRenderer extends BaseAssetRenderer {
 
 	@Override
 	public boolean isConvertible() {
+		return true;
+	}
+
+	@Override
+	public boolean isDisplayable() {
+		Date now = new Date();
+
+		Date displayDate = _article.getDisplayDate();
+
+		if ((displayDate != null) && displayDate.after(now)) {
+			return false;
+		}
+
+		Date expirationDate = _article.getExpirationDate();
+
+		if ((expirationDate != null) && expirationDate.before(now)) {
+			return false;
+		}
+
 		return true;
 	}
 

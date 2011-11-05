@@ -68,14 +68,6 @@ public class JournalContentImpl implements JournalContent {
 	}
 
 	public String getContent(
-		long groupId, String articleId, String viewMode, String languageId,
-		ThemeDisplay themeDisplay) {
-
-		return getContent(
-			groupId, articleId, null, viewMode, languageId, themeDisplay);
-	}
-
-	public String getContent(
 		long groupId, String articleId, String templateId, String viewMode,
 		String languageId, String xmlRequest) {
 
@@ -107,6 +99,14 @@ public class JournalContentImpl implements JournalContent {
 		else {
 			return null;
 		}
+	}
+
+	public String getContent(
+		long groupId, String articleId, String viewMode, String languageId,
+		ThemeDisplay themeDisplay) {
+
+		return getContent(
+			groupId, articleId, null, viewMode, languageId, themeDisplay);
 	}
 
 	public JournalArticleDisplay getDisplay(
@@ -196,23 +196,6 @@ public class JournalContentImpl implements JournalContent {
 	}
 
 	public JournalArticleDisplay getDisplay(
-		long groupId, String articleId, String viewMode, String languageId,
-		ThemeDisplay themeDisplay) {
-
-		return getDisplay(
-			groupId, articleId, viewMode, languageId, themeDisplay, 1);
-	}
-
-	public JournalArticleDisplay getDisplay(
-		long groupId, String articleId, String viewMode, String languageId,
-		ThemeDisplay themeDisplay, int page) {
-
-		return getDisplay(
-			groupId, articleId, null, viewMode, languageId, themeDisplay, page,
-			null);
-	}
-
-	public JournalArticleDisplay getDisplay(
 		long groupId, String articleId, String templateId, String viewMode,
 		String languageId, String xmlRequest) {
 
@@ -238,6 +221,23 @@ public class JournalContentImpl implements JournalContent {
 		return getDisplay(
 			groupId, articleId, 0, templateId, viewMode, languageId,
 			themeDisplay, 1, null);
+	}
+
+	public JournalArticleDisplay getDisplay(
+		long groupId, String articleId, String viewMode, String languageId,
+		ThemeDisplay themeDisplay) {
+
+		return getDisplay(
+			groupId, articleId, viewMode, languageId, themeDisplay, 1);
+	}
+
+	public JournalArticleDisplay getDisplay(
+		long groupId, String articleId, String viewMode, String languageId,
+		ThemeDisplay themeDisplay, int page) {
+
+		return getDisplay(
+			groupId, articleId, null, viewMode, languageId, themeDisplay, page,
+			null);
 	}
 
 	protected String encodeKey(
@@ -282,7 +282,6 @@ public class JournalContentImpl implements JournalContent {
 
 		return sb.toString();
 	}
-
 	protected JournalArticleDisplay getArticleDisplay(
 		long groupId, String articleId, String templateId, String viewMode,
 		String languageId, int page, String xmlRequest,
