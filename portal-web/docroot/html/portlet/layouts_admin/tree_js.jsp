@@ -25,6 +25,7 @@ String treeLoading = PortalUtil.generateRandomKey(request, "treeLoading");
 
 String treeId = ParamUtil.getString(request, "treeId");
 boolean checkContentDisplayPage = ParamUtil.getBoolean(request, "checkContentDisplayPage", false);
+boolean defaultStateChecked = ParamUtil.getBoolean(request, "defaultStateChecked", false);
 boolean expandFirstNode = ParamUtil.getBoolean(request, "expandFirstNode", true);
 boolean saveState = ParamUtil.getBoolean(request, "saveState", true);
 boolean selectableTree = ParamUtil.getBoolean(request, "selectableTree");
@@ -152,6 +153,9 @@ if (!selectableTree) {
 						expanded : node.selLayoutAncestor,
 						id: TreeUtil.createListItemId(node.layoutId, node.plid),
 						type: '<%= selectableTree ? "task" : "io" %>'
+						<c:if test='<%= !saveState && defaultStateChecked %>'>
+							,checked: true
+						</c:if>
 					};
 
 					var cssClass = '';
@@ -313,6 +317,9 @@ if (!selectableTree) {
 			id: rootId,
 			label: rootLabel,
 			leaf: false
+			<c:if test='<%= !saveState && defaultStateChecked %>'>
+				,checked: true
+			</c:if>
 		}
 	);
 
