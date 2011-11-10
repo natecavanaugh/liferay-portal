@@ -609,6 +609,8 @@ public class PropsValues {
 
 	public static final String IFRAME_PASSWORD_PASSWORD_TOKEN_ROLE = PropsUtil.get(PropsKeys.IFRAME_PASSWORD_PASSWORD_TOKEN_ROLE);
 
+	public static final boolean IG_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.IG_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED));
+
 	public static final boolean IMAGE_AUTO_SCALE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.IMAGE_AUTO_SCALE));
 
 	public static final String IMAGE_HOOK_FILE_SYSTEM_ROOT_DIR = PropsUtil.get(PropsKeys.IMAGE_HOOK_FILE_SYSTEM_ROOT_DIR);

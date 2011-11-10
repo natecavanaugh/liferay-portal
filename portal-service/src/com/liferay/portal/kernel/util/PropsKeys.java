@@ -753,6 +753,8 @@ public interface PropsKeys {
 
 	public static final String IFRAME_PASSWORD_PASSWORD_TOKEN_ROLE = "iframe.password.token.role";
 
+	public static final String IG_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED = "ig.previous.and.next.navigation.enabled";
+
 	public static final String IMAGE_AUTO_SCALE = "image.auto.scale";
 
 	public static final String IMAGE_DEFAULT_COMPANY_LOGO = "image.default.company.logo";
