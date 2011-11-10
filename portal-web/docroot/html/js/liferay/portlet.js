@@ -276,7 +276,9 @@
 				{
 					after: {
 						success: function() {
-							Liferay.fire('updatedLayout');
+							if (!data.avoidFireEvent) {
+								Liferay.fire('updatedLayout');
+							}
 						}
 					},
 					data: data,
