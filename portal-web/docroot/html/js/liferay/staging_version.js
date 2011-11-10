@@ -23,6 +23,8 @@ AUI().add(
 
 					var namespace = instance._namespace;
 
+					instance._destroyExistingToolbar();
+
 					var layoutRevisionToolbar = new A.Toolbar(
 						{
 							activeState: false,
@@ -78,17 +80,42 @@ AUI().add(
 										method: 'GET',
 										on: {
 											success: function(event, id, obj) {
+												instance._destroyExistingToolbar();
+
 												var response = this.get('responseData');
 
 												layoutRevisionDetails.plug(A.Plugin.ParseContent);
 
 												layoutRevisionDetails.setContent(response);
+											},
+											failure: function(event, id, obj) {
+												layoutRevisionDetails.setContent(Liferay.Language('your-request-failed-to-complete'));
 											}
 										}
 									}
 								);
 							}
 						);
+					}
+				},
+
+				_destroyExistingToolbar: function() {
+					if (StagingBar.layoutRevisionToolbar) {
+						StagingBar.layoutRevisionToolbar.destroy();
+
+						StagingBar.layoutRevisionToolbar = null;
+					}
+
+					if (StagingBar.redoButton) {
+						StagingBar.redoButton.destroy();
+
+						StagingBar.redoButton = null;
+					}
+
+					if (StagingBar.undoButton) {
+						StagingBar.undoButton.destroy();
+
+						StagingBar.undoButton = null;
 					}
 				},
 
