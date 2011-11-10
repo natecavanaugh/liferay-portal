@@ -25,9 +25,6 @@
 			<parameter xmlns:tns="http://service.portal.liferay.com" qname="serviceContext" type="tns:ServiceContext"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRuleGroupInstance" qname="operNS:deleteRuleGroupInstance" soapAction="">
-			<parameter xmlns:tns="http://model.mobiledevicerules.portlet.liferay.com" qname="ruleGroupInstance" type="tns:MDRRuleGroupInstanceSoap"></parameter>
-		</operation>
-		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRuleGroupInstance" qname="operNS:deleteRuleGroupInstance" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="ruleGroupInstanceId" type="tns:long"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getRuleGroupInstancesCount" qname="operNS:getRuleGroupInstancesCount" returnQName="getRuleGroupInstancesCountReturn" returnType="rtns:int" soapAction="">

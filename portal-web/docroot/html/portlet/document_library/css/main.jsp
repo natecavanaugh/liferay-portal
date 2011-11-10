@@ -225,7 +225,7 @@
 			border-color: #057CB0;
 		}
 
-		&.descriptive {
+		&.display-descriptive {
 			display: block;
 			margin: 5px;
 			padding: 5px 0;
@@ -260,6 +260,7 @@
 				position: absolute;
 				right: 6px;
 				top: 10px;
+				width: 22px;
 			}
 
 			.document-selector {
@@ -291,7 +292,7 @@
 			}
 		}
 
-		&.icon {
+		&.display-icon {
 			display: inline-block;
 			float: left;
 			margin: 5px;
@@ -305,6 +306,7 @@
 				overflow: hidden;
 				position: absolute;
 				right: 5px;
+				width: 22px;
 			}
 
 			.document-selector {
@@ -364,6 +366,7 @@
 	.folder-display-style li {
 		.overlay.document-action {
 			display: block;
+			height: 16px;
 			overflow: hidden;
 			position: absolute;
 			right: 15px;
@@ -396,7 +399,7 @@
 
 	.document-display-style, .lfr-search-container, .folder-display-style li {
 		.overlay {
-			clip: rect(0 0 0 0);
+			clip: rect(0, 0, 0, 0);
 		}
 	}
 
@@ -468,8 +471,12 @@
 			}
 		}
 
-		.aui-icon-download, .aui-icon-edit, .aui-icon-lock, .aui-icon-move, .aui-icon-permissions, .aui-icon-unlock {
+		.aui-icon-delete, .aui-icon-download, .aui-icon-edit, .aui-icon-lock, .aui-icon-move, .aui-icon-permissions, .aui-icon-undo, .aui-icon-unlock {
 			background: url() no-repeat 0 0;
+		}
+
+		.aui-icon-delete {
+			background-image: url(<%= themeImagesPath %>/common/delete.png);
 		}
 
 		.aui-icon-download {
@@ -492,12 +499,18 @@
 			background-image: url(<%= themeImagesPath %>/common/permissions.png);
 		}
 
+		.aui-icon-undo {
+			background-image: url(<%= themeImagesPath %>/common/undo.png);
+		}
+
 		.aui-icon-unlock {
 			background-image: url(<%= themeImagesPath %>/common/unlock.png);
 		}
 	}
 
 	.lfr-header-row-content {
+		position: relative;
+
 		.toolbar, .add-button {
 			float: left;
 		}
@@ -529,8 +542,13 @@
 		}
 	}
 
-	.context-pane-content {
-		position: relative;
+	.context-pane {
+		overflow: hidden;
+
+		.context-pane-content {
+			border-left: 1px solid #7B7B7B;
+			position: relative;
+		}
 	}
 
 	.taglib-search-iterator-page-iterator-top, .taglib-search-iterator-page-iterator-bottom, .aui-paginator-container, .document-library-breadcrumb {
@@ -575,6 +593,7 @@
 	.lfr-list-view-content {
 		ul .expand-folder {
 			height: 10px;
+			overflow: hidden;
 			padding-left: 5px;
 			padding-right: 5px;
 			position: absolute;
@@ -814,8 +833,36 @@
 
 .ie6, .ie7 {
 	.portlet-document-library, .portlet-document-library-display {
-		.document-display-style.descriptive {
+		.document-display-style.display-descriptive {
 			zoom: 1;
+		}
+	}
+}
+
+.ie6 {
+	.lfr-header-row {
+		height: 31px;
+
+		.lfr-header-row-content {
+			.toolbar {
+				position: relative;
+
+				.aui-field-choice {
+					width: 24px;
+				}
+			}
+
+			.display-style {
+				position: relative;
+			}
+
+			.lfr-search-combobox {
+				width: 250px;
+
+				.aui-field-input-text {
+					width: 95%;
+				}
+			}
 		}
 	}
 }

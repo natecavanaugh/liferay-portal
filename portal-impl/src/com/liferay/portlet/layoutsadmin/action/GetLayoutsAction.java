@@ -85,7 +85,7 @@ public class GetLayoutsAction extends JSONAction {
 
 				name = templateLayout.getName(themeDisplay.getLocale());
 			}
-			
+
 			jsonObject.put("name", name);
 
 			jsonObject.put("parentLayoutId", layout.getParentLayoutId());
