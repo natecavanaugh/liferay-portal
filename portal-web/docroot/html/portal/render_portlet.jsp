@@ -1053,7 +1053,7 @@ if (themeDisplay.isStatePopUp()) {
 					for (String key : data.keySet()) {
 					%>
 
-						, <%= key %>: <%= data.get(key) %>
+						, '<%= key %>': <%= data.get(key) %>
 
 					<%
 					}
@@ -1061,7 +1061,7 @@ if (themeDisplay.isStatePopUp()) {
 
 				</c:if>
 
-				}
+				};
 
 				var curPortletBoundaryId = '#p_p_id_<%= doRefreshPortletId %>_';
 

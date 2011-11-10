@@ -23,7 +23,7 @@ AUI().add(
 
 					var namespace = instance._namespace;
 
-					instance._destroyExistingToolbar();
+					instance._destroyToolbarContent();
 
 					var layoutRevisionToolbar = new A.Toolbar(
 						{
@@ -80,7 +80,7 @@ AUI().add(
 										method: 'GET',
 										on: {
 											success: function(event, id, obj) {
-												instance._destroyExistingToolbar();
+												instance._destroyToolbarContent();
 
 												var response = this.get('responseData');
 
@@ -89,7 +89,7 @@ AUI().add(
 												layoutRevisionDetails.setContent(response);
 											},
 											failure: function(event, id, obj) {
-												layoutRevisionDetails.setContent(Liferay.Language('your-request-failed-to-complete'));
+												layoutRevisionDetails.setContent(Liferay.Language('there-was-an-unexpected-error-please-refresh-the-current-page'));
 											}
 										}
 									}
@@ -99,7 +99,7 @@ AUI().add(
 					}
 				},
 
-				_destroyExistingToolbar: function() {
+				_destroyToolbarContent: function() {
 					if (StagingBar.layoutRevisionToolbar) {
 						StagingBar.layoutRevisionToolbar.destroy();
 
