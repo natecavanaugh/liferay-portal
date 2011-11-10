@@ -4,9 +4,6 @@
 	<service name="Portlet_MDR_MDRActionService" provider="java:RPC" style="rpc" use="encoded">
 		<typeMapping xmlns:ns="http://model.mobiledevicerules.portlet.liferay.com" qname="ns:MDRActionSoap" type="java:com.liferay.portlet.mobiledevicerules.model.MDRActionSoap" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></typeMapping>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteAction" qname="operNS:deleteAction" soapAction="">
-			<parameter xmlns:tns="http://model.mobiledevicerules.portlet.liferay.com" qname="action" type="tns:MDRActionSoap"></parameter>
-		</operation>
-		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteAction" qname="operNS:deleteAction" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="actionId" type="tns:long"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" xmlns:rtns="http://model.mobiledevicerules.portlet.liferay.com" name="fetchAction" qname="operNS:fetchAction" returnQName="fetchActionReturn" returnType="rtns:MDRActionSoap" soapAction="">

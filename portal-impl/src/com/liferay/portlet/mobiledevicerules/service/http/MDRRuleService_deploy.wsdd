@@ -4,9 +4,6 @@
 	<service name="Portlet_MDR_MDRRuleService" provider="java:RPC" style="rpc" use="encoded">
 		<typeMapping xmlns:ns="http://model.mobiledevicerules.portlet.liferay.com" qname="ns:MDRRuleSoap" type="java:com.liferay.portlet.mobiledevicerules.model.MDRRuleSoap" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></typeMapping>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRule" qname="operNS:deleteRule" soapAction="">
-			<parameter xmlns:tns="http://model.mobiledevicerules.portlet.liferay.com" qname="rule" type="tns:MDRRuleSoap"></parameter>
-		</operation>
-		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRule" qname="operNS:deleteRule" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="ruleId" type="tns:long"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" xmlns:rtns="http://model.mobiledevicerules.portlet.liferay.com" name="fetchRule" qname="operNS:fetchRule" returnQName="fetchRuleReturn" returnType="rtns:MDRRuleSoap" soapAction="">

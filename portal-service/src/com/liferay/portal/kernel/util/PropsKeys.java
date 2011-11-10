@@ -753,6 +753,8 @@ public interface PropsKeys {
 
 	public static final String IFRAME_PASSWORD_PASSWORD_TOKEN_ROLE = "iframe.password.token.role";
 
+	public static final String IG_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED = "ig.previous.and.next.navigation.enabled";
+
 	public static final String IMAGE_AUTO_SCALE = "image.auto.scale";
 
 	public static final String IMAGE_DEFAULT_COMPANY_LOGO = "image.default.company.logo";
@@ -1836,10 +1838,6 @@ public interface PropsKeys {
 	public static final String SOCIAL_BOOKMARK_POST_URL = "social.bookmark.post.url";
 
 	public static final String SOCIAL_BOOKMARK_TYPES = "social.bookmark.types";
-
-	public static final String SOCIAL_EQUITY_EQUITY_LOG_CHECK_INTERVAL = "social.equity.equity.log.check.interval";
-
-	public static final String SOCIAL_EQUITY_EQUITY_LOG_ENABLED = "social.equity.equity.log.enabled";
 
 	public static final String SOURCE_FORGE_MIRRORS = "source.forge.mirrors";
 

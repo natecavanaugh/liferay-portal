@@ -640,6 +640,17 @@ public class DLFileEntryLocalServiceImpl
 		return dlFileEntryPersistence.countByG_F(groupId, folderId);
 	}
 
+	public DLFileEntry[] getFileEntriesPrevAndNext(
+			long fileEntryId, OrderByComparator obc)
+		throws PortalException, SystemException {
+
+		DLFileEntry dlFileEntry = getFileEntry(fileEntryId);
+
+		return dlFileEntryPersistence.findByG_F_PrevAndNext(
+			fileEntryId, dlFileEntry.getGroupId(), dlFileEntry.getFolderId(),
+			obc);
+	}
+
 	public DLFileEntry getFileEntry(long fileEntryId)
 		throws PortalException, SystemException {
 
@@ -815,8 +826,11 @@ public class DLFileEntryLocalServiceImpl
 		}
 
 		try {
-			return moveFileEntryImpl(
+			DLFileEntry dlFileEntry = moveFileEntryImpl(
 				userId, fileEntryId, newFolderId, serviceContext);
+
+			return dlFileEntryTypeLocalService.updateFileEntryFileEntryType(
+				dlFileEntry, serviceContext);
 		}
 		finally {
 			if (!isFileEntryCheckedOut(fileEntryId)) {
