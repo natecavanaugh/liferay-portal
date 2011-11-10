@@ -422,7 +422,7 @@
 		<priority value="INFO" />
 	</category>
 
-	<category name="com.liferay.portal.security.permission.ResourceActionsUtil">
+	<category name="com.liferay.portal.security.permission.ResourceActionsImpl">
 		<priority value="WARN" />
 	</category>
 

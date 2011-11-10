@@ -16,7 +16,7 @@
 
 <%@ include file="/html/portlet/css_init.jsp" %>
 
-.portlet-document-library, .portlet-document-library-display {
+.portlet-document-library, .portlet-document-library-display, .portlet-image-gallery-display {
 	.file-entry-list-description {
 		font-style: italic;
 		margin-left: 10px;
@@ -423,6 +423,35 @@
 			background-repeat: no-repeat;
 		}
 
+		.prev-next-navigation {
+			float: right;
+
+			.next, .previous {
+				display: inline-block;
+				height: 25px;
+				margin: 0;
+				opacity: 0.5;
+				width: 30px;
+
+				&:hover {
+				  opacity: 1;
+				}
+			}
+
+			.next {
+				background: url(<%= themeImagesPath %>/document_library/preview_right.png) no-repeat 0 50%;
+			}
+
+			.previous {
+				background: url(<%= themeImagesPath %>/document_library/preview_left.png) no-repeat 0 50%;
+			}
+
+			.disabled, .disabled:hover {
+				cursor: auto;
+				opacity: 0.1;
+			}
+		}
+
 		.aui-icon-display-list {
 			background-position: 0 100%;
 		}
@@ -468,8 +497,12 @@
 			}
 		}
 
-		.aui-icon-download, .aui-icon-edit, .aui-icon-lock, .aui-icon-move, .aui-icon-permissions, .aui-icon-unlock {
+		.aui-icon-delete, .aui-icon-download, .aui-icon-edit, .aui-icon-lock, .aui-icon-move, .aui-icon-permissions, .aui-icon-undo, .aui-icon-unlock {
 			background: url() no-repeat 0 0;
+		}
+
+		.aui-icon-delete {
+			background-image: url(<%= themeImagesPath %>/common/delete.png);
 		}
 
 		.aui-icon-download {
@@ -492,6 +525,10 @@
 			background-image: url(<%= themeImagesPath %>/common/permissions.png);
 		}
 
+		.aui-icon-undo {
+			background-image: url(<%= themeImagesPath %>/common/undo.png);
+		}
+
 		.aui-icon-unlock {
 			background-image: url(<%= themeImagesPath %>/common/unlock.png);
 		}
@@ -508,6 +545,7 @@
 
 		.edit-toolbar {
 			margin: 0;
+			float: left;
 		}
 
 		.parent-folder-title {
@@ -816,6 +854,27 @@
 	.portlet-document-library, .portlet-document-library-display {
 		.document-display-style.descriptive {
 			zoom: 1;
+		}
+	}
+}
+
+.ie7, .ie8 {
+	.lfr-header-row {
+		.prev-next-navigation {
+			.previous, .next {
+				-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+				filter: alpha(opacity=50);
+
+				&:hover {
+					-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+					filter: alpha(opacity=100);
+				}
+			}
+
+			.disabled, .disabled:hover {
+				-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
+				filter: alpha(opacity=10);
+			}
 		}
 	}
 }

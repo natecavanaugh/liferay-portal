@@ -4621,9 +4621,6 @@
 	<service name="Portlet_MDR_MDRActionService" provider="java:RPC" style="rpc" use="encoded">
 		<typeMapping xmlns:ns="http://model.mobiledevicerules.portlet.liferay.com" qname="ns:MDRActionSoap" type="java:com.liferay.portlet.mobiledevicerules.model.MDRActionSoap" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></typeMapping>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteAction" qname="operNS:deleteAction" soapAction="">
-			<parameter xmlns:tns="http://model.mobiledevicerules.portlet.liferay.com" qname="action" type="tns:MDRActionSoap"></parameter>
-		</operation>
-		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteAction" qname="operNS:deleteAction" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="actionId" type="tns:long"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" xmlns:rtns="http://model.mobiledevicerules.portlet.liferay.com" name="fetchAction" qname="operNS:fetchAction" returnQName="fetchActionReturn" returnType="rtns:MDRActionSoap" soapAction="">
@@ -4665,9 +4662,6 @@
 			<parameter xmlns:tns="http://service.portal.liferay.com" qname="serviceContext" type="tns:ServiceContext"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRuleGroupInstance" qname="operNS:deleteRuleGroupInstance" soapAction="">
-			<parameter xmlns:tns="http://model.mobiledevicerules.portlet.liferay.com" qname="ruleGroupInstance" type="tns:MDRRuleGroupInstanceSoap"></parameter>
-		</operation>
-		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRuleGroupInstance" qname="operNS:deleteRuleGroupInstance" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="ruleGroupInstanceId" type="tns:long"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getRuleGroupInstancesCount" qname="operNS:getRuleGroupInstancesCount" returnQName="getRuleGroupInstancesCountReturn" returnType="rtns:int" soapAction="">
@@ -4701,17 +4695,9 @@
 		<typeMapping xmlns:ns="http://model.portal.liferay.com" qname="ns:PortletPreferencesIds" type="java:com.liferay.portal.model.PortletPreferencesIds" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></typeMapping>
 		<typeMapping xmlns:ns="http://service.portal.liferay.com" qname="ns:ServiceContext" type="java:com.liferay.portal.service.ServiceContext" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></typeMapping>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" xmlns:rtns="http://model.mobiledevicerules.portlet.liferay.com" name="copyRuleGroup" qname="operNS:copyRuleGroup" returnQName="copyRuleGroupReturn" returnType="rtns:MDRRuleGroupSoap" soapAction="">
-			<parameter xmlns:tns="http://model.mobiledevicerules.portlet.liferay.com" qname="ruleGroup" type="tns:MDRRuleGroupSoap"></parameter>
-			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
-			<parameter xmlns:tns="http://service.portal.liferay.com" qname="serviceContext" type="tns:ServiceContext"></parameter>
-		</operation>
-		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" xmlns:rtns="http://model.mobiledevicerules.portlet.liferay.com" name="copyRuleGroup" qname="operNS:copyRuleGroup" returnQName="copyRuleGroupReturn" returnType="rtns:MDRRuleGroupSoap" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="ruleGroupId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://service.portal.liferay.com" qname="serviceContext" type="tns:ServiceContext"></parameter>
-		</operation>
-		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRuleGroup" qname="operNS:deleteRuleGroup" soapAction="">
-			<parameter xmlns:tns="http://model.mobiledevicerules.portlet.liferay.com" qname="ruleGroup" type="tns:MDRRuleGroupSoap"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRuleGroup" qname="operNS:deleteRuleGroup" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="ruleGroupId" type="tns:long"></parameter>
@@ -4733,9 +4719,6 @@
 	</service>
 	<service name="Portlet_MDR_MDRRuleService" provider="java:RPC" style="rpc" use="encoded">
 		<typeMapping xmlns:ns="http://model.mobiledevicerules.portlet.liferay.com" qname="ns:MDRRuleSoap" type="java:com.liferay.portlet.mobiledevicerules.model.MDRRuleSoap" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></typeMapping>
-		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRule" qname="operNS:deleteRule" soapAction="">
-			<parameter xmlns:tns="http://model.mobiledevicerules.portlet.liferay.com" qname="rule" type="tns:MDRRuleSoap"></parameter>
-		</operation>
 		<operation xmlns:operNS="urn:http.service.mobiledevicerules.portlet.liferay.com" name="deleteRule" qname="operNS:deleteRule" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="ruleId" type="tns:long"></parameter>
 		</operation>
@@ -5252,19 +5235,8 @@
 		<parameter name="wsdlTargetNamespace" value="urn:http.service.shopping.portlet.liferay.com" />
 	</service>
 	<service name="Portlet_Social_SocialActivitySettingService" provider="java:RPC" style="rpc" use="encoded">
-		<arrayMapping xmlns:ns="urn:http.service.social.portlet.liferay.com" xmlns:cmp-ns="http://model.social.portlet.liferay.com" qname="ns:ArrayOf_tns2_SocialActivityDefinition" type="java:com.liferay.portlet.social.model.SocialActivityDefinition[]" innerType="cmp-ns:SocialActivityDefinition" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></arrayMapping>
 		<arrayMapping xmlns:ns="urn:http.service.social.portlet.liferay.com" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema" qname="ns:ArrayOf_xsd_anyType" type="java:java.lang.Object[]" innerType="cmp-ns:anyType" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></arrayMapping>
 		<typeMapping xmlns:ns="http://model.social.portlet.liferay.com" qname="ns:SocialActivityCounterDefinition" type="java:com.liferay.portlet.social.model.SocialActivityCounterDefinition" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></typeMapping>
-		<typeMapping xmlns:ns="http://model.social.portlet.liferay.com" qname="ns:SocialActivityDefinition" type="java:com.liferay.portlet.social.model.SocialActivityDefinition" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></typeMapping>
-		<operation xmlns:operNS="urn:http.service.social.portlet.liferay.com" xmlns:rtns="http://model.social.portlet.liferay.com" name="getActivityDefinition" qname="operNS:getActivityDefinition" returnQName="getActivityDefinitionReturn" returnType="rtns:SocialActivityDefinition" soapAction="">
-			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
-			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="className" type="tns:string"></parameter>
-			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="activityType" type="tns:int"></parameter>
-		</operation>
-		<operation xmlns:operNS="urn:http.service.social.portlet.liferay.com" xmlns:rtns="urn:http.service.social.portlet.liferay.com" xmlns:tns2="http://model.social.portlet.liferay.com" name="getActivityDefinitions" qname="operNS:getActivityDefinitions" returnQName="getActivityDefinitionsReturn" returnType="rtns:ArrayOf_tns2_SocialActivityDefinition" returnItemType="tns2:SocialActivityDefinition" soapAction="">
-			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
-			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="className" type="tns:string"></parameter>
-		</operation>
 		<operation xmlns:operNS="urn:http.service.social.portlet.liferay.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getJSONActivityDefinitions" qname="operNS:getJSONActivityDefinitions" returnQName="getJSONActivityDefinitionsReturn" returnType="rtns:string" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="className" type="tns:string"></parameter>
@@ -5286,7 +5258,7 @@
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="activityType" type="tns:int"></parameter>
 			<parameter xmlns:tns="urn:http.service.social.portlet.liferay.com" qname="activityCounterDefinitions" type="tns:ArrayOf_xsd_anyType"></parameter>
 		</operation>
-		<parameter name="allowedMethods" value="getActivityDefinition getActivityDefinitions getJSONActivityDefinitions updateActivitySetting updateActivitySettings" />
+		<parameter name="allowedMethods" value="getJSONActivityDefinitions updateActivitySetting updateActivitySettings" />
 		<parameter name="className" value="com.liferay.portlet.social.service.http.SocialActivitySettingServiceSoap" />
 		<parameter name="schemaUnqualified" value="http://model.social.portlet.liferay.com,http://xml.apache.org/xml-soap,urn:http.service.social.portlet.liferay.com" />
 		<parameter name="typeMappingVersion" value="1.2" />

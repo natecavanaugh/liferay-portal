@@ -1684,8 +1684,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		// Social
 
 		socialActivityLocalService.deleteUserActivities(user.getUserId());
-		socialEquityLogLocalService.deactivateUserEquityLogs(user.getUserId());
-		socialEquityUserLocalService.deleteSocialEquityUser(user.getUserId());
 		socialRequestLocalService.deleteReceiverUserRequests(user.getUserId());
 		socialRequestLocalService.deleteUserRequests(user.getUserId());
 
@@ -3311,6 +3309,12 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			User user, String emailAddress, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
+		if (user.isEmailAddressVerified() &&
+			emailAddress.equalsIgnoreCase(user.getEmailAddress())) {
+
+			return;
+		}
+
 		Ticket ticket = ticketLocalService.addTicket(
 			user.getCompanyId(), User.class.getName(), user.getUserId(),
 			TicketConstants.TYPE_EMAIL_ADDRESS, emailAddress, null,
@@ -4486,15 +4490,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		User user = userPersistence.findByPrimaryKey(userId);
 
-		boolean oldActive = user.isActive();
-
 		user.setStatus(status);
 
 		userPersistence.update(user, false);
-
-		if (!user.isActive() && oldActive) {
-			socialEquityUserLocalService.clearRanks(user.getUserId());
-		}
 
 		Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
 
@@ -4666,6 +4664,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			}
 		}
 
+		user.setFacebookId(facebookId);
 		user.setOpenId(openId);
 		user.setLanguageId(languageId);
 		user.setTimeZoneId(timeZoneId);
