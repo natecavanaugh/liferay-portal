@@ -16,7 +16,11 @@ package com.liferay.portlet.documentlibrary.util;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.util.PropsUtil;
 
+import com.xuggle.xuggler.Configuration;
 import com.xuggle.xuggler.IAudioResampler;
 import com.xuggle.xuggler.IAudioSamples;
 import com.xuggle.xuggler.ICodec;
@@ -29,6 +33,10 @@ import com.xuggle.xuggler.IStreamCoder;
 import com.xuggle.xuggler.IVideoPicture;
 import com.xuggle.xuggler.IVideoResampler;
 
+import java.io.File;
+
+import java.util.Properties;
+
 /**
  * @author Juan González
  * @author Sergio González
@@ -38,6 +46,9 @@ public class LiferayVideoConverter extends LiferayConverter {
 
 	public LiferayVideoConverter(
 		String inputURL, String outputURL, int height, int width, int rate) {
+
+		_ffpresetProperties = PropsUtil.getProperties(
+			PropsKeys.XUGGLER_FFPRESET, true);
 
 		_inputURL = inputURL;
 		_outputURL = outputURL;
@@ -95,6 +106,9 @@ public class LiferayVideoConverter extends LiferayConverter {
 		IStreamCoder[] outputIStreamCoders =
 			new IStreamCoder[inputStreamsCount];
 
+		String outputFormat =
+			_outputIContainer.getContainerFormat().getOutputFormatShortName();
+
 		for (int i = 0; i < inputStreamsCount; i++) {
 			IStream inputIStream = _inputIContainer.getStream(i);
 
@@ -144,6 +158,10 @@ public class LiferayVideoConverter extends LiferayConverter {
 				ICodec iCodec = ICodec.guessEncodingCodec(
 					null, null, _outputURL, null, inputICodecType);
 
+				if (outputFormat.equals("mp4")) {
+					iCodec = ICodec.findEncodingCodec(ICodec.ID.CODEC_ID_H264);
+				}
+
 				if (iCodec == null) {
 					throw new RuntimeException(
 						"Unable to determine " + inputICodecType +
@@ -152,7 +170,7 @@ public class LiferayVideoConverter extends LiferayConverter {
 
 				outputIStreamCoder.setCodec(iCodec);
 
-				if ((inputIStreamCoder.getHeight() <= 0)) {
+				if (inputIStreamCoder.getHeight() <= 0) {
 					throw new RuntimeException(
 						"Unable to determine height for " + _inputURL);
 				}
@@ -186,6 +204,11 @@ public class LiferayVideoConverter extends LiferayConverter {
 					outputIStreamCoder.getPixelType(),
 					outputIStreamCoder.getWidth(),
 					outputIStreamCoder.getHeight());
+
+				if (iCodec.getID().equals(ICodec.ID.CODEC_ID_H264)) {
+					Configuration.configure(
+						_ffpresetProperties, outputIStreamCoder);
+				}
 			}
 
 			openStreamCoder(inputIStreamCoders[i]);
@@ -281,12 +304,65 @@ public class LiferayVideoConverter extends LiferayConverter {
 		}
 
 		cleanUp(inputIStreamCoders, outputIStreamCoders);
+
+		// Create MP4 fast start
+
+		File videoFile = new File(_outputURL);
+
+		if (outputFormat.equals("mp4") && videoFile.exists()) {
+			File fastStartTmp = FileUtil.createTempFile();
+
+			try {
+				JQTFastStart.convert(videoFile, fastStartTmp);
+
+				if (fastStartTmp.exists() && fastStartTmp.length() > 0) {
+					FileUtil.move(fastStartTmp, videoFile);
+				}
+			}
+			catch (Exception e) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Error while moving MOOV atom to front of MP4 file.");
+				}
+			}
+			finally {
+				FileUtil.delete(fastStartTmp);
+			}
+		}
 	}
 
 	@Override
 	protected IContainer getInputIContainer() {
 		return _inputIContainer;
 	}
+
+	@Override
+	protected ICodec getAudioEncodingICodec(IContainer outputIContainer) {
+		String outputFormat =
+			outputIContainer.getContainerFormat().getOutputFormatShortName();
+
+		if (outputFormat.equals("ogg")) {
+			return ICodec.findEncodingCodec(ICodec.ID.CODEC_ID_VORBIS);
+		}
+
+		return super.getAudioEncodingICodec(outputIContainer);
+	}
+
+	@Override
+	protected int getAudioEncodingChannels(
+		IContainer outputIContainer, int channels) {
+
+		String outputFormat =
+			outputIContainer.getContainerFormat().getOutputFormatShortName();
+
+		if (outputFormat.equals("ogg")) {
+			return 2;
+		}
+
+		return super.getAudioEncodingChannels(outputIContainer, channels);
+	}
+
+	private Properties _ffpresetProperties;
 
 	private static Log _log = LogFactoryUtil.getLog(
 		LiferayVideoConverter.class);

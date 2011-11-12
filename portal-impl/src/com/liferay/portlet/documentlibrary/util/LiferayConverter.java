@@ -87,7 +87,7 @@ public abstract class LiferayConverter {
 		IAudioResampler iAudioResampler = null;
 
 		Format inputSampleFormat = inputIStreamCoder.getSampleFormat();
-		Format outputSampleFormat = inputIStreamCoder.getSampleFormat();
+		Format outputSampleFormat = outputIStreamCoder.getSampleFormat();
 
 		if ((inputIStreamCoder.getChannels() ==
 				outputIStreamCoder.getChannels()) &&
@@ -471,11 +471,22 @@ public abstract class LiferayConverter {
 
 		outputIStreamCoders[index] = outputIStreamCoder;
 
-		outputIStreamCoder.setBitRate(inputIStreamCoder.getBitRate());
-		outputIStreamCoder.setChannels(channels);
+		int bitRate = inputIStreamCoder.getBitRate();
 
-		ICodec iCodec = ICodec.guessEncodingCodec(
-			null, null, outputURL, null, inputICodecType);
+		if (bitRate == 0) {
+			bitRate = DEFAULT_BIT_RATE;
+		}
+
+		outputIStreamCoder.setBitRate(bitRate);
+		outputIStreamCoder.setChannels(getAudioEncodingChannels(
+			outputIContainer, channels));
+
+		ICodec iCodec = getAudioEncodingICodec(outputIContainer);
+
+		if (iCodec == null) {
+			iCodec = ICodec.guessEncodingCodec(
+				null, null, outputURL, null, inputICodecType);
+		}
 
 		if (iCodec == null) {
 			throw new RuntimeException(
@@ -645,7 +656,19 @@ public abstract class LiferayConverter {
 		}
 	}
 
+	protected ICodec getAudioEncodingICodec(IContainer outputIContainer) {
+		return null;
+	}
+
+	protected int getAudioEncodingChannels(
+		IContainer outputIContainer, int channels) {
+
+		return channels;
+	}
+
 	protected static final int DECODE_VIDEO_THUMBNAIL = 2;
+
+	protected static final int DEFAULT_BIT_RATE = 64000;
 
 	private static Log _log = LogFactoryUtil.getLog(LiferayConverter.class);
 
