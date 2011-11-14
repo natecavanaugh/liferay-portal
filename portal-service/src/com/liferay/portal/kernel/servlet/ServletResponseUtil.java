@@ -80,10 +80,10 @@ public class ServletResponseUtil {
 
 					if (start == -1) {
 						start = length - end;
-						end = length;
+						end = length - 1;
 					}
 					else if (end == -1 || end > length - 1) {
-						end = length;
+						end = length - 1;
 					}
 
 					if (start > end) {

@@ -310,7 +310,7 @@ public class VideoProcessor extends DefaultPreviewableProcessor {
 			LiferayVideoConverter liferayVideoConverter =
 				new LiferayVideoConverter(
 					srcFile.getCanonicalPath(), destFile.getCanonicalPath(),
-					height, width, _SAMPLE_RATE);
+					height, width);
 
 			liferayVideoConverter.convert();
 
@@ -467,8 +467,6 @@ public class VideoProcessor extends DefaultPreviewableProcessor {
 		MessageBusUtil.sendMessage(
 			DestinationNames.DOCUMENT_LIBRARY_VIDEO_PROCESSOR, fileVersion);
 	}
-
-	private static int _SAMPLE_RATE = 44100;
 
 	private static int _THUMBNAIL_PERCENTAGE =
 		PropsValues.DL_FILE_ENTRY_THUMBNAIL_VIDEO_FRAME_PERCENTAGE;

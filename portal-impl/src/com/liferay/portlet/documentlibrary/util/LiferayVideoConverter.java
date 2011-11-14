@@ -45,7 +45,7 @@ import java.util.Properties;
 public class LiferayVideoConverter extends LiferayConverter {
 
 	public LiferayVideoConverter(
-		String inputURL, String outputURL, int height, int width, int rate) {
+		String inputURL, String outputURL, int height, int width) {
 
 		_ffpresetProperties = PropsUtil.getProperties(
 			PropsKeys.XUGGLER_FFPRESET, true);
@@ -54,7 +54,6 @@ public class LiferayVideoConverter extends LiferayConverter {
 		_outputURL = outputURL;
 		_height = height;
 		_width = width;
-		_rate = rate;
 	}
 
 	public void convert() throws Exception {
@@ -119,96 +118,16 @@ public class LiferayVideoConverter extends LiferayConverter {
 			ICodec.Type inputICodecType = inputIStreamCoder.getCodecType();
 
 			if (inputICodecType == ICodec.Type.CODEC_TYPE_AUDIO) {
-				int channels = inputIStreamCoder.getChannels();
-
-				if (_channels > 0) {
-					channels = _channels;
-				}
-
-				int rate = inputIStreamCoder.getSampleRate();
-
-				if (_rate > 0) {
-					rate = _rate;
-				}
-
 				prepareAudio(
 					iAudioResamplers, inputIAudioSamples, outputIAudioSamples,
 					inputIStreamCoder, outputIStreamCoders, _outputIContainer,
-					outputIStreams, inputICodecType, _outputURL, channels, rate,
-					i);
+					outputIStreams, inputICodecType, _outputURL, i);
 			}
 			else if (inputICodecType == ICodec.Type.CODEC_TYPE_VIDEO) {
-				IStream outputIStream = _outputIContainer.addNewStream(i);
-
-				outputIStreams[i] = outputIStream;
-
-				IStreamCoder outputIStreamCoder =
-					outputIStream.getStreamCoder();
-
-				outputIStreamCoders[i] = outputIStreamCoder;
-
-				if (inputIStreamCoder.getBitRate() == 0) {
-					outputIStreamCoder.setBitRate(250000);
-				}
-				else {
-					outputIStreamCoder.setBitRate(
-						inputIStreamCoder.getBitRate());
-				}
-
-				ICodec iCodec = ICodec.guessEncodingCodec(
-					null, null, _outputURL, null, inputICodecType);
-
-				if (outputFormat.equals("mp4")) {
-					iCodec = ICodec.findEncodingCodec(ICodec.ID.CODEC_ID_H264);
-				}
-
-				if (iCodec == null) {
-					throw new RuntimeException(
-						"Unable to determine " + inputICodecType +
-							" encoder for " + _outputURL);
-				}
-
-				outputIStreamCoder.setCodec(iCodec);
-
-				if (inputIStreamCoder.getHeight() <= 0) {
-					throw new RuntimeException(
-						"Unable to determine height for " + _inputURL);
-				}
-
-				outputIStreamCoder.setHeight(_height);
-
-				IRational iRational = inputIStreamCoder.getFrameRate();
-
-				outputIStreamCoder.setFrameRate(iRational);
-
-				outputIStreamCoder.setPixelType(Type.YUV420P);
-				outputIStreamCoder.setTimeBase(
-					IRational.make(
-						iRational.getDenominator(), iRational.getNumerator()));
-
-				if (inputIStreamCoder.getWidth() <= 0) {
-					throw new RuntimeException(
-						"Unable to determine width for " + _inputURL);
-				}
-
-				outputIStreamCoder.setWidth(_width);
-
-				iVideoResamplers[i] = createIVideoResampler(
-					inputIStreamCoder, outputIStreamCoder, _height, _width);
-
-				inputIVideoPictures[i] = IVideoPicture.make(
-					inputIStreamCoder.getPixelType(),
-					inputIStreamCoder.getWidth(),
-					inputIStreamCoder.getHeight());
-				outputIVideoPictures[i] = IVideoPicture.make(
-					outputIStreamCoder.getPixelType(),
-					outputIStreamCoder.getWidth(),
-					outputIStreamCoder.getHeight());
-
-				if (iCodec.getID().equals(ICodec.ID.CODEC_ID_H264)) {
-					Configuration.configure(
-						_ffpresetProperties, outputIStreamCoder);
-				}
+				prepareVideo(
+					iVideoResamplers, inputIVideoPictures, outputIVideoPictures,
+					inputIStreamCoder, outputIStreamCoders, outputFormat,
+					outputIStreams, inputICodecType, i);
 			}
 
 			openStreamCoder(inputIStreamCoders[i]);
@@ -332,8 +251,17 @@ public class LiferayVideoConverter extends LiferayConverter {
 	}
 
 	@Override
-	protected IContainer getInputIContainer() {
-		return _inputIContainer;
+	protected int getAudioEncodingChannels(
+		IContainer outputIContainer, int channels) {
+
+		String outputFormat =
+			outputIContainer.getContainerFormat().getOutputFormatShortName();
+
+		if (outputFormat.equals("ogg")) {
+			return 2;
+		}
+
+		return super.getAudioEncodingChannels(outputIContainer, channels);
 	}
 
 	@Override
@@ -349,17 +277,94 @@ public class LiferayVideoConverter extends LiferayConverter {
 	}
 
 	@Override
-	protected int getAudioEncodingChannels(
-		IContainer outputIContainer, int channels) {
+	protected IContainer getInputIContainer() {
+		return _inputIContainer;
+	}
 
-		String outputFormat =
-			outputIContainer.getContainerFormat().getOutputFormatShortName();
+	protected void prepareVideo(
+			IVideoResampler[] iVideoResamplers,
+			IVideoPicture[] inputIVideoPictures,
+			IVideoPicture[] outputIVideoPictures,
+			IStreamCoder inputIStreamCoder, IStreamCoder[] outputIStreamCoders,
+			String outputFormat, IStream[] outputIStreams,
+			ICodec.Type inputICodecType, int index)
+		throws Exception {
 
-		if (outputFormat.equals("ogg")) {
-			return 2;
+		IStream outputIStream = _outputIContainer.addNewStream(index);
+
+		outputIStreams[index] = outputIStream;
+
+		IStreamCoder outputIStreamCoder =
+			outputIStream.getStreamCoder();
+
+		outputIStreamCoders[index] = outputIStreamCoder;
+
+		int bitRate = inputIStreamCoder.getBitRate();
+
+		if ((bitRate == 0) || (bitRate > MAX_VIDEO_BIT_RATE)) {
+			bitRate = DEFAULT_VIDEO_BIT_RATE;
 		}
 
-		return super.getAudioEncodingChannels(outputIContainer, channels);
+		outputIStreamCoder.setBitRate(bitRate);
+
+		ICodec iCodec = ICodec.guessEncodingCodec(
+			null, null, _outputURL, null, inputICodecType);
+
+		if (outputFormat.equals("mp4")) {
+			iCodec = ICodec.findEncodingCodec(ICodec.ID.CODEC_ID_H264);
+		}
+
+		if (iCodec == null) {
+			throw new RuntimeException(
+				"Unable to determine " + inputICodecType +
+					" encoder for " + _outputURL);
+		}
+
+		outputIStreamCoder.setCodec(iCodec);
+
+		if (inputIStreamCoder.getHeight() <= 0) {
+			throw new RuntimeException(
+				"Unable to determine height for " + _inputURL);
+		}
+
+		outputIStreamCoder.setHeight(_height);
+
+		IRational frameRate = inputIStreamCoder.getFrameRate();
+
+		if (outputFormat.equals("mp4")) {
+			frameRate = IRational.make(30, 1);
+		}
+
+		outputIStreamCoder.setFrameRate(frameRate);
+
+		outputIStreamCoder.setPixelType(Type.YUV420P);
+
+		outputIStreamCoder.setTimeBase(IRational.make(
+			frameRate.getDenominator(), frameRate.getNumerator()));
+
+		if (inputIStreamCoder.getWidth() <= 0) {
+			throw new RuntimeException(
+				"Unable to determine width for " + _inputURL);
+		}
+
+		outputIStreamCoder.setWidth(_width);
+
+		iVideoResamplers[index] = createIVideoResampler(
+			inputIStreamCoder, outputIStreamCoder, _height, _width);
+
+		inputIVideoPictures[index] = IVideoPicture.make(
+			inputIStreamCoder.getPixelType(),
+			inputIStreamCoder.getWidth(),
+			inputIStreamCoder.getHeight());
+		outputIVideoPictures[index] = IVideoPicture.make(
+			outputIStreamCoder.getPixelType(),
+			outputIStreamCoder.getWidth(),
+			outputIStreamCoder.getHeight());
+
+		if (iCodec.getID().equals(ICodec.ID.CODEC_ID_H264)) {
+			Configuration.configure(
+				_ffpresetProperties, outputIStreamCoder);
+		}
 	}
 
 	private Properties _ffpresetProperties;
@@ -367,13 +372,11 @@ public class LiferayVideoConverter extends LiferayConverter {
 	private static Log _log = LogFactoryUtil.getLog(
 		LiferayVideoConverter.class);
 
-	private int _channels;
 	private int _height = 240;
 	private IContainer _inputIContainer;
 	private String _inputURL;
 	private IContainer _outputIContainer;
 	private String _outputURL;
-	private int _rate;
 	private int _width = 320;
 
 }
