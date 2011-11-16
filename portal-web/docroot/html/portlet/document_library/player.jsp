@@ -20,35 +20,64 @@
 boolean supportedAudio = GetterUtil.getBoolean((String)request.getAttribute("view_file_entry.jsp-supportedAudio"));
 boolean supportedVideo = GetterUtil.getBoolean((String)request.getAttribute("view_file_entry.jsp-supportedVideo"));
 
-String previewFileURL = (String)request.getAttribute("view_file_entry.jsp-previewFileURL");
+String[] previewFileURLs = (String[])request.getAttribute("view_file_entry.jsp-previewFileURLs");
 String videoThumbnailURL = (String)request.getAttribute("view_file_entry.jsp-videoThumbnailURL");
+
+String mp4PreviewFileURL = null;
+String ogvPreviewFileURL = null;
+
+for (String previewFileURL : previewFileURLs) {
+	if (previewFileURL.endsWith("mp4")){
+		mp4PreviewFileURL = previewFileURL;
+	}
+	else if (previewFileURL.endsWith("ogv")){
+		ogvPreviewFileURL = previewFileURL;
+	}
+}
 %>
 
-<aui:script use="aui-swf">
-	new A.SWF(
-		{
-			boundingBox: '#<portlet:namespace />previewFileContent',
-			fixedAttributes: {
-				allowFullScreen: true,
-				bgColor: '#000000'
-			},
-			flashVars: {
-				<c:choose>
-					<c:when test="<%= supportedAudio %>">
-							'<%= AudioProcessor.PREVIEW_TYPE %>': '<%= previewFileURL %>'
-					</c:when>
-					<c:when test="<%= supportedVideo %>">
-						'<%= VideoProcessor.PREVIEW_TYPE %>': '<%= previewFileURL %>',
-						'<%= VideoProcessor.THUMBNAIL_TYPE %>': '<%= videoThumbnailURL %>'
-					</c:when>
-				</c:choose>
-			},
-			<c:if test="<%= supportedAudio %>">
-				height: 27,
-			</c:if>
-			url: '<%= themeDisplay.getPathJavaScript() %>/misc/video_player/mpw_player.swf',
-			useExpressInstall: true,
-			version: 9
-		}
-	);
-</aui:script>
+<c:choose>
+	<c:when test="<%= supportedAudio %>">
+		<aui:script use="aui-swf">
+			new A.SWF(
+				{
+					boundingBox: '#<portlet:namespace />previewFileContent',
+					fixedAttributes: {
+						allowFullScreen: true,
+						bgColor: '#000000'
+					},
+					flashVars: {
+						'mp3': '<%= previewFileURLs[0] %>'
+					},
+					url: '<%= themeDisplay.getPathJavaScript() %>/misc/video_player/mpw_player.swf',
+					useExpressInstall: true,
+					version: 9
+				}
+			);
+		</aui:script>
+	</c:when>
+	<c:when test="<%= supportedVideo %>">
+		<aui:script use="aui-video">
+			var previewNode = A.one('#<portlet:namespace />previewFileContent');
+
+			new A.Video(
+				{
+					boundingBox: previewNode,
+					fixedAttributes: {
+						allowfullscreen: 'true',
+						bgColor: '#000000'
+					},
+					height: previewNode.height(),
+					<c:if test="<%= Validator.isNotNull(ogvPreviewFileURL) %>">
+						ogvUrl: '<%= ogvPreviewFileURL %>',
+					</c:if>
+					poster: '<%= videoThumbnailURL %>',
+					<c:if test="<%= Validator.isNotNull(mp4PreviewFileURL) %>">
+						url: '<%= mp4PreviewFileURL %>',
+					</c:if>
+					width: previewNode.width()
+				}
+			).render();
+		</aui:script>
+	</c:when>
+</c:choose>

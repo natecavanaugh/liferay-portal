@@ -653,6 +653,11 @@
 		}
 	}
 
+	.aui-video-node {
+		height: 100%;
+		width: 100%;
+	}
+
 	.asset-details {
 		h3.version {
 			margin: 0 0 10px;
