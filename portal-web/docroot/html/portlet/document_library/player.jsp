@@ -36,52 +36,48 @@ for (String previewFileURL : previewFileURLs) {
 }
 %>
 
-<c:if test="<%= supportedAudio%>">
-	<aui:script use="aui-swf">
-		new A.SWF(
-			{
-				boundingBox: '#<portlet:namespace />previewFileContent',
-				fixedAttributes: {
-					allowFullScreen: true,
-					bgColor: '#000000'
-				},
-				flashVars: {
-					'mp3': '<%= previewFileURLs[0] %>'
-				},
-				height: 27,
-				url: '<%= themeDisplay.getPathJavaScript() %>/misc/video_player/mpw_player.swf',
-				useExpressInstall: true,
-				version: 9
-			}
-		);
-	</aui:script>
-</c:if>
-<c:if test="<%= supportedVideo%>">
-	<style type="text/css" media="screen">
-		.aui-video-node {
-			width: 100%;
-			height: 100%;
-		}
-	</style>
-	<aui:script use="aui-base,aui-video">
-	    var previewDivObject = A.one('#<portlet:namespace />previewFileContent');
-		new A.Video(
-			{
-			    boundingBox: '#<portlet:namespace />previewFileContent',
-			    width: previewDivObject.getStyle('width'),
-		    	height: previewDivObject.getStyle('height'),
-		    	<c:if test="<%= Validator.isNotNull(mp4PreviewFileURL) %>">
-			    	url: '<%= mp4PreviewFileURL %>',
-			    </c:if>
-			    <c:if test="<%= Validator.isNotNull(ogvPreviewFileURL) %>">
-			    	ogvUrl: '<%= ogvPreviewFileURL %>',
-			    </c:if>
-			    poster: '<%= videoThumbnailURL %>',
-			    fixedAttributes: {
-			        allowfullscreen: 'true',
-			        bgColor: '#000000'
-			    }
-			}
-		).render();
-	</aui:script>
-</c:if>
+<c:choose>
+	<c:when test="<%= supportedAudio %>">
+		<aui:script use="aui-swf">
+			new A.SWF(
+				{
+					boundingBox: '#<portlet:namespace />previewFileContent',
+					fixedAttributes: {
+						allowFullScreen: true,
+						bgColor: '#000000'
+					},
+					flashVars: {
+						'mp3': '<%= previewFileURLs[0] %>'
+					},
+					url: '<%= themeDisplay.getPathJavaScript() %>/misc/video_player/mpw_player.swf',
+					useExpressInstall: true,
+					version: 9
+				}
+			);
+		</aui:script>
+	</c:when>
+	<c:when test="<%= supportedVideo %>">
+		<aui:script use="aui-video">
+			var previewNode = A.one('#<portlet:namespace />previewFileContent');
+
+			new A.Video(
+				{
+					boundingBox: previewNode,
+					fixedAttributes: {
+						allowfullscreen: 'true',
+						bgColor: '#000000'
+					},
+					height: previewNode.height(),
+					<c:if test="<%= Validator.isNotNull(ogvPreviewFileURL) %>">
+						ogvUrl: '<%= ogvPreviewFileURL %>',
+					</c:if>
+					poster: '<%= videoThumbnailURL %>',
+					<c:if test="<%= Validator.isNotNull(mp4PreviewFileURL) %>">
+						url: '<%= mp4PreviewFileURL %>',
+					</c:if>
+					width: previewNode.width()
+				}
+			).render();
+		</aui:script>
+	</c:when>
+</c:choose>
