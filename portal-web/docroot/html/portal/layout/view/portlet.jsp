@@ -17,13 +17,13 @@
 <%@ include file="/html/portal/init.jsp" %>
 
 <%
-if (themeDisplay.isFacebook() || themeDisplay.isStateExclusive() || themeDisplay.isStatePopUp() || themeDisplay.isWidget() || layoutTypePortlet.hasStateMax()) {
+if (themeDisplay.isFacebook() || themeDisplay.isStateExclusive() || themeDisplay.isStateExclusiveStateful() || themeDisplay.isStatePopUp() || themeDisplay.isWidget() || layoutTypePortlet.hasStateMax()) {
 	String ppid = ParamUtil.getString(request, "p_p_id");
 
 	String velocityTemplateId = null;
 	String velocityTemplateContent = null;
 
-	if (themeDisplay.isFacebook() || themeDisplay.isStateExclusive()) {
+	if (themeDisplay.isFacebook() || themeDisplay.isStateExclusive() || themeDisplay.isStateExclusiveStateful()) {
 		velocityTemplateId = theme.getThemeId() + LayoutTemplateConstants.STANDARD_SEPARATOR + "exclusive";
 		velocityTemplateContent = LayoutTemplateLocalServiceUtil.getContent("exclusive", true, theme.getThemeId());
 	}
@@ -68,7 +68,7 @@ else {
 }
 %>
 
-<c:if test="<%= !themeDisplay.isFacebook() && !themeDisplay.isStateExclusive() && !themeDisplay.isStatePopUp() && !themeDisplay.isWidget() %>">
+<c:if test="<%= !themeDisplay.isFacebook() && !themeDisplay.isStateExclusive() && !themeDisplay.isStateExclusiveStateful() && !themeDisplay.isStatePopUp() && !themeDisplay.isWidget() %>">
 
 	<%
 	for (String portletId : PropsValues.LAYOUT_STATIC_PORTLETS_ALL) {

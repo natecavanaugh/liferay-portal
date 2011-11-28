@@ -28,12 +28,25 @@ public class LiferayWindowState extends WindowState {
 
 	public static final WindowState EXCLUSIVE = new WindowState("exclusive");
 
+	public static final WindowState EXCLUSIVE_STATEFUL = new WindowState("exclusive_stateful");
+
 	public static final WindowState POP_UP = new WindowState("pop_up");
 
 	public static boolean isExclusive(HttpServletRequest request) {
 		String state = _getWindowState(request);
 
 		if ((state != null) && (state.equals(EXCLUSIVE.toString()))) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public static boolean isExclusiveStateful(HttpServletRequest request) {
+		String state = _getWindowState(request);
+
+		if ((state != null) && (state.equals(EXCLUSIVE_STATEFUL.toString()))) {
 			return true;
 		}
 		else {
@@ -74,6 +87,14 @@ public class LiferayWindowState extends WindowState {
 			(newWindowState.equals(LiferayWindowState.EXCLUSIVE))) {
 
 			return true;
+		}
+
+		// Changes to EXCLUSIVE_STATEFUL are always preserved
+
+		if ((newWindowState != null) &&
+			(newWindowState.equals(LiferayWindowState.EXCLUSIVE_STATEFUL))) {
+
+			return false;
 		}
 
 		// Some window states are automatically preserved
