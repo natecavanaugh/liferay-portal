@@ -75,38 +75,47 @@ if (layout != null) {
 %>
 
 <c:if test="<%= !themeDisplay.isStatePopUp() && !group.isControlPanel() && (layout != null) && (!group.hasStagingGroup() || group.isStagingGroup()) && (GroupPermissionUtil.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_LAYOUT) || LayoutPermissionUtil.contains(permissionChecker, layout, ActionKeys.UPDATE) || (layoutTypePortlet.isCustomizable() && LayoutPermissionUtil.contains(permissionChecker, layout, ActionKeys.CUSTOMIZE))) %>">
-	<aui:script use="liferay-layout,liferay-navigation">
-		var layoutOptions = {};
 
-		if (!themeDisplay.isFreeformLayout()) {
-			layoutOptions = {
-				disabledDropContainerClass: 'portlet-dropzone-disabled',
-				dragNodes: '#main-content .portlet-boundary:not(.portlet-static)',
-				dropContainer: '.portlet-dropzone',
-				dropNodes: '.portlet-column',
-				emptyColumnClass: 'empty',
-				handles: ['.portlet-title', '.portlet-title-default'],
-				invalid: '.portlet-static',
-				nestedPortletId: '_<%= PortletKeys.NESTED_PORTLETS %>_INSTANCE',
-				portletBoundary: '.portlet-boundary'
-			};
-		}
-		else {
-			layoutOptions = {
-				disabledDropContainerClass: 'portlet-dropzone-disabled',
-				dragNodes: '#main-content .portlet-boundary',
-				dropContainer: '.portlet-dropzone',
-				dropNodes: '.portlet-column',
-				emptyColumnClass: 'empty',
-				freeForm: true,
-				freeformPlaceholderClass: 'lfr-freeform-layout-drag-indicator',
-				handles: ['.portlet-header-bar', '.portlet-title-default', '.portlet-topper'],
-				nestedPortletId: '_<%= PortletKeys.NESTED_PORTLETS %>_INSTANCE',
-				portletBoundary: '.portlet-boundary'
-			};
-		}
+	<c:if test="<%= layout.isTypePortlet() %>">
+		<aui:script>
+			var layoutOptions = {};
+		</aui:script>
 
-		<c:if test="<%= layout.isTypePortlet() %>">
+		<c:choose>
+			<c:when test="<%= !themeDisplay.isFreeformLayout() %>">
+				<aui:script use="liferay-layout-column">
+					layoutOptions = {
+						disabledDropContainerClass: 'portlet-dropzone-disabled',
+						dragNodes: '#main-content .portlet-boundary:not(.portlet-static)',
+						dropContainer: '.portlet-dropzone',
+						dropNodes: '.portlet-column',
+						emptyColumnClass: 'empty',
+						handles: ['.portlet-title', '.portlet-title-default'],
+						invalid: '.portlet-static',
+						nestedPortletId: '_<%= PortletKeys.NESTED_PORTLETS %>_INSTANCE',
+						portletBoundary: '.portlet-boundary'
+					};
+				</aui:script>
+			</c:when>
+			<c:otherwise>
+				<aui:script use="liferay-layout-freeform">
+					layoutOptions = {
+						disabledDropContainerClass: 'portlet-dropzone-disabled',
+						dragNodes: '#main-content .portlet-boundary',
+						dropContainer: '.portlet-dropzone',
+						dropNodes: '.portlet-column',
+						emptyColumnClass: 'empty',
+						freeForm: true,
+						freeformPlaceholderClass: 'lfr-freeform-layout-drag-indicator',
+						handles: ['.portlet-header-bar', '.portlet-title-default', '.portlet-topper'],
+						nestedPortletId: '_<%= PortletKeys.NESTED_PORTLETS %>_INSTANCE',
+						portletBoundary: '.portlet-boundary'
+					};
+				</aui:script>
+			</c:otherwise>
+		</c:choose>
+
+		<aui:script use="liferay-layout">
 			Liferay.once(
 				'initLayout',
 				function() {
@@ -124,8 +133,10 @@ if (layout != null) {
 					}
 				);
 			}
-		</c:if>
+		</aui:script>
+	</c:if>
 
+	<aui:script use="liferay-navigation">
 		Liferay.once(
 			'initNavigation',
 			function() {
