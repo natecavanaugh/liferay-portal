@@ -23,9 +23,9 @@ $theme.include($body_top_include)
 
 	<header id="banner" role="banner">
 		<div id="heading">
-			<h1 class="company-title">
-				<a class="$logo_css_class" href="$company_url" title="#language("go-to") $company_name">
-					<span>$company_name</span>
+			<h1 class="site-title">
+				<a class="$logo_css_class" href="$site_default_url" title="#language("go-to") $site_name">
+					<span>$site_name</span>
 				</a>
 			</h1>
 
