@@ -121,6 +121,11 @@
 				},
 				fieldNamespace: {
 					value: 'ddm'
+				},
+				name: {
+					valueFn: function() {
+						return A.FormBuilderField.buildFieldName('documents-and-media');
+					}
 				}
 			},
 
@@ -139,6 +144,12 @@
 						function(item, index, collection) {
 							if (item.attributeName === 'predefinedValue') {
 								item.editor = false;
+							}
+
+							if (item.attributeName === 'type') {
+								item.formatter = function() {
+									return 'documents-and-media';
+								}
 							}
 						}
 					);
