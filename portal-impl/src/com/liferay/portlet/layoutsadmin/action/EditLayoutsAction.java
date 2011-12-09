@@ -836,7 +836,7 @@ public class EditLayoutsAction extends PortletAction {
 					groupId, privateLayout, parentLayoutId, nameMap,
 					titleMap, descriptionMap, keywordsMap, robotsMap,
 					layoutPrototypeLayout.getType(), hidden, friendlyURL,
-					locked,	serviceContext);
+					locked, serviceContext);
 
 				LayoutServiceUtil.updateLayout(
 					layout.getGroupId(), layout.isPrivateLayout(),
