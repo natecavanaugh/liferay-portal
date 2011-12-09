@@ -124,10 +124,19 @@ String[][] categorySections = {mainSections};
 			String taglibEnableOnClick = "event.preventDefault(); " + liferayPortletResponse.getNamespace() + "saveLayout('enable');";
 
 			String taglibDeleteOnClick = "event.preventDefault(); " + liferayPortletResponse.getNamespace() + "saveLayout('" + Constants.DELETE + "');";
+
+			String taglibValue = null;
+
+			if (WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, LayoutRevision.class.getName())) {
+				taglibValue = LanguageUtil.format(pageContext, "submit-for-enabling-in-x", layoutSetBranchName);
+			}
+			else {
+				taglibValue = LanguageUtil.format(pageContext, "enable-in-x", layoutSetBranchName);
+			}
 			%>
 
 			<aui:button-row>
-				<aui:button name="enableLayout" onClick="<%= taglibEnableOnClick %>" value='<%= LanguageUtil.format(pageContext, "enable-in-x", layoutSetBranchName) %>' />
+				<aui:button name="enableLayout" onClick="<%= taglibEnableOnClick %>" value='<%= taglibValue %>' />
 
 				<aui:button name="deleteLayout" onClick="<%= taglibDeleteOnClick %>" value="delete-in-all-pages-variations" />
 			</aui:button-row>
