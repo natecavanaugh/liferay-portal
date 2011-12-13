@@ -42,7 +42,7 @@ if ((article != null) && article.isDraft()) {
 			children: [
 				<c:if test="<%= (article != null) && Validator.isNotNull(structureId) && (classNameId == 0) %>">
 					{
-						icon: 'search',
+						icon: 'preview',
 						id: '<portlet:namespace />previewArticleButton',
 						label: '<%= UnicodeLanguageUtil.get(pageContext, "preview") %>'
 					},
@@ -50,7 +50,7 @@ if ((article != null) && article.isDraft()) {
 
 				<c:if test="<%= Validator.isNotNull(structureId) %>">
 					{
-						icon: 'arrowreturnthick-1-b',
+						icon: 'download',
 						id: '<portlet:namespace />downloadArticleContentButton',
 						label: '<%= UnicodeLanguageUtil.get(pageContext, "download") %>'
 					},
@@ -87,7 +87,7 @@ if ((article != null) && article.isDraft()) {
 						permissionPopUp.centered();
 
 					},
-					icon: 'key',
+					icon: 'permissions',
 					label: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>'
 				},
 				</c:if>
@@ -97,7 +97,7 @@ if ((article != null) && article.isDraft()) {
 						handler: function() {
 							<portlet:namespace />expireArticle();
 						},
-						icon: 'minusthick',
+						icon: 'expire',
 						label: '<%= UnicodeLanguageUtil.get(pageContext, "expire-this-version") %>'
 					},
 				</c:if>
@@ -107,7 +107,7 @@ if ((article != null) && article.isDraft()) {
 						handler: function() {
 							<portlet:namespace />deleteArticle();
 						},
-						icon: 'circle-minus',
+						icon: 'delete',
 						label: '<liferay-ui:message key="<%= deleteButtonLabel %>" />'
 					},
 				</c:if>
@@ -124,7 +124,7 @@ if ((article != null) && article.isDraft()) {
 						handler: function (event) {
 							window.location = '<%= viewHistoryURL %>';
 						},
-						icon: 'clock',
+						icon: 'history',
 						label: '<%= UnicodeLanguageUtil.get(pageContext, "view-history") %>'
 					}
 				</c:if>
