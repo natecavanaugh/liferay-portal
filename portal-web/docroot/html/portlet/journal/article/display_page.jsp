@@ -154,14 +154,18 @@ Group parentGroup = themeDisplay.getParentGroup();
 				var buffer = [];
 
 				if (A.instanceOf(node, A.TreeNode)) {
-					buffer.push(node.get('labelEl').text());
+					var labelText = Liferay.Util.escapeHTML(node.get('labelEl').text());
+
+					buffer.push(labelText);
 
 					node.eachParent(
 						function(treeNode) {
 							var labelEl = treeNode.get('labelEl');
 
 							if (labelEl) {
-								buffer.unshift(labelEl.text());
+								labelText = Liferay.Util.escapeHTML(labelEl.text());
+
+								buffer.unshift(labelText);
 							}
 						}
 					);
@@ -535,6 +539,8 @@ Group parentGroup = themeDisplay.getParentGroup();
 	<%
 	Layout defaultDisplayLayout = LayoutLocalServiceUtil.getLayoutByUuidAndGroupId(layoutUuid, scopeGroupId);
 
+	defaultDisplayLayout = defaultDisplayLayout.toEscapedModel();
+
 	AssetRendererFactory assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(JournalArticle.class.getName());
 
 	AssetRenderer assetRenderer = assetRendererFactory.getAssetRenderer(article.getResourcePrimKey());
@@ -550,6 +556,8 @@ Group parentGroup = themeDisplay.getParentGroup();
 <%!
 private String _getLayoutBreadcrumb(Layout layout, Locale locale) throws Exception {
 	StringBundler sb = new StringBundler();
+
+	layout = layout.toEscapedModel();
 
 	if (layout.isPrivateLayout()) {
 		sb.append(LanguageUtil.get(locale, "private-pages"));
@@ -567,6 +575,8 @@ private String _getLayoutBreadcrumb(Layout layout, Locale locale) throws Excepti
 	Collections.reverse(ancestors);
 
 	for (Layout ancestor : ancestors) {
+		ancestor = ancestor.toEscapedModel();
+
 		sb.append(ancestor.getName(locale));
 		sb.append(StringPool.SPACE);
 		sb.append(StringPool.GREATER_THAN);
