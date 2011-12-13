@@ -66,6 +66,8 @@ Group parentGroup = themeDisplay.getParentGroup();
 
 			var Lang = A.Lang;
 
+			var Util = Liferay.Util;
+
 			var TPL_TAB_CONTENT = '<div id="<portlet:namespace />{tabId}">' +
 				'<div id="<portlet:namespace />{tabContentId}"></div>' +
 			'</div>';
@@ -154,7 +156,7 @@ Group parentGroup = themeDisplay.getParentGroup();
 				var buffer = [];
 
 				if (A.instanceOf(node, A.TreeNode)) {
-					var labelText = Liferay.Util.escapeHTML(node.get('labelEl').text());
+					var labelText = Util.escapeHTML(node.get('labelEl').text());
 
 					buffer.push(labelText);
 
@@ -163,7 +165,7 @@ Group parentGroup = themeDisplay.getParentGroup();
 							var labelEl = treeNode.get('labelEl');
 
 							if (labelEl) {
-								labelText = Liferay.Util.escapeHTML(labelEl.text());
+								labelText = Util.escapeHTML(labelEl.text());
 
 								buffer.unshift(labelText);
 							}
