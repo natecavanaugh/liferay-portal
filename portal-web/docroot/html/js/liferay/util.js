@@ -1593,9 +1593,18 @@
 							showBox.show();
 						}
 
-						if (hideBoxIds) {
-							A.all('#' + hideBoxIds.join(',#')).hide();
-						}
+                        if (Lang.isValue(hideBoxIds)) {
+                            var selector;
+
+                            if (Lang.isArray(hideBoxIds)) {
+                                selector = '#' + hideBoxIds.join(',#');
+                            }
+                            else {
+                                selector = '#' + hideBoxIds;
+                            }
+
+                            A.all(selector).hide();
+                        }
 					}
 				);
 			}
