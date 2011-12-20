@@ -112,7 +112,7 @@ import com.liferay.portal.servlet.filters.autologin.AutoLoginFilter;
 import com.liferay.portal.servlet.filters.cache.CacheUtil;
 import com.liferay.portal.spring.aop.ServiceBeanAopProxy;
 import com.liferay.portal.struts.AuthPublicPathRegistry;
-import com.liferay.portal.struts.StrutsActionRegistry;
+import com.liferay.portal.struts.StrutsActionRegistryUtil;
 import com.liferay.portal.upgrade.UpgradeProcessUtil;
 import com.liferay.portal.util.CustomJspRegistryUtil;
 import com.liferay.portal.util.JavaScriptBundleUtil;
@@ -235,9 +235,6 @@ public class HookHotDeployListener
 		"organizations.form.add.identification",
 		"organizations.form.add.main",
 		"organizations.form.add.miscellaneous",
-		"organizations.form.update.identification",
-		"organizations.form.update.main",
-		"organizations.form.update.miscellaneous",
 		"passwords.passwordpolicytoolkit.generator",
 		"passwords.passwordpolicytoolkit.static",
 		"portlet.add.default.resource.check.enabled",
@@ -2237,9 +2234,6 @@ public class HookHotDeployListener
 			"organizations.form.add.identification",
 			"organizations.form.add.main",
 			"organizations.form.add.miscellaneous",
-			"organizations.form.update.identification",
-			"organizations.form.update.main",
-			"organizations.form.update.miscellaneous",
 			"portlet.add.default.resource.check.whitelist",
 			"portlet.add.default.resource.check.whitelist.actions",
 			"session.phishing.protected.attributes",
@@ -2992,10 +2986,11 @@ public class HookHotDeployListener
 
 		public void registerStrutsAction(String path, Object strutsAction) {
 			if (strutsAction instanceof StrutsAction) {
-				StrutsActionRegistry.register(path, (StrutsAction)strutsAction);
+				StrutsActionRegistryUtil.register(
+					path, (StrutsAction)strutsAction);
 			}
 			else {
-				StrutsActionRegistry.register(
+				StrutsActionRegistryUtil.register(
 					path, (StrutsPortletAction)strutsAction);
 			}
 
@@ -3004,7 +2999,7 @@ public class HookHotDeployListener
 
 		public void unregisterStrutsActions() {
 			for (String path : _paths) {
-				StrutsActionRegistry.unregister(path);
+				StrutsActionRegistryUtil.unregister(path);
 			}
 
 			_paths.clear();

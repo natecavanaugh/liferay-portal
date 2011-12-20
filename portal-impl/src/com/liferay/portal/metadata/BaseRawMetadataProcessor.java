@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.metadata.RawMetadataProcessor;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 
 import java.io.File;
@@ -26,7 +27,9 @@ import java.io.InputStream;
 
 import java.lang.reflect.Field;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -74,6 +77,13 @@ public abstract class BaseRawMetadataProcessor implements RawMetadataProcessor {
 		Fields ddmFields = new Fields();
 
 		for (Field field : fields) {
+			Class<?> fieldClass = field.getDeclaringClass();
+
+			String fieldClassName = fieldClass.getSimpleName();
+
+			String name = fieldClassName.concat(
+				StringPool.UNDERLINE).concat(field.getName());
+
 			String value = getMetadataValue(metadata, field);
 
 			if (value == null) {
@@ -82,7 +92,7 @@ public abstract class BaseRawMetadataProcessor implements RawMetadataProcessor {
 
 			com.liferay.portlet.dynamicdatamapping.storage.Field ddmField =
 				new com.liferay.portlet.dynamicdatamapping.storage.Field(
-					field.getName(), value);
+					name, value);
 
 			ddmFields.put(ddmField);
 		}
@@ -154,6 +164,12 @@ public abstract class BaseRawMetadataProcessor implements RawMetadataProcessor {
 		}
 	}
 
+	private static void _addFields(Class<?> clazz, List<Field> fields) {
+		for (Field field : clazz.getFields()) {
+			fields.add(field);
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(
 		BaseRawMetadataProcessor.class);
 
@@ -161,27 +177,22 @@ public abstract class BaseRawMetadataProcessor implements RawMetadataProcessor {
 		new HashMap<String, Field[]>();
 
 	static {
+		List<Field> fields = new ArrayList<Field>();
+
+		_addFields(ClimateForcast.class, fields);
+		_addFields(CreativeCommons.class, fields);
+		_addFields(DublinCore.class, fields);
+		_addFields(Geographic.class, fields);
+		_addFields(HttpHeaders.class, fields);
+		_addFields(Message.class, fields);
+		_addFields(MSOffice.class, fields);
+		_addFields(TIFF.class, fields);
+		_addFields(TikaMetadataKeys.class, fields);
+		_addFields(TikaMimeKeys.class, fields);
+		_addFields(XMPDM.class, fields);
+
 		_fields.put(
-			ClimateForcast.class.getSimpleName(),
-			ClimateForcast.class.getFields());
-		_fields.put(
-			CreativeCommons.class.getSimpleName(),
-			CreativeCommons.class.getFields());
-		_fields.put(
-			DublinCore.class.getSimpleName(), DublinCore.class.getFields());
-		_fields.put(
-			Geographic.class.getSimpleName(), Geographic.class.getFields());
-		_fields.put(
-			HttpHeaders.class.getSimpleName(), HttpHeaders.class.getFields());
-		_fields.put(Message.class.getSimpleName(), Message.class.getFields());
-		_fields.put(MSOffice.class.getSimpleName(), MSOffice.class.getFields());
-		_fields.put(TIFF.class.getSimpleName(), TIFF.class.getFields());
-		_fields.put(
-			TikaMetadataKeys.class.getSimpleName(),
-			TikaMetadataKeys.class.getFields());
-		_fields.put(
-			TikaMimeKeys.class.getSimpleName(), TikaMimeKeys.class.getFields());
-		_fields.put(XMPDM.class.getSimpleName(), XMPDM.class.getFields());
+			"TikaRawMetadata", fields.toArray(new Field[fields.size()]));
 	}
 
 }

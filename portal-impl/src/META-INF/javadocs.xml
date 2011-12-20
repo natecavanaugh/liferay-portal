@@ -2298,6 +2298,9 @@ by the Search portlet.]]></comment>
 				<type>byte[]</type>
 				<comment><![CDATA[the bytes of the company's logo image]]></comment>
 			</param>
+			<return>
+				<comment><![CDATA[the company with the primary key]]></comment>
+			</return>
 			<throws>
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
@@ -2322,6 +2325,9 @@ by the Search portlet.]]></comment>
 				<type>java.io.File</type>
 				<comment><![CDATA[the file of the company's logo image]]></comment>
 			</param>
+			<return>
+				<comment><![CDATA[the company with the primary key]]></comment>
+			</return>
 			<throws>
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
@@ -2346,6 +2352,9 @@ by the Search portlet.]]></comment>
 				<type>java.io.InputStream</type>
 				<comment><![CDATA[the input stream of the company's logo image]]></comment>
 			</param>
+			<return>
+				<comment><![CDATA[the company with the primary key]]></comment>
+			</return>
 			<throws>
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
@@ -2431,7 +2440,7 @@ by the Search portlet.]]></comment>
 			</throws>
 		</method>
 		<method>
-			<name>getLogoId</name>
+			<name>checkLogo</name>
 			<comment><![CDATA[]]></comment>
 			<param>
 				<name>companyId</name>
@@ -3044,6 +3053,9 @@ through {@link com.liferay.portal.service.CompanyService}.]]></comment>
 				<type>java.io.InputStream</type>
 				<comment><![CDATA[the input stream of the company's logo image]]></comment>
 			</param>
+			<return>
+				<comment><![CDATA[the company with the primary key]]></comment>
+			</return>
 			<throws>
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
@@ -7707,7 +7719,7 @@ This method handles the creation of the layout including its resources, metadata
 			<param>
 				<name>serviceContext</name>
 				<type>com.liferay.portal.service.ServiceContext</type>
-				<comment><![CDATA[the service context. Must set the universally unique identifier (UUID) for the layout. Can set the creation date, modification date and the expando bridge attributes for the layout. For layouts that belong to a layout set prototype, an attribute named 'layoutUpdateable' can be set to specify whether site administrators can modify this page within their site.]]></comment>
+				<comment><![CDATA[the service context. Must set the universally unique identifier (UUID) for the layout. Can set the creation date, modification date and the expando bridge attributes for the layout. For layouts that belong to a layout set prototype, an attribute named 'layoutUpdateable' can be set to specify whether site administrators can modify this page within their site. For layouts that are created from a layout prototype, attributes named 'layoutPrototypeUuid' and 'layoutPrototypeLinkedEnabled' can be specified to provide the unique identifier of the source prototype and a boolean to determined whether a link to it should be enabled to activate propagation of changes made to the linked page in the prototype.]]></comment>
 			</param>
 			<return>
 				<comment><![CDATA[the layout]]></comment>
@@ -9019,7 +9031,7 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 			<param>
 				<name>serviceContext</name>
 				<type>com.liferay.portal.service.ServiceContext</type>
-				<comment><![CDATA[the service context. Can set the modification date and expando bridge attributes for the layout.]]></comment>
+				<comment><![CDATA[the service context. Can set the modification date and expando bridge attributes for the layout. For layouts that are linked to a layout prototype, attributes named 'layoutPrototypeUuid' and 'layoutPrototypeLinkedEnabled' can be specified to provide the unique identifier of the source prototype and a boolean to determined whether a link to it should be enabled to activate propagation of changes made to the linked page in the prototype.]]></comment>
 			</param>
 			<return>
 				<comment><![CDATA[the updated layout]]></comment>
@@ -16621,7 +16633,7 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>getUserOrganizations</name>
-			<comment><![CDATA[Returns all the organizations associated with the user, optionally including the organizations associated with the user groups to which the user belongs.]]></comment>
+			<comment><![CDATA[Returns all the organizations associated with the user.]]></comment>
 			<param>
 				<name>userId</name>
 				<type>long</type>
@@ -16643,7 +16655,7 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>getUserOrganizations</name>
-			<comment><![CDATA[Returns a range of all the organizations associated with the user, optionally including the organizations associated with the user groups to which the user belongs.
+			<comment><![CDATA[Returns a range of all the organizations associated with the user.
 
 <p>
 Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.

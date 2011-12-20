@@ -305,7 +305,13 @@ public class LayoutLocalServiceWrapper implements LayoutLocalService,
 	date, modification date and the expando bridge attributes for the
 	layout. For layouts that belong to a layout set prototype, an
 	attribute named 'layoutUpdateable' can be set to specify whether
-	site administrators can modify this page within their site.
+	site administrators can modify this page within their site. For
+	layouts that are created from a layout prototype, attributes
+	named 'layoutPrototypeUuid' and 'layoutPrototypeLinkedEnabled'
+	can be specified to provide the unique identifier of the source
+	prototype and a boolean to determined whether a link to it should
+	be enabled to activate propagation of changes made to the linked
+	page in the prototype.
 	* @return the layout
 	* @throws PortalException if a group or user with the primary key could not
 	be found, or if layout values were invalid
@@ -1110,7 +1116,13 @@ public class LayoutLocalServiceWrapper implements LayoutLocalService,
 	* @param iconImage whether the icon image will be updated
 	* @param iconBytes the byte array of the layout's new icon image
 	* @param serviceContext the service context. Can set the modification date
-	and expando bridge attributes for the layout.
+	and expando bridge attributes for the layout. For layouts that
+	are linked to a layout prototype, attributes named
+	'layoutPrototypeUuid' and 'layoutPrototypeLinkedEnabled' can be
+	specified to provide the unique identifier of the source
+	prototype and a boolean to determined whether a link to it should
+	be enabled to activate propagation of changes made to the linked
+	page in the prototype.
 	* @return the updated layout
 	* @throws PortalException if a group or layout with the primary key could
 	not be found, if a unique friendly URL could not be generated, if

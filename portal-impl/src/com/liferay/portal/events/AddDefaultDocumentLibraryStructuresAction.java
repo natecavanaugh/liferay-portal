@@ -197,14 +197,19 @@ public class AddDefaultDocumentLibraryStructuresAction
 	}
 
 	protected String buildDLRawMetadataElementXML(String name, Field field) {
-		StringBundler sb = new StringBundler(12);
+		StringBundler sb = new StringBundler(14);
 
 		sb.append("<dynamic-element dataType=\"string\" name=\"");
+
+		Class<?> fieldClass = field.getDeclaringClass();
+
+		sb.append(fieldClass.getSimpleName());
+		sb.append(StringPool.UNDERLINE);
 		sb.append(field.getName());
 		sb.append("\" type=\"text\">");
 		sb.append("<meta-data locale=\"en_US\">");
 		sb.append("<entry name=\"label\"><![CDATA[metadata.");
-		sb.append(name);
+		sb.append(fieldClass.getSimpleName());
 		sb.append(StringPool.PERIOD);
 		sb.append(field.getName());
 		sb.append("]]></entry><entry name=\"predefinedValue\">");

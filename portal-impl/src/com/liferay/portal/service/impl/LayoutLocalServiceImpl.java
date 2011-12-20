@@ -53,6 +53,7 @@ import com.liferay.portal.lar.PortletImporter;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
+import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.LayoutReference;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutTypePortlet;
@@ -98,6 +99,7 @@ import javax.portlet.PortletException;
  * The implementation of the layout local service.
  *
  * @author Brian Wing Shun Chan
+ * @author Jorge Ferrer
  * @author Joel Kozikowski
  * @author Charles May
  * @author Raymond Augé
@@ -167,7 +169,13 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 	 *         date, modification date and the expando bridge attributes for the
 	 *         layout. For layouts that belong to a layout set prototype, an
 	 *         attribute named 'layoutUpdateable' can be set to specify whether
-	 *         site administrators can modify this page within their site.
+	 *         site administrators can modify this page within their site. For
+	 *         layouts that are created from a layout prototype, attributes
+	 *         named 'layoutPrototypeUuid' and 'layoutPrototypeLinkedEnabled'
+	 *         can be specified to provide the unique identifier of the source
+	 *         prototype and a boolean to determined whether a link to it should
+	 *         be enabled to activate propagation of changes made to the linked
+	 *         page in the prototype.
 	 * @return the layout
 	 * @throws PortalException if a group or user with the primary key could not
 	 *         be found, or if layout values were invalid
@@ -232,6 +240,25 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 				"layoutUpdateable", String.valueOf(layoutUpdateable));
 
 			layout.setTypeSettingsProperties(typeSettingsProperties);
+		}
+
+		String layoutPrototypeUuid = ParamUtil.getString(
+			serviceContext, "layoutPrototypeUuid");
+		boolean layoutPrototypeLinkEnabled = ParamUtil.getBoolean(
+			serviceContext, "layoutPrototypeLinkEnabled", true);
+
+		if (Validator.isNotNull(layoutPrototypeUuid)) {
+			layout.setLayoutPrototypeUuid(layoutPrototypeUuid);
+			layout.setLayoutPrototypeLinkEnabled(layoutPrototypeLinkEnabled);
+
+			LayoutPrototype layoutPrototype =
+				layoutPrototypeLocalService.getLayoutPrototypeByUuid(
+					layoutPrototypeUuid);
+
+			Layout layoutPrototypeLayout = layoutPrototype.getLayout();
+
+			layout.setSourcePrototypeLayoutUuid(
+				layoutPrototypeLayout.getUuid());
 		}
 
 		if (type.equals(LayoutConstants.TYPE_PORTLET)) {
@@ -1511,7 +1538,13 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 	 * @param  iconImage whether the icon image will be updated
 	 * @param  iconBytes the byte array of the layout's new icon image
 	 * @param  serviceContext the service context. Can set the modification date
-	 *         and expando bridge attributes for the layout.
+	 *         and expando bridge attributes for the layout. For layouts that
+	 *         are linked to a layout prototype, attributes named
+	 *         'layoutPrototypeUuid' and 'layoutPrototypeLinkedEnabled' can be
+	 *         specified to provide the unique identifier of the source
+	 *         prototype and a boolean to determined whether a link to it should
+	 *         be enabled to activate propagation of changes made to the linked
+	 *         page in the prototype.
 	 * @return the updated layout
 	 * @throws PortalException if a group or layout with the primary key could
 	 *         not be found, if a unique friendly URL could not be generated, if
@@ -1591,6 +1624,25 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 			"layoutUpdateable", String.valueOf(layoutUpdateable));
 
 		layout.setTypeSettingsProperties(typeSettingsProperties);
+
+		String layoutPrototypeUuid = ParamUtil.getString(
+			serviceContext, "layoutPrototypeUuid");
+		boolean layoutPrototypeLinkEnabled = ParamUtil.getBoolean(
+			serviceContext, "layoutPrototypeLinkEnabled");
+
+		if (Validator.isNotNull(layoutPrototypeUuid)) {
+			layout.setLayoutPrototypeUuid(layoutPrototypeUuid);
+			layout.setLayoutPrototypeLinkEnabled(layoutPrototypeLinkEnabled);
+
+			LayoutPrototype layoutPrototype =
+				layoutPrototypeLocalService.getLayoutPrototypeByUuid(
+					layoutPrototypeUuid);
+
+			Layout layoutPrototypeLayout = layoutPrototype.getLayout();
+
+			layout.setSourcePrototypeLayoutUuid(
+				layoutPrototypeLayout.getUuid());
+		}
 
 		layoutPersistence.update(layout, false);
 

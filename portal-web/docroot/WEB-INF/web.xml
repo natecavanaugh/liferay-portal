@@ -24,6 +24,10 @@
 			<param-name>dispatcher</param-name>
 			<param-value>ERROR</param-value>
 		</init-param>
+		<init-param>
+			<param-name>register-portal-lifecycle</param-name>
+			<param-value>false</param-value>
+		</init-param>
 	</filter>
 	<filter>
 		<filter-name>Invoker Filter - FORWARD</filter-name>
@@ -31,6 +35,10 @@
 		<init-param>
 			<param-name>dispatcher</param-name>
 			<param-value>FORWARD</param-value>
+		</init-param>
+		<init-param>
+			<param-name>register-portal-lifecycle</param-name>
+			<param-value>false</param-value>
 		</init-param>
 	</filter>
 	<filter>
@@ -40,6 +48,10 @@
 			<param-name>dispatcher</param-name>
 			<param-value>INCLUDE</param-value>
 		</init-param>
+		<init-param>
+			<param-name>register-portal-lifecycle</param-name>
+			<param-value>false</param-value>
+		</init-param>
 	</filter>
 	<filter>
 		<filter-name>Invoker Filter - REQUEST</filter-name>
@@ -47,6 +59,10 @@
 		<init-param>
 			<param-name>dispatcher</param-name>
 			<param-value>REQUEST</param-value>
+		</init-param>
+		<init-param>
+			<param-name>register-portal-lifecycle</param-name>
+			<param-value>false</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>

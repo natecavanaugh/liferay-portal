@@ -21,6 +21,18 @@ import javax.portlet.PortletPreferences;
  */
 public class PrefsPropsUtil {
 
+	public static long getLong(String key) throws Exception {
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getLongMethodKey, key);
+
+		if (returnObj != null) {
+			return (Long)returnObj;
+		}
+		else {
+			return 0;
+		}
+	}
+
 	public static String getString(long companyId, String key)
 		throws Exception {
 
@@ -35,9 +47,7 @@ public class PrefsPropsUtil {
 		}
 	}
 
-	public static String getString(String key)
-		throws Exception {
-
+	public static String getString(String key) throws Exception {
 		Object returnObj = PortalClassInvoker.invoke(
 			false, _getStringMethodKey2, key);
 
@@ -147,6 +157,8 @@ public class PrefsPropsUtil {
 	private static final String _CLASS_NAME =
 		"com.liferay.portal.util.PrefsPropsUtil";
 
+	private static MethodKey _getLongMethodKey = new MethodKey(
+		_CLASS_NAME, "getLong", String.class);
 	private static MethodKey _getStringArrayMethodKey1 = new MethodKey(
 		_CLASS_NAME, "getStringArray", long.class, String.class, String.class);
 	private static MethodKey _getStringArrayMethodKey2 = new MethodKey(

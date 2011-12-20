@@ -60,7 +60,7 @@
 						<aui:input type="hidden" name="<%= Constants.CMD %>" value="<%= Constants.UPDATE %>" />
 
 						<aui:fieldset column="<%= true %>" cssClass="aui-w45" label="portal">
-							<aui:input label="portal-name" name='<%= "properties--" + PropsKeys.COMPANY_DEFAULT_WEB_ID + "--" %>' suffix='<%= LanguageUtil.format(pageContext, "for-example-x", "liferay.com") %>' value="<%= PropsValues.COMPANY_DEFAULT_WEB_ID %>" />
+							<aui:input label="portal-name" name='<%= "properties--" + PropsKeys.COMPANY_DEFAULT_NAME + "--" %>' suffix='<%= LanguageUtil.format(pageContext, "for-example-x", "Liferay") %>' value="<%= PropsValues.COMPANY_DEFAULT_NAME %>" />
 
 							<aui:select inlineField="<%= true %>" label="default-language" name='<%= "properties--" + PropsKeys.COMPANY_DEFAULT_LOCALE + "--" %>'>
 
