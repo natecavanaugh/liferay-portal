@@ -428,8 +428,9 @@ public class PortalInstances {
 			_log.debug("Check journal content search");
 		}
 
-		if (GetterUtil.getBoolean(PropsUtil.get(
-				PropsKeys.JOURNAL_SYNC_CONTENT_SEARCH_ON_STARTUP))) {
+		if (GetterUtil.getBoolean(
+				PropsUtil.get(
+					PropsKeys.JOURNAL_SYNC_CONTENT_SEARCH_ON_STARTUP))) {
 
 			try {
 				JournalContentSearchLocalServiceUtil.checkContentSearches(
@@ -514,11 +515,12 @@ public class PortalInstances {
 
 	private void _reload(ServletContext servletContext) {
 		_companyIds = new long[0];
+		_webIds = null;
 
 		String[] webIds = _getWebIds();
 
 		for (String webId : webIds) {
-			PortalInstances.initCompany(servletContext, webId);
+			_initCompany(servletContext, webId);
 		}
 	}
 

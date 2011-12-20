@@ -76,7 +76,9 @@ public class XMLStorageAdapter extends BaseStorageAdapter {
 			Object value = field.getValue();
 
 			if (value instanceof Date) {
-				value = ((Date)value).getTime();
+				Date valueDate = (Date)value;
+
+				value = valueDate.getTime();
 			}
 
 			_appendField(rootElement, field.getName(), String.valueOf(value));
@@ -214,8 +216,16 @@ public class XMLStorageAdapter extends BaseStorageAdapter {
 		while (itr.hasNext()) {
 			Field field = itr.next();
 
+			Object value = field.getValue();
+
+			if (value instanceof Date) {
+				Date valueDate = (Date)value;
+
+				value = valueDate.getTime();
+			}
+
 			String fieldName = field.getName();
-			String fieldValue = String.valueOf(field.getValue());
+			String fieldValue = String.valueOf(value);
 
 			Element dynamicElementElement = _getElementByName(
 				document, fieldName);

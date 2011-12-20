@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -78,11 +77,10 @@ public class InvokerFilter extends BasePortalLifecycle implements Filter {
 
 		_contextPath = servletContext.getContextPath();
 
-		Thread currentThread = Thread.currentThread();
+		boolean registerPortalLifecycle = GetterUtil.getBoolean(
+			_filterConfig.getInitParameter("register-portal-lifecycle"), true);
 
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		if (contextClassLoader != PortalClassLoaderUtil.getClassLoader()) {
+		if (registerPortalLifecycle) {
 			registerPortalLifecycle();
 		}
 		else {

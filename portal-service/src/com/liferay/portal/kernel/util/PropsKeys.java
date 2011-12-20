@@ -351,6 +351,8 @@ public interface PropsKeys {
 
 	public static final String COMPANY_DEFAULT_LOCALE = "company.default.locale";
 
+	public static final String COMPANY_DEFAULT_NAME = "company.default.name";
+
 	public static final String COMPANY_DEFAULT_TIME_ZONE = "company.default.time.zone";
 
 	public static final String COMPANY_DEFAULT_WEB_ID = "company.default.web.id";
@@ -1036,6 +1038,10 @@ public interface PropsKeys {
 	public static final String LAYOUT_PARALLEL_RENDER_ENABLE = "layout.parallel.render.enable";
 
 	public static final String LAYOUT_PARENTABLE = "layout.parentable";
+
+	public static final String LAYOUT_PROTOTYPE_MERGE_FAIL_THRESHOLD = "layout.prototype.merge.fail.threshold";
+
+	public static final String LAYOUT_PROTOTYPE_MERGE_LOCK_MAX_TIME = "layout.prototype.merge.lock.max.time";
 
 	public static final String LAYOUT_REMEMBER_MAXIMIZED_WINDOW_STATE = "layout.remember.maximized.window.state";
 

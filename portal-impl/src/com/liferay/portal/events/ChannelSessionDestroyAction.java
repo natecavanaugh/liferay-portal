@@ -34,9 +34,16 @@ public class ChannelSessionDestroyAction extends SessionAction {
 
 	@Override
 	public void run(HttpSession session) {
-		try {
-			User user = (User)session.getAttribute(WebKeys.USER);
+		User user = null;
 
+		try {
+			user = (User)session.getAttribute(WebKeys.USER);
+		}
+		catch (IllegalStateException ise) {
+			return;
+		}
+
+		try {
 			if (user == null) {
 				Long userId = (Long)session.getAttribute(WebKeys.USER_ID);
 

@@ -329,7 +329,9 @@ public class CustomSQL {
 		}
 
 		try {
-			ClassLoader classLoader = getClass().getClassLoader();
+			Class<?> clazz = getClass();
+
+			ClassLoader classLoader = clazz.getClassLoader();
 
 			String[] configs = getConfigs();
 

@@ -14,6 +14,8 @@
 
 package com.liferay.portal.events;
 
+import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
+import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -61,22 +63,25 @@ public class LoginPostAction extends Action {
 			// Live users
 
 			if (PropsValues.LIVE_USERS_ENABLED) {
-				userId = PortalUtil.getUserId(request);
-
-				String sessionId = session.getId();
-				String remoteAddr = request.getRemoteAddr();
-				String remoteHost = request.getRemoteHost();
-				String userAgent = request.getHeader(HttpHeaders.USER_AGENT);
-
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
+				ClusterNode clusterNode =
+					ClusterExecutorUtil.getLocalClusterNode();
+
+				jsonObject.put("clusterNodeId", clusterNode.getClusterNodeId());
 				jsonObject.put("command", "signIn");
 				jsonObject.put("companyId", companyId);
-				jsonObject.put("userId", userId);
-				jsonObject.put("sessionId", sessionId);
-				jsonObject.put("remoteAddr", remoteAddr);
-				jsonObject.put("remoteHost", remoteHost);
+				jsonObject.put("remoteAddr", request.getRemoteAddr());
+				jsonObject.put("remoteHost", request.getRemoteHost());
+				jsonObject.put("sessionId", session.getId());
+
+				String userAgent = request.getHeader(HttpHeaders.USER_AGENT);
+
 				jsonObject.put("userAgent", userAgent);
+
+				userId = PortalUtil.getUserId(request);
+
+				jsonObject.put("userId", userId);
 
 				MessageBusUtil.sendMessage(
 					DestinationNames.LIVE_USERS, jsonObject.toString());

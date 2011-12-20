@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.login.util;
 
+import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
+import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -255,15 +257,18 @@ public class LoginUtil {
 
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
+				ClusterNode clusterNode =
+					ClusterExecutorUtil.getLocalClusterNode();
+
+				jsonObject.put("clusterNodeId", clusterNode.getClusterNodeId());
 				jsonObject.put("command", "signOut");
 
 				long companyId = CompanyLocalServiceUtil.getCompanyIdByUserId(
 					userId);
 
 				jsonObject.put("companyId", companyId);
-
-				jsonObject.put("userId", userId);
 				jsonObject.put("sessionId", userTracker.getSessionId());
+				jsonObject.put("userId", userId);
 
 				MessageBusUtil.sendMessage(
 					DestinationNames.LIVE_USERS, jsonObject.toString());
