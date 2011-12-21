@@ -19,7 +19,126 @@ AUI().add(
 
 		var EMPTY_FN = A.Lang.emptyFn;
 
+		var STR_COMMA = ',';
 		var STR_EMPTY = '';
+
+		var DLFileEntryCellEditor = A.Component.create(
+			{
+				NAME: 'document-library-file-entry-cell-editor',
+
+				EXTENDS: A.BaseCellEditor,
+
+				prototype: {
+					ELEMENT_TEMPLATE: '<input type="hidden" />',
+
+					initializer: function() {
+						var instance = this;
+
+						window[Liferay.Util.getPortletNamespace('15') + 'selectDocumentLibrary'] = A.bind(instance._selectFileEntry, instance);
+					},
+
+					getElementsValue: function() {
+						var instance = this;
+
+						return instance.get('value');
+					},
+
+					_defInitToolbarFn: function() {
+						var instance = this;
+
+						DLFileEntryCellEditor.superclass._defInitToolbarFn.apply(instance, arguments);
+
+						instance.toolbar.add(
+							{
+								handler: A.bind(instance._handleChooseEvent, instance),
+								label: Liferay.Language.get('choose')
+							},
+							1
+						);
+					},
+
+					_handleChooseEvent: function() {
+						var instance = this;
+
+						var portletURL = Liferay.PortletURL.createRenderURL();
+
+						portletURL.setParameter('groupId', themeDisplay.getScopeGroupId());
+						portletURL.setParameter('struts_action', '/journal/select_document_library');
+
+						portletURL.setPlid(themeDisplay.getPlid());
+
+						portletURL.setPortletId('15');
+
+						portletURL.setWindowState('pop_up');
+
+						Liferay.Util.openWindow(
+							{
+								title: Liferay.Language.get('javax.portlet.title.20'),
+								uri: portletURL.toString()
+							}
+						);
+					},
+
+					_selectFileEntry: function(url, uuid, title, version) {
+						var instance = this;
+
+						instance.selectedTitle = title;
+						instance.selectedURL = url;
+
+						instance.set(
+							'value',
+							JSON.stringify(
+								{
+									groupId: themeDisplay.getScopeGroupId(),
+									uuid: uuid,
+									version: version
+								}
+							)
+						);
+					},
+
+					_syncFileLabel: function(title, url) {
+						var instance = this;
+
+						var contentBox = instance.get('contentBox');
+						var linkNode = contentBox.one('a');
+
+						if (!linkNode) {
+							linkNode = A.Node.create('<a></a>');
+
+							contentBox.prepend(linkNode);
+						}
+
+						linkNode.setAttribute('href', url);
+						linkNode.setContent(title);
+					},
+
+					_uiSetValue: function(val) {
+						var instance = this;
+
+						if (val) {
+							if (instance.selectedTitle && instance.selectedURL) {
+								instance._syncFileLabel(instance.selectedTitle, instance.selectedURL);
+							}
+							else {
+								SpreadSheet.Util.getFileEntry(val, function(fileEntry) {
+									var url = SpreadSheet.Util.getFileEntryURL(fileEntry);
+
+									instance._syncFileLabel(fileEntry.title, url);
+								});
+							}
+
+							instance.elements.val(val);
+						}
+						else {
+							instance._syncFileLabel(STR_EMPTY, STR_EMPTY);
+
+							instance.elements.val(STR_EMPTY);
+						}
+					}
+				}
+			}
+		);
 
 		var SpreadSheet = A.Component.create(
 			{
@@ -148,19 +267,7 @@ AUI().add(
 									var type = field.type;
 
 									if ((type === 'radio') || (type === 'select')) {
-										if (!Lang.isArray(item)) {
-											item = [item];
-										}
-
-										var values = [];
-
-										for (var i = 0; i < item.length; i++) {
-											var option = SpreadSheet.findStructureFieldByAttribute(field.options, 'label', item[i]);
-
-											values[i] = option.value;
-										}
-
-										item = values.join();
+										item = JSON.stringify(item);
 									}
 								}
 
@@ -240,7 +347,7 @@ AUI().add(
 									workflowAction: Liferay.Workflow.ACTION_PUBLISH
 								}
 							),
-							serviceParameterTypes: A.JSON.stringify(serviceParameterTypes)
+							serviceParameterTypes: JSON.stringify(serviceParameterTypes)
 						},
 						callback
 					);
@@ -360,9 +467,28 @@ AUI().add(
 							else if ((type === 'radio') || (type === 'select')) {
 								structureField = instance.findStructureFieldByAttribute(structure, 'name', name);
 
-								config.options = instance.getCellEditorOptions(structureField.options);
+								var multiple = A.DataType.Boolean.parse(structureField.multiple);
+								var options = instance.getCellEditorOptions(structureField.options);
 
-								config.multiple = A.DataType.Boolean.parse(structureField.multiple);
+								item.formatter = function(obj) {
+									var data = obj.record.get('data');
+
+									var label = [];
+									var value = data[name];
+
+									AArray.each(
+										value,
+										function(item1, index1, collection1) {
+											label.push(options[item1]);
+										}
+									);
+
+									return label.join(', ');
+								};
+
+								config.inputFormatter = AArray;
+								config.multiple = multiple;
+								config.options = options;
 							}
 
 							var validatorRuleName = instance.DATATYPE_VALIDATOR[dataType];
@@ -422,7 +548,7 @@ AUI().add(
 					AArray.each(
 						options,
 						function(item, index, collection) {
-							normalized[item.label] = item.label;
+							normalized[item.value] = item.label;
 						}
 					);
 
@@ -470,7 +596,7 @@ AUI().add(
 									workflowAction: Liferay.Workflow.ACTION_PUBLISH
 								}
 							),
-							serviceParameterTypes: A.JSON.stringify(serviceParameterTypes)
+							serviceParameterTypes: JSON.stringify(serviceParameterTypes)
 						},
 						callback
 					);
@@ -513,7 +639,7 @@ AUI().add(
 				var data = {};
 
 				try {
-					data = A.JSON.parse(value);
+					data = JSON.parse(value);
 				}
 				catch (e) {
 				}
@@ -522,10 +648,12 @@ AUI().add(
 			}
 		};
 
+		SpreadSheet.TYPE_EDITOR['ddm-documentlibrary'] = DLFileEntryCellEditor;
+
 		Liferay.SpreadSheet = SpreadSheet;
 	},
 	'',
 	{
-		requires: ['aui-arraysort', 'aui-datatable', 'json']
+		requires: ['aui-arraysort', 'aui-datatable', 'json', 'liferay-portlet-url']
 	}
 );

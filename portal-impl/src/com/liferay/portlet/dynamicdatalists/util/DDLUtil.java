@@ -89,8 +89,7 @@ public class DDLUtil {
 		return "ddl_records/" + record.getRecordId();
 	}
 
-	public static JSONObject getRecordJSONObject(
-			DDLRecord record, ThemeDisplay themeDisplay)
+	public static JSONObject getRecordJSONObject(DDLRecord record)
 		throws Exception {
 
 		DDLRecordSet recordSet = record.getRecordSet();
@@ -114,15 +113,22 @@ public class DDLUtil {
 			Field field = itr.next();
 
 			String fieldName = field.getName();
+			String fieldType = field.getType();
 			Object fieldValue = field.getValue();
 
 			if (fieldValue instanceof Date) {
 				jsonObject.put(fieldName, ((Date)fieldValue).getTime());
 			}
-			else {
-				fieldValue = field.getRenderedValue(themeDisplay);
+			else if ((fieldType.equals("radio") || fieldType.equals("select"))
+					&& Validator.isNotNull(fieldValue)) {
 
-				jsonObject.put(fieldName, (String)fieldValue);
+				fieldValue = JSONFactoryUtil.createJSONArray(
+					String.valueOf(fieldValue));
+
+				jsonObject.put(fieldName, (JSONArray)fieldValue);
+			}
+			else {
+				jsonObject.put(fieldName, String.valueOf(fieldValue));
 			}
 		}
 
@@ -179,21 +185,19 @@ public class DDLUtil {
 		return jsonArray;
 	}
 
-	public static JSONArray getRecordsJSONArray(
-			DDLRecordSet recordSet, ThemeDisplay themeDisplay)
+	public static JSONArray getRecordsJSONArray(DDLRecordSet recordSet)
 		throws Exception {
 
-		return getRecordsJSONArray(recordSet.getRecords(), themeDisplay);
+		return getRecordsJSONArray(recordSet.getRecords());
 	}
 
-	public static JSONArray getRecordsJSONArray(
-			List<DDLRecord> records, ThemeDisplay themeDisplay)
+	public static JSONArray getRecordsJSONArray(List<DDLRecord> records)
 		throws Exception {
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
 		for (DDLRecord record : records) {
-			JSONObject jsonObject = getRecordJSONObject(record, themeDisplay);
+			JSONObject jsonObject = getRecordJSONObject(record);
 
 			jsonArray.put(jsonObject);
 		}
