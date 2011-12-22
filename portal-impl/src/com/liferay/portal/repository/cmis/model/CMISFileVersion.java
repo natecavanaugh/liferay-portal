@@ -42,10 +42,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -104,21 +102,7 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 	}
 
 	public String getExtension() {
-		String extension = FileUtil.getExtension(getTitle());
-
-		if (Validator.isNotNull(extension)) {
-			return extension;
-		}
-
-		Set<String> extensions = MimeTypesUtil.getExtensions(getMimeType());
-
-		if (extensions.isEmpty()) {
-			return extension;
-		}
-
-		Iterator<String> iterator = extensions.iterator();
-
-		return iterator.next();
+		return FileUtil.getExtension(getTitle());
 	}
 
 	public String getExtraSettings() {

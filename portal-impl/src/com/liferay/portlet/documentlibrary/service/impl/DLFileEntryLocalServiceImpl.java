@@ -20,7 +20,7 @@ import com.liferay.portal.NoSuchLockException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.image.ImageBag;
-import com.liferay.portal.kernel.image.ImageProcessorUtil;
+import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Indexer;
@@ -552,9 +552,7 @@ public class DLFileEntryLocalServiceImpl
 		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByPrimaryKey(
 			fileEntryId);
 
-		if (PropsValues.DL_FILE_ENTRY_READ_COUNT_ENABLED &&
-			incrementCounter) {
-
+		if (PropsValues.DL_FILE_ENTRY_READ_COUNT_ENABLED && incrementCounter) {
 			dlFileEntry.setReadCount(dlFileEntry.getReadCount() + 1);
 
 			dlFileEntryPersistence.update(dlFileEntry, false);
@@ -583,9 +581,7 @@ public class DLFileEntryLocalServiceImpl
 		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByPrimaryKey(
 			fileEntryId);
 
-		if (PropsValues.DL_FILE_ENTRY_READ_COUNT_ENABLED &&
-			incrementCounter) {
-
+		if (PropsValues.DL_FILE_ENTRY_READ_COUNT_ENABLED && incrementCounter) {
 			dlFileEntry.setReadCount(dlFileEntry.getReadCount() + 1);
 
 			dlFileEntryPersistence.update(dlFileEntry, false);
@@ -948,7 +944,7 @@ public class DLFileEntryLocalServiceImpl
 			String contentType = largeImage.getType();
 
 			if (bytes != null) {
-				ImageBag imageBag = ImageProcessorUtil.read(bytes);
+				ImageBag imageBag = ImageToolUtil.read(bytes);
 
 				renderedImage = imageBag.getRenderedImage();
 
@@ -962,11 +958,11 @@ public class DLFileEntryLocalServiceImpl
 					PropsKeys.DL_FILE_ENTRY_THUMBNAIL_MAX_WIDTH);
 
 				RenderedImage thumbnailRenderedImage =
-					ImageProcessorUtil.scale(renderedImage, height, width);
+					ImageToolUtil.scale(renderedImage, height, width);
 
 				imageLocalService.updateImage(
 					smallImageId,
-					ImageProcessorUtil.getBytes(
+					ImageToolUtil.getBytes(
 						thumbnailRenderedImage, contentType));
 			}
 		}

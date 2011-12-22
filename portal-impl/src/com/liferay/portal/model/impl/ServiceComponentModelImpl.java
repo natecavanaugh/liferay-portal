@@ -125,7 +125,7 @@ public class ServiceComponentModelImpl extends BaseModelImpl<ServiceComponent>
 	}
 
 	public void setBuildNamespace(String buildNamespace) {
-		_columnBitmask |= BUILDNAMESPACE_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (_originalBuildNamespace == null) {
 			_originalBuildNamespace = _buildNamespace;
@@ -143,7 +143,7 @@ public class ServiceComponentModelImpl extends BaseModelImpl<ServiceComponent>
 	}
 
 	public void setBuildNumber(long buildNumber) {
-		_columnBitmask |= BUILDNUMBER_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (!_setOriginalBuildNumber) {
 			_setOriginalBuildNumber = true;

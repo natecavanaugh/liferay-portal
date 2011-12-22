@@ -116,6 +116,8 @@ public class ShoppingItemPriceModelImpl extends BaseModelImpl<ShoppingItemPrice>
 	}
 
 	public void setItemPriceId(long itemPriceId) {
+		_columnBitmask = -1L;
+
 		_itemPriceId = itemPriceId;
 	}
 
@@ -124,7 +126,7 @@ public class ShoppingItemPriceModelImpl extends BaseModelImpl<ShoppingItemPrice>
 	}
 
 	public void setItemId(long itemId) {
-		_columnBitmask |= ITEMID_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (!_setOriginalItemId) {
 			_setOriginalItemId = true;

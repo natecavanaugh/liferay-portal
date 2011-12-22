@@ -128,6 +128,19 @@ public class InputTag extends BaseInputTag {
 			bean = pageContext.getAttribute("aui:model-context:bean");
 		}
 
+		String defaultLanguageId = getDefaultLanguageId();
+
+		if (Validator.isNull(defaultLanguageId)) {
+			defaultLanguageId = (String)pageContext.getAttribute(
+				"aui:model-context:defaultLanguageId");
+		}
+
+		if (Validator.isNull(defaultLanguageId)) {
+			Locale defaultLocale = LocaleUtil.getDefault();
+
+			defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
+		}
+
 		String name = getName();
 
 		int pos = name.indexOf(StringPool.DOUBLE_DASH);
@@ -196,10 +209,6 @@ public class InputTag extends BaseInputTag {
 			}
 
 			if (ModelHintsUtil.isLocalized(model.getName(), field)) {
-				Locale defaultLocale = LocaleUtil.getDefault();
-				String defaultLanguageId = LocaleUtil.toLanguageId(
-					defaultLocale);
-
 				_forLabel += StringPool.UNDERLINE + defaultLanguageId;
 				_inputName += StringPool.UNDERLINE + defaultLanguageId;
 			}
@@ -218,6 +227,7 @@ public class InputTag extends BaseInputTag {
 
 		setNamespacedAttribute(request, "baseType", baseType);
 		setNamespacedAttribute(request, "bean", bean);
+		setNamespacedAttribute(request, "defaultLanguageId", defaultLanguageId);
 		setNamespacedAttribute(request, "field", field);
 		setNamespacedAttribute(request, "forLabel", _forLabel);
 		setNamespacedAttribute(request, "formName", formName);

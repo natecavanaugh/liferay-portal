@@ -274,7 +274,7 @@ public class AssetCategoryPropertyModelImpl extends BaseModelImpl<AssetCategoryP
 	}
 
 	public void setKey(String key) {
-		_columnBitmask |= KEY_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (_originalKey == null) {
 			_originalKey = _key;

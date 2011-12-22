@@ -299,7 +299,7 @@ public class WikiNodeModelImpl extends BaseModelImpl<WikiNode>
 	}
 
 	public void setName(String name) {
-		_columnBitmask |= NAME_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (_originalName == null) {
 			_originalName = _name;

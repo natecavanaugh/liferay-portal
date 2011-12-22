@@ -381,7 +381,7 @@ public class DLFileEntryModelImpl extends BaseModelImpl<DLFileEntry>
 	}
 
 	public void setFolderId(long folderId) {
-		_columnBitmask |= FOLDERID_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (!_setOriginalFolderId) {
 			_setOriginalFolderId = true;
@@ -407,7 +407,7 @@ public class DLFileEntryModelImpl extends BaseModelImpl<DLFileEntry>
 	}
 
 	public void setName(String name) {
-		_columnBitmask |= NAME_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (_originalName == null) {
 			_originalName = _name;

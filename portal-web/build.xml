@@ -27,6 +27,7 @@
 		<pathelement location="${project.dir}/lib/development/activation.jar" />
 		<pathelement location="${project.dir}/lib/development/mail.jar" />
 		<pathelement location="${project.dir}/lib/global/portlet.jar" />
+		<pathelement location="${project.dir}/lib/portal/alloy-taglib.jar" />
 		<pathelement location="${project.dir}/lib/portal/ant.jar" />
 		<pathelement location="${project.dir}/lib/portal/backport-concurrent.jar" />
 		<pathelement location="${project.dir}/lib/portal/commons-collections.jar" />
@@ -1028,8 +1029,6 @@ Please set the property "jdk.6.home" in build.properties.
 		<antcall target="build-vaadin" />
 
 		<antcall target="build-css" />
-
-		<copy todir="docroot/WEB-INF/lib" file="${project.dir}/portal-client/portal-client.jar" failonerror="false" />
 
 		<antcall target="build-common-web.deploy" />
 

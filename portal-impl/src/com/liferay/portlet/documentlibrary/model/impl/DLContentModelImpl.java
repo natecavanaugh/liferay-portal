@@ -205,7 +205,7 @@ public class DLContentModelImpl extends BaseModelImpl<DLContent>
 	}
 
 	public void setVersion(String version) {
-		_columnBitmask |= VERSION_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (_originalVersion == null) {
 			_originalVersion = _version;

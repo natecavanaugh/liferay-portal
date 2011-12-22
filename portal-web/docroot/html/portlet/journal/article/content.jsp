@@ -159,7 +159,7 @@ if (Validator.isNotNull(content)) {
 
 <liferay-ui:error-marker key="errorSection" value="content" />
 
-<aui:model-context bean="<%= article %>" model="<%= JournalArticle.class %>" />
+<aui:model-context bean="<%= article %>" defaultLanguageId="<%= defaultLanguageId %>" model="<%= JournalArticle.class %>" />
 
 <portlet:renderURL var="editArticleRenderPopUpURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 	<portlet:param name="struts_action" value="/journal/edit_article" />
@@ -403,7 +403,7 @@ if (Validator.isNotNull(content)) {
 											}
 
 											String taglibEditArticleURL = HttpUtil.addParameter(editArticleRenderPopUpURL.toString(), renderResponse.getNamespace() + "toLanguageId", LocaleUtil.toLanguageId(locales[i]));
-											String taglibEditURL = "javascript:Liferay.Util.openWindow({cache: false, id: '" + renderResponse.getNamespace() + LocaleUtil.toLanguageId(locales[i]) + "', title: '" + LanguageUtil.get(pageContext, "web-content-translation") + "', uri: '" + taglibEditArticleURL + "'});";
+											String taglibEditURL = "javascript:Liferay.Util.openWindow({cache: false, id: '" + renderResponse.getNamespace() + LocaleUtil.toLanguageId(locales[i]) + "', title: '" + UnicodeLanguageUtil.get(pageContext, "web-content-translation") + "', uri: '" + taglibEditArticleURL + "'});";
 										%>
 
 											<liferay-ui:icon
@@ -458,7 +458,7 @@ if (Validator.isNotNull(content)) {
 											String editTranslationURL = HttpUtil.addParameter(editArticleRenderPopUpURL.toString(), renderResponse.getNamespace() + "toLanguageId", translations[i]);
 										%>
 
-										<a class="lfr-token journal-article-translation-<%= translations[i] %>" href="javascript:;" onClick="Liferay.Util.openWindow({id: '<portlet:namespace /><%= translations[i] %>', title: '<%= LanguageUtil.get(pageContext, "web-content-translation") %>', uri: '<%= editTranslationURL %>'});">
+										<a class="lfr-token journal-article-translation-<%= translations[i] %>" href="javascript:;" onClick="Liferay.Util.openWindow({id: '<portlet:namespace /><%= translations[i] %>', title: '<%= UnicodeLanguageUtil.get(pageContext, "web-content-translation") %>', uri: '<%= editTranslationURL %>'});">
 											<img alt="" src='<%= themeDisplay.getPathThemeImages() + "/language/" + translations[i] + ".png" %>' />
 
 											<%= LocaleUtil.fromLanguageId(translations[i]).getDisplayName(locale) %>
@@ -562,7 +562,7 @@ if (Validator.isNotNull(content)) {
 
 					<div class="structure-tree-wrapper" id="<portlet:namespace />structureTreeWrapper">
 						<ul class="structure-tree" id="<portlet:namespace />structureTree">
-							<% _format(groupId, contentDoc.getRootElement(), xsdDoc.getRootElement(), new IntegerWrapper(0), new Integer(-1), true, pageContext, request); %>
+							<% _format(groupId, contentDoc.getRootElement(), xsdDoc.getRootElement(), new IntegerWrapper(0), new Integer(-1), true, defaultLanguageId, pageContext, request); %>
 						</ul>
 					</div>
 				</c:otherwise>
@@ -624,7 +624,7 @@ if (Validator.isNotNull(content)) {
 			else if (!translationLink) {
 				statusNode.removeClass('workflow-status-approved');
 				statusNode.addClass('workflow-status-draft');
-				statusNode.html('<%= LanguageUtil.get(pageContext, "draft") %>');
+				statusNode.html('<%= UnicodeLanguageUtil.get(pageContext, "draft") %>');
 
 				availableTranslationContainer.addClass('contains-translations');
 				availableTranslationsLinks.show();
@@ -650,7 +650,7 @@ if (Validator.isNotNull(content)) {
 						Liferay.Util.openWindow(
 							{
 								id: '<portlet:namespace />' + newLanguageId,
-								title: '<%= LanguageUtil.get(pageContext, "web-content-translation") %>',
+								title: '<%= UnicodeLanguageUtil.get(pageContext, "web-content-translation") %>',
 								uri: editTranslationURL
 							}
 						);
@@ -809,7 +809,7 @@ private String _getTemplateImage(ThemeDisplay themeDisplay, JournalTemplate temp
 	return imageURL;
 }
 
-private void _format(long groupId, Element contentParentElement, Element xsdParentElement, IntegerWrapper count, Integer depth, boolean repeatablePrototype, PageContext pageContext, HttpServletRequest request) throws Exception {
+private void _format(long groupId, Element contentParentElement, Element xsdParentElement, IntegerWrapper count, Integer depth, boolean repeatablePrototype, String defaultLanguageId, PageContext pageContext, HttpServletRequest request) throws Exception {
 	depth = new Integer(depth.intValue() + 1);
 
 	String languageId = LanguageUtil.getLanguageId(request);
@@ -894,7 +894,7 @@ private void _format(long groupId, Element contentParentElement, Element xsdPare
 				}
 			}
 			else {
-				elLanguageId = languageId;
+				elLanguageId = defaultLanguageId;
 			}
 
 			if (!_hasRepeatedParent(contentElement)) {
@@ -925,7 +925,7 @@ private void _format(long groupId, Element contentParentElement, Element xsdPare
 			if (!elType.equals("list") && !elType.equals("multi-list") && !contentElement.elements().isEmpty()) {
 				pageContext.include("/html/portlet/journal/edit_article_content_xsd_el_top.jsp");
 
-				_format(groupId, contentElement, xsdElement, count, depth, repeatablePrototype, pageContext, request);
+				_format(groupId, contentElement, xsdElement, count, depth, repeatablePrototype, defaultLanguageId, pageContext, request);
 
 				request.setAttribute(WebKeys.JOURNAL_STRUCTURE_CLOSE_DROPPABLE_TAG, Boolean.TRUE.toString());
 

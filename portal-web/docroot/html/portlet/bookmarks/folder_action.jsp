@@ -68,6 +68,7 @@ if (row == null) {
 			<portlet:param name="struts_action" value="/bookmarks/edit_folder" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="folderId" value="<%= String.valueOf(folder.getFolderId()) %>" />
+			<portlet:param name="mergeWithParentFolderDisabled" value="<%= (row == null) && (folderId == folder.getFolderId()) %>" />
 		</portlet:renderURL>
 
 		<liferay-ui:icon

@@ -226,7 +226,7 @@ int secondReminder = BeanParamUtil.getInteger(event, request, "secondReminder", 
 
 			<liferay-ui:input-repeat event="<%= event %>" />
 
-			<aui:fieldset>
+			<aui:fieldset cssClass='<%= recurrenceType == Recurrence.NO_RECURRENCE ? "aui-helper-hidden" : StringPool.BLANK %>' id="repeatUntilOptions">
 				<aui:field-wrapper cssClass="end-date-field" label="repeat-until" name="endDateType">
 					<aui:input checked="<%= endDateType == 0 %>" cssClass="input-container" label="no-end-date" name="endDateType" type="radio" value="0" />
 
@@ -298,38 +298,8 @@ int secondReminder = BeanParamUtil.getInteger(event, request, "secondReminder", 
 		return window.<portlet:namespace />editor.getHTML();
 	}
 
-	function <portlet:namespace />init() {
-		<c:choose>
-			<c:when test="<%= recurrenceType == Recurrence.NO_RECURRENCE %>">
-				<portlet:namespace />showTable("<portlet:namespace />neverTable");
-			</c:when>
-			<c:when test="<%= recurrenceType == Recurrence.DAILY %>">
-				<portlet:namespace />showTable("<portlet:namespace />dailyTable");
-			</c:when>
-			<c:when test="<%= recurrenceType == Recurrence.WEEKLY %>">
-				<portlet:namespace />showTable("<portlet:namespace />weeklyTable");
-			</c:when>
-			<c:when test="<%= recurrenceType == Recurrence.MONTHLY %>">
-				<portlet:namespace />showTable("<portlet:namespace />monthlyTable");
-			</c:when>
-			<c:when test="<%= recurrenceType == Recurrence.YEARLY %>">
-				<portlet:namespace />showTable("<portlet:namespace />yearlyTable");
-			</c:when>
-		</c:choose>
-	}
-
 	function <portlet:namespace />initEditor() {
 		return "<%= UnicodeFormatter.toString(description) %>";
-	}
-
-	function <portlet:namespace />showTable(id) {
-		document.getElementById("<portlet:namespace />neverTable").style.display = "none";
-		document.getElementById("<portlet:namespace />dailyTable").style.display = "none";
-		document.getElementById("<portlet:namespace />weeklyTable").style.display = "none";
-		document.getElementById("<portlet:namespace />monthlyTable").style.display = "none";
-		document.getElementById("<portlet:namespace />yearlyTable").style.display = "none";
-
-		document.getElementById(id).style.display = "block";
 	}
 
 	function <portlet:namespace />saveEvent() {
@@ -337,8 +307,6 @@ int secondReminder = BeanParamUtil.getInteger(event, request, "secondReminder", 
 		document.<portlet:namespace />fm.<portlet:namespace />description.value = <portlet:namespace />getDescription();
 		submitForm(document.<portlet:namespace />fm);
 	}
-
-	<portlet:namespace />init();
 
 	<%-- LEP-6018 --%>
 
@@ -361,6 +329,21 @@ int secondReminder = BeanParamUtil.getInteger(event, request, "secondReminder", 
 			}
 		);
 	}
+
+	A.all('#<portlet:namespace />recurrenceTypeNever, #<portlet:namespace />recurrenceTypeDaily, #<portlet:namespace />recurrenceTypeWeekly, #<portlet:namespace />recurrenceTypeMonthly, #<portlet:namespace />recurrenceTypeYearly').on(
+		'change',
+		function(event) {
+			var repeatUntilOptions = A.one('#<portlet:namespace />repeatUntilOptions');
+
+			if (repeatUntilOptions) {
+				var currentTarget = event.currentTarget;
+
+				var showOptions = (currentTarget.attr('checked') && currentTarget.attr('id') != '<portlet:namespace />recurrenceTypeNever');
+
+				repeatUntilOptions.toggle(showOptions);
+			}
+		}
+	);
 </aui:script>
 
 <%

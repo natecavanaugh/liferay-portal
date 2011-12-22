@@ -21,9 +21,49 @@ import javax.portlet.PortletPreferences;
  */
 public class PrefsPropsUtil {
 
+	public static int getInteger(long companyId, String key)
+		throws Exception {
+
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getIntegerMethodKey1, companyId, key);
+
+		if (returnObj != null) {
+			return (Integer)returnObj;
+		}
+		else {
+			return 0;
+		}
+	}
+
+	public static int getInteger(String key) throws Exception {
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getIntegerMethodKey2, key);
+
+		if (returnObj != null) {
+			return (Integer)returnObj;
+		}
+		else {
+			return 0;
+		}
+	}
+
+	public static long getLong(long companyId, String key)
+		throws Exception {
+
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getLongMethodKey1, companyId, key);
+
+		if (returnObj != null) {
+			return (Long)returnObj;
+		}
+		else {
+			return 0;
+		}
+	}
+
 	public static long getLong(String key) throws Exception {
 		Object returnObj = PortalClassInvoker.invoke(
-			false, _getLongMethodKey, key);
+			false, _getLongMethodKey2, key);
 
 		if (returnObj != null) {
 			return (Long)returnObj;
@@ -157,7 +197,13 @@ public class PrefsPropsUtil {
 	private static final String _CLASS_NAME =
 		"com.liferay.portal.util.PrefsPropsUtil";
 
-	private static MethodKey _getLongMethodKey = new MethodKey(
+	private static MethodKey _getIntegerMethodKey1 = new MethodKey(
+		_CLASS_NAME, "getInteger", long.class, String.class);
+	private static MethodKey _getIntegerMethodKey2 = new MethodKey(
+		_CLASS_NAME, "getInteger", String.class);
+	private static MethodKey _getLongMethodKey1 = new MethodKey(
+		_CLASS_NAME, "getLong", long.class, String.class);
+	private static MethodKey _getLongMethodKey2 = new MethodKey(
 		_CLASS_NAME, "getLong", String.class);
 	private static MethodKey _getStringArrayMethodKey1 = new MethodKey(
 		_CLASS_NAME, "getStringArray", long.class, String.class, String.class);

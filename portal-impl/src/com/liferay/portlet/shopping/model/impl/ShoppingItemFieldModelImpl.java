@@ -120,7 +120,7 @@ public class ShoppingItemFieldModelImpl extends BaseModelImpl<ShoppingItemField>
 	}
 
 	public void setItemId(long itemId) {
-		_columnBitmask |= ITEMID_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (!_setOriginalItemId) {
 			_setOriginalItemId = true;
@@ -145,6 +145,8 @@ public class ShoppingItemFieldModelImpl extends BaseModelImpl<ShoppingItemField>
 	}
 
 	public void setName(String name) {
+		_columnBitmask = -1L;
+
 		_name = name;
 	}
 

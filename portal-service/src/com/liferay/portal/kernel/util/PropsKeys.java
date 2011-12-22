@@ -569,10 +569,6 @@ public interface PropsKeys {
 
 	public static final String DL_FILE_ENTRY_THUMBNAIL_CUSTOM_2_MAX_WIDTH = "dl.file.entry.thumbnail.custom2.max.width";
 
-	public static final String DL_FILE_ENTRY_THUMBNAIL_DOCUMENT_DEPTH = "dl.file.entry.thumbnail.document.depth";
-
-	public static final String DL_FILE_ENTRY_THUMBNAIL_DOCUMENT_DPI = "dl.file.entry.thumbnail.document.dpi";
-
 	public static final String DL_FILE_ENTRY_THUMBNAIL_ENABLED = "dl.file.entry.thumbnail.enabled";
 
 	public static final String DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT = "dl.file.entry.thumbnail.max.height";
@@ -1646,6 +1642,8 @@ public interface PropsKeys {
 	public static final String RELEASE_INFO_PREVIOUS_BUILD_NUMBER = "release.info.previous.build.number";
 
 	public static final String REQUEST_HEADER_AUTH_IMPORT_FROM_LDAP = "request.header.auth.import.from.ldap";
+
+	public static final String REQUEST_HEADER_IGNORE_INIT_PARAMS = "request.header.ignore.init.params";
 
 	public static final String REQUEST_SHARED_ATTRIBUTES = "request.shared.attributes";
 

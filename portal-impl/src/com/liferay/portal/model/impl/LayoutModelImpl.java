@@ -354,7 +354,7 @@ public class LayoutModelImpl extends BaseModelImpl<Layout>
 	}
 
 	public void setParentLayoutId(long parentLayoutId) {
-		_columnBitmask |= PARENTLAYOUTID_COLUMN_BITMASK;
+		_columnBitmask = -1L;
 
 		if (!_setOriginalParentLayoutId) {
 			_setOriginalParentLayoutId = true;
@@ -1008,6 +1008,8 @@ public class LayoutModelImpl extends BaseModelImpl<Layout>
 	}
 
 	public void setPriority(int priority) {
+		_columnBitmask = -1L;
+
 		_priority = priority;
 	}
 

@@ -82,7 +82,7 @@ if (showPrototypes && (group != null)) {
 		</c:when>
 		<c:when test="<%= (liveGroup != null) && liveGroup.isOrganization() %>">
 			<aui:field-wrapper helpMessage="the-name-of-this-site-cannot-be-edited-because-it-belongs-to-an-organization" label="name">
-				<%= liveGroup.getDescriptiveName() %>
+				<%= liveGroup.getDescriptiveName(locale) %>
 			</aui:field-wrapper>
 		</c:when>
 		<c:otherwise>
@@ -284,7 +284,7 @@ if (showPrototypes && (group != null)) {
 				<aui:input name="layoutSetPrototypeId" type="hidden" value="<%= layoutSetPrototype.getLayoutSetPrototypeId() %>" />
 
 				<aui:field-wrapper label="copy-as">
-					<aui:input checked="<%= true %>" helpMessage='<%= LanguageUtil.format(pageContext, "select-this-to-copy-the-pages-of-the-site-template-x-as-private-pages-for-this-site", layoutSetPrototype.getName(user.getLanguageId())) %>' label="public-pages" name="layoutSetVisibility" type="radio" value="0" />
+					<aui:input checked="<%= true %>" helpMessage='<%= LanguageUtil.format(pageContext, "select-this-to-copy-the-pages-of-the-site-template-x-as-public-pages-for-this-site", layoutSetPrototype.getName(user.getLanguageId())) %>' label="public-pages" name="layoutSetVisibility" type="radio" value="0" />
 					<aui:input helpMessage='<%= LanguageUtil.format(pageContext, "select-this-to-copy-the-pages-of-the-site-template-x-as-private-pages-for-this-site", layoutSetPrototype.getName(user.getLanguageId())) %>' label="private-pages" name="layoutSetVisibility" type="radio" value="1" />
 				</aui:field-wrapper>
 

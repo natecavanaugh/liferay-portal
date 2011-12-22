@@ -29,7 +29,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
-import com.liferay.portlet.documentlibrary.util.ImageProcessor;
+import com.liferay.portlet.documentlibrary.util.ImageProcessorUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalFeed;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Raymond Augé
@@ -302,9 +303,10 @@ public class JournalRSSUtil {
 		else {
 			FileEntry fileEntry = getFileEntry(url);
 
+			Set<String> imageMimeTypes = ImageProcessorUtil.getImageMimeTypes();
+
 			if ((fileEntry != null) &&
-				ImageProcessor.getImageMimeTypes().contains(
-					fileEntry.getMimeType())) {
+				imageMimeTypes.contains(fileEntry.getMimeType())) {
 
 				type = fileEntry.getExtension();
 				size = fileEntry.getSize();

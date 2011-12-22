@@ -144,14 +144,6 @@ if (folder != null) {
 	for (int i = 0; i < results.size(); i++) {
 		FileEntry fileEntry = (FileEntry)results.get(i);
 
-		FileVersion fileVersion = fileEntry.getFileVersion();
-
-		DLFileShortcut fileShortcut = null;
-	%>
-
-		<%@ include file="/html/portlet/document_library/document_thumbnail.jspf" %>
-
-	<%
 		ResultRow row = new ResultRow(fileEntry, fileEntry.getFileEntryId(), i);
 
 		String rowHREF = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + folderId + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle(), true);
@@ -161,8 +153,16 @@ if (folder != null) {
 		StringBundler sb = new StringBundler(10);
 
 		sb.append("<img alt=\"\" align=\"left\" border=\"0\" src=\"");
+
+		DLFileShortcut fileShortcut = null;
+
+		String thumbnailSrc = DLUtil.getThumbnailSrc(fileEntry, fileShortcut, themeDisplay);
+
 		sb.append(thumbnailSrc);
 		sb.append("\" style=\"");
+
+		String thumbnailStyle = DLUtil.getThumbnailStyle();
+
 		sb.append(thumbnailStyle);
 		sb.append("\">");
 		sb.append(fileEntry.getTitle());
@@ -187,7 +187,7 @@ if (folder != null) {
 
 		sb.setIndex(0);
 
-		sb.append("parent.");
+		sb.append("Liferay.Util.getOpener().");
 		sb.append(renderResponse.getNamespace());
 		sb.append("selectDocumentLibrary('");
 		sb.append(themeDisplay.getPathContext());
@@ -198,7 +198,7 @@ if (folder != null) {
 		sb.append(StringPool.SLASH);
 		sb.append(HttpUtil.encodeURL(HtmlUtil.unescape(fileEntry.getTitle())));
 
-		Set<String> imageMimeTypes = ImageProcessor.getImageMimeTypes();
+		Set<String> imageMimeTypes = ImageProcessorUtil.getImageMimeTypes();
 
 		if (imageMimeTypes.contains(fileEntry.getMimeType())) {
 			sb.append("?t=");

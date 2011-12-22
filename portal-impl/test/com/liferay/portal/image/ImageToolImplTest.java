@@ -15,8 +15,8 @@
 package com.liferay.portal.image;
 
 import com.liferay.portal.kernel.image.ImageBag;
-import com.liferay.portal.kernel.image.ImageProcessor;
-import com.liferay.portal.kernel.image.ImageProcessorUtil;
+import com.liferay.portal.kernel.image.ImageTool;
+import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.util.BaseTestCase;
 
@@ -34,7 +34,7 @@ import javax.imageio.ImageIO;
 /**
  * @author Shuyang Zhou
  */
-public class ImageProcessorImplTest extends BaseTestCase {
+public class ImageToolImplTest extends BaseTestCase {
 
 	public void testReadBMP() throws Exception {
 		testRead("liferay.bmp");
@@ -75,7 +75,7 @@ public class ImageProcessorImplTest extends BaseTestCase {
 		String expectedType = FileUtil.getExtension(fileName);
 
 		if (expectedType.equals("jpeg")) {
-			expectedType = ImageProcessor.TYPE_JPEG;
+			expectedType = ImageTool.TYPE_JPEG;
 		}
 
 		RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
@@ -84,7 +84,7 @@ public class ImageProcessorImplTest extends BaseTestCase {
 
 		randomAccessFile.readFully(bytes);
 
-		ImageBag imageBag = ImageProcessorUtil.read(bytes);
+		ImageBag imageBag = ImageToolUtil.read(bytes);
 
 		RenderedImage resultImage = imageBag.getRenderedImage();
 
