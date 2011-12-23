@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,8 +34,8 @@ DDMStructure ddmStructure = recordSet.getDDMStructure();
 
 <div class="lfr-spreadsheet-container">
 	<div id="<portlet:namespace />spreadsheet">
-		<div class="yui3-widget yui3-datatable" id="<portlet:namespace />dataTableBB">
-			<div class="yui3-datatable-scrollable yui3-datatable-content" id="<portlet:namespace />dataTableCC"></div>
+		<div class="yui3-widget yui3-datatable" id="<portlet:namespace />dataTable">
+			<div class="yui3-datatable-scrollable yui3-datatable-content" id="<portlet:namespace />dataTableContent"></div>
 		</div>
 	</div>
 
@@ -60,18 +60,55 @@ DDMStructure ddmStructure = recordSet.getDDMStructure();
 	var structure = <%= DDMXSDUtil.getJSONArray(ddmStructure.getXsd()) %>;
 	var columnset = Liferay.SpreadSheet.buildDataTableColumnset(<%= DDLUtil.getRecordSetJSONArray(recordSet) %>, structure, <%= editable %>);
 
-	var ignoreEmptyRecordsSort = function(recA, recB, field, desc) {
+	var ignoreEmptyRecordsNumericSort = function(recA, recB, field, desc) {
+		var a = recA.getValue(field);
+		var b = recB.getValue(field);
+
+		return A.ArraySort.compareIgnoreWhiteSpace(
+			a,
+			b,
+			desc,
+			function(a, b, desc) {
+				var num1 = parseFloat(a);
+				var num2 = parseFloat(b);
+
+				var result;
+
+				if (isNaN(num1) || isNaN(num2)) {
+					result = A.ArraySort.compare(a, b, desc);
+				}
+				else {
+					result = desc ? (num2 - num1) : (num1 - num2);
+				}
+
+				return result;
+			}
+		);
+	};
+
+	var ignoreEmptyRecordsStringSort = function(recA, recB, field, desc) {
 		var a = recA.getValue(field);
 		var b = recB.getValue(field);
 
 		return A.ArraySort.compareIgnoreWhiteSpace(a, b, desc);
 	};
 
+	var numericData = {
+		'double': 1,
+		integer: 1,
+		number: 1
+	};
+
 	var keys = A.Array.map(
 		columnset,
 		function(item, index, collection) {
 			if (!item.sortFn) {
-				item.sortFn = ignoreEmptyRecordsSort;
+				if (numericData[item.dataType]) {
+					item.sortFn = ignoreEmptyRecordsNumericSort;
+				}
+				else {
+					item.sortFn = ignoreEmptyRecordsStringSort;
+				}
 			}
 
 			return item.key;
@@ -109,9 +146,9 @@ DDMStructure ddmStructure = recordSet.getDDMStructure();
 
 	var spreadSheet = new Liferay.SpreadSheet(
 		{
-			boundingBox: '#<portlet:namespace />dataTableBB',
+			boundingBox: '#<portlet:namespace />dataTable',
 			columnset: columnset,
-			contentBox: '#<portlet:namespace />dataTableCC',
+			contentBox: '#<portlet:namespace />dataTableContent',
 			editEvent: 'dblclick',
 			recordset: recordset,
 			recordsetId: <%= recordSet.getRecordSetId() %>,

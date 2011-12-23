@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -135,19 +135,29 @@ if (Validator.isNotNull(structureAvailableFields)) {
 	<%@ include file="/html/portlet/dynamic_data_mapping/form_builder.jspf" %>
 
 	<aui:script use="aui-base">
+		var hiddenAttributesMap = window.<portlet:namespace />formBuilder.MAP_HIDDEN_FIELD_ATTRS;
+
+		window.<portlet:namespace />getFieldHiddenAttributes = function(mode, field) {
+			var hiddenAttributes = hiddenAttributesMap[field.get('type')] || hiddenAttributesMap.DEFAULT;
+
+			hiddenAttributes = A.Array(hiddenAttributes);
+
+			if (mode === '<%= DDMTemplateConstants.TEMPLATE_MODE_EDIT %>') {
+				A.Array.removeItem(hiddenAttributes, 'readOnly');
+			}
+
+			return hiddenAttributes;
+		};
+
 		window.<portlet:namespace />toggleMode = function(mode) {
 			var modeEdit = (mode === '<%= DDMTemplateConstants.TEMPLATE_MODE_EDIT %>');
-
-			var hiddenAttributes = window.<portlet:namespace />formBuilder.HIDDEN_FIELD_ATTRS;
-
-			if (modeEdit) {
-				hiddenAttributes = [];
-			}
 
 			window.<portlet:namespace />formBuilder.set('allowRemoveRequiredFields', modeEdit);
 
 			window.<portlet:namespace />formBuilder.get('fields').each(
 				function(item, index, collection) {
+					var hiddenAttributes = window.<portlet:namespace />getFieldHiddenAttributes(mode, item);
+
 					item.set('hiddenAttributes', hiddenAttributes);
 				}
 			);
@@ -155,6 +165,8 @@ if (Validator.isNotNull(structureAvailableFields)) {
 			A.Array.each(
 				window.<portlet:namespace />formBuilder.get('availableFields'),
 				function(item, index, collection) {
+					var hiddenAttributes = window.<portlet:namespace />getFieldHiddenAttributes(mode, item);
+
 					item.set('hiddenAttributes', hiddenAttributes);
 				}
 			);

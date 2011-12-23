@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -53,7 +53,7 @@ if (layoutSetBranchId > 0) {
 				List<LayoutSetBranch> layoutSetBranches = LayoutSetBranchLocalServiceUtil.getLayoutSetBranches(stagingGroup.getGroupId(), privateLayout);
 				%>
 
-				<aui:select label="copy-pages-from-site-pages-variation" name="copyLayoutSetBranchId">
+				<aui:select helpMessage="copy-pages-from-site-pages-variation-help" label="copy-pages-from-site-pages-variation" name="copyLayoutSetBranchId">
 					<aui:option label="all-site-pages-variations" selected="<%= true %>" value="<%= LayoutSetBranchConstants.ALL_BRANCHES %>" />
 					<aui:option label="none-empty-site-pages-variation" value="<%= LayoutSetBranchConstants.NO_BRANCHES %>" />
 

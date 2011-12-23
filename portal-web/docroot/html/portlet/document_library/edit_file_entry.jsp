@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -365,16 +365,16 @@ else if (dlFileEntryType != null) {
 					<aui:input classPK="<%= assetClassPK %>" model="<%= DLFileEntry.class %>" name="tags" type="assetTags" />
 				</aui:fieldset>
 			</liferay-ui:panel>
-		</c:if>
 
-		<liferay-ui:panel defaultState="closed" extended="<%= false %>" id="dlFileEntryAssetLinksPanel" persistState="<%= true %>" title="related-assets">
-			<aui:fieldset>
-				<liferay-ui:input-asset-links
-					className="<%= DLFileEntry.class.getName() %>"
-					classPK="<%= assetClassPK %>"
-				/>
-			</aui:fieldset>
-		</liferay-ui:panel>
+			<liferay-ui:panel defaultState="closed" extended="<%= false %>" id="dlFileEntryAssetLinksPanel" persistState="<%= true %>" title="related-assets">
+				<aui:fieldset>
+					<liferay-ui:input-asset-links
+						className="<%= DLFileEntry.class.getName() %>"
+						classPK="<%= assetClassPK %>"
+					/>
+				</aui:fieldset>
+			</liferay-ui:panel>
+		</c:if>
 
 		<c:if test="<%= fileEntry == null %>">
 			<aui:field-wrapper label="permissions">

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -288,11 +288,15 @@ public class DDMXSDImpl implements DDMXSD {
 			JSONArray hiddenAttributesJSONArray =
 				JSONFactoryUtil.createJSONArray();
 
+			String type = jsonObject.getString("type");
+
+			if (type.equals(_TYPE_CHECKBOX)) {
+				hiddenAttributesJSONArray.put("required");
+			}
+
 			hiddenAttributesJSONArray.put("readOnly");
 
 			jsonObject.put("hiddenAttributes", hiddenAttributesJSONArray);
-
-			String type = jsonObject.getString("type");
 
 			String key = "fields";
 
@@ -469,6 +473,8 @@ public class DDMXSDImpl implements DDMXSD {
 
 	private static final String _TPL_PATH =
 		"com/liferay/portlet/dynamicdatamapping/dependencies/";
+
+	private static final String _TYPE_CHECKBOX = "checkbox";
 
 	private static final String _TYPE_RADIO = "radio";
 

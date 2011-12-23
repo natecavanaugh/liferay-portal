@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -1030,10 +1030,10 @@ public class SourceFormatter {
 			line = StringUtil.replace(
 				line,
 				new String[] {
-					"* Copyright (c) 2000-2010 Liferay, Inc."
+					"* Copyright (c) 2000-2011 Liferay, Inc."
 				},
 				new String[] {
-					"* Copyright (c) 2000-2011 Liferay, Inc."
+					"* Copyright (c) 2000-2012 Liferay, Inc."
 				});
 
 			line = _replacePrimitiveWrapperInstantiation(
@@ -1270,10 +1270,10 @@ public class SourceFormatter {
 			newContent = StringUtil.replace(
 				newContent,
 				new String[] {
-					"* Copyright (c) 2000-2010 Liferay, Inc."
+					"* Copyright (c) 2000-2011 Liferay, Inc."
 				},
 				new String[] {
-					"* Copyright (c) 2000-2011 Liferay, Inc."
+					"* Copyright (c) 2000-2012 Liferay, Inc."
 				});
 
 			if (fileName.endsWith(".jsp") || fileName.endsWith(".jspf")) {
@@ -1688,7 +1688,7 @@ public class SourceFormatter {
 			if ((trimmedPreviousLine.startsWith("if ") ||
 				 trimmedPreviousLine.startsWith("else ")) &&
 				(previousLine.endsWith("||") || previousLine.endsWith("&&")) &&
-				 line.endsWith(StringPool.OPEN_CURLY_BRACE)) {
+				line.endsWith(StringPool.OPEN_CURLY_BRACE)) {
 
 				return previousLine + StringPool.SPACE + line;
 			}

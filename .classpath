@@ -247,7 +247,6 @@
 	<classpathentry kind="lib" path="lib/portal/serializer.jar"/>
 	<classpathentry kind="lib" path="lib/portal/simplecaptcha.jar"/>
 	<classpathentry kind="lib" path="lib/portal/slf4j-api.jar"/>
-	<classpathentry kind="lib" path="lib/portal/slf4j-log4j12.jar"/>
 	<classpathentry kind="lib" path="lib/portal/soap.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-aop.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-asm.jar"/>

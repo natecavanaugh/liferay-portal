@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -889,8 +889,12 @@ private void _format(long groupId, Element contentParentElement, Element xsdPare
 			if (dynamicContentEl != null) {
 				elLanguageId = dynamicContentEl.attributeValue("language-id", StringPool.BLANK);
 
-				if (Validator.isNotNull(toLanguageId) && Validator.isNull(elLanguageId)) {
-					continue;
+				if (Validator.isNotNull(toLanguageId)) {
+					if (Validator.isNull(elLanguageId)) {
+						continue;
+					}
+
+					elLanguageId = toLanguageId;
 				}
 			}
 			else {

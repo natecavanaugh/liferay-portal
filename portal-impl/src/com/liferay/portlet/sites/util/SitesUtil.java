@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -249,7 +249,7 @@ public class SitesUtil {
 		Map<String, String[]> parameterMap = getLayoutSetPrototypeParameters(
 			serviceContext);
 
-		setLayoutSetPrototypeLinkEnabled(
+		setLayoutSetPrototypeLinkEnabledParameter(
 			parameterMap, targetLayoutSet, serviceContext);
 
 		if (!targetLayoutSet.isPrivateLayout()) {
@@ -582,7 +582,7 @@ public class SitesUtil {
 		Map<String, String[]> parameterMap = getLayoutSetPrototypeParameters(
 			serviceContext);
 
-		setLayoutSetPrototypeLinkEnabled(
+		setLayoutSetPrototypeLinkEnabledParameter(
 			parameterMap, layoutSet, serviceContext);
 
 		LayoutServiceUtil.importLayouts(
@@ -769,7 +769,7 @@ public class SitesUtil {
 		}
 	}
 
-	protected static void setLayoutSetPrototypeLinkEnabled(
+	protected static void setLayoutSetPrototypeLinkEnabledParameter(
 		Map<String, String[]> parameterMap, LayoutSet targetLayoutSet,
 		ServiceContext serviceContext) {
 

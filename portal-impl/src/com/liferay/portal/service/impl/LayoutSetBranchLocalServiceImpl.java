@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -121,9 +121,16 @@ public class LayoutSetBranchLocalServiceImpl
 					copyLayoutSetBranchId, true);
 
 			for (LayoutRevision layoutRevision : layoutRevisions) {
+				LayoutBranch layoutBranch =
+					layoutBranchLocalService.addLayoutBranch(
+						layoutSetBranchId, layoutRevision.getPlid(),
+						LayoutBranchConstants.MASTER_BRANCH_NAME,
+						LayoutBranchConstants.MASTER_BRANCH_DESCRIPTION, true,
+						serviceContext);
+
 				layoutRevisionLocalService.addLayoutRevision(
 					userId, layoutSetBranchId,
-					layoutRevision.getLayoutBranchId(),
+					layoutBranch.getLayoutBranchId(),
 					LayoutRevisionConstants.DEFAULT_PARENT_LAYOUT_REVISION_ID,
 					true, layoutRevision.getPlid(),
 					layoutRevision.getPrivateLayout(), layoutRevision.getName(),
