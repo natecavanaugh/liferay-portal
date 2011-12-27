@@ -59,6 +59,14 @@ hr, .separator {
 	text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
 }
 
+.site-title .page-template {
+    background-image: url(../images/common/layout_prototypes.png);
+}
+
+.site-title .site-template {
+    background-image: url(../images/common/layout_set_prototypes.png);
+}
+
 .company-site .site-title .site-name {
 	background-image: url(../images/common/folder.png);
 }
