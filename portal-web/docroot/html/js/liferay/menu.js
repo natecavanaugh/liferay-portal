@@ -91,7 +91,7 @@ AUI().add(
 
 		Menu.prototype = {
 			_closeActiveMenu: function() {
-				var instance = this;
+				var instance = Menu._INSTANCE || this;
 
 				var menu = instance._activeMenu;
 
@@ -111,7 +111,7 @@ AUI().add(
 
 			_getAlignPoints: A.cached(
 				function(cssClass) {
-					var instance = this;
+					var instance = Menu._INSTANCE || this;
 
 					var alignPoints = DEFAULT_ALIGN_POINTS;
 
@@ -134,7 +134,7 @@ AUI().add(
 			),
 
 			_getLiveSearch: function(trigger, menu) {
-				var instance = this;
+				var instance = Menu._INSTANCE || this;
 
 				var liveSearch = menu._liveSearch;
 
@@ -187,7 +187,7 @@ AUI().add(
 			},
 
 			_getMenu: function(trigger) {
-				var instance = this;
+				var instance = Menu._INSTANCE || this;
 
 				var overlay = instance._overlay;
 
@@ -270,7 +270,7 @@ AUI().add(
 			},
 
 			_getMenuHeight: function(trigger, menu, listItems) {
-				var instance = this;
+				var instance = Menu._INSTANCE || this;
 
 				var cssClass = trigger.attr(ATTR_CLASS_NAME);
 
@@ -298,7 +298,7 @@ AUI().add(
 			},
 
 			_getFocusManager: function() {
-				var instance = this;
+				var instance = Menu._INSTANCE || this;
 
 				var focusManager = instance._focusManager;
 
@@ -362,7 +362,7 @@ AUI().add(
 			},
 
 			_positionActiveMenu: function() {
-				var instance = this;
+				var instance = Menu._INSTANCE || this;
 
 				var menu = instance._activeMenu;
 				var trigger = instance._activeTrigger;
