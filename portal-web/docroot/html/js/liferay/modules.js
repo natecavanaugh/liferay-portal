@@ -62,7 +62,7 @@
 			'list-view': ['aui-base', 'transition'],
 			'logo-selector': ['aui-base'],
 			'look-and-feel': ['aui-color-picker', 'aui-dialog', 'aui-io-request', 'aui-tabs-base'],
-			'menu': ['aui-live-search', 'aui-overlay', 'node-focusmanager'],
+			'menu': [],
 			'navigation': ['aui-form-combobox', 'aui-io-request', 'dd-constrain', 'event-touch', 'json-parse', 'node-event-simulate', 'overlay', 'selector-css3', 'sortable'],
 			'navigation-touch': ['liferay-navigation'],
 			'navigation-interaction': ['node-focusmanager', 'plugin'],
