@@ -379,7 +379,7 @@ int total = 0;
 				</c:if>
 
 				<c:if test='<%= displayStyle.equals("list") %>'>
-					<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" type="more" />
+					<liferay-ui:search-iterator paginate="<%= false %>" searchContainer="<%= searchContainer %>" type="more" />
 				</c:if>
 
 			<%
