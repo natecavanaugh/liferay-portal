@@ -39,6 +39,8 @@ else {
 	folderIdsArray = StringUtil.split(StringUtil.merge(folderIds), 0L);
 }
 
+long repositoryId = ParamUtil.getLong(request, "repositoryId");
+
 String keywords = ParamUtil.getString(request, "keywords");
 %>
 
@@ -49,6 +51,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 <aui:form action="<%= searchURL %>" method="get" name="fm">
 	<liferay-portlet:renderURLParams varImpl="searchURL" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="repositoryId" type="hidden" value="<%= repositoryId %>" />
 	<aui:input name="breadcrumbsFolderId" type="hidden" value="<%= breadcrumbsFolderId %>" />
 	<aui:input name="searchFolderId" type="hidden" value="<%= searchFolderId %>" />
 	<aui:input name="searchFolderIds" type="hidden" value="<%= searchFolderIds %>" />
@@ -63,6 +66,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 
 	portletURL.setParameter("struts_action", "/document_library_display/search");
 	portletURL.setParameter("redirect", redirect);
+	portletURL.setParameter("repositoryId", String.valueOf(repositoryId));
 	portletURL.setParameter("breadcrumbsFolderId", String.valueOf(breadcrumbsFolderId));
 	portletURL.setParameter("searchFolderId", String.valueOf(searchFolderId));
 	portletURL.setParameter("searchFolderIds", String.valueOf(searchFolderIds));
@@ -88,7 +92,7 @@ String keywords = ParamUtil.getString(request, "keywords");
 		searchContext.setKeywords(keywords);
 		searchContext.setStart(searchContainer.getStart());
 
-		Hits results = indexer.search(searchContext);
+		Hits results = DLAppServiceUtil.search(repositoryId, searchContext);
 
 		int total = results.getLength();
 
