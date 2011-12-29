@@ -207,7 +207,7 @@ int total = 0;
 				headerNames.add(headerName);
 			}
 
-			SearchContainer searchContainer = new SearchContainer(liferayPortletRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, entriesPerPage, portletURL, headerNames, LanguageUtil.format(pageContext, "no-documents-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(keywords) + "</strong>"));
+			SearchContainer searchContainer = new SearchContainer(liferayPortletRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, entriesPerPage, portletURL, headerNames, null);
 
 			Map<String, String> orderableHeaders = new HashMap<String, String>();
 
@@ -371,6 +371,12 @@ int total = 0;
 				<%
 				}
 				%>
+
+				<c:if test="<%= results.isEmpty() %>">
+					<div class="portlet-msg-info">
+						<%= LanguageUtil.format(pageContext, "no-documents-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(keywords) + "</strong>") %>
+					</div>
+				</c:if>
 
 				<c:if test='<%= displayStyle.equals("list") %>'>
 					<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" type="more" />
