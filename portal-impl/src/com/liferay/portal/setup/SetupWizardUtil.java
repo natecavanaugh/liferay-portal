@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
@@ -160,6 +161,10 @@ public class SetupWizardUtil {
 
 		UnicodeProperties unicodeProperties =
 			PropertiesParamUtil.getProperties(request, _PROPERTIES_PREFIX);
+
+		unicodeProperties.setProperty(
+			PropsKeys.LIFERAY_HOME,
+			SystemProperties.get(PropsKeys.LIFERAY_HOME));
 
 		boolean databaseConfigured = _isDatabaseConfigured(unicodeProperties);
 

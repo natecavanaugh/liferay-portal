@@ -2597,6 +2597,7 @@
 		<exception>RequiredGroup</exception>
 		<exception>RequiredLayout</exception>
 		<exception>RequiredLayoutSetBranch</exception>
+		<exception>RequiredLayoutSetPrototype</exception>
 		<exception>RequiredOrganization</exception>
 		<exception>RequiredPasswordPolicy</exception>
 		<exception>RequiredReminderQuery</exception>

@@ -1186,8 +1186,9 @@ AUI.add(
 					_onTagMergeClick: function(event) {
 						var instance = this;
 
-						var namespace = instance._prefixedPortletId;
 						var selectedList = instance._selectedTagsList;
+
+						var namespace = instance._prefixedPortletId;
 
 						var mergeOnlySelected = A.one('#' + namespace + 'mergeOnlySelectedTags').get('checked');
 
@@ -1441,7 +1442,10 @@ AUI.add(
 
 						var contextPanel = event.currentTarget;
 						var boundingBox = contextPanel.get('boundingBox');
-						var propertiesTrigger = boundingBox.one('fieldset#tagProperties');
+
+						var namespace = instance._prefixedPortletId;
+
+						var propertiesTrigger = boundingBox.one('fieldset#' + namespace + 'tagProperties');
 
 						var autoFieldsInstance = propertiesTrigger.getData('autoFieldsInstance');
 

@@ -1898,7 +1898,10 @@ AUI.add(
 
 						var contextPanel = event.currentTarget;
 						var boundingBox = contextPanel.get('boundingBox');
-						var propertiesTrigger = boundingBox.one('fieldset#categoryProperties');
+
+						var namespace = instance._prefixedPortletId;
+
+						var propertiesTrigger = boundingBox.one('fieldset#' + namespace + 'categoryProperties');
 
 						var autoFieldsInstance = propertiesTrigger.getData('autoFieldsInstance');
 

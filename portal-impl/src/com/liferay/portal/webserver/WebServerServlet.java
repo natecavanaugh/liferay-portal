@@ -85,6 +85,8 @@ import com.liferay.portlet.documentlibrary.util.PDFProcessorImpl;
 import com.liferay.portlet.documentlibrary.util.PDFProcessorUtil;
 import com.liferay.portlet.documentlibrary.util.VideoProcessorImpl;
 import com.liferay.portlet.documentlibrary.util.VideoProcessorUtil;
+import com.liferay.portlet.dynamicdatalists.service.DDLRecordServiceUtil;
+import com.liferay.portlet.dynamicdatalists.util.DDLUtil;
 
 import java.awt.image.RenderedImage;
 
@@ -129,6 +131,9 @@ public class WebServerServlet extends HttpServlet {
 
 			if (pathArray.length == 0) {
 				return true;
+			}
+			else if (_PATH_DDL.equals(pathArray[0])) {
+				_checkDDLRecord(pathArray);
 			}
 			else if (Validator.isNumber(pathArray[0])) {
 				_checkFileEntry(pathArray);
@@ -224,7 +229,10 @@ public class WebServerServlet extends HttpServlet {
 					request.getServletPath() + StringPool.SLASH + path);
 			}
 			else {
-				if (Validator.isNumber(pathArray[0])) {
+				if (_PATH_DDL.equals(pathArray[0])) {
+					sendDDLRecordFile(request, response, pathArray);
+				}
+				else if (Validator.isNumber(pathArray[0])) {
 					sendFile(request, response, user, pathArray);
 				}
 				else {
@@ -644,6 +652,20 @@ public class WebServerServlet extends HttpServlet {
 		response.sendRedirect(redirect);
 	}
 
+	protected void sendDDLRecordFile(
+			HttpServletRequest request, HttpServletResponse response,
+			String[] pathArray)
+		throws Exception {
+
+		if (pathArray.length == 3) {
+			long recordId = GetterUtil.getLong(pathArray[1]);
+			String fieldName = GetterUtil.getString(pathArray[2]);
+
+			DDLUtil.sendRecordFileUpload(
+				request, response, recordId, fieldName);
+		}
+	}
+
 	protected void sendDocumentLibrary(
 			HttpServletRequest request, HttpServletResponse response, User user,
 			String path, String[] pathArray)
@@ -982,7 +1004,7 @@ public class WebServerServlet extends HttpServlet {
 		freeMarkerContext.put("serverInfo", ReleaseInfo.getServerInfo());
 		freeMarkerContext.put("validator", Validator_IW.getInstance());
 
-		String html = FreeMarkerUtil.process(_TPL_TEMPLATE, freeMarkerContext);
+		String html = FreeMarkerUtil.process(_TEMPLATE_FTL, freeMarkerContext);
 
 		response.setContentType(ContentTypes.TEXT_HTML_UTF8);
 
@@ -1023,6 +1045,16 @@ public class WebServerServlet extends HttpServlet {
 			if (_log.isWarnEnabled()) {
 				_log.warn(e, e);
 			}
+		}
+	}
+
+	private static void _checkDDLRecord(String[] pathArray)
+		throws Exception {
+
+		if (pathArray.length == 2) {
+			long recordId = GetterUtil.getLong(pathArray[1]);
+
+			DDLRecordServiceUtil.getRecord(recordId);
 		}
 	}
 
@@ -1109,13 +1141,15 @@ public class WebServerServlet extends HttpServlet {
 
 	private static final String _DATE_FORMAT_PATTERN = "d MMM yyyy HH:mm z";
 
-	private static final String _TPL_TEMPLATE =
+	private static final String _PATH_DDL = "ddl";
+
+	private static final String _TEMPLATE_FTL =
 		"com/liferay/portal/webserver/dependencies/template.ftl";
+
+	private static Log _log = LogFactoryUtil.getLog(WebServerServlet.class);
 
 	private static Format _dateFormat =
 		FastDateFormatFactoryUtil.getSimpleDateFormat(_DATE_FORMAT_PATTERN);
-
-	private static Log _log = LogFactoryUtil.getLog(WebServerServlet.class);
 
 	private boolean _lastModified = true;
 
