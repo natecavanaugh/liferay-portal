@@ -415,7 +415,7 @@ int total = 0;
 	<c:when test="<%= searchType == DLSearchConstants.MULTIPLE %>">
 		<c:choose>
 			<c:when test="<%= (searchRepositoryId == scopeGroupId) %>">
-				<span id="<portlet:namespace />searchResultsContainer">
+				<span class="search-results-container" id="<portlet:namespace />searchResultsContainer">
 					<liferay-ui:tabs
 						names='<%= "local," + ListUtil.toString(mountFolders, "name") %>'
 						refresh="<%= false %>"
@@ -431,7 +431,11 @@ int total = 0;
 						%>
 
 							<liferay-ui:section>
-								<div id="<portlet:namespace />repositorySearchResultsContainer<%= mountFolder.getRepositoryId() %>"></div>
+								<div id="<portlet:namespace />repositorySearchResultsContainer<%= mountFolder.getRepositoryId() %>">
+									<div class="portlet-msg-info">
+										<%= LanguageUtil.get(pageContext, "searching-please-wait") %>
+									</div>
+								</div>
 							</liferay-ui:section>
 
 						<%
