@@ -148,7 +148,148 @@ AUI.add(
 			}
 		);
 
-		var SpreadSheet = A.Component.create(
+		var SpreadSheet = A.Base.create(
+			'datatable',
+			A.DataTable.Base,
+			[],
+			{
+				initializer: function() {
+					var instance = this;
+
+					var recordset = instance.get('recordset');
+
+					recordset.on('update', instance._onRecordUpdate, instance);
+				},
+
+				addEmptyRows: function(num) {
+					var instance = this;
+
+					var columnset = instance.get('columnset');
+					var recordset = instance.get('recordset');
+
+					var emptyRows = SpreadSheet.buildEmptyRecords(num, getObjectKeys(columnset.keyHash));
+
+					recordset.add(emptyRows);
+
+					instance._uiSetRecordset(recordset);
+
+					instance._fixPluginsUI();
+				},
+
+				updateMinDisplayRows: function(minDisplayRows, callback) {
+					var instance = this;
+
+					callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+
+					var recordsetId = instance.get('recordsetId');
+
+					DDLRecordSet.updateMinDisplayRows(
+						{
+							recordsetId: recordsetId,
+							minDisplayRows: minDisplayRows,
+							serviceContext: JSON.stringify(
+								{
+									scopeGroupId: themeDisplay.getScopeGroupId(),
+									userId: themeDisplay.getUserId()
+								}
+							)
+						},
+						callback
+					);
+				},
+
+				_editCell: function(event) {
+					var instance = this;
+
+					SpreadSheet.superclass._editCell.apply(instance, arguments);
+
+					var column = event.column;
+					var record = event.record;
+
+					var recordset = instance.get('recordset');
+					var recordsetId = instance.get('recordsetId');
+					var structure = instance.get('structure');
+
+					var editor = instance.getCellEditor(record, column);
+
+					if (editor) {
+						editor.set('record', record);
+						editor.set('recordset', recordset);
+						editor.set('recordsetId', recordsetId);
+						editor.set('structure', structure);
+					}
+				},
+
+				_normalizeRecordData: function(data) {
+					var instance = this;
+
+					var recordset = instance.get('recordset');
+					var structure = instance.get('structure');
+
+					var normalized = {};
+
+					A.each(
+						data,
+						function(item, index, collection) {
+							var field = SpreadSheet.findStructureFieldByAttribute(structure, 'name', index);
+
+							if (field !== null) {
+								var type = field.type;
+
+								if ((type === 'radio') || (type === 'select')) {
+									item = JSON.stringify(item);
+								}
+							}
+
+							normalized[index] = instance._normalizeValue(item);
+						}
+					);
+
+					delete normalized.displayIndex;
+					delete normalized.recordId;
+
+					return normalized;
+				},
+
+				_normalizeValue: function(value) {
+					var instance = this;
+
+					return String(value);
+				},
+
+				_onRecordUpdate: function(event) {
+					var instance = this;
+
+					var recordsetId = instance.get('recordsetId');
+
+					var recordIndex = event.index;
+
+					AArray.each(
+						event.updated,
+						function(item, index, collection) {
+							var data = item.get('data');
+
+							var fieldsMap = instance._normalizeRecordData(data);
+
+							if (data.recordId > 0) {
+								SpreadSheet.updateRecord(data.recordId, recordIndex, fieldsMap, true);
+							}
+							else {
+								SpreadSheet.addRecord(
+									recordsetId,
+									recordIndex,
+									fieldsMap,
+									function(json) {
+										if (json.recordId > 0) {
+											data.recordId = json.recordId;
+										}
+									}
+								);
+							}
+						}
+					);
+				}
+			},
 			{
 				ATTRS: {
 					portletNamespace: {
@@ -174,10 +315,6 @@ AUI.add(
 					'long': 'digits'
 				},
 
-				EXTENDS: A.DataTable.Base,
-
-				NAME: 'spreadsheet',
-
 				TYPE_EDITOR: {
 					'checkbox': A.CheckboxCellEditor,
 					'ddm-date': A.DateCellEditor,
@@ -188,145 +325,6 @@ AUI.add(
 					'select': A.DropDownCellEditor,
 					'text': A.TextCellEditor,
 					'textarea': A.TextAreaCellEditor
-				},
-
-				prototype: {
-					initializer: function() {
-						var instance = this;
-
-						var recordset = instance.get('recordset');
-
-						recordset.on('update', instance._onRecordUpdate, instance);
-					},
-
-					addEmptyRows: function(num) {
-						var instance = this;
-
-						var columnset = instance.get('columnset');
-						var recordset = instance.get('recordset');
-
-						var emptyRows = SpreadSheet.buildEmptyRecords(num, getObjectKeys(columnset.keyHash));
-
-						recordset.add(emptyRows);
-
-						instance._uiSetRecordset(recordset);
-
-						instance._fixPluginsUI();
-					},
-
-					updateMinDisplayRows: function(minDisplayRows, callback) {
-						var instance = this;
-
-						callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
-
-						var recordsetId = instance.get('recordsetId');
-
-						DDLRecordSet.updateMinDisplayRows(
-							{
-								recordsetId: recordsetId,
-								minDisplayRows: minDisplayRows,
-								serviceContext: JSON.stringify(
-									{
-										scopeGroupId: themeDisplay.getScopeGroupId(),
-										userId: themeDisplay.getUserId()
-									}
-								)
-							},
-							callback
-						);
-					},
-
-					_editCell: function(event) {
-						var instance = this;
-
-						SpreadSheet.superclass._editCell.apply(instance, arguments);
-
-						var column = event.column;
-						var record = event.record;
-
-						var recordset = instance.get('recordset');
-						var recordsetId = instance.get('recordsetId');
-						var structure = instance.get('structure');
-
-						var editor = instance.getCellEditor(record, column);
-
-						if (editor) {
-							editor.set('record', record);
-							editor.set('recordset', recordset);
-							editor.set('recordsetId', recordsetId);
-							editor.set('structure', structure);
-						}
-					},
-
-					_normalizeRecordData: function(data) {
-						var instance = this;
-
-						var recordset = instance.get('recordset');
-						var structure = instance.get('structure');
-
-						var normalized = {};
-
-						A.each(
-							data,
-							function(item, index, collection) {
-								var field = SpreadSheet.findStructureFieldByAttribute(structure, 'name', index);
-
-								if (field !== null) {
-									var type = field.type;
-
-									if ((type === 'radio') || (type === 'select')) {
-										item = JSON.stringify(item);
-									}
-								}
-
-								normalized[index] = instance._normalizeValue(item);
-							}
-						);
-
-						delete normalized.displayIndex;
-						delete normalized.recordId;
-
-						return normalized;
-					},
-
-					_normalizeValue: function(value) {
-						var instance = this;
-
-						return String(value);
-					},
-
-					_onRecordUpdate: function(event) {
-						var instance = this;
-
-						var recordsetId = instance.get('recordsetId');
-
-						var recordIndex = event.index;
-
-						AArray.each(
-							event.updated,
-							function(item, index, collection) {
-								var data = item.get('data');
-
-								var fieldsMap = instance._normalizeRecordData(data);
-
-								if (data.recordId > 0) {
-									SpreadSheet.updateRecord(data.recordId, recordIndex, fieldsMap, true);
-								}
-								else {
-									SpreadSheet.addRecord(
-										recordsetId,
-										recordIndex,
-										fieldsMap,
-										function(json) {
-											if (json.recordId > 0) {
-												data.recordId = json.recordId;
-											}
-										}
-									);
-								}
-							}
-						);
-					}
 				},
 
 				addRecord: function(recordsetId, displayIndex, fieldsMap, callback) {
