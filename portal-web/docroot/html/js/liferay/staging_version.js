@@ -80,7 +80,8 @@ AUI.add(
 									themeDisplay.getPathMain() + '/staging_bar/view_layout_revision_details',
 									{
 										data: {
-											p_l_id: themeDisplay.getPlid()
+											p_l_id: themeDisplay.getPlid(),
+											t: Math.random()
 										},
 										method: 'GET',
 										on: {
