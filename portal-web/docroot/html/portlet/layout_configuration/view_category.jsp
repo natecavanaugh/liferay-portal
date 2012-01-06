@@ -118,6 +118,17 @@ if (!categories.isEmpty() || !portlets.isEmpty()) {
 
 				boolean portletInstanceable = portlet.isInstanceable();
 				boolean portletUsed = layoutTypePortlet.hasPortletId(portlet.getPortletId());
+
+				String[] runtimePortletIds = request.getParameter("runtimePortletIds").split(",");
+				for(String runtimePortletId : runtimePortletIds){
+					if (runtimePortletId.equals(portlet.getPortletId()) ||
+						runtimePortletId.startsWith(
+							portlet.getPortletId().concat(PortletConstants.INSTANCE_SEPARATOR))) {
+
+						portletUsed = true;
+					}
+				}
+
 				boolean portletLocked = (!portletInstanceable && portletUsed);
 
 				if (portletInstanceable && layout.isTypePanel()) {

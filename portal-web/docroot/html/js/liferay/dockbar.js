@@ -591,6 +591,24 @@ AUI.add(
 									BODY.toggleClass('lfr-has-sidebar', visible);
 								};
 
+								var runtimePortletIdArray = A.Selector.query('.portlet-static');
+								var j, node, runtimePortletIds = '';
+
+								for (j = 0; node = runtimePortletIdArray[j++];) {
+									var portletId = node.id;
+									portletId = portletId.substring(7, portletId.length);
+
+									if(portletId.indexOf('_INSTANCE_') == -1){
+										portletId = portletId.replace('_', '');
+									}
+
+									runtimePortletIds += portletId;
+
+									if(j < runtimePortletIdArray.length){
+										runtimePortletIds += ',';
+									}
+							    }
+
 								addApplication = instance._addUnderlay(
 									{
 										after: {
@@ -605,6 +623,7 @@ AUI.add(
 											},
 											data: {
 												doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
+												runtimePortletIds: runtimePortletIds,
 												p_l_id: themeDisplay.getPlid(),
 												p_p_id: 87,
 												p_p_state: 'exclusive'

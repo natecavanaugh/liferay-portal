@@ -78,6 +78,17 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 
 														boolean portletInstanceable = portlet.isInstanceable();
 														boolean portletUsed = layoutTypePortlet.hasPortletId(portlet.getPortletId());
+
+														Set<String> runtimePortletIds = (Set<String>)request.getAttribute(com.liferay.portal.kernel.util.WebKeys.RUNTIME_PORTLET_IDS);
+														for(String runtimePortletId : runtimePortletIds){
+															if (runtimePortletId.equals(portlet.getPortletId()) ||
+																runtimePortletId.startsWith(
+																	portlet.getPortletId().concat(PortletConstants.INSTANCE_SEPARATOR))) {
+												
+																portletUsed = true;
+															}
+														}
+
 														boolean portletLocked = (!portletInstanceable && portletUsed);
 
 													if (!PortletPermissionUtil.contains(permissionChecker, layout, portlet.getPortletId(), ActionKeys.ADD_TO_PAGE)) {
