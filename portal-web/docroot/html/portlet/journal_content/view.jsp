@@ -85,7 +85,7 @@ boolean expired = true;
 				content = RuntimePortletUtil.processXML(request, content, actionURLLogic);
 				content = RuntimePortletUtil.processXML(request, content, renderURLLogic);
 
-				if (themeDisplay.isStateExclusive()) {
+				if (themeDisplay.isStateExclusive() || themeDisplay.isStateExclusiveStateful()) {
 					out.print(content);
 
 					return;

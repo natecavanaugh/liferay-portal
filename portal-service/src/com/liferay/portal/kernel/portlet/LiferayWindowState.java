@@ -28,7 +28,8 @@ public class LiferayWindowState extends WindowState {
 
 	public static final WindowState EXCLUSIVE = new WindowState("exclusive");
 
-	public static final WindowState EXCLUSIVE_STATEFUL = new WindowState("exclusive_stateful");
+	public static final WindowState EXCLUSIVE_STATEFUL =
+		new WindowState("exclusive_stateful");
 
 	public static final WindowState POP_UP = new WindowState("pop_up");
 
