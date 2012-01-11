@@ -34,6 +34,8 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 		portlets.add(portlet);
 	}
 }
+
+Set<String> runtimePortletIds = (Set<String>)request.getAttribute(com.liferay.portal.kernel.util.WebKeys.RUNTIME_PORTLET_IDS);
 %>
 
 <div class="dockbar" data-namespace="<portlet:namespace />" id="dockbar">
@@ -79,8 +81,7 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 														boolean portletInstanceable = portlet.isInstanceable();
 														boolean portletUsed = layoutTypePortlet.hasPortletId(portlet.getPortletId());
 
-														Set<String> runtimePortletIds = (Set<String>)request.getAttribute(com.liferay.portal.kernel.util.WebKeys.RUNTIME_PORTLET_IDS);
-														for(String runtimePortletId : runtimePortletIds){
+														for (String runtimePortletId : runtimePortletIds) {
 															if (runtimePortletId.equals(portlet.getPortletId()) ||
 																runtimePortletId.startsWith(
 																	portlet.getPortletId().concat(PortletConstants.INSTANCE_SEPARATOR))) {

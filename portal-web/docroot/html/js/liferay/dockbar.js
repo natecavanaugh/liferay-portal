@@ -596,15 +596,16 @@ AUI.add(
 
 								for (j = 0; node = runtimePortletIdArray[j++];) {
 									var portletId = node.id;
+
 									portletId = portletId.substring(7, portletId.length);
 
-									if(portletId.indexOf('_INSTANCE_') == -1){
+									if (portletId.indexOf('_INSTANCE_') == -1) {
 										portletId = portletId.replace('_', '');
 									}
 
 									runtimePortletIds += portletId;
 
-									if(j < runtimePortletIdArray.length){
+									if (j < runtimePortletIdArray.length) {
 										runtimePortletIds += ',';
 									}
 							    }
