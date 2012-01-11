@@ -818,6 +818,22 @@ public class SitesUtil {
 		}
 	}
 
+	public static void resetPrototype(Layout layout)
+		throws PortalException, SystemException {
+
+		layout.setModifiedDate(null);
+
+		LayoutLocalServiceUtil.updateLayout(layout, false);
+
+		LayoutSet layoutSet = layout.getLayoutSet();
+		UnicodeProperties settingsProperties =
+			layoutSet.getSettingsProperties();
+
+		settingsProperties.remove("last-merge-time");
+
+		LayoutSetLocalServiceUtil.updateLayoutSet(layoutSet, false);
+	}
+
 	protected static void setLayoutSetPrototypeLinkEnabledParameter(
 		Map<String, String[]> parameterMap, LayoutSet targetLayoutSet,
 		ServiceContext serviceContext) {
