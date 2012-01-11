@@ -152,6 +152,12 @@ AUI.add(
 							state = 'closed';
 						}
 
+						var toggler = event.panelTitle.all('.lfr-panel-button');
+
+						if(toggler) {
+							toggler.attr('title', Liferay.Language.get(state == 'open' ? 'collapse' : 'expand'));
+						}
+
 						instance._saveState(panelId, state);
 
 						instance.fire(
