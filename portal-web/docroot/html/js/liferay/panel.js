@@ -154,8 +154,14 @@ AUI.add(
 
 						var toggler = event.panelTitle.all('.lfr-panel-button');
 
-						if(toggler) {
-							toggler.attr('title', Liferay.Language.get(state == 'open' ? 'collapse' : 'expand'));
+						if (toggler.size()) {
+							var title = Liferay.Language.get('expand');
+
+							if (state == 'open') {
+								title = Liferay.Language.get('collapse');
+							}
+
+							toggler.attr('title', title);
 						}
 
 						instance._saveState(panelId, state);
