@@ -14,288 +14,384 @@
  */
 --%>
 
-<div class="api-section api-method">
-	<h2>
+<%@ include file="/html/portal/api/jsonws/init.jsp" %>
 
-		<%
-		JSONWebServiceActionMapping jsonWebServiceActionMapping = JSONWebServiceActionsManagerUtil.getJSONWebServiceActionMapping(signature);
-		%>
+<%
+String signature = ParamUtil.getString(request, "signature");
+%>
 
-		<%= jsonWebServiceActionMapping.getServletContextPath() + jsonWebServiceActionMapping.getPath() %>
-	</h2>
-
-	<dl class="http-method">
-		<dt><liferay-ui:message key="http-method" /></dt>
-		<dd class="lfr-action-label"><%= jsonWebServiceActionMapping.getMethod() %></dd>
-	</dl>
-
-	<%
-	Class<?> actionClass = jsonWebServiceActionMapping.getActionClass();
-
-	String actionClassName = actionClass.getName();
-
-	int pos = actionClassName.lastIndexOf(CharPool.PERIOD);
-
-	Method actionMethod = jsonWebServiceActionMapping.getActionMethod();
-	%>
-
-	<div class="param">
-		<span class="param-name">
-			<%= actionClassName.substring(0, pos) %>.<span class="class-name"><%= actionClassName.substring(pos + 1) %></span>#<span class="method-name"><%= actionMethod.getName() %></span>
-		</span>
-
-		<%
-		JavadocMethod javadocMethod = JavadocManagerUtil.lookupJavadocMethod(jsonWebServiceActionMapping.getActionMethod());
-
-		String comment = null;
-
-		if (javadocMethod != null) {
-			comment = javadocMethod.getComment();
-		}
-		%>
-
-		<c:if test="<%= Validator.isNotNull(comment) %>">
-			<p class="param-comment">
-				<%= comment %>
-			</p>
-		</c:if>
-	</div>
-</div>
-
-<div class="api-section api-parameters">
-	<h3><liferay-ui:message key="parameters" /></h3>
-
-	<%
-	MethodParameter[] methodParameters = jsonWebServiceActionMapping.getMethodParameters();
-
-	for (int i = 0; i < methodParameters.length; i++) {
-		MethodParameter methodParameter = methodParameters[i];
-
-		Class methodParameterTypeClass = methodParameter.getType();
-
-		String methodParameterTypeClassName = null;
-
-		if (methodParameterTypeClass.isArray()) {
-			methodParameterTypeClassName = methodParameterTypeClass.getComponentType() + "[]";
-		}
-		else {
-			methodParameterTypeClassName = methodParameterTypeClass.getName();
-		}
-	%>
-
-		<div class="param">
-			<span class="param-name">
-				<%= methodParameter.getName() %>
-			</span>
-
-			<span class="lfr-action-label param-type">
-				<%= methodParameterTypeClassName %>
-			</span>
+<c:choose>
+	<c:when test="<%= Validator.isNotNull(signature) %>">
+		<div class="lfr-api-method lfr-api-section">
 
 			<%
-			String parameterComment = null;
-
-			if (javadocMethod != null) {
-				parameterComment = javadocMethod.getParameterComment(i);
-			}
+			JSONWebServiceActionMapping jsonWebServiceActionMapping = JSONWebServiceActionsManagerUtil.getJSONWebServiceActionMapping(signature);
 			%>
 
-			<c:if test="<%= Validator.isNotNull(parameterComment) %>">
-				<p class="param-comment">
-					<%= parameterComment %>
-				</p>
-			</c:if>
+			<h2><%= jsonWebServiceActionMapping.getServletContextPath() + jsonWebServiceActionMapping.getPath() %></h2>
+
+			<dl class="lfr-api-http-method">
+				<dt>
+					<liferay-ui:message key="http-method" />
+				</dt>
+				<dd class="lfr-action-label">
+					<%= jsonWebServiceActionMapping.getMethod() %>
+				</dd>
+			</dl>
+
+			<%
+			Class<?> actionClass = jsonWebServiceActionMapping.getActionClass();
+
+			String actionClassName = actionClass.getName();
+
+			int pos = actionClassName.lastIndexOf(CharPool.PERIOD);
+
+			Method actionMethod = jsonWebServiceActionMapping.getActionMethod();
+			%>
+
+			<div class="lfr-api-param">
+				<span class="lfr-api-param-name">
+					<%= actionClassName.substring(0, pos) %>.<span class="class-name"><%= actionClassName.substring(pos + 1) %></span>#<span class="method-name"><%= actionMethod.getName() %></span>
+				</span>
+
+				<%
+				JavadocMethod javadocMethod = JavadocManagerUtil.lookupJavadocMethod(jsonWebServiceActionMapping.getActionMethod());
+
+				String comment = null;
+
+				if (javadocMethod != null) {
+					comment = javadocMethod.getComment();
+				}
+				%>
+
+				<c:if test="<%= Validator.isNotNull(comment) %>">
+					<p class="lfr-api-param-comment">
+						<%= comment %>
+					</p>
+				</c:if>
+			</div>
 		</div>
 
-	<%
-	}
-	%>
-
-</div>
-
-<div class="api-section api-return-type">
-	<h3><liferay-ui:message key="return-type" /></h3>
-
-	<div class="param">
-
-		<%
-		Class<?> returnTypeClass = actionMethod.getReturnType();
-		%>
-
-		<span class="param-name">
-			<%= returnTypeClass.getName() %>
-		</span>
-
-		<%
-		String returnComment = null;
-
-		if (javadocMethod != null) {
-			returnComment = javadocMethod.getReturnComment();
-		}
-		%>
-
-		<c:if test="<%= Validator.isNotNull(returnComment) %>">
-			<p class="param-comment">
-				<%= returnComment %>
-			</p>
-		</c:if>
-	</div>
-</div>
-
-<div class="api-section api-exception">
-	<h3>Exception</h3>
-
-	<%
-	Class<?>[] exceptionTypeClasses = actionMethod.getExceptionTypes();
-
-	for (int i = 0; i < exceptionTypeClasses.length; i++) {
-		Class<?> exceptionTypeClass = exceptionTypeClasses[i];
-	%>
-
-		<div class="param">
-			<span class="param-name">
-				<%= exceptionTypeClass.getName() %>
-			</span>
+		<div class="lfr-api-parameters lfr-api-section">
+			<h3><liferay-ui:message key="parameters" /></h3>
 
 			<%
-			String throwsComment = null;
+			MethodParameter[] methodParameters = jsonWebServiceActionMapping.getMethodParameters();
 
-			if (javadocMethod != null) {
-				throwsComment = javadocMethod.getThrowsComment(i);
-			}
-			%>
+			for (int i = 0; i < methodParameters.length; i++) {
+				MethodParameter methodParameter = methodParameters[i];
 
-			<c:if test="<%= Validator.isNotNull(throwsComment) %>">
-				<div class="param-comment"><%= throwsComment %></div>
-			</c:if>
-		</div>
+				Class methodParameterTypeClass = methodParameter.getType();
 
-	<%
-		}
-	%>
+				String methodParameterTypeClassName = null;
 
-</div>
-
-<div class="api-section api-execute">
-
-	<h3><liferay-ui:message key="execute" /></h3>
-
-	<%
-	String enctype = StringPool.BLANK;
-
-	for (MethodParameter methodParameter : methodParameters) {
-		Class<?> methodParameterTypeClass = methodParameter.getType();
-
-		if (methodParameterTypeClass.equals(File.class)) {
-			enctype = "multipart/form-data";
-
-			break;
-		}
-	}
-	%>
-
-	<div class="aui-helper-hidden api-results" id="serviceResults">
-		<liferay-ui:tabs
-			names="result,javascript-example,curl-example"
-			refresh="<%= false %>"
-		>
-			<liferay-ui:section>
-				<pre class="lfr-code-block" id="serviceOutput"></pre>
-			</liferay-ui:section>
-			<liferay-ui:section>
-				<pre class="lfr-code-block" id="jsExample"></pre>
-			</liferay-ui:section>
-			<liferay-ui:section>
-				<pre class="lfr-code-block" id="curlExample"></pre>
-			</liferay-ui:section>
-		</liferay-ui:tabs>
-	</div>
-
-	<aui:script>
-		Liferay.TPL_DATA_TYPES = {
-			array: {},
-			other: {},
-			string: {}
-		};
-	</aui:script>
-
-	<aui:form action='<%= jsonWebServiceActionMapping.getServletContextPath() + "/api/secure/jsonws" + jsonWebServiceActionMapping.getPath() %>' enctype="<%= enctype %>" name="execute"  method="<%= jsonWebServiceActionMapping.getMethod() %>">
-		<%
-		for (int i = 0; i < methodParameters.length; i++) {
-			MethodParameter methodParameter = methodParameters[i];
-
-			String methodParameterName = methodParameter.getName();
-
-			if (methodParameterName.equals("serviceContext")) {
-				continue;
-			}
-
-			Class<?> methodParameterTypeClass = methodParameter.getType();
-
-			String methodParameterTypeClassName = null;
-
-			if (methodParameterTypeClass.isArray()) {
-				methodParameterTypeClassName = methodParameterTypeClass.getComponentType() + "[]";
-			}
-			else {
-				methodParameterTypeClassName = methodParameterTypeClass.getName();
-			}
-
-			if (methodParameterTypeClass.equals(File.class)) {
-		%>
-
-				<aui:input id='<%= "field" + i %>' label="<%= methodParameterName %>" name="<%= methodParameterName %>"  suffix="<%= methodParameterTypeClassName %>" type="file" />
-
-			<%
-			}
-			else if (methodParameterTypeClass.equals(boolean.class)) {
-			%>
-
-				<aui:field-wrapper label="<%= methodParameterName %>">
-					<aui:input checked="<%= true %>" id='<%= "fieldTrue" + i %>' inlineField="<%= true %>" label="true" name="<%= methodParameterName %>" type="radio" value="<%= true %>" />
-
-					<aui:input id='<%= "fieldFalse" + i %>' inlineField="<%= true %>" label="false" name="<%= methodParameterName %>" type="radio" value="<%= false %>" />
-
-					<span class="aui-suffix"><%= methodParameterTypeClassName %></span>
-				</aui:field-wrapper>
-
-			<%
-			}
-			else {
-				int size = 10;
-
-				if (methodParameterTypeClass.equals(String.class)) {
-					size = 60;
+				if (methodParameterTypeClass.isArray()) {
+					methodParameterTypeClassName = methodParameterTypeClass.getComponentType() + "[]";
+				}
+				else {
+					methodParameterTypeClassName = methodParameterTypeClass.getName();
 				}
 			%>
 
-				<aui:input id='<%= "field" + i %>' label="<%= methodParameterName %>" name="<%= methodParameterName %>" size="<%= size %>" suffix="<%= methodParameterTypeClassName %>" />
+				<div class="lfr-api-param">
+					<span class="lfr-api-param-name">
+						<%= methodParameter.getName() %>
+					</span>
 
-		<%
-			}
-		%>
-		<aui:script>
+					<span class="lfr-action-label lfr-api-param-type">
+						<%= methodParameterTypeClassName %>
+					</span>
+
+					<%
+					String parameterComment = null;
+
+					if (javadocMethod != null) {
+						parameterComment = javadocMethod.getParameterComment(i);
+					}
+					%>
+
+					<c:if test="<%= Validator.isNotNull(parameterComment) %>">
+						<p class="lfr-api-param-comment">
+							<%= parameterComment %>
+						</p>
+					</c:if>
+				</div>
+
 			<%
-			String jsObjectType = "other";
-
-			if (methodParameterTypeClass.isArray()) {
-				jsObjectType = "array";
-			}
-			else if (methodParameterTypeClass.equals(String.class)) {
-				jsObjectType = "string";
 			}
 			%>
 
-			Liferay.TPL_DATA_TYPES['<%= jsObjectType %>']['<%= methodParameterName %>'] = true;
-		</aui:script>
-		<%
-		
-		}
-		%>
+		</div>
 
-		<aui:button type="submit" value="invoke" />
-	</aui:form>
-</div>
+		<div class="lfr-api-return-type lfr-api-section">
+			<h3><liferay-ui:message key="return-type" /></h3>
+
+			<div class="lfr-api-param">
+
+				<%
+				Class<?> returnTypeClass = actionMethod.getReturnType();
+				%>
+
+				<span class="lfr-api-param-name">
+					<%= returnTypeClass.getName() %>
+				</span>
+
+				<%
+				String returnComment = null;
+
+				if (javadocMethod != null) {
+					returnComment = javadocMethod.getReturnComment();
+				}
+				%>
+
+				<c:if test="<%= Validator.isNotNull(returnComment) %>">
+					<p class="lfr-api-param-comment">
+						<%= returnComment %>
+					</p>
+				</c:if>
+			</div>
+		</div>
+
+		<div class="lfr-api-exception lfr-api-section">
+			<h3><liferay-ui:message key="exception" /></h3>
+
+			<%
+			Class<?>[] exceptionTypeClasses = actionMethod.getExceptionTypes();
+
+			for (int i = 0; i < exceptionTypeClasses.length; i++) {
+				Class<?> exceptionTypeClass = exceptionTypeClasses[i];
+			%>
+
+				<div class="lfr-api-param">
+					<span class="lfr-api-param-name">
+						<%= exceptionTypeClass.getName() %>
+					</span>
+
+					<%
+					String throwsComment = null;
+
+					if (javadocMethod != null) {
+						throwsComment = javadocMethod.getThrowsComment(i);
+					}
+					%>
+
+					<c:if test="<%= Validator.isNotNull(throwsComment) %>">
+						<div class="lfr-api-param-comment">
+							<%= throwsComment %>
+						</div>
+					</c:if>
+				</div>
+
+			<%
+				}
+			%>
+
+		</div>
+
+		<div class="lfr-api-execute lfr-api-section">
+			<h3><liferay-ui:message key="execute" /></h3>
+
+			<%
+			String enctype = StringPool.BLANK;
+
+			for (MethodParameter methodParameter : methodParameters) {
+				Class<?> methodParameterTypeClass = methodParameter.getType();
+
+				if (methodParameterTypeClass.equals(File.class)) {
+					enctype = "multipart/form-data";
+
+					break;
+				}
+			}
+			%>
+
+			<div class="aui-helper-hidden lfr-api-results" id="serviceResults">
+				<liferay-ui:tabs
+					names="result,javascript-example,curl-example"
+					refresh="<%= false %>"
+				>
+					<liferay-ui:section>
+						<pre class="lfr-code-block" id="serviceOutput"></pre>
+					</liferay-ui:section>
+					<liferay-ui:section>
+						<pre class="lfr-code-block" id="jsExample"></pre>
+					</liferay-ui:section>
+					<liferay-ui:section>
+						<pre class="lfr-code-block" id="curlExample"></pre>
+					</liferay-ui:section>
+				</liferay-ui:tabs>
+			</div>
+
+			<aui:script>
+				Liferay.TPL_DATA_TYPES = {
+					array: {},
+					other: {},
+					string: {}
+				};
+			</aui:script>
+
+			<aui:form action='<%= jsonWebServiceActionMapping.getServletContextPath() + "/api/secure/jsonws" + jsonWebServiceActionMapping.getPath() %>' enctype="<%= enctype %>" name="execute"  method="<%= jsonWebServiceActionMapping.getMethod() %>">
+				<%
+				for (int i = 0; i < methodParameters.length; i++) {
+					MethodParameter methodParameter = methodParameters[i];
+
+					String methodParameterName = methodParameter.getName();
+
+					if (methodParameterName.equals("serviceContext")) {
+						continue;
+					}
+
+					Class<?> methodParameterTypeClass = methodParameter.getType();
+
+					String methodParameterTypeClassName = null;
+
+					if (methodParameterTypeClass.isArray()) {
+						methodParameterTypeClassName = methodParameterTypeClass.getComponentType() + "[]";
+					}
+					else {
+						methodParameterTypeClassName = methodParameterTypeClass.getName();
+					}
+
+					if (methodParameterTypeClass.equals(File.class)) {
+				%>
+
+						<aui:input id='<%= "field" + i %>' label="<%= methodParameterName %>" name="<%= methodParameterName %>"  suffix="<%= methodParameterTypeClassName %>" type="file" />
+
+					<%
+					}
+					else if (methodParameterTypeClass.equals(boolean.class)) {
+					%>
+
+						<aui:field-wrapper label="<%= methodParameterName %>">
+							<aui:input checked="<%= true %>" id='<%= "fieldTrue" + i %>' inlineField="<%= true %>" label="true" name="<%= methodParameterName %>" type="radio" value="<%= true %>" />
+
+							<aui:input id='<%= "fieldFalse" + i %>' inlineField="<%= true %>" label="false" name="<%= methodParameterName %>" type="radio" value="<%= false %>" />
+
+							<span class="aui-suffix"><%= methodParameterTypeClassName %></span>
+						</aui:field-wrapper>
+
+					<%
+					}
+					else {
+						int size = 10;
+
+						if (methodParameterTypeClass.equals(String.class)) {
+							size = 60;
+						}
+					%>
+
+						<aui:input id='<%= "field" + i %>' label="<%= methodParameterName %>" name="<%= methodParameterName %>" size="<%= size %>" suffix="<%= methodParameterTypeClassName %>" />
+
+				<%
+					}
+				%>
+
+				<aui:script>
+
+					<%
+					String jsObjectType = "other";
+
+					if (methodParameterTypeClass.isArray()) {
+						jsObjectType = "array";
+					}
+					else if (methodParameterTypeClass.equals(String.class)) {
+						jsObjectType = "string";
+					}
+					%>
+
+					Liferay.TPL_DATA_TYPES['<%= jsObjectType %>']['<%= methodParameterName %>'] = true;
+				</aui:script>
+
+				<%				
+				}
+				%>
+
+				<aui:button type="submit" value="invoke" />
+			</aui:form>
+		</div>
+
+		<aui:script use="aui-io,aui-template,querystring-parse">
+			var REGEX_QUERY_STRING = new RegExp('([^?=&]+)(?:=([^&]*))?', 'g');
+
+			var form = A.one('#execute');
+
+			var curlTpl = A.Template.from('#curlTpl');
+			var scriptTpl = A.Template.from('#scriptTpl');
+
+			var curlExample = A.one('#curlExample');
+			var jsExample = A.one('#jsExample');
+
+			var serviceOutput = A.one('#serviceOutput');
+			var serviceResults = A.one('#serviceResults');
+
+			form.on(
+				'submit',
+				function(event) {
+					event.halt();
+
+					var output = A.all([curlExample, jsExample, serviceOutput]);
+
+					output.empty().addClass('loading-results');
+
+					var formEl = form.getDOM();
+
+					Liferay.Service(
+						'<%= jsonWebServiceActionMapping.getServletContextPath() + jsonWebServiceActionMapping.getPath() %>',
+						formEl,
+						function(obj) {
+							serviceOutput.html(A.JSON.stringify(obj, null, 2));
+
+							output.removeClass('loading-results');
+
+							location.hash = '#serviceResults';
+						}
+					);
+
+					var formQueryString = A.IO.prototype._serialize(formEl);
+
+					var data = [];
+
+					var tplDataTypes = Liferay.TPL_DATA_TYPES;
+
+					var stringType = tplDataTypes.string;
+					var arrayType = tplDataTypes.array;
+
+					formQueryString.replace(
+						REGEX_QUERY_STRING,
+						function(match, key, value) {
+							if (value) {
+								value = decodeURIComponent(value.replace(/\+/g, ' '));
+
+								if (stringType[key]) {
+									value = '\'' + value + '\'';
+								}
+								else if (arrayType[key]) {
+									value = '[' + value + ']';
+								}
+
+								data.push(
+									{
+										key: key,
+										value: value
+									}
+								);
+							}
+						}
+					);
+
+					var tplData = {
+						data: data
+					};
+
+					curlTpl.render(tplData, curlExample);
+					scriptTpl.render(tplData, jsExample);
+
+					serviceResults.show();
+				}
+			);
+		</aui:script>
+
+<%-- Note: these template blocks are whitespace sensitive and need to be formatted like this  --%>
 
 <textarea class="aui-helper-hidden" id="scriptTpl">
 Liferay.Service(
@@ -311,139 +407,15 @@ Liferay.Service(
 </textarea>
 
 <textarea class="aui-helper-hidden" id="curlTpl">
-curl http://localhost:8080/api/secure/jsonws<%= jsonWebServiceActionMapping.getServletContextPath() + jsonWebServiceActionMapping.getPath() %> \\
-  -u test@liferay.com:test \\
-  <tpl if="data.length"><tpl for="data">-d {key}={value} <tpl if="!$last">\\
+curl <%= themeDisplay.getPortalURL() + themeDisplay.getPathContext() %>/api/secure/jsonws<%= jsonWebServiceActionMapping.getServletContextPath() + jsonWebServiceActionMapping.getPath() %> \\
+  -u test@liferay.com:test <tpl if="data.length">\\
+  <tpl for="data">-d {key}={value} <tpl if="!$last">\\
   </tpl></tpl></tpl>
 </textarea>
-
-<aui:script use="aui-io,querystring-parse,aui-template">
-	var REGEX_QUERY_STRING = new RegExp('([^?=&]+)(?:=([^&]*))?', 'g');
-
-	var form = A.one('#execute');
-
-	var curlTpl = A.Template.from('#curlTpl');
-	var scriptTpl = A.Template.from('#scriptTpl');
-
-	var curlExample = A.one('#curlExample');
-	var jsExample = A.one('#jsExample');
-
-	var serviceResults = A.one('#serviceResults');
-
-	var serviceOutput = A.one('#serviceOutput');
-
-	form.on(
-		'submit',
-		function(event) {
-			event.halt();
-
-			var output = A.all([curlExample, jsExample, serviceOutput]);
-
-			output.empty().addClass('loading-results');
-
-			var formEl = form.getDOM();
-
-			Liferay.Service(
-				'<%= jsonWebServiceActionMapping.getServletContextPath() + jsonWebServiceActionMapping.getPath() %>',
-				formEl,
-				function(obj) {
-					serviceOutput.html(A.JSON.stringify(obj, null, 2));
-
-					output.removeClass('loading-results');
-
-					location.hash = '#serviceOutput';
-				}
-			);
-/*
-AUI().use(
-  'aui-io',
-  function(A) {
-    A.io.request(
-      '/api/secure/jsonws<%= jsonWebServiceActionMapping.getPath() %>',
-      {<tpl if="data.length">
-        data: {
-          <tpl for="data">{key}: {value}<tpl if="!$last">,
-          </tpl></tpl>  
-        },</tpl>
-        dataType: 'json',
-        method: '<%= jsonWebServiceActionMapping.getMethod() %>',
-        on: {
-          success: function(event) {
-            var jsonObj = this.get('responseData');
-          }
-        }
-      }
-    );
-  }
-);
-
-
-
-			A.io.request(
-				form.attr('action'),
-				{
-					after: {
-						success: function(event, id, xhr) {
-							var obj = this.get('responseData');
-
-							serviceOutput.html(A.JSON.stringify(obj, null, 2));
-
-							serviceOutput.removeClass('loading-results');
-							jsExample.removeClass('loading-results');
-						}
-					},
-					dataType: 'json',
-					form: {
-						id: formEl
-					},
-					method: 'POST'
-				}
-			);
-
-			*/
-
-			var formQueryString = A.IO.prototype._serialize(formEl);
-
-			var data = [];
-
-			var tplDataTypes = Liferay.TPL_DATA_TYPES;
-
-			var stringType = tplDataTypes.string;
-			var arrayType = tplDataTypes.array;
-
-			formQueryString.replace(
-				REGEX_QUERY_STRING,
-				function(match, key, value) {
-					if (value) {
-						value = decodeURIComponent(value.replace(/\+/g, ' '));
-
-						if (stringType[key]) {
-							value = '\'' + value + '\'';
-						}
-						else if (arrayType[key]) {
-							value = '[' + value + ']';
-						}
-
-						data.push(
-							{
-								key: key,
-								value: value
-							}
-						);
-					}
-				}
-			);
-
-			var tplData = {
-				data: data
-			};
-
-			console.log(curlTpl, curlTpl.parse(tplData));
-
-			curlTpl.render(tplData, curlExample);
-			scriptTpl.render(tplData, jsExample);
-
-			serviceResults.show();
-		}
-	);
-</aui:script>
+	</c:when>
+	<c:otherwise>
+		<div class="portlet-msg-info">
+			<liferay-ui:message key="please-select-a-method-on-the-left" />
+		</div>
+	</c:otherwise>
+</c:choose>
