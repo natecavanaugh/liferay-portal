@@ -674,7 +674,11 @@ AUI.add(
 					if (!manageCustomizationLink.hasClass('disabled')) {
 						instance._controls = dockBar.one('.layout-customizable-controls');
 
-						var columns = A.all('.portlet-column');
+						var columns = A.all('.portlet-column').filter(
+							function(node) {
+								return !node.one('.portlet-dropzone:not(.portlet-dropzone-disabled)');
+							}
+						);
 
 						var customizationsHandle;
 
@@ -696,10 +700,6 @@ AUI.add(
 
 								columns.each(
 									function(item, index, collection) {
-										if(item.one('.portlet-dropzone-disabled')) {
-											return true;
-										}
-
 										var overlayMask = item.getData('customizationControls');
 
 										if (!overlayMask) {
