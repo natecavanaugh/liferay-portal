@@ -591,6 +591,16 @@ AUI.add(
 									BODY.toggleClass('lfr-has-sidebar', visible);
 								};
 
+								var j, runtimePortletIds = '';
+
+								for (j = 0; j < Liferay.Portlet.runtimeList.length; j++) {
+									runtimePortletIds += Liferay.Portlet.runtimeList[j];
+
+									if (j < Liferay.Portlet.runtimeList.length) {
+										runtimePortletIds += ',';
+									}
+							    }
+
 								addApplication = instance._addUnderlay(
 									{
 										after: {
@@ -605,6 +615,7 @@ AUI.add(
 											},
 											data: {
 												doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
+												runtimePortletIds: runtimePortletIds,
 												p_l_id: themeDisplay.getPlid(),
 												p_p_id: 87,
 												p_p_state: 'exclusive'
