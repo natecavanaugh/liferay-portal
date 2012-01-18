@@ -37,30 +37,34 @@ String curSection = categorySections[0][0];
 String historyKey = ParamUtil.getString(request, "historyKey");
 
 if (Validator.isNotNull(historyKey)) {
-	curSection = historyKey;
+	curSection = StringUtil.replace(historyKey, portletDisplay.getNamespace(), StringPool.BLANK);
+	curSection = TextFormatter.format(curSection, TextFormatter.K);
 }
+
+String errorSection = (String)request.getAttribute("errorSection");
 %>
 
 <div class="taglib-form-navigator">
 	<div id="<portlet:namespace />sectionsContainer">
+		<div class="form-navigator-sections" id="<portlet:namespace />formNavigatorSections">
+			<%
+			for (String section : allSections) {
+				if (!section.equals(curSection) || (Validator.isNotNull(errorSection) && !section.equals(errorSection))) {
+					continue;
+				}
 
-		<%
-		for (String section : allSections) {
-			String sectionId = _getSectionId(section);
-			String sectionJsp = jspPath + _getSectionJsp(section) + ".jsp";
-		%>
+				String sectionId = _getSectionId(section);
+				String sectionJsp = jspPath + _getSectionJsp(section) + ".jsp";
+			%>
 
-			<!-- Begin fragment <%= namespace + sectionId %> -->
+				<div class="form-section <%= (section.equals(curSection) || section.equals(sectionId)) ? "selected" : "aui-helper-hidden-accessible" %>" id="<%= namespace + sectionId %>">
+					<liferay-util:include page="<%= sectionJsp %>" portletId="<%= portletDisplay.getRootPortletId() %>" />
+				</div>
 
-			<div class="form-section <%= (curSection.equals(section) || curSection.equals(sectionId)) ? "selected" : "aui-helper-hidden-accessible" %>" id="<%= namespace + sectionId %>">
-				<liferay-util:include page="<%= sectionJsp %>" portletId="<%= portletDisplay.getRootPortletId() %>" />
-			</div>
-
-			<!-- End fragment <%= namespace + sectionId %> -->
-
-		<%
-		}
-		%>
+			<%
+			}
+			%>
+		</div>
 
 		<div class="lfr-component form-navigator">
 			<%= Validator.isNotNull(htmlTop) ? htmlTop : StringPool.BLANK %>
@@ -83,8 +87,6 @@ if (Validator.isNotNull(historyKey)) {
 						<ul>
 
 							<%
-							String errorSection = (String)request.getAttribute("errorSection");
-
 							if (Validator.isNotNull(errorSection)) {
 								curSection = StringPool.BLANK;
 							}
@@ -174,10 +176,6 @@ if (Validator.isNotNull(historyKey)) {
 			namespace: '<portlet:namespace />'
 		}
 	);
-
-	<%
-	String errorSection = (String)request.getAttribute("errorSection");
-	%>
 
 	<c:if test="<%= Validator.isNotNull(errorSection) %>">
 		<portlet:namespace />formNavigator._revealSection('#<%= namespace + errorSection %>', '');

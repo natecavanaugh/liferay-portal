@@ -102,15 +102,10 @@ else {
 </aui:fieldset>
 
 <aui:script use="liferay-auto-fields">
-	Liferay.once(
-		'formNavigator:reveal<portlet:namespace />additionalEmailAddresses',
-		function() {
-			new Liferay.AutoFields(
-				{
-					contentBox: '#<portlet:namespace />additionalEmailAddresses > fieldset',
-					fieldIndexes: '<portlet:namespace />emailAddressesIndexes'
-				}
-			).render();
+	new Liferay.AutoFields(
+		{
+			contentBox: '#<portlet:namespace />additionalEmailAddresses > fieldset',
+			fieldIndexes: '<portlet:namespace />emailAddressesIndexes'
 		}
-	);
+	).render();
 </aui:script>

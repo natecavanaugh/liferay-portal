@@ -321,6 +321,36 @@
 
 	Liferay.provide(
 		Portlet,
+		'load',
+		function(id, fn) {
+			var A = AUI();
+
+			var config = {
+				data: {
+					doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
+					p_l_id: themeDisplay.getPlid(),
+					p_p_id: id,
+					p_p_state: 'exclusive_stateful'
+				}
+			};
+
+			if (fn) {
+				var on = A.namespace.call(config, 'on');
+
+				on.success = function(){
+					var responseData = this.get('responseData');
+
+					fn.call(this, A.Node.create(responseData), responseData);
+				};
+			}
+
+			A.io.request('/c/portal/render_portlet', config);
+		},
+		['aui-io-request']
+	);
+
+	Liferay.provide(
+		Portlet,
 		'close',
 		function(portlet, skipConfirm, options) {
 			var instance = this;

@@ -102,15 +102,10 @@ else {
 </aui:fieldset>
 
 <aui:script use="liferay-auto-fields">
-	Liferay.once(
-		'formNavigator:reveal<portlet:namespace />websites',
-		function() {
-			new Liferay.AutoFields(
-				{
-					contentBox: '#<portlet:namespace />websites > fieldset',
-					fieldIndexes: '<portlet:namespace />websitesIndexes'
-				}
-			).render();
+	new Liferay.AutoFields(
+		{
+			contentBox: '#<portlet:namespace />websites > fieldset',
+			fieldIndexes: '<portlet:namespace />websitesIndexes'
 		}
-	);
+	).render();
 </aui:script>

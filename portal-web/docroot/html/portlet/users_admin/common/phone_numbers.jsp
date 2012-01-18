@@ -105,15 +105,10 @@ else {
 </aui:fieldset>
 
 <aui:script use="liferay-auto-fields">
-	Liferay.once(
-		'formNavigator:reveal<portlet:namespace />phoneNumbers',
-		function() {
-			new Liferay.AutoFields(
-				{
-					contentBox: '#<portlet:namespace />phoneNumbers > fieldset',
-					fieldIndexes: '<portlet:namespace />phonesIndexes'
-				}
-			).render();
+	new Liferay.AutoFields(
+		{
+			contentBox: '#<portlet:namespace />phoneNumbers > fieldset',
+			fieldIndexes: '<portlet:namespace />phonesIndexes'
 		}
-	);
+	).render();
 </aui:script>

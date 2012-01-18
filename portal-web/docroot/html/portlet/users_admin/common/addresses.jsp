@@ -151,49 +151,44 @@ else {
 </aui:fieldset>
 
 <aui:script use="liferay-auto-fields,liferay-dynamic-select">
-	Liferay.once(
-		'formNavigator:reveal<portlet:namespace />addresses',
-		function() {
-			var addresses = new Liferay.AutoFields(
-				{
-					contentBox: '#<portlet:namespace />addresses > fieldset',
-					fieldIndexes: '<portlet:namespace />addressesIndexes',
-					on: {
-						'clone': function(event) {
-							var row = event.row;
-							var guid = event.guid;
+	var addresses = new Liferay.AutoFields(
+		{
+			contentBox: '#<portlet:namespace />addresses > fieldset',
+			fieldIndexes: '<portlet:namespace />addressesIndexes',
+			on: {
+				'clone': function(event) {
+					var row = event.row;
+					var guid = event.guid;
 
-							var dynamicSelects = row.one('select[data-componentType=dynamic_select]');
+					var dynamicSelects = row.one('select[data-componentType=dynamic_select]');
 
-							if (dynamicSelects) {
-								dynamicSelects.detach('change');
-							}
-
-							new Liferay.DynamicSelect(
-								[
-									{
-										select: '<portlet:namespace />addressCountryId' + guid,
-										selectData: Liferay.Address.getCountries,
-										selectDesc: 'name',
-										selectLocalizeDesc: '<%= true %>',
-										selectLocalizeDescPrefix: '<%= CountryConstants.NAME_PREFIX %>',
-										selectSort: '<%= true %>',
-										selectId: 'countryId',
-										selectVal: ''
-									},
-									{
-										select: '<portlet:namespace />addressRegionId' + guid,
-										selectData: Liferay.Address.getRegions,
-										selectDesc: 'name',
-										selectId: 'regionId',
-										selectVal: ''
-									}
-								]
-							);
-						}
+					if (dynamicSelects) {
+						dynamicSelects.detach('change');
 					}
+
+					new Liferay.DynamicSelect(
+						[
+							{
+								select: '<portlet:namespace />addressCountryId' + guid,
+								selectData: Liferay.Address.getCountries,
+								selectDesc: 'name',
+								selectLocalizeDesc: '<%= true %>',
+								selectLocalizeDescPrefix: '<%= CountryConstants.NAME_PREFIX %>',
+								selectSort: '<%= true %>',
+								selectId: 'countryId',
+								selectVal: ''
+							},
+							{
+								select: '<portlet:namespace />addressRegionId' + guid,
+								selectData: Liferay.Address.getRegions,
+								selectDesc: 'name',
+								selectId: 'regionId',
+								selectVal: ''
+							}
+						]
+					);
 				}
-			).render();
+			}
 		}
-	);
+	).render();
 </aui:script>
