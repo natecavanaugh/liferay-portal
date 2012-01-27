@@ -769,7 +769,8 @@ public class PortalImpl implements Portal {
 			WebKeys.THEME_DISPLAY);
 
 		if (themeDisplay.isLifecycleResource() ||
-			themeDisplay.isStateExclusive()) {
+			themeDisplay.isStateExclusive() ||
+			themeDisplay.isStateExclusiveStateful() ) {
 
 			return PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
 		}
@@ -5452,6 +5453,8 @@ public class PortalImpl implements Portal {
 
 		themeDisplay.setStateExclusive(
 			windowState.equals(LiferayWindowState.EXCLUSIVE));
+		themeDisplay.setStateExclusiveStateful(
+			windowState.equals(LiferayWindowState.EXCLUSIVE_STATEFUL));
 		themeDisplay.setStateMaximized(
 			windowState.equals(WindowState.MAXIMIZED));
 		themeDisplay.setStatePopUp(

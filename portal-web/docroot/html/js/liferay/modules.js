@@ -51,7 +51,7 @@
 			'dynamic-select': ['aui-base'],
 			'form': ['aui-base', 'aui-form-validator'],
 			'form-placeholders': ['liferay-form', 'plugin'],
-			'form-navigator': ['aui-base'],
+			'form-navigator': ['aui-base', 'aui-io-plugin', 'liferay-history-manager'],
 			'history': getHistoryRequirements(),
 			'history-html5': ['liferay-history', 'history-html5', 'querystring-stringify-simple'],
 			'history-manager': ['liferay-history'],
