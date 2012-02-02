@@ -249,6 +249,7 @@ public class HookHotDeployListener
 		"servlet.session.destroy.events",
 		"servlet.service.events.post",
 		"servlet.service.events.pre",
+		"session.max.allowed",
 		"session.phishing.protected.attributes",
 		"session.store.password",
 		"sites.form.add.advanced",
@@ -2237,6 +2238,7 @@ public class HookHotDeployListener
 	};
 
 	private static final String[] _PROPS_VALUES_INTEGER = {
+		"session.max.allowed",
 		"users.image.max.height",
 		"users.image.max.width",
 	};

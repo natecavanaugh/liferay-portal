@@ -5075,11 +5075,11 @@ public class PortalImpl implements Portal {
 			HttpServletResponse response)
 		throws IOException, ServletException {
 
-		if (_log.isInfoEnabled()) {
+		if (_log.isDebugEnabled()) {
 			String currentURL = (String)request.getAttribute(
 				WebKeys.CURRENT_URL);
 
-			_log.info(
+			_log.debug(
 				"Current URL " + currentURL + " generates exception: " +
 					e.getMessage());
 		}
@@ -5089,18 +5089,18 @@ public class PortalImpl implements Portal {
 				_logWebServerServlet.warn(e, e);
 			}
 		}
-		else if ((e instanceof PortalException) && _log.isInfoEnabled()) {
+		else if ((e instanceof PortalException) && _log.isDebugEnabled()) {
 			if ((e instanceof NoSuchLayoutException) ||
 				(e instanceof PrincipalException)) {
 
 				String msg = e.getMessage();
 
 				if (Validator.isNotNull(msg)) {
-					_log.info(msg);
+					_log.debug(msg);
 				}
 			}
 			else {
-				_log.info(e, e);
+				_log.debug(e, e);
 			}
 		}
 		else if ((e instanceof SystemException) && _log.isWarnEnabled()) {
