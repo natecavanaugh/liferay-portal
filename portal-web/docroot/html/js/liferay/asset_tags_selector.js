@@ -646,18 +646,21 @@ AUI.add(
 
 						popup.searchField.resetValue();
 
-						instance._buffer = ['<fieldset class="' + (!data || !data.length ? CSS_NO_MATCHES : '') + '">'];
-
 						A.each(data, iterator, instance);
+						
+						var tag_data = {
+							tags: data
+						};
 
-						var buffer = instance._buffer;
+						var tpl_tag = new A.Template(
+							'<tpl for="tags">',
+								'<fieldset class="' + (!data || !data.length ? CSS_NO_MATCHES : '') + '">',
+										TPL_INPUT,
+								'</fieldset>',
+							'</tpl>'
+						);
 
-						var message = Lang.sub(TPL_MESSAGE, [Liferay.Language.get('no-tags-found')]);
-
-						buffer.push(message);
-						buffer.push('</fieldset>');
-
-						popup.entriesNode.html(buffer.join(''));
+						tpl_tag.render(tag_data, popup.entriesNode);
 
 						popup.liveSearch.get('nodes').refresh();
 						popup.liveSearch.refreshIndex();
@@ -672,6 +675,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['array-extras', 'async-queue', 'aui-autocomplete', 'aui-dialog', 'aui-io-request', 'aui-live-search', 'aui-textboxlist', 'aui-form-textfield', 'datasource-cache', 'liferay-service-datasource']
+		requires: ['array-extras', 'async-queue', 'aui-autocomplete', 'aui-dialog', 'aui-io-request', 'aui-live-search', 'aui-textboxlist', 'aui-form-textfield', 'datasource-cache', 'liferay-service-datasource', 'aui-template']
 	}
 );
