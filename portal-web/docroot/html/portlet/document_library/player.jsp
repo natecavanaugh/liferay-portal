@@ -46,45 +46,29 @@ for (String previewFileURL : previewFileURLs) {
 
 <c:choose>
 	<c:when test="<%= supportedAudio %>">
-		<aui:script use="aui-node,aui-swf">
-			var nodeAudio = A.config.doc.createElement('audio');
+		<aui:script use="aui-audio,swfdetect">
+			var oggUrl = '<%= oggPreviewFileURL %>';
 
-			if (!!nodeAudio.canPlayType) {
-				var previewNode = A.one('#<portlet:namespace />previewFileContent');
-
-				var audioId = A.guid();
-
-				var audioObject = '<audio id="' + audioId + '" controls="controls" style="width: 100%;">';
-
-				<c:if test="<%= Validator.isNotNull(mp3PreviewFileURL) %>">
-					audioObject += '<source src="<%= mp3PreviewFileURL %>" type="audio/mp3" />';
-				</c:if>
-				<c:if test="<%= Validator.isNotNull(oggPreviewFileURL) %>">
-					audioObject += '<source src="<%= oggPreviewFileURL %>" type="audio/ogg" />';
-				</c:if>
-
-				audioObject += '</audio>';
-
-				A.one('#<portlet:namespace />previewFileContent').html(audioObject);
-			}
-			else {
-				new A.SWF(
-					{
-						boundingBox: '#<portlet:namespace />previewFileContent',
-						fixedAttributes: {
-							allowFullScreen: true,
-							bgColor: '#000000'
-						},
-						flashVars: {
-							'mp3': '<%= previewFileURLs[0] %>'
-						},
-						height: 27,
-						url: '<%= themeDisplay.getCDNHost() + themeDisplay.getPathJavaScript() %>/misc/video_player/mpw_player.swf',
-						useExpressInstall: true,
-						version: 9
+			var auiAudio = new A.Audio(
+				{
+					boundingBox: '#<portlet:namespace />previewFileContent',
+					fixedAttributes: {
+						allowfullscreen: 'true'
 					}
-				);
+					<c:if test="<%= Validator.isNotNull(mp3PreviewFileURL) %>">
+						,url: '<%= mp3PreviewFileURL %>'
+					</c:if>
+					<c:if test="<%= Validator.isNotNull(oggPreviewFileURL) && !BrowserSnifferUtil.isFirefox(request) %>">
+						,oggUrl: oggUrl
+					</c:if>
+				}
+			);
+
+			if (A.UA.gecko && !A.SWFDetect.isFlashVersionAtLeast(9)) {
+				auiAudio.set('oggUrl', oggUrl);
 			}
+
+			auiAudio.render();
 		</aui:script>
 	</c:when>
 	<c:when test="<%= supportedVideo %>">
