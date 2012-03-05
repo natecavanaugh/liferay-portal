@@ -158,17 +158,14 @@ public class LiferayDefaultSelenium
 	}
 
 	public void uploadCommonFile(String location, String value) {
-		value =
+		super.type(
+			location,
 			_projectDir + "portal-web\\test\\com\\liferay\\portalweb\\" +
-				"dependencies\\" + value;
-
-		super.type(location, text);
+				"dependencies\\" + value);
 	}
 
 	public void uploadTempFile(String location, String value) {
-		String text = TestPropsValues.OUTPUT_DIR + value;
-
-		super.type(location, text);
+		super.type(location, TestPropsValues.OUTPUT_DIR + value);
 	}
 
 	@Override
