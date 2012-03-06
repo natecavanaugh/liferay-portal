@@ -449,6 +449,19 @@ definePermissionsURL.setParameter(Constants.CMD, Constants.VIEW);
 							buffer.append("disabled ");
 						}
 
+						buffer.append("id=\"");
+						buffer.append(FriendlyURLNormalizerUtil.normalize(role.getName()));
+
+						if (Validator.isNotNull(preselectedMsg)) {
+							buffer.append("_PRESELECTED_");
+						}
+						else {
+							buffer.append("_ACTION_");
+						}
+
+						buffer.append(action);
+						buffer.append("\" ");
+
 						buffer.append("name=\"");
 						buffer.append(role.getRoleId());
 
