@@ -46,7 +46,27 @@ for (String previewFileURL : previewFileURLs) {
 
 <c:choose>
 	<c:when test="<%= supportedAudio %>">
-		<aui:script use="aui-node,aui-swf">
+		<aui:script use="aui-audio">
+			new A.Audio(
+				{
+					boundingBox: '#<portlet:namespace />previewFileContent',
+					flashVars: {
+						'mp3': '<%= mp3PreviewFileURL %>'
+					},
+					fixedAttributes: {
+						allowfullscreen: 'true'
+					},
+					height: 27
+					<c:if test="<%= Validator.isNotNull(mp3PreviewFileURL) %>">
+						,url: '<%= mp3PreviewFileURL %>'
+					</c:if>
+					<c:if test="<%= Validator.isNotNull(oggPreviewFileURL) %>">
+						,oggUrl: '<%= oggPreviewFileURL %>',
+					</c:if>
+				}
+			).render();
+
+			/*
 			var nodeAudio = A.config.doc.createElement('audio');
 
 			if (!!nodeAudio.canPlayType) {
@@ -85,6 +105,7 @@ for (String previewFileURL : previewFileURLs) {
 					}
 				);
 			}
+			*/
 		</aui:script>
 	</c:when>
 	<c:when test="<%= supportedVideo %>">
