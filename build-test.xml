@@ -3067,7 +3067,7 @@ file.
 		</if>
 
 		<exec executable="${mysql.executable}" input="${sql.file}">
-			<arg line="-u${mysql.user.name} -p${mysql.user.password}" />
+			<arg line="${mysql.arg.line}" />
 		</exec>
 
 		<delete file="${sql.file}" />
