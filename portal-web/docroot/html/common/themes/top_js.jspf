@@ -188,6 +188,9 @@
 				isStateExclusive: function() {
 					return <%= themeDisplay.isStateExclusive() %>;
 				},
+				isStateExclusiveStateful: function() {
+					return <%= themeDisplay.isStateExclusiveStateful() %>;
+				},
 				isStateMaximized: function() {
 					return <%= themeDisplay.isStateMaximized() %>;
 				},
