@@ -94,8 +94,8 @@ portletURL.setParameter("tabs1", tabs1);
 
 		<c:if test="<%= classNameId == 0 %>">
 			<liferay-ui:search-container-column-text
-				href="<%= rowHREF %>"
 				buffer="buffer"
+				href="<%= rowHREF %>"
 				name="type"
 			>
 
@@ -107,8 +107,8 @@ portletURL.setParameter("tabs1", tabs1);
 		</c:if>
 
 		<liferay-ui:search-container-column-text
-			href="<%= rowHREF %>"
 			buffer="buffer"
+			href="<%= rowHREF %>"
 			name="modified-date"
 		>
 
@@ -136,6 +136,7 @@ portletURL.setParameter("tabs1", tabs1);
 					constrain: true,
 					width: 600
 				},
+				id: '<portlet:namespace />copyStructure',
 				refreshWindow: window,
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "copy-structure") %>',
 				uri: uri

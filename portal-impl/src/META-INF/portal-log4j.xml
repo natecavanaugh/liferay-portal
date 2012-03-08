@@ -866,6 +866,10 @@
 		<priority value="WARN" />
 	</category>
 
+	<category name="com.liferay.resourcesimporter">
+		<priority value="INFO" />
+	</category>
+
 	<category name="com.liferay.samplestruts">
 		<priority value="INFO" />
 	</category>
