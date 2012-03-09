@@ -141,8 +141,8 @@ public class RuntimePortletImpl implements RuntimePortlet {
 				themeDisplay.getCompanyId(), portletId);
 		}
 
-		if ((portlet != null) && (portlet.isInstanceable()) &&
-			(!portlet.isAddDefaultResource())) {
+		if ((portlet != null) && portlet.isInstanceable() &&
+			!portlet.isAddDefaultResource()) {
 
 			String instanceId = portlet.getInstanceId();
 
@@ -377,7 +377,7 @@ public class RuntimePortletImpl implements RuntimePortlet {
 			}
 
 			if (y == -1) {
-				sb.append(content.substring(x, content.length()));
+				sb.append(content.substring(x));
 			}
 
 			return sb.toString();

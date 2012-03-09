@@ -252,7 +252,7 @@ public class BaseDeployer implements Deployer {
 			String jarName = jarFullName.substring(
 				jarFullName.lastIndexOf("/") + 1);
 
-			if ((!appServerType.equals(ServerDetector.TOMCAT_ID)) ||
+			if (!appServerType.equals(ServerDetector.TOMCAT_ID) ||
 				(appServerType.equals(ServerDetector.TOMCAT_ID) &&
 				 !jarFullName.equals("util-java.jar"))) {
 
@@ -1404,7 +1404,7 @@ public class BaseDeployer implements Deployer {
 	}
 
 	public void mergeDirectory(File mergeDir, File targetDir) {
-		if ((mergeDir == null) || (!mergeDir.exists())) {
+		if ((mergeDir == null) || !mergeDir.exists()) {
 			return;
 		}
 
@@ -1829,8 +1829,7 @@ public class BaseDeployer implements Deployer {
 		int pos = content.indexOf("</web-app>");
 
 		String newContent =
-			content.substring(0, pos) + extraContent +
-				content.substring(pos, content.length());
+			content.substring(0, pos) + extraContent + content.substring(pos);
 
 		// Replace old package names
 

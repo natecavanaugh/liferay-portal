@@ -793,6 +793,20 @@
 		</comments>
 	</library>
 	<library>
+		<file-name>development/selenium-server-2.jar</file-name>
+		<version>2.20.0</version>
+		<project-name>Selenium Server</project-name>
+		<project-url>http://seleniumhq.org</project-url>
+		<licenses>
+			<license>
+				<license-name>Apache License 2.0</license-name>
+			</license>
+		</licenses>
+		<comments>
+			See the Ant target "build-selenium-server" in portal-impl/build.xml.
+		</comments>
+	</library>
+	<library>
 		<file-name>development/servlet-api.jar</file-name>
 		<version>2.5</version>
 		<project-name>Java Servlet</project-name>

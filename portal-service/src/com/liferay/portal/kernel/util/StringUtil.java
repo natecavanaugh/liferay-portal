@@ -603,7 +603,7 @@ public class StringUtil {
 		StringBundler sb = new StringBundler(2 * queryTerms.length - 1);
 
 		for (int i = 0; i < queryTerms.length; i++) {
-			sb.append(Pattern.quote(queryTerms[i].trim()));
+			sb.append(queryTerms[i].trim());
 
 			if ((i + 1) < queryTerms.length) {
 				sb.append(StringPool.PIPE);
@@ -611,7 +611,8 @@ public class StringUtil {
 		}
 
 		int flags =
-			Pattern.CANON_EQ | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
+			Pattern.CANON_EQ | Pattern.CASE_INSENSITIVE | Pattern.LITERAL |
+				Pattern.UNICODE_CASE;
 
 		Pattern pattern = Pattern.compile(sb.toString(), flags);
 
@@ -1806,7 +1807,7 @@ public class StringUtil {
 			int y = s.indexOf(end, x + begin.length());
 
 			if ((x == -1) || (y == -1)) {
-				sb.append(s.substring(pos, s.length()));
+				sb.append(s.substring(pos));
 
 				break;
 			}
@@ -1854,7 +1855,7 @@ public class StringUtil {
 			int y = s.indexOf(end, x + begin.length());
 
 			if ((x == -1) || (y == -1)) {
-				sb.append(s.substring(pos, s.length()));
+				sb.append(s.substring(pos));
 
 				break;
 			}
@@ -2259,8 +2260,8 @@ public class StringUtil {
 	 *         delimiter
 	 */
 	public static String[] split(String s, String delimiter) {
-		if ((Validator.isNull(s)) || (delimiter == null) ||
-			(delimiter.equals(StringPool.BLANK))) {
+		if (Validator.isNull(s) || (delimiter == null) ||
+			delimiter.equals(StringPool.BLANK)) {
 
 			return _emptyStringArray;
 		}
@@ -2711,7 +2712,7 @@ public class StringUtil {
 			int y = s.indexOf(end, x + begin.length());
 
 			if ((x == -1) || (y == -1)) {
-				sb.append(s.substring(pos, s.length()));
+				sb.append(s.substring(pos));
 
 				break;
 			}

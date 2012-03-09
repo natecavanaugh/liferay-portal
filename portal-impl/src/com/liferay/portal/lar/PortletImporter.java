@@ -54,7 +54,10 @@ import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.PortletItem;
 import com.liferay.portal.model.PortletPreferences;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
+import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.PortletItemLocalServiceUtil;
@@ -82,6 +85,7 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetLinkLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil;
+import com.liferay.portlet.asset.service.permission.AssetPermission;
 import com.liferay.portlet.asset.service.persistence.AssetCategoryUtil;
 import com.liferay.portlet.asset.service.persistence.AssetTagUtil;
 import com.liferay.portlet.asset.service.persistence.AssetVocabularyUtil;
@@ -624,6 +628,7 @@ public class PortletImporter {
 		throws Exception {
 
 		long userId = portletDataContext.getUserId(assetCategory.getUserUuid());
+		long groupId = portletDataContext.getGroupId();
 		long assetVocabularyId = MapUtil.getLong(
 			assetVocabularyPKs, assetCategory.getVocabularyId(),
 			assetCategory.getVocabularyId());
@@ -665,6 +670,16 @@ public class PortletImporter {
 		serviceContext.setModifiedDate(assetCategory.getModifiedDate());
 		serviceContext.setScopeGroupId(portletDataContext.getScopeGroupId());
 
+		boolean global = GetterUtil.getBoolean(
+			assetCategoryElement.attributeValue("global"));
+
+		if (global) {
+			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+				portletDataContext.getCompanyId());
+
+			groupId = companyGroup.getGroupId();
+		}
+
 		AssetCategory importedAssetCategory = null;
 
 		try {
@@ -690,8 +705,7 @@ public class PortletImporter {
 
 			AssetCategory existingAssetCategory =
 				AssetCategoryUtil.fetchByUUID_G(
-					assetCategory.getUuid(),
-					portletDataContext.getScopeGroupId());
+					assetCategory.getUuid(), groupId);
 
 			if (existingAssetCategory == null) {
 				String name = getAssetCategoryName(
@@ -699,6 +713,27 @@ public class PortletImporter {
 					parentAssetCategoryId, assetCategory.getName(), 2);
 
 				serviceContext.setUuid(assetCategory.getUuid());
+
+				if (global) {
+					if (AssetPermission.contains(
+							PermissionThreadLocal.getPermissionChecker(),
+							groupId, ActionKeys.ADD_CATEGORY)) {
+
+						serviceContext.setScopeGroupId(groupId);
+					}
+					else {
+						StringBundler sb = new StringBundler(6);
+
+						sb.append("Category ");
+						sb.append(assetCategory.getName());
+						sb.append(" could not be imported to the Global ");
+						sb.append("scope because the user does not have ");
+						sb.append("permissions. It will be imported into the ");
+						sb.append("current scope.");
+
+						_log.error(sb.toString());
+					}
+				}
 
 				importedAssetCategory =
 					AssetCategoryLocalServiceUtil.addCategory(
@@ -712,13 +747,43 @@ public class PortletImporter {
 					assetCategory.getUuid(), assetCategory.getGroupId(),
 					parentAssetCategoryId, assetCategory.getName(), 2);
 
-				importedAssetCategory =
-					AssetCategoryLocalServiceUtil.updateCategory(
-						userId, existingAssetCategory.getCategoryId(),
-						parentAssetCategoryId,
-						getAssetCategoryTitleMap(assetCategory, name),
-						assetCategory.getDescriptionMap(), assetVocabularyId,
-						properties, serviceContext);
+				boolean updateAssetCategory = true;
+
+				if (global) {
+					PermissionChecker permissionChecker =
+						PermissionThreadLocal.getPermissionChecker();
+
+					if (permissionChecker.hasPermission(
+							 groupId, AssetCategory.class.getName(),
+							 existingAssetCategory.getCategoryId(),
+							 ActionKeys.UPDATE)) {
+
+						 serviceContext.setScopeGroupId(groupId);
+					}
+					else {
+						 updateAssetCategory = false;
+					}
+				}
+
+				if (updateAssetCategory) {
+					importedAssetCategory =
+						AssetCategoryLocalServiceUtil.updateCategory(
+							userId, existingAssetCategory.getCategoryId(),
+							parentAssetCategoryId,
+							getAssetCategoryTitleMap(assetCategory, name),
+							assetCategory.getDescriptionMap(),
+							assetVocabularyId, properties, serviceContext);
+				}
+				else {
+					StringBundler sb = new StringBundler(4);
+
+					sb.append("Category ");
+					sb.append(existingAssetCategory.getName());
+					sb.append(" could not be updated in the Global scope ");
+					sb.append("because the user does not have permissions.");
+
+					_log.error(sb.toString());
+				}
 			}
 
 			assetCategoryPKs.put(
@@ -831,6 +896,16 @@ public class PortletImporter {
 		serviceContext.setModifiedDate(assetVocabulary.getModifiedDate());
 		serviceContext.setScopeGroupId(portletDataContext.getScopeGroupId());
 
+		boolean global = GetterUtil.getBoolean(
+			assetVocabularyElement.attributeValue("global"));
+
+		if (global) {
+			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+				portletDataContext.getCompanyId());
+
+			groupId = companyGroup.getGroupId();
+		}
+
 		AssetVocabulary importedAssetVocabulary = null;
 
 		AssetVocabulary existingAssetVocabulary =
@@ -838,18 +913,30 @@ public class PortletImporter {
 				assetVocabulary.getUuid(), groupId);
 
 		if (existingAssetVocabulary == null) {
-			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
-				portletDataContext.getCompanyId());
-
-			existingAssetVocabulary = AssetVocabularyUtil.fetchByUUID_G(
-				assetVocabulary.getUuid(), companyGroup.getGroupId());
-		}
-
-		if (existingAssetVocabulary == null) {
 			String name = getAssetVocabularyName(
 				null, groupId, assetVocabulary.getName(), 2);
 
 			serviceContext.setUuid(assetVocabulary.getUuid());
+
+			if (global) {
+				if (AssetPermission.contains(
+						PermissionThreadLocal.getPermissionChecker(), groupId,
+						ActionKeys.ADD_VOCABULARY)) {
+
+					serviceContext.setScopeGroupId(groupId);
+				}
+				else {
+					StringBundler sb = new StringBundler(5);
+
+					sb.append("Vocabulary ");
+					sb.append(assetVocabulary.getName());
+					sb.append(" could not be imported to the Global scope ");
+					sb.append("because the user does not have permissions. ");
+					sb.append("It will be imported into the current scope.");
+
+					_log.error(sb.toString());
+				}
+			}
 
 			importedAssetVocabulary =
 				AssetVocabularyLocalServiceUtil.addVocabulary(
@@ -863,12 +950,43 @@ public class PortletImporter {
 				assetVocabulary.getUuid(), groupId, assetVocabulary.getName(),
 				2);
 
-			importedAssetVocabulary =
-				AssetVocabularyLocalServiceUtil.updateVocabulary(
-					existingAssetVocabulary.getVocabularyId(), StringPool.BLANK,
-					getAssetVocabularyTitleMap(assetVocabulary, name),
-					assetVocabulary.getDescriptionMap(),
-					assetVocabulary.getSettings(), serviceContext);
+			boolean updateVocabulary = true;
+
+			if (global) {
+				PermissionChecker permissionChecker =
+					PermissionThreadLocal.getPermissionChecker();
+
+				if (permissionChecker.hasPermission(
+					 groupId, AssetVocabulary.class.getName(),
+					 existingAssetVocabulary.getVocabularyId(),
+					 ActionKeys.UPDATE)) {
+
+					 serviceContext.setScopeGroupId(groupId);
+				}
+				else {
+					 updateVocabulary = false;
+				}
+			}
+
+			if (updateVocabulary) {
+				importedAssetVocabulary =
+					AssetVocabularyLocalServiceUtil.updateVocabulary(
+						existingAssetVocabulary.getVocabularyId(),
+						StringPool.BLANK,
+						getAssetVocabularyTitleMap(assetVocabulary, name),
+						assetVocabulary.getDescriptionMap(),
+						assetVocabulary.getSettings(), serviceContext);
+			}
+			else {
+				StringBundler sb = new StringBundler(4);
+
+				sb.append("Vocabulary ");
+				sb.append(existingAssetVocabulary.getName());
+				sb.append(" could not be updated in the Global scope because ");
+				sb.append("the user does not have permissions.");
+
+				_log.error(sb.toString());
+			}
 		}
 
 		assetVocabularyPKs.put(

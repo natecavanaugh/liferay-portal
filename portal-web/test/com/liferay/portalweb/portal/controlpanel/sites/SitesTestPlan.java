@@ -18,7 +18,7 @@ import com.liferay.portalweb.portal.BaseTestSuite;
 import com.liferay.portalweb.portal.controlpanel.sites.lar.LARTestPlan;
 import com.liferay.portalweb.portal.controlpanel.sites.site.SiteTestPlan;
 import com.liferay.portalweb.portal.controlpanel.sites.sitepage.SitePageTestPlan;
-import com.liferay.portalweb.portal.controlpanel.sites.sitepageportlet.SitePagePortletTestPlan;
+import com.liferay.portalweb.portal.controlpanel.sites.siteportlet.SitePortletTestPlan;
 import com.liferay.portalweb.portal.controlpanel.sites.usecase.UseCaseTestPlan;
 
 import junit.framework.Test;
@@ -34,7 +34,7 @@ public class SitesTestPlan extends BaseTestSuite {
 
 		testSuite.addTest(SiteTestPlan.suite());
 		testSuite.addTest(SitePageTestPlan.suite());
-		testSuite.addTest(SitePagePortletTestPlan.suite());
+		testSuite.addTest(SitePortletTestPlan.suite());
 		testSuite.addTest(LARTestPlan.suite());
 		testSuite.addTest(UseCaseTestPlan.suite());
 

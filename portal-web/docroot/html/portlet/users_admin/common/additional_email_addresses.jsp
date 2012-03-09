@@ -86,9 +86,9 @@ else {
 			<div class="row-fields">
 				<aui:input name='<%= "emailAddressId" + emailAddressesIndex %>' type="hidden" value="<%= emailAddress.getEmailAddressId() %>" />
 
-				<aui:input fieldParam='<%= "emailAddressAddress" + emailAddressesIndex %>' label="email-address" name="address" />
+				<aui:input fieldParam='<%= "emailAddressAddress" + emailAddressesIndex %>' id='<%= "emailAddressAddress" + emailAddressesIndex %>' label="email-address" name="address" />
 
-				<aui:select label="type" name='<%= "emailAddressTypeId" + emailAddressesIndex %>' listType="<%= className + ListTypeConstants.EMAIL_ADDRESS %>" />
+				<aui:select label="type" listType="<%= className + ListTypeConstants.EMAIL_ADDRESS %>" name='<%= "emailAddressTypeId" + emailAddressesIndex %>' />
 
 				<aui:input checked="<%= emailAddress.isPrimary() %>" cssClass="primary-ctrl" id='<%= "emailAddressPrimary" + emailAddressesIndex %>' label="primary" name="emailAddressPrimary" type="radio" value="<%= emailAddressesIndex %>" />
 			</div>

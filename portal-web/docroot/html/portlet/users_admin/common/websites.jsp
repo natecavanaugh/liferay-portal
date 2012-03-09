@@ -86,9 +86,9 @@ else {
 			<div class="row-fields">
 				<aui:input name='<%= "websiteId" + websitesIndex %>' type="hidden" value="<%= website.getWebsiteId() %>" />
 
-				<aui:input fieldParam='<%= "websiteUrl" + websitesIndex %>' name="url" />
+				<aui:input fieldParam='<%= "websiteUrl" + websitesIndex %>' id='<%= "websiteUrl" + websitesIndex %>' name="url" />
 
-				<aui:select label="type" name='<%= "websiteTypeId" + websitesIndex %>' listType="<%= className + ListTypeConstants.WEBSITE %>" />
+				<aui:select label="type" listType="<%= className + ListTypeConstants.WEBSITE %>" name='<%= "websiteTypeId" + websitesIndex %>' />
 
 				<aui:input checked="<%= website.isPrimary() %>" cssClass="primary-ctrl" id='<%= "websitePrimary" + websitesIndex %>' label="primary" name="websitePrimary" type="radio" value="<%= websitesIndex %>" />
 			</div>
