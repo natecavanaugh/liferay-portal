@@ -24,6 +24,7 @@ public class VerifyProcessSuite extends VerifyProcess {
 		verify(new VerifyProperties());
 
 		verify(new VerifyMySQL());
+		verify(new VerifyOracle());
 		verify(new VerifySQLServer());
 
 		verify(new VerifyCounter());

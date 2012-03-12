@@ -563,15 +563,11 @@ public class JavadocFormatter {
 		String indentAndTagName = indent + StringPool.AT + tagName;
 
 		if (Validator.isNotNull(elementName)) {
-
-			if (Validator.isNotNull(elementName)) {
-
-				if (Validator.isNotNull(comment)) {
-					comment = elementName  + StringPool.SPACE + comment;
-				}
-				else {
-					comment = elementName;
-				}
+			if (Validator.isNotNull(comment)) {
+				comment = elementName  + StringPool.SPACE + comment;
+			}
+			else {
+				comment = elementName;
 			}
 
 			// <name indent> elementName [comment]
@@ -620,7 +616,7 @@ public class JavadocFormatter {
 
 		if (fileName.endsWith("JavadocFormatter.java") ||
 			fileName.endsWith("SourceFormatter.java") ||
-			_isGenerated(originalContent)) {
+			_hasGeneratedTag(originalContent)) {
 
 			return;
 		}
@@ -1141,7 +1137,7 @@ public class JavadocFormatter {
 		return false;
 	}
 
-	private boolean _isGenerated(String content) {
+	private boolean _hasGeneratedTag(String content) {
 		if (content.contains("* @generated") || content.contains("$ANTLR")) {
 			return true;
 		}

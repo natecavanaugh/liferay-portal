@@ -387,6 +387,7 @@ public class SourceFormatter {
 							posOpenParenthesis - 1);
 
 						if (!Character.isLetterOrDigit(nextChar) &&
+							(nextChar != CharPool.PERIOD) &&
 							!Character.isLetterOrDigit(previousChar)) {
 
 							String s = ifClause.substring(
@@ -1370,7 +1371,14 @@ public class SourceFormatter {
 				trimmedLine.startsWith("while (") ||
 				Validator.isNotNull(ifClause)) {
 
-				ifClause = ifClause + StringPool.SPACE + trimmedLine;
+				if (Validator.isNull(ifClause) ||
+					ifClause.endsWith(StringPool.OPEN_PARENTHESIS)) {
+
+					ifClause = ifClause + trimmedLine;
+				}
+				else {
+					ifClause = ifClause + StringPool.SPACE + trimmedLine;
+				}
 
 				if (ifClause.endsWith(") {")) {
 					_checkIfClause(ifClause, fileName, lineCount);
@@ -1840,7 +1848,12 @@ public class SourceFormatter {
 
 		String line = null;
 
+		String previousLine = null;
+
+		String currentAttributeAndValue = null;
 		String previousAttribute = null;
+		String previousAttributeAndValue = null;
+
 		boolean readAttributes = false;
 
 		while ((line = unsyncBufferedReader.readLine()) != null) {
@@ -1867,6 +1880,14 @@ public class SourceFormatter {
 
 					int pos = trimmedLine.indexOf(StringPool.EQUAL);
 
+					if ((trimmedLine.startsWith("if (") ||
+						 trimmedLine.startsWith("else if (") ||
+						 trimmedLine.startsWith("while (")) &&
+						trimmedLine.endsWith(") {")) {
+
+						_checkIfClause(trimmedLine, fileName, lineCount);
+					}
+
 					if (pos != -1) {
 						String attribute = trimmedLine.substring(0, pos);
 
@@ -1876,22 +1897,24 @@ public class SourceFormatter {
 									fileName,
 									"attribute: " + fileName + " " + lineCount);
 							}
-							else if (previousAttribute.compareTo(
-										attribute) > 0) {
+							else if (Validator.isNull(
+										previousAttributeAndValue) &&
+									 (previousAttribute.compareTo(
+										 attribute) > 0)) {
 
-								/*
-								_sourceFormatterHelper.printError(
-									fileName,
-									"sort: " + fileName + " " + lineCount);
-								*/
+								previousAttributeAndValue = previousLine;
+								currentAttributeAndValue = line;
 							}
 						}
 
 						previousAttribute = attribute;
+						previousLine = line;
 					}
 				}
 				else {
 					previousAttribute = null;
+					previousLine = null;
+
 					readAttributes = false;
 				}
 			}
@@ -1972,6 +1995,13 @@ public class SourceFormatter {
 
 		content = _formatTaglibQuotes(fileName, content, StringPool.QUOTE);
 		content = _formatTaglibQuotes(fileName, content, StringPool.APOSTROPHE);
+
+		if (Validator.isNotNull(previousAttributeAndValue)) {
+			content = StringUtil.replaceFirst(
+				content,
+				previousAttributeAndValue + "\n" + currentAttributeAndValue,
+				currentAttributeAndValue + "\n" + previousAttributeAndValue);
+		}
 
 		return content;
 	}
