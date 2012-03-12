@@ -786,3 +786,14 @@ input[type="text"], input[type="password"], select, textarea, .textarea, #breadc
 	@include filter-gradient(#427EAD, #154B75);
 	@include background-image(linear-gradient(#427EAD, #154B75));
 }
+
+.aui-field-choice {
+	.aui-field-label,
+	.aui-field-label-inline-label {
+		font-weight: normal;
+	}
+
+	.aui-field-input-choice {
+		float: none;
+	}
+}
