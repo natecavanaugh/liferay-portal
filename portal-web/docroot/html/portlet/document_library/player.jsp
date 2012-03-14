@@ -23,12 +23,20 @@ boolean supportedVideo = GetterUtil.getBoolean((String)request.getAttribute("vie
 String[] previewFileURLs = (String[])request.getAttribute("view_file_entry.jsp-previewFileURLs");
 String videoThumbnailURL = (String)request.getAttribute("view_file_entry.jsp-videoThumbnailURL");
 
+String mp3PreviewFileURL = null;
 String mp4PreviewFileURL = null;
+String oggPreviewFileURL = null;
 String ogvPreviewFileURL = null;
 
 for (String previewFileURL : previewFileURLs) {
-	if (previewFileURL.endsWith("mp4")){
+	if (previewFileURL.endsWith("mp3")){
+		mp3PreviewFileURL = previewFileURL;
+	}
+	else if (previewFileURL.endsWith("mp4")){
 		mp4PreviewFileURL = previewFileURL;
+	}
+	else if (previewFileURL.endsWith("ogg")){
+		oggPreviewFileURL = previewFileURL;
 	}
 	else if (previewFileURL.endsWith("ogv")){
 		ogvPreviewFileURL = previewFileURL;
@@ -36,45 +44,53 @@ for (String previewFileURL : previewFileURLs) {
 }
 %>
 
-<c:if test="<%= supportedAudio%>">
-	<aui:script use="aui-swf">
-		new A.SWF(
-			{
-				boundingBox: '#<portlet:namespace />previewFileContent',
-				fixedAttributes: {
-					allowFullScreen: true,
-					bgColor: '#000000'
-				},
-				flashVars: {
-					'mp3': '<%= previewFileURLs[0] %>'
-				},
-				height: 27,
-				url: '<%= themeDisplay.getCDNHost() + themeDisplay.getPathJavaScript() %>/misc/video_player/mpw_player.swf',
-				useExpressInstall: true,
-				version: 9
-			}
-		);
-	</aui:script>
-</c:if>
-<c:if test="<%= supportedVideo%>">
-	<aui:script use="aui-base,aui-video">
-		new A.Video(
-			{
-				boundingBox: '#<portlet:namespace />previewFileContent',
-				fixedAttributes: {
-					allowfullscreen: 'true',
-					bgColor: '#000000'
-				},
-				<c:if test="<%= Validator.isNotNull(ogvPreviewFileURL) %>">
-					ogvUrl: '<%= ogvPreviewFileURL %>',
-				</c:if>
+<c:choose>
+	<c:when test="<%= supportedAudio %>">
+		<aui:script use="aui-audio,swfdetect">
+			var oggUrl = '<%= oggPreviewFileURL %>';
 
-				poster: '<%= videoThumbnailURL %>',
+			var auiAudio = new A.Audio(
+				{
+					boundingBox: '#<portlet:namespace />previewFileContent',
+					fixedAttributes: {
+						allowfullscreen: 'true'
+					}
+					<c:if test="<%= Validator.isNotNull(mp3PreviewFileURL) %>">
+						,url: '<%= mp3PreviewFileURL %>'
+					</c:if>
+					<c:if test="<%= Validator.isNotNull(oggPreviewFileURL) && !BrowserSnifferUtil.isFirefox(request) %>">
+						,oggUrl: oggUrl
+					</c:if>
+				}
+			);
 
-				<c:if test="<%= Validator.isNotNull(mp4PreviewFileURL) %>">
-					url: '<%= mp4PreviewFileURL %>'
-				</c:if>
+			if (A.UA.gecko && !A.SWFDetect.isFlashVersionAtLeast(9)) {
+				auiAudio.set('oggUrl', oggUrl);
 			}
-		).render();
-	</aui:script>
-</c:if>
+
+			auiAudio.render();
+		</aui:script>
+	</c:when>
+	<c:when test="<%= supportedVideo %>">
+		<aui:script use="aui-base,aui-video">
+			new A.Video(
+				{
+					boundingBox: '#<portlet:namespace />previewFileContent',
+					fixedAttributes: {
+						allowfullscreen: 'true',
+						bgColor: '#000000'
+					},
+					<c:if test="<%= Validator.isNotNull(ogvPreviewFileURL) %>">
+						ogvUrl: '<%= ogvPreviewFileURL %>',
+					</c:if>
+
+					poster: '<%= videoThumbnailURL %>',
+
+					<c:if test="<%= Validator.isNotNull(mp4PreviewFileURL) %>">
+						url: '<%= mp4PreviewFileURL %>'
+					</c:if>
+				}
+			).render();
+		</aui:script>
+	</c:when>
+</c:choose>
