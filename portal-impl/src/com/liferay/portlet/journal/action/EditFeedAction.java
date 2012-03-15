@@ -59,6 +59,10 @@ public class EditFeedAction extends PortletAction {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
+		if (Validator.isNull(cmd)) {
+			return;
+		}
+
 		try {
 			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
 				updateFeed(actionRequest);

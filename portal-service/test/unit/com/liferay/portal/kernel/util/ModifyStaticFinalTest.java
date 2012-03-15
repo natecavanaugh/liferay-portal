@@ -73,16 +73,6 @@ public class ModifyStaticFinalTest extends NewClassLoaderTestCase {
 		assertTrue(runInNewClassLoader(MemberCallable.class));
 	}
 
-	public void testStaticMemberClass() throws Exception {
-		assertFalse(StaticFinalClass.VALUE);
-
-		System.setProperty(_TEST_KEY, "true");
-
-		assertFalse(StaticFinalClass.VALUE);
-
-		assertTrue(runInNewClassLoader(StaticMemberCallable.class));
-	}
-
 	public void testNoDefaultConstructor() throws Exception {
 		assertFalse(StaticFinalClass.VALUE);
 
@@ -115,6 +105,16 @@ public class ModifyStaticFinalTest extends NewClassLoaderTestCase {
 				getClass(), String.class);
 
 		assertTrue(runInNewClassLoader(constructor, "value"));
+	}
+
+	public void testStaticMemberClass() throws Exception {
+		assertFalse(StaticFinalClass.VALUE);
+
+		System.setProperty(_TEST_KEY, "true");
+
+		assertFalse(StaticFinalClass.VALUE);
+
+		assertTrue(runInNewClassLoader(StaticMemberCallable.class));
 	}
 
 	public void testThrowsException() throws Exception {

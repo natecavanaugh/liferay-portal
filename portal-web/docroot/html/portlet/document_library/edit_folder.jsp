@@ -168,7 +168,7 @@ if (workflowEnabled) {
 								for (WorkflowDefinition workflowDefinition : workflowDefinitions) {
 									boolean selected = false;
 
-									if ((workflowDefinitionLink != null) && (workflowDefinitionLink.getWorkflowDefinitionName().equals(workflowDefinition.getName())) && (workflowDefinitionLink.getWorkflowDefinitionVersion() == workflowDefinition.getVersion())) {
+									if ((workflowDefinitionLink != null) && workflowDefinitionLink.getWorkflowDefinitionName().equals(workflowDefinition.getName()) && (workflowDefinitionLink.getWorkflowDefinitionVersion() == workflowDefinition.getVersion())) {
 										selected = true;
 									}
 								%>
@@ -186,7 +186,7 @@ if (workflowEnabled) {
 					<c:if test="<%= !rootFolder %>">
 						<liferay-ui:search-container
 							headerNames="<%= headerNames %>"
-							id='<%= renderResponse.getNamespace() + "fileEntryTypeSearchContainer" %>'
+							id="fileEntryTypeSearchContainer"
 						>
 							<liferay-ui:search-container-results
 								results="<%= fileEntryTypes %>"
@@ -222,7 +222,7 @@ if (workflowEnabled) {
 											for (WorkflowDefinition workflowDefinition : workflowDefinitions) {
 												boolean selected = false;
 
-												if ((workflowDefinitionLink != null) && (workflowDefinitionLink.getWorkflowDefinitionName().equals(workflowDefinition.getName())) && (workflowDefinitionLink.getWorkflowDefinitionVersion() == workflowDefinition.getVersion())) {
+												if ((workflowDefinitionLink != null) && workflowDefinitionLink.getWorkflowDefinitionName().equals(workflowDefinition.getName()) && (workflowDefinitionLink.getWorkflowDefinitionVersion() == workflowDefinition.getVersion())) {
 													selected = true;
 												}
 											%>
@@ -296,6 +296,7 @@ if (workflowEnabled) {
 				dialog: {
 					width: 680
 				},
+				id: '<portlet:namespace />fileEntryTypeSeclector',
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "document-types") %>',
 				uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/document_library/select_file_entry_type" /><portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" /><portlet:param name="includeBasicFileEntryType" value="1" /></portlet:renderURL>'
 			}

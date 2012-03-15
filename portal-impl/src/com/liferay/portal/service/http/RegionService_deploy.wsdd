@@ -10,8 +10,16 @@
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="name" type="tns:string"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="active" type="tns:boolean"></parameter>
 		</operation>
+		<operation xmlns:operNS="urn:http.service.portal.liferay.com" xmlns:rtns="http://model.portal.liferay.com" name="fetchRegion" qname="operNS:fetchRegion" returnQName="fetchRegionReturn" returnType="rtns:RegionSoap" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="countryId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="regionCode" type="tns:string"></parameter>
+		</operation>
 		<operation xmlns:operNS="urn:http.service.portal.liferay.com" xmlns:rtns="http://model.portal.liferay.com" name="getRegion" qname="operNS:getRegion" returnQName="getRegionReturn" returnType="rtns:RegionSoap" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="regionId" type="tns:long"></parameter>
+		</operation>
+		<operation xmlns:operNS="urn:http.service.portal.liferay.com" xmlns:rtns="http://model.portal.liferay.com" name="getRegion" qname="operNS:getRegion" returnQName="getRegionReturn" returnType="rtns:RegionSoap" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="countryId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="regionCode" type="tns:string"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.portal.liferay.com" xmlns:rtns="urn:http.service.portal.liferay.com" xmlns:tns2="http://model.portal.liferay.com" name="getRegions" qname="operNS:getRegions" returnQName="getRegionsReturn" returnType="rtns:ArrayOf_tns2_RegionSoap" returnItemType="tns2:RegionSoap" soapAction=""> </operation>
 		<operation xmlns:operNS="urn:http.service.portal.liferay.com" xmlns:rtns="urn:http.service.portal.liferay.com" xmlns:tns2="http://model.portal.liferay.com" name="getRegions" qname="operNS:getRegions" returnQName="getRegionsReturn" returnType="rtns:ArrayOf_tns2_RegionSoap" returnItemType="tns2:RegionSoap" soapAction="">
@@ -24,7 +32,7 @@
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="countryId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="active" type="tns:boolean"></parameter>
 		</operation>
-		<parameter name="allowedMethods" value="addRegion getRegion getRegions" />
+		<parameter name="allowedMethods" value="addRegion fetchRegion getRegion getRegions" />
 		<parameter name="className" value="com.liferay.portal.service.http.RegionServiceSoap" />
 		<parameter name="schemaUnqualified" value="http://model.portal.liferay.com,urn:http.service.portal.liferay.com" />
 		<parameter name="typeMappingVersion" value="1.2" />

@@ -37,7 +37,7 @@ import com.liferay.portal.util.TestPropsValues;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
-import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -141,6 +141,42 @@ public class DLAppServiceTest extends BaseDLAppTestCase {
 		}
 
 		_fileEntry = null;
+	}
+
+	public void testAddFileEntryWithInvalidMimeType() throws Exception {
+		long folderId = folder.getFolderId();
+		String description = StringPool.BLANK;
+		String changeLog = StringPool.BLANK;
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setAddGroupPermissions(true);
+		serviceContext.setAddGuestPermissions(true);
+
+		try {
+			String name = "InvalidMime.txt";
+			byte[] bytes = CONTENT.getBytes();
+
+			FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
+				TestPropsValues.getGroupId(), folderId, name,
+				ContentTypes.APPLICATION_OCTET_STREAM, name, description,
+				changeLog, bytes, serviceContext);
+
+			assertEquals(ContentTypes.TEXT_PLAIN, fileEntry.getMimeType());
+
+			name = "InvalidMime";
+
+			fileEntry = DLAppServiceUtil.updateFileEntry(
+				fileEntry.getFileEntryId(), name, null, name, description,
+				changeLog, true, bytes, serviceContext);
+
+			assertEquals(ContentTypes.TEXT_PLAIN, fileEntry.getMimeType());
+		}
+		catch (Exception e) {
+			fail(
+				"Unable to add file with invalid mime type " +
+					StackTraceUtil.getStackTrace(e));
+		}
 	}
 
 	public void testAddNullFileEntry() throws Exception {
@@ -269,7 +305,7 @@ public class DLAppServiceTest extends BaseDLAppTestCase {
 			serviceContext);
 
 		AssetEntry assetEntry = AssetEntryLocalServiceUtil.fetchEntry(
-			DLFileEntry.class.getName(), fileEntry.getFileEntryId());
+			DLFileEntryConstants.getClassName(), fileEntry.getFileEntryId());
 
 		assertEqualsSorted(assetTagNames, assetEntry.getTagNames());
 
@@ -290,7 +326,7 @@ public class DLAppServiceTest extends BaseDLAppTestCase {
 			description, changeLog, false, bytes, serviceContext);
 
 		assetEntry = AssetEntryLocalServiceUtil.fetchEntry(
-			DLFileEntry.class.getName(), fileEntry.getFileEntryId());
+			DLFileEntryConstants.getClassName(), fileEntry.getFileEntryId());
 
 		assertEqualsSorted(assetTagNames, assetEntry.getTagNames());
 
@@ -361,7 +397,8 @@ public class DLAppServiceTest extends BaseDLAppTestCase {
 
 		searchContext.setQueryConfig(queryConfig);
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(DLFileEntry.class);
+		Indexer indexer = IndexerRegistryUtil.getIndexer(
+			DLFileEntryConstants.getClassName());
 
 		Hits hits = indexer.search(searchContext);
 

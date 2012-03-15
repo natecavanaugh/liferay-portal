@@ -105,7 +105,27 @@ public class CacheFilter extends BasePortalFilter {
 		sb.append(request.getServletPath());
 		sb.append(request.getPathInfo());
 		sb.append(StringPool.QUESTION);
-		sb.append(request.getQueryString());
+
+		String queryString = request.getQueryString();
+
+		if (queryString == null) {
+			queryString = (String)request.getAttribute(
+				JavaConstants.JAVAX_SERVLET_FORWARD_QUERY_STRING);
+
+			if (queryString == null) {
+				String url = PortalUtil.getCurrentCompleteURL(request);
+
+				int pos = url.indexOf(StringPool.QUESTION);
+
+				if (pos > -1) {
+					queryString = url.substring(pos + 1);
+				}
+			}
+		}
+
+		if (queryString != null) {
+			sb.append(queryString);
+		}
 
 		// Language
 

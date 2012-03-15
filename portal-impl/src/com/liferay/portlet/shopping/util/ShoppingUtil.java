@@ -216,8 +216,8 @@ public class ShoppingUtil {
 				ShoppingItem item = cartItem.getItem();
 
 				if (((categoryIdsSet.size() > 0) &&
-					 (categoryIdsSet.contains(
-						String.valueOf(item.getCategoryId())))) ||
+					 categoryIdsSet.contains(
+						 String.valueOf(item.getCategoryId()))) ||
 					((skusSet.size() > 0) && skusSet.contains(item.getSku()))) {
 
 					newItems.put(cartItem, count);
@@ -965,7 +965,7 @@ public class ShoppingUtil {
 		}
 		else {
 			return Character.toUpperCase(ppPaymentStatus.charAt(0)) +
-				ppPaymentStatus.substring(1, ppPaymentStatus.length());
+				ppPaymentStatus.substring(1);
 		}
 	}
 

@@ -73,7 +73,10 @@ if (parentStructure != null) {
 
 String xsd = ParamUtil.getString(request, "xsd");
 
-if (Validator.isNull(xsd)) {
+try {
+	xsd = JournalUtil.processXMLAttributes(xsd);
+}
+catch (StructureXsdException sxe) {
 	xsd = "<root></root>";
 
 	if (structure != null) {
@@ -84,7 +87,6 @@ if (Validator.isNull(xsd)) {
 // Bug with dom4j requires you to remove "\r\n" and "  " or else root.elements()
 // and root.content() will return different number of objects
 
-xsd = JournalUtil.processXMLAttributes(xsd);
 xsd = StringUtil.replace(xsd, StringPool.RETURN_NEW_LINE, StringPool.BLANK);
 xsd = StringUtil.replace(xsd, StringPool.DOUBLE_SPACE, StringPool.BLANK);
 
@@ -282,10 +284,6 @@ int tabIndex = 1;
 
 		var xsd = "<root>\n";
 
-		if ((cmd == "add") && (elCount == -1)) {
-			xsd += "<dynamic-element name='' type=''></dynamic-element>\n"
-		}
-
 		for (i = 0; i >= 0; i++) {
 			var elDepth = document.getElementById("<portlet:namespace />structure_el" + i + "_depth");
 			var elMetadataXML = document.getElementById("<portlet:namespace />structure_el" + i + "_metadata_xml");
@@ -389,6 +387,10 @@ int tabIndex = 1;
 			}
 		}
 
+		if ((cmd == "add") && (elCount == -1)) {
+			xsd += "<dynamic-element name='' type=''></dynamic-element>\n"
+		}
+
 		xsd += "</root>";
 
 		return xsd;
@@ -414,6 +416,7 @@ int tabIndex = 1;
 				dialog: {
 					width: 680
 				},
+				id: '<portlet:namespace />parentStructureSelector',
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "structure") %>',
 				uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/journal/select_structure" /><portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" /></portlet:renderURL>'
 			}

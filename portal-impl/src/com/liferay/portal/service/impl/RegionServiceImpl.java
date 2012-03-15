@@ -62,10 +62,22 @@ public class RegionServiceImpl extends RegionServiceBaseImpl {
 		return region;
 	}
 
+	public Region fetchRegion(long countryId, String regionCode)
+		throws SystemException {
+
+		return regionPersistence.fetchByC_R(countryId, regionCode);
+	}
+
 	public Region getRegion(long regionId)
 		throws PortalException, SystemException {
 
 		return regionPersistence.findByPrimaryKey(regionId);
+	}
+
+	public Region getRegion(long countryId, String regionCode)
+		throws PortalException, SystemException {
+
+		return regionPersistence.findByC_R(countryId, regionCode);
 	}
 
 	public List<Region> getRegions() throws SystemException {

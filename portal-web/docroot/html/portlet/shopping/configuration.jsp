@@ -44,7 +44,7 @@ else if (tabs3.equals("shipping-email")) {
 }
 %>
 
-<liferay-portlet:renderURL var="portletURL" portletConfiguration="true">
+<liferay-portlet:renderURL portletConfiguration="true" var="portletURL">
 	<portlet:param name="tabs2" value="<%= tabs2 %>" />
 	<portlet:param name="redirect" value="<%= redirect %>" />
 </liferay-portlet:renderURL>
@@ -110,13 +110,13 @@ else if (tabs3.equals("shipping-email")) {
 					%>
 
 					<liferay-ui:input-move-boxes
-						leftTitle="current"
-						rightTitle="available"
 						leftBoxName="current_cc_types"
-						rightBoxName="available_cc_types"
-						leftReorder="true"
 						leftList="<%= leftList %>"
+						leftReorder="true"
+						leftTitle="current"
+						rightBoxName="available_cc_types"
 						rightList="<%= rightList %>"
+						rightTitle="available"
 					/>
 				</aui:field-wrapper>
 
@@ -148,9 +148,9 @@ else if (tabs3.equals("shipping-email")) {
 
 				</aui:select>
 
-				<aui:input maxlength="7" name="taxRate" type="text" size="7" value="<%= taxFormat.format(shoppingPrefs.getTaxRate()) %>" />
+				<aui:input maxlength="7" name="taxRate" size="7" type="text" value="<%= taxFormat.format(shoppingPrefs.getTaxRate()) %>" />
 
-				<aui:input label="minimum-order" maxlength="7" name="minOrder" type="text" size="7" value="<%= doubleFormat.format(shoppingPrefs.getMinOrder()) %>" />
+				<aui:input label="minimum-order" maxlength="7" name="minOrder" size="7" type="text" value="<%= doubleFormat.format(shoppingPrefs.getMinOrder()) %>" />
 			</aui:fieldset>
 		</c:when>
 		<c:when test='<%= tabs2.equals("shipping-calculation") %>'>

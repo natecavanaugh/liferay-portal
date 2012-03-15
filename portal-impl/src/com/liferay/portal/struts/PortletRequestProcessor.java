@@ -84,17 +84,11 @@ public class PortletRequestProcessor extends TilesRequestProcessor {
 			Class<?> clazz = Class.forName(className);
 
 			Constructor<?> constructor = clazz.getConstructor(
-				new Class[] {
-					ActionServlet.class, ModuleConfig.class
-				}
-			);
+				ActionServlet.class, ModuleConfig.class);
 
 			PortletRequestProcessor portletReqProcessor =
 				(PortletRequestProcessor)constructor.newInstance(
-					new Object[] {
-						servlet, moduleConfig
-					}
-				);
+					servlet, moduleConfig);
 
 			return portletReqProcessor;
 		}
@@ -283,7 +277,7 @@ public class PortletRequestProcessor extends TilesRequestProcessor {
 
 				String parentPath =
 					StringPool.SLASH + portlet.getParentStrutsPath() +
-						path.substring(pos, path.length());
+						path.substring(pos);
 
 				if (StrutsActionRegistryUtil.getAction(parentPath) != null) {
 					actionMapping =

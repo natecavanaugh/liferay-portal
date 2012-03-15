@@ -92,4 +92,8 @@ public class PortletConstants {
 		}
 	}
 
+	public static boolean hasInstanceId(String portletId) {
+		return portletId.contains(INSTANCE_SEPARATOR);
+	}
+
 }

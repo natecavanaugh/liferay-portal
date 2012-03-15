@@ -651,10 +651,10 @@ public abstract class DLPreviewableProcessor implements DLProcessor {
 
 	protected abstract String getThumbnailType(FileVersion fileVersion);
 
-	protected boolean hasPreview(FileVersion fileVersion, String containerType)
+	protected boolean hasPreview(FileVersion fileVersion, String type)
 		throws Exception {
 
-		String previewFilePath = getPreviewFilePath(fileVersion, containerType);
+		String previewFilePath = getPreviewFilePath(fileVersion, type);
 
 		if (DLStoreUtil.hasFile(
 				fileVersion.getCompanyId(), REPOSITORY_ID, previewFilePath)) {
@@ -667,17 +667,17 @@ public abstract class DLPreviewableProcessor implements DLProcessor {
 	}
 
 	protected boolean hasPreviews(FileVersion fileVersion) throws Exception {
-		int previewsCount = 0;
+		int count = 0;
 
 		String[] previewTypes = getPreviewTypes();
 
 		for (String previewType : previewTypes) {
 			if (hasPreview(fileVersion, previewType)) {
-				previewsCount++;
+				count++;
 			}
 		}
 
-		if (previewsCount == previewTypes.length) {
+		if (count == previewTypes.length) {
 			return true;
 		}
 		else {

@@ -398,6 +398,157 @@ public class Creole10Parser]]></replacevalue>
 		<delete dir="${tstamp.value}" />
 	</target>
 
+	<target name="build-selenium-server-2">
+		<tstamp>
+			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+		</tstamp>
+
+		<unzip
+			dest="${tstamp.value}"
+			src="${project.dir}/lib/development/selenium-server-2.jar"
+		/>
+
+		<delete includeemptydirs="true">
+
+			<!-- bcprov.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/bouncycastle/**"
+			/>
+
+			<!-- bsh.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="bsh/**"
+			/>
+
+			<!-- commons-codec.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/apache/commons/codec/**"
+			/>
+
+			<!-- commons-collections.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/apache/commons/collections/**"
+			/>
+
+			<!-- commons-io.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/apache/commons/io/**"
+			/>
+
+			<!-- commons-lang.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/apache/commons/lang/**"
+			/>
+
+			<!-- commons-logging.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/apache/commons/logging/**"
+			/>
+
+			<!-- ecj.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/eclipse/jdt/**"
+			/>
+
+			<!-- hamcrest*.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/hamcrest/**"
+			/>
+
+			<!-- junit.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="junit/**,org/junit/**"
+			/>
+
+			<!-- jasper.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/apache/jasper/**"
+			/>
+
+			<!-- json-java.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/json/**"
+			/>
+
+			<!-- nekohtml.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/cyberneko/**"
+			/>
+
+			<!-- serializer.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/apache/xml/serializer/**"
+			/>
+
+			<!-- servlet-api.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="javax/servlet/**"
+			/>
+
+			<!-- slf4j-*.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/slf4j/**"
+			/>
+
+			<!-- xalan.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="java_cup/**,org/apache/bcel/**,org/apache/regexp/**,org/apache/xalan/**,org/apache/xml/**,org/apache/xpath/**,trax/**"
+			/>
+
+			<!-- xerces.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="org/apache/html/**,org/apache/wml/**,org/apache/xerces/**,org/apache/xml/serialize/**"
+			/>
+
+			<!-- xml-apis.jar -->
+
+			<fileset
+				dir="${tstamp.value}"
+				includes="javax/xml/**,org/apache/xmlcommons/**,org/xml/sax/**,org/w3c/dom/**"
+			/>
+		</delete>
+
+		<zip basedir="${tstamp.value}" destfile="${project.dir}/lib/development/selenium-server-2.jar.new" />
+
+		<delete dir="${tstamp.value}" />
+	</target>
+
 	<target name="build-service">
 		<java
 			classname="com.liferay.portal.tools.servicebuilder.ServiceBuilder"

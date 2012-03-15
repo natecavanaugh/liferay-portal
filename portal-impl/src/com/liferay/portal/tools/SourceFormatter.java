@@ -31,14 +31,16 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.util.ContentUtil;
 import com.liferay.portal.util.FileImpl;
 import com.liferay.portal.xml.SAXReaderImpl;
+import com.liferay.util.ContentUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -267,7 +269,7 @@ public class SourceFormatter {
 
 			includeFileNames.add(fileName);
 
-			Set<String> checkedFileNames =  new HashSet<String>();
+			Set<String> checkedFileNames = new HashSet<String>();
 
 			int x = importLine.indexOf(StringPool.QUOTE);
 			int y = importLine.indexOf(StringPool.QUOTE, x + 1);
@@ -387,6 +389,7 @@ public class SourceFormatter {
 							posOpenParenthesis - 1);
 
 						if (!Character.isLetterOrDigit(nextChar) &&
+							(nextChar != CharPool.PERIOD) &&
 							!Character.isLetterOrDigit(previousChar)) {
 
 							String s = ifClause.substring(
@@ -415,70 +418,6 @@ public class SourceFormatter {
 					level -= 1;
 				}
 			}
-		}
-	}
-
-	private static void _checkJSPAttributes(
-		String fileName, String line, int lineCount) {
-
-		int x = line.indexOf(StringPool.SPACE);
-
-		if (x == -1) {
-			return;
-		}
-
-		line = line.substring(x + 1);
-
-		String previousAttribute = null;
-
-		for (x = 0;;) {
-			x = line.indexOf(StringPool.EQUAL);
-
-			if ((x == -1) || (line.length() <= (x + 1))) {
-				return;
-			}
-
-			String attribute = line.substring(0, x);
-
-			if (!_isJSPAttributName(attribute)) {
-				return;
-			}
-
-			if (Validator.isNotNull(previousAttribute) &&
-				(previousAttribute.compareTo(attribute) > 0)) {
-
-				//_sourceFormatterHelper.printError(
-				//	fileName, "sort: " + fileName + " " + lineCount);
-
-				return;
-			}
-
-			line = line.substring(x + 1);
-
-			char delimeter = line.charAt(0);
-
-			if ((delimeter != CharPool.APOSTROPHE) &&
-				(delimeter != CharPool.QUOTE)) {
-
-				_sourceFormatterHelper.printError(
-					fileName, "delimeter: " + fileName + " " + lineCount);
-
-				return;
-			}
-
-			line = line.substring(1);
-
-			int y = line.indexOf(delimeter);
-
-			if ((y == -1) || (line.length() <= (y + 1))) {
-				return;
-			}
-
-			line = line.substring(y + 1);
-
-			line = StringUtil.trimLeading(line);
-
-			previousAttribute = attribute;
 		}
 	}
 
@@ -710,7 +649,7 @@ public class SourceFormatter {
 		}
 
 		for (int i = 0; i < previousMethodParameterTypes.size(); i++) {
-			if (methodParameterTypes.size() < i + 1) {
+			if (methodParameterTypes.size() < (i + 1)) {
 				_sourceFormatterHelper.printError(
 					fileName, "sort: " + fileName + " " + lineCount);
 
@@ -1165,7 +1104,7 @@ public class SourceFormatter {
 
 			String packageLevel = s.substring(classStartPos, pos);
 
-			if ((i != 0) && (!packageLevel.equals(temp))) {
+			if ((i != 0) && !packageLevel.equals(temp)) {
 				sb.append("\n");
 			}
 
@@ -1305,26 +1244,12 @@ public class SourceFormatter {
 			newContent = StringUtil.replace(
 				newContent,
 				new String[] {
-					";\n/**",
-					"\t/*\n\t *",
-					"if(",
-					"for(",
-					"while(",
-					"List <",
-					"){\n",
-					"]{\n",
-					"\n\n\n"
+					";\n/**", "\t/*\n\t *", "if (", "for (", "while (", "List<",
+					"){\n", "]{\n", "\n\n\n"
 				},
 				new String[] {
-					";\n\n/**",
-					"\t/**\n\t *",
-					"if (",
-					"for (",
-					"while (",
-					"List<",
-					") {\n",
-					"] {\n",
-					"\n\n"
+					";\n\n/**", "\t/**\n\t *", "if (", "for (", "while (",
+					"List<", ") {\n", "] {\n", "\n\n"
 				});
 
 			if (newContent.contains("*/\npackage ")) {
@@ -1332,9 +1257,7 @@ public class SourceFormatter {
 					fileName, "package: " + fileName);
 			}
 
-			if (!newContent.endsWith("\n\n}") &&
-				!newContent.endsWith("{\n}")) {
-
+			if (!newContent.endsWith("\n\n}") && !newContent.endsWith("{\n}")) {
 				_sourceFormatterHelper.printError(fileName, "}: " + fileName);
 			}
 
@@ -1434,7 +1357,14 @@ public class SourceFormatter {
 				trimmedLine.startsWith("while (") ||
 				Validator.isNotNull(ifClause)) {
 
-				ifClause = ifClause + StringPool.SPACE + trimmedLine;
+				if (Validator.isNull(ifClause) ||
+					ifClause.endsWith(StringPool.OPEN_PARENTHESIS)) {
+
+					ifClause = ifClause + trimmedLine;
+				}
+				else {
+					ifClause = ifClause + StringPool.SPACE + trimmedLine;
+				}
 
 				if (ifClause.endsWith(") {")) {
 					_checkIfClause(ifClause, fileName, lineCount);
@@ -1646,7 +1576,8 @@ public class SourceFormatter {
 							fileName, "> 80: " + fileName + " " + lineCount);
 					}
 					else {
-						int lineTabCount = StringUtil.count(line, StringPool.TAB);
+						int lineTabCount = StringUtil.count(
+							line, StringPool.TAB);
 						int previousLineTabCount = StringUtil.count(
 							previousLine, StringPool.TAB);
 
@@ -1689,7 +1620,7 @@ public class SourceFormatter {
 			else {
 				if ((lineCount > 1) &&
 					(Validator.isNotNull(previousLine) ||
-					 (lineToSkipIfEmpty != lineCount - 1))) {
+					 (lineToSkipIfEmpty != (lineCount - 1)))) {
 
 					sb.append(previousLine);
 					sb.append("\n");
@@ -1725,8 +1656,8 @@ public class SourceFormatter {
 		directoryScanner.setBasedir(basedir);
 
 		String[] excludes = {
-			"**\\portal\\aui\\**", "**\\bin\\**", "**\\null.jsp",
-			"**\\tmp\\**", "**\\tools\\**"
+			"**\\portal\\aui\\**", "**\\bin\\**", "**\\null.jsp", "**\\tmp\\**",
+			"**\\tools\\**"
 		};
 
 		excludes = ArrayUtil.append(excludes, _excludes);
@@ -1758,7 +1689,18 @@ public class SourceFormatter {
 
 			String content = _fileUtil.read(file);
 
-			String newContent = _formatJSPContent(fileName, content);
+			String oldContent = content;
+			String newContent = StringPool.BLANK;
+
+			for (;;) {
+				newContent = _formatJSPContent(fileName, oldContent);
+
+				if (oldContent.equals(newContent)) {
+					break;
+				}
+
+				oldContent = newContent;
+			}
 
 			newContent = StringUtil.replace(
 				newContent,
@@ -1826,8 +1768,7 @@ public class SourceFormatter {
 				newContent,
 				new String[] {
 					"alert('<%= LanguageUtil.",
-					"alert(\"<%= LanguageUtil.",
-					"confirm('<%= LanguageUtil.",
+					"alert(\"<%= LanguageUtil.", "confirm('<%= LanguageUtil.",
 					"confirm(\"<%= LanguageUtil."
 				},
 				new String[] {
@@ -1893,7 +1834,12 @@ public class SourceFormatter {
 
 		String line = null;
 
+		String previousLine = null;
+
+		String currentAttributeAndValue = null;
 		String previousAttribute = null;
+		String previousAttributeAndValue = null;
+
 		boolean readAttributes = false;
 
 		while ((line = unsyncBufferedReader.readLine()) != null) {
@@ -1920,6 +1866,14 @@ public class SourceFormatter {
 
 					int pos = trimmedLine.indexOf(StringPool.EQUAL);
 
+					if ((trimmedLine.startsWith("if (") ||
+						 trimmedLine.startsWith("else if (") ||
+						 trimmedLine.startsWith("while (")) &&
+						trimmedLine.endsWith(") {")) {
+
+						_checkIfClause(trimmedLine, fileName, lineCount);
+					}
+
 					if (pos != -1) {
 						String attribute = trimmedLine.substring(0, pos);
 
@@ -1929,22 +1883,24 @@ public class SourceFormatter {
 									fileName,
 									"attribute: " + fileName + " " + lineCount);
 							}
-							else if (previousAttribute.compareTo(
-										attribute) > 0) {
+							else if (Validator.isNull(
+										previousAttributeAndValue) &&
+									 (previousAttribute.compareTo(
+										 attribute) > 0)) {
 
-								/*
-								_sourceFormatterHelper.printError(
-									fileName,
-									"sort: " + fileName + " " + lineCount);
-								*/
+								previousAttributeAndValue = previousLine;
+								currentAttributeAndValue = line;
 							}
 						}
 
 						previousAttribute = attribute;
+						previousLine = line;
 					}
 				}
 				else {
 					previousAttribute = null;
+					previousLine = null;
+
 					readAttributes = false;
 				}
 			}
@@ -1959,7 +1915,7 @@ public class SourceFormatter {
 					readAttributes = true;
 				}
 				else {
-					_checkJSPAttributes(fileName, trimmedLine, lineCount);
+					line = _sortJSPAttributes(fileName, line, lineCount);
 				}
 			}
 
@@ -2002,8 +1958,7 @@ public class SourceFormatter {
 
 					if (!matcher.find()) {
 						_sourceFormatterHelper.printError(
-							fileName,
-							"include: " + fileName + " " + lineCount);
+							fileName, "include: " + fileName + " " + lineCount);
 					}
 				}
 			}
@@ -2025,6 +1980,13 @@ public class SourceFormatter {
 
 		content = _formatTaglibQuotes(fileName, content, StringPool.QUOTE);
 		content = _formatTaglibQuotes(fileName, content, StringPool.APOSTROPHE);
+
+		if (Validator.isNotNull(previousAttributeAndValue)) {
+			content = StringUtil.replaceFirst(
+				content,
+				previousAttributeAndValue + "\n" + currentAttributeAndValue,
+				currentAttributeAndValue + "\n" + previousAttributeAndValue);
+		}
 
 		return content;
 	}
@@ -2257,8 +2219,7 @@ public class SourceFormatter {
 
 			sb = new StringBundler();
 
-			sb.append(
-				"\t\t\t<url-pattern>/c/portal/protected</url-pattern>\n");
+			sb.append("\t\t\t<url-pattern>/c/portal/protected</url-pattern>\n");
 
 			for (String urlPattern : urlPatterns) {
 				sb.append(
@@ -2388,7 +2349,7 @@ public class SourceFormatter {
 				if ((line.charAt(x - 1) != CharPool.SPACE) &&
 					(previousLineLength + 1 + x) < 80) {
 
-					String addToPreviousLine  = line.substring(0, x + 1);
+					String addToPreviousLine = line.substring(0, x + 1);
 
 					if (addToPreviousLine.contains(StringPool.SPACE)) {
 						return null;
@@ -2447,8 +2408,7 @@ public class SourceFormatter {
 					 ((line.length() + previousLineLength) < 80)) {
 
 				return new String[] {
-					previousLine + StringPool.SPACE + line,
-					StringPool.BLANK
+					previousLine + StringPool.SPACE + line, StringPool.BLANK
 				};
 			}
 		}
@@ -2790,8 +2750,7 @@ public class SourceFormatter {
 
 		String[] excludes = {
 			"**\\bin\\**", "**\\model\\*Clp.java",
-			"**\\model\\impl\\*BaseImpl.java",
-			"**\\model\\impl\\*Model.java",
+			"**\\model\\impl\\*BaseImpl.java", "**\\model\\impl\\*Model.java",
 			"**\\model\\impl\\*ModelImpl.java",
 			"**\\service\\**\\model\\*Model.java",
 			"**\\service\\**\\model\\*Soap.java",
@@ -2950,6 +2909,18 @@ public class SourceFormatter {
 		}
 	}
 
+	private static boolean _isInJavaTermTypeGroup(
+		int javaTermType, int[] javaTermTypeGroup) {
+
+		for (int type : javaTermTypeGroup) {
+			if (javaTermType == type) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private static boolean _isJSPAttributName(String attributeName) {
 		if (Validator.isNull(attributeName)) {
 			return false;
@@ -3061,18 +3032,6 @@ public class SourceFormatter {
 		return false;
 	}
 
-	private static boolean _isInJavaTermTypeGroup(
-		int javaTermType, int[] javaTermTypeGroup) {
-
-		for (int type : javaTermTypeGroup) {
-			if (javaTermType == type) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	private static boolean _isValidJavaParameter(String javaParameter) {
 		int quoteCount = StringUtil.count(javaParameter, StringPool.QUOTE);
 
@@ -3115,8 +3074,8 @@ public class SourceFormatter {
 		String newLine = StringUtil.replace(
 			line,
 			new String[] {
-				"new Boolean(", "new Byte(", "new Character(",
-				"new Integer(", "new Long(", "new Short("
+				"new Boolean(", "new Byte(", "new Character(", "new Integer(",
+				"new Long(", "new Short("
 			},
 			new String[] {
 				"Boolean.valueOf(", "Byte.valueOf(", "Character.valueOf(",
@@ -3129,6 +3088,113 @@ public class SourceFormatter {
 		}
 
 		return newLine;
+	}
+
+	private static String _sortJSPAttributes(
+		String fileName, String line, int lineCount) {
+
+		String s = line;
+
+		int x = s.indexOf(StringPool.SPACE);
+
+		if (x == -1) {
+			return line;
+		}
+
+		s = s.substring(x + 1);
+
+		String previousAttribute = null;
+		String previousAttributeAndValue = null;
+
+		boolean wrongOrder = false;
+
+		for (x = 0;;) {
+			x = s.indexOf(StringPool.EQUAL);
+
+			if ((x == -1) || (s.length() <= (x + 1))) {
+				return line;
+			}
+
+			String attribute = s.substring(0, x);
+
+			if (!_isJSPAttributName(attribute)) {
+				return line;
+			}
+
+			if (Validator.isNotNull(previousAttribute) &&
+				(previousAttribute.compareTo(attribute) > 0)) {
+
+				wrongOrder = true;
+			}
+
+			s = s.substring(x + 1);
+
+			char delimeter = s.charAt(0);
+
+			if ((delimeter != CharPool.APOSTROPHE) &&
+				(delimeter != CharPool.QUOTE)) {
+
+				_sourceFormatterHelper.printError(
+					fileName, "delimeter: " + fileName + " " + lineCount);
+
+				return line;
+			}
+
+			s = s.substring(1);
+
+			int y = s.indexOf(delimeter);
+
+			if ((y == -1) || (s.length() <= (y + 1))) {
+				return line;
+			}
+
+			String value = s.substring(0, y);
+
+			if (value.contains("<%") && !value.contains("%>")) {
+				int z = s.indexOf("%>");
+
+				if (z == -1) {
+					return line;
+				}
+
+				y = s.substring(z).indexOf(delimeter);
+
+				value = s.substring(0, y + z);
+			}
+
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(attribute);
+			sb.append(StringPool.EQUAL);
+			sb.append(delimeter);
+			sb.append(value);
+			sb.append(delimeter);
+
+			String currentAttributeAndValue = sb.toString();
+
+			if (wrongOrder) {
+				if (line.contains(currentAttributeAndValue) &&
+					line.contains(previousAttributeAndValue)) {
+
+					line = StringUtil.replaceFirst(
+						line, previousAttributeAndValue,
+						currentAttributeAndValue);
+
+					line = StringUtil.replaceLast(
+						line, currentAttributeAndValue,
+						previousAttributeAndValue);
+				}
+
+				return line;
+			}
+
+			s = s.substring(y + 1);
+
+			s = StringUtil.trimLeading(s);
+
+			previousAttribute = attribute;
+			previousAttributeAndValue = currentAttributeAndValue;
+		}
 	}
 
 	private static String _stripJSPImports(String fileName, String content)

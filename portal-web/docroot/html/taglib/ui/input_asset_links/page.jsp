@@ -104,7 +104,7 @@ assetBrowserURL.setParameter("groupId", scopeGroupId.toString());
 
 <liferay-ui:search-container
 	headerNames="type,title,null"
-	id='<%= portletResponse.getNamespace() + "assetLinkSearchContainer" %>'
+	id="assetLinkSearchContainer"
 >
 	<liferay-ui:search-container-results
 		results="<%= assetLinks %>"
@@ -163,7 +163,7 @@ assetBrowserURL.setParameter("groupId", scopeGroupId.toString());
 					constrain: true,
 					width: 820
 				},
-				id: 'asset_browser',
+				id: '<portlet:namespace />assetBrowser',
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "asset-browser") %>',
 				uri: url
 			}

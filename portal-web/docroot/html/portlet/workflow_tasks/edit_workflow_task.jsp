@@ -194,7 +194,7 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 					<div class="task-content-actions">
 						<liferay-ui:icon-list>
 							<c:if test="<%= assetRenderer.hasViewPermission(permissionChecker) %>">
-								<liferay-ui:icon image="view" method="get" url="<%= viewFullContentURLString %>" target='<%= assetRenderer.isPreviewInContext() ? "_blank" : StringPool.BLANK %>' />
+								<liferay-ui:icon image="view" method="get" target='<%= assetRenderer.isPreviewInContext() ? "_blank" : StringPool.BLANK %>' url="<%= viewFullContentURLString %>" />
 							</c:if>
 
 							<c:if test="<%= editPortletURL != null %>">
@@ -215,7 +215,7 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 									<c:when test="<%= assetRenderer.hasEditPermission(permissionChecker) && showEditURL %>">
 
 										<%
-										String taglibEditURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960}, id: '" + renderResponse.getNamespace() + "', title: '" + LanguageUtil.format(pageContext, "edit-x", HtmlUtil.escape(assetRenderer.getTitle(locale))) + "', uri:'" + HtmlUtil.escapeURL(editPortletURLString) + "'});";
+										String taglibEditURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960}, id: '" + renderResponse.getNamespace() + "editAsset', title: '" + LanguageUtil.format(pageContext, "edit-x", HtmlUtil.escape(assetRenderer.getTitle(locale))) + "', uri:'" + HtmlUtil.escapeURL(editPortletURLString) + "'});";
 										%>
 
 										<liferay-ui:icon image="edit" url="<%= taglibEditURL %>" />
@@ -229,7 +229,7 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 					</div>
 
 					<h3 class="task-content-title">
-						<img src="<%= workflowHandler.getIconPath(liferayPortletRequest) %>" alt="" /> <%= HtmlUtil.escape(workflowHandler.getTitle(classPK, locale)) %>
+						<img alt="" src="<%= workflowHandler.getIconPath(liferayPortletRequest) %>" /> <%= HtmlUtil.escape(workflowHandler.getTitle(classPK, locale)) %>
 					</h3>
 
 					<%

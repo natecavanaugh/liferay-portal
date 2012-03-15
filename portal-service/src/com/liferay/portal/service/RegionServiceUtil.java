@@ -44,10 +44,23 @@ public class RegionServiceUtil {
 		return getService().addRegion(countryId, regionCode, name, active);
 	}
 
+	public static com.liferay.portal.model.Region fetchRegion(long countryId,
+		java.lang.String regionCode)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchRegion(countryId, regionCode);
+	}
+
 	public static com.liferay.portal.model.Region getRegion(long regionId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getRegion(regionId);
+	}
+
+	public static com.liferay.portal.model.Region getRegion(long countryId,
+		java.lang.String regionCode)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getRegion(countryId, regionCode);
 	}
 
 	public static java.util.List<com.liferay.portal.model.Region> getRegions()

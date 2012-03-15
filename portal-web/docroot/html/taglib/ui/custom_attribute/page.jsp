@@ -75,7 +75,7 @@ ExpandoBridge expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(company.
 		<c:choose>
 			<c:when test="<%= editable && ExpandoColumnPermissionUtil.contains(permissionChecker, company.getCompanyId(), className, ExpandoTableConstants.DEFAULT_TABLE_NAME, name, ActionKeys.UPDATE) %>">
 				<aui:field-wrapper label="<%= label ? localizedName : StringPool.BLANK %>">
-					<input type="hidden" name="<portlet:namespace />ExpandoAttributeName--<%= escapedName %>--" value="<%= escapedName %>" />
+					<input name="<portlet:namespace />ExpandoAttributeName--<%= escapedName %>--" type="hidden" value="<%= escapedName %>" />
 
 					<c:choose>
 						<c:when test="<%= type == ExpandoColumnConstants.BOOLEAN %>">
@@ -172,9 +172,9 @@ ExpandoBridge expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(company.
 									monthParam='<%= fieldParam + "Month" %>'
 									monthValue='<%= month %>'
 									yearParam='<%= fieldParam + "Year" %>'
-									yearValue="<%= year %>"
-									yearRangeStart="<%= valueDate.get(Calendar.YEAR) - 100 %>"
 									yearRangeEnd="<%= valueDate.get(Calendar.YEAR) + 100 %>"
+									yearRangeStart="<%= valueDate.get(Calendar.YEAR) - 100 %>"
+									yearValue="<%= year %>"
 								/>
 
 								<liferay-ui:input-time
@@ -183,9 +183,9 @@ ExpandoBridge expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(company.
 									disabled="<%= false %>"
 									hourParam='<%= fieldParam + "Hour" %>'
 									hourValue="<%= hour %>"
+									minuteInterval="1"
 									minuteParam='<%= fieldParam + "Minute" %>'
 									minuteValue="<%= minute %>"
-									minuteInterval="1"
 								/>
 							</span>
 						</c:when>

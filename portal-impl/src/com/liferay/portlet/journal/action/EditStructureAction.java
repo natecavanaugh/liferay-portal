@@ -94,6 +94,11 @@ public class EditStructureAction extends PortletAction {
 
 				sendRedirect(actionRequest, actionResponse, redirect);
 			}
+			else {
+				String xsd = ParamUtil.getString(actionRequest, "xsd");
+
+				JournalUtil.processXMLAttributes(xsd);
+			}
 		}
 		catch (Exception e) {
 			if (e instanceof NoSuchStructureException ||

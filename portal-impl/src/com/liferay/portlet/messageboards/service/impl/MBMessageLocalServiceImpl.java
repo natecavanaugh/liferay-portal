@@ -186,7 +186,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 				classNameId, classPK);
 
 			if (discussion == null) {
-				discussion = mbDiscussionLocalService.addDiscussion(
+				mbDiscussionLocalService.addDiscussion(
 					classNameId, classPK, message.getThreadId());
 			}
 		}
@@ -1815,8 +1815,9 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 
 		subscriptionSender.setBody(body);
 		subscriptionSender.setCompanyId(message.getCompanyId());
+		subscriptionSender.setContextAttribute(
+			"[$COMMENTS_BODY$]", message.getBody(true), false);
 		subscriptionSender.setContextAttributes(
-			"[$COMMENTS_BODY$]", message.getBody(true),
 			"[$COMMENTS_USER_ADDRESS$]", userAddress, "[$COMMENTS_USER_NAME$]",
 			userName, "[$CONTENT_URL$]", contentURL);
 		subscriptionSender.setFrom(fromAddress, fromName);
@@ -1956,10 +1957,12 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			signature = MBUtil.getEmailMessageAddedSignature(preferences);
 		}
 
-		String subject = message.getSubject();
-
 		if (!subjectPrefix.contains("[$MESSAGE_SUBJECT$]")) {
-			subject = subjectPrefix.trim() + " " + subject.trim();
+			String subject = message.getSubject();
+
+			subject = subjectPrefix.trim() + StringPool.SPACE + subject.trim();
+
+			message.setSubject(subject);
 		}
 
 		if (Validator.isNotNull(signature)) {
