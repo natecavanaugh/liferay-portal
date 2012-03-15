@@ -293,6 +293,13 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 									previewFileURLs[0] = videoThumbnailURL;
 								}
 							}
+							else if (hasAudio) {
+								previewFileURLs = new String[PropsValues.DL_FILE_ENTRY_PREVIEW_AUDIO_CONTAINERS.length];
+
+								for (int i = 0; i < PropsValues.DL_FILE_ENTRY_PREVIEW_AUDIO_CONTAINERS.length; i++) {
+									previewFileURLs[i] = DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, previewQueryString + "&type=" + PropsValues.DL_FILE_ENTRY_PREVIEW_AUDIO_CONTAINERS[i]);
+								}
+							}
 							else {
 								previewFileURLs = new String[1];
 
