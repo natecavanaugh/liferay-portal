@@ -18,8 +18,10 @@ import com.liferay.portal.kernel.servlet.taglib.BaseBodyTagSupport;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.util.servlet.DynamicServletRequest;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Shuyang Zhou
  */
 public class ParamAndPropertyAncestorTagImpl
 	extends BaseBodyTagSupport
@@ -35,6 +38,20 @@ public class ParamAndPropertyAncestorTagImpl
 	public void addParam(String name, String value) {
 		if (_params == null) {
 			_params = new LinkedHashMap<String, String[]>();
+		}
+
+		// PLT.26.6
+
+		if ((value == null) || (value.length() == 0)) {
+			_params.remove(name);
+
+			if (_removedParameterNames == null) {
+				_removedParameterNames = new HashSet<String>();
+			}
+
+			_removedParameterNames.add(name);
+
+			return;
 		}
 
 		String[] values = _params.get(name);
@@ -82,6 +99,10 @@ public class ParamAndPropertyAncestorTagImpl
 		if (_params != null) {
 			_params.clear();
 		}
+
+		if (_removedParameterNames != null) {
+			_removedParameterNames.clear();
+		}
 	}
 
 	public void clearProperties() {
@@ -96,6 +117,10 @@ public class ParamAndPropertyAncestorTagImpl
 
 	public Map<String, String[]> getProperties() {
 		return _properties;
+	}
+
+	public Set<String> getRemovedParameterNames() {
+		return _removedParameterNames;
 	}
 
 	public ServletContext getServletContext() {
@@ -140,6 +165,7 @@ public class ParamAndPropertyAncestorTagImpl
 
 	private Map<String, String[]> _params;
 	private Map<String, String[]> _properties;
+	private Set<String> _removedParameterNames;
 	private ServletContext _servletContext;
 
 }

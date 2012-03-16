@@ -23,13 +23,13 @@ long assetEntryId = GetterUtil.getLong((String)request.getAttribute("liferay-ui:
 
 List<AssetLink> assetLinks = new ArrayList<AssetLink>();
 
-String assetLinkSearchContainerPrimaryKeys = ParamUtil.getString(request, "assetLinkSearchContainerPrimaryKeys");
+String assetLinksSearchContainerPrimaryKeys = ParamUtil.getString(request, "assetLinksSearchContainerPrimaryKeys");
 
-if (Validator.isNull(assetLinkSearchContainerPrimaryKeys) && SessionErrors.isEmpty(portletRequest) && (assetEntryId > 0)) {
+if (Validator.isNull(assetLinksSearchContainerPrimaryKeys) && SessionErrors.isEmpty(portletRequest) && (assetEntryId > 0)) {
 	assetLinks = AssetLinkLocalServiceUtil.getDirectLinks(assetEntryId);
 }
 else {
-	String[] assetEntriesPrimaryKeys = StringUtil.split(assetLinkSearchContainerPrimaryKeys);
+	String[] assetEntriesPrimaryKeys = StringUtil.split(assetLinksSearchContainerPrimaryKeys);
 
 	for (String assetEntryPrimaryKey : assetEntriesPrimaryKeys) {
 		long assetEntryPrimaryKeyLong = GetterUtil.getLong(assetEntryPrimaryKey);
@@ -104,7 +104,6 @@ assetBrowserURL.setParameter("groupId", scopeGroupId.toString());
 
 <liferay-ui:search-container
 	headerNames="type,title,null"
-	id="assetLinkSearchContainer"
 >
 	<liferay-ui:search-container-results
 		results="<%= assetLinks %>"
@@ -176,7 +175,7 @@ assetBrowserURL.setParameter("groupId", scopeGroupId.toString());
 		function(entryId, entryType, entryTitle) {
 			var A = AUI();
 
-			var searchContainerName = '<%= portletResponse.getNamespace() %>assetLinkSearchContainer';
+			var searchContainerName = '<%= portletResponse.getNamespace() %>assetLinksSearchContainer';
 
 			searchContainer = Liferay.SearchContainer.get(searchContainerName);
 
@@ -192,7 +191,7 @@ assetBrowserURL.setParameter("groupId", scopeGroupId.toString());
 </aui:script>
 
 <aui:script use="liferay-search-container">
-	var searchContainer = Liferay.SearchContainer.get('<%= portletResponse.getNamespace() %>assetLinkSearchContainer');
+	var searchContainer = Liferay.SearchContainer.get('<%= portletResponse.getNamespace() %>assetLinksSearchContainer');
 
 	searchContainer.get('contentBox').delegate(
 		'click',

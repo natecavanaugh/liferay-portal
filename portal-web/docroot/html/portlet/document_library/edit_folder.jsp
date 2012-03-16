@@ -186,7 +186,6 @@ if (workflowEnabled) {
 					<c:if test="<%= !rootFolder %>">
 						<liferay-ui:search-container
 							headerNames="<%= headerNames %>"
-							id="fileEntryTypeSearchContainer"
 						>
 							<liferay-ui:search-container-results
 								results="<%= fileEntryTypes %>"
@@ -325,7 +324,7 @@ if (workflowEnabled) {
 		function(fileEntryTypeId, fileEntryTypeName, dialog) {
 			var A = AUI();
 
-			var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />fileEntryTypeSearchContainer');
+			var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />dlFileEntryTypesSearchContainer');
 
 			var fileEntryTypeLink = '<a class="modify-link" data-rowId="' + fileEntryTypeId + '" href="javascript:;"><%= UnicodeFormatter.toString(removeFileEntryTypeIcon) %></a>';
 
@@ -390,7 +389,7 @@ if (workflowEnabled) {
 </aui:script>
 
 <aui:script use="liferay-search-container">
-	var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />fileEntryTypeSearchContainer');
+	var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />dlFileEntryTypesSearchContainer');
 
 	searchContainer.get('contentBox').delegate(
 		'click',

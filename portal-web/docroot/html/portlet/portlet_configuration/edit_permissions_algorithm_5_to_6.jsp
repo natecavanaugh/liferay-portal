@@ -284,7 +284,7 @@ definePermissionsURL.setParameter(Constants.CMD, Constants.VIEW);
 		}
 		%>
 
-		<liferay-ui:search-container id="rolesSearchContainer">
+		<liferay-ui:search-container>
 			<liferay-ui:search-container-results
 				results="<%= roles %>"
 				total="<%= roles.size() %>"

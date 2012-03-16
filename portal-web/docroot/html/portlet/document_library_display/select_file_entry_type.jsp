@@ -26,9 +26,7 @@ long folderId = ParamUtil.getLong(request, "folderId");
 List<DLFileEntryType> fileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(DLUtil.getGroupIds(themeDisplay), folderId, true);
 %>
 
-<liferay-ui:search-container
-	id="fileEntryTypesSearchContainer"
->
+<liferay-ui:search-container>
 	<liferay-ui:search-container-results
 		results="<%= fileEntryTypes %>"
 	/>
@@ -48,7 +46,7 @@ List<DLFileEntryType> fileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolder
 </liferay-ui:search-container>
 
 <aui:script use="liferay-portlet-url,liferay-search-container">
-	var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />fileEntryTypesSearchContainer');
+	var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />dlFileEntryTypesSearchContainer');
 
 	searchContainer.get('contentBox').delegate(
 		'click',

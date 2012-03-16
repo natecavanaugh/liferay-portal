@@ -1791,6 +1791,10 @@ public interface PropsKeys {
 
 	public static final String SETUP_DATABASE_DRIVER_CLASS_NAME = "setup.database.driverClassName";
 
+	public static final String SETUP_DATABASE_JAR_NAME = "setup.database.jar.name";
+
+	public static final String SETUP_DATABASE_JAR_URL = "setup.database.jar.url";
+
 	public static final String SETUP_DATABASE_TYPES = "setup.database.types";
 
 	public static final String SETUP_DATABASE_URL = "setup.database.url";

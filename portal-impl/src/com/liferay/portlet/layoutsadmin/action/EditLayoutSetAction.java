@@ -206,7 +206,7 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 				throw new UploadException("No logo uploaded for use");
 			}
 
-			if (file.exists()) {
+			if ((file != null) && file.exists()) {
 				inputStream = new ByteArrayFileInputStream(file, 1024);
 			}
 

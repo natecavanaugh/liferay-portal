@@ -270,6 +270,10 @@ public class PortletURLImpl
 		return _portletRequest;
 	}
 
+	public Set<String> getRemovedParameterNames() {
+		return _removedParameterNames;
+	}
+
 	public Map<String, String> getReservedParameterMap() {
 		if (_reservedParameters != null) {
 			return _reservedParameters;
@@ -607,6 +611,12 @@ public class PortletURLImpl
 
 	public void setRefererPlid(long refererPlid) {
 		_refererPlid = refererPlid;
+
+		clearCache();
+	}
+
+	public void setRemovedParameterNames(Set<String> removedParameterNames) {
+		_removedParameterNames = removedParameterNames;
 
 		clearCache();
 	}
@@ -1246,16 +1256,18 @@ public class PortletURLImpl
 		Map<String, String[]> renderParameters = RenderParametersPool.get(
 			_request, layout.getPlid(), getPortlet().getPortletId());
 
-		Iterator<Map.Entry<String, String[]>> itr =
-			renderParameters.entrySet().iterator();
-
-		while (itr.hasNext()) {
-			Map.Entry<String, String[]> entry = itr.next();
-
+		for (Map.Entry<String, String[]> entry : renderParameters.entrySet()) {
 			String name = entry.getKey();
 
 			if (name.indexOf(namespace) != -1) {
 				name = name.substring(namespace.length());
+			}
+
+			if (!_lifecycle.equals(PortletRequest.RESOURCE_PHASE) &&
+				(_removedParameterNames != null) &&
+				_removedParameterNames.contains(name)) {
+
+				continue;
 			}
 
 			String[] oldValues = entry.getValue();
@@ -1385,6 +1397,7 @@ public class PortletURLImpl
 	private PortletMode _portletMode;
 	private PortletRequest _portletRequest;
 	private long _refererPlid;
+	private Set<String> _removedParameterNames;
 	private Map<String, String[]> _removePublicRenderParameters;
 	private HttpServletRequest _request;
 	private Map<String, String> _reservedParameters;

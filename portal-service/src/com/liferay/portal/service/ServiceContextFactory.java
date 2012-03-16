@@ -227,7 +227,7 @@ public class ServiceContextFactory {
 			request, "assetEntryVisible", true);
 		long[] assetLinkEntryIds = StringUtil.split(
 			ParamUtil.getString(
-				request, "assetLinkSearchContainerPrimaryKeys"), 0L);
+				request, "assetLinksSearchContainerPrimaryKeys"), 0L);
 		String[] assetTagNames = StringUtil.split(
 			ParamUtil.getString(request, "assetTagNames"));
 
@@ -403,7 +403,7 @@ public class ServiceContextFactory {
 			portletRequest, "assetEntryVisible", true);
 		long[] assetLinkEntryIds = StringUtil.split(
 			ParamUtil.getString(
-				portletRequest, "assetLinkSearchContainerPrimaryKeys"), 0L);
+				portletRequest, "assetLinksSearchContainerPrimaryKeys"), 0L);
 		String[] assetTagNames = StringUtil.split(
 			ParamUtil.getString(portletRequest, "assetTagNames"));
 

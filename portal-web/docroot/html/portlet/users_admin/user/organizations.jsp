@@ -34,7 +34,6 @@ List<Organization> organizations = (List<Organization>)request.getAttribute("use
 
 <liferay-ui:search-container
 	headerNames="name,type,roles,null"
-	id="organizationsSearchContainer"
 >
 	<liferay-ui:search-container-results
 		results="<%= organizations %>"
