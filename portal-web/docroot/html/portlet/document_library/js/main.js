@@ -1519,12 +1519,14 @@ AUI.add(
 						if (paginatorData.name == 'entryPaginator') {
 							var showSyncMessageIcon = A.one('#' + instance.ns('showSyncMessageIcon'));
 
+							var syncNotificationNode = instance.byId('syncNotification');
+
 							if (paginatorData.state.total > 0) {
-								instance.byId('syncNotification').show();
+								syncNotificationNode.show();
 								showSyncMessageIcon.show();
 							}
 							else {
-								instance.byId('syncNotification').hide();
+								syncNotificationNode.hide();
 								showSyncMessageIcon.hide();
 
 							}
