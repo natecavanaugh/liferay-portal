@@ -126,7 +126,7 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 	</aui:script>
 </c:if>
 
-<aui:script use="aui-base,aui-loading-mask,selector-css3">
+<aui:script use="aui-base,aui-loading-mask">
 	var form = A.one('#<portlet:namespace />fm1');
 
 	form.on(
@@ -143,18 +143,19 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 
 						var children = treeView.getChildren(true);
 						var layoutIds = [];
+						var length = children.length;
+						var regExpLayoutId = /layoutId_(\d+)/;
 
-						for (var i in children) {
-							// Skip the root node because it's not a valid layout
-							if (i == 0) {
-								continue;
-							}
-
+						for (var i = 1; i < length; ++i) {
 							var child = children[i];
 
 							if (child.isChecked()) {
-								var layoutId = child.get('id').match(/layoutId_(\d+)/)[1];
-								layoutIds.push(layoutId);
+								var layoutIdMatch = regExpLayoutId.exec(child.get('id'));
+
+								if (layoutIdMatch) {
+					                var layoutId = layoutIdMatch[1];
+									layoutIds.push(layoutId);
+								}
 							}
 						}
 
