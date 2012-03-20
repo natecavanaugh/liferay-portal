@@ -1680,10 +1680,45 @@
 		['aui-base']
 	);
 
-	Liferay.publish(
-		'submitForm',
-		{
-			defaultFn: Util._defaultSubmitFormFn
+	A.use(
+		'attribute',
+		function(A) {
+			Liferay.publish(
+				'submitForm',
+				{
+					defaultFn: Util._defaultSubmitFormFn
+				}
+			);
+
+			Liferay.after(
+				'closeWindow',
+				function(event) {
+					var id = event.id;
+
+					var dialog = Liferay.Util.getTop().Liferay.Util.Window._map[id];
+
+					if (dialog && dialog.iframe) {
+						var dialogWindow = dialog.iframe.node.get('contentWindow').getDOM();
+
+						var openingWindow = dialogWindow.Liferay.Util.getOpener();
+						var refresh = event.refresh;
+
+						if (refresh && openingWindow) {
+							var data;
+
+							if (!event.portletAjaxable) {
+								data = {
+									portletAjaxable: false
+								};
+							}
+
+							openingWindow.Liferay.Portlet.refresh('#p_p_id_' + refresh + '_', data);
+						}
+
+						dialog.close();
+					}
+				}
+			);
 		}
 	);
 
@@ -1694,36 +1729,6 @@
 			Util._openWindow(config);
 		},
 		['liferay-util-window']
-	);
-
-	Liferay.after(
-		'closeWindow',
-		function(event) {
-			var id = event.id;
-
-			var dialog = Liferay.Util.getTop().Liferay.Util.Window._map[id];
-
-			if (dialog && dialog.iframe) {
-				var dialogWindow = dialog.iframe.node.get('contentWindow').getDOM();
-
-				var openingWindow = dialogWindow.Liferay.Util.getOpener();
-				var refresh = event.refresh;
-
-				if (refresh && openingWindow) {
-					var data;
-
-					if (!event.portletAjaxable) {
-						data = {
-							portletAjaxable: false
-						};
-					}
-
-					openingWindow.Liferay.Portlet.refresh('#p_p_id_' + refresh + '_', data);
-				}
-
-				dialog.close();
-			}
-		}
 	);
 
 	Util.Window = Window;

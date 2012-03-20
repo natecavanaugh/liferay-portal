@@ -679,17 +679,22 @@
 		['liferay-look-and-feel']
 	);
 
-	Liferay.publish(
-		'closePortlet',
-		{
-			defaultFn: Portlet._defCloseFn
-		}
-	);
+	A.use(
+		'attribute',
+		function(A) {
+			Liferay.publish(
+				'closePortlet',
+				{
+					defaultFn: Portlet._defCloseFn
+				}
+			);
 
-	Liferay.publish(
-		'allPortletsReady',
-		{
-			fireOnce: true
+			Liferay.publish(
+				'allPortletsReady',
+				{
+					fireOnce: true
+				}
+			);
 		}
 	);
 

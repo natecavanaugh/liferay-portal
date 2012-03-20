@@ -19,11 +19,9 @@ import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.servlet.PortalIncludeUtil;
 import com.liferay.portal.kernel.servlet.taglib.FileAvailabilityUtil;
 import com.liferay.portal.kernel.servlet.taglib.aui.ScriptData;
-import com.liferay.portal.kernel.util.ServerDetector;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.util.*;
 import com.liferay.taglib.aui.base.BaseScriptTag;
+import com.liferay.taglib.util.AlloyModulesLoaderUtil;
 
 import java.util.Set;
 
@@ -202,10 +200,29 @@ public class ScriptTag extends BaseScriptTag {
 			jspWriter.write("(");
 
 			Set<String> useSet = scriptData.getUseSet();
+			
+			Set<String> jsModulesSet = null;
+			Set<String> cssModulesSet = null;
 
-			for (String use : useSet) {
+			if (GetterUtil.getBoolean(
+				PropsUtil.get(PropsKeys.SERVLET_FILTERS_ALLOY_FILTER))) {
+
+				jsModulesSet = AlloyModulesLoaderUtil.expandModulesList(
+					scriptData.getUseSet(), false, false, false);
+
+				cssModulesSet = AlloyModulesLoaderUtil.expandModulesList(
+					scriptData.getUseSet(), false, true, true);
+
+				request.setAttribute(
+					WebKeys.EXPANDED_CSS_USAGES, cssModulesSet);
+			}
+			else {
+				jsModulesSet = useSet;
+			}
+
+			for (String module : jsModulesSet) {
 				jspWriter.write(StringPool.APOSTROPHE);
-				jspWriter.write(use);
+				jspWriter.write(module);
 				jspWriter.write(StringPool.APOSTROPHE);
 				jspWriter.write(StringPool.COMMA_AND_SPACE);
 			}

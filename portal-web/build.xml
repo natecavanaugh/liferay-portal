@@ -7,6 +7,8 @@
 
 	<property name="alloy.file" value="alloy-1.5.0.zip" />
 
+	<property name="alloy.modules.path" value="docroot/WEB-INF/classes/modules.json" />
+
 	<!--
 	When upgrading CKEditor, make sure to delete
 	docroot/html/js/editor/ckeditor_diffs/ckeditor.js.
@@ -125,7 +127,7 @@
 						<if>
 							<available file="docroot/html/js/aui/${dir.name}/assets/skins/sam/${dir.name}.css"/>
 							<then>
-								<concat append="true" destfile="docroot/html/ALLOY_ZIP/build/aui-skins/tmp/alloy.css">
+								<concat append="true" destfile="docroot/html/ALLOY_ZIP/build/aui-skins/tmp/aui_components.css">
 									<filelist
 										dir="docroot/html/js/aui/${dir.name}/assets/skins/sam/"
 										files="${dir.name}.css"
@@ -166,6 +168,28 @@
 					overwrite="true"
 				/>
 
+
+				<replaceregexp match="url\(([^)]+)\)" replace="url(@theme_image_path@/aui/\1)" flags="g" byline="false">
+					<fileset
+						dir="docroot/html/ALLOY_ZIP/build/aui-skins/tmp/"
+						includes="aui_components.css"
+					/>
+				</replaceregexp>
+
+				<replace file="docroot/html/ALLOY_ZIP/build/aui-skins/tmp/aui_components.css">
+					<replacefilter token="../images/" value="" />
+				</replace>
+
+				<replace file="docroot/html/ALLOY_ZIP/build/aui-skins/tmp/aui_components.css">
+					<replacefilter token="../../../../../build/aui-skin-base/images/" value="" />
+				</replace>
+
+				<copy
+					file="docroot/html/ALLOY_ZIP/build/aui-skins/tmp/aui_components.css"
+					tofile="docroot/html/css/portal/aui_components.css"
+					overwrite="true"
+				/>
+
 				<!-- Images -->
 
 				<copy todir="docroot/html/themes/_unstyled/images/aui/">
@@ -175,6 +199,19 @@
 				<!-- Clean up -->
 
 				<delete dir="docroot/html/ALLOY_ZIP" />
+			</then>
+		</if>
+
+		<!-- Create list with all modules dependencies -->
+		<if>
+			<not>
+				<uptodate
+					srcfile="third-party/${alloy.file}"
+					targetfile="${alloy.modules.path}"
+				/>
+			</not>
+			<then>
+				<antcall target="create-list-modules-dependencies" inheritAll="false" />
 			</then>
 		</if>
 	</target>
@@ -1054,6 +1091,18 @@ Please set the property "jdk.6.home" in build.properties.
 			<param name="arg.line" value="-d ${jspc.classes.dir} -webapp ${jsp.precompile.dir}" />
 		</antcall>
 	</target>
+		
+	<target name="create-list-modules-dependencies">
+		<if>
+			<equals arg1="${javascript.engine}" arg2="node" />
+			<then>
+				<antcall target="execute-node-js-engine" inheritAll="false" />
+			</then>
+			<else>
+				<antcall target="execute-ringo-js-engine" inheritAll="false" />
+			</else>
+		</if>
+	</target>
 
 	<target name="deploy">
 		<antcall target="build-alloy" />
@@ -1146,6 +1195,32 @@ Please set the property "jdk.6.home" in build.properties.
 
 	<target name="deploy-properties">
 		<ant dir=".." target="deploy-properties" inheritAll="false" />
+	</target>
+
+	<target name="execute-node-js-engine">
+		<exec executable="${javascript.engine.run.command}">
+			<arg line="${javascript.engine.run.file}" />
+			<arg line="../aui" />
+			<arg line="${alloy.modules.path}" />
+		</exec>
+	</target>
+
+	<target name="execute-ringo-js-engine">
+		<path id="ringo.bootclasspath">
+			<pathelement location="${project.dir}/lib/development/js.jar"/>
+		</path>
+
+		<java
+			classname="org.ringojs.tools.RingoRunner"
+			classpathref="project.classpath"
+			fork="true"
+			dir="${project.dir}/portal-web"
+		>
+			<jvmarg line="-Xbootclasspath/p:${project.dir}/lib/development/js.jar" />
+			<arg value="docroot/html/js/misc/alloy_modules_list.js" />
+			<arg value="../aui" />
+			<arg value="${alloy.modules.path}" />
+		</java>
 	</target>
 
 	<target name="war" depends="compile">

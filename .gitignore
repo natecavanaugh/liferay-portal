@@ -97,6 +97,7 @@ _sass_cache_*.css
 /portal-web/docroot/html/ALLOY_ZIP
 
 /portal-web/docroot/html/css/portal/aui.css
+/portal-web/docroot/html/css/portal/aui_components.css
 
 /portal-web/docroot/html/icons/_sprite.*
 

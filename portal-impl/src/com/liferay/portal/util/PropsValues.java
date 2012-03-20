@@ -336,6 +336,8 @@ public class PropsValues {
 
 	public static final int COUNTER_INCREMENT = GetterUtil.getInteger(PropsUtil.get(PropsKeys.COUNTER_INCREMENT));
 
+	public static final String SERVLET_FILTERS_ALLOY_FILTER = GetterUtil.getString(PropsUtil.get(PropsKeys.SERVLET_FILTERS_ALLOY_FILTER));
+
 	public static final String CUSTOM_SQL_FUNCTION_ISNOTNULL = PropsUtil.get(PropsKeys.CUSTOM_SQL_FUNCTION_ISNOTNULL);
 
 	public static final String CUSTOM_SQL_FUNCTION_ISNULL = PropsUtil.get(PropsKeys.CUSTOM_SQL_FUNCTION_ISNULL);

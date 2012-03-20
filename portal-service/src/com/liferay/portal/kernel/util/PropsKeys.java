@@ -1739,6 +1739,8 @@ public interface PropsKeys {
 
 	public static final String SERVICE_BUILDER_SERVICE_READ_ONLY_PREFIXES = "service.builder.service.read.only.prefixes";
 
+	public static final String SERVLET_FILTERS_ALLOY_FILTER = "com.liferay.portal.servlet.filters.alloy.CSSFilter";
+
 	public static final String SERVLET_SERVICE_EVENTS_POST = "servlet.service.events.post";
 
 	public static final String SERVLET_SERVICE_EVENTS_PRE = "servlet.service.events.pre";

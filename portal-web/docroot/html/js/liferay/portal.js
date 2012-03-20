@@ -70,10 +70,15 @@
 		['aui-base']
 	);
 
-	Liferay.publish(
-		'showTab',
-		{
-			defaultFn: Liferay.Portal.Tabs._show
+	A.use(
+		'attribute',
+		function(A) {
+			Liferay.publish(
+				'showTab',
+				{
+					defaultFn: Liferay.Portal.Tabs._show
+				}
+			);
 		}
 	);
 
