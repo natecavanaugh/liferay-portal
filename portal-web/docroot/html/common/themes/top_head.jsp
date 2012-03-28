@@ -70,7 +70,21 @@ if (!themeDisplay.isSignedIn() && layout.isPublicLayout()) {
 
 <%-- Portal CSS --%>
 
-<link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/main.css")) %>" rel="stylesheet" type="text/css" />
+<%
+String mainCSS = "main_components.css";
+
+String webComponentsUrl = StringPool.BLANK;
+
+if (GetterUtil.getBoolean(PropsUtil.get(PropsKeys.SERVLET_FILTERS_ALLOY_FILTER))) {
+	mainCSS = "main.css";
+
+	webComponentsUrl = WebKeys.MARKER_CSS_COMPONENTS_URL;
+}
+%>
+
+<link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + themeDisplay.getPathContext() + "/html/css/" + mainCSS)) %>" rel="stylesheet" type="text/css" />
+
+<%= webComponentsUrl %>
 
 <%
 List<Portlet> portlets = null;

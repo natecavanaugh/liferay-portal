@@ -39,6 +39,8 @@ public interface WebKeys {
 
 	public static final String CURRENT_URL = "CURRENT_URL";
 
+	public static final String EXPANDED_CSS_USAGES = "EXPANDED_CSS_USAGES";
+
 	public static final String EXTEND_SESSION = "EXTEND_SESSION";
 
 	public static final String FILE_ITEM_THRESHOLD_SIZE_EXCEEDED = "FILE_ITEM_THRESHOLD_SIZE_EXCEEDED";
@@ -58,6 +60,8 @@ public interface WebKeys {
 	public static final String LAYOUT = "LAYOUT";
 
 	public static final String LAYOUTS = "LAYOUTS";
+
+	public static final String MARKER_CSS_COMPONENTS_URL = "MARKER_CSS_COMPONENTS_URL";
 
 	/**
 	 * @deprecated {@link #VISITED_GROUP_ID_PREVIOUS}
