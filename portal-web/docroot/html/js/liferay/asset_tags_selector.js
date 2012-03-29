@@ -48,7 +48,7 @@ AUI.add(
 		var TPL_LOADING = '<div class="loading-animation" />';
 
 		var TPL_TAG = new A.Template(
-			'<fieldset class="{[(!values.tags || !values.tags.length) ? ' + CSS_NO_MATCHES + ' : \"\"]}">',
+			'<fieldset class="{[(!values.tags || !values.tags.length) ? "', CSS_NO_MATCHES, '" : "', STR_BLANK ,'" ]}">',
 				'<tpl for="tags">',
 					'<label title="{name}"><input type="checkbox" value="{name}" {checked} />{name}</label>',
 				'</tpl>',
@@ -59,6 +59,8 @@ AUI.add(
 		var TPL_URL_SUGGESTIONS = 'http://search.yahooapis.com/ContentAnalysisService/V1/termExtraction?appid=YahooDemo&output=json&context={context}';
 
 		var TPL_TAGS_CONTAINER = '<div class="' + CSS_TAGS_LIST + '"></div>';
+
+		var STR_BLANK = '';
 
 		/**
 		 * OPTIONS
@@ -213,7 +215,7 @@ AUI.add(
 
 							var bodyNode = popup.bodyNode;
 
-							bodyNode.html('');
+							bodyNode.html(STR_BLANK);
 
 							var searchField = new A.Textfield(
 								{
@@ -296,7 +298,7 @@ AUI.add(
 										var key = term;
 
 										if (term == '*') {
-											term = '';
+											term = STR_BLANK;
 										}
 
 										var serviceQueryObj = serviceQueryCache[key];
@@ -305,7 +307,7 @@ AUI.add(
 											serviceQueryObj = {
 												groupId: themeDisplay.getParentGroupId(),
 												name: '%' + term + '%',
-												properties: '',
+												properties: STR_BLANK,
 												begin: 0,
 												end: 20
 											};
@@ -386,7 +388,8 @@ AUI.add(
 										instance.entries.add(item, {});
 									}
 								);
-							} else {
+							}
+							else {
 								instance.entries.add(text, {});
 							}
 						}
@@ -536,7 +539,7 @@ AUI.add(
 
 						var contentCallback = instance.get('contentCallback');
 
-						var context = '';
+						var context = STR_BLANK;
 						var data = [];
 
 						if (contentCallback) {
@@ -562,8 +565,16 @@ AUI.add(
 									success: function(event, id, obj) {
 										var results = this.get('responseData');
 
-										if (results && results.ResultSet && results.ResultSet.Result) {
-											data = data.concat(results.ResultSet.Result);
+										var resultData = results.ResultSet.Result;
+
+										if (results && results.ResultSet && resultData) {
+											for (var i = 0; i < resultData.length; i++) {
+												var tag = {
+													name: resultData[i]
+												}
+
+												data[i] = tag;
+											}
 										}
 
 										queue.run();
@@ -605,8 +616,7 @@ AUI.add(
 						queue.after(
 							'complete',
 							function(event) {
-								console.log(AArray.unique(data));
-								instance._updateSuggestionsList(AArray.unique(data));
+								instance._updateSelectList(AArray.unique(data));
 							}
 						);
 
@@ -641,28 +651,9 @@ AUI.add(
 						var instance = this;
 
 						for (var i = 0; i < data.length; i++) {
+							var tag = data[i];
 
-							var tag = data[i];					
-
-							tag.checked =  instance.entries.indexOfKey(tag.name) > -1 ? TPL_CHECKED : '';
-						}
-
-						instance._renderTemplate(data);
-
-					},
-					
-					_updateSuggestionsList: function(data) {
-						var instance = this;
-
-						for (var i = 0; i < data.length; i++) {				
-
-							var tag = {
-								name: data[i]
-							}
-
-							tag.checked =  instance.entries.indexOfKey(tag.name) > -1 ? TPL_CHECKED : '';
-
-							data[i] = tag;
+							tag.checked =  instance.entries.indexOfKey(tag.name) > -1 ? TPL_CHECKED : STR_BLANK;
 						}
 
 						instance._renderTemplate(data);
