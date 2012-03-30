@@ -132,7 +132,6 @@ portletURL.setParameter("tabs1", tabs1);
 		Liferay.Util.openWindow(
 			{
 				dialog: {
-					centered: true,
 					constrain: true,
 					width: 600
 				},

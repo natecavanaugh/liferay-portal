@@ -87,8 +87,8 @@
 					if (!popUp) {
 						 popUp = new A.Dialog(
 							{
+								align: Liferay.Util.Window.ALIGN_CENTER,
 								bodyContent: content.show(),
-								centered: true,
 								title: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>',
 								modal: true,
 								width: 500

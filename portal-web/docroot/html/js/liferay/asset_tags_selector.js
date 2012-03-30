@@ -200,6 +200,7 @@ AUI.add(
 						if (!instance._popup) {
 							var popup = new A.Dialog(
 								{
+									align: Liferay.Util.Window.ALIGN_CENTER,
 									bodyContent: TPL_LOADING,
 									constrain: true,
 									draggable: true,
