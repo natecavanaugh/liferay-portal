@@ -32,7 +32,7 @@ boolean selectableTree = ParamUtil.getBoolean(request, "selectableTree");
 
 boolean rootNodeExpanded = GetterUtil.getBoolean(SessionClicks.get(request, treeId + "RootNode", null), true);
 
-String modules = "aui-io-request,aui-tree-view,dataschema-xml,datatype-xml";
+String modules = "aui-io-request,aui-tree-view,dataschema-xml,datatype-xml,liferay-store";
 
 if (!selectableTree) {
 	modules += ",liferay-history-manager";
@@ -300,17 +300,9 @@ if (!selectableTree) {
 						TreeUtil.updateSessionTreeClick(<%= LayoutConstants.DEFAULT_PLID %>, event.newVal, '<%= HtmlUtil.escape(treeId) %>SelectedNode');
 					},
 				</c:if>
-				expandedChange: function(event) {
-					var sessionClickURL = themeDisplay.getPathMain() + '/portal/session_click';
 
-					A.io.request(
-						sessionClickURL,
-						{
-							data: {
-								'<%= HtmlUtil.escape(treeId) %>RootNode': event.newVal
-							}
-						}
-					);
+				expandedChange: function(event) {
+					Liferay.Store('<%= HtmlUtil.escape(treeId) %>RootNode', event.newVal);
 				}
 			},
 			alwaysShowHitArea: true,
