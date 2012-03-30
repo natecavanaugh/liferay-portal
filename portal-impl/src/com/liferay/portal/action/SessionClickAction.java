@@ -14,13 +14,13 @@
 
 package com.liferay.portal.action;
 
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.SessionClicks;
 
 import java.util.Enumeration;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,11 +47,22 @@ public class SessionClickAction extends Action {
 				String name = enu.nextElement();
 
 				if (!name.equals("doAsUserId")) {
-					String value = HtmlUtil.escape(
-						ParamUtil.getString(request, name));
+					String value = ParamUtil.getString(request, name);
 
 					SessionClicks.put(request, name, value);
 				}
+			}
+
+			String cmd = ParamUtil.getString(request, "cmd");
+
+			String key = ParamUtil.getString(request, "key");
+
+			if (key != null && cmd.equals("get")) {
+				String result = SessionClicks.get(request, key, cmd);
+
+				ServletOutputStream out = response.getOutputStream();
+
+				out.println(result);
 			}
 
 			return null;
@@ -62,5 +73,4 @@ public class SessionClickAction extends Action {
 			return null;
 		}
 	}
-
 }
