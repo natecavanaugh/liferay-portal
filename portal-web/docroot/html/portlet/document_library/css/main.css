@@ -603,6 +603,7 @@
 	}
 
 	.show-sync-message-icon-container {
+		background-color: #EBEBEB;
 		position: relative;
 	}
 
@@ -859,6 +860,16 @@
 		.document-display-style.display-descriptive, .document-info {
 			zoom: 1;
 		}
+	}
+
+	.show-sync-message-icon-container {
+		background-color: #EBEBEB;
+		background-image: url(@theme_image_path@/application/button_bg_selected.png);
+		height: 21px;
+		position: absolute;
+		right: 0px;
+		width: 21px;
+		z-index: 1;
 	}
 }
 

@@ -1517,7 +1517,7 @@ AUI.add(
 						var instance = this;
 
 						if (paginatorData.name == 'entryPaginator') {
-							var showSyncMessageIcon = A.one('#' + instance.ns('showSyncMessageIcon'));
+							var showSyncMessageIcon = instance.byId('showSyncMessageIcon');
 
 							var syncNotificationNode = instance.byId('syncNotification');
 
@@ -1528,7 +1528,6 @@ AUI.add(
 							else {
 								syncNotificationNode.hide();
 								showSyncMessageIcon.hide();
-
 							}
 						}
 					},
