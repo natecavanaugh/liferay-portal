@@ -303,6 +303,7 @@ body.portlet {
 		background-image: url(../images/portlet/close_borderless.png);
 		background-position: 0 0;
 		background-repeat: no-repeat;
+		display: block;
 	}
 
 	.lfr-message-close-all {
