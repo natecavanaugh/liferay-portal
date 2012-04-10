@@ -518,8 +518,11 @@ AUI.add(
 						instance._handles.push(
 							Liferay.on('portletDragStart', instance._closeActiveMenu, instance),
 							A.getWin().on('resize', A.debounce(instance._positionActiveMenu, 200, instance)),
-							A.getDoc().on(EVENT_CLICK, instance._closeActiveMenu, instance),
-							A.getDoc().on('mouseup', instance._closeActiveMenu, instance)
+							A.getDoc().on(
+								[EVENT_CLICK, 'mouseup'],
+								instance._closeActiveMenu,
+								instance
+							)
 						);
 					}
 
