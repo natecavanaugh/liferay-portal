@@ -23,6 +23,7 @@ import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletOutputStream;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -52,6 +53,19 @@ public class SessionClickAction extends Action {
 
 					SessionClicks.put(request, name, value);
 				}
+			}
+
+			String cmd = ParamUtil.getString(request, "cmd");
+
+			String key = ParamUtil.getString(request, "key");
+
+			if (key != null && cmd.equals("get")){
+			
+				String result = SessionClicks.get(request, key, cmd);
+
+				ServletOutputStream out = response.getOutputStream();
+				
+				out.println(result);			
 			}
 
 			return null;
