@@ -39,6 +39,7 @@ AUI.add(
 						if (!instance._currentPopup) {
 							instance._currentPopup = new A.Dialog(
 								{
+									align: Liferay.Util.Window.ALIGN_CENTER,
 									on: {
 										close: function() {
 											if (Browser.isIe() && Browser.getMajorVersion() == 6) {

@@ -17,6 +17,7 @@ AUI.add(
 		};
 
 		var CONFIG_DEFAULTS_DIALOG = {
+			align: Liferay.Util.Window.ALIGN_CENTER,
 			draggable: true,
 			stack: false,
 			width: 720,
