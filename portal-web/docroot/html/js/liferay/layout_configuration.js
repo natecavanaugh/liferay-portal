@@ -19,6 +19,7 @@
 
 				dialog = new A.Dialog(
 					{
+						align: Liferay.Util.Window.ALIGN_CENTER,
 						on: {
 							visibleChange: function(event) {
 								body.toggleClass('lfr-has-sidebar', event.newVal);
