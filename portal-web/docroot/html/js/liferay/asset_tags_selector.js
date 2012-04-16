@@ -5,6 +5,8 @@ AUI.add(
 
 		var AArray = A.Array;
 
+		var ADialogManager = A.DialogManager;
+
 		var NAME = 'tagselector';
 
 		var CSS_INPUT_NODE = 'lfr-tag-selector-input';
@@ -515,6 +517,10 @@ AUI.add(
 						popup.entriesNode.html(TPL_LOADING);
 
 						popup.show();
+
+						if (popup.get('stack')) {
+							A.later(0, ADialogManager, ADialogManager.bringToTop, popup);
+						}
 					},
 
 					_showSelectPopup: function(event) {
