@@ -377,7 +377,7 @@ hr, .separator {
 .aui-combobox .aui-field-input {
 	padding: 4px 3px 3px;
 	font-size: 11px;
-	height: 15px;
+	height: auto;
 }
 
 .aui-combobox .aui-field {

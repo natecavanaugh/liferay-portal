@@ -36,8 +36,12 @@
 .lfr-actions .lfr-trigger strong {
 	display: block;
 	min-width: 70px;
-	padding: 2px 0 3px;
+	padding: 1px 0 2px;
 	text-align: center;
+}
+
+.ie7 .lfr-actions .lfr-trigger strong {
+	padding: 2px 0 3px;
 }
 
 .ie6 .lfr-actions .lfr-trigger strong {
