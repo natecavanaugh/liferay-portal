@@ -603,7 +603,6 @@
 	}
 
 	.show-sync-message-icon-container {
-		background-color: #EBEBEB;
 		position: relative;
 	}
 
@@ -866,7 +865,6 @@
 		}
 
 		.show-sync-message-icon-container {
-			background-color: #EBEBEB;
 			background-image: url(@theme_image_path@/application/button_bg_selected.png);
 			height: 21px;
 			position: absolute;
