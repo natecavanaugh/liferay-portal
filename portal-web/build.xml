@@ -104,6 +104,18 @@
 
 				<!-- CSS -->
 
+				<copy
+					file="docroot/html/ALLOY_ZIP/build/aui-skin-base/css/reset.css"
+					tofile="docroot/html/themes/_styled/css/reset.css"
+					overwrite="true"
+				/>
+
+				<copy
+					file="docroot/html/ALLOY_ZIP/build/aui-skin-base/css/reset.css"
+					tofile="docroot/html/themes/_unstyled/css/reset.css"
+					overwrite="true"
+				/>
+
 				<property name="alloy.core.css" value="aui-skin-base.css" />
 
 				<concat destfile="docroot/html/ALLOY_ZIP/build/aui-skins/tmp/alloy.css">
