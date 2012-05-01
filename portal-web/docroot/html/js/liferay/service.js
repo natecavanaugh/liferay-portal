@@ -421,6 +421,7 @@ Liferay.Service.registerClass(
 		updateOpenId: true,
 		updateOrganizations: true,
 		updatePassword: true,
+		updatePortrait: true,
 		updateReminderQuery: true,
 		updateScreenName: true,
 		updateStatus: true,

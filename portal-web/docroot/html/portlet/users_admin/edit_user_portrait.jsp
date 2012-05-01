@@ -34,6 +34,7 @@ User selUser = PortalUtil.getSelectedUser(request);
 
 		<aui:form action="<%= editUserPortraitURL %>" enctype="multipart/form-data" method="post" name="fm">
 			<aui:input name="p_u_i_d" type="hidden" value="<%= selUser.getUserId() %>" />
+			<aui:input name="cropRegion" type="hidden" />
 
 			<liferay-ui:error exception="<%= UploadException.class %>" message="an-unexpected-error-occurred-while-uploading-your-file" />
 
@@ -49,20 +50,106 @@ User selUser = PortalUtil.getSelectedUser(request);
 			<liferay-ui:error exception="<%= UserPortraitTypeException.class %>" message="please-enter-a-file-with-a-valid-file-type" />
 
 			<aui:fieldset>
-				<aui:input label='<%= LanguageUtil.format(pageContext, "upload-a-gif-or-jpeg-that-is-x-pixels-tall-and-x-pixels-wide", new Object[] {"120", "100"}, false) %>' name="fileName" size="50" type="file" />
+				<aui:input label='<%= LanguageUtil.format(pageContext, "upload-images-no-larger-than-x-k", PrefsPropsUtil.getLong(PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE)/1024, false) %>' name="fileName" size="50" type="file" />
+
+				<div id="<%= portletDisplay.getNamespace() %>portrait-preview-wrapper">
+					<img id="<%= portletDisplay.getNamespace() %>portrait-preview" style="display: none" />
+				</div>
 
 				<aui:button-row>
-					<aui:button type="submit" />
+					<aui:button name="submitButton" type="submit" />
 
 					<aui:button onClick="window.close();" type="cancel" value="close" />
 				</aui:button-row>
 			</aui:fieldset>
 		</aui:form>
 
-		<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-			<aui:script>
+		<aui:script use="aui-io,json,aui-image-cropper,aui-loading-mask">
+			<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
 				Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />fileName);
-			</aui:script>
-		</c:if>
+			</c:if>
+
+			var imageCropper;
+
+			var cropRegionNode = A.one('#<portlet:namespace />cropRegion');
+			var fileNameNode = A.one('#<portlet:namespace />fileName');
+			var formNode = A.one('#<portlet:namespace />fm');
+			var imageNode = A.one('#<portlet:namespace />portrait-preview');
+			var imageWrapperNode = A.one('#<portlet:namespace />portrait-preview-wrapper');
+			var submitButton = A.one('#<portlet:namespace />submitButton');
+
+			imageNode.on('load', imageLoadHandler);
+			fileNameNode.on('change', fileNameChangeHandler);
+			formNode.on('submit', submitHandler);
+
+			function imageLoadHandler(event) {
+				imageWrapperNode.setStyle('width', 'auto');
+				imageWrapperNode.setStyle('height', 'auto');
+
+				imageWrapperNode.loadingmask.hide();
+
+				imageNode.setStyle('display', 'inline');
+
+				if (imageCropper) {
+					imageCropper.afterImageChange();
+				} else {
+					imageCropper = new A.ImageCropper({
+						srcNode: imageNode
+					}).render();
+				}
+
+				submitButton.attr('disabled', false);
+				submitButton.ancestor('.aui-button').removeClass('aui-button-disabled');
+			}
+
+			function fileNameChangeHandler(event) {
+				var uploadURL = '<portlet:actionURL><portlet:param name="struts_action" value="/users_admin/edit_user_portrait" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD_TEMP %>" /></portlet:actionURL>';
+
+				var previewURL = '<portlet:resourceURL><portlet:param name="struts_action" value="/users_admin/edit_user_portrait" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.GET_TEMP %>" /></portlet:resourceURL>';
+
+				if (!imageWrapperNode.loadingmask) {
+					imageWrapperNode.plug(
+						A.LoadingMask,
+						{
+							zIndex: 20
+						}
+					);
+				}
+
+				var maskHeight = Math.max(imageNode.height(), 50);
+				var maskWidth = Math.max(imageNode.width(), 175);
+
+				imageWrapperNode.setStyle('width', maskWidth);
+				imageWrapperNode.setStyle('height', maskHeight);
+
+				imageWrapperNode.loadingmask.show();
+
+				A.io.request(
+					uploadURL,
+					{
+						method: 'post',
+						form: {
+							id: '<portlet:namespace />fm',
+							upload: true
+						},
+						on: {
+							start: function() {
+								submitButton.attr('disabled', true);
+								submitButton.ancestor('.aui-button').addClass('aui-button-disabled');
+							},
+							complete: function(event, id, obj) {
+								imageNode.set('src', previewURL);
+							}
+						}
+					}
+				);
+			}
+
+			function submitHandler(event) {
+				if (imageCropper != null) {
+					cropRegionNode.set('value', A.JSON.stringify(imageCropper.getCropRegion()));
+				}
+			}
+		</aui:script>
 	</c:otherwise>
 </c:choose>
