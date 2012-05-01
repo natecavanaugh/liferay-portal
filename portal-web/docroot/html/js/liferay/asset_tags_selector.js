@@ -443,7 +443,7 @@ AUI.add(
 							}
 						);
 					},
-		
+
 					_renderIcons: function() {
 						var instance = this;
 
