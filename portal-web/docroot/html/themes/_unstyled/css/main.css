@@ -1,5 +1,7 @@
 /* This is the main CSS that includes other CSS files. */
 
+@import url(reset.css);
+
 @import url(base.css);
 
 @import url(application.css);
