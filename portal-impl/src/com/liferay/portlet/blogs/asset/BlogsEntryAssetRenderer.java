@@ -16,6 +16,7 @@ package com.liferay.portlet.blogs.asset;
 
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.trash.TrashRenderer;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
@@ -23,6 +24,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
+import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.permission.BlogsEntryPermission;
@@ -39,8 +41,10 @@ import javax.portlet.WindowState;
  * @author Jorge Ferrer
  * @author Juan Fernández
  * @author Sergio González
+ * @author Zsolt Berentey
  */
-public class BlogsEntryAssetRenderer extends BaseAssetRenderer {
+public class BlogsEntryAssetRenderer extends BaseAssetRenderer
+	implements TrashRenderer {
 
 	public BlogsEntryAssetRenderer(BlogsEntry entry) {
 		_entry = entry;
@@ -64,12 +68,25 @@ public class BlogsEntryAssetRenderer extends BaseAssetRenderer {
 		return _entry.getGroupId();
 	}
 
+	@Override
+	public String getIconPath(ThemeDisplay themeDisplay) {
+		return getAssetRendererFactory().getIconPath(themeDisplay);
+	}
+
+	public String getPortletId() {
+		return getAssetRendererFactory().getPortletId();
+	}
+
 	public String getSummary(Locale locale) {
 		return HtmlUtil.stripHtml(_entry.getDescription());
 	}
 
 	public String getTitle(Locale locale) {
 		return _entry.getTitle();
+	}
+
+	public String getType() {
+		return BlogsEntryAssetRendererFactory.TYPE;
 	}
 
 	@Override
@@ -129,6 +146,11 @@ public class BlogsEntryAssetRenderer extends BaseAssetRenderer {
 		return _entry.getUuid();
 	}
 
+	public boolean hasDeletePermission(PermissionChecker permissionChecker) {
+		return BlogsEntryPermission.contains(
+			permissionChecker, _entry, ActionKeys.DELETE);
+	}
+
 	@Override
 	public boolean hasEditPermission(PermissionChecker permissionChecker) {
 		return BlogsEntryPermission.contains(
@@ -163,11 +185,18 @@ public class BlogsEntryAssetRenderer extends BaseAssetRenderer {
 		}
 	}
 
-	@Override
-	protected String getIconPath(ThemeDisplay themeDisplay) {
-		return themeDisplay.getPathThemeImages() + "/blogs/blogs.png";
+	private BlogsEntryAssetRendererFactory getAssetRendererFactory() {
+		if (_factory == null) {
+			_factory = (BlogsEntryAssetRendererFactory)
+				AssetRendererFactoryRegistryUtil.
+					getAssetRendererFactoryByClassName(
+							BlogsEntryAssetRendererFactory.CLASS_NAME);
+		}
+
+		return _factory;
 	}
 
 	private BlogsEntry _entry;
+	private BlogsEntryAssetRendererFactory _factory;
 
 }
