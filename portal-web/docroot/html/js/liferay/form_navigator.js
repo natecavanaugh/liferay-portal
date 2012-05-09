@@ -224,6 +224,8 @@ AUI.add(
 				if (id) {
 					id = id.charAt(0) != '#' ? '#' + id : id;
 
+					var li = currentNavItem || instance._navigation.one('[href$=' + id + ']').get('parentNode');
+
 					if (!currentNavItem) {
 						var link = instance._navigation.one('[href$=' + id + ']');
 
