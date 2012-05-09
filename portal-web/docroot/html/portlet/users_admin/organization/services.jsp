@@ -253,15 +253,10 @@ Format timeFormat = FastDateFormatFactoryUtil.getSimpleDateFormat("HH:mm", local
 </aui:fieldset>
 
 <aui:script use="liferay-auto-fields">
-	Liferay.once(
-		'formNavigator:reveal<portlet:namespace />services',
-		function() {
-			new Liferay.AutoFields(
-				{
-					contentBox: '#<portlet:namespace />services > fieldset',
-					fieldIndexes: '<portlet:namespace />orgLaborsIndexes'
-				}
-			).render();
+	new Liferay.AutoFields(
+		{
+			contentBox: '#<portlet:namespace />services > fieldset',
+			fieldIndexes: '<portlet:namespace />orgLaborsIndexes'
 		}
-	);
+	).render();
 </aui:script>

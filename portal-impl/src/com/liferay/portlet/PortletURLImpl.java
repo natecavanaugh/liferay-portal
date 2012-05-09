@@ -1029,6 +1029,7 @@ public class PortletURLImpl
 			if (_anchor && (_windowState != null) &&
 				!_windowState.equals(WindowState.MAXIMIZED) &&
 				!_windowState.equals(LiferayWindowState.EXCLUSIVE) &&
+				!_windowState.equals(LiferayWindowState.EXCLUSIVE_STATEFUL) &&
 				!_windowState.equals(LiferayWindowState.POP_UP)) {
 
 				String lastString = sb.stringAt(sb.index() - 1);
@@ -1137,6 +1138,7 @@ public class PortletURLImpl
 			if (_anchor && (_windowState != null) &&
 				!_windowState.equals(WindowState.MAXIMIZED) &&
 				!_windowState.equals(LiferayWindowState.EXCLUSIVE) &&
+				!_windowState.equals(LiferayWindowState.EXCLUSIVE_STATEFUL) &&
 				!_windowState.equals(LiferayWindowState.POP_UP)) {
 
 				sb.append("wsrp-fragmentID");

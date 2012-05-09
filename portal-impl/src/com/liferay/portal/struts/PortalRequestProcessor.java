@@ -638,6 +638,7 @@ public class PortalRequestProcessor extends TilesRequestProcessor {
 
 			if (themeDisplay.isLifecycleResource() ||
 				themeDisplay.isStateExclusive() ||
+				themeDisplay.isStateExclusiveStateful() ||
 				themeDisplay.isStatePopUp() ||
 				!request.getMethod().equalsIgnoreCase(HttpMethods.GET)) {
 

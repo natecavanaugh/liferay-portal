@@ -15,6 +15,8 @@ AUI.add(
 
 		var STR_HREF = 'href';
 
+		var History = Liferay.HistoryManager;
+
 		var FormNavigator = function(options) {
 			var instance = this;
 
@@ -26,8 +28,31 @@ AUI.add(
 
 			Liferay.after('form:registered', instance._afterFormRegistered, instance);
 
+			Liferay.publish(
+				'formNavigator:reveal',
+				{
+					defaultFn: A.bind('_defRevealFn', instance)
+				}
+			);
+
 			instance._navigation = instance._container.one('.form-navigator');
+			instance._formNavigatorSections = instance._container.oneNS(instance._namespace, '#formNavigatorSections');
 			instance._sections = instance._container.all(SELECTOR_FORM_SECTION);
+
+			instance._formNavigatorSections.plug(
+				[
+					{
+						fn: A.Plugin.ParseContent
+					},
+					{
+						fn: A.LoadingMask
+					}
+				]
+			);
+
+			instance._errorMsg = A.Node.create('<div class="portlet-msg-error aui-helper-hidden">' + Liferay.Language.get('failed-to-load-content') + '</div>');
+
+			instance._formNavigatorSections.append(instance._errorMsg);
 
 			if (instance._navigation) {
 				instance._navigation.delegate('click', instance._onClick, 'li a', instance);
@@ -53,11 +78,16 @@ AUI.add(
 				instance._modifiedSectionsArray = [];
 			}
 
-			instance._revealSection(location.href);
+			//instance._revealSection(location.href);
+			instance._restoreState();
 
 			A.on('formNavigator:trackChanges', instance._trackChanges, instance);
 
 			var inputs = instance._container.all('input, select, textarea');
+
+			History.after('stateChange',function(event) {
+				console.log('stateChange');
+			});
 
 			if (inputs) {
 				inputs.on(
@@ -79,6 +109,14 @@ AUI.add(
 		};
 
 		FormNavigator.prototype = {
+			_restoreState: function() {
+				var instance = this;
+
+				if (!History.HTML5) {
+					instance._revealSection('#' + Liferay.HistoryManager.get(instance._namespace + 'historyKey'));
+				}
+			},
+
 			_addModifiedSection: function (section) {
 				var instance = this;
 
@@ -152,13 +190,41 @@ AUI.add(
 				}
 			},
 
+			_defRevealFn: function(event) {
+				var instance = this;
+
+				var prevSection = A.one('#' + instance._currentSection);
+
+				if (prevSection) {
+					prevSection._hideClass = CSS_HIDDEN;
+					prevSection.hide();
+				}
+
+				var namespacedId = event.id;
+				var section = event.section;
+
+				instance._currentSection = namespacedId;
+				console.log(instance._currentSection);
+
+				instance._sections.removeClass(CSS_SELECTED).addClass(CSS_HIDDEN);
+
+				if (section) {
+					section.addClass(CSS_SELECTED).removeClass(CSS_HIDDEN);
+					console.log(section, section.test(':hidden'), CSS_HIDDEN);
+				}
+			},
+
 			_revealSection: function(id, currentNavItem) {
 				var instance = this;
+
+				instance._errorMsg.hide();
 
 				id = instance._getId(id);
 
 				if (id) {
 					id = id.charAt(0) != '#' ? '#' + id : id;
+
+					var li = currentNavItem || instance._navigation.one('[href$=' + id + ']').get('parentNode');
 
 					if (!currentNavItem) {
 						var link = instance._navigation.one('[href$=' + id + ']');
@@ -173,21 +239,78 @@ AUI.add(
 					var namespacedId = id[1];
 
 					if (currentNavItem && namespacedId) {
-						Liferay.fire('formNavigator:reveal' + namespacedId);
+						var uri = location.href.split('#')[0];
 
-						var section = A.one('#' + namespacedId);
-						var selected = instance._navigation.one(SELECTOR_LIST_ITEM_SELECTED);
+						var baseId = namespacedId;
 
-						if (selected) {
-							selected.removeClass(CSS_SELECTED);
+						if (uri.indexOf('historyKey') == -1) {
+							var params = {};
+
+							params[instance._namespace + 'historyKey'] = namespacedId;
+
+							uri = Liferay.Util.addParams(params, uri);
+						}
+						else {
+							var re = new RegExp('(?:' + instance._namespace + ')?historyKey=(?:[^&]*)?', 'g');
+
+							uri = uri.replace(re, instance._namespace + 'historyKey=' + namespacedId);
 						}
 
-						currentNavItem.addClass(CSS_SELECTED);
+						uri = uri.replace(/p_p_state=(?:[^&]*)?/g, 'p_p_state=exclusive_stateful');
 
-						instance._sections.removeClass(CSS_SELECTED).addClass(CSS_HIDDEN);
+						var section = A.one('#' + namespacedId);
 
-						if (section) {
-							section.addClass(CSS_SELECTED).removeClass(CSS_HIDDEN);
+						if (li) {
+							var selected = instance._navigation.one(SELECTOR_LIST_ITEM_SELECTED);
+
+							if (selected) {
+								selected.removeClass(CSS_SELECTED);
+							}
+
+							li.addClass(CSS_SELECTED);
+						}
+
+						var eventData = {
+							id: namespacedId,
+							section: section
+						};
+
+						if (!section) {
+							instance._formNavigatorSections.loadingmask.show();
+
+							A.io.request(
+								uri,
+								{
+									selector: '#' + namespacedId,
+									after: {
+										success: function(event) {
+											var section = this.get('responseData').item(0);
+
+											if (section) {
+												instance._formNavigatorSections.prepend(section);
+
+												instance._sections.push(section);
+
+												eventData.section = section;
+
+												Liferay.fire('formNavigator:reveal', eventData);
+											}
+											else {
+												if (instance._currentSection) {
+													A.one('#' + instance._currentSection).addClass(CSS_HIDDEN);
+												}
+
+												instance._errorMsg.show();
+											}
+
+											instance._formNavigatorSections.loadingmask.hide();
+										}
+									}
+								}
+							);
+						}
+						else {
+							Liferay.fire('formNavigator:reveal', eventData);
 						}
 					}
 				}
@@ -220,7 +343,11 @@ AUI.add(
 			_updateHash: function(section) {
 				var instance = this;
 
-				location.hash = instance._hashKey + section;
+				var params = {};
+
+				params[instance._namespace + 'historyKey'] = section;
+
+				History.add(params);
 			},
 
 			_updateSectionStatus: function() {
@@ -260,6 +387,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base']
+		requires: ['aui-base', 'aui-io-plugin', 'liferay-history-manager']
 	}
 );
