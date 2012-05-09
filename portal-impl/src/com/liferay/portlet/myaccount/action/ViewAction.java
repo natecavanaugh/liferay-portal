@@ -45,10 +45,6 @@ public class ViewAction extends PortletAction {
 			return mapping.findForward("portlet.my_account.view");
 		}
 
-		if (!renderRequest.getWindowState().equals(WindowState.MAXIMIZED)) {
-			return mapping.findForward("portlet.my_account.view");
-		}
-
 		User user = PortalUtil.getUser(renderRequest);
 
 		RenderRequestImpl renderRequestImpl = (RenderRequestImpl)renderRequest;
