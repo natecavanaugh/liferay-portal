@@ -29,11 +29,11 @@ import javax.portlet.RenderResponse;
  */
 public interface TrashRenderer {
 
-	public static final String TEMPLATE_DEFAULT = "default";
-
 	public String getIconPath(PortletRequest portletRequest);
 
 	public String getPortletId();
+
+	public String getSummary(Locale locale);
 
 	public String getTitle(Locale locale);
 
