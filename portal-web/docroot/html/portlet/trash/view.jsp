@@ -83,25 +83,25 @@ portletURL.setParameter("tabs1", tabs1);
 
 			TrashRenderer trashRenderer = trashHandler.getTrashRenderer(entry.getClassPK());
 
-			String viewContentURL = null;
+			String viewContentURLString = null;
 
 			if (trashRenderer != null) {
-				PortletURL portletURL = renderResponse.createRenderURL();
+				PortletURL viewContentURL = renderResponse.createRenderURL();
 
-				portletURL.setParameter("struts_action", "/trash/view_content");
-				portletURL.setParameter("redirect", currentURL);
-				portletURL.setParameter("type", trashRenderer.getType());
-				portletURL.setParameter("entryId", String.valueOf(entry.getEntryId()));
-				portletURL.setParameter("showActions", String.valueOf(Boolean.FALSE));
-				portletURL.setParameter("showAssetMetadata", String.valueOf(Boolean.TRUE));
-				portletURL.setParameter("showEditURL", String.valueOf(Boolean.FALSE));
+				viewContentURL.setParameter("struts_action", "/trash/view_content");
+				viewContentURL.setParameter("redirect", currentURL);
+				viewContentURL.setParameter("type", trashRenderer.getType());
+				viewContentURL.setParameter("entryId", String.valueOf(entry.getEntryId()));
+				viewContentURL.setParameter("showActions", String.valueOf(Boolean.FALSE));
+				viewContentURL.setParameter("showAssetMetadata", String.valueOf(Boolean.TRUE));
+				viewContentURL.setParameter("showEditURL", String.valueOf(Boolean.FALSE));
 
-				viewContentURL = portletURL.toString();
+				viewContentURLString = viewContentURL.toString();
 			}
 			%>
 
 			<liferay-ui:search-container-column-text
-				href="<%= viewContentURL %>"
+				href="<%= viewContentURLString %>"
 				name="name"
 			>
 				<liferay-ui:icon label="<%= true %>" message="<%= trashRenderer.getTitle(locale) %>" src="<%= trashRenderer.getIconPath(renderRequest) %>" />
