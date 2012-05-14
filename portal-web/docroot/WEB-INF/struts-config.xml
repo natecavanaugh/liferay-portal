@@ -1850,6 +1850,10 @@
 
 		<!-- Trash -->
 
+		<action path="/trash/edit_discussion" type="com.liferay.portlet.messageboards.action.EditDiscussionAction">
+			<forward name="portlet.message_boards.error" path="portlet.journal_content.error" />
+		</action>
+
 		<action path="/trash/edit_entry" type="com.liferay.portlet.trash.action.EditEntryAction">
 			<forward name="portlet.trash.view" path="portlet.trash.view" />
 		</action>

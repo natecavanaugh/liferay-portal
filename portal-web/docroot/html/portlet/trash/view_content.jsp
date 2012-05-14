@@ -19,6 +19,7 @@
 <div class="asset-content">
 
 	<%
+	String redirect = ParamUtil.getString(request, "redirect");
 	long entryId = ParamUtil.getLong(request, "entryId");
 
 	TrashEntry trashEntry = TrashEntryLocalServiceUtil.getEntry(entryId);
@@ -27,29 +28,67 @@
 
 	TrashRenderer trashRenderer = trashHandler.getTrashRenderer(trashEntry.getClassPK());
 
-	String template = null;
-
-	if (trashRenderer instanceof AssetRenderer) {
-		template = AssetRenderer.TEMPLATE_FULL_CONTENT;
-	}
-	else {
-		template = TrashRenderer.TEMPLATE_DEFAULT;
-	}
-
-	String path = trashRenderer.render(renderRequest, renderResponse, template);
-	String redirect = ParamUtil.getString(request, "redirect");
-	String title = trashRenderer.getTitle(locale);
+	String path = trashRenderer.render(renderRequest, renderResponse, AssetRenderer.TEMPLATE_FULL_CONTENT);
 	%>
 
-	<c:if test="<%= !(trashRenderer instanceof AssetRenderer) %>">
-		<liferay-ui:header
-			backURL="<%= redirect %>"
-			localizeTitle="<%= false %>"
-			title="<%= title %>"
-		/>
-	</c:if>
+	<liferay-ui:header
+		backURL="<%= redirect %>"
+		localizeTitle="<%= false %>"
+		title="<%= trashRenderer.getTitle(locale) %>"
+	/>
 
-	<c:if test="<%= Validator.isNotNull(path) %>">
-		<liferay-util:include page="<%= path %>" portletId="<%= trashRenderer.getPortletId() %>" />
+	<c:choose>
+		<c:when test="<%= Validator.isNotNull(path) %>">
+			<liferay-util:include page="<%= path %>" portletId="<%= trashRenderer.getPortletId() %>">
+				<liferay-util:param name="showHeader" value="<%= Boolean.FALSE.toString() %>" />
+			</liferay-util:include>
+		</c:when>
+		<c:otherwise>
+			<%= trashRenderer.getSummary(locale) %>
+		</c:otherwise>
+	</c:choose>
+
+	<c:if test="<%= trashRenderer instanceof AssetRenderer %>">
+
+		<%
+		AssetRenderer assetRenderer = (AssetRenderer)trashRenderer;
+		%>
+
+		<c:if test="<%= !assetRenderer.getAssetRendererFactoryClassName().equals(DLFileEntryAssetRendererFactory.CLASS_NAME) %>">
+			<div class="asset-ratings">
+				<liferay-ui:ratings
+					className="<%= trashEntry.getClassName() %>"
+					classPK="<%= trashEntry.getClassPK() %>"
+				/>
+			</div>
+
+			<%
+			AssetEntry entry = AssetEntryLocalServiceUtil.getEntry(trashEntry.getClassName(), trashEntry.getClassPK());
+			%>
+
+			<div class="asset-related-assets">
+				<liferay-ui:asset-links
+					assetEntryId="<%= entry.getEntryId() %>"
+				/>
+			</div>
+
+			<c:if test="<%= Validator.isNotNull(assetRenderer.getDiscussionPath()) %>">
+				<portlet:actionURL var="discussionURL">
+					<portlet:param name="struts_action" value="/trash/edit_discussion" />
+				</portlet:actionURL>
+
+				<div class="asset-discussion">
+					<liferay-ui:discussion
+						className="<%= trashEntry.getClassName() %>"
+						classPK="<%= trashEntry.getClassPK() %>"
+						formAction="<%= discussionURL %>"
+						formName='<%= "fm" + trashEntry.getClassPK() %>'
+						redirect="<%= currentURL %>"
+						subject="<%= trashRenderer.getTitle(locale) %>"
+						userId="<%= trashEntry.getUserId() %>"
+					/>
+				</div>
+			</c:if>
+		</c:if>
 	</c:if>
 </div>
