@@ -29,7 +29,6 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
-import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.service.permission.DLFileEntryPermission;
@@ -56,6 +55,10 @@ public class DLFileEntryAssetRenderer extends BaseAssetRenderer
 
 		_fileEntry = fileEntry;
 		_fileVersion = fileVersion;
+	}
+
+	public String getAssetRendererFactoryClassName() {
+		return DLFileEntryAssetRendererFactory.CLASS_NAME;
 	}
 
 	public long getClassPK() {
@@ -86,7 +89,8 @@ public class DLFileEntryAssetRenderer extends BaseAssetRenderer
 
 	@Override
 	public String getIconPath(ThemeDisplay themeDisplay) {
-		return getAssetRendererFactory().getIconPath(themeDisplay);
+		return themeDisplay.getPathThemeImages() + "/file_system/small/" +
+			_fileEntry.getIcon() + ".png";
 	}
 
 	public String getPortletId() {
@@ -219,18 +223,6 @@ public class DLFileEntryAssetRenderer extends BaseAssetRenderer
 		}
 	}
 
-	private DLFileEntryAssetRendererFactory getAssetRendererFactory() {
-		if (_factory == null) {
-			_factory = (DLFileEntryAssetRendererFactory)
-				AssetRendererFactoryRegistryUtil.
-					getAssetRendererFactoryByClassName(
-						DLFileEntryAssetRendererFactory.CLASS_NAME);
-		}
-
-		return _factory;
-	}
-
-	private DLFileEntryAssetRendererFactory _factory;
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;
 

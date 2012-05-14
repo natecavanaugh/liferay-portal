@@ -24,7 +24,6 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
-import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.permission.BlogsEntryPermission;
@@ -50,6 +49,10 @@ public class BlogsEntryAssetRenderer extends BaseAssetRenderer
 		_entry = entry;
 	}
 
+	public String getAssetRendererFactoryClassName() {
+		return BlogsEntryAssetRendererFactory.CLASS_NAME;
+	}
+
 	public long getClassPK() {
 		return _entry.getEntryId();
 	}
@@ -70,7 +73,7 @@ public class BlogsEntryAssetRenderer extends BaseAssetRenderer
 
 	@Override
 	public String getIconPath(ThemeDisplay themeDisplay) {
-		return getAssetRendererFactory().getIconPath(themeDisplay);
+		return themeDisplay.getPathThemeImages() + "/blogs/blogs.png";
 	}
 
 	public String getPortletId() {
@@ -185,18 +188,6 @@ public class BlogsEntryAssetRenderer extends BaseAssetRenderer
 		}
 	}
 
-	private BlogsEntryAssetRendererFactory getAssetRendererFactory() {
-		if (_factory == null) {
-			_factory = (BlogsEntryAssetRendererFactory)
-				AssetRendererFactoryRegistryUtil.
-					getAssetRendererFactoryByClassName(
-							BlogsEntryAssetRendererFactory.CLASS_NAME);
-		}
-
-		return _factory;
-	}
-
 	private BlogsEntry _entry;
-	private BlogsEntryAssetRendererFactory _factory;
 
 }
