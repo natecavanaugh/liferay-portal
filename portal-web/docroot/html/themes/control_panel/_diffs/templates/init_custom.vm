@@ -2,8 +2,4 @@
 
 #set ($panelsMinimized = $getterUtil.getBoolean($sessionClicks.get($request, "control-panel-sidebar-minimized", "false")))
 
-#if ($panelsMinimized == true)
-	#set ($css_class = "${css_class} panels-minimized")
-#end
-
 #set ($css_class = "${css_class} display-panel-columns")

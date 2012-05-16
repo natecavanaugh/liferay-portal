@@ -158,7 +158,7 @@
 							}
 							%>
 
-							<liferay-ui:icon-menu align="left" direction="down" icon="<%= icon %>" id="groupSelector" localizeMessage="<%= false %>" message="<%= HtmlUtil.escape(StringUtil.shorten(curGroupName, 25)) %>">
+							<liferay-ui:icon-menu align="left" direction="down" icon="<%= icon %>" id="groupSelector" message="<%= HtmlUtil.escape(StringUtil.shorten(curGroupName, 19)) %>">
 
 								<%
 								for (int i = 0; i < manageableSites.size(); i++) {
@@ -187,7 +187,6 @@
 
 									<liferay-ui:icon
 										image="<%= image %>"
-										localizeMessage="<%= false %>"
 										message="<%= HtmlUtil.escape(message) %>"
 										url="<%= url %>"
 									/>
@@ -281,7 +280,7 @@
 					%>
 
 							<li class="<%= ppid.equals(portletId) ? "selected-portlet" : "" %>">
-								<a href="<liferay-portlet:renderURL doAsGroupId="<%= themeDisplay.getScopeGroupId() %>" portletName="<%= portlet.getRootPortletId() %>" windowState="<%= WindowState.MAXIMIZED.toString() %>" />" id="<portlet:namespace />portlet_<%= portletId %>">
+								<a href="<liferay-portlet:renderURL doAsGroupId="<%= themeDisplay.getScopeGroupId() %>" portletName="<%= portlet.getRootPortletId() %>" windowState="<%= WindowState.MAXIMIZED.toString() %>" />">
 									<c:choose>
 										<c:when test="<%= Validator.isNull(portlet.getIcon()) %>">
 											<liferay-ui:icon src='<%= themeDisplay.getPathContext() + "/html/icons/default.png" %>' />
@@ -332,6 +331,277 @@
 
 	</liferay-ui:panel-container>
 </div>
+
+<div class="styled-select">
+
+	<select id="styledselect" onChange="location.href=this.value;">
+		<%
+		String beforeMenu = "";
+		String sitesMenu = "";
+		String ppid = GetterUtil.getString((String)request.getAttribute("control_panel.jsp-ppid"), layoutTypePortlet.getStateMaxPortletId());
+
+		String category = PortalUtil.getControlPanelCategory(ppid, themeDisplay);
+
+		String[] allCategories = PortletCategoryKeys.ALL;
+
+		String controlPanelCategory = HttpUtil.getParameter(PortalUtil.getCurrentURL(request), "controlPanelCategory", false);
+
+		if (Validator.isNotNull(controlPanelCategory)) {
+			allCategories = new String[] {controlPanelCategory};
+		}
+
+		for (String curCategory : allCategories) {
+			Collection<Portlet> categoryPortlets = PortalUtil.getControlPanelPortlets(themeDisplay.getCompanyId(), curCategory);
+
+			List<Layout> scopeLayouts = new ArrayList<Layout>();
+
+			String curGroupLabel = null;
+			Group curGroup = null;
+
+			String title = null;
+
+			if (curCategory.equals(PortletCategoryKeys.MY)) {
+				title = HtmlUtil.escape(StringUtil.shorten(user.getFullName(), 25));
+			}
+			else if (curCategory.equals(PortletCategoryKeys.CONTENT)) {
+				Layout scopeLayout = null;
+
+				curGroup = themeDisplay.getScopeGroup();
+
+				if (curGroup.isLayout()) {
+					scopeLayout = LayoutLocalServiceUtil.getLayout(curGroup.getClassPK());
+
+					curGroup = scopeLayout.getGroup();
+				}
+
+				List<Group> manageableSites = null;
+
+				if (Validator.isNotNull(controlPanelCategory)) {
+					manageableSites = new ArrayList<Group>();
+
+					if (curGroup.isUser()) {
+						manageableSites.add(user.getGroup());
+					}
+					else {
+						long groupId = GetterUtil.getLong(HttpUtil.getParameter(PortalUtil.getCurrentURL(request), "doAsGroupId", false));
+
+						Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+						manageableSites.add(group);
+					}
+				}
+				else {
+					manageableSites = GroupServiceUtil.getManageableSites(categoryPortlets, PropsValues.CONTROL_PANEL_NAVIGATION_MAX_SITES);
+
+					Group userGroup = user.getGroup();
+
+					if (userGroup.hasPrivateLayouts() || userGroup.hasPublicLayouts()) {
+						manageableSites.add(0, userGroup);
+					}
+
+					if (PortalUtil.isCompanyControlPanelVisible(themeDisplay)) {
+						Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(themeDisplay.getCompanyId());
+
+						manageableSites.add(0, companyGroup);
+					}
+				}
+
+				Group curLiveGroup = curGroup;
+
+				if (curGroup.isStagingGroup()) {
+					curLiveGroup = curGroup.getLiveGroup();
+				}
+
+				if (!manageableSites.isEmpty() && !manageableSites.contains(curLiveGroup)) {
+					if (curLiveGroup.isSite() && PortletPermissionUtil.contains(permissionChecker, curLiveGroup.getGroupId(), 0, categoryPortlets, ActionKeys.ACCESS_IN_CONTROL_PANEL)) {
+						manageableSites.add(0, curLiveGroup);
+					}
+					else {
+						curGroup = manageableSites.get(0);
+
+						curLiveGroup = curGroup;
+
+						themeDisplay.setScopeGroupId(curGroup.getGroupId());
+					}
+				}
+
+				String curGroupName = null;
+
+				if (curGroup.isUser() && (curGroup.getClassPK() == user.getUserId())) {
+					curGroupName = LanguageUtil.format(pageContext, "x-personal-site", curLiveGroup.getDescriptiveName(locale));
+				}
+				else {
+					curGroupName = curLiveGroup.getDescriptiveName(locale);
+				}
+
+				if (category.equals(PortletCategoryKeys.CONTENT)) {
+					PortalUtil.addPortletBreadcrumbEntry(request, curGroupName, null);
+				}
+
+				if (scopeLayout == null) {
+					curGroupLabel = LanguageUtil.get(pageContext, "default");
+				}
+				else {
+					curGroupLabel = scopeLayout.getName(locale);
+
+					if (category.equals(PortletCategoryKeys.CONTENT)) {
+						PortalUtil.addPortletBreadcrumbEntry(request, curGroupLabel, null);
+					}
+				}
+				%>
+
+				<liferay-util:buffer var="groupSelectorIconMenu">
+					<c:choose>
+						<c:when test="<%= !manageableSites.isEmpty() %>">
+
+							<%
+							String icon = themeDisplay.getPathThemeImages() + "/common/site_icon.png";
+
+							if (curGroup.isCompany()) {
+								icon = themeDisplay.getPathThemeImages() + "/common/folder.png";
+							}
+							else if (curGroup.isOrganization()) {
+								icon = themeDisplay.getPathThemeImages() + "/common/organization_icon.png";
+							}
+							else if (curGroup.isUser()) {
+								icon = themeDisplay.getPathThemeImages() + "/common/user_icon.png";
+							}
+							%>
+
+							<liferay-ui:icon-menu align="left" direction="down" icon="<%= icon %>" id="groupSelector" message="<%= HtmlUtil.escape(StringUtil.shorten(curGroupName, 25)) %>">
+
+								<%
+								for (int i = 0; i < manageableSites.size(); i++) {
+									boolean selected = false;
+									Group group = manageableSites.get(i);
+
+									String message = group.getDescriptiveName(locale);
+
+									if (group.getDescriptiveName(locale) == curGroupName) {
+										selected = true;
+									}
+
+									if (group.isCompany()) {
+
+									}
+									else if (group.isOrganization()) {
+
+									}
+									else if (group.isUser()) {
+
+										message = LanguageUtil.format(pageContext, "x-personal-site", group.getDescriptiveName(locale));
+									}
+
+									String url = null;
+
+									if (manageableSites.size() > 1) {
+
+										url = HttpUtil.setParameter(PortalUtil.getCurrentURL(request), "doAsGroupId", group.getGroupId());
+
+									}
+								%>
+
+									<option value="<%= url %>" <%= selected ? "selected" : "" %>><%= HtmlUtil.escape(StringUtil.shorten(message, 21)) %></option>
+
+								<%
+								}
+								%>
+
+							</liferay-ui:icon-menu>
+
+						</c:when>
+						<c:otherwise>
+
+							<option value="" ><%= HtmlUtil.escape(StringUtil.shorten(curGroupName, 25)) %></option>
+						</c:otherwise>
+					</c:choose>
+				</liferay-util:buffer>
+
+				<%
+				scopeLayouts.addAll(LayoutLocalServiceUtil.getScopeGroupLayouts(curGroup.getGroupId(), false));
+
+				scopeLayouts.addAll(LayoutLocalServiceUtil.getScopeGroupLayouts(curGroup.getGroupId(), true));
+				sitesMenu = groupSelectorIconMenu;
+				title = LanguageUtil.get(pageContext, PortletCategoryKeys.CONTENT) + " for " + curGroupName;
+			}
+			else if (curCategory.equals(PortletCategoryKeys.PORTAL) && (CompanyLocalServiceUtil.getCompaniesCount(false) > 1)) {
+				title = HtmlUtil.escape(company.getName());
+			}
+			else {
+				title = LanguageUtil.get(pageContext, "category." + curCategory);
+			}
+
+			List<Portlet> portlets = PortalUtil.getControlPanelPortlets(curCategory, themeDisplay);
+
+		%>
+
+			<liferay-util:buffer var="categoryPortletsContent">
+				<c:if test="<%= !scopeLayouts.isEmpty() && curCategory.equals(PortletCategoryKeys.CONTENT) %>">
+
+						<optgroup label='<%= LanguageUtil.get(pageContext, "scope") + StringPool.COLON + StringPool.SPACE + curGroupLabel %>'>
+
+									<option value="<%= HttpUtil.setParameter(PortalUtil.getCurrentURL(request), "doAsGroupId", curGroup.getGroupId()) %>" >default</option>
+
+							<%
+							for (Layout curScopeLayout : scopeLayouts) {
+							%>
+
+						<option value="<%= HttpUtil.setParameter(PortalUtil.getCurrentURL(request), "doAsGroupId", curScopeLayout.getScopeGroup().getGroupId()) %>"><%= HtmlUtil.escape(curScopeLayout.getName(locale)) %></option>
+
+							<%
+							}
+							%>
+
+						</optgroup>
+
+				</c:if>
+
+					<%
+					for (Portlet portlet : portlets) {
+						if (portlet.isActive() && !portlet.isInstanceable()) {
+							String portletId = portlet.getPortletId();
+					%>
+
+									<%= PortalUtil.getPortletTitle(portlet, application, locale) %>
+
+							<option <%= ppid.equals(portletId) ? "selected" : "" %> value="<liferay-portlet:renderURL doAsGroupId="<%= themeDisplay.getScopeGroupId() %>" portletName="<%= portlet.getRootPortletId() %>" windowState="<%= WindowState.MAXIMIZED.toString() %>" />" ><%= PortalUtil.getPortletTitle(portlet, application, locale) %></option>
+
+					<%
+						}
+					}
+					%>
+			</liferay-util:buffer>
+
+			<c:choose>
+				<c:when test="<%= Validator.isNotNull(controlPanelCategory) %>">
+
+							<%= categoryPortletsContent %>
+
+				</c:when>
+				<c:otherwise>
+					<c:if test="<%= !portlets.isEmpty() %>">
+							<optgroup label=" <%= title %>">
+								<%= categoryPortletsContent %>
+							</optgroup>
+
+					</c:if>
+				</c:otherwise>
+			</c:choose>
+
+		<%
+		}
+		%>
+
+	</select>
+
+	<span class="styled-select"></span>
+</div>
+
+<select id="site-select" onChange="location.href=this.value;">
+	<%= sitesMenu %>
+</select>
+
+<span class="site-select"></span>
 
 <aui:script use="liferay-panel">
 	var trigger = A.one('#<portlet:namespace />groupSelector a');

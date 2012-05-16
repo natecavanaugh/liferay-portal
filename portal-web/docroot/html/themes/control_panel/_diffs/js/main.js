@@ -2,7 +2,7 @@ Liferay.Util.portletTitleEdit = function() {
 };
 
 if (!themeDisplay.isStatePopUp()) {
-	AUI().ready('aui-live-search', 'aui-overlay-context-panel', 'event-mouseenter', 'liferay-message', 'liferay-panel', 'liferay-store', 'node-focusmanager', 'transition',
+	AUI().ready('aui-live-search', 'aui-io-request', 'aui-overlay-context-panel', 'aui-viewport', 'event-mouseenter', 'liferay-message', 'liferay-panel', 'liferay-store', 'node-focusmanager', 'transition',
 		function(A) {
 			var body = A.getBody();
 
@@ -124,6 +124,30 @@ if (!themeDisplay.isStatePopUp()) {
 							instance._searchActive = false;
 						}
 					);
+
+					showNavigationAnchor.on(
+						'click', 
+						function(event){
+							body.removeClass(CSS_SEARCH_PANEL_ACTIVE);
+
+							instance._searchPanelInput.val('').focus();
+
+							searchNodes.show();
+
+							instance._searchActive = false;
+						}
+					);
+				},
+
+				_createDataConnection: function() {
+					var instance = this;
+
+					instance._saveData = A.io.request(
+						themeDisplay.getPathMain() + '/portal/session_click',
+						{
+							autoLoad: false
+						}
+					);
 				},
 
 				_createFocusManager: function() {
@@ -221,6 +245,41 @@ if (!themeDisplay.isStatePopUp()) {
 					var panelToggleButton = togglePanels.one('a');
 
 					controlPanelTools.append(togglePanels);
+
+					var showNavigation = A.Node.create('<li class="show-navigation" />');
+					var showNavigationAnchor = A.Node.create('<a href="javascript:;"><span id="show-navigation"></span></a>');
+
+					showNavigation.append(showNavigationAnchor);
+					showNavigationAnchor.on('click', function(event){
+						A.getBody().toggleClass('panels-minimized');
+					});
+					A.one('.search-panels').on('click', function(event){
+						A.getBody().removeClass('panels-minimized');
+					});
+					A.one('.pin-dockbar').placeAfter(showNavigation);
+
+					var orientation = window.orientation;
+
+					if (orientation == 0 || orientation == 180) {
+						A.getBody().addClass('panels-minimized');
+					}
+					else {
+						A.getBody().removeClass('panels-minimized');
+					}
+
+					A.getWin().on('orientationchange', function(event) {
+						var orientation = window.orientation;
+
+						if (orientation == 0 || orientation == 180) {
+							A.getBody().addClass('panels-minimized');
+						}
+						else {
+							A.one("#styledselect").blur();
+							A.one("#site-select").blur();
+
+							A.getBody().removeClass('panels-minimized');
+						}
+					});
 
 					searchPanelInput.attr('autocomplete', 'off');
 
