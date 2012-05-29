@@ -221,11 +221,11 @@ public class WikiDisplayPortletDataHandlerImpl extends BasePortletDataHandler {
 				portletDataContext, pageElement, page);
 		}
 
-		Map<Long, Long> nodePKs =
+		Map<Long, Long> nodeIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				WikiNode.class);
 
-		for (long nodeId : nodePKs.values()) {
+		for (long nodeId : nodeIds.values()) {
 			WikiCacheUtil.clearCache(nodeId);
 		}
 
@@ -233,7 +233,7 @@ public class WikiDisplayPortletDataHandlerImpl extends BasePortletDataHandler {
 			portletPreferences.getValue("nodeId", StringPool.BLANK));
 
 		if (nodeId > 0) {
-			nodeId = MapUtil.getLong(nodePKs, nodeId, nodeId);
+			nodeId = MapUtil.getLong(nodeIds, nodeId, nodeId);
 
 			portletPreferences.setValue("nodeId", String.valueOf(nodeId));
 		}

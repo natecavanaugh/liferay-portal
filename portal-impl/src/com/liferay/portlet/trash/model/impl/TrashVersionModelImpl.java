@@ -79,7 +79,9 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
 				"value.object.column.bitmask.enabled.com.liferay.portlet.trash.model.TrashVersion"),
 			true);
-	public static long ENTRYID_COLUMN_BITMASK = 1L;
+	public static long CLASSNAMEID_COLUMN_BITMASK = 1L;
+	public static long CLASSPK_COLUMN_BITMASK = 2L;
+	public static long ENTRYID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.trash.model.TrashVersion"));
 
@@ -207,7 +209,19 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 	}
 
 	public void setClassNameId(long classNameId) {
+		_columnBitmask |= CLASSNAMEID_COLUMN_BITMASK;
+
+		if (!_setOriginalClassNameId) {
+			_setOriginalClassNameId = true;
+
+			_originalClassNameId = _classNameId;
+		}
+
 		_classNameId = classNameId;
+	}
+
+	public long getOriginalClassNameId() {
+		return _originalClassNameId;
 	}
 
 	public long getClassPK() {
@@ -215,7 +229,19 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 	}
 
 	public void setClassPK(long classPK) {
+		_columnBitmask |= CLASSPK_COLUMN_BITMASK;
+
+		if (!_setOriginalClassPK) {
+			_setOriginalClassPK = true;
+
+			_originalClassPK = _classPK;
+		}
+
 		_classPK = classPK;
+	}
+
+	public long getOriginalClassPK() {
+		return _originalClassPK;
 	}
 
 	public int getStatus() {
@@ -321,6 +347,14 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 
 		trashVersionModelImpl._setOriginalEntryId = false;
 
+		trashVersionModelImpl._originalClassNameId = trashVersionModelImpl._classNameId;
+
+		trashVersionModelImpl._setOriginalClassNameId = false;
+
+		trashVersionModelImpl._originalClassPK = trashVersionModelImpl._classPK;
+
+		trashVersionModelImpl._setOriginalClassPK = false;
+
 		trashVersionModelImpl._columnBitmask = 0;
 	}
 
@@ -402,7 +436,11 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 	private long _originalEntryId;
 	private boolean _setOriginalEntryId;
 	private long _classNameId;
+	private long _originalClassNameId;
+	private boolean _setOriginalClassNameId;
 	private long _classPK;
+	private long _originalClassPK;
+	private boolean _setOriginalClassPK;
 	private int _status;
 	private long _columnBitmask;
 	private TrashVersion _escapedModelProxy;

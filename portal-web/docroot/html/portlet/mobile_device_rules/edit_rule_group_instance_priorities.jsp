@@ -36,7 +36,7 @@ List<MDRRuleGroupInstance> ruleGroupInstances = MDRRuleGroupInstanceServiceUtil.
 
 <liferay-ui:header
 	backURL="<%= redirect %>"
-	title="manage-rule-groups-priorities"
+	title="manage-rule-group-priorities"
 />
 
 <div class="portlet-msg-info">

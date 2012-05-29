@@ -294,18 +294,40 @@ public class TrashEntryLocalServiceUtil {
 	}
 
 	/**
+	* Deletes the trash entry with the primary key.
+	*
+	* @param entryId the primary key of the trash entry
+	* @throws PortalException if a trash entry with the primary key could not
+	be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.trash.model.TrashEntry deleteEntry(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().deleteEntry(entryId);
+	}
+
+	/**
 	* Deletes the trash entry with the entity class name and primary key.
 	*
 	* @param className the class name of entity
 	* @param classPK the primary key of the entry
-	* @throws PortalException if the user did not have permission to delete the
-	entry
+	* @throws PortalException if a trash entry with the primary key could not
+	be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void deleteEntry(java.lang.String className, long classPK)
+	public static com.liferay.portlet.trash.model.TrashEntry deleteEntry(
+		java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteEntry(className, classPK);
+		return getService().deleteEntry(className, classPK);
+	}
+
+	public static com.liferay.portlet.trash.model.TrashEntry deleteEntry(
+		com.liferay.portlet.trash.model.TrashEntry trashEntry)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().deleteEntry(trashEntry);
 	}
 
 	/**
@@ -401,7 +423,8 @@ public class TrashEntryLocalServiceUtil {
 	*
 	* @param entryId the primary key of the trash entry
 	* @return the trash entry with the primary key
-	* @throws PortalException if a portal exception occurred
+	* @throws PortalException if a trash entry with the primary key could not
+	be found
 	* @throws SystemException if a system exception occurred
 	*/
 	public static com.liferay.portlet.trash.model.TrashEntry getEntry(
@@ -439,6 +462,20 @@ public class TrashEntryLocalServiceUtil {
 		long entryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getVersions(entryId);
+	}
+
+	/**
+	* Returns all the trash versions associated with the trash entry.
+	*
+	* @param className the class name of the trash entity
+	* @param classPK the primary key of the trash entity
+	* @return all the trash versions associated with the trash entry
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.trash.model.TrashVersion> getVersions(
+		java.lang.String className, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getVersions(className, classPK);
 	}
 
 	public static TrashEntryLocalService getService() {

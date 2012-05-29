@@ -230,6 +230,18 @@ update Country set name = 'yemen' where name = 'Yemen';
 update Country set name = 'zambia' where name = 'Zambia';
 update Country set name = 'zimbabwe' where name = 'Zimbabwe';
 
+alter table DLFileRank add active_ BOOLEAN;
+
+COMMIT_TRANSACTION;
+
+update DLFileRank set active_ = TRUE;
+
+alter table DLFileShortcut add active_ BOOLEAN;
+
+COMMIT_TRANSACTION;
+
+update DLFileShortcut set active_ = TRUE;
+
 alter table DLFolder add status INTEGER;
 alter table DLFolder add statusByUserId LONG;
 alter table DLFolder add statusByUserName VARCHAR(75) null;

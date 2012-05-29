@@ -225,12 +225,12 @@ public class DLDisplayPortletDataHandlerImpl extends BasePortletDataHandler {
 			rootElement.attributeValue("root-folder-id"));
 
 		if (rootFolderId > 0) {
-			Map<Long, Long> folderPKs =
+			Map<Long, Long> folderIds =
 				(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 					Folder.class);
 
 			rootFolderId = MapUtil.getLong(
-				folderPKs, rootFolderId, rootFolderId);
+				folderIds, rootFolderId, rootFolderId);
 
 			portletPreferences.setValue(
 				"rootFolderId", String.valueOf(rootFolderId));

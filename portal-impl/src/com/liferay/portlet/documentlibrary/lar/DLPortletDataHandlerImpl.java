@@ -243,12 +243,12 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(fileEntry.getUserUuid());
 
-		Map<Long, Long> folderPKs =
+		Map<Long, Long> folderIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				DLFolder.class);
 
 		long folderId = MapUtil.getLong(
-			folderPKs, fileEntry.getFolderId(), fileEntry.getFolderId());
+			folderIds, fileEntry.getFolderId(), fileEntry.getFolderId());
 
 		long[] assetCategoryIds = null;
 		String[] assetTagNames = null;
@@ -302,7 +302,7 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 			importFolder(portletDataContext, folderPath, folderElement, folder);
 
 			folderId = MapUtil.getLong(
-				folderPKs, fileEntry.getFolderId(), fileEntry.getFolderId());
+				folderIds, fileEntry.getFolderId(), fileEntry.getFolderId());
 		}
 
 		importMetaData(portletDataContext, fileEntryElement, serviceContext);
@@ -697,8 +697,8 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 		}
 
 		if (portletDataContext.getBooleanParameter(_NAMESPACE, "shortcuts")) {
-			List<DLFileShortcut> fileShortcuts = DLFileShortcutUtil.findByG_F(
-				folder.getRepositoryId(), folder.getFolderId());
+			List<DLFileShortcut> fileShortcuts = DLFileShortcutUtil.findByG_F_A(
+				folder.getRepositoryId(), folder.getFolderId(), true);
 
 			for (DLFileShortcut fileShortcut : fileShortcuts) {
 				exportFileShortcut(
@@ -1225,12 +1225,12 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(fileShortcut.getUserUuid());
 
-		Map<Long, Long> folderPKs =
+		Map<Long, Long> folderIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				DLFolder.class);
 
 		long folderId = MapUtil.getLong(
-			folderPKs, fileShortcut.getFolderId(), fileShortcut.getFolderId());
+			folderIds, fileShortcut.getFolderId(), fileShortcut.getFolderId());
 
 		long groupId = portletDataContext.getScopeGroupId();
 
@@ -1297,12 +1297,12 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(folder.getUserUuid());
 
-		Map<Long, Long> folderPKs =
+		Map<Long, Long> folderIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				DLFolder.class);
 
 		long parentFolderId = MapUtil.getLong(
-			folderPKs, folder.getParentFolderId(), folder.getParentFolderId());
+			folderIds, folder.getParentFolderId(), folder.getParentFolderId());
 
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
 			folderPath, folder, _NAMESPACE);
@@ -1319,7 +1319,7 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 			importFolder(portletDataContext, path, folderElement, parentFolder);
 
 			parentFolderId = MapUtil.getLong(
-				folderPKs, folder.getParentFolderId(),
+				folderIds, folder.getParentFolderId(),
 				folder.getParentFolderId());
 		}
 
@@ -1630,9 +1630,9 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 		}
 
 		if (portletDataContext.getBooleanParameter(_NAMESPACE, "shortcuts")) {
-			List<DLFileShortcut> fileShortcuts = DLFileShortcutUtil.findByG_F(
+			List<DLFileShortcut> fileShortcuts = DLFileShortcutUtil.findByG_F_A(
 				portletDataContext.getScopeGroupId(),
-				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, true);
 
 			for (DLFileShortcut fileShortcut : fileShortcuts) {
 				exportFileShortcut(
@@ -1724,12 +1724,12 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 			rootElement.attributeValue("root-folder-id"));
 
 		if (rootFolderId > 0) {
-			Map<Long, Long> folderPKs =
+			Map<Long, Long> folderIds =
 				(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 					DLFolder.class);
 
 			rootFolderId = MapUtil.getLong(
-				folderPKs, rootFolderId, rootFolderId);
+				folderIds, rootFolderId, rootFolderId);
 
 			portletPreferences.setValue(
 				"rootFolderId", String.valueOf(rootFolderId));

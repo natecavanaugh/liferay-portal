@@ -77,12 +77,13 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 			{ "repositoryId", Types.BIGINT },
 			{ "folderId", Types.BIGINT },
 			{ "toFileEntryId", Types.BIGINT },
+			{ "active_", Types.BOOLEAN },
 			{ "status", Types.INTEGER },
 			{ "statusByUserId", Types.BIGINT },
 			{ "statusByUserName", Types.VARCHAR },
 			{ "statusDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table DLFileShortcut (uuid_ VARCHAR(75) null,fileShortcutId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,repositoryId LONG,folderId LONG,toFileEntryId LONG,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table DLFileShortcut (uuid_ VARCHAR(75) null,fileShortcutId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,repositoryId LONG,folderId LONG,toFileEntryId LONG,active_ BOOLEAN,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table DLFileShortcut";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
@@ -96,12 +97,13 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
 				"value.object.column.bitmask.enabled.com.liferay.portlet.documentlibrary.model.DLFileShortcut"),
 			true);
-	public static long COMPANYID_COLUMN_BITMASK = 1L;
-	public static long FOLDERID_COLUMN_BITMASK = 2L;
-	public static long GROUPID_COLUMN_BITMASK = 4L;
-	public static long STATUS_COLUMN_BITMASK = 8L;
-	public static long TOFILEENTRYID_COLUMN_BITMASK = 16L;
-	public static long UUID_COLUMN_BITMASK = 32L;
+	public static long ACTIVE_COLUMN_BITMASK = 1L;
+	public static long COMPANYID_COLUMN_BITMASK = 2L;
+	public static long FOLDERID_COLUMN_BITMASK = 4L;
+	public static long GROUPID_COLUMN_BITMASK = 8L;
+	public static long STATUS_COLUMN_BITMASK = 16L;
+	public static long TOFILEENTRYID_COLUMN_BITMASK = 32L;
+	public static long UUID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -123,6 +125,7 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 		model.setRepositoryId(soapModel.getRepositoryId());
 		model.setFolderId(soapModel.getFolderId());
 		model.setToFileEntryId(soapModel.getToFileEntryId());
+		model.setActive(soapModel.getActive());
 		model.setStatus(soapModel.getStatus());
 		model.setStatusByUserId(soapModel.getStatusByUserId());
 		model.setStatusByUserName(soapModel.getStatusByUserName());
@@ -192,6 +195,7 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 		attributes.put("repositoryId", getRepositoryId());
 		attributes.put("folderId", getFolderId());
 		attributes.put("toFileEntryId", getToFileEntryId());
+		attributes.put("active", getActive());
 		attributes.put("status", getStatus());
 		attributes.put("statusByUserId", getStatusByUserId());
 		attributes.put("statusByUserName", getStatusByUserName());
@@ -266,6 +270,12 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 
 		if (toFileEntryId != null) {
 			setToFileEntryId(toFileEntryId);
+		}
+
+		Boolean active = (Boolean)attributes.get("active");
+
+		if (active != null) {
+			setActive(active);
 		}
 
 		Integer status = (Integer)attributes.get("status");
@@ -467,6 +477,31 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 	}
 
 	@JSON
+	public boolean getActive() {
+		return _active;
+	}
+
+	public boolean isActive() {
+		return _active;
+	}
+
+	public void setActive(boolean active) {
+		_columnBitmask |= ACTIVE_COLUMN_BITMASK;
+
+		if (!_setOriginalActive) {
+			_setOriginalActive = true;
+
+			_originalActive = _active;
+		}
+
+		_active = active;
+	}
+
+	public boolean getOriginalActive() {
+		return _originalActive;
+	}
+
+	@JSON
 	public int getStatus() {
 		return _status;
 	}
@@ -615,6 +650,7 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 		dlFileShortcutImpl.setRepositoryId(getRepositoryId());
 		dlFileShortcutImpl.setFolderId(getFolderId());
 		dlFileShortcutImpl.setToFileEntryId(getToFileEntryId());
+		dlFileShortcutImpl.setActive(getActive());
 		dlFileShortcutImpl.setStatus(getStatus());
 		dlFileShortcutImpl.setStatusByUserId(getStatusByUserId());
 		dlFileShortcutImpl.setStatusByUserName(getStatusByUserName());
@@ -691,6 +727,10 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 
 		dlFileShortcutModelImpl._setOriginalToFileEntryId = false;
 
+		dlFileShortcutModelImpl._originalActive = dlFileShortcutModelImpl._active;
+
+		dlFileShortcutModelImpl._setOriginalActive = false;
+
 		dlFileShortcutModelImpl._originalStatus = dlFileShortcutModelImpl._status;
 
 		dlFileShortcutModelImpl._setOriginalStatus = false;
@@ -750,6 +790,8 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 
 		dlFileShortcutCacheModel.toFileEntryId = getToFileEntryId();
 
+		dlFileShortcutCacheModel.active = getActive();
+
 		dlFileShortcutCacheModel.status = getStatus();
 
 		dlFileShortcutCacheModel.statusByUserId = getStatusByUserId();
@@ -776,7 +818,7 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -800,6 +842,8 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 		sb.append(getFolderId());
 		sb.append(", toFileEntryId=");
 		sb.append(getToFileEntryId());
+		sb.append(", active=");
+		sb.append(getActive());
 		sb.append(", status=");
 		sb.append(getStatus());
 		sb.append(", statusByUserId=");
@@ -814,7 +858,7 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(49);
+		StringBundler sb = new StringBundler(52);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portlet.documentlibrary.model.DLFileShortcut");
@@ -865,6 +909,10 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 		sb.append(getToFileEntryId());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>active</column-name><column-value><![CDATA[");
+		sb.append(getActive());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>status</column-name><column-value><![CDATA[");
 		sb.append(getStatus());
 		sb.append("]]></column-value></column>");
@@ -911,6 +959,9 @@ public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 	private long _toFileEntryId;
 	private long _originalToFileEntryId;
 	private boolean _setOriginalToFileEntryId;
+	private boolean _active;
+	private boolean _originalActive;
+	private boolean _setOriginalActive;
 	private int _status;
 	private int _originalStatus;
 	private boolean _setOriginalStatus;

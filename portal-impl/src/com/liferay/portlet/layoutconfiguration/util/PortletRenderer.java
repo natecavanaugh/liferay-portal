@@ -128,7 +128,9 @@ public class PortletRenderer {
 		public PortletRendererCallable(
 			HttpServletRequest request, HttpServletResponse response) {
 
-			super(false, true);
+			super(
+				ParallelRenderThreadLocalBinderUtil.getThreadLocalBinder(),
+				false, true);
 
 			_request= request;
 			_response = response;

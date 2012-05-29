@@ -57,6 +57,7 @@ public class DLFileShortcutWrapper implements DLFileShortcut,
 		attributes.put("repositoryId", getRepositoryId());
 		attributes.put("folderId", getFolderId());
 		attributes.put("toFileEntryId", getToFileEntryId());
+		attributes.put("active", getActive());
 		attributes.put("status", getStatus());
 		attributes.put("statusByUserId", getStatusByUserId());
 		attributes.put("statusByUserName", getStatusByUserName());
@@ -130,6 +131,12 @@ public class DLFileShortcutWrapper implements DLFileShortcut,
 
 		if (toFileEntryId != null) {
 			setToFileEntryId(toFileEntryId);
+		}
+
+		Boolean active = (Boolean)attributes.get("active");
+
+		if (active != null) {
+			setActive(active);
 		}
 
 		Integer status = (Integer)attributes.get("status");
@@ -391,6 +398,33 @@ public class DLFileShortcutWrapper implements DLFileShortcut,
 	*/
 	public void setToFileEntryId(long toFileEntryId) {
 		_dlFileShortcut.setToFileEntryId(toFileEntryId);
+	}
+
+	/**
+	* Returns the active of this document library file shortcut.
+	*
+	* @return the active of this document library file shortcut
+	*/
+	public boolean getActive() {
+		return _dlFileShortcut.getActive();
+	}
+
+	/**
+	* Returns <code>true</code> if this document library file shortcut is active.
+	*
+	* @return <code>true</code> if this document library file shortcut is active; <code>false</code> otherwise
+	*/
+	public boolean isActive() {
+		return _dlFileShortcut.isActive();
+	}
+
+	/**
+	* Sets whether this document library file shortcut is active.
+	*
+	* @param active the active of this document library file shortcut
+	*/
+	public void setActive(boolean active) {
+		_dlFileShortcut.setActive(active);
 	}
 
 	/**

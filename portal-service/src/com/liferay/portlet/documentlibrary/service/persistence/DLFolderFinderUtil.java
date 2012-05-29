@@ -36,6 +36,12 @@ public class DLFolderFinderUtil {
 		return getFinder().countFE_ByG_F(groupId, folderId, queryDefinition);
 	}
 
+	public static int countFE_FS_ByG_F(long groupId, long folderId,
+		com.liferay.portal.kernel.dao.orm.QueryDefinition queryDefinition)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().countFE_FS_ByG_F(groupId, folderId, queryDefinition);
+	}
+
 	public static int filterCountF_FE_FS_ByG_F_M_M(long groupId, long folderId,
 		java.lang.String[] mimeTypes, boolean includeMountFolders,
 		com.liferay.portal.kernel.dao.orm.QueryDefinition queryDefinition)
@@ -50,6 +56,13 @@ public class DLFolderFinderUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getFinder()
 				   .filterCountFE_ByG_F(groupId, folderId, queryDefinition);
+	}
+
+	public static int filterCountFE_FS_ByG_F(long groupId, long folderId,
+		com.liferay.portal.kernel.dao.orm.QueryDefinition queryDefinition)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder()
+				   .filterCountFE_FS_ByG_F(groupId, folderId, queryDefinition);
 	}
 
 	public static int filterCountFE_FS_ByG_F_M(long groupId, long folderId,

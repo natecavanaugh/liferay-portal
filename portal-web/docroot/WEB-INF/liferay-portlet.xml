@@ -242,6 +242,7 @@
 		<custom-attributes-display>com.liferay.portlet.documentlibrary.DLFileEntryCustomAttributesDisplay</custom-attributes-display>
 		<custom-attributes-display>com.liferay.portlet.documentlibrary.DLFolderCustomAttributesDisplay</custom-attributes-display>
 		<trash-handler>com.liferay.portlet.documentlibrary.trash.DLFileEntryTrashHandler</trash-handler>
+		<trash-handler>com.liferay.portlet.documentlibrary.trash.DLFileShortcutTrashHandler</trash-handler>
 		<trash-handler>com.liferay.portlet.documentlibrary.trash.DLFolderTrashHandler</trash-handler>
 		<workflow-handler>com.liferay.portlet.documentlibrary.workflow.DLFileEntryWorkflowHandler</workflow-handler>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
@@ -1865,6 +1866,7 @@
 		<icon>/html/icons/default.png</icon>
 		<parent-struts-path>mobile_device_rules</parent-struts-path>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
+		<portlet-data-handler-class>com.liferay.portlet.mobiledevicerules.lar.MDRPortletDataHandlerImpl</portlet-data-handler-class>
 		<control-panel-entry-category>content</control-panel-entry-category>
 		<control-panel-entry-weight>22.0</control-panel-entry-weight>
 		<use-default-template>false</use-default-template>

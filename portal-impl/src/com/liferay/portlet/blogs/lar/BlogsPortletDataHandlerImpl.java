@@ -328,16 +328,6 @@ public class BlogsPortletDataHandlerImpl extends BasePortletDataHandler {
 		String[] trackbacks = StringUtil.split(entry.getTrackbacks());
 		int status = entry.getStatus();
 
-		ServiceContext serviceContext = portletDataContext.createServiceContext(
-			entryElement, entry, _NAMESPACE);
-
-		if ((status != WorkflowConstants.STATUS_APPROVED) &&
-			(status != WorkflowConstants.STATUS_IN_TRASH)) {
-
-			serviceContext.setWorkflowAction(
-				WorkflowConstants.ACTION_SAVE_DRAFT);
-		}
-
 		String smallImageFileName = null;
 		InputStream smallImageInputStream = null;
 
@@ -351,6 +341,17 @@ public class BlogsPortletDataHandlerImpl extends BasePortletDataHandler {
 						StringPool.PERIOD).concat(entry.getSmallImageType());
 				smallImageInputStream =
 					portletDataContext.getZipEntryAsInputStream(smallImagePath);
+			}
+
+			ServiceContext serviceContext =
+				portletDataContext.createServiceContext(
+					entryElement, entry, _NAMESPACE);
+
+			if ((status != WorkflowConstants.STATUS_APPROVED) &&
+				(status != WorkflowConstants.STATUS_IN_TRASH)) {
+
+				serviceContext.setWorkflowAction(
+					WorkflowConstants.ACTION_SAVE_DRAFT);
 			}
 
 			BlogsEntry importedEntry = null;

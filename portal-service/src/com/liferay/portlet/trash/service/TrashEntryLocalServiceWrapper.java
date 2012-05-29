@@ -288,18 +288,39 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	}
 
 	/**
+	* Deletes the trash entry with the primary key.
+	*
+	* @param entryId the primary key of the trash entry
+	* @throws PortalException if a trash entry with the primary key could not
+	be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.trash.model.TrashEntry deleteEntry(long entryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _trashEntryLocalService.deleteEntry(entryId);
+	}
+
+	/**
 	* Deletes the trash entry with the entity class name and primary key.
 	*
 	* @param className the class name of entity
 	* @param classPK the primary key of the entry
-	* @throws PortalException if the user did not have permission to delete the
-	entry
+	* @throws PortalException if a trash entry with the primary key could not
+	be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public void deleteEntry(java.lang.String className, long classPK)
+	public com.liferay.portlet.trash.model.TrashEntry deleteEntry(
+		java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		_trashEntryLocalService.deleteEntry(className, classPK);
+		return _trashEntryLocalService.deleteEntry(className, classPK);
+	}
+
+	public com.liferay.portlet.trash.model.TrashEntry deleteEntry(
+		com.liferay.portlet.trash.model.TrashEntry trashEntry)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _trashEntryLocalService.deleteEntry(trashEntry);
 	}
 
 	/**
@@ -394,7 +415,8 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 	*
 	* @param entryId the primary key of the trash entry
 	* @return the trash entry with the primary key
-	* @throws PortalException if a portal exception occurred
+	* @throws PortalException if a trash entry with the primary key could not
+	be found
 	* @throws SystemException if a system exception occurred
 	*/
 	public com.liferay.portlet.trash.model.TrashEntry getEntry(long entryId)
@@ -431,6 +453,20 @@ public class TrashEntryLocalServiceWrapper implements TrashEntryLocalService,
 		long entryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _trashEntryLocalService.getVersions(entryId);
+	}
+
+	/**
+	* Returns all the trash versions associated with the trash entry.
+	*
+	* @param className the class name of the trash entity
+	* @param classPK the primary key of the trash entity
+	* @return all the trash versions associated with the trash entry
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portlet.trash.model.TrashVersion> getVersions(
+		java.lang.String className, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _trashEntryLocalService.getVersions(className, classPK);
 	}
 
 	/**

@@ -316,12 +316,12 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(entry.getUserUuid());
 
-		Map<Long, Long> folderPKs =
+		Map<Long, Long> folderIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				BookmarksFolder.class);
 
 		long folderId = MapUtil.getLong(
-			folderPKs, entry.getFolderId(), entry.getFolderId());
+			folderIds, entry.getFolderId(), entry.getFolderId());
 
 		if ((folderId != BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) &&
 			(folderId == entry.getFolderId())) {
@@ -334,7 +334,7 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 			importFolder(portletDataContext, path, folder);
 
 			folderId = MapUtil.getLong(
-				folderPKs, entry.getFolderId(), entry.getFolderId());
+				folderIds, entry.getFolderId(), entry.getFolderId());
 		}
 
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
@@ -379,12 +379,12 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(folder.getUserUuid());
 
-		Map<Long, Long> folderPKs =
+		Map<Long, Long> folderIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				BookmarksFolder.class);
 
 		long parentFolderId = MapUtil.getLong(
-			folderPKs, folder.getParentFolderId(), folder.getParentFolderId());
+			folderIds, folder.getParentFolderId(), folder.getParentFolderId());
 
 		if ((parentFolderId !=
 				BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) &&
@@ -399,7 +399,7 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 			importFolder(portletDataContext, path, parentFolder);
 
 			parentFolderId = MapUtil.getLong(
-				folderPKs, folder.getParentFolderId(),
+				folderIds, folder.getParentFolderId(),
 				folder.getParentFolderId());
 		}
 

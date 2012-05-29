@@ -36,7 +36,7 @@ public class PortalExecutorManagerImpl implements PortalExecutorManager {
 	public void afterPropertiesSet() {
 		if (_portalExecutorFactory == null) {
 			throw new IllegalArgumentException(
-				"portal executor factory is null");
+				"Portal executor factory is null");
 		}
 	}
 

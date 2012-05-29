@@ -32,6 +32,9 @@ public interface MDRRuleGroupInstance extends MDRRuleGroupInstanceModel,
 	 *
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portlet.mobiledevicerules.model.impl.MDRRuleGroupInstanceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public java.util.List<com.liferay.portlet.mobiledevicerules.model.MDRAction> getActions()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup getRuleGroup()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;

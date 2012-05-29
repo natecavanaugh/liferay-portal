@@ -184,12 +184,12 @@ public class PollsPortletDataHandlerImpl extends BasePortletDataHandler {
 			PortletDataContext portletDataContext, PollsChoice choice)
 		throws Exception {
 
-		Map<Long, Long> questionPKs =
+		Map<Long, Long> questionIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				PollsQuestion.class);
 
 		long questionId = MapUtil.getLong(
-			questionPKs, choice.getQuestionId(), choice.getQuestionId());
+			questionIds, choice.getQuestionId(), choice.getQuestionId());
 
 		PollsChoice importedChoice = null;
 
@@ -299,19 +299,19 @@ public class PollsPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(vote.getUserUuid());
 
-		Map<Long, Long> questionPKs =
+		Map<Long, Long> questionIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				PollsQuestion.class);
 
 		long questionId = MapUtil.getLong(
-			questionPKs, vote.getQuestionId(), vote.getQuestionId());
+			questionIds, vote.getQuestionId(), vote.getQuestionId());
 
-		Map<Long, Long> choicePKs =
+		Map<Long, Long> choiceIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				PollsChoice.class);
 
 		long choiceId = MapUtil.getLong(
-			choicePKs, vote.getChoiceId(), vote.getChoiceId());
+			choiceIds, vote.getChoiceId(), vote.getChoiceId());
 
 		ServiceContext serviceContext = new ServiceContext();
 

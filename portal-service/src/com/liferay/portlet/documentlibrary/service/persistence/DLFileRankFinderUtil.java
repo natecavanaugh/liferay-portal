@@ -26,6 +26,12 @@ public class DLFileRankFinderUtil {
 		return getFinder().findByStaleRanks(count);
 	}
 
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileRank> findByFolderId(
+		long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().findByFolderId(folderId);
+	}
+
 	public static DLFileRankFinder getFinder() {
 		if (_finder == null) {
 			_finder = (DLFileRankFinder)PortalBeanLocatorUtil.locate(DLFileRankFinder.class.getName());

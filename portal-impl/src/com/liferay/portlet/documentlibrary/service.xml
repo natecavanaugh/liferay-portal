@@ -294,6 +294,7 @@
 		<!-- Other fields -->
 
 		<column name="fileEntryId" type="long" />
+		<column name="active" type="boolean" />
 
 		<!-- Order -->
 
@@ -312,6 +313,11 @@
 		<finder name="G_U" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="userId" />
+		</finder>
+		<finder name="G_U_A" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="userId" />
+			<finder-column name="active" />
 		</finder>
 		<finder name="C_U_F" return-type="DLFileRank" unique="true">
 			<finder-column name="companyId" />
@@ -346,6 +352,7 @@
 		<column name="repositoryId" type="long" />
 		<column name="folderId" type="long" />
 		<column name="toFileEntryId" type="long" />
+		<column name="active" type="boolean" />
 		<column name="status" type="int" />
 		<column name="statusByUserId" type="long" />
 		<column name="statusByUserName" type="String" />
@@ -356,13 +363,15 @@
 		<finder name="ToFileEntryId" return-type="Collection">
 			<finder-column name="toFileEntryId" />
 		</finder>
-		<finder name="G_F" return-type="Collection">
+		<finder name="G_F_A" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="folderId" />
+			<finder-column name="active" />
 		</finder>
-		<finder name="G_F_S" return-type="Collection">
+		<finder name="G_F_A_S" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="folderId" />
+			<finder-column name="active" />
 			<finder-column name="status" />
 		</finder>
 
@@ -370,6 +379,7 @@
 
 		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
 		<reference package-path="com.liferay.portlet.asset" entity="AssetTag" />
+		<reference package-path="com.liferay.portlet.trash" entity="TrashEntry" />
 	</entity>
 	<entity name="DLFileVersion" human-name="document library file version" uuid="true" local-service="true" remote-service="true">
 

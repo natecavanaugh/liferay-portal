@@ -176,12 +176,12 @@ public class WikiPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(page.getUserUuid());
 
-		Map<Long, Long> nodePKs =
+		Map<Long, Long> nodeIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				WikiNode.class);
 
 		long nodeId = MapUtil.getLong(
-			nodePKs, page.getNodeId(), page.getNodeId());
+			nodeIds, page.getNodeId(), page.getNodeId());
 
 		String content = JournalPortletDataHandlerImpl.importReferencedContent(
 			portletDataContext, pageElement, page.getContent());
@@ -571,11 +571,11 @@ public class WikiPortletDataHandlerImpl extends BasePortletDataHandler {
 			importPage(portletDataContext, pageElement, page);
 		}
 
-		Map<Long, Long> nodePKs =
+		Map<Long, Long> nodeIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				WikiNode.class);
 
-		for (long nodeId : nodePKs.values()) {
+		for (long nodeId : nodeIds.values()) {
 			WikiCacheUtil.clearCache(nodeId);
 		}
 

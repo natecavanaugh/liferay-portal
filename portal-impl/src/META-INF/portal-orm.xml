@@ -1917,6 +1917,9 @@
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="fileEntryId" />
+			<basic name="active">
+				<column name="ACTIVE_" />
+			</basic>
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -1942,6 +1945,9 @@
 			<basic name="repositoryId" />
 			<basic name="folderId" />
 			<basic name="toFileEntryId" />
+			<basic name="active">
+				<column name="ACTIVE_" />
+			</basic>
 			<basic name="status" />
 			<basic name="statusByUserId" />
 			<basic name="statusByUserName" />

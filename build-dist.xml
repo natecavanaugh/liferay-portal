@@ -1052,7 +1052,7 @@ release was successful.</echo>
 			<replacefilter token="9043" value="8443" />
 		</replace>
 
-		<replace file="${app.server.dir}/conf/tomcat6-server.xml">
+		<replace file="${app.server.jonas.dir}/conf/tomcat6-server.xml">
 			<replacetoken><![CDATA[autoDeploy="false"]]></replacetoken>
 			<replacevalue><![CDATA[autoDeploy="true"]]></replacevalue>
 		</replace>
@@ -1152,7 +1152,19 @@ release was successful.</echo>
 	</target>
 
 	<target name="unzip-weblogic">
-		<var name="wl.home" value="${app.server.weblogic.dir}/wlserver" />
+		<property name="app.server.weblogic.dir.abs" location="${app.server.weblogic.dir}" />
+
+		<property name="app.server.weblogic.instance.dir.abs" location="${app.server.weblogic.instance.dir}" />
+
+		<pathconvert property="app.server.weblogic.instance.dir.unix" targetos="unix">
+			<path location="${app.server.weblogic.instance.dir.abs}" />
+		</pathconvert>
+
+		<var name="app.server.weblogic.wlserver.dir" value="${app.server.weblogic.dir.abs}/wlserver" />
+
+		<pathconvert property="app.server.weblogic.wlserver.dir.unix" targetos="unix">
+			<path location="${app.server.weblogic.wlserver.dir}" />
+		</pathconvert>
 
 		<delete dir="${app.server.weblogic.dir}" />
 
@@ -1180,7 +1192,7 @@ rerun this task.</echo>
 
 		<mkdir dir="${tstamp.value}" />
 
-		<echo file="${tstamp.value}/create-weblogic-domain.py">readTemplate('${wl.home}/common/templates/domains/wls.jar')
+		<echo file="${tstamp.value}/create-weblogic-domain.py">readTemplate('${app.server.weblogic.wlserver.dir.unix}/common/templates/domains/wls.jar')
 
 set('Name', '${app.server.weblogic.instance.name}')
 
@@ -1193,15 +1205,15 @@ cd('/Servers/AdminServer')
 set('ListenAddress', '')
 set('ListenPort', 8080)
 
-writeDomain('${app.server.weblogic.instance.dir}')
+writeDomain('${app.server.weblogic.instance.dir.unix}')
 
 closeTemplate()</echo>
 
 		<if>
 			<os family="windows" />
 			<then>
-				<exec dir="${app.server.weblogic.dir}" executable="cmd">
-					<env key="MW_HOME" value="${app.server.weblogic.dir}" />
+				<exec dir="${app.server.weblogic.dir.abs}" executable="cmd">
+					<env key="MW_HOME" value="${app.server.weblogic.dir.abs}" />
 					<arg value="/c" />
 					<arg value="configure.cmd" />
 				</exec>
@@ -1210,9 +1222,9 @@ closeTemplate()</echo>
 
 set "USER_MEM_ARGS=-Xmx1024m -XX:PermSize=256m"
 
-set "MW_HOME=${app.server.weblogic.dir}"
+set "MW_HOME=${app.server.weblogic.dir.abs}"
 
-set "WL_HOME=${wl.home}"
+set "WL_HOME=${app.server.weblogic.wlserver.dir}"
 
 call %WL_HOME%/common/bin/commEnv.cmd
 
@@ -1229,7 +1241,7 @@ set "CLASSPATH=%FMWCONFIG_CLASSPATH%"
 
 set "USER_MEM_ARGS=-Xmx1024m -XX:PermSize=512m"
 
-set "MW_HOME=${app.server.weblogic.dir}"
+set "MW_HOME=${app.server.weblogic.dir.abs}"
 
 call startWebLogic.cmd</echo>
 			</then>
@@ -1245,7 +1257,7 @@ export USER_MEM_ARGS="-Xmx1024m -XX:PermSize=256m"
 
 export MW_HOME="${app.server.weblogic.dir}"
 
-export WL_HOME="${wl.home}"
+export WL_HOME="${app.server.weblogic.wlserver.dir}"
 
 source ${WL_HOME}/common/bin/commEnv.sh
 

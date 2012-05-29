@@ -16,8 +16,12 @@ package com.liferay.portlet.mobiledevicerules.model.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portlet.mobiledevicerules.model.MDRAction;
 import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup;
+import com.liferay.portlet.mobiledevicerules.service.MDRActionLocalServiceUtil;
 import com.liferay.portlet.mobiledevicerules.service.MDRRuleGroupLocalServiceUtil;
+
+import java.util.List;
 
 /**
  * @author Edward C. Han
@@ -25,6 +29,10 @@ import com.liferay.portlet.mobiledevicerules.service.MDRRuleGroupLocalServiceUti
 public class MDRRuleGroupInstanceImpl extends MDRRuleGroupInstanceBaseImpl {
 
 	public MDRRuleGroupInstanceImpl() {
+	}
+
+	public List<MDRAction> getActions() throws SystemException {
+		return MDRActionLocalServiceUtil.getActions(getRuleGroupInstanceId());
 	}
 
 	public MDRRuleGroup getRuleGroup() throws PortalException, SystemException {

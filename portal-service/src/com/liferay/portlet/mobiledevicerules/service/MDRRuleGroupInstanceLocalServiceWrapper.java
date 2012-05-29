@@ -303,6 +303,11 @@ public class MDRRuleGroupInstanceLocalServiceWrapper
 			className, classPK, ruleGroupId, serviceContext);
 	}
 
+	public void deleteGroupRuleGroupInstances(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_mdrRuleGroupInstanceLocalService.deleteGroupRuleGroupInstances(groupId);
+	}
+
 	public void deleteRuleGroupInstance(long ruleGroupInstanceId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_mdrRuleGroupInstanceLocalService.deleteRuleGroupInstance(ruleGroupInstanceId);

@@ -438,6 +438,10 @@
 		<priority value="WARN" />
 	</category>
 
+	<category name="com.liferay.portal.server.capabilities.ServerCapabilitiesUtil">
+		<priority value="ERROR" />
+	</category>
+
 	<category name="com.liferay.portal.service.impl.LayoutLocalServiceImpl">
 		<priority value="ERROR" />
 	</category>

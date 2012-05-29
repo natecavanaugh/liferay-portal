@@ -336,12 +336,12 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		User user = UserLocalServiceUtil.getUser(userId);
 
-		Map<Long, Long> folderPKs =
+		Map<Long, Long> folderIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				JournalFolder.class);
 
 		long folderId = MapUtil.getLong(
-			folderPKs, article.getFolderId(), article.getFolderId());
+			folderIds, article.getFolderId(), article.getFolderId());
 
 		if ((folderId != JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID) &&
 			(folderId == article.getFolderId())) {
@@ -356,7 +356,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 			importFolder(portletDataContext, folderPath, folder);
 
 			folderId = MapUtil.getLong(
-				folderPKs, article.getFolderId(), article.getFolderId());
+				folderIds, article.getFolderId(), article.getFolderId());
 		}
 
 		String articleId = article.getArticleId();
@@ -643,8 +643,9 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 					fileName = fileName.substring(0, pos);
 				}
 
-				images.put(fileName, portletDataContext.getZipEntryAsByteArray(
-					imageFile));
+				images.put(
+					fileName,
+					portletDataContext.getZipEntryAsByteArray(imageFile));
 			}
 		}
 
@@ -2171,12 +2172,12 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(folder.getUserUuid());
 
-		Map<Long, Long> folderPKs =
+		Map<Long, Long> folderIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				JournalFolder.class);
 
 		long parentFolderId = MapUtil.getLong(
-			folderPKs, folder.getParentFolderId(), folder.getParentFolderId());
+			folderIds, folder.getParentFolderId(), folder.getParentFolderId());
 
 		if ((parentFolderId !=
 				JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID) &&
@@ -2191,7 +2192,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 			importFolder(portletDataContext, path, parentFolder);
 
 			parentFolderId = MapUtil.getLong(
-				folderPKs, folder.getParentFolderId(),
+				folderIds, folder.getParentFolderId(),
 				folder.getParentFolderId());
 		}
 

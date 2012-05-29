@@ -211,9 +211,7 @@ public class BaseDeployer implements Deployer {
 				appServerType + " is not a valid application server type");
 		}
 
-		if (appServerType.equals(ServerDetector.GLASSFISH_ID) ||
-			appServerType.equals(ServerDetector.WEBLOGIC_ID)) {
-
+		if (appServerType.equals(ServerDetector.GLASSFISH_ID)) {
 			unpackWar = false;
 		}
 
