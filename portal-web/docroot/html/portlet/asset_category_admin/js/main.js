@@ -1344,7 +1344,7 @@ AUI.add(
 							);
 						}
 
-						Liferay.Service.Asset.AssetCategory.getVocabularyCategories(params, callback);
+						Liferay.Service.Asset.AssetCategory.getJSONVocabularyCategories(params, callback);
 					},
 
 					_getVocabularyId: function(exp) {
