@@ -81,6 +81,11 @@
 	margin-left: 29px;
 }
 
+.lfr-categories-selector-search-results-path {
+	color: #575757;
+	float: right;
+}
+
 /* Skin */
 
 .lfr-asset-category-container legend {
