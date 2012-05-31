@@ -963,8 +963,8 @@ AUI.add(
 
 						instance._getVocabularyCategories(
 							vocabularyId,
-							function(categories) {
-								instance._displayVocabularyCategoriesImpl(categories, callback, renderMode);
+							function(result) {
+								instance._displayVocabularyCategoriesImpl(result.categories, callback, renderMode);
 							}
 						);
 					},
