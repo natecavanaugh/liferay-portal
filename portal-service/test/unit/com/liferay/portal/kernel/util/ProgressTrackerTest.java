@@ -14,143 +14,120 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.portal.kernel.test.TestCase;
 import com.liferay.portal.upload.LiferayFileUpload;
+
 import org.junit.Assert;
 import org.junit.Test;
+
 import org.springframework.mock.web.MockHttpSession;
 
 /**
  * @author Sergio González
  */
-public class ProgressTrackerTest {
+public class ProgressTrackerTest extends TestCase {
 
-	@Test
 	public void testGetMessage() throws Exception {
-		MockHttpSession mockHttpSession = new MockHttpSession();
+		_mockInstallProcess.initialize();
 
-		MockInstallProcess process = new MockInstallProcess(mockHttpSession);
+		ProgressTracker progressTracker = getAttribute(
+			LiferayFileUpload.PERCENT);
 
-		process.initialize();
+		Assert.assertEquals(StringPool.BLANK, progressTracker.getMessage());
 
-		ProgressTracker progressTracker =
-			(ProgressTracker)mockHttpSession.getAttribute(
-				LiferayFileUpload.PERCENT + _progressId);
+		_mockInstallProcess.download();
 
-		Assert.assertEquals(
-			StringPool.BLANK, progressTracker.getMessage());
+		progressTracker = getAttribute(LiferayFileUpload.PERCENT);
 
-		process.download();
-
-		progressTracker =
-			(ProgressTracker)mockHttpSession.getAttribute(
-				LiferayFileUpload.PERCENT + _progressId);
-
-		Assert.assertEquals(
-			"downloading", progressTracker.getMessage());
-
-		process.finish();
+		Assert.assertEquals("downloading", progressTracker.getMessage());
 	}
 
 	public void testGetPercent() throws Exception {
-		MockHttpSession mockHttpSession = new MockHttpSession();
+		_mockInstallProcess.initialize();
 
-		MockInstallProcess process = new MockInstallProcess(mockHttpSession);
+		ProgressTracker sessionProgressTracker = getAttribute(
+			LiferayFileUpload.PERCENT);
 
-		process.initialize();
+		Assert.assertEquals(0, sessionProgressTracker.getPercent());
 
-		ProgressTracker sessionProgressTracker =
-			(ProgressTracker)mockHttpSession.getAttribute(
-				LiferayFileUpload.PERCENT + _progressId);
+		_mockInstallProcess.download();
+		_mockInstallProcess.copy();
 
-		Assert.assertEquals(
-			0, sessionProgressTracker.getPercent());
+		sessionProgressTracker = getAttribute(LiferayFileUpload.PERCENT);
 
-		process.download();
-		process.copy();
-
-		sessionProgressTracker =
-			(ProgressTracker)mockHttpSession.getAttribute(
-				LiferayFileUpload.PERCENT + _progressId);
-
-		Assert.assertEquals(
-			sessionProgressTracker.getPercent(), 25);
-
-		process.finish();
+		Assert.assertEquals(sessionProgressTracker.getPercent(), 50);
 	}
 
 	@Test
 	public void testGetStatus() throws Exception {
-		MockHttpSession mockHttpSession = new MockHttpSession();
+		_mockInstallProcess.initialize();
 
-		MockInstallProcess process = new MockInstallProcess(mockHttpSession);
+		ProgressTracker sessionProgressTracker = getAttribute(
+			LiferayFileUpload.PERCENT);
 
-		process.initialize();
-
-		ProgressTracker sessionProgressTracker =
-			(ProgressTracker)mockHttpSession.getAttribute(
-				LiferayFileUpload.PERCENT + _progressId);
-
-		process.download();
-		process.copy();
+		_mockInstallProcess.download();
+		_mockInstallProcess.copy();
 
 		Assert.assertEquals(
 			ProgressStatusConstants.COPYING,
 			sessionProgressTracker.getStatus());
-
-		process.finish();
 	}
 
 	@Test
 	public void testInitializeAndFinish() throws Exception {
-		MockHttpSession mockHttpSession = new MockHttpSession();
+		_mockInstallProcess.initialize();
 
-		MockInstallProcess process = new MockInstallProcess(mockHttpSession);
-
-		process.initialize();
-		
-		ProgressTracker sessionProgressTracker =
-			(ProgressTracker)mockHttpSession.getAttribute(
-				LiferayFileUpload.PERCENT + _progressId);
+		ProgressTracker sessionProgressTracker = getAttribute(
+			LiferayFileUpload.PERCENT);
 
 		Assert.assertNotNull(sessionProgressTracker);
 
-		process.finish();
+		_mockInstallProcess.finish();
 
-		sessionProgressTracker =
-			(ProgressTracker)mockHttpSession.getAttribute(
-				LiferayFileUpload.PERCENT + _progressId);
+		sessionProgressTracker = getAttribute(LiferayFileUpload.PERCENT);
 
 		Assert.assertNull(sessionProgressTracker);
-
-		process.finish();
 	}
 
 	@Test
 	public void testInitialStatus() throws Exception {
-		MockHttpSession mockHttpSession = new MockHttpSession();
+		_mockInstallProcess.initialize();
 
-		MockInstallProcess process = new MockInstallProcess(mockHttpSession);
-
-		process.initialize();
-
-		ProgressTracker sessionProgressTracker =
-			(ProgressTracker)mockHttpSession.getAttribute(
-				LiferayFileUpload.PERCENT + _progressId);
+		ProgressTracker sessionProgressTracker = getAttribute(
+			LiferayFileUpload.PERCENT);
 
 		Assert.assertEquals(
 			ProgressStatusConstants.PREPARED,
 			sessionProgressTracker.getStatus());
 		Assert.assertEquals(
 			StringPool.BLANK, sessionProgressTracker.getMessage());
-		Assert.assertEquals(
-			0, sessionProgressTracker.getPercent());
-
-		process.finish();
+		Assert.assertEquals(0, sessionProgressTracker.getPercent());
 	}
 
-	private class MockInstallProcess {
+	protected ProgressTracker getAttribute(String status) {
+		ProgressTracker sessionProgressTracker =
+			(ProgressTracker)_mockHttpSession.getAttribute(
+				status + _progressId);
 
-		private ProgressTracker _progressTracker;
+		return sessionProgressTracker;
+	}
+
+	protected void setUp() throws Exception {
+		_mockHttpSession = new MockHttpSession();
+
+		_mockInstallProcess = new MockInstallProcess(_mockHttpSession);
+	}
+
+	protected void tearDown() throws Exception {
+		_mockInstallProcess.finish();
+	}
+
+	private static final String _progressId = "TestId";
+
+	private MockHttpSession _mockHttpSession;
+	private MockInstallProcess _mockInstallProcess;
+
+	private class MockInstallProcess {
 
 		public MockInstallProcess(MockHttpSession mockHttpSession) {
 			ProgressTracker progressTracker =
@@ -180,7 +157,8 @@ public class ProgressTrackerTest {
 			_progressTracker.initialize();
 		}
 
+		private ProgressTracker _progressTracker;
+
 	}
 
-	private static final String _progressId = "TestId";
 }
