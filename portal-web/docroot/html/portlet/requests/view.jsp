@@ -35,25 +35,21 @@ List<SocialRequest> requests = (List<SocialRequest>)request.getAttribute(WebKeys
 
 		portletURL.setParameter("struts_action", "/requests/update_request");
 		portletURL.setParameter("redirect", currentURL);
-		%>
 
-		<table class="lfr-table" width="100%">
-
-		<%
 		for (int i = 0; i < requests.size(); i++) {
 			SocialRequest socialRequest = requests.get(i);
 
 			SocialRequestFeedEntry requestFeedEntry = SocialRequestInterpreterLocalServiceUtil.interpret(socialRequest, themeDisplay);
 		%>
 
-			<tr>
-				<td align="center" class="lfr-top">
+			<aui:layout>
+				<aui:column>
 					<liferay-ui:user-display
 						displayStyle="<%= 2 %>"
 						userId="<%= socialRequest.getUserId() %>"
 					/>
-				</td>
-				<td class="lfr-top" width="99%">
+				</aui:column>
+				<aui:column>
 					<c:choose>
 						<c:when test="<%= requestFeedEntry == null %>">
 							<div class="portlet-msg-error">
@@ -104,21 +100,16 @@ List<SocialRequest> requests = (List<SocialRequest>)request.getAttribute(WebKeys
 							</liferay-ui:icon-list>
 						</c:otherwise>
 					</c:choose>
-				</td>
-			</tr>
+				</aui:column>
+			</aui:layout>
 
 			<c:if test="<%= (i + 1) < requests.size() %>">
-				<tr>
-					<td colspan="2">
-						<div class="separator"><!-- --></div>
-					</td>
-				</tr>
+				<div class="separator"><!-- --></div>
 			</c:if>
 
 		<%
 		}
 		%>
 
-		</table>
 	</c:otherwise>
 </c:choose>
