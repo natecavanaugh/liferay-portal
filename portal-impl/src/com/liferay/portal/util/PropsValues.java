@@ -634,6 +634,8 @@ public class PropsValues {
 
 	public static final boolean HOT_UNDEPLOY_ON_REDEPLOY = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.HOT_UNDEPLOY_ON_REDEPLOY));
 
+	public static final String[] HTML5_DEGRADE_IGNORE_PATHS = PropsUtil.getArray(PropsKeys.HTML5_DEGRADE_IGNORE_PATHS);
+
 	public static final String HTTP_HEADER_VERSION_VERBOSITY = PropsUtil.get(PropsKeys.HTTP_HEADER_VERSION_VERBOSITY);
 
 	public static final String IFRAME_PASSWORD_PASSWORD_TOKEN_ROLE = PropsUtil.get(PropsKeys.IFRAME_PASSWORD_PASSWORD_TOKEN_ROLE);

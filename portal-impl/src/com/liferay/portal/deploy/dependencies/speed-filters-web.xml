@@ -143,6 +143,10 @@
 	</init-param>
 </filter>
 <filter>
+	<filter-name>HTML 5 Degrade Filter</filter-name>
+	<filter-class>com.liferay.portal.servlet.filters.html5degrade.Html5DegradeFilter</filter-class>
+</filter>
+<filter>
 	<filter-name>Language Filter</filter-name>
 	<filter-class>com.liferay.portal.kernel.servlet.PortalClassLoaderFilter</filter-class>
 	<init-param>
@@ -273,6 +277,22 @@
 <filter-mapping>
 	<filter-name>Language Filter</filter-name>
 	<url-pattern>*.js</url-pattern>
+</filter-mapping>
+<filter-mapping>
+	<filter-name>HTML 5 Degrade Filter</filter-name>
+	<url-pattern>/c/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+	<filter-name>HTML 5 Degrade Filter</filter-name>
+	<url-pattern>/group/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+	<filter-name>HTML 5 Degrade Filter</filter-name>
+	<url-pattern>/user/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+	<filter-name>HTML 5 Degrade Filter</filter-name>
+	<url-pattern>/web/*</url-pattern>
 </filter-mapping>
 <filter-mapping>
 	<filter-name>Minifier Filter</filter-name>
