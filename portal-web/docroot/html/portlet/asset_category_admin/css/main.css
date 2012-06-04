@@ -164,6 +164,60 @@
 
 	.vocabulary-categories {
 		overflow: auto;
+
+		.category-item {
+			background-color: #F5F5F5;
+			color: #5C85AD;
+			cursor: pointer;
+			font-weight: bold;
+
+			.aui-column:before {
+				border-right: none;
+			}
+
+			.category-name, .category-path {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				width: 100%;
+			}
+
+			&:hover {
+				background: #D3DADD;
+			}
+
+			&.selected {
+				background-color: #6F7D83;
+				color: #FFF;
+
+				&:hover {
+					background-color: #6F7D83;
+					color: #FFB683;
+				}
+			}
+
+			.category-name, .category-item-check {
+				vertical-align: middle;
+			}
+
+			.category-name {
+				display: inline-block;
+				padding-top: 8px;
+				padding-bottom: 8px;
+			}
+
+			.category-item-check {
+				margin-left: 18px;
+				margin-right: 3px;
+			}
+
+			.category-path {
+				float: right;
+				margin-right: 2px;
+				margin-top: 8px;
+				text-align: right;
+			}
+		}
 	}
 
 	.vocabulary-edit-category .category-view {
