@@ -660,6 +660,7 @@ AUI.add(
 								languageId: themeDisplay.getLanguageId(),
 								layoutId: themeDisplay.getLayoutId(),
 								name: pageTitle,
+								p_auth: Liferay.authToken,
 								privateLayout: themeDisplay.isPrivateLayout()
 							};
 
