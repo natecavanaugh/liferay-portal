@@ -96,262 +96,9 @@ AUI.add(
 
 			instance.acceptChildren = true;
 
-			var placeholder = A.Node.create(TPL_PLACEHOLDER);
-
-			var fields = A.all(structureTreeId + ' li.structure-field');
-
-			instance.nestedListOptions = {
-				dd: {
-					handles: ['.journal-article-move-handler']
-				},
-				dropCondition: function(event) {
-					var dropNode = event.drop.get('node');
-
-					return instance.canDrop(dropNode);
-				},
-				dropOn: 'span.folder > ul.folder-droppable',
-				helper: instance._helper,
-				placeholder: placeholder,
-				sortCondition: function(event) {
-					var dropNode = event.drop.get('node');
-
-					return dropNode.ancestor(structureTreeId);
-				},
-				sortOn: structureTreeId
-			};
-
-			instance.nestedListEvents = {
-				'drag:start': function(event) {
-					var helper = instance._helper;
-
-					helper.setStyle('height', '100px');
-					helper.setStyle('width', '450px');
-
-					instance.updateTextAreaVisibility('hidden');
-				},
-
-				'drag:end': function(event) {
-					instance._dropField();
-
-					instance.updateTextAreaVisibility('visible');
-				},
-
-				'drag:out': function(event) {
-					if (!instance.acceptChildren) {
-						instance.helperIntersecting();
-						instance.acceptChildren = true;
-					}
-				},
-
-				'drag:over': function(event) {
-					var dropNode = event.drop.get('node');
-
-					instance.acceptChildren = instance.canDrop(dropNode);
-
-					if (instance.acceptChildren) {
-						instance.helperIntersecting();
-					}
-					else {
-						instance.helperNotIntersecting();
-					}
-				}
-			};
-
-			instance.createNestedList(
-				fields.filter(':not(.repeated-field)').filter(':not(.parent-structure-field)'),
-				instance.nestedListOptions,
-				instance.nestedListEvents
-			);
-
-			var journalComponentListId = instance._getNamespacedId('#journalComponentList');
-			var componentFields = A.all(journalComponentListId + ' .component-group .journal-component');
-
-			instance.componentFieldsOptions = {
-				dropCondition: function(event) {
-					var dropNode = event.drop.get('node');
-
-					return instance.canDrop(dropNode);
-				},
-				dropOn: 'span.folder > ul.folder-droppable',
-				helper: instance._helper,
-				placeholder: placeholder,
-				sortCondition: function(event) {
-					var dropNode = event.drop.get('node');
-
-					return dropNode.ancestor(structureTreeId);
-				}
-			};
-
-			instance.componentFieldsEvents = {
-				'drag:start': function(event) {
-					var drag = event.target;
-					var proxy = drag.get('dragNode');
-					var source = drag.get('node');
-					var languageName = source.text();
-					var componentType = instance.getComponentType(source);
-					var className = 'journal-component-' + instance._stripComponentType(componentType);
-					var helper = instance._helper;
-					var helperComponentIcon = instance._helper.all('div.journal-component');
-
-					helper.setStyle('height', '25px');
-					helper.setStyle('width', '200px');
-
-					if (helperComponentIcon) {
-						helperComponentIcon.addClass(className).html(languageName);
-					}
-
-					proxy.addClass('component-dragging');
-
-					instance.updateTextAreaVisibility('hidden');
-
-					instance.clonedSource = source.clone();
-
-					source.placeBefore(instance.clonedSource);
-
-					instance.clonedSource.attr('id', '');
-					instance.clonedSource.guid();
-
-					instance.clonedSource.show().setStyle('visibility', 'visible');
-					instance.clonedSource.removeClass('aui-helper-hidden');
-					instance.clonedSource.addClass('dragging');
-
-					instance.createNestedList(
-						instance.clonedSource,
-						instance.componentFieldsOptions,
-						instance.componentFieldsEvents,
-						true
-					);
-				},
-
-				'drag:end': function(event) {
-					var drag = event.target;
-					var source = drag.get('node');
-					var proxy = drag.get('dragNode');
-
-					var componentType = instance.getComponentType(source);
-					var className = 'journal-component-' + instance._stripComponentType(componentType);
-					var helperComponentIcon = instance._helper.all('div.journal-component');
-
-					proxy.removeClass('component-dragging');
-
-					if (helperComponentIcon) {
-						helperComponentIcon.removeClass(className).empty();
-					}
-
-					var addedComponent = structureTree.one('div.journal-component');
-
-					if (addedComponent) {
-						addedComponent.hide();
-
-						var fieldInstance = instance._fieldInstanceFactory(componentType);
-
-						if (fieldInstance.get('fieldType') == 'text_area') {
-							instance.buildHTMLEditor(fieldInstance);
-						}
-
-						var htmlTemplate = instance._createFieldHTMLTemplate(fieldInstance);
-						var newComponent = A.Node.create(htmlTemplate);
-
-						addedComponent.placeBefore(newComponent);
-						addedComponent.remove();
-
-						var variableName = newComponent.attr('dataName');
-						var randomInstanceId = newComponent.attr('dataInstanceId');
-
-						fieldInstance.set('source', newComponent);
-						fieldInstance.set('variableName', variableName);
-						fieldInstance.set('instanceId', randomInstanceId);
-
-						instance.createNestedList(
-							newComponent,
-							instance.nestedListOptions,
-							instance.nestedListEvents
-						);
-
-						instance._attachEvents();
-
-						var id = newComponent.get('id');
-
-						fieldsDataSet.add(id, fieldInstance);
-
-						instance.repositionEditFieldOptions();
-
-						var variableNameInput = instance.getById(randomInstanceId + 'variableName');
-
-						if (variableNameInput) {
-							Liferay.Util.focusFormField(variableNameInput);
-							variableNameInput.select();
-						}
-					}
-					else {
-						source.remove();
-					}
-
-					instance.updateTextAreaVisibility('visible');
-
-					if (instance.clonedSource) {
-						var journalComponentList = instance.getById('#journalComponentList');
-
-						instance.clonedSource.removeClass('dragging');
-
-						if (journalComponentList.contains(source[0]) &&
-							journalComponentList.contains(instance.clonedSource[0])) {
-
-							source.remove();
-						}
-					}
-				},
-
-				'drag:out': instance.nestedListEvents['drag:out'],
-
-				'drag:over': instance.nestedListEvents['drag:over']
-			};
-
-			instance.createNestedList(
-				componentFields,
-				instance.componentFieldsOptions,
-				instance.componentFieldsEvents,
-				true
-			);
-
-			var fieldLabel = instance.getById('fieldLabel');
-			var editContainerWrapper = instance.getById('#journalArticleEditFieldWrapper');
-
-			if (editContainerWrapper) {
-				editContainerWrapper.show();
-			}
-
-			instance.editContainerContextPanel = new A.OverlayContextPanel(
-				{
-					after: {
-						hide: A.bind(instance.closeEditFieldOptions, instance),
-						show: function() {
-							A.later(
-								0,
-								instance,
-								function() {
-									Liferay.Util.focusFormField(fieldLabel);
-								}
-							);
-						}
-					},
-					align: {
-						points: ['lc', 'rc']
-					},
-					bodyContent: editContainerWrapper,
-					trigger: '.edit-button .aui-button-input'
-				}
-			).render();
-
-			A.OverlayContextManager.remove(instance.editContainerContextPanel);
-
 			instance._initializeTagsSuggestionContent();
 			instance._initializePageLoadFieldInstances();
 			instance._attachEvents();
-			instance._attachEditContainerEvents();
-			instance._attachDelegatedEvents();
-
-			instance._updateOriginalStructureXSD();
 		};
 
 		Journal.prototype = {
@@ -659,28 +406,317 @@ AUI.add(
 				A.getBody().addClass('portlet-journal-edit-mode');
 
 				var editStructureLinkId = instance._getNamespacedId('editStructureLink');
-				var editStructureLink = A.one(editStructureLinkId);
+				var journalComponentListId = instance._getNamespacedId('#journalComponentList');
+				var structureTreeId = instance._getNamespacedId('#structureTree');
+
+				var editContainerWrapper = instance.getById('#journalArticleEditFieldWrapper');
 				var editStructureButton = instance.getById('editStructureButton');
+				var fieldLabel = instance.getById('fieldLabel');
 				var journalComponentList = instance.getById('#journalComponentList');
 				var saveStructureButton = instance.getById('saveStructureButton');
+				var structureMessage = instance.getById('structureMessage');
+
+				var editStructureLink = A.one(editStructureLinkId);
+				var saveStructureTriggers = A.one('.journal-save-structure-trigger');
+				var structureTree = A.one(structureTreeId);
+
+				var placeholder = A.Node.create(TPL_PLACEHOLDER);
+
+				var componentFields = A.all(journalComponentListId + ' .component-group .journal-component');
+				var fields = A.all(structureTreeId + ' li.structure-field');
 
 				instance.editContainerNormalMode();
 
+				editStructureButton.ancestor('.aui-button').show();
 				saveStructureButton.ancestor('.aui-button').show();
 
-				journalComponentList.show();
-
-				var structureTree = instance.getById('#structureTree');
-
 				editStructureLink.hide();
-
-				editStructureButton.ancestor('.aui-button').show();
+				journalComponentList.show();
 
 				structureTree.all('.journal-list-label').attr('disabled', '');
 
-				var structureMessage = instance.getById('structureMessage');
-
 				instance.clearMessage(structureMessage);
+
+				if (editStructureButton) {
+					editStructureButton.detach('click');
+
+					editStructureButton.on(
+						'click',
+						function(event) {
+							Liferay.reset('controlPanelSidebarHidden');
+
+							instance.disableEditMode();
+						}
+					);
+				}
+
+				if (saveStructureButton) {
+					saveStructureButton.detach('click');
+
+					saveStructureButton.on(
+						'click',
+						function() {
+							instance.openSaveStructureDialog();
+						}
+					);
+				}
+
+				if (saveStructureTriggers) {
+					saveStructureTriggers.detach('click');
+
+					saveStructureTriggers.on(
+						'click',
+						function(event) {
+							event.preventDefault();
+
+							saveStructureButton.simulate('click');
+						}
+					);
+				}
+
+				structureTree.on(
+					'mouseenter',
+					function(event) {
+						instance.nestedListOptions = {
+							dd: {
+								handles: ['.journal-article-move-handler']
+							},
+							dropCondition: function(event) {
+								var dropNode = event.drop.get('node');
+
+								return instance.canDrop(dropNode);
+							},
+							dropOn: 'span.folder > ul.folder-droppable',
+							helper: instance._helper,
+							placeholder: placeholder,
+							sortCondition: function(event) {
+								var dropNode = event.drop.get('node');
+
+								return dropNode.ancestor(structureTreeId);
+							},
+							sortOn: structureTreeId
+						};
+
+						instance.nestedListEvents = {
+							'drag:start': function(event) {
+								var helper = instance._helper;
+
+								helper.setStyle('height', '100px');
+								helper.setStyle('width', '450px');
+
+								instance.updateTextAreaVisibility('hidden');
+							},
+
+							'drag:end': function(event) {
+								instance._dropField();
+
+								instance.updateTextAreaVisibility('visible');
+							},
+
+							'drag:out': function(event) {
+								if (!instance.acceptChildren) {
+									instance.helperIntersecting();
+									instance.acceptChildren = true;
+								}
+							},
+
+							'drag:over': function(event) {
+								var dropNode = event.drop.get('node');
+
+								instance.acceptChildren = instance.canDrop(dropNode);
+
+								if (instance.acceptChildren) {
+									instance.helperIntersecting();
+								}
+								else {
+									instance.helperNotIntersecting();
+								}
+							}
+						};
+
+						instance.createNestedList(
+							fields.filter(':not(.repeated-field)').filter(':not(.parent-structure-field)'),
+							instance.nestedListOptions,
+							instance.nestedListEvents
+						);
+
+						instance.componentFieldsOptions = {
+							dropCondition: function(event) {
+								var dropNode = event.drop.get('node');
+
+								return instance.canDrop(dropNode);
+							},
+							dropOn: 'span.folder > ul.folder-droppable',
+							helper: instance._helper,
+							placeholder: placeholder,
+							sortCondition: function(event) {
+								var dropNode = event.drop.get('node');
+
+								return dropNode.ancestor(structureTreeId);
+							}
+						};
+
+						instance.componentFieldsEvents = {
+							'drag:start': function(event) {
+								var drag = event.target;
+								var proxy = drag.get('dragNode');
+								var source = drag.get('node');
+								var languageName = source.text();
+								var componentType = instance.getComponentType(source);
+								var className = 'journal-component-' + instance._stripComponentType(componentType);
+								var helper = instance._helper;
+								var helperComponentIcon = instance._helper.all('div.journal-component');
+
+								helper.setStyle('height', '25px');
+								helper.setStyle('width', '200px');
+
+								if (helperComponentIcon) {
+									helperComponentIcon.addClass(className).html(languageName);
+								}
+
+								proxy.addClass('component-dragging');
+
+								instance.updateTextAreaVisibility('hidden');
+
+								instance.clonedSource = source.clone();
+
+								source.placeBefore(instance.clonedSource);
+
+								instance.clonedSource.attr('id', '');
+								instance.clonedSource.guid();
+
+								instance.clonedSource.show().setStyle('visibility', 'visible');
+								instance.clonedSource.removeClass('aui-helper-hidden');
+								instance.clonedSource.addClass('dragging');
+
+								instance.createNestedList(
+									instance.clonedSource,
+									instance.componentFieldsOptions,
+									instance.componentFieldsEvents,
+									true
+								);
+							},
+
+							'drag:end': function(event) {
+								var drag = event.target;
+								var source = drag.get('node');
+								var proxy = drag.get('dragNode');
+
+								var componentType = instance.getComponentType(source);
+								var className = 'journal-component-' + instance._stripComponentType(componentType);
+								var helperComponentIcon = instance._helper.all('div.journal-component');
+
+								proxy.removeClass('component-dragging');
+
+								if (helperComponentIcon) {
+									helperComponentIcon.removeClass(className).empty();
+								}
+
+								var addedComponent = structureTree.one('div.journal-component');
+
+								if (addedComponent) {
+									addedComponent.hide();
+
+									var fieldInstance = instance._fieldInstanceFactory(componentType);
+
+									if (fieldInstance.get('fieldType') == 'text_area') {
+										instance.buildHTMLEditor(fieldInstance);
+									}
+
+									var htmlTemplate = instance._createFieldHTMLTemplate(fieldInstance);
+									var newComponent = A.Node.create(htmlTemplate);
+
+									addedComponent.placeBefore(newComponent);
+									addedComponent.remove();
+
+									var variableName = newComponent.attr('dataName');
+									var randomInstanceId = newComponent.attr('dataInstanceId');
+
+									fieldInstance.set('source', newComponent);
+									fieldInstance.set('variableName', variableName);
+									fieldInstance.set('instanceId', randomInstanceId);
+
+									instance.createNestedList(
+										newComponent,
+										instance.nestedListOptions,
+										instance.nestedListEvents
+									);
+
+									instance._attachEvents();
+
+									var id = newComponent.get('id');
+
+									fieldsDataSet.add(id, fieldInstance);
+
+									instance.repositionEditFieldOptions();
+
+									var variableNameInput = instance.getById(randomInstanceId + 'variableName');
+
+									if (variableNameInput) {
+										Liferay.Util.focusFormField(variableNameInput);
+										variableNameInput.select();
+									}
+								}
+								else {
+									source.remove();
+								}
+
+								instance.updateTextAreaVisibility('visible');
+
+								if (instance.clonedSource) {
+									var journalComponentList = instance.getById('#journalComponentList');
+
+									instance.clonedSource.removeClass('dragging');
+
+									if (journalComponentList.contains(source[0]) &&
+										journalComponentList.contains(instance.clonedSource[0])) {
+
+										source.remove();
+									}
+								}
+							},
+
+							'drag:out': instance.nestedListEvents['drag:out'],
+
+							'drag:over': instance.nestedListEvents['drag:over']
+						};
+
+						instance.createNestedList(
+							componentFields,
+							instance.componentFieldsOptions,
+							instance.componentFieldsEvents,
+							true
+						);
+
+						if (editContainerWrapper) {
+							editContainerWrapper.show();
+						}
+
+						instance.editContainerContextPanel = new A.OverlayContextPanel(
+							{
+								after: {
+									hide: A.bind(instance.closeEditFieldOptions, instance),
+									show: function() {
+										A.later(
+											0,
+											instance,
+											function() {
+												Liferay.Util.focusFormField(fieldLabel);
+											}
+										);
+									}
+								},
+								align: {
+									points: ['lc', 'rc']
+								},
+								bodyContent: editContainerWrapper,
+								trigger: '.edit-button .aui-button-input'
+							}
+						).render();
+
+						A.OverlayContextManager.remove(instance.editContainerContextPanel);
+					}
+				);
 			},
 
 			enableFields: function() {
@@ -2065,24 +2101,13 @@ AUI.add(
 				var container = A.one(journalArticleContainerId);
 
 				container.delegate(
-					'click',
-					function(event) {
-						var checkbox = event.currentTarget;
-						var source = instance.getSourceByNode(checkbox);
-
-						instance._updateLocaleState(source, checkbox);
-					},
-					'.journal-article-localized-checkbox .aui-field-input-choice'
-				);
-
-				container.delegate(
-					'click',
+					'mouseenter',
 					function(event) {
 						var source = instance.getSourceByNode(event.currentTarget);
 
-						instance.repeatField(source);
+						source.addClass('repeatable-border');
 					},
-					'.repeatable-field-add'
+					'.repeatable-field-image'
 				);
 
 				container.delegate(
@@ -2092,17 +2117,7 @@ AUI.add(
 
 						instance.closeField(source);
 					},
-					'.repeatable-field-delete'
-				);
-
-				container.delegate(
-					'mouseenter',
-					function(event) {
-						var source = instance.getSourceByNode(event.currentTarget);
-
-						source.addClass('repeatable-border');
-					},
-					'.repeatable-field-image'
+					'.repeatable-field-delete, span.journal-article-close'
 				);
 
 				container.delegate(
@@ -2115,8 +2130,38 @@ AUI.add(
 					'.repeatable-field-image'
 				);
 
-				container.delegate('keypress', keyPressAddItem, '.journal-list-key');
-				container.delegate('keypress', keyPressAddItem, '.journal-list-value');
+				container.delegate(
+					'click',
+					function(event) {
+						var source = instance.getSourceByNode(event.currentTarget);
+
+						instance.renderEditFieldOptions(source);
+					},
+					'.journal-article-buttons .edit-button .aui-button-input'
+				);
+
+				container.delegate(
+					'click',
+					function(event) {
+						var source = instance.getSourceByNode(event.currentTarget);
+
+						instance.repeatField(source);
+					},
+					'.repeatable-field-add, .journal-article-buttons .repeatable-button .aui-button-input'
+				);
+
+				container.delegate(
+					'click',
+					function(event) {
+						var checkbox = event.currentTarget;
+						var source = instance.getSourceByNode(checkbox);
+
+						instance._updateLocaleState(source, checkbox);
+					},
+					'.journal-article-localized-checkbox .aui-field-input-choice'
+				);
+
+				container.delegate('keypress', keyPressAddItem, '.journal-list-key, .journal-list-value');
 				container.delegate('click', addListItem, '.journal-add-field');
 				container.delegate('click', removeListItem, '.journal-delete-field');
 
@@ -2260,118 +2305,17 @@ AUI.add(
 			_attachEvents: function() {
 				var instance = this;
 
-				var closeButtons = instance.getCloseButtons();
-				var editButtons = instance.getEditButtons();
-				var repeatableButtons = instance.getRepeatableButtons();
+				var changeStructureButton = instance.getById('changeStructureButton');
 				var downloadArticleContentButton = instance.getById('downloadArticleContentButton');
-				var fieldsContainer = instance.getById('journalArticleContainer');
+				var loadDefaultStructureButton = instance.getById('loadDefaultStructure');
 				var previewArticleButton = instance.getById('previewArticleButton');
 				var publishButton = instance.getById('publishButton');
 				var saveButton = instance.getById('saveButton');
 				var translateButton = instance.getById('translateButton');
 
-				var containerInputs = fieldsContainer.all('.journal-article-component-container .aui-field-input');
-
-				closeButtons.detach('click');
-				containerInputs.detach('change');
-				editButtons.detach('click');
-				repeatableButtons.detach('click');
-
-				if (publishButton) {
-					publishButton.detach('click');
-				}
-
-				if (saveButton) {
-					saveButton.detach('click');
-				}
-
-				if (translateButton) {
-					translateButton.detach('click');
-				}
-
-				editButtons.on(
-					'click',
-					function(event) {
-						var source = instance.getSourceByNode(event.currentTarget);
-
-						instance.renderEditFieldOptions(source);
-					}
-				);
-
-				repeatableButtons.on(
-					'click',
-					function(event) {
-						var source = instance.getSourceByNode(event.currentTarget);
-
-						instance.repeatField(source);
-					}
-				);
-
-				closeButtons.on(
-					'click',
-					function(event) {
-						var source = instance.getSourceByNode(event.currentTarget);
-
-						instance.closeField(source);
-					}
-				);
-
-				if (saveButton) {
-					saveButton.on(
-						'click',
-						function() {
-							instance.saveArticle();
-						}
-					);
-				}
-
-				if (publishButton) {
-					publishButton.on(
-						'click',
-						function() {
-							instance.saveArticle('publish');
-						}
-					);
-				}
-
-				if (translateButton) {
-					translateButton.on(
-						'click',
-						function() {
-							instance.translateArticle();
-						}
-					);
-				}
-
-				if (downloadArticleContentButton) {
-					downloadArticleContentButton.detach('click');
-
-					downloadArticleContentButton.on(
-						'click',
-						function() {
-							instance.downloadArticleContent();
-						}
-					);
-				}
-
-				if (previewArticleButton) {
-					previewArticleButton.detach('click');
-
-					previewArticleButton.on(
-						'click',
-						function() {
-							instance.previewArticle();
-						}
-					);
-				}
-
-				var changeStructureButton = instance.getById('changeStructureButton');
 				var editStructureLinkId = instance._getNamespacedId('editStructureLink');
+
 				var editStructureLink = A.one(editStructureLinkId);
-				var editStructureButton = instance.getById('editStructureButton');
-				var loadDefaultStructureButton = instance.getById('loadDefaultStructure');
-				var saveStructureButton = instance.getById('saveStructureButton');
-				var saveStructureTriggers = A.one('.journal-save-structure-trigger');
 
 				if (changeStructureButton) {
 					changeStructureButton.detach('click');
@@ -2388,52 +2332,13 @@ AUI.add(
 					);
 				}
 
-				if (loadDefaultStructureButton) {
-					loadDefaultStructureButton.detach('click');
+				if (downloadArticleContentButton) {
+					downloadArticleContentButton.detach('click');
 
-					loadDefaultStructureButton.on(
+					downloadArticleContentButton.on(
 						'click',
 						function() {
-							instance.loadDefaultStructure();
-						}
-					);
-				}
-
-				if (saveStructureButton) {
-					saveStructureButton.detach('click');
-
-					saveStructureButton.on(
-						'click',
-						function() {
-							instance.openSaveStructureDialog();
-						}
-					);
-				}
-
-				if (saveStructureTriggers) {
-					saveStructureTriggers.detach('click');
-
-					saveStructureTriggers.on(
-						'click',
-						function(event) {
-							event.preventDefault();
-
-							saveStructureButton.simulate('click');
-						}
-					);
-				}
-
-				var body = A.getBody();
-
-				if (editStructureButton) {
-					editStructureButton.detach('click');
-
-					editStructureButton.on(
-						'click',
-						function(event) {
-							Liferay.reset('controlPanelSidebarHidden');
-
-							instance.disableEditMode();
+							instance.downloadArticleContent();
 						}
 					);
 				}
@@ -2446,7 +2351,66 @@ AUI.add(
 						function(event) {
 							Liferay.set('controlPanelSidebarHidden', true);
 
+							instance._attachDelegatedEvents();
+							instance._attachEditContainerEvents();
+							instance._updateOriginalStructureXSD();
+
 							instance.enableEditMode();
+						}
+					);
+				}
+
+				if (loadDefaultStructureButton) {
+					loadDefaultStructureButton.detach('click');
+
+					loadDefaultStructureButton.on(
+						'click',
+						function() {
+							instance.loadDefaultStructure();
+						}
+					);
+				}
+
+				if (previewArticleButton) {
+					previewArticleButton.detach('click');
+
+					previewArticleButton.on(
+						'click',
+						function() {
+							instance.previewArticle();
+						}
+					);
+				}
+
+				if (publishButton) {
+					publishButton.detach('click');
+
+					publishButton.on(
+						'click',
+						function() {
+							instance.saveArticle('publish');
+						}
+					);
+				}
+
+				if (saveButton) {
+					saveButton.detach('click');
+
+					saveButton.on(
+						'click',
+						function() {
+							instance.saveArticle();
+						}
+					);
+				}
+
+				if (translateButton) {
+					translateButton.detach('click');
+
+					translateButton.on(
+						'click',
+						function() {
+							instance.translateArticle();
 						}
 					);
 				}
