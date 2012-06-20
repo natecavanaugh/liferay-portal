@@ -27,6 +27,7 @@ AUI.add(
 
 						instance._expiringSoonText = Liferay.Language.get('warning-your-password-will-expire-soon');
 						instance._closeText = Liferay.Language.get('close');
+
 						banner = new Liferay.Notice(
 							{
 								closeText: instance._closeText,
@@ -43,6 +44,7 @@ AUI.add(
 				}
 			}
 		);
+
 		Liferay.PasswordExpiringSoon = PasswordExpiringSoon;
 	},
 	'',

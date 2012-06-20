@@ -1448,7 +1448,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			}
 			else {
 				user.setDigest(StringPool.BLANK);
-				user.setPasswordReset(true);
 
 				userPersistence.update(user, false);
 
@@ -2893,8 +2892,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	public boolean isPasswordExpiringSoon(User user)
 		throws PortalException, SystemException {
 
-		boolean isPasswordExpiringSoon = false;
-
 		PasswordPolicy passwordPolicy = user.getPasswordPolicy();
 
 		if (passwordPolicy.isExpireable()) {
@@ -2914,15 +2911,14 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				passwordExpiresOn - (passwordPolicy.getWarningTime() * 1000);
 
 			if (now.getTime() > timeStartWarning) {
-				isPasswordExpiringSoon = true;
-
-				if (isPasswordExpired(user) && user.isPasswordReset()) {
-					isPasswordExpiringSoon = false;
-				}
+				return true;
+			}
+			else {
+				return false;
 			}
 		}
 
-		return isPasswordExpiringSoon;
+		return false;
 	}
 
 	/**
