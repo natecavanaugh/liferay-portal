@@ -2381,12 +2381,13 @@
 			</license>
 		</licenses>
 		<comments>
-			See LPS-3169
+			See LPS-3169.
+			Note: Identical to version 1.6 R7 but with modification to the URL for XMLBeans in build.xml.
 		</comments>
 	</library>
 	<library>
 		<file-name>portal/liferay-yuicompressor.jar</file-name>
-		<version>2.4.2</version>
+		<version>2.4.7</version>
 		<project-name>YUI Compressor</project-name>
 		<project-url>http://developer.yahoo.com/yui/compressor</project-url>
 		<licenses>
@@ -2395,7 +2396,8 @@
 			</license>
 		</licenses>
 		<comments>
-			See LPS-3169
+			See LPS-3169.
+			See LPS-25202.
 		</comments>
 	</library>
 	<library>
