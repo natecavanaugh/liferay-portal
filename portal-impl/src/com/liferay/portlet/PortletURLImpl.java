@@ -1346,7 +1346,7 @@ public class PortletURLImpl
 
 				redirect = HttpUtil.decodeURL(redirect);
 
-				String newURL = shortenURL(redirect, --count);
+				String newURL = shortenURL(redirect, count - 1);
 
 				if (newURL != null) {
 					newURL = HttpUtil.encodeURL(newURL);

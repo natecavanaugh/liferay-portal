@@ -280,6 +280,7 @@ Liferay.Service.registerClass(
 		testAddClassNameAndTestTransactionPortletBar_Success: true,
 		testCounterIncrement_Rollback: true,
 		testDeleteClassName: true,
+		testGetBuildNumber: true,
 		testGetUserId: true,
 		testHasClassName: true
 	}

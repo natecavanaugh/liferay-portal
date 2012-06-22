@@ -102,6 +102,8 @@ import com.liferay.portal.security.auth.AutoLogin;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.security.auth.EmailAddressGenerator;
 import com.liferay.portal.security.auth.EmailAddressGeneratorFactory;
+import com.liferay.portal.security.auth.EmailAddressValidator;
+import com.liferay.portal.security.auth.EmailAddressValidatorFactory;
 import com.liferay.portal.security.auth.FullNameGenerator;
 import com.liferay.portal.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.security.auth.FullNameValidator;
@@ -112,6 +114,9 @@ import com.liferay.portal.security.auth.ScreenNameValidator;
 import com.liferay.portal.security.auth.ScreenNameValidatorFactory;
 import com.liferay.portal.security.ldap.AttributesTransformer;
 import com.liferay.portal.security.ldap.AttributesTransformerFactory;
+import com.liferay.portal.security.pwd.PwdToolkitUtil;
+import com.liferay.portal.security.pwd.Toolkit;
+import com.liferay.portal.security.pwd.ToolkitWrapper;
 import com.liferay.portal.service.ReleaseLocalServiceUtil;
 import com.liferay.portal.service.persistence.BasePersistence;
 import com.liferay.portal.servlet.filters.autologin.AutoLoginFilter;
@@ -234,10 +239,11 @@ public class HookHotDeployListener
 		"theme.portlet.decorate.default", "theme.portlet.sharing.default",
 		"theme.shortcut.icon", "upgrade.processes",
 		"user.notification.event.confirmation.enabled",
-		"users.email.address.generator", "users.email.address.required",
-		"users.form.add.identification", "users.form.add.main",
-		"users.form.add.miscellaneous", "users.form.my.account.identification",
-		"users.form.my.account.main", "users.form.my.account.miscellaneous",
+		"users.email.address.generator", "users.email.address.validator",
+		"users.email.address.required", "users.form.add.identification",
+		"users.form.add.main", "users.form.add.miscellaneous",
+		"users.form.my.account.identification", "users.form.my.account.main",
+		"users.form.my.account.miscellaneous",
 		"users.form.update.identification", "users.form.update.main",
 		"users.form.update.miscellaneous", "users.full.name.generator",
 		"users.full.name.validator", "users.image.max.height",
@@ -410,6 +416,13 @@ public class HookHotDeployListener
 			com.liferay.mail.util.HookFactory.setInstance(null);
 		}
 
+		if (portalProperties.containsKey(PropsKeys.PASSWORDS_TOOLKIT)) {
+			ToolkitWrapper toolkitWrapper =
+				(ToolkitWrapper)PwdToolkitUtil.getToolkit();
+
+			toolkitWrapper.setToolkit(null);
+		}
+
 		if (portalProperties.containsKey(PropsKeys.PHONE_NUMBER_FORMAT_IMPL)) {
 			PhoneNumberFormatWrapper phoneNumberFormatWrapper =
 				(PhoneNumberFormatWrapper)
@@ -429,6 +442,12 @@ public class HookHotDeployListener
 				PropsKeys.USERS_EMAIL_ADDRESS_GENERATOR)) {
 
 			EmailAddressGeneratorFactory.setInstance(null);
+		}
+
+		if (portalProperties.containsKey(
+				PropsKeys.USERS_EMAIL_ADDRESS_VALIDATOR)) {
+
+			EmailAddressValidatorFactory.setInstance(null);
 		}
 
 		if (portalProperties.containsKey(PropsKeys.USERS_FULL_NAME_GENERATOR)) {
@@ -1724,6 +1743,19 @@ public class HookHotDeployListener
 			com.liferay.mail.util.HookFactory.setInstance(mailHook);
 		}
 
+		if (portalProperties.containsKey(PropsKeys.PASSWORDS_TOOLKIT)) {
+			String toolkitClassName = portalProperties.getProperty(
+				PropsKeys.PASSWORDS_TOOLKIT);
+
+			Toolkit toolkit = (Toolkit)newInstance(
+				portletClassLoader, Sanitizer.class, toolkitClassName);
+
+			ToolkitWrapper toolkitWrapper =
+				(ToolkitWrapper)PwdToolkitUtil.getToolkit();
+
+			toolkitWrapper.setToolkit(toolkit);
+		}
+
 		if (portalProperties.containsKey(PropsKeys.PHONE_NUMBER_FORMAT_IMPL)) {
 			String phoneNumberFormatClassName = portalProperties.getProperty(
 				PropsKeys.PHONE_NUMBER_FORMAT_IMPL);
@@ -1766,6 +1798,21 @@ public class HookHotDeployListener
 					emailAddressGeneratorClassName);
 
 			EmailAddressGeneratorFactory.setInstance(emailAddressGenerator);
+		}
+
+		if (portalProperties.containsKey(
+				PropsKeys.USERS_EMAIL_ADDRESS_VALIDATOR)) {
+
+			String emailAddressValidatorClassName =
+				portalProperties.getProperty(
+					PropsKeys.USERS_EMAIL_ADDRESS_VALIDATOR);
+
+			EmailAddressValidator emailAddressValidator =
+				(EmailAddressValidator)newInstance(
+					portletClassLoader, EmailAddressValidator.class,
+					emailAddressValidatorClassName);
+
+			EmailAddressValidatorFactory.setInstance(emailAddressValidator);
 		}
 
 		if (portalProperties.containsKey(PropsKeys.USERS_FULL_NAME_GENERATOR)) {

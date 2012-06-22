@@ -383,14 +383,15 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		DLProcessorRegistryUtil.cleanUp(fileEntry.getLatestFileVersion());
 
-		repository.cancelCheckOut(fileEntryId);
+		FileVersion draftFileVersion = repository.cancelCheckOut(fileEntryId);
 
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setWorkflowAction(WorkflowConstants.ACTION_PUBLISH);
 
-		dlAppHelperLocalService.updateFileEntry(
-			getUserId(), fileEntry, fileEntry.getFileVersion(), serviceContext);
+		dlAppHelperLocalService.cancelCheckOut(
+			getUserId(), fileEntry, fileEntry.getFileVersion(),
+			draftFileVersion, serviceContext);
 	}
 
 	/**

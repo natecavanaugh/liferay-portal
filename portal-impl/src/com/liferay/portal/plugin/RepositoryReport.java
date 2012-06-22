@@ -18,7 +18,8 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
-import java.util.Iterator;
+import java.io.Serializable;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -26,7 +27,7 @@ import java.util.TreeMap;
 /**
  * @author Jorge Ferrer
  */
-public class RepositoryReport {
+public class RepositoryReport implements Serializable {
 
 	public static final String SUCCESS = "success";
 
@@ -64,17 +65,15 @@ public class RepositoryReport {
 
 	@Override
 	public String toString() {
-		Iterator<String> itr = getRepositoryURLs().iterator();
+		Set<String> repositoryURLs = getRepositoryURLs();
 
-		if (getRepositoryURLs().isEmpty()) {
+		if (repositoryURLs.isEmpty()) {
 			return StringPool.BLANK;
 		}
 
-		StringBundler sb = new StringBundler(getRepositoryURLs().size() * 3);
+		StringBundler sb = new StringBundler(repositoryURLs.size() * 3);
 
-		while (itr.hasNext()) {
-			String repositoryURL = itr.next();
-
+		for (String repositoryURL : repositoryURLs) {
 			sb.append(repositoryURL);
 			sb.append(": ");
 			sb.append(_reportMap.get(repositoryURL));

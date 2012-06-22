@@ -352,6 +352,7 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 		if (isNew || !WikiPageResourceModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((wikiPageResourceModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
@@ -393,6 +394,7 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_N_T, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_N_T, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_N_T,

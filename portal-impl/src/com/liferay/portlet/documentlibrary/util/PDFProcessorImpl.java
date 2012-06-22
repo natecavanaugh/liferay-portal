@@ -198,12 +198,14 @@ public class PDFProcessorImpl
 		}
 
 		if (!_warned) {
-			StringBundler sb = new StringBundler(5);
+			StringBundler sb = new StringBundler(6);
 
-			sb.append("Liferay is not configured to use ImageMagick for ");
-			sb.append("generating Document Library previews and will default ");
-			sb.append("to PDFBox. For better quality previews, install ");
-			sb.append("ImageMagick and enable it in portal-ext.properties.");
+			sb.append("Liferay is not configured to use ImageMagick. For ");
+			sb.append("better quality document and image previews, install ");
+			sb.append("ImageMagick and enable it in portal-ext.properties or ");
+			sb.append("in the Server Administration control panel at: ");
+			sb.append("http://<server>/group/control_panel/manage/-/server/");
+			sb.append("external-services");
 
 			_log.warn(sb.toString());
 

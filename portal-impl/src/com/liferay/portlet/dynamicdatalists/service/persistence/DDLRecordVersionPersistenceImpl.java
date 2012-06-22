@@ -363,6 +363,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 		if (isNew || !DDLRecordVersionModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((ddlRecordVersionModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RECORDID.getColumnBitmask()) != 0) {
@@ -427,6 +428,7 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_V, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_V, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V,

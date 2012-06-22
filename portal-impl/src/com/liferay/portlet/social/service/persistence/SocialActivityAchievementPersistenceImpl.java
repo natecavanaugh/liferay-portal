@@ -459,6 +459,7 @@ public class SocialActivityAchievementPersistenceImpl
 				!SocialActivityAchievementModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((socialActivityAchievementModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
@@ -592,6 +593,7 @@ public class SocialActivityAchievementPersistenceImpl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U_N, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_U_N, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_U_N,

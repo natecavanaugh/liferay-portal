@@ -356,6 +356,7 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 		if (isNew || !UserIdMapperModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((userIdMapperModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
@@ -405,6 +406,7 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_T, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_T, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_T,
@@ -424,6 +426,7 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_T_E, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_T_E, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_T_E,

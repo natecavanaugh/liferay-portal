@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.audit.AuditRouterUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.language.UnicodeLanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ArrayUtil_IW;
@@ -70,7 +72,10 @@ import com.liferay.portlet.expando.service.ExpandoRowLocalService;
 import com.liferay.portlet.expando.service.ExpandoTableLocalService;
 import com.liferay.portlet.expando.service.ExpandoValueLocalService;
 import com.liferay.portlet.journalcontent.util.JournalContentUtil;
+import com.liferay.taglib.util.VelocityTaglib;
 import com.liferay.util.portlet.PortletRequestUtil;
+
+import java.lang.reflect.Method;
 
 import java.util.List;
 import java.util.Map;
@@ -107,25 +112,45 @@ public class VelocityVariablesImpl implements VelocityVariables {
 
 		// Audit message factory
 
-		velocityContext.put(
-			"auditMessageFactoryUtil",
-			AuditMessageFactoryUtil.getAuditMessageFactory());
+		try {
+			velocityContext.put(
+				"auditMessageFactoryUtil",
+				AuditMessageFactoryUtil.getAuditMessageFactory());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Audit router util
 
-		velocityContext.put(
-			"auditRouterUtil", AuditRouterUtil.getAuditRouter());
+		try {
+			velocityContext.put(
+				"auditRouterUtil", AuditRouterUtil.getAuditRouter());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Browser sniffer
 
-		velocityContext.put(
-			"browserSniffer", BrowserSnifferUtil.getBrowserSniffer());
+		try {
+			velocityContext.put(
+				"browserSniffer", BrowserSnifferUtil.getBrowserSniffer());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Date format
 
-		velocityContext.put(
-			"dateFormatFactory",
-			FastDateFormatFactoryUtil.getFastDateFormatFactory());
+		try {
+			velocityContext.put(
+				"dateFormatFactory",
+				FastDateFormatFactoryUtil.getFastDateFormatFactory());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Date tool
 
@@ -139,34 +164,66 @@ public class VelocityVariablesImpl implements VelocityVariables {
 
 		velocityContext.put("escapeTool", new EscapeTool());
 
-		// Expando column service
+		// Service locator
 
-		ServiceLocator serviceLocator = ServiceLocator.getInstance();
+		try {
+			ServiceLocator serviceLocator = ServiceLocator.getInstance();
 
-		velocityContext.put(
-			"expandoColumnLocalService",
-			serviceLocator.findService(
-				ExpandoColumnLocalService.class.getName()));
+			insertHelperUtility(
+				velocityContext, restrictedVariables, "serviceLocator",
+				serviceLocator);
 
-		// Expando row service
+			// Expando column service
 
-		velocityContext.put(
-			"expandoRowLocalService",
-			serviceLocator.findService(ExpandoRowLocalService.class.getName()));
+			try {
+				velocityContext.put(
+					"expandoColumnLocalService",
+					serviceLocator.findService(
+						ExpandoColumnLocalService.class.getName()));
+			}
+			catch (SecurityException se) {
+				_log.error(se, se);
+			}
 
-		// Expando table service
+			// Expando row service
 
-		velocityContext.put(
-			"expandoTableLocalService",
-			serviceLocator.findService(
-				ExpandoTableLocalService.class.getName()));
+			try {
+				velocityContext.put(
+					"expandoRowLocalService",
+					serviceLocator.findService(
+						ExpandoRowLocalService.class.getName()));
+			}
+			catch (SecurityException se) {
+				_log.error(se, se);
+			}
 
-		// Expando value service
+			// Expando table service
 
-		velocityContext.put(
-			"expandoValueLocalService",
-			serviceLocator.findService(
-				ExpandoValueLocalService.class.getName()));
+			try {
+				velocityContext.put(
+					"expandoTableLocalService",
+					serviceLocator.findService(
+						ExpandoTableLocalService.class.getName()));
+			}
+			catch (SecurityException se) {
+				_log.error(se, se);
+			}
+
+			// Expando value service
+
+			try {
+				velocityContext.put(
+					"expandoValueLocalService",
+					serviceLocator.findService(
+						ExpandoValueLocalService.class.getName()));
+			}
+			catch (SecurityException se) {
+				_log.error(se, se);
+			}
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Getter util
 
@@ -174,11 +231,21 @@ public class VelocityVariablesImpl implements VelocityVariables {
 
 		// Html util
 
-		velocityContext.put("htmlUtil", HtmlUtil.getHtml());
+		try {
+			velocityContext.put("htmlUtil", HtmlUtil.getHtml());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Http util
 
-		velocityContext.put("httpUtil", HttpUtil.getHttp());
+		try {
+			velocityContext.put("httpUtil", HttpUtil.getHttp());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Iterator tool
 
@@ -186,19 +253,41 @@ public class VelocityVariablesImpl implements VelocityVariables {
 
 		// Journal content util
 
-		velocityContext.put(
-			"journalContentUtil", JournalContentUtil.getJournalContent());
+		try {
+			velocityContext.put(
+				"journalContentUtil", JournalContentUtil.getJournalContent());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// JSON factory util
 
-		velocityContext.put(
-			"jsonFactoryUtil", JSONFactoryUtil.getJSONFactory());
+		try {
+			velocityContext.put(
+				"jsonFactoryUtil", JSONFactoryUtil.getJSONFactory());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Language util
 
-		velocityContext.put("languageUtil", LanguageUtil.getLanguage());
-		velocityContext.put(
-			"unicodeLanguageUtil", UnicodeLanguageUtil.getUnicodeLanguage());
+		try {
+			velocityContext.put("languageUtil", LanguageUtil.getLanguage());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"unicodeLanguageUtil",
+				UnicodeLanguageUtil.getUnicodeLanguage());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// List tool
 
@@ -206,7 +295,12 @@ public class VelocityVariablesImpl implements VelocityVariables {
 
 		// Locale util
 
-		velocityContext.put("localeUtil", LocaleUtil.getInstance());
+		try {
+			velocityContext.put("localeUtil", LocaleUtil.getInstance());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Math tool
 
@@ -222,29 +316,50 @@ public class VelocityVariablesImpl implements VelocityVariables {
 
 		// Portal util
 
-		insertHelperUtility(
-			velocityContext, restrictedVariables, "portalUtil",
-			PortalUtil.getPortal());
-		insertHelperUtility(
-			velocityContext, restrictedVariables, "portal",
-			PortalUtil.getPortal());
+		try {
+			insertHelperUtility(
+				velocityContext, restrictedVariables, "portalUtil",
+				PortalUtil.getPortal());
+			insertHelperUtility(
+				velocityContext, restrictedVariables, "portal",
+				PortalUtil.getPortal());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Prefs props util
 
-		insertHelperUtility(
-			velocityContext, restrictedVariables, "prefsPropsUtil",
-			PrefsPropsUtil.getPrefsProps());
+		try {
+			insertHelperUtility(
+				velocityContext, restrictedVariables, "prefsPropsUtil",
+				PrefsPropsUtil.getPrefsProps());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Props util
 
-		insertHelperUtility(
-			velocityContext, restrictedVariables, "propsUtil",
-			PropsUtil.getProps());
+		try {
+			insertHelperUtility(
+				velocityContext, restrictedVariables, "propsUtil",
+				PropsUtil.getProps());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Portlet URL factory
 
-		velocityContext.put(
-			"portletURLFactory", PortletURLFactoryUtil.getPortletURLFactory());
+		try {
+			velocityContext.put(
+				"portletURLFactory",
+				PortletURLFactoryUtil.getPortletURLFactory());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Portlet preferences
 
@@ -257,24 +372,40 @@ public class VelocityVariablesImpl implements VelocityVariables {
 		velocityContext.put(
 			"randomizer", Randomizer_IW.getInstance().getWrappedInstance());
 
-		// SAX reader util
+		// Util locator
 
-		UtilLocator utilLocator = UtilLocator.getInstance();
+		try {
+			UtilLocator utilLocator = UtilLocator.getInstance();
 
-		velocityContext.put(
-			"saxReaderUtil", utilLocator.findUtil(SAXReader.class.getName()));
+			insertHelperUtility(
+				velocityContext, restrictedVariables, "utilLocator",
+				utilLocator);
 
-		// Service locator
+			// SAX reader util
 
-		insertHelperUtility(
-			velocityContext, restrictedVariables, "serviceLocator",
-			serviceLocator);
+			try {
+				velocityContext.put(
+					"saxReaderUtil",
+					utilLocator.findUtil(SAXReader.class.getName()));
+			}
+			catch (SecurityException se) {
+				_log.error(se, se);
+			}
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Session clicks
 
-		insertHelperUtility(
-			velocityContext, restrictedVariables, "sessionClicks",
-			SessionClicks_IW.getInstance());
+		try {
+			insertHelperUtility(
+				velocityContext, restrictedVariables, "sessionClicks",
+				SessionClicks_IW.getInstance());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Sort tool
 
@@ -293,11 +424,6 @@ public class VelocityVariablesImpl implements VelocityVariables {
 
 		velocityContext.put("timeZoneUtil", TimeZoneUtil_IW.getInstance());
 
-		// Util locator
-
-		insertHelperUtility(
-			velocityContext, restrictedVariables, "utilLocator", utilLocator);
-
 		// Unicode formatter
 
 		velocityContext.put(
@@ -307,50 +433,154 @@ public class VelocityVariablesImpl implements VelocityVariables {
 
 		velocityContext.put("validator", Validator_IW.getInstance());
 
+		// VelocityTaglib methods
+
+		try {
+			Class<?> clazz = VelocityTaglib.class;
+
+			Method method = clazz.getMethod(
+				"layoutIcon", new Class[] {Layout.class});
+
+			velocityContext.put("velocityTaglib#layoutIcon", method);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+
 		// Web server servlet token
 
-		velocityContext.put(
-			"webServerToken",
-			WebServerServletTokenUtil.getWebServerServletToken());
+		try {
+			velocityContext.put(
+				"webServerToken",
+				WebServerServletTokenUtil.getWebServerServletToken());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Permissions
 
-		velocityContext.put(
-			"accountPermission", AccountPermissionUtil.getAccountPermission());
-		velocityContext.put(
-			"commonPermission", CommonPermissionUtil.getCommonPermission());
-		velocityContext.put(
-			"groupPermission", GroupPermissionUtil.getGroupPermission());
-		velocityContext.put(
-			"layoutPermission", LayoutPermissionUtil.getLayoutPermission());
-		velocityContext.put(
-			"organizationPermission",
-			OrganizationPermissionUtil.getOrganizationPermission());
-		velocityContext.put(
-			"passwordPolicyPermission",
-			PasswordPolicyPermissionUtil.getPasswordPolicyPermission());
-		velocityContext.put(
-			"portalPermission", PortalPermissionUtil.getPortalPermission());
-		velocityContext.put(
-			"portletPermission", PortletPermissionUtil.getPortletPermission());
-		velocityContext.put(
-			"rolePermission", RolePermissionUtil.getRolePermission());
-		velocityContext.put(
-			"userGroupPermission",
-			UserGroupPermissionUtil.getUserGroupPermission());
-		velocityContext.put(
-			"userPermission", UserPermissionUtil.getUserPermission());
+		try {
+			velocityContext.put(
+				"accountPermission",
+				AccountPermissionUtil.getAccountPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"commonPermission", CommonPermissionUtil.getCommonPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"groupPermission", GroupPermissionUtil.getGroupPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"layoutPermission", LayoutPermissionUtil.getLayoutPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"organizationPermission",
+				OrganizationPermissionUtil.getOrganizationPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"passwordPolicyPermission",
+				PasswordPolicyPermissionUtil.getPasswordPolicyPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"portalPermission", PortalPermissionUtil.getPortalPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"portletPermission",
+				PortletPermissionUtil.getPortletPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"rolePermission", RolePermissionUtil.getRolePermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"userGroupPermission",
+				UserGroupPermissionUtil.getUserGroupPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"userPermission", UserPermissionUtil.getUserPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 
 		// Deprecated
 
-		velocityContext.put(
-			"dateFormats",
-			FastDateFormatFactoryUtil.getFastDateFormatFactory());
-		velocityContext.put(
-			"imageToken", WebServerServletTokenUtil.getWebServerServletToken());
-		velocityContext.put(
-			"locationPermission",
-			OrganizationPermissionUtil.getOrganizationPermission());
+		try {
+			velocityContext.put(
+				"dateFormats",
+				FastDateFormatFactoryUtil.getFastDateFormatFactory());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"imageToken",
+				WebServerServletTokenUtil.getWebServerServletToken());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
+
+		try {
+			velocityContext.put(
+				"locationPermission",
+				OrganizationPermissionUtil.getOrganizationPermission());
+		}
+		catch (SecurityException se) {
+			_log.error(se, se);
+		}
 	}
 
 	public void insertVariables(
@@ -445,7 +675,7 @@ public class VelocityVariablesImpl implements VelocityVariables {
 			if (layout != null) {
 				RequestVars requestVars = new RequestVars(
 					request, themeDisplay, layout.getAncestorPlid(),
-					layout.getAncestorLayoutId());
+					layout.getAncestorLayoutId(), velocityContext);
 
 				List<NavItem> navItems = NavItem.fromLayouts(
 					requestVars, layouts);
@@ -565,5 +795,8 @@ public class VelocityVariablesImpl implements VelocityVariables {
 
 		velocityContext.put("tilesSelectable", tilesSelectable);
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		VelocityVariablesImpl.class);
 
 }

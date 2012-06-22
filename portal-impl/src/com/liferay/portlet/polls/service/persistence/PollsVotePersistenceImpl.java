@@ -353,6 +353,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		if (isNew || !PollsVoteModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((pollsVoteModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_QUESTIONID.getColumnBitmask()) != 0) {
@@ -414,6 +415,7 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_Q_U, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_Q_U, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_Q_U,

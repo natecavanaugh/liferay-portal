@@ -18,13 +18,18 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
+
+import java.lang.reflect.Method;
 
 import java.net.URI;
 import java.net.URL;
 
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -39,7 +44,16 @@ public class JasperVersionDetector {
 		return _instance._jasperVersion;
 	}
 
+	public static boolean hasJspServletDependantsMap() {
+		return _instance._jspServletDependantsMap;
+	}
+
 	private JasperVersionDetector() {
+		_initializeJasperVersion();
+		_initializeJspServletDependantsMap();
+	}
+
+	private void _initializeJasperVersion() {
 		try {
 			Class<?> clazz = getClass();
 
@@ -66,11 +80,70 @@ public class JasperVersionDetector {
 
 			Attributes attributes = manifest.getMainAttributes();
 
-			_jasperVersion = GetterUtil.getString(
-				attributes.getValue("Specification-Version"));
+			if (attributes.containsKey(Attributes.Name.SPECIFICATION_VERSION)) {
+				_jasperVersion = GetterUtil.getString(
+					attributes.getValue(Attributes.Name.SPECIFICATION_VERSION));
+
+				if (_isValidJasperVersion(_jasperVersion)) {
+					return;
+				}
+			}
+
+			if (attributes.containsKey(
+					Attributes.Name.IMPLEMENTATION_VERSION)) {
+
+				_jasperVersion = GetterUtil.getString(
+					attributes.get(Attributes.Name.IMPLEMENTATION_VERSION));
+
+				if (_isValidJasperVersion(_jasperVersion)) {
+					return;
+				}
+			}
+
+			Attributes.Name bundleVersionAttributesName = new Attributes.Name(
+				"Bundle-Version");
+
+			if (attributes.containsKey(bundleVersionAttributesName)) {
+				_jasperVersion = GetterUtil.getString(
+					attributes.get(bundleVersionAttributesName));
+
+				if (_isValidJasperVersion(_jasperVersion)) {
+					return;
+				}
+
+				_jasperVersion = StringPool.BLANK;
+			}
 		}
 		catch (Exception e) {
 			_log.error(e, e);
+		}
+	}
+
+	private void _initializeJspServletDependantsMap() {
+		try {
+			Class<?> clazz = Class.forName(
+				"org.apache.jasper.servlet.JspServletWrapper");
+
+			Method method = ReflectionUtil.getDeclaredMethod(
+				clazz, "getDependants");
+
+			Class<?> returnType = method.getReturnType();
+
+			_jspServletDependantsMap = Map.class.isAssignableFrom(returnType);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+	}
+
+	private boolean _isValidJasperVersion(String jasperVersion) {
+		if (Validator.isNull(jasperVersion) ||
+			!Validator.isDigit(jasperVersion.charAt(0))) {
+
+			return false;
+		}
+		else {
+			return true;
 		}
 	}
 
@@ -81,5 +154,6 @@ public class JasperVersionDetector {
 		new JasperVersionDetector();
 
 	private String _jasperVersion = StringPool.BLANK;
+	private boolean _jspServletDependantsMap;
 
 }

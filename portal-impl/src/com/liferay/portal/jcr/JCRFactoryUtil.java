@@ -16,8 +16,8 @@ package com.liferay.portal.jcr;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.Closeable;
@@ -61,7 +61,7 @@ public class JCRFactoryUtil {
 			Session session = getJCRFactory().createSession(workspaceName);
 
 			Object sessionProxy = ProxyUtil.newProxyInstance(
-				PortalClassLoaderUtil.getClassLoader(),
+				PACLClassLoaderUtil.getPortalClassLoader(),
 				new Class<?>[] {Closeable.class, Map.class, Session.class},
 				new JCRSessionInvocationHandler(session));
 

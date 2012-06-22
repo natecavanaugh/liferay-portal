@@ -607,6 +607,7 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		if (isNew || !UserModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((userModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
@@ -738,6 +739,7 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CONTACTID,
 					args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CONTACTID,
 					args);
 
@@ -753,6 +755,7 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PORTRAITID,
 					args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_PORTRAITID,
 					args);
 
@@ -768,6 +771,7 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_U, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_U, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_U,
@@ -785,6 +789,7 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_DU, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_DU, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_DU,
@@ -803,6 +808,7 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_SN, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_SN, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_SN,
@@ -822,6 +828,7 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_EA, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_EA, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_EA,
@@ -840,6 +847,7 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_FID, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_FID, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_FID,
@@ -858,6 +866,7 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_O, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_O, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_O,

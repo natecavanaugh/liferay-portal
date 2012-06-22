@@ -390,6 +390,7 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 		if (isNew || !AssetCategoryPropertyModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((assetCategoryPropertyModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
@@ -479,6 +480,7 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CA_K, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CA_K, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CA_K,

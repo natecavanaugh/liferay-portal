@@ -338,6 +338,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 		if (isNew || !ServiceComponentModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((serviceComponentModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE.getColumnBitmask()) != 0) {
@@ -381,6 +382,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BNS_BNU, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_BNS_BNU, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,

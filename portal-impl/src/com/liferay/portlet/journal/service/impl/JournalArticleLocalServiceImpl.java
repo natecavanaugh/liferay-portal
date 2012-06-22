@@ -3412,14 +3412,19 @@ public class JournalArticleLocalServiceImpl
 
 	protected void validateContent(String content) throws PortalException {
 		if (Validator.isNull(content)) {
-			throw new ArticleContentException();
+			throw new ArticleContentException("Content is null");
 		}
 
 		try {
 			SAXReaderUtil.read(content);
 		}
 		catch (DocumentException de) {
-			throw new ArticleContentException();
+			if (_log.isDebugEnabled()) {
+				_log.debug("Invalid content:\n" + content);
+			}
+
+			throw new ArticleContentException(
+				"Unable to read content with an XML parser", de);
 		}
 	}
 

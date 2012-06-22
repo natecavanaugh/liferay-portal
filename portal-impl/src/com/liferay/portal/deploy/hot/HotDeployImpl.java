@@ -18,17 +18,18 @@ import com.liferay.portal.kernel.deploy.hot.HotDeploy;
 import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
 import com.liferay.portal.kernel.deploy.hot.HotDeployException;
 import com.liferay.portal.kernel.deploy.hot.HotDeployListener;
+import com.liferay.portal.kernel.freemarker.FreeMarkerEngineUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
 import com.liferay.portal.kernel.util.HttpUtil;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalLifecycle;
 import com.liferay.portal.kernel.util.PortalLifecycleUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.velocity.VelocityEngineUtil;
 import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.security.pacl.PACLPolicy;
 import com.liferay.portal.security.pacl.PACLPolicyManager;
@@ -106,7 +107,12 @@ public class HotDeployImpl implements HotDeploy {
 		_deployedServletContextNames.remove(
 			hotDeployEvent.getServletContextName());
 
-		PACLPolicyManager.unregister(hotDeployEvent.getContextClassLoader());
+		ClassLoader classLoader = hotDeployEvent.getContextClassLoader();
+
+		FreeMarkerEngineUtil.clearClassLoader(classLoader);
+		VelocityEngineUtil.clearClassLoader(classLoader);
+
+		PACLPolicyManager.unregister(classLoader);
 	}
 
 	public void registerListener(HotDeployListener hotDeployListener) {
@@ -174,7 +180,8 @@ public class HotDeployImpl implements HotDeploy {
 			ClassLoader contextClassLoader = getContextClassLoader();
 
 			try {
-				setContextClassLoader(PortalClassLoaderUtil.getClassLoader());
+				setContextClassLoader(
+					PACLClassLoaderUtil.getPortalClassLoader());
 
 				List<HotDeployEvent> dependentEvents =
 					new ArrayList<HotDeployEvent>(_dependentHotDeployEvents);

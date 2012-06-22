@@ -402,7 +402,13 @@ public class Creole10Parser]]></replacevalue>
 		<java
 			classname="com.liferay.portal.tools.servicebuilder.ServiceBuilder"
 			classpathref="project.classpath"
+			fork="true"
+			newenvironment="true"
 		>
+			<jvmarg value="-Xms512m" />
+			<jvmarg value="-Xmx1024m" />
+			<jvmarg value="-Xss2048k" />
+			<jvmarg value="-XX:MaxPermSize=512m" />
 			<arg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
 			<arg value="-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Log4JLogger" />
 			<arg value="service.input.file=${service.file}" />
@@ -421,7 +427,7 @@ public class Creole10Parser]]></replacevalue>
 			<arg value="service.sql.sequences.file=sequences.sql" />
 			<arg value="service.bean.locator.util=com.liferay.portal.kernel.bean.PortalBeanLocatorUtil" />
 			<arg value="service.props.util=com.liferay.portal.util.PropsUtil" />
-			<arg value="service.test.dir=${basedir}/test" />
+			<arg value="service.target.entity.name=${service.target.entity.name}" />
 		</java>
 
 		<delete file="ServiceBuilder.temp" />
@@ -864,17 +870,17 @@ public class Creole10Parser]]></replacevalue>
 		</tstamp>
 
 		<unzip src="${project.dir}/tools/rhino1_6R7.zip" dest="${tstamp.value}" />
-		<unzip src="${project.dir}/tools/yuicompressor-2.4.2.zip" dest="${tstamp.value}" />
+		<unzip src="${project.dir}/tools/yuicompressor-2.4.7.zip" dest="${tstamp.value}" />
 
 		<move todir="${tstamp.value}/rhino1_6R7/src/org">
-			<fileset dir="${tstamp.value}/yuicompressor-2.4.2/src/org" includes="**/*.java" />
+			<fileset dir="${tstamp.value}/yuicompressor-2.4.7/src/org" includes="**/*.java" />
 		</move>
 
 		<move file="${tstamp.value}/rhino1_6R7/deprecatedsrc/org/mozilla" todir="${tstamp.value}/rhino1_6R7/deprecatedsrc/com/liferay" />
 		<move file="${tstamp.value}/rhino1_6R7/src/org/mozilla" todir="${tstamp.value}/rhino1_6R7/src/com/liferay" />
 		<move file="${tstamp.value}/rhino1_6R7/toolsrc/org/mozilla" todir="${tstamp.value}/rhino1_6R7/toolsrc/com/liferay" />
 		<move file="${tstamp.value}/rhino1_6R7/xmlimplsrc/org/mozilla" todir="${tstamp.value}/rhino1_6R7/xmlimplsrc/com/liferay" />
-		<move file="${tstamp.value}/yuicompressor-2.4.2/src/com/yahoo" todir="${tstamp.value}/yuicompressor-2.4.2/src/com/liferay" />
+		<move file="${tstamp.value}/yuicompressor-2.4.7/src/com/yahoo" todir="${tstamp.value}/yuicompressor-2.4.7/src/com/liferay" />
 
 		<replace dir="${tstamp.value}" includes="**/build.xml,**/*.java,**/*.properties">
 			<replacefilter token="com.yahoo" value="com.liferay.yahoo" />
@@ -892,24 +898,24 @@ public class Creole10Parser]]></replacevalue>
 			<replacevalue><![CDATA[excludes="com/]]></replacevalue>
 		</replace>
 
-		<replace file="${tstamp.value}/yuicompressor-2.4.2/build.xml">
+		<replace file="${tstamp.value}/yuicompressor-2.4.7/build.xml">
 			<replacetoken><![CDATA[<unjar src="${lib.dir}/jargs-1.0.jar" dest="${build.dir}/jar" />]]></replacetoken>
 			<replacevalue></replacevalue>
 		</replace>
 
-		<replace file="${tstamp.value}/yuicompressor-2.4.2/build.xml">
+		<replace file="${tstamp.value}/yuicompressor-2.4.7/build.xml">
 			<replacetoken><![CDATA[<unjar src="${lib.dir}/rhino-1.6R7.jar" dest="${build.dir}/jar" />]]></replacetoken>
 			<replacevalue></replacevalue>
 		</replace>
 
 		<ant dir="${tstamp.value}/rhino1_6R7" target="jar" inheritAll="false" />
 
-		<copy file="${tstamp.value}/rhino1_6R7/build/rhino1_6R7/js.jar" tofile="${tstamp.value}/yuicompressor-2.4.2/lib/rhino-1.6R7.jar" />
+		<copy file="${tstamp.value}/rhino1_6R7/build/rhino1_6R7/js.jar" tofile="${tstamp.value}/yuicompressor-2.4.7/lib/rhino-1.6R7.jar" />
 
-		<ant dir="${tstamp.value}/yuicompressor-2.4.2" target="build.jar" inheritAll="false" />
+		<ant dir="${tstamp.value}/yuicompressor-2.4.7" target="build.jar" inheritAll="false" />
 
 		<move file="${tstamp.value}/rhino1_6R7/build/rhino1_6R7/js.jar" tofile="${project.dir}/lib/portal/liferay-rhino.jar.new" />
-		<move file="${tstamp.value}/yuicompressor-2.4.2/build/yuicompressor-2.4.2.jar" tofile="${project.dir}/lib/portal/liferay-yuicompressor.jar.new" />
+		<move file="${tstamp.value}/yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar" tofile="${project.dir}/lib/portal/liferay-yuicompressor.jar.new" />
 
 		<delete dir="${tstamp.value}" />
 	</target>
@@ -1099,6 +1105,7 @@ public class Creole10Parser]]></replacevalue>
 			newenvironment="true"
 		>
 			<jvmarg value="-Xmx512m" />
+			<jvmarg value="-Xss2048k" />
 			<jvmarg value="-Dsource.formatter.excludes=${source.formatter.excludes}" />
 		</java>
 

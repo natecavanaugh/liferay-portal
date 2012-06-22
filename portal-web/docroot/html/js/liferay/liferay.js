@@ -304,6 +304,12 @@ Liferay = window.Liferay || {};
 			_ioRequest: function(uri, config) {
 				var instance = this;
 
+				var data = config.data;
+
+				if (!A.Object.owns(data, 'p_auth')) {
+					data.p_auth = Liferay.authToken;
+				}
+
 				if (A.io && A.io.request) {
 					A.io.request(uri, config);
 				}

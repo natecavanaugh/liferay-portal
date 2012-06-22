@@ -350,6 +350,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		if (isNew || !CountryModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((countryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACTIVE.getColumnBitmask()) != 0) {
@@ -390,6 +391,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				Object[] args = new Object[] { countryModelImpl.getOriginalName() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
@@ -401,6 +403,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				Object[] args = new Object[] { countryModelImpl.getOriginalA2() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A2, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A2, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A2,
@@ -412,6 +415,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 				Object[] args = new Object[] { countryModelImpl.getOriginalA3() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A3, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A3, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A3,

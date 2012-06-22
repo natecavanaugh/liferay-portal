@@ -518,6 +518,10 @@ public class PortletExporter {
 		Map<String, String[]> assetTagNamesMap =
 			portletDataContext.getAssetTagNamesMap();
 
+		if (assetTagNamesMap.isEmpty()) {
+			return;
+		}
+
 		for (Map.Entry<String, String[]> entry : assetTagNamesMap.entrySet()) {
 			String[] assetTagNameParts = StringUtil.split(
 				entry.getKey(), CharPool.POUND);

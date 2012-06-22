@@ -369,6 +369,7 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 		if (isNew || !PermissionModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((permissionModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEID.getColumnBitmask()) != 0) {
@@ -411,6 +412,7 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_R, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_R, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_R,

@@ -332,6 +332,7 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 		if (isNew || !ShoppingCouponModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((shoppingCouponModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
@@ -369,6 +370,7 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CODE, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CODE, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,

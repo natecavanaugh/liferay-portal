@@ -26,13 +26,13 @@ import com.liferay.portal.kernel.servlet.StringServletResponse;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.PortletApp;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.tools.deploy.PortletDeployer;
 import com.liferay.portal.util.WebKeys;
 
@@ -180,16 +180,15 @@ public class InvokerPortletImpl implements InvokerPortlet {
 
 	public void destroy() {
 		if (_destroyable) {
-			Thread currentThread = Thread.currentThread();
-
 			ClassLoader contextClassLoader =
-				currentThread.getContextClassLoader();
+				PACLClassLoaderUtil.getContextClassLoader();
 
 			ClassLoader portletClassLoader = getPortletClassLoader();
 
 			try {
 				if (portletClassLoader != null) {
-					currentThread.setContextClassLoader(portletClassLoader);
+					PACLClassLoaderUtil.setContextClassLoader(
+						portletClassLoader);
 				}
 
 				removePortletFilters();
@@ -198,7 +197,8 @@ public class InvokerPortletImpl implements InvokerPortlet {
 			}
 			finally {
 				if (portletClassLoader != null) {
-					currentThread.setContextClassLoader(contextClassLoader);
+					PACLClassLoaderUtil.setContextClassLoader(
+						contextClassLoader);
 				}
 			}
 		}
@@ -219,7 +219,7 @@ public class InvokerPortletImpl implements InvokerPortlet {
 			PluginContextListener.PLUGIN_CLASS_LOADER);
 
 		if (classLoader == null) {
-			classLoader = PortalClassLoaderUtil.getClassLoader();
+			classLoader = PACLClassLoaderUtil.getPortalClassLoader();
 		}
 
 		return classLoader;
@@ -240,22 +240,21 @@ public class InvokerPortletImpl implements InvokerPortlet {
 	public void init(PortletConfig portletConfig) throws PortletException {
 		_portletConfigImpl = (PortletConfigImpl)portletConfig;
 
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+		ClassLoader contextClassLoader =
+			PACLClassLoaderUtil.getContextClassLoader();
 
 		ClassLoader portletClassLoader = getPortletClassLoader();
 
 		try {
 			if (portletClassLoader != null) {
-				currentThread.setContextClassLoader(portletClassLoader);
+				PACLClassLoaderUtil.setContextClassLoader(portletClassLoader);
 			}
 
 			_portlet.init(portletConfig);
 		}
 		finally {
 			if (portletClassLoader != null) {
-				currentThread.setContextClassLoader(contextClassLoader);
+				PACLClassLoaderUtil.setContextClassLoader(contextClassLoader);
 			}
 		}
 

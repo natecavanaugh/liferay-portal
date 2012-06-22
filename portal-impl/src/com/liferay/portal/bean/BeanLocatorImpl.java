@@ -156,10 +156,8 @@ public class BeanLocatorImpl implements BeanLocator {
 		return bean;
 	}
 
-	protected Class<?>[] getInterfaces(Object object) {
-		List<Class<?>> interfaceClasses = new ArrayList<Class<?>>();
-
-		Class<?> clazz = object.getClass();
+	protected void getInterfaces(
+		List<Class<?>> interfaceClasses, Class<?> clazz) {
 
 		for (Class<?> interfaceClass : clazz.getInterfaces()) {
 			try {
@@ -168,6 +166,22 @@ public class BeanLocatorImpl implements BeanLocator {
 			}
 			catch (ClassNotFoundException cnfe) {
 			}
+		}
+	}
+
+	protected Class<?>[] getInterfaces(Object object) {
+		List<Class<?>> interfaceClasses = new ArrayList<Class<?>>();
+
+		Class<?> clazz = object.getClass();
+
+		getInterfaces(interfaceClasses, clazz);
+
+		Class<?> superClazz = clazz.getSuperclass();
+
+		while (superClazz != null) {
+			getInterfaces(interfaceClasses, superClazz);
+
+			superClazz = superClazz.getSuperclass();
 		}
 
 		return interfaceClasses.toArray(new Class<?>[interfaceClasses.size()]);

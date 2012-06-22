@@ -445,6 +445,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 		if (isNew || !SocialActivityCounterModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((socialActivityCounterModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
@@ -535,6 +536,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_S,
 					args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C_C_N_O_S,
 					args);
 
@@ -564,6 +566,7 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_C_C_N_O_E,
 					args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_C_C_N_O_E,
 					args);
 

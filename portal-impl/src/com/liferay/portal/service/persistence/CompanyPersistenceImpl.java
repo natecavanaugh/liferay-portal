@@ -350,6 +350,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 		if (isNew || !CompanyModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((companyModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SYSTEM.getColumnBitmask()) != 0) {
@@ -390,6 +391,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 				Object[] args = new Object[] { companyModelImpl.getOriginalWebId() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_WEBID, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_WEBID, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_WEBID,
@@ -401,6 +403,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 				Object[] args = new Object[] { companyModelImpl.getOriginalMx() };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MX, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_MX, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_MX,
@@ -414,6 +417,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LOGOID, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_LOGOID, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_LOGOID,

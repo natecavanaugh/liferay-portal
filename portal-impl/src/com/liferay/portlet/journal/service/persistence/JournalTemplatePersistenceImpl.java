@@ -483,6 +483,7 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		if (isNew || !JournalTemplateModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((journalTemplateModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
@@ -613,6 +614,7 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -630,6 +632,7 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SMALLIMAGEID,
 					args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_SMALLIMAGEID,
 					args);
 
@@ -648,6 +651,7 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_T, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_T, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_T,

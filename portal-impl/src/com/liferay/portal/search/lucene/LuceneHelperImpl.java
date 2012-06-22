@@ -551,6 +551,17 @@ public class LuceneHelperImpl implements LuceneHelper {
 			LuceneIndexer luceneIndexer = new LuceneIndexer(companyId);
 
 			if (PropsValues.INDEX_WITH_THREAD) {
+				if (_luceneIndexThreadPoolExecutor == null) {
+
+					// This should never be null except for the case where
+					// VerifyProcessUtil#_verifyProcess(boolean) sets
+					// PropsValues#INDEX_ON_STARTUP to true.
+
+					_luceneIndexThreadPoolExecutor =
+						PortalExecutorManagerUtil.getPortalExecutor(
+							LuceneHelperImpl.class.getName());
+				}
+
 				_luceneIndexThreadPoolExecutor.execute(luceneIndexer);
 			}
 			else {

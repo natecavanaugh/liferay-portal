@@ -393,6 +393,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 		if (isNew || !RepositoryEntryModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((repositoryEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
@@ -460,6 +461,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
@@ -478,6 +480,7 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_M, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_M, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_M,

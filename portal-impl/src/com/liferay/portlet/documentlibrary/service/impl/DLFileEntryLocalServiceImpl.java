@@ -221,11 +221,11 @@ public class DLFileEntryLocalServiceImpl
 			dlFileEntry.getFileEntryId(), groupPermissions, guestPermissions);
 	}
 
-	public void cancelCheckOut(long userId, long fileEntryId)
+	public DLFileVersion cancelCheckOut(long userId, long fileEntryId)
 		throws PortalException, SystemException {
 
 		if (!isFileEntryCheckedOut(fileEntryId)) {
-			return;
+			return null;
 		}
 
 		if (!hasFileEntryLock(userId, fileEntryId)) {
@@ -250,6 +250,8 @@ public class DLFileEntryLocalServiceImpl
 		}
 
 		lockLocalService.unlock(DLFileEntry.class.getName(), fileEntryId);
+
+		return dlFileVersion;
 	}
 
 	public void checkInFileEntry(

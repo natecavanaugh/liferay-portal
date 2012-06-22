@@ -430,6 +430,7 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 		if (isNew || !PortletPreferencesModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((portletPreferencesModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PLID.getColumnBitmask()) != 0) {
@@ -548,6 +549,7 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_O_O_P_P, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_O_O_P_P, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_O_O_P_P,

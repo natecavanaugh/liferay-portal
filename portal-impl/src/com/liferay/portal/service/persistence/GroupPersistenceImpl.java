@@ -558,6 +558,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		if (isNew || !GroupModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
+
 		else {
 			if ((groupModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
@@ -651,6 +652,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_LIVEGROUPID,
 					args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_LIVEGROUPID,
 					args);
 
@@ -667,6 +669,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_N, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_N, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_N,
@@ -686,6 +689,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_F, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_F, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_F,
@@ -705,6 +709,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_C, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C_C, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C_C,
@@ -725,6 +730,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_L_N, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_L_N, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_L_N,
@@ -747,6 +753,7 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C_L_N, args);
+
 				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C_L_N, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C_L_N,
