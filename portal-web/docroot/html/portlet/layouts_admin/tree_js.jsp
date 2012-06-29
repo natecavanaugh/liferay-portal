@@ -181,17 +181,21 @@ if (!selectableTree) {
 							checked: true,
 						</c:if>
 
-						children: TreeUtil.formatJSONResults(childLayouts),
 						draggable: node.updateable,
-						expanded: childLayouts.length > 0,
+						expanded: total > 0,
 						id: TreeUtil.createListItemId(node.groupId, node.layoutId, node.plid),
 						paginator: {
 							limit: TreeUtil.PAGINATION_LIMIT,
 							offsetParam: 'start',
+							start: Math.max(childLayouts.length - TreeUtil.PAGINATION_LIMIT, 0),
 							total: total
 						},
 						type: '<%= selectableTree ? "task" : "io" %>'
 					};
+
+					if (nodeChildren && (total > 0)) {
+						newNode.children = TreeUtil.formatJSONResults(nodeChildren);
+					}
 
 					var cssClass = '';
 
@@ -251,14 +255,7 @@ if (!selectableTree) {
 				}
 			}
 
-			var children = node.get('children');
-			var paginator = node.get('paginator');
-
-			var limit = paginator.limit;
-
-			paginator.start = Math.max(children.length - limit, 0);
-
-			A.Array.each(children, TreeUtil.restoreNodeState);
+			A.Array.each(node.get('paginator'), TreeUtil.restoreNodeState);
 		},
 
 		restoreSelectedNode: function(node) {
@@ -300,7 +297,72 @@ if (!selectableTree) {
 		}
 
 		<c:if test="<%= saveState %>">
-			, updateSessionTreeCheckedState: function(treeId, nodeId, state) {
+			, invokeSessionClick: function(data, callback) {
+				A.mix(
+					data,
+					{
+						useHttpSession: true
+					}
+				);
+
+				A.io.request(
+					themeDisplay.getPathMain() + '/portal/session_click',
+					{
+						after: {
+							success: function(event) {
+								var responseData = this.get('responseData');
+
+								if (callback && responseData) {
+									callback(responseData);
+								}
+							}
+						},
+						data: data
+					}
+				);
+			},
+
+			updatePagination: function(node) {
+				var paginationMap = {};
+
+				var updatePaginationMap = function(map, curNode) {
+					if (A.instanceOf(curNode, A.TreeNodeIO)) {
+						var layoutId = TreeUtil.extractLayoutId(curNode);
+						var children = curNode.get('children');
+
+						map[layoutId] = Math.ceil(children.length / TreeUtil.PAGINATION_LIMIT) * TreeUtil.PAGINATION_LIMIT;
+					}
+				}
+
+				TreeUtil.invokeSessionClick(
+					{
+						cmd: 'get',
+						key: '<%= HtmlUtil.escape(treeId) %>:<%= groupId %>:<%= privateLayout %>:Pagination'
+					},
+					function(value) {
+						try {
+							paginationMap = A.JSON.parse(value);
+						}
+						catch(e) {}
+
+						updatePaginationMap(paginationMap, node)
+
+						node.eachParent(
+							function(parent) {
+								updatePaginationMap(paginationMap, parent);
+							}
+						);
+
+						TreeUtil.invokeSessionClick(
+							{
+								'<%= HtmlUtil.escape(treeId) %>:<%= groupId %>:<%= privateLayout %>:Pagination': A.JSON.stringify(paginationMap)
+							}
+						);
+					}
+				);
+			},
+
+			updateSessionTreeCheckedState: function(treeId, nodeId, state) {
 				var data = {
 					cmd: state ? 'layoutCheck' : 'layoutUncheck',
 					plid: nodeId
@@ -408,6 +470,7 @@ if (!selectableTree) {
 			paginator: {
 				limit: TreeUtil.PAGINATION_LIMIT,
 				offsetParam: 'start',
+				start: Math.max(<%= layoutsJSON.getJSONArray("layouts").length() %> - TreeUtil.PAGINATION_LIMIT, 0),
 				total: <%= layoutsJSON.getInt("total") %>
 			}
 		}
@@ -456,6 +519,8 @@ if (!selectableTree) {
 
 								instance.syncUI();
 							}
+
+							TreeUtil.updatePagination(instance);
 						}
 					}
 				},
