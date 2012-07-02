@@ -101,8 +101,8 @@ public class PortletSetupUtil {
 
 		boolean useCustomTitle = GetterUtil.getBoolean(
 			portletSetup.getValue("portletSetupUseCustomTitle", null));
-		String showBorders = portletSetup.getValue(
-			"portletSetupShowBorders", "");
+		String showBorders = GetterUtil.getString(
+			portletSetup.getValue("portletSetupShowBorders", null));
 		String linkToLayoutUuid = GetterUtil.getString(
 			portletSetup.getValue("portletSetupLinkToLayoutUuid", null));
 
