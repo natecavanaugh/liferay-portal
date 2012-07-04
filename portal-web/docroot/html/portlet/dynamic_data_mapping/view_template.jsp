@@ -207,7 +207,7 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 
 		<c:if test="<%= total > 0 %>">
 			<aui:button-row>
-				<aui:button cssClass="delete-templates-button" onClick='<%= renderResponse.getNamespace() + "deleteTemplates();" %>' value="delete" />
+				<aui:button cssClass="delete-templates-button" disabled="true" onClick='<%= renderResponse.getNamespace() + "deleteTemplates();" %>' value="delete" />
 			</aui:button-row>
 
 			<div class="separator"><!-- --></div>
@@ -235,25 +235,24 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 </aui:script>
 
 <aui:script use="aui-base,aui-debounce">
-	var deleteTemplatesButton = A.one('.delete-templates-button');
+	var Util = Liferay.Util;
+
+	var deleteTemplatesButton = A.one('.delete-templates-button .aui-button-input');
 
 	if (deleteTemplatesButton) {
 		var resultsGrid = A.one('.results-grid');
 
-		debugger;
-
-		var toggleTemplatesButton = function() {
-			var checkedTemplates = resultsGrid.all(':checkbox:checked');
-
-			deleteTemplatesButton.toggleClass('aui-button-disabled', checkedTemplates.size() <= 0);
-		};
-
-		resultsGrid.delegate(
-			'change',
-			A.debounce(toggleTemplatesButton, 200),
-			':checkbox'
-		);
-
-	    toggleTemplatesButton();
+		if (resultsGrid) {
+			resultsGrid.delegate(
+				'change',
+				A.debounce(
+					function(event) {
+						Util.toggleDisabled(deleteTemplatesButton, !resultsGrid.one(':checked'));
+					},
+					100
+				),
+				':checkbox'
+			);
+		}
 	}
 </aui:script>
