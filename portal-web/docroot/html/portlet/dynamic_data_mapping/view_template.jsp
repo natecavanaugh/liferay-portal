@@ -234,26 +234,26 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 	);
 </aui:script>
 
-<aui:script use="aui-base">
-	var buttons = A.all('.delete-templates-button');
+<aui:script use="aui-base,aui-debounce">
+	var deleteTemplatesButton = A.one('.delete-templates-button');
 
-	if (buttons.size()) {
-		var toggleDisabled = A.bind(Liferay.Util.toggleDisabled, Liferay.Util, ':button');
-
+	if (deleteTemplatesButton) {
 		var resultsGrid = A.one('.results-grid');
 
-		if (resultsGrid) {
-			resultsGrid.delegate(
-				'click',
-				function(event) {
-					var disabled = (resultsGrid.one(':checked') == null);
+		debugger;
 
-					toggleDisabled(disabled);
-				},
-				':checkbox'
-			);
-		}
+		var toggleTemplatesButton = function() {
+			var checkedTemplates = resultsGrid.all(':checkbox:checked');
 
-		toggleDisabled(true);
+			deleteTemplatesButton.toggleClass('aui-button-disabled', checkedTemplates.size() <= 0);
+		};
+
+		resultsGrid.delegate(
+			'change',
+			A.debounce(toggleTemplatesButton, 200),
+			':checkbox'
+		);
+
+	    toggleTemplatesButton();
 	}
 </aui:script>
