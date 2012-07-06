@@ -1,14 +1,28 @@
 @import "compass";
 @import url(../../classic/css/custom_common.css);
 
+@mixin select-navigation-top-bar {
+	top: 12px;
+}
+
+@mixin select-navigation-middle-bar {
+	top: 17px;
+}
+
+
+@mixin select-navigation-bottom-bar {
+	top: 22px;
+}
+
+
 /* -------- Base styles -------- */
 
 body, html, #content, #content-wrapper, #wrapper {
 	height: 100%;
 }
 
-html {
-	overflow-x: hidden;
+a {
+	color: #5C85AD;
 }
 
 body {
@@ -17,8 +31,8 @@ body {
 	font-size: 16px;
 }
 
-a {
-	color: #5C85AD;
+html {
+	overflow-x: hidden;
 }
 
 input[type="password"], input[type="text"], select, textarea, .textarea {
@@ -26,7 +40,7 @@ input[type="password"], input[type="text"], select, textarea, .textarea {
 	border: 1px solid #A1A2A4;
 }
 
-body.portal-popup:after, body.portal-popup:before, #minimize-panels, .panels-minimized .panel-page-menu .lfr-panel .lfr-panel-titlebar .lfr-panel-button, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel-titlebar, select#styledselect, select#styledselect optgroup, select#styledselect option, select#site-select, .touch.aui-view-lt960.aui-view-gt720 .lfr-menu-list {
+body.portal-popup:after, body.portal-popup:before, .panels-minimized .panel-page-menu .lfr-panel .lfr-panel-titlebar .lfr-panel-button, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel-titlebar, .select-navigation-wrapper, .select-site-wrapper, .touch.aui-view-lt960.aui-view-gt720 .lfr-menu-list {
 	display: none;
 }
 
@@ -52,23 +66,11 @@ select {
 	}
 }
 
-.dockbar, li.show-navigation a, .panels-minimized .aui-column-content-last, .panels-minimized .panel-page-application-content, .panels-minimized .panel-page-body-content, .panels-minimized .search-panels .aui-field-element, .search-panels {
+.dockbar, .toggle-navigation a, .panels-minimized .aui-column-content-last, .panels-minimized .panel-page-application-content, .panels-minimized .panel-page-body-content, .panels-minimized .search-panels .aui-field-element, .search-panels {
 	width: 100%;
 }
 
-li.show-navigation {
-	height: 24px;
-	margin: 5px 4px;
-	overflow: hidden;
-	width: 38px;
-
-	a {
-		display: block;
-		height: 100%;
-	}
-}
-
-#show-navigation:before, #show-navigation, #show-navigation:after, .touch.aui-view-lt960.aui-view-gt720 span.styled-select:before, .touch.aui-view-lt960.aui-view-gt720 span.styled-select, .touch.aui-view-lt960.aui-view-gt720 span.styled-select:after {
+.toggle-navigation:before, .toggle-navigation a:after, .toggle-navigation a:before, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-element:after , .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-element:before, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-content:before {
 	background: #FFF;
 	content: "";
 	height: 2px;
@@ -78,16 +80,44 @@ li.show-navigation {
 	z-index: 306;
 }
 
-#show-navigation:before, .touch.aui-view-lt960.aui-view-gt720 span.styled-select:before {
-	top: 12px;
+li.toggle-navigation {
+	height: 24px;
+	margin: 5px 4px;
+	overflow: hidden;
+	width: 38px;
+
+	&:before {
+		@include select-navigation-top-bar;
+	}
+
+	a {
+		display: block;
+		height: 100%;
+
+		&:after {
+			@include select-navigation-bottom-bar;
+		}
+
+		&:before{
+			@include select-navigation-middle-bar;
+		}
+	}
 }
 
-#show-navigation, .touch.aui-view-lt960.aui-view-gt720 span.styled-select {
-	top: 17px;
-}
+.touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper {
+	.aui-field-element {
+		&:after {
+			@include select-navigation-bottom-bar;
+		}
 
-#show-navigation:after, .touch.aui-view-lt960.aui-view-gt720 span.styled-select:after {
-	top: 22px;
+		&:before {
+			@include select-navigation-middle-bar;
+		}
+	}
+
+	.aui-field-content:before {
+		@include select-navigation-top-bar;
+	}
 }
 
 #wrapper div.panel-page-body {
@@ -97,7 +127,7 @@ li.show-navigation {
 	width: auto;
 }
 
-#banner, #breadcrumbs h1, #heading .site-title, #minimize-panels span, #navigation h1, #skip-to-content, .lfr-ctrl-panel .user-greeting, .pin-dockbar {
+#banner, #breadcrumbs h1, #heading .site-title, #navigation h1, #skip-to-content, .lfr-ctrl-panel .user-greeting, .pin-dockbar, .toggle-navigation span, {
 	clip: rect(0 0 0 0);
 	position: absolute;
 }
@@ -169,10 +199,10 @@ li.show-navigation {
 	background: transparent url(../images/custom/bg-1.png) 0 0 repeat-y;
 	border-left: 238px solid #CAD2DD;
 	width: auto;
-}
 
-.lfr-ctrl-panel .aui-tree-node-selected {
-	background: transparent;
+	.aui-tree-node-selected {
+		background: transparent;
+	}
 }
 
 .lfr-ctrl-panel .aui-tree-node-selected a, .search-panel-active #controlPanelMenuAddContentPanelContainer a {
@@ -184,7 +214,7 @@ li.show-navigation {
 	border-right: 1px solid #B0B1B3;
 	margin-left: -238px;
 	margin-top: -30px;
-	position: absolute;
+	position: relative;
 	width: 238px;
 
 	.lfr-panel.lfr-extended {
@@ -208,12 +238,12 @@ li.show-navigation {
 		padding: 7px 6px 6px;
 	}
 
-	.lfr-panel .lfr-panel-content {
-		background: #DCE3EA url(../images/custom/shadow_top_bg.png) 0 0 repeat-x;
-	}
-
 	#panel-manage-content .lfr-panel-titlebar {
 		padding: 0px 6px;
+	}
+
+	.lfr-panel .lfr-panel-content {
+		background: #DCE3EA url(../images/custom/shadow_top_bg.png) 0 0 repeat-x;
 	}
 
 	.lfr-panel.lfr-collapsed .lfr-panel-titlebar {
@@ -300,14 +330,16 @@ li.show-navigation {
 		background-position: -8px 0;
 	}
 
-	.lfr-panel-content ul li a:hover {
-		background-color: #EBF0F5;
-		text-decoration: underline;
-	}
+	.lfr-panel-content ul li a {
+		&:hover {
+			background-color: #EBF0F5;
+			text-decoration: underline;
+		}
 
-	.lfr-panel-content ul li a .icon {
-		float: left;
-		padding: 0 4px 0 0;
+		.icon {
+			float: left;
+			padding: 0 4px 0 0;
+		}
 	}
 
 	#groupSelectorPanel .lfr-panel-content ul li a {
@@ -322,11 +354,11 @@ li.show-navigation {
 		font-weight: bold;
 		padding-left: 2px;
 		position: relative;
-	}
 
-	#panel-manage-content .lfr-panel-title span a:focus {
-		background-color: transparent;
-		text-decoration: none;
+		&:focus {
+			background-color: transparent;
+			text-decoration: none;
+		}
 	}
 
 	#panel-manage-marketplace .lfr-panel-title {
@@ -337,12 +369,14 @@ li.show-navigation {
 		background-position: 0 -39px;
 	}
 
-	#panel-manage-server .lfr-panel-title {
-		background-position: 0 -56px;
-	}
+	#panel-manage-server {
+		.lfr-panel-content {
+			border-bottom: 1px solid #FFF;
+		}
 
-	#panel-manage-server .lfr-panel-content {
-		border-bottom: 1px solid #FFF;
+		.lfr-panel-title {
+			background-position: 0 -56px;
+		}
 	}
 }
 
@@ -395,14 +429,14 @@ li.show-navigation {
 	}
 }
 
-.aui-column-content, .ie7 .panel-page-menu .lfr-panel-content ul li.selected-portlet a, .ie7 .panel-page-menu .lfr-panel-content {
+.aui-column-content, .ie7 .panel-page-menu .lfr-panel-content, .ie7 .panel-page-menu .lfr-panel-content ul li.selected-portlet a {
 	zoom: 1;
 }
 
 .aui-column-content:after {
+	clear: both;
 	content: "";
 	display: block;
-	clear: both;
 }
 
 .portal-add-content {
@@ -412,8 +446,8 @@ li.show-navigation {
 
 .search-panel-active {
 	.panel-page-menu .lfr-panel.lfr-extended .lfr-panel-content ul {
+		border: none;
 		padding: 0;
-		border: 0;
 	}
 
 	.panel-page-menu li a {
@@ -444,24 +478,36 @@ li.show-navigation {
 			background-color: #CAD2DD;
 		}
 
-		.lfr-panel.lfr-extended, .lfr-panel.lfr-extended .lfr-panel-content, .lfr-panel.lfr-extended .lfr-panel-content ul {
-			background: transparent;
+		.lfr-panel.lfr-extended {
+			&, .lfr-panel-content {
+				& ul {
+					background: transparent;
+				}
+			}
 		}
 
-		#panel-manage-my li a:focus, #panel-manage-my li.selected-portlet a {
-			background-color: #76AD00;
+		#panel-manage-my li {
+			&.selected-portlet a, a:focus {
+				background-color: #76AD00;
+			}
 		}
 
-		#panel-manage-content li a:focus, #panel-manage-content li.selected-portlet a {
-			background-color: #005BA8;
+		#panel-manage-content li {
+			&.selected-portlet a, a:focus {
+				background-color: #005BA8;
+			}
 		}
 
-		#panel-manage-portal li a:focus, #panel-manage-portal li.selected-portlet a {
-			background-color: #680082;
+		#panel-manage-portal li {
+			&.selected-portlet a, a:focus {
+				background-color: #680082;
+			}
 		}
 
-		#panel-manage-server li a:focus, #panel-manage-server li.selected-portlet a {
-			background-color: #727171;
+		#panel-manage-server li {
+			&.selected-portlet a, a:focus {
+				background-color: #727171;
+			}
 		}
 	}
 }
@@ -515,26 +561,30 @@ li.show-navigation {
 		border-top: none;
 	}
 
-	.lfr-panel .lfr-panel-titlebar, .lfr-panel .lfr-panel-titlebar .lfr-panel-button {
-		background: url(../images/custom/panel_normal_header_toggler_bg.png) -3px -1px no-repeat;
-		margin: 2px 0 0;
-	}
-
-	.lfr-panel.lfr-extended .lfr-panel-titlebar {
-		background: transparent none;
-		padding: 0 3px 0 5px;
-
-		.lfr-panel-button {
-			background: url(../images/custom/panel_header_toggler_bg.png) -3px -1px no-repeat;
-			margin: 2px 0 0;
+	.lfr-panel {
+		.lfr-panel-titlebar {
+			&, .lfr-panel-button {
+				background: url(../images/custom/panel_normal_header_toggler_bg.png) -3px -1px no-repeat;
+				margin: 2px 0 0;
+			}
 		}
-	}
 
-	.lfr-panel.lfr-collapsed .lfr-panel-titlebar {
-		border-bottom: 1px solid #DEDEDE;
+		&.lfr-collapsed .lfr-panel-titlebar {
+			border-bottom: 1px solid #DEDEDE;
 
-		&, .lfr-panel-button {
-			background-position: -3px -23px;
+			&, .lfr-panel-button {
+				background-position: -3px -23px;
+			}
+		}
+
+		&.lfr-extended .lfr-panel-titlebar {
+			background: transparent none;
+			padding: 0 3px 0 5px;
+
+			.lfr-panel-button {
+				background: url(../images/custom/panel_header_toggler_bg.png) -3px -1px no-repeat;
+				margin: 2px 0 0;
+			}
 		}
 	}
 }
@@ -674,7 +724,8 @@ li.show-navigation {
 	}
 
 	.panel-page-menu {
-		margin-left: -238px;
+		left: -238px;
+		margin-left: 0;
 
 		#panel-manage-content {
 			.lfr-panel-titlebar {
@@ -767,69 +818,88 @@ li.show-navigation {
 	}
 }
 
-.touch .panels-minimized, .touch.aui-view-lt960.aui-view-gt720 {
-	.lfr-ctrl-panel {
-		background: transparent;
-		border-left: 0px solid #CAD2DD;
+.touch {
+	&.aui-view-lt960.aui-view-gt720, .panels-minimized {
+		.lfr-ctrl-panel {
+			background: transparent;
+			border-left: 0px solid #CAD2DD;
+		}
+
+		#breadcrumbs {
+			left: 17px;
+			margin-right: 34px;
+		}
 	}
 
-	#breadcrumbs {
-		left: 17px;
-		margin-right: 34px;
-	}
-}
+	&.aui-view-lt960.aui-view-gt720 {
+		.dockbar .back-link {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			width: 80px;
+		}
 
-.touch.aui-view-lt960.aui-view-gt720 {
-	.panel-page-menu {
-		height: 100%;
-		overflow: hidden;
+		.panel-page-menu {
+			height: 100%;
+			overflow: hidden;
+		}
+
+		.toggle-navigation {
+			background:	transparent;
+			display: hidden;
+			margin-right: 229px;
+		}
+
+		.select-navigation-wrapper, .select-site-wrapper {
+			display: block;
+			height: 24px;
+			margin: 6px 9px;
+			position: fixed;
+			top: 0;
+			z-index: 303;
+		}
+
+		.select-navigation-input, .select-site-input {
+			background: transparent;
+			border-width: 0;
+			height: 24px;
+		}
+
+		.select-navigation-wrapper {
+			left: 0;
+
+			.select-navigation-input {
+				line-height: 0;
+				width: 38px;
+			}
+		}
+
+		.select-site-wrapper {
+			left: 47px;
+
+			.select-site-input {
+				color: #FFF;
+				font-weight: bold;
+				padding: 2px 5px;
+				padding-right: 23px;
+			}
+		}
+
+		.select-site-arrow {
+			border: 7px solid transparent;
+			border-top-color: #FFF;
+			border-width: 7px 4px 0px;
+			content: "";
+			left: 185px;
+			position: fixed;
+			top: 13px;
+			z-index: 305;
+		}
 	}
 
-	li.show-navigation {
-		background:	transparent;
-		display: hidden;
-		margin-right: 229px;
-	}
-
-	.dockbar .back-link {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		width: 80px;
-	}
-
-	select#styledselect, select#site-select {
-		border-width: 0;
-		display: block;
-		height: 24px;
-		margin: 6px 9px;
-		position: fixed;
-		top: 0;
-		z-index: 303;
-	}
-
-	select#styledselect {
-		left: 0px;
-		line-height: 0;
-		width: 38px;
-	}
-
-	select#site-select {
-		color: #FFF;
-		font-weight: bold;
-		left: 47px;
-		padding: 2px 5px;
-		padding-right: 23px;
-	}
-
-	.site-select {
-		border: 7px solid transparent;
-		border-top-color: #FFF;
-		border-width: 7px 4px 0px;
-		content: "";
-		left: 249px;
-		position: fixed;
-		top: 13px;
-		z-index: 305;
+	.panels-minimized {
+		.panel-page-menu {
+			display: none;
+		}
 	}
 }
 
@@ -843,7 +913,7 @@ input[type="text"], input[type="password"], select, textarea, .aui-tagselector-c
 	@include box-shadow(0 1px 2px #CCC inset);
 }
 
-input[type="text"], input[type="password"], select, textarea, #breadcrumbs, .aui-field-element, .aui-textboxlistentry-holder, .form-navigation, .lfr-panel.lfr-extended, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .portlet-communities .layout-breadcrumb ul, .portlet-enterprise-admin .form-navigation, .portlet-enterprise-admin .layout-breadcrumb ul, .taglib-search-toggle, .textarea {
+input[type="text"], input[type="password"], select, textarea, #breadcrumbs, .aui-field-element, .aui-textboxlistentry-holder, .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .lfr-panel.lfr-extended, .portlet-communities .layout-breadcrumb ul, .portlet-enterprise-admin .form-navigation, .portlet-enterprise-admin .layout-breadcrumb ul, .taglib-search-toggle, .textarea {
 	@include border-radius(4px);
 }
 
@@ -859,12 +929,14 @@ input[type="text"], input[type="password"], select, textarea, #breadcrumbs, .aui
 	@include box-shadow(0 0 8px #CECECE inset);
 }
 
-.panels-minimized #controlPanelMenuAddContentPanelContainer .lfr-panel-content {
-	@include border-radius(0 6px 6px 0);
-}
+.panels-minimized #controlPanelMenuAddContentPanelContainer {
+	.lfr-panel-content {
+		@include border-radius(0 6px 6px 0);
 
-.panels-minimized #controlPanelMenuAddContentPanelContainer .lfr-panel-content:before {
-	@include border-radius(6px 0 0 6px);
+		&:before {
+			@include border-radius(6px 0 0 6px);
+		}
+	}
 }
 
 #controlPanelMenuAddContentPanelContainer a.lfr-panel-button:focus, .aui-tagselector .lfr-tag-selector-input, .panel-page-application .lfr-document-library-comments.lfr-panel.lfr-extended, .panel-page-menu .lfr-floating-container, .panel-page-menu .lfr-panel-container, .panel-page-menu .lfr-panel-container .lfr-extended.lfr-collapsible .lfr-panel-titlebar, .panel-page-menu .lfr-panel.lfr-extended, .panel-page-menu .lfr-panel.lfr-extended .lfr-panel-titlebar, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel .lfr-panel-content, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel.lfr-extended {
@@ -901,16 +973,16 @@ input[type="text"], input[type="password"], select, textarea, #breadcrumbs, .aui
 	@include background-image(linear-gradient(#427EAD, #154B75));
 }
 
-#show-navigation:before, #show-navigation, #show-navigation:after, .touch.aui-view-lt960.aui-view-gt720 span.styled-select:before, .touch.aui-view-lt960.aui-view-gt720 span.styled-select, .touch.aui-view-lt960.aui-view-gt720 span.styled-select:after {
+.toggle-navigation:before, .toggle-navigation a:before, .toggle-navigation a:after, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-element:after , .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-element:before, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-content:before {
 	@include border-radius(1px);
 }
 
-li.show-navigation, .touch.aui-view-lt960.aui-view-gt720 select#styledselect, .touch.aui-view-lt960.aui-view-gt720 select#site-select {
+.toggle-navigation, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper, .touch.aui-view-lt960.aui-view-gt720 .select-site-wrapper {
 	@include border-radius(3px);
-	@include linear-gradient(color-stops(#427EAD, #154B75));
+	@include background-image(linear-gradient(color-stops(#427EAD, #154B75)));
 }
 
-.touch.aui-view-lt960.aui-view-gt720 select#styledselect, .touch.aui-view-lt960.aui-view-gt720 select#site-select {
+.touch.aui-view-lt960.aui-view-gt720 .select-navigation-input, .touch.aui-view-lt960.aui-view-gt720 .select-site-input {
 	@include box-shadow(0 0 0 0);
 	@include experimental(appearance, none, -moz, -webkit, not -o, not -ms, not -khtml, official);
 }
