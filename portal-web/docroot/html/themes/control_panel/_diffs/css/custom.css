@@ -212,9 +212,9 @@ li.toggle-navigation {
 .panel-page-menu {
 	background: #CAD2DD;
 	border-right: 1px solid #B0B1B3;
-	margin-left: -238px;
-	margin-top: -30px;
-	position: relative;
+	left: 0;
+	position: absolute;
+	top: 0;
 	width: 238px;
 
 	.lfr-panel.lfr-extended {
@@ -724,8 +724,8 @@ li.toggle-navigation {
 	}
 
 	.panel-page-menu {
-		left: -238px;
-		margin-left: 0;
+		left: 0px;
+		width: 40px;
 
 		#panel-manage-content {
 			.lfr-panel-titlebar {

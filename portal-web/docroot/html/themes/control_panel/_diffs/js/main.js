@@ -331,12 +331,11 @@ if (!themeDisplay.isStatePopUp()) {
 					if (!A.UA.touch) {
 						instance._panelHolder.transition(
 							{
-								left: toggleValue,
+								width: toggleValue,
 								easing: 'ease-out',
 								duration: 0.2
 							},
 							function() {
-								body.toggleClass(CSS_PANELS_MINIMIZED, newVal);
 
 								if (!newVal) {
 									instance._searchPanelInput.selectText();
@@ -344,9 +343,8 @@ if (!themeDisplay.isStatePopUp()) {
 							}
 						);
 					}
-					else {
-						body.toggleClass(CSS_PANELS_MINIMIZED, newVal);
-					}
+
+					body.toggleClass(CSS_PANELS_MINIMIZED, newVal);
 
 					if (persist) {
 						Liferay.Store('control-panel-sidebar-minimized', newVal);
@@ -361,8 +359,8 @@ if (!themeDisplay.isStatePopUp()) {
 				},
 
 				_panelCfg: {
-					closeValue: '-238px',
-					openValue: '0'
+					closeValue: '40px',
+					openValue: '238px'
 				},
 
 				_searchActive: false,
