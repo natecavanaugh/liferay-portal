@@ -161,7 +161,12 @@ int sortColumnIndex = -1;
 
 							<c:choose>
 								<c:when test="<%= Validator.isNull(orderByJS) %>">
-									<a href="<%= url %>&<%= namespace %><%= searchContainer.getOrderByColParam() %>=<%= orderKey %>&<%= namespace %><%= searchContainer.getOrderByTypeParam() %>=<%= HtmlUtil.escapeURL(orderByType) %>">
+									<%
+									String orderURL = HttpUtil.addParameter(url, namespace+searchContainer.getOrderByColParam(), orderKey);
+									orderURL = HttpUtil.addParameter(orderURL, namespace+searchContainer.getOrderByTypeParam(), orderByType);
+									%>
+
+									<a href="<%= orderURL %>">
 								</c:when>
 								<c:otherwise>
 									<a href="<%= StringUtil.replace(orderByJS, new String[] { "orderKey", "orderByType" }, new String[] { orderKey, orderByType }) %>">
