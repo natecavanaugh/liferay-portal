@@ -17,6 +17,7 @@ package com.liferay.portal.security.pacl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -180,6 +181,14 @@ public class PACLClassUtil {
 						callerClass.getName());
 			}
 
+			if (ProxyUtil.isProxyClass(callerClass)) {
+				if (debug) {
+					_log.debug("Skipping frame because it is proxy class");
+				}
+
+				continue;
+			}
+
 			ClassLoader callerClassLoader = _getCallerClassLoader(callerClass);
 
 			if (callerClassLoader == null) {
@@ -210,6 +219,12 @@ public class PACLClassUtil {
 					PACLPolicyManager.getDefaultPACLPolicy();
 
 				if (paclPolicy == null) {
+					if (debug) {
+						_log.debug(
+							"Possibly return default PACL policy " +
+								defaultPACLPolicy);
+					}
+
 					paclPolicy = defaultPACLPolicy;
 				}
 
@@ -233,11 +248,21 @@ public class PACLClassUtil {
 				continue;
 			}
 
+			if (debug) {
+				_log.debug(
+					"Lookup PACL policy for caller class loader " +
+						callerClassLoader);
+			}
+
 			PACLPolicy callerPACLPolicy = PACLPolicyManager.getPACLPolicy(
 				callerClassLoader);
 
 			if (callerPACLPolicy != null) {
 				paclPolicy = callerPACLPolicy;
+
+				if (debug) {
+					_log.debug("Possibly return PACL policy " + paclPolicy);
+				}
 
 				if (!deep) {
 					break;

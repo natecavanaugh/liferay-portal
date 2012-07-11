@@ -88,6 +88,23 @@ public class AddPageMBTest extends BaseTestCase {
 		loadRequiredJavaScriptModules();
 		selenium.clickAt("//div/span/button[1]",
 			RuntimeVariables.replace("Add Page"));
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
+				if (selenium.isVisible("//input[@id='_156_name_en_US']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
 		selenium.type("//input[@id='_156_name_en_US']",
 			RuntimeVariables.replace("Message Boards Page"));
 		selenium.clickAt("//input[@value='Add Page']",

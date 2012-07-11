@@ -36,7 +36,7 @@ public class ViewGmailBlogsEntryComment1NotificationTest extends BaseTestCase {
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
 		Thread.sleep(10000);
-		assertEquals(RuntimeVariables.replace("me"),
+		assertEquals(RuntimeVariables.replace("Joe Bloggs"),
 			selenium.getText("//tbody/tr[1]/td[5]/div/span"));
 		assertEquals(RuntimeVariables.replace("New Comments by Joe Bloggs"),
 			selenium.getText("//tbody/tr[1]/td[6]/div/div/div/span"));

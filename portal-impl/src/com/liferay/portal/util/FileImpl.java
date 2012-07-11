@@ -202,6 +202,14 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		return sb.toString();
 	}
 
+	public File createTempFolder() {
+		File file = new File(createTempFileName());
+
+		file.mkdirs();
+
+		return file;
+	}
+
 	public String decodeSafeFileName(String fileName) {
 		return StringUtil.replace(
 			fileName, _SAFE_FILE_NAME_2, _SAFE_FILE_NAME_1);

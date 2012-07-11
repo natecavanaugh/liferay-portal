@@ -104,6 +104,10 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 	 * @return the normal model instance
 	 */
 	public static Repository toModel(RepositorySoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		Repository model = new RepositoryImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -131,6 +135,10 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 	 * @return the normal model instances
 	 */
 	public static List<Repository> toModels(RepositorySoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<Repository> models = new ArrayList<Repository>(soapModels.length);
 
 		for (RepositorySoap soapModel : soapModels) {

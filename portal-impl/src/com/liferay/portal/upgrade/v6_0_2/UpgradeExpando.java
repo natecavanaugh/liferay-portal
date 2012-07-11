@@ -123,7 +123,7 @@ public class UpgradeExpando extends UpgradeProcess {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				long count = rs.getLong(1);
+				int count = rs.getInt(1);
 
 				if (count > 0) {
 					return true;
@@ -160,7 +160,7 @@ public class UpgradeExpando extends UpgradeProcess {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				long count = rs.getLong(1);
+				int count = rs.getInt(1);
 
 				if (count > 0) {
 					return true;

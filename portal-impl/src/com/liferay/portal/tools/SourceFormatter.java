@@ -91,6 +91,9 @@ public class SourceFormatter {
 						_formatFriendlyURLRoutesXML();
 						_formatPortletXML();
 						_formatSH();
+						_formatSQL();
+						_formatStrutsConfigXML();
+						_formatTilesDefsXML();
 						_formatWebXML();
 					}
 					catch (Exception e) {
@@ -575,18 +578,18 @@ public class SourceFormatter {
 			previousJavaTermName.toLowerCase();
 
 		if (fileName.contains("persistence") &&
-			(previousJavaTermName.startsWith("doCount") &&
-			 javaTermName.startsWith("doCount")) ||
-			(previousJavaTermName.startsWith("doFind") &&
-			 javaTermName.startsWith("doFind")) ||
-			(previousJavaTermNameLowerCase.startsWith("count") &&
-			 javaTermNameLowerCase.startsWith("count")) ||
-			(previousJavaTermNameLowerCase.startsWith("filter") &&
-			 javaTermNameLowerCase.startsWith("filter")) ||
-			(previousJavaTermNameLowerCase.startsWith("find") &&
-			 javaTermNameLowerCase.startsWith("find")) ||
-			(previousJavaTermNameLowerCase.startsWith("join") &&
-			 javaTermNameLowerCase.startsWith("join"))) {
+			((previousJavaTermName.startsWith("doCount") &&
+			  javaTermName.startsWith("doCount")) ||
+			 (previousJavaTermName.startsWith("doFind") &&
+			  javaTermName.startsWith("doFind")) ||
+			 (previousJavaTermNameLowerCase.startsWith("count") &&
+			  javaTermNameLowerCase.startsWith("count")) ||
+			 (previousJavaTermNameLowerCase.startsWith("filter") &&
+			  javaTermNameLowerCase.startsWith("filter")) ||
+			 (previousJavaTermNameLowerCase.startsWith("find") &&
+			  javaTermNameLowerCase.startsWith("find")) ||
+			 (previousJavaTermNameLowerCase.startsWith("join") &&
+			  javaTermNameLowerCase.startsWith("join")))) {
 
 			return;
 		}
@@ -1255,6 +1258,44 @@ public class SourceFormatter {
 
 				_sourceFormatterHelper.printError(
 					fileName, "ServiceUtil: " + fileName);
+			}
+
+			if (!className.equals("ProxyUtil") &&
+				newContent.contains("import java.lang.reflect.Proxy;")) {
+
+				_sourceFormatterHelper.printError(
+					fileName, "Proxy: " + fileName);
+			}
+
+			// LPS-28266
+
+			for (int pos1 = -1;;) {
+				pos1 = newContent.indexOf(StringPool.TAB + "try {", pos1 + 1);
+
+				if (pos1 == -1) {
+					break;
+				}
+
+				int pos2 = newContent.indexOf(
+					StringPool.TAB + "try {", pos1 + 1);
+				int pos3 = newContent.indexOf("\"select count(", pos1);
+
+				if ((pos2 != -1) && (pos3 != -1) && (pos2 < pos3)) {
+					continue;
+				}
+
+				int pos4 = newContent.indexOf("rs.getLong(1)", pos1);
+				int pos5 = newContent.indexOf(
+					StringPool.TAB + "finally {", pos1);
+
+				if ((pos3 == -1) || (pos4 == -1) || (pos5 == -1)) {
+					break;
+				}
+
+				if ((pos3 < pos4) && (pos4 < pos5)) {
+					_sourceFormatterHelper.printError(
+						fileName, "Use getInt(1) for count: " + fileName);
+				}
 			}
 
 			if ((newContent != null) && !content.equals(newContent)) {
@@ -1970,7 +2011,7 @@ public class SourceFormatter {
 		content = sb.toString();
 
 		if (content.endsWith("\n")) {
-			content = content.substring(0, content.length() -1);
+			content = content.substring(0, content.length() - 1);
 		}
 
 		content = _formatTaglibQuotes(fileName, content, StringPool.QUOTE);
@@ -2083,6 +2124,118 @@ public class SourceFormatter {
 		}
 	}
 
+	private static void _formatSQL() throws IOException {
+		String basedir = "./";
+
+		DirectoryScanner directoryScanner = new DirectoryScanner();
+
+		directoryScanner.setBasedir(basedir);
+		directoryScanner.setIncludes(new String[] {"**\\sql\\*.sql"});
+
+		List<String> fileNames = _sourceFormatterHelper.scanForFiles(
+			directoryScanner);
+
+		for (String fileName : fileNames) {
+			File file = new File(basedir + fileName);
+
+			String content = _fileUtil.read(file);
+
+			String newContent = _formatSQLContent(content);
+
+			if ((newContent != null) && !content.equals(newContent)) {
+				_fileUtil.write(file, newContent);
+
+				_sourceFormatterHelper.printError(fileName, file);
+			}
+		}
+	}
+
+	private static String _formatSQLContent(String content) throws IOException {
+		StringBundler sb = new StringBundler();
+
+		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+			new UnsyncStringReader(content));
+
+		String line = null;
+
+		String previousLineSqlCommand = StringPool.BLANK;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			if (line.trim().length() == 0) {
+				line = StringPool.BLANK;
+			}
+
+			if (Validator.isNotNull(line) && !line.startsWith(StringPool.TAB)) {
+				String sqlCommand = StringUtil.split(line, CharPool.SPACE)[0];
+
+				if (Validator.isNotNull(previousLineSqlCommand) &&
+					!previousLineSqlCommand.equals(sqlCommand)) {
+
+					sb.append("\n");
+				}
+
+				previousLineSqlCommand = sqlCommand;
+			}
+			else {
+				previousLineSqlCommand = StringPool.BLANK;
+			}
+
+			sb.append(line);
+			sb.append("\n");
+		}
+
+		unsyncBufferedReader.close();
+
+		content = sb.toString();
+
+		if (content.endsWith("\n")) {
+			content = content.substring(0, content.length() - 1);
+		}
+
+		return content;
+	}
+
+	private static void _formatStrutsConfigXML()
+		throws IOException, DocumentException {
+
+		String basedir = "./";
+
+		if (!_fileUtil.exists(basedir + "portal-impl")) {
+			return;
+		}
+
+		String fileName = "portal-web/docroot/WEB-INF/struts-config.xml";
+
+		File file = new File(basedir + fileName);
+
+		String content = _fileUtil.read(file);
+
+		Document document = _saxReaderUtil.read(content);
+
+		Element rootElement = document.getRootElement();
+
+		Element actionMappingsElement = rootElement.element("action-mappings");
+
+		List<Element> actionElements = actionMappingsElement.elements("action");
+
+		String previousPath = StringPool.BLANK;
+
+		for (Element actionElement : actionElements) {
+			String path = actionElement.attributeValue("path");
+
+			if (Validator.isNotNull(previousPath) &&
+				(previousPath.compareTo(path) > 0) &&
+				(!previousPath.startsWith("/portal/") ||
+				 path.startsWith("/portal/"))) {
+
+				_sourceFormatterHelper.printError(
+					fileName, "sort: " + fileName + " " + path);
+			}
+
+			previousPath = path;
+		}
+	}
+
 	private static String _formatTaglibQuotes(
 		String fileName, String content, String quoteType) {
 
@@ -2142,6 +2295,45 @@ public class SourceFormatter {
 		}
 
 		return content;
+	}
+
+	private static void _formatTilesDefsXML()
+		throws IOException, DocumentException {
+
+		String basedir = "./";
+
+		if (!_fileUtil.exists(basedir + "portal-impl")) {
+			return;
+		}
+
+		String fileName = "portal-web/docroot/WEB-INF/tiles-defs.xml";
+
+		File file = new File(basedir + fileName);
+
+		String content = _fileUtil.read(file);
+
+		Document document = _saxReaderUtil.read(content);
+
+		Element rootElement = document.getRootElement();
+
+		List<Element> definitionElements = rootElement.elements("definition");
+
+		String previousName = StringPool.BLANK;
+
+		for (Element definitionElement : definitionElements) {
+			String name = definitionElement.attributeValue("name");
+
+			if (Validator.isNotNull(previousName) &&
+				(previousName.compareTo(name) > 0) &&
+				!previousName.equals("portlet")) {
+
+				_sourceFormatterHelper.printError(
+					fileName, "sort: " + fileName + " " + name);
+
+			}
+
+			previousName = name;
+		}
 	}
 
 	private static void _formatWebXML() throws IOException {

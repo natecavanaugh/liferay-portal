@@ -42,11 +42,11 @@ public class User_ViewOffPermissionsBlogsUSPTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
-		assertFalse(selenium.isElementPresent(
+		assertTrue(selenium.isElementNotPresent(
 				"//div[@class='subscribe']/span[2]/a/span"));
-		assertFalse(selenium.isElementPresent(
+		assertTrue(selenium.isElementNotPresent(
 				"//input[@value='Add Blog Entry']"));
-		assertFalse(selenium.isElementPresent("//input[@value='Permissions']"));
+		assertTrue(selenium.isElementNotPresent("//input[@value='Permissions']"));
 		assertEquals(RuntimeVariables.replace("Add"),
 			selenium.getText("//a[@class='menu-button']/span"));
 		selenium.clickAt("//a[@class='menu-button']/span",
@@ -90,6 +90,6 @@ public class User_ViewOffPermissionsBlogsUSPTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
-		assertFalse(selenium.isElementPresent("//div[@title='Blogs']"));
+		assertTrue(selenium.isElementNotPresent("//div[@title='Blogs']"));
 	}
 }

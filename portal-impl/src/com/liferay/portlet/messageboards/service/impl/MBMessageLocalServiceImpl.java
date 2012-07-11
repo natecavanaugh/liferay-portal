@@ -695,23 +695,23 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		// Asset
 
 		assetEntryLocalService.deleteEntry(
-			MBMessage.class.getName(), message.getMessageId());
+			message.getWorkflowClassName(), message.getMessageId());
 
 		// Expando
 
 		expandoValueLocalService.deleteValues(
-			MBMessage.class.getName(), message.getMessageId());
+			message.getWorkflowClassName(), message.getMessageId());
 
 		// Ratings
 
 		ratingsStatsLocalService.deleteStats(
-			MBMessage.class.getName(), message.getMessageId());
+			message.getWorkflowClassName(), message.getMessageId());
 
 		// Resources
 
 		if (!message.isDiscussion()) {
 			resourceLocalService.deleteResource(
-				message.getCompanyId(), MBMessage.class.getName(),
+				message.getCompanyId(), message.getWorkflowClassName(),
 				ResourceConstants.SCOPE_INDIVIDUAL, message.getMessageId());
 		}
 
@@ -1985,7 +1985,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 
 		String messageBody = message.getBody();
 
-		if (htmlFormat) {
+		if (htmlFormat && message.isFormatBBCode()) {
 			try {
 				messageBody = BBCodeTranslatorUtil.getHTML(messageBody);
 			}

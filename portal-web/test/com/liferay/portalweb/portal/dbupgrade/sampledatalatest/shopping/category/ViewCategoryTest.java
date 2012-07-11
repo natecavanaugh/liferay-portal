@@ -57,16 +57,22 @@ public class ViewCategoryTest extends BaseTestCase {
 			RuntimeVariables.replace("Search"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		assertEquals(RuntimeVariables.replace("Shopping Category Community"),
-			selenium.getText("//td[1]/a"));
 		assertEquals(RuntimeVariables.replace("Open"),
 			selenium.getText("//td[2]/a"));
-		selenium.clickAt("link=Shopping Category Community",
-			RuntimeVariables.replace("Shopping Category Community"));
+		assertEquals(RuntimeVariables.replace("Shopping Category Community"),
+			selenium.getText("//td[1]/a"));
+		selenium.open(
+			"/web/shopping-category-community/shopping-category-page/");
+		loadRequiredJavaScriptModules();
+		selenium.clickAt("link=Shopping Category Page",
+			RuntimeVariables.replace(""));
+		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
+		selenium.clickAt("link=Categories", RuntimeVariables.replace(""));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"Category Test\nThis is a category test."),
-			selenium.getText("//td[1]/a"));
+			selenium.getText("//td/a"));
 	}
 }

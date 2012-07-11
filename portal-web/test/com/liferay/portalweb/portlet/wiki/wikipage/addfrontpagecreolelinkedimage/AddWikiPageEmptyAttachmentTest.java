@@ -76,6 +76,9 @@ public class AddWikiPageEmptyAttachmentTest extends BaseTestCase {
 			RuntimeVariables.replace("Add Attachments"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
+		selenium.selectWindow("null");
+		Thread.sleep(5000);
+		selenium.windowFocus();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {

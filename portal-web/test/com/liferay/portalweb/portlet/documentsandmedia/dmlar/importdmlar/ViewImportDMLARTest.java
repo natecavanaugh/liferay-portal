@@ -81,7 +81,7 @@ public class ViewImportDMLARTest extends BaseTestCase {
 			try {
 				if (RuntimeVariables.replace("DL Folder1 Name")
 										.equals(selenium.getText(
-								"//li[@class='folder selected']/a[2]"))) {
+								"//li[@class='folder selected']/a/span[2]"))) {
 					break;
 				}
 			}
@@ -92,7 +92,7 @@ public class ViewImportDMLARTest extends BaseTestCase {
 		}
 
 		assertEquals(RuntimeVariables.replace("DL Folder1 Name"),
-			selenium.getText("//li[@class='folder selected']/a[2]"));
+			selenium.getText("//li[@class='folder selected']/a/span[2]"));
 		assertEquals(RuntimeVariables.replace("DL Folder1 Subfolder Name"),
 			selenium.getText(
 				"//a[contains(@class,'document-link')]/span[@class='entry-title']"));
@@ -192,7 +192,7 @@ public class ViewImportDMLARTest extends BaseTestCase {
 			try {
 				if (RuntimeVariables.replace("DL Folder2 Name Edit")
 										.equals(selenium.getText(
-								"//li[@class='folder selected']/a[2]"))) {
+								"//li[@class='folder selected']/a/span[2]"))) {
 					break;
 				}
 			}
@@ -203,7 +203,7 @@ public class ViewImportDMLARTest extends BaseTestCase {
 		}
 
 		assertEquals(RuntimeVariables.replace("DL Folder2 Name Edit"),
-			selenium.getText("//li[@class='folder selected']/a[2]"));
+			selenium.getText("//li[@class='folder selected']/a/span[2]"));
 		assertEquals(RuntimeVariables.replace("DL Folder2 Subfolder Name Edit"),
 			selenium.getText(
 				"//a[contains(@class,'document-link')]/span[@class='entry-title']"));

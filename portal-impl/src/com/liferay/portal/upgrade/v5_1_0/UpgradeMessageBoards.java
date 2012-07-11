@@ -37,7 +37,7 @@ public class UpgradeMessageBoards extends UpgradeProcess {
 		}
 	}
 
-	protected long getMessageIdsCount() throws Exception {
+	protected int getMessageIdsCount() throws Exception {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -62,7 +62,7 @@ public class UpgradeMessageBoards extends UpgradeProcess {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				return rs.getLong(1);
+				return rs.getInt(1);
 			}
 
 			return 0;

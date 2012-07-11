@@ -126,6 +126,10 @@ public class WikiPageModelImpl extends BaseModelImpl<WikiPage>
 	 * @return the normal model instance
 	 */
 	public static WikiPage toModel(WikiPageSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		WikiPage model = new WikiPageImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -162,6 +166,10 @@ public class WikiPageModelImpl extends BaseModelImpl<WikiPage>
 	 * @return the normal model instances
 	 */
 	public static List<WikiPage> toModels(WikiPageSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<WikiPage> models = new ArrayList<WikiPage>(soapModels.length);
 
 		for (WikiPageSoap soapModel : soapModels) {
@@ -802,6 +810,15 @@ public class WikiPageModelImpl extends BaseModelImpl<WikiPage>
 		}
 	}
 
+	public boolean isDenied() {
+		if (getStatus() == WorkflowConstants.STATUS_DENIED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public boolean isDraft() {
 		if ((getStatus() == WorkflowConstants.STATUS_DRAFT) ||
 				(getStatus() == WorkflowConstants.STATUS_DRAFT_FROM_APPROVED)) {
@@ -821,8 +838,35 @@ public class WikiPageModelImpl extends BaseModelImpl<WikiPage>
 		}
 	}
 
+	public boolean isInactive() {
+		if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isIncomplete() {
+		if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public boolean isPending() {
 		if (getStatus() == WorkflowConstants.STATUS_PENDING) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isScheduled() {
+		if (getStatus() == WorkflowConstants.STATUS_SCHEDULED) {
 			return true;
 		}
 		else {

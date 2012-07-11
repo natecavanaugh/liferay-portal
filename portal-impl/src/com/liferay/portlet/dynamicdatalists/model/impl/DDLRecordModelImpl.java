@@ -106,6 +106,10 @@ public class DDLRecordModelImpl extends BaseModelImpl<DDLRecord>
 	 * @return the normal model instance
 	 */
 	public static DDLRecord toModel(DDLRecordSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		DDLRecord model = new DDLRecordImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -133,6 +137,10 @@ public class DDLRecordModelImpl extends BaseModelImpl<DDLRecord>
 	 * @return the normal model instances
 	 */
 	public static List<DDLRecord> toModels(DDLRecordSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<DDLRecord> models = new ArrayList<DDLRecord>(soapModels.length);
 
 		for (DDLRecordSoap soapModel : soapModels) {

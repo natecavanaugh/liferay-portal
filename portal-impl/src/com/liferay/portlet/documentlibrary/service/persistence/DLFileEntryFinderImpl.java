@@ -79,11 +79,23 @@ public class DLFileEntryFinderImpl
 	public static final String FIND_BY_G_U_F =
 		DLFileEntryFinder.class.getName() + ".findByG_U_F";
 
+	public static final String FIND_BY_G_F_M =
+		DLFileEntryFinder.class.getName() + ".findByG_F_M";
+
 	public static final String FIND_BY_G_F_S =
 		DLFileEntryFinder.class.getName() + ".findByG_F_S";
 
+	public static final String FIND_BY_G_U_F_M =
+		DLFileEntryFinder.class.getName() + ".findByG_U_F_M";
+
 	public static final String FIND_BY_G_U_F_S =
 		DLFileEntryFinder.class.getName() + ".findByG_U_F_S";
+
+	public static final String FIND_BY_G_F_S_M =
+		DLFileEntryFinder.class.getName() + ".findByG_F_S_M";
+
+	public static final String FIND_BY_G_U_F_S_M =
+		DLFileEntryFinder.class.getName() + ".findByG_U_F_S_M";
 
 	public int countByExtraSettings() throws SystemException {
 		Session session = null;
@@ -374,27 +386,45 @@ public class DLFileEntryFinderImpl
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil.get(FIND_BY_G_U_F_S);
+			String sql = StringPool.BLANK;
+
+			if ((mimeTypes == null) || (mimeTypes.length == 0)) {
+				sql = CustomSQLUtil.get(FIND_BY_G_U_F_S);
+			}
+			else {
+				sql = CustomSQLUtil.get(FIND_BY_G_U_F_S_M);
+			}
 
 			if (userId <= 0) {
 				if (status == WorkflowConstants.STATUS_ANY) {
 					table = DLFileEntryImpl.TABLE_NAME;
 
-					sql = CustomSQLUtil.get(FIND_BY_G_F);
+					if ((mimeTypes == null) || (mimeTypes.length == 0)) {
+						sql = CustomSQLUtil.get(FIND_BY_G_F);
+					}
+					else {
+						sql = CustomSQLUtil.get(FIND_BY_G_F_M);
+					}
 				}
-				else {
+				else if ((mimeTypes == null) || (mimeTypes.length == 0)) {
 					sql = CustomSQLUtil.get(FIND_BY_G_F_S);
 				}
+				else {
+					sql = CustomSQLUtil.get(FIND_BY_G_F_S_M);
+				}
 			}
-			else {
-				if (status == WorkflowConstants.STATUS_ANY) {
-					table = DLFileEntryImpl.TABLE_NAME;
+			else if (status == WorkflowConstants.STATUS_ANY) {
+				table = DLFileEntryImpl.TABLE_NAME;
 
+				if ((mimeTypes == null) || (mimeTypes.length == 0)) {
 					sql = CustomSQLUtil.get(FIND_BY_G_U_F);
+				}
+				else {
+					sql = CustomSQLUtil.get(FIND_BY_G_U_F_M);
 				}
 			}
 
-			StringBundler sb = new StringBundler();
+			StringBundler sb = new StringBundler(3);
 
 			if (folderIds.size() > 0) {
 				sb.append(StringPool.OPEN_PARENTHESIS);
@@ -402,14 +432,17 @@ public class DLFileEntryFinderImpl
 				sb.append(StringPool.CLOSE_PARENTHESIS);
 			}
 
+			sql = StringUtil.replace(sql, "[$FOLDER_ID$]", sb.toString());
+
+			sb.setIndex(0);
+
 			if ((mimeTypes != null) && (mimeTypes.length > 0)) {
-				sb.append(WHERE_AND);
 				sb.append(StringPool.OPEN_PARENTHESIS);
-				sb.append(getMimeTypes(mimeTypes, table));
+				sb.append(getMimeTypes(mimeTypes, DLFileEntryImpl.TABLE_NAME));
 				sb.append(StringPool.CLOSE_PARENTHESIS);
 			}
 
-			sql = StringUtil.replace(sql, "[$FOLDER_ID$]", sb.toString());
+			sql = StringUtil.replace(sql, "[$MIME_TYPE$]", sb.toString());
 			sql = CustomSQLUtil.replaceOrderBy(sql, obc);
 
 			SQLQuery q = session.createSQLQuery(sql);

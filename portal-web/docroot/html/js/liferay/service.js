@@ -416,13 +416,18 @@ Liferay.Service.registerClass(
 		deletePortrait: true,
 		deleteRoleUser: true,
 		deleteUser: true,
+		getCompanyUsers: true,
+		getCompanyUsersCount: true,
 		getDefaultUserId: true,
 		getGroupUserIds: true,
+		getGroupUsers: true,
 		getOrganizationUserIds: true,
+		getOrganizationUsers: true,
 		getRoleUserIds: true,
 		getUserByEmailAddress: true,
 		getUserById: true,
 		getUserByScreenName: true,
+		getUserGroupUsers: true,
 		getUserIdByEmailAddress: true,
 		getUserIdByScreenName: true,
 		hasGroupUser: true,
@@ -932,7 +937,8 @@ Liferay.Service.registerClass(
 		subscribe: true,
 		unsubscribe: true,
 		updateArticle: true,
-		updateContent: true
+		updateContent: true,
+		updateStatus: true
 	}
 );
 

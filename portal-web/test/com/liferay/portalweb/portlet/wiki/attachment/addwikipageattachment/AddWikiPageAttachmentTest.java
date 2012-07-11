@@ -90,6 +90,7 @@ public class AddWikiPageAttachmentTest extends BaseTestCase {
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
 		selenium.selectWindow("null");
+		Thread.sleep(5000);
 		selenium.windowFocus();
 
 		for (int second = 0;; second++) {

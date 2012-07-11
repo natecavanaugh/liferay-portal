@@ -163,18 +163,18 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			// Ratings
 
 			ratingsStatsLocalService.deleteStats(
-				MBMessage.class.getName(), message.getMessageId());
+				message.getWorkflowClassName(), message.getMessageId());
 
 			// Asset
 
 			assetEntryLocalService.deleteEntry(
-				MBMessage.class.getName(), message.getMessageId());
+				message.getWorkflowClassName(), message.getMessageId());
 
 			// Resources
 
 			if (!message.isDiscussion()) {
 				resourceLocalService.deleteResource(
-					message.getCompanyId(), MBMessage.class.getName(),
+					message.getCompanyId(), message.getWorkflowClassName(),
 					ResourceConstants.SCOPE_INDIVIDUAL, message.getMessageId());
 			}
 

@@ -14,7 +14,27 @@
 	<td></td>
 </tr>
 <tr>
+	<td>clickAt</td>
+	<td>//div[@id='dockbar']</td>
+	<td>Dockbar</td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
+	<td>//script[contains(@src,'/aui/aui-editable/aui-editable-min.js')]</td>
+	<td>AUI Editable Min</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//li[@id='_145_mySites']/a/span</td>
+	<td>Go to</td>
+</tr>
+<tr>
+	<td>mouseOver</td>
+	<td>//li[@id='_145_mySites']/a/span</td>
+	<td>Go to</td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
 	<td>link=Control Panel</td>
 	<td>Control Panel</td>
 </tr>
@@ -50,17 +70,17 @@
 </tr>
 <tr>
 	<td>waitForText</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li[2]/a</td>
+	<td>//div[@class='lfr-component lfr-menu-list']/ul/li[contains(.,'Manage Pages')]/a</td>
 	<td>Manage Pages</td>
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li[2]/a</td>
+	<td>//div[@class='lfr-component lfr-menu-list']/ul/li[contains(.,'Manage Pages')]/a</td>
 	<td>Manage Pages</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@class='lfr-component lfr-menu-list']/ul/li[2]/a</td>
+	<td>//div[@class='lfr-component lfr-menu-list']/ul/li[contains(.,'Manage Pages')]/a</td>
 	<td>Manage Pages</td>
 </tr>
 <tr>
@@ -76,7 +96,7 @@
 <tr>
 	<td>waitForVisible</td>
 	<td>//input[@id='_156_addLayoutName_en_US']</td>
-	<td></td>
+	<td>Name Field</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -94,19 +114,24 @@
 	<td>Your request completed successfully.</td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
-	<td></td>
+	<td>clickAt</td>
+	<td>//div[@class='aui-tree-hitarea']</td>
+	<td>Drop Down Arrow</td>
 </tr>
 <tr>
-	<td>storeElementPresent</td>
-	<td>//li[@id='layoutsTree_layoutId_0_plid_0']/div[contains(@class,'aui-tree-expanded')]</td>
-	<td>treeExpanded</td>
+	<td>waitForElementPresent</td>
+	<td>xPath=(//a[@class='layout-tree'])[2]</td>
+	<td>Public Page</td>
+</tr>
+<tr>
+	<td>storeVisible</td>
+	<td>xPath=(//a[@class='layout-tree'])[2]</td>
+	<td>pageVisible</td>
 </tr>
 <tr>
 	<td>gotoIf</td>
-	<td>${treeExpanded}</td>
-	<td>TreeExpanded</td>
+	<td>${pageVisible}</td>
+	<td>PageVisible</td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -115,17 +140,17 @@
 </tr>
 <tr>
 	<td>label</td>
-	<td>TreeExpanded</td>
+	<td>PageVisible</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForVisible</td>
-	<td>//li/ul/li/div/div[3]/a</td>
+	<td>//ul[@class='aui-tree-container']/li/div/div/a[contains(.,'Public Page')]</td>
 	<td>Public Page</td>
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>//li/ul/li/div/div[3]/a</td>
+	<td>//ul[@class='aui-tree-container']/li/div/div/a[contains(.,'Public Page')]</td>
 	<td>Public Page</td>
 </tr>
 </tbody></table>

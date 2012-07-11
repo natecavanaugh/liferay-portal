@@ -111,6 +111,10 @@ public class AssetVocabularyModelImpl extends BaseModelImpl<AssetVocabulary>
 	 * @return the normal model instance
 	 */
 	public static AssetVocabulary toModel(AssetVocabularySoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		AssetVocabulary model = new AssetVocabularyImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -137,6 +141,10 @@ public class AssetVocabularyModelImpl extends BaseModelImpl<AssetVocabulary>
 	 */
 	public static List<AssetVocabulary> toModels(
 		AssetVocabularySoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<AssetVocabulary> models = new ArrayList<AssetVocabulary>(soapModels.length);
 
 		for (AssetVocabularySoap soapModel : soapModels) {

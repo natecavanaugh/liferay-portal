@@ -416,15 +416,25 @@ public class JournalArticleLocalServiceImpl
 		Set<Long> companyIds = new HashSet<Long>();
 
 		for (JournalArticle article : articles) {
-			article.setStatus(WorkflowConstants.STATUS_EXPIRED);
+			if (PropsValues.JOURNAL_ARTICLE_EXPIRE_ALL_VERSIONS) {
+				List<JournalArticle> currentArticles =
+					journalArticlePersistence.findByG_A(
+						article.getGroupId(), article.getArticleId(),
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+						new ArticleVersionComparator(true));
 
-			journalArticlePersistence.update(article, false);
+				for (JournalArticle currentArticle : currentArticles) {
+					currentArticle.setExpirationDate(
+						article.getExpirationDate());
+					currentArticle.setStatus(WorkflowConstants.STATUS_EXPIRED);
 
-			if (article.isIndexable()) {
-				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
-					JournalArticle.class);
+					journalArticlePersistence.update(currentArticle, false);
+				}
+			}
+			else {
+				article.setStatus(WorkflowConstants.STATUS_EXPIRED);
 
-				indexer.delete(article);
+				journalArticlePersistence.update(article, false);
 			}
 
 			updatePreviousApprovedArticle(article);
@@ -3364,6 +3374,19 @@ public class JournalArticleLocalServiceImpl
 			if (article.getStatus() == WorkflowConstants.STATUS_APPROVED) {
 				previousApprovedArticle = approvedArticles.get(1);
 			}
+
+			Date[] dateInterval = getDateInterval(
+				previousApprovedArticle.getGroupId(),
+				previousApprovedArticle.getArticleId(),
+				previousApprovedArticle.getDisplayDate(),
+				previousApprovedArticle.getExpirationDate());
+
+			Date displayDate = dateInterval[0];
+			Date expirationDate = dateInterval[1];
+
+			assetEntryLocalService.updateEntry(
+				JournalArticle.class.getName(), article.getResourcePrimKey(),
+				displayDate, expirationDate, true);
 
 			if (article.isIndexable()) {
 				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(

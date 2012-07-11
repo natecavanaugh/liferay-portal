@@ -113,7 +113,7 @@ public class UpgradePortletPermissions extends UpgradeProcess {
 		}
 	}
 
-	protected long getPortletPermissionsCount(
+	protected int getPortletPermissionsCount(
 			String actionId, long resourceId, String modelName)
 		throws Exception {
 
@@ -147,7 +147,7 @@ public class UpgradePortletPermissions extends UpgradeProcess {
 
 			rs.next();
 
-			return rs.getLong(1);
+			return rs.getInt(1);
 		}
 		finally {
 			DataAccess.cleanUp(con, ps, rs);
@@ -175,7 +175,7 @@ public class UpgradePortletPermissions extends UpgradeProcess {
 		Resource resource = ResourceLocalServiceUtil.addResource(
 			companyId, modelName, scope, String.valueOf(groupId));
 
-		long portletPermissionCount = getPortletPermissionsCount(
+		int portletPermissionCount = getPortletPermissionsCount(
 			actionId, resource.getResourceId(), modelName);
 
 		if (portletPermissionCount == 0) {

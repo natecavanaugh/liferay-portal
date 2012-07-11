@@ -51,6 +51,7 @@ if (!selectableTree) {
 		%>
 
 		OPEN_NODES: '<%= openNodes %>'.split(','),
+		PAGINATION_LIMIT: <%= PropsValues.LAYOUT_MANAGE_PAGES_INITIAL_CHILDREN %>,
 		PREFIX_GROUP_ID: '_groupId_',
 		PREFIX_LAYOUT: '_layout_',
 		PREFIX_LAYOUT_ID: '_layoutId_',
@@ -141,8 +142,20 @@ if (!selectableTree) {
 			var output = [];
 
 			A.each(
-				json,
+				json.layouts,
 				function(node) {
+					var childLayouts = [];
+					var total = 0;
+
+					var nodeChildren = node.children;
+
+					if (nodeChildren) {
+						childLayouts = nodeChildren.layouts;
+						total = nodeChildren.total;
+					}
+
+					var expanded = (total > 0);
+
 					var newNode = {
 						<c:if test="<%= saveState %>">
 							after: {
@@ -161,12 +174,21 @@ if (!selectableTree) {
 							},
 						</c:if>
 						alwaysShowHitArea: node.hasChildren,
-						children: TreeUtil.formatJSONResults(node.children),
 						draggable: node.updateable,
-						expanded: (node.children && (node.children.length > 0)),
+						expanded: expanded,
 						id: TreeUtil.createListItemId(node.groupId, node.layoutId, node.plid),
+						paginator: {
+							limit: TreeUtil.PAGINATION_LIMIT,
+							offsetParam: 'start',
+							start: Math.max(childLayouts.length - TreeUtil.PAGINATION_LIMIT, 0),
+							total: total
+						},
 						type: '<%= selectableTree ? "task" : "io" %>'
 					};
+
+					if (nodeChildren && expanded) {
+						newNode.children = TreeUtil.formatJSONResults(nodeChildren);
+					}
 
 					var cssClass = '';
 
@@ -231,14 +253,7 @@ if (!selectableTree) {
 				}
 			}
 
-			var children = node.get('children');
-			var paginator = node.get('paginator');
-
-			var limit = paginator.limit;
-
-			paginator.start = Math.max(children.length - limit, 0);
-
-			A.Array.each(children, TreeUtil.restoreNodeState);
+			A.Array.each(node.get('children'), TreeUtil.restoreNodeState);
 		},
 
 		updateLayout: function(data) {
@@ -269,7 +284,76 @@ if (!selectableTree) {
 		}
 
 		<c:if test="<%= saveState %>">
-			, updateSessionTreeCheckedState: function(treeId, nodeId, state) {
+			, invokeSessionClick: function(data, callback) {
+				A.mix(
+					data,
+					{
+						useHttpSession: true
+					}
+				);
+
+				A.io.request(
+					themeDisplay.getPathMain() + '/portal/session_click',
+					{
+						after: {
+							success: function(event) {
+								var responseData = this.get('responseData');
+
+								if (callback && responseData) {
+									callback(Liferay.Util.unescapeHTML(responseData));
+								}
+							}
+						},
+						data: data
+					}
+				);
+			},
+
+			updatePagination: function(node) {
+				var paginationMap = {};
+
+				var updatePaginationMap = function(map, curNode) {
+					if (A.instanceOf(curNode, A.TreeNodeIO)) {
+						var paginationLimit = TreeUtil.PAGINATION_LIMIT;
+
+						var layoutId = TreeUtil.extractLayoutId(curNode);
+
+						var children = curNode.get('children');
+
+						map[layoutId] = Math.ceil(children.length / paginationLimit) * paginationLimit;
+					}
+				}
+
+				TreeUtil.invokeSessionClick(
+					{
+						cmd: 'get',
+						key: '<%= HtmlUtil.escape(treeId) %>:<%= groupId %>:<%= privateLayout %>:Pagination'
+					},
+					function(responseData) {
+						try {
+							paginationMap = A.JSON.parse(responseData);
+						}
+						catch(e) {
+						}
+
+						updatePaginationMap(paginationMap, node)
+
+						node.eachParent(
+							function(parent) {
+								updatePaginationMap(paginationMap, parent);
+							}
+						);
+
+						TreeUtil.invokeSessionClick(
+							{
+								'<%= HtmlUtil.escape(treeId) %>:<%= groupId %>:<%= privateLayout %>:Pagination': A.JSON.stringify(paginationMap)
+							}
+						);
+					}
+				);
+			},
+
+			updateSessionTreeCheckedState: function(treeId, nodeId, state) {
 				var data = {
 					cmd: state ? 'layoutCheck' : 'layoutUncheck',
 					plid: nodeId
@@ -352,7 +436,12 @@ if (!selectableTree) {
 			},
 
 			alwaysShowHitArea: true,
-			children: TreeUtil.formatJSONResults(<%= LayoutsTreeUtil.getLayoutsJSON(request, groupId, privateLayout, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, StringUtil.split(openNodes, 0L)) %>),
+
+			<%
+			JSONObject layoutsJSON = JSONFactoryUtil.createJSONObject(LayoutsTreeUtil.getLayoutsJSON(request, groupId, privateLayout, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, StringUtil.split(openNodes, 0L)));
+			%>
+
+			children: TreeUtil.formatJSONResults(<%= layoutsJSON %>),
 			draggable: false,
 
 			<%
@@ -362,7 +451,13 @@ if (!selectableTree) {
 			expanded: <%= rootNodeExpanded %>,
 			id: rootId,
 			label: rootLabel,
-			leaf: false
+			leaf: false,
+			paginator: {
+				limit: TreeUtil.PAGINATION_LIMIT,
+				offsetParam: 'start',
+				start: Math.max(<%= layoutsJSON.getJSONArray("layouts").length() %> - TreeUtil.PAGINATION_LIMIT, 0),
+				total: <%= layoutsJSON.getInt("total") %>
+			}
 		}
 	);
 
@@ -390,7 +485,28 @@ if (!selectableTree) {
 							selPlid: '<%= selPlid %>'
 						};
 					},
-					method: AUI.defaults.io.method
+					method: AUI.defaults.io.method,
+					on: {
+						success: function(event, id, xhr) {
+							var instance = this;
+
+							var paginator = instance.get('paginator');
+							var response;
+
+							try {
+								response = A.JSON.parse(xhr.responseText);
+							}
+							catch(e) {}
+
+							if (response) {
+								paginator.total = response.total;
+
+								instance.syncUI();
+							}
+
+							TreeUtil.updatePagination(instance);
+						}
+					}
 				},
 				formatter: TreeUtil.formatJSONResults,
 				url: getLayoutsURL
@@ -423,10 +539,6 @@ if (!selectableTree) {
 						index
 					);
 				}
-			},
-			paginator: {
-				limit: <%= PropsValues.LAYOUT_MANAGE_PAGES_INITIAL_CHILDREN %>,
-				offsetParam: 'start'
 			},
 			type: 'pages'
 		}

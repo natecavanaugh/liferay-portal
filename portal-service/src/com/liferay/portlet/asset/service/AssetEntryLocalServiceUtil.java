@@ -484,6 +484,16 @@ public class AssetEntryLocalServiceUtil {
 			url, layoutUuid, height, width, priority, sync);
 	}
 
+	public static com.liferay.portlet.asset.model.AssetEntry updateEntry(
+		java.lang.String className, long classPK, java.util.Date publishDate,
+		java.util.Date expirationDate, boolean visible)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateEntry(className, classPK, publishDate,
+			expirationDate, visible);
+	}
+
 	public static com.liferay.portlet.asset.model.AssetEntry updateVisible(
 		java.lang.String className, long classPK, boolean visible)
 		throws com.liferay.portal.kernel.exception.PortalException,

@@ -864,6 +864,9 @@ public class UserFinderImpl
 
 				join = sb.toString();
 			}
+			else {
+				join = "WHERE (Organization_.treePath LIKE ?)";
+			}
 		}
 		else if (key.equals("usersPasswordPolicies")) {
 			join = CustomSQLUtil.get(JOIN_BY_USERS_PASSWORD_POLICIES);
@@ -981,6 +984,9 @@ public class UserFinderImpl
 
 						qPos.add(treePath.toString());
 					}
+				}
+				else {
+					qPos.add("%/ /%");
 				}
 			}
 			else if (value instanceof Long) {

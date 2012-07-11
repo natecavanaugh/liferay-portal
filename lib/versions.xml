@@ -1313,6 +1313,9 @@
 				<license-name>Apache License 2.0</license-name>
 			</license>
 		</licenses>
+		<comments>
+			This includes a public patch from CMIS-527.
+		</comments>
 	</library>
 	<library>
 		<file-name>portal/chemistry-opencmis-commons-api.jar</file-name>
@@ -2585,6 +2588,22 @@
 				<copyright-notice>Copyright (c) 2000-2002 The Apache Software Foundation. All rights reserved.</copyright-notice>
 			</license>
 		</licenses>
+	</library>
+	<library>
+		<file-name>portal/oscache.jar</file-name>
+		<version>2.4.1</version>
+		<project-name>OSCache</project-name>
+		<project-url>http://www.opensymphony.com/oscache</project-url>
+		<licenses>
+			<license>
+				<license-name>Symphony License For OSCache</license-name>
+				<copyright-notice>Copyright (c) 2001-2004 The OpenSymphony Group. All rights reserved.</copyright-notice>
+			</license>
+		</licenses>
+		<comments>
+			This JAR is no longer used directly by Liferay but is included
+			because it is a runtime requirement for JSPWiki.
+		</comments>
 	</library>
 	<library>
 		<file-name>portal/pdfbox.jar</file-name>

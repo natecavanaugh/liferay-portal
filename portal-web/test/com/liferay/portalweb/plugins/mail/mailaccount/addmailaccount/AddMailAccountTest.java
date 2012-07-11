@@ -24,23 +24,6 @@ public class AddMailAccountTest extends BaseTestCase {
 	public void testAddMailAccount() throws Exception {
 		selenium.open("/web/guest/home");
 		loadRequiredJavaScriptModules();
-
-		for (int second = 0;; second++) {
-			if (second >= 90) {
-				fail("timeout");
-			}
-
-			try {
-				if (selenium.isVisible("link=Mail Test Page")) {
-					break;
-				}
-			}
-			catch (Exception e) {
-			}
-
-			Thread.sleep(1000);
-		}
-
 		selenium.clickAt("link=Mail Test Page",
 			RuntimeVariables.replace("Mail Test Page"));
 		selenium.waitForPageToLoad("30000");
@@ -66,7 +49,7 @@ public class AddMailAccountTest extends BaseTestCase {
 		}
 
 		selenium.type("//input[@id='_1_WAR_mailportlet_address']",
-			RuntimeVariables.replace("liferay.qa.testing.trunk@gmail.com"));
+			RuntimeVariables.replace("liferay.qa.testing@gmail.com"));
 		selenium.type("//input[@id='_1_WAR_mailportlet_password']",
 			RuntimeVariables.replace("loveispatient"));
 		assertFalse(selenium.isChecked(

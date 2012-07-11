@@ -175,7 +175,82 @@
 				[$FOLDER_ID$]
 		]]>
 	</sql>
+	<sql id="com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryFinder.findByG_F_M">
+		<![CDATA[
+			SELECT
+				{DLFileEntry.*}
+			FROM
+				DLFileEntry
+			WHERE
+				(DLFileEntry.groupId = ?) AND
+				[$FOLDER_ID$] AND
+				[$MIME_TYPE$]
+		]]>
+	</sql>
 	<sql id="com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryFinder.findByG_F_S">
+		<![CDATA[
+			SELECT
+				{DLFileEntry.*}
+			FROM
+				(
+					SELECT
+						DISTINCT DLFileVersion.fileEntryId AS tempFileEntryId
+					FROM
+						DLFileVersion
+					WHERE
+						(DLFileVersion.groupId = ?) AND
+						(DLFileVersion.status = ?) AND
+						[$FOLDER_ID$]
+				) TEMP_TABLE
+				INNER JOIN
+					DLFileEntry ON
+						(TEMP_TABLE.tempFileEntryId = DLFileEntry.fileEntryId)
+		]]>
+	</sql>
+	<sql id="com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryFinder.findByG_U_F_M">
+		<![CDATA[
+			SELECT
+				{DLFileEntry.*}
+			FROM
+				(
+					SELECT
+						DISTINCT DLFileVersion.fileEntryId AS tempFileEntryId
+					FROM
+						DLFileVersion
+					WHERE
+						(DLFileVersion.groupId = ?) AND
+						(DLFileVersion.userId = ?)
+				) TEMP_TABLE
+				INNER JOIN
+					DLFileEntry ON
+						(TEMP_TABLE.tempFileEntryId = DLFileEntry.fileEntryId)
+			WHERE
+				[$FOLDER_ID$] AND
+				[$MIME_TYPE$]
+		]]>
+	</sql>
+	<sql id="com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryFinder.findByG_U_F_S">
+		<![CDATA[
+			SELECT
+				{DLFileEntry.*}
+			FROM
+				(
+					SELECT
+						DISTINCT DLFileVersion.fileEntryId AS tempFileEntryId
+					FROM
+						DLFileVersion
+					WHERE
+						(DLFileVersion.groupId = ?) AND
+						(DLFileVersion.userId = ?) AND
+						(DLFileVersion.status = ?) AND
+						[$FOLDER_ID$]
+				) TEMP_TABLE
+				INNER JOIN
+					DLFileEntry ON
+						(TEMP_TABLE.tempFileEntryId = DLFileEntry.fileEntryId)
+		]]>
+	</sql>
+	<sql id="com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryFinder.findByG_F_S_M">
 		<![CDATA[
 			SELECT
 				{DLFileEntry.*}
@@ -197,7 +272,7 @@
 				[$MIME_TYPE$]
 		]]>
 	</sql>
-	<sql id="com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryFinder.findByG_U_F_S">
+	<sql id="com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryFinder.findByG_U_F_S_M">
 		<![CDATA[
 			SELECT
 				{DLFileEntry.*}

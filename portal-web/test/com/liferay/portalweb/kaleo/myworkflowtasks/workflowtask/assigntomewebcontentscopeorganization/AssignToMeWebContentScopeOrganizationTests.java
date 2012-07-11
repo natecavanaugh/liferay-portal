@@ -15,6 +15,9 @@
 package com.liferay.portalweb.kaleo.myworkflowtasks.workflowtask.assigntomewebcontentscopeorganization;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
+import com.liferay.portalweb.portal.controlpanel.organizations.organization.addorganization.AddOrganizationTest;
+import com.liferay.portalweb.portal.controlpanel.organizations.organization.addorganization.TearDownOrganizationTest;
+import com.liferay.portalweb.portal.controlpanel.organizations.organization.editorganizationsite.EditOrganizationSiteTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -26,6 +29,7 @@ public class AssignToMeWebContentScopeOrganizationTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 		testSuite.addTestSuite(AddOrganizationTest.class);
+		testSuite.addTestSuite(EditOrganizationSiteTest.class);
 		testSuite.addTestSuite(ConfigureWebContentSingleApproverScopeOrganizationTest.class);
 		testSuite.addTestSuite(AddWebContentScopeOrganizationTest.class);
 		testSuite.addTestSuite(AssignToMeWebContentScopeOrganizationActionsTest.class);

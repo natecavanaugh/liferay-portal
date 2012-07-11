@@ -49,6 +49,7 @@ public class ViewOrganizationLiferayTest extends BaseTestCase {
 			RuntimeVariables.replace("Users and Organizations"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
+		Thread.sleep(5000);
 		assertEquals(RuntimeVariables.replace("Liferay, Inc."),
 			selenium.getText("//a[2]/strong"));
 		selenium.clickAt("//a[2]/strong",

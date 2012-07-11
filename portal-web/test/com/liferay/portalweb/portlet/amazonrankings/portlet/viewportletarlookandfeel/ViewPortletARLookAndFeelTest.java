@@ -113,8 +113,8 @@ public class ViewPortletARLookAndFeelTest extends BaseTestCase {
 				"//input[@id='_113_use-custom-titleCheckbox']"));
 		assertEquals("Current Page",
 			selenium.getSelectedLabel("//select[@id='_113_lfr-point-links']"));
-		assertTrue(selenium.isChecked(
-				"//input[@id='_113_show-bordersCheckbox']"));
+		assertTrue(selenium.isVisible("//select[@id='_113_show-borders']"));
+		assertEquals("", selenium.getValue("//select[@id='_113_show-borders']"));
 		assertEquals(RuntimeVariables.replace(
 				"-1em -0.95em -0.9em -0.85em -0.8em -0.75em -0.7em -0.65em -0.6em -0.55em -0.5em -0.45em -0.4em -0.35em -0.3em -0.25em -0.2em -0.15em -0.1em -0.05em Normal 0.05em 0.1em 0.15em 0.2em 0.25em 0.3em 0.35em 0.4em 0.45em 0.5em 0.55em 0.6em 0.65em 0.7em 0.75em 0.8em 0.85em 0.9em 0.95em"),
 			selenium.getText("//select[@id='_113_lfr-font-space']"));

@@ -745,15 +745,15 @@ public class PortletURLImpl
 		Portlet portlet = (Portlet)_request.getAttribute(
 			WebKeys.RENDER_PORTLET);
 
-		if (portlet == null) {
-			return;
-		}
+		if (portlet != null) {
+			String portletId = portlet.getPortletId();
 
-		if (portlet.getPortletId().equals(_portletId) ||
-			!_portlet.isAddDefaultResource() ||
-			portlet.getPortletId().equals(PortletKeys.CONTROL_PANEL_MENU)) {
+			if (portletId.equals(_portletId) ||
+				portletId.equals(PortletKeys.CONTROL_PANEL_MENU) ||
+				!_portlet.isAddDefaultResource()) {
 
-			return;
+				return;
+			}
 		}
 
 		Set<String> portletAddDefaultResourceCheckWhiteList =

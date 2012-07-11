@@ -93,12 +93,12 @@ public class DefinePermissionsRoleAddDocumentSiteOnTest extends BaseTestCase {
 			RuntimeVariables.replace("Documents and Media"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		assertEquals(RuntimeVariables.replace("Document Library"),
-			selenium.getText("//h3"));
+		assertEquals(RuntimeVariables.replace("Documents and Media"),
+			selenium.getText("//h3[2]"));
 		assertTrue(selenium.isChecked(
 				"//input[@value='com.liferay.portlet.documentlibraryADD_DOCUMENT']"));
 		assertEquals(RuntimeVariables.replace("Add Document"),
-			selenium.getText("//tr[3]/td[2]"));
+			selenium.getText("//div[2]/div/div/table/tbody/tr[3]/td[2]"));
 		selenium.clickAt("//span[@class='lfr-token']/a",
 			RuntimeVariables.replace("x"));
 
@@ -110,7 +110,7 @@ public class DefinePermissionsRoleAddDocumentSiteOnTest extends BaseTestCase {
 			try {
 				if (RuntimeVariables.replace("Portal")
 										.equals(selenium.getText(
-								"//tr[3]/td[3]"))) {
+								"//div[2]/div/div/table/tbody/tr[3]/td[3]/div/span"))) {
 					break;
 				}
 			}
@@ -121,10 +121,12 @@ public class DefinePermissionsRoleAddDocumentSiteOnTest extends BaseTestCase {
 		}
 
 		assertEquals(RuntimeVariables.replace("Portal"),
-			selenium.getText("//tr[3]/td[3]"));
+			selenium.getText(
+				"//div[2]/div/div/table/tbody/tr[3]/td[3]/div/span"));
 		assertEquals(RuntimeVariables.replace("Limit Scope"),
-			selenium.getText("//tr[3]/td[4]/span/a/span"));
-		selenium.clickAt("//tr[3]/td[4]/span/a/span",
+			selenium.getText(
+				"//div[2]/div/div/table/tbody/tr[3]/td[4]/span/a/span"));
+		selenium.clickAt("//div[2]/div/div/table/tbody/tr[3]/td[4]/span/a/span",
 			RuntimeVariables.replace("Limit Scope"));
 		selenium.waitForPopUp("site", RuntimeVariables.replace("30000"));
 		selenium.selectWindow("title=Roles");
@@ -181,7 +183,7 @@ public class DefinePermissionsRoleAddDocumentSiteOnTest extends BaseTestCase {
 			selenium.getText("//div[@class='portlet-msg-success']"));
 		assertEquals(RuntimeVariables.replace("Documents and Media"),
 			selenium.getText("//tr[3]/td[1]/a"));
-		assertEquals(RuntimeVariables.replace("Document Library"),
+		assertEquals(RuntimeVariables.replace("Documents and Media"),
 			selenium.getText("//tr[3]/td[2]"));
 		assertEquals(RuntimeVariables.replace("Add Document"),
 			selenium.getText("//tr[3]/td[3]"));

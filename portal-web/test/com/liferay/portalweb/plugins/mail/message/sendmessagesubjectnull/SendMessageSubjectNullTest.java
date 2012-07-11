@@ -45,11 +45,10 @@ public class SendMessageSubjectNullTest extends BaseTestCase {
 			RuntimeVariables.replace("Mail Test Page"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		assertEquals(RuntimeVariables.replace(
-				"liferay.qa.testing.trunk@gmail.com"),
+		assertEquals(RuntimeVariables.replace("liferay.qa.testing@gmail.com"),
 			selenium.getText("//div/div/div[1]/div/ul/li/span/span/a"));
 		selenium.clickAt("//div/div/div[1]/div/ul/li/span/span/a",
-			RuntimeVariables.replace("liferay.qa.testing.trunk@gmail.com"));
+			RuntimeVariables.replace("liferay.qa.testing@gmail.com"));
 		Thread.sleep(5000);
 
 		for (int second = 0;; second++) {

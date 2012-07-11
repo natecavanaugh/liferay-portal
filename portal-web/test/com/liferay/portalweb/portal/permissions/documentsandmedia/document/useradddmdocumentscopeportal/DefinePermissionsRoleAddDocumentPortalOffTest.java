@@ -25,6 +25,9 @@ public class DefinePermissionsRoleAddDocumentPortalOffTest extends BaseTestCase 
 		throws Exception {
 		selenium.open("/web/guest/home/");
 		loadRequiredJavaScriptModules();
+		assertEquals(RuntimeVariables.replace("Go to"),
+			selenium.getText("//li[@id='_145_mySites']/a/span"));
+		selenium.mouseOver("//li[@id='_145_mySites']/a/span");
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -32,7 +35,7 @@ public class DefinePermissionsRoleAddDocumentPortalOffTest extends BaseTestCase 
 			}
 
 			try {
-				if (selenium.isElementPresent("link=Control Panel")) {
+				if (selenium.isVisible("link=Control Panel")) {
 					break;
 				}
 			}
@@ -93,8 +96,8 @@ public class DefinePermissionsRoleAddDocumentPortalOffTest extends BaseTestCase 
 			RuntimeVariables.replace("Documents and Media"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		assertEquals(RuntimeVariables.replace("Document Library"),
-			selenium.getText("//h3"));
+		assertEquals(RuntimeVariables.replace("Documents and Media"),
+			selenium.getText("//h3[2]"));
 		assertFalse(selenium.isChecked(
 				"//input[@value='com.liferay.portlet.documentlibraryADD_DOCUMENT']"));
 		selenium.clickAt("//input[@value='Save']",

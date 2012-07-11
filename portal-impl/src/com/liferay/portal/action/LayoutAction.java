@@ -35,6 +35,8 @@ import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.PipingServletResponse;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.StringServletResponse;
+import com.liferay.portal.kernel.servlet.TempAttributesServletRequest;
+import com.liferay.portal.kernel.struts.LastPath;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Base64;
@@ -44,6 +46,7 @@ import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ServerDetector;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.webdav.WebDAVStorage;
@@ -338,6 +341,57 @@ public class LayoutAction extends Action {
 		}
 
 		return layoutTypePortlets;
+	}
+
+	protected HttpServletRequest getOwnerLayoutRequestWrapper(
+			HttpServletRequest request, Portlet portlet)
+		throws Exception {
+
+		if (!PropsValues.PORTLET_EVENT_DISTRIBUTION_LAYOUT_SET) {
+			return request;
+		}
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
+
+		Layout currentLayout = themeDisplay.getLayout();
+
+		Layout requestLayout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+
+		List<LayoutTypePortlet> layoutTypePortlets = getLayoutTypePortlets(
+			requestLayout.getGroupId(), requestLayout.isPrivateLayout());
+
+		Layout ownerLayout = null;
+		LayoutTypePortlet ownerLayoutTypePortlet = null;
+
+		for (LayoutTypePortlet layoutTypePortlet : layoutTypePortlets) {
+			if (layoutTypePortlet.hasPortletId(portlet.getPortletId())) {
+				ownerLayoutTypePortlet = layoutTypePortlet;
+
+				ownerLayout = layoutTypePortlet.getLayout();
+
+				break;
+			}
+		}
+
+		if ((ownerLayout != null) && !currentLayout.equals(ownerLayout)) {
+			ThemeDisplay themeDisplayClone = (ThemeDisplay)themeDisplay.clone();
+
+			themeDisplayClone.setLayout(ownerLayout);
+			themeDisplayClone.setLayoutTypePortlet(ownerLayoutTypePortlet);
+
+			TempAttributesServletRequest tempAttributesServletRequest =
+				new TempAttributesServletRequest(request);
+
+			tempAttributesServletRequest.setTempAttribute(
+				WebKeys.THEME_DISPLAY, themeDisplayClone);
+			tempAttributesServletRequest.setTempAttribute(
+				WebKeys.LAYOUT, ownerLayout);
+
+			return tempAttributesServletRequest;
+		}
+
+		return request;
 	}
 
 	protected long getScopeGroupId(
@@ -769,13 +823,23 @@ public class LayoutAction extends Action {
 		PortletMode portletMode = PortletModeFactory.getPortletMode(
 			ParamUtil.getString(request, "p_p_mode"));
 
+		HttpServletRequest ownerLayoutRequest = getOwnerLayoutRequestWrapper(
+			request, portlet);
+
+		Layout ownerLayout = (Layout)ownerLayoutRequest.getAttribute(
+			WebKeys.LAYOUT);
+
+		boolean allowAddPortletDefaultResource =
+			PortalUtil.isAllowAddPortletDefaultResource(
+				ownerLayoutRequest, portlet);
+
 		PortletPreferencesIds portletPreferencesIds =
 			PortletPreferencesFactoryUtil.getPortletPreferencesIds(
 				request, portletId);
 
 		PortletPreferences portletPreferences = null;
 
-		if (PortalUtil.isAllowAddPortletDefaultResource(request, portlet)) {
+		if (allowAddPortletDefaultResource) {
 			portletPreferences =
 				PortletPreferencesLocalServiceUtil.getPreferences(
 					portletPreferencesIds);
@@ -792,6 +856,32 @@ public class LayoutAction extends Action {
 			PermissionThreadLocal.getPermissionChecker();
 
 		if (lifecycle.equals(PortletRequest.ACTION_PHASE)) {
+			if (!allowAddPortletDefaultResource) {
+				String url = null;
+
+				LastPath lastPath = (LastPath)request.getAttribute(
+					WebKeys.LAST_PATH);
+
+				if (lastPath != null) {
+					StringBundler sb = new StringBundler(3);
+
+					sb.append(PortalUtil.getPortalURL(request));
+					sb.append(lastPath.getContextPath());
+					sb.append(lastPath.getPath());
+
+					url = sb.toString();
+				}
+				else {
+					url = String.valueOf(request.getRequestURI());
+				}
+
+				_log.error(
+					"Reject processAction for " + url + " on " +
+						portlet.getPortletId());
+
+				return portlet;
+			}
+
 			InvokerPortlet invokerPortlet = PortletInstanceFactoryUtil.create(
 				portlet, servletContext);
 
@@ -847,7 +937,7 @@ public class LayoutAction extends Action {
 				ServiceContextThreadLocal.pushServiceContext(serviceContext);
 
 				boolean access = PortletPermissionUtil.hasAccessPermission(
-					permissionChecker, scopeGroupId, layout, portlet,
+					permissionChecker, scopeGroupId, ownerLayout, portlet,
 					portletMode);
 
 				if (access) {
@@ -907,6 +997,32 @@ public class LayoutAction extends Action {
 		}
 
 		if (lifecycle.equals(PortletRequest.RESOURCE_PHASE)) {
+			if (!allowAddPortletDefaultResource) {
+				String url = null;
+
+				LastPath lastPath = (LastPath)request.getAttribute(
+					WebKeys.LAST_PATH);
+
+				if (lastPath != null) {
+					StringBundler sb = new StringBundler(3);
+
+					sb.append(PortalUtil.getPortalURL(request));
+					sb.append(lastPath.getContextPath());
+					sb.append(lastPath.getPath());
+
+					url = sb.toString();
+				}
+				else {
+					url = String.valueOf(request.getRequestURI());
+				}
+
+				_log.error(
+					"Reject serveResource for " + url + " on " +
+						portlet.getPortletId());
+
+				return portlet;
+			}
+
 			InvokerPortlet invokerPortlet = PortletInstanceFactoryUtil.create(
 				portlet, servletContext);
 
@@ -952,7 +1068,7 @@ public class LayoutAction extends Action {
 				ServiceContextThreadLocal.pushServiceContext(serviceContext);
 
 				boolean access = PortletPermissionUtil.hasAccessPermission(
-					permissionChecker, scopeGroupId, layout, portlet,
+					permissionChecker, scopeGroupId, ownerLayout, portlet,
 					portletMode);
 
 				if (access) {

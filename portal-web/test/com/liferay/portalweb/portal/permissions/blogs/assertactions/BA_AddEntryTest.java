@@ -168,6 +168,7 @@ public class BA_AddEntryTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
+		selenium.selectFrame("relative=top");
 		selenium.clickAt("//input[@value='Publish']",
 			RuntimeVariables.replace("Publish"));
 		selenium.waitForPageToLoad("30000");

@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 
@@ -123,7 +122,7 @@ public class UserAtomCollectionAdapter
 		long groupId = atomRequestContext.getLongParameter("groupId");
 
 		if (groupId > 0) {
-			List<User> users = UserLocalServiceUtil.getGroupUsers(groupId);
+			List<User> users = UserServiceUtil.getGroupUsers(groupId);
 
 			return users;
 		}
@@ -132,7 +131,7 @@ public class UserAtomCollectionAdapter
 			"organizationId");
 
 		if (organizationId > 0) {
-			List<User> users = UserLocalServiceUtil.getOrganizationUsers(
+			List<User> users = UserServiceUtil.getOrganizationUsers(
 				organizationId);
 
 			return users;
@@ -141,8 +140,7 @@ public class UserAtomCollectionAdapter
 		long userGroupId = atomRequestContext.getLongParameter("userGroupId");
 
 		if (userGroupId > 0) {
-			List<User> users = UserLocalServiceUtil.getUserGroupUsers(
-				userGroupId);
+			List<User> users = UserServiceUtil.getUserGroupUsers(userGroupId);
 
 			return users;
 		}
@@ -150,14 +148,13 @@ public class UserAtomCollectionAdapter
 		long companyId = CompanyThreadLocal.getCompanyId();
 
 		if (companyId > 0) {
-			int usersCount = UserLocalServiceUtil.getCompanyUsersCount(
-				companyId);
+			int usersCount = UserServiceUtil.getCompanyUsersCount(companyId);
 
 			AtomPager atomPager = new AtomPager(atomRequestContext, usersCount);
 
 			AtomUtil.saveAtomPagerInRequest(atomRequestContext, atomPager);
 
-			List<User> users = UserLocalServiceUtil.getCompanyUsers(
+			List<User> users = UserServiceUtil.getCompanyUsers(
 				companyId, atomPager.getStart(), atomPager.getEnd() + 1);
 
 			return users;

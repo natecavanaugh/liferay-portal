@@ -29,6 +29,8 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 			case 1:
 				selenium.open("/web/guest/home/");
 				loadRequiredJavaScriptModules();
+				selenium.clickAt("//div[@id='dockbar']",
+					RuntimeVariables.replace("Dockbar"));
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -36,7 +38,28 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 					}
 
 					try {
-						if (selenium.isElementPresent("link=Control Panel")) {
+						if (selenium.isElementPresent(
+									"//script[contains(@src,'/aui/aui-editable/aui-editable-min.js')]")) {
+							break;
+						}
+					}
+					catch (Exception e) {
+					}
+
+					Thread.sleep(1000);
+				}
+
+				assertEquals(RuntimeVariables.replace("Go to"),
+					selenium.getText("//li[@id='_145_mySites']/a/span"));
+				selenium.mouseOver("//li[@id='_145_mySites']/a/span");
+
+				for (int second = 0;; second++) {
+					if (second >= 90) {
+						fail("timeout");
+					}
+
+					try {
+						if (selenium.isVisible("link=Control Panel")) {
 							break;
 						}
 					}
@@ -73,7 +96,7 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 					try {
 						if (RuntimeVariables.replace("Manage Pages")
 												.equals(selenium.getText(
-										"//div[@class='lfr-component lfr-menu-list']/ul/li[2]/a"))) {
+										"//div[@class='lfr-component lfr-menu-list']/ul/li[contains(.,'Manage Pages')]/a"))) {
 							break;
 						}
 					}
@@ -85,9 +108,9 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 
 				assertEquals(RuntimeVariables.replace("Manage Pages"),
 					selenium.getText(
-						"//div[@class='lfr-component lfr-menu-list']/ul/li[2]/a"));
+						"//div[@class='lfr-component lfr-menu-list']/ul/li[contains(.,'Manage Pages')]/a"));
 				selenium.click(RuntimeVariables.replace(
-						"//div[@class='lfr-component lfr-menu-list']/ul/li[2]/a"));
+						"//div[@class='lfr-component lfr-menu-list']/ul/li[contains(.,'Manage Pages')]/a"));
 				selenium.waitForPageToLoad("30000");
 				loadRequiredJavaScriptModules();
 				selenium.clickAt("link=Public Pages",
@@ -123,12 +146,30 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 				assertEquals(RuntimeVariables.replace(
 						"Your request completed successfully."),
 					selenium.getText("//div[@class='portlet-msg-success']"));
-				Thread.sleep(5000);
+				selenium.clickAt("//div[@class='aui-tree-hitarea']",
+					RuntimeVariables.replace("Drop Down Arrow"));
 
-				boolean treeExpanded = selenium.isElementPresent(
-						"//li[@id='layoutsTree_layoutId_0_plid_0']/div[contains(@class,'aui-tree-expanded')]");
+				for (int second = 0;; second++) {
+					if (second >= 90) {
+						fail("timeout");
+					}
 
-				if (treeExpanded) {
+					try {
+						if (selenium.isElementPresent(
+									"xPath=(//a[@class='layout-tree'])[2]")) {
+							break;
+						}
+					}
+					catch (Exception e) {
+					}
+
+					Thread.sleep(1000);
+				}
+
+				boolean pageVisible = selenium.isVisible(
+						"xPath=(//a[@class='layout-tree'])[2]");
+
+				if (pageVisible) {
 					label = 2;
 
 					continue;
@@ -145,7 +186,8 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 					}
 
 					try {
-						if (selenium.isVisible("//li/ul/li/div/div[3]/a")) {
+						if (selenium.isVisible(
+									"//ul[@class='aui-tree-container']/li/div/div/a[contains(.,'Public Page')]")) {
 							break;
 						}
 					}
@@ -156,7 +198,8 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 				}
 
 				assertEquals(RuntimeVariables.replace("Public Page"),
-					selenium.getText("//li/ul/li/div/div[3]/a"));
+					selenium.getText(
+						"//ul[@class='aui-tree-container']/li/div/div/a[contains(.,'Public Page')]"));
 
 			case 100:
 				label = -1;

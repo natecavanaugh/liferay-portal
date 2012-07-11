@@ -575,6 +575,8 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 			try {
 				Runnable runnable = _runnable;
 
+				_runnable = null;
+
 				do {
 					if (runnable != null) {
 						_runTask(runnable);
@@ -697,7 +699,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 		}
 
 		private volatile long _localCompletedTaskCount;
-		private final Runnable _runnable;
+		private Runnable _runnable;
 		private Thread _thread;
 
 	}

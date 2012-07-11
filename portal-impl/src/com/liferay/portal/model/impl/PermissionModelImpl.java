@@ -90,6 +90,10 @@ public class PermissionModelImpl extends BaseModelImpl<Permission>
 	 * @return the normal model instance
 	 */
 	public static Permission toModel(PermissionSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		Permission model = new PermissionImpl();
 
 		model.setPermissionId(soapModel.getPermissionId());
@@ -107,6 +111,10 @@ public class PermissionModelImpl extends BaseModelImpl<Permission>
 	 * @return the normal model instances
 	 */
 	public static List<Permission> toModels(PermissionSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<Permission> models = new ArrayList<Permission>(soapModels.length);
 
 		for (PermissionSoap soapModel : soapModels) {

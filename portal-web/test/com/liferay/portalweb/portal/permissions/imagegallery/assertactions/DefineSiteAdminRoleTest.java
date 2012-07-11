@@ -67,7 +67,7 @@ public class DefineSiteAdminRoleTest extends BaseTestCase {
 			RuntimeVariables.replace("label=Media Gallery"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		assertEquals(RuntimeVariables.replace("Document Library"),
+		assertEquals(RuntimeVariables.replace("Documents and Media"),
 			selenium.getText("//h3"));
 		selenium.check(
 			"//input[@name='_128_rowIds' and @value='com.liferay.portlet.documentlibraryADD_DOCUMENT']");

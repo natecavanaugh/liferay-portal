@@ -122,6 +122,10 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 	 * @return the normal model instance
 	 */
 	public static DLFileVersion toModel(DLFileVersionSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		DLFileVersion model = new DLFileVersionImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -159,6 +163,10 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 	 * @return the normal model instances
 	 */
 	public static List<DLFileVersion> toModels(DLFileVersionSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<DLFileVersion> models = new ArrayList<DLFileVersion>(soapModels.length);
 
 		for (DLFileVersionSoap soapModel : soapModels) {
@@ -744,6 +752,15 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	public boolean isDenied() {
+		if (getStatus() == WorkflowConstants.STATUS_DENIED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public boolean isDraft() {
 		if ((getStatus() == WorkflowConstants.STATUS_DRAFT) ||
 				(getStatus() == WorkflowConstants.STATUS_DRAFT_FROM_APPROVED)) {
@@ -763,8 +780,35 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 		}
 	}
 
+	public boolean isInactive() {
+		if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isIncomplete() {
+		if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public boolean isPending() {
 		if (getStatus() == WorkflowConstants.STATUS_PENDING) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isScheduled() {
+		if (getStatus() == WorkflowConstants.STATUS_SCHEDULED) {
 			return true;
 		}
 		else {

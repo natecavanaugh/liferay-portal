@@ -14,11 +14,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>link=Control Panel</td>
-	<td>Control Panel</td>
-</tr>
-<tr>
 	<td>clickAtAndWait</td>
 	<td>link=Control Panel</td>
 	<td>Control Panel</td>
@@ -39,9 +34,49 @@
 	<td>Knowledge Base Admin Article Title</td>
 </tr>
 <tr>
-	<td>pause</td>
-	<td>5000</td>
-	<td></td>
+	<td>waitForElementPresent</td>
+	<td>//span[@id='cke__1_WAR_knowledgebaseportlet_editor']</td>
+	<td>Text Area</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[.='Source']</td>
+	<td>Source</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//span[.='Source']</td>
+	<td>Source</td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//a[@class='cke_button_source cke_on']</td>
+	<td>Source Button On</td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//td[@id='cke_contents__1_WAR_knowledgebaseportlet_editor']/textarea</td>
+	<td>CK Editor</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//td[@id='cke_contents__1_WAR_knowledgebaseportlet_editor']/textarea</td>
+	<td>Knowledge Base Admin Article Content</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//span[.='Source']</td>
+	<td>Source</td>
+</tr>
+<tr>
+	<td>clickAt</td>
+	<td>//span[.='Source']</td>
+	<td>Source</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//span[@id='cke__1_WAR_knowledgebaseportlet_editor']</td>
+	<td>Text Area</td>
 </tr>
 <tr>
 	<td>waitForVisible</td>
@@ -54,7 +89,7 @@
 	<td>CK Editor</td>
 </tr>
 <tr>
-	<td>type</td>
+	<td>waitForText</td>
 	<td>//body</td>
 	<td>Knowledge Base Admin Article Content</td>
 </tr>
@@ -113,7 +148,6 @@
 	<td>//tr[3]/td[8]</td>
 	<td>Views</td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
