@@ -116,6 +116,10 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 	 * @return the normal model instance
 	 */
 	public static JournalFeed toModel(JournalFeedSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		JournalFeed model = new JournalFeedImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -152,6 +156,10 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 	 * @return the normal model instances
 	 */
 	public static List<JournalFeed> toModels(JournalFeedSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<JournalFeed> models = new ArrayList<JournalFeed>(soapModels.length);
 
 		for (JournalFeedSoap soapModel : soapModels) {

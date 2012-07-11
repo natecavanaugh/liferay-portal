@@ -142,7 +142,7 @@ public class User2_SearchFolderImageTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
-		assertFalse(selenium.isElementPresent("//a[@class='document-link']"));
+		assertTrue(selenium.isElementNotPresent("//a[@class='document-link']"));
 		assertFalse(selenium.isTextPresent(
 				"DL Folder 2 SubFolder Image 4 Title"));
 	}

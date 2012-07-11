@@ -75,6 +75,7 @@ public class RevertChangeParentFrontPageChildPageToWikiPageTest
 		selenium.clickAt("link=History", RuntimeVariables.replace("History"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
+		Thread.sleep(5000);
 		assertEquals(RuntimeVariables.replace(
 				"Changed parent from \"FrontPage.\""),
 			selenium.getText("//tr[3]/td[7]"));

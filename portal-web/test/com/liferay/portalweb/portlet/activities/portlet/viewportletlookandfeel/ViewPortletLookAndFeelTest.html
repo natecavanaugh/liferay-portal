@@ -24,6 +24,11 @@
 	<td>Activities Test Page</td>
 </tr>
 <tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
 	<td>assertText</td>
 	<td>//strong/a</td>
 	<td>Options</td>
@@ -89,9 +94,14 @@
 	<td>Current Page</td>
 </tr>
 <tr>
-	<td>assertChecked</td>
-	<td>//input[@id='_113_show-bordersCheckbox']</td>
+	<td>assertVisible</td>
+	<td>//select[@id='_113_show-borders']</td>
 	<td>Show Borders</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>//select[@id='_113_show-borders']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAt</td>
@@ -333,7 +343,6 @@
 	<td>//select[@id='_113_lfr-wap-initial-window-state']</td>
 	<td>Minimized Normal</td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

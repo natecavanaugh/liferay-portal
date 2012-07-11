@@ -17,6 +17,10 @@ package com.liferay.portal.upgrade.v6_0_12;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.messageboards.model.MBCategoryConstants;
+import com.liferay.portlet.messageboards.model.MBDiscussion;
+import com.liferay.portlet.messageboards.model.MBMessage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,12 +28,14 @@ import java.sql.ResultSet;
 
 /**
  * @author Shuyang Zhou
+ * @author Kalman Vincze
  */
 public class UpgradeMessageBoards extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
 		updateMessage();
+		updateRatings();
 		updateThread();
 	}
 
@@ -82,6 +88,48 @@ public class UpgradeMessageBoards extends UpgradeProcess {
 		finally {
 			DataAccess.cleanUp(con, ps);
 		}
+	}
+
+	protected void updateRatings() throws Exception {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			con = DataAccess.getUpgradeOptimizedConnection();
+
+			ps = con.prepareStatement(
+				"select MBMessage.messageId from MBMessage where " +
+					"MBMessage.categoryId = " +
+						MBCategoryConstants.DISCUSSION_CATEGORY_ID);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				long messageId = rs.getLong("messageId");
+
+				updateRatings(messageId);
+			}
+		}
+		finally {
+			DataAccess.cleanUp(con, ps, rs);
+		}
+	}
+
+	protected void updateRatings(long classPK) throws Exception {
+		long discussionClassNameId = PortalUtil.getClassNameId(
+			MBDiscussion.class);
+		long messageClassNameId = PortalUtil.getClassNameId(MBMessage.class);
+
+		runSQL(
+			"update RatingsStats set classNameId = " + discussionClassNameId +
+				" where classNameId = " + messageClassNameId +
+					" and classPK = " + classPK);
+
+		runSQL(
+			"update RatingsEntry set classNameId = " + discussionClassNameId +
+				" where classNameId = " + messageClassNameId +
+					" and classPK = " + classPK);
 	}
 
 	protected void updateThread() throws Exception {

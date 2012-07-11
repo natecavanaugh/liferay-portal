@@ -35,7 +35,7 @@
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>//h1[@class='header-title]/span</td>
+	<td>//h1[@class='header-title']/span</td>
 	<td>DM Music Title</td>
 </tr>
 <tr>
@@ -61,7 +61,7 @@
 <tr>
 	<td>assertText</td>
 	<td>//span[@class='workflow-status']</td>
-	<td>Status: Ready for Publication</td>
+	<td>Status: Approved</td>
 </tr>
 <tr>
 	<td>assertText</td>
@@ -90,7 +90,7 @@
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>//h1[@class='header-title]/span</td>
+	<td>//h1[@class='header-title']/span</td>
 	<td>DM Music Title</td>
 </tr>
 <tr>
@@ -115,8 +115,8 @@
 </tr>
 <tr>
 	<td>assertText</td>
-	<td>//span[@class='workflow-status']</td>
-	<td>Status: Ready for Publication</td>
+	<td>xPath=(//span[@class='workflow-status'])[contains(.,'Approved')]</td>
+	<td>Status: Approved</td>
 </tr>
 <tr>
 	<td>assertText</td>
@@ -128,8 +128,6 @@
 	<td>//span[@class='download-document']/span/a/span</td>
 	<td>Download (8,527.7k)</td>
 </tr>
-
-
 </tbody></table>
 </body>
 </html>

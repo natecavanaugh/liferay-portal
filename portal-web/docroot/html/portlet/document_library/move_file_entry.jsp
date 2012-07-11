@@ -120,7 +120,7 @@ portletURL.setParameter("fileEntryId", String.valueOf(fileEntryId));
 		<aui:field-wrapper label="current-folder">
 			<liferay-ui:icon
 				image="folder"
-				label="true"
+				label="<%= true %>"
 				message="<%= folderName %>"
 				url="<%= viewFolderURL %>"
 			/>

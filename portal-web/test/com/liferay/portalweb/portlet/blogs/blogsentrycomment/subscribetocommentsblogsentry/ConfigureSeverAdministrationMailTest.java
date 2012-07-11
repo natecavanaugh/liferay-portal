@@ -60,7 +60,7 @@ public class ConfigureSeverAdministrationMailTest extends BaseTestCase {
 		selenium.clickAt("//input[@id='_137_pop3SecureCheckbox']",
 			RuntimeVariables.replace("Use a Secure Network Connection"));
 		selenium.type("//input[@id='_137_pop3User']",
-			RuntimeVariables.replace("liferay.qa.testing.trunk@gmail.com"));
+			RuntimeVariables.replace("liferay.qa.server.trunk@gmail.com"));
 		selenium.type("//input[@id='_137_pop3Password']",
 			RuntimeVariables.replace("loveispatient"));
 		selenium.type("//input[@id='_137_smtpHost']",
@@ -70,7 +70,7 @@ public class ConfigureSeverAdministrationMailTest extends BaseTestCase {
 		selenium.clickAt("//input[@id='_137_smtpSecureCheckbox']",
 			RuntimeVariables.replace("Use a Secure Network Connection"));
 		selenium.type("//input[@id='_137_smtpUser']",
-			RuntimeVariables.replace("liferay.qa.testing.trunk@gmail.com"));
+			RuntimeVariables.replace("liferay.qa.server.trunk@gmail.com"));
 		selenium.type("//input[@id='_137_smtpPassword']",
 			RuntimeVariables.replace("loveispatient"));
 		selenium.clickAt("//input[@value='Save']",

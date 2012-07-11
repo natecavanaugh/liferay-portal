@@ -72,7 +72,7 @@ public class TearDownMailAccountTest extends BaseTestCase {
 					}
 
 					try {
-						if (!selenium.isElementPresent(
+						if (selenium.isElementNotPresent(
 									"//input[@id='_1_WAR_mailportlet_password']")) {
 							break;
 						}
@@ -97,11 +97,10 @@ public class TearDownMailAccountTest extends BaseTestCase {
 				}
 
 				assertEquals(RuntimeVariables.replace(
-						"liferay.qa.testing.trunk@gmail.com"),
+						"liferay.qa.testing@gmail.com"),
 					selenium.getText("//div/div/div[1]/div/ul/li/span/span"));
 				selenium.clickAt("//div/div/div[1]/div/ul/li/span/span",
-					RuntimeVariables.replace(
-						"liferay.qa.testing.trunk@gmail.com"));
+					RuntimeVariables.replace("liferay.qa.testing@gmail.com"));
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -199,7 +198,7 @@ public class TearDownMailAccountTest extends BaseTestCase {
 				selenium.waitForPageToLoad("30000");
 				loadRequiredJavaScriptModules();
 				assertFalse(selenium.isTextPresent(
-						"liferay.qa.testing.trunk@gmail.com"));
+						"liferay.qa.testing@gmail.com"));
 
 			case 100:
 				label = -1;

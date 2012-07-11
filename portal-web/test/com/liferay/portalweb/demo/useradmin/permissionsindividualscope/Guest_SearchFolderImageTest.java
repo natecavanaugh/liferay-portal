@@ -92,7 +92,7 @@ public class Guest_SearchFolderImageTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
-		assertFalse(selenium.isElementPresent("//a[@class='document-link']"));
+		assertTrue(selenium.isElementNotPresent("//a[@class='document-link']"));
 		assertFalse(selenium.isTextPresent("DL Folder 2 Image 2 Title"));
 		selenium.type("//input[@id='_20_keywords']",
 			RuntimeVariables.replace("fish"));
@@ -116,7 +116,7 @@ public class Guest_SearchFolderImageTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
-		assertFalse(selenium.isElementPresent("//a[@class='document-link']"));
+		assertTrue(selenium.isElementNotPresent("//a[@class='document-link']"));
 		assertFalse(selenium.isTextPresent("DL Folder 2 Image 3 Title"));
 		selenium.type("//input[@id='_20_keywords']",
 			RuntimeVariables.replace("frog"));
@@ -140,7 +140,7 @@ public class Guest_SearchFolderImageTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
-		assertFalse(selenium.isElementPresent("//a[@class='document-link']"));
+		assertTrue(selenium.isElementNotPresent("//a[@class='document-link']"));
 		assertFalse(selenium.isTextPresent(
 				"DL Folder 2 SubFolder Image 4 Title"));
 	}

@@ -91,7 +91,10 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 				if (Validator.isNotNull(
 						layout.getSourcePrototypeLayoutUuid())) {
 
-					SitesUtil.mergeLayoutSetProtypeLayouts(group, layoutSet);
+					if (!SitesUtil.isLayoutModifiedSinceLastMerge(layout)) {
+						SitesUtil.mergeLayoutSetProtypeLayouts(
+							group, layoutSet);
+					}
 				}
 			}
 			finally {
@@ -113,20 +116,31 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 				LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(
 					groupId, privateLayout);
 
-				try {
-					MergeLayoutPrototypesThreadLocal.setInProgress(true);
-					WorkflowThreadLocal.setEnabled(false);
+				List<Layout> layouts = (List<Layout>)methodInvocation.proceed();
 
-					SitesUtil.mergeLayoutSetProtypeLayouts(group, layoutSet);
-				}
-				finally {
-					MergeLayoutPrototypesThreadLocal.setInProgress(false);
-					WorkflowThreadLocal.setEnabled(workflowEnabled);
+				for (Layout layout : layouts) {
+					if (!SitesUtil.isLayoutModifiedSinceLastMerge(layout)) {
+						try {
+							MergeLayoutPrototypesThreadLocal.setInProgress(
+								true);
+							WorkflowThreadLocal.setEnabled(false);
+
+							SitesUtil.mergeLayoutSetProtypeLayouts(
+								group, layoutSet);
+							}
+						finally {
+							MergeLayoutPrototypesThreadLocal.setInProgress(
+								false);
+							WorkflowThreadLocal.setEnabled(workflowEnabled);
+						}
+
+						break;
+					}
 				}
 
 				Object returnValue = methodInvocation.proceed();
 
-				if (!PropsValues.
+				if (PropsValues.
 						USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE &&
 					group.isUser()) {
 

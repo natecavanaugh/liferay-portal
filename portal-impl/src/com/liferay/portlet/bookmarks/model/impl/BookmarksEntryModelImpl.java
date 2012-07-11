@@ -110,6 +110,10 @@ public class BookmarksEntryModelImpl extends BaseModelImpl<BookmarksEntry>
 	 * @return the normal model instance
 	 */
 	public static BookmarksEntry toModel(BookmarksEntrySoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		BookmarksEntry model = new BookmarksEntryImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -138,6 +142,10 @@ public class BookmarksEntryModelImpl extends BaseModelImpl<BookmarksEntry>
 	 * @return the normal model instances
 	 */
 	public static List<BookmarksEntry> toModels(BookmarksEntrySoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<BookmarksEntry> models = new ArrayList<BookmarksEntry>(soapModels.length);
 
 		for (BookmarksEntrySoap soapModel : soapModels) {

@@ -23,12 +23,10 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.journal.model.JournalArticle;
-import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portlet.journal.service.JournalArticleServiceUtil;
 import com.liferay.portlet.journal.util.comparator.ArticleVersionComparator;
 
@@ -138,7 +136,7 @@ public class JournalArticleAtomCollectionProvider
 
 		OrderByComparator obc = new ArticleVersionComparator();
 
-		int count = JournalArticleLocalServiceUtil.searchCount(
+		int count = JournalArticleServiceUtil.searchCount(
 			companyId, groupId, classNameId, keywords, version, type,
 			structureId, templateId, displayDateGT, displayDateLT, status,
 			reviewDate);
@@ -147,7 +145,7 @@ public class JournalArticleAtomCollectionProvider
 
 		AtomUtil.saveAtomPagerInRequest(atomRequestContext, atomPager);
 
-		journalArticles = JournalArticleLocalServiceUtil.search(
+		journalArticles = JournalArticleServiceUtil.search(
 			companyId, groupId, classNameId, keywords, version, type,
 			structureId, templateId, displayDateGT, displayDateLT, status,
 			reviewDate, atomPager.getStart(), atomPager.getEnd() + 1, obc);
@@ -160,8 +158,6 @@ public class JournalArticleAtomCollectionProvider
 			String title, String summary, String content, Date date,
 			AtomRequestContext atomRequestContext)
 		throws Exception {
-
-		User user = AtomUtil.getUser(atomRequestContext);
 
 		long groupId = atomRequestContext.getLongParameter("groupId");
 		long classNameId = 0;
@@ -226,9 +222,9 @@ public class JournalArticleAtomCollectionProvider
 		double version = journalArticle.getVersion();
 		int status = WorkflowConstants.STATUS_APPROVED;
 
-		journalArticle = JournalArticleLocalServiceUtil.updateStatus(
-			user.getUserId(), groupId, journalArticle.getArticleId(), version,
-			status, articleURL, serviceContext);
+		journalArticle = JournalArticleServiceUtil.updateStatus(
+			groupId, journalArticle.getArticleId(), version, status, articleURL,
+			serviceContext);
 
 		return journalArticle;
 	}
@@ -238,8 +234,6 @@ public class JournalArticleAtomCollectionProvider
 			JournalArticle journalArticle, String title, String summary,
 			String content, Date date, AtomRequestContext atomRequestContext)
 		throws Exception {
-
-		User user = AtomUtil.getUser(atomRequestContext);
 
 		long groupId = journalArticle.getGroupId();
 		String articleId = journalArticle.getArticleId();
@@ -255,9 +249,9 @@ public class JournalArticleAtomCollectionProvider
 		int status = WorkflowConstants.STATUS_APPROVED;
 		String articleURL = StringPool.BLANK;
 
-		JournalArticleLocalServiceUtil.updateStatus(
-			user.getUserId(), groupId, journalArticle.getArticleId(),
-			journalArticle.getVersion(), status, articleURL, serviceContext);
+		JournalArticleServiceUtil.updateStatus(
+			groupId, journalArticle.getArticleId(), journalArticle.getVersion(),
+			status, articleURL, serviceContext);
 	}
 
 	private static final String _COLLECTION_NAME = "web-content";

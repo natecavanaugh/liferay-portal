@@ -57,6 +57,7 @@ public class AddBlogsEntryCommentTest extends BaseTestCase {
 
 		selenium.type("//textarea[@name='_33_postReplyBody0']",
 			RuntimeVariables.replace("Blogs Entry Comment Body"));
+		Thread.sleep(5000);
 		selenium.clickAt("//input[@value='Reply']",
 			RuntimeVariables.replace("Reply"));
 

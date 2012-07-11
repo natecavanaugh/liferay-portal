@@ -61,6 +61,8 @@ public class WorkflowConstants {
 
 	public static final String LABEL_DRAFT = "draft";
 
+	public static final String LABEL_DRAFT_FROM_APPROVED = "draft";
+
 	public static final String LABEL_EXPIRED = "expired";
 
 	public static final String LABEL_INACTIVE = "inactive";
@@ -68,6 +70,8 @@ public class WorkflowConstants {
 	public static final String LABEL_INCOMPLETE = "incomplete";
 
 	public static final String LABEL_PENDING = "pending";
+
+	public static final String LABEL_SCHEDULED = "scheduled";
 
 	public static final int STATUS_ANY = -1;
 
@@ -77,7 +81,7 @@ public class WorkflowConstants {
 
 	public static final int STATUS_DRAFT = 2;
 
-	public static final int STATUS_DRAFT_FROM_APPROVED = 7;
+	public static final int STATUS_DRAFT_FROM_APPROVED = 9;
 
 	public static final int STATUS_EXPIRED = 3;
 
@@ -86,6 +90,8 @@ public class WorkflowConstants {
 	public static final int STATUS_INCOMPLETE = 6;
 
 	public static final int STATUS_PENDING = 1;
+
+	public static final int STATUS_SCHEDULED = 7;
 
 	public static String toLabel(int status) {
 		if (status == STATUS_ANY) {
@@ -97,7 +103,9 @@ public class WorkflowConstants {
 		else if (status == STATUS_DENIED) {
 			return LABEL_DENIED;
 		}
-		else if (status == STATUS_DRAFT) {
+		else if ((status == STATUS_DRAFT) ||
+				 (status == STATUS_DRAFT_FROM_APPROVED)) {
+
 			return LABEL_DRAFT;
 		}
 		else if (status == STATUS_EXPIRED) {
@@ -111,6 +119,9 @@ public class WorkflowConstants {
 		}
 		else if (status == STATUS_PENDING) {
 			return LABEL_PENDING;
+		}
+		else if (status == STATUS_SCHEDULED) {
+			return LABEL_SCHEDULED;
 		}
 		else {
 			return LABEL_ANY;
@@ -127,7 +138,9 @@ public class WorkflowConstants {
 		else if (label.equals(LABEL_DENIED)) {
 			return STATUS_DENIED;
 		}
-		else if (label.equals(LABEL_DRAFT)) {
+		else if (label.equals(LABEL_DRAFT) ||
+				 label.equals(LABEL_DRAFT_FROM_APPROVED)) {
+
 			return STATUS_DRAFT;
 		}
 		else if (label.equals(LABEL_EXPIRED)) {
@@ -141,6 +154,9 @@ public class WorkflowConstants {
 		}
 		else if (label.equals(LABEL_PENDING)) {
 			return STATUS_PENDING;
+		}
+		else if (label.equals(LABEL_SCHEDULED)) {
+			return STATUS_SCHEDULED;
 		}
 		else {
 			return STATUS_ANY;

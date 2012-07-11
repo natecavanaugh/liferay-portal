@@ -124,6 +124,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		);
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -134,6 +135,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		<#list entity.regularColList as column>
 			<#if column.isPrimitiveType()>
@@ -358,6 +360,15 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 			}
 		}
 
+		public boolean isDenied() {
+			if (getStatus() == WorkflowConstants.STATUS_DENIED) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
 		public boolean isDraft() {
 			if (getStatus() == WorkflowConstants.STATUS_DRAFT) {
 				return true;
@@ -376,8 +387,35 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 			}
 		}
 
+		public boolean isInactive() {
+			if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		public boolean isIncomplete() {
+			if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
 		public boolean isPending() {
 			if (getStatus() == WorkflowConstants.STATUS_PENDING) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
+		public boolean isScheduled() {
+			if (getStatus() == WorkflowConstants.STATUS_SCHEDULED) {
 				return true;
 			}
 			else {

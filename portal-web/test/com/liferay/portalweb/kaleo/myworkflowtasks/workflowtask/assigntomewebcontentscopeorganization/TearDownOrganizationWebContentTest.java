@@ -60,7 +60,7 @@ public class TearDownOrganizationWebContentTest extends BaseTestCase {
 
 					try {
 						if (selenium.isVisible(
-									"//div[@class='lfr-component lfr-menu-list']/ul/li[3]/a")) {
+									"//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Organization Name')]")) {
 							break;
 						}
 					}
@@ -72,8 +72,8 @@ public class TearDownOrganizationWebContentTest extends BaseTestCase {
 
 				assertEquals(RuntimeVariables.replace("Organization Name"),
 					selenium.getText(
-						"//div[@class='lfr-component lfr-menu-list']/ul/li[3]/a"));
-				selenium.clickAt("//div[@class='lfr-component lfr-menu-list']/ul/li[3]/a",
+						"//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Organization Name')]"));
+				selenium.clickAt("//div[@class='lfr-component lfr-menu-list']/ul/li/a[contains(.,'Organization Name')]",
 					RuntimeVariables.replace("Organization Name"));
 				selenium.waitForPageToLoad("30000");
 				loadRequiredJavaScriptModules();

@@ -46,7 +46,11 @@ public class AddSchedulerEventStagingCommunityQuartzTest extends BaseTestCase {
 			RuntimeVariables.replace("Page Staging Community Quartz"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		selenium.clickAt("//strong/a",
+		assertTrue(selenium.isVisible(
+				"//span[@class='staging-icon-menu-container']/span/ul/li[1]/strong/a"));
+		selenium.mouseOver(
+			"//span[@class='staging-icon-menu-container']/span/ul/li[1]/strong/a");
+		selenium.clickAt("//span[@class='staging-icon-menu-container']/span/ul/li[1]/strong/a",
 			RuntimeVariables.replace("Staging Drop Down"));
 
 		for (int second = 0;; second++) {

@@ -45,6 +45,7 @@ public class ViewPortletLookAndFeelTest extends BaseTestCase {
 			RuntimeVariables.replace("Activities Test Page"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
+		Thread.sleep(5000);
 		assertEquals(RuntimeVariables.replace("Options"),
 			selenium.getText("//strong/a"));
 		selenium.clickAt("//strong/a", RuntimeVariables.replace("Options"));
@@ -133,8 +134,8 @@ public class ViewPortletLookAndFeelTest extends BaseTestCase {
 				"//input[@id='_113_use-custom-titleCheckbox']"));
 		assertEquals("Current Page",
 			selenium.getSelectedLabel("//select[@id='_113_lfr-point-links']"));
-		assertTrue(selenium.isChecked(
-				"//input[@id='_113_show-bordersCheckbox']"));
+		assertTrue(selenium.isVisible("//select[@id='_113_show-borders']"));
+		assertEquals("", selenium.getValue("//select[@id='_113_show-borders']"));
 		selenium.clickAt("link=Text Styles",
 			RuntimeVariables.replace("Text Styles"));
 

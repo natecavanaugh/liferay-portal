@@ -87,6 +87,7 @@ public class AddWikiFrontPageContentJavascriptTest extends BaseTestCase {
 		selenium.type("//textarea[@class='cke_source cke_enable_context_menu']",
 			RuntimeVariables.replace(
 				"<p id=\"demo\">PASS</p><script type=\"text/javascript\">document.getElementById('demo').innerHTML=\"FAIL\";</script>"));
+		selenium.selectFrame("relative=top");
 		selenium.clickAt("//input[@value='Publish']",
 			RuntimeVariables.replace("Publish"));
 		selenium.waitForPageToLoad("30000");

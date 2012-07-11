@@ -60,7 +60,14 @@ import sun.reflect.Reflection;
 public class FileChecker extends BaseChecker {
 
 	public void afterPropertiesSet() {
-		_rootDir = WebDirDetector.getRootDir(getClassLoader());
+		try {
+			_rootDir = WebDirDetector.getRootDir(getClassLoader());
+		}
+		catch (Exception e) {
+
+			// This means the WAR is probably not exploded
+
+		}
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Root directory " + _rootDir);
@@ -334,7 +341,9 @@ public class FileChecker extends BaseChecker {
 
 		// Plugin
 
-		paths.add(_rootDir + "-");
+		if (_rootDir != null) {
+			paths.add(_rootDir + "-");
+		}
 
 		// Portal
 

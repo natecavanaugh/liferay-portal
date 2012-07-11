@@ -44,11 +44,10 @@ public class DeleteMessageNullDraftsTest extends BaseTestCase {
 		selenium.click(RuntimeVariables.replace("link=Mail Test Page"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		assertEquals(RuntimeVariables.replace(
-				"liferay.qa.testing.trunk@gmail.com"),
+		assertEquals(RuntimeVariables.replace("liferay.qa.testing@gmail.com"),
 			selenium.getText("//div/div/div[1]/div/ul/li/span/span/a"));
 		selenium.clickAt("//div/div/div[1]/div/ul/li/span/span/a",
-			RuntimeVariables.replace("liferay.qa.testing.trunk@gmail.com"));
+			RuntimeVariables.replace("liferay.qa.testing@gmail.com"));
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {

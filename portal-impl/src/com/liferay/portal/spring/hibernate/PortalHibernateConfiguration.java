@@ -34,9 +34,11 @@ import java.util.Properties;
 
 import javassist.util.proxy.ProxyFactory;
 
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
+import org.hibernate.dialect.Dialect;
 
 import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
 
@@ -63,14 +65,21 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		return super.buildSessionFactory();
 	}
 
+	@Override
+	public void destroy() throws HibernateException {
+		setBeanClassLoader(null);
+
+		super.destroy();
+	}
+
 	public void setHibernateConfigurationConverter(
 		Converter<String> hibernateConfigurationConverter) {
 
 		_hibernateConfigurationConverter = hibernateConfigurationConverter;
 	}
 
-	protected String determineDialect() {
-		return DialectDetector.determineDialect(getDataSource());
+	protected Dialect determineDialect() {
+		return DialectDetector.getDialect(getDataSource());
 	}
 
 	protected ClassLoader getConfigurationClassLoader() {
@@ -104,9 +113,13 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 			configuration.setProperties(PropsUtil.getProperties());
 
 			if (Validator.isNull(PropsValues.HIBERNATE_DIALECT)) {
-				String dialect = determineDialect();
+				Dialect dialect = determineDialect();
 
-				configuration.setProperty("hibernate.dialect", dialect);
+				setDB(dialect);
+
+				Class<?> clazz = dialect.getClass();
+
+				configuration.setProperty("hibernate.dialect", clazz.getName());
 			}
 
 			DB db = DBFactoryUtil.getDB();
@@ -179,6 +192,10 @@ public class PortalHibernateConfiguration extends LocalSessionFactoryBean {
 		configuration = configuration.addInputStream(is);
 
 		is.close();
+	}
+
+	protected void setDB(Dialect dialect) {
+		DBFactoryUtil.setDB(dialect);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

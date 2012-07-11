@@ -40,6 +40,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance;
 
 import java.io.Serializable;
@@ -55,7 +56,7 @@ import javax.portlet.PortletURL;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ThemeDisplay implements Serializable {
+public class ThemeDisplay implements Cloneable, Serializable {
 
 	public ThemeDisplay() {
 		if (_log.isDebugEnabled()) {
@@ -63,6 +64,21 @@ public class ThemeDisplay implements Serializable {
 		}
 
 		_portletDisplay.setThemeDisplay(this);
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		ThemeDisplay themeDisplay = (ThemeDisplay)super.clone();
+
+		PortletDisplay portletDisplay = new PortletDisplay();
+
+		_portletDisplay.copyTo(portletDisplay);
+
+		themeDisplay._portletDisplay = portletDisplay;
+
+		portletDisplay.setThemeDisplay(themeDisplay);
+
+		return themeDisplay;
 	}
 
 	public Account getAccount() {
@@ -861,8 +877,19 @@ public class ThemeDisplay implements Serializable {
 
 			String host = getCDNHost();
 
+			String portalURL = getPortalURL();
+
+			if (getServerName() != null) {
+				try {
+					portalURL = PortalUtil.getPortalURL(getLayout(), this);
+				}
+				catch (Exception e) {
+					_log.error(e, e);
+				}
+			}
+
 			if (Validator.isNull(host)) {
-				host = getPortalURL();
+				host = portalURL;
 			}
 
 			setPathColorSchemeImages(
@@ -872,7 +899,7 @@ public class ThemeDisplay implements Serializable {
 			String dynamicResourcesHost = getCDNDynamicResourcesHost();
 
 			if (Validator.isNull(dynamicResourcesHost)) {
-				dynamicResourcesHost = getPortalURL();
+				dynamicResourcesHost = portalURL;
 			}
 
 			setPathThemeCss(

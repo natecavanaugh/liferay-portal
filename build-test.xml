@@ -255,7 +255,7 @@
 	</target>
 
 	<target name="build-test-ant-scripts">
-		<property name="build-test-ant-scripts.version" value="1" />
+		<property name="build-test-ant-scripts.version" value="2" />
 
 		<if>
 			<available file="portal-web/test-ant-scripts/version" />
@@ -1306,6 +1306,13 @@
 		</antcall>
 
 		<antcall target="build-test-ant-script">
+			<param name="test.ant.script.command" value="plugins-test-event" />
+			<param name="test.ant.script.plugin.portlets" value="test-event-portlet" />
+			<param name="test.ant.script.properties" value="portlet.event.distribution=layout-set" />
+			<param name="test.ant.script.suite" value="PluginsTestEventTestSuite" />
+		</antcall>
+
+		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="plugins-test-hook" />
 			<param name="test.ant.script.plugin.portlets" value="test-hook-portlet" />
 			<param name="test.ant.script.suite" value="PluginsTestHookTestSuite" />
@@ -1334,12 +1341,6 @@
 			<param name="test.ant.script.command" value="plugins-test-transaction" />
 			<param name="test.ant.script.plugin.portlets" value="test-transaction-portlet" />
 			<param name="test.ant.script.suite" value="PluginsTestTransactionTestSuite" />
-		</antcall>
-
-		<antcall target="build-test-ant-script">
-			<param name="test.ant.script.command" value="plugins-test-workflow" />
-			<param name="test.ant.script.plugin.portlets" value="test-workflow-portlet" />
-			<param name="test.ant.script.suite" value="PluginsTestWorkflowTestSuite" />
 		</antcall>
 
 		<antcall target="build-test-ant-script">
@@ -3702,6 +3703,19 @@ file.
 					<property name="plugin.types" value="portlets" />
 					<property name="plugins.deployed" value="${plugins.deployed}" />
 					<property name="plugins.includes" value="${portlet.plugins.includes}" />
+				</ant>
+
+				<property name="plugins.deployed" value="true" />
+			</then>
+		</if>
+
+		<if>
+			<isset property="test.pacl" />
+			<then>
+				<ant antfile="build-test-plugins.xml" target="deploy-simple-server-plugins">
+					<property name="plugin.types" value="portlets" />
+					<property name="plugins.deployed" value="${plugins.deployed}" />
+					<property name="plugins.includes" value="chat-portlet,flash-portlet,test-pacl-portlet" />
 				</ant>
 
 				<property name="plugins.deployed" value="true" />

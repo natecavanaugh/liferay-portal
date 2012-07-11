@@ -98,7 +98,7 @@ public class TearDownWCWebContentTest extends BaseTestCase {
 					}
 
 					try {
-						if (!selenium.isElementPresent(
+						if (selenium.isElementNotPresent(
 									"//span[contains(@class,'aui-button-disabled')]/span/input[@value='Delete']")) {
 							break;
 						}

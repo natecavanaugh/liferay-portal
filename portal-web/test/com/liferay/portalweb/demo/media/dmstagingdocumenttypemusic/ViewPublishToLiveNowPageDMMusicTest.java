@@ -53,7 +53,7 @@ public class ViewPublishToLiveNowPageDMMusicTest extends BaseTestCase {
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("DM Music Title"),
-			selenium.getText("//h1[@class='header-title]/span"));
+			selenium.getText("//h1[@class='header-title']/span"));
 		assertEquals(RuntimeVariables.replace("DM Music Title"),
 			selenium.getText("//h2[@class='document-title']"));
 		assertEquals(RuntimeVariables.replace("DM Music Description"),
@@ -62,7 +62,7 @@ public class ViewPublishToLiveNowPageDMMusicTest extends BaseTestCase {
 			selenium.getText("//h3[contains(@class,'version')]"));
 		assertEquals(RuntimeVariables.replace("Last Updated by Joe Bloggs"),
 			selenium.getText("//div[contains(@class,'lfr-asset-author')]"));
-		assertEquals(RuntimeVariables.replace("Status: Ready for Publication"),
+		assertEquals(RuntimeVariables.replace("Status: Approved"),
 			selenium.getText("//span[@class='workflow-status']"));
 		assertEquals(RuntimeVariables.replace("DM Music Description"),
 			selenium.getText("//blockquote[@class='lfr-asset-description']"));
@@ -79,7 +79,7 @@ public class ViewPublishToLiveNowPageDMMusicTest extends BaseTestCase {
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("DM Music Title"),
-			selenium.getText("//h1[@class='header-title]/span"));
+			selenium.getText("//h1[@class='header-title']/span"));
 		assertEquals(RuntimeVariables.replace("DM Music Title"),
 			selenium.getText("//h2[@class='document-title']"));
 		assertEquals(RuntimeVariables.replace("DM Music Description"),
@@ -88,8 +88,9 @@ public class ViewPublishToLiveNowPageDMMusicTest extends BaseTestCase {
 			selenium.getText("//h3[contains(@class,'version')]"));
 		assertEquals(RuntimeVariables.replace("Last Updated by Joe Bloggs"),
 			selenium.getText("//div[contains(@class,'lfr-asset-author')]"));
-		assertEquals(RuntimeVariables.replace("Status: Ready for Publication"),
-			selenium.getText("//span[@class='workflow-status']"));
+		assertEquals(RuntimeVariables.replace("Status: Approved"),
+			selenium.getText(
+				"xPath=(//span[@class='workflow-status'])[contains(.,'Approved')]"));
 		assertEquals(RuntimeVariables.replace("DM Music Description"),
 			selenium.getText("//blockquote[@class='lfr-asset-description']"));
 		assertEquals(RuntimeVariables.replace("Download (8,527.7k)"),

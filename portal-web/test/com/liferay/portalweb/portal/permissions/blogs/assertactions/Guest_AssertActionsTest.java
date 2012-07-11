@@ -48,10 +48,10 @@ public class Guest_AssertActionsTest extends BaseTestCase {
 		assertTrue(selenium.isElementPresent("//input[@value='Search']"));
 		assertTrue(selenium.isElementPresent(
 				"link=Permissions Blogs Test Entry"));
-		assertFalse(selenium.isElementPresent("link=Edit"));
-		assertFalse(selenium.isElementPresent("link=Permissions"));
-		assertFalse(selenium.isElementPresent("link=Delete"));
-		assertFalse(selenium.isElementPresent(
+		assertTrue(selenium.isElementNotPresent("link=Edit"));
+		assertTrue(selenium.isElementNotPresent("link=Permissions"));
+		assertTrue(selenium.isElementNotPresent("link=Delete"));
+		assertTrue(selenium.isElementNotPresent(
 				"//input[@value='Add Blog Entry']"));
 		selenium.clickAt("link=Permissions Blogs Test Entry",
 			RuntimeVariables.replace("Permissions Blogs Test Entry"));
@@ -78,10 +78,10 @@ public class Guest_AssertActionsTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
-		assertFalse(selenium.isElementPresent("//input[@value='Reply']"));
-		assertFalse(selenium.isElementPresent("link=Edit"));
-		assertFalse(selenium.isElementPresent("link=Permissions"));
-		assertFalse(selenium.isElementPresent("link=Delete"));
+		assertTrue(selenium.isElementNotPresent("//input[@value='Reply']"));
+		assertTrue(selenium.isElementNotPresent("link=Edit"));
+		assertTrue(selenium.isElementNotPresent("link=Permissions"));
+		assertTrue(selenium.isElementNotPresent("link=Delete"));
 		assertTrue(selenium.isElementPresent("link=Sign in to vote."));
 		selenium.clickAt("//input[@value='Reply as...']",
 			RuntimeVariables.replace("Reply as..."));
@@ -92,7 +92,7 @@ public class Guest_AssertActionsTest extends BaseTestCase {
 			}
 
 			try {
-				if (selenium.isVisible("//iframe[@id='_33_']")) {
+				if (selenium.isVisible("//iframe[@id='_33_signInDialog']")) {
 					break;
 				}
 			}
@@ -102,7 +102,7 @@ public class Guest_AssertActionsTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
-		selenium.selectFrame("//iframe[@id='_33_']");
+		selenium.selectFrame("//iframe[@id='_33_signInDialog']");
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {

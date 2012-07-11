@@ -1160,7 +1160,13 @@ public class PortalImpl implements Portal {
 			cdnHost = getCDNHostHttp(company.getCompanyId());
 		}
 
-		return ParamUtil.getString(request, "cdn_host", cdnHost);
+		cdnHost = ParamUtil.getString(request, "cdn_host", cdnHost);
+
+		if (Validator.isUrl(cdnHost)) {
+			return cdnHost;
+		}
+
+		return StringPool.BLANK;
 	}
 
 	public String getCDNHostHttp(long companyId) {
@@ -1177,7 +1183,9 @@ public class PortalImpl implements Portal {
 		catch (Exception e) {
 		}
 
-		if ((cdnHostHttp == null) || cdnHostHttp.startsWith("${")) {
+		if ((cdnHostHttp == null) || cdnHostHttp.startsWith("${") ||
+			!Validator.isUrl(cdnHostHttp)) {
+
 			cdnHostHttp = StringPool.BLANK;
 		}
 
@@ -1201,7 +1209,9 @@ public class PortalImpl implements Portal {
 		catch (SystemException se) {
 		}
 
-		if ((cdnHostHttps == null) || cdnHostHttps.startsWith("${")) {
+		if ((cdnHostHttps == null) || cdnHostHttps.startsWith("${") ||
+			!Validator.isUrl(cdnHostHttps)) {
+
 			cdnHostHttps = StringPool.BLANK;
 		}
 
@@ -1423,7 +1433,7 @@ public class PortalImpl implements Portal {
 				themeDisplay.getScopeGroupId(), false,
 				PropsValues.COMPANY_SECURITY_STRANGERS_URL);
 
-			return PortalUtil.getLayoutURL(layout, themeDisplay);
+			return getLayoutURL(layout, themeDisplay);
 		}
 		catch (NoSuchLayoutException nsle) {
 		}
@@ -3908,7 +3918,7 @@ public class PortalImpl implements Portal {
 	}
 
 	public String getUniqueElementId(
-		HttpServletRequest request, String elementId) {
+		HttpServletRequest request, String namespace, String elementId) {
 
 		String uniqueElementId = elementId;
 
@@ -3923,19 +3933,26 @@ public class PortalImpl implements Portal {
 		else {
 			int i = 1;
 
-			while (uniqueElementIds.contains(uniqueElementId)) {
+			while (uniqueElementIds.contains(
+						namespace.concat(uniqueElementId))) {
+
 				uniqueElementId = elementId.concat(StringPool.UNDERLINE).concat(
 					String.valueOf(i));
+
+				i++;
 			}
 		}
 
-		uniqueElementIds.add(uniqueElementId);
+		uniqueElementIds.add(namespace.concat(uniqueElementId));
 
 		return uniqueElementId;
 	}
 
-	public String getUniqueElementId(PortletRequest request, String elementId) {
-		return getUniqueElementId(getHttpServletRequest(request), elementId);
+	public String getUniqueElementId(
+		PortletRequest request, String namespace, String elementId) {
+
+		return getUniqueElementId(
+			getHttpServletRequest(request), namespace, elementId);
 	}
 
 	public UploadPortletRequest getUploadPortletRequest(
