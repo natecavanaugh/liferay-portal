@@ -314,7 +314,7 @@ for (int i = 0; i < results.size(); i++) {
 						row = new ResultRow(fileShortcut, fileShortcut.getFileShortcutId(), i);
 					}
 
-					row.setClassName("app-view-entry-taglib entry-display-style");
+					row.setClassName("app-view-entry-taglib entry-display-style selectable");
 
 					Map<String, Object> data = new HashMap<String, Object>();
 
@@ -434,7 +434,7 @@ for (int i = 0; i < results.size(); i++) {
 
 					ResultRow row = new ResultRow(curFolder, curFolder.getPrimaryKey(), i);
 
-					row.setClassName("app-view-entry-taglib entry-display-style");
+					row.setClassName("app-view-entry-taglib entry-display-style selectable");
 
 					Map<String, Object> data = new HashMap<String, Object>();
 
