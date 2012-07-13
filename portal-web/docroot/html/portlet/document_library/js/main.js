@@ -7,6 +7,8 @@ AUI.add(
 
 		var UA = A.UA;
 
+		var CSS_ROW_SELECTABLE = 'tr.selectable';
+
 		var CSS_SYNC_MESSAGE_HIDDEN = 'sync-message-hidden';
 
 		var DEFAULT_FOLDER_ID = 0;
@@ -59,7 +61,7 @@ AUI.add(
 
 		var DocumentLibrary = A.Component.create(
 			{
-				AUGMENTS: [Liferay.PortletBase],
+				AUGMENTS: [Liferay.PortletBase, Liferay.DocumentLibraryUpload],
 
 				EXTENDS: A.Base,
 

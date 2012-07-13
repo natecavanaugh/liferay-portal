@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
-import com.liferay.portal.kernel.servlet.ServletResponseConstants;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
@@ -130,7 +129,8 @@ public class EditFileEntryAction extends PortletAction {
 			}
 			else if (cmd.equals(Constants.ADD) ||
 					 cmd.equals(Constants.UPDATE) ||
-					 cmd.equals(Constants.UPDATE_AND_CHECKIN)) {
+					 cmd.equals(Constants.UPDATE_AND_CHECKIN) ||
+					 cmd.equals(Constants.ADD_DYNAMIC)) {
 
 				updateFileEntry(portletConfig, actionRequest, actionResponse);
 			}
@@ -780,7 +780,7 @@ public class EditFileEntryAction extends PortletAction {
 
 			FileEntry fileEntry = null;
 
-			if (cmd.equals(Constants.ADD)) {
+			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.ADD_DYNAMIC)) {
 
 				// Add file entry
 
@@ -791,6 +791,14 @@ public class EditFileEntryAction extends PortletAction {
 				AssetPublisherUtil.addAndStoreSelection(
 					actionRequest, DLFileEntry.class.getName(),
 					fileEntry.getFileEntryId(), -1);
+
+				if (cmd.equals(Constants.ADD_DYNAMIC)) {
+					JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+					jsonObject.put("fileEntryId", fileEntry.getFileEntryId());
+
+					writeJSON(actionRequest, actionResponse, jsonObject);
+				}
 			}
 			else if (cmd.equals(Constants.UPDATE_AND_CHECKIN)) {
 
