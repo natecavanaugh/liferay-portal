@@ -332,6 +332,27 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, newTitle, serviceContext);
 	}
 
+	public void movePageAttachmentFromTrash(
+			long nodeId, String title, String deletedFileName)
+		throws PortalException, SystemException {
+
+		WikiNodePermission.check(
+			getPermissionChecker(), nodeId, ActionKeys.ADD_ATTACHMENT);
+
+		wikiPageLocalService.movePageAttachmentFromTrash(
+			nodeId, title, deletedFileName);
+	}
+
+	public void movePageAttachmentToTrash(
+			long nodeId, String title, String fileName)
+		throws PortalException, SystemException {
+
+		WikiPagePermission.check(
+			getPermissionChecker(), nodeId, title, ActionKeys.DELETE);
+
+		wikiPageLocalService.movePageAttachmentToTrash(nodeId, title, fileName);
+	}
+
 	public WikiPage revertPage(
 			long nodeId, String title, double version,
 			ServiceContext serviceContext)
