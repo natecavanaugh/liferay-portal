@@ -136,34 +136,50 @@ for (int i = 0; i < results.size(); i++) {
 %>
 
 <c:if test="<%= WikiNodePermission.contains(permissionChecker, node.getNodeId(), ActionKeys.ADD_ATTACHMENT) %>">
-	<c:if test="<%= !viewTrashAttachments %>">
-		<portlet:renderURL var="viewTrashAttachmentsURL">
-			<portlet:param name="struts_action" value="/wiki/view_page_attachments" />
-			<portlet:param name="redirect" value="<%= currentURL %>" />
-			<portlet:param name="nodeId" value="<%= String.valueOf(node.getNodeId()) %>" />
-			<portlet:param name="title" value="<%= wikiPage.getTitle() %>" />
-			<portlet:param name="tabs1" value="attachments" />
-			<portlet:param name="viewTrashAttachments" value="<%= Boolean.TRUE.toString() %>" />
-		</portlet:renderURL>
+	<c:choose>
+		<c:when test="<%= viewTrashAttachments %>">
+			<portlet:actionURL var="emptyTrashURL">
+				<portlet:param name="struts_action" value="/wiki/edit_page_attachment" />
+				<portlet:param name="nodeId" value="<%= String.valueOf(node.getPrimaryKey()) %>" />
+				<portlet:param name="title" value="<%= wikiPage.getTitle() %>" />
+			</portlet:actionURL>
 
-		<%
-		String[] deletedAttachments = wikiPage.getDeletedAttachmentsFiles();
-		%>
-
-		<c:if test="<%= deletedAttachments.length > 0 %>">
-			<liferay-ui:icon
-				cssClass="trash-attachments"
-				image="delete"
-				label="<%= true %>"
-				message='<%= LanguageUtil.format(pageContext, "x-attachments-in-the-recycle-bin", deletedAttachments.length) %>'
-				url="<%= viewTrashAttachmentsURL %>"
+			<liferay-ui:trash-empty
+				confirmMessage="are-you-sure-you-want-to-delete-the-attachments-for-this-page"
+				emptyMessage="delete-the-attachments-for-this-page"
+				portletURL="<%= emptyTrashURL.toString() %>"
+				totalEntries="<%= attachments.length %>"
 			/>
-		</c:if>
+		</c:when>
+		<c:otherwise>
+			<portlet:renderURL var="viewTrashAttachmentsURL">
+				<portlet:param name="struts_action" value="/wiki/view_page_attachments" />
+				<portlet:param name="redirect" value="<%= currentURL %>" />
+				<portlet:param name="nodeId" value="<%= String.valueOf(node.getNodeId()) %>" />
+				<portlet:param name="title" value="<%= wikiPage.getTitle() %>" />
+				<portlet:param name="tabs1" value="attachments" />
+				<portlet:param name="viewTrashAttachments" value="<%= Boolean.TRUE.toString() %>" />
+			</portlet:renderURL>
 
-		<div>
-			<input type="button" value="<liferay-ui:message key="add-attachments" />" onClick="location.href = '<portlet:renderURL><portlet:param name="struts_action" value="/wiki/edit_page_attachment" /><portlet:param name="nodeId" value="<%= String.valueOf(node.getNodeId()) %>" /><portlet:param name="title" value="<%= wikiPage.getTitle() %>" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>';" />
-		</div>
-	</c:if>
+			<%
+			String[] deletedAttachments = wikiPage.getDeletedAttachmentsFiles();
+			%>
+
+			<c:if test="<%= deletedAttachments.length > 0 %>">
+				<liferay-ui:icon
+					cssClass="trash-attachments"
+					image="delete"
+					label="<%= true %>"
+					message='<%= LanguageUtil.format(pageContext, "x-attachments-in-the-recycle-bin", deletedAttachments.length) %>'
+					url="<%= viewTrashAttachmentsURL %>"
+				/>
+			</c:if>
+
+			<div>
+				<input type="button" value="<liferay-ui:message key="add-attachments" />" onClick="location.href = '<portlet:renderURL><portlet:param name="struts_action" value="/wiki/edit_page_attachment" /><portlet:param name="nodeId" value="<%= String.valueOf(node.getNodeId()) %>" /><portlet:param name="title" value="<%= wikiPage.getTitle() %>" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>';" />
+			</div>
+		</c:otherwise>
+	</c:choose>
 
 	<br />
 </c:if>

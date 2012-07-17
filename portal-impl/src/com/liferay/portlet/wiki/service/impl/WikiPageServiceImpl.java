@@ -198,6 +198,15 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), fileName, tempFolderName);
 	}
 
+	public void emptyPageAttachments(long nodeId, String title)
+		throws PortalException, SystemException {
+
+		WikiPagePermission.check(
+			getPermissionChecker(), nodeId, title, ActionKeys.DELETE);
+
+		wikiPageLocalService.emptyPageAttachments(nodeId, title);
+	}
+
 	public WikiPage getDraftPage(long nodeId, String title)
 		throws PortalException, SystemException {
 

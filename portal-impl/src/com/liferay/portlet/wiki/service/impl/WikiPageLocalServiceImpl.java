@@ -593,6 +593,20 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		TempFileUtil.deleteTempFile(userId, fileName, tempFolderName);
 	}
 
+	public void emptyPageAttachments(long nodeId, String title)
+		throws PortalException, SystemException {
+
+		WikiPage page = getPage(nodeId, title);
+
+		long companyId = page.getCompanyId();
+		long repositoryId = CompanyConstants.SYSTEM;
+
+		String deletedAttachmentsDir = page.getDeletedAttachmentsDir();
+
+		DLStoreUtil.deleteDirectory(
+			companyId, repositoryId, deletedAttachmentsDir);
+	}
+
 	public List<WikiPage> getChildren(
 			long nodeId, boolean head, String parentTitle)
 		throws SystemException {
