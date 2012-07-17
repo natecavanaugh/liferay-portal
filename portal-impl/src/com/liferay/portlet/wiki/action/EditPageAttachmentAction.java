@@ -101,6 +101,9 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 			else if (cmd.equals(Constants.DELETE_TEMP)) {
 				deleteTempAttachment(actionRequest, actionResponse);
 			}
+			else if (cmd.equals(Constants.EMPTY_TRASH)) {
+				emptyTrash(actionRequest);
+			}
 			else if (cmd.equals(Constants.MOVE_FROM_TRASH)) {
 				moveAttachmentFromTrash(actionRequest);
 			}
@@ -339,6 +342,15 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 		}
 
 		writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+
+	protected void emptyTrash(ActionRequest actionRequest)
+		throws Exception {
+
+		long nodeId = ParamUtil.getLong(actionRequest, "nodeId");
+		String title = ParamUtil.getString(actionRequest, "title");
+
+		WikiPageServiceUtil.emptyPageAttachments(nodeId, title);
 	}
 
 	protected void moveAttachmentFromTrash(ActionRequest actionRequest)
