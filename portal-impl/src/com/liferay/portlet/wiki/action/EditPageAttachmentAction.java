@@ -96,10 +96,16 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 				addTempAttachment(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteAttachment(actionRequest);
+				deleteAttachment(actionRequest, false);
 			}
 			else if (cmd.equals(Constants.DELETE_TEMP)) {
 				deleteTempAttachment(actionRequest, actionResponse);
+			}
+			else if (cmd.equals(Constants.MOVE_FROM_TRASH)) {
+				moveAttachmentFromTrash(actionRequest);
+			}
+			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
+				deleteAttachment(actionRequest, true);
 			}
 
 			if (cmd.equals(Constants.ADD_TEMP) ||
@@ -288,14 +294,21 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 		}
 	}
 
-	protected void deleteAttachment(ActionRequest actionRequest)
+	protected void deleteAttachment(
+			ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
 
 		long nodeId = ParamUtil.getLong(actionRequest, "nodeId");
 		String title = ParamUtil.getString(actionRequest, "title");
 		String attachment = ParamUtil.getString(actionRequest, "fileName");
 
-		WikiPageServiceUtil.deletePageAttachment(nodeId, title, attachment);
+		if (moveToTrash) {
+			WikiPageServiceUtil.movePageAttachmentToTrash(
+				nodeId, title, attachment);
+		}
+		else {
+			WikiPageServiceUtil.deletePageAttachment(nodeId, title, attachment);
+		}
 	}
 
 	protected void deleteTempAttachment(
@@ -326,6 +339,17 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 		}
 
 		writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+
+	protected void moveAttachmentFromTrash(ActionRequest actionRequest)
+		throws Exception {
+
+		long nodeId = ParamUtil.getLong(actionRequest, "nodeId");
+		String title = ParamUtil.getString(actionRequest, "title");
+		String attachment = ParamUtil.getString(actionRequest, "fileName");
+
+		WikiPageServiceUtil.movePageAttachmentFromTrash(
+			nodeId, title, attachment);
 	}
 
 	private static final String _TEMP_FOLDER_NAME =
