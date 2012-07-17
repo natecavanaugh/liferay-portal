@@ -82,9 +82,9 @@ public class EditUserPortraitAction extends EditCompanyLogoAction {
 
 				writeJSON(actionRequest, actionResponse, jsonObject);
 			}
-			else if (e instanceof UploadException ||
-					 e instanceof UserPortraitSizeException ||
-					 e instanceof NoSuchFileException) {
+			else if (e instanceof NoSuchFileException ||
+					 e instanceof UploadException ||
+					 e instanceof UserPortraitSizeException) {
 
 				SessionErrors.add(actionRequest, e.getClass());
 			}
@@ -115,9 +115,9 @@ public class EditUserPortraitAction extends EditCompanyLogoAction {
 			PortletRequest portletRequest, byte[] bytes)
 		throws Exception {
 
-		long selUserId = ParamUtil.getLong(portletRequest, "p_u_i_d");
+		long userId = ParamUtil.getLong(portletRequest, "p_u_i_d");
 
-		UserServiceUtil.updatePortrait(selUserId, bytes);
+		UserServiceUtil.updatePortrait(userId, bytes);
 	}
 
 }

@@ -174,7 +174,7 @@ public class EditCompanyLogoAction extends PortletAction {
 				themeDisplay.getUserId(), getTempImageFileName(portletRequest),
 				getTempImageFolderName(), inputStream);
 		}
-		catch (DuplicateFileException e) {
+		catch (DuplicateFileException dfe) {
 			TempFileUtil.deleteTempFile(getTempImageFilePath(portletRequest));
 
 			TempFileUtil.addTempFile(
@@ -210,12 +210,13 @@ public class EditCompanyLogoAction extends PortletAction {
 
 	protected String getTempImageFilePath(PortletRequest portletRequest)
 		throws Exception {
-	ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
-		WebKeys.THEME_DISPLAY);
 
-	return TempFileUtil.getTempFileName(
-		themeDisplay.getUserId(), getTempImageFileName(portletRequest),
-		getTempImageFolderName());
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		return TempFileUtil.getTempFileName(
+			themeDisplay.getUserId(), getTempImageFileName(portletRequest),
+			getTempImageFolderName());
 	}
 
 	protected String getTempImageFolderName() {
@@ -225,11 +226,9 @@ public class EditCompanyLogoAction extends PortletAction {
 	}
 
 	protected InputStream getTempImageStream(String tempFilePath) {
-
 		try {
 			return TempFileUtil.getTempFileAsStream(tempFilePath);
 		}
-
 		catch(Exception e) {
 			return null;
 		}
@@ -280,7 +279,8 @@ public class EditCompanyLogoAction extends PortletAction {
 	}
 
 	protected void saveTempImageFile(
-			PortletRequest portletRequest, byte[] bytes) throws Exception {
+			PortletRequest portletRequest, byte[] bytes)
+		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -309,9 +309,9 @@ public class EditCompanyLogoAction extends PortletAction {
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
-			EditCompanyLogoAction.class);
+		EditCompanyLogoAction.class);
 
 	private static Set<String> _imageMimeTypes = SetUtil.fromArray(
-			PropsValues.DL_FILE_ENTRY_PREVIEW_IMAGE_MIME_TYPES);
+		PropsValues.DL_FILE_ENTRY_PREVIEW_IMAGE_MIME_TYPES);
 
 }

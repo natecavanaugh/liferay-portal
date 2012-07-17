@@ -84,8 +84,8 @@ public class EditOrganizationLogoAction extends EditCompanyLogoAction {
 
 				writeJSON(actionRequest, actionResponse, jsonObject);
 			}
-			else if (e instanceof UploadException ||
-					 e instanceof NoSuchFileException) {
+			else if (e instanceof NoSuchFileException ||
+					 e instanceof UploadException) {
 
 				SessionErrors.add(actionRequest, e.getClass());
 			}

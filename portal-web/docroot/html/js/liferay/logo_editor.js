@@ -6,15 +6,15 @@ AUI.add(
 		var LogoEditor = A.Component.create(
 			{
 				ATTRS: {
+					maxFileSize: {
+						value: null
+					},
+
 					previewURL: {
 						value: null
 					},
 
 					uploadURL: {
-						value: null
-					},
-
-					maxFileSize: {
 						value: null
 					}
 				},
@@ -109,8 +109,8 @@ AUI.add(
 											var ErrorMessage = Lang.sub(
 												TPL_MESSAGE,
 												{
-													messageClass: messageClass,
-													message: message
+													message: message,
+													messageClass: messageClass
 												}
 											);
 
@@ -120,7 +120,6 @@ AUI.add(
 										previewURL = Liferay.Util.addParams('t=' + Lang.now(), previewURL);
 										portraitPreviewImg.attr('src', previewURL);
 										portraitPreviewImg.removeClass('loading');
-
 									},
 									start: function() {
 										Liferay.Util.toggleDisabled(instance._submitButton, true);
@@ -174,9 +173,9 @@ AUI.add(
 							else {
 								imageCropper = new A.ImageCropper(
 									{
-										srcNode: portraitPreviewImg,
 										cropHeight: cropHeight,
 										cropWidth: cropWidth
+										srcNode: portraitPreviewImg
 									}
 								).render();
 

@@ -73,10 +73,10 @@ if (publicLayoutSetId != 0) {
 		<aui:script use="liferay-logo-editor">
 			new Liferay.LogoEditor(
 				{
+					maxFileSize: '<%= PrefsPropsUtil.getLong(PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE) / 1024 %>',
 					namespace: '<portlet:namespace />',
 					previewURL: '<portlet:resourceURL><portlet:param name="struts_action" value="/users_admin/edit_organization_logo" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.GET_TEMP %>" /><portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" /></portlet:resourceURL>',
-					uploadURL: '<portlet:actionURL><portlet:param name="struts_action" value="/users_admin/edit_organization_logo" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD_TEMP %>" /><portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" /></portlet:actionURL>',
-					maxFileSize: '<%= PrefsPropsUtil.getLong(PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE) / 1024 %>'
+					uploadURL: '<portlet:actionURL><portlet:param name="struts_action" value="/users_admin/edit_organization_logo" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD_TEMP %>" /><portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" /></portlet:actionURL>'
 				}
 			);
 		</aui:script>
