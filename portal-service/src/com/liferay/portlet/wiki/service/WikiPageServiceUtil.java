@@ -144,6 +144,12 @@ public class WikiPageServiceUtil {
 		getService().deleteTempPageAttachment(nodeId, fileName, tempFolderName);
 	}
 
+	public static void emptyPageAttachments(long nodeId, java.lang.String title)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().emptyPageAttachments(nodeId, title);
+	}
+
 	public static com.liferay.portlet.wiki.model.WikiPage getDraftPage(
 		long nodeId, java.lang.String title)
 		throws com.liferay.portal.kernel.exception.PortalException,
