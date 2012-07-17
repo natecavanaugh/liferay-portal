@@ -1,4 +1,3 @@
-<%@ page import="com.liferay.portlet.trash.util.TrashUtil" %>
 <%--
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
@@ -17,6 +16,8 @@
 
 <%@ include file="/html/taglib/init.jsp" %>
 
+<%@ page import="com.liferay.portlet.trash.util.TrashUtil" %>
+
 <%
 String portletURL = (String)request.getAttribute("liferay-ui:trash-empty:portletURL");
 
@@ -28,27 +29,32 @@ int totalEntries = GetterUtil.getInteger(request.getAttribute("liferay-ui:trash-
 Group group = themeDisplay.getScopeGroup();
 %>
 
-<aui:form action="<%= portletURL %>" cssClass="trash-empty-form" method="post" name="emptyForm">
-	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.EMPTY_TRASH %>" />
-	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
-</aui:form>
-
-<div class="lfr-message-info">
+<div class="lfr-message-info taglib-trash-empty">
 	<liferay-ui:message arguments="<%= TrashUtil.getMaxAge(group) %>" key="entries-that-have-been-in-recycle-bin-for-more-than-x-days-will-be-automatically-deleted" />
 
 	<c:if test="<%= totalEntries > 0 %>">
-		<a href="javascript:;" onClick="<portlet:namespace />emptyTrash();"><liferay-ui:message key="<%= emptyMessage %>" /></a>
+		<a class="trash-empty-link" href="javascript:;" id="<%= namespace %>empty"><liferay-ui:message key="<%= emptyMessage %>" /></a>
+
+		<aui:form action="<%= portletURL %>" cssClass="trash-empty-form" method="post" name="emptyForm">
+			<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.EMPTY_TRASH %>" />
+			<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
+
+			<aui:button type="submit" value="empty" />
+		</aui:form>
 	</c:if>
 </div>
 
 <aui:script use="aui-base">
-	Liferay.provide(
-		window,
-		'<portlet:namespace />emptyTrash',
-		function() {
-			if (confirm('<%= UnicodeLanguageUtil.get(pageContext, confirmMessage) %>')) {
-				submitForm(document.<portlet:namespace />emptyForm);
+	var emptyLink = A.one('#<%= namespace %>empty');
+
+	if (emptyLink) {
+		emptyLink.on(
+			'click',
+			function(event) {
+				if (confirm('<%= UnicodeLanguageUtil.get(pageContext, confirmMessage) %>')) {
+					submitForm(document.<portlet:namespace />emptyForm);
+				}
 			}
-		}
-	);
+		);
+	}
 </aui:script>
