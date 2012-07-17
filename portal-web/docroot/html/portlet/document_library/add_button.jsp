@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/document_library/init.jsp" %>
 
 <%
-Folder folder = (Folder)request.getAttribute("view.jsp-folder");
+	Folder folder = (Folder)request.getAttribute("view.jsp-folder");
 
 long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folderId"));
 
@@ -26,7 +26,7 @@ long repositoryId = GetterUtil.getLong((String)request.getAttribute("view.jsp-re
 List<DLFileEntryType> fileEntryTypes = Collections.emptyList();
 
 if ((folder == null) || folder.isSupportsMetadata()) {
-	fileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(DLUtil.getGroupIds(themeDisplay), folderId, true);
+	fileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(PortalUtil.getSiteAndCompanyGroupIds(themeDisplay), folderId, true);
 }
 %>
 

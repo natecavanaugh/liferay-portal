@@ -67,7 +67,7 @@ List<AssetRendererFactory> classTypesAssetRendererFactories = new ArrayList<Asse
 			Set<Group> groups = new HashSet<Group>();
 
 			groups.add(company.getGroup());
-			groups.add(scopeGroup);
+			groups.add(themeDisplay.getScopeGroup());
 
 			for (Layout curLayout : LayoutLocalServiceUtil.getLayouts(layout.getGroupId(), layout.isPrivateLayout())) {
 				if (curLayout.hasScopeGroup()) {
@@ -358,7 +358,7 @@ List<AssetRendererFactory> classTypesAssetRendererFactories = new ArrayList<Asse
 
 									<%
 									for (long classNameId : availableClassNameIdsSet) {
-										ClassName className = ClassNameServiceUtil.getClassName(classNameId);
+										ClassName className = ClassNameLocalServiceUtil.getClassName(classNameId);
 
 										if (Arrays.binarySearch(classNameIds, classNameId) < 0) {
 											typesRightList.add(new KeyValuePair(String.valueOf(classNameId), ResourceActionsUtil.getModelResource(locale, className.getValue())));

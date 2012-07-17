@@ -47,24 +47,18 @@ public class ClassNameServiceWrapper implements ClassNameService,
 		_classNameService.setBeanIdentifier(beanIdentifier);
 	}
 
-	public com.liferay.portal.model.ClassName getClassName(long classNameId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _classNameService.getClassName(classNameId);
-	}
-
-	public com.liferay.portal.model.ClassName getClassName(
+	public com.liferay.portal.model.ClassName fetchClassName(
 		java.lang.String value)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _classNameService.getClassName(value);
+		return _classNameService.fetchClassName(value);
 	}
 
-	public long getClassNameId(java.lang.Class<?> clazz) {
-		return _classNameService.getClassNameId(clazz);
+	public long fetchClassNameId(java.lang.Class<?> clazz) {
+		return _classNameService.fetchClassNameId(clazz);
 	}
 
-	public long getClassNameId(java.lang.String value) {
-		return _classNameService.getClassNameId(value);
+	public long fetchClassNameId(java.lang.String value) {
+		return _classNameService.fetchClassNameId(value);
 	}
 
 	/**

@@ -44,125 +44,123 @@ portletURL.setParameter("tabs1", tabs1);
 	<portlet:param name="struts_action" value="/trash/view" />
 </liferay-portlet:renderURL>
 
-<aui:form action="<%= searchURL.toString() %>" method="get" name="fm">
-	<liferay-portlet:renderURLParams varImpl="searchURL" />
-	<aui:input name="<%= Constants.CMD %>" type="hidden" value="" />
-	<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
-	<aui:input name="deleteEntryIds" type="hidden" />
-	<aui:input name="restoreEntryIds" type="hidden" />
+<liferay-ui:search-container
+	rowChecker="<%= new RowChecker(renderResponse) %>"
+	searchContainer="<%= new EntrySearch(renderRequest, portletURL) %>"
+>
 
-	<liferay-ui:search-container
-		rowChecker="<%= new RowChecker(renderResponse) %>"
-		searchContainer="<%= new EntrySearch(renderRequest, portletURL) %>"
+	<%
+	boolean aproximate = false;
+	%>
+
+	<liferay-ui:search-container-results>
+
+		<%
+		EntrySearchTerms searchTerms = (EntrySearchTerms)searchContainer.getSearchTerms();
+
+		if (Validator.isNotNull(searchTerms.getKeywords())) {
+			Sort sort = SortFactoryUtil.getSort(TrashEntry.class, searchContainer.getOrderByCol(), searchContainer.getOrderByType());
+
+			Hits hits = TrashEntryServiceUtil.search(company.getCompanyId(), groupId, user.getUserId(), searchTerms.getKeywords(), searchContainer.getStart(), searchContainer.getEnd(), sort);
+
+			pageContext.setAttribute("results", TrashUtil.getEntries(hits));
+			pageContext.setAttribute("total", hits.getLength());
+		}
+		else {
+			TrashEntryList trashEntryList = TrashEntryServiceUtil.getEntries(groupId, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
+
+			pageContext.setAttribute("results", TrashEntryImpl.toModels(trashEntryList.getArray()));
+			pageContext.setAttribute("total", trashEntryList.getCount());
+
+			aproximate = trashEntryList.isApproximate();
+		}
+
+		if ((total == 0) && Validator.isNotNull(searchTerms.getKeywords())) {
+			searchContainer.setEmptyResultsMessage(LanguageUtil.format(pageContext, "no-entries-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(searchTerms.getKeywords()) + "</strong>"));
+		}
+		%>
+
+	</liferay-ui:search-container-results>
+
+	<liferay-ui:search-container-row
+		className="com.liferay.portlet.trash.model.TrashEntry"
+		keyProperty="entryId"
+		modelVar="entry"
 	>
 
 		<%
-		boolean aproximate = false;
+		TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(entry.getClassName());
+
+		TrashRenderer trashRenderer = trashHandler.getTrashRenderer(entry.getClassPK());
+
+		String viewContentURLString = null;
+
+		if (trashRenderer != null) {
+			PortletURL viewContentURL = renderResponse.createRenderURL();
+
+			viewContentURL.setParameter("struts_action", "/trash/view_content");
+			viewContentURL.setParameter("redirect", currentURL);
+			viewContentURL.setParameter("entryId", String.valueOf(entry.getEntryId()));
+			viewContentURL.setParameter("type", trashRenderer.getType());
+			viewContentURL.setParameter("showActions", Boolean.FALSE.toString());
+			viewContentURL.setParameter("showAssetMetadata", Boolean.TRUE.toString());
+			viewContentURL.setParameter("showEditURL", Boolean.FALSE.toString());
+
+			viewContentURLString = viewContentURL.toString();
+		}
 		%>
 
-		<liferay-ui:search-container-results>
-
-			<%
-			EntrySearchTerms searchTerms = (EntrySearchTerms)searchContainer.getSearchTerms();
-
-			if (Validator.isNotNull(searchTerms.getKeywords())) {
-				Sort sort = SortFactoryUtil.getSort(TrashEntry.class, searchContainer.getOrderByCol(), searchContainer.getOrderByType());
-
-				Hits hits = TrashEntryServiceUtil.search(company.getCompanyId(), groupId, user.getUserId(), searchTerms.getKeywords(), searchContainer.getStart(), searchContainer.getEnd(), sort);
-
-				pageContext.setAttribute("results", TrashUtil.getEntries(hits));
-				pageContext.setAttribute("total", hits.getLength());
-			}
-			else {
-				TrashEntryList trashEntryList = TrashEntryServiceUtil.getEntries(groupId, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-
-				pageContext.setAttribute("results", TrashEntryImpl.toModels(trashEntryList.getArray()));
-				pageContext.setAttribute("total", trashEntryList.getCount());
-
-				aproximate = trashEntryList.isApproximate();
-			}
-
-			if ((total == 0) && Validator.isNotNull(searchTerms.getKeywords())) {
-				searchContainer.setEmptyResultsMessage(LanguageUtil.format(pageContext, "no-entries-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(searchTerms.getKeywords()) + "</strong>"));
-			}
-			%>
-
-		</liferay-ui:search-container-results>
-
-		<liferay-ui:search-container-row
-			className="com.liferay.portlet.trash.model.TrashEntry"
-			keyProperty="entryId"
-			modelVar="entry"
+		<liferay-ui:search-container-column-text
+			href="<%= viewContentURLString %>"
+			name="name"
 		>
+			<liferay-ui:icon label="<%= true %>" message="<%= trashRenderer.getTitle(locale) %>" src="<%= trashRenderer.getIconPath(renderRequest) %>" />
+		</liferay-ui:search-container-column-text>
 
-			<%
-			TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(entry.getClassName());
+		<liferay-ui:search-container-column-text
+			name="type"
+			orderable="<%= true %>"
+			value="<%= LanguageUtil.get(pageContext, trashRenderer.getType()) %>"
+		/>
 
-			TrashRenderer trashRenderer = trashHandler.getTrashRenderer(entry.getClassPK());
+		<liferay-ui:search-container-column-text
+			name="removed-date"
+			orderable="<%= true %>"
+		>
+			<span title="<liferay-ui:message arguments="<%= dateFormatDateTime.format(entry.getCreateDate()) %>" key="deleted-x" />">
 
-			String viewContentURLString = null;
+				<%
+				Date createDate = entry.getCreateDate();
+				%>
 
-			if (trashRenderer != null) {
-				PortletURL viewContentURL = renderResponse.createRenderURL();
+				<liferay-ui:message arguments="<%= LanguageUtil.getTimeDescription(pageContext, System.currentTimeMillis() - createDate.getTime(), true) %>" key="x-ago" />
+			</span>
+		</liferay-ui:search-container-column-text>
 
-				viewContentURL.setParameter("struts_action", "/trash/view_content");
-				viewContentURL.setParameter("redirect", currentURL);
-				viewContentURL.setParameter("entryId", String.valueOf(entry.getEntryId()));
-				viewContentURL.setParameter("type", trashRenderer.getType());
-				viewContentURL.setParameter("showActions", Boolean.FALSE.toString());
-				viewContentURL.setParameter("showAssetMetadata", Boolean.TRUE.toString());
-				viewContentURL.setParameter("showEditURL", Boolean.FALSE.toString());
+		<liferay-ui:search-container-column-text
+			name="removed-by"
+			orderable="<%= true %>"
+			value="<%= entry.getUserName() %>"
+		/>
 
-				viewContentURLString = viewContentURL.toString();
-			}
-			%>
+		<liferay-ui:search-container-column-jsp
+			align="right"
+			path="/html/portlet/trash/entry_action.jsp"
+		/>
+	</liferay-ui:search-container-row>
 
-			<liferay-ui:search-container-column-text
-				href="<%= viewContentURLString %>"
-				name="name"
-			>
-				<liferay-ui:icon label="<%= true %>" message="<%= trashRenderer.getTitle(locale) %>" src="<%= trashRenderer.getIconPath(renderRequest) %>" />
-			</liferay-ui:search-container-column-text>
+	<portlet:actionURL var="emptyTrashURL">
+		<portlet:param name="struts_action" value="/trash/edit_entry" />
+	</portlet:actionURL>
 
-			<liferay-ui:search-container-column-text
-				name="type"
-				orderable="<%= true %>"
-				value="<%= LanguageUtil.get(pageContext, trashRenderer.getType()) %>"
-			/>
+	<liferay-ui:trash-empty portletURL="<%= emptyTrashURL %>" totalEntries="<%= total %>" />
 
-			<liferay-ui:search-container-column-text
-				name="removed-date"
-				orderable="<%= true %>"
-			>
-				<span title="<liferay-ui:message arguments="<%= dateFormatDateTime.format(entry.getCreateDate()) %>" key="deleted-x" />">
-
-					<%
-					Date createDate = entry.getCreateDate();
-					%>
-
-					<liferay-ui:message arguments="<%= LanguageUtil.getTimeDescription(pageContext, System.currentTimeMillis() - createDate.getTime(), true) %>" key="x-ago" />
-				</span>
-			</liferay-ui:search-container-column-text>
-
-			<liferay-ui:search-container-column-text
-				name="removed-by"
-				orderable="<%= true %>"
-				value="<%= entry.getUserName() %>"
-			/>
-
-			<liferay-ui:search-container-column-jsp
-				align="right"
-				path="/html/portlet/trash/entry_action.jsp"
-			/>
-		</liferay-ui:search-container-row>
-
-		<div class="lfr-message-info">
-			<liferay-ui:message arguments="<%= TrashUtil.getMaxAge(group) %>" key="entries-that-have-been-in-recycle-bin-for-more-than-x-days-will-be-automatically-deleted" />
-
-			<c:if test="<%= total > 0 %>">
-				<a href="javascript:;" onClick="<%= renderResponse.getNamespace() %>emptyTrash();"><liferay-ui:message key="empty-the-recycle-bin" /></a>
-			</c:if>
-		</div>
+	<aui:form action="<%= searchURL.toString() %>" method="get" name="fm">
+		<liferay-portlet:renderURLParams varImpl="searchURL" />
+		<aui:input name="<%= Constants.CMD %>" type="hidden" value="" />
+		<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
+		<aui:input name="deleteEntryIds" type="hidden" />
+		<aui:input name="restoreEntryIds" type="hidden" />
 
 		<aui:button-row>
 			<liferay-ui:search-form
@@ -175,12 +173,12 @@ portletURL.setParameter("tabs1", tabs1);
 				<aui:button name="restoreButton" onClick='<%= renderResponse.getNamespace() + "restoreEntries();" %>' value="restore" />
 			</c:if>
 		</aui:button-row>
+	</aui:form>
 
-		<div class="separator"><!-- --></div>
+	<div class="separator"><!-- --></div>
 
-		<liferay-ui:search-iterator type='<%= aproximate ? "more" : "regular" %>' />
-	</liferay-ui:search-container>
-</aui:form>
+	<liferay-ui:search-iterator type='<%= aproximate ? "more" : "regular" %>' />
+</liferay-ui:search-container>
 
 <aui:script use="aui-base">
 	Liferay.provide(
@@ -197,18 +195,6 @@ portletURL.setParameter("tabs1", tabs1);
 			}
 		},
 		['liferay-util-list-fields']
-	);
-
-	Liferay.provide(
-		window,
-		'<portlet:namespace />emptyTrash',
-		function() {
-			if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-empty-the-recycle-bin") %>')) {
-				document.<portlet:namespace />fm.method = "post";
-				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.EMPTY_TRASH %>";
-				submitForm(document.<portlet:namespace />fm, "<portlet:actionURL><portlet:param name="struts_action" value="/trash/edit_entry" /></portlet:actionURL>");
-			}
-		}
 	);
 
 	Liferay.provide(

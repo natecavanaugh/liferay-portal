@@ -892,6 +892,12 @@ public interface Portal {
 			PortletRequest portletRequest, boolean checkPermission)
 		throws PortalException, SystemException;
 
+	public long[] getSiteAndCompanyGroupIds(long groupId)
+		throws PortalException, SystemException;
+
+	public long[] getSiteAndCompanyGroupIds(ThemeDisplay themeDisplay)
+		throws PortalException, SystemException;
+
 	/**
 	 * Returns the URL of the login page for the current site if one is
 	 * available.

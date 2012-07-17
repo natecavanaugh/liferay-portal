@@ -19,7 +19,6 @@
 <%@ page import="com.liferay.portal.NoSuchModelException" %><%@
 page import="com.liferay.portal.kernel.repository.model.FileEntry" %><%@
 page import="com.liferay.portal.kernel.search.Hits" %><%@
-page import="com.liferay.portal.kernel.staging.StagingConstants" %><%@
 page import="com.liferay.portal.kernel.template.PortletDisplayTemplateHandler" %><%@
 page import="com.liferay.portal.kernel.template.PortletDisplayTemplateHandlerRegistryUtil" %><%@
 page import="com.liferay.portal.kernel.xml.Document" %><%@
@@ -48,24 +47,26 @@ page import="com.liferay.portlet.asset.util.AssetUtil" %><%@
 page import="com.liferay.portlet.assetpublisher.search.AssetDisplayTerms" %><%@
 page import="com.liferay.portlet.assetpublisher.search.AssetSearch" %><%@
 page import="com.liferay.portlet.assetpublisher.search.AssetSearchTerms" %><%@
+page import="com.liferay.portlet.assetpublisher.util.AssetPublisherHelperUtil" %><%@
 page import="com.liferay.portlet.assetpublisher.util.AssetPublisherUtil" %><%@
 page import="com.liferay.portlet.documentlibrary.model.DLFileEntry" %><%@
 page import="com.liferay.portlet.documentlibrary.model.DLFileEntryConstants" %><%@
 page import="com.liferay.portlet.documentlibrary.model.DLFolderConstants" %><%@
 page import="com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil" %><%@
 page import="com.liferay.portlet.documentlibrary.util.DocumentConversionUtil" %><%@
-page import="com.liferay.portlet.dynamicdatamapping.NoSuchTemplateException" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.model.DDMTemplate" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.service.permission.DDMTemplatePermission" %><%@
 page import="com.liferay.portlet.journal.model.JournalArticle" %><%@
 page import="com.liferay.portlet.journal.model.JournalStructure" %><%@
 page import="com.liferay.portlet.journal.service.JournalStructureLocalServiceUtil" %><%@
+page import="com.liferay.portlet.portletdisplaytemplates.util.PortletDisplayTemplatesConstants" %><%@
+page import="com.liferay.portlet.portletdisplaytemplates.util.PortletDisplayTemplatesUtil" %><%@
 page import="com.liferay.util.RSSUtil" %><%@
 page import="com.liferay.util.xml.DocUtil" %>
 
 <%
-PortletPreferences preferences = renderRequest.getPreferences();
+	PortletPreferences preferences = renderRequest.getPreferences();
 
 String portletResource = ParamUtil.getString(request, "portletResource");
 
@@ -175,63 +176,7 @@ if (portletName.equals(PortletKeys.RELATED_ASSETS)) {
 boolean mergeUrlTags = GetterUtil.getBoolean(preferences.getValue("mergeUrlTags", null), true);
 boolean mergeLayoutTags = GetterUtil.getBoolean(preferences.getValue("mergeLayoutTags", null), false);
 
-String portletDisplayDDMTemplateUuid = StringPool.BLANK;
-
 String displayStyle = GetterUtil.getString(preferences.getValue("displayStyle", "abstracts"));
-
-if (displayStyle.startsWith("ddmTemplate_")) {
-	portletDisplayDDMTemplateUuid = displayStyle.substring("ddmTemplate_".length());
-}
-else if (Validator.isNull(displayStyle)) {
-	displayStyle = "abstracts";
-}
-
-long portletDisplayDDMTemplateGroupId = scopeGroupId;
-
-Group scopeGroup = themeDisplay.getScopeGroup();
-
-if (scopeGroup.hasStagingGroup()) {
-	Group stagingGroup = GroupLocalServiceUtil.getStagingGroup(scopeGroup.getGroupId());
-
-	boolean staged = GetterUtil.getBoolean(scopeGroup.getTypeSettingsProperty(StagingConstants.STAGED_PORTLET + PortletKeys.PORTLET_DISPLAY_TEMPLATES));
-
-	if (staged) {
-		portletDisplayDDMTemplateGroupId = stagingGroup.getGroupId();
-	}
-}
-else if (scopeGroup.getLiveGroupId() > 0) {
-	Group liveGroup = scopeGroup.getLiveGroup();
-
-	boolean staged = GetterUtil.getBoolean(liveGroup.getTypeSettingsProperty(StagingConstants.STAGED_PORTLET + PortletKeys.PORTLET_DISPLAY_TEMPLATES));
-
-	if (!staged) {
-		portletDisplayDDMTemplateGroupId = liveGroup.getGroupId();
-	}
-}
-
-DDMTemplate portletDisplayDDMTemplate = null;
-
-long portletDisplayDDMTemplateId = 0;
-
-if (Validator.isNotNull(portletDisplayDDMTemplateUuid)) {
-	try {
-		portletDisplayDDMTemplate = DDMTemplateLocalServiceUtil.getDDMTemplateByUuidAndGroupId(portletDisplayDDMTemplateUuid, portletDisplayDDMTemplateGroupId);
-
-		portletDisplayDDMTemplateId = portletDisplayDDMTemplate.getTemplateId();
-	}
-	catch (NoSuchTemplateException nste1) {
-		try {
-			portletDisplayDDMTemplate = DDMTemplateLocalServiceUtil.getDDMTemplateByUuidAndGroupId(portletDisplayDDMTemplateUuid, themeDisplay.getCompanyGroupId());
-
-			portletDisplayDDMTemplateId = portletDisplayDDMTemplate.getTemplateId();
-		}
-		catch (NoSuchTemplateException nste2) {
-			portletDisplayDDMTemplateId = 0;
-
-			displayStyle = "abstracts";
-		}
-	}
-}
 
 boolean showAssetTitle = GetterUtil.getBoolean(preferences.getValue("showAssetTitle", null), true);
 boolean showContextLink = GetterUtil.getBoolean(preferences.getValue("showContextLink", null), true);
@@ -295,6 +240,18 @@ boolean viewInContext = assetLinkBehavior.equals("viewInPortlet");
 boolean showPortletWithNoResults = false;
 boolean groupByClass = (assetVocabularyId == -1);
 boolean allowEmptyResults = false;
+
+DDMTemplate portletDisplayDDMTemplate = null;
+long portletDisplayDDMTemplateId = 0;
+long portletDisplayDDMTemplateGroupId = PortletDisplayTemplatesUtil.getDDMTemplateGroupId(themeDisplay);
+
+if (displayStyle.startsWith("ddmTemplate_")) {
+	portletDisplayDDMTemplate = PortletDisplayTemplatesUtil.fetchDDMTemplate(portletDisplayDDMTemplateGroupId, displayStyle);
+
+	if (portletDisplayDDMTemplate != null) {
+		portletDisplayDDMTemplateId = portletDisplayDDMTemplate.getTemplateId();
+	}
+}
 
 Map<String, PortletURL> addPortletURLs = null;
 

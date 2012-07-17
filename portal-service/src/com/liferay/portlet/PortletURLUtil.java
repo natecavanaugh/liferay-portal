@@ -14,6 +14,7 @@
 
 package com.liferay.portlet;
 
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -49,35 +50,41 @@ public class PortletURLUtil {
 
 	public static PortletURL clone(
 			LiferayPortletURL liferayPortletURL, String lifecycle,
-			MimeResponse mimeResponse)
+			LiferayPortletResponse liferayPortletResponse)
 		throws PortletException {
 
-		LiferayPortletURL newURLImpl = null;
+		LiferayPortletURL newLiferayPortletURL =
+			liferayPortletResponse.createLiferayPortletURL(lifecycle);
 
-		if (lifecycle.equals(PortletRequest.ACTION_PHASE)) {
-			newURLImpl = (LiferayPortletURL)mimeResponse.createActionURL();
-		}
-		else if (lifecycle.equals(PortletRequest.RENDER_PHASE)) {
-			newURLImpl = (LiferayPortletURL)mimeResponse.createRenderURL();
-		}
-
-		newURLImpl.setPortletId(liferayPortletURL.getPortletId());
+		newLiferayPortletURL.setPortletId(liferayPortletURL.getPortletId());
 
 		WindowState windowState = liferayPortletURL.getWindowState();
 
 		if (windowState != null) {
-			newURLImpl.setWindowState(windowState);
+			newLiferayPortletURL.setWindowState(windowState);
 		}
 
 		PortletMode portletMode = liferayPortletURL.getPortletMode();
 
 		if (portletMode != null) {
-			newURLImpl.setPortletMode(portletMode);
+			newLiferayPortletURL.setPortletMode(portletMode);
 		}
 
-		newURLImpl.setParameters(liferayPortletURL.getParameterMap());
+		newLiferayPortletURL.setParameters(liferayPortletURL.getParameterMap());
 
-		return newURLImpl;
+		return newLiferayPortletURL;
+	}
+
+	public static PortletURL clone(
+			PortletURL portletURL,
+			LiferayPortletResponse liferayPortletResponse)
+		throws PortletException {
+
+		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
+
+		return clone(
+			liferayPortletURL, liferayPortletURL.getLifecycle(),
+			liferayPortletResponse);
 	}
 
 	public static PortletURL clone(
@@ -87,7 +94,18 @@ public class PortletURLUtil {
 		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
 
 		return clone(
-			liferayPortletURL, liferayPortletURL.getLifecycle(), mimeResponse);
+			liferayPortletURL, liferayPortletURL.getLifecycle(),
+			(LiferayPortletResponse)mimeResponse);
+	}
+
+	public static PortletURL clone(
+			PortletURL portletURL, String lifecycle,
+			LiferayPortletResponse liferayPortletResponse)
+		throws PortletException {
+
+		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
+
+		return clone(liferayPortletURL, lifecycle, liferayPortletResponse);
 	}
 
 	public static PortletURL clone(
@@ -96,7 +114,8 @@ public class PortletURLUtil {
 
 		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
 
-		return clone(liferayPortletURL, lifecycle, mimeResponse);
+		return clone(
+			liferayPortletURL, lifecycle, (LiferayPortletResponse)mimeResponse);
 	}
 
 	public static PortletURL getCurrent(

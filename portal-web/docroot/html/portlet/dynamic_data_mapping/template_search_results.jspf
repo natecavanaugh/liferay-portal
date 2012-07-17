@@ -20,7 +20,7 @@ TemplateSearchTerms searchTerms = (TemplateSearchTerms)searchContainer.getSearch
 long[] groupIds = new long[] {scopeGroupId};
 
 if (showGlobalScope) {
-	groupIds = DLUtil.getGroupIds(themeDisplay);
+	groupIds = PortalUtil.getSiteAndCompanyGroupIds(themeDisplay);
 }
 
 long[] clasNameIds = null;

@@ -3699,6 +3699,33 @@ public class PortalImpl implements Portal {
 			getHttpServletRequest(portletRequest), checkPermission);
 	}
 
+	public long[] getSiteAndCompanyGroupIds(long groupId)
+		throws PortalException, SystemException {
+
+		Group scopeGroup = GroupLocalServiceUtil.getGroup(groupId);
+
+		Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+			scopeGroup.getCompanyId());
+
+		if (scopeGroup.isLayout()) {
+			return new long[] {
+				scopeGroup.getParentGroupId(), companyGroup.getGroupId()
+			};
+		}
+		else if (scopeGroup.isRegularSite()) {
+			return new long[] {groupId, companyGroup.getGroupId()};
+		}
+		else {
+			return new long[] {companyGroup.getGroupId()};
+		}
+	}
+
+	public long[] getSiteAndCompanyGroupIds(ThemeDisplay themeDisplay)
+		throws PortalException, SystemException {
+
+		return getSiteAndCompanyGroupIds(themeDisplay.getScopeGroupId());
+	}
+
 	public String getSiteLoginURL(ThemeDisplay themeDisplay)
 		throws PortalException, SystemException {
 

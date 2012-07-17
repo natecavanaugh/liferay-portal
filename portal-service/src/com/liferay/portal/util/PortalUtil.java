@@ -1102,6 +1102,18 @@ public class PortalUtil {
 		return getPortal().getSelectedUser(portletRequest, checkPermission);
 	}
 
+	public static long[] getSiteAndCompanyGroupIds(long groupId)
+		throws PortalException, SystemException {
+
+		return getPortal().getSiteAndCompanyGroupIds(groupId);
+	}
+
+	public static long[] getSiteAndCompanyGroupIds(ThemeDisplay themeDisplay)
+		throws PortalException, SystemException {
+
+		return getPortal().getSiteAndCompanyGroupIds(themeDisplay);
+	}
+
 	public static String getSiteLoginURL(ThemeDisplay themeDisplay)
 		throws PortalException, SystemException {
 

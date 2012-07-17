@@ -420,6 +420,31 @@
 		</attribute>
 	</tag>
 	<tag>
+		<name>ddm-template-selector</name>
+		<tag-class>com.liferay.taglib.ui.DDMTemplateSelectorTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>classNameId</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>icon</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>message</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>refreshURL</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
 		<name>diff</name>
 		<tag-class>com.liferay.taglib.ui.DiffTag</tag-class>
 		<body-content>JSP</body-content>
@@ -3076,6 +3101,31 @@
 		</attribute>
 		<attribute>
 			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<name>trash-empty</name>
+		<tag-class>com.liferay.taglib.ui.TrashEmptyTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>confirmMessage</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>emptyMessage</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>portletURL</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>totalEntries</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>

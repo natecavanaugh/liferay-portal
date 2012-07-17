@@ -77,6 +77,8 @@ for (String curAssetTagName : allAssetTagNames) {
 if (enableTagBasedNavigation && selectionStyle.equals("manual") && ((assetEntryQuery.getAllCategoryIds().length > 0) || (assetEntryQuery.getAllTagIds().length > 0))) {
 	selectionStyle = "dynamic";
 }
+
+Group scopeGroup = themeDisplay.getScopeGroup();
 %>
 
 <c:if test="<%= (scopeGroup != null) && (!scopeGroup.hasStagingGroup() || scopeGroup.isStagingGroup()) && !portletName.equals(PortletKeys.RELATED_ASSETS) %>">
@@ -114,6 +116,12 @@ if (!paginationType.equals("none")) {
 		portletURL="<%= portletURL%>"
 	/>
 </c:if>
+
+<%
+Map<String, Object> contextObjects = new HashMap<String, Object>();
+
+contextObjects.put(PortletDisplayTemplatesConstants.ASSET_PUBLISHER_HELPER, AssetPublisherHelperUtil.getAssetPublisherHelper());
+%>
 
 <c:choose>
 	<c:when test='<%= selectionStyle.equals("dynamic") %>'>

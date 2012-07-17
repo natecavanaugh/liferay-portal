@@ -17,13 +17,13 @@
 <%@ include file="/html/portlet/document_library_display/init.jsp" %>
 
 <%
-String redirect = ParamUtil.getString(request, "redirect");
+	String redirect = ParamUtil.getString(request, "redirect");
 String backURL = ParamUtil.getString(request, "backURL");
 
 long repositoryId = ParamUtil.getLong(request, "repositoryId");
 long folderId = ParamUtil.getLong(request, "folderId");
 
-List<DLFileEntryType> fileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(DLUtil.getGroupIds(themeDisplay), folderId, true);
+List<DLFileEntryType> fileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(PortalUtil.getSiteAndCompanyGroupIds(themeDisplay), folderId, true);
 %>
 
 <liferay-ui:search-container>

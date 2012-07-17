@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/document_library/init.jsp" %>
 
 <%
-FileEntry fileEntry = (FileEntry)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FILE_ENTRY);
+	FileEntry fileEntry = (FileEntry)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FILE_ENTRY);
 
 long repositoryId = BeanParamUtil.getLong(fileEntry, request, "repositoryId");
 
@@ -28,7 +28,7 @@ if (repositoryId <= 0) {
 	repositoryId = BeanParamUtil.getLong(fileEntry, request, "groupId");
 }
 
-List<DLFileEntryType> fileEntryTypes = DLFileEntryTypeServiceUtil.getFileEntryTypes(DLUtil.getGroupIds(themeDisplay));
+List<DLFileEntryType> fileEntryTypes = DLFileEntryTypeServiceUtil.getFileEntryTypes(PortalUtil.getSiteAndCompanyGroupIds(themeDisplay));
 
 long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");
 

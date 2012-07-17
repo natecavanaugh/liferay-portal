@@ -139,7 +139,8 @@ public class DLFileEntryLocalServiceImpl
 			counterLocalService.increment(DLFileEntry.class.getName()));
 		String extension = DLAppUtil.getExtension(title, sourceFileName);
 		fileEntryTypeId = getFileEntryTypeId(
-			DLUtil.getGroupIds(groupId), folderId, fileEntryTypeId);
+			PortalUtil.getSiteAndCompanyGroupIds(groupId), folderId,
+			fileEntryTypeId);
 		Date now = new Date();
 
 		validateFile(
@@ -1194,7 +1195,7 @@ public class DLFileEntryLocalServiceImpl
 		String extraSettings = StringPool.BLANK;
 
 		fileEntryTypeId = getFileEntryTypeId(
-			DLUtil.getGroupIds(dlFileEntry.getGroupId()),
+			PortalUtil.getSiteAndCompanyGroupIds(dlFileEntry.getGroupId()),
 			dlFileEntry.getFolderId(), fileEntryTypeId);
 
 		return updateFileEntry(
