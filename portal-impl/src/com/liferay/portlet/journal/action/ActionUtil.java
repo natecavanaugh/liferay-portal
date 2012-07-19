@@ -56,6 +56,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ActionUtil {
 
+	public static final String VERSION_SEPARATOR = "_version_";
+
 	public static void deleteArticle(
 			ActionRequest actionRequest, String deleteArticleId)
 		throws Exception {
@@ -68,8 +70,7 @@ public class ActionUtil {
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			JournalArticle.class.getName(), actionRequest);
 
-		int pos = deleteArticleId.lastIndexOf(
-			EditArticleAction.VERSION_SEPARATOR);
+		int pos = deleteArticleId.lastIndexOf(ActionUtil.VERSION_SEPARATOR);
 
 		String articleId = deleteArticleId;
 
@@ -85,7 +86,7 @@ public class ActionUtil {
 			articleId = articleId.substring(0, pos);
 			version = GetterUtil.getDouble(
 				deleteArticleId.substring(
-					pos + EditArticleAction.VERSION_SEPARATOR.length()));
+					pos + ActionUtil.VERSION_SEPARATOR.length()));
 
 			JournalArticleServiceUtil.deleteArticle(
 				groupId, articleId, version, articleURL, serviceContext);
@@ -106,8 +107,7 @@ public class ActionUtil {
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			JournalArticle.class.getName(), actionRequest);
 
-		int pos = expireArticleId.lastIndexOf(
-			EditArticleAction.VERSION_SEPARATOR);
+		int pos = expireArticleId.lastIndexOf(ActionUtil.VERSION_SEPARATOR);
 
 		String articleId = expireArticleId;
 
@@ -123,7 +123,7 @@ public class ActionUtil {
 			articleId = articleId.substring(0, pos);
 			version = GetterUtil.getDouble(
 				expireArticleId.substring(
-					pos + EditArticleAction.VERSION_SEPARATOR.length()));
+					pos + ActionUtil.VERSION_SEPARATOR.length()));
 
 			JournalArticleServiceUtil.expireArticle(
 				groupId, articleId, version, articleURL, serviceContext);
