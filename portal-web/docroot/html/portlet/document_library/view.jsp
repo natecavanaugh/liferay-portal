@@ -66,6 +66,18 @@ if (Validator.isNotNull(orderByCol) && Validator.isNotNull(orderByType)) {
 	portalPreferences.setValue(PortletKeys.DOCUMENT_LIBRARY, "order-by-type", orderByType);
 }
 
+FileEntry fileEntry = (FileEntry) null;
+
+DLFileShortcut fileShortcut = null;
+
+boolean showCheckBox = false;
+
+PortletURL tempRowURL = liferayPortletResponse.createRenderURL();
+
+String thumbnailSrc = "/html/themes/classic/images/file_system/large/default.png";
+
+String thumbnailStyle = DLUtil.getThumbnailStyle();
+
 request.setAttribute("view.jsp-folder", folder);
 
 request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
@@ -151,7 +163,9 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 						</c:when>
 						<c:otherwise>
 							<liferay-util:include page="/html/portlet/document_library/view_entries.jsp" />
+
 							<%@ include file="/html/portlet/document_library/invisible_file_entry_icon.jsp" %>
+
 							<%@ include file="/html/portlet/document_library/invisible_file_entry_descriptive.jsp" %>
 						</c:otherwise>
 					</c:choose>
@@ -207,6 +221,7 @@ if (folder != null) {
 
 	new Liferay.Portlet.DocumentLibrary(
 		{
+			columnNames: ['<%= StringUtil.merge(entryColumns, "','") %>'],
 			displayStyle: '<%= HtmlUtil.escapeJS(displayStyle) %>',
 			folders: {
 				defaultParams: {

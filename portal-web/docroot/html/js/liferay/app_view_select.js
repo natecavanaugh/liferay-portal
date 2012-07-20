@@ -149,7 +149,11 @@ AUI.add(
 					_getDisplayStyle: function(currentDisplayStyle, style) {
 						var instance = this;
 
-						var displayStyle = History.get(currentDisplayStyle) || instance.get('displayStyle');
+						var currentDisplayStyleHistory = History.get(currentDisplayStyle) || instance.get('displayStyle');
+
+						var displayStyle = currentDisplayStyleHistory[instance._displayStyle] || currentDisplayStyleHistory;
+
+						displayStyle = !A.Object.isEmpty(currentDisplayStyleHistory) ? currentDisplayStyleHistory : instance.get('displayStyle');
 
 						if (style) {
 							displayStyle = (displayStyle == style);

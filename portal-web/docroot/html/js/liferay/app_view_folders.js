@@ -629,7 +629,9 @@ AUI.add(
 					_valueListView: function(value) {
 						var instance = this;
 
-						value = value || {};
+						if (!Lang.isObject(value)) {
+							value = {};
+						}
 
 						var folderContainer = instance.get(STR_FOLDER_CONTAINER);
 

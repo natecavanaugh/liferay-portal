@@ -21,46 +21,6 @@ AUI.add(
 		DocumentLibraryUpload.NAME = 'documentlibraryupload';
 
 		DocumentLibraryUpload.prototype = {
-			_initDLUpload: function() {
-				var instance = this;
-
-				if (themeDisplay.isSignedIn()) {
-
-					var uploader = instance._initUploader();
-
-					if (uploader) {
-
-						instance._dataset = new A.DataSet();
-						instance._maxFileSize = '314572800 B';
-						instance._overlayManager = new A.OverlayManager();
-						instance._subscriptions = [];
-
-						var documentContainer = A.one('.document-container');
-
-						var invisibleDescriptiveEntry = documentContainer.one('#invisible_descriptive');
-						var invisibleIconEntry = documentContainer.one('#invisible_icon');
-
-						documentContainer.ancestor().append(invisibleDescriptiveEntry);
-						documentContainer.ancestor().append(invisibleIconEntry);
-
-						instance._entriesContainer = documentContainer;
-
-						instance._invisibleDescriptiveEntry = invisibleDescriptiveEntry;
-						instance._invisibleIconEntry = invisibleIconEntry;
-
-						instance._uploader = uploader;
-
-						instance._initCallbacks();
-
-						// Language keys
-
-						instance._invalidFileNameText = Liferay.Language.get('please-enter-a-file-with-a-valid-file-name');
-						instance._invalidFileSizeText = Liferay.Language.get('please-enter-a-file-with-a-valid-file-size-no-larger-than-x');
-						instance._zeroByteFileText = Liferay.Language.get('the-file-contains-no-data-and-cannot-be-uploaded.-please-use-the-classic-uploader');
-					}
-				}
-			},
-
 			destructor: function() {
 				var instance = this;
 
@@ -79,22 +39,18 @@ AUI.add(
 				}
 			},
 
-			_displayEntryError: function(entryNode) {
-				var instance = this;
-
-				var entryThumbnailImage = entryNode.one('img');
-
-				var entryErrorSrc = themeDisplay.getPathContext() + '/html/themes/classic/images/file_system/large/default_error.png';
-
-				entryThumbnailImage.set('src', entryErrorSrc);
-			},
-
 			_addEntry: function(file) {
 				var instance = this;
 
-				var displayStyle = instance._getDisplayStyle();
+				var displayStyle = instance._appViewSelect._getDisplayStyle();
+
+				var entriesContainer = instance._entriesContainer;
+
+				var emptyMessage = entriesContainer.one('.entries-empty');
 
 				var entryNode;
+
+				var title = file.name;
 
 				if (displayStyle === 'icon') {
 					entryNode = instance._invisibleIconEntry.clone();
@@ -103,10 +59,10 @@ AUI.add(
 					entryNode = instance._invisibleDescriptiveEntry.clone();
 				}
 				else {
-					entryNode = instance._createEntryListRow(file);
-				}
+					instance._createEntryListRow(file);
 
-				var title = file.name;
+					entryNode = entriesContainer.one('.lfr-search-container');
+				}
 
 				entryNode.attr('data-title', title);
 
@@ -115,6 +71,10 @@ AUI.add(
 				entryNode.set('id', entryNodeId);
 
 				entryNode.show();
+
+				if (emptyMessage) {
+					emptyMessage.hide();
+				}
 
 				var errorMessage = file.errorMessage;
 
@@ -128,8 +88,6 @@ AUI.add(
 					file.row = entryNode;
 				}
 				else {
-					var entriesContainer = instance._entriesContainer;
-
 					entriesContainer.append(entryNode);
 
 					var entryDocumentLink = entryNode.one('.document-link');
@@ -276,9 +234,7 @@ AUI.add(
 				var alternate = entriesCount % 2;
 
 				if (alternate) {
-					row.addClass('alt');
-
-					row.addClass('portlet-section-alternate-hover');
+					row.addClass('alt portlet-section-alternate-hover');
 				}
 				else {
 					row.addClass('portlet-section-hover');
@@ -309,11 +265,12 @@ AUI.add(
 
 						if (item === 'name') {
 							columnName = 'title';
+
 							var ns_struts_action = instance.ns('struts_action=%2Fdocument_library%2Fview_file_entry');
 
 							var anchor = A.Node.create('<a class="taglib-icon" href="' + instance._config.viewFileEntryUrl + '" > ' + file.name + '</a>');
 
-							var icon = A.Node.create('<img alt="" src="/html/themes/classic/images/file_system/small/page.png" class="icon" id="' + A.guid() + '"/>')
+							var icon = A.Node.create('<img alt="" class="icon" id="' + A.guid() + '" src="/html/themes/classic/images/file_system/small/page.png" />')
 
 							td.append(icon);
 
@@ -327,13 +284,13 @@ AUI.add(
 						}
 						else if (item === 'action') {
 							columnName = rowNumber;
+
 							td.set('id', instance.ns('ocerSearchContainer_col-5_row-1'));
+
 							td.addClass('last');
 						}
 
-						td.addClass('align-left');
-						td.addClass('col-' + columnName);
-						td.addClass('valign-middle');
+						td.addClass('align-left col-' + columnName + ' valign-middle');
 
 						td.attr('colspan', 1);
 						td.attr('headers', instance.ns('ocerSearchContainer_col-' + columnName));
@@ -343,6 +300,50 @@ AUI.add(
 				);
 
 				return row;
+			},
+
+			_createNavigationOverlays: function() {
+				var instance = this;
+
+				var container = instance._entriesContainer;
+
+				var columnContent = container.ancestor('.aui-column-content');
+
+				var headerRow = columnContent.one('.lfr-header-row');
+
+				var headerRowOverlay = instance._createOverlay(headerRow, UPLOAD_MASK);
+
+				var documentEntriesPaginator = A.one('.document-entries-paginator');
+
+				var documentEntriesPaginatorOverlay = instance._createOverlay(documentEntriesPaginator, UPLOAD_MASK);
+
+				var navigationPane = instance.byId('listViewContainer');
+
+				var navigationPaneOverlay = instance._createOverlay(navigationPane, UPLOAD_MASK);
+
+				var navigationOverlays = [];
+
+				navigationOverlays.push(headerRowOverlay, documentEntriesPaginatorOverlay, navigationPaneOverlay);
+
+				var uploader = instance._uploader;
+
+				uploader.before(
+					'uploadstart',
+					function(event) {
+						A.Array.invoke(navigationOverlays, 'show');
+					}
+				);
+
+				uploader.after(
+					'alluploadscomplete',
+					function(event) {
+						var dataset = instance._dataset;
+
+						if (!dataset.length) {
+							A.Array.invoke(navigationOverlays, 'hide');
+						}
+					}
+				);
 			},
 
 			_createOverlay: function(target, cssClass) {
@@ -390,6 +391,16 @@ AUI.add(
 				A.Array.invoke(subscriptions, 'detach');
 			},
 
+			_displayEntryError: function(entryNode) {
+				var instance = this;
+
+				var entryThumbnailImage = entryNode.one('img');
+
+				var entryErrorSrc = themeDisplay.getPathContext() + '/html/themes/classic/images/file_system/large/default_error.png';
+
+				entryThumbnailImage.set('src', entryErrorSrc);
+			},
+
 			_getDragDropFiles: function(files) {
 				var instance = this;
 
@@ -420,9 +431,9 @@ AUI.add(
 			_getFolderEntry: function(target) {
 				var instance = this;
 
-				var dataFolder = target.ancestor('[data-folder="true"]');
-
 				var folderEntry;
+
+				var dataFolder = target.ancestor('[data-folder="true"]');
 
 				var overlayBoundingBox = target.ancestor('.aui-overlaymask');
 
@@ -613,6 +624,8 @@ AUI.add(
 
 							event.fileList = instance._getDragDropFiles(files);
 
+							instance._createNavigationOverlays();
+
 							uploader.fire('fileselect', {_EVT: event});
 						}
 					},
@@ -622,7 +635,9 @@ AUI.add(
 				entriesContainer.delegate(
 					'dragover',
 					function(event) {
-						event.target.ancestor(CSS_DOCUMENT_DISPLAY_STYLE).addClass(CSS_ACTIVE_AREA);
+						var parentElement = event.target.ancestor(CSS_DOCUMENT_DISPLAY_STYLE);
+
+						parentElement.addClass(CSS_ACTIVE_AREA);
 					},
 					'[data-folder="true"]'
 				);
@@ -630,7 +645,9 @@ AUI.add(
 				entriesContainer.delegate(
 					'dragleave',
 					function(event) {
-						event.target.ancestor(CSS_DOCUMENT_DISPLAY_STYLE).removeClass(CSS_ACTIVE_AREA);
+						var parentElement = event.target.ancestor(CSS_DOCUMENT_DISPLAY_STYLE);
+
+						parentElement.removeClass(CSS_ACTIVE_AREA);
 					},
 					'[data-folder="true"]'
 				);
@@ -652,58 +669,50 @@ AUI.add(
 					},
 					instance
 				);
-
-				instance.after('paginator:render', instance._createNavigationOverlays, instance);
 			},
 
-			_createNavigationOverlays: function() {
+			_initDLUpload: function() {
 				var instance = this;
 
-				var container = instance._entriesContainer;
+				if (themeDisplay.isSignedIn()) {
+					var uploader = instance._initUploader();
 
-				var columnContent = container.ancestor('.aui-column-content');
+					if (uploader) {
+						instance._dataset = new A.DataSet();
+						instance._maxFileSize = '314572800 B';
+						instance._overlayManager = new A.OverlayManager();
+						instance._subscriptions = [];
 
-				var headerRow = columnContent.one('.lfr-header-row');
+						var documentContainer = A.one('.document-container');
 
-				var headerRowOverlay = instance._createOverlay(headerRow, UPLOAD_MASK);
+						var invisibleDescriptiveEntry = documentContainer.one('#invisible_descriptive');
+						var invisibleIconEntry = documentContainer.one('#invisible_icon');
 
-				var documentEntriesPaginator = A.one('.document-entries-paginator');
+						var documentContainerParent = documentContainer.ancestor();
 
-				var documentEntriesPaginatorOverlay = instance._createOverlay(documentEntriesPaginator, UPLOAD_MASK);
+						documentContainerParent.append(invisibleDescriptiveEntry);
+						documentContainerParent.append(invisibleIconEntry);
 
-				var navigationPane = instance.byId('listViewContainer');
+						instance._entriesContainer = documentContainer;
+						instance._invisibleDescriptiveEntry = invisibleDescriptiveEntry;
+						instance._invisibleIconEntry = invisibleIconEntry;
+						instance._uploader = uploader;
 
-				var navigationPaneOverlay = instance._createOverlay(navigationPane, UPLOAD_MASK);
+						instance._initCallbacks();
 
-				var navigationOverlays = [];
-
-				navigationOverlays.push(headerRowOverlay, documentEntriesPaginatorOverlay, navigationPaneOverlay);
-
-				var uploader = instance._uploader;
-
-				uploader.before(
-					'uploadstart',
-					function(event) {
-						A.Array.invoke(navigationOverlays, 'show');
+						instance._invalidFileNameText = Liferay.Language.get('please-enter-a-file-with-a-valid-file-name');
+						instance._invalidFileSizeText = Liferay.Language.get('please-enter-a-file-with-a-valid-file-size-no-larger-than-x');
+						instance._zeroByteFileText = Liferay.Language.get('the-file-contains-no-data-and-cannot-be-uploaded.-please-use-the-classic-uploader');
 					}
-				);
-
-				uploader.after(
-					'alluploadscomplete',
-					function(event) {
-						var dataset = instance._dataset;
-
-						if (!dataset.length) {
-							A.Array.invoke(navigationOverlays, 'hide');
-						}
-					}
-				);
+				}
 			},
 
 			_initUploader: function() {
 				var instance = this;
 
-				if (A.Uploader.TYPE && A.Uploader.TYPE === 'html5' && !UA.ios) {
+				var uploaderType = A.Uploader.TYPE;
+
+				if (uploaderType && uploaderType === 'html5' && !UA.ios) {
 					var folderId = instance.folderId;
 
 					var uploadURL = instance._getFolderURL(folderId);
@@ -735,68 +744,6 @@ AUI.add(
 				var queue = uploader.queue;
 
 				return (queue && queue._currentState && queue._currentState === 'uploading');
-			},
-
-			_updateFolderEntry: function(folderEntry, invalidFiles) {
-				var instance = this;
-
-				var displayStyle = instance._getDisplayStyle();
-
-				var imagePath;
-
-				if (invalidFiles.length) {
-
-					if (displayStyle === 'list') {
-						imagePath = themeDisplay.getPathContext() + '/html/themes/classic/images/common/close.png';
-					}
-					else {
-						imagePath = themeDisplay.getPathContext() + '/html/themes/classic/images/document_library/folder_exclamation.png';
-					}
-
-					var tooltipBodyContent = '';
-
-					A.Array.map(
-						invalidFiles,
-						function(item, index, collection) {
-							tooltipBodyContent = tooltipBodyContent.concat(item.name, ': ' + item.errorMessage + '<br /><br />');
-						}
-					);
-
-					new A.Tooltip(
-						{
-							bodyContent: tooltipBodyContent,
-							trigger: folderEntry,
-							constrain: true
-						}
-					).render();
-				}
-				else {
-					if (displayStyle === 'list') {
-						imagePath = themeDisplay.getPathContext() + '/html/themes/classic/images/common/checked.png';
-					}
-					else {
-						imagePath = themeDisplay.getPathContext() + '/html/themes/classic/images/document_library/folder_checkmark.png';
-					}
-				}
-
-				var folderImage = folderEntry.one('img');
-
-				if (folderImage) {
-					var src = folderImage.get('src');
-
-					folderImage.set('src', imagePath);
-
-					setTimeout(
-						function() {
-							folderImage.set('src', src);
-						},
-						3000
-					);
-				}
-
-				if (folderEntry.overlay) {
-					folderEntry.overlay.hide();
-				}
 			},
 
 			_onAllUploadsComplete: function(upload) {
@@ -878,11 +825,11 @@ AUI.add(
 
 				var dataset = instance._dataset;
 
+				var uploader = instance._uploader;
+
 				var datasetFolderEntry = dataset.item(folderId + '');
 
 				var dataUploading = dataset.get('first') || null;
-
-				var uploader = instance._uploader;
 
 				var queue = uploader.queue;
 
@@ -903,9 +850,9 @@ AUI.add(
 				}
 				else {
 					dataset.add(
-						folderId, 
+						folderId,
 						{
-							displayView: instance._getDisplayStyle(),
+							displayView: instance._appViewSelect._getDisplayStyle(),
 							fileList: validFileList,
 							folderEntry: folderEntry,
 							folderId: folderId,
@@ -937,10 +884,9 @@ AUI.add(
 
 					var fileEntryId = responseData.fileEntryId;
 
-					var displayStyle = instance._getDisplayStyle();
+					var displayStyle = instance._appViewSelect._getDisplayStyle();
 
 					if (displayStyle !== 'list') {
-
 						instance._updateIconLink(
 							fileEntryId,
 							{
@@ -977,7 +923,6 @@ AUI.add(
 				var progressBar = file.progressBar;
 
 				var overlayContentBox = overlay.get(CONTENT_BOX);
-
 				var overlayBoundingBox = overlay.get(BOUNDING_BOX);
 
 				var progressBarBoundingBox = progressBar.get(BOUNDING_BOX);
@@ -1062,6 +1007,67 @@ AUI.add(
 				}
 			},
 
+			_updateFolderEntry: function(folderEntry, invalidFiles) {
+				var instance = this;
+
+				var displayStyle = instance._appViewSelect._getDisplayStyle();
+
+				var imagePath;
+
+				if (invalidFiles.length) {
+					if (displayStyle === 'list') {
+						imagePath = themeDisplay.getPathContext() + '/html/themes/classic/images/common/close.png';
+					}
+					else {
+						imagePath = themeDisplay.getPathContext() + '/html/themes/classic/images/document_library/folder_exclamation.png';
+					}
+
+					var tooltipBodyContent = '';
+
+					A.Array.map(
+						invalidFiles,
+						function(item, index, collection) {
+							tooltipBodyContent = tooltipBodyContent.concat(item.name, ': ' + item.errorMessage + '<br /><br />');
+						}
+					);
+
+					new A.Tooltip(
+						{
+							bodyContent: tooltipBodyContent,
+							trigger: folderEntry,
+							constrain: true
+						}
+					).render();
+				}
+				else {
+					if (displayStyle === 'list') {
+						imagePath = themeDisplay.getPathContext() + '/html/themes/classic/images/common/checked.png';
+					}
+					else {
+						imagePath = themeDisplay.getPathContext() + '/html/themes/classic/images/document_library/folder_checkmark.png';
+					}
+				}
+
+				var folderImage = folderEntry.one('img');
+
+				if (folderImage) {
+					var src = folderImage.get('src');
+
+					folderImage.set('src', imagePath);
+
+					setTimeout(
+						function() {
+							folderImage.set('src', src);
+						},
+						3000
+					);
+				}
+
+				if (folderEntry.overlay) {
+					folderEntry.overlay.hide();
+				}
+			},
+
 			_updateIconLink: function(id, file) {
 				var instance = this;
 
@@ -1105,6 +1111,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-data-set', 'aui-overlay-manager', 'aui-overlay-mask', 'aui-progressbar', 'aui-tooltip', 'uploader', 'uploader-html5']
+		requires: ['aui-data-set', 'aui-overlay-manager', 'aui-overlay-mask', 'aui-progressbar', 'aui-tooltip', 'liferay-app-view-folders', 'liferay-app-view-move', 'liferay-app-view-paginator', 'liferay-app-view-select', 'uploader', 'uploader-html5']
 	}
 );

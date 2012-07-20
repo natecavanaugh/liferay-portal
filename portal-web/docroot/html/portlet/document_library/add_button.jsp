@@ -114,7 +114,9 @@ if ((folder == null) || folder.isSupportsMetadata()) {
 </liferay-ui:icon-menu>
 
 <aui:script use="aui-base,aui-swf">
-	if (A.SWFDetect.isFlashVersionAtLeast(9)) {
+	var swfDetect = A.SWF.isFlashVersionAtLeast || A.SWFDetect.isFlashVersionAtLeast;
+
+	if (swfDetect(9)) {
 		var uploadMultipleDocumentsIcon = A.all('.upload-multiple-documents:hidden');
 
 		uploadMultipleDocumentsIcon.show();

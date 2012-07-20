@@ -14,10 +14,9 @@
  */
 --%>
 
-<div id="invisible_descriptive" class="document-display-style display-descriptive <%= showCheckBox ? "selectable" : StringPool.BLANK %> aui-helper-hidden" data-draggable="<%= showCheckBox ? Boolean.TRUE.toString() : Boolean.FALSE.toString() %>" data-title="{title}">
+<div class="document-display-style display-descriptive <%= showCheckBox ? "selectable" : StringPool.BLANK %> aui-helper-hidden" data-draggable="<%= showCheckBox ? Boolean.TRUE.toString() : Boolean.FALSE.toString() %>" data-title="{title}" id="invisible_descriptive">
 	<a class="document-link" data-folder="<%= Boolean.FALSE.toString() %>" href="<%= tempRowURL.toString() %>" title="{title}">
 		<span class="document-thumbnail">
-
 			<img alt="" border="no" src="<%= thumbnailSrc %>" style="<%= thumbnailStyle %>" />
 		</span>
 

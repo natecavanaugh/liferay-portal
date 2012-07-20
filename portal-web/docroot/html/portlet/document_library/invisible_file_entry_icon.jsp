@@ -14,35 +14,12 @@
  */
 --%>
 
-<%
-FileEntry fileEntry = (FileEntry) null;
-
-String fileEntryIdPlaceholder = "--fileEntryId--";
-
-String fileEntryString = "FileEntry";
-
-DLFileShortcut fileShortcut = null;
-
-boolean showCheckBox = true;
-
-PortletURL tempRowURL = liferayPortletResponse.createRenderURL();
-
-String thumbnailSrc = "http://marc.local:8080/html/themes/classic/images/file_system/large/default.png";
-
-String thumbnailStyle = DLUtil.getThumbnailStyle();
-
-String rowCheckerIds = RowChecker.ROW_IDS;
-%>
-
-<div id="invisible_icon" class="document-display-style display-icon aui-helper-hidden" data-draggable="true" data-title="{title}">
-
+<div class="document-display-style display-icon aui-helper-hidden" data-draggable="true" data-title="{title}" id="invisible_icon">
 	<liferay-util:include page="/html/portlet/document_library/invisible_entry_action.jsp" />
 
 	<a class="document-link" data-folder="<%= Boolean.FALSE.toString() %>" href="<%= tempRowURL.toString() %>" title="{title}">
 		<span class="document-thumbnail">
-
 			<img alt="" border="no" src="<%= thumbnailSrc %>" style="<%= thumbnailStyle %>" />
-
 		</span>
 
 		<span class="entry-title">

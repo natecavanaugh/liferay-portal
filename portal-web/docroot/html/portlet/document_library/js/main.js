@@ -5,9 +5,7 @@ AUI.add(
 		var Lang = A.Lang;
 		var History = Liferay.HistoryManager;
 
-		var UA = A.UA;
-
-		var CSS_ROW_SELECTABLE = 'tr.selectable';
+		var IE = A.UA.ie;
 
 		var CSS_SYNC_MESSAGE_HIDDEN = 'sync-message-hidden';
 
@@ -191,6 +189,8 @@ AUI.add(
 						}
 
 						instance._toggleSyncNotification();
+
+						instance._initDLUpload();
 					},
 
 					destructor: function() {
@@ -409,7 +409,7 @@ AUI.add(
 
 						var webDavUrl = event.webDavUrl;
 
-						if (webDavUrl && UA.ie) {
+						if (webDavUrl && IE) {
 							try {
 								var executor = new WIN.ActiveXObject('SharePoint.OpenDocuments');
 
@@ -597,6 +597,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-loading-mask', 'aui-parse-content', 'event-simulate', 'liferay-app-view-folders', 'liferay-app-view-move', 'liferay-app-view-paginator', 'liferay-app-view-select', 'liferay-history-manager', 'liferay-message', 'liferay-portlet-base', 'querystring-parse-simple']
+		requires: ['aui-loading-mask', 'aui-parse-content', 'document-library-upload', 'event-simulate', 'liferay-app-view-folders', 'liferay-app-view-move', 'liferay-app-view-paginator', 'liferay-app-view-select', 'liferay-history-manager', 'liferay-message', 'liferay-portlet-base', 'querystring-parse-simple']
 	}
 );
