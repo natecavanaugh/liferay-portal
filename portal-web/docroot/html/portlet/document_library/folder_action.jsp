@@ -451,7 +451,9 @@ if ((row == null) && (portletName.equals(PortletKeys.DOCUMENT_LIBRARY_DISPLAY) |
 </portlet:renderURL>
 
 <aui:script use="aui-dialog,aui-swf">
-	if (A.SWF.isFlashVersionAtLeast(9)) {
+	var swfDetect = A.SWF.isFlashVersionAtLeast || A.SWFDetect.isFlashVersionAtLeast;
+
+	if (swfDetect(9)) {
 		var uploadMultipleDocumentsIcon = A.all('.upload-multiple-documents:hidden');
 
 		uploadMultipleDocumentsIcon.show();
