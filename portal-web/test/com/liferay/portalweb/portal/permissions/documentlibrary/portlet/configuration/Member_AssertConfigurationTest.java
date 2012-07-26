@@ -24,25 +24,8 @@ public class Member_AssertConfigurationTest extends BaseTestCase {
 	public void testMember_AssertConfiguration() throws Exception {
 		selenium.open("/web/guest/home/");
 		loadRequiredJavaScriptModules();
-
-		for (int second = 0;; second++) {
-			if (second >= 90) {
-				fail("timeout");
-			}
-
-			try {
-				if (selenium.isVisible("link=Document Library Permissions Page")) {
-					break;
-				}
-			}
-			catch (Exception e) {
-			}
-
-			Thread.sleep(1000);
-		}
-
-		selenium.clickAt("link=Document Library Permissions Page",
-			RuntimeVariables.replace("Document Library Permissions Page"));
+		selenium.clickAt("link=Documents and Media Test Page",
+			RuntimeVariables.replace("Documents and Media Test Page"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
 		Thread.sleep(5000);
@@ -79,7 +62,27 @@ public class Member_AssertConfigurationTest extends BaseTestCase {
 			}
 
 			try {
-				if (selenium.isVisible("//input[@value='Save']")) {
+				if (selenium.isVisible(
+							"//iframe[@id='_20_configurationIframeDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_20_configurationIframeDialog']");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
+				if (selenium.isVisible(
+							"//ul[@class='aui-tabview-list']/li[1]/span/a")) {
 					break;
 				}
 			}
@@ -104,5 +107,6 @@ public class Member_AssertConfigurationTest extends BaseTestCase {
 		assertEquals(RuntimeVariables.replace(
 				"You have successfully updated the setup."),
 			selenium.getText("//div[@class='portlet-msg-success']"));
+		selenium.selectFrame("relative=top");
 	}
 }

@@ -69,9 +69,7 @@ public class UpgradeMessageBoards extends UpgradeProcess {
 		}
 	}
 
-	protected void updateMessage(long messageId, String body)
-		throws Exception {
-
+	protected void updateMessage(long messageId, String body) throws Exception {
 		Connection con = null;
 		PreparedStatement ps = null;
 

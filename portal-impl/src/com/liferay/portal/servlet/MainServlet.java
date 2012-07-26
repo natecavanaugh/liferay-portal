@@ -189,6 +189,8 @@ public class MainServlet extends ActionServlet {
 
 		ServletContext servletContext = getServletContext();
 
+		servletContext.setAttribute(MainServlet.class.getName(), Boolean.TRUE);
+
 		callParentInit();
 
 		if (_log.isDebugEnabled()) {

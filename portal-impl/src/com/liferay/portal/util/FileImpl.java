@@ -194,7 +194,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		sb.append(Time.getTimestamp());
 		sb.append(PwdGenerator.getPassword(PwdGenerator.KEY2, 8));
 
-		if (Validator.isNotNull(extension)) {
+		if (Validator.isFileExtension(extension)) {
 			sb.append(StringPool.PERIOD);
 			sb.append(extension);
 		}
@@ -764,9 +764,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		write(file, s, false);
 	}
 
-	public void write(File file, String s, boolean lazy)
-		throws IOException {
-
+	public void write(File file, String s, boolean lazy) throws IOException {
 		write(file, s, lazy, false);
 	}
 

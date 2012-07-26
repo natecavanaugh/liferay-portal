@@ -145,5 +145,6 @@ public class ExportLARCPPage2DLPageScopeTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Export']",
 			RuntimeVariables.replace("Export"));
 		selenium.downloadTempFile("DL_Page_Scope.Page2.CP.lar");
+		Thread.sleep(15000);
 	}
 }

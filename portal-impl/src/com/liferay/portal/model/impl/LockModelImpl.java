@@ -385,17 +385,6 @@ public class LockModelImpl extends BaseModelImpl<Lock> implements LockModel {
 	}
 
 	@Override
-	public Lock toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Lock)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
 			Lock.class.getName(), getPrimaryKey());
@@ -406,6 +395,17 @@ public class LockModelImpl extends BaseModelImpl<Lock> implements LockModel {
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public Lock toEscapedModel() {
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (Lock)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModelProxy;
 	}
 
 	@Override

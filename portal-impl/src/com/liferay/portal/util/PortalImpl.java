@@ -834,7 +834,7 @@ public class PortalImpl implements Portal {
 	}
 
 	public Locale[] getAlternateLocales(HttpServletRequest request)
-		throws SystemException, PortalException {
+		throws PortalException, SystemException {
 
 		Locale[] availableLocales = LanguageUtil.getAvailableLocales();
 
@@ -1483,9 +1483,11 @@ public class PortalImpl implements Portal {
 
 				String[] facebookData = FacebookUtil.getFacebookData(request);
 
-				currentURL =
-					FacebookUtil.FACEBOOK_APPS_URL + facebookData[0] +
-						facebookData[2];
+				if (facebookData != null) {
+					currentURL =
+						FacebookUtil.FACEBOOK_APPS_URL + facebookData[0] +
+							facebookData[2];
+				}
 			}
 		}
 
@@ -1512,7 +1514,8 @@ public class PortalImpl implements Portal {
 
 	public Date getDate(int month, int day, int year) {
 		try {
-			return getDate(month, day, year, null);
+			return getDate(
+				month, day, year, (Class<? extends PortalException>)null);
 		}
 		catch (PortalException pe) {
 			throw new RuntimeException();
@@ -1520,12 +1523,83 @@ public class PortalImpl implements Portal {
 	}
 
 	public Date getDate(
+			int month, int day, int year,
+			Class<? extends PortalException> clazz)
+		throws PortalException {
+
+		return getDate(month, day, year, null, clazz);
+	}
+
+	public Date getDate(
+			int month, int day, int year, int hour, int min,
+			Class<? extends PortalException> clazz)
+		throws PortalException {
+
+		return getDate(month, day, year, hour, min, null, clazz);
+	}
+
+	/**
+	 * @deprecated {@link #getDate(int, int, int, int, int, Class)}
+	 */
+	public Date getDate(
 			int month, int day, int year, int hour, int min, PortalException pe)
 		throws PortalException {
 
 		return getDate(month, day, year, hour, min, null, pe);
 	}
 
+	public Date getDate(
+			int month, int day, int year, int hour, int min, TimeZone timeZone,
+			Class<? extends PortalException> clazz)
+		throws PortalException {
+
+		if (!Validator.isGregorianDate(month, day, year)) {
+			if (clazz != null) {
+				try {
+					throw clazz.newInstance();
+				}
+				catch (Exception e) {
+					throw new PortalException(e);
+				}
+			}
+			else {
+				return null;
+			}
+		}
+		else {
+			Calendar cal = null;
+
+			if (timeZone == null) {
+				cal = CalendarFactoryUtil.getCalendar();
+			}
+			else {
+				cal = CalendarFactoryUtil.getCalendar(timeZone);
+			}
+
+			if ((hour == -1) || (min == -1)) {
+				cal.set(year, month, day, 0, 0, 0);
+			}
+			else {
+				cal.set(year, month, day, hour, min, 0);
+			}
+
+			cal.set(Calendar.MILLISECOND, 0);
+
+			Date date = cal.getTime();
+
+			/*if ((timeZone != null) &&
+				cal.before(CalendarFactoryUtil.getCalendar(timeZone))) {
+
+				throw pe;
+			}*/
+
+			return date;
+		}
+	}
+
+	/**
+	 * @deprecated {@link #getDate(int, int, int, int, int, TimeZone, Class)}
+	 */
 	public Date getDate(
 			int month, int day, int year, int hour, int min, TimeZone timeZone,
 			PortalException pe)
@@ -1570,12 +1644,26 @@ public class PortalImpl implements Portal {
 		}
 	}
 
+	/**
+	 * @deprecated {@link #getDate(int, int, int, Class)}
+	 */
 	public Date getDate(int month, int day, int year, PortalException pe)
 		throws PortalException {
 
 		return getDate(month, day, year, null, pe);
 	}
 
+	public Date getDate(
+			int month, int day, int year, TimeZone timeZone,
+			Class<? extends PortalException> clazz)
+		throws PortalException {
+
+		return getDate(month, day, year, -1, -1, timeZone, clazz);
+	}
+
+	/**
+	 * @deprecated {@link #getDate(int, int, int, TimeZone, Class)}
+	 */
 	public Date getDate(
 			int month, int day, int year, TimeZone timeZone, PortalException pe)
 		throws PortalException {
@@ -1795,7 +1883,7 @@ public class PortalImpl implements Portal {
 
 			value = getDate(
 				valueDateMonth, valueDateDay, valueDateYear, valueDateHour,
-				valueDateMinute, timeZone, new ValueDataException());
+				valueDateMinute, timeZone, ValueDataException.class);
 		}
 		else if (type == ExpandoColumnConstants.DATE_ARRAY) {
 		}
@@ -1933,7 +2021,7 @@ public class PortalImpl implements Portal {
 
 			value = getDate(
 				valueDateMonth, valueDateDay, valueDateYear, valueDateHour,
-				valueDateMinute, timeZone, new ValueDataException());
+				valueDateMinute, timeZone, ValueDataException.class);
 		}
 		else if (type == ExpandoColumnConstants.DATE_ARRAY) {
 		}
@@ -4493,6 +4581,16 @@ public class PortalImpl implements Portal {
 			if (layoutTypePortlet.hasPortletId(checkPortletId)) {
 				return true;
 			}
+
+			String resourcePrimKey = PortletPermissionUtil.getPrimaryKey(
+				themeDisplay.getPlid(), portletId);
+
+			if (ResourcePermissionLocalServiceUtil.getResourcePermissionsCount(
+					themeDisplay.getCompanyId(), portlet.getPortletName(),
+					ResourceConstants.SCOPE_INDIVIDUAL, resourcePrimKey) > 0) {
+
+				return true;
+			}
 		}
 
 		if (themeDisplay.isSignedIn() &&
@@ -4574,7 +4672,14 @@ public class PortalImpl implements Portal {
 			return true;
 		}
 
-		String strutsAction = ParamUtil.getString(request, "struts_action");
+		String namespace = getPortletNamespace(portletId);
+
+		String strutsAction = ParamUtil.getString(
+			request, namespace + "struts_action");
+
+		if (Validator.isNull(strutsAction)) {
+			strutsAction = ParamUtil.getString(request, "struts_action");
+		}
 
 		if (_portletAddDefaultResourceCheckWhitelistActions.contains(
 				strutsAction)) {

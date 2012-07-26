@@ -48,6 +48,11 @@ import javax.portlet.PortletPreferences;
 public class RSSPortletDataHandlerImpl extends JournalPortletDataHandlerImpl {
 
 	@Override
+	public String[] getDataPortletPreferences() {
+		return new String[] {"footerArticleValues", "headerArticleValues"};
+	}
+
+	@Override
 	public PortletDataHandlerControl[] getExportControls() {
 		return new PortletDataHandlerControl[] {
 			_selectedArticles, _embeddedAssets
@@ -275,7 +280,7 @@ public class RSSPortletDataHandlerImpl extends JournalPortletDataHandlerImpl {
 
 		Map<String, String> articleIds =
 			(Map<String, String>)portletDataContext.getNewPrimaryKeysMap(
-				JournalArticle.class);
+				JournalArticle.class + ".articleId");
 
 		Layout layout = LayoutLocalServiceUtil.getLayout(
 			portletDataContext.getPlid());
@@ -291,6 +296,9 @@ public class RSSPortletDataHandlerImpl extends JournalPortletDataHandlerImpl {
 			"footerArticleValues", new String[] {"0", ""});
 
 		String footerArticleId = footerArticleValues[1];
+
+		footerArticleId = MapUtil.getString(
+			articleIds, footerArticleId, footerArticleId);
 
 		if (Validator.isNotNull(footerArticleId)) {
 			footerArticleId = MapUtil.getString(
@@ -319,6 +327,9 @@ public class RSSPortletDataHandlerImpl extends JournalPortletDataHandlerImpl {
 			"headerArticleValues", new String[] {"0", ""});
 
 		String headerArticleId = headerArticleValues[1];
+
+		headerArticleId = MapUtil.getString(
+			articleIds, headerArticleId, headerArticleId);
 
 		if (Validator.isNotNull(headerArticleId)) {
 			headerArticleId = MapUtil.getString(

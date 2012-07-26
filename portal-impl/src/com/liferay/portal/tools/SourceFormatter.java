@@ -355,6 +355,7 @@ public class SourceFormatter {
 		}
 
 		ifClause = _stripQuotes(ifClause);
+		ifClause = _stripRedundantParentheses(ifClause);
 
 		ifClause = StringUtil.replace(
 			ifClause, new String[] {"'('", "')'"},
@@ -1336,6 +1337,8 @@ public class SourceFormatter {
 
 		String ifClause = StringPool.BLANK;
 
+		String packageName = StringPool.BLANK;
+
 		while ((line = unsyncBufferedReader.readLine()) != null) {
 			lineCount++;
 
@@ -1353,6 +1356,22 @@ public class SourceFormatter {
 				new String[] {
 					"* Copyright (c) 2000-2012 Liferay, Inc."
 				});
+
+			if (line.startsWith("package ")) {
+				packageName = line.substring(8, line.length() - 1);
+			}
+
+			if (line.startsWith("import ")) {
+				int pos = line.lastIndexOf(StringPool.PERIOD);
+
+				if (pos != -1) {
+					String importPackageName = line.substring(7, pos);
+
+					if (importPackageName.equals(packageName)) {
+						continue;
+					}
+				}
+			}
 
 			if (line.startsWith(StringPool.SPACE) && !line.startsWith(" *")) {
 				if (!line.startsWith(StringPool.FOUR_SPACES)) {
@@ -1387,6 +1406,14 @@ public class SourceFormatter {
 				fileName, line, lineCount);
 
 			String trimmedLine = StringUtil.trimLeading(line);
+
+			if (!trimmedLine.equals("{") && line.endsWith("{") &&
+				!line.endsWith(" {")) {
+
+				line = StringUtil.replaceLast(line, "{", " {");
+			}
+
+			line = _sortExceptions(line);
 
 			if (trimmedLine.startsWith("if (") ||
 				trimmedLine.startsWith("else if (") ||
@@ -1441,7 +1468,7 @@ public class SourceFormatter {
 						}
 
 						if (_isInJavaTermTypeGroup(
-								javaTermType, _TYPE_VARIABLE_NOT_STATIC)) {
+								javaTermType, _TYPE_VARIABLE_NOT_FINAL)) {
 
 							char firstChar = javaTermName.charAt(0);
 
@@ -1515,6 +1542,19 @@ public class SourceFormatter {
 						trimmedLine, StringPool.TAB, StringPool.SPACE);
 				}
 
+				if (line.contains(StringPool.TAB + StringPool.SPACE) &&
+					!previousLine.endsWith("&&") &&
+					!previousLine.endsWith("||") &&
+					!previousLine.contains(StringPool.TAB + "((") &&
+					!previousLine.contains(StringPool.TAB + StringPool.SPACE) &&
+					!previousLine.contains(StringPool.TAB + "implements ") &&
+					!previousLine.contains(StringPool.TAB + "throws ")) {
+
+					line = StringUtil.replace(
+						line, StringPool.TAB + StringPool.SPACE,
+						StringPool.TAB);
+				}
+
 				while (trimmedLine.contains(StringPool.DOUBLE_SPACE) &&
 					   !trimmedLine.contains(
 						   StringPool.QUOTE + StringPool.DOUBLE_SPACE) &&
@@ -1566,6 +1606,37 @@ public class SourceFormatter {
 									line.substring(x));
 							}
 						}
+					}
+				}
+			}
+
+			if ((line.contains(" && ") || line.contains(" || ")) &&
+				line.endsWith(StringPool.OPEN_PARENTHESIS)) {
+
+				_sourceFormatterHelper.printError(
+					fileName, "line break: " + fileName + " " + lineCount);
+			}
+
+			if (line.contains(StringPool.COMMA) &&
+				!line.contains(StringPool.CLOSE_PARENTHESIS) &&
+				!line.contains(StringPool.GREATER_THAN) &&
+				!line.contains(StringPool.QUOTE) &&
+				line.endsWith(StringPool.OPEN_PARENTHESIS)) {
+
+				_sourceFormatterHelper.printError(
+					fileName, "line break: " + fileName + " " + lineCount);
+			}
+
+			if (line.endsWith(StringPool.PLUS)) {
+				int x = line.indexOf(" = ");
+
+				if (x != -1) {
+					int y = line.indexOf(StringPool.QUOTE);
+
+					if ((y == -1) || (x < y)) {
+						_sourceFormatterHelper.printError(
+							fileName,
+							"line break: " + fileName + " " + lineCount);
 					}
 				}
 			}
@@ -1649,7 +1720,9 @@ public class SourceFormatter {
 							line, addedToPreviousLine, StringPool.BLANK);
 					}
 				}
-				else if (line.endsWith(StringPool.OPEN_CURLY_BRACE)) {
+				else if (line.endsWith(StringPool.OPEN_CURLY_BRACE) &&
+						 !previousLine.contains(" class ")) {
+
 					lineToSkipIfEmpty = lineCount + 1;
 				}
 			}
@@ -1659,6 +1732,21 @@ public class SourceFormatter {
 					 (lineToSkipIfEmpty != (lineCount - 1)))) {
 
 					sb.append(previousLine);
+
+					if (previousLine.endsWith(
+							StringPool.TAB + StringPool.CLOSE_CURLY_BRACE) &&
+						Validator.isNotNull(trimmedLine) &&
+						!trimmedLine.equals(");") &&
+						!trimmedLine.startsWith(StringPool.CLOSE_CURLY_BRACE) &&
+						!trimmedLine.startsWith(StringPool.DOUBLE_SLASH) &&
+						!trimmedLine.startsWith("catch ") &&
+						!trimmedLine.startsWith("else ") &&
+						!trimmedLine.startsWith("finally ") &&
+						!trimmedLine.startsWith("while ")) {
+
+						sb.append("\n");
+					}
+
 					sb.append("\n");
 				}
 
@@ -1870,7 +1958,7 @@ public class SourceFormatter {
 
 		String line = null;
 
-		String previousLine = null;
+		String previousLine = StringPool.BLANK;
 
 		String currentAttributeAndValue = null;
 		String previousAttribute = null;
@@ -1895,6 +1983,46 @@ public class SourceFormatter {
 			}
 
 			String trimmedLine = StringUtil.trimLeading(line);
+			String trimmedPreviousLine = StringUtil.trimLeading(previousLine);
+
+			if (trimmedPreviousLine.equals("%>") && Validator.isNotNull(line) &&
+				!trimmedLine.equals("-->")) {
+
+				sb.append("\n");
+			}
+			else if (Validator.isNotNull(previousLine) &&
+					 !trimmedPreviousLine.equals("<!--") &&
+					 trimmedLine.equals("<%")) {
+
+				sb.append("\n");
+			}
+			else if (trimmedPreviousLine.equals("<%") &&
+					 Validator.isNull(line)) {
+
+				continue;
+			}
+			else if (trimmedPreviousLine.equals("<%") &&
+					 trimmedLine.startsWith("//")) {
+
+				sb.append("\n");
+			}
+			else if (Validator.isNull(previousLine) &&
+					 trimmedLine.equals("%>") && (sb.index() > 2)) {
+
+				String lineBeforePreviousLine = sb.stringAt(sb.index() - 3);
+
+				if (!lineBeforePreviousLine.startsWith("//")) {
+					sb.setIndex(sb.index() - 1);
+				}
+			}
+
+			if ((trimmedLine.startsWith("if (") ||
+				 trimmedLine.startsWith("else if (") ||
+				 trimmedLine.startsWith("while (")) &&
+				trimmedLine.endsWith(") {")) {
+
+				_checkIfClause(trimmedLine, fileName, lineCount);
+			}
 
 			if (readAttributes) {
 				if (!trimmedLine.startsWith(StringPool.FORWARD_SLASH) &&
@@ -1902,22 +2030,25 @@ public class SourceFormatter {
 
 					int pos = trimmedLine.indexOf(StringPool.EQUAL);
 
-					if ((trimmedLine.startsWith("if (") ||
-						 trimmedLine.startsWith("else if (") ||
-						 trimmedLine.startsWith("while (")) &&
-						trimmedLine.endsWith(") {")) {
-
-						_checkIfClause(trimmedLine, fileName, lineCount);
-					}
-
 					if (pos != -1) {
 						String attribute = trimmedLine.substring(0, pos);
 
-						if (Validator.isNotNull(previousAttribute)) {
+						if (!trimmedLine.endsWith(StringPool.QUOTE) &&
+							!trimmedLine.endsWith(StringPool.APOSTROPHE)) {
+
+							_sourceFormatterHelper.printError(
+								fileName,
+								"attribute: " + fileName + " " + lineCount);
+
+							readAttributes = false;
+						}
+						else if (Validator.isNotNull(previousAttribute)) {
 							if (!_isJSPAttributName(attribute)) {
 								_sourceFormatterHelper.printError(
 									fileName,
 									"attribute: " + fileName + " " + lineCount);
+
+								readAttributes = false;
 							}
 							else if (Validator.isNull(
 										previousAttributeAndValue) &&
@@ -1929,13 +2060,17 @@ public class SourceFormatter {
 							}
 						}
 
-						previousAttribute = attribute;
-						previousLine = line;
+						if (!readAttributes) {
+							previousAttribute = null;
+							previousAttributeAndValue = null;
+						}
+						else {
+							previousAttribute = attribute;
+						}
 					}
 				}
 				else {
 					previousAttribute = null;
-					previousLine = null;
 
 					readAttributes = false;
 				}
@@ -2001,6 +2136,8 @@ public class SourceFormatter {
 
 			line = _replacePrimitiveWrapperInstantiation(
 				fileName, line, lineCount);
+
+			previousLine = line;
 
 			sb.append(line);
 			sb.append("\n");
@@ -2487,7 +2624,8 @@ public class SourceFormatter {
 				return new String[] {previousLine + StringPool.SPACE + line};
 			}
 
-			if (previousLine.endsWith(StringPool.EQUAL) &&
+			if ((previousLine.endsWith(StringPool.EQUAL) ||
+				 trimmedPreviousLine.equals("return")) &&
 				line.endsWith(StringPool.SEMICOLON)) {
 
 				return new String[] {previousLine + StringPool.SPACE + line};
@@ -2497,6 +2635,15 @@ public class SourceFormatter {
 				 trimmedPreviousLine.startsWith("else ")) &&
 				(previousLine.endsWith("||") || previousLine.endsWith("&&")) &&
 				line.endsWith(StringPool.OPEN_CURLY_BRACE)) {
+
+				return new String[] {previousLine + StringPool.SPACE + line};
+			}
+
+			if ((line.startsWith("extends ") ||
+				 line.startsWith("implements ") ||
+				 line.startsWith("throws")) &&
+				line.endsWith(StringPool.OPEN_CURLY_BRACE) &&
+				(lineTabCount == (previousLineTabCount + 1))) {
 
 				return new String[] {previousLine + StringPool.SPACE + line};
 			}
@@ -2791,23 +2938,33 @@ public class SourceFormatter {
 					_getConstructorOrMethodName(line, pos),
 					_TYPE_METHOD_PROTECTED_STATIC);
 			}
+
+			if (line.startsWith(StringPool.TAB + "protected static class ")) {
+				return new Tuple(
+					_getClassName(line), _TYPE_CLASS_PROTECTED_STATIC);
+			}
 		}
 		else if (line.startsWith(StringPool.TAB + "protected ")) {
-			if ((pos != -1) && !line.contains(StringPool.EQUAL)) {
-				int spaceCount = StringUtil.count(
-					line.substring(0, pos), StringPool.SPACE);
+			if (pos != -1) {
+				if (!line.contains(StringPool.EQUAL)) {
+					int spaceCount = StringUtil.count(
+						line.substring(0, pos), StringPool.SPACE);
 
-				if (spaceCount == 1) {
-					return new Tuple(
-						_getConstructorOrMethodName(line, pos),
-						_TYPE_CONSTRUCTOR_PROTECTED);
-				}
+					if (spaceCount == 1) {
+						return new Tuple(
+							_getConstructorOrMethodName(line, pos),
+							_TYPE_CONSTRUCTOR_PROTECTED);
+					}
 
-				if (spaceCount > 1) {
-					return new Tuple(
-						_getConstructorOrMethodName(line, pos),
-						_TYPE_METHOD_PROTECTED);
+					if (spaceCount > 1) {
+						return new Tuple(
+							_getConstructorOrMethodName(line, pos),
+							_TYPE_METHOD_PROTECTED);
+					}
 				}
+			}
+			else if (line.startsWith(StringPool.TAB + "protected class ")) {
+				return new Tuple(_getClassName(line), _TYPE_CLASS_PROTECTED);
 			}
 
 			return new Tuple(_getVariableName(line), _TYPE_VARIABLE_PROTECTED);
@@ -3292,6 +3449,51 @@ public class SourceFormatter {
 		return newLine;
 	}
 
+	private static String _sortExceptions(String line) {
+		if (!line.endsWith(StringPool.OPEN_CURLY_BRACE) &&
+			!line.endsWith(StringPool.SEMICOLON)) {
+
+			return line;
+		}
+
+		int x = line.indexOf("throws ");
+
+		if (x == -1) {
+			return line;
+		}
+
+		String previousException = StringPool.BLANK;
+
+		String[] exceptions = StringUtil.split(
+			line.substring(x), CharPool.SPACE);
+
+		for (int i = 1; i < exceptions.length; i++) {
+			String exception = exceptions[i];
+
+			if (exception.equals(StringPool.OPEN_CURLY_BRACE)) {
+				break;
+			}
+
+			if (exception.endsWith(StringPool.COMMA) ||
+				exception.endsWith(StringPool.SEMICOLON)) {
+
+				exception = exception.substring(0, exception.length() - 1);
+			}
+
+			if (Validator.isNotNull(previousException) &&
+				(previousException.compareToIgnoreCase(exception) > 0)) {
+
+				return StringUtil.replace(
+					line, previousException + ", " + exception,
+					exception + ", " + previousException);
+			}
+
+			previousException = exception;
+		}
+
+		return line;
+	}
+
 	private static String _sortJSPAttributes(
 		String fileName, String line, int lineCount) {
 
@@ -3351,6 +3553,14 @@ public class SourceFormatter {
 			}
 
 			String value = s.substring(0, y);
+
+			if ((delimeter == CharPool.APOSTROPHE) &&
+				!value.contains(StringPool.QUOTE)) {
+
+				return StringUtil.replace(
+					line, StringPool.APOSTROPHE + value + StringPool.APOSTROPHE,
+					StringPool.QUOTE + value + StringPool.QUOTE);
+			}
 
 			if (value.contains("<%") && !value.contains("%>")) {
 				int z = s.indexOf("%>");
@@ -3474,6 +3684,28 @@ public class SourceFormatter {
 		return content;
 	}
 
+	private static String _stripRedundantParentheses(String s) {
+		for (int x = 0;;) {
+			x = s.indexOf(StringPool.OPEN_PARENTHESIS, x + 1);
+			int y = s.indexOf(StringPool.CLOSE_PARENTHESIS, x);
+
+			if ((x == -1) || (y == -1)) {
+				return s;
+			}
+
+			String linePart = s.substring(x + 1, y);
+
+			linePart = StringUtil.replace(
+				linePart, StringPool.COMMA, StringPool.BLANK);
+
+			if (Validator.isAlphanumericName(linePart) ||
+				Validator.isNull(linePart)) {
+
+				s = s.substring(0, x) + s.substring(y + 1);
+			}
+		}
+	}
+
 	private static String _stripQuotes(String s) {
 		String[] parts = StringUtil.split(s, CharPool.QUOTE);
 
@@ -3496,19 +3728,23 @@ public class SourceFormatter {
 		"tiles"
 	};
 
-	private static final int _TYPE_CLASS_PRIVATE = 22;
+	private static final int _TYPE_CLASS_PRIVATE = 24;
 
-	private static final int _TYPE_CLASS_PRIVATE_STATIC = 21;
+	private static final int _TYPE_CLASS_PRIVATE_STATIC = 23;
+
+	private static final int _TYPE_CLASS_PROTECTED = 16;
+
+	private static final int _TYPE_CLASS_PROTECTED_STATIC = 15;
 
 	private static final int _TYPE_CLASS_PUBLIC = 8;
 
 	private static final int _TYPE_CLASS_PUBLIC_STATIC = 7;
 
-	private static final int _TYPE_CONSTRUCTOR_PRIVATE = 16;
+	private static final int _TYPE_CONSTRUCTOR_PRIVATE = 18;
 
 	private static final int _TYPE_CONSTRUCTOR_PROTECTED = 10;
 
-	private static final int _TYPE_CONSTRUCTOR_PUBLIC = 5;
+	private static final int _TYPE_CONSTRUCTOR_PUBLIC = 4;
 
 	private static final int[] _TYPE_METHOD = {
 		SourceFormatter._TYPE_METHOD_PRIVATE,
@@ -3519,19 +3755,19 @@ public class SourceFormatter {
 		SourceFormatter._TYPE_METHOD_PUBLIC_STATIC
 	};
 
-	private static final int _TYPE_METHOD_PRIVATE = 17;
+	private static final int _TYPE_METHOD_PRIVATE = 19;
 
-	private static final int _TYPE_METHOD_PRIVATE_STATIC = 15;
+	private static final int _TYPE_METHOD_PRIVATE_STATIC = 17;
 
 	private static final int _TYPE_METHOD_PROTECTED = 11;
 
 	private static final int _TYPE_METHOD_PROTECTED_STATIC = 9;
 
-	private static final int _TYPE_METHOD_PUBLIC = 6;
+	private static final int _TYPE_METHOD_PUBLIC = 5;
 
-	private static final int _TYPE_METHOD_PUBLIC_STATIC = 4;
+	private static final int _TYPE_METHOD_PUBLIC_STATIC = 3;
 
-	private static final int[] _TYPE_VARIABLE_NOT_STATIC = {
+	private static final int[] _TYPE_VARIABLE_NOT_FINAL = {
 		SourceFormatter._TYPE_VARIABLE_PRIVATE,
 		SourceFormatter._TYPE_VARIABLE_PRIVATE_STATIC,
 		SourceFormatter._TYPE_VARIABLE_PROTECTED,
@@ -3540,11 +3776,11 @@ public class SourceFormatter {
 		SourceFormatter._TYPE_VARIABLE_PUBLIC_STATIC
 	};
 
-	private static final int _TYPE_VARIABLE_PRIVATE = 20;
+	private static final int _TYPE_VARIABLE_PRIVATE = 22;
 
-	private static final int _TYPE_VARIABLE_PRIVATE_STATIC = 19;
+	private static final int _TYPE_VARIABLE_PRIVATE_STATIC = 21;
 
-	private static final int _TYPE_VARIABLE_PRIVATE_STATIC_FINAL = 18;
+	private static final int _TYPE_VARIABLE_PRIVATE_STATIC_FINAL = 20;
 
 	private static final int _TYPE_VARIABLE_PROTECTED = 14;
 
@@ -3552,7 +3788,7 @@ public class SourceFormatter {
 
 	private static final int _TYPE_VARIABLE_PROTECTED_STATIC_FINAL = 12;
 
-	private static final int _TYPE_VARIABLE_PUBLIC = 3;
+	private static final int _TYPE_VARIABLE_PUBLIC = 6;
 
 	private static final int _TYPE_VARIABLE_PUBLIC_STATIC = 2;
 

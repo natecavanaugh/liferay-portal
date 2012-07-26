@@ -160,9 +160,7 @@ public class DBLoader {
 		}
 	}
 
-	private void _loadDerby(Connection con, String fileName)
-		throws Exception {
-
+	private void _loadDerby(Connection con, String fileName) throws Exception {
 		StringBundler sb = new StringBundler();
 
 		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(

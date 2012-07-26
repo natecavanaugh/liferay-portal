@@ -20,19 +20,23 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Localization;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PrefsParamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Tuple;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.language.LanguageResources;
 import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
@@ -81,6 +85,47 @@ public class LocalizationImpl implements Localization {
 		return StringUtil.split(attributeValue);
 	}
 
+	public Locale getDefaultImportLocale(
+		String className, long classPK, Locale contentDefaultLocale,
+		Locale[] contentAvailableLocales) {
+
+		Locale[] availableLocales = LanguageUtil.getAvailableLocales();
+
+		if (ArrayUtil.contains(availableLocales, contentDefaultLocale)) {
+			return contentDefaultLocale;
+		}
+
+		Locale defaultLocale = LocaleUtil.getDefault();
+
+		if (ArrayUtil.contains(contentAvailableLocales, defaultLocale)) {
+			return defaultLocale;
+		}
+
+		for (Locale contentAvailableLocale : contentAvailableLocales) {
+			if (ArrayUtil.contains(availableLocales, contentAvailableLocale)) {
+				return contentAvailableLocale;
+			}
+		}
+
+		if (_log.isWarnEnabled()) {
+			StringBundler sb = new StringBundler(9);
+
+			sb.append("Language ");
+			sb.append(LocaleUtil.toLanguageId(contentDefaultLocale));
+			sb.append(" is missing for ");
+			sb.append(className);
+			sb.append(" with primary key ");
+			sb.append(classPK);
+			sb.append(". Setting default language to ");
+			sb.append(LocaleUtil.toLanguageId(defaultLocale));
+			sb.append(".");
+
+			_log.warn(sb.toString());
+		}
+
+		return defaultLocale;
+	}
+
 	public String getDefaultLocale(String xml) {
 		String defaultLanguageId = LocaleUtil.toLanguageId(
 			LocaleUtil.getDefault());
@@ -111,8 +156,9 @@ public class LocalizationImpl implements Localization {
 
 		Locale requestedLocale = LocaleUtil.fromLanguageId(requestedLanguageId);
 
-		if (useDefault && LanguageUtil.isDuplicateLanguageCode(
-			requestedLocale.getLanguage())) {
+		if (useDefault &&
+			LanguageUtil.isDuplicateLanguageCode(
+				requestedLocale.getLanguage())) {
 
 			Locale priorityLocale = LanguageUtil.getLocale(
 				requestedLocale.getLanguage());
@@ -295,6 +341,40 @@ public class LocalizationImpl implements Localization {
 			String languageId = LocaleUtil.toLanguageId(locale);
 
 			map.put(locale, getLocalization(xml, languageId, false));
+		}
+
+		return map;
+	}
+
+	public Map<Locale, String> getLocalizationMap(
+		String bundleName, ClassLoader classLoader, String key) {
+
+		if (key == null) {
+			return null;
+		}
+
+		Map<Locale, String> map = new HashMap<Locale, String>();
+
+		Locale defaultLocale = LocaleUtil.getDefault();
+
+		String defaultValue = _getLocalization(
+			bundleName, defaultLocale, classLoader, key, key);
+
+		map.put(defaultLocale, defaultValue);
+
+		Locale[] locales = LanguageUtil.getAvailableLocales();
+
+		for (Locale locale : locales) {
+			if (locale.equals(defaultLocale)) {
+				continue;
+			}
+
+			String value = _getLocalization(
+				bundleName, locale, classLoader, key, null);
+
+			if (Validator.isNotNull(value) && !value.equals(defaultValue)) {
+				map.put(locale, value);
+			}
 		}
 
 		return map;
@@ -789,6 +869,35 @@ public class LocalizationImpl implements Localization {
 			Tuple subkey = new Tuple(useDefault, requestedLanguageId);
 
 			value = valueMap.get(subkey);
+		}
+
+		return value;
+	}
+
+	private String _getLocalization(
+		String bundleName, Locale locale, ClassLoader classLoader, String key,
+		String defaultValue) {
+
+		ResourceBundle resourceBundle = ResourceBundle.getBundle(
+			bundleName, locale, classLoader);
+
+		String value = null;
+
+		try {
+			value = resourceBundle.getString(key);
+
+			value = new String(
+				value.getBytes(StringPool.ISO_8859_1), StringPool.UTF8);
+		}
+
+		catch (Exception e) {
+		}
+
+		if (Validator.isNotNull(value)) {
+			value = LanguageResources.fixValue(value);
+		}
+		else {
+			value = LanguageUtil.get(locale, key, defaultValue);
 		}
 
 		return value;

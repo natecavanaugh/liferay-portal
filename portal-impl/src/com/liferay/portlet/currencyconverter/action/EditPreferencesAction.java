@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.currencyconverter.action;
 
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
@@ -67,9 +68,12 @@ public class EditPreferencesAction extends PortletAction {
 			return;
 		}
 
+		LiferayPortletConfig liferayPortletConfig =
+			(LiferayPortletConfig)portletConfig;
+
 		SessionMessages.add(
 			actionRequest,
-			portletConfig.getPortletName() +
+			liferayPortletConfig.getPortletId() +
 				SessionMessages.KEY_SUFFIX_UPDATED_PREFERENCES);
 	}
 

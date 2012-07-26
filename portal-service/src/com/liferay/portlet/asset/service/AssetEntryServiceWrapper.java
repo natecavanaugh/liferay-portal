@@ -60,13 +60,6 @@ public class AssetEntryServiceWrapper implements AssetEntryService,
 		return _assetEntryService.getCompanyEntriesCount(companyId);
 	}
 
-	public com.liferay.portlet.asset.model.AssetEntryDisplay[] getCompanyEntryDisplays(
-		long companyId, int start, int end, java.lang.String languageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _assetEntryService.getCompanyEntryDisplays(companyId, start,
-			end, languageId);
-	}
-
 	public java.util.List<com.liferay.portlet.asset.model.AssetEntry> getEntries(
 		com.liferay.portlet.asset.service.persistence.AssetEntryQuery entryQuery)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -92,22 +85,6 @@ public class AssetEntryServiceWrapper implements AssetEntryService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _assetEntryService.incrementViewCounter(className, classPK);
-	}
-
-	public com.liferay.portlet.asset.model.AssetEntryDisplay[] searchEntryDisplays(
-		long companyId, long[] groupIds, java.lang.String className,
-		java.lang.String keywords, java.lang.String languageId, int start,
-		int end) throws com.liferay.portal.kernel.exception.SystemException {
-		return _assetEntryService.searchEntryDisplays(companyId, groupIds,
-			className, keywords, languageId, start, end);
-	}
-
-	public int searchEntryDisplaysCount(long companyId, long[] groupIds,
-		java.lang.String className, java.lang.String keywords,
-		java.lang.String languageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _assetEntryService.searchEntryDisplaysCount(companyId, groupIds,
-			className, keywords, languageId);
 	}
 
 	public com.liferay.portlet.asset.model.AssetEntry updateEntry(

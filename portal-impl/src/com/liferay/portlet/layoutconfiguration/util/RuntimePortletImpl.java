@@ -353,9 +353,9 @@ public class RuntimePortletImpl implements RuntimePortlet {
 			String velocityTemplateContent, boolean processTemplate)
 		throws Exception {
 
-		 if (Validator.isNull(velocityTemplateContent)) {
-			 return null;
-		 }
+		if (Validator.isNull(velocityTemplateContent)) {
+			return null;
+		}
 
 		LayoutTemplate layoutTemplate = getLayoutTemplate(velocityTemplateId);
 

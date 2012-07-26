@@ -199,7 +199,7 @@ public class ScriptingImpl implements Scripting {
 		sb.append(getErrorMessage(e));
 		sb.append(StringPool.NEW_LINE);
 
-		try{
+		try {
 			LineNumberReader lineNumberReader = new LineNumberReader(
 				new UnsyncStringReader(script));
 

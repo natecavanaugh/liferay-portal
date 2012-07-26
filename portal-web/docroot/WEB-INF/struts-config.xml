@@ -161,11 +161,6 @@
 			<forward name="portlet.users_admin.error" path="portlet.directory.error" />
 		</action>
 
-		<action path="/admin_server/edit_site" type="com.liferay.portlet.sites.action.EditGroupAction">
-			<forward name="portlet.sites_admin.edit_site" path="portlet.sites_admin.edit_site" />
-			<forward name="portlet.sites_admin.error" path="portlet.sites_admin.error" />
-		</action>
-
 		<action path="/admin_server/edit_permissions" type="com.liferay.portal.convert.action.EditPermissionsAction">
 			<forward name="portlet.admin.edit_permissions" path="portlet.admin.edit_permissions" />
 			<forward name="portlet.admin.error" path="portlet.admin.error" />
@@ -179,6 +174,11 @@
 		<action path="/admin_server/edit_server" type="com.liferay.portlet.admin.action.EditServerAction">
 			<forward name="portlet.admin.edit_permissions" path="portlet.admin.edit_permissions" />
 			<forward name="portlet.admin.error" path="portlet.admin.error" />
+		</action>
+
+		<action path="/admin_server/edit_site" type="com.liferay.portlet.sites.action.EditGroupAction">
+			<forward name="portlet.sites_admin.edit_site" path="portlet.sites_admin.edit_site" />
+			<forward name="portlet.sites_admin.error" path="portlet.sites_admin.error" />
 		</action>
 
 		<action path="/admin_server/edit_user" type="com.liferay.portlet.usersadmin.action.EditUserAction">

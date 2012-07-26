@@ -81,7 +81,7 @@ public class LiferayInputStream extends ServletInputStreamWrapper {
 		Integer curPercent = (Integer)_session.getAttribute(
 			LiferayFileUpload.PERCENT);
 
-		if ((curPercent == null) || (percent - curPercent.intValue() >= 1)) {
+		if ((curPercent == null) || ((percent - curPercent.intValue()) >= 1)) {
 			_session.setAttribute(
 				LiferayFileUpload.PERCENT, new Integer(percent));
 		}

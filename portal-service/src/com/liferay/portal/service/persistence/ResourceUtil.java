@@ -242,10 +242,6 @@ public class ResourceUtil {
 	/**
 	* Returns the first resource in the ordered set where codeId = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param codeId the code ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching resource
@@ -261,11 +257,22 @@ public class ResourceUtil {
 	}
 
 	/**
-	* Returns the last resource in the ordered set where codeId = &#63;.
+	* Returns the first resource in the ordered set where codeId = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param codeId the code ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching resource, or <code>null</code> if a matching resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Resource fetchByCodeId_First(
+		long codeId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCodeId_First(codeId, orderByComparator);
+	}
+
+	/**
+	* Returns the last resource in the ordered set where codeId = &#63;.
 	*
 	* @param codeId the code ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -282,11 +289,22 @@ public class ResourceUtil {
 	}
 
 	/**
-	* Returns the resources before and after the current resource in the ordered set where codeId = &#63;.
+	* Returns the last resource in the ordered set where codeId = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param codeId the code ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching resource, or <code>null</code> if a matching resource could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Resource fetchByCodeId_Last(
+		long codeId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByCodeId_Last(codeId, orderByComparator);
+	}
+
+	/**
+	* Returns the resources before and after the current resource in the ordered set where codeId = &#63;.
 	*
 	* @param resourceId the primary key of the current resource
 	* @param codeId the code ID

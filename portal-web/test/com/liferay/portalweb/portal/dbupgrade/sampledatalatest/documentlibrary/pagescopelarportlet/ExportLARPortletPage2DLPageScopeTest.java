@@ -120,5 +120,6 @@ public class ExportLARPortletPage2DLPageScopeTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Export']",
 			RuntimeVariables.replace("Export"));
 		selenium.downloadTempFile("DL_Page_Scope.Page2.Portlet.lar");
+		Thread.sleep(15000);
 	}
 }

@@ -29,6 +29,9 @@ public class AddUser3Test extends BaseTestCase {
 			case 1:
 				selenium.open("/web/guest/home/");
 				loadRequiredJavaScriptModules();
+				assertEquals(RuntimeVariables.replace("Go to"),
+					selenium.getText("//li[@id='_145_mySites']/a/span"));
+				selenium.mouseOver("//li[@id='_145_mySites']/a/span");
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -54,7 +57,10 @@ public class AddUser3Test extends BaseTestCase {
 					RuntimeVariables.replace("Users and Organizations"));
 				selenium.waitForPageToLoad("30000");
 				loadRequiredJavaScriptModules();
-				selenium.clickAt("link=Add", RuntimeVariables.replace("Add"));
+				assertEquals(RuntimeVariables.replace("Add"),
+					selenium.getText("//span[@title='Add']/ul/li/strong/a/span"));
+				selenium.clickAt("//span[@title='Add']/ul/li/strong/a/span",
+					RuntimeVariables.replace("Add"));
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {

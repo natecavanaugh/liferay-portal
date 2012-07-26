@@ -47,7 +47,7 @@ page import="org.apache.log4j.Logger" %>
 <%
 boolean showShardSelector = false;
 
-if (PropsValues.SHARD_SELECTOR.equals(ManualShardSelector.class.getName()) && ShardUtil.getAvailableShardNames().length > 1) {
+if (PropsValues.SHARD_SELECTOR.equals(ManualShardSelector.class.getName()) && (ShardUtil.getAvailableShardNames().length > 1)) {
 	showShardSelector = true;
 }
 %>

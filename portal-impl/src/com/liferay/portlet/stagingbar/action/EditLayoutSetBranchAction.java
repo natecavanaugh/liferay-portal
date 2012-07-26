@@ -17,6 +17,7 @@ package com.liferay.portlet.stagingbar.action;
 import com.liferay.portal.LayoutSetBranchNameException;
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
@@ -75,9 +76,12 @@ public class EditLayoutSetBranchAction extends EditLayoutsAction {
 			}
 
 			if (SessionErrors.isEmpty(actionRequest)) {
+				LiferayPortletConfig liferayPortletConfig =
+					(LiferayPortletConfig)portletConfig;
+
 				SessionMessages.add(
 					actionRequest,
-					portletConfig.getPortletName() +
+					liferayPortletConfig.getPortletId() +
 						SessionMessages.KEY_SUFFIX_REFRESH_PORTLET,
 					PortletKeys.STAGING_BAR);
 
@@ -87,7 +91,7 @@ public class EditLayoutSetBranchAction extends EditLayoutsAction {
 
 				SessionMessages.add(
 					actionRequest,
-					portletConfig.getPortletName() +
+					liferayPortletConfig.getPortletId() +
 						SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA,
 					data);
 			}
@@ -161,9 +165,12 @@ public class EditLayoutSetBranchAction extends EditLayoutsAction {
 			actionRequest, "currentLayoutBranchId");
 
 		if (layoutSetBranchId == currentLayoutBranchId) {
+			LiferayPortletConfig liferayPortletConfig =
+				(LiferayPortletConfig)portletConfig;
+
 			SessionMessages.add(
 				actionRequest,
-				portletConfig.getPortletName() +
+				liferayPortletConfig.getPortletId() +
 					SessionMessages.KEY_SUFFIX_PORTLET_NOT_AJAXABLE);
 		}
 

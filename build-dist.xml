@@ -966,7 +966,8 @@ release was successful.</echo>
 				<![CDATA[
 					<paths>
 						<path name="com/sun/image/codec/jpeg" />
-						<path name="com/sun/org/apache" />
+						<path name="com/sun/org/apache/xml/internal/resolver" />
+						<path name="com/sun/org/apache/xml/internal/resolver/tools" />
 				]]>
 			</replacevalue>
 		</replace>
@@ -1315,6 +1316,21 @@ release was successful.</echo>
 		<replace file="${app.server.resin.dir}/conf/resin.properties">
 			<replacetoken><![CDATA[# jvm_args  : -Xmx2048m -XX:MaxPermSize=256m]]></replacetoken>
 			<replacevalue><![CDATA[jvm_args  : -Dfile.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -Duser.timezone=GMT -Xmx1024m -XX:MaxPermSize=256m]]></replacevalue>
+		</replace>
+
+		<replace file="${app.server.resin.dir}/conf/resin.xml">
+			<replacetoken><![CDATA[xmlns:resin="urn:java:com.caucho.resin">]]></replacetoken>
+			<replacevalue>
+				<![CDATA[
+					xmlns:resin="urn:java:com.caucho.resin">
+
+					<class-loader>
+						<tree-loader path="${resin.root}/ext-lib" />
+						<tree-loader path="${resin.root}/resin-inf" />
+						<tree-loader path="cloud:/resin-inf" />
+					</class-loader>
+				 ]]>
+				</replacevalue>
 		</replace>
 
 		<copy

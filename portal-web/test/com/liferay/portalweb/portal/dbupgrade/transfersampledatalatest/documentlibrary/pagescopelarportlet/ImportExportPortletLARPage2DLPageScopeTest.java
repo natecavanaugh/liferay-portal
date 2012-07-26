@@ -46,6 +46,7 @@ public class ImportExportPortletLARPage2DLPageScopeTest extends BaseTestCase {
 			RuntimeVariables.replace("DL Page2 Name"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
+		Thread.sleep(5000);
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {

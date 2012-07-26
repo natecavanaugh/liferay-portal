@@ -23,6 +23,7 @@ String cssClasses = ParamUtil.getString(request, "cssClasses");
 String languageId = ParamUtil.getString(request, "languageId");
 long wikiPageResourcePrimKey = ParamUtil.getLong(request, "wikiPageResourcePrimKey");
 String attachmentURLPrefix = ParamUtil.getString(request, "attachmentURLPrefix");
+boolean resizable = ParamUtil.getBoolean(request, "resizable");
 
 String linkButtonBar = "['Link', 'Unlink']";
 
@@ -31,7 +32,21 @@ if (wikiPageResourcePrimKey > 0) {
 }
 %>
 
+CKEDITOR.config.attachmentURLPrefix = '<%= HtmlUtil.escapeJS(attachmentURLPrefix) %>';
+
+CKEDITOR.config.bodyClass = 'html-editor <%= HtmlUtil.escapeJS(cssClasses) %>';
+
+CKEDITOR.config.decodeLinks = true;
+
+CKEDITOR.config.disableObjectResizing = true;
+
+CKEDITOR.config.extraPlugins = 'creole,wikilink';
+
+CKEDITOR.config.format_tags = 'p;h1;h2;h3;h4;h5;h6;pre';
+
 CKEDITOR.config.height = 265;
+
+CKEDITOR.config.language = '<%= HtmlUtil.escapeJS(languageId) %>';
 
 CKEDITOR.config.removePlugins = [
 	'elementspath',
@@ -63,6 +78,8 @@ CKEDITOR.config.removePlugins = [
 	'wsc'
 ].join();
 
+CKEDITOR.config.resize_enabled = '<%= resizable %>';
+
 CKEDITOR.config.toolbar_creole = [
 	['Cut','Copy','Paste','PasteText','PasteFromWord'],
 	['Undo','Redo'],
@@ -73,15 +90,3 @@ CKEDITOR.config.toolbar_creole = [
 	['Find','Replace','-','SelectAll','RemoveFormat'],
 	['Source']
 ];
-
-CKEDITOR.config.attachmentURLPrefix = '<%= HtmlUtil.escapeJS(attachmentURLPrefix) %>';
-
-CKEDITOR.config.bodyClass = 'html-editor <%= HtmlUtil.escapeJS(cssClasses) %>';
-
-CKEDITOR.config.decodeLinks = true;
-
-CKEDITOR.config.extraPlugins = 'creole,wikilink';
-
-CKEDITOR.config.format_tags = 'p;h1;h2;h3;h4;h5;h6;pre';
-
-CKEDITOR.config.language = '<%= HtmlUtil.escapeJS(languageId) %>';

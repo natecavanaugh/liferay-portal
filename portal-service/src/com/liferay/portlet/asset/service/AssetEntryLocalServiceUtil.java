@@ -322,13 +322,6 @@ public class AssetEntryLocalServiceUtil {
 		return getService().getCompanyEntriesCount(companyId);
 	}
 
-	public static com.liferay.portlet.asset.model.AssetEntryDisplay[] getCompanyEntryDisplays(
-		long companyId, int start, int end, java.lang.String languageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getCompanyEntryDisplays(companyId, start, end, languageId);
-	}
-
 	public static java.util.List<com.liferay.portlet.asset.model.AssetEntry> getEntries(
 		com.liferay.portlet.asset.service.persistence.AssetEntryQuery entryQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -435,24 +428,6 @@ public class AssetEntryLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .search(companyId, groupIds, className, keywords, start, end);
-	}
-
-	public static com.liferay.portlet.asset.model.AssetEntryDisplay[] searchEntryDisplays(
-		long companyId, long[] groupIds, java.lang.String className,
-		java.lang.String keywords, java.lang.String languageId, int start,
-		int end) throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .searchEntryDisplays(companyId, groupIds, className,
-			keywords, languageId, start, end);
-	}
-
-	public static int searchEntryDisplaysCount(long companyId, long[] groupIds,
-		java.lang.String className, java.lang.String keywords,
-		java.lang.String languageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .searchEntryDisplaysCount(companyId, groupIds, className,
-			keywords, languageId);
 	}
 
 	public static com.liferay.portlet.asset.model.AssetEntry updateEntry(

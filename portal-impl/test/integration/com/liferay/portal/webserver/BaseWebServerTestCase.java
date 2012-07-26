@@ -17,6 +17,7 @@ package com.liferay.portal.webserver;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.User;
 import com.liferay.portal.util.TestPropsValues;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.documentlibrary.service.BaseDLAppTestCase;
@@ -24,7 +25,7 @@ import com.liferay.portlet.documentlibrary.service.BaseDLAppTestCase;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServlet;
+import javax.servlet.Servlet;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -36,38 +37,43 @@ public abstract class BaseWebServerTestCase extends BaseDLAppTestCase {
 
 	public MockHttpServletResponse service(
 			String method, String path, Map<String, String> headers,
-			byte[] data)
+			Map<String, String> params, User user, byte[] data)
 		throws Exception {
-
-		MockHttpServletResponse response = new MockHttpServletResponse();
-
-		response.setCharacterEncoding(StringPool.UTF8);
 
 		if (headers == null) {
 			headers = new HashMap<String, String>();
 		}
 
+		if (params == null) {
+			params = new HashMap<String, String>();
+		}
+
+		if (user == null) {
+			user = TestPropsValues.getUser();
+		}
+
 		String requestURI =
 			_CONTEXT_PATH + _SERVLET_PATH + _PATH_INFO_PREFACE + path;
 
-		MockHttpServletRequest request = new MockHttpServletRequest(
-			method, requestURI);
+		MockHttpServletRequest mockHttpServletRequest =
+			new MockHttpServletRequest(method, requestURI);
 
-		request.setAttribute(WebKeys.USER, TestPropsValues.getUser());
-		request.setContextPath(_CONTEXT_PATH);
-		request.setServletPath(_SERVLET_PATH);
-		request.setPathInfo(_PATH_INFO_PREFACE + path);
+		mockHttpServletRequest.setAttribute(WebKeys.USER, user);
+		mockHttpServletRequest.setContextPath(_CONTEXT_PATH);
+		mockHttpServletRequest.setParameters(params);
+		mockHttpServletRequest.setPathInfo(_PATH_INFO_PREFACE + path);
+		mockHttpServletRequest.setServletPath(_SERVLET_PATH);
 
 		if (data != null) {
-			request.setContent(data);
+			mockHttpServletRequest.setContent(data);
 
 			String contentType = headers.remove(HttpHeaders.CONTENT_TYPE);
 
 			if (contentType != null) {
-				request.setContentType(contentType);
+				mockHttpServletRequest.setContentType(contentType);
 			}
 			else {
-				request.setContentType(ContentTypes.TEXT_PLAIN);
+				mockHttpServletRequest.setContentType(ContentTypes.TEXT_PLAIN);
 			}
 		}
 
@@ -75,15 +81,22 @@ public abstract class BaseWebServerTestCase extends BaseDLAppTestCase {
 			String key = entry.getKey();
 			String value = entry.getValue();
 
-			request.addHeader(key, value);
+			mockHttpServletRequest.addHeader(key, value);
 		}
 
-		getServlet().service(request, response);
+		MockHttpServletResponse mockHttpServletResponse =
+			new MockHttpServletResponse();
 
-		return response;
+		mockHttpServletResponse.setCharacterEncoding(StringPool.UTF8);
+
+		Servlet httpServlet = getServlet();
+
+		httpServlet.service(mockHttpServletRequest, mockHttpServletResponse);
+
+		return mockHttpServletResponse;
 	}
 
-	protected HttpServlet getServlet() {
+	protected Servlet getServlet() {
 		return new WebServerServlet();
 	}
 

@@ -100,6 +100,25 @@ public class ConfigurePage1PortletDLScopeDefaultTest extends BaseTestCase {
 			}
 
 			try {
+				if (selenium.isVisible(
+							"//iframe[@id='_20_configurationIframeDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_20_configurationIframeDialog']");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
 				if (selenium.isVisible("link=Scope")) {
 					break;
 				}
@@ -143,6 +162,7 @@ public class ConfigurePage1PortletDLScopeDefaultTest extends BaseTestCase {
 			selenium.getText("//div[@class='portlet-msg-success']"));
 		assertEquals("Default",
 			selenium.getSelectedLabel("//select[@id='_86_scopeType']"));
+		selenium.selectFrame("relative=top");
 		selenium.open("/web/document-library-page-scope-community/");
 		loadRequiredJavaScriptModules();
 

@@ -273,7 +273,7 @@ public class PortalUtil {
 
 	public static String getCanonicalURL(
 			String completeURL, ThemeDisplay themeDisplay, Layout layout)
-		throws PortalException, SystemException{
+		throws PortalException, SystemException {
 
 		return getPortal().getCanonicalURL(completeURL, themeDisplay, layout);
 	}
@@ -411,6 +411,25 @@ public class PortalUtil {
 	}
 
 	public static Date getDate(
+			int month, int day, int year,
+			Class<? extends PortalException> clazz)
+		throws PortalException {
+
+		return getPortal().getDate(month, day, year, clazz);
+	}
+
+	public static Date getDate(
+			int month, int day, int year, int hour, int min,
+			Class<? extends PortalException> clazz)
+		throws PortalException {
+
+		return getPortal().getDate(month, day, year, hour, min, clazz);
+	}
+
+	/**
+	 * @deprecated {@link #getDate(int, int, int, int, int, Class)}
+	 */
+	public static Date getDate(
 			int month, int day, int year, int hour, int min, PortalException pe)
 		throws PortalException {
 
@@ -419,18 +438,44 @@ public class PortalUtil {
 
 	public static Date getDate(
 			int month, int day, int year, int hour, int min, TimeZone timeZone,
+			Class<? extends PortalException> clazz)
+		throws PortalException {
+
+		return getPortal().getDate(
+			month, day, year, hour, min, timeZone, clazz);
+	}
+
+	/**
+	 * @deprecated {@link #getDate(int, int, int, int, int, TimeZone, Class)}
+	 */
+	public static Date getDate(
+			int month, int day, int year, int hour, int min, TimeZone timeZone,
 			PortalException pe)
 		throws PortalException {
 
 		return getPortal().getDate(month, day, year, hour, min, timeZone, pe);
 	}
 
+	/**
+	 * @deprecated {@link #getDate(int, int, int, Class)}
+	 */
 	public static Date getDate(int month, int day, int year, PortalException pe)
 		throws PortalException {
 
 		return getPortal().getDate(month, day, year, pe);
 	}
 
+	public static Date getDate(
+			int month, int day, int year, TimeZone timeZone,
+			Class<? extends PortalException> clazz)
+		throws PortalException {
+
+		return getPortal().getDate(month, day, year, timeZone, clazz);
+	}
+
+	/**
+	 * @deprecated {@link #getDate(int, int, int, TimeZone, Class)}
+	 */
 	public static Date getDate(
 			int month, int day, int year, TimeZone timeZone, PortalException pe)
 		throws PortalException {
@@ -491,7 +536,7 @@ public class PortalUtil {
 	public static Serializable getExpandoValue(
 			PortletRequest portletRequest, String name, int type,
 			String displayType)
-		throws PortalException, SystemException{
+		throws PortalException, SystemException {
 
 		return getPortal().getExpandoValue(
 			portletRequest, name, type, displayType);

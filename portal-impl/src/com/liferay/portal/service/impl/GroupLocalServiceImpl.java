@@ -943,6 +943,9 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		if (group.isCompany()) {
 			name = LanguageUtil.get(locale, "global");
 		}
+		else if (group.isControlPanel()) {
+			name = LanguageUtil.get(locale, "control-panel");
+		}
 		else if (group.isLayout()) {
 			Layout layout = layoutLocalService.getLayout(group.getClassPK());
 
@@ -2302,8 +2305,9 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 				name, StringPool.PERCENT, StringPool.BLANK);
 
 			if (companyName.indexOf(name) != -1) {
-				realName = StringPool.PERCENT + GroupConstants.GUEST +
-					StringPool.PERCENT;
+				realName =
+					StringPool.PERCENT + GroupConstants.GUEST +
+						StringPool.PERCENT;
 			}
 		}
 		catch (PortalException pe) {

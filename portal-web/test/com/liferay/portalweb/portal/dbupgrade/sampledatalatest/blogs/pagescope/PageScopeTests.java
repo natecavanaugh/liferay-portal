@@ -50,8 +50,12 @@ public class PageScopeTests extends BaseTestSuite {
 		testSuite.addTestSuite(RatePage2BlogsEntry2Comment2Test.class);
 		testSuite.addTestSuite(AddPage2BlogsEntry3Test.class);
 		testSuite.addTestSuite(AddPage2BlogsEntry4Test.class);
-		testSuite.addTestSuite(ConfigurePortlet2MaximumItemsToDisplay1Test.class);
-		testSuite.addTestSuite(PermissionsPage2BlogsEntry4GuestViewOffTest.class);
+		testSuite.addTestSuite(AddPage2BlogsEntry5Test.class);
+		testSuite.addTestSuite(AddPage2BlogsEntry6Test.class);
+		testSuite.addTestSuite(AddPage2BlogsEntry7Test.class);
+		testSuite.addTestSuite(AddPage2BlogsEntry8Test.class);
+		testSuite.addTestSuite(ConfigurePortlet2MaximumItemsToDisplay5Test.class);
+		testSuite.addTestSuite(PermissionsPage2BlogsEntry8GuestViewOffTest.class);
 		testSuite.addTestSuite(ViewPage1BlogsEntry1Test.class);
 		testSuite.addTestSuite(ViewPage1BlogsEntry1Comment1Test.class);
 		testSuite.addTestSuite(ViewPage1BlogsEntry1Comment2Test.class);
@@ -66,13 +70,13 @@ public class PageScopeTests extends BaseTestSuite {
 		testSuite.addTestSuite(ViewRatePage2BlogsEntry2Comment2Test.class);
 		testSuite.addTestSuite(ViewPage2BlogsEntry3Test.class);
 		testSuite.addTestSuite(ViewPage2BlogsEntry4Test.class);
-		testSuite.addTestSuite(ViewConfigurePortlet2MaximumItemsToDisplay1Test.class);
+		testSuite.addTestSuite(ViewConfigurePortlet2MaximumItemsToDisplay5Test.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(Guest_ViewPage1BlogsEntry1Test.class);
 		testSuite.addTestSuite(Guest_ViewPage2BlogsEntry2Test.class);
 		testSuite.addTestSuite(Guest_ViewPage2BlogsEntry3Test.class);
-		testSuite.addTestSuite(Guest_ViewPage2BlogsEntry4Test.class);
-		testSuite.addTestSuite(Guest_ViewConfigurePortlet2MaximumItemsToDisplay1Test.class);
+		testSuite.addTestSuite(Guest_ViewPage2BlogsEntry8Test.class);
+		testSuite.addTestSuite(Guest_ViewConfigurePortlet2MaximumItemsToDisplay5Test.class);
 		testSuite.addTestSuite(SignInTest.class);
 
 		return testSuite;

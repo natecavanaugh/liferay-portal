@@ -93,8 +93,8 @@ public class DefinePermissionsRoleViewPortletPortalOffTest extends BaseTestCase 
 			RuntimeVariables.replace("Documents and Media"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		assertEquals(RuntimeVariables.replace("Document Library"),
-			selenium.getText("//h3"));
+		assertEquals(RuntimeVariables.replace("Documents and Media"),
+			selenium.getText("//h3[.='Documents and Media']"));
 		assertFalse(selenium.isChecked(
 				"//input[@value='com.liferay.portlet.documentlibraryVIEW']"));
 		selenium.clickAt("//input[@value='Save']",
