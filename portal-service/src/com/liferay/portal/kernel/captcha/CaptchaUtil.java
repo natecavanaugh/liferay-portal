@@ -58,7 +58,7 @@ public class CaptchaUtil {
 	}
 
 	public static boolean isEnabled(PortletRequest portletRequest)
-		throws CaptchaException{
+		throws CaptchaException {
 
 		return getCaptcha().isEnabled(portletRequest);
 	}

@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.deploy.hot.HotDeployListener;
 import com.liferay.portal.kernel.freemarker.FreeMarkerEngineUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -99,10 +100,19 @@ public class HotDeployImpl implements HotDeploy {
 	public synchronized void fireUndeployEvent(HotDeployEvent hotDeployEvent) {
 		for (HotDeployListener hotDeployListener : _hotDeployListeners) {
 			try {
+				PortletClassLoaderUtil.setClassLoader(
+					hotDeployEvent.getContextClassLoader());
+				PortletClassLoaderUtil.setServletContextName(
+					hotDeployEvent.getServletContextName());
+
 				hotDeployListener.invokeUndeploy(hotDeployEvent);
 			}
 			catch (HotDeployException hde) {
 				_log.error(hde, hde);
+			}
+			finally {
+				PortletClassLoaderUtil.setClassLoader(null);
+				PortletClassLoaderUtil.setServletContextName(null);
 			}
 		}
 
@@ -170,10 +180,19 @@ public class HotDeployImpl implements HotDeploy {
 
 			for (HotDeployListener hotDeployListener : _hotDeployListeners) {
 				try {
+					PortletClassLoaderUtil.setClassLoader(
+						hotDeployEvent.getContextClassLoader());
+					PortletClassLoaderUtil.setServletContextName(
+						hotDeployEvent.getServletContextName());
+
 					hotDeployListener.invokeDeploy(hotDeployEvent);
 				}
 				catch (HotDeployException hde) {
 					_log.error(hde, hde);
+				}
+				finally {
+					PortletClassLoaderUtil.setClassLoader(null);
+					PortletClassLoaderUtil.setServletContextName(null);
 				}
 			}
 

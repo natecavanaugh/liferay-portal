@@ -354,7 +354,6 @@ else if (tabs2.equals("page-updated-email")) {
 				}
 
 				rightList = ListUtil.sort(rightList, new KeyValuePairComparator(false, true));
-
 				%>
 
 				<liferay-ui:input-move-boxes

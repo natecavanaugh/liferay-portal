@@ -611,17 +611,6 @@ public class GroupModelImpl extends BaseModelImpl<Group> implements GroupModel {
 	}
 
 	@Override
-	public Group toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Group)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
 			Group.class.getName(), getPrimaryKey());
@@ -632,6 +621,17 @@ public class GroupModelImpl extends BaseModelImpl<Group> implements GroupModel {
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public Group toEscapedModel() {
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (Group)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModelProxy;
 	}
 
 	@Override

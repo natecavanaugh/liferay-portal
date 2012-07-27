@@ -289,6 +289,10 @@ public interface ResourceBlockLocalService extends BaseLocalService,
 	*
 	* @param companyId the primary key of the resource block's company
 	* @param groupId the primary key of the resource block's group
+	* @param name the resource block's name
+	* @param permissionsHash the resource block's permission hash
+	* @param resourceBlockPermissionsContainer the resource block's
+	permissions container
 	* @return the new resource block
 	* @throws SystemException if a system exception occurred
 	*/
@@ -333,18 +337,6 @@ public interface ResourceBlockLocalService extends BaseLocalService,
 		com.liferay.portal.model.ResourceBlock resourceBlock, long roleId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	/**
-	* Returns the permissions hash of the resource permissions. The permissions
-	* hash is a representation of all the roles with access to the resource
-	* along with the actions they can perform.
-	*
-	* @param resourceBlockPermissionsContainer the resource block permissions
-	* @return the permissions hash of the resource permissions
-	*/
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.lang.String getPermissionsHash(
-		com.liferay.portal.model.ResourceBlockPermissionsContainer resourceBlockPermissionsContainer);
-
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.model.ResourceBlock getResourceBlock(
 		java.lang.String name, long primKey)
@@ -381,8 +373,7 @@ public interface ResourceBlockLocalService extends BaseLocalService,
 
 	public void releasePermissionedModelResourceBlock(
 		com.liferay.portal.model.PermissionedModel permissionedModel)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public void releasePermissionedModelResourceBlock(java.lang.String name,
 		long primKey)
@@ -398,8 +389,7 @@ public interface ResourceBlockLocalService extends BaseLocalService,
 	* @throws SystemException if a system exception occurred
 	*/
 	public void releaseResourceBlock(long resourceBlockId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Decrements the reference count of the resource block and updates it in
@@ -462,28 +452,6 @@ public interface ResourceBlockLocalService extends BaseLocalService,
 		java.lang.String name,
 		com.liferay.portal.model.PermissionedModel permissionedModel,
 		long roleId, long actionIdsLong)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Increments the reference count of the resource block and updates it in
-	* the database.
-	*
-	* @param resourceBlockId the primary key of the resource block
-	* @throws SystemException if a system exception occurred
-	*/
-	public void retainResourceBlock(long resourceBlockId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Increments the reference count of the resource block and updates it in
-	* the database.
-	*
-	* @param resourceBlock the resource block
-	* @throws SystemException if a system exception occurred
-	*/
-	public void retainResourceBlock(
-		com.liferay.portal.model.ResourceBlock resourceBlock)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public void setCompanyScopePermissions(long companyId,

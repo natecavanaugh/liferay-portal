@@ -15,6 +15,7 @@
 package com.liferay.portlet.portletconfiguration.action;
 
 import com.liferay.portal.NoSuchLayoutException;
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
@@ -84,18 +85,21 @@ public class EditScopeAction extends EditConfigurationAction {
 		}
 
 		if (SessionErrors.isEmpty(actionRequest)) {
+			LiferayPortletConfig liferayPortletConfig =
+				(LiferayPortletConfig)portletConfig;
+
 			String portletResource = ParamUtil.getString(
 				actionRequest, "portletResource");
 
 			SessionMessages.add(
 				actionRequest,
-				portletConfig.getPortletName() +
+				liferayPortletConfig.getPortletId() +
 					SessionMessages.KEY_SUFFIX_REFRESH_PORTLET,
 				portletResource);
 
 			SessionMessages.add(
 				actionRequest,
-				portletConfig.getPortletName() +
+				liferayPortletConfig.getPortletId() +
 					SessionMessages.KEY_SUFFIX_UPDATED_CONFIGURATION);
 
 			String redirect = PortalUtil.escapeRedirect(
@@ -131,9 +135,7 @@ public class EditScopeAction extends EditConfigurationAction {
 			renderRequest, "portlet.portlet_configuration.edit_scope"));
 	}
 
-	protected Tuple getNewScope(ActionRequest actionRequest)
-		throws Exception {
-
+	protected Tuple getNewScope(ActionRequest actionRequest) throws Exception {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 

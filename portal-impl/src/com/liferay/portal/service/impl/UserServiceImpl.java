@@ -996,6 +996,24 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 	}
 
 	/**
+	 * Removes the users from the teams of a group.
+	 *
+	 * @param  groupId the primary key of the group
+	 * @param  userIds the primary keys of the users
+	 * @throws PortalException if the current user did not have permission to
+	 *         modify user group assignments
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void unsetGroupTeamsUsers(long groupId, long[] userIds)
+		throws PortalException, SystemException {
+
+		UserGroupPermissionUtil.check(
+			getPermissionChecker(), groupId, ActionKeys.ASSIGN_MEMBERS);
+
+		userLocalService.unsetGroupTeamsUsers(groupId, userIds);
+	}
+
+	/**
 	 * Removes the users from the group.
 	 *
 	 * @param  groupId the primary key of the group
@@ -1992,40 +2010,16 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			return;
 		}
 
-		List<Organization> organizations =
-			organizationLocalService.getUserOrganizations(
-				permissionChecker.getUserId());
-
 		for (long userId : userIds) {
 			boolean allowed = false;
 
+			List<Organization> organizations =
+				organizationLocalService.getUserOrganizations(userId);
+
 			for (Organization organization : organizations) {
-				boolean manageUsers = OrganizationPermissionUtil.contains(
-					permissionChecker, organization, ActionKeys.MANAGE_USERS);
-				boolean manageSuborganizations =
-					OrganizationPermissionUtil.contains(
+				if (OrganizationPermissionUtil.contains(
 						permissionChecker, organization,
-						ActionKeys.MANAGE_SUBORGANIZATIONS);
-
-				if (!manageUsers && !manageSuborganizations) {
-					continue;
-				}
-
-				boolean inherited = false;
-				boolean includeSpecifiedOrganization = false;
-
-				if (manageUsers && manageSuborganizations) {
-					inherited = true;
-					includeSpecifiedOrganization = true;
-				}
-				else if (!manageUsers && manageSuborganizations) {
-					inherited = true;
-					includeSpecifiedOrganization = false;
-				}
-
-				if (organizationLocalService.hasUserOrganization(
-						userId, organization.getOrganizationId(), inherited,
-						includeSpecifiedOrganization)) {
+						ActionKeys.MANAGE_USERS)) {
 
 					allowed = true;
 

@@ -539,6 +539,8 @@ public interface PropsKeys {
 
 	public static final String DL_FILE_ENTRY_DRAFTS_ENABLED = "dl.file.entry.drafts.enabled";
 
+	public static final String DL_FILE_ENTRY_LOCK_POLICY = "dl.file.entry.lock.policy";
+
 	public static final String DL_FILE_ENTRY_PREVIEW_AUDIO = "dl.file.entry.preview.audio.";
 
 	public static final String DL_FILE_ENTRY_PREVIEW_AUDIO_BIT_RATE = "dl.file.entry.preview.audio.bit.rate";
@@ -1259,6 +1261,8 @@ public interface PropsKeys {
 
 	public static final String LOCALES_BETA = "locales.beta";
 
+	public static final String LOCK_LISTENERS = "lock.listeners";
+
 	public static final String LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD = "login.create.account.allow.custom.password";
 
 	public static final String LOGIN_EMAIL_FROM_ADDRESS = "login.email.from.address";
@@ -1544,8 +1548,6 @@ public interface PropsKeys {
 	public static final String OPENOFFICE_SERVER_HOST = "openoffice.server.host";
 
 	public static final String OPENOFFICE_SERVER_PORT = "openoffice.server.port";
-
-	public static final String ORGANIZATIONS_ASSIGNMENT_AUTO = "organizations.assignment.auto";
 
 	public static final String ORGANIZATIONS_ASSIGNMENT_STRICT = "organizations.assignment.strict";
 
@@ -2011,6 +2013,8 @@ public interface PropsKeys {
 
 	public static final String STRIP_IGNORE_PATHS = "strip.ignore.paths";
 
+	public static final String STRIP_JS_LANGUAGE_ATTRIBUTE_SUPPORT_ENABLED = "strip.js.language.attribute.support.enabled";
+
 	public static final String STRUTS_PORTLET_REQUEST_PROCESSOR = "struts.portlet.request.processor";
 
 	public static final String SYSTEM_GROUPS = "system.groups";
@@ -2300,5 +2304,17 @@ public interface PropsKeys {
 	public static final String YM_LOGIN = "ym.login";
 
 	public static final String YM_PASSWORD = "ym.password";
+
+	public static final String YUI_COMPRESSOR_CSS_LINE_BREAK = "yui.compressor.css.line.break";
+
+	public static final String YUI_COMPRESSOR_JS_DISABLE_OPTIMIZATIONS = "yui.compressor.js.disable.optimizations";
+
+	public static final String YUI_COMPRESSOR_JS_LINE_BREAK = "yui.compressor.js.line.break";
+
+	public static final String YUI_COMPRESSOR_JS_MUNGE = "yui.compressor.js.munge";
+
+	public static final String YUI_COMPRESSOR_JS_PRESERVE_ALL_SEMICOLONS = "yui.compressor.js.preserve.all.semicolons";
+
+	public static final String YUI_COMPRESSOR_JS_VERBOSE = "yui.compressor.js.verbose";
 
 }

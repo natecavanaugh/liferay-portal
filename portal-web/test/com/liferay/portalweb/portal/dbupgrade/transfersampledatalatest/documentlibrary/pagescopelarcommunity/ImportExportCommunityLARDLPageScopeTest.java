@@ -94,6 +94,24 @@ public class ImportExportCommunityLARDLPageScopeTest extends BaseTestCase {
 			}
 
 			try {
+				if (selenium.isVisible("//iframe[@id='_156_importDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_156_importDialog']");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
 				if (selenium.isVisible("//input[@id='_156_importFileName']")) {
 					break;
 				}
@@ -152,5 +170,6 @@ public class ImportExportCommunityLARDLPageScopeTest extends BaseTestCase {
 		assertEquals(RuntimeVariables.replace(
 				"Your request completed successfully."),
 			selenium.getText("//div[@class='portlet-msg-success']"));
+		selenium.selectFrame("relative=top");
 	}
 }

@@ -125,15 +125,18 @@ public class DefaultConfigurationAction
 		if (SessionErrors.isEmpty(actionRequest)) {
 			portletPreferences.store();
 
+			LiferayPortletConfig liferayPortletConfig =
+				(LiferayPortletConfig)portletConfig;
+
 			SessionMessages.add(
 				actionRequest,
-				portletConfig.getPortletName() +
+				liferayPortletConfig.getPortletId() +
 					SessionMessages.KEY_SUFFIX_REFRESH_PORTLET,
 				portletResource);
 
 			SessionMessages.add(
 				actionRequest,
-				portletConfig.getPortletName() +
+				liferayPortletConfig.getPortletId() +
 					SessionMessages.KEY_SUFFIX_UPDATED_CONFIGURATION);
 		}
 	}

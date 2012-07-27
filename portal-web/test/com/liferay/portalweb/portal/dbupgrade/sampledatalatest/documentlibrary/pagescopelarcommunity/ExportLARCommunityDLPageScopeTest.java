@@ -94,6 +94,24 @@ public class ExportLARCommunityDLPageScopeTest extends BaseTestCase {
 			}
 
 			try {
+				if (selenium.isVisible("//iframe[@id='_156_exportDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_156_exportDialog']");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
 				if (selenium.isVisible("//input[@id='_156_exportFileName']")) {
 					break;
 				}
@@ -139,5 +157,7 @@ public class ExportLARCommunityDLPageScopeTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Export']",
 			RuntimeVariables.replace("Export"));
 		selenium.downloadTempFile("DL_Page_Scope.Community.lar");
+		selenium.selectFrame("relative=top");
+		Thread.sleep(15000);
 	}
 }

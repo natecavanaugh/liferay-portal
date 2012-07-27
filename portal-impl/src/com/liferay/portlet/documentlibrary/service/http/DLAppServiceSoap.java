@@ -1921,6 +1921,10 @@ public class DLAppServiceSoap {
 		}
 	}
 
+	/**
+	* @deprecated Use {@link #checkInFileEntry(long, boolean, String,
+	ServiceContext)}.
+	*/
 	public static void unlockFileEntry(long fileEntryId)
 		throws RemoteException {
 		try {
@@ -1933,6 +1937,9 @@ public class DLAppServiceSoap {
 		}
 	}
 
+	/**
+	* @deprecated Use {@link #checkInFileEntry(long, String)}.
+	*/
 	public static void unlockFileEntry(long fileEntryId,
 		java.lang.String lockUuid) throws RemoteException {
 		try {
@@ -2088,15 +2095,15 @@ public class DLAppServiceSoap {
 	* @param serviceContext the service context to be applied. In a Liferay
 	repository, it may include:  <ul> <li> defaultFileEntryTypeId -
 	the file entry type to default all Liferay file entries to </li>
-	<li> fileEntryTypeSearchContainerPrimaryKeys - a comma-delimited
-	list of file entry type primary keys allowed in the given folder
-	and all descendants </li> <li> overrideFileEntryTypes - boolean
-	specifying whether to override ancestral folder's restriction of
-	file entry types allowed </li> <li> workflowDefinitionXYZ - the
-	workflow definition name specified per file entry type. The
-	parameter name must be the string <code>workflowDefinition</code>
-	appended by the <code>fileEntryTypeId</code> (optionally
-	<code>0</code>). </li> </ul>
+	<li> dlFileEntryTypesSearchContainerPrimaryKeys - a
+	comma-delimited list of file entry type primary keys allowed in
+	the given folder and all descendants </li> <li>
+	overrideFileEntryTypes - boolean specifying whether to override
+	ancestral folder's restriction of file entry types allowed </li>
+	<li> workflowDefinitionXYZ - the workflow definition name
+	specified per file entry type. The parameter name must be the
+	string <code>workflowDefinition</code> appended by the <code>
+	fileEntryTypeId</code> (optionally <code>0</code>). </li> </ul>
 	* @return the folder
 	* @throws PortalException if the current or new parent folder could not be
 	found or if the new parent folder's information was invalid

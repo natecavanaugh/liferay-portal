@@ -87,6 +87,7 @@ import com.liferay.portal.model.PasswordPolicy;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
+import com.liferay.portal.model.Team;
 import com.liferay.portal.model.Ticket;
 import com.liferay.portal.model.TicketConstants;
 import com.liferay.portal.model.User;
@@ -332,7 +333,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 * @throws PortalException if a user with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	@SuppressWarnings("deprecation")
 	public void addDefaultUserGroups(long userId)
 		throws PortalException, SystemException {
 
@@ -361,12 +361,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		long[] userGroupIds = ArrayUtil.toArray(
 			userGroupIdSet.toArray(new Long[userGroupIdSet.size()]));
-
-		if (PropsValues.USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE) {
-			for (long userGroupId : userGroupIds) {
-				userGroupLocalService.copyUserGroupLayouts(userGroupId, userId);
-			}
-		}
 
 		userPersistence.addUserGroups(userId, userGroupIds);
 	}
@@ -557,13 +551,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 *         could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	@SuppressWarnings("deprecation")
 	public void addUserGroupUsers(long userGroupId, long[] userIds)
 		throws PortalException, SystemException {
-
-		if (PropsValues.USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE) {
-			userGroupLocalService.copyUserGroupLayouts(userGroupId, userIds);
-		}
 
 		userGroupPersistence.addUsers(userGroupId, userIds);
 
@@ -622,7 +611,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 * @throws PortalException if the user's information was invalid
 	 * @throws SystemException if a system exception occurred
 	 */
-	@SuppressWarnings("deprecation")
 	public User addUserWithWorkflow(
 			long creatorUserId, long companyId, boolean autoPassword,
 			String password1, String password2, boolean autoScreenName,
@@ -747,6 +735,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		user.setLastName(lastName);
 		user.setJobTitle(jobTitle);
 		user.setStatus(WorkflowConstants.STATUS_DRAFT);
+		user.setExpandoBridgeAttributes(serviceContext);
 
 		userPersistence.update(user, false, serviceContext);
 
@@ -776,7 +765,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		Date birthday = PortalUtil.getDate(
 			birthdayMonth, birthdayDay, birthdayYear,
-			new ContactBirthdayException());
+			ContactBirthdayException.class);
 
 		Contact contact = contactPersistence.create(user.getContactId());
 
@@ -829,13 +818,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		// User groups
 
 		if (userGroupIds != null) {
-			if (PropsValues.USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE) {
-				for (long userGroupId : userGroupIds) {
-					userGroupLocalService.copyUserGroupLayouts(
-						userGroupId, new long[] {userId});
-				}
-			}
-
 			userPersistence.setUserGroups(userId, userGroupIds);
 		}
 
@@ -847,12 +829,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			updateAsset(
 				creatorUserId, user, serviceContext.getAssetCategoryIds(),
 				serviceContext.getAssetTagNames());
-		}
-
-		// Expando
-
-		if (serviceContext != null) {
-			user.setExpandoBridgeAttributes(serviceContext);
 		}
 
 		// Indexer
@@ -3435,19 +3411,34 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 * @throws PortalException if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
-	@SuppressWarnings("deprecation")
 	public void setUserGroupUsers(long userGroupId, long[] userIds)
 		throws PortalException, SystemException {
-
-		if (PropsValues.USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE) {
-			userGroupLocalService.copyUserGroupLayouts(userGroupId, userIds);
-		}
 
 		userGroupPersistence.setUsers(userGroupId, userIds);
 
 		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(User.class);
 
 		indexer.reindex(userIds);
+
+		PermissionCacheUtil.clearCache();
+	}
+
+	/**
+	 * Removes the users from the teams of a group.
+	 *
+	 * @param  groupId the primary key of the group
+	 * @param  userIds the primary keys of the users
+	 * @throws PortalException if a portal exception occurred
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void unsetGroupTeamsUsers(long groupId, long[] userIds)
+		throws PortalException, SystemException {
+
+		List<Team> teams = teamPersistence.findByGroupId(groupId);
+
+		for (Team team : teams) {
+			unsetTeamUsers(team.getTeamId(), userIds);
+		}
 
 		PermissionCacheUtil.clearCache();
 	}
@@ -3465,6 +3456,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		userGroupRoleLocalService.deleteUserGroupRoles(userIds, groupId);
+
+		userLocalService.unsetGroupTeamsUsers(groupId, userIds);
 
 		groupPersistence.removeUsers(groupId, userIds);
 
@@ -3947,10 +3940,11 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			user.setMiddleName(middleName);
 			user.setLastName(lastName);
 			user.setJobTitle(jobTitle);
+			user.setExpandoBridgeAttributes(serviceContext);
 
 			Date birthday = PortalUtil.getDate(
 				birthdayMonth, birthdayDay, birthdayYear,
-				new ContactBirthdayException());
+				ContactBirthdayException.class);
 
 			Contact contact = user.getContact();
 
@@ -3964,10 +3958,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			contact.setJobTitle(jobTitle);
 
 			contactPersistence.update(contact, false, serviceContext);
-
-			// Expando
-
-			user.setExpandoBridgeAttributes(serviceContext);
 
 			// Indexer
 
@@ -4584,7 +4574,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 *         or if the new information was invalid
 	 * @throws SystemException if a system exception occurred
 	 */
-	@SuppressWarnings("deprecation")
 	public User updateUser(
 			long userId, String oldPassword, String newPassword1,
 			String newPassword2, boolean passwordReset,
@@ -4701,6 +4690,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		user.setMiddleName(middleName);
 		user.setLastName(lastName);
 		user.setJobTitle(jobTitle);
+		user.setExpandoBridgeAttributes(serviceContext);
 
 		userPersistence.update(user, false, serviceContext);
 
@@ -4708,7 +4698,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		Date birthday = PortalUtil.getDate(
 			birthdayMonth, birthdayDay, birthdayYear,
-			new ContactBirthdayException());
+			ContactBirthdayException.class);
 
 		long contactId = user.getContactId();
 
@@ -4776,11 +4766,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		// User groups
 
 		if (userGroupIds != null) {
-			if (PropsValues.USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE) {
-				userGroupLocalService.copyUserGroupLayouts(
-					userGroupIds, userId);
-			}
-
 			userPersistence.setUserGroups(userId, userGroupIds);
 		}
 
@@ -4794,12 +4779,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			updateAsset(
 				userId, user, serviceContext.getAssetCategoryIds(),
 				serviceContext.getAssetTagNames());
-		}
-
-		// Expando
-
-		if (serviceContext != null) {
-			user.setExpandoBridgeAttributes(serviceContext);
 		}
 
 		// Message boards

@@ -77,7 +77,7 @@ if (selUser != null) {
 	%>
 
 	<c:choose>
-		<c:when test="<%= PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED && ((selUser == null) || (publicLayoutSetPrototype == null)) && !layoutSetPrototypes.isEmpty() %>">
+		<c:when test="<%= PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED && ((selUser == null) || ((publicLayoutSetPrototype == null) && (selUser.getPublicLayoutsPageCount() == 0))) && !layoutSetPrototypes.isEmpty() %>">
 			<aui:select label="public-pages" name="publicLayoutSetPrototypeId">
 				<aui:option label='<%= selUser == null ? "default" : "none" %>' selected="<%= true %>" value="" />
 

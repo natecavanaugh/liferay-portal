@@ -630,10 +630,6 @@ public class OrgGroupPermissionPersistenceImpl extends BasePersistenceImpl<OrgGr
 	/**
 	 * Returns the first org group permission in the ordered set where groupId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching org group permission
@@ -643,32 +639,47 @@ public class OrgGroupPermissionPersistenceImpl extends BasePersistenceImpl<OrgGr
 	public OrgGroupPermission findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchOrgGroupPermissionException, SystemException {
+		OrgGroupPermission orgGroupPermission = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (orgGroupPermission != null) {
+			return orgGroupPermission;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrgGroupPermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first org group permission in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching org group permission, or <code>null</code> if a matching org group permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupPermission fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<OrgGroupPermission> list = findByGroupId(groupId, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchOrgGroupPermissionException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last org group permission in the ordered set where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -679,34 +690,49 @@ public class OrgGroupPermissionPersistenceImpl extends BasePersistenceImpl<OrgGr
 	public OrgGroupPermission findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchOrgGroupPermissionException, SystemException {
+		OrgGroupPermission orgGroupPermission = fetchByGroupId_Last(groupId,
+				orderByComparator);
+
+		if (orgGroupPermission != null) {
+			return orgGroupPermission;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrgGroupPermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last org group permission in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching org group permission, or <code>null</code> if a matching org group permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupPermission fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
 
 		List<OrgGroupPermission> list = findByGroupId(groupId, count - 1,
 				count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchOrgGroupPermissionException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the org group permissions before and after the current org group permission in the ordered set where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param orgGroupPermissionPK the primary key of the current org group permission
 	 * @param groupId the group ID
@@ -985,10 +1011,6 @@ public class OrgGroupPermissionPersistenceImpl extends BasePersistenceImpl<OrgGr
 	/**
 	 * Returns the first org group permission in the ordered set where permissionId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param permissionId the permission ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching org group permission
@@ -998,32 +1020,47 @@ public class OrgGroupPermissionPersistenceImpl extends BasePersistenceImpl<OrgGr
 	public OrgGroupPermission findByPermissionId_First(long permissionId,
 		OrderByComparator orderByComparator)
 		throws NoSuchOrgGroupPermissionException, SystemException {
+		OrgGroupPermission orgGroupPermission = fetchByPermissionId_First(permissionId,
+				orderByComparator);
+
+		if (orgGroupPermission != null) {
+			return orgGroupPermission;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("permissionId=");
+		msg.append(permissionId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrgGroupPermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first org group permission in the ordered set where permissionId = &#63;.
+	 *
+	 * @param permissionId the permission ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching org group permission, or <code>null</code> if a matching org group permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupPermission fetchByPermissionId_First(long permissionId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<OrgGroupPermission> list = findByPermissionId(permissionId, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("permissionId=");
-			msg.append(permissionId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchOrgGroupPermissionException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last org group permission in the ordered set where permissionId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param permissionId the permission ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1034,34 +1071,49 @@ public class OrgGroupPermissionPersistenceImpl extends BasePersistenceImpl<OrgGr
 	public OrgGroupPermission findByPermissionId_Last(long permissionId,
 		OrderByComparator orderByComparator)
 		throws NoSuchOrgGroupPermissionException, SystemException {
+		OrgGroupPermission orgGroupPermission = fetchByPermissionId_Last(permissionId,
+				orderByComparator);
+
+		if (orgGroupPermission != null) {
+			return orgGroupPermission;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("permissionId=");
+		msg.append(permissionId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchOrgGroupPermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last org group permission in the ordered set where permissionId = &#63;.
+	 *
+	 * @param permissionId the permission ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching org group permission, or <code>null</code> if a matching org group permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public OrgGroupPermission fetchByPermissionId_Last(long permissionId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByPermissionId(permissionId);
 
 		List<OrgGroupPermission> list = findByPermissionId(permissionId,
 				count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("permissionId=");
-			msg.append(permissionId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchOrgGroupPermissionException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the org group permissions before and after the current org group permission in the ordered set where permissionId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param orgGroupPermissionPK the primary key of the current org group permission
 	 * @param permissionId the permission ID

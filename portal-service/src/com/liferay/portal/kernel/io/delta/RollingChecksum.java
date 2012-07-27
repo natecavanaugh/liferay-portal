@@ -29,7 +29,7 @@ public class RollingChecksum {
 
 	public RollingChecksum(
 			ReadableByteChannel readableByteChannel, int blockLength)
-	 	throws IOException {
+		throws IOException {
 
 		_blockLength = blockLength;
 		_byteChannelReader = new ByteChannelReader(
@@ -72,6 +72,7 @@ public class RollingChecksum {
 
 		generateWeakChecksum();
 	}
+
 	public void nextByte() throws IOException {
 		int blockLength = currentBlockLength();
 		int x = _byteChannelReader.get();

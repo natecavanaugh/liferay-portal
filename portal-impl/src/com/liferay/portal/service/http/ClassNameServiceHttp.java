@@ -52,49 +52,12 @@ import com.liferay.portal.service.ClassNameServiceUtil;
  * @generated
  */
 public class ClassNameServiceHttp {
-	public static com.liferay.portal.model.ClassName getClassName(
-		HttpPrincipal httpPrincipal, long classNameId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		try {
-			MethodKey methodKey = new MethodKey(ClassNameServiceUtil.class.getName(),
-					"getClassName", _getClassNameParameterTypes0);
-
-			MethodHandler methodHandler = new MethodHandler(methodKey,
-					classNameId);
-
-			Object returnObj = null;
-
-			try {
-				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
-			}
-			catch (Exception e) {
-				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
-					throw (com.liferay.portal.kernel.exception.PortalException)e;
-				}
-
-				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
-					throw (com.liferay.portal.kernel.exception.SystemException)e;
-				}
-
-				throw new com.liferay.portal.kernel.exception.SystemException(e);
-			}
-
-			return (com.liferay.portal.model.ClassName)returnObj;
-		}
-		catch (com.liferay.portal.kernel.exception.SystemException se) {
-			_log.error(se, se);
-
-			throw se;
-		}
-	}
-
-	public static com.liferay.portal.model.ClassName getClassName(
+	public static com.liferay.portal.model.ClassName fetchClassName(
 		HttpPrincipal httpPrincipal, java.lang.String value)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(ClassNameServiceUtil.class.getName(),
-					"getClassName", _getClassNameParameterTypes1);
+					"fetchClassName", _fetchClassNameParameterTypes0);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, value);
 
@@ -120,12 +83,12 @@ public class ClassNameServiceHttp {
 		}
 	}
 
-	public static long getClassNameId(HttpPrincipal httpPrincipal,
+	public static long fetchClassNameId(HttpPrincipal httpPrincipal,
 		java.lang.Class<?> clazz)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(ClassNameServiceUtil.class.getName(),
-					"getClassNameId", _getClassNameIdParameterTypes2);
+					"fetchClassNameId", _fetchClassNameIdParameterTypes1);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, clazz);
 
@@ -147,12 +110,12 @@ public class ClassNameServiceHttp {
 		}
 	}
 
-	public static long getClassNameId(HttpPrincipal httpPrincipal,
+	public static long fetchClassNameId(HttpPrincipal httpPrincipal,
 		java.lang.String value)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(ClassNameServiceUtil.class.getName(),
-					"getClassNameId", _getClassNameIdParameterTypes3);
+					"fetchClassNameId", _fetchClassNameIdParameterTypes2);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, value);
 
@@ -175,16 +138,13 @@ public class ClassNameServiceHttp {
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ClassNameServiceHttp.class);
-	private static final Class<?>[] _getClassNameParameterTypes0 = new Class[] {
-			long.class
-		};
-	private static final Class<?>[] _getClassNameParameterTypes1 = new Class[] {
+	private static final Class<?>[] _fetchClassNameParameterTypes0 = new Class[] {
 			java.lang.String.class
 		};
-	private static final Class<?>[] _getClassNameIdParameterTypes2 = new Class[] {
+	private static final Class<?>[] _fetchClassNameIdParameterTypes1 = new Class[] {
 			java.lang.Class.class
 		};
-	private static final Class<?>[] _getClassNameIdParameterTypes3 = new Class[] {
+	private static final Class<?>[] _fetchClassNameIdParameterTypes2 = new Class[] {
 			java.lang.String.class
 		};
 }

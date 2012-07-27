@@ -913,10 +913,6 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	/**
 	 * Returns the first d d m template in the ordered set where uuid = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching d d m template
@@ -926,31 +922,45 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByUuid_First(uuid, orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d m template in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMTemplate> list = findByUuid(uuid, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d m template in the ordered set where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -961,34 +971,48 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d m template in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
 
 		List<DDMTemplate> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d m templates before and after the current d d m template in the ordered set where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param templateId the primary key of the current d d m template
 	 * @param uuid the uuid
@@ -1433,10 +1457,6 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	/**
 	 * Returns the first d d m template in the ordered set where groupId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching d d m template
@@ -1446,31 +1466,46 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByGroupId_First(groupId,
+				orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d m template in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMTemplate> list = findByGroupId(groupId, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d m template in the ordered set where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1481,34 +1516,48 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByGroupId_Last(groupId, orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d m template in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
 
 		List<DDMTemplate> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d m templates before and after the current d d m template in the ordered set where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param templateId the primary key of the current d d m template
 	 * @param groupId the group ID
@@ -2075,10 +2124,6 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	/**
 	 * Returns the first d d m template in the ordered set where structureId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param structureId the structure ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching d d m template
@@ -2088,32 +2133,47 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByStructureId_First(long structureId,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByStructureId_First(structureId,
+				orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d m template in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByStructureId_First(long structureId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMTemplate> list = findByStructureId(structureId, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("structureId=");
-			msg.append(structureId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d m template in the ordered set where structureId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param structureId the structure ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2124,34 +2184,49 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByStructureId_Last(long structureId,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByStructureId_Last(structureId,
+				orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d m template in the ordered set where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByStructureId_Last(long structureId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByStructureId(structureId);
 
 		List<DDMTemplate> list = findByStructureId(structureId, count - 1,
 				count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("structureId=");
-			msg.append(structureId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d m templates before and after the current d d m template in the ordered set where structureId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param templateId the primary key of the current d d m template
 	 * @param structureId the structure ID
@@ -2434,10 +2509,6 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	/**
 	 * Returns the first d d m template in the ordered set where type = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param type the type
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching d d m template
@@ -2447,31 +2518,45 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByType_First(String type,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByType_First(type, orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d m template in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByType_First(String type,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMTemplate> list = findByType(type, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d m template in the ordered set where type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param type the type
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2482,34 +2567,48 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByType_Last(String type,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByType_Last(type, orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d m template in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByType_Last(String type,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByType(type);
 
 		List<DDMTemplate> list = findByType(type, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d m templates before and after the current d d m template in the ordered set where type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param templateId the primary key of the current d d m template
 	 * @param type the type
@@ -2806,10 +2905,6 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	/**
 	 * Returns the first d d m template in the ordered set where language = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param language the language
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching d d m template
@@ -2819,32 +2914,47 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByLanguage_First(String language,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByLanguage_First(language,
+				orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("language=");
+		msg.append(language);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d m template in the ordered set where language = &#63;.
+	 *
+	 * @param language the language
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByLanguage_First(String language,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMTemplate> list = findByLanguage(language, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("language=");
-			msg.append(language);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d m template in the ordered set where language = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param language the language
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2855,34 +2965,49 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByLanguage_Last(String language,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByLanguage_Last(language,
+				orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("language=");
+		msg.append(language);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d m template in the ordered set where language = &#63;.
+	 *
+	 * @param language the language
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByLanguage_Last(String language,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByLanguage(language);
 
 		List<DDMTemplate> list = findByLanguage(language, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("language=");
-			msg.append(language);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d m templates before and after the current d d m template in the ordered set where language = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param templateId the primary key of the current d d m template
 	 * @param language the language
@@ -3192,10 +3317,6 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	/**
 	 * Returns the first d d m template in the ordered set where structureId = &#63; and type = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param structureId the structure ID
 	 * @param type the type
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -3206,35 +3327,51 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByS_T_First(long structureId, String type,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByS_T_First(structureId, type,
+				orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d m template in the ordered set where structureId = &#63; and type = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByS_T_First(long structureId, String type,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<DDMTemplate> list = findByS_T(structureId, type, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("structureId=");
-			msg.append(structureId);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d m template in the ordered set where structureId = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param structureId the structure ID
 	 * @param type the type
@@ -3246,37 +3383,53 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByS_T_Last(long structureId, String type,
 		OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByS_T_Last(structureId, type,
+				orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d m template in the ordered set where structureId = &#63; and type = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByS_T_Last(long structureId, String type,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByS_T(structureId, type);
 
 		List<DDMTemplate> list = findByS_T(structureId, type, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("structureId=");
-			msg.append(structureId);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d m templates before and after the current d d m template in the ordered set where structureId = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param templateId the primary key of the current d d m template
 	 * @param structureId the structure ID
@@ -3611,10 +3764,6 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	/**
 	 * Returns the first d d m template in the ordered set where structureId = &#63; and type = &#63; and mode = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param structureId the structure ID
 	 * @param type the type
 	 * @param mode the mode
@@ -3626,38 +3775,56 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByS_T_M_First(long structureId, String type,
 		String mode, OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByS_T_M_First(structureId, type, mode,
+				orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", mode=");
+		msg.append(mode);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d m template in the ordered set where structureId = &#63; and type = &#63; and mode = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param type the type
+	 * @param mode the mode
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByS_T_M_First(long structureId, String type,
+		String mode, OrderByComparator orderByComparator)
+		throws SystemException {
 		List<DDMTemplate> list = findByS_T_M(structureId, type, mode, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("structureId=");
-			msg.append(structureId);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(", mode=");
-			msg.append(mode);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d m template in the ordered set where structureId = &#63; and type = &#63; and mode = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param structureId the structure ID
 	 * @param type the type
@@ -3670,40 +3837,58 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	public DDMTemplate findByS_T_M_Last(long structureId, String type,
 		String mode, OrderByComparator orderByComparator)
 		throws NoSuchTemplateException, SystemException {
+		DDMTemplate ddmTemplate = fetchByS_T_M_Last(structureId, type, mode,
+				orderByComparator);
+
+		if (ddmTemplate != null) {
+			return ddmTemplate;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("structureId=");
+		msg.append(structureId);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(", mode=");
+		msg.append(mode);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTemplateException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d m template in the ordered set where structureId = &#63; and type = &#63; and mode = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @param type the type
+	 * @param mode the mode
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d m template, or <code>null</code> if a matching d d m template could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMTemplate fetchByS_T_M_Last(long structureId, String type,
+		String mode, OrderByComparator orderByComparator)
+		throws SystemException {
 		int count = countByS_T_M(structureId, type, mode);
 
 		List<DDMTemplate> list = findByS_T_M(structureId, type, mode,
 				count - 1, count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("structureId=");
-			msg.append(structureId);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(", mode=");
-			msg.append(mode);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchTemplateException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d m templates before and after the current d d m template in the ordered set where structureId = &#63; and type = &#63; and mode = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param templateId the primary key of the current d d m template
 	 * @param structureId the structure ID

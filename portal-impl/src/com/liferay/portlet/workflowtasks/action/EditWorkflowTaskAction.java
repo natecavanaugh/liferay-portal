@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.workflowtasks.action;
 
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
@@ -71,9 +72,12 @@ public class EditWorkflowTaskAction extends PortletAction {
 				actionRequest, "closeRedirect");
 
 			if (Validator.isNotNull(closeRedirect)) {
+				LiferayPortletConfig liferayPortletConfig =
+					(LiferayPortletConfig)portletConfig;
+
 				SessionMessages.add(
 					actionRequest,
-					portletConfig.getPortletName() +
+					liferayPortletConfig.getPortletId() +
 						SessionMessages.KEY_SUFFIX_CLOSE_REDIRECT,
 					closeRedirect);
 			}
@@ -182,7 +186,7 @@ public class EditWorkflowTaskAction extends PortletAction {
 
 		Date dueDate = PortalUtil.getDate(
 			dueDateMonth, dueDateDay, dueDateYear, dueDateHour, dueDateMinute,
-			new WorkflowTaskDueDateException());
+			WorkflowTaskDueDateException.class);
 
 		WorkflowTaskManagerUtil.updateDueDate(
 			themeDisplay.getCompanyId(), themeDisplay.getUserId(),

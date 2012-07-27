@@ -24,6 +24,7 @@ Liferay.Portlet.ready(
 
 Liferay.on(
 	'allPortletsReady',
+
 	/*
 	This function gets loaded when everything, including the portlets, is on
 	the page.

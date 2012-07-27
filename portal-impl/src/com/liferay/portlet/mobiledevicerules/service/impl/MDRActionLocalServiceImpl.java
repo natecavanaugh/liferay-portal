@@ -108,9 +108,7 @@ public class MDRActionLocalServiceImpl extends MDRActionLocalServiceBaseImpl {
 		}
 	}
 
-	public void deleteActions(long ruleGroupInstanceId)
-		throws SystemException {
-
+	public void deleteActions(long ruleGroupInstanceId) throws SystemException {
 		List<MDRAction> actions =
 			mdrActionPersistence.findByRuleGroupInstanceId(ruleGroupInstanceId);
 

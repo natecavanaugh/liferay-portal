@@ -243,6 +243,11 @@ public class PermissionLocalServiceImpl extends PermissionLocalServiceBaseImpl {
 	public void checkPermissions(String name, List<String> actionIds)
 		throws PortalException, SystemException {
 
+		List<String> groupDefaultActions =
+			ResourceActionsUtil.getModelResourceGroupDefaultActions(name);
+		List<String> guestDefaultActions =
+			ResourceActionsUtil.getModelResourceGuestDefaultActions(name);
+
 		List<Company> companies = companyPersistence.findAll();
 
 		for (Company company : companies) {
@@ -255,12 +260,58 @@ public class PermissionLocalServiceImpl extends PermissionLocalServiceBaseImpl {
 				continue;
 			}
 
+			Role guestRole = rolePersistence.fetchByC_N(
+				companyId, RoleConstants.GUEST);
+			Role ownerRole = rolePersistence.fetchByC_N(
+				companyId, RoleConstants.OWNER);
+			Role siteMemberRole = rolePersistence.fetchByC_N(
+				companyId, RoleConstants.SITE_MEMBER);
+
 			for (String actionId : actionIds) {
 				List<Resource> resources = resourceFinder.findByNoActions(
 					resourceCode.getCodeId(), actionId);
 
+				List<Permission> permissions = new ArrayList<Permission>(
+					resources.size());
+
 				for (Resource resource : resources) {
-					checkPermission(resource, actionId);
+					long permissionId = counterLocalService.increment(
+						Permission.class.getName());
+
+					Permission permission = permissionPersistence.create(
+						permissionId);
+
+					permission.setCompanyId(companyId);
+					permission.setActionId(actionId);
+					permission.setResourceId(resource.getResourceId());
+
+					permissionPersistence.update(permission, false);
+
+					permissions.add(permission);
+				}
+
+				if ((guestRole != null) &&
+					guestDefaultActions.contains(actionId)) {
+
+					rolePersistence.addPermissions(
+						guestRole.getRoleId(), permissions);
+				}
+
+				if (ownerRole != null) {
+					rolePersistence.addPermissions(
+						ownerRole.getRoleId(), permissions);
+				}
+
+				if ((siteMemberRole != null) &&
+					groupDefaultActions.contains(actionId)) {
+
+					rolePersistence.addPermissions(
+						siteMemberRole.getRoleId(), permissions);
+				}
+
+				for (Resource resource : resources) {
+					SearchEngineUtil.updatePermissionFields(
+						resource.getResourceId());
 				}
 			}
 		}
@@ -1227,16 +1278,6 @@ public class PermissionLocalServiceImpl extends PermissionLocalServiceBaseImpl {
 		PermissionCacheUtil.clearCache();
 	}
 
-	protected void addRolePermissions(String roleName, Permission permission)
-		throws SystemException {
-
-		List<Role> roles = rolePersistence.findByName(roleName);
-
-		for (Role role : roles) {
-			rolePersistence.addPermission(role.getRoleId(), permission);
-		}
-	}
-
 	protected boolean checkOrgGroupPermission(
 			List<Organization> organizations, List<Group> groups,
 			List<Permission> permissions)
@@ -1288,41 +1329,6 @@ public class PermissionLocalServiceImpl extends PermissionLocalServiceBaseImpl {
 
 		throw new NoSuchPermissionException(
 			"User has a permission in OrgGroupPermission that does not match");
-	}
-
-	protected void checkPermission(Resource resource, String actionId)
-		throws PortalException, SystemException {
-
-		long permissionId = counterLocalService.increment(
-			Permission.class.getName());
-
-		Permission permission = permissionPersistence.create(permissionId);
-
-		permission.setCompanyId(resource.getCompanyId());
-		permission.setActionId(actionId);
-		permission.setResourceId(resource.getResourceId());
-
-		permissionPersistence.update(permission, false);
-
-		List<String> groupDefaultActions =
-			ResourceActionsUtil.getModelResourceGroupDefaultActions(
-				resource.getName());
-
-		if (groupDefaultActions.contains(actionId)) {
-			addRolePermissions(RoleConstants.SITE_MEMBER, permission);
-		}
-
-		List<String> guestDefaultActions =
-			ResourceActionsUtil.getModelResourceGuestDefaultActions(
-				resource.getName());
-
-		if (guestDefaultActions.contains(actionId)) {
-			addRolePermissions(RoleConstants.GUEST, permission);
-		}
-
-		addRolePermissions(RoleConstants.OWNER, permission);
-
-		SearchEngineUtil.updatePermissionFields(resource.getResourceId());
 	}
 
 	protected boolean hasUserPermissions_1(

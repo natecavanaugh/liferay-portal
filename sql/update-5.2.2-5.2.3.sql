@@ -81,6 +81,10 @@ create table ResourcePermission (
 	actionIds LONG
 );
 
+COMMIT_TRANSACTION;
+
+create unique index IX_8D83D0CE on ResourcePermission (companyId, name, scope, primKey, roleId);
+
 create table Shard (
 	shardId LONG not null primary key,
 	classNameId LONG,

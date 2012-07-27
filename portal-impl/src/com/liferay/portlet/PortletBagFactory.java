@@ -546,9 +546,8 @@ public class PortletBagFactory {
 			(AssetRendererFactory)newInstance(
 				AssetRendererFactory.class, assetRendererFactoryClass);
 
-		assetRendererFactoryInstance.setClassNameId(
-			PortalUtil.getClassNameId(
-				assetRendererFactoryInstance.getClassName()));
+		assetRendererFactoryInstance.setClassName(
+			assetRendererFactoryInstance.getClassName());
 		assetRendererFactoryInstance.setPortletId(portlet.getPortletId());
 
 		AssetRendererFactoryRegistryUtil.register(assetRendererFactoryInstance);

@@ -24,6 +24,9 @@ public class AddUser3AddressTest extends BaseTestCase {
 	public void testAddUser3Address() throws Exception {
 		selenium.open("/web/guest/home/");
 		loadRequiredJavaScriptModules();
+		assertEquals(RuntimeVariables.replace("Go to"),
+			selenium.getText("//li[@id='_145_mySites']/a/span"));
+		selenium.mouseOver("//li[@id='_145_mySites']/a/span");
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -79,6 +82,23 @@ public class AddUser3AddressTest extends BaseTestCase {
 				"Addresses"));
 		selenium.clickAt("//a[@id='_125_addressesLink']",
 			RuntimeVariables.replace("Addresses"));
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
+				if (selenium.isVisible("//input[@id='_125_addressStreet1_0']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
 		selenium.type("//input[@id='_125_addressStreet1_0']",
 			RuntimeVariables.replace("9012 Server Boulevard"));
 		selenium.select("//select[@id='_125_addressCountryId0']",

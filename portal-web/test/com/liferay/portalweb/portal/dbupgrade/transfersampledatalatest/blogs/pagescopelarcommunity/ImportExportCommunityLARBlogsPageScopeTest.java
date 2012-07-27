@@ -55,6 +55,7 @@ public class ImportExportCommunityLARBlogsPageScopeTest extends BaseTestCase {
 			RuntimeVariables.replace("Search"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
+		Thread.sleep(5000);
 		assertEquals(RuntimeVariables.replace("Actions"),
 			selenium.getText("//span[@title='Actions']/ul/li/strong/a/span"));
 		selenium.clickAt("//span[@title='Actions']/ul/li/strong/a/span",
@@ -87,6 +88,24 @@ public class ImportExportCommunityLARBlogsPageScopeTest extends BaseTestCase {
 		assertEquals(RuntimeVariables.replace("Import"),
 			selenium.getText("//button[3]"));
 		selenium.clickAt("//button[3]", RuntimeVariables.replace("Import"));
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
+				if (selenium.isVisible("//iframe[@id='_156_importDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_156_importDialog']");
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -152,5 +171,6 @@ public class ImportExportCommunityLARBlogsPageScopeTest extends BaseTestCase {
 		assertEquals(RuntimeVariables.replace(
 				"Your request completed successfully."),
 			selenium.getText("//div[@class='portlet-msg-success']"));
+		selenium.selectFrame("relative=top");
 	}
 }

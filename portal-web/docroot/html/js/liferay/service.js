@@ -14,8 +14,8 @@ Liferay.Service.registerClass(
 Liferay.Service.registerClass(
 	Liferay.Service.Portal, "ClassName",
 	{
-		getClassName: true,
-		getClassNameId: true
+		fetchClassName: true,
+		fetchClassNameId: true
 	}
 );
 
@@ -434,6 +434,7 @@ Liferay.Service.registerClass(
 		hasRoleUser: true,
 		setRoleUsers: true,
 		setUserGroupUsers: true,
+		unsetGroupTeamsUsers: true,
 		unsetGroupUsers: true,
 		unsetOrganizationUsers: true,
 		unsetPasswordPolicyUsers: true,
@@ -561,13 +562,10 @@ Liferay.Service.registerClass(
 	{
 		getCompanyEntries: true,
 		getCompanyEntriesCount: true,
-		getCompanyEntryDisplays: true,
 		getEntries: true,
 		getEntriesCount: true,
 		getEntry: true,
 		incrementViewCounter: true,
-		searchEntryDisplays: true,
-		searchEntryDisplaysCount: true,
 		updateEntry: true
 	}
 );
@@ -754,11 +752,9 @@ Liferay.Service.registerClass(
 		getGroupFileEntriesCount: true,
 		hasFileEntryLock: true,
 		isFileEntryCheckedOut: true,
-		lockFileEntry: true,
 		moveFileEntry: true,
 		refreshFileEntryLock: true,
 		revertFileEntry: true,
-		unlockFileEntry: true,
 		verifyFileEntryCheckOut: true,
 		verifyFileEntryLock: true
 	}

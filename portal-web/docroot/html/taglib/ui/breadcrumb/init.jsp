@@ -85,8 +85,14 @@ private void _buildLayoutBreadcrumb(Layout selLayout, String selLayoutParam, boo
 	breadcrumbSB.append(layoutURL);
 	breadcrumbSB.append("\" ");
 
+	String layoutName = selLayout.getName(themeDisplay.getLocale());
+
 	if (selLayout.isTypeControlPanel()) {
 		breadcrumbSB.append(" target=\"_top\"");
+
+		if (layoutName.equals(LayoutConstants.DEFAULT_NAME_CONTROL_PANEL)) {
+			layoutName = LanguageUtil.get(themeDisplay.getLocale(), "control-panel");
+		}
 	}
 	else {
 		breadcrumbSB.append(target);
@@ -94,16 +100,27 @@ private void _buildLayoutBreadcrumb(Layout selLayout, String selLayoutParam, boo
 
 	breadcrumbSB.append(">");
 
-	breadcrumbSB.append(HtmlUtil.escape(selLayout.getName(themeDisplay.getLocale())));
+	breadcrumbSB.append(HtmlUtil.escape(layoutName));
 
 	breadcrumbSB.append("</a></span></li>");
 
-	Layout layoutParent = null;
+	Layout parentLayout = null;
 
 	if (selLayout.getParentLayoutId() != LayoutConstants.DEFAULT_PARENT_LAYOUT_ID) {
-		layoutParent = LayoutLocalServiceUtil.getLayout(selLayout.getGroupId(), selLayout.isPrivateLayout(), selLayout.getParentLayoutId());
+		if (selLayout instanceof VirtualLayout) {
+			VirtualLayout virtualLayout = (VirtualLayout)selLayout;
 
-		_buildLayoutBreadcrumb(layoutParent, selLayoutParam, false, portletURL, themeDisplay, sb);
+			Layout sourceLayout = virtualLayout.getSourceLayout();
+
+			parentLayout = LayoutLocalServiceUtil.getLayout(sourceLayout.getGroupId(), sourceLayout.isPrivateLayout(), sourceLayout.getParentLayoutId());
+
+			parentLayout = new VirtualLayout(parentLayout, selLayout.getGroup());
+		}
+		else {
+			parentLayout = LayoutLocalServiceUtil.getLayout(selLayout.getGroupId(), selLayout.isPrivateLayout(), selLayout.getParentLayoutId());
+		}
+
+		_buildLayoutBreadcrumb(parentLayout, selLayoutParam, false, portletURL, themeDisplay, sb);
 
 		sb.append(breadcrumbSB.toString());
 	}

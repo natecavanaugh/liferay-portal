@@ -501,7 +501,7 @@ public class PortletExporter {
 	protected void exportAssetTag(
 			PortletDataContext portletDataContext, AssetTag assetTag,
 			Element assetTagsElement)
-		throws SystemException, PortalException {
+		throws PortalException, SystemException {
 
 		String path = getAssetTagPath(portletDataContext, assetTag.getTagId());
 

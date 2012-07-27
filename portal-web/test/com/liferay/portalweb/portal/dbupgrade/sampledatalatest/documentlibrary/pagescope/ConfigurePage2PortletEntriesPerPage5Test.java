@@ -102,6 +102,25 @@ public class ConfigurePage2PortletEntriesPerPage5Test extends BaseTestCase {
 			}
 
 			try {
+				if (selenium.isVisible(
+							"//iframe[@id='_20_configurationIframeDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_20_configurationIframeDialog']");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
 				if (selenium.isVisible("//label[@for='entriesPerPage']")) {
 					break;
 				}
@@ -126,5 +145,6 @@ public class ConfigurePage2PortletEntriesPerPage5Test extends BaseTestCase {
 			selenium.getText("//div[@class='portlet-msg-success']"));
 		assertEquals("5",
 			selenium.getSelectedLabel("//select[@id='_86_entriesPerPage']"));
+		selenium.selectFrame("relative=top");
 	}
 }

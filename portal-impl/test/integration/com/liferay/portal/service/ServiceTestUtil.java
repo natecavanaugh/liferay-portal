@@ -140,7 +140,7 @@ public class ServiceTestUtil {
 
 		HashMap<Locale, String> nameMap = new HashMap<Locale, String>();
 
-		nameMap.put(Locale.getDefault(), name);
+		nameMap.put(LocaleUtil.getDefault(), name);
 
 		return LayoutPrototypeLocalServiceUtil.addLayoutPrototype(
 			TestPropsValues.getUserId(), TestPropsValues.getCompanyId(),
@@ -152,7 +152,7 @@ public class ServiceTestUtil {
 
 		HashMap<Locale, String> nameMap = new HashMap<Locale, String>();
 
-		nameMap.put(Locale.getDefault(), name);
+		nameMap.put(LocaleUtil.getDefault(), name);
 
 		return LayoutSetPrototypeLocalServiceUtil.addLayoutSetPrototype(
 			TestPropsValues.getUserId(), TestPropsValues.getCompanyId(),

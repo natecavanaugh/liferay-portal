@@ -20,16 +20,11 @@ import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.xml.Document;
-import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.util.InitUtil;
 
 import java.io.File;
 
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -72,8 +67,7 @@ public class PluginsSummaryBuilder {
 			new String[] {"**\\tmp\\**", "**\\tools\\**"});
 		directoryScanner.setIncludes(
 			new String[] {
-				"**\\liferay-plugin-package.properties",
-				"**\\liferay-plugin-package.xml"
+				"**\\liferay-plugin-package.properties"
 			});
 
 		directoryScanner.scan();
@@ -125,46 +119,18 @@ public class PluginsSummaryBuilder {
 
 		String artifactId = fileName.substring(x, y);
 
-		String name = StringPool.BLANK;
-		String tags = StringPool.BLANK;
-		String shortDescription = StringPool.BLANK;
-		String longDescription = StringPool.BLANK;
-		String changeLog = StringPool.BLANK;
-		String pageURL = StringPool.BLANK;
-		String author = StringPool.BLANK;
-		String licenses = StringPool.BLANK;
-		String liferayVersions = StringPool.BLANK;
+		Properties properties = PropertiesUtil.load(content);
 
-		if (fileName.endsWith(".properties")) {
-			Properties properties = PropertiesUtil.load(content);
-
-			name = _readProperty(properties, "name");
-			tags = _readProperty(properties, "tags");
-			shortDescription = _readProperty(properties, "short-description");
-			longDescription = _readProperty(properties, "long-description");
-			changeLog = _readProperty(properties, "change-log");
-			pageURL = _readProperty(properties, "page-url");
-			author = _readProperty(properties, "author");
-			licenses = _readProperty(properties, "licenses");
-			liferayVersions = _readProperty(properties, "liferay-versions");
-		}
-		else {
-			Document document = SAXReaderUtil.read(content);
-
-			Element rootElement = document.getRootElement();
-
-			name = rootElement.elementText("name");
-			tags = _readList(rootElement.element("tags"), "tag");
-			shortDescription = rootElement.elementText("short-description");
-			longDescription = GetterUtil.getString(
-				rootElement.elementText("long-description"));
-			changeLog = rootElement.elementText("change-log");
-			pageURL = rootElement.elementText("page-url");
-			author = rootElement.elementText("author");
-			licenses = _readList(rootElement.element("licenses"), "license");
-			liferayVersions = _readList(
-				rootElement.element("liferay-versions"), "liferay-version");
-		}
+		String name = _readProperty(properties, "name");
+		String tags = _readProperty(properties, "tags");
+		String shortDescription = _readProperty(
+			properties, "short-description");
+		String longDescription = _readProperty(properties, "long-description");
+		String changeLog = _readProperty(properties, "change-log");
+		String pageURL = _readProperty(properties, "page-url");
+		String author = _readProperty(properties, "author");
+		String licenses = _readProperty(properties, "licenses");
+		String liferayVersions = _readProperty(properties, "liferay-versions");
 
 		_distinctAuthors.add(author);
 		_distinctLicenses.add(licenses);
@@ -187,37 +153,6 @@ public class PluginsSummaryBuilder {
 		sb.append(_readReleng(fileName));
 		sb.append("\t\t</releng>\n");
 		sb.append("\t</plugin>\n");
-	}
-
-	private String _readList(Element parentElement, String name) {
-		if (parentElement == null) {
-			return StringPool.BLANK;
-		}
-
-		List<Element> elements = parentElement.elements(name);
-
-		if (elements.isEmpty()) {
-			return StringPool.BLANK;
-		}
-
-		StringBundler sb = new StringBundler(
-			parentElement.elements(name).size() * 2 - 1);
-
-		Iterator<Element> itr = elements.iterator();
-
-		while (itr.hasNext()) {
-			Element element = itr.next();
-
-			String text = element.getText().trim();
-
-			sb.append(text);
-
-			if (itr.hasNext()) {
-				sb.append(", ");
-			}
-		}
-
-		return sb.toString();
 	}
 
 	private String _readProperty(Properties properties, String key) {

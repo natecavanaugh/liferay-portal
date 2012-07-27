@@ -81,6 +81,7 @@ serverURL.setParameter("tabs3", tabs3);
 								<%
 								}
 								%>
+
 							</aui:select>
 						</aui:fieldset>
 
@@ -709,6 +710,7 @@ serverURL.setParameter("tabs3", tabs3);
 						<%
 						}
 						%>
+
 					</aui:select>
 
 					<aui:input cssClass="lfr-textarea-container" name="script" type="textarea" value="<%= script %>" />

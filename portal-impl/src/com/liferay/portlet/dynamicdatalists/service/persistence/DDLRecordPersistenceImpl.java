@@ -746,10 +746,6 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	/**
 	 * Returns the first d d l record in the ordered set where uuid = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching d d l record
@@ -759,31 +755,45 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	public DDLRecord findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordException, SystemException {
+		DDLRecord ddlRecord = fetchByUuid_First(uuid, orderByComparator);
+
+		if (ddlRecord != null) {
+			return ddlRecord;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRecordException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d l record in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d l record, or <code>null</code> if a matching d d l record could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecord fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<DDLRecord> list = findByUuid(uuid, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRecordException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d l record in the ordered set where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -794,34 +804,48 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	public DDLRecord findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordException, SystemException {
+		DDLRecord ddlRecord = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (ddlRecord != null) {
+			return ddlRecord;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRecordException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d l record in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d l record, or <code>null</code> if a matching d d l record could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecord fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
 
 		List<DDLRecord> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRecordException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d l records before and after the current d d l record in the ordered set where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param recordId the primary key of the current d d l record
 	 * @param uuid the uuid
@@ -1267,10 +1291,6 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	/**
 	 * Returns the first d d l record in the ordered set where recordSetId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param recordSetId the record set ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching d d l record
@@ -1280,32 +1300,47 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	public DDLRecord findByRecordSetId_First(long recordSetId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordException, SystemException {
+		DDLRecord ddlRecord = fetchByRecordSetId_First(recordSetId,
+				orderByComparator);
+
+		if (ddlRecord != null) {
+			return ddlRecord;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("recordSetId=");
+		msg.append(recordSetId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRecordException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d l record in the ordered set where recordSetId = &#63;.
+	 *
+	 * @param recordSetId the record set ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d l record, or <code>null</code> if a matching d d l record could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecord fetchByRecordSetId_First(long recordSetId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<DDLRecord> list = findByRecordSetId(recordSetId, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("recordSetId=");
-			msg.append(recordSetId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRecordException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d l record in the ordered set where recordSetId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param recordSetId the record set ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1316,34 +1351,49 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	public DDLRecord findByRecordSetId_Last(long recordSetId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordException, SystemException {
+		DDLRecord ddlRecord = fetchByRecordSetId_Last(recordSetId,
+				orderByComparator);
+
+		if (ddlRecord != null) {
+			return ddlRecord;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("recordSetId=");
+		msg.append(recordSetId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRecordException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d l record in the ordered set where recordSetId = &#63;.
+	 *
+	 * @param recordSetId the record set ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d l record, or <code>null</code> if a matching d d l record could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecord fetchByRecordSetId_Last(long recordSetId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByRecordSetId(recordSetId);
 
 		List<DDLRecord> list = findByRecordSetId(recordSetId, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("recordSetId=");
-			msg.append(recordSetId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRecordException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d l records before and after the current d d l record in the ordered set where recordSetId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param recordId the primary key of the current d d l record
 	 * @param recordSetId the record set ID
@@ -1628,10 +1678,6 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	/**
 	 * Returns the first d d l record in the ordered set where recordSetId = &#63; and userId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param recordSetId the record set ID
 	 * @param userId the user ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1642,35 +1688,51 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	public DDLRecord findByR_U_First(long recordSetId, long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordException, SystemException {
+		DDLRecord ddlRecord = fetchByR_U_First(recordSetId, userId,
+				orderByComparator);
+
+		if (ddlRecord != null) {
+			return ddlRecord;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("recordSetId=");
+		msg.append(recordSetId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRecordException(msg.toString());
+	}
+
+	/**
+	 * Returns the first d d l record in the ordered set where recordSetId = &#63; and userId = &#63;.
+	 *
+	 * @param recordSetId the record set ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching d d l record, or <code>null</code> if a matching d d l record could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecord fetchByR_U_First(long recordSetId, long userId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<DDLRecord> list = findByR_U(recordSetId, userId, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("recordSetId=");
-			msg.append(recordSetId);
-
-			msg.append(", userId=");
-			msg.append(userId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRecordException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last d d l record in the ordered set where recordSetId = &#63; and userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param recordSetId the record set ID
 	 * @param userId the user ID
@@ -1682,37 +1744,53 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	public DDLRecord findByR_U_Last(long recordSetId, long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRecordException, SystemException {
+		DDLRecord ddlRecord = fetchByR_U_Last(recordSetId, userId,
+				orderByComparator);
+
+		if (ddlRecord != null) {
+			return ddlRecord;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("recordSetId=");
+		msg.append(recordSetId);
+
+		msg.append(", userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRecordException(msg.toString());
+	}
+
+	/**
+	 * Returns the last d d l record in the ordered set where recordSetId = &#63; and userId = &#63;.
+	 *
+	 * @param recordSetId the record set ID
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching d d l record, or <code>null</code> if a matching d d l record could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDLRecord fetchByR_U_Last(long recordSetId, long userId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByR_U(recordSetId, userId);
 
 		List<DDLRecord> list = findByR_U(recordSetId, userId, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("recordSetId=");
-			msg.append(recordSetId);
-
-			msg.append(", userId=");
-			msg.append(userId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRecordException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the d d l records before and after the current d d l record in the ordered set where recordSetId = &#63; and userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param recordId the primary key of the current d d l record
 	 * @param recordSetId the record set ID

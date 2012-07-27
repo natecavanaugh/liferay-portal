@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.service.ClassNameServiceUtil;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.AssetCategoryException;
@@ -68,7 +68,7 @@ public class BaseAssetEntryValidator implements AssetEntryValidator {
 			}
 		}
 
-		long classNameId = ClassNameServiceUtil.getClassNameId(className);
+		long classNameId = ClassNameLocalServiceUtil.getClassNameId(className);
 
 		for (AssetVocabulary vocabulary : vocabularies) {
 			validate(classNameId, categoryIds, vocabulary);

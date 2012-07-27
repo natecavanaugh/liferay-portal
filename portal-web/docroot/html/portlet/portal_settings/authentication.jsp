@@ -132,7 +132,7 @@ String siteminderUserHeader = PrefsPropsUtil.getString(company.getCompanyId(), P
 				String taglibOnClick = renderResponse.getNamespace() + "testSettings('casConfiguration');";
 				%>
 
-				<aui:button onClick='<%= taglibOnClick %>' value="test-cas-configuration" />
+				<aui:button onClick="<%= taglibOnClick %>" value="test-cas-configuration" />
 			</aui:button-row>
 		</aui:fieldset>
 	</liferay-ui:section>
@@ -201,7 +201,7 @@ String siteminderUserHeader = PrefsPropsUtil.getString(company.getCompanyId(), P
 				String taglibOnClick = renderResponse.getNamespace() + "testSettings('openssoConfiguration');";
 				%>
 
-				<aui:button onClick='<%= taglibOnClick %>' value="test-opensso-configuration" />
+				<aui:button onClick="<%= taglibOnClick %>" value="test-opensso-configuration" />
 			</aui:button-row>
 		</aui:fieldset>
 	</liferay-ui:section>

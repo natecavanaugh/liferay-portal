@@ -212,6 +212,7 @@ public class ModelHintsImpl implements ModelHints {
 			if (_log.isWarnEnabled()) {
 				_log.warn("Cannot load " + source);
 			}
+
 			return;
 		}
 		else {

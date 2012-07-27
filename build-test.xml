@@ -255,7 +255,7 @@
 	</target>
 
 	<target name="build-test-ant-scripts">
-		<property name="build-test-ant-scripts.version" value="2" />
+		<property name="build-test-ant-scripts.version" value="4" />
 
 		<if>
 			<available file="portal-web/test-ant-scripts/version" />
@@ -1300,7 +1300,7 @@
 		</antcall>
 
 		<antcall target="build-test-ant-script">
-			<param name="test.ant.script.command" value="plugins-test-dependecy" />
+			<param name="test.ant.script.command" value="plugins-test-dependency" />
 			<param name="test.ant.script.plugin.portlets" value="test-dependency-able-portlet,test-dependency-baker-portlet,test-dependency-charlie-portlet,test-dependency-dog-portlet,test-dependency-easy-portlet,test-dependency-fox-portlet" />
 			<param name="test.ant.script.suite" value="PluginsTestDependencyTestSuite" />
 		</antcall>
@@ -1371,6 +1371,13 @@
 			<param name="test.ant.script.command" value="plugins-web-form" />
 			<param name="test.ant.script.plugin.portlets" value="web-form-portlet" />
 			<param name="test.ant.script.suite" value="PluginsWebFormTestSuite" />
+		</antcall>
+
+		<antcall target="build-test-ant-script">
+			<param name="test.ant.script.command" value="plugins-welcome" />
+			<param name="test.ant.script.plugin.themes" value="welcome-theme" />
+			<param name="test.ant.script.plugin.webs" value="resources-importer-web" />
+			<param name="test.ant.script.suite" value="PluginsWelcomeTestSuite" />
 		</antcall>
 
 		<antcall target="build-test-ant-script">
@@ -3623,7 +3630,7 @@ file.
 				<delete includeemptydirs="true" failonerror="false">
 					<fileset
 						dir="${simple.server.deploy.dir}"
-						excludes=",*.dodeploy,*.rar,*.sar/**,*.xml,.autodeploystatus/**,liferay-portal.war/**,security/**,root/**,ROOT/**,ROOT.war/**,tunnel-web/**,tunnel-web.war/**"
+						excludes=",*.dodeploy,*.rar,*.sar/**,*.xml,.autodeploystatus/**,liferay-portal/**,liferay-portal.war/**,security/**,root/**,ROOT/**,ROOT.war/**,tunnel-web/**,tunnel-web.war/**"
 					/>
 				</delete>
 			</then>
@@ -3710,7 +3717,7 @@ file.
 		</if>
 
 		<if>
-			<isset property="test.pacl" />
+			<equals arg1="${test.pacl}" arg2="true" />
 			<then>
 				<ant antfile="build-test-plugins.xml" target="deploy-simple-server-plugins">
 					<property name="plugin.types" value="portlets" />

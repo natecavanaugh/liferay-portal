@@ -823,17 +823,6 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 	}
 
 	@Override
-	public Contact toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Contact)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
 			Contact.class.getName(), getPrimaryKey());
@@ -844,6 +833,17 @@ public class ContactModelImpl extends BaseModelImpl<Contact>
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public Contact toEscapedModel() {
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (Contact)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModelProxy;
 	}
 
 	@Override

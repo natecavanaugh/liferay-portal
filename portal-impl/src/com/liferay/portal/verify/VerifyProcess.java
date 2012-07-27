@@ -88,9 +88,7 @@ public abstract class VerifyProcess {
 		}
 	}
 
-	public void verify(VerifyProcess verifyProcess)
-		throws VerifyException {
-
+	public void verify(VerifyProcess verifyProcess) throws VerifyException {
 		verifyProcess.verify();
 	}
 

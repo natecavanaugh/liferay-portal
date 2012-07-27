@@ -176,12 +176,30 @@ public class Guest_ViewPage2Folder7Test extends BaseTestCase {
 		assertEquals(RuntimeVariables.replace(
 				"Documents and Media (DL Page2 Name)"),
 			selenium.getText("//span[@class='portlet-title-text']"));
-		assertTrue(selenium.isVisible(
-				"xPath=(//span[@class='document-thumbnail']/img)[6]"));
+		selenium.clickAt("link=2", RuntimeVariables.replace("2"));
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
+				if (RuntimeVariables.replace("DL Folder7 Name")
+										.equals(selenium.getText(
+								"//a[contains(@class,'document-link')]/span[@class='entry-title']"))) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
 		assertEquals(RuntimeVariables.replace("DL Folder7 Name"),
 			selenium.getText(
-				"xPath=(//a[contains(@class,'document-link')]/span[@class='entry-title'])[6]"));
-		selenium.clickAt("xPath=(//a[contains(@class,'document-link')]/span[@class='entry-title'])[6]",
+				"//a[contains(@class,'document-link')]/span[@class='entry-title']"));
+		selenium.clickAt("//a[contains(@class,'document-link')]/span[@class='entry-title']",
 			RuntimeVariables.replace("DL Folder7 Name"));
 
 		for (int second = 0;; second++) {

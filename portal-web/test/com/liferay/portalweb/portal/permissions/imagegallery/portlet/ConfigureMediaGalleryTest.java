@@ -81,6 +81,26 @@ public class ConfigureMediaGalleryTest extends BaseTestCase {
 			}
 
 			try {
+				if (selenium.isVisible(
+							"//iframe[@id='_31_configurationIframeDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_31_configurationIframeDialog']");
+		Thread.sleep(5000);
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
 				if (selenium.isVisible("//input[@id='_86_showActionsCheckbox']")) {
 					break;
 				}
@@ -116,5 +136,6 @@ public class ConfigureMediaGalleryTest extends BaseTestCase {
 		assertTrue(selenium.isChecked(
 				"//input[@id='_86_showFolderMenuCheckbox']"));
 		assertTrue(selenium.isChecked("//input[@id='_86_showTabsCheckbox']"));
+		selenium.selectFrame("relative=top");
 	}
 }

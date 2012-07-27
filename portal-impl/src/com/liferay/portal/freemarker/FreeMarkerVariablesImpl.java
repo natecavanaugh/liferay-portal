@@ -455,6 +455,7 @@ public class FreeMarkerVariablesImpl implements FreeMarkerVariables {
 		catch (SecurityException se) {
 			_log.error(se, se);
 		}
+
 		try {
 			freeMarkerContext.put(
 				"organizationPermission",
@@ -472,6 +473,7 @@ public class FreeMarkerVariablesImpl implements FreeMarkerVariables {
 		catch (SecurityException se) {
 			_log.error(se, se);
 		}
+
 		try {
 			freeMarkerContext.put(
 				"portalPermission", PortalPermissionUtil.getPortalPermission());
@@ -479,6 +481,7 @@ public class FreeMarkerVariablesImpl implements FreeMarkerVariables {
 		catch (SecurityException se) {
 			_log.error(se, se);
 		}
+
 		try {
 			freeMarkerContext.put(
 				"portletPermission",
@@ -487,6 +490,7 @@ public class FreeMarkerVariablesImpl implements FreeMarkerVariables {
 		catch (SecurityException se) {
 			_log.error(se, se);
 		}
+
 		try {
 			freeMarkerContext.put(
 				"rolePermission", RolePermissionUtil.getRolePermission());

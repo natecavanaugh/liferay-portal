@@ -147,7 +147,7 @@ public class ProgressInputStream extends InputStream {
 		Integer curPercent = (Integer)_portletSession.getAttribute(
 			_getPercentAttributeName(), PortletSession.APPLICATION_SCOPE);
 
-		if ((curPercent == null) || (percent - curPercent.intValue() >= 1)) {
+		if ((curPercent == null) || ((percent - curPercent.intValue()) >= 1)) {
 			_portletSession.setAttribute(
 				_getPercentAttributeName(), new Integer(percent),
 				PortletSession.APPLICATION_SCOPE);

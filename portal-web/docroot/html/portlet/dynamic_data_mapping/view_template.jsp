@@ -66,7 +66,6 @@ portletURL.setParameter("structureId", String.valueOf(structureId));
 
 	<liferay-ui:search-container-row
 		className="com.liferay.portlet.dynamicdatamapping.model.DDMTemplate"
-		escapedModel="<%= true %>"
 		keyProperty="templateId"
 		modelVar="template"
 	>
@@ -82,7 +81,7 @@ portletURL.setParameter("structureId", String.valueOf(structureId));
 			sb.append("']('");
 			sb.append(template.getTemplateId());
 			sb.append("', '");
-			sb.append(template.getName(locale));
+			sb.append(HtmlUtil.escapeJS(template.getName(locale)));
 			sb.append("', Liferay.Util.getWindow());");
 
 			rowHREF = sb.toString();
@@ -98,7 +97,7 @@ portletURL.setParameter("structureId", String.valueOf(structureId));
 		<liferay-ui:search-container-column-text
 			href="<%= rowHREF %>"
 			name="name"
-			value="<%= LanguageUtil.get(pageContext, template.getName(locale)) %>"
+			value="<%= HtmlUtil.escape(LanguageUtil.get(pageContext, template.getName(locale))) %>"
 		/>
 
 		<c:if test="<%= Validator.isNull(templateTypeValue) %>">

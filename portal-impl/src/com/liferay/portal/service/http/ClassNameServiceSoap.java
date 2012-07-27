@@ -64,24 +64,10 @@ import java.rmi.RemoteException;
  * @generated
  */
 public class ClassNameServiceSoap {
-	public static com.liferay.portal.model.ClassNameSoap getClassName(
-		long classNameId) throws RemoteException {
-		try {
-			com.liferay.portal.model.ClassName returnValue = ClassNameServiceUtil.getClassName(classNameId);
-
-			return com.liferay.portal.model.ClassNameSoap.toSoapModel(returnValue);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static com.liferay.portal.model.ClassNameSoap getClassName(
+	public static com.liferay.portal.model.ClassNameSoap fetchClassName(
 		java.lang.String value) throws RemoteException {
 		try {
-			com.liferay.portal.model.ClassName returnValue = ClassNameServiceUtil.getClassName(value);
+			com.liferay.portal.model.ClassName returnValue = ClassNameServiceUtil.fetchClassName(value);
 
 			return com.liferay.portal.model.ClassNameSoap.toSoapModel(returnValue);
 		}
@@ -92,10 +78,10 @@ public class ClassNameServiceSoap {
 		}
 	}
 
-	public static long getClassNameId(java.lang.Class<?> clazz)
+	public static long fetchClassNameId(java.lang.Class<?> clazz)
 		throws RemoteException {
 		try {
-			long returnValue = ClassNameServiceUtil.getClassNameId(clazz);
+			long returnValue = ClassNameServiceUtil.fetchClassNameId(clazz);
 
 			return returnValue;
 		}
@@ -106,10 +92,10 @@ public class ClassNameServiceSoap {
 		}
 	}
 
-	public static long getClassNameId(java.lang.String value)
+	public static long fetchClassNameId(java.lang.String value)
 		throws RemoteException {
 		try {
-			long returnValue = ClassNameServiceUtil.getClassNameId(value);
+			long returnValue = ClassNameServiceUtil.fetchClassNameId(value);
 
 			return returnValue;
 		}

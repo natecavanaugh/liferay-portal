@@ -171,9 +171,7 @@ public class ForgotPasswordAction extends PortletAction {
 		}
 	}
 
-	protected User getUser(ActionRequest actionRequest)
-		throws Exception {
-
+	protected User getUser(ActionRequest actionRequest) throws Exception {
 		PortletSession portletSession = actionRequest.getPortletSession();
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(

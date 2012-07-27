@@ -770,10 +770,6 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	/**
 	 * Returns the first message boards mailing list in the ordered set where uuid = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching message boards mailing list
@@ -783,31 +779,45 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	public MBMailingList findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
+		MBMailingList mbMailingList = fetchByUuid_First(uuid, orderByComparator);
+
+		if (mbMailingList != null) {
+			return mbMailingList;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchMailingListException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards mailing list in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBMailingList fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<MBMailingList> list = findByUuid(uuid, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchMailingListException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last message boards mailing list in the ordered set where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -818,34 +828,48 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	public MBMailingList findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
+		MBMailingList mbMailingList = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (mbMailingList != null) {
+			return mbMailingList;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchMailingListException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards mailing list in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBMailingList fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
 
 		List<MBMailingList> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchMailingListException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the message boards mailing lists before and after the current message boards mailing list in the ordered set where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param mailingListId the primary key of the current message boards mailing list
 	 * @param uuid the uuid
@@ -1290,10 +1314,6 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	/**
 	 * Returns the first message boards mailing list in the ordered set where active = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param active the active
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching message boards mailing list
@@ -1303,31 +1323,46 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	public MBMailingList findByActive_First(boolean active,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
+		MBMailingList mbMailingList = fetchByActive_First(active,
+				orderByComparator);
+
+		if (mbMailingList != null) {
+			return mbMailingList;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchMailingListException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards mailing list in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBMailingList fetchByActive_First(boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<MBMailingList> list = findByActive(active, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("active=");
-			msg.append(active);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchMailingListException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last message boards mailing list in the ordered set where active = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param active the active
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1338,34 +1373,49 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	public MBMailingList findByActive_Last(boolean active,
 		OrderByComparator orderByComparator)
 		throws NoSuchMailingListException, SystemException {
+		MBMailingList mbMailingList = fetchByActive_Last(active,
+				orderByComparator);
+
+		if (mbMailingList != null) {
+			return mbMailingList;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("active=");
+		msg.append(active);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchMailingListException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards mailing list in the ordered set where active = &#63;.
+	 *
+	 * @param active the active
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards mailing list, or <code>null</code> if a matching message boards mailing list could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBMailingList fetchByActive_Last(boolean active,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByActive(active);
 
 		List<MBMailingList> list = findByActive(active, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("active=");
-			msg.append(active);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchMailingListException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the message boards mailing lists before and after the current message boards mailing list in the ordered set where active = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param mailingListId the primary key of the current message boards mailing list
 	 * @param active the active

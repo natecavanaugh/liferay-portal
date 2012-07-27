@@ -705,10 +705,6 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	/**
 	 * Returns the first message boards ban in the ordered set where groupId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching message boards ban
@@ -718,31 +714,45 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public MBBan findByGroupId_First(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByGroupId_First(groupId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards ban in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByGroupId_First(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<MBBan> list = findByGroupId(groupId, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchBanException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last message boards ban in the ordered set where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param groupId the group ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -753,34 +763,48 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public MBBan findByGroupId_Last(long groupId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByGroupId_Last(groupId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards ban in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByGroupId_Last(long groupId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByGroupId(groupId);
 
 		List<MBBan> list = findByGroupId(groupId, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("groupId=");
-			msg.append(groupId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchBanException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the message boards bans before and after the current message boards ban in the ordered set where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param banId the primary key of the current message boards ban
 	 * @param groupId the group ID
@@ -1049,10 +1073,6 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	/**
 	 * Returns the first message boards ban in the ordered set where userId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param userId the user ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching message boards ban
@@ -1062,31 +1082,45 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public MBBan findByUserId_First(long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByUserId_First(userId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards ban in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByUserId_First(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<MBBan> list = findByUserId(userId, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId=");
-			msg.append(userId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchBanException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last message boards ban in the ordered set where userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param userId the user ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1097,34 +1131,48 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public MBBan findByUserId_Last(long userId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByUserId_Last(userId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards ban in the ordered set where userId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByUserId_Last(long userId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUserId(userId);
 
 		List<MBBan> list = findByUserId(userId, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId=");
-			msg.append(userId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchBanException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the message boards bans before and after the current message boards ban in the ordered set where userId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param banId the primary key of the current message boards ban
 	 * @param userId the user ID
@@ -1395,10 +1443,6 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	/**
 	 * Returns the first message boards ban in the ordered set where banUserId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param banUserId the ban user ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching message boards ban
@@ -1408,31 +1452,45 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public MBBan findByBanUserId_First(long banUserId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByBanUserId_First(banUserId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("banUserId=");
+		msg.append(banUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the first message boards ban in the ordered set where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByBanUserId_First(long banUserId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<MBBan> list = findByBanUserId(banUserId, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("banUserId=");
-			msg.append(banUserId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchBanException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last message boards ban in the ordered set where banUserId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param banUserId the ban user ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1443,34 +1501,48 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 	public MBBan findByBanUserId_Last(long banUserId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBanException, SystemException {
+		MBBan mbBan = fetchByBanUserId_Last(banUserId, orderByComparator);
+
+		if (mbBan != null) {
+			return mbBan;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("banUserId=");
+		msg.append(banUserId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchBanException(msg.toString());
+	}
+
+	/**
+	 * Returns the last message boards ban in the ordered set where banUserId = &#63;.
+	 *
+	 * @param banUserId the ban user ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching message boards ban, or <code>null</code> if a matching message boards ban could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBBan fetchByBanUserId_Last(long banUserId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByBanUserId(banUserId);
 
 		List<MBBan> list = findByBanUserId(banUserId, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("banUserId=");
-			msg.append(banUserId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchBanException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the message boards bans before and after the current message boards ban in the ordered set where banUserId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param banId the primary key of the current message boards ban
 	 * @param banUserId the ban user ID

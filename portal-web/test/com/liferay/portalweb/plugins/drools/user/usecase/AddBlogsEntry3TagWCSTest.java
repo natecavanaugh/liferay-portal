@@ -172,7 +172,7 @@ public class AddBlogsEntry3TagWCSTest extends BaseTestCase {
 			RuntimeVariables.replace(""));
 		Thread.sleep(5000);
 		selenium.type("//input[@class='lfr-tag-selector-input aui-field-input-text']",
-			RuntimeVariables.replace("West Coast Symposium"));
+			RuntimeVariables.replace("Americas Symposium"));
 		selenium.clickAt("//button[@id='add']", RuntimeVariables.replace(""));
 		selenium.clickAt("//input[@value='Publish']",
 			RuntimeVariables.replace("Publish"));
@@ -185,7 +185,7 @@ public class AddBlogsEntry3TagWCSTest extends BaseTestCase {
 			selenium.getText("//div[@class='entry-title']/h2/a"));
 		assertEquals(RuntimeVariables.replace("Blogs Entry Content"),
 			selenium.getText("//div[@class='entry-body']/p"));
-		assertEquals(RuntimeVariables.replace("west coast symposium"),
+		assertEquals(RuntimeVariables.replace("americas symposium"),
 			selenium.getText("//a[@class='tag']"));
 	}
 }

@@ -189,9 +189,9 @@ int userIdsPos = ParamUtil.getInteger(request, "userIdsPos");
 				String taglibFinishedOnClick = renderResponse.getNamespace() + "saveUserPermissions(-1, '"+ userIdsArray[userIdsPos] + "');";
 				%>
 
-				<aui:button cssClass="previous" disabled="<%= userIdsPos <= 0 %>" onClick='<%= taglibPreviousOnClick %>' value="previous" />
+				<aui:button cssClass="previous" disabled="<%= userIdsPos <= 0 %>" onClick="<%= taglibPreviousOnClick %>" value="previous" />
 
-				<aui:button cssClass="next" disabled="<%= userIdsPos + 1 >= userIdsArray.length %>" onClick='<%= taglibNextOnClick %>' value="next" />
+				<aui:button cssClass="next" disabled="<%= userIdsPos + 1 >= userIdsArray.length %>" onClick="<%= taglibNextOnClick %>" value="next" />
 
 				<aui:button cssClass="finished" onClick="<%= taglibFinishedOnClick %>" value="finished" />
 			</aui:button-row>
