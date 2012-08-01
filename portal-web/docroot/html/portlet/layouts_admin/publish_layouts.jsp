@@ -227,6 +227,10 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 </c:if>
 
 <style type="text/css">
+	.aui-tree-node-content .incomplete-layout {
+		color: #CCCCCC;
+	}
+
 	#<portlet:namespace />pane th.col-3 {
 		text-align: left;
 		width: 74%;
