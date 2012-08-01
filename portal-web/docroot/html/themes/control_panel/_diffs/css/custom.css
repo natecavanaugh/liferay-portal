@@ -786,3 +786,7 @@ input[type="text"], input[type="password"], select, textarea, .textarea, #breadc
 	@include filter-gradient(#427EAD, #154B75);
 	@include background-image(linear-gradient(#427EAD, #154B75));
 }
+
+.taglib-page-iterator .search-pages .page-links {
+	padding: 5px 0 0;
+}
