@@ -22,15 +22,15 @@
 }
 
 .breadcrumbs-vertical {
+	a {
+		text-align: center;
+		text-decoration: none;
+	}
+
 	li {
 		background: url(@theme_image_path@/arrows/07_down.png) no-repeat 50% 100%;
 		padding: 0 0 9px;
 		max-width: auto;
-	}
-
-	a {
-		text-align: center;
-		text-decoration: none;
 	}
 
 	.last {
