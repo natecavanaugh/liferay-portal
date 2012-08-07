@@ -131,7 +131,7 @@ request.setAttribute("search.jsp-portletURL", portletURL);
 <aui:script use="aui-base">
 	var allPageLinks = A.all('.portlet-search .result .page-links');
 
-	for (i = 0; i < allPageLinks.size(); i++){
+	for (i = 0; i < allPageLinks.size(); i++) {
 		pageLinks = allPageLinks.item(i);
 
 		if (pageLinks) {
@@ -171,7 +171,6 @@ request.setAttribute("search.jsp-portletURL", portletURL);
 				'a.next'
 			);
 		}
-
 	}
 
 	var resultsGrid = A.one('.portlet-search .result .results-grid');
