@@ -212,7 +212,7 @@ request.setAttribute("view.jsp-total", String.valueOf(total));
 			<c:otherwise>
 				<liferay-ui:message key="there-are-no-documents-or-media-files-on-this-page" />
 			</c:otherwise>
-		</c:choose>	
+		</c:choose>
 	</div>
 </c:if>
 

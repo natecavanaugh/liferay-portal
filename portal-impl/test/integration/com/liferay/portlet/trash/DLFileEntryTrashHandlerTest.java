@@ -38,50 +38,70 @@ public class DLFileEntryTrashHandlerTest extends BaseDLTrashHandlerTestCase {
 
 	@Test
 	public void testTrashAndDelete() throws Exception {
-		testTrash(false, true, false, false, false);
+		trashDLFileEntry(false, true, false, false, false);
 	}
 
 	@Test
 	public void testTrashAndDeleteVersioned() throws Exception {
-		testTrash(false, true, true, false, false);
+		trashDLFileEntry(false, true, true, false, false);
 	}
 
 	@Test
 	public void testTrashAndDeleteVersionedAndCheckedOut() throws Exception {
-		testTrash(false, true, true, true, false);
+		trashDLFileEntry(false, true, true, true, false);
 	}
 
 	@Test
 	public void testTrashAndRestore() throws Exception {
-		testTrash(false, false, false, false, false);
+		trashDLFileEntry(false, false, false, false, false);
 	}
 
 	@Test
 	public void testTrashAndRestoreVersioned() throws Exception {
-		testTrash(false, false, true, false, false);
+		trashDLFileEntry(false, false, true, false, false);
 	}
 
 	@Test
 	public void testTrashAndRestoreVersionedAndCheckedOut() throws Exception {
-		testTrash(false, false, true, true, false);
+		trashDLFileEntry(false, false, true, true, false);
 	}
 
 	@Test
 	public void testTrashAndRestoreWithFileRank() throws Exception {
-		testTrash(false, false, false, false, true);
+		trashDLFileEntry(false, false, false, false, true);
 	}
 
 	@Test
 	public void testTrashDraftAndCheckedOutAndRestore() throws Exception {
-		testTrash(true, false, false, true, false);
+		trashDLFileEntry(true, false, false, true, false);
 	}
 
 	@Test
 	public void testTrashDraftAndRestore() throws Exception {
-		testTrash(true, false, false, false, false);
+		trashDLFileEntry(true, false, false, false, false);
 	}
 
-	protected void testTrash(
+	@Override
+	protected long addSubentry(long folderId1, long folderId2)
+		throws Exception {
+
+		FileEntry fileEntry = addFileEntry(folderId1, "Subentry.txt");
+
+		return fileEntry.getFileEntryId();
+	}
+
+	@Override
+	protected void moveSubentryFromTrash(long subentryId) throws Exception {
+		DLAppServiceUtil.moveFileEntryFromTrash(
+			subentryId, parentFolder.getFolderId(), new ServiceContext());
+	}
+
+	@Override
+	protected void moveSubentryToTrash(long subentryId) throws Exception {
+		DLAppServiceUtil.moveFileEntryToTrash(subentryId);
+	}
+
+	protected void trashDLFileEntry(
 			boolean draft, boolean delete, boolean versioned,
 			boolean leaveCheckedOut, boolean fileRank)
 		throws Exception {

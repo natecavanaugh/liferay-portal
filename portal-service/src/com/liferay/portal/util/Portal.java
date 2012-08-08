@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
+import com.liferay.portal.model.AuditedModel;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
@@ -966,6 +967,8 @@ public interface Portal {
 	public long getUserId(HttpServletRequest request);
 
 	public long getUserId(PortletRequest portletRequest);
+
+	public String getUserName(AuditedModel auditedModel);
 
 	public String getUserName(long userId, String defaultUserName);
 

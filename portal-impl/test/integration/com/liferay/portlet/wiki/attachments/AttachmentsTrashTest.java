@@ -114,4 +114,19 @@ public class AttachmentsTrashTest extends BaseDLTrashHandlerTestCase {
 			initialNotInTrashCount + 1, wikiPage.getAttachmentsFiles().length);
 	}
 
+	@Override
+	protected long addSubentry(long folderId1, long folderId2)
+		throws Exception {
+
+		return 0;
+	}
+
+	@Override
+	protected void moveSubentryFromTrash(long subEntryId) throws Exception {
+	}
+
+	@Override
+	protected void moveSubentryToTrash(long subEntryId) throws Exception {
+	}
+
 }
