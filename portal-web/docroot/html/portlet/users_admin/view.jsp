@@ -34,6 +34,11 @@ if (Validator.isNotNull(viewUsersRedirect)) {
 pageContext.setAttribute("portletURL", portletURL);
 
 String portletURLString = portletURL.toString();
+
+int status = ParamUtil.getInteger(request, "status", WorkflowConstants.STATUS_APPROVED);
+
+int inactiveUsersCount = 0;
+int usersCount = 0;
 %>
 
 <liferay-ui:error exception="<%= RequiredOrganizationException.class %>" message="you-cannot-delete-organizations-that-have-suborganizations-or-users" />
@@ -152,6 +157,30 @@ String portletURLString = portletURL.toString();
 		document.<portlet:namespace />fm.method = "get";
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "";
 		submitForm(document.<portlet:namespace />fm, '<%= portletURLString %>');
+	}
+
+	function <portlet:namespace />showUsers(field) {
+
+		<%
+		PortletURL showUsersURL = renderResponse.createRenderURL();
+
+		showUsersURL.setParameter("struts_action", "/users_admin/view_users");
+		showUsersURL.setParameter("usersListView", usersListView);
+
+		long organizationId = ParamUtil.getLong(request, "organizationId", OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID);
+
+		if (organizationId != OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID) {
+			showUsersURL.setParameter("organizationId", String.valueOf(organizationId));
+		}
+
+		if (Validator.isNotNull(viewUsersRedirect)) {
+			showUsersURL.setParameter("viewUsersRedirect", viewUsersRedirect);
+		}
+		%>
+
+		var url = '<%= showUsersURL.toString() %>' + '&<portlet:namespace />status=' + field.value;
+
+		location.href = url;
 	}
 
 	Liferay.provide(
