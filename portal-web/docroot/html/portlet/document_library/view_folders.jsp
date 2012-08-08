@@ -422,21 +422,21 @@ request.setAttribute("view_folders.jsp-total", String.valueOf(total));
 				</c:choose>
 			</ul>
 
-			<aui:script>
-				Liferay.fire(
-					'<portlet:namespace />pageLoaded',
-					{
-						paginator: {
-							name: 'folderPaginator',
-							state: {
-								page: <%= folderEnd / (folderEnd - folderStart) %>,
-								rowsPerPage: <%= (folderEnd - folderStart) %>,
-								total: <%= total %>
-							}
-						}
-					}
-				);
-			</aui:script>
+			<%
+				JSONObject paginatorState = JSONFactoryUtil.createJSONObject();
+				paginatorState.put("page", total == 0 ? 0 : folderEnd / (folderEnd - folderStart));
+				paginatorState.put("rowsPerPage", folderEnd - folderStart);
+				paginatorState.put("total", total);
+
+				JSONObject paginatorDataFolders = JSONFactoryUtil.createJSONObject();
+				paginatorDataFolders.put("name", "folderPaginator");
+				paginatorDataFolders.put("state", paginatorState);
+
+				JSONObject pageData = JSONFactoryUtil.createJSONObject();
+				pageData.put("paginator", paginatorDataFolders);
+			%>
+
+			<div class="aui-helper-hidden pageData"><%= pageData.toString() %></div>
 		</div>
 	</div>
 </div>

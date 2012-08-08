@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermissio
 import com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
+import com.liferay.portal.model.AuditedModel;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
@@ -1234,6 +1235,10 @@ public class PortalUtil {
 
 	public static long getUserId(PortletRequest portletRequest) {
 		return getPortal().getUserId(portletRequest);
+	}
+
+	public static String getUserName(AuditedModel auditedModel) {
+		return getPortal().getUserName(auditedModel);
 	}
 
 	public static String getUserName(long userId, String defaultUserName) {

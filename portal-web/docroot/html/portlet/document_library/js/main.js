@@ -2,6 +2,7 @@ AUI.add(
 	'liferay-document-library',
 	function(A) {
 		var AObject = A.Object;
+		var JSON = A.JSON;
 		var Lang = A.Lang;
 		var History = Liferay.HistoryManager;
 
@@ -82,8 +83,6 @@ AUI.add(
 						instance._eventChangeSearchFolder = instance.ns('changeSearchFolder');
 
 						instance._entriesContainer = instance.byId('entriesContainer');
-
-						instance._eventPageLoaded = instance.ns('pageLoaded');
 
 						instance._keywordsNode = instance.byId(STR_KEYWORDS);
 
@@ -171,7 +170,6 @@ AUI.add(
 						var eventHandles = [
 							Liferay.on(instance._eventDataRetrieveSuccess, instance._onDataRetrieveSuccess, instance),
 							Liferay.on(instance._eventOpenDocument, instance._openDocument, instance),
-							Liferay.on(instance._eventPageLoaded, instance._onPageLoaded, instance),
 							History.after('stateChange', instance._afterStateChange, instance),
 							Liferay.on('showTab', instance._onShowTab, instance),
 							Liferay.on(instance._eventChangeSearchFolder, instance._onChangeSearchFolder, instance)
@@ -315,37 +313,13 @@ AUI.add(
 							instance._appViewSelect.syncDisplayStyleToolbar();
 
 							instance._setSearchResults(content);
+
+							instance._setPageData();
 						}
 
 						Liferay.fire(instance._eventDataProcessed);
 
 						WIN[instance.ns('toggleActionsButton')]();
-					},
-
-					_onPageLoaded: function(event) {
-						var instance = this;
-
-						var paginatorData = event.paginator;
-
-						if (paginatorData) {
-							if (event.src == SRC_SEARCH) {
-								var repositoriesData = instance._repositoriesData;
-
-								var repositoryData = repositoriesData[event.repositoryId];
-
-								if (!repositoryData) {
-									repositoryData = {};
-
-									instance._repositoriesData[event.repositoryId] = repositoryData;
-								}
-
-								repositoryData.paginatorData = paginatorData;
-							}
-
-							instance._appViewPaginator.set(STR_PAGINATOR_DATA, paginatorData);
-
-							instance._toggleSyncNotification();
-						}
 					},
 
 					_onSearchFormSubmit: function(event) {
@@ -452,6 +426,7 @@ AUI.add(
 							instance._eventDataRequest,
 							{
 								requestParams: requestParams,
+								resetPaginator: true,
 								src: Liferay.DL_SEARCH
 							}
 						);
@@ -463,6 +438,40 @@ AUI.add(
 
 							entriesContainer.html(searchingTPL);
 						}
+					},
+
+					_setPageData: function() {
+						var instance = this;
+
+						var pageData = instance._documentLibraryContainer.all('.pageData');
+
+						pageData.each(
+							function(item, index) {
+								var pageData = JSON.parse(item.text());
+
+								if (pageData) {
+									var paginatorData = pageData.paginator;
+
+									if (pageData.src == SRC_SEARCH) {
+										var repositoriesData = instance._repositoriesData;
+
+										var repositoryData = repositoriesData[pageData.repositoryId];
+
+										if (!repositoryData) {
+											repositoryData = {};
+
+											instance._repositoriesData[pageData.repositoryId] = repositoryData;
+										}
+
+										repositoryData.paginatorData = paginatorData;
+									}
+
+									instance._appViewPaginator.set(STR_PAGINATOR_DATA, paginatorData);
+
+									instance._toggleSyncNotification();
+								}
+							}
+						);
 					},
 
 					_setSearchResults: function(content) {
