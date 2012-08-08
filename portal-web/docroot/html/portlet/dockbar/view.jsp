@@ -534,3 +534,221 @@ boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChec
 		customizableColumns.get('parentNode').addClass('customizable');
 	}
 </aui:script>
+
+<aui:script use="aui-paginator,autocomplete,autocomplete-filters">
+	Liferay.after(
+		'mySitesOverlayRender',
+		function(event) {
+			var taglibMySites = A.one('.taglib-my-sites'); 
+
+			<%
+			List<Group> mySites = user.getMySites();
+
+			PortletURL portletURL = new PortletURLImpl(request, PortletKeys.SITE_REDIRECTOR, plid, PortletRequest.ACTION_PHASE);
+
+			int count = 0;
+
+			int maxResults = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:my_sites:max"));
+
+			if (maxResults <= 0) {
+				maxResults = PropsValues.MY_SITES_MAX_ELEMENTS;
+			}
+
+			for (Group mySite : mySites) {
+
+				if (count++ > maxResults) {
+
+					%>
+					var escapedSiteName = '<%= HtmlUtil.escape(mySite.getName()) %>';
+
+					var hasPrivateSite = '<%= mySite.getPublicLayoutsPageCount() > 0 %>';
+
+					var hasPublicSite = '<%= mySite.getPublicLayoutsPageCount() > 0 %>';
+					
+					if (hasPrivateSite) {
+						var private_li = A.Node.create('<li id=' + A.guid() + ' class="private-site aui-menu-item" ></li>');
+
+						var private_a = A.Node.create('<a id=' + A.guid() + ' href="' + themeDisplay.getCDNBaseURL() + '/group/' + escapedSiteName + '/" tabindex="-1"></a>');
+
+						var private_span1 = A.Node.create('<span id=' + A.guid() + ' class="site-name">' + escapedSiteName + '</span>');
+
+						private_li.append(private_a);
+						private_a.append(private_span1);
+
+						if (hasPublicSite) {
+							private_a.append(A.Node.create('<span class="site-type">Private</span>'));
+						}
+
+						taglibMySites.append(private_li);
+
+						private_li.hide();
+					}
+
+					if (hasPublicSite) {
+						var public_li = A.Node.create('<li id=' + A.guid() + ' class="public-site aui-menu-item"></li>');
+
+						var public_a = A.Node.create('<a id=' + A.guid() + ' href="' + themeDisplay.getCDNBaseURL() + '/web/' + escapedSiteName + '/" tabindex="-1"></a>');
+
+						var public_span1 = A.Node.create('<span id=' + A.guid() + ' class="site-name">' + escapedSiteName + '</span>');
+
+						public_li.append(public_a);
+						public_a.append(public_span1);
+
+						if (hasPrivateSite) {
+							public_a.append(A.Node.create('<span class="site-type">Public</span>'));
+						}
+
+						taglibMySites.append(public_li);
+
+						public_li.hide();
+					}
+				<%
+				}
+			}
+			%>
+			var dataSource = [];
+
+			var menuItems = taglibMySites.all('li');
+
+			var searchBoxNode = menuItems.one('input');
+
+			menuItems.shift();	// to ignore the input li
+
+			A.each(
+				menuItems,
+				function(item, index, collection) {
+					if (item.one('.site-name')) {
+						var siteName = item.one('.site-name').getContent().trim();
+
+						dataSource.push(
+							{
+								li: item,
+								name: siteName
+							}
+						);
+					}
+				}
+			);
+
+			var maxResults = taglibMySites.all('li:not(.aui-helper-hidden)').size() - 1;
+
+			searchBoxNode.plug(
+				A.Plugin.AutoCompleteList,
+				{
+					maxResults: maxResults,	//15
+					minQueryLength: 0,
+					resultFilters: 'phraseMatch',
+					resultHighlighter: 'phraseMatch',
+					resultTextLocator: 'name',
+					source: dataSource
+				}
+			);
+
+			searchBoxNode.ac.on(
+				'results',
+				function(event) {
+					var siteResults = event.results;
+
+					A.Array.invoke(menuItems, 'hide');
+
+					A.each(
+						siteResults,
+						function(item, index, collection) {
+							var rawItem = item.raw;
+
+							var li = rawItem.li;
+
+							li.show();
+						}
+					);
+
+					event.preventDefault();
+				}
+			);
+
+			var siteNodes = menuItems._nodes;
+
+			var totalSites = siteNodes.length;
+
+			//var viewShift = taglibMySites.all('li:not(.aui-helper-hidden)')._nodes.length - 1;	// 14
+
+			var getPageRange = function (page) {
+				if (page === 1) {
+					var start = 0;
+
+					var end = maxResults;
+
+					return {
+						start: start,
+						end: end
+					}
+				}
+				else {
+					var start = (page - 1) * maxResults;
+
+					var end = start + maxResults + 1;
+
+					if (end > totalSites) {
+						end = totalSites;
+
+						start = totalSites - maxResults;
+					}
+
+					return {
+						start: start,
+						end: end
+					}
+				}
+			}
+
+			showPage = function (pageNumber) {
+				A.Array.each(
+					siteNodes,
+					function(item, index, collection) {
+						A.one(item).hide();
+					}
+				);
+
+				var range = getPageRange(pageNumber);
+
+				var sitesToShow = siteNodes.slice(range.start, range.end);
+
+				A.Array.each(
+					sitesToShow,
+					function(item, index, collection) {
+						A.one(item).show();
+					}
+				);
+			}
+
+			var paginatorContainer = A.Node.create('<li></li>')
+
+			taglibMySites.prepend(paginatorContainer);
+
+			var paginator = new A.Paginator(
+				{
+					containers: paginatorContainer,
+					firstPageLinkLabel: '',
+					lastPageLinkLabel: '',
+					nextPageLinkLabel: '',
+					on: {
+						changeRequest: function(event) {
+							var instance = this;
+
+							var newState = event.state;
+
+							var page = newState.page;
+
+							showPage(page);
+
+							instance.setState(newState);
+						}
+					},
+					prevPageLinkLabel: '',
+					template: '{FirstPageLink}{PrevPageLink}{NextPageLink}{LastPageLink}',
+					total: totalSites
+				}
+			).render();
+		}
+	);
+</aui:script>
