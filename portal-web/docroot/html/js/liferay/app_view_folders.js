@@ -143,8 +143,6 @@ AUI.add(
 
 						instance._entriesContainer = instance.byId('entriesContainer');
 
-						instance._eventPageLoaded = instance.ns('pageLoaded');
-
 						instance._repositoriesData = {};
 
 						var eventHandles = [

@@ -384,25 +384,25 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 			%>
 
 		</aui:form>
-	</div>
 
-	<aui:script>
-		Liferay.fire(
-			'<portlet:namespace />pageLoaded',
-			{
-				paginator: {
-					name: 'entryPaginator',
-					state: {
-						page: <%= (total == 0) ? 0 : entryEnd / (entryEnd - entryStart) %>,
-						rowsPerPage: <%= (entryEnd - entryStart) %>,
-						total: <%= total %>
-					}
-				},
-				repositoryId: '<%= searchRepositoryId %>',
-				src: Liferay.DL_SEARCH
-			}
-		);
-	</aui:script>
+		<%
+			JSONObject paginatorState = JSONFactoryUtil.createJSONObject();
+			paginatorState.put("page", total == 0 ? 0 : entryEnd / (entryEnd - entryStart));
+			paginatorState.put("rowsPerPage", entryEnd - entryStart);
+			paginatorState.put("total", total);
+
+			JSONObject paginatorDataEntries = JSONFactoryUtil.createJSONObject();
+			paginatorDataEntries.put("name", "entryPaginator");
+			paginatorDataEntries.put("state", paginatorState);
+
+			JSONObject pageData = JSONFactoryUtil.createJSONObject();
+			pageData.put("paginator", paginatorDataEntries);
+			pageData.put("repositoryId", searchRepositoryId);
+			pageData.put("src", 3);
+		%>
+
+		<div class="aui-helper-hidden pageData"><%= pageData.toString() %></div>
+	</div>
 </liferay-util:buffer>
 
 <c:choose>

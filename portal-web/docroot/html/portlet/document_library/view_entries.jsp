@@ -489,21 +489,21 @@ for (int i = 0; i < results.size(); i++) {
 	<liferay-ui:search-iterator paginate="<%= false %>" searchContainer="<%= searchContainer %>" />
 </c:if>
 
-<aui:script>
-	Liferay.fire(
-		'<portlet:namespace />pageLoaded',
-		{
-			paginator: {
-				name: 'entryPaginator',
-				state: {
-					page: <%= (total == 0) ? 0 : (entryEnd / (entryEnd - entryStart)) %>,
-					rowsPerPage: <%= (entryEnd - entryStart) %>,
-					total: <%= total %>
-				}
-			}
-		}
-	);
-</aui:script>
+<%
+	JSONObject paginatorState = JSONFactoryUtil.createJSONObject();
+	paginatorState.put("page", total == 0 ? 0 : entryEnd / (entryEnd - entryStart));
+	paginatorState.put("rowsPerPage", entryEnd - entryStart);
+	paginatorState.put("total", total);
+
+	JSONObject paginatorDataEntries = JSONFactoryUtil.createJSONObject();
+	paginatorDataEntries.put("name", "entryPaginator");
+	paginatorDataEntries.put("state", paginatorState);
+
+	JSONObject pageData = JSONFactoryUtil.createJSONObject();
+	pageData.put("paginator", paginatorDataEntries);
+%>
+
+<div class="aui-helper-hidden pageData"><%= pageData.toString() %></div>
 
 <%!
 private static Log _log = LogFactoryUtil.getLog("portal-web.docroot.html.portlet.document_library.view_entries_jsp");
