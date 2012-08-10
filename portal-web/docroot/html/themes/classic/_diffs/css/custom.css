@@ -126,6 +126,17 @@ hr, .separator {
 	position: relative;
 	z-index: 1;
 
+	a, li {
+		display: inline-block;
+	}
+
+	a:focus, a:hover, li.hover a, .child-menu li a, .lfr-navigation-proxy, .selected a, .yui3-dd-dragging {
+		background-color: #313334;
+		color: #FFF;
+		outline: 0;
+		text-shadow: -1px -1px #000;
+	}
+
 	a {
 		color: #FFF;
 		font-size: 1.1em;
@@ -154,17 +165,6 @@ hr, .separator {
 		padding: 3px;
 	}
 
-	a, li {
-		display: inline-block;
-	}
-
-	a:focus, a:hover, li.hover a, .child-menu li a, .lfr-navigation-proxy, .selected a, .yui3-dd-dragging {
-		background-color: #313334;
-		color: #FFF;
-		outline: 0;
-		text-shadow: -1px -1px #000;
-	}
-
 	.child-menu {
 		display: none;
 
@@ -176,6 +176,7 @@ hr, .separator {
 
 			a {
 				cursor: pointer !important;
+
 				&:hover, &.active {
 					background-color: #020509;
 				}
@@ -194,19 +195,19 @@ hr, .separator {
 
 .ie6, .ie7 {
 	#navigation {
-		ul.child-menu-visible, li.hover .child-menu {
+		li.hover .child-menu, ul.child-menu-visible {
 			left: 0;
 			top: 25px;
-		}
-
-		a {
-			padding: 4px 15px;
 		}
 
 		a, li {
 			display: inline;
 			zoom: 1;
 			z-index: 200;
+		}
+
+		a {
+			padding: 4px 15px;
 		}
 	}
 }

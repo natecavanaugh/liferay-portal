@@ -29,6 +29,48 @@ body.green, .green .portlet {
 
 	/* ---------- Application styling ---------- */
 
+	.aui-menu-content li a.aui-focus, .lfr-menu-list ul a.aui-focus, .lfr-menu-expanded li a:focus {
+		background-color: #677D5B;
+		color: #FFF;
+		text-shadow: -1px -1px #2F342C;
+	}
+
+	.portlet-communities, .portlet-enterprise-admin {
+		.lfr-current-theme {
+			background-color: #F6F8F1;
+			border-color: #909683;
+		}
+
+		.lfr-theme-list {
+			h3 {
+				background-color: #DBDED4;
+			}
+
+			.theme-entry:hover {
+				background-color: #F5FFE0;
+				border-color: #CFE0A8;
+				color: #BBC99F;
+			}
+		}
+
+		.selected-color-scheme .theme-entry {
+			border-color: #669A33;
+		}
+
+		.theme-entry .theme-title {
+			background-color: #909488;
+			border-color: #909683;
+		}
+
+		.theme-entry:hover .theme-thumbnail {
+			border-color: #CFE0A8;
+		}
+
+		.theme-entry, .lfr-current-theme .theme-screenshot {
+			border-color: #B9BDAF;
+		}
+	}
+
 	.aui-autocomplete-results-content {
 		border-color: #C1F599;
 	}
@@ -136,49 +178,15 @@ body.green, .green .portlet {
 		}
 	}
 
-	.aui-menu-content li a.aui-focus, .lfr-menu-list ul a.aui-focus, .lfr-menu-expanded li a:focus {
-		background-color: #677D5B;
-		color: #FFF;
-		text-shadow: -1px -1px #2F342C;
-	}
-
-	.portlet-communities, .portlet-enterprise-admin {
-		.lfr-current-theme {
-			background-color: #F6F8F1;
-			border-color: #909683;
-		}
-
-		.lfr-theme-list {
-			h3 {
-				background-color: #DBDED4;
-			}
-
-			.theme-entry:hover {
-				background-color: #F5FFE0;
-				border-color: #CFE0A8;
-				color: #BBC99F;
-			}
-		}
-
-		.selected-color-scheme .theme-entry {
-			border-color: #669A33;
-		}
-
-		.theme-entry .theme-title {
-			background-color: #909488;
-			border-color: #909683;
-		}
-
-		.theme-entry:hover .theme-thumbnail {
-			border-color: #CFE0A8;
-		}
-
-		.theme-entry, .lfr-current-theme .theme-screenshot {
-			border-color: #B9BDAF;
-		}
-	}
-
 	/* ---------- Portlet wrapper and icons ---------- */
+
+	.portlet-section-selected, .portlet-section-selected a {
+		background-color: #909683;
+
+		&:focus, &:hover {
+			background-color: #909683;
+		}
+	}
 
 	.panel-page .portlet-topper {
 		border-bottom-color: #909683;
@@ -191,14 +199,6 @@ body.green, .green .portlet {
 	.portlet-topper {
 		background-color: #D9DDD3;
 		border-bottom-color: #B7BCAE;
-	}
-
-	.portlet-section-selected, .portlet-section-selected a {
-		background-color: #909683;
-
-		&:focus, &:hover {
-			background-color: #909683;
-		}
 	}
 
 	/* ---------- Calendar portlet ---------- */
@@ -262,20 +262,22 @@ body.green, .green .portlet {
 
 	/* This CSS sets the default styles for forms. */
 
-	button, input[type="button"], input[type="reset"], input[type="submit"], .lfr-actions, .lfr-actions ul {
-		color: #404F34;
-	}
+	button, input[type="button"], input[type="reset"], input[type="submit"], .lfr-actions {
+		&, .lfr-actions ul {
+			color: #404F34;
+		}
 
-	button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover, .lfr-actions:hover, .lfr-actions:hover ul {
-		background-color: #CFDABA;
-		background-image: url(@theme_image_path@/color_schemes/green/application/state_hover_bg.png);
-		border-color: #778362;
-		color: #669A33;
-	}
+		&:focus, .lfr-actions:focus ul {
+			background-color: #ECECEC;
+			background-image: url(@theme_image_path@/application/state_active_bg.png);
+		}
 
-	button:focus, input[type="button"]:focus, input[type="reset"]:focus, input[type="submit"]:focus, .lfr-actions:focus, .lfr-actions:focus ul {
-		background-color: #ECECEC;
-		background-image: url(@theme_image_path@/application/state_active_bg.png);
+		&:hover, .lfr-actions:hover ul {
+			background-color: #CFDABA;
+			background-image: url(@theme_image_path@/color_schemes/green/application/state_hover_bg.png);
+			border-color: #778362;
+			color: #669A33;
+		}
 	}
 
 	/* ---------- Site breadcrumbs ---------- */
