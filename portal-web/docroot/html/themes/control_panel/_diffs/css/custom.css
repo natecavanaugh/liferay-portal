@@ -1,12 +1,28 @@
 @import "compass";
 @import url(../../classic/css/custom_common.css);
 
-/* ---------- Base styles ---------- */
+@mixin select-navigation-bottom-bar {
+	top: 22px;
+}
+
+@mixin select-navigation-middle-bar {
+	top: 17px;
+}
+
+@mixin select-navigation-top-bar {
+	top: 12px;
+}
+
+/* -------- Base styles -------- */
+
+body, html, #content, #content-wrapper, #wrapper {
+	height: 100%;
+}
 
 body {
 	background: #EEF0F2;
 	color: #1A1A1A;
-	font-size: 12px;
+	font-size: 16px;
 }
 
 a {
@@ -22,29 +38,7 @@ select {
 	padding: 4px;
 }
 
-.display-panel-columns {
-	&:after, &:before {
-		bottom: 0;
-		content: "";
-		display: block;
-		position: fixed;
-		top: 0;
-		width: 238px;
-		z-index: -1;
-	}
-
-	&:after {
-		border-right: 1px solid #FFF;
-		margin-left: 1px;
-	}
-
-	&:before {
-		background-color: #CAD2DD;
-		border-right: 1px solid #B0B1B3;
-	}
-}
-
-body.portal-popup:after, body.portal-popup:before {
+body.portal-popup:after, body.portal-popup:before, .panels-minimized .panel-page-menu .lfr-panel .lfr-panel-titlebar .lfr-panel-button, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel-titlebar, .select-navigation-wrapper, .select-site-wrapper, .touch.aui-view-lt960.aui-view-gt720 .lfr-menu-list {
 	display: none;
 }
 
@@ -56,18 +50,19 @@ body.portal-popup:after, body.portal-popup:before {
 
 .portal-add-content {
 	background-color: transparent;
+	margin-top: 34px;
 }
 
 .portlet-layout {
 	clear: none;
 }
 
-#banner, #breadcrumbs h1, #heading .site-title, #minimize-panels span, #navigation h1, #skip-to-content, .lfr-ctrl-panel .user-greeting {
+#banner, #breadcrumbs h1, #heading .site-title, .lfr-ctrl-panel .user-greeting, #navigation h1, .pin-dockbar, #skip-to-content, .toggle-navigation span, {
 	clip: rect(0 0 0 0);
 	position: absolute;
 }
 
-.clear {
+.clear, .panel-page-menu .lfr-panel-content ul.category-portlets {
 	clear: both;
 }
 
@@ -87,26 +82,19 @@ body.portal-popup:after, body.portal-popup:before {
 
 #breadcrumbs {
 	left: 257px;
-	position: absolute;
+	margin-right: 273px;
+	position: relative;
 	right: 20px;
-	top: 40px;
+	top: 43px;
 	z-index: 1;
 
 	.first {
 		padding-left: 3px;
 	}
 
-	.last {
-		margin-top: 0;
-	}
-
-	.breadcrumbs {
-		margin-bottom: 0;
-	}
-
 	li {
-		.first a {
-			background: url(../images/common/control_panel.png) no-repeat 0 0;
+		&.first a {
+			background: url(../images/dock/control_panel.png) no-repeat 0 0;
 			padding-left: 21px;
 		}
 
@@ -139,8 +127,17 @@ body.portal-popup:after, body.portal-popup:before {
 	}
 }
 
+#breadcrumbs .last, .portlet-message-boards .threads-panel {
+	margin-top: 0;
+}
+
+#breadcrumbs .breadcrumbs, .aui-tagselector-content {
+	margin-bottom: 0;
+}
+
 .panels-minimized #breadcrumbs {
-	left: 57px;
+	left: 59px;
+	margin-right: 75px;
 }
 
 .lfr-panel-container {
@@ -166,22 +163,22 @@ body.portal-popup:after, body.portal-popup:before {
 	}
 }
 
-#content-wrapper {
-	position: relative;
-}
-
 .lfr-ctrl-panel {
+	background: transparent url(../images/custom/bg-1.png) repeat-y 0 0;
+	border-left: 238px solid #CAD2DD;
+	width: auto;
+
 	.aui-tree-node-selected {
 		background: transparent;
-
-		a {
-			color: #333;
-		}
 	}
 }
 
+.lfr-ctrl-panel .aui-tree-node-selected a, .search-panel-active #controlPanelMenuAddContentPanelContainer a {
+	color: #333;
+}
+
 .panel-page-application {
-	.lfr-panel.lfr-extended {
+	.lfr-pane.lfr-extended {
 		margin-bottom: 5px;
 	}
 
@@ -203,16 +200,18 @@ body.portal-popup:after, body.portal-popup:before {
 	}
 
 	&.lfr-extended {
+		margin-bottom: 5px;
+
 		.lfr-panel-titlebar {
 			&, .lfr-panel-button {
 				background: url(../images/custom/panel_header_toggler_bg.png) no-repeat -3px -1px;
 				margin: 2px 0 0;
 			}
-		}
 
-		.lfr-panel-titlebar {
-			background: transparent none;
-			padding: 0 3px 0 5px;
+			& {
+				background: transparent none;
+				padding: 0 3px 0 5px;
+			}
 		}
 
 		#panel-manage-content .lfr-panel-titlebar {
@@ -230,7 +229,11 @@ body.portal-popup:after, body.portal-popup:before {
 }
 
 .panel-page-menu {
-	position: relative;
+	background: #CAD2DD;
+	border-right: 1px solid #B0B1B3;
+	left: 0;
+	position: absolute;
+	top: 0;
 	width: 238px;
 }
 
@@ -240,33 +243,30 @@ body.portal-popup:after, body.portal-popup:before {
 
 #wrapper div.panel-page-body {
 	float: none;
-	padding: 44px 20px 0 260px;
+	margin-left: 0;
+	padding: 46px 23px 25px 25px;
 	width: auto;
 }
 
 .panels-minimized #wrapper div.panel-page-body {
-	padding-left: 60px;
+	padding-left: 24px;
+	padding-right: 23px;
 }
 
-.aui-tagselector-content {
-	margin-bottom: 0;
-}
-
-.lfr-ctrl-panel-content .aui-column-content, .lfr-ctrl-panel-content .aui-column-content-center, .lfr-ctrl-panel .panel-page-menu-content {
-	padding: 0 0 0;
+.lfr-ctrl-panel .panel-page-menu-content, .lfr-ctrl-panel-content .aui-column-content, .lfr-ctrl-panel-content .aui-column-content-center {
+	padding: 0;
 }
 
 .search-panels {
 	background: url(../images/custom/search_panels_bg.png) repeat-x 0 0;
 	display: block;
 	height: 42px;
-	width: 100%;
 	z-index: 5;
 
 	.aui-field-content {
 		display: block;
 		line-height: 1;
-		padding: 9px;
+		padding: 8px;
 		position: relative;
 	}
 }
@@ -282,16 +282,17 @@ body.portal-popup:after, body.portal-popup:before {
 	width: 191px;
 }
 
-.panels-minimized .search-panels-input {
-	visibility: hidden;
-}
+.panels-minimized {
+	.search-panels-input {
+		visibility: hidden;
+	}
 
-.panels-minimized .search-panels .aui-field-element {
-	background: url(../images/custom/search_navigation_min_icon.png) no-repeat 100% 50%;
-	border-bottom: none;
-	display: block;
-	position: relative;
-	width: 100%;
+	.search-panels .aui-field-element {
+		background: url(../images/custom/search_navigation_min_icon.png) no-repeat 100% 50%;
+		border-bottom: none;
+		display: block;
+		position: relative;
+	}
 }
 
 .search-panels .cancel-search {
@@ -359,7 +360,7 @@ body.portal-popup:after, body.portal-popup:before {
 	}
 
 	#panel-manage-content .lfr-panel-titlebar {
-		padding: 3px 6px;
+		padding: 0 6px;
 
 		.lfr-panel-title-single {
 			padding: 7px 6px 6px;
@@ -370,14 +371,12 @@ body.portal-popup:after, body.portal-popup:before {
 		background: #CAD2DD;
 		border-top: 1px solid transparent;
 	}
-}
 
-.panel-page-menu #controlPanelMenuAddContentPanelContainer .lfr-panel-titlebar a.lfr-panel-button:focus, .panel-page-menu .lfr-panel.lfr-collapsed .lfr-panel-titlebar .lfr-panel-button, .panel-page-menu .lfr-panel-titlebar .lfr-panel-button, .panel-page-menu .lfr-panel-titlebar .lfr-panel-button:hover {
-	background: transparent url(../images/custom/panel_header_toggler_bg.png) no-repeat 0 0;
-}
+	#controlPanelMenuAddContentPanelContainer .lfr-panel.lfr-collapsed .lfr-panel-titlebar .lfr-panel-button, .lfr-panel-titlebar a.lfr-panel-button:focus, .lfr-panel-titlebar .lfr-panel-button, .lfr-panel-titlebar .lfr-panel-button:hover {
+		background: transparent url(../images/custom/panel_header_toggler_bg.png) no-repeat 0 0;
+	}
 
-.panel-page-menu {
-	.lfr-panel.lfr-collapsed .lfr-panel-titlebar .lfr-panel-button {
+	#controlPanelMenuAddContentPanelContainer .lfr-panel.lfr-collapsed .lfr-panel-titlebar .lfr-panel-button {
 		&, &:hover {
 			background-position: 0 -22px;
 		}
@@ -388,13 +387,13 @@ body.portal-popup:after, body.portal-popup:before {
 	}
 }
 
-.search-panel-active .panel-page-menu {
-	.lfr-panel.lfr-extended .lfr-panel-content ul {
+.search-panel-active {
+	.panel-page-menu .lfr-panel.lfr-extended .lfr-panel-content ul {
+		border-width: 0;
 		padding: 0;
-		border: 0;
 	}
 
-	li a {
+	.panel-page-menu li a {
 		border-style: solid;
 		border-width: 0 0 0 5px;
 	}
@@ -426,7 +425,9 @@ body.portal-popup:after, body.portal-popup:before {
 .panel-page-menu .lfr-panel-titlebar .lfr-panel-title {
 	background-image: url(../images/custom/panel_icons_bg.png);
 	background-repeat: no-repeat;
-	font-size: 13px;
+	font-size: 16px;
+	line-height: 16px;
+	margin: 4px 0;
 	padding-left: 20px;
 }
 
@@ -446,9 +447,15 @@ body.portal-popup:after, body.portal-popup:before {
 	}
 }
 
-.panel-page-menu #panel-manage-content .lfr-panel-title span a, .panels-minimized .panel-page-menu #panel-manage-content .lfr-panel-title {
-	font-size: 13px;
-	padding-left: 20px;
+.panels-minimized .panel-page-menu #panel-manage-content .lfr-panel-title {
+	height: 19px;
+	overflow: hidden;
+	padding-left: 0;
+	position: absolute;
+	right: 10px;
+	text-indent: -9999px;
+	top: 8px;
+	width: 19px;
 }
 
 .panel-page-menu {
@@ -462,49 +469,43 @@ body.portal-popup:after, body.portal-popup:before {
 	}
 
 	.lfr-panel-content {
+		background-color: transparent;
 		padding: 0;
 
 		ul {
 			background-position: -238px 0;
 			background-repeat: no-repeat;
 
-			&.category-portlets {
-				clear: both;
-			}
+			li {
+				a {
+					color: #2D2D2D;
+					display: block;
+					outline: 0;
+					padding: 5px 8px 5px 20px;
+				}
 
-			li a {
-				color: #2D2D2D;
-				display: block;
-				outline: 0;
-				padding: 5px 8px 5px 20px;
+				&.selected-portlet a {
+					color: #FFF;
+					font-weight: bold;
+					position: relative;
+
+					&:after, &:focus:after {
+						border: 8px solid #EEF0F2;
+						border-color: transparent #EEF0F2 transparent transparent;
+						content: "";
+						display: block;
+						right: -2px;
+						margin-top: -8px;
+						position: absolute;
+						top: 50%;
+						z-index: 2;
+					}
+				}
 			}
 		}
 
 		.lfr-title-scope-selector {
 			margin-left: 20px;
-		}
-
-		ul li.selected-portlet a {
-			color: #FFF;
-			font-weight: bold;
-			position: relative;
-		}
-	}
-}
-
-.panel-page-menu {
-	.lfr-panel-content ul li.selected-portlet a {
-		&:after, :focus:after {
-			border-color: transparent #EEF0F2 transparent transparent;
-			border-style: solid;
-			border-width: 8px;
-			content: "";
-			display: block;
-			margin-top: -8px;
-			position: absolute;
-			right: -2px;
-			top: 50%;
-			z-index: 2;
 		}
 	}
 
@@ -529,15 +530,11 @@ body.portal-popup:after, body.portal-popup:before {
 	}
 
 	#panel-manage-my .lfr-panel-title {
-		background-position: 0 3px;
-	}
-
-	.lfr-panel-content {
-		background-color: transparent;
+		background-position: 0 0;
 	}
 }
 
-.panel-page-menu #panel-manage-content .lfr-panel-title, .panels-minimized .panel-page-menu #panel-manage-content .lfr-panel-title {
+.panel-page-menu #panel-manage-content .lfr-panel-title {
 	background-image: none;
 	display: inline-block;
 	vertical-align: top;
@@ -551,7 +548,7 @@ body.portal-popup:after, body.portal-popup:before {
 }
 
 .panel-page-menu {
-	#panel-manage-content .lfr-panel-title span a {
+	#panel-manage-content .lfr-panel-title  span a {
 		font-weight: bold;
 		padding-left: 2px;
 		position: relative;
@@ -574,15 +571,17 @@ body.portal-popup:after, body.portal-popup:before {
 	}
 
 	#panel-manage-portal .lfr-panel-title {
-		background-position: 0 -36px;
+		background-position: 0 -39px;
 	}
 
-	#panel-manage-server .lfr-panel-title {
-		background-position: 0 -55px;
-	}
+	#panel-manage-server {
+		.lfr-panel-title {
+			background-position: 0 -56px;
+		}
 
-	#panel-manage-server .lfr-panel-content {
-		border-bottom: 1px solid #FFF;
+		.lfr-panel-content {
+			border-bottom: 1px solid #FFF;
+		}
 	}
 }
 
@@ -593,22 +592,20 @@ body.portal-popup:after, body.portal-popup:before {
 	text-shadow: 1px 1px 0 #FFF;
 }
 
-.search-panel-active #controlPanelMenuAddContentPanelContainer {
-	.lfr-panel .lfr-panel-content {
-		background-color: #CAD2DD;
-	}
+.search-panel-active {
+	#controlPanelMenuAddContentPanelContainer {
+		.lfr-panel .lfr-panel-content {
+			background-color: #CAD2DD;
+		}
 
-	& {
-		background: #EEF0F2;
+		& {
+			background: #EEF0F2;
+		}
 	}
+}
 
-	a {
-		color: #333;
-	}
-
-	li.selected-portlet a {
-		color: #FFF;
-	}
+.portlet-description .hide-all-notices a, .search-panel-active #controlPanelMenuAddContentPanelContainer li.selected-portlet a {
+	color: #FFF;
 }
 
 #controlPanelMenuAddContentPanelContainer a:focus {
@@ -618,43 +615,39 @@ body.portal-popup:after, body.portal-popup:before {
 	text-decoration: underline;
 }
 
-.search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel.lfr-extended {
-	&, .lfr-panel-content, .lfr-panel-content ul {
-		background: transparent;
-	}
-}
-
 .search-panel-active #controlPanelMenuAddContentPanelContainer {
+	.lfr-panel.lfr-extended {
+		&, .lfr-panel-content ul {
+			background: transparent;
+		}
+	}
+
 	#panel-manage-my li {
-		a:focus, &.selected-portlet a {
+		&.selected-portlet a, a:focus {
 			background-color: #76AD00;
 		}
 	}
 
 	#panel-manage-content li {
-		a:focus, &.selected-portlet a {
+		&.selected-portlet a, a:focus {
 			background-color: #005BA8;
 		}
 	}
 
 	#panel-manage-portal li {
-		a:focus, &.selected-portlet a {
+		&.selected-portlet a, a:focus {
 			background-color: #680082;
 		}
 	}
 
 	#panel-manage-server li {
-		a:focus, &.selected-portlet a {
+		&.selected-portlet a, a:focus {
 			background-color: #727171;
 		}
 	}
 }
 
-.panel-page-menu #controlPanelMenuAddContentPanelContainer .lfr-panel-titlebar a.lfr-panel-button:focus {
-	background: transparent url(../images/custom/panel_header_toggler_bg.png) no-repeat 0 0;
-}
-
-.search-panel-active .lfr-collapsed .lfr-panel-content {
+.panels-minimized #controlPanelMenuAddContentPanelContainer .lfr-panel:hover .lfr-panel-content, .search-panel-active .lfr-collapsed .lfr-panel-content {
 	display: block;
 }
 
@@ -662,25 +655,37 @@ body.portal-popup:after, body.portal-popup:before {
 	position: relative;
 }
 
-.panels-minimized .panel-page-menu .lfr-panel .lfr-panel-titlebar .lfr-panel-button, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel-titlebar {
-	display: none;
-}
-
 .panels-minimized {
 	.panel-page-menu {
+		left: 0;
+		width: 40px;
+
 		.lfr-panel-titlebar {
 			height: 22px;
+
+			.lfr-panel-title {
+				height: 19px;
+				overflow: hidden;
+				padding-left: 0;
+				position: absolute;
+				right: 10px;
+				text-indent: -9999px;
+				top: 8px;
+				width: 19px;
+			}
 		}
 
-		.lfr-panel-titlebar .lfr-panel-title, #panel-manage-content .lfr-panel-title {
-			height: 19px;
-			overflow: hidden;
-			padding-left: 0;
-			position: absolute;
-			right: 10px;
-			text-indent: -9999px;
-			top: 8px;
-			width: 19px;
+		#panel-manage-content {
+			.lfr-panel-titlebar {
+				padding: 8px 6px 8px;
+			}
+
+			.lfr-panel-title {
+				background-image: url(../images/common/site_icon.png);
+				background-position: 50%;
+				display: inline-block;
+				vertical-align: top;
+			}
 		}
 	}
 
@@ -696,7 +701,7 @@ body.portal-popup:after, body.portal-popup:before {
 
 			&:before {
 				background: #333 url(../images/common/user_icon_white.png) no-repeat 50%;
-				content: '';
+				content: "";
 				display: block;
 				height: 35px;
 				left: -38px;
@@ -718,14 +723,14 @@ body.portal-popup:after, body.portal-popup:before {
 		#panel-manage-server .lfr-panel-content:before {
 			background-image: url(../images/custom/panel_icons_white_server_bg.png);
 		}
+	}
 
-		.lfr-panel:hover .lfr-panel-content {
-			display: block;
-		}
+	.lfr-ctrl-panel {
+		border-left: 40px solid #CAD2DD;
 	}
 }
 
-.lfr-table tr td, .lfr-table tr th {
+.lfr-header-row .lfr-actions.lfr-extended, .lfr-table tr td, .lfr-table tr th {
 	padding: 2px 5px;
 }
 
@@ -733,13 +738,9 @@ body.portal-popup:after, body.portal-popup:before {
 	background: #F6F8FB;
 }
 
-.portlet-message-boards .threads-panel {
-	margin-top: 0;
-}
-
 #quick-links {
-	min-height: 20px;
 	padding: 10px;
+	min-height: 20px;
 }
 
 .drop-zone {
@@ -757,9 +758,10 @@ body.portal-popup:after, body.portal-popup:before {
 .portlet-description {
 	background-color: #E6F5F0;
 	border-color: #8DD4AE;
-	font-weight: normal;
-	padding-bottom: 10px;
-	padding-top: 10px;
+	border-style: solid;
+	border-width: 1px 0;
+	padding: 10px 5px 10px 25px;
+	position: relative;
 
 	.warn {
 		display: block;
@@ -775,9 +777,253 @@ body.portal-popup:after, body.portal-popup:before {
 	padding: 5px 0 0;
 }
 
+.dockbar {
+	font-size: 16px;
+	position: fixed;
+	top: 0;
+
+	ul {
+		margin-right: 14px;
+	}
+}
+
+.dockbar, .panels-minimized .aui-column-content-last, .panels-minimized .panel-page-application-content, .panels-minimized .panel-page-body-content, .panels-minimized .search-panels .aui-field-element, .search-panels, .toggle-navigation a, {
+	width: 100%;
+}
+
+.toggle-navigation:before, .toggle-navigation a:after, .toggle-navigation a:before, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-element:after , .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-element:before, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-content:before {
+	background: #FFF;
+	content: "";
+	height: 2px;
+	left: 20px;
+	position: fixed;
+	width: 16px;
+	z-index: 306;
+}
+
+li.toggle-navigation {
+	height: 24px;
+	margin: 5px 4px;
+	overflow: hidden;
+	width: 38px;
+
+	&:before {
+		@include select-navigation-top-bar;
+	}
+
+	a {
+		display: block;
+		height: 100%;
+
+		&:after {
+			@include select-navigation-bottom-bar;
+		}
+
+		&:before {
+			@include select-navigation-middle-bar;
+		}
+	}
+}
+
+#panel-manage-content a.lfr-panel-button {
+	margin-top: 8px;
+}
+
+#main-content {
+	font-size: 14px;
+}
+
+.portlet-description {
+	.hide-notices-control {
+		left: 3px;
+		margin: -8px 0 0 0;
+		position: absolute;
+		top: 50%;
+		z-index: 10;
+
+		.aui-icon {
+			background-position: 0 0;
+			cursor: pointer;
+			display: inline-block;
+		}
+	}
+
+	.aui-icon-help {
+		background-image: url(../images/portlet/help.png);
+	}
+
+	.aui-icon-closethick {
+		background-image: url(../images/portlet/close_borderless.png);
+	}
+
+	.hide-all-notices {
+		color: #FFF;
+		display: inline-block;
+		font-size: 16px;
+		margin-left: 2px;
+		padding: 1px 10px;
+		text-shadow: 1px 1px 0 #000;
+		vertical-align: top;
+	}
+}
+
+.hide-notices-hover .hide-all-notices, .portlet-description .aui-icon-closethick {
+	background-color: #333;
+}
+
+img.icon, .lfr-component li img {
+	height: 20px;
+}
+
+.aui-w1-2, .aui-w50 {
+	min-width: 200px;
+	width: auto;
+}
+
+.touch {
+	.panel-page-menu #panel-manage-content {
+		&.lfr-collapsed .lfr-panel-title .lfr-actions .lfr-trigger img, .lfr-panel-title {
+			padding-left: 0;
+		}
+
+		.lfr-panel-title {
+			.lfr-actions .lfr-trigger img {
+				vertical-align: text-bottom;
+			}
+		}
+	}
+
+	&.aui-view-lt960.aui-view-gt720, .panels-minimized {
+		.lfr-ctrl-panel {
+			background: transparent;
+			border-left-width: 0;
+		}
+
+		#breadcrumbs {
+			left: 17px;
+			margin-right: 34px;
+		}
+	}
+
+	&.aui-view-lt960.aui-view-gt720 {
+		.select-navigation-wrapper {
+			.aui-field-element {
+				&:after {
+					@include select-navigation-bottom-bar;
+				}
+
+				&:before {
+					@include select-navigation-middle-bar;
+				}
+			}
+
+			.aui-field-content:before {
+				@include select-navigation-top-bar;
+			}
+		}
+
+		.dockbar .back-link {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			width: 80px;
+		}
+
+		.panel-page-menu {
+			height: 100%;
+			overflow: hidden;
+			width: 0;
+		}
+
+		.toggle-navigation {
+			margin-right: 229px;
+		}
+
+		.select-navigation-wrapper, .select-site-wrapper {
+			display: block;
+			height: 24px;
+			margin: 6px 9px;
+			position: fixed;
+			top: 0;
+			z-index: 303;
+		}
+
+		.select-navigation-input, .select-site-input {
+			background: transparent;
+			border-width: 0;
+			height: 24px;
+		}
+
+		.select-navigation-wrapper {
+			left: 0;
+
+			.select-navigation-input {
+				line-height: 0;
+				width: 38px;
+			}
+		}
+
+		.select-site-wrapper {
+			left: 47px;
+
+			.select-site-input {
+				color: #FFF;
+				font-weight: bold;
+				padding: 2px 23px 2px 5px;
+			}
+		}
+
+		.select-site-arrow {
+			border-style: solid;
+			border-color: #FFF transparent transparent transparent;
+			border-width: 7px 4px 0;
+			content: "";
+			left: 185px;
+			position: fixed;
+			top: 13px;
+			z-index: 305;
+		}
+	}
+
+	.panels-minimized {
+		.panel-page-menu {
+			display: none;
+		}
+	}
+}
+
+/* ---------- Internet Explorer ---------- */
+
+.ie {
+	li.toggle-navigation a {
+		background-image: url(../images/custom/panel_button.png);
+		background-repeat: no-repeat;
+	}
+}
+
+.ie7 {
+	#content-wrapper {
+		width: 100%;
+	}
+
+	.panels-minimized .panel-page-menu #panel-manage-content .lfr-panel-title {
+		background-position-x: 0;
+		background-position-y: 0;
+	}
+
+	.panel-page-menu {
+		z-index: 1;
+	}
+}
+
+.ie9 {
+	li.toggle-navigation {
+		background-color: #427EAD;
+	}
+}
+
 /*----- Extras -----*/
 
-input[type="password"], input[type="text"], select, textarea, .textarea, .aui-tagselector-content .aui-textboxlistentry-holder {
+input[type="password"], input[type="text"], select, textarea, .aui-tagselector-content .aui-textboxlistentry-holder, .textarea {
 	@include box-shadow(0 1px 0 #FFF, 0 1px 2px #CCC inset);
 }
 
@@ -791,8 +1037,7 @@ input[type="password"], input[type="text"], select, textarea, .textarea, .aui-ta
 	}
 }
 
-input[type="password"], input[type="text"], select, textarea,
-#breadcrumbs, .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .lfr-panel.lfr-extended, .portlet-communities .layout-breadcrumb ul, .portlet-enterprise-admin .form-navigation, .portlet-enterprise-admin .layout-breadcrumb ul, .taglib-search-toggle, .textarea, .aui-field-element, .aui-textboxlistentry-holder {
+input[type="password"], input[type="text"], select, textarea, #breadcrumbs, .aui-field-element, .aui-textboxlistentry-holder, .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .lfr-panel.lfr-extended, .portlet-communities .layout-breadcrumb ul, .portlet-enterprise-admin .form-navigation, .portlet-enterprise-admin .layout-breadcrumb ul, .taglib-search-toggle, .textarea {
 	@include border-radius(4px);
 }
 
@@ -800,12 +1045,12 @@ input[type="password"], input[type="text"], select, textarea,
 	@include border-radius(4px 4px 0 0);
 }
 
-#breadcrumbs, .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .taglib-search-toggle {
-	@include box-shadow(0 0 8px #CECECE inset);
+.hide-notices-hover .hide-all-notices, .portlet-description .aui-icon {
+	@include border-radius(10px);
 }
 
-#minimize-panels {
-	@include border-radius(0 2px 2px 0);
+#breadcrumbs, .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .taglib-search-toggle {
+	@include box-shadow(0 0 8px #CECECE inset);
 }
 
 .panels-minimized #controlPanelMenuAddContentPanelContainer .lfr-panel-content {
@@ -816,7 +1061,7 @@ input[type="password"], input[type="text"], select, textarea,
 	}
 }
 
-#controlPanelMenuAddContentPanelContainer a.lfr-panel-button:focus, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel.lfr-extended, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel .lfr-panel-content, .aui-tagselector .lfr-tag-selector-input {
+#controlPanelMenuAddContentPanelContainer a.lfr-panel-button:focus, .aui-tagselector .lfr-tag-selector-input, .panel-page-application .lfr-document-library-comments.lfr-panel.lfr-extended, .panel-page-menu .lfr-floating-container, .panel-page-menu .lfr-panel.lfr-extended, .panel-page-menu .lfr-panel.lfr-extended .lfr-panel-titlebar, .panel-page-menu .lfr-panel-container, .panel-page-menu .lfr-panel-container .lfr-extended.lfr-collapsible .lfr-panel-titlebar, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel .lfr-panel-content, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel.lfr-extended {
 	@include box-shadow(none);
 }
 
@@ -828,17 +1073,12 @@ input[type="password"], input[type="text"], select, textarea,
 	@include box-shadow(0 0 6px #3E9AE1);
 }
 
-.search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel.lfr-extended {
+.panel-page-application .lfr-document-library-comments.lfr-panel.lfr-extended, .panel-page-menu .lfr-floating-container, .panel-page-menu .lfr-panel.lfr-extended, .panel-page-menu .lfr-panel.lfr-extended .lfr-panel-titlebar, .panel-page-menu .lfr-panel-container, .panel-page-menu .lfr-panel-container .lfr-extended.lfr-collapsible .lfr-panel-titlebar, .search-panel-active #controlPanelMenuAddContentPanelContainer .lfr-panel.lfr-extended {
 	@include border-radius(0);
 }
 
 .lfr-preview-file-index, .lfr-preview-file-info, .lfr-preview-file-toolbar, .panel-page-menu #panel-manage-content .lfr-panel-title span {
 	@include border-radius(5px);
-}
-
-.panel-page-application .lfr-document-library-comments.lfr-panel.lfr-extended, .panel-page-menu .lfr-floating-container, .panel-page-menu .lfr-panel.lfr-extended, .panel-page-menu .lfr-panel.lfr-extended .lfr-panel-titlebar, .panel-page-menu .lfr-panel-container, .panel-page-menu .lfr-panel-container .lfr-extended.lfr-collapsible .lfr-panel-titlebar {
-	@include border-radius(0);
-	@include box-shadow(none);
 }
 
 .panel-page-menu .lfr-panel.lfr-extended .lfr-panel-titlebar {
@@ -853,4 +1093,20 @@ input[type="password"], input[type="text"], select, textarea,
 .panel-page-menu .lfr-panel-content ul li.selected-portlet a {
 	@include background-image(linear-gradient(#427EAD, #154B75));
 	@include filter-gradient(#427EAD, #154B75);
+}
+
+.toggle-navigation:before, .toggle-navigation a:after, .toggle-navigation a:before, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-element:before, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-element:after, .touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper .aui-field-content:before {
+	@include border-radius(1px);
+}
+
+.touch.aui-view-lt960.aui-view-gt720 .select-navigation-wrapper, .touch.aui-view-lt960.aui-view-gt720 .select-site-wrapper, .toggle-navigation {
+	@include background-image(linear-gradient(color-stops(#427EAD, #154B75)));
+	@include border-radius(3px);
+}
+
+.touch.aui-view-lt960.aui-view-gt720 {
+	.select-navigation-input, .select-site-input {
+		@include box-shadow(0 0 0 0);
+		@include experimental(appearance, none, -moz, -webkit, not -o, not -ms, not -khtml, official);
+	}
 }
