@@ -37,6 +37,7 @@ portletURL.setParameter("struts_action", "/message_boards/view");
 
 				<%
 				portletURL.setParameter("topLink", "message-boards-home");
+				portletURL.setParameter("tag", StringPool.BLANK);
 				%>
 
 				<liferay-ui:icon

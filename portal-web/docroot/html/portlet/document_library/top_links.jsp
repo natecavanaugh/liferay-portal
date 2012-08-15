@@ -46,9 +46,9 @@
 
 							PortletURL portletURL = renderResponse.createRenderURL();
 
+							portletURL.setParameter("topLink", homeMessage);
 							portletURL.setParameter("categoryId", StringPool.BLANK);
 							portletURL.setParameter("tag", StringPool.BLANK);
-							portletURL.setParameter("topLink", homeMessage);
 							%>
 
 							<liferay-ui:icon
