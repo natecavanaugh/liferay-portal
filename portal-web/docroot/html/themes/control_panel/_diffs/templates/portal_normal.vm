@@ -8,6 +8,8 @@
 	<title>$the_title - $company_name</title>
 
 	$theme.include($top_head_include)
+
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" />
 </head>
 
 <body class="$css_class">
