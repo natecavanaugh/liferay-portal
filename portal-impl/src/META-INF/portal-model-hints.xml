@@ -227,25 +227,22 @@
 		<field name="layoutId" type="long" />
 		<field name="parentLayoutId" type="long" />
 		<field name="name" type="String" localized="true">
-			<hint name="display-width">150</hint>
+			<hint name="display-width">250</hint>
 			<hint name="max-length">4000</hint>
 			<validator name="required" />
 		</field>
 		<field name="title" type="String" localized="true">
-			<hint name="display-width">150</hint>
+			<hint name="display-width">250</hint>
 			<hint name="max-length">4000</hint>
 		</field>
 		<field name="description" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
-			<hint name="display-width">300</hint>
 		</field>
 		<field name="keywords" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
-			<hint name="display-width">300</hint>
 		</field>
 		<field name="robots" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
-			<hint name="display-width">300</hint>
 		</field>
 		<field name="type" type="String" />
 		<field name="typeSettings" type="String">
@@ -1048,7 +1045,6 @@
 		<field name="title" type="String" localized="true" />
 		<field name="description" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
-			<hint name="display-width">350</hint>
 		</field>
 		<field name="vocabularyId" type="long" />
 	</model>
@@ -1160,7 +1156,6 @@
 		<field name="title" type="String" localized="true" />
 		<field name="description" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
-			<hint name="display-width">350</hint>
 		</field>
 		<field name="settings" type="String">
 			<hint name="max-length">4000</hint>
@@ -2026,7 +2021,6 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="ruleGroupId" type="long" />
 		<field name="name" type="String" localized="true">
-			<hint name="display-width">150</hint>
 			<hint name="max-length">255</hint>
 			<validator name="required" />
 		</field>
@@ -2050,7 +2044,6 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="name" type="String" localized="true">
-			<hint name="display-width">150</hint>
 			<hint name="max-length">255</hint>
 			<validator name="required" />
 		</field>
