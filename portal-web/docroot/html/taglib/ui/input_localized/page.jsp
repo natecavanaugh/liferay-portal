@@ -35,22 +35,19 @@ String type = (String)request.getAttribute("liferay-ui:input-localized:type");
 
 Locale defaultLocale = null;
 
+Integer COUNT_OFFSEST = 1;
+String FLAG_IMAGE_EXT = "png";
+String FLAG_IMAGES_PATH = themeDisplay.getPathThemeImages() + "/language/";
+String INPUT_ID_SUFFIX = StringPool.UNDERLINE + "display";
 String LOCALIZER_CLASS = "lfr-localizer";
 String LOCALIZER_NS = LOCALIZER_CLASS + "-";
 String LOCALIZER_CONTENT_BOX = randomNamespace + "languageSelections";
+String LOCALES_MAP = randomNamespace + "locales";
 
 String INPUT_CLASS = LOCALIZER_NS + "input";
-String INPUT_ID_SUFFIX = StringPool.UNDERLINE + "display";
-String INPUT_SELECTOR_DISPLAYED_CLASS = LOCALIZER_NS + "selector-displayed";
-
-String COUNT_CLASS = LOCALIZER_NS + "locale-count";
-Integer COUNT_OFFSEST = 1;
-
-String FLAG_CLASS = LOCALIZER_NS + "locale-flag";
-String FLAG_IMAGE_EXT = "png";
-String FLAG_IMAGES_PATH = themeDisplay.getPathThemeImages() + "/language/";
-
-String LOCALES_MAP = randomNamespace + "locales";
+String LOCALE_COUNT_CLASS = LOCALIZER_NS + "locale-count";
+String LOCALE_FLAG_CLASS = LOCALIZER_NS + "locale-flag";
+String SELECTOR_DISPLAYED_CLASS = LOCALIZER_NS + "selector-displayed";
 
 if (Validator.isNotNull(defaultLanguageId)) {
 	defaultLocale = LocaleUtil.fromLanguageId(defaultLanguageId);
@@ -81,30 +78,16 @@ if (Validator.isNull(mainLanguageValue)) {
 }
 %>
 
-<span class="taglib-input-localized lfr-localizer-type-<%= type %> <%= displayLocaleSelector ? INPUT_SELECTOR_DISPLAYED_CLASS : "" %>" id="<%= LOCALIZER_CONTENT_BOX %>">
+<span class="taglib-input-localized lfr-localizer-type-<%= type %> <%= displayLocaleSelector ? SELECTOR_DISPLAYED_CLASS : "" %>" id="<%= LOCALIZER_CONTENT_BOX %>">
 	<c:choose>
 		<c:when test='<%= type.equals("input") %>'>
 
-			<input
-				class="<%= cssClass %> lfr-input-text <%= INPUT_CLASS %>"
-				<%= disabled ? "disabled=\"disabled\"" : "" %>
-				id="<portlet:namespace /><%= id + StringPool.UNDERLINE + INPUT_ID_SUFFIX %>"
-				name="<portlet:namespace /><%= name + StringPool.UNDERLINE + HtmlUtil.escape(mainLanguageId) %>"
-				type="text"
-				value="<%= HtmlUtil.escape(mainLanguageValue) %>"
-				<%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>
-			>
+			<input class="<%= cssClass %> lfr-input-text <%= INPUT_CLASS %>" <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace /><%= id + StringPool.UNDERLINE + INPUT_ID_SUFFIX %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + HtmlUtil.escape(mainLanguageId) %>" type="text" value="<%= HtmlUtil.escape(mainLanguageValue) %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %> />
 
 		</c:when>
 		<c:when test='<%= type.equals("textarea") %>'>
 
-			<textarea
-				class="<%= cssClass %> lfr-textarea <%= INPUT_CLASS %>"
-				<%= disabled ? "disabled=\"disabled\"" : "" %>
-				id="<portlet:namespace /><%= id + StringPool.UNDERLINE + INPUT_ID_SUFFIX %>"
-				name="<portlet:namespace /><%= name + StringPool.UNDERLINE + HtmlUtil.escape(mainLanguageId) %>"
-				<%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>
-			><%= HtmlUtil.escape(mainLanguageValue) %></textarea>
+			<textarea class="<%= cssClass %> lfr-textarea <%= INPUT_CLASS %>" <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace /><%= id + StringPool.UNDERLINE + INPUT_ID_SUFFIX %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + HtmlUtil.escape(mainLanguageId) %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>><%= HtmlUtil.escape(mainLanguageValue) %></textarea>
 
 		</c:when>
 	</c:choose>
@@ -152,11 +135,7 @@ if (Validator.isNull(mainLanguageValue)) {
 			}
 			%>
 
-			<input
-				id="<portlet:namespace /><%= id + StringPool.UNDERLINE + HtmlUtil.escape(curLanguageId) %>"
-				name="<portlet:namespace /><%= name + StringPool.UNDERLINE + HtmlUtil.escape(curLanguageId) %>"
-				type="hidden"
-				value="<%= HtmlUtil.escape(languageValue) %>"
+			<input id="<portlet:namespace /><%= id + StringPool.UNDERLINE + HtmlUtil.escape(curLanguageId) %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + HtmlUtil.escape(curLanguageId) %>" type="hidden" value="<%= HtmlUtil.escape(languageValue) %>"
 			>
 
 			<c:if test="<%= Validator.isNotNull(maxLength) %>">
@@ -174,8 +153,8 @@ if (Validator.isNull(mainLanguageValue)) {
 		%>
 
 		<liferay-util:buffer var="localizerLocaleStatus">
-			<span class="<%= COUNT_CLASS %>"><%= languageIds.size() + COUNT_OFFSEST %></span>
-				<img alt="<%= defaultLocale.getDisplayName() %>" class="<%= FLAG_CLASS %>" src="<%= FLAG_IMAGES_PATH %><%= mainLanguageId %>.<%= FLAG_IMAGE_EXT %>" title="<%= defaultLocale.getDisplayName() %>">
+			<span class="<%= LOCALE_COUNT_CLASS %>"><%= languageIds.size() + COUNT_OFFSEST %></span>
+				<img alt="<%= defaultLocale.getDisplayName() %>" class="<%= LOCALE_FLAG_CLASS %>" src="<%= FLAG_IMAGES_PATH %><%= mainLanguageId %>.<%= FLAG_IMAGE_EXT %>" title="<%= defaultLocale.getDisplayName() %>">
 		</liferay-util:buffer>
 
 		<c:choose>
@@ -200,9 +179,9 @@ if (Validator.isNull(mainLanguageValue)) {
 		var <%= LOCALES_MAP %> = [
 			<%
 			for (int i = 0; i < locales.length; i++) {
+				boolean needsComma = ((i + 1) < locales.length);
 				String selLanguageId = LocaleUtil.toLanguageId(locales[i]);
 				String selLanguageName = locales[i].getDisplayName(locale);
-				boolean needsComma = ((i + 1) < locales.length);
 			%>
 				{
 					id: '<%= selLanguageId %>',
@@ -211,10 +190,11 @@ if (Validator.isNull(mainLanguageValue)) {
 			<%
 			}
 			%>
-		]
+		];
 
 		new Liferay.Localizer(
 			{
+				defaultLocale: '<%= defaultLanguageId %>',
 				contentBox: '#<%= LOCALIZER_CONTENT_BOX %>',
 				flagImagesPath: '<%= FLAG_IMAGES_PATH %>',
 				locales: <%= LOCALES_MAP %>,

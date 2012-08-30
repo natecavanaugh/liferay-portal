@@ -1,11 +1,10 @@
 @import "compass";
 
-.aui-localizer {
+.aui-localizer, .taglib-input-localized {
 	display: inline;
 }
 
 .taglib-input-localized {
-	display: inline;
 	position: relative;
 
 	&.lfr-localizer-type-input {
@@ -22,6 +21,10 @@
 	position: relative;
 	text-align: right;
 	z-index: 1;
+}
+
+.aui-localizer-disabled .lfr-localizer {
+	opacity: 0.5;
 }
 
 .lfr-localizer, .lfr-localizer-selector {
@@ -74,10 +77,9 @@
 	margin-right: 5px;
 	padding: 3px 6px;
 	text-align: center;
-	vertical-align: middle;
 }
 
-.lfr-localizer-locale-flag {
+.lfr-localizer-locale-count, .lfr-localizer-locale-flag {
 	vertical-align: middle;
 }
 
@@ -94,12 +96,12 @@
 	}
 }
 
-.lfr-localizer-locale-item-hasvalue {
+.lfr-localizer-locale-item-value {
 	background: #CAFD5B url(@theme_image_path@/common/check.png) no-repeat 3px 50%;
 	padding-left: 25px;
 }
 
-.lfr-localizer-locale-item-isselected {
+.lfr-localizer-locale-item-selected {
 	background-color: #5C7D93;
 
 	&, a {
