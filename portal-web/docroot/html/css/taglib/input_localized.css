@@ -1,3 +1,188 @@
-.lfr-language-selector input, .lfr-language-selector textarea {
-	width: 200px;
+@import "compass";
+
+.aui-localizer, .taglib-input-localized {
+	display: inline;
+}
+
+.taglib-input-localized {
+	position: relative;
+
+	&.lfr-localizer-type-input {
+		white-space: nowrap;
+	}
+}
+
+.aui-textarea-ft {
+	background-color: #DFDFDF;
+	border-top: 1px solid #999;
+	margin-right: -4px;
+	max-width: @model_hints_constants_textarea_display_width@px;
+	padding: 2px 3px 3px 1px;
+	position: relative;
+	text-align: right;
+	z-index: 1;
+}
+
+.aui-localizer-disabled .lfr-localizer {
+	opacity: 0.5;
+}
+
+.lfr-localizer, .lfr-localizer-selector {
+	background-color: #EEE;
+	border: 1px solid #AAA;
+}
+
+.taglib-input-localized .aui-text-button {
+	display: inline-block;
+	margin-left: -4px;
+	padding-top: 4px;
+	vertical-align: top;
+}
+
+.lfr-localizer {
+	background-image: url(@theme_image_path@/arrows/05_down.png);
+	background-position: 90% 50%;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	display: inline-block;
+	line-height: 1;
+	padding: 3px 20px 3px 10px;
+	position: relative;
+	vertical-align: middle;
+}
+
+.lfr-localizer-selector {
+	margin-top: -1px;
+	padding: 6px 0;
+	position: absolute;
+	right: 0;
+	top: 100%;
+
+	ul {
+		line-height: inherit;
+		list-style: none;
+		margin: 0;
+		max-height: 400px;
+		overflow: auto;
+		overflow-x: hidden;
+		padding: 0;
+	}
+}
+
+.lfr-localizer-locale-count {
+	background-color: #444;
+	color: #FFF;
+	display: inline-block;
+	font-weight: bold;
+	margin-right: 5px;
+	padding: 3px 6px;
+	text-align: center;
+}
+
+.lfr-localizer-locale-count, .lfr-localizer-locale-flag {
+	vertical-align: middle;
+}
+
+.lfr-localizer-locale-item {
+	padding: 5px 20px 5px 25px;
+	text-align: left;
+	white-space: nowrap;
+
+	&:hover {
+		&, a {
+			background-color: #275A93;
+			color: #FFF;
+		}
+	}
+}
+
+.lfr-localizer-locale-item-value {
+	background: #CAFD5B url(@theme_image_path@/common/check.png) no-repeat 3px 50%;
+	padding-left: 25px;
+}
+
+.lfr-localizer-locale-item-selected {
+	background-color: #5C7D93;
+
+	&, a {
+		color: #FFF;
+	}
+}
+
+.lfr-localizer-locale-item-flag {
+	padding-right: 0.5em;
+}
+
+/* -------- Misc. Bug Fixes -------- */
+
+.aui-textarea-ft {
+	.firefox & {
+		margin-top: -1px;
+	}
+
+	.webkit & {
+		margin-top: -4px;
+	}
+}
+
+.taglib-input-localized .aui-text-button {
+	.ie & {
+		padding-top: 3px;
+	}
+
+	.ie8 & {
+		padding-top: 4px;
+	}
+
+	.ie7 & {
+		margin-top: 1px;
+		padding-bottom: 4px;
+	}
+}
+
+.lfr-localizer-selector {
+	ul {
+		.ie7 & {
+			max-height: none;
+			overflow: visible;
+		}
+	}
+}
+
+[class~="aui-form-validator-message"] {
+	.lfr-localizer-type-textarea & {
+		.ie & {
+			margin-top: -32px;
+			white-space: nowrap;
+		}
+	}
+}
+
+/* -------- Extras -------- */
+
+.lfr-localizer-selector-displayed {
+	&.lfr-localizer-type-input .lfr-localizer-input {
+		@include border-right-radius(0);
+	}
+
+	&.lfr-localizer-type-textarea .lfr-localizer-input {
+		@include border-bottom-radius(0);
+	}
+}
+
+.aui-textarea-ft {
+	@include border-bottom-radius(4px);
+}
+
+.lfr-localizer, .lfr-localizer-selector {
+	@include border-radius(8px);
+}
+
+.taglib-input-localized .aui-text-button {
+	@include border-left-radius(0);
+}
+
+.lfr-localizer-locale-count {
+	@include border-radius(20px);
+	@include box-shadow(1px 1px 0 #FFF, 1px 1px 1px #000 inset);
 }

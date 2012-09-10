@@ -56,6 +56,10 @@ public class InputLocalizedTag extends IncludeTag {
 		_maxLength = maxLength;
 	}
 
+	public void setMaxWidth(String maxWidth) {
+		_maxWidth = maxWidth;
+	}
+
 	public void setName(String name) {
 		_name = name;
 	}
@@ -77,6 +81,7 @@ public class InputLocalizedTag extends IncludeTag {
 		_ignoreRequestValue = false;
 		_languageId = null;
 		_maxLength = null;
+		_maxWidth = null;
 		_name = null;
 		_type = "input";
 		_xml = null;
@@ -118,6 +123,8 @@ public class InputLocalizedTag extends IncludeTag {
 			"liferay-ui:input-localized:languageId", _languageId);
 		request.setAttribute(
 			"liferay-ui:input-localized:maxLength", _maxLength);
+		request.setAttribute(
+			"liferay-ui:input-localized:maxWidth", _maxWidth);
 		request.setAttribute("liferay-ui:input-localized:name", _name);
 		request.setAttribute("liferay-ui:input-localized:type", _type);
 		request.setAttribute("liferay-ui:input-localized:xml", _xml);
@@ -134,6 +141,7 @@ public class InputLocalizedTag extends IncludeTag {
 	private boolean _ignoreRequestValue;
 	private String _languageId;
 	private String _maxLength;
+	private String _maxWidth;
 	private String _name;
 	private String _type = "input";
 	private String _xml;

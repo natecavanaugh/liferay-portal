@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_input_localized_page");
+String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_input_localized_page") + StringPool.UNDERLINE;
 
 String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-localized:cssClass"));
 String defaultLanguageId = (String)request.getAttribute("liferay-ui:input-localized:defaultLanguageId");
@@ -28,11 +28,26 @@ String formName = (String)request.getAttribute("liferay-ui:input-localized:formN
 boolean ignoreRequestValue = GetterUtil.getBoolean((String) request.getAttribute("liferay-ui:input-localized:ignoreRequestValue"));
 String languageId = (String)request.getAttribute("liferay-ui:input-localized:languageId");
 String maxLength = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-localized:maxLength"));
+String maxWidth = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-localized:maxWidth"));
 String name = (String)request.getAttribute("liferay-ui:input-localized:name");
 String xml = (String)request.getAttribute("liferay-ui:input-localized:xml");
 String type = (String)request.getAttribute("liferay-ui:input-localized:type");
 
 Locale defaultLocale = null;
+
+Integer COUNT_OFFSEST = 1;
+String FLAG_IMAGE_EXT = "png";
+String FLAG_IMAGES_PATH = themeDisplay.getPathThemeImages() + "/language/";
+String INPUT_ID_SUFFIX = StringPool.UNDERLINE + "display";
+String LOCALIZER_CLASS = "lfr-localizer";
+String LOCALIZER_NS = LOCALIZER_CLASS + "-";
+String LOCALIZER_CONTENT_BOX = randomNamespace + "languageSelections";
+String LOCALES_MAP = randomNamespace + "locales";
+
+String INPUT_CLASS = LOCALIZER_NS + "input";
+String LOCALE_COUNT_CLASS = LOCALIZER_NS + "locale-count";
+String LOCALE_FLAG_CLASS = LOCALIZER_NS + "locale-flag";
+String SELECTOR_DISPLAYED_CLASS = LOCALIZER_NS + "selector-displayed";
 
 if (Validator.isNotNull(defaultLanguageId)) {
 	defaultLocale = LocaleUtil.fromLanguageId(defaultLanguageId);
@@ -43,6 +58,8 @@ else {
 }
 
 Locale[] locales = LanguageUtil.getAvailableLocales();
+
+boolean displayLocaleSelector = Validator.isNull(languageId) && (locales.length > 1);
 
 String mainLanguageId = defaultLanguageId;
 
@@ -61,13 +78,17 @@ if (Validator.isNull(mainLanguageValue)) {
 }
 %>
 
-<span class="taglib-input-localized">
+<span class="taglib-input-localized lfr-localizer-type-<%= type %> <%= displayLocaleSelector ? SELECTOR_DISPLAYED_CLASS : "" %>" id="<%= LOCALIZER_CONTENT_BOX %>">
 	<c:choose>
 		<c:when test='<%= type.equals("input") %>'>
-			<input class="language-value <%= cssClass %>" <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace /><%= id + StringPool.UNDERLINE + mainLanguageId %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + mainLanguageId %>" type="text" value="<%= HtmlUtil.escape(mainLanguageValue) %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %> />
+
+			<input class="<%= cssClass %> lfr-input-text <%= INPUT_CLASS %>" <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace /><%= id + StringPool.UNDERLINE + INPUT_ID_SUFFIX %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + HtmlUtil.escape(mainLanguageId) %>" type="text" value="<%= HtmlUtil.escape(mainLanguageValue) %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %> />
+
 		</c:when>
 		<c:when test='<%= type.equals("textarea") %>'>
-			<textarea class="language-value <%= cssClass %>" <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace /><%= id + StringPool.UNDERLINE + mainLanguageId %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + mainLanguageId %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>><%= HtmlUtil.escape(mainLanguageValue) %></textarea>
+
+			<textarea class="<%= cssClass %> lfr-textarea <%= INPUT_CLASS %>" <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace /><%= id + StringPool.UNDERLINE + INPUT_ID_SUFFIX %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + HtmlUtil.escape(mainLanguageId) %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>><%= HtmlUtil.escape(mainLanguageValue) %></textarea>
+
 		</c:when>
 	</c:choose>
 
@@ -75,235 +96,110 @@ if (Validator.isNull(mainLanguageValue)) {
 		<aui:script use="aui-char-counter">
 			new A.CharCounter(
 				{
-					input: '#<portlet:namespace /><%= id + StringPool.UNDERLINE + mainLanguageId %>',
+					input: '#<portlet:namespace /><%= id + StringPool.UNDERLINE + INPUT_ID_SUFFIX %>',
 					maxLength: <%= maxLength %>
 				}
 			);
 		</aui:script>
 	</c:if>
 
-	<c:if test="<%= (locales.length > 1) && Validator.isNull(languageId) %>">
-		<span class="flag-selector nobr">
-			<img alt="<%= defaultLocale.getDisplayName() %>" class="default-language" src="<%= themeDisplay.getPathThemeImages() %>/language/<%= mainLanguageId %>.png" />
+	<c:if test="<%= displayLocaleSelector %>">
+		<%
+		List<String> languageIds = new ArrayList<String>();
 
-			<%
-			List<String> languageIds = new ArrayList<String>();
+		if (Validator.isNotNull(xml)) {
+			for (int i = 0; i < locales.length; i++) {
+				if (locales[i].equals(defaultLocale)) {
+					continue;
+				}
+
+				String selLanguageId = LocaleUtil.toLanguageId(locales[i]);
+				String languageValue = LocalizationUtil.getLocalization(xml, selLanguageId, false);
+
+				if (Validator.isNotNull(languageValue) || (!ignoreRequestValue && (request.getParameter(name + StringPool.UNDERLINE + selLanguageId) != null))) {
+					languageIds.add(selLanguageId);
+				}
+			}
+		}
+
+		for (int i = 0; i < languageIds.size(); i++) {
+			String curLanguageId = languageIds.get(i);
+			String languageValue = StringPool.BLANK;
 
 			if (Validator.isNotNull(xml)) {
-				for (int i = 0; i < locales.length; i++) {
-					if (locales[i].equals(defaultLocale)) {
-						continue;
-					}
+				languageValue = LocalizationUtil.getLocalization(xml, curLanguageId, false);
+			}
 
-					String selLanguageId = LocaleUtil.toLanguageId(locales[i]);
-					String languageValue = LocalizationUtil.getLocalization(xml, selLanguageId, false);
-
-					if (Validator.isNotNull(languageValue) || (!ignoreRequestValue && (request.getParameter(name + StringPool.UNDERLINE + selLanguageId) != null))) {
-						languageIds.add(selLanguageId);
-					}
-				}
+			if (!ignoreRequestValue) {
+				languageValue = ParamUtil.getString(request, name + StringPool.UNDERLINE + curLanguageId, languageValue);
 			}
 			%>
 
-			<a class="lfr-floating-trigger" href="javascript:;" id="<%= randomNamespace %>languageSelectorTrigger">
-				<liferay-ui:message key="other-languages" /> (<%= languageIds.size() %>)
-			</a>
-		</span>
+			<input id="<portlet:namespace /><%= id + StringPool.UNDERLINE + HtmlUtil.escape(curLanguageId) %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + HtmlUtil.escape(curLanguageId) %>" type="hidden" value="<%= HtmlUtil.escape(languageValue) %>"
+			>
 
+			<c:if test="<%= Validator.isNotNull(maxLength) %>">
+				<aui:script use="aui-char-counter">
+					new A.CharCounter(
+						{
+							input: '#<portlet:namespace /><%= id + StringPool.UNDERLINE + curLanguageId %>',
+							maxLength: <%= maxLength %>
+						}
+					);
+				</aui:script>
+			</c:if>
 		<%
-		if (languageIds.isEmpty()) {
-			languageIds.add(StringPool.BLANK);
 		}
 		%>
 
-		<div class="lfr-floating-container lfr-language-selector aui-helper-hidden" id="<%= randomNamespace %>languageSelector">
-			<div class="lfr-panel aui-form">
-				<div class="lfr-panel-titlebar">
-					<h3 class="lfr-panel-title"><span><liferay-ui:message key="other-languages" /></span></h3>
+		<liferay-util:buffer var="localizerLocaleStatus">
+			<span class="<%= LOCALE_COUNT_CLASS %>"><%= languageIds.size() + COUNT_OFFSEST %></span>
+				<img alt="<%= defaultLocale.getDisplayName() %>" class="<%= LOCALE_FLAG_CLASS %>" src="<%= FLAG_IMAGES_PATH %><%= mainLanguageId %>.<%= FLAG_IMAGE_EXT %>" title="<%= defaultLocale.getDisplayName() %>">
+		</liferay-util:buffer>
+
+		<c:choose>
+			<c:when test='<%= type.equals("input") %>'>
+				<span class="aui-text-button <%= LOCALIZER_CLASS %>">
+					<%= localizerLocaleStatus %>
+				</span>
+			</c:when>
+			<c:when test='<%= type.equals("textarea") %>'>
+				<div class="aui-textarea-ft" <%= (Validator.isNotNull(maxWidth) ? "style='max-width: " + maxWidth + ";'" : "" ) %>>
+					<span class="aui-textarea-button <%= LOCALIZER_CLASS %>">
+						<%= localizerLocaleStatus %>
+					</span>
 				</div>
-
-				<div class="lfr-panel-content">
-
-					<%
-					for (int i = 0; i < languageIds.size(); i++) {
-						String curLanguageId = languageIds.get(i);
-					%>
-
-						<div class="lfr-form-row">
-							<div class="row-names">
-								<img alt="<%= Validator.isNotNull(curLanguageId) ? LocaleUtil.fromLanguageId(curLanguageId).getDisplayName() : StringPool.BLANK %>" class="language-flag" src="<%= themeDisplay.getPathThemeImages() %>/language/<%= Validator.isNotNull(curLanguageId) ? curLanguageId : "../spacer" %>.png" />
-
-								<select <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace />languageId<%= i %>">
-									<option value="" />
-
-									<%
-									for (Locale curLocale : locales) {
-										if (curLocale.equals(defaultLocale)) {
-											continue;
-										}
-
-										String optionStyle = StringPool.BLANK;
-
-										String selLanguageId = LocaleUtil.toLanguageId(curLocale);
-										String languageValue = LocalizationUtil.getLocalization(xml, selLanguageId, false);
-
-										if (Validator.isNotNull(xml) && Validator.isNotNull(languageValue)) {
-											optionStyle = "style=\"font-weight: bold\"";
-										}
-									%>
-
-										<option <%= (curLanguageId.equals(selLanguageId)) ? "selected" : "" %> <%= optionStyle %> value="<%= selLanguageId %>"><%= curLocale.getDisplayName(locale) %></option>
-
-									<%
-									}
-									%>
-
-								</select>
-
-								<%
-								String languageValue = StringPool.BLANK;
-
-								if (Validator.isNotNull(xml)) {
-									languageValue = LocalizationUtil.getLocalization(xml, curLanguageId, false);
-								}
-
-								if (!ignoreRequestValue) {
-									languageValue = ParamUtil.getString(request, name + StringPool.UNDERLINE + curLanguageId, languageValue);
-								}
-								%>
-
-								<c:choose>
-									<c:when test='<%= type.equals("input") %>'>
-										<input class="language-value" <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace /><%= id + StringPool.UNDERLINE + curLanguageId %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + curLanguageId %>" type="text" value="<%= HtmlUtil.escape(languageValue) %>" />
-									</c:when>
-									<c:when test='<%= type.equals("textarea") %>'>
-										<textarea class="language-value" <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace /><%= id + StringPool.UNDERLINE + curLanguageId %>" name="<portlet:namespace /><%= name + StringPool.UNDERLINE + curLanguageId %>"><%= HtmlUtil.escape(languageValue) %></textarea>
-									</c:when>
-								</c:choose>
-
-								<c:if test="<%= Validator.isNotNull(maxLength) %>">
-									<aui:script use="aui-char-counter">
-										new A.CharCounter(
-											{
-												input: '#<portlet:namespace /><%= id + StringPool.UNDERLINE + curLanguageId %>',
-												maxLength: <%= maxLength %>
-											}
-										);
-									</aui:script>
-								</c:if>
-							</div>
-						</div>
-
-					<%
-					}
-					%>
-
-				</div>
-			</div>
-		</div>
+			</c:when>
+		</c:choose>
 	</c:if>
 </span>
 
-<c:if test="<%= (locales.length > 1) && Validator.isNull(languageId) %>">
-	<aui:script use="liferay-auto-fields,liferay-panel-floating">
-		var updateLanguageFlag = function(event) {
-			var target = event.target;
-
-			var selectedValue = target.val();
-
-			var newName = '<portlet:namespace /><%= name %>_';
-			var newId = '<portlet:namespace /><%= id %>_';
-
-			var currentRow = target.ancestor('.lfr-form-row');
-
-			var img = currentRow.all('img.language-flag');
-			var imgSrc = 'spacer';
-
-			if (selectedValue) {
-				newName ='<portlet:namespace /><%= name %>_' + selectedValue;
-				newId ='<portlet:namespace /><%= id %>_' + selectedValue;
-
-				imgSrc = 'language/' + selectedValue;
-			}
-
-			var inputField = currentRow.one('.language-value');
-
-			if (inputField) {
-				inputField.attr('name', newName);
-				inputField.attr('id', newId);
-			}
-
-			if (img) {
-				img.attr('src', '<%= themeDisplay.getPathThemeImages() %>/' + imgSrc + '.png');
-			}
-		};
-
-		var autoFields = null;
-
-		<c:if test="<%= !disabled %>">
-			autoFields = new Liferay.AutoFields(
+<c:if test="<%= displayLocaleSelector %>">
+	<aui:script use="liferay-localizer">
+		var <%= LOCALES_MAP %> = [
+			<%
+			for (int i = 0; i < locales.length; i++) {
+				boolean needsComma = ((i + 1) < locales.length);
+				String selLanguageId = LocaleUtil.toLanguageId(locales[i]);
+				String selLanguageName = locales[i].getDisplayName(locale);
+			%>
 				{
-					contentBox: '#<%= randomNamespace %>languageSelector .lfr-panel-content',
-					on: {
-						'clone': function(event) {
-							var instance = this;
+					id: '<%= selLanguageId %>',
+					name: '<%= selLanguageName %>'
+				}<c:if test="<%= needsComma %>">,</c:if>
+			<%
+			}
+			%>
+		];
 
-							var row = event.row;
-
-							var select = row.one('select');
-							var img = row.one('img.language-flag');
-
-							if (select) {
-								select.on('change', updateLanguageFlag);
-							}
-
-							if (img) {
-								img.attr('src', '<%= themeDisplay.getPathThemeImages() %>/spacer.png');
-							}
-						}
-					}
-				}
-			).render();
-		</c:if>
-
-		var form = A.one(document.<portlet:namespace /><%= formName %>);
-
-		var panel = new Liferay.PanelFloating(
+		new Liferay.Localizer(
 			{
-				collapsible: false,
-				container: '#<%= randomNamespace %>languageSelector',
-				on: {
-					hide: function(event) {
-						var instance = this;
-
-						instance._positionHelper.appendTo(form);
-					},
-					show: function(event) {
-						var instance = this;
-
-						instance._positionHelper.appendTo(document.body);
-					}
-				},
-				trigger: '#<%= randomNamespace %>languageSelectorTrigger',
-				width: 500
+				defaultLocale: '<%= defaultLanguageId %>',
+				contentBox: '#<%= LOCALIZER_CONTENT_BOX %>',
+				flagImagesPath: '<%= FLAG_IMAGES_PATH %>',
+				locales: <%= LOCALES_MAP %>,
+				namespace: '<portlet:namespace /><%= name + StringPool.UNDERLINE %>'
 			}
-		);
-
-		panel._positionHelper.appendTo(form);
-
-		A.all('#<%= randomNamespace %>languageSelector select').each(
-			function(item) {
-				if (item) {
-					item.on('change', updateLanguageFlag);
-				}
-			}
-		);
-
-		var languageSelectorTrigger = A.one('#<%= randomNamespace %>languageSelectorTrigger');
-
-		if (languageSelectorTrigger) {
-			languageSelectorTrigger.setData('autoFieldsInstance', autoFields);
-			languageSelectorTrigger.setData('panelInstance', panel);
-		}
+		).render();
 	</aui:script>
 </c:if>
