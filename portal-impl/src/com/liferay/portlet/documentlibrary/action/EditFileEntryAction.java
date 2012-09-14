@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.servlet.ServletResponseConstants;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadException;
@@ -94,6 +95,7 @@ import javax.portlet.WindowState;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileUploadBase.IOFileUploadException;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -230,33 +232,30 @@ public class EditFileEntryAction extends PortletAction {
 					return;
 				}
 
-				if (e instanceof DuplicateFileException) {
+				if (e instanceof DuplicateFileException ||
+					e instanceof FileExtensionException ||
+					e instanceof FileNameException ||
+					e instanceof FileSizeException) {
+
 					HttpServletResponse response =
 						PortalUtil.getHttpServletResponse(actionResponse);
 
-					response.setStatus(
-						ServletResponseConstants.SC_DUPLICATE_FILE_EXCEPTION);
-				}
-				else if (e instanceof FileExtensionException) {
-					HttpServletResponse response =
-						PortalUtil.getHttpServletResponse(actionResponse);
+					response.setStatus(200);
 
-					response.setStatus(
-						ServletResponseConstants.SC_FILE_EXTENSION_EXCEPTION);
-				}
-				else if (e instanceof FileNameException) {
-					HttpServletResponse response =
-						PortalUtil.getHttpServletResponse(actionResponse);
+					response.setContentType("text/html");
 
-					response.setStatus(
-						ServletResponseConstants.SC_FILE_NAME_EXCEPTION);
-				}
-				else if (e instanceof FileSizeException) {
-					HttpServletResponse response =
-						PortalUtil.getHttpServletResponse(actionResponse);
-
-					response.setStatus(
-						ServletResponseConstants.SC_FILE_SIZE_EXCEPTION);
+					if (e instanceof DuplicateFileException) {
+						new ServletResponseUtil().write(response, Integer.toString(ServletResponseConstants.SC_DUPLICATE_FILE_EXCEPTION));
+					}
+					else if (e instanceof FileExtensionException) {
+						new ServletResponseUtil().write(response, Integer.toString(ServletResponseConstants.SC_FILE_EXTENSION_EXCEPTION));
+					}
+					else if (e instanceof FileNameException) {
+						new ServletResponseUtil().write(response, Integer.toString(ServletResponseConstants.SC_FILE_NAME_EXCEPTION));
+					}
+					else if (e instanceof FileSizeException) {
+						new ServletResponseUtil().write(response, Integer.toString(ServletResponseConstants.SC_FILE_SIZE_EXCEPTION));
+					}
 				}
 
 				SessionErrors.add(actionRequest, e.getClass());
@@ -434,6 +433,22 @@ public class EditFileEntryAction extends PortletAction {
 			DLAppServiceUtil.addTempFileEntry(
 				themeDisplay.getScopeGroupId(), folderId, sourceFileName,
 				_TEMP_FOLDER_NAME, inputStream);
+		}
+		catch (Exception e) {
+			UploadException uploadException =
+				(UploadException)actionRequest.getAttribute(
+					WebKeys.UPLOAD_EXCEPTION);
+
+			if (uploadException != null && uploadException.getCause() instanceof IOFileUploadException) {
+
+				// Cancelled a temporary upload. Just consume this exception
+			}
+			else if (uploadException != null && uploadException.isExceededSizeLimit()) {
+				throw new FileSizeException(uploadException.getCause());
+			}
+			else {
+				throw e;
+			}
 		}
 		finally {
 			StreamUtil.cleanUp(inputStream);
