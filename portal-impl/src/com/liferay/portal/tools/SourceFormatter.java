@@ -1261,7 +1261,8 @@ public class SourceFormatter {
 					fileName, "ServiceUtil: " + fileName);
 			}
 
-			if (!className.equals("ProxyUtil") &&
+			if (!className.equals("DeepNamedValueScanner") &&
+				!className.equals("ProxyUtil") &&
 				newContent.contains("import java.lang.reflect.Proxy;")) {
 
 				_sourceFormatterHelper.printError(
