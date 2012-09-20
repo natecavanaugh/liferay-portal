@@ -758,13 +758,13 @@ AUI.add(
 					hiddenAttributes: MAP_HIDDEN_FIELD_ATTRS.DEFAULT,
 					iconClass: 'aui-form-builder-field-icon aui-form-builder-field-icon-text',
 					label: Liferay.Language.get('text'),
-					type: 'ddm-text'
+					type: 'text'
 				},
 				{
 					hiddenAttributes: MAP_HIDDEN_FIELD_ATTRS.DEFAULT,
 					iconClass: 'aui-form-builder-field-icon aui-form-builder-field-icon-textarea',
 					label: Liferay.Language.get('text-box'),
-					type: 'ddm-textarea'
+					type: 'textarea'
 				}
 			],
 
