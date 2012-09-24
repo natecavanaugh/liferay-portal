@@ -422,10 +422,10 @@ AUI.add(
 
 								event.halt();
 
-								var action = 'show';
+								var action = 'hide';
 
-								if (!toolItem.StateInteraction.get('active')) {
-									action = 'hide';
+								if (toolItem.StateInteraction.get('active')) {
+									action = 'show';
 								}
 
 								comboBox._optionsOverlay[action]();
