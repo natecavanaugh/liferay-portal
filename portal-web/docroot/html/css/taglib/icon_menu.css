@@ -87,8 +87,14 @@
 		}
 
 		a {
-			padding: 5px 10px 5px 0;
-			display: block;
+			&, label {
+				display: block;
+			}
+
+			label {
+				cursor: pointer;
+				padding: 5px 0 5px 5px;
+			}
 		}
 
 		.taglib-icon img {
