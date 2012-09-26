@@ -624,6 +624,7 @@ create unique index IX_A2635F5C on Region (countryId, regionCode);
 create index IX_8BD6BCA7 on Release_ (servletContextName);
 
 create index IX_5253B1FA on Repository (groupId);
+create unique index IX_8AD39CEB on Repository (groupId, portletId);
 create index IX_74C17B04 on Repository (uuid_);
 create index IX_F543EA4 on Repository (uuid_, companyId);
 create unique index IX_11641E26 on Repository (uuid_, groupId);
