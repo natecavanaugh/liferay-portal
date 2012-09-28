@@ -137,6 +137,10 @@ AUI.add(
 
 		var STR_TITLE = 'title';
 
+		var STR_TREE_NODE = 'tree-node';
+
+		var STR_TREE_VIEW = 'tree-view';
+
 		var STR_URI = 'uri';
 
 		var STR_VOCABULARY_ID = 'vocabularyId';
@@ -2586,7 +2590,7 @@ AUI.add(
 
 						var dragNode = event.drag.get(STR_NODE).get(STR_PARENT_NODE);
 
-						var dragTreeNode = Widget.getByNode(dragNode);
+						var dragTreeNode = dragNode.getData(STR_TREE_NODE);
 
 						if (dragTreeNode) {
 							var categoryName = dragTreeNode.get(STR_LABEL);
@@ -2599,7 +2603,7 @@ AUI.add(
 								dropNode = dropNode.get('parentNode.parentNode');
 							}
 
-							var dropTreeNode = Widget.getByNode(dropNode);
+							var dropTreeNode = dropNode.getData(STR_TREE_VIEW);
 
 							if (dropTreeNode) {
 								var children = dropTreeNode.get('children');
