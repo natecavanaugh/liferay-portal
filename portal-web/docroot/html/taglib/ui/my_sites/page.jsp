@@ -29,6 +29,10 @@ List<Group> mySites = user.getMySites(true, max);
 <c:if test="<%= !mySites.isEmpty() %>">
 	<ul class="taglib-my-sites">
 
+		<li>
+			<input type="text"/>
+		</li>
+
 		<%
 		PortletURL portletURL = new PortletURLImpl(request, PortletKeys.SITE_REDIRECTOR, plid, PortletRequest.ACTION_PHASE);
 

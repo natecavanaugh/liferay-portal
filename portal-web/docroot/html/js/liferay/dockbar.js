@@ -555,6 +555,8 @@ AUI.add(
 					}
 				);
 
+				Liferay.fire('mySitesOverlayRender');
+
 				var userOptionsContainer = A.one('#' + namespace + 'userOptionsContainer');
 
 				if (userOptionsContainer) {
