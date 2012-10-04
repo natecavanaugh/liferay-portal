@@ -304,14 +304,14 @@
 						var portlets = instance._portletItems;
 
 						instance._dialogBody.delegate(
-							'mousedown',
+							'click',
 							function(event) {
 								var link = event.currentTarget;
 								var portlet = link.ancestor('.lfr-portlet-item');
 
 								instance._addPortlet(portlet);
 							},
-							'a'
+							'.lfr-portlet-item a'
 						);
 
 						var portletItem = null;
@@ -360,9 +360,9 @@
 						}
 
 						instance._dialogBody.delegate(
-							'mousedown',
+							'click',
 							function(event) {
-								var heading = event.currentTarget.get('parentNode');
+								var heading = event.currentTarget.ancestor('.lfr-add-content');
 								var category = heading.one('> .lfr-content-category');
 
 								if (category) {
@@ -373,7 +373,7 @@
 									heading.toggleClass('collapsed').toggleClass('expanded');
 								}
 							},
-							'.lfr-add-content > h2'
+							'.lfr-add-content > h2 a'
 						);
 
 						Util.focusFormField('#layout_configuration_content');
