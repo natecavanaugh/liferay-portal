@@ -86,6 +86,8 @@ public class SourceFormatter {
 						_formatAntXML();
 						_formatDDLStructuresXML();
 						_formatFriendlyURLRoutesXML();
+						_formatFTL();
+						_formatJS();
 						_formatPortletXML();
 						_formatServiceXML();
 						_formatSH();
@@ -1068,6 +1070,38 @@ public class SourceFormatter {
 		return sb.toString();
 	}
 
+	private static void _formatFTL() throws IOException {
+		String basedir = "./";
+
+		DirectoryScanner directoryScanner = new DirectoryScanner();
+
+		directoryScanner.setBasedir(basedir);
+		directoryScanner.setIncludes(new String[] {"**\\*.ftl"});
+		directoryScanner.setExcludes(
+			new String[] {
+				"**\\journal\\dependencies\\template.ftl",
+				"**\\servicebuilder\\dependencies\\props.ftl"
+			}
+		);
+
+		List<String> fileNames = _sourceFormatterHelper.scanForFiles(
+			directoryScanner);
+
+		for (String fileName : fileNames) {
+			File file = new File(basedir + fileName);
+
+			String content = _fileUtil.read(file);
+
+			String newContent = _trimContent(content);
+
+			if ((newContent != null) && !content.equals(newContent)) {
+				_fileUtil.write(file, newContent);
+
+				_sourceFormatterHelper.printError(fileName, file);
+			}
+		}
+	}
+
 	private static String _formatImports(String imports, int classStartPos)
 		throws IOException {
 
@@ -1725,6 +1759,24 @@ public class SourceFormatter {
 								"line break: " + fileName + " " + lineCount);
 						}
 
+						if (previousLine.endsWith(StringPool.PERIOD)) {
+							int x = trimmedLine.indexOf(
+								StringPool.OPEN_PARENTHESIS);
+
+							if ((x != -1) &&
+								((_getLineLength(previousLine) + x) < 80) &&
+								(trimmedLine.endsWith(
+									StringPool.OPEN_PARENTHESIS) ||
+								 (trimmedLine.charAt(x + 1) !=
+									 CharPool.CLOSE_PARENTHESIS))) {
+
+								_sourceFormatterHelper.printError(
+									fileName,
+									"line break: " + fileName + " " +
+										lineCount);
+							}
+						}
+
 						combinedLines = _getCombinedLines(
 							trimmedLine, previousLine, lineTabCount,
 							previousLineTabCount);
@@ -1814,6 +1866,92 @@ public class SourceFormatter {
 		}
 
 		return newContent;
+	}
+
+	private static void _formatJS() throws IOException {
+		String basedir = "./";
+
+		List<String> list = new ArrayList<String>();
+
+		DirectoryScanner directoryScanner = new DirectoryScanner();
+
+		directoryScanner.setBasedir(basedir);
+
+		String[] excludes = {
+			"**\\tools\\**", "**\\js\\aui\\**", "**\\js\\editor\\**",
+			"**\\js\\misc\\**", "**\\VAADIN\\**"
+		};
+
+		excludes = ArrayUtil.append(excludes, _excludes);
+
+		directoryScanner.setExcludes(excludes);
+
+		directoryScanner.setIncludes(new String[] {"**\\*.js"});
+
+		list.addAll(_sourceFormatterHelper.scanForFiles(directoryScanner));
+
+		String[] fileNames = list.toArray(new String[list.size()]);
+
+		for (String fileName : fileNames) {
+			File file = new File(basedir + fileName);
+
+			String content = _fileUtil.read(file);
+
+			String newContent = StringUtil.replace(
+				content,
+				new String[] {
+					"else{", "for(", "function (", "if(", "while(", "){\n",
+					"= new Array();", "= new Object();"
+				},
+				new String[] {
+					"else {", "for (", "function(", "if (", "while (", ") {\n",
+					"= [];", "= {};"
+				});
+
+			StringBundler sb = new StringBundler();
+
+			UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
+				new UnsyncStringReader(newContent));
+
+			int lineCount = 0;
+
+			String line = null;
+
+			Pattern pattern = Pattern.compile("var \\w+\\,");
+
+			while ((line = unsyncBufferedReader.readLine()) != null) {
+				lineCount++;
+
+				line = _trimLine(line);
+
+				String trimmedLine = StringUtil.trimLeading(line);
+
+				Matcher matcher = pattern.matcher(trimmedLine);
+
+				if (matcher.find()) {
+					_sourceFormatterHelper.printError(
+						fileName, "one var per line: " + fileName + " " +
+							lineCount);
+				}
+
+				sb.append(line);
+				sb.append("\n");
+			}
+
+			unsyncBufferedReader.close();
+
+			newContent = sb.toString();
+
+			if (newContent.endsWith("\n")) {
+				newContent = newContent.substring(0, newContent.length() - 1);
+			}
+
+			if ((newContent != null) && !content.equals(newContent)) {
+				_fileUtil.write(file, newContent);
+
+				_sourceFormatterHelper.printError(fileName, file);
+			}
+		}
 	}
 
 	private static void _formatJSP() throws IOException {
@@ -2854,6 +2992,7 @@ public class SourceFormatter {
 			}
 
 			if ((previousLine.endsWith(StringPool.EQUAL) ||
+				 previousLine.endsWith(StringPool.PERIOD) ||
 				 trimmedPreviousLine.equals("return")) &&
 				line.endsWith(StringPool.SEMICOLON)) {
 
