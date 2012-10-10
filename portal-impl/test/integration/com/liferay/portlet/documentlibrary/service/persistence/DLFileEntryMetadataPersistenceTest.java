@@ -271,11 +271,6 @@ public class DLFileEntryMetadataPersistenceTest {
 			existingDLFileEntryMetadataModelImpl.getOriginalDDMStructureId());
 		Assert.assertEquals(existingDLFileEntryMetadataModelImpl.getFileVersionId(),
 			existingDLFileEntryMetadataModelImpl.getOriginalFileVersionId());
-
-		Assert.assertEquals(existingDLFileEntryMetadataModelImpl.getFileEntryId(),
-			existingDLFileEntryMetadataModelImpl.getOriginalFileEntryId());
-		Assert.assertEquals(existingDLFileEntryMetadataModelImpl.getFileVersionId(),
-			existingDLFileEntryMetadataModelImpl.getOriginalFileVersionId());
 	}
 
 	protected DLFileEntryMetadata addDLFileEntryMetadata()
