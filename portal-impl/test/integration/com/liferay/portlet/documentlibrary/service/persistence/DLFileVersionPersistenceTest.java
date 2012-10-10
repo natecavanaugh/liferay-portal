@@ -148,6 +148,8 @@ public class DLFileVersionPersistenceTest {
 
 		newDLFileVersion.setSize(ServiceTestUtil.nextLong());
 
+		newDLFileVersion.setChecksum(ServiceTestUtil.randomString());
+
 		newDLFileVersion.setStatus(ServiceTestUtil.nextInt());
 
 		newDLFileVersion.setStatusByUserId(ServiceTestUtil.nextLong());
@@ -202,6 +204,8 @@ public class DLFileVersionPersistenceTest {
 			newDLFileVersion.getVersion());
 		Assert.assertEquals(existingDLFileVersion.getSize(),
 			newDLFileVersion.getSize());
+		Assert.assertEquals(existingDLFileVersion.getChecksum(),
+			newDLFileVersion.getChecksum());
 		Assert.assertEquals(existingDLFileVersion.getStatus(),
 			newDLFileVersion.getStatus());
 		Assert.assertEquals(existingDLFileVersion.getStatusByUserId(),
@@ -395,6 +399,8 @@ public class DLFileVersionPersistenceTest {
 		dlFileVersion.setVersion(ServiceTestUtil.randomString());
 
 		dlFileVersion.setSize(ServiceTestUtil.nextLong());
+
+		dlFileVersion.setChecksum(ServiceTestUtil.randomString());
 
 		dlFileVersion.setStatus(ServiceTestUtil.nextInt());
 

@@ -225,6 +225,13 @@ AUI.add(
 					);
 
 					button.on(
+						'blur',
+						function(event) {
+							MenuManager.hideAll();
+						}
+					);
+
+					button.on(
 						'keydown',
 						function(event) {
 							if (event.isKey('DOWN')) {
