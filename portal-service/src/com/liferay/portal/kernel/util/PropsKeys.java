@@ -21,6 +21,8 @@ public interface PropsKeys {
 
 	public static final String ADMIN_DEFAULT_GROUP_NAMES = "admin.default.group.names";
 
+	public static final String ADMIN_DEFAULT_ORGANIZATION_GROUP_NAMES = "admin.default.organization.group.names";
+
 	public static final String ADMIN_DEFAULT_ROLE_NAMES = "admin.default.role.names";
 
 	public static final String ADMIN_DEFAULT_USER_GROUP_NAMES = "admin.default.user.group.names";
@@ -638,6 +640,8 @@ public interface PropsKeys {
 	public static final String DL_FILE_ENTRY_THUMBNAIL_VIDEO_FRAME_PERCENTAGE = "dl.file.entry.thumbnail.video.frame.percentage";
 
 	public static final String DL_FILE_ENTRY_TYPE_IG_IMAGE_AUTO_CREATE_ON_UPGRADE = "dl.file.entry.type.ig.image.auto.create.on.upgrade";
+
+	public static final String DL_FILE_ENTRY_VERSION_POLICY = "dl.file.entry.version.policy";
 
 	public static final String DL_FILE_EXTENSIONS = "dl.file.extensions";
 
@@ -2209,6 +2213,8 @@ public interface PropsKeys {
 
 	public static final String TRASH_SEARCH_LIMIT = "trash.search.limit";
 
+	public static final String UPGRADE_DATABASE_TRANSACTIONS_DISABLED = "upgrade.database.transactions.disabled";
+
 	public static final String UPGRADE_PROCESSES = "upgrade.processes";
 
 	public static final String UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE = "com.liferay.portal.upload.UploadServletRequestImpl.max.size";
@@ -2316,6 +2322,8 @@ public interface PropsKeys {
 	public static final String VELOCITY_ENGINE_RESTRICTED_PACKAGES = "velocity.engine.restricted.packages";
 
 	public static final String VELOCITY_ENGINE_VELOCIMACRO_LIBRARY = "velocity.engine.velocimacro.library";
+
+	public static final String VERIFY_DATABASE_TRANSACTIONS_DISABLED = "verify.database.transactions.disabled";
 
 	public static final String VERIFY_FREQUENCY = "verify.frequency";
 
