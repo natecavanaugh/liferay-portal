@@ -228,6 +228,10 @@ hr, .separator {
 	padding: 0;
 }
 
+.portlet-asset-publisher li.title-list, .portlet-asset-publisher .asset-content, .portlet-asset-publisher .asset-summary, .portlet-asset-publisher .asset-title, .portlet-asset-publisher .header-title, .portlet-asset-publisher .results-row, .portlet-blogs .entry-body, .portlet-blogs .entry-title, .portlet-blogs .header-title, .portlet-journal-content .journal-content-article, .portlet-message-boards .header-title, .portlet-message-boards .thread-body, .portlet-search .results-row {
+	@include hyphenation;
+}
+
 .portlet-icons {
 	float: none;
 
@@ -413,10 +417,6 @@ hr, .separator {
 #banner .site-name {
 	@include border-radius(4px);
 	@include box-shadow(inset 0 0 5px rgba(0, 0, 0, 0.8), 1px 1px 1px #FFF);
-}
-
-.portlet {
-	@include hyphenation;
 }
 
 .portlet-borderless-bar, .portlet-journal-content .icon-actions {
