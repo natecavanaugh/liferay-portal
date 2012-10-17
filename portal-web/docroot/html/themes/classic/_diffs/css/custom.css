@@ -228,6 +228,10 @@ hr, .separator {
 	padding: 0;
 }
 
+.asset-content, .asset-entry-content, .asset-summary, .asset-title, .entry-body, .entry-title, .header-title, .journal-content-article, .thread-body {
+	@include hyphenation;
+}
+
 .portlet-icons {
 	float: none;
 
@@ -413,10 +417,6 @@ hr, .separator {
 #banner .site-name {
 	@include border-radius(4px);
 	@include box-shadow(inset 0 0 5px rgba(0, 0, 0, 0.8), 1px 1px 1px #FFF);
-}
-
-.portlet {
-	@include hyphenation;
 }
 
 .portlet-borderless-bar, .portlet-journal-content .icon-actions {
