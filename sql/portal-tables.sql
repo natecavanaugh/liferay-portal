@@ -513,7 +513,10 @@ create table DDMTemplate (
 	mode_ VARCHAR(75) null,
 	language VARCHAR(75) null,
 	script TEXT null,
-	cacheable BOOLEAN
+	cacheable BOOLEAN,
+	smallImage BOOLEAN,
+	smallImageId LONG,
+	smallImageURL STRING null
 );
 
 create table DLContent (
