@@ -26,6 +26,7 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.storage.StorageType;
 
+import java.io.File;
 import java.io.InputStream;
 
 import java.util.HashMap;
@@ -96,7 +97,7 @@ public class BaseDDMServiceTestCase {
 		throws Exception {
 
 		return addTemplate(
-			classNameId, classPK,  null, name, type, mode, language, script);
+			classNameId, classPK, null, name, type, mode, language, script);
 	}
 
 	protected DDMTemplate addTemplate(
@@ -106,20 +107,21 @@ public class BaseDDMServiceTestCase {
 
 		return addTemplate(
 			classNameId, classPK, templateKey, name, type, mode, language,
-			script, false);
+			script, false, false, null, null);
 	}
 
 	protected DDMTemplate addTemplate(
 			long classNameId, long classPK, String templateKey, String name,
 			String type, String mode, String language, String script,
-			boolean cacheable)
+			boolean cacheable, boolean smallImage, String smallImageURL,
+			File smallFile)
 		throws Exception {
 
 		return DDMTemplateLocalServiceUtil.addTemplate(
 			TestPropsValues.getUserId(), TestPropsValues.getGroupId(),
 			classNameId, classPK, templateKey, getDefaultLocaleMap(name), null,
-			type, mode, language, script, cacheable,
-			ServiceTestUtil.getServiceContext());
+			type, mode, language, script, cacheable, smallImage, smallImageURL,
+			smallFile, ServiceTestUtil.getServiceContext());
 	}
 
 	protected Map<Locale, String> getDefaultLocaleMap(String defaultValue) {

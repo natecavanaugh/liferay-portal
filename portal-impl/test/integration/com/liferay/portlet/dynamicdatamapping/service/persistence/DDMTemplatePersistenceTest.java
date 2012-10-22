@@ -144,7 +144,13 @@ public class DDMTemplatePersistenceTest {
 
 		newDDMTemplate.setCacheable(ServiceTestUtil.randomBoolean());
 
-		_persistence.update(newDDMTemplate);
+		newDDMTemplate.setSmallImage(ServiceTestUtil.randomBoolean());
+
+		newDDMTemplate.setSmallImageId(ServiceTestUtil.nextLong());
+
+		newDDMTemplate.setSmallImageURL(ServiceTestUtil.randomString());
+
+		_persistence.update(newDDMTemplate, false);
 
 		DDMTemplate existingDDMTemplate = _persistence.findByPrimaryKey(newDDMTemplate.getPrimaryKey());
 
@@ -186,6 +192,12 @@ public class DDMTemplatePersistenceTest {
 			newDDMTemplate.getScript());
 		Assert.assertEquals(existingDDMTemplate.getCacheable(),
 			newDDMTemplate.getCacheable());
+		Assert.assertEquals(existingDDMTemplate.getSmallImage(),
+			newDDMTemplate.getSmallImage());
+		Assert.assertEquals(existingDDMTemplate.getSmallImageId(),
+			newDDMTemplate.getSmallImageId());
+		Assert.assertEquals(existingDDMTemplate.getSmallImageURL(),
+			newDDMTemplate.getSmallImageURL());
 	}
 
 	@Test
@@ -364,7 +376,13 @@ public class DDMTemplatePersistenceTest {
 
 		ddmTemplate.setCacheable(ServiceTestUtil.randomBoolean());
 
-		_persistence.update(ddmTemplate);
+		ddmTemplate.setSmallImage(ServiceTestUtil.randomBoolean());
+
+		ddmTemplate.setSmallImageId(ServiceTestUtil.nextLong());
+
+		ddmTemplate.setSmallImageURL(ServiceTestUtil.randomString());
+
+		_persistence.update(ddmTemplate, false);
 
 		return ddmTemplate;
 	}
