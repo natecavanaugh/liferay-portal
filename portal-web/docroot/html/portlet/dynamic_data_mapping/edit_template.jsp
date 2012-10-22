@@ -14,6 +14,9 @@
  */
 --%>
 
+<%@ page import="com.liferay.portlet.dynamicdatamapping.TemplateSmallImageNameException" %>
+<%@ page import="com.liferay.portlet.dynamicdatamapping.TemplateSmallImageSizeException" %>
+
 <%@ include file="/html/portlet/dynamic_data_mapping/init.jsp" %>
 
 <%
@@ -31,6 +34,8 @@ long templateId = BeanParamUtil.getLong(template, request, "templateId");
 long groupId = BeanParamUtil.getLong(template, request, "groupId", scopeGroupId);
 long classNameId = BeanParamUtil.getLong(template, request, "classNameId");
 long classPK = BeanParamUtil.getLong(template, request, "classPK");
+
+boolean isSmallImage = BeanParamUtil.getBoolean(template, request, "smallImage");
 
 DDMStructure structure = (DDMStructure)request.getAttribute(WebKeys.DYNAMIC_DATA_MAPPING_STRUCTURE);
 
@@ -88,6 +93,24 @@ if (Validator.isNotNull(structureAvailableFields)) {
 
 	<liferay-ui:error exception="<%= TemplateNameException.class %>" message="please-enter-a-valid-name" />
 	<liferay-ui:error exception="<%= TemplateScriptException.class %>" message="please-enter-a-valid-script" />
+
+	<liferay-ui:error exception="<%= TemplateSmallImageNameException.class %>">
+
+		<%
+		String[] imageExtensions = PrefsPropsUtil.getStringArray(PropsKeys.DYNAMIC_DATA_MAPPING_IMAGE_EXTENSIONS, ",");
+		%>
+
+		<liferay-ui:message key="image-names-must-end-with-one-of-the-following-extensions" /> <%= StringUtil.merge(imageExtensions, StringPool.COMMA) %>.
+	</liferay-ui:error>
+
+	<liferay-ui:error exception="<%= TemplateSmallImageSizeException.class %>">
+
+		<%
+		long imageMaxSize = PrefsPropsUtil.getLong(PropsKeys.DYNAMIC_DATA_MAPPING_IMAGE_SMALL_MAX_SIZE) / 1024;
+		%>
+
+		<liferay-ui:message arguments="<%= imageMaxSize %>" key="please-enter-a-small-image-with-a-valid-file-size-no-larger-than-x" />
+	</liferay-ui:error>
 
 	<%
 	String title = null;
@@ -153,21 +176,69 @@ if (Validator.isNotNull(structureAvailableFields)) {
 					</c:if>
 				</c:if>
 
-				<c:if test="<%= type.equals(DDMTemplateConstants.TEMPLATE_TYPE_FORM) %>">
-					<aui:select helpMessage="only-allow-deleting-required-fields-in-edit-mode" label="mode" name="mode">
-						<aui:option label="create" />
-						<aui:option label="edit" />
-					</aui:select>
+				<c:choose>
+					<c:when test="<%= type.equals(DDMTemplateConstants.TEMPLATE_TYPE_DETAIL) %>">
+						<aui:select helpMessage="only-allow-deleting-required-fields-in-edit-mode" label="mode" name="mode">
+							<aui:option label="create" />
+							<aui:option label="edit" />
+						</aui:select>
 
-					<aui:script use="aui-base,event-valuechange">
-						A.one('#<portlet:namespace />mode').on(
-							'valueChange',
-							function(event) {
-								<portlet:namespace />toggleMode(event.newVal);
-							}
-						);
-					</aui:script>
-				</c:if>
+						<aui:script use="aui-base,event-valuechange">
+							A.one('#<portlet:namespace />mode').on(
+								'valueChange',
+								function(event) {
+									<portlet:namespace />toggleMode(event.newVal);
+								}
+							);
+						</aui:script>
+					</c:when>
+					<c:otherwise>
+						<div id="<portlet:namespace />smallImageContainer">
+							<div class="lfr-ddm-small-image-header">
+								<aui:input name="smallImage" />
+							</div>
+							<div class="lfr-ddm-small-image-content aui-toggler-content-collapsed">
+								<table>
+									<tr>
+										<th>
+											<div class="lfr-ddm-small-image-preview">
+												<c:if test="<%= isSmallImage %>">
+													<style>
+														.lfr-ddm-small-image-preview div {
+															background: url(<%= Validator.isNotNull(template.getSmallImageURL()) ? template.getSmallImageURL() : themeDisplay.getPathImage() + "/template?img_id=" + template.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(template.getSmallImageId()) %>) !important;
+														}
+													</style>
+												</c:if>
+
+												<div></div>
+											</div>
+										</th>
+										<td>
+											<table>
+												<tr>
+													<th>
+														<aui:input inputCssClass="lfr-ddm-small-image-type" label="small-image-url" name="type" type="radio" />
+													</th>
+													<td>
+														<aui:input inputCssClass="lfr-ddm-small-image-value" label="" name="smallImageURL" />
+													</td>
+												</tr>
+												<tr>
+													<th>
+														<aui:input inputCssClass="lfr-ddm-small-image-type" label="small-image" name="type" type="radio" />
+													</th>
+													<td>
+														<aui:input inputCssClass="lfr-ddm-small-image-value" label="" name="smallImageFile" type="file" />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</c:otherwise>
+				</c:choose>
 			</liferay-ui:panel>
 		</liferay-ui:panel-container>
 
@@ -182,50 +253,110 @@ if (Validator.isNotNull(structureAvailableFields)) {
 	</aui:fieldset>
 </aui:form>
 
-<c:if test="<%= type.equals(DDMTemplateConstants.TEMPLATE_TYPE_FORM) %>">
-	<%@ include file="/html/portlet/dynamic_data_mapping/form_builder.jspf" %>
+<c:choose>
+	<c:when test="<%= type.equals(DDMTemplateConstants.TEMPLATE_TYPE_FORM) %>">
+		<%@ include file="/html/portlet/dynamic_data_mapping/form_builder.jspf" %>
 
-	<aui:script use="aui-base">
-		var hiddenAttributesMap = window.<portlet:namespace />formBuilder.MAP_HIDDEN_FIELD_ATTRS;
+		<aui:script use="aui-base">
+			var hiddenAttributesMap = window.<portlet:namespace />formBuilder.MAP_HIDDEN_FIELD_ATTRS;
 
-		window.<portlet:namespace />getFieldHiddenAttributes = function(mode, field) {
-			var hiddenAttributes = hiddenAttributesMap[field.get('type')] || hiddenAttributesMap.DEFAULT;
+			window.<portlet:namespace />getFieldHiddenAttributes = function(mode, field) {
+				var hiddenAttributes = hiddenAttributesMap[field.get('type')] || hiddenAttributesMap.DEFAULT;
 
-			hiddenAttributes = A.Array(hiddenAttributes);
+				hiddenAttributes = A.Array(hiddenAttributes);
 
-			if (mode === '<%= DDMTemplateConstants.TEMPLATE_MODE_EDIT %>') {
-				A.Array.removeItem(hiddenAttributes, 'readOnly');
-			}
+				if (mode === '<%= DDMTemplateConstants.TEMPLATE_MODE_EDIT %>') {
+					A.Array.removeItem(hiddenAttributes, 'readOnly');
+				}
 
-			return hiddenAttributes;
-		};
+				return hiddenAttributes;
+			};
 
-		window.<portlet:namespace />toggleMode = function(mode) {
-			var modeEdit = (mode === '<%= DDMTemplateConstants.TEMPLATE_MODE_EDIT %>');
+			window.<portlet:namespace />toggleMode = function(mode) {
+				var modeEdit = (mode === '<%= DDMTemplateConstants.TEMPLATE_MODE_EDIT %>');
 
-			window.<portlet:namespace />formBuilder.set('allowRemoveRequiredFields', modeEdit);
+				window.<portlet:namespace />formBuilder.set('allowRemoveRequiredFields', modeEdit);
 
-			window.<portlet:namespace />formBuilder.get('fields').each(
-				function(item, index, collection) {
-					var hiddenAttributes = window.<portlet:namespace />getFieldHiddenAttributes(mode, item);
+				window.<portlet:namespace />formBuilder.get('fields').each(
+					function(item, index, collection) {
+						var hiddenAttributes = window.<portlet:namespace />getFieldHiddenAttributes(mode, item);
 
-					item.set('hiddenAttributes', hiddenAttributes);
+						item.set('hiddenAttributes', hiddenAttributes);
+					}
+				);
+
+				A.Array.each(
+					window.<portlet:namespace />formBuilder.get('availableFields'),
+					function(item, index, collection) {
+						var hiddenAttributes = window.<portlet:namespace />getFieldHiddenAttributes(mode, item);
+
+						item.set('hiddenAttributes', hiddenAttributes);
+					}
+				);
+			};
+
+			<portlet:namespace />toggleMode('<%= HtmlUtil.escape(mode) %>');
+		</aui:script>
+	</c:when>
+	<c:otherwise>
+		<aui:script use="aui-toggler">
+			var <portlet:namespace />container = A.one('#<portlet:namespace />smallImageContainer');
+			var <portlet:namespace />preview = <portlet:namespace />container.one('.lfr-ddm-small-image-preview div');
+			var <portlet:namespace />types = <portlet:namespace />container.all('.lfr-ddm-small-image-type');
+			var <portlet:namespace />values = <portlet:namespace />container.all('.lfr-ddm-small-image-value');
+
+			var <portlet:namespace />selectSmallImageType = function(index) {
+				<portlet:namespace />types.set('checked', false);
+				<portlet:namespace />types.item(index).set('checked', true);
+
+				<portlet:namespace />values.set('disabled', true);
+				<portlet:namespace />values.item(index).set('disabled', false);
+			};
+
+			<portlet:namespace />container.delegate(
+				'change',
+				function(event) {
+					var input = event.currentTarget;
+					var index = <portlet:namespace />types.indexOf(input);
+
+					<portlet:namespace />selectSmallImageType(index);
+				},
+				'.lfr-ddm-small-image-type'
+			);
+
+			var <portlet:namespace />toggler = new A.Toggler(
+				{
+					on: {
+						animatingChange: function(event) {
+							var instance = this;
+							var expanded = !instance.get('expanded');
+
+							A.one('#<portlet:namespace />smallImageCheckbox').set('checked', expanded);
+							A.one('#<portlet:namespace />smallImage').set('value', expanded);
+
+							if (expanded) {
+								<portlet:namespace />types.each(function (type, index) {
+									if (type.get('checked')) {
+										<portlet:namespace />values.item(index).set('disabled', false);
+									}
+								});
+							}
+							else {
+								<portlet:namespace />values.set('disabled', true);
+							}
+						}
+					},
+					animated: true,
+					content: '#<portlet:namespace />smallImageContainer .lfr-ddm-small-image-content',
+					header: '#<portlet:namespace />smallImageContainer .lfr-ddm-small-image-header',
+					expanded: <%= isSmallImage %>
 				}
 			);
 
-			A.Array.each(
-				window.<portlet:namespace />formBuilder.get('availableFields'),
-				function(item, index, collection) {
-					var hiddenAttributes = window.<portlet:namespace />getFieldHiddenAttributes(mode, item);
-
-					item.set('hiddenAttributes', hiddenAttributes);
-				}
-			);
-		};
-
-		<portlet:namespace />toggleMode('<%= HtmlUtil.escape(mode) %>');
-	</aui:script>
-</c:if>
+			<portlet:namespace />selectSmallImageType('<%= (template != null) && Validator.isNotNull(template.getSmallImageURL()) ? 0 : 1 %>');
+		</aui:script>
+	</c:otherwise>
+</c:choose>
 
 <aui:button-row>
 	<aui:button onClick='<%= renderResponse.getNamespace() + "saveTemplate();" %>' value='<%= LanguageUtil.get(pageContext, "save") %>' />
