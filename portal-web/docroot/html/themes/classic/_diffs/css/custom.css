@@ -161,7 +161,6 @@ hr, .separator {
 
 	.child-menu, .grandchild-menu {
 		display: none;
-		max-width: 200px;
 		position: absolute;
 		z-index: 250;
 	}
@@ -187,7 +186,7 @@ hr, .separator {
 				background: transparent;
 			}
 		}
-		
+
 		li:hover a, .selected a {
 			background-color: #202223;
 		}
@@ -199,7 +198,7 @@ hr, .separator {
 
 	.grandchild-menu {
 		background: #202223;
-		left: 102.5%;
+		left: 100%;
 		min-width: 100px;
 		top: -6px;
 
@@ -421,7 +420,7 @@ hr, .separator {
 		}
 
 		.grandchild-menu {
-			left: 102%;
+			left: 100%;
 			top: -3px;
 			width: 115px;
 		}
