@@ -224,6 +224,16 @@ boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChec
 				if (refererLayout != null) {
 					Group refererGroup = refererLayout.getGroup();
 
+					if (refererGroup.isUserGroup()) {
+						Group scopeGroup = themeDisplay.getScopeGroup();
+
+						if (scopeGroup.isUser()) {
+							refererGroup = scopeGroup;
+
+							refererLayout = new VirtualLayout(refererLayout, refererGroup);
+						}
+					}
+
 					refererGroupDescriptiveName = refererGroup.getDescriptiveName(locale);
 
 					if (refererGroup.isUser() && (refererGroup.getClassPK() == user.getUserId())) {
@@ -382,6 +392,7 @@ boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChec
 				<%
 				for (LayoutPrototype layoutPrototype : layoutPrototypes) {
 				%>
+
 					<li>
 						<label>
 							<a href="javascript:;">
@@ -389,6 +400,7 @@ boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChec
 							</a>
 						</label>
 					</li>
+
 				<%
 				}
 				%>
@@ -404,18 +416,16 @@ boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChec
 
 		<liferay-ui:message key="this-page-has-been-changed-since-the-last-update-from-the-site-template" />
 
-		<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, layout.getGroupId(), ActionKeys.UPDATE) %>">
-			<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetPrototypeURL">
-				<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
-				<portlet:param name="<%= Constants.CMD %>" value="reset_prototype" />
-				<portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
-				<portlet:param name="groupId" value="<%= String.valueOf(themeDisplay.getParentGroupId()) %>" />
-			</liferay-portlet:actionURL>
+		<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetPrototypeURL">
+			<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
+			<portlet:param name="<%= Constants.CMD %>" value="reset_prototype" />
+			<portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
+			<portlet:param name="groupId" value="<%= String.valueOf(themeDisplay.getParentGroupId()) %>" />
+		</liferay-portlet:actionURL>
 
-			<aui:form action="<%= resetPrototypeURL %>" cssClass="reset-prototype" name="resetFm">
-				<aui:button name="submit" type="submit" value="reset" />
-			</aui:form>
-		</c:if>
+		<aui:form action="<%= resetPrototypeURL %>" cssClass="reset-prototype" name="resetFm">
+			<aui:button name="submit" type="submit" value="reset" />
+		</aui:form>
 	</div>
 </c:if>
 
@@ -471,7 +481,7 @@ boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChec
 			}
 			%>
 
-			<liferay-ui:icon cssClass='<%= layoutTypePortlet.isCustomizedView() ? StringPool.BLANK : "false" %>' id="toggleCustomizedView" image='<%= taglibImage %>' label="<%= true %>" message="<%= taglibMessage %>" url="javascript:;" />
+			<liferay-ui:icon cssClass='<%= layoutTypePortlet.isCustomizedView() ? StringPool.BLANK : "false" %>' id="toggleCustomizedView" image="<%= taglibImage %>" label="<%= true %>" message="<%= taglibMessage %>" url="javascript:;" />
 
 			<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetCustomizationViewURL">
 				<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />

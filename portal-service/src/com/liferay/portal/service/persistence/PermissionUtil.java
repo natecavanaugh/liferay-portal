@@ -244,10 +244,6 @@ public class PermissionUtil {
 	/**
 	* Returns the first permission in the ordered set where resourceId = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
 	* @param resourceId the resource ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching permission
@@ -264,11 +260,23 @@ public class PermissionUtil {
 	}
 
 	/**
-	* Returns the last permission in the ordered set where resourceId = &#63;.
+	* Returns the first permission in the ordered set where resourceId = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param resourceId the resource ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching permission, or <code>null</code> if a matching permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Permission fetchByResourceId_First(
+		long resourceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByResourceId_First(resourceId, orderByComparator);
+	}
+
+	/**
+	* Returns the last permission in the ordered set where resourceId = &#63;.
 	*
 	* @param resourceId the resource ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -286,11 +294,23 @@ public class PermissionUtil {
 	}
 
 	/**
-	* Returns the permissions before and after the current permission in the ordered set where resourceId = &#63;.
+	* Returns the last permission in the ordered set where resourceId = &#63;.
 	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
+	* @param resourceId the resource ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching permission, or <code>null</code> if a matching permission could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.Permission fetchByResourceId_Last(
+		long resourceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByResourceId_Last(resourceId, orderByComparator);
+	}
+
+	/**
+	* Returns the permissions before and after the current permission in the ordered set where resourceId = &#63;.
 	*
 	* @param permissionId the primary key of the current permission
 	* @param resourceId the resource ID

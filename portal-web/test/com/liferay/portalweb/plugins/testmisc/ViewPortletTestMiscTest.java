@@ -75,8 +75,6 @@ public class ViewPortletTestMiscTest extends BaseTestCase {
 		assertTrue(selenium.isPartialText("//p[6]",
 				"TestSchedulerMessageListener.isReceived=PASSED"));
 		assertTrue(selenium.isPartialText("//p[6]",
-				"TestSchedulerUtil.isScheduledBeforeSpringInitialized=PASSED"));
-		assertTrue(selenium.isPartialText("//p[6]",
 				"TestSchedulerUtil.isReceivedBeforeSpringInitialzed=PASSED"));
 		assertEquals(RuntimeVariables.replace("Servlet Request"),
 			selenium.getText("//h3[7]"));

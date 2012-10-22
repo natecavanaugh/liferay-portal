@@ -1010,10 +1010,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	/**
 	 * Returns the first social relation in the ordered set where uuid = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching social relation
@@ -1023,31 +1019,46 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByUuid_First(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUuid_First(uuid,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_First(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRelation> list = findByUuid(uuid, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last social relation in the ordered set where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1058,34 +1069,48 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByUuid_Last(String uuid,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUuid_Last(uuid, orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("uuid=");
+		msg.append(uuid);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUuid_Last(String uuid,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUuid(uuid);
 
 		List<SocialRelation> list = findByUuid(uuid, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where uuid = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param relationId the primary key of the current social relation
 	 * @param uuid the uuid
@@ -1370,10 +1395,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	/**
 	 * Returns the first social relation in the ordered set where companyId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching social relation
@@ -1383,32 +1404,47 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByCompanyId_First(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByCompanyId_First(companyId,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRelation> list = findByCompanyId(companyId, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last social relation in the ordered set where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1419,34 +1455,49 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByCompanyId_Last(long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByCompanyId_Last(companyId,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByCompanyId(companyId);
 
 		List<SocialRelation> list = findByCompanyId(companyId, count - 1,
 				count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param relationId the primary key of the current social relation
 	 * @param companyId the company ID
@@ -1718,10 +1769,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	/**
 	 * Returns the first social relation in the ordered set where userId1 = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param userId1 the user id1
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching social relation
@@ -1731,32 +1778,47 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByUserId1_First(long userId1,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUserId1_First(userId1,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId1_First(long userId1,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRelation> list = findByUserId1(userId1, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId1=");
-			msg.append(userId1);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last social relation in the ordered set where userId1 = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param userId1 the user id1
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -1767,34 +1829,49 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByUserId1_Last(long userId1,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUserId1_Last(userId1,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId1 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId1_Last(long userId1,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUserId1(userId1);
 
 		List<SocialRelation> list = findByUserId1(userId1, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId1=");
-			msg.append(userId1);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where userId1 = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param relationId the primary key of the current social relation
 	 * @param userId1 the user id1
@@ -2066,10 +2143,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	/**
 	 * Returns the first social relation in the ordered set where userId2 = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param userId2 the user id2
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching social relation
@@ -2079,32 +2152,47 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByUserId2_First(long userId2,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUserId2_First(userId2,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId2=");
+		msg.append(userId2);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId2_First(long userId2,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRelation> list = findByUserId2(userId2, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId2=");
-			msg.append(userId2);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last social relation in the ordered set where userId2 = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param userId2 the user id2
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2115,34 +2203,49 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByUserId2_Last(long userId2,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByUserId2_Last(userId2,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId2=");
+		msg.append(userId2);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId2 = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByUserId2_Last(long userId2,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByUserId2(userId2);
 
 		List<SocialRelation> list = findByUserId2(userId2, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId2=");
-			msg.append(userId2);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where userId2 = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param relationId the primary key of the current social relation
 	 * @param userId2 the user id2
@@ -2413,10 +2516,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	/**
 	 * Returns the first social relation in the ordered set where type = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param type the type
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching social relation
@@ -2426,31 +2525,46 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByType_First(int type,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByType_First(type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByType_First(int type,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRelation> list = findByType(type, 0, 1, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last social relation in the ordered set where type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param type the type
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2461,34 +2575,48 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByType_Last(int type,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByType_Last(type, orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where type = &#63;.
+	 *
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByType_Last(int type,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByType(type);
 
 		List<SocialRelation> list = findByType(type, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param relationId the primary key of the current social relation
 	 * @param type the type
@@ -2773,10 +2901,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	/**
 	 * Returns the first social relation in the ordered set where companyId = &#63; and type = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param companyId the company ID
 	 * @param type the type
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -2787,35 +2911,51 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByC_T_First(long companyId, int type,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByC_T_First(companyId, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByC_T_First(long companyId, int type,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRelation> list = findByC_T(companyId, type, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last social relation in the ordered set where companyId = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param companyId the company ID
 	 * @param type the type
@@ -2827,37 +2967,53 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByC_T_Last(long companyId, int type,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByC_T_Last(companyId, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where companyId = &#63; and type = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByC_T_Last(long companyId, int type,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByC_T(companyId, type);
 
 		List<SocialRelation> list = findByC_T(companyId, type, count - 1,
 				count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("companyId=");
-			msg.append(companyId);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where companyId = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param relationId the primary key of the current social relation
 	 * @param companyId the company ID
@@ -3148,10 +3304,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	/**
 	 * Returns the first social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param userId1 the user id1
 	 * @param userId2 the user id2
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -3162,35 +3314,51 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByU1_U2_First(long userId1, long userId2,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU1_U2_First(userId1, userId2,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(", userId2=");
+		msg.append(userId2);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_U2_First(long userId1, long userId2,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRelation> list = findByU1_U2(userId1, userId2, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId1=");
-			msg.append(userId1);
-
-			msg.append(", userId2=");
-			msg.append(userId2);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param userId1 the user id1
 	 * @param userId2 the user id2
@@ -3202,37 +3370,53 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByU1_U2_Last(long userId1, long userId2,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU1_U2_Last(userId1, userId2,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(", userId2=");
+		msg.append(userId2);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param userId2 the user id2
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_U2_Last(long userId1, long userId2,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByU1_U2(userId1, userId2);
 
 		List<SocialRelation> list = findByU1_U2(userId1, userId2, count - 1,
 				count, orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId1=");
-			msg.append(userId1);
-
-			msg.append(", userId2=");
-			msg.append(userId2);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where userId1 = &#63; and userId2 = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param relationId the primary key of the current social relation
 	 * @param userId1 the user id1
@@ -3522,10 +3706,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	/**
 	 * Returns the first social relation in the ordered set where userId1 = &#63; and type = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param userId1 the user id1
 	 * @param type the type
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -3536,35 +3716,51 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByU1_T_First(long userId1, int type,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU1_T_First(userId1, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_T_First(long userId1, int type,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRelation> list = findByU1_T(userId1, type, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId1=");
-			msg.append(userId1);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last social relation in the ordered set where userId1 = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param userId1 the user id1
 	 * @param type the type
@@ -3576,37 +3772,53 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByU1_T_Last(long userId1, int type,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU1_T_Last(userId1, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId1=");
+		msg.append(userId1);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId1 = &#63; and type = &#63;.
+	 *
+	 * @param userId1 the user id1
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU1_T_Last(long userId1, int type,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByU1_T(userId1, type);
 
 		List<SocialRelation> list = findByU1_T(userId1, type, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId1=");
-			msg.append(userId1);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where userId1 = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param relationId the primary key of the current social relation
 	 * @param userId1 the user id1
@@ -3896,10 +4108,6 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	/**
 	 * Returns the first social relation in the ordered set where userId2 = &#63; and type = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param userId2 the user id2
 	 * @param type the type
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -3910,35 +4118,51 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByU2_T_First(long userId2, int type,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU2_T_First(userId2, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId2=");
+		msg.append(userId2);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the first social relation in the ordered set where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU2_T_First(long userId2, int type,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<SocialRelation> list = findByU2_T(userId2, type, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId2=");
-			msg.append(userId2);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last social relation in the ordered set where userId2 = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param userId2 the user id2
 	 * @param type the type
@@ -3950,37 +4174,53 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 	public SocialRelation findByU2_T_Last(long userId2, int type,
 		OrderByComparator orderByComparator)
 		throws NoSuchRelationException, SystemException {
+		SocialRelation socialRelation = fetchByU2_T_Last(userId2, type,
+				orderByComparator);
+
+		if (socialRelation != null) {
+			return socialRelation;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId2=");
+		msg.append(userId2);
+
+		msg.append(", type=");
+		msg.append(type);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchRelationException(msg.toString());
+	}
+
+	/**
+	 * Returns the last social relation in the ordered set where userId2 = &#63; and type = &#63;.
+	 *
+	 * @param userId2 the user id2
+	 * @param type the type
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching social relation, or <code>null</code> if a matching social relation could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SocialRelation fetchByU2_T_Last(long userId2, int type,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByU2_T(userId2, type);
 
 		List<SocialRelation> list = findByU2_T(userId2, type, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId2=");
-			msg.append(userId2);
-
-			msg.append(", type=");
-			msg.append(type);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchRelationException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the social relations before and after the current social relation in the ordered set where userId2 = &#63; and type = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param relationId the primary key of the current social relation
 	 * @param userId2 the user id2

@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.repository.Repository;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
-import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
@@ -541,18 +540,30 @@ public class LiferayRepository
 			getGroupId(), toFolderId(folderId), recurse);
 	}
 
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, ServiceContext)}
+	 */
 	public Lock lockFileEntry(long fileEntryId)
 		throws PortalException, SystemException {
 
-		return dlFileEntryService.lockFileEntry(fileEntryId);
+		FileEntry fileEntry = checkOutFileEntry(
+			fileEntryId, new ServiceContext());
+
+		return fileEntry.getLock();
 	}
 
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, String, long,
+	 *             ServiceContext)}
+	 */
 	public Lock lockFileEntry(
 			long fileEntryId, String owner, long expirationTime)
 		throws PortalException, SystemException {
 
-		return dlFileEntryService.lockFileEntry(
-			fileEntryId, owner, expirationTime);
+		FileEntry fileEntry = checkOutFileEntry(
+			fileEntryId, owner, expirationTime, new ServiceContext());
+
+		return fileEntry.getLock();
 	}
 
 	public Lock lockFolder(long folderId)
@@ -617,27 +628,13 @@ public class LiferayRepository
 
 		searchContext.setSearchEngineId(indexer.getSearchEngineId());
 
-		BooleanQuery fullQuery = indexer.getFullQuery(searchContext);
-
-		return SearchEngineUtil.search(searchContext, fullQuery);
+		return indexer.search(searchContext);
 	}
 
 	public Hits search(SearchContext searchContext, Query query)
 		throws SearchException {
 
 		return SearchEngineUtil.search(searchContext, query);
-	}
-
-	public void unlockFileEntry(long fileEntryId)
-		throws PortalException, SystemException {
-
-		dlFileEntryService.unlockFileEntry(fileEntryId);
-	}
-
-	public void unlockFileEntry(long fileEntryId, String lockUuid)
-		throws PortalException, SystemException {
-
-		dlFileEntryService.unlockFileEntry(fileEntryId, lockUuid);
 	}
 
 	public void unlockFolder(long folderId, String lockUuid)
@@ -706,7 +703,7 @@ public class LiferayRepository
 		long defaultFileEntryTypeId = ParamUtil.getLong(
 			serviceContext, "defaultFileEntryTypeId");
 		SortedArrayList<Long> fileEntryTypeIds = getLongList(
-			serviceContext, "fileEntryTypeSearchContainerPrimaryKeys");
+			serviceContext, "dlFileEntryTypesSearchContainerPrimaryKeys");
 		boolean overrideFileEntryTypes = ParamUtil.getBoolean(
 			serviceContext, "overrideFileEntryTypes");
 

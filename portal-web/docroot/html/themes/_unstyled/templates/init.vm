@@ -223,7 +223,7 @@
 		#set ($css_class = $css_class + " site-template")
 	#end
 
-	#if($page_group.isCompany())
+	#if ($page_group.isCompany())
 		#set ($site_type = "company-site")
 	#elseif ($page_group.isOrganization())
 		#set ($site_type = "organization-site")

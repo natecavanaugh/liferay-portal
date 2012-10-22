@@ -206,6 +206,10 @@ public class DLFileEntryFinderImpl
 				qPos.add(folderId);
 			}
 
+			if (mimeTypes != null) {
+				qPos.add(mimeTypes);
+			}
+
 			Iterator<Long> itr = q.iterate();
 
 			if (itr.hasNext()) {
@@ -465,6 +469,10 @@ public class DLFileEntryFinderImpl
 				qPos.add(folderId);
 			}
 
+			if (mimeTypes != null) {
+				qPos.add(mimeTypes);
+			}
+
 			return (List<DLFileEntry>)QueryUtil.list(
 				q, getDialect(), start, end);
 		}
@@ -585,10 +593,7 @@ public class DLFileEntryFinderImpl
 
 		for (int i = 0; i < mimeTypes.length; i++) {
 			sb.append(table);
-
-			sb.append(".mimeType = '");
-			sb.append(mimeTypes[i]);
-			sb.append("'");
+			sb.append(".mimeType = ?");
 
 			if ((i + 1) != mimeTypes.length) {
 				sb.append(WHERE_OR);

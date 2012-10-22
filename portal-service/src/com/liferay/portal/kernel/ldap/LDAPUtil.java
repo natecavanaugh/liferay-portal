@@ -131,6 +131,51 @@ public class LDAPUtil {
 		return object.toString();
 	}
 
+	public static String[] getAttributeStringArray(
+			Attributes attributes, Properties properties, String key)
+		throws NamingException {
+
+		String id = properties.getProperty(key);
+
+		return getAttributeStringArray(attributes, id);
+	}
+
+	public static String[] getAttributeStringArray(
+			Attributes attributes, String id)
+		throws NamingException {
+
+		if (Validator.isNull(id)) {
+			return null;
+		}
+
+		Attribute attribute = attributes.get(id);
+
+		if (attribute == null) {
+			return null;
+		}
+
+		int size = attribute.size();
+
+		if (size == 0) {
+			return null;
+		}
+
+		String[] array = new String[size];
+
+		for (int i = 0; i < size; i++) {
+			Object object = attribute.get(i);
+
+			if (object == null) {
+				array[i] = StringPool.BLANK;
+			}
+			else {
+				array[i] = object.toString();
+			}
+		}
+
+		return array;
+	}
+
 	public static String getFullProviderURL(String baseURL, String baseDN) {
 		return baseURL + StringPool.SLASH + baseDN;
 	}

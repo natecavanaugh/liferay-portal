@@ -350,7 +350,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	public String addTempFileEntry(
 			long groupId, long folderId, String fileName, String tempFolderName,
 			InputStream inputStream)
-		throws IOException, PortalException, SystemException {
+		throws PortalException, SystemException {
 
 		DLFolderPermission.check(
 			getPermissionChecker(), groupId, folderId, ActionKeys.ADD_DOCUMENT);
@@ -1870,21 +1870,31 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		return TempFileUtil.getTempFileEntryNames(getUserId(), tempFolderName);
 	}
 
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, ServiceContext)}
+	 */
 	public Lock lockFileEntry(long fileEntryId)
 		throws PortalException, SystemException {
 
-		Repository repository = getRepository(0, fileEntryId, 0);
+		checkOutFileEntry(fileEntryId, new ServiceContext());
 
-		return repository.lockFileEntry(fileEntryId);
+		FileEntry fileEntry = getFileEntry(fileEntryId);
+
+		return fileEntry.getLock();
 	}
 
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, String, long,
+	 *             ServiceContext)}
+	 */
 	public Lock lockFileEntry(
 			long fileEntryId, String owner, long expirationTime)
 		throws PortalException, SystemException {
 
-		Repository repository = getRepository(0, fileEntryId, 0);
+		FileEntry fileEntry = checkOutFileEntry(
+			fileEntryId, owner, expirationTime, new ServiceContext());
 
-		return repository.lockFileEntry(fileEntryId, owner, expirationTime);
+		return fileEntry.getLock();
 	}
 
 	/**
@@ -2116,20 +2126,24 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		}
 	}
 
+	/**
+	 * @deprecated Use {@link #checkInFileEntry(long, boolean, String,
+	 *             ServiceContext)}.
+	 */
 	public void unlockFileEntry(long fileEntryId)
 		throws PortalException, SystemException {
 
-		Repository repository = getRepository(0, fileEntryId, 0);
-
-		repository.unlockFileEntry(fileEntryId);
+		checkInFileEntry(
+			fileEntryId, false, StringPool.BLANK, new ServiceContext());
 	}
 
+	/**
+	 * @deprecated Use {@link #checkInFileEntry(long, String)}.
+	 */
 	public void unlockFileEntry(long fileEntryId, String lockUuid)
 		throws PortalException, SystemException {
 
-		Repository repository = getRepository(0, fileEntryId, 0);
-
-		repository.unlockFileEntry(fileEntryId, lockUuid);
+		checkInFileEntry(fileEntryId, lockUuid);
 	}
 
 	/**
@@ -2443,15 +2457,15 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @param  serviceContext the service context to be applied. In a Liferay
 	 *         repository, it may include:  <ul> <li> defaultFileEntryTypeId -
 	 *         the file entry type to default all Liferay file entries to </li>
-	 *         <li> fileEntryTypeSearchContainerPrimaryKeys - a comma-delimited
-	 *         list of file entry type primary keys allowed in the given folder
-	 *         and all descendants </li> <li> overrideFileEntryTypes - boolean
-	 *         specifying whether to override ancestral folder's restriction of
-	 *         file entry types allowed </li> <li> workflowDefinitionXYZ - the
-	 *         workflow definition name specified per file entry type. The
-	 *         parameter name must be the string <code>workflowDefinition</code>
-	 *         appended by the <code>fileEntryTypeId</code> (optionally
-	 *         <code>0</code>). </li> </ul>
+	 *         <li> dlFileEntryTypesSearchContainerPrimaryKeys - a
+	 *         comma-delimited list of file entry type primary keys allowed in
+	 *         the given folder and all descendants </li> <li>
+	 *         overrideFileEntryTypes - boolean specifying whether to override
+	 *         ancestral folder's restriction of file entry types allowed </li>
+	 *         <li> workflowDefinitionXYZ - the workflow definition name
+	 *         specified per file entry type. The parameter name must be the
+	 *         string <code>workflowDefinition</code> appended by the <code>
+	 *         fileEntryTypeId</code> (optionally <code>0</code>). </li> </ul>
 	 * @return the folder
 	 * @throws PortalException if the current or new parent folder could not be
 	 *         found or if the new parent folder's information was invalid
@@ -2685,7 +2699,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 	protected Repository getRepository(
 			long folderId, ServiceContext serviceContext)
-		throws PortalException, SystemException{
+		throws PortalException, SystemException {
 
 		Repository repository = null;
 
@@ -2702,7 +2716,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	protected FileEntry moveFileEntries(
 			long fileEntryId, long newFolderId, Repository fromRepository,
 			Repository toRepository, ServiceContext serviceContext)
-		throws SystemException, PortalException {
+		throws PortalException, SystemException {
 
 		FileEntry sourceFileEntry = fromRepository.getFileEntry(fileEntryId);
 
@@ -2719,7 +2733,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	protected Folder moveFolders(
 			long folderId, long parentFolderId, Repository fromRepository,
 			Repository toRepository, ServiceContext serviceContext)
-		throws PortalException, SystemException{
+		throws PortalException, SystemException {
 
 		Folder folder = fromRepository.getFolder(folderId);
 

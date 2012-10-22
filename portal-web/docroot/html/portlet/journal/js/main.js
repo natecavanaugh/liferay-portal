@@ -1063,7 +1063,11 @@ AUI.add(
 						30000
 					);
 
-					instance.getById('selectTemplateButton').focus();
+					var selectTemplateButton = instance.getById('selectTemplateButton');
+
+					if (selectTemplateButton) {
+						selectTemplateButton.focus();
+					}
 				}
 				else {
 					var defaultLocale = instance.getDefaultLocale();
@@ -1102,7 +1106,9 @@ AUI.add(
 				instance.hideEditContainerMessage();
 				instance.loadEditFieldOptions(source);
 
-				instance.editContainerContextPanel.refreshAlign();
+				if (instance.editContainerContextPanel) {
+					instance.editContainerContextPanel.refreshAlign();
+				}
 			},
 
 			repeatField: function(source) {
@@ -1193,7 +1199,11 @@ AUI.add(
 						30000
 					);
 
-					instance.getById('selectTemplateButton').focus();
+					var selectTemplateButton = instance.getById('selectTemplateButton');
+
+					if (selectTemplateButton) {
+						selectTemplateButton.focus();
+					}
 				}
 				else {
 					if (!cmd) {
@@ -1297,7 +1307,9 @@ AUI.add(
 				journalMessage.attr('className', className);
 				journalMessage.show();
 
-				instance.editContainerContextPanel.refreshAlign();
+				if (instance.editContainerContextPanel) {
+					instance.editContainerContextPanel.refreshAlign();
+				}
 
 				if (message) {
 					journalMessage.html(message);
@@ -1309,7 +1321,9 @@ AUI.add(
 					function() {
 						journalMessage.hide();
 
-						instance.editContainerContextPanel.refreshAlign();
+						if (instance.editContainerContextPanel) {
+							instance.editContainerContextPanel.refreshAlign();
+						}
 					}
 				);
 			},
@@ -1835,8 +1849,6 @@ AUI.add(
 
 						instance.editContainerContextPanel.set('trigger', editButton);
 						instance.editContainerContextPanel.show();
-
-						instance.renderEditFieldOptions(source);
 					},
 					instance._getNamespacedId('#structureTree') + ' div.journal-article-buttons .edit-button .aui-button-input'
 				);
@@ -2252,13 +2264,13 @@ AUI.add(
 							points: ['lc', 'rc']
 						},
 						bodyContent: editContainerWrapper,
-						trigger: instance._getNamespacedId('#structureTree') + ' div.journal-article-buttons .edit-button .aui-button-input'
+						trigger: new A.NodeList()
 					}
 				).render();
 
 				instance.editContainerContextPanel.addTarget(instance);
 
-				instance.after(
+				instance.on(
 					'overlaycontextpanel:visibleChange',
 					function(event) {
 						if (event.newVal == true) {
@@ -3523,7 +3535,7 @@ AUI.add(
 		registerFieldModel('List', 'list', 'ListField', true);
 		registerFieldModel('MultiList', 'multi-list', 'MultiListField', true);
 		registerFieldModel('LinkToPage', 'link_to_layout', 'LinkToPageField', true);
-		registerFieldModel('SelectionBreak', 'selection_break', 'SelectionBreakField', true);
+		registerFieldModel('SelectionBreak', 'selection_break', 'SelectionBreakField', false);
 
 		Liferay.Portlet.Journal = Journal;
 	},

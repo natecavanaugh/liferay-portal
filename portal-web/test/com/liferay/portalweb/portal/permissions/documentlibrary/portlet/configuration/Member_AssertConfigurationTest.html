@@ -14,14 +14,9 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForVisible</td>
-	<td>link=Document Library Permissions Page</td>
-	<td>Document Library Permissions Page</td>
-</tr>
-<tr>
 	<td>clickAtAndWait</td>
-	<td>link=Document Library Permissions Page</td>
-	<td>Document Library Permissions Page</td>
+	<td>link=Documents and Media Test Page</td>
+	<td>Documents and Media Test Page</td>
 </tr>
 <tr>
 	<td>pause</td>
@@ -55,8 +50,18 @@
 </tr>
 <tr>
 	<td>waitForVisible</td>
-	<td>//input[@value='Save']</td>
-	<td>Save</td>
+	<td>//iframe[@id='_20_configurationIframeDialog']</td>
+	<td>Documents and Media - Configuration</td>
+</tr>
+<tr>
+	<td>selectFrame</td>
+	<td>//iframe[@id='_20_configurationIframeDialog']</td>
+	<td>Documents and Media - Configuration</td>
+</tr>
+<tr>
+	<td>waitForVisible</td>
+	<td>//ul[@class='aui-tabview-list']/li[1]/span/a</td>
+	<td>Setup</td>
 </tr>
 <tr>
 	<td>assertText</td>
@@ -87,6 +92,11 @@
 	<td>assertText</td>
 	<td>//div[@class='portlet-msg-success']</td>
 	<td>You have successfully updated the setup.</td>
+</tr>
+<tr>
+	<td>selectFrame</td>
+	<td>relative=top</td>
+	<td>top</td>
 </tr>
 </tbody></table>
 </body>

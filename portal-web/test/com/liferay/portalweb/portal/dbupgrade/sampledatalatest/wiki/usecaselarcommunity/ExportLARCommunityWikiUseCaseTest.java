@@ -94,6 +94,24 @@ public class ExportLARCommunityWikiUseCaseTest extends BaseTestCase {
 			}
 
 			try {
+				if (selenium.isVisible("//iframe[@id='_156_exportDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_156_exportDialog']");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
 				if (selenium.isVisible("//input[@id='_156_exportFileName']")) {
 					break;
 				}
@@ -126,5 +144,7 @@ public class ExportLARCommunityWikiUseCaseTest extends BaseTestCase {
 			RuntimeVariables.replace("Export"));
 		Thread.sleep(5000);
 		selenium.downloadTempFile("Wiki_Use_Case.Community.lar");
+		Thread.sleep(15000);
+		selenium.selectFrame("relative=top");
 	}
 }

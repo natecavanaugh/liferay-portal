@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.journal.model.impl;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
@@ -164,6 +165,12 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 		else {
 			return true;
 		}
+	}
+
+	@Override
+	@SuppressWarnings("unused")
+	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
+		throws LocaleException {
 	}
 
 	public void setSmallImageType(String smallImageType) {

@@ -310,9 +310,7 @@ public class SCProductEntryLocalServiceImpl
 			groupId, userId, start, end, obc);
 	}
 
-	public int getProductEntriesCount(long groupId)
-		throws SystemException {
-
+	public int getProductEntriesCount(long groupId) throws SystemException {
 		return scProductEntryPersistence.countByGroupId(groupId);
 	}
 

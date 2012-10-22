@@ -47,6 +47,7 @@ public class UnsyncCharArrayReader extends Reader {
 		if (buffer == null) {
 			throw new IOException("Stream closed");
 		}
+
 		markIndex = index;
 	}
 
@@ -75,9 +76,7 @@ public class UnsyncCharArrayReader extends Reader {
 	}
 
 	@Override
-	public int read(char[] chars, int offset, int length)
-		throws IOException {
-
+	public int read(char[] chars, int offset, int length) throws IOException {
 		if (buffer == null) {
 			throw new IOException("Stream closed");
 		}

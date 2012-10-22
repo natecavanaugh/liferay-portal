@@ -5,6 +5,11 @@
 -->
 
 <!--
+The Marketplace does not allow plugins that have liferay-plugin-package.xml.
+Please use liferay-plugin-package.properties instead.
+-->
+
+<!--
 A boolean type is the string representation of a boolean (true or false)
 variable.
 -->

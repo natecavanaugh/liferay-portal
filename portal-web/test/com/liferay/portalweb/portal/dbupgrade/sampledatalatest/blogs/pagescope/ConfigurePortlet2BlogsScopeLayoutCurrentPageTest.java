@@ -101,6 +101,25 @@ public class ConfigurePortlet2BlogsScopeLayoutCurrentPageTest
 			}
 
 			try {
+				if (selenium.isVisible(
+							"//iframe[@id='_33_configurationIframeDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_33_configurationIframeDialog']");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
 				if (selenium.isVisible("link=Scope")) {
 					break;
 				}
@@ -114,7 +133,6 @@ public class ConfigurePortlet2BlogsScopeLayoutCurrentPageTest
 		selenium.clickAt("link=Scope", RuntimeVariables.replace("Scope"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		Thread.sleep(5000);
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -168,6 +186,7 @@ public class ConfigurePortlet2BlogsScopeLayoutCurrentPageTest
 			selenium.getSelectedLabel("//select[@id='_86_scopeType']"));
 		assertEquals("Current Page (Blogs Test Page2)",
 			selenium.getSelectedLabel("//select[@id='_86_scopeLayoutUuid']"));
+		selenium.selectFrame("relative=top");
 		selenium.open("/web/blogs-page-scope-community/");
 		loadRequiredJavaScriptModules();
 

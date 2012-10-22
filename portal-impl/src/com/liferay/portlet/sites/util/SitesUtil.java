@@ -25,8 +25,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.LocaleThreadLocal;
-import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -353,12 +351,10 @@ public class SitesUtil {
 			ServiceContext serviceContext =
 				ServiceContextThreadLocal.getServiceContext();
 
-			Locale locale = LocaleThreadLocal.getThemeDisplayLocale();
-
 			updateLayoutScopes(
 				serviceContext.getUserId(), sourceLayout, targetLayout,
 				sourcePreferences, targetPreferences, sourcePortletId,
-				LocaleUtil.toLanguageId(locale));
+				serviceContext.getLanguageId());
 		}
 	}
 

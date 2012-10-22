@@ -14,11 +14,14 @@
 
 package com.liferay.portlet.dynamicdatamapping.service.impl;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -624,8 +627,6 @@ public class DDMStructureLocalServiceImpl
 	protected void validate(Map<Locale, String> nameMap, String xsd)
 		throws PortalException {
 
-		validateName(nameMap);
-
 		if (Validator.isNull(xsd)) {
 			throw new StructureXsdException();
 		}
@@ -641,14 +642,25 @@ public class DDMStructureLocalServiceImpl
 					throw new StructureXsdException();
 				}
 
+				Locale contentDefaultLocale = LocaleUtil.fromLanguageId(
+					rootElement.attributeValue("default-locale"));
+
+				validateLanguages(nameMap, contentDefaultLocale);
+
 				elements.addAll(rootElement.elements());
 
 				Set<String> elNames = new HashSet<String>();
 
 				validate(elements, elNames);
 			}
+			catch (LocaleException le) {
+				throw le;
+			}
 			catch (StructureDuplicateElementException sdee) {
 				throw sdee;
+			}
+			catch (StructureNameException sne) {
+				throw sne;
 			}
 			catch (StructureXsdException sxe) {
 				throw sxe;
@@ -659,13 +671,25 @@ public class DDMStructureLocalServiceImpl
 		}
 	}
 
-	protected void validateName(Map<Locale, String> nameMap)
+	protected void validateLanguages(
+			Map<Locale, String> nameMap, Locale contentDefaultLocale)
 		throws PortalException {
 
-		String name = nameMap.get(LocaleUtil.getDefault());
+		String name = nameMap.get(contentDefaultLocale);
 
 		if (Validator.isNull(name)) {
 			throw new StructureNameException();
+		}
+
+		Locale[] availableLocales = LanguageUtil.getAvailableLocales();
+
+		if (!ArrayUtil.contains(availableLocales, contentDefaultLocale)) {
+			LocaleException le = new LocaleException();
+
+			le.setSourceAvailableLocales(new Locale[] {contentDefaultLocale});
+			le.setTargetAvailableLocales(availableLocales);
+
+			throw le;
 		}
 	}
 

@@ -126,6 +126,18 @@ public class PluginsEnvironmentBuilder {
 
 		List<String> jars = ListUtil.toList(dependencyJars);
 
+		String[] requiredDeploymentContexts = StringUtil.split(
+			properties.getProperty("required-deployment-contexts"));
+
+		for (String requiredDeploymentContext : requiredDeploymentContexts) {
+			if (_fileUtil.exists(
+					libDir.getCanonicalPath() + "/" +
+						requiredDeploymentContext + "-service.jar")) {
+
+				jars.add(requiredDeploymentContext + "-service.jar");
+			}
+		}
+
 		jars.add("commons-logging.jar");
 		jars.add("log4j.jar");
 		jars.add("util-bridges.jar");
@@ -459,7 +471,7 @@ public class PluginsEnvironmentBuilder {
 		_fileUtil.write(projectFile, sb.toString());
 	}
 
-	private static final String _BRANCH = "trunk";
+	private static final String _BRANCH = "6.1.x";
 
 	private static final String[] _SOURCE_DIR_NAMES = new String[] {
 		"docroot/WEB-INF/ext-impl/src", "docroot/WEB-INF/ext-service/src",

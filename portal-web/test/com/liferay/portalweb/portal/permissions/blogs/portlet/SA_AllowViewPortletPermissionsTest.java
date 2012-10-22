@@ -113,25 +113,6 @@ public class SA_AllowViewPortletPermissionsTest extends BaseTestCase {
 			RuntimeVariables.replace("Permissions"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-
-		for (int second = 0;; second++) {
-			if (second >= 90) {
-				fail("timeout");
-			}
-
-			try {
-				if (selenium.isVisible(
-							"//iframe[@id='_33_configurationIframeDialog']")) {
-					break;
-				}
-			}
-			catch (Exception e) {
-			}
-
-			Thread.sleep(1000);
-		}
-
-		selenium.selectFrame("//iframe[@id='_33_configurationIframeDialog']");
 		assertFalse(selenium.isChecked("//input[@id='guest_ACTION_VIEW']"));
 		selenium.check("//input[@id='guest_ACTION_VIEW']");
 		assertTrue(selenium.isChecked("//input[@id='guest_ACTION_VIEW']"));

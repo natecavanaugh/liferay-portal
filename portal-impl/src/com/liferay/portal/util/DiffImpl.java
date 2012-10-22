@@ -274,7 +274,7 @@ public class DiffImpl implements com.liferay.portal.kernel.util.Diff {
 			}
 
 			if (aligned) {
-				 break;
+				break;
 			}
 
 			_highlightLines(
@@ -369,8 +369,9 @@ public class DiffImpl implements com.liferay.portal.kernel.util.Diff {
 			return margin;
 		}
 
-		int lastChangedLine = (lastDiff.getLineNumber() - 1) +
-			lastDiff.getChangedLines().size();
+		int lastChangedLine =
+			(lastDiff.getLineNumber() - 1) +
+				lastDiff.getChangedLines().size();
 
 		int currentChangedLine = startPos - margin;
 
@@ -469,7 +470,7 @@ public class DiffImpl implements com.liferay.portal.kernel.util.Diff {
 		// length), consider this as not aligned yet.
 
 		if ((deletedChars > (sourceList.size() / 2)) ||
-			(addedChars > sourceList.size() / 2)) {
+			(addedChars > (sourceList.size() / 2))) {
 
 			return false;
 		}

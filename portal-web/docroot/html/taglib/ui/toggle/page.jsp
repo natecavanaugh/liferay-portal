@@ -80,6 +80,14 @@ String defaultMessage = (String)request.getAttribute("liferay-ui:toggle:defaultM
 						}
 					);
 				}
+
+				Liferay.fire(
+					'toggle:stateChange',
+					{
+						id: '<%= id %>',
+						state: 0
+					}
+				);
 			}
 			else {
 				<%= stateVar %> = "";
@@ -105,6 +113,14 @@ String defaultMessage = (String)request.getAttribute("liferay-ui:toggle:defaultM
 						}
 					);
 				}
+
+				Liferay.fire(
+					'toggle:stateChange',
+					{
+						id: '<%= id %>',
+						state: 1
+					}
+				);
 			}
 		},
 		['aui-io']

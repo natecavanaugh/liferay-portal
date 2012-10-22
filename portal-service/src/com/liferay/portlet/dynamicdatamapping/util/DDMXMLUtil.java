@@ -20,15 +20,15 @@ import com.liferay.portal.kernel.xml.DocumentException;
 
 import java.io.IOException;
 
+import java.util.Locale;
+
 /**
  * @author Bruno Basto
  * @author Brian Wing Shun Chan
  */
 public class DDMXMLUtil {
 
-	public static String formatXML(Document document)
-		throws IOException {
-
+	public static String formatXML(Document document) throws IOException {
 		return getDDMXML().formatXML(document);
 	}
 
@@ -42,6 +42,15 @@ public class DDMXMLUtil {
 		PortalRuntimePermission.checkGetBeanProperty(DDMXMLUtil.class);
 
 		return _ddmXML;
+	}
+
+	public static String updateXMLDefaultLocale(
+			String xml, Locale contentDefaultLocale,
+			Locale contentNewDefaultLocale)
+		throws DocumentException, IOException {
+
+		return getDDMXML().updateXMLDefaultLocale(
+			xml, contentDefaultLocale, contentNewDefaultLocale);
 	}
 
 	public void setDDMXML(DDMXML ddmXML) {

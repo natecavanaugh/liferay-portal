@@ -205,6 +205,10 @@ public class LanguageUtil {
 		return getLanguage().getLocale(languageCode);
 	}
 
+	public static Locale[] getSupportedLocales() {
+		return getLanguage().getSupportedLocales();
+	}
+
 	public static String getTimeDescription(Locale locale, long milliseconds) {
 		return getLanguage().getTimeDescription(locale, milliseconds);
 	}

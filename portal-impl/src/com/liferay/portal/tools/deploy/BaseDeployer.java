@@ -141,9 +141,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 		}
 	}
 
-	public void addExtJar(List<String> jars, String resource)
-		throws Exception {
-
+	public void addExtJar(List<String> jars, String resource) throws Exception {
 		Set<String> servletContextNames = ExtRegistry.getServletContextNames();
 
 		for (String servletContextName : servletContextNames) {
@@ -185,7 +183,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 		jars.add(path);
 	}
 
-	public void autoDeploy(AutoDeploymentContext autoDeploymentContext)
+	public int autoDeploy(AutoDeploymentContext autoDeploymentContext)
 		throws AutoDeployException {
 
 		List<String> wars = new ArrayList<String>();
@@ -197,7 +195,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 		this.wars = wars;
 
 		try {
-			deployFile(autoDeploymentContext);
+			return deployFile(autoDeploymentContext);
 		}
 		catch (Exception e) {
 			throw new AutoDeployException(e);
@@ -754,7 +752,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			srcFile, null, null, displayName, override, pluginPackage);
 	}
 
-	public void deployFile(AutoDeploymentContext autoDeploymentContext)
+	public int deployFile(AutoDeploymentContext autoDeploymentContext)
 		throws Exception {
 
 		File srcFile = autoDeploymentContext.getFile();
@@ -853,19 +851,30 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 				deployDirFile);
 
 			if ((pluginPackage != null) && (previousPluginPackage != null)) {
-				if (_log.isInfoEnabled()) {
-					String name = pluginPackage.getName();
-					String previousVersion = previousPluginPackage.getVersion();
-					String version = pluginPackage.getVersion();
+				String name = pluginPackage.getName();
+				String previousVersion = previousPluginPackage.getVersion();
+				String version = pluginPackage.getVersion();
 
+				if (_log.isInfoEnabled()) {
 					_log.info(
 						"Updating " + name + " from version " +
 							previousVersion + " to version " + version);
 				}
 
-				if (pluginPackage.isLaterVersionThan(previousPluginPackage)) {
-					overwrite = true;
+				if (pluginPackage.isPreviousVersionThan(
+						previousPluginPackage)) {
+
+					if (_log.isInfoEnabled()) {
+						_log.info(
+							"Not updating " + name + " because version " +
+								previousVersion + " is newer than version " +
+									version);
+					}
+
+					return AutoDeployer.CODE_SKIP_NEWER_VERSION;
 				}
+
+				overwrite = true;
 			}
 
 			File mergeDirFile = new File(
@@ -894,6 +903,8 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 					postDeploy(destDir, deployDir);
 				}
 			}
+
+			return AutoDeployer.CODE_DEFAULT;
 		}
 		catch (Exception e) {
 			if (pluginPackage != null) {
@@ -1564,6 +1575,10 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 		return filterMap;
 	}
 
+	/**
+	 * @see {@link PluginPackageUtil#_readPluginPackageServletContext(
+	 *      javax.servlet.ServletContext)}
+	 */
 	public PluginPackage readPluginPackage(File file) {
 		if (!file.exists()) {
 			return null;

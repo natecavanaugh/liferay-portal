@@ -180,9 +180,7 @@ public class ActionUtil
 		getMembershipRequest(request);
 	}
 
-	public static void getTeam(HttpServletRequest request)
-		throws Exception {
-
+	public static void getTeam(HttpServletRequest request) throws Exception {
 		long teamId = ParamUtil.getLong(request, "teamId");
 
 		Team team = null;
@@ -194,9 +192,7 @@ public class ActionUtil
 		request.setAttribute(WebKeys.TEAM, team);
 	}
 
-	public static void getTeam(PortletRequest portletRequest)
-		throws Exception {
-
+	public static void getTeam(PortletRequest portletRequest) throws Exception {
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(
 			portletRequest);
 

@@ -80,7 +80,7 @@ public abstract class BaseReflectChecker extends BaseChecker {
 
 		// java.beans.Introspector
 
-		if (JavaDetector.isOpenJDK()) {
+		//if (JavaDetector.isOpenJDK()) {
 			if ((callerClass9.getEnclosingClass() == Introspector.class) &&
 				CheckerUtil.isAccessControllerDoPrivileged(10)) {
 
@@ -88,7 +88,7 @@ public abstract class BaseReflectChecker extends BaseChecker {
 
 				return true;
 			}
-		}
+		//}
 
 		// java.lang.Class
 

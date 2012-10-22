@@ -104,5 +104,6 @@ public class ExportLARCPWikiUseCaseTest extends BaseTestCase {
 			RuntimeVariables.replace("Export"));
 		Thread.sleep(5000);
 		selenium.downloadTempFile("Wiki_Use_Case.CP.lar");
+		Thread.sleep(15000);
 	}
 }

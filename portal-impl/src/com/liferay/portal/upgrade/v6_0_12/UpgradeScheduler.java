@@ -43,9 +43,7 @@ import java.util.Map;
  */
 public class UpgradeScheduler extends UpgradeProcess {
 
-	protected void deleteJob(String jobName, String jobGroup)
-		throws Exception {
-
+	protected void deleteJob(String jobName, String jobGroup) throws Exception {
 		runSQL(
 			"delete from QUARTZ_CRON_TRIGGERS where TRIGGER_NAME = '" +
 				jobName + "' and TRIGGER_GROUP = '" + jobGroup + "'");

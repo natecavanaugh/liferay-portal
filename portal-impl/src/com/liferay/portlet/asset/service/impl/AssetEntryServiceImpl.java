@@ -30,7 +30,6 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetEntry;
-import com.liferay.portlet.asset.model.AssetEntryDisplay;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.service.base.AssetEntryServiceBaseImpl;
 import com.liferay.portlet.asset.service.permission.AssetCategoryPermission;
@@ -82,37 +81,6 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 		return assetEntryLocalService.getCompanyEntriesCount(companyId);
 	}
 
-	public AssetEntryDisplay[] getCompanyEntryDisplays(
-			long companyId, int start, int end, String languageId)
-		throws SystemException {
-
-		List<AssetEntryDisplay> entryDisplays =
-			new ArrayList<AssetEntryDisplay>();
-
-		AssetEntryDisplay[] companyEntryDisplays =
-			assetEntryLocalService.getCompanyEntryDisplays(
-				companyId, start, end, languageId);
-
-		for (AssetEntryDisplay entryDisplay : companyEntryDisplays) {
-			try {
-				if (AssetEntryPermission.contains(
-						getPermissionChecker(), entryDisplay.getClassName(),
-						entryDisplay.getClassPK(), ActionKeys.VIEW)) {
-
-					entryDisplays.add(entryDisplay);
-				}
-			}
-			catch (PortalException pe) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(pe, pe);
-				}
-			}
-		}
-
-		return entryDisplays.toArray(
-			new AssetEntryDisplay[entryDisplays.size()]);
-	}
-
 	public List<AssetEntry> getEntries(AssetEntryQuery entryQuery)
 		throws PortalException, SystemException {
 
@@ -123,7 +91,7 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 			return new ArrayList<AssetEntry>();
 		}
 
-		Object[] results = filterEntryQuery(filteredEntryQuery);
+		Object[] results = filterEntryQuery(filteredEntryQuery, false);
 
 		return (List<AssetEntry>)results[0];
 	}
@@ -138,7 +106,7 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 			return 0;
 		}
 
-		Object[] results = filterEntryQuery(filteredEntryQuery);
+		Object[] results = filterEntryQuery(filteredEntryQuery, true);
 
 		return (Integer)results[1];
 	}
@@ -177,24 +145,6 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 		}
 
 		return assetEntry;
-	}
-
-	public AssetEntryDisplay[] searchEntryDisplays(
-			long companyId, long[] groupIds, String className, String keywords,
-			String languageId, int start, int end)
-		throws SystemException {
-
-		return assetEntryLocalService.searchEntryDisplays(
-			companyId, groupIds, className, keywords, languageId, start, end);
-	}
-
-	public int searchEntryDisplaysCount(
-			long companyId, long[] groupIds, String className, String keywords,
-			String languageId)
-		throws SystemException {
-
-		return assetEntryLocalService.searchEntryDisplaysCount(
-			companyId, groupIds, className, keywords, languageId);
 	}
 
 	public AssetEntry updateEntry(
@@ -254,7 +204,8 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 			viewableCategoryIds.toArray(new Long[viewableCategoryIds.size()]));
 	}
 
-	protected Object[] filterEntryQuery(AssetEntryQuery entryQuery)
+	protected Object[] filterEntryQuery(
+			AssetEntryQuery entryQuery, boolean returnEntriesCountOnly)
 		throws PortalException, SystemException {
 
 		ThreadLocalCache<Object[]> threadLocalCache =
@@ -263,9 +214,23 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 
 		String key = entryQuery.toString();
 
+		key = key.concat(StringPool.POUND).concat(
+			Boolean.toString(returnEntriesCountOnly));
+
 		Object[] results = threadLocalCache.get(key);
 
 		if (results != null) {
+			return results;
+		}
+
+		if (returnEntriesCountOnly && !entryQuery.isEnablePermissions()) {
+			int entriesCount = assetEntryLocalService.getEntriesCount(
+				entryQuery);
+
+			results = new Object[] {null, entriesCount};
+
+			threadLocalCache.put(key, results);
+
 			return results;
 		}
 
@@ -332,8 +297,7 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 		}
 		else {
 			filteredEntries = entries;
-			filteredEntriesCount = assetEntryLocalService.getEntriesCount(
-				entryQuery);
+			filteredEntriesCount = filteredEntries.size();
 		}
 
 		results = new Object[] {filteredEntries, filteredEntriesCount};

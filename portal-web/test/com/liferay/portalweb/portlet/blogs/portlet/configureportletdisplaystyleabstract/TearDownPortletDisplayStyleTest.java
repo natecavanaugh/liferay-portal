@@ -100,6 +100,26 @@ public class TearDownPortletDisplayStyleTest extends BaseTestCase {
 					}
 
 					try {
+						if (selenium.isVisible(
+									"//iframe[@id='_33_configurationIframeDialog']")) {
+							break;
+						}
+					}
+					catch (Exception e) {
+					}
+
+					Thread.sleep(1000);
+				}
+
+				selenium.selectFrame(
+					"//iframe[@id='_33_configurationIframeDialog']");
+
+				for (int second = 0;; second++) {
+					if (second >= 90) {
+						fail("timeout");
+					}
+
+					try {
 						if (selenium.isVisible("link=Display Settings")) {
 							break;
 						}
@@ -193,6 +213,7 @@ public class TearDownPortletDisplayStyleTest extends BaseTestCase {
 					RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
 				loadRequiredJavaScriptModules();
+				selenium.selectFrame("relative=top");
 
 			case 100:
 				label = -1;

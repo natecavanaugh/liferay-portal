@@ -342,11 +342,25 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 		long[] ldapServerIds = StringUtil.split(
 			PrefsPropsUtil.getString(companyId, "ldap.server.ids"), 0L);
 
-		if (ldapServerIds.length <= 0) {
-			ldapServerIds = new long[] {0};
+		for (long ldapServerId : ldapServerIds) {
+			User user = importLDAPUser(
+				ldapServerId, companyId, emailAddress, screenName);
+
+			if (user != null) {
+				return user;
+			}
 		}
 
-		for (long ldapServerId : ldapServerIds) {
+		for (int ldapServerId = 0;; ldapServerId++) {
+			String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
+
+			String providerUrl = PrefsPropsUtil.getString(
+				companyId, PropsKeys.LDAP_BASE_PROVIDER_URL + postfix);
+
+			if (Validator.isNull(providerUrl)) {
+				break;
+			}
+
 			User user = importLDAPUser(
 				ldapServerId, companyId, emailAddress, screenName);
 
@@ -529,9 +543,7 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 		return StringUtil.replace(value, "\\,", "\\\\,");
 	}
 
-	protected User getUser(long companyId, LDAPUser ldapUser)
-		throws Exception {
-
+	protected User getUser(long companyId, LDAPUser ldapUser) throws Exception {
 		User user = null;
 
 		try {
@@ -1022,9 +1034,9 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 	}
 
 	protected void populateExpandoAttributes(
-		ExpandoBridge expandoBridge, Map<String, String> expandoAttributes) {
+		ExpandoBridge expandoBridge, Map<String, String[]> expandoAttributes) {
 
-		for (Map.Entry<String, String> expandoAttribute :
+		for (Map.Entry<String, String[]> expandoAttribute :
 				expandoAttributes.entrySet()) {
 
 			String name = expandoAttribute.getKey();
@@ -1035,8 +1047,9 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 
 			int type = expandoBridge.getAttributeType(name);
 
-			Serializable value = ExpandoConverterUtil.getAttributeFromString(
-				type, expandoAttribute.getValue());
+			Serializable value =
+				ExpandoConverterUtil.getAttributeFromStringArray(
+					type, expandoAttribute.getValue());
 
 			try {
 				ExpandoValueLocalServiceUtil.addValue(

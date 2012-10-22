@@ -24,7 +24,7 @@ import com.liferay.portalweb.portal.dbupgrade.sampledatalatest.blogs.pagescope.A
 import com.liferay.portalweb.portal.dbupgrade.sampledatalatest.blogs.pagescope.AddPage3PortletBlogsPageScopeTest;
 import com.liferay.portalweb.portal.dbupgrade.sampledatalatest.blogs.pagescope.ConfigurePortlet1BlogsScopeDefaultTest;
 import com.liferay.portalweb.portal.dbupgrade.sampledatalatest.blogs.pagescope.ConfigurePortlet2BlogsScopeLayoutCurrentPageTest;
-import com.liferay.portalweb.portal.dbupgrade.sampledatalatest.blogs.pagescope.ConfigurePortlet2MaximumItemsToDisplay1Test;
+import com.liferay.portalweb.portal.dbupgrade.sampledatalatest.blogs.pagescope.ConfigurePortlet2MaximumItemsToDisplay5Test;
 import com.liferay.portalweb.portal.dbupgrade.sampledatalatest.blogs.pagescope.ConfigurePortlet3BlogsScopeLayoutPage2Test;
 
 import junit.framework.Test;
@@ -46,7 +46,7 @@ public class PageScopeLARCPTests extends BaseTestSuite {
 		testSuite.addTestSuite(ConfigurePortlet1BlogsScopeDefaultTest.class);
 		testSuite.addTestSuite(ConfigurePortlet2BlogsScopeLayoutCurrentPageTest.class);
 		testSuite.addTestSuite(ConfigurePortlet3BlogsScopeLayoutPage2Test.class);
-		testSuite.addTestSuite(ConfigurePortlet2MaximumItemsToDisplay1Test.class);
+		testSuite.addTestSuite(ConfigurePortlet2MaximumItemsToDisplay5Test.class);
 		testSuite.addTestSuite(ImportExportCPLARDefaultBlogsPageScopeTest.class);
 		testSuite.addTestSuite(ImportExportCPLARPage2BlogsPageScopeTest.class);
 

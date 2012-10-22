@@ -14,10 +14,12 @@
 
 package com.liferay.portlet.journal.service.impl;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.NoSuchImageException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
@@ -28,6 +30,7 @@ import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -156,7 +159,7 @@ public class JournalArticleLocalServiceImpl
 		Date displayDate = PortalUtil.getDate(
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, user.getTimeZone(),
-			new ArticleDisplayDateException());
+			ArticleDisplayDateException.class);
 
 		Date expirationDate = null;
 
@@ -164,7 +167,7 @@ public class JournalArticleLocalServiceImpl
 			expirationDate = PortalUtil.getDate(
 				expirationDateMonth, expirationDateDay, expirationDateYear,
 				expirationDateHour, expirationDateMinute, user.getTimeZone(),
-				new ArticleExpirationDateException());
+				ArticleExpirationDateException.class);
 		}
 
 		Date reviewDate = null;
@@ -173,7 +176,7 @@ public class JournalArticleLocalServiceImpl
 			reviewDate = PortalUtil.getDate(
 				reviewDateMonth, reviewDateDay, reviewDateYear, reviewDateHour,
 				reviewDateMinute, user.getTimeZone(),
-				new ArticleReviewDateException());
+				ArticleReviewDateException.class);
 		}
 
 		byte[] smallImageBytes = null;
@@ -407,7 +410,8 @@ public class JournalArticleLocalServiceImpl
 
 		List<JournalArticle> articles =
 			journalArticleFinder.findByExpirationDate(
-				0, WorkflowConstants.STATUS_APPROVED, now);
+				0, WorkflowConstants.STATUS_APPROVED,
+				new Date(now.getTime() + _JOURNAL_ARTICLE_CHECK_INTERVAL));
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Expiring " + articles.size() + " articles");
@@ -1933,7 +1937,7 @@ public class JournalArticleLocalServiceImpl
 		Date displayDate = PortalUtil.getDate(
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, user.getTimeZone(),
-			new ArticleDisplayDateException());
+			ArticleDisplayDateException.class);
 
 		Date expirationDate = null;
 
@@ -1941,7 +1945,7 @@ public class JournalArticleLocalServiceImpl
 			expirationDate = PortalUtil.getDate(
 				expirationDateMonth, expirationDateDay, expirationDateYear,
 				expirationDateHour, expirationDateMinute, user.getTimeZone(),
-				new ArticleExpirationDateException());
+				ArticleExpirationDateException.class);
 		}
 
 		Date now = new Date();
@@ -1958,7 +1962,7 @@ public class JournalArticleLocalServiceImpl
 			reviewDate = PortalUtil.getDate(
 				reviewDateMonth, reviewDateDay, reviewDateYear, reviewDateHour,
 				reviewDateMinute, user.getTimeZone(),
-				new ArticleReviewDateException());
+				ArticleReviewDateException.class);
 		}
 
 		byte[] smallImageBytes = null;
@@ -2186,6 +2190,12 @@ public class JournalArticleLocalServiceImpl
 			throw new ArticleVersionException();
 		}
 
+		boolean incrementVersion = false;
+
+		if (oldArticle.isApproved() || oldArticle.isExpired()) {
+			incrementVersion = true;
+		}
+
 		if (serviceContext != null) {
 			serviceContext.validateModifiedDate(
 				oldArticle, ArticleVersionException.class);
@@ -2193,9 +2203,9 @@ public class JournalArticleLocalServiceImpl
 
 		JournalArticle article = null;
 
-		User user = userService.getUserById(oldArticle.getUserId());
+		User user = userPersistence.findByPrimaryKey(oldArticle.getUserId());
 
-		if (!oldArticle.isDraft()) {
+		if (incrementVersion) {
 			double newVersion = MathUtil.format(oldVersion + 0.1, 1, 1);
 
 			long id = counterLocalService.increment();
@@ -2256,8 +2266,9 @@ public class JournalArticleLocalServiceImpl
 		article.setDescriptionMap(descriptionMap);
 
 		content = format(
-			user, groupId, articleId, version, !oldArticle.isDraft(), content,
-			oldArticle.getStructureId(), images);
+			user, groupId, articleId, article.getVersion(),
+			!oldArticle.isDraft(), content, oldArticle.getStructureId(),
+			images);
 
 		article.setContent(content);
 
@@ -3384,9 +3395,14 @@ public class JournalArticleLocalServiceImpl
 			Date displayDate = dateInterval[0];
 			Date expirationDate = dateInterval[1];
 
-			assetEntryLocalService.updateEntry(
+			AssetEntry assetEntry = assetEntryLocalService.updateEntry(
 				JournalArticle.class.getName(), article.getResourcePrimKey(),
 				displayDate, expirationDate, true);
+
+			assetEntry.setModifiedDate(
+				previousApprovedArticle.getModifiedDate());
+
+			assetEntryPersistence.update(assetEntry, false);
 
 			if (article.isIndexable()) {
 				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
@@ -3420,12 +3436,25 @@ public class JournalArticleLocalServiceImpl
 			String smallImageURL, File smallImageFile, byte[] smallImageBytes)
 		throws PortalException, SystemException {
 
-		Locale defaultLocale = LocaleUtil.fromLanguageId(
+		Locale articleDefaultLocale = LocaleUtil.fromLanguageId(
 			LocalizationUtil.getDefaultLocale(content));
+
+		Locale[] availableLocales = LanguageUtil.getAvailableLocales();
+
+		if (!ArrayUtil.contains(availableLocales, articleDefaultLocale)) {
+			LocaleException le = new LocaleException();
+
+			Locale[] sourceAvailableLocales = {articleDefaultLocale};
+
+			le.setSourceAvailableLocales(sourceAvailableLocales);
+			le.setTargetAvailableLocales(availableLocales);
+
+			throw le;
+		}
 
 		if ((classNameId == 0) &&
 			(titleMap.isEmpty() ||
-			 Validator.isNull(titleMap.get(defaultLocale)))) {
+			 Validator.isNull(titleMap.get(articleDefaultLocale)))) {
 
 			throw new ArticleTitleException();
 		}

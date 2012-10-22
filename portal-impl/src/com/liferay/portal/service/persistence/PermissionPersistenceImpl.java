@@ -675,10 +675,6 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 	/**
 	 * Returns the first permission in the ordered set where resourceId = &#63;.
 	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
 	 * @param resourceId the resource ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching permission
@@ -688,32 +684,47 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 	public Permission findByResourceId_First(long resourceId,
 		OrderByComparator orderByComparator)
 		throws NoSuchPermissionException, SystemException {
+		Permission permission = fetchByResourceId_First(resourceId,
+				orderByComparator);
+
+		if (permission != null) {
+			return permission;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("resourceId=");
+		msg.append(resourceId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first permission in the ordered set where resourceId = &#63;.
+	 *
+	 * @param resourceId the resource ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching permission, or <code>null</code> if a matching permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permission fetchByResourceId_First(long resourceId,
+		OrderByComparator orderByComparator) throws SystemException {
 		List<Permission> list = findByResourceId(resourceId, 0, 1,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("resourceId=");
-			msg.append(resourceId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the last permission in the ordered set where resourceId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param resourceId the resource ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -724,34 +735,49 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 	public Permission findByResourceId_Last(long resourceId,
 		OrderByComparator orderByComparator)
 		throws NoSuchPermissionException, SystemException {
+		Permission permission = fetchByResourceId_Last(resourceId,
+				orderByComparator);
+
+		if (permission != null) {
+			return permission;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("resourceId=");
+		msg.append(resourceId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchPermissionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last permission in the ordered set where resourceId = &#63;.
+	 *
+	 * @param resourceId the resource ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching permission, or <code>null</code> if a matching permission could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Permission fetchByResourceId_Last(long resourceId,
+		OrderByComparator orderByComparator) throws SystemException {
 		int count = countByResourceId(resourceId);
 
 		List<Permission> list = findByResourceId(resourceId, count - 1, count,
 				orderByComparator);
 
-		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("resourceId=");
-			msg.append(resourceId);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			throw new NoSuchPermissionException(msg.toString());
-		}
-		else {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
+
+		return null;
 	}
 
 	/**
 	 * Returns the permissions before and after the current permission in the ordered set where resourceId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
 	 *
 	 * @param permissionId the primary key of the current permission
 	 * @param resourceId the resource ID

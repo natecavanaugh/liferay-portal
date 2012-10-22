@@ -45,6 +45,14 @@ public class LocalizationUtil {
 		return getLocalization().getAvailableLocales(xml);
 	}
 
+	public static Locale getDefaultImportLocale(
+		String className, long classPK, Locale contentDefaultLocale,
+		Locale[] contentAvailableLocales) {
+
+		return getLocalization().getDefaultImportLocale(
+			className, classPK, contentDefaultLocale, contentAvailableLocales);
+	}
+
 	public static String getDefaultLocale(String xml) {
 		return getLocalization().getDefaultLocale(xml);
 	}
@@ -82,6 +90,14 @@ public class LocalizationUtil {
 
 	public static Map<Locale, String> getLocalizationMap(String xml) {
 		return getLocalization().getLocalizationMap(xml);
+	}
+
+	public static Map<Locale, String> getLocalizationMap(
+		String bundleName, ClassLoader classLoader, String key,
+		boolean includeBetaLocales) {
+
+		return getLocalization().getLocalizationMap(
+			bundleName, classLoader, key, includeBetaLocales);
 	}
 
 	public static Map<Locale, String> getLocalizationMap(

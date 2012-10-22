@@ -506,6 +506,26 @@ public interface Portal {
 	public Date getDate(int month, int day, int year);
 
 	/**
+	 * Returns the date object for the specified month, day, and year,
+	 * optionally throwing an exception if the date is invalid.
+	 *
+	 * @param  month the month (0-based, meaning 0 for January)
+	 * @param  day the day of the month
+	 * @param  year the year
+	 * @param  clazz the exception class to throw if the date is invalid. If
+	 *         <code>null</code>, no exception will be thrown for an invalid
+	 *         date.
+	 * @return the date object, or <code>null</code> if the date is invalid and
+	 *         no exception to throw was provided
+	 * @throws PortalException if the date was invalid and <code>pe</code> was
+	 *         not <code>null</code>
+	 */
+	public Date getDate(
+			int month, int day, int year,
+			Class<? extends PortalException> clazz)
+		throws PortalException;
+
+	/**
 	 * Returns the date object for the specified month, day, year, hour, and
 	 * minute, optionally throwing an exception if the date is invalid.
 	 *
@@ -514,13 +534,36 @@ public interface Portal {
 	 * @param  year the year
 	 * @param  hour the hour (0-24)
 	 * @param  min the minute of the hour
-	 * @param  pe the exception to throw if the date is invalid. If
+	 * @param  clazz the exception class to throw if the date is invalid. If
 	 *         <code>null</code>, no exception will be thrown for an invalid
 	 *         date.
 	 * @return the date object, or <code>null</code> if the date is invalid and
 	 *         no exception to throw was provided
 	 * @throws PortalException if the date was invalid and <code>pe</code> was
 	 *         not <code>null</code>
+	 */
+	public Date getDate(
+			int month, int day, int year, int hour, int min,
+			Class<? extends PortalException> clazz)
+		throws PortalException;
+
+	/**
+	 * Returns the date object for the specified month, day, year, hour, and
+	 * minute, optionally throwing an exception if the date is invalid.
+	 *
+	 * @param      month the month (0-based, meaning 0 for January)
+	 * @param      day the day of the month
+	 * @param      year the year
+	 * @param      hour the hour (0-24)
+	 * @param      min the minute of the hour
+	 * @param      pe the exception to throw if the date is invalid. If
+	 *             <code>null</code>, no exception will be thrown for an invalid
+	 *             date.
+	 * @return     the date object, or <code>null</code> if the date is invalid
+	 *             and no exception to throw was provided
+	 * @throws     PortalException if the date was invalid and <code>pe</code>
+	 *             was not <code>null</code>
+	 * @deprecated {@link #getDate(int, int, int, int, int, Class)}
 	 */
 	public Date getDate(
 			int month, int day, int year, int hour, int min, PortalException pe)
@@ -536,13 +579,37 @@ public interface Portal {
 	 * @param  hour the hour (0-24)
 	 * @param  min the minute of the hour
 	 * @param  timeZone the time zone of the date
-	 * @param  pe the exception to throw if the date is invalid. If
+	 * @param  clazz the exception class to throw if the date is invalid. If
 	 *         <code>null</code>, no exception will be thrown for an invalid
 	 *         date.
 	 * @return the date object, or <code>null</code> if the date is invalid and
 	 *         no exception to throw was provided
 	 * @throws PortalException if the date was invalid and <code>pe</code> was
 	 *         not <code>null</code>
+	 */
+	public Date getDate(
+			int month, int day, int year, int hour, int min, TimeZone timeZone,
+			Class<? extends PortalException> clazz)
+		throws PortalException;
+
+	/**
+	 * Returns the date object for the specified month, day, year, hour, minute,
+	 * and time zone, optionally throwing an exception if the date is invalid.
+	 *
+	 * @param      month the month (0-based, meaning 0 for January)
+	 * @param      day the day of the month
+	 * @param      year the year
+	 * @param      hour the hour (0-24)
+	 * @param      min the minute of the hour
+	 * @param      timeZone the time zone of the date
+	 * @param      pe the exception to throw if the date is invalid. If
+	 *             <code>null</code>, no exception will be thrown for an invalid
+	 *             date.
+	 * @return     the date object, or <code>null</code> if the date is invalid
+	 *             and no exception to throw was provided
+	 * @throws     PortalException if the date was invalid and <code>pe</code>
+	 *             was not <code>null</code>
+	 * @deprecated {@link #getDate(int, int, int, int, int, TimeZone, Class)}
 	 */
 	public Date getDate(
 			int month, int day, int year, int hour, int min, TimeZone timeZone,
@@ -553,16 +620,17 @@ public interface Portal {
 	 * Returns the date object for the specified month, day, and year,
 	 * optionally throwing an exception if the date is invalid.
 	 *
-	 * @param  month the month (0-based, meaning 0 for January)
-	 * @param  day the day of the month
-	 * @param  year the year
-	 * @param  pe the exception to throw if the date is invalid. If
-	 *         <code>null</code>, no exception will be thrown for an invalid
-	 *         date.
-	 * @return the date object, or <code>null</code> if the date is invalid and
-	 *         no exception to throw was provided
-	 * @throws PortalException if the date was invalid and <code>pe</code> was
-	 *         not <code>null</code>
+	 * @param      month the month (0-based, meaning 0 for January)
+	 * @param      day the day of the month
+	 * @param      year the year
+	 * @param      pe the exception to throw if the date is invalid. If
+	 *             <code>null</code>, no exception will be thrown for an invalid
+	 *             date.
+	 * @return     the date object, or <code>null</code> if the date is invalid
+	 *             and no exception to throw was provided
+	 * @throws     PortalException if the date was invalid and <code>pe</code>
+	 *             was not <code>null</code>
+	 * @deprecated {@link #getDate(int, int, int, Class)}
 	 */
 	public Date getDate(int month, int day, int year, PortalException pe)
 		throws PortalException;
@@ -575,13 +643,35 @@ public interface Portal {
 	 * @param  day the day of the month
 	 * @param  year the year
 	 * @param  timeZone the time zone of the date
-	 * @param  pe the exception to throw if the date is invalid. If
+	 * @param  clazz the exception class to throw if the date is invalid. If
 	 *         <code>null</code>, no exception will be thrown for an invalid
 	 *         date.
 	 * @return the date object, or <code>null</code> if the date is invalid and
 	 *         no exception to throw was provided
 	 * @throws PortalException if the date was invalid and <code>pe</code> was
 	 *         not <code>null</code>
+	 */
+	public Date getDate(
+			int month, int day, int year, TimeZone timeZone,
+			Class<? extends PortalException> clazz)
+		throws PortalException;
+
+	/**
+	 * Returns the date object for the specified month, day, year, and time
+	 * zone, optionally throwing an exception if the date is invalid.
+	 *
+	 * @param      month the month (0-based, meaning 0 for January)
+	 * @param      day the day of the month
+	 * @param      year the year
+	 * @param      timeZone the time zone of the date
+	 * @param      pe the exception to throw if the date is invalid. If
+	 *             <code>null</code>, no exception will be thrown for an invalid
+	 *             date.
+	 * @return     the date object, or <code>null</code> if the date is invalid
+	 *             and no exception to throw was provided
+	 * @throws     PortalException if the date was invalid and <code>pe</code>
+	 *             was not <code>null</code>
+	 * @deprecated {@link #getDate(int, int, int, TimeZone, Class)}
 	 */
 	public Date getDate(
 			int month, int day, int year, TimeZone timeZone, PortalException pe)

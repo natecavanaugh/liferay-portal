@@ -17,10 +17,12 @@ package com.liferay.portal.service.impl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.staging.MergeLayoutPrototypesThreadLocal;
+import com.liferay.portal.kernel.util.AutoResetThreadLocal;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowThreadLocal;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutSet;
@@ -116,48 +118,74 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 				LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(
 					groupId, privateLayout);
 
-				List<Layout> layouts = (List<Layout>)methodInvocation.proceed();
+				try {
+					MergeLayoutPrototypesThreadLocal.setInProgress(true);
+					WorkflowThreadLocal.setEnabled(false);
 
-				for (Layout layout : layouts) {
-					if (!SitesUtil.isLayoutModifiedSinceLastMerge(layout)) {
-						try {
-							MergeLayoutPrototypesThreadLocal.setInProgress(
-								true);
-							WorkflowThreadLocal.setEnabled(false);
+					List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+						groupId, privateLayout);
 
-							SitesUtil.mergeLayoutSetProtypeLayouts(
-								group, layoutSet);
-							}
-						finally {
-							MergeLayoutPrototypesThreadLocal.setInProgress(
-								false);
-							WorkflowThreadLocal.setEnabled(workflowEnabled);
+					if (layouts.isEmpty()) {
+						SitesUtil.mergeLayoutSetProtypeLayouts(
+							group, layoutSet);
+					}
+
+					boolean modified = false;
+
+					for (Layout layout : layouts) {
+						if (SitesUtil.isLayoutModifiedSinceLastMerge(layout)) {
+							modified = true;
+
+							break;
 						}
+					}
 
-						break;
+					if (!modified) {
+						SitesUtil.mergeLayoutSetProtypeLayouts(
+							group, layoutSet);
 					}
 				}
+				finally {
+					MergeLayoutPrototypesThreadLocal.setInProgress(false);
+					WorkflowThreadLocal.setEnabled(workflowEnabled);
+				}
 
-				Object returnValue = methodInvocation.proceed();
+				List<Layout> layouts = (List<Layout>)methodInvocation.proceed();
 
 				if (PropsValues.
-						USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE &&
-					group.isUser()) {
+						USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE) {
+
+					return layouts;
+				}
+
+				if (group.isUser()) {
+					_virtualLayoutTargetGroupId.set(group.getGroupId());
 
 					if (parentLayoutId ==
 							LayoutConstants.DEFAULT_PARENT_LAYOUT_ID) {
 
 						return addUserGroupLayouts(
-							group, layoutSet, (List<Layout>)returnValue,
-							parentLayoutId);
+							group, layoutSet, layouts, parentLayoutId);
 					}
 					else {
-						return addChildUserGroupLayouts(
-							group, (List<Layout>)returnValue);
+						return addChildUserGroupLayouts(group, layouts);
+					}
+				}
+				else if (group.isUserGroup() &&
+						 (parentLayoutId !=
+							 LayoutConstants.DEFAULT_PARENT_LAYOUT_ID)) {
+
+					long targetGroupId = _virtualLayoutTargetGroupId.get();
+
+					if (targetGroupId != GroupConstants.DEFAULT_LIVE_GROUP_ID) {
+						Group targetGroup = GroupLocalServiceUtil.getGroup(
+							targetGroupId);
+
+						return addChildUserGroupLayouts(targetGroup, layouts);
 					}
 				}
 
-				return returnValue;
+				return layouts;
 			}
 			catch (Exception e) {
 				_log.error(e, e);
@@ -233,5 +261,11 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 
 	private static Log _log = LogFactoryUtil.getLog(
 		LayoutLocalServiceVirtualLayoutsAdvice.class);
+
+	private static ThreadLocal<Long> _virtualLayoutTargetGroupId =
+		new AutoResetThreadLocal<Long>(
+			LayoutLocalServiceVirtualLayoutsAdvice.class +
+				"._virtualLayoutTargetGroupId",
+			GroupConstants.DEFAULT_LIVE_GROUP_ID);
 
 }

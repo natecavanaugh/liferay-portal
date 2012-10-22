@@ -53,5 +53,9 @@ public interface JournalArticle extends JournalArticleModel, PersistedModel {
 
 	public boolean isTemplateDriven();
 
+	public void prepareLocalizedFieldsForImport(
+		java.util.Locale defaultImportLocale)
+		throws com.liferay.portal.LocaleException;
+
 	public void setSmallImageType(java.lang.String smallImageType);
 }

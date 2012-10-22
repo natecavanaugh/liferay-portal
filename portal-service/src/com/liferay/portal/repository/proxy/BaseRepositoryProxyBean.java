@@ -229,9 +229,7 @@ public class BaseRepositoryProxyBean
 			folderId, status, mimeTypes);
 	}
 
-	public int getFileEntriesCount(long folderId)
-		throws SystemException {
-
+	public int getFileEntriesCount(long folderId) throws SystemException {
 		return _baseRepository.getFileEntriesCount(folderId);
 	}
 
@@ -453,6 +451,9 @@ public class BaseRepositoryProxyBean
 		_baseRepository.initRepository();
 	}
 
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, ServiceContext)}
+	 */
 	public Lock lockFileEntry(long fileEntryId)
 		throws PortalException, SystemException {
 
@@ -461,6 +462,10 @@ public class BaseRepositoryProxyBean
 		return (Lock)newProxyInstance(lock, Lock.class);
 	}
 
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, String, long,
+	 *             ServiceContext)}
+	 */
 	public Lock lockFileEntry(
 			long fileEntryId, String owner, long expirationTime)
 		throws PortalException, SystemException {
@@ -589,18 +594,6 @@ public class BaseRepositoryProxyBean
 
 	public void setUserLocalService(UserLocalService userLocalService) {
 		_baseRepository.setUserLocalService(userLocalService);
-	}
-
-	public void unlockFileEntry(long fileEntryId)
-		throws PortalException, SystemException {
-
-		_baseRepository.unlockFileEntry(fileEntryId);
-	}
-
-	public void unlockFileEntry(long fileEntryId, String lockUuid)
-		throws PortalException, SystemException {
-
-		_baseRepository.unlockFileEntry(fileEntryId, lockUuid);
 	}
 
 	public void unlockFolder(long folderId, String lockUuid)

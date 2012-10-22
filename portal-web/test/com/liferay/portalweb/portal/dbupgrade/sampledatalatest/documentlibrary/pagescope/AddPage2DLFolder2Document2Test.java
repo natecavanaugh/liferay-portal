@@ -126,9 +126,8 @@ public class AddPage2DLFolder2Document2Test extends BaseTestCase {
 		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("DL Folder2 Name"),
 			selenium.getText("//div[2]/div/a"));
-		selenium.type("//input[@id='_20_file']",
-			RuntimeVariables.replace(
-				"L:\\portal\\build\\portal-web\\test\\com\\liferay\\portalweb\\portal\\dbupgrade\\sampledatalatest\\documentlibrary\\pagescope\\dependencies\\document_2.xls"));
+		selenium.uploadCommonFile("//input[@id='_20_file']",
+			RuntimeVariables.replace("Document_1.xls"));
 		selenium.type("//input[@id='_20_title']",
 			RuntimeVariables.replace("DL Folder2 Document2 Title.xls"));
 		selenium.clickAt("//input[@value='Publish']",

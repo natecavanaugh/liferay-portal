@@ -30,6 +30,7 @@ import com.liferay.portal.util.PropsValues;
 
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateCache;
 import freemarker.cache.TemplateLoader;
 
 import freemarker.template.Configuration;
@@ -38,6 +39,9 @@ import freemarker.template.Template;
 import java.io.IOException;
 import java.io.Writer;
 
+import java.lang.reflect.Constructor;
+
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,13 +56,17 @@ public class FreeMarkerEngineImpl implements FreeMarkerEngine {
 	}
 
 	public void flushTemplate(String freeMarkerTemplateId) {
+		if (_configuration == null) {
+			return;
+		}
+
 		if (_stringTemplateLoader != null) {
 			_stringTemplateLoader.removeTemplate(freeMarkerTemplateId);
 		}
 
 		PortalCache portalCache = LiferayCacheStorage.getPortalCache();
 
-		portalCache.remove(freeMarkerTemplateId);
+		portalCache.remove(_getResourceCacheKey(freeMarkerTemplateId));
 	}
 
 	public FreeMarkerContext getWrappedClassLoaderToolsContext() {
@@ -151,6 +159,9 @@ public class FreeMarkerEngineImpl implements FreeMarkerEngine {
 		_configuration.setTemplateUpdateDelay(
 			PropsValues.FREEMARKER_ENGINE_MODIFICATION_CHECK_INTERVAL);
 
+		_encoding = _configuration.getEncoding(_configuration.getLocale());
+		_locale = _configuration.getLocale();
+
 		_restrictedToolsContext = new FreeMarkerContextImpl();
 
 		FreeMarkerVariablesUtil.insertHelperUtilities(
@@ -161,6 +172,16 @@ public class FreeMarkerEngineImpl implements FreeMarkerEngine {
 
 		FreeMarkerVariablesUtil.insertHelperUtilities(
 			_standardToolsContext, null);
+
+		ClassLoader classLoader = TemplateCache.class.getClassLoader();
+
+		Class<?> templateKeyClass = classLoader.loadClass(
+			TemplateCache.class.getName().concat("$TemplateKey"));
+
+		_templateKeyConstructor = templateKeyClass.getDeclaredConstructor(
+			String.class, Locale.class, String.class, boolean.class);
+
+		_templateKeyConstructor.setAccessible(true);
 	}
 
 	public boolean mergeTemplate(
@@ -177,9 +198,10 @@ public class FreeMarkerEngineImpl implements FreeMarkerEngine {
 			FreeMarkerContext freeMarkerContext, Writer writer)
 		throws Exception {
 
-		if (Validator.isNotNull(freemarkerTemplateContent) &&
-			(!PropsValues.LAYOUT_TEMPLATE_CACHE_ENABLED ||
-			 !stringTemplateExists(freeMarkerTemplateId))) {
+		if (Validator.isNotNull(freemarkerTemplateContent)) {
+			PortalCache portalCache = LiferayCacheStorage.getPortalCache();
+
+			portalCache.remove(_getResourceCacheKey(freeMarkerTemplateId));
 
 			_stringTemplateLoader.putTemplate(
 				freeMarkerTemplateId, freemarkerTemplateContent);
@@ -241,15 +263,18 @@ public class FreeMarkerEngineImpl implements FreeMarkerEngine {
 		}
 	}
 
-	protected boolean stringTemplateExists(String freeMarkerTemplateId) {
-		Object templateSource = _stringTemplateLoader.findTemplateSource(
-			freeMarkerTemplateId);
+	private String _getResourceCacheKey(String freeMarkerTemplateId) {
+		try {
+			Object object = _templateKeyConstructor.newInstance(
+				freeMarkerTemplateId, _locale, _encoding, Boolean.TRUE);
 
-		if (templateSource == null) {
-			return false;
+			return object.toString();
 		}
-
-		return true;
+		catch (Exception e) {
+			throw new RuntimeException(
+				"Failed to build FreeMarker internal resource cache key for " +
+					"template id " + freeMarkerTemplateId, e);
+		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(FreeMarkerEngineImpl.class);
@@ -258,8 +283,11 @@ public class FreeMarkerEngineImpl implements FreeMarkerEngine {
 		_classLoaderFreeMarkerContexts =
 			new ConcurrentHashMap<ClassLoader, FreeMarkerContextImpl>();
 	private Configuration _configuration;
+	private String _encoding;
+	private Locale _locale;
 	private FreeMarkerContextImpl _restrictedToolsContext;
 	private FreeMarkerContextImpl _standardToolsContext;
 	private StringTemplateLoader _stringTemplateLoader;
+	private Constructor<?> _templateKeyConstructor;
 
 }

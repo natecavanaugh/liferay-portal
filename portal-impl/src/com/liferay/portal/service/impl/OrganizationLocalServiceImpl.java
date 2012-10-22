@@ -56,7 +56,6 @@ import com.liferay.portal.service.base.OrganizationLocalServiceBaseImpl;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.comparator.OrganizationNameComparator;
-import com.liferay.portlet.expando.model.ExpandoBridge;
 
 import java.io.Serializable;
 
@@ -171,6 +170,7 @@ public class OrganizationLocalServiceImpl
 		organization.setCountryId(countryId);
 		organization.setStatusId(statusId);
 		organization.setComments(comments);
+		organization.setExpandoBridgeAttributes(serviceContext);
 
 		organizationPersistence.update(organization, false);
 
@@ -180,21 +180,13 @@ public class OrganizationLocalServiceImpl
 			userId, Organization.class.getName(), organizationId, name, null,
 			GroupConstants.TYPE_SITE_PRIVATE, null, site, true, null);
 
-		if (PropsValues.ORGANIZATIONS_ASSIGNMENT_AUTO) {
+		// Role
 
-			// Role
+		Role role = roleLocalService.getRole(
+			organization.getCompanyId(), RoleConstants.ORGANIZATION_OWNER);
 
-			Role role = roleLocalService.getRole(
-				organization.getCompanyId(), RoleConstants.ORGANIZATION_OWNER);
-
-			userGroupRoleLocalService.addUserGroupRoles(
-				userId, group.getGroupId(), new long[] {role.getRoleId()});
-
-			// User
-
-			userLocalService.addOrganizationUsers(
-				organizationId, new long[] {userId});
-		}
+		userGroupRoleLocalService.addUserGroupRoles(
+			userId, group.getGroupId(), new long[] {role.getRoleId()});
 
 		// Resources
 
@@ -206,14 +198,6 @@ public class OrganizationLocalServiceImpl
 			updateAsset(
 				userId, organization, serviceContext.getAssetCategoryIds(),
 				serviceContext.getAssetTagNames());
-		}
-
-		// Expando
-
-		if (serviceContext != null) {
-			ExpandoBridge expandoBridge = organization.getExpandoBridge();
-
-			expandoBridge.setAttributes(serviceContext);
 		}
 
 		// Indexer
@@ -1621,6 +1605,7 @@ public class OrganizationLocalServiceImpl
 		organization.setCountryId(countryId);
 		organization.setStatusId(statusId);
 		organization.setComments(comments);
+		organization.setExpandoBridgeAttributes(serviceContext);
 
 		organizationPersistence.update(organization, false);
 
@@ -1646,14 +1631,6 @@ public class OrganizationLocalServiceImpl
 				serviceContext.getUserId(), organization,
 				serviceContext.getAssetCategoryIds(),
 				serviceContext.getAssetTagNames());
-		}
-
-		// Expando
-
-		if (serviceContext != null) {
-			ExpandoBridge expandoBridge = organization.getExpandoBridge();
-
-			expandoBridge.setAttributes(serviceContext);
 		}
 
 		// Indexer

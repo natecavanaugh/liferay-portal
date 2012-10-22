@@ -280,7 +280,7 @@ else if (dlFileEntryType != null) {
 			</aui:validator>
 		</aui:input>
 
-		<c:if test='<%= ((folder == null) || folder.isSupportsMetadata()) %>'>
+		<c:if test="<%= ((folder == null) || folder.isSupportsMetadata()) %>">
 			<aui:input name="description" />
 
 			<c:if test="<%= (folder == null) || (folder.getModel() instanceof DLFolder) %>">
@@ -305,7 +305,7 @@ else if (dlFileEntryType != null) {
 							for (DLFileEntryType curDLFileEntryType : dlFileEntryTypes) {
 							%>
 
-								<aui:option label="<%= curDLFileEntryType.getName() %>" selected="<%= (fileEntryTypeId == curDLFileEntryType.getPrimaryKey()) %>" value="<%= curDLFileEntryType.getPrimaryKey() %>" />
+								<aui:option label="<%= HtmlUtil.escapeAttribute(curDLFileEntryType.getName()) %>" selected="<%= (fileEntryTypeId == curDLFileEntryType.getPrimaryKey()) %>" value="<%= curDLFileEntryType.getPrimaryKey() %>" />
 
 							<%
 							}
@@ -345,6 +345,7 @@ else if (dlFileEntryType != null) {
 					}
 				}
 				%>
+
 			</c:if>
 
 			<liferay-ui:custom-attributes-available className="<%= DLFileEntryConstants.getClassName() %>">
@@ -357,7 +358,7 @@ else if (dlFileEntryType != null) {
 			</liferay-ui:custom-attributes-available>
 		</c:if>
 
-		<c:if test='<%= ((folder == null) || folder.isSupportsSocial()) %>'>
+		<c:if test="<%= ((folder == null) || folder.isSupportsSocial()) %>">
 			<liferay-ui:panel defaultState="closed" extended="<%= false %>" id="dlFileEntryCategorizationPanel" persistState="<%= true %>" title="categorization">
 				<aui:fieldset>
 					<aui:input classPK="<%= assetClassPK %>" model="<%= DLFileEntry.class %>" name="categories" type="assetCategories" />
@@ -419,12 +420,16 @@ else if (dlFileEntryType != null) {
 
 			String publishButtonLabel = "publish";
 
-			if (WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, DLFileEntryConstants.getClassName())) {
+			if (DLUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, folderId, fileEntryTypeId)) {
 				publishButtonLabel = "submit-for-publication";
 			}
 
+			boolean saveAsDraft = false;
+
 			if ((checkedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
 				publishButtonLabel = "save";
+
+				saveAsDraft = true;
 			}
 			%>
 
@@ -432,7 +437,7 @@ else if (dlFileEntryType != null) {
 				<aui:button disabled="<%= checkedOut && !hasLock %>" name="saveButton" onClick='<%= renderResponse.getNamespace() + "saveFileEntry(true);" %>' value="<%= saveButtonLabel %>" />
 			</c:if>
 
-			<aui:button disabled="<%= checkedOut && !hasLock || (pending && PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) %>" name="publishButton" type="submit" value="<%= publishButtonLabel %>" />
+			<aui:button disabled="<%= checkedOut && !hasLock || (pending && PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) %>" name="publishButton" onClick='<%= renderResponse.getNamespace() + "saveFileEntry(" + saveAsDraft + ");" %>' value="<%= publishButtonLabel %>" />
 
 			<c:if test="<%= (fileEntry != null) && ((checkedOut && hasLock) || !checkedOut) %>">
 				<c:choose>

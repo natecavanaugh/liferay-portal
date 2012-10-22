@@ -94,22 +94,6 @@ public class AssetEntryServiceSoap {
 		}
 	}
 
-	public static com.liferay.portlet.asset.model.AssetEntryDisplay[] getCompanyEntryDisplays(
-		long companyId, int start, int end, java.lang.String languageId)
-		throws RemoteException {
-		try {
-			com.liferay.portlet.asset.model.AssetEntryDisplay[] returnValue = AssetEntryServiceUtil.getCompanyEntryDisplays(companyId,
-					start, end, languageId);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
 	public static com.liferay.portlet.asset.model.AssetEntrySoap[] getEntries(
 		com.liferay.portlet.asset.service.persistence.AssetEntryQuery entryQuery)
 		throws RemoteException {
@@ -162,39 +146,6 @@ public class AssetEntryServiceSoap {
 					classPK);
 
 			return com.liferay.portlet.asset.model.AssetEntrySoap.toSoapModel(returnValue);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static com.liferay.portlet.asset.model.AssetEntryDisplay[] searchEntryDisplays(
-		long companyId, long[] groupIds, java.lang.String className,
-		java.lang.String keywords, java.lang.String languageId, int start,
-		int end) throws RemoteException {
-		try {
-			com.liferay.portlet.asset.model.AssetEntryDisplay[] returnValue = AssetEntryServiceUtil.searchEntryDisplays(companyId,
-					groupIds, className, keywords, languageId, start, end);
-
-			return returnValue;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new RemoteException(e.getMessage());
-		}
-	}
-
-	public static int searchEntryDisplaysCount(long companyId, long[] groupIds,
-		java.lang.String className, java.lang.String keywords,
-		java.lang.String languageId) throws RemoteException {
-		try {
-			int returnValue = AssetEntryServiceUtil.searchEntryDisplaysCount(companyId,
-					groupIds, className, keywords, languageId);
-
-			return returnValue;
 		}
 		catch (Exception e) {
 			_log.error(e, e);

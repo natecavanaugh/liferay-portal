@@ -32,6 +32,18 @@ public class PACLAdvice extends ChainableMethodAdvice {
 
 	@Override
 	public Object invoke(MethodInvocation methodInvocation) throws Throwable {
+		if (!PortalSecurityManagerThreadLocal.isEnabled()) {
+
+			// Proceed so that we do not remove the advice
+
+			try {
+				return methodInvocation.proceed();
+			}
+			catch (Throwable throwable) {
+				throw throwable;
+			}
+		}
+
 		if (!PACLPolicyManager.isActive()) {
 			ServiceBeanAopProxy.removeMethodInterceptor(methodInvocation, this);
 

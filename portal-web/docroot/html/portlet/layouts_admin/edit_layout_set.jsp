@@ -58,6 +58,10 @@ if (!company.isSiteLogo()) {
 	mainSections = ArrayUtil.remove(mainSections, "logo");
 }
 
+if (group.isGuest()) {
+	mainSections = ArrayUtil.remove(mainSections, "advanced");
+}
+
 String[][] categorySections = {mainSections};
 
 boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissionChecker, liveGroupId, ActionKeys.EXPORT_IMPORT_LAYOUTS);
@@ -242,8 +246,6 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 							uri: '<%= importPagesURL.toString() %>'
 						}
 					);
-
-
 				},
 				icon: 'arrowthick-1-t',
 				label: '<%= UnicodeLanguageUtil.get(pageContext, "import") %>'

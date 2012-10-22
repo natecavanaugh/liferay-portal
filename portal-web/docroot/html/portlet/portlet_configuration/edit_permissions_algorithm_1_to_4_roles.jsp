@@ -213,9 +213,9 @@ else if (tabs2.equals("site-roles")) {
 				String taglibFinishedOnClick = renderResponse.getNamespace() + "saveRolePermissions(-1, '"+ roleIdsArray[roleIdsPos] + "');";
 				%>
 
-				<aui:button cssClass="previous" disabled="<%= roleIdsPos <= 0 %>" onClick='<%= taglibPreviousOnClick %>' value="previous" />
+				<aui:button cssClass="previous" disabled="<%= roleIdsPos <= 0 %>" onClick="<%= taglibPreviousOnClick %>" value="previous" />
 
-				<aui:button cssClass="next" disabled="<%= roleIdsPos + 1 >= roleIdsArray.length %>" onClick='<%= taglibNextOnClick %>' value="next" />
+				<aui:button cssClass="next" disabled="<%= roleIdsPos + 1 >= roleIdsArray.length %>" onClick="<%= taglibNextOnClick %>" value="next" />
 
 				<aui:button cssClass="finished" onClick="<%= taglibFinishedOnClick %>" value="finished" />
 			</aui:button-row>

@@ -37,6 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.ResourceManager;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
@@ -60,7 +61,8 @@ public class VelocityEngineImpl implements VelocityEngine {
 			stringResourceRepository.removeStringResource(velocityTemplateId);
 		}
 
-		LiferayResourceCacheUtil.remove(velocityTemplateId);
+		LiferayResourceCacheUtil.remove(
+			_getResourceCacheKey(velocityTemplateId));
 	}
 
 	public VelocityContext getEmptyContext() {
@@ -227,9 +229,9 @@ public class VelocityEngineImpl implements VelocityEngine {
 			VelocityContext velocityContext, Writer writer)
 		throws Exception {
 
-		if (Validator.isNotNull(velocityTemplateContent) &&
-			(!PropsValues.LAYOUT_TEMPLATE_CACHE_ENABLED ||
-			 !resourceExists(velocityTemplateId))) {
+		if (Validator.isNotNull(velocityTemplateContent)) {
+			LiferayResourceCacheUtil.remove(
+				_getResourceCacheKey(velocityTemplateId));
 
 			StringResourceRepository stringResourceRepository =
 				StringResourceLoader.getRepository();
@@ -283,8 +285,15 @@ public class VelocityEngineImpl implements VelocityEngine {
 		return _velocityEngine.resourceExists(resource);
 	}
 
+	private String _getResourceCacheKey(String velocityTemplateId) {
+		return _RESOURCE_TEMPLATE_NAME_SPACE.concat(velocityTemplateId);
+	}
+
 	private static final String _RESOURCE_LOADER =
 		org.apache.velocity.app.VelocityEngine.RESOURCE_LOADER;
+
+	private static final String _RESOURCE_TEMPLATE_NAME_SPACE = String.valueOf(
+		ResourceManager.RESOURCE_TEMPLATE);
 
 	private static Log _log = LogFactoryUtil.getLog(VelocityEngineImpl.class);
 

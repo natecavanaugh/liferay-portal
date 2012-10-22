@@ -82,7 +82,6 @@ else if (tabs3.equals("shipping-email")) {
 				<aui:field-wrapper label="credit-cards">
 
 					<%
-
 					String[] ccTypes1 = ShoppingPreferences.CC_TYPES;
 					String[] ccTypes2 = shoppingPrefs.getCcTypes();
 
@@ -185,7 +184,6 @@ else if (tabs3.equals("shipping-email")) {
 					</c:if>
 
 					<aui:input label="" maxlength="6" name='<%= "shipping" + i %>' size="6" type="text" value="<%= GetterUtil.getString(shoppingPrefs.getShipping()[i]) %>" />
-
 
 					<%
 					}

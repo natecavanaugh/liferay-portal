@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -68,8 +67,8 @@ import com.liferay.portlet.documentlibrary.SourceFileNameException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
+import com.liferay.portlet.dynamicdatamapping.StorageFieldRequiredException;
 
-import java.io.File;
 import java.io.InputStream;
 
 import java.util.ArrayList;
@@ -136,7 +135,7 @@ public class EditFileEntryAction extends PortletAction {
 				addTempFileEntry(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteFileEntries(actionRequest);
+				deleteFileEntry(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE_TEMP)) {
 				deleteTempFileEntry(actionRequest, actionResponse);
@@ -203,7 +202,8 @@ public class EditFileEntryAction extends PortletAction {
 					 e instanceof FileNameException ||
 					 e instanceof FileSizeException ||
 					 e instanceof NoSuchFolderException ||
-					 e instanceof SourceFileNameException) {
+					 e instanceof SourceFileNameException ||
+					 e instanceof StorageFieldRequiredException) {
 
 				if (!cmd.equals(Constants.ADD_MULTIPLE) &&
 					!cmd.equals(Constants.ADD_TEMP)) {
@@ -357,18 +357,21 @@ public class EditFileEntryAction extends PortletAction {
 		String description = ParamUtil.getString(actionRequest, "description");
 		String changeLog = ParamUtil.getString(actionRequest, "changeLog");
 
-		File file = null;
+		String tempFileName = TempFileUtil.getTempFileName(
+			themeDisplay.getUserId(), selectedFileName, _TEMP_FOLDER_NAME);
 
 		try {
-			file = TempFileUtil.getTempFile(
-				themeDisplay.getUserId(), selectedFileName, _TEMP_FOLDER_NAME);
+			InputStream inputStream = TempFileUtil.getTempFileAsStream(
+				tempFileName);
+			long size = TempFileUtil.getTempFileSize(tempFileName);
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
 				DLFileEntry.class.getName(), actionRequest);
 
 			FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
 				repositoryId, folderId, selectedFileName, contentType,
-				selectedFileName, description, changeLog, file, serviceContext);
+				selectedFileName, description, changeLog, inputStream, size,
+				serviceContext);
 
 			AssetPublisherUtil.addAndStoreSelection(
 				actionRequest, DLFileEntry.class.getName(),
@@ -389,7 +392,7 @@ public class EditFileEntryAction extends PortletAction {
 				new KeyValuePair(selectedFileName, errorMessage));
 		}
 		finally {
-			FileUtil.delete(file);
+			TempFileUtil.deleteTempFile(tempFileName);
 		}
 	}
 
@@ -482,27 +485,21 @@ public class EditFileEntryAction extends PortletAction {
 		}
 	}
 
-	protected void deleteFileEntries(ActionRequest actionRequest)
+	protected void deleteFileEntry(ActionRequest actionRequest)
 		throws Exception {
 
 		long fileEntryId = ParamUtil.getLong(actionRequest, "fileEntryId");
 		String version = ParamUtil.getString(actionRequest, "version");
 
-		if ((fileEntryId > 0) && Validator.isNotNull(version)) {
+		if (fileEntryId == 0) {
+			return;
+		}
+
+		if (Validator.isNotNull(version)) {
 			DLAppServiceUtil.deleteFileVersion(fileEntryId, version);
 		}
 		else {
-			if (fileEntryId > 0) {
-				DLAppServiceUtil.deleteFileEntry(fileEntryId);
-			}
-			else {
-				long[] deleteFileEntryIds = StringUtil.split(
-					ParamUtil.getString(actionRequest, "deleteEntryIds"), 0L);
-
-				for (int i = 0; i < deleteFileEntryIds.length; i++) {
-					DLAppServiceUtil.deleteFileEntry(deleteFileEntryIds[i]);
-				}
-			}
+			DLAppServiceUtil.deleteFileEntry(fileEntryId);
 		}
 	}
 

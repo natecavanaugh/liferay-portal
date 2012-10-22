@@ -179,7 +179,7 @@ public class UpgradePortletId extends UpgradeProcess {
 					oldPortletId +=
 						PortletConstants.INSTANCE_SEPARATOR + instanceId;
 					newPortletId +=
-					 	PortletConstants.INSTANCE_SEPARATOR + instanceId;
+						PortletConstants.INSTANCE_SEPARATOR + instanceId;
 				}
 
 				if (!portletId.equals(oldRootPortletId)) {

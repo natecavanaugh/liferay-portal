@@ -63,6 +63,25 @@ public class ConfigurePortletScopeLayoutCurrentPagePage2Test
 			}
 
 			try {
+				if (selenium.isVisible(
+							"//iframe[@id='_33_configurationIframeDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_33_configurationIframeDialog']");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
 				if (RuntimeVariables.replace("Scope")
 										.equals(selenium.getText("link=Scope"))) {
 					break;
@@ -137,6 +156,7 @@ public class ConfigurePortletScopeLayoutCurrentPagePage2Test
 			selenium.getText("//div[@class='portlet-msg-success']"));
 		assertEquals("Current Page (Blogs2 Test2 Page2)",
 			selenium.getSelectedLabel("//select[@id='_86_scopeLayoutUuid']"));
+		selenium.selectFrame("relative=top");
 		selenium.open("/web/guest/home/");
 		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=Blogs2 Test2 Page2",

@@ -43,8 +43,7 @@ import java.util.Map;
  * @author Jorge Ferrer
  * @author Juan Fernández
  */
-public class AssetVocabularyServiceImpl
-	extends AssetVocabularyServiceBaseImpl {
+public class AssetVocabularyServiceImpl extends AssetVocabularyServiceBaseImpl {
 
 	/**
 	 * @deprecated
@@ -142,9 +141,7 @@ public class AssetVocabularyServiceImpl
 			groupId, name, start, end, obc);
 	}
 
-	public int getGroupVocabulariesCount(long groupId)
-		throws SystemException {
-
+	public int getGroupVocabulariesCount(long groupId) throws SystemException {
 		return assetVocabularyPersistence.filterCountByGroupId(groupId);
 	}
 

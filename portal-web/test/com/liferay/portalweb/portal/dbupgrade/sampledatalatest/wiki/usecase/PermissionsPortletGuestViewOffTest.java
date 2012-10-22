@@ -78,6 +78,25 @@ public class PermissionsPortletGuestViewOffTest extends BaseTestCase {
 			}
 
 			try {
+				if (selenium.isVisible(
+							"//iframe[@id='_36_configurationIframeDialog']")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
+		selenium.selectFrame("//iframe[@id='_36_configurationIframeDialog']");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
 				if (selenium.isVisible("link=Permissions")) {
 					break;
 				}
@@ -123,5 +142,6 @@ public class PermissionsPortletGuestViewOffTest extends BaseTestCase {
 				"Your request completed successfully."),
 			selenium.getText("//div[@class='portlet-msg-success']"));
 		assertFalse(selenium.isChecked("//tr[3]/td[4]/input"));
+		selenium.selectFrame("relative=top");
 	}
 }

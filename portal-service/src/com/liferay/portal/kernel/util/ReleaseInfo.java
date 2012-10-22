@@ -53,6 +53,8 @@ public class ReleaseInfo {
 
 	public static final int RELEASE_5_2_8_BUILD_NUMBER = 5208;
 
+	public static final int RELEASE_5_2_9_BUILD_NUMBER = 5209;
+
 	public static final int RELEASE_6_0_0_BUILD_NUMBER = 6000;
 
 	public static final int RELEASE_6_0_1_BUILD_NUMBER = 6001;
@@ -66,6 +68,8 @@ public class ReleaseInfo {
 	public static final int RELEASE_6_0_5_BUILD_NUMBER = 6005;
 
 	public static final int RELEASE_6_0_6_BUILD_NUMBER = 6006;
+
+	public static final int RELEASE_6_0_10_BUILD_NUMBER = 6010;
 
 	public static final int RELEASE_6_0_11_BUILD_NUMBER = 6011;
 
@@ -130,7 +134,7 @@ public class ReleaseInfo {
 
 	private static final String _BUILD = "6101";
 
-	private static final int _BUILD_NUMBER = Integer.parseInt(_BUILD);
+	private static final int _BUILD_NUMBER = GetterUtil.getInteger(_BUILD);
 
 	private static final String _CODE_NAME = "Paton";
 

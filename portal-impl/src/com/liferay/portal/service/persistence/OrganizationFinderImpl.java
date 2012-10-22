@@ -226,7 +226,8 @@ public class OrganizationFinderImpl
 			sql = StringUtil.replace(sql, "[$WHERE$]", getWhere(params));
 			sql = StringUtil.replace(
 				sql, "[$PARENT_ORGANIZATION_ID_COMPARATOR$]",
-				parentOrganizationIdComparator);
+				parentOrganizationIdComparator.equals(StringPool.EQUAL) ?
+				StringPool.EQUAL : StringPool.NOT_EQUAL);
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -454,7 +455,8 @@ public class OrganizationFinderImpl
 			sql, "lower(Address.zip)", StringPool.LIKE, true, zips);
 		sql = StringUtil.replace(
 			sql, "[$PARENT_ORGANIZATION_ID_COMPARATOR$]",
-			parentOrganizationIdComparator);
+			parentOrganizationIdComparator.equals(StringPool.EQUAL) ?
+			StringPool.EQUAL : StringPool.NOT_EQUAL);
 
 		if (regionId == null) {
 			sql = StringUtil.replace(sql, REGION_ID_SQL, StringPool.BLANK);

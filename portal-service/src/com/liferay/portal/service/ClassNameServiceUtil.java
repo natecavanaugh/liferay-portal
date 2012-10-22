@@ -55,25 +55,18 @@ public class ClassNameServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static com.liferay.portal.model.ClassName getClassName(
-		long classNameId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getClassName(classNameId);
-	}
-
-	public static com.liferay.portal.model.ClassName getClassName(
+	public static com.liferay.portal.model.ClassName fetchClassName(
 		java.lang.String value)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getClassName(value);
+		return getService().fetchClassName(value);
 	}
 
-	public static long getClassNameId(java.lang.Class<?> clazz) {
-		return getService().getClassNameId(clazz);
+	public static long fetchClassNameId(java.lang.Class<?> clazz) {
+		return getService().fetchClassNameId(clazz);
 	}
 
-	public static long getClassNameId(java.lang.String value) {
-		return getService().getClassNameId(value);
+	public static long fetchClassNameId(java.lang.String value) {
+		return getService().fetchClassNameId(value);
 	}
 
 	public static ClassNameService getService() {

@@ -53,6 +53,7 @@ public class RateWikiFrontPageChildPageTest extends BaseTestCase {
 		loadRequiredJavaScriptModules();
 		assertTrue(selenium.isPartialText(
 				"xPath=(//div[@class='aui-rating-label-element'])[2]", "0 Votes"));
+		Thread.sleep(5000);
 		selenium.clickAt("//a[4]", RuntimeVariables.replace("Rating"));
 
 		for (int second = 0;; second++) {
