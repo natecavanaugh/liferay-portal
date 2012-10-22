@@ -39,6 +39,8 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
+import com.liferay.portal.service.persistence.BatchSessionUtil;
+import com.liferay.portal.service.persistence.ImagePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -511,7 +513,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 			if (ddmTemplate.isCachedModel()) {
 				ddmTemplate = (DDMTemplate)session.get(DDMTemplateImpl.class,
-						ddmTemplate.getPrimaryKeyObj());
+			BatchSessionUtil.delete(session, ddmTemplate);
 			}
 
 			if (ddmTemplate != null) {
@@ -534,8 +536,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	@Override
 	public DDMTemplate updateImpl(
-		com.liferay.portlet.dynamicdatamapping.model.DDMTemplate ddmTemplate)
-		throws SystemException {
+		com.liferay.portlet.dynamicdatamapping.model.DDMTemplate ddmTemplate,
+		boolean merge) throws SystemException {
 		ddmTemplate = toUnwrappedModel(ddmTemplate);
 
 		boolean isNew = ddmTemplate.isNew();
@@ -553,10 +555,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 		try {
 			session = openSession();
 
-			if (ddmTemplate.isNew()) {
-				session.save(ddmTemplate);
+			BatchSessionUtil.update(session, ddmTemplate, merge);
 
-				ddmTemplate.setNew(false);
+			ddmTemplate.setNew(false);
 			}
 			else {
 				session.merge(ddmTemplate);
@@ -873,6 +874,9 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 		ddmTemplateImpl.setLanguage(ddmTemplate.getLanguage());
 		ddmTemplateImpl.setScript(ddmTemplate.getScript());
 		ddmTemplateImpl.setCacheable(ddmTemplate.isCacheable());
+		ddmTemplateImpl.setSmallImage(ddmTemplate.isSmallImage());
+		ddmTemplateImpl.setSmallImageId(ddmTemplate.getSmallImageId());
+		ddmTemplateImpl.setSmallImageURL(ddmTemplate.getSmallImageURL());
 
 		return ddmTemplateImpl;
 	}
@@ -7699,6 +7703,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 	protected DDMStructureLinkPersistence ddmStructureLinkPersistence;
 	@BeanReference(type = DDMTemplatePersistence.class)
 	protected DDMTemplatePersistence ddmTemplatePersistence;
+	@BeanReference(type = ImagePersistence.class)
+	protected ImagePersistence imagePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_DDMTEMPLATE = "SELECT ddmTemplate FROM DDMTemplate ddmTemplate";
