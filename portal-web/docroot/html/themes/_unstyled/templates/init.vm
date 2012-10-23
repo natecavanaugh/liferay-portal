@@ -414,6 +414,7 @@
 
 					<li class="$menu_item" data-layoutId="$nav_item.getLayout().getLayoutId()">
 						<a class="$menu_item_label" href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
+
 						#if ($nav_item.hasChildren())
 							#aui_drop_down_ul($nav_item.getChildren() "")
 						#end
@@ -434,7 +435,7 @@
 	#aui_drop_down_ul($nav_items)
 
 	<script type="text/javascript">
-		Liferay.Data.NAV_ITEM_SELECTOR = '.lfr-nav-item';
+		Liferay.Data.NAV_ITEM_SELECTOR = '> .yui3-menu > .yui3-menu-content > ul > li';
 
 		AUI().use(
 			'node-menunav',

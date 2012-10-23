@@ -550,9 +550,11 @@ AUI.add(
 				if (instance.get('isSortable')) {
 					var navBlock = instance.get('navBlock');
 
+					var navItem = navBlock.one('.lfr-nav-updateable');
+
 					var sortable = new A.Sortable(
 						{
-							container: navBlock,
+							container: navItem && navItem.ancestor(),
 							moveType: 'move',
 							nodes: '.lfr-nav-sortable',
 							opacity: '.5',
@@ -784,13 +786,13 @@ AUI.add(
 			function(node) {
 				var instance = this;
 
-				var navItems = instance.get('navBlock').all('> li');
+				var navItems = instance.get('navBlock').all(instance._navItemSelector);
 
 				var priority = -1;
 
 				navItems.some(
 					function(item, index, collection) {
-						if (!item.ancestor().hasClass('child-menu') && !item.one('.yui3-menu')) {
+						if (!item.ancestor('li')) {
 							priority++;
 						}
 
