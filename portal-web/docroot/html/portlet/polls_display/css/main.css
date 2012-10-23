@@ -1,18 +1,11 @@
-.portlet-polls-display {
-	.no-progress {
-		opacity: 0.4;
+@import "compass";
 
-		.aui-progress-bar-status {
-			display: none;
-		}
-	}
+.portlet-polls-display .no-progress .aui-progress-bar-status {
+	display: none;
 }
 
-.ie {
-	.portlet-polls-display {
-		.no-progress {
-			-ms-filter: alpha(opacity=40);
-			filter: alpha(opacity=40);
-		}
-	}
+/* ---------- Extras ---------- */
+
+.portlet-polls-display .no-progress {
+	@include opacity(0.4);
 }
