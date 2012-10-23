@@ -421,6 +421,10 @@ String customCSSClassName = PortletConfigurationUtil.getPortletCustomCSSClassNam
 
 portletDisplay.setCustomCSSClassName(customCSSClassName);
 
+// Portlet CSS class wrapper
+
+portletDisplay.setCSSClassWrapper(portlet.getCssClassWrapper());
+
 // Portlet icon
 
 String portletIcon = null;
