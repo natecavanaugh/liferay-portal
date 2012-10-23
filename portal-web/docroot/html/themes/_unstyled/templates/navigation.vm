@@ -1,26 +1,68 @@
 <nav class="$nav_css_class" id="navigation">
 	<h1>
-		<span>#language ("navigation")</span>
+		<span>#language("navigation")</span>
 	</h1>
 
 	<ul>
 		#foreach ($nav_item in $nav_items)
-			#if ($nav_item.isSelected())
-				<li aria-selected="true" class="selected">
-			#else
-				<li>
-			#end
-				<a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
+			#set ($nav_has_children = $nav_item.hasChildren())
+			#set ($nav_item_class = "")
 
-				#if ($nav_item.hasChildren())
+			#if ($nav_item.isSelected())
+				#set ($nav_item_class = "selected")
+			#end
+
+			#if ($nav_has_children)
+				#set ($nav_item_class = ${nav_item_class} + " has-children parent-menu")
+			#end
+
+			<li class="$nav_item_class">
+				<a href="$nav_item.getURL()" $nav_item.getTarget()>
+					<span>
+						$nav_item.icon() $nav_item.getName()
+					</span>
+
+					#if ($nav_has_children)
+						<span class="triangle">&#9660;</span>
+					#end
+				</a>
+
+				#if ($nav_has_children)
 					<ul class="child-menu">
 						#foreach ($nav_child in $nav_item.getChildren())
-							#if ($nav_child.isSelected())
-								<li aria-selected="true" class="selected">
-							#else
-								<li>
+							#set ($nav_has_grand_children = $nav_child.hasChildren())
+							#set ($nav_child_class = "")
+
+							#if ($nav_child.isSelected() || $nav_child.isChildSelected())
+								#set ($nav_child_class = "selected")
 							#end
-								<a href="$nav_child.getURL()" $nav_child.getTarget()>$nav_child.getName()</a>
+
+							#if ($nav_has_grand_children)
+								#set ($nav_child_class = ${nav_child_class} + " has-children")
+							#end
+
+							<li class="$nav_child_class">
+								<a href="$nav_child.getURL()" $nav_child.getTarget()>
+									<span>$nav_child.icon() $nav_child.getName()</span>
+
+									#if ($nav_has_grand_children)
+										<span class="triangle child-triangle">&#9658;</span>
+									#end
+								</a>
+
+								#if ($nav_has_grand_children)
+									<ul class="grandchild-menu">
+										#foreach ($nav_grandchild in $nav_child.getChildren())
+											#if ($nav_grandchild.isSelected())
+												<li class="selected">
+											#else
+												<li>
+											#end
+												<a href="$nav_grandchild.getURL()" $nav_grandchild.getTarget()>$nav_grandchild.getName()</a>
+											</li>
+										#end
+									</ul>
+								#end
 							</li>
 						#end
 					</ul>
