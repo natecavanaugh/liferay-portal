@@ -202,10 +202,10 @@ if (Validator.isNotNull(structureAvailableFields)) {
 									<tr>
 										<th>
 											<div class="lfr-ddm-small-image-preview">
-												<c:if test="<%= isSmallImage %>">
+												<c:if test="<%= isSmallImage && (template != null) %>">
 													<style>
 														.lfr-ddm-small-image-preview div {
-															background: url(<%= Validator.isNotNull(template.getSmallImageURL()) ? template.getSmallImageURL() : themeDisplay.getPathImage() + "/template?img_id=" + template.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(template.getSmallImageId()) %>) !important;
+															background: url(<%= Validator.isNotNull(template.getSmallImageURL()) ? template.getSmallImageURL() : themeDisplay.getPathImage() + "/template?img_id=" + template.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(template.getSmallImageId()) %>) 50% 50% !important;
 														}
 													</style>
 												</c:if>
@@ -300,60 +300,61 @@ if (Validator.isNotNull(structureAvailableFields)) {
 	</c:when>
 	<c:otherwise>
 		<aui:script use="aui-toggler">
-			var <portlet:namespace />container = A.one('#<portlet:namespace />smallImageContainer');
-			var <portlet:namespace />preview = <portlet:namespace />container.one('.lfr-ddm-small-image-preview div');
-			var <portlet:namespace />types = <portlet:namespace />container.all('.lfr-ddm-small-image-type');
-			var <portlet:namespace />values = <portlet:namespace />container.all('.lfr-ddm-small-image-value');
+			var container = A.one('#<portlet:namespace />smallImageContainer');
+			var types = container.all('.lfr-ddm-small-image-type');
+			var values = container.all('.lfr-ddm-small-image-value');
 
-			var <portlet:namespace />selectSmallImageType = function(index) {
-				<portlet:namespace />types.set('checked', false);
-				<portlet:namespace />types.item(index).set('checked', true);
+			var selectSmallImageType = function(index) {
+				types.set('checked', false);
+				types.item(index).set('checked', true);
 
-				<portlet:namespace />values.set('disabled', true);
-				<portlet:namespace />values.item(index).set('disabled', false);
+				values.set('disabled', true);
+				values.item(index).set('disabled', false);
 			};
 
-			<portlet:namespace />container.delegate(
+			container.delegate(
 				'change',
 				function(event) {
 					var input = event.currentTarget;
-					var index = <portlet:namespace />types.indexOf(input);
+					var index = types.indexOf(input);
 
-					<portlet:namespace />selectSmallImageType(index);
+					selectSmallImageType(index);
 				},
 				'.lfr-ddm-small-image-type'
 			);
 
 			var <portlet:namespace />toggler = new A.Toggler(
 				{
+					animated: true,
+					content: '#<portlet:namespace />smallImageContainer .lfr-ddm-small-image-content',
+					expanded: <%= isSmallImage %>,
+					header: '#<portlet:namespace />smallImageContainer .lfr-ddm-small-image-header',
 					on: {
 						animatingChange: function(event) {
 							var instance = this;
 							var expanded = !instance.get('expanded');
 
-							A.one('#<portlet:namespace />smallImageCheckbox').set('checked', expanded);
 							A.one('#<portlet:namespace />smallImage').set('value', expanded);
+							A.one('#<portlet:namespace />smallImageCheckbox').set('checked', expanded);
 
 							if (expanded) {
-								<portlet:namespace />types.each(function (type, index) {
-									if (type.get('checked')) {
-										<portlet:namespace />values.item(index).set('disabled', false);
+								types.each(
+									function (item, index, collection) {
+										if (item.get('checked')) {
+											values.item(index).set('disabled', false);
+										}
 									}
-								});
+								);
 							}
 							else {
-								<portlet:namespace />values.set('disabled', true);
+								values.set('disabled', true);
 							}
 						}
-					},
-					animated: true,
-					content: '#<portlet:namespace />smallImageContainer .lfr-ddm-small-image-content',
-					header: '#<portlet:namespace />smallImageContainer .lfr-ddm-small-image-header',
-					expanded: <%= isSmallImage %>
+					}
 				}
 			);
 
-			<portlet:namespace />selectSmallImageType('<%= (template != null) && Validator.isNotNull(template.getSmallImageURL()) ? 0 : 1 %>');
+			selectSmallImageType('<%= (template != null) && Validator.isNotNull(template.getSmallImageURL()) ? 0 : 1 %>');
 		</aui:script>
 	</c:otherwise>
 </c:choose>
