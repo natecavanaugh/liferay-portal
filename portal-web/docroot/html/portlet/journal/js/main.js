@@ -1116,17 +1116,36 @@ AUI.add(
 					fieldInstance.set('source', newSource);
 					fieldInstance.set('instanceId', instanceId);
 
+					var localizedCheckbox = newSource.one('.journal-article-localized-checkbox');
+
+					localizedCheckbox.one('.aui-field-input').attr('checked', false);
+
 					var fieldType = fieldInstance.get('fieldType');
 
-					if (fieldType == 'text_area') {
+					if (fieldType == 'boolean') {
+						var componentContainer = newSource.one('.journal-article-component-container');
+
+						componentContainer.one('.aui-field-input').attr('checked', false);
+					}
+					else if ((fieldType == 'document_library') || (fieldType == 'text')) {
+						var componentContainer = newSource.one('.journal-article-component-container');
+
+						componentContainer.one('.aui-field-input').val('');
+					}
+					else if (fieldType == 'image') {
+						newSource.all('.journal-image-show-hide,.journal-image-preview').remove();
+					}
+					else if (fieldType == 'text_area') {
 						var html = instance.buildHTMLEditor(fieldInstance);
 
 						var componentContainer = newSource.one('.journal-article-component-container');
 
 						componentContainer.html(html);
 					}
-					else if (fieldType == 'image') {
-						newSource.all('.journal-image-show-hide,.journal-image-preview').remove();
+					else if (fieldType == 'text_box') {
+						var componentContainer = newSource.one('.journal-article-component-container');
+
+						componentContainer.one('.aui-field-input').html('');
 					}
 
 					return fieldInstance;
