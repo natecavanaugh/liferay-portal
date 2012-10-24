@@ -1,3 +1,5 @@
+@import "compass/css3";
+
 .aui-document-library-file-entry-cell-editor-hidden {
 	display: none;
 }
@@ -44,37 +46,35 @@
 	}
 
 	.lfr-ddm-small-image-preview {
-		padding: 4px;
 		background-color: white;
 		border: 1px solid #CCC;
-		border: 1px solid rgba(0, 0, 0, 0.2);
-		-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		width: 80px;
 		height: 80px;
+		padding: 4px;
+		width: 80px;
+
+		@include box-shadow(0 1px 3px #ccc);
 	}
 
 	.lfr-ddm-small-image-preview div {
 		background: #ccc;
-		width: 80px;
 		height: 80px;
+		width: 80px;
 	}
 
 	.lfr-ddm-small-image-content {
 		background-color: #f5f5f5;
 		padding: 5px;
-	}
 
-	.lfr-ddm-small-image-content .aui-field-input-text {
-		width: 350px;
-		margin: 5px;
-	}
+		th {
+			padding: 5px;
+			white-space: nowrap;
+			width: 1%;
+		}
 
-	.lfr-ddm-small-image-content th {
-		width: 1%;
-		white-space: nowrap;
-		padding: 5px;
+		.aui-field-input-text {
+			margin: 5px;
+			width: 350px;
+		}
 	}
 
 	.lfr-ddm-text-html, .lfr-ddm-text-html-icon {
