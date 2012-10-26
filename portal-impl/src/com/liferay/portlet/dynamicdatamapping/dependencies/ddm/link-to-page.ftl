@@ -13,7 +13,7 @@
 		</#if>
 
 		<#list layouts as curLayout>
-			<#assign curLayoutJSON = "{ layoutId: ${curLayout.getLayoutId()}, groupId: ${groupId}, privateLayout: ${privateLayout?string} }">
+			<#assign curLayoutJSON = htmlUtil.escapeAttribute("{ \"layoutId\": ${curLayout.getLayoutId()}, \"groupId\": ${groupId}, \"privateLayout\": ${privateLayout?string} }")>
 
 			<#assign selected = false>
 
