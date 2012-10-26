@@ -177,7 +177,7 @@ if (Validator.isNotNull(structureAvailableFields)) {
 				</c:if>
 
 				<c:choose>
-					<c:when test="<%= type.equals(DDMTemplateConstants.TEMPLATE_TYPE_DETAIL) %>">
+					<c:when test="<%= type.equals(DDMTemplateConstants.TEMPLATE_TYPE_FORM) %>">
 						<aui:select helpMessage="only-allow-deleting-required-fields-in-edit-mode" label="mode" name="mode">
 							<aui:option label="create" />
 							<aui:option label="edit" />
