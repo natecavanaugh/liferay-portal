@@ -516,7 +516,7 @@ create table DDMTemplate (
 	cacheable BOOLEAN,
 	smallImage BOOLEAN,
 	smallImageId LONG,
-	smallImageURL STRING null
+	smallImageURL VARCHAR(75) null
 );
 
 create table DLContent (
