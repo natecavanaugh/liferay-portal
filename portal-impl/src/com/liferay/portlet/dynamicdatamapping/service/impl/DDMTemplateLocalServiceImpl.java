@@ -76,10 +76,16 @@ public class DDMTemplateLocalServiceImpl
 
 		byte[] smallImageBytes = null;
 
-		try {
-			smallImageBytes = FileUtil.getBytes(smallImageFile);
-		}
-		catch (IOException ioe) {
+		if (smallImage) {
+			try {
+				smallImageBytes = FileUtil.getBytes(smallImageFile);
+			}
+			catch (IOException ioe) {
+			}
+
+			if ((smallImageBytes == null) || Validator.isUrl(smallImageURL)) {
+				smallImage = false;
+			}
 		}
 
 		validate(
