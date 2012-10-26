@@ -399,21 +399,25 @@
 		<div class="yui3-menu-content">
 			<ul>
 				#foreach ($nav_item in $nav_items)
+					#set($has_children_marker = "")
 					#set($menu_item = "lfr-nav-item")
 					#set($menu_item_label = "yui3-menuitem-content")
+					#set($selected_anchor = "")
 
 					#if ($nav_item.hasChildren())
+						#set($has_children_marker = "has_children_marker")
 						#set($menu_item_label = "$menu_item_label yui3-menu-label")
 					#else
 						#set($menu_item = "$menu_item yui3-menuitem")
 					#end
 
-					#if ($nav_item.isSelected())
+					#if ($nav_item.isSelected() || $nav_item.isChildSelected())
 						#set($menu_item = "$menu_item selected")
+						#set($selected_anchor = "selected-anchor")
 					#end
 
 					<li class="$menu_item" data-layoutId="$nav_item.getLayout().getLayoutId()">
-						<a class="$menu_item_label" href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
+						<a class="$menu_item_label $selected_anchor" href="$nav_item.getURL()" $nav_item.getTarget()><span class="$has_children_marker">$nav_item.icon() $nav_item.getName()</span></a>
 
 						#if ($nav_item.hasChildren())
 							#aui_drop_down_ul($nav_item.getChildren() "")
