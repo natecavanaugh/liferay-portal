@@ -1,3 +1,5 @@
+@import "compass/css3";
+
 .aui-document-library-file-entry-cell-editor-hidden {
 	display: none;
 }
@@ -32,6 +34,38 @@
 
 	.lfr-translation-manager {
 		margin-bottom: 15px;
+	}
+
+	.lfr-ddm-small-image-preview {
+		background-color: white;
+		border: 1px solid #CCC;
+		height: 80px;
+		padding: 4px;
+		width: 80px;
+
+		@include box-shadow(0 1px 3px #ccc);
+	}
+
+	.lfr-ddm-small-image-preview div {
+		background: #ccc;
+		height: 80px;
+		width: 80px;
+	}
+
+	.lfr-ddm-small-image-content {
+		background-color: #f5f5f5;
+		padding: 5px;
+
+		th {
+			padding: 5px;
+			white-space: nowrap;
+			width: 1%;
+		}
+
+		.aui-field-input-text {
+			margin: 5px;
+			width: 350px;
+		}
 	}
 
 	.lfr-ddm-text-html, .lfr-ddm-text-html-icon {
