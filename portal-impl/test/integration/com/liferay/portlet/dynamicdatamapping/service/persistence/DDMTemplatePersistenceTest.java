@@ -150,7 +150,7 @@ public class DDMTemplatePersistenceTest {
 
 		newDDMTemplate.setSmallImageURL(ServiceTestUtil.randomString());
 
-		_persistence.update(newDDMTemplate, false);
+		_persistence.update(newDDMTemplate);
 
 		DDMTemplate existingDDMTemplate = _persistence.findByPrimaryKey(newDDMTemplate.getPrimaryKey());
 
@@ -382,7 +382,7 @@ public class DDMTemplatePersistenceTest {
 
 		ddmTemplate.setSmallImageURL(ServiceTestUtil.randomString());
 
-		_persistence.update(ddmTemplate, false);
+		_persistence.update(ddmTemplate);
 
 		return ddmTemplate;
 	}

@@ -39,7 +39,6 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ImagePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -513,7 +512,7 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 			if (ddmTemplate.isCachedModel()) {
 				ddmTemplate = (DDMTemplate)session.get(DDMTemplateImpl.class,
-			BatchSessionUtil.delete(session, ddmTemplate);
+						ddmTemplate.getPrimaryKeyObj());
 			}
 
 			session.delete(ddmTemplate);
@@ -532,8 +531,8 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 
 	@Override
 	public DDMTemplate updateImpl(
-		com.liferay.portlet.dynamicdatamapping.model.DDMTemplate ddmTemplate,
-		boolean merge) throws SystemException {
+		com.liferay.portlet.dynamicdatamapping.model.DDMTemplate ddmTemplate)
+		throws SystemException {
 		ddmTemplate = toUnwrappedModel(ddmTemplate);
 
 		boolean isNew = ddmTemplate.isNew();
@@ -551,9 +550,10 @@ public class DDMTemplatePersistenceImpl extends BasePersistenceImpl<DDMTemplate>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, ddmTemplate, merge);
+			if (ddmTemplate.isNew()) {
+				session.save(ddmTemplate);
 
-			ddmTemplate.setNew(false);
+				ddmTemplate.setNew(false);
 			}
 			else {
 				session.merge(ddmTemplate);
