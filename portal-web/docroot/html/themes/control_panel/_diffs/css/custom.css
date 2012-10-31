@@ -23,17 +23,16 @@ select {
 }
 
 .display-panel-columns:after, .display-panel-columns:before {
-	position: fixed;
+	bottom: 0;
 	content: '';
 	display: block;
-	bottom: 0;
+	position: absolute;
 	top: 0;
 	width: 238px;
 	z-index: -1;
 }
 
 .display-panel-columns:after {
-	margin-left: 1px;
 	border-right: 1px solid #FFF;
 }
 
@@ -41,9 +40,25 @@ select {
 	position: relative;
 }
 
+.ie .display-panel-columns {
+	bottom: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+
 .display-panel-columns:before {
 	background-color: #CAD2DD;
 	border-right: 1px solid #B0B1B3;
+	margin-left: -1px;
+}
+
+.panel-page-menu-content {
+	border-right: 1px solid #B0B1B3;
+}
+
+.aui-column-first {
+	border-right: 1px solid #FFF;
 }
 
 body.portal-popup:after, body.portal-popup:before {
