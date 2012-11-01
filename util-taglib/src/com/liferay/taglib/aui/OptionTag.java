@@ -54,7 +54,7 @@ public class OptionTag extends BaseOptionTag {
 
 		boolean selected = getSelected();
 
-		if (!getIgnoreModelValue()) {
+		if (getUseModelValue()) {
 			String selectValue = GetterUtil.getString(
 				(String)request.getAttribute("aui:select:value"));
 

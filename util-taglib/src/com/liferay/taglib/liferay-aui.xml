@@ -556,11 +556,6 @@
 				<outputType>boolean</outputType>
 			</attribute>
 			<attribute>
-				<name>ignoreModelValue</name>
-				<inputType>boolean</inputType>
-				<outputType>boolean</outputType>
-			</attribute>
-			<attribute>
 				<name>label</name>
 				<inputType>java.lang.Object</inputType>
 				<outputType>java.lang.Object</outputType>
@@ -574,6 +569,11 @@
 				<name>style</name>
 				<inputType>java.lang.String</inputType>
 				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
+				<name>useModelValue</name>
+				<inputType>boolean</inputType>
+				<outputType>boolean</outputType>
 			</attribute>
 			<attribute>
 				<name>value</name>

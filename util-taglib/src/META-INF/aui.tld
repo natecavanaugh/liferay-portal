@@ -1540,12 +1540,6 @@
 			<type>boolean</type>
 		</attribute>
 		<attribute>
-			<name>ignoreModelValue</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>boolean</type>
-		</attribute>
-		<attribute>
 			<name>label</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -1562,6 +1556,12 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<name>useModelValue</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
 		</attribute>
 		<attribute>
 			<name>value</name>

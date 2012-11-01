@@ -45,10 +45,6 @@ public class BaseOptionTag extends com.liferay.taglib.util.IncludeTag {
 		return _disabled;
 	}
 
-	public boolean getIgnoreModelValue() {
-		return _ignoreModelValue;
-	}
-
 	public java.lang.Object getLabel() {
 		return _label;
 	}
@@ -59,6 +55,10 @@ public class BaseOptionTag extends com.liferay.taglib.util.IncludeTag {
 
 	public java.lang.String getStyle() {
 		return _style;
+	}
+
+	public boolean getUseModelValue() {
+		return _useModelValue;
 	}
 
 	public java.lang.Object getValue() {
@@ -83,12 +83,6 @@ public class BaseOptionTag extends com.liferay.taglib.util.IncludeTag {
 		setScopedAttribute("disabled", disabled);
 	}
 
-	public void setIgnoreModelValue(boolean ignoreModelValue) {
-		_ignoreModelValue = ignoreModelValue;
-
-		setScopedAttribute("ignoreModelValue", ignoreModelValue);
-	}
-
 	public void setLabel(java.lang.Object label) {
 		_label = label;
 
@@ -105,6 +99,12 @@ public class BaseOptionTag extends com.liferay.taglib.util.IncludeTag {
 		_style = style;
 
 		setScopedAttribute("style", style);
+	}
+
+	public void setUseModelValue(boolean useModelValue) {
+		_useModelValue = useModelValue;
+
+		setScopedAttribute("useModelValue", useModelValue);
 	}
 
 	public void setValue(java.lang.Object value) {
@@ -139,10 +139,10 @@ public class BaseOptionTag extends com.liferay.taglib.util.IncludeTag {
 		setNamespacedAttribute(request, "cssClass", _cssClass);
 		setNamespacedAttribute(request, "data", _data);
 		setNamespacedAttribute(request, "disabled", _disabled);
-		setNamespacedAttribute(request, "ignoreModelValue", _ignoreModelValue);
 		setNamespacedAttribute(request, "label", _label);
 		setNamespacedAttribute(request, "selected", _selected);
 		setNamespacedAttribute(request, "style", _style);
+		setNamespacedAttribute(request, "useModelValue", _useModelValue);
 		setNamespacedAttribute(request, "value", _value);
 	}
 
@@ -157,10 +157,10 @@ public class BaseOptionTag extends com.liferay.taglib.util.IncludeTag {
 	private java.lang.String _cssClass = null;
 	private java.util.Map<java.lang.String, java.lang.Object> _data = null;
 	private boolean _disabled = false;
-	private boolean _ignoreModelValue = false;
 	private java.lang.Object _label = null;
 	private boolean _selected = false;
 	private java.lang.String _style = null;
+	private boolean _useModelValue = true;
 	private java.lang.Object _value = null;
 
 }
