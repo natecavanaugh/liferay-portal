@@ -1,85 +1,79 @@
-<!DOCTYPE html>
+#parse($init)
 
-#parse ($init)
+<!doctype html>
+<html dir="$w3c_dir" lang="$w3c_language_id">
+	<head>
+		<meta name="description", content="$site_description">
+		<meta name="viewport", content="width=device-width">
+		<meta property="og:title", content="$site_name">
+		<meta property="og:type", content="website">
+		<meta property="og:url", content="$site_default_url">
+		<meta property="og:image", content="$site_logo">
 
-<html class="#language ("lang.dir")" dir="#language ("lang.dir")" lang="$w3c_language_id">
+		<link rel="apple-touch-icon-precomposed", href="$images_folder/image-icon.png">
+		<link rel="shortcut icon", href="$images_folder/favicon.ico">
+		<link rel="stylesheet", href="$css_folder/main.css">
 
-<head>
-	<title>$the_title - $company_name</title>
+		<style></style>
 
-	$theme.include($top_head_include)
-</head>
+		<script src="$javascript_folder/script.js"></script>
 
-<body class="$css_class">
+		$theme.include($top_head_include)
 
-<a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
+		<title>$the_title - $company_name</title>
+	</head>
 
-$theme.include($body_top_include)
+	<body>
+		$theme.include($body_top_include)
 
-#if ($is_signed_in)
-	#dockbar()
-#end
+		<a href="#main" class="site-skip">#language('skip-to-content')</a>
 
-<div id="wrapper">
-	<header id="banner" role="banner">
-		<div id="heading">
-			<h1 class="site-title">
-				<a class="$logo_css_class" href="$site_default_url" title="#language ("go-to") $site_name">
-					<img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width" />
-				</a>
-
-				#if ($show_site_name)
-					<span class="site-name" title="#language ("go-to") $site_name">
-						$site_name
-					</span>
-				#end
-			</h1>
-
-			<h2 class="page-title">
-				<span>$the_title</span>
-			</h2>
-		</div>
-
-		#if (!$is_signed_in)
-			<a href="$sign_in_url" id="sign-in" rel="nofollow">$sign_in_text</a>
+		#if ($is_signed_in)
+			#dockbar()
 		#end
 
-		#if ($has_navigation || $is_signed_in)
-			#parse ("$full_templates_path/navigation.vm")
-		#end
-	</header>
+		<header role="banner" class="site-header">
+			<nav role="navigation" id="navigation" class="site-navigation">
+				<form method="get" action="$searchURL" class="search">
+					<input type="search" placeholder="#language('search-the-site')" name="q"> <button type="submit">#language('search')</button>
+				</form>
 
-	<div id="content">
-		<nav class="site-breadcrumbs" id="breadcrumbs">
-			<h1>
-				<span>#language ("breadcrumbs")</span>
-			</h1>
+				<a href="#navigation" class="expand" onclick="location.hash=='#navigation'?history.back():null;"></a>
+
+				<ul>
+					#foreach ($nav_item in $nav_items)
+						<li>
+							<a href="$nav_item.getURL()">$nav_item.getName()</a>
+						</li>
+					#end
+				</ul>
+			</nav>
+
+			<a href="$site_default_url" title="#language('go-to') $site_name" class="site-logo"><h1>
+				 <img src="$site_logo" alt="$site_name">
+			</h1></a>
+
+			<nav class="site-breadcrumb">
+				<ul>
+					#foreach ($breacrumb_item in $breacrumb_items)
+						<li>
+							<a href="$breacrumb_item.getURL()">$breacrumb_item.getName()</a>
+						</li>
+					#end
+				</ul>
+			</nav>
 
 			#breadcrumbs()
-		</nav>
+		</header>
 
-		#if ($selectable)
+		<div role="main" id="main" class="site-main">
 			$theme.include($content_include)
-		#else
-			$portletDisplay.recycle()
+		</div>
 
-			$portletDisplay.setTitle($the_title)
-
-			$theme.wrapPortlet("portlet.vm", $content_include)
-		#end
-	</div>
-
-	<footer id="footer" role="contentinfo">
-		<p class="powered-by">
-			#language ("powered-by") <a href="http://www.liferay.com" rel="external">Liferay</a>
-		</p>
-	</footer>
-</div>
-
-$theme.include($body_bottom_include)
-
-</body>
-
-$theme.include($bottom_include)
-
+		<footer role="contentinfo" class="site-footer">
+			<p>
+				#language('powered-by') <a href="//www.liferay.com" rel="external">Liferay</a>.
+			</p>
+		</footer>
+	</body>
 </html>
