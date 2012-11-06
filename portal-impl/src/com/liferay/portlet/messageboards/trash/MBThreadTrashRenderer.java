@@ -90,7 +90,8 @@ public class MBThreadTrashRenderer extends BaseTrashRenderer {
 		renderRequest.setAttribute(
 			WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE, _rootMessage);
 		renderRequest.setAttribute(
-			WebKeys.MESSAGE_BOARDS_TREE_WALKER_CUR_MESSAGE, treeWalker.getRoot());
+			WebKeys.MESSAGE_BOARDS_TREE_WALKER_CUR_MESSAGE,
+			treeWalker.getRoot());
 		renderRequest.setAttribute(
 			WebKeys.MESSAGE_BOARDS_TREE_WALKER_CATEGORY,
 			messageDisplay.getCategory());
