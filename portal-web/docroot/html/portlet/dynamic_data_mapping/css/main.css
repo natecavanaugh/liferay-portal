@@ -48,11 +48,8 @@
 	.lfr-ddm-small-image-preview {
 		background-color: white;
 		border: 1px solid #CCC;
-		height: 80px;
 		padding: 4px;
-		width: 80px;
-
-		@include box-shadow(0 1px 3px #ccc);
+		max-width: 120px;
 	}
 
 	.lfr-ddm-small-image-preview div {

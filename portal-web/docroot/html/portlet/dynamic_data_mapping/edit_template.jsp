@@ -201,17 +201,9 @@ if (Validator.isNotNull(structureAvailableFields)) {
 								<table>
 									<tr>
 										<th>
-											<div class="lfr-ddm-small-image-preview">
-												<c:if test="<%= isSmallImage && (template != null) %>">
-													<style>
-														.lfr-ddm-small-image-preview div {
-															background: url(<%= Validator.isNotNull(template.getSmallImageURL()) ? template.getSmallImageURL() : themeDisplay.getPathImage() + "/template?img_id=" + template.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(template.getSmallImageId()) %>) 50% 50% !important;
-														}
-													</style>
-												</c:if>
-
-												<div></div>
-											</div>
+											<c:if test="<%= isSmallImage && (template != null) %>">
+												<img alt="<liferay-ui:message key="preview" />" class="lfr-ddm-small-image-preview" src="<%= Validator.isNotNull(template.getSmallImageURL()) ? template.getSmallImageURL() : themeDisplay.getPathImage() + "/template?img_id=" + template.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(template.getSmallImageId()) %>" />
+											</c:if>
 										</th>
 										<td>
 											<table>
@@ -257,10 +249,10 @@ if (Validator.isNotNull(structureAvailableFields)) {
 	<c:when test="<%= type.equals(DDMTemplateConstants.TEMPLATE_TYPE_FORM) %>">
 		<%@ include file="/html/portlet/dynamic_data_mapping/form_builder.jspf" %>
 
-		<aui:script use="aui-base">
+		<aui:script>
 			var hiddenAttributesMap = window.<portlet:namespace />formBuilder.MAP_HIDDEN_FIELD_ATTRS;
 
-			window.<portlet:namespace />getFieldHiddenAttributes = function(mode, field) {
+			var getFieldHiddenAttributes = function(mode, field) {
 				var hiddenAttributes = hiddenAttributesMap[field.get('type')] || hiddenAttributesMap.DEFAULT;
 
 				hiddenAttributes = A.Array(hiddenAttributes);
@@ -272,43 +264,46 @@ if (Validator.isNotNull(structureAvailableFields)) {
 				return hiddenAttributes;
 			};
 
-			window.<portlet:namespace />toggleMode = function(mode) {
-				var modeEdit = (mode === '<%= DDMTemplateConstants.TEMPLATE_MODE_EDIT %>');
+			var setFieldsHiddenAttributes = function(item, index, collection) {
+				var hiddenAttributes = getFieldHiddenAttributes(mode, item);
 
-				window.<portlet:namespace />formBuilder.set('allowRemoveRequiredFields', modeEdit);
-
-				window.<portlet:namespace />formBuilder.get('fields').each(
-					function(item, index, collection) {
-						var hiddenAttributes = window.<portlet:namespace />getFieldHiddenAttributes(mode, item);
-
-						item.set('hiddenAttributes', hiddenAttributes);
-					}
-				);
-
-				A.Array.each(
-					window.<portlet:namespace />formBuilder.get('availableFields'),
-					function(item, index, collection) {
-						var hiddenAttributes = window.<portlet:namespace />getFieldHiddenAttributes(mode, item);
-
-						item.set('hiddenAttributes', hiddenAttributes);
-					}
-				);
+				item.set('hiddenAttributes', hiddenAttributes);
 			};
 
+			Liferay.provide(
+				window,
+				'<portlet:namespace />toggleMode',
+				function(mode) {
+					var modeEdit = (mode === '<%= DDMTemplateConstants.TEMPLATE_MODE_EDIT %>');
+
+					window.<portlet:namespace />formBuilder.set('allowRemoveRequiredFields', modeEdit);
+
+					window.<portlet:namespace />formBuilder.get('fields').each(setFieldsHiddenAttributes);
+
+					A.Array.each(window.<portlet:namespace />formBuilder.get('availableFields'), setFieldsHiddenAttributes);
+				},
+				['aui-base']
+			);
+		</aui:script>
+
+		<aui:script use="aui-base">
 			<portlet:namespace />toggleMode('<%= HtmlUtil.escape(mode) %>');
 		</aui:script>
 	</c:when>
 	<c:otherwise>
 		<aui:script use="aui-toggler">
 			var container = A.one('#<portlet:namespace />smallImageContainer');
+
 			var types = container.all('.lfr-ddm-small-image-type');
 			var values = container.all('.lfr-ddm-small-image-value');
 
 			var selectSmallImageType = function(index) {
 				types.set('checked', false);
+
 				types.item(index).set('checked', true);
 
 				values.set('disabled', true);
+
 				values.item(index).set('disabled', false);
 			};
 
@@ -316,6 +311,7 @@ if (Validator.isNotNull(structureAvailableFields)) {
 				'change',
 				function(event) {
 					var input = event.currentTarget;
+
 					var index = types.indexOf(input);
 
 					selectSmallImageType(index);
@@ -332,6 +328,7 @@ if (Validator.isNotNull(structureAvailableFields)) {
 					on: {
 						animatingChange: function(event) {
 							var instance = this;
+
 							var expanded = !instance.get('expanded');
 
 							A.one('#<portlet:namespace />smallImage').set('value', expanded);
