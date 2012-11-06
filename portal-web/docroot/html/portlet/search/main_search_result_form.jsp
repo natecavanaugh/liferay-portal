@@ -124,7 +124,7 @@ PortletURL portletURL = (PortletURL)request.getAttribute("search.jsp-portletURL"
 
 	<span class="asset-entry-title">
 		<a href="<%= viewURL %>">
-			<c:if test="<%= assetRendererFactory != null %>">
+			<c:if test="<%= assetRenderer != null %>">
 				<img alt="" src="<%= assetRenderer.getIconPath(renderRequest) %>" />
 			</c:if>
 
