@@ -183,8 +183,6 @@
 
 		<action path="/admin_server/view" forward="portlet.admin.view" />
 
-		<action path="/admin_server/view_chart" type="com.liferay.portlet.admin.action.ViewChartAction" />
-
 		<!-- Alerts -->
 
 		<action path="/alerts/edit_entry" type="com.liferay.portlet.announcements.action.EditEntryAction">
