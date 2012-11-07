@@ -14,13 +14,8 @@
 
 package com.liferay.portlet.usersadmin.util;
 
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.Projection;
-import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.ProjectionList;
-import com.liferay.portal.kernel.dao.orm.Property;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
@@ -33,8 +28,8 @@ import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
-import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.service.persistence.OrganizationActionableDynamicQuery;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 
@@ -127,14 +122,6 @@ public class OrganizationIndexer extends BaseIndexer {
 				addSearchExpando(searchQuery, searchContext, expandoAttributes);
 			}
 		}
-	}
-
-	protected void addReindexCriteria(
-		DynamicQuery dynamicQuery, long companyId) {
-
-		Property property = PropertyFactoryUtil.forName("companyId");
-
-		dynamicQuery.add(property.eq(companyId));
 	}
 
 	@Override
@@ -290,78 +277,25 @@ public class OrganizationIndexer extends BaseIndexer {
 	}
 
 	protected void reindexOrganizations(long companyId) throws Exception {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Organization.class, PACLClassLoaderUtil.getPortalClassLoader());
+		final Collection<Document> documents = new ArrayList<Document>();
 
-		Projection minOrganizationIdProjection = ProjectionFactoryUtil.min(
-			"organizationId");
-		Projection maxOrganizationIdProjection = ProjectionFactoryUtil.max(
-			"organizationId");
+		ActionableDynamicQuery actionableDynamicQuery =
+			new OrganizationActionableDynamicQuery() {
 
-		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
+			@Override
+			protected void performAction(Object object) throws PortalException {
+				Organization organization = (Organization)object;
 
-		projectionList.add(minOrganizationIdProjection);
-		projectionList.add(maxOrganizationIdProjection);
+				Document document = getDocument(organization);
 
-		dynamicQuery.setProjection(projectionList);
+				documents.add(document);
+			}
 
-		addReindexCriteria(dynamicQuery, companyId);
+		};
 
-		List<Object[]> results = OrganizationLocalServiceUtil.dynamicQuery(
-			dynamicQuery);
+		actionableDynamicQuery.setCompanyId(companyId);
 
-		Object[] minAndMaxOrganizationIds = results.get(0);
-
-		if ((minAndMaxOrganizationIds[0] == null) ||
-			(minAndMaxOrganizationIds[1] == null)) {
-
-			return;
-		}
-
-		long minOrganizationId = (Long)minAndMaxOrganizationIds[0];
-		long maxOrganizationId = (Long)minAndMaxOrganizationIds[1];
-
-		long startOrganizationId = minOrganizationId;
-		long endOrganizationId = startOrganizationId + DEFAULT_INTERVAL;
-
-		while (startOrganizationId <= maxOrganizationId) {
-			reindexOrganizations(
-				companyId, startOrganizationId, endOrganizationId);
-
-			startOrganizationId = endOrganizationId;
-			endOrganizationId += DEFAULT_INTERVAL;
-		}
-	}
-
-	protected void reindexOrganizations(
-			long companyId, long startOrganizationId, long endOrganizationId)
-		throws Exception {
-
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Organization.class, PACLClassLoaderUtil.getPortalClassLoader());
-
-		Property property = PropertyFactoryUtil.forName("organizationId");
-
-		dynamicQuery.add(property.ge(startOrganizationId));
-		dynamicQuery.add(property.lt(endOrganizationId));
-
-		addReindexCriteria(dynamicQuery, companyId);
-
-		List<Organization> organizations =
-			OrganizationLocalServiceUtil.dynamicQuery(dynamicQuery);
-
-		if (organizations.isEmpty()) {
-			return;
-		}
-
-		Collection<Document> documents = new ArrayList<Document>(
-			organizations.size());
-
-		for (Organization organization : organizations) {
-			Document document = getDocument(organization);
-
-			documents.add(document);
-		}
+		actionableDynamicQuery.performActions();
 
 		SearchEngineUtil.updateDocuments(
 			getSearchEngineId(), companyId, documents);
