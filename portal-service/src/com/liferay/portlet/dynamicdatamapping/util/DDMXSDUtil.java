@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
+import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
@@ -37,6 +38,16 @@ public class DDMXSDUtil {
 		PortalRuntimePermission.checkGetBeanProperty(DDMXSDUtil.class);
 
 		return _ddmXSD;
+	}
+
+	public static String getFieldHTML(
+			PageContext pageContext, Element fieldElement, Fields fields,
+			String namespace, String mode, boolean readOnly, Locale locale)
+		throws Exception {
+
+		return getDDMXSD().getFieldHTML(
+			pageContext, fieldElement, fields, namespace, mode, readOnly,
+			locale);
 	}
 
 	public static String getHTML(
@@ -98,6 +109,12 @@ public class DDMXSDUtil {
 		throws DocumentException, JSONException {
 
 		return getDDMXSD().getJSONArray(xml);
+	}
+
+	public static String getXSD(String className, long classPK)
+		throws Exception {
+
+		return getDDMXSD().getXSD(className, classPK);
 	}
 
 	public void setDDMXSD(DDMXSD ddmXSD) {
