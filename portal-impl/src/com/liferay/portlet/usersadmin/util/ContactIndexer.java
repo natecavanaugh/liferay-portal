@@ -14,13 +14,9 @@
 
 package com.liferay.portlet.usersadmin.util;
 
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.Projection;
-import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.ProjectionList;
-import com.liferay.portal.kernel.dao.orm.Property;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
@@ -33,15 +29,14 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.User;
-import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.service.ContactLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.persistence.ContactActionableDynamicQuery;
 import com.liferay.portal.util.PortletKeys;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 
 import javax.portlet.PortletURL;
@@ -96,14 +91,6 @@ public class ContactIndexer extends BaseIndexer {
 				addSearchExpando(searchQuery, searchContext, expandoAttributes);
 			}
 		}
-	}
-
-	protected void addReindexCriteria(
-		DynamicQuery dynamicQuery, long companyId) {
-
-		Property property = PropertyFactoryUtil.forName("companyId");
-
-		dynamicQuery.add(property.eq(companyId));
 	}
 
 	@Override
@@ -203,82 +190,30 @@ public class ContactIndexer extends BaseIndexer {
 		return PORTLET_ID;
 	}
 
-	protected void reindexContacts(long companyId) throws Exception {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Contact.class, PACLClassLoaderUtil.getPortalClassLoader());
+	protected void reindexContacts(long companyId)
+		throws PortalException, SystemException {
 
-		Projection minContactIdProjection = ProjectionFactoryUtil.min(
-			"contactId");
-		Projection maxContactIdProjection = ProjectionFactoryUtil.max(
-			"contactId");
+		final Collection<Document> documents = new ArrayList<Document>();
 
-		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
+		ActionableDynamicQuery actionableDynamicQuery =
+			new ContactActionableDynamicQuery() {
 
-		projectionList.add(minContactIdProjection);
-		projectionList.add(maxContactIdProjection);
+			@Override
+			protected void performAction(Object object) throws PortalException {
+				Contact contact = (Contact)object;
 
-		dynamicQuery.setProjection(projectionList);
+				Document document = getDocument(contact);
 
-		addReindexCriteria(dynamicQuery, companyId);
-
-		List<Object[]> results = ContactLocalServiceUtil.dynamicQuery(
-			dynamicQuery);
-
-		Object[] minAndMaxContactIds = results.get(0);
-
-		if ((minAndMaxContactIds[0] == null) ||
-			(minAndMaxContactIds[1] == null)) {
-
-			return;
-		}
-
-		long minContactId = (Long)minAndMaxContactIds[0];
-		long maxContactId = (Long)minAndMaxContactIds[1];
-
-		long startContactId = minContactId;
-		long endContactId = startContactId + DEFAULT_INTERVAL;
-
-		while (startContactId <= maxContactId) {
-			reindexContacts(companyId, startContactId, endContactId);
-
-			startContactId = endContactId;
-			endContactId += DEFAULT_INTERVAL;
-		}
-	}
-
-	protected void reindexContacts(
-			long companyId, long startContactId, long endContactId)
-		throws Exception {
-
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Contact.class, PACLClassLoaderUtil.getPortalClassLoader());
-
-		Property property = PropertyFactoryUtil.forName("contactId");
-
-		dynamicQuery.add(property.ge(startContactId));
-		dynamicQuery.add(property.lt(endContactId));
-
-		addReindexCriteria(dynamicQuery, companyId);
-
-		List<Contact> contacts = ContactLocalServiceUtil.dynamicQuery(
-			dynamicQuery);
-
-		if (contacts.isEmpty()) {
-			return;
-		}
-
-		Collection<Document> documents = new ArrayList<Document>(
-			contacts.size());
-
-		for (Contact contact : contacts) {
-			Document document = getDocument(contact);
-
-			if (document == null) {
-				continue;
+				if (document != null) {
+					documents.add(document);
+				}
 			}
 
-			documents.add(document);
-		}
+		};
+
+		actionableDynamicQuery.setCompanyId(companyId);
+
+		actionableDynamicQuery.performActions();
 
 		SearchEngineUtil.updateDocuments(
 			getSearchEngineId(), companyId, documents);

@@ -654,6 +654,10 @@ public class ServiceBuilder {
 						System.out.println("Building " + entity.getName());
 
 						if (entity.hasColumns()) {
+							if (entity.hasLocalService()) {
+								_createActionableDynamicQuery(entity);
+							}
+
 							_createHbm(entity);
 							_createHbmUtil(entity);
 
@@ -1600,6 +1604,24 @@ public class ServiceBuilder {
 
 			element.add(childElement);
 		}
+	}
+
+	private void _createActionableDynamicQuery(Entity entity) throws Exception {
+		Map<String, Object> context = _getContext();
+
+		context.put("entity", entity);
+
+		// Content
+
+		String content = _processTemplate(_tplActionableDynamicQuery, context);
+
+		// Write file
+
+		File ejbFile = new File(
+			_serviceOutputPath + "/service/persistence/" +
+				entity.getName() + "ActionableDynamicQuery.java");
+
+		writeFile(ejbFile, content, _author);
 	}
 
 	private void _createBlobModels(Entity entity) throws Exception {
@@ -4925,6 +4947,8 @@ public class ServiceBuilder {
 	private String _targetEntityName;
 	private String _testDir;
 	private String _testOutputPath;
+	private String _tplActionableDynamicQuery =
+		_TPL_ROOT + "actionable_dynamic_query.ftl";
 	private String _tplBadAliasNames = _TPL_ROOT + "bad_alias_names.txt";
 	private String _tplBadColumnNames = _TPL_ROOT + "bad_column_names.txt";
 	private String _tplBadTableNames = _TPL_ROOT + "bad_table_names.txt";

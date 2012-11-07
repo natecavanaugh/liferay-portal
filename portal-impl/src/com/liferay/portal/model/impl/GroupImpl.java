@@ -96,15 +96,10 @@ public class GroupImpl extends GroupBaseImpl {
 
 		Group group = this;
 
-		while (true) {
-			if (!group.isRoot()) {
-				group = group.getParentGroup();
+		while (!group.isRoot()) {
+			group = group.getParentGroup();
 
-				groups.add(group);
-			}
-			else {
-				break;
-			}
+			groups.add(group);
 		}
 
 		return groups;
@@ -416,9 +411,8 @@ public class GroupImpl extends GroupBaseImpl {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isShowSite(

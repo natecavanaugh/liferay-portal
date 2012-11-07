@@ -38,15 +38,10 @@ public class JournalFolderImpl extends JournalFolderBaseImpl {
 
 		JournalFolder folder = this;
 
-		while (true) {
-			if (!folder.isRoot()) {
-				folder = folder.getParentFolder();
+		while (!folder.isRoot()) {
+			folder = folder.getParentFolder();
 
-				ancestors.add(folder);
-			}
-			else {
-				break;
-			}
+			ancestors.add(folder);
 		}
 
 		return ancestors;
@@ -70,9 +65,8 @@ public class JournalFolderImpl extends JournalFolderBaseImpl {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

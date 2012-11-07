@@ -21,15 +21,15 @@
 	<%
 	String redirect = ParamUtil.getString(request, "redirect");
 
-	long entryId = ParamUtil.getLong(request, "entryId");
+	long trashEntryId = ParamUtil.getLong(request, "trashEntryId");
 
 	String className = ParamUtil.getString(request, "className");
 	long classPK = ParamUtil.getLong(request, "classPK");
 
 	TrashEntry entry = null;
 
-	if (entryId > 0) {
-		entry = TrashEntryLocalServiceUtil.getEntry(entryId);
+	if (trashEntryId > 0) {
+		entry = TrashEntryLocalServiceUtil.getEntry(trashEntryId);
 	}
 	else if (Validator.isNotNull(className) && (classPK > 0)) {
 		entry = TrashEntryLocalServiceUtil.fetchEntry(className, classPK);
@@ -82,13 +82,13 @@
 		<c:if test="<%= !assetRenderer.getAssetRendererFactoryClassName().equals(DLFileEntryAssetRendererFactory.CLASS_NAME) %>">
 			<div class="asset-ratings">
 				<liferay-ui:ratings
-					className="<%= entry.getClassName() %>"
-					classPK="<%= entry.getClassPK() %>"
+					className="<%= className %>"
+					classPK="<%= classPK %>"
 				/>
 			</div>
 
 			<%
-			AssetEntry assetEntry = AssetEntryLocalServiceUtil.getEntry(entry.getClassName(), entry.getClassPK());
+			AssetEntry assetEntry = AssetEntryLocalServiceUtil.getEntry(className, classPK);
 			%>
 
 			<div class="asset-related-assets">
@@ -104,13 +104,13 @@
 
 				<div class="asset-discussion">
 					<liferay-ui:discussion
-						className="<%= entry.getClassName() %>"
-						classPK="<%= entry.getClassPK() %>"
+						className="<%= className %>"
+						classPK="<%= classPK %>"
 						formAction="<%= discussionURL %>"
-						formName='<%= "fm" + entry.getClassPK() %>'
+						formName='<%= "fm" + classPK %>'
 						redirect="<%= currentURL %>"
 						subject="<%= trashRenderer.getTitle(locale) %>"
-						userId="<%= entry.getUserId() %>"
+						userId="<%= assetEntry.getUserId() %>"
 					/>
 				</div>
 			</c:if>

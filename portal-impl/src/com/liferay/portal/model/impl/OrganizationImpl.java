@@ -136,15 +136,10 @@ public class OrganizationImpl extends OrganizationBaseImpl {
 
 		Organization organization = this;
 
-		while (true) {
-			if (!organization.isRoot()) {
-				organization = organization.getParentOrganization();
+		while (!organization.isRoot()) {
+			organization = organization.getParentOrganization();
 
-				ancestors.add(organization);
-			}
-			else {
-				break;
-			}
+			ancestors.add(organization);
 		}
 
 		return ancestors;
@@ -350,9 +345,8 @@ public class OrganizationImpl extends OrganizationBaseImpl {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected void buildTreePath(StringBundler sb, Organization organization)

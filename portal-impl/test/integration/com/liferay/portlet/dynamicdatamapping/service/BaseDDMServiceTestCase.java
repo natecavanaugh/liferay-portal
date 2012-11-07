@@ -27,6 +27,7 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.storage.StorageType;
 
+import java.io.File;
 import java.io.InputStream;
 
 import java.util.HashMap;
@@ -45,19 +46,7 @@ public class BaseDDMServiceTestCase {
 		group = ServiceTestUtil.addGroup();
 	}
 
-	protected DDMTemplate addDetailTemplate(long classPK, String name)
-		throws Exception {
-
-		String language = "xsd";
-
-		return addTemplate(
-			PortalUtil.getClassNameId(DDMStructure.class), classPK, name,
-			DDMTemplateConstants.TEMPLATE_TYPE_FORM,
-			DDMTemplateConstants.TEMPLATE_MODE_CREATE, language,
-			getTestTemplateScript(language));
-	}
-
-	protected DDMTemplate addListTemplate(
+	protected DDMTemplate addDisplayTemplate(
 			long classNameId, long classPK, String name)
 		throws Exception {
 
@@ -69,11 +58,26 @@ public class BaseDDMServiceTestCase {
 			language, getTestTemplateScript(language));
 	}
 
-	protected DDMTemplate addListTemplate(long classPK, String name)
+	protected DDMTemplate addDisplayTemplate(long classPK, String name)
 		throws Exception {
 
-		return addListTemplate(
+		return addDisplayTemplate(
 			PortalUtil.getClassNameId(DDMStructure.class), classPK, name);
+	}
+
+	protected DDMTemplate addFormTemplate(long classPK, String name)
+		throws Exception {
+
+		return addFormTemplate(classPK, name, getTestTemplateScript("xsd"));
+	}
+
+	protected DDMTemplate addFormTemplate(long classPK, String name, String xsd)
+		throws Exception {
+
+		return addTemplate(
+			PortalUtil.getClassNameId(DDMStructure.class), classPK, name,
+			DDMTemplateConstants.TEMPLATE_TYPE_FORM,
+			DDMTemplateConstants.TEMPLATE_MODE_CREATE, "xsd", xsd);
 	}
 
 	protected DDMStructure addStructure(long classNameId, String name)
@@ -104,7 +108,7 @@ public class BaseDDMServiceTestCase {
 		throws Exception {
 
 		return addTemplate(
-			classNameId, classPK,  null, name, type, mode, language, script);
+			classNameId, classPK, null, name, type, mode, language, script);
 	}
 
 	protected DDMTemplate addTemplate(
@@ -114,20 +118,21 @@ public class BaseDDMServiceTestCase {
 
 		return addTemplate(
 			classNameId, classPK, templateKey, name, type, mode, language,
-			script, false);
+			script, false, false, null, null);
 	}
 
 	protected DDMTemplate addTemplate(
 			long classNameId, long classPK, String templateKey, String name,
 			String type, String mode, String language, String script,
-			boolean cacheable)
+			boolean cacheable, boolean smallImage, String smallImageURL,
+			File smallFile)
 		throws Exception {
 
 		return DDMTemplateLocalServiceUtil.addTemplate(
 			TestPropsValues.getUserId(), group.getGroupId(), classNameId,
 			classPK, templateKey, getDefaultLocaleMap(name), null, type, mode,
-			language, script, cacheable,
-			ServiceTestUtil.getServiceContext(group.getGroupId()));
+			language, script, cacheable, smallImage, smallImageURL, smallFile,
+			ServiceTestUtil.getServiceContext());
 	}
 
 	protected Map<Locale, String> getDefaultLocaleMap(String defaultValue) {

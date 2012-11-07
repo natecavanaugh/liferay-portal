@@ -113,15 +113,15 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 			}
 		}
 		catch (InvocationTargetException ite) {
-			Throwable cause = ite.getCause();
+			Throwable throwable = ite.getCause();
 
-			if (cause instanceof SecurityException) {
-				throw (SecurityException)cause;
+			if (throwable instanceof SecurityException) {
+				throw (SecurityException)throwable;
 			}
 
-			_log.error(cause, cause);
+			_log.error(throwable, throwable);
 
-			return JSONFactoryUtil.serializeThrowable(cause);
+			return JSONFactoryUtil.serializeThrowable(throwable);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

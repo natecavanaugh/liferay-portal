@@ -1084,8 +1084,7 @@ public class SourceFormatter {
 			new String[] {
 				"**\\journal\\dependencies\\template.ftl",
 				"**\\servicebuilder\\dependencies\\props.ftl"
-			}
-		);
+			});
 
 		List<String> fileNames = _sourceFormatterHelper.scanForFiles(
 			directoryScanner);
@@ -2450,19 +2449,19 @@ public class SourceFormatter {
 		directoryScanner.setBasedir(basedir);
 
 		if (_portalSource) {
+			directoryScanner.setExcludes(
+				new String[] {"**\\classes\\**", "**\\bin\\**"});
 			directoryScanner.setIncludes(
 				new String[] {
 					"**\\portal-ext.properties",
 					"**\\portal-legacy-*.properties",
-				}
-			);
+				});
 		}
 		else {
 			directoryScanner.setIncludes(
 				new String[] {
 					"**\\portal.properties", "**\\portal-ext.properties"
-				}
-			);
+				});
 		}
 
 		List<String> fileNames = _sourceFormatterHelper.scanForFiles(

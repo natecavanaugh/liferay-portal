@@ -202,17 +202,12 @@ public class LayoutImpl extends LayoutBaseImpl {
 
 		Layout layout = this;
 
-		while (true) {
-			if (!layout.isRootLayout()) {
-				layout = LayoutLocalServiceUtil.getLayout(
-					layout.getGroupId(), layout.isPrivateLayout(),
-					layout.getParentLayoutId());
+		while (!layout.isRootLayout()) {
+			layout = LayoutLocalServiceUtil.getLayout(
+				layout.getGroupId(), layout.isPrivateLayout(),
+				layout.getParentLayoutId());
 
-				layouts.add(layout);
-			}
-			else {
-				break;
-			}
+			layouts.add(layout);
 		}
 
 		return layouts;
@@ -499,27 +494,24 @@ public class LayoutImpl extends LayoutBaseImpl {
 		if (Validator.isNotNull(defaultAssetPublisherPortletId)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isFirstChild() {
 		if (getPriority() == 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isFirstParent() {
 		if (isFirstChild() && isRootLayout()) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isInheritLookAndFeel() {
@@ -528,9 +520,8 @@ public class LayoutImpl extends LayoutBaseImpl {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isInheritWapLookAndFeel() {
@@ -539,9 +530,8 @@ public class LayoutImpl extends LayoutBaseImpl {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isLayoutPrototypeLinkActive() {
@@ -562,9 +552,8 @@ public class LayoutImpl extends LayoutBaseImpl {
 		if (getParentLayoutId() == LayoutConstants.DEFAULT_PARENT_LAYOUT_ID) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isSelected(
@@ -595,63 +584,56 @@ public class LayoutImpl extends LayoutBaseImpl {
 		if (getType().equals(LayoutConstants.TYPE_ARTICLE)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isTypeControlPanel() {
 		if (getType().equals(LayoutConstants.TYPE_CONTROL_PANEL)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isTypeEmbedded() {
 		if (getType().equals(LayoutConstants.TYPE_EMBEDDED)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isTypeLinkToLayout() {
 		if (getType().equals(LayoutConstants.TYPE_LINK_TO_LAYOUT)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isTypePanel() {
 		if (getType().equals(LayoutConstants.TYPE_PANEL)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isTypePortlet() {
 		if (getType().equals(LayoutConstants.TYPE_PORTLET)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isTypeURL() {
 		if (getType().equals(LayoutConstants.TYPE_URL)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

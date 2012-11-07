@@ -38,16 +38,11 @@ public class MBCategoryImpl extends MBCategoryBaseImpl {
 
 		MBCategory category = this;
 
-		while (true) {
-			if (!category.isRoot()) {
-				category = MBCategoryLocalServiceUtil.getCategory(
-					category.getParentCategoryId());
+		while (!category.isRoot()) {
+			category = MBCategoryLocalServiceUtil.getCategory(
+				category.getParentCategoryId());
 
-				ancestorCategoryIds.add(category.getCategoryId());
-			}
-			else {
-				break;
-			}
+			ancestorCategoryIds.add(category.getCategoryId());
 		}
 
 		return ancestorCategoryIds;
@@ -60,19 +55,25 @@ public class MBCategoryImpl extends MBCategoryBaseImpl {
 
 		MBCategory category = this;
 
-		while (true) {
-			if (!category.isRoot()) {
-				category = MBCategoryLocalServiceUtil.getCategory(
-					category.getParentCategoryId());
+		while (!category.isRoot()) {
+			category = category.getParentCategory();
 
-				ancestors.add(category);
-			}
-			else {
-				break;
-			}
+			ancestors.add(category);
 		}
 
 		return ancestors;
+	}
+
+	public MBCategory getParentCategory()
+		throws PortalException, SystemException {
+
+		if (getParentCategoryId() ==
+				MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) {
+
+			return null;
+		}
+
+		return MBCategoryLocalServiceUtil.getCategory(getParentCategoryId());
 	}
 
 	public boolean isRoot() {
@@ -81,9 +82,8 @@ public class MBCategoryImpl extends MBCategoryBaseImpl {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

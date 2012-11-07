@@ -163,9 +163,8 @@ public class DLFolderImpl extends DLFolderBaseImpl {
 		if (getParentFolderId() == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

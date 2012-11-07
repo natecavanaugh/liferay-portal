@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.trash.service.impl;
 
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Hits;
@@ -30,6 +31,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.persistence.GroupActionableDynamicQuery;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.trash.model.TrashEntry;
 import com.liferay.portlet.trash.model.TrashVersion;
@@ -113,17 +115,15 @@ public class TrashEntryLocalServiceImpl extends TrashEntryLocalServiceBaseImpl {
 	}
 
 	public void checkEntries() throws PortalException, SystemException {
-		int count = groupPersistence.countAll();
+		ActionableDynamicQuery actionableDynamicQuery =
+			new GroupActionableDynamicQuery() {
 
-		int pages = count / Indexer.DEFAULT_INTERVAL;
+			@Override
+			protected void performAction(Object object)
+				throws PortalException, SystemException {
 
-		for (int i = 0; i <= pages; i++) {
-			int start = (i * Indexer.DEFAULT_INTERVAL);
-			int end = start + Indexer.DEFAULT_INTERVAL;
+				Group group = (Group)object;
 
-			List<Group> groups = groupPersistence.findAll(start, end);
-
-			for (Group group : groups) {
 				Date date = getMaxAge(group);
 
 				List<TrashEntry> entries = trashEntryPersistence.findByG_LtCD(
@@ -137,26 +137,30 @@ public class TrashEntryLocalServiceImpl extends TrashEntryLocalServiceBaseImpl {
 					trashHandler.deleteTrashEntry(entry.getClassPK(), false);
 				}
 			}
-		}
+
+		};
+
+		actionableDynamicQuery.performActions();
 	}
 
 	public void checkEntriesAttachments()
 		throws PortalException, SystemException {
 
-		int count = groupPersistence.countAll();
+		ActionableDynamicQuery actionableDynamicQuery =
+			new GroupActionableDynamicQuery() {
 
-		int pages = count / Indexer.DEFAULT_INTERVAL;
+			@Override
+			protected void performAction(Object object)
+				throws PortalException, SystemException {
 
-		for (int i = 0; i <= pages; i++) {
-			int start = (i * Indexer.DEFAULT_INTERVAL);
-			int end = start + Indexer.DEFAULT_INTERVAL;
+				Group group = (Group)object;
 
-			List<Group> groups = groupPersistence.findAll(start, end);
-
-			for (Group group : groups) {
 				checkEntriesAttachments(group);
 			}
-		}
+
+		};
+
+		actionableDynamicQuery.performActions();
 	}
 
 	/**

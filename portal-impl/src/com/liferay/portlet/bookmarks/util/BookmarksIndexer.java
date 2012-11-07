@@ -14,13 +14,12 @@
 
 package com.liferay.portlet.bookmarks.util;
 
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.Projection;
-import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.ProjectionList;
 import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
@@ -32,19 +31,18 @@ import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
-import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.persistence.GroupActionableDynamicQuery;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.bookmarks.model.BookmarksEntry;
 import com.liferay.portlet.bookmarks.model.BookmarksFolder;
 import com.liferay.portlet.bookmarks.model.BookmarksFolderConstants;
 import com.liferay.portlet.bookmarks.service.BookmarksEntryLocalServiceUtil;
-import com.liferay.portlet.bookmarks.service.BookmarksFolderLocalServiceUtil;
 import com.liferay.portlet.bookmarks.service.BookmarksFolderServiceUtil;
+import com.liferay.portlet.bookmarks.service.persistence.BookmarksEntryActionableDynamicQuery;
+import com.liferay.portlet.bookmarks.service.persistence.BookmarksFolderActionableDynamicQuery;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 import javax.portlet.PortletURL;
@@ -102,26 +100,6 @@ public class BookmarksIndexer extends BaseIndexer {
 
 			contextQuery.add(folderIdsQuery, BooleanClauseOccur.MUST);
 		}
-	}
-
-	protected void addReindexCriteria(
-		DynamicQuery dynamicQuery, long companyId) {
-
-		Property property = PropertyFactoryUtil.forName("companyId");
-
-		dynamicQuery.add(property.eq(companyId));
-	}
-
-	protected void addReindexCriteria(
-		DynamicQuery dynamicQuery, long groupId, long folderId) {
-
-		Property groupIdProperty = PropertyFactoryUtil.forName("groupId");
-
-		dynamicQuery.add(groupIdProperty.eq(groupId));
-
-		Property folderIdProperty = PropertyFactoryUtil.forName("folderId");
-
-		dynamicQuery.add(folderIdProperty.eq(folderId));
 	}
 
 	@Override
@@ -192,212 +170,90 @@ public class BookmarksIndexer extends BaseIndexer {
 		return PORTLET_ID;
 	}
 
-	protected void reindexEntries(long companyId, long groupId, long folderId)
-		throws Exception {
-
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			BookmarksEntry.class, PACLClassLoaderUtil.getPortalClassLoader());
-
-		Projection minEntryIdProjection = ProjectionFactoryUtil.min("entryId");
-		Projection maxEntryIdProjection = ProjectionFactoryUtil.max("entryId");
-
-		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
-
-		projectionList.add(minEntryIdProjection);
-		projectionList.add(maxEntryIdProjection);
-
-		dynamicQuery.setProjection(projectionList);
-
-		addReindexCriteria(dynamicQuery, groupId, folderId);
-
-		List<Object[]> results = BookmarksEntryLocalServiceUtil.dynamicQuery(
-			dynamicQuery);
-
-		Object[] minAndMaxEntryIds = results.get(0);
-
-		if ((minAndMaxEntryIds[0] == null) || (minAndMaxEntryIds[1] == null)) {
-			return;
-		}
-
-		long minEntryId = (Long)minAndMaxEntryIds[0];
-		long maxEntryId = (Long)minAndMaxEntryIds[1];
-
-		long startEntryId = minEntryId;
-		long endEntryId = startEntryId + DEFAULT_INTERVAL;
-
-		while (startEntryId <= maxEntryId) {
-			reindexEntries(
-				companyId, groupId, folderId, startEntryId, endEntryId);
-
-			startEntryId = endEntryId;
-			endEntryId += DEFAULT_INTERVAL;
-		}
-	}
-
 	protected void reindexEntries(
-			long companyId, long groupId, long folderId, long startEntryId,
-			long endEntryId)
-		throws Exception {
+			long companyId, final long groupId, final long folderId)
+		throws PortalException, SystemException {
 
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			BookmarksEntry.class, PACLClassLoaderUtil.getPortalClassLoader());
+		final Collection<Document> documents = new ArrayList<Document>();
 
-		Property property = PropertyFactoryUtil.forName("entryId");
+		ActionableDynamicQuery actionableDynamicQuery =
+			new BookmarksEntryActionableDynamicQuery() {
 
-		dynamicQuery.add(property.ge(startEntryId));
-		dynamicQuery.add(property.lt(endEntryId));
+			@Override
+			protected void addCriteria(DynamicQuery dynamicQuery) {
+				Property property = PropertyFactoryUtil.forName("folderId");
 
-		addReindexCriteria(dynamicQuery, groupId, folderId);
+				dynamicQuery.add(property.eq(folderId));
+			}
 
-		List<BookmarksEntry> entries =
-			BookmarksEntryLocalServiceUtil.dynamicQuery(dynamicQuery);
+			@Override
+			protected void performAction(Object object) throws PortalException {
+				BookmarksEntry entry = (BookmarksEntry)object;
 
-		if (entries.isEmpty()) {
-			return;
-		}
+				Document document = getDocument(entry);
 
-		Collection<Document> documents = new ArrayList<Document>(
-			entries.size());
+				documents.add(document);
+			}
 
-		for (BookmarksEntry entry : entries) {
-			Document document = getDocument(entry);
+		};
 
-			documents.add(document);
-		}
+		actionableDynamicQuery.setGroupId(groupId);
+
+		actionableDynamicQuery.performActions();
 
 		SearchEngineUtil.updateDocuments(
 			getSearchEngineId(), companyId, documents);
 	}
 
-	protected void reindexFolders(long companyId) throws Exception {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			BookmarksFolder.class, PACLClassLoaderUtil.getPortalClassLoader());
+	protected void reindexFolders(final long companyId)
+		throws PortalException, SystemException {
 
-		Projection minFolderIdProjection = ProjectionFactoryUtil.min(
-			"folderId");
-		Projection maxFolderIdProjection = ProjectionFactoryUtil.max(
-			"folderId");
+		ActionableDynamicQuery actionableDynamicQuery =
+			new BookmarksFolderActionableDynamicQuery() {
 
-		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
+			@Override
+			protected void performAction(Object object)
+				throws PortalException, SystemException {
 
-		projectionList.add(minFolderIdProjection);
-		projectionList.add(maxFolderIdProjection);
+				BookmarksFolder folder = (BookmarksFolder)object;
 
-		dynamicQuery.setProjection(projectionList);
+				long groupId = folder.getGroupId();
+				long folderId = folder.getFolderId();
 
-		addReindexCriteria(dynamicQuery, companyId);
+				reindexEntries(companyId, groupId, folderId);
+			}
 
-		List<Object[]> results = BookmarksFolderLocalServiceUtil.dynamicQuery(
-			dynamicQuery);
+		};
 
-		Object[] minAndMaxFolderIds = results.get(0);
+		actionableDynamicQuery.setCompanyId(companyId);
 
-		if ((minAndMaxFolderIds[0] == null) ||
-			(minAndMaxFolderIds[1] == null)) {
-
-			return;
-		}
-
-		long minFolderId = (Long)minAndMaxFolderIds[0];
-		long maxFolderId = (Long)minAndMaxFolderIds[1];
-
-		long startFolderId = minFolderId;
-		long endFolderId = startFolderId + DEFAULT_INTERVAL;
-
-		while (startFolderId <= maxFolderId) {
-			reindexFolders(companyId, startFolderId, endFolderId);
-
-			startFolderId = endFolderId;
-			endFolderId += DEFAULT_INTERVAL;
-		}
+		actionableDynamicQuery.performActions();
 	}
 
-	protected void reindexFolders(
-			long companyId, long startFolderId, long endFolderId)
-		throws Exception {
+	protected void reindexRoot(final long companyId)
+		throws PortalException, SystemException {
 
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			BookmarksFolder.class, PACLClassLoaderUtil.getPortalClassLoader());
+		ActionableDynamicQuery actionableDynamicQuery =
+			new GroupActionableDynamicQuery() {
 
-		Property property = PropertyFactoryUtil.forName("folderId");
+			@Override
+			protected void performAction(Object object)
+				throws PortalException, SystemException {
 
-		dynamicQuery.add(property.ge(startFolderId));
-		dynamicQuery.add(property.lt(endFolderId));
+				Group group = (Group)object;
 
-		addReindexCriteria(dynamicQuery, companyId);
+				long groupId = group.getGroupId();
+				long folderId =
+					BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID;
 
-		List<BookmarksFolder> folders =
-			BookmarksFolderLocalServiceUtil.dynamicQuery(dynamicQuery);
+				reindexEntries(companyId, groupId, folderId);
+			}
 
-		for (BookmarksFolder folder : folders) {
-			long groupId = folder.getGroupId();
-			long folderId = folder.getFolderId();
+		};
 
-			reindexEntries(companyId, groupId, folderId);
-		}
-	}
+		actionableDynamicQuery.setCompanyId(companyId);
 
-	protected void reindexRoot(long companyId) throws Exception {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Group.class, PACLClassLoaderUtil.getPortalClassLoader());
-
-		Projection minGroupIdProjection = ProjectionFactoryUtil.min("groupId");
-		Projection maxGroupIdProjection = ProjectionFactoryUtil.max("groupId");
-
-		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
-
-		projectionList.add(minGroupIdProjection);
-		projectionList.add(maxGroupIdProjection);
-
-		dynamicQuery.setProjection(projectionList);
-
-		addReindexCriteria(dynamicQuery, companyId);
-
-		List<Object[]> results = GroupLocalServiceUtil.dynamicQuery(
-			dynamicQuery);
-
-		Object[] minAndMaxGroupIds = results.get(0);
-
-		if ((minAndMaxGroupIds[0] == null) || (minAndMaxGroupIds[1] == null)) {
-			return;
-		}
-
-		long minGroupId = (Long)minAndMaxGroupIds[0];
-		long maxGroupId = (Long)minAndMaxGroupIds[1];
-
-		long startGroupId = minGroupId;
-		long endGroupId = startGroupId + DEFAULT_INTERVAL;
-
-		while (startGroupId <= maxGroupId) {
-			reindexRoot(companyId, startGroupId, endGroupId);
-
-			startGroupId = endGroupId;
-			endGroupId += DEFAULT_INTERVAL;
-		}
-	}
-
-	protected void reindexRoot(
-			long companyId, long startGroupId, long endGroupId)
-		throws Exception {
-
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			Group.class, PACLClassLoaderUtil.getPortalClassLoader());
-
-		Property property = PropertyFactoryUtil.forName("groupId");
-
-		dynamicQuery.add(property.ge(startGroupId));
-		dynamicQuery.add(property.lt(endGroupId));
-
-		addReindexCriteria(dynamicQuery, companyId);
-
-		List<Group> groups = GroupLocalServiceUtil.dynamicQuery(dynamicQuery);
-
-		for (Group group : groups) {
-			long groupId = group.getGroupId();
-			long folderId = BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID;
-
-			reindexEntries(companyId, groupId, folderId);
-		}
+		actionableDynamicQuery.performActions();
 	}
 
 }

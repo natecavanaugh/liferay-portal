@@ -14,13 +14,20 @@
 
 package com.liferay.portlet.messageboards.action;
 
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.struts.PortletAction;
 import com.liferay.portlet.messageboards.LockedThreadException;
 import com.liferay.portlet.messageboards.service.MBThreadServiceUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -32,6 +39,7 @@ import org.apache.struts.action.ActionMapping;
 /**
  * @author Deepak Gothe
  * @author Sergio González
+ * @author Zsolt Berentey
  */
 public class DeleteThreadAction extends PortletAction {
 
@@ -41,8 +49,17 @@ public class DeleteThreadAction extends PortletAction {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
 		try {
-			deleteThreads(actionRequest, actionResponse);
+			if (cmd.equals(Constants.DELETE)) {
+				deleteThreads(
+					(LiferayPortletConfig)portletConfig, actionRequest, false);
+			}
+			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
+				deleteThreads(
+					(LiferayPortletConfig)portletConfig, actionRequest, true);
+			}
 
 			sendRedirect(actionRequest, actionResponse);
 		}
@@ -61,21 +78,46 @@ public class DeleteThreadAction extends PortletAction {
 	}
 
 	protected void deleteThreads(
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			LiferayPortletConfig liferayPortletConfig,
+			ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
+
+		long[] deleteThreadIds = null;
 
 		long threadId = ParamUtil.getLong(actionRequest, "threadId");
 
 		if (threadId > 0) {
-			MBThreadServiceUtil.deleteThread(threadId);
+			deleteThreadIds = new long[] {threadId};
 		}
 		else {
-			long[] deleteThreadIds = StringUtil.split(
+			deleteThreadIds = StringUtil.split(
 				ParamUtil.getString(actionRequest, "threadIds"), 0L);
+		}
 
-			for (int i = 0; i < deleteThreadIds.length; i++) {
-				MBThreadServiceUtil.deleteThread(deleteThreadIds[i]);
+		for (long deleteThreadId : deleteThreadIds) {
+			if (moveToTrash) {
+				MBThreadServiceUtil.moveThreadToTrash(deleteThreadId);
 			}
+			else {
+				MBThreadServiceUtil.deleteThread(deleteThreadId);
+			}
+		}
+
+		if (moveToTrash && (deleteThreadIds.length > 0)) {
+			Map<String, String[]> data = new HashMap<String, String[]>();
+
+			data.put(
+				"restoreThreadIds", ArrayUtil.toStringArray(deleteThreadIds));
+
+			SessionMessages.add(
+				actionRequest,
+				liferayPortletConfig.getPortletId() +
+					SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA, data);
+
+			SessionMessages.add(
+				actionRequest,
+				liferayPortletConfig.getPortletId() +
+					SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
 		}
 	}
 

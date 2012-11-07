@@ -14,13 +14,12 @@
 
 package com.liferay.portlet.blogs.util;
 
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.Projection;
-import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.ProjectionList;
 import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
@@ -31,18 +30,17 @@ import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portlet.blogs.service.permission.BlogsEntryPermission;
+import com.liferay.portlet.blogs.service.persistence.BlogsEntryActionableDynamicQuery;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import javax.portlet.PortletURL;
@@ -93,27 +91,6 @@ public class BlogsIndexer extends BaseIndexer {
 		if (status != WorkflowConstants.STATUS_ANY) {
 			contextQuery.addRequiredTerm(Field.STATUS, status);
 		}
-	}
-
-	protected void addReindexCriteria(
-		DynamicQuery dynamicQuery, long companyId) {
-
-		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");
-
-		dynamicQuery.add(companyIdProperty.eq(companyId));
-
-		Property displayDateProperty = PropertyFactoryUtil.forName(
-			"displayDate");
-
-		dynamicQuery.add(displayDateProperty.lt(new Date()));
-
-		Property statusProperty = PropertyFactoryUtil.forName("status");
-
-		Integer[] statuses = {
-			WorkflowConstants.STATUS_APPROVED, WorkflowConstants.STATUS_IN_TRASH
-		};
-
-		dynamicQuery.add(statusProperty.in(statuses));
 	}
 
 	@Override
@@ -189,74 +166,45 @@ public class BlogsIndexer extends BaseIndexer {
 		return PORTLET_ID;
 	}
 
-	protected void reindexEntries(long companyId) throws Exception {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			BlogsEntry.class, PACLClassLoaderUtil.getPortalClassLoader());
+	protected void reindexEntries(long companyId)
+		throws PortalException, SystemException {
 
-		Projection minEntryIdProjection = ProjectionFactoryUtil.min("entryId");
-		Projection maxEntryIdProjection = ProjectionFactoryUtil.max("entryId");
+		final Collection<Document> documents = new ArrayList<Document>();
 
-		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
+		ActionableDynamicQuery actionableDynamicQuery =
+			new BlogsEntryActionableDynamicQuery() {
 
-		projectionList.add(minEntryIdProjection);
-		projectionList.add(maxEntryIdProjection);
+			@Override
+			protected void addCriteria(DynamicQuery dynamicQuery) {
+				Property displayDateProperty = PropertyFactoryUtil.forName(
+					"displayDate");
 
-		dynamicQuery.setProjection(projectionList);
+				dynamicQuery.add(displayDateProperty.lt(new Date()));
 
-		addReindexCriteria(dynamicQuery, companyId);
+				Property statusProperty = PropertyFactoryUtil.forName("status");
 
-		List<Object[]> results = BlogsEntryLocalServiceUtil.dynamicQuery(
-			dynamicQuery);
+				Integer[] statuses = {
+					WorkflowConstants.STATUS_APPROVED,
+					WorkflowConstants.STATUS_IN_TRASH
+				};
 
-		Object[] minAndMaxEntryIds = results.get(0);
+				dynamicQuery.add(statusProperty.in(statuses));
+			}
 
-		if ((minAndMaxEntryIds[0] == null) || (minAndMaxEntryIds[1] == null)) {
-			return;
-		}
+			@Override
+			protected void performAction(Object object) throws PortalException {
+				BlogsEntry entry = (BlogsEntry)object;
 
-		long minEntryId = (Long)minAndMaxEntryIds[0];
-		long maxEntryId = (Long)minAndMaxEntryIds[1];
+				Document document = getDocument(entry);
 
-		long startEntryId = minEntryId;
-		long endEntryId = startEntryId + DEFAULT_INTERVAL;
+				documents.add(document);
+			}
 
-		while (startEntryId <= maxEntryId) {
-			reindexEntries(companyId, startEntryId, endEntryId);
+		};
 
-			startEntryId = endEntryId;
-			endEntryId += DEFAULT_INTERVAL;
-		}
-	}
+		actionableDynamicQuery.setCompanyId(companyId);
 
-	protected void reindexEntries(
-			long companyId, long startEntryId, long endEntryId)
-		throws Exception {
-
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			BlogsEntry.class, PACLClassLoaderUtil.getPortalClassLoader());
-
-		Property property = PropertyFactoryUtil.forName("entryId");
-
-		dynamicQuery.add(property.ge(startEntryId));
-		dynamicQuery.add(property.lt(endEntryId));
-
-		addReindexCriteria(dynamicQuery, companyId);
-
-		List<BlogsEntry> entries = BlogsEntryLocalServiceUtil.dynamicQuery(
-			dynamicQuery);
-
-		if (entries.isEmpty()) {
-			return;
-		}
-
-		Collection<Document> documents = new ArrayList<Document>(
-			entries.size());
-
-		for (BlogsEntry entry : entries) {
-			Document document = getDocument(entry);
-
-			documents.add(document);
-		}
+		actionableDynamicQuery.performActions();
 
 		SearchEngineUtil.updateDocuments(
 			getSearchEngineId(), companyId, documents);

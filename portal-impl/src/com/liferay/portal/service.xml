@@ -570,6 +570,7 @@
 		<reference package-path="com.liferay.portlet.journal" entity="JournalArticle" />
 		<reference package-path="com.liferay.portlet.journal" entity="JournalContentSearch" />
 		<reference package-path="com.liferay.portlet.messageboards" entity="MBMessage" />
+		<reference package-path="com.liferay.portlet.mobiledevicerules" entity="MDRRuleGroupInstance" />
 		<reference package-path="com.liferay.portlet.ratings" entity="RatingsStats" />
 	</entity>
 	<entity name="LayoutBranch" local-service="true" remote-service="true">
@@ -2059,6 +2060,14 @@
 			<finder-column name="companyId" />
 			<finder-column name="userId" />
 		</finder>
+		<finder name="C_CD" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="createDate" />
+		</finder>
+		<finder name="C_MD" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="modifiedDate" />
+		</finder>
 		<finder name="C_DU" return-type="User">
 			<finder-column name="companyId" />
 			<finder-column name="defaultUser" />
@@ -2082,6 +2091,11 @@
 		<finder name="C_S" return-type="Collection">
 			<finder-column name="companyId" />
 			<finder-column name="status" />
+		</finder>
+		<finder name="C_CD_MD" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="createDate" />
+			<finder-column name="modifiedDate" />
 		</finder>
 
 		<!-- References -->

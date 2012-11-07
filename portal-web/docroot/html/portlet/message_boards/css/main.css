@@ -1,4 +1,4 @@
-.portlet-message-boards {
+.portlet-message-boards, .portlet-trash {
 	.category-buttons {
 		clear: both;
 		margin-bottom: 1em;
@@ -265,6 +265,16 @@
 		width: 100%;
 	}
 
+	.thread-view-controls {
+		list-style: none;
+		margin: 0;
+		text-align: right;
+
+		li {
+			display: inline-block;
+		}
+	}
+
 	.emoticons {
 		border: 1px solid #ccc;
 		margin-left: 10px;
@@ -369,7 +379,7 @@
 }
 
 .ie {
-	.portlet-message-boards {
+	.portlet-message-boards, .portlet-trash {
 		.message-container {
 			width: 100%;
 
@@ -381,7 +391,7 @@
 }
 
 .ie6 {
-	.portlet-message-boards {
+	.portlet-message-boards, .portlet-trash {
 		.code {
 			width: 100%;
 		}

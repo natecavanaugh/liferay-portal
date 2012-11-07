@@ -151,6 +151,11 @@
 			<finder-column name="classNameId" />
 			<finder-column name="layoutUuid" />
 		</finder>
+		<finder name="G_U_C" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="userId" />
+			<finder-column name="classNameId" />
+		</finder>
 		<finder name="G_A_V" return-type="JournalArticle" unique="true">
 			<finder-column name="groupId" />
 			<finder-column name="articleId" />

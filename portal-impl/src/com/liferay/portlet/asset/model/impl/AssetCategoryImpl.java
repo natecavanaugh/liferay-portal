@@ -38,16 +38,11 @@ public class AssetCategoryImpl extends AssetCategoryBaseImpl {
 
 		AssetCategory category = this;
 
-		while (true) {
-			if (!category.isRootCategory()) {
-				category = AssetCategoryLocalServiceUtil.getAssetCategory(
-					category.getParentCategoryId());
+		while (!category.isRootCategory()) {
+			category = AssetCategoryLocalServiceUtil.getAssetCategory(
+				category.getParentCategoryId());
 
-				categories.add(category);
-			}
-			else {
-				break;
-			}
+			categories.add(category);
 		}
 
 		return categories;
@@ -79,9 +74,8 @@ public class AssetCategoryImpl extends AssetCategoryBaseImpl {
 		if (getParentCategoryId() == 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }
