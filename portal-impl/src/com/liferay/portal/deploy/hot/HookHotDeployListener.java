@@ -2469,8 +2469,7 @@ public class HookHotDeployListener
 		Release release = null;
 
 		try {
-			release = ReleaseLocalServiceUtil.getRelease(
-				servletContextName, buildNumber);
+			release = ReleaseLocalServiceUtil.getRelease(servletContextName);
 		}
 		catch (PortalException pe) {
 			int previousBuildNumber = GetterUtil.getInteger(

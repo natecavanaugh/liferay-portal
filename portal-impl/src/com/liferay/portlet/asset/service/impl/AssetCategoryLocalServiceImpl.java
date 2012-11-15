@@ -174,7 +174,7 @@ public class AssetCategoryLocalServiceImpl
 				category.getCategoryId());
 
 		for (AssetCategory curCategory : categories) {
-			deleteCategory(curCategory.getCategoryId());
+			deleteCategory(curCategory);
 		}
 
 		// Category

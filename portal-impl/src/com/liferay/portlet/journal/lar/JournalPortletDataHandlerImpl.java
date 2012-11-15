@@ -891,7 +891,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 						feed.getOrderByCol(), feed.getOrderByType(),
 						feed.getTargetLayoutFriendlyUrl(),
 						feed.getTargetPortletId(), feed.getContentField(),
-						feed.getFeedType(), feed.getFeedVersion(),
+						feed.getFeedFormat(), feed.getFeedVersion(),
 						serviceContext);
 				}
 				else {
@@ -903,7 +903,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 						feed.getOrderByCol(), feed.getOrderByType(),
 						feed.getTargetLayoutFriendlyUrl(),
 						feed.getTargetPortletId(), feed.getContentField(),
-						feed.getFeedType(), feed.getFeedVersion(),
+						feed.getFeedFormat(), feed.getFeedVersion(),
 						serviceContext);
 				}
 			}
@@ -916,7 +916,8 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 					feed.getOrderByCol(), feed.getOrderByType(),
 					feed.getTargetLayoutFriendlyUrl(),
 					feed.getTargetPortletId(), feed.getContentField(),
-					feed.getFeedType(), feed.getFeedVersion(), serviceContext);
+					feed.getFeedFormat(), feed.getFeedVersion(),
+					serviceContext);
 			}
 
 			portletDataContext.importClassedModel(

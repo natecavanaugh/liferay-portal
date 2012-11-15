@@ -2509,7 +2509,7 @@
 			<basic name="targetLayoutFriendlyUrl" />
 			<basic name="targetPortletId" />
 			<basic name="contentField" />
-			<basic name="feedType" />
+			<basic name="feedFormat" />
 			<basic name="feedVersion" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />

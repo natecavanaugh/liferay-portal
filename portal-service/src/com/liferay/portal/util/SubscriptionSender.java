@@ -150,7 +150,10 @@ public class SubscriptionSender implements Serializable {
 					_runtimeSubscribersOVPs) {
 
 				String toAddress = ovp.getKey();
-				String toName = ovp.getValue();
+
+				if (Validator.isNull(toAddress)) {
+					continue;
+				}
 
 				if (_sentEmailAddresses.contains(toAddress)) {
 					if (_log.isDebugEnabled()) {
@@ -158,17 +161,18 @@ public class SubscriptionSender implements Serializable {
 							"Do not send a duplicate email to " + toAddress);
 					}
 
-					return;
+					continue;
 				}
-				else {
-					if (_log.isDebugEnabled()) {
-						_log.debug(
-							"Add " + toAddress + " to the list of users who " +
-								"have received an email");
-					}
 
-					_sentEmailAddresses.add(toAddress);
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						"Add " + toAddress + " to the list of users who " +
+							"have received an email");
 				}
+
+				_sentEmailAddresses.add(toAddress);
+
+				String toName = ovp.getValue();
 
 				InternetAddress to = new InternetAddress(toAddress, toName);
 

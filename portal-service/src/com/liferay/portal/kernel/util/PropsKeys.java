@@ -989,6 +989,8 @@ public interface PropsKeys {
 
 	public static final String JOURNAL_ARTICLE_FORM_ADD = "journal.article.form.add";
 
+	public static final String JOURNAL_ARTICLE_FORM_DEFAULT_VALUES = "journal.article.form.default.values";
+
 	public static final String JOURNAL_ARTICLE_FORM_TRANSLATE = "journal.article.form.translate";
 
 	public static final String JOURNAL_ARTICLE_FORM_UPDATE = "journal.article.form.update";
@@ -1892,6 +1894,10 @@ public interface PropsKeys {
 	public static final String ROLES_SITE_SUBTYPES = "roles.site.subtypes";
 
 	public static final String RSS_CONNECTION_TIMEOUT = "rss.connection.timeout";
+
+	public static final String RSS_FEED_TYPE_DEFAULT = "rss.feed.type.default";
+
+	public static final String RSS_FEED_TYPES = "rss.feed.types";
 
 	public static final String RSS_FEEDS_ENABLED = "rss.feeds.enabled";
 

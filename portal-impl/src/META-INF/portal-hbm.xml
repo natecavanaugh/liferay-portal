@@ -1844,7 +1844,7 @@
 		<property name="targetLayoutFriendlyUrl" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="targetPortletId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="contentField" type="com.liferay.portal.dao.orm.hibernate.StringType" />
-		<property name="feedType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="feedFormat" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="feedVersion" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
 	</class>
 	<class name="com.liferay.portlet.journal.model.impl.JournalFolderImpl" table="JournalFolder">

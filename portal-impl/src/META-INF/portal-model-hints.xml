@@ -1787,7 +1787,7 @@
 		</field>
 		<field name="targetPortletId" type="String" />
 		<field name="contentField" type="String" />
-		<field name="feedType" type="String" />
+		<field name="feedFormat" type="String" />
 		<field name="feedVersion" type="double" />
 	</model>
 	<model name="com.liferay.portlet.journal.model.JournalFolder">

@@ -30,6 +30,10 @@ else {
 
 JournalStructure structure = (JournalStructure)request.getAttribute(WebKeys.JOURNAL_STRUCTURE);
 
+long groupId = BeanParamUtil.getLong(structure, request, "groupId", scopeGroupId);
+
+Group group = GroupLocalServiceUtil.getGroup(groupId);
+
 long classNameId = PortalUtil.getClassNameId(JournalStructure.class.getName());
 
 long classPK = 0;
@@ -37,10 +41,6 @@ long classPK = 0;
 if (structure != null) {
 	classPK = structure.getId();
 }
-
-long groupId = BeanParamUtil.getLong(structure, request, "groupId", scopeGroupId);
-
-Group group = GroupLocalServiceUtil.getGroup(groupId);
 
 String structureId = BeanParamUtil.getString(structure, request, "structureId");
 String newStructureId = ParamUtil.getString(request, "newStructureId");

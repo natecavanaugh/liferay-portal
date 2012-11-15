@@ -82,8 +82,8 @@ public class JournalFeedCacheModel implements CacheModel<JournalFeed>,
 		sb.append(targetPortletId);
 		sb.append(", contentField=");
 		sb.append(contentField);
-		sb.append(", feedType=");
-		sb.append(feedType);
+		sb.append(", feedFormat=");
+		sb.append(feedFormat);
 		sb.append(", feedVersion=");
 		sb.append(feedVersion);
 		sb.append("}");
@@ -213,11 +213,11 @@ public class JournalFeedCacheModel implements CacheModel<JournalFeed>,
 			journalFeedImpl.setContentField(contentField);
 		}
 
-		if (feedType == null) {
-			journalFeedImpl.setFeedType(StringPool.BLANK);
+		if (feedFormat == null) {
+			journalFeedImpl.setFeedFormat(StringPool.BLANK);
 		}
 		else {
-			journalFeedImpl.setFeedType(feedType);
+			journalFeedImpl.setFeedFormat(feedFormat);
 		}
 
 		journalFeedImpl.setFeedVersion(feedVersion);
@@ -249,7 +249,7 @@ public class JournalFeedCacheModel implements CacheModel<JournalFeed>,
 		targetLayoutFriendlyUrl = objectInput.readUTF();
 		targetPortletId = objectInput.readUTF();
 		contentField = objectInput.readUTF();
-		feedType = objectInput.readUTF();
+		feedFormat = objectInput.readUTF();
 		feedVersion = objectInput.readDouble();
 	}
 
@@ -363,11 +363,11 @@ public class JournalFeedCacheModel implements CacheModel<JournalFeed>,
 			objectOutput.writeUTF(contentField);
 		}
 
-		if (feedType == null) {
+		if (feedFormat == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
 		else {
-			objectOutput.writeUTF(feedType);
+			objectOutput.writeUTF(feedFormat);
 		}
 
 		objectOutput.writeDouble(feedVersion);
@@ -394,6 +394,6 @@ public class JournalFeedCacheModel implements CacheModel<JournalFeed>,
 	public String targetLayoutFriendlyUrl;
 	public String targetPortletId;
 	public String contentField;
-	public String feedType;
+	public String feedFormat;
 	public double feedVersion;
 }

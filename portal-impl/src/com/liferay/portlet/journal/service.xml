@@ -360,7 +360,7 @@
 		<column name="targetLayoutFriendlyUrl" type="String" />
 		<column name="targetPortletId" type="String" />
 		<column name="contentField" type="String" />
-		<column name="feedType" type="String" />
+		<column name="feedFormat" type="String" />
 		<column name="feedVersion" type="double" />
 
 		<!-- Order -->

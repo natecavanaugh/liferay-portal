@@ -16,6 +16,10 @@
 
 <%@ include file="/html/portlet/dynamic_data_mapping/init.jsp" %>
 
+<%
+long groupId = ParamUtil.getLong(request, "groupId", scopeGroupId);
+%>
+
 <c:if test="<%= showToolbar %>">
 	<liferay-util:include page="/html/portlet/dynamic_data_mapping/structure_toolbar.jsp">
 		<liferay-util:param name="toolbarItem" value="view-all" />

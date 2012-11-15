@@ -67,7 +67,7 @@ public class JournalFeedWrapper implements JournalFeed,
 		attributes.put("targetLayoutFriendlyUrl", getTargetLayoutFriendlyUrl());
 		attributes.put("targetPortletId", getTargetPortletId());
 		attributes.put("contentField", getContentField());
-		attributes.put("feedType", getFeedType());
+		attributes.put("feedFormat", getFeedFormat());
 		attributes.put("feedVersion", getFeedVersion());
 
 		return attributes;
@@ -201,10 +201,10 @@ public class JournalFeedWrapper implements JournalFeed,
 			setContentField(contentField);
 		}
 
-		String feedType = (String)attributes.get("feedType");
+		String feedFormat = (String)attributes.get("feedFormat");
 
-		if (feedType != null) {
-			setFeedType(feedType);
+		if (feedFormat != null) {
+			setFeedFormat(feedFormat);
 		}
 
 		Double feedVersion = (Double)attributes.get("feedVersion");
@@ -632,21 +632,21 @@ public class JournalFeedWrapper implements JournalFeed,
 	}
 
 	/**
-	* Returns the feed type of this journal feed.
+	* Returns the feed format of this journal feed.
 	*
-	* @return the feed type of this journal feed
+	* @return the feed format of this journal feed
 	*/
-	public java.lang.String getFeedType() {
-		return _journalFeed.getFeedType();
+	public java.lang.String getFeedFormat() {
+		return _journalFeed.getFeedFormat();
 	}
 
 	/**
-	* Sets the feed type of this journal feed.
+	* Sets the feed format of this journal feed.
 	*
-	* @param feedType the feed type of this journal feed
+	* @param feedFormat the feed format of this journal feed
 	*/
-	public void setFeedType(java.lang.String feedType) {
-		_journalFeed.setFeedType(feedType);
+	public void setFeedFormat(java.lang.String feedFormat) {
+		_journalFeed.setFeedFormat(feedFormat);
 	}
 
 	/**
@@ -725,6 +725,10 @@ public class JournalFeedWrapper implements JournalFeed,
 
 	public com.liferay.portlet.journal.model.JournalFeed toEscapedModel() {
 		return new JournalFeedWrapper(_journalFeed.toEscapedModel());
+	}
+
+	public com.liferay.portlet.journal.model.JournalFeed toUnescapedModel() {
+		return new JournalFeedWrapper(_journalFeed.toUnescapedModel());
 	}
 
 	@Override

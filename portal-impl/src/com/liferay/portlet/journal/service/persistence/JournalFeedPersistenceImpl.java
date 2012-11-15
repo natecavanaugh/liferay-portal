@@ -571,7 +571,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		journalFeedImpl.setTargetLayoutFriendlyUrl(journalFeed.getTargetLayoutFriendlyUrl());
 		journalFeedImpl.setTargetPortletId(journalFeed.getTargetPortletId());
 		journalFeedImpl.setContentField(journalFeed.getContentField());
-		journalFeedImpl.setFeedType(journalFeed.getFeedType());
+		journalFeedImpl.setFeedFormat(journalFeed.getFeedFormat());
 		journalFeedImpl.setFeedVersion(journalFeed.getFeedVersion());
 
 		return journalFeedImpl;

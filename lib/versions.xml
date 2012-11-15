@@ -2775,7 +2775,7 @@
 		<file-name>portal/rome.jar</file-name>
 		<version>1.0</version>
 		<project-name>ROME</project-name>
-		<project-url>http://rome.dev.java.net</project-url>
+		<project-url>http://java.net/projects/rome</project-url>
 		<licenses>
 			<license>
 				<license-name>Apache License 2.0</license-name>
@@ -3073,6 +3073,9 @@
 				<license-name>Apache License 2.0</license-name>
 			</license>
 		</licenses>
+		<comments>
+			See the Ant target "build-struts" in portal-impl/build.xml.
+		</comments>
 	</library>
 	<library>
 		<file-name>portal/stax.jar</file-name>

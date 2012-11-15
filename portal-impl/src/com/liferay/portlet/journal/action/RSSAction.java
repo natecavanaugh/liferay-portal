@@ -133,7 +133,8 @@ public class RSSAction extends com.liferay.portal.struts.RSSAction {
 			syndEntries.add(syndEntry);
 		}
 
-		syndFeed.setFeedType(feed.getFeedType() + "_" + feed.getFeedVersion());
+		syndFeed.setFeedType(
+			feed.getFeedFormat() + "_" + feed.getFeedVersion());
 
 		List<SyndLink> syndLinks = new ArrayList<SyndLink>();
 

@@ -206,8 +206,7 @@ public class DBUpgrader {
 
 		try {
 			release = ReleaseLocalServiceUtil.getRelease(
-				ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME,
-				ReleaseInfo.getParentBuildNumber());
+				ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME);
 		}
 		catch (PortalException pe) {
 			release = ReleaseLocalServiceUtil.addRelease(

@@ -873,7 +873,7 @@ create table JournalFeed (
 	targetLayoutFriendlyUrl VARCHAR(255) null,
 	targetPortletId VARCHAR(75) null,
 	contentField VARCHAR(75) null,
-	feedType VARCHAR(75) null,
+	feedFormat VARCHAR(75) null,
 	feedVersion DOUBLE
 );
 

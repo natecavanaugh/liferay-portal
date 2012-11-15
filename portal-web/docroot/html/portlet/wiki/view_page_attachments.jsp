@@ -123,6 +123,10 @@ for (int i = 0; i < results.size(); i++) {
 	rowURL.setParameter("title", wikiPage.getTitle());
 	rowURL.setParameter("fileName", shortFileName);
 
+	if (viewTrashAttachments) {
+		rowURL.setParameter("status", String.valueOf(WorkflowConstants.STATUS_IN_TRASH));
+	}
+
 	StringBundler sb = new StringBundler(6);
 
 	sb.append("<img align=\"left\" border=\"0\" src=\"");
@@ -195,3 +199,18 @@ for (int i = 0; i < results.size(); i++) {
 </c:if>
 
 <liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
+
+<aui:script use="liferay-restore-entry">
+	<portlet:actionURL var="restoreEntryURL">
+		<portlet:param name="struts_action" value="/wiki/restore_page_attachment" />
+		<portlet:param name="redirect" value="<%= redirect %>" />
+	</portlet:actionURL>
+
+	new Liferay.RestoreEntry(
+		{
+			checkEntryURL: '<portlet:actionURL><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.CHECK %>" /><portlet:param name="struts_action" value="/wiki/restore_page_attachment" /></portlet:actionURL>',
+			namespace: '<portlet:namespace />',
+			restoreEntryURL: '<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/wiki/restore_entry" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="restoreEntryURL" value="<%= restoreEntryURL %>" /></portlet:renderURL>'
+		}
+	);
+</aui:script>

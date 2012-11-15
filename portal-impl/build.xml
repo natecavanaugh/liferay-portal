@@ -187,11 +187,10 @@ public class Creole10Parser]]></replacevalue>
 			<param name="javac.srcdir" value="${tstamp.value}" />
 		</antcall>
 
-		<zip destfile="${project.dir}/lib/portal/json-java.jar">
-			<zipfileset
-				dir="${tstamp.value}"
-			/>
-		</zip>
+		<zip
+			basedir="${tstamp.value}"
+			destfile="${project.dir}/lib/portal/json-java.jar"
+		/>
 
 		<delete dir="${tstamp.value}" />
 	</target>
@@ -712,6 +711,65 @@ public class Creole10Parser]]></replacevalue>
 		<antcall target="build-service-counter" />
 		<antcall target="build-service-portal" />
 		<antcall target="build-service-portlets" />
+	</target>
+
+	<target name="build-struts">
+		<tstamp>
+			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+		</tstamp>
+
+		<get
+			dest="struts-1.2.9-bin.zip"
+			src="http://archive.apache.org/dist/struts/binaries/struts-1.2.9-bin.zip"
+		/>
+
+		<unzip
+			dest="${project.dir}/lib/portal"
+			src="struts-1.2.9-bin.zip"
+		>
+			<patternset
+				includes="**/struts.jar"
+			/>
+			<flattenmapper />
+		</unzip>
+
+		<delete file="struts-1.2.9-bin.zip" />
+
+		<get
+			dest="struts-1.2.9-src.zip"
+			src="http://archive.apache.org/dist/struts/source/struts-1.2.9-src.zip"
+		/>
+
+		<unzip
+			dest="${tstamp.value}/org/apache/struts/tiles/xmlDefinition"
+			src="struts-1.2.9-src.zip"
+		>
+			<patternset
+				includes="**/I18nFactorySet.java"
+			/>
+			<flattenmapper />
+		</unzip>
+
+		<delete file="struts-1.2.9-src.zip" />
+
+		<replace file="${tstamp.value}/org/apache/struts/tiles/xmlDefinition/I18nFactorySet.java">
+			<replacefilter token="private XmlDefinitionsSet " value="protected XmlDefinitionsSet " />
+			<replacefilter token="com/ibm" value="com/liferay/ibm" />
+		</replace>
+
+		<antcall target="compile-java">
+			<param name="javac.classpathref" value="project.classpath" />
+			<param name="javac.destdir" value="${tstamp.value}" />
+			<param name="javac.srcdir" value="${tstamp.value}" />
+		</antcall>
+
+		<zip
+			basedir="${tstamp.value}"
+			destfile="${project.dir}/lib/portal/struts.jar"
+			update="yes"
+		/>
+
+		<delete dir="${tstamp.value}" />
 	</target>
 
 	<target name="build-themes">
