@@ -228,6 +228,10 @@ hr, .separator {
 	padding: 0;
 }
 
+.asset-content, .asset-entry-content, .asset-summary, .asset-title, .entry-body, .entry-title, .header-title, .journal-content-article, .thread-body {
+	@include hyphenation;
+}
+
 .portlet-icons {
 	float: none;
 
