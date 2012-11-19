@@ -22,27 +22,36 @@ select {
 	padding: 4px;
 }
 
-.display-panel-columns:after, .display-panel-columns:before {
-	position: fixed;
-	content: '';
-	display: block;
-	bottom: 0;
-	top: 0;
-	width: 238px;
-	z-index: -1;
+.display-panel-columns {
+	&:after, &:before {
+		bottom: 0;
+		content: '';
+		display: block;
+		position: absolute;
+		top: 0;
+		width: 238px;
+		z-index: -1;
+	}
+
+	&:before {
+		background-color: #CAD2DD;
+		border-right: 1px solid #B0B1B3;
+		margin-left: -1px;
+	}
 }
 
-.display-panel-columns:after {
-	margin-left: 1px;
+.ie .display-panel-columns {
+	bottom: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+
+.panel-page-menu {
 	border-right: 1px solid #FFF;
 }
 
-.ie8 .display-panel-columns:after {
-	position: relative;
-}
-
-.display-panel-columns:before {
-	background-color: #CAD2DD;
+.panel-page-menu-content {
 	border-right: 1px solid #B0B1B3;
 }
 
