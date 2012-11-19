@@ -287,11 +287,6 @@
 
 .tag-cloud {
 	line-height: 2.5em;
-
-	.tag-asset-count {
-		clip: rect(0 0 0 0);
-		position: absolute;
-	}
 }
 
 .tag-selected {
@@ -302,11 +297,6 @@
 
 .tag-cloud {
 	line-height: 2.5em;
-
-	.tag-asset-count {
-		clip: rect(0 0 0 0);
-		position: absolute;
-	}
 
 	$tag-popularity-font-size: 0.7em;
 
