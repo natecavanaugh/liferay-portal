@@ -285,10 +285,6 @@
 	}
 }
 
-.tag-cloud {
-	line-height: 2.5em;
-}
-
 .tag-selected {
 	color: #000;
 	font-weight: bold;
