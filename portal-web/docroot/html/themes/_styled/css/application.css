@@ -604,17 +604,7 @@
 	font-size: 0;
 	overflow: hidden;
 	text-indent: 0;
-}
-
-.aui-paginator-current-page {
-	background: #0083BD url(../images/application/paginator_link_current_bg.png) 0 0 repeat-x;
-	border-color: #38B6EF #006D9E #006D9E #46B4E6;
-	color: #FFF;
-	text-shadow: -1px -1px #003C57;
-}
-
-.ie7 .aui-paginator-current-page {
-	color: #FFF;
+	vertical-align: middle;
 }
 
 .aui-paginator-page-link {
@@ -626,8 +616,20 @@
 	color: #1F1E1E;
 	font-size: 1em;
 	height: auto;
+	line-height: 1.4;
 	overflow: visible;
 	text-indent: 0;
+}
+
+.aui-paginator-current-page {
+	background: #0083BD url(../images/application/paginator_link_current_bg.png) 0 0 repeat-x;
+	border-color: #38B6EF #006D9E #006D9E #46B4E6;
+	color: #FFF;
+	text-shadow: -1px -1px #003C57;
+}
+
+.ie7 .aui-paginator-current-page {
+	color: #FFF;
 }
 
 .aui-paginator-first-link {
