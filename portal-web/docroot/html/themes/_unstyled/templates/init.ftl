@@ -403,13 +403,13 @@
 		<div class="yui3-menu-content">
 			<ul>
 				<#list nav_items as nav_item>
-					<#assign has_children_marker = "" />
+					<#assign has_child = "" />
 					<#assign menu_item = "lfr-nav-item" />
 					<#assign menu_item_label = "yui3-menuitem-content" />
 					<#assign selected_anchor = "" />
 
 					<#if nav_item.hasChildren()>
-						<#assign has_children_marker = "has_children_marker" />
+						<#assign has_child = "has-child" />
 						<#assign menu_item_label = "${menu_item_label} yui3-menu-label" />
 					<#else>
 						<#assign menu_item = "${menu_item} yui3-menuitem" />
@@ -421,7 +421,7 @@
 					</#if>
 
 					<li class="${menu_item}" data-layoutId="${nav_item.getLayout().getLayoutId()}">
-						<a class="${menu_item_label} ${selected_anchor}" href="${nav_item.getURL()}" ${nav_item.getTarget()}><span class="${has_children_marker}">${nav_item.icon()} ${nav_item.getName()}</span></a>
+						<a class="${menu_item_label} ${selected_anchor} ${has_child}" href="${nav_item.getURL()}" ${nav_item.getTarget()}>${nav_item.icon()} ${nav_item.getName()}</a>
 
 						<#if nav_item.hasChildren()>
 							<@aui_drop_down_ul nav_items=nav_item.getChildren() orientation="" />

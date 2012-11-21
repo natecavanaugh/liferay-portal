@@ -145,13 +145,25 @@ hr, .separator {
 		padding: 3px 15px;
 		text-align: left;
 		text-decoration: none;
-	    white-space: nowrap;
+		white-space: nowrap;
 	}
 
-	.has_children_marker:after {
+	.selected a {
+		background-color: #313334;
+	}
+
+	a:focus, .yui3-dd-dragging, .yui3-menuitem-active a, .selected .yui3-menu-label-active, .yui3-menu-label-active, .yui3-menu-label-menuvisible {
+		background-color: #202223;
+	}
+
+	a:active {
+		background-color: #020509 !important;
+	}
+
+	.has-child:after {
 		content: "\25BC";
-		font-size: .7em;
-		padding: .5em;
+		font-size: 0.7em;
+		padding: 0.5em;
 		position: relative;
 		top: -.1em;
 	}
@@ -181,20 +193,25 @@ hr, .separator {
 		.yui3-menu {
 			margin-top: -4px;
 			padding-top: 4px;
+			width: 150px;
 			z-index: 10;
-			
-			.yui3-menu-content {
-				border-top: 1px solid #020509;
-				max-width: 200px;
-				min-width: 115px;
 
-				a {
-					cursor: pointer;
-				}
+			.yui3-menu-content {
+				background-color: #313334;
+				border-top: 1px solid #202223;
 			}
-			
-			.yui3-menu-label-active, .selected-anchor, .yui3-menu .yui3-menu-content, .yui3-menu-label-menuvisible, .yui3-menuitem-active a {
-				background: #202223;
+
+			a {
+				cursor: pointer;
+				outline: 0;
+			}
+
+			.selected-anchor, .yui3-menu-label-active, .yui3-menu-label-menuvisible, .yui3-menuitem-active a {
+				background-color: #202223;
+			}
+
+			.selected .yui3-menu-label-active {
+				background-color: #151617;
 			}
 
 			.yui3-menu .yui3-menu-content {
@@ -203,27 +220,19 @@ hr, .separator {
 				top: -10px;
 			}
 
-			.has_children_marker:after {
-				content: "\25B6";
+			.has-child:after {
+				content: "\25BA";
 				position: absolute;
 				right: 2px;
-				top: .25em;
+				top: 0.25em;
 			}
 		}
-	}
-	
-	a:focus, .selected > a, .yui3-dd-dragging, .yui3-menuitem-active a, .yui3-menu-label-menuvisible, .yui3-menu .yui3-menu .yui3-menu .yui3-menu-label-menuvisible, .yui3-menu .yui3-menu .yui3-menu-content,  .yui3-menu .yui3-menu .yui3-menu .yui3-menuitem-active a, .yui3-menu .yui3-menu .yui3-menu .selected-anchor {
-		background: #313334;
-		color: #FFF;
-		outline: 0;
-		text-shadow: -1px -1px #000;
-	}
 
-	a:active {
-		background: #020509 !important;
+		a {
+			white-space: normal;
+		}
 	}
 }
-
 
 /* ---------- Portlet wrapper and icons ---------- */
 
@@ -394,32 +403,20 @@ hr, .separator {
 
 .ie6, .ie7 {
 	#navigation {
-		li, a {
-			display: inline;
-			zoom: 1;
-			z-index: 200;
+		.has-child {
+			background-image: url(../images/arrows/06_down.png);
+			background-repeat: no-repeat;
+			background-position: 95% 50%;
+			padding-right: 25px;
 		}
 
 		li {
-			li .has_children_marker {
+			li .has-child {
 				background-image: url(../images/arrows/06_right.png);
 			}
-			
-			li, li a {
-				display: block;
-			}
 		}
 
-		a {
-			padding: 4px 15px;
-			white-space: normal;
-		}
-
-		.yui3-menu .yui3-menu  {
-			left: 0;
-			top: 98%;
-			width: 115px;
-
+		.yui3-menu .yui3-menu {
 			.yui3-menu-content {
 				margin-top: -1px;
 
@@ -428,12 +425,23 @@ hr, .separator {
 				}
 			}
 		}
+	}
+}
 
-		.has_children_marker {
-			background-image: url(../images/arrows/06_down.png);
-			background-repeat: no-repeat;
-			background-position: 100% 50%;
-			padding-right: 20px;
+.ie6 {
+	#navigation {
+		zoom: 1;
+
+		li, a {
+			display: inline;
+			zoom: 1;
+			z-index: 200;
+		}
+
+		li {
+			li, li a {
+				display: block;
+			}
 		}
 	}
 }
@@ -497,19 +505,18 @@ hr, .separator {
 }
 
 #navigation {
-	li.selected > a {
+	.selected > a {
 		@include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.8));
 	}
-	
-	ul .yui3-menu-content {
-		@include box-shadow(2px 3px 3px rgba(0, 0, 0, 0.5));
-	}
 
-	.yui3-menu .yui3-menu .yui3-menu-content {
+	.yui3-menu {
+		.yui3-menu .yui3-menu-content {
 		@include border-top-radius(0);
-		
+			@include box-shadow(2px 3px 3px rgba(0, 0, 0, 0.5));
+
 		.yui3-menu-content {
 			@include border-top-right-radius(4px);
+			}
 		}
 	}
 }
