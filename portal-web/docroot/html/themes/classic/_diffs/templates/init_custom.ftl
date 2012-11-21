@@ -50,10 +50,6 @@ This file allows you to override and define new FreeMarker variables.
 </#macro>
 
 <#macro aui_drop_down nav_items orientation>
-	<#if aui_guid == 0>
-		<link href="${theme_display.getPathJavaScript()}/aui/node-menunav/assets/node-menunav-core.css" rel="stylesheet" type="text/css" />
-	</#if>
-
 	<#assign menu_id = aui_guid + 1 />
 
 	<@aui_drop_down_ul nav_items=nav_items orientation=orientation />
