@@ -22,17 +22,21 @@ import com.liferay.portal.kernel.security.pacl.permission.PortalHookPermission;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.servlet.taglib.FileAvailabilityUtil;
 import com.liferay.portal.kernel.util.JavaDetector;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.security.pacl.PACLClassUtil;
 import com.liferay.portal.security.pacl.PACLPolicy;
 import com.liferay.portal.security.pacl.PACLPolicyManager;
 import com.liferay.portal.security.pacl.checker.CheckerUtil;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 
 import java.security.Permission;
 
 import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
+
+import sun.reflect.Reflection;
 
 /**
  * This is the portal's implementation of a security manager. The goal is to
@@ -44,6 +48,7 @@ import javax.naming.spi.NamingManager;
  *
  * @author Brian Wing Shun Chan
  * @author Raymond Augé
+ * @authro Zsolt Berentey
  */
 public class PortalSecurityManager extends SecurityManager {
 
@@ -67,6 +72,60 @@ public class PortalSecurityManager extends SecurityManager {
 				_log.warn(e, e);
 			}
 		}
+	}
+
+	@Override
+	public void checkMemberAccess(Class<?> clazz, int which) {
+		if (clazz == null) {
+			throw new NullPointerException();
+		}
+
+		if (which == Member.PUBLIC) {
+			return;
+		}
+
+		ClassLoader classClassLoader = PACLClassLoaderUtil.getClassLoader(
+			clazz);
+
+		if (classClassLoader == null) {
+			return;
+		}
+
+		Class<?> callerClass = Reflection.getCallerClass(4);
+
+		ClassLoader callerClassLoader = PACLClassLoaderUtil.getClassLoader(
+			callerClass);
+
+		if (callerClassLoader == null) {
+			for (int i = 5;; i++) {
+				callerClass = Reflection.getCallerClass(i);
+
+				if (callerClass == null) {
+					break;
+				}
+
+				String className = callerClass.getName();
+
+				if (!className.startsWith("java.lang") &&
+					!className.startsWith("java.security") &&
+					!className.startsWith("sun.reflect")) {
+
+					callerClassLoader = PACLClassLoaderUtil.getClassLoader(
+						callerClass);
+
+					break;
+				}
+			}
+		}
+
+		if (classClassLoader == callerClassLoader) {
+			return;
+		}
+
+		Permission permission = new RuntimePermission(
+			PACLConstants.RUNTIME_PERMISSION_ACCESS_DECLARED_MEMBERS);
+
+		checkPermission(permission);
 	}
 
 	@Override

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
+import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -43,7 +44,8 @@ import java.util.Map;
  * @see com.liferay.portlet.dynamicdatalists.model.impl.DDLRecordSetModelImpl
  * @generated
  */
-public interface DDLRecordSetModel extends BaseModel<DDLRecordSet>, GroupedModel {
+public interface DDLRecordSetModel extends BaseModel<DDLRecordSet>, GroupedModel,
+	StagedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
