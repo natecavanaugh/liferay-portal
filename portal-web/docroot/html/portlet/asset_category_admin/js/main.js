@@ -236,7 +236,7 @@ AUI.add(
 
 						var portletMessageContainer = instance._portletMessageContainer;
 
-						instance._hideMessageTask = A.debounce('hide', 7000, portletMessageContainer);
+						instance._hideMessageTask = A.debounce('hide', 700000, portletMessageContainer);
 
 						vocabularyList.on(EVENT_CLICK, instance._onVocabularyListClick, instance);
 
