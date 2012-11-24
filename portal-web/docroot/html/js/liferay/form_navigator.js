@@ -159,7 +159,7 @@ AUI.add(
 			_pollHash: function() {
 				var instance = this;
 
-				var hash = location.hash;
+				var hash = location.hash || location.href;
 
 				if (hash != instance._hash) {
 					A.fire('formNavigator:revealSection', hash);
