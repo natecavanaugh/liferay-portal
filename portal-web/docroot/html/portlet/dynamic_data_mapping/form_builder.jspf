@@ -23,126 +23,151 @@ String defaultLanguageId = LocalizationUtil.getDefaultLocale(script);
 
 <div class="separator"><!-- --></div>
 
-<div class="lfr-translation-manager" id="<portlet:namespace />translationManager">
-	<div class="lfr-translation-manager-content">
-		<label class="lfr-translation-manager-default-locale-label" for="<portlet:namespace />defaultLanguageId"><liferay-ui:message key="web-content-default-language" />:</label>
+<div class="aui-helper-hidden lfr-message-response portlet-msg-error" id="<portlet:namespace />messageContainer"></div>
 
-		<span class="lfr-translation-manager-selector nobr">
-			<span class="lfr-translation-manager-default-locale-text lfr-translation-manager-translation lfr-translation-manager-translation-editing">
-				<img src="<%= themeDisplay.getPathThemeImages() %>/language/<%= defaultLanguageId %>.png" />
+<div id="<portlet:namespace />formBuilderTabView">
+	<ul class="aui-tabview-list aui-widget-hd" id="<portlet:namespace />formBuilderTabs">
+		<li class="aui-tab">
+			<a class="aui-tab-label" href="#<portlet:namespace />formBuilderTab">
+				<liferay-ui:message key="view" />
+			</a>
+		</li>
+		<li class="aui-tab">
+			<a class="aui-tab-label" href="#<portlet:namespace />formBuilderSourceTab">
+				<liferay-ui:message key="source" />
+			</a>
+		</li>
+	</ul>
 
-				<%= LocaleUtil.fromLanguageId(defaultLanguageId).getDisplayName(locale) %>
-			</span>
+	<div class="aui-tabview-content aui-widget-bd" id="<portlet:namespace />formBuilderViewContent">
+		<div class="aui-tabview-content-item" id="<portlet:namespace />formBuilderTab">
+			<div class="lfr-translation-manager" id="<portlet:namespace />translationManager">
+				<div class="lfr-translation-manager-content">
+					<label class="lfr-translation-manager-default-locale-label" for="<portlet:namespace />defaultLanguageId"><liferay-ui:message key="web-content-default-language" />:</label>
 
-			<select class="aui-helper-hidden lfr-translation-manager-default-locale" id="defaultLocale">
+					<span class="lfr-translation-manager-selector nobr">
+						<span class="lfr-translation-manager-default-locale-text lfr-translation-manager-translation lfr-translation-manager-translation-editing">
+							<img src="<%= themeDisplay.getPathThemeImages() %>/language/<%= defaultLanguageId %>.png" />
 
-				<%
-				Locale[] locales = LanguageUtil.getAvailableLocales();
-
-				for (int i = 0; i < locales.length; i++) {
-				%>
-
-					<aui:option label="<%= locales[i].getDisplayName(locale) %>" selected="<%= defaultLanguageId.equals(LocaleUtil.toLanguageId(locales[i])) %>" value="<%= LocaleUtil.toLanguageId(locales[i]) %>" />
-
-				<%
-				}
-				%>
-
-			</select>
-
-			<a class="lfr-translation-manager-change-default-locale" href="javascript:;"><liferay-ui:message key="change" /></a>
-		</span>
-
-		<span class="lfr-translation-manager-add-menu">
-			<liferay-ui:icon-menu
-				cssClass="lfr-translation-manager-icon-menu"
-				direction="down"
-				icon='<%= themeDisplay.getPathThemeImages() + "/common/add.png" %>'
-				message='<%= LanguageUtil.get(pageContext, "add-translation") %>'
-				showArrow="<%= true %>"
-				showWhenSingleIcon="<%= true %>"
-			>
-
-				<%
-				for (int i = 0; i < locales.length; i++) {
-				%>
-
-					<liferay-ui:icon
-						cssClass="lfr-translation-manager-translation-item"
-						image='<%= "../language/" + LocaleUtil.toLanguageId(locales[i]) %>'
-						lang="<%= LocaleUtil.toLanguageId(locales[i]) %>"
-						message="<%= locales[i].getDisplayName(locale) %>"
-						url="javascript:;"
-					/>
-
-				<%
-				}
-				%>
-
-			</liferay-ui:icon-menu>
-		</span>
-
-		<c:if test="<%= availableLocales.length > 0 %>">
-			<div class="lfr-translation-manager-available-translations">
-				<label><liferay-ui:message key="available-translations" /></label>
-
-				<span class="lfr-translation-manager-available-translations-links">
-
-					<%
-					for (int i = 0; i < availableLocales.length; i++) {
-						if (defaultLanguageId.equals(availableLocales[i])) {
-							continue;
-						}
-					%>
-
-						<span class="lfr-translation-manager-translation" locale="<%= availableLocales[i] %>">
-							<img src="<%= themeDisplay.getPathThemeImages() %>/language/<%= availableLocales[i] %>.png">
-
-							<%= LocaleUtil.fromLanguageId(availableLocales[i]).getDisplayName(locale) %>
-
-							<a class="lfr-translation-manager-translation-delete" href="javascript:;">x</a>
+							<%= LocaleUtil.fromLanguageId(defaultLanguageId).getDisplayName(locale) %>
 						</span>
 
-					<%
-					}
-					%>
+						<select class="aui-helper-hidden lfr-translation-manager-default-locale" id="defaultLocale">
 
-				</span>
+							<%
+							Locale[] locales = LanguageUtil.getAvailableLocales();
+
+							for (int i = 0; i < locales.length; i++) {
+							%>
+
+								<aui:option label="<%= locales[i].getDisplayName(locale) %>" selected="<%= defaultLanguageId.equals(LocaleUtil.toLanguageId(locales[i])) %>" value="<%= LocaleUtil.toLanguageId(locales[i]) %>" />
+
+							<%
+							}
+							%>
+
+						</select>
+
+						<a class="lfr-translation-manager-change-default-locale" href="javascript:;"><liferay-ui:message key="change" /></a>
+					</span>
+
+					<span class="lfr-translation-manager-add-menu">
+						<liferay-ui:icon-menu
+							cssClass="lfr-translation-manager-icon-menu"
+							direction="down"
+							icon='<%= themeDisplay.getPathThemeImages() + "/common/add.png" %>'
+							message='<%= LanguageUtil.get(pageContext, "add-translation") %>'
+							showArrow="<%= true %>"
+							showWhenSingleIcon="<%= true %>"
+						>
+
+							<%
+							for (int i = 0; i < locales.length; i++) {
+							%>
+
+								<liferay-ui:icon
+									cssClass="lfr-translation-manager-translation-item"
+									image='<%= "../language/" + LocaleUtil.toLanguageId(locales[i]) %>'
+									lang="<%= LocaleUtil.toLanguageId(locales[i]) %>"
+									message="<%= locales[i].getDisplayName(locale) %>"
+									url="javascript:;"
+								/>
+
+							<%
+							}
+							%>
+
+						</liferay-ui:icon-menu>
+					</span>
+
+					<c:if test="<%= availableLocales.length > 0 %>">
+						<div class="lfr-translation-manager-available-translations">
+							<label><liferay-ui:message key="available-translations" /></label>
+
+							<span class="lfr-translation-manager-available-translations-links">
+
+								<%
+								for (int i = 0; i < availableLocales.length; i++) {
+									if (defaultLanguageId.equals(availableLocales[i])) {
+										continue;
+									}
+								%>
+
+									<span class="lfr-translation-manager-translation" locale="<%= availableLocales[i] %>">
+										<img src="<%= themeDisplay.getPathThemeImages() %>/language/<%= availableLocales[i] %>.png">
+
+										<%= LocaleUtil.fromLanguageId(availableLocales[i]).getDisplayName(locale) %>
+
+										<a class="lfr-translation-manager-translation-delete" href="javascript:;">x</a>
+									</span>
+
+								<%
+								}
+								%>
+
+							</span>
+						</div>
+					</c:if>
+				</div>
 			</div>
-		</c:if>
-	</div>
-</div>
+			<div class="aui-diagram-builder" id="<portlet:namespace />formBuilder">
+				<div class="aui-diagram-builder-content aui-helper-clearfix" id="<portlet:namespace />formBuilderContent">
+					<div class="aui-diagram-builder-tabs">
+						<div class="aui-diagram-builder-tabs-content">
+							<ul class="aui-tabview-list aui-widget-hd">
+								<li class="aui-state-active aui-state-default aui-tab aui-tab-active">
+									<span class="aui-tab-content">
+										<a class="aui-tab-label" href="javascript:;">
+											<liferay-ui:message key="fields" />
+										</a>
+									</span>
+								</li>
+								<li class="aui-state-default aui-tab">
+									<span class="aui-tab-content">
+										<a class="aui-tab-label" href="javascript:;">
+											<liferay-ui:message key="settings" />
+										</a>
+									</span>
+								</li>
+							</ul>
 
-<div class="aui-diagram-builder" id="<portlet:namespace />formBuilder">
-	<div class="aui-diagram-builder-content aui-helper-clearfix" id="<portlet:namespace />formBuilderContent">
-		<div class="aui-diagram-builder-tabs">
-			<div class="aui-diagram-builder-tabs-content">
-				<ul class="aui-tabview-list aui-widget-hd">
-					<li class="aui-state-active aui-state-default aui-tab aui-tab-active">
-						<span class="aui-tab-content">
-							<a class="aui-tab-label" href="javascript:;">
-								<liferay-ui:message key="fields" />
-							</a>
-						</span>
-					</li>
-					<li class="aui-state-default aui-tab">
-						<span class="aui-tab-content">
-							<a class="aui-tab-label" href="javascript:;">
-								<liferay-ui:message key="settings" />
-							</a>
-						</span>
-					</li>
-				</ul>
+							<div class="aui-tabview-content aui-widget-bd">
+								<div class="aui-tabview-content-item"></div>
 
-				<div class="aui-tabview-content aui-widget-bd">
-					<div class="aui-tabview-content-item"></div>
+								<div class="aui-helper-hidden aui-tabview-content-item"></div>
+							</div>
+						</div>
+					</div>
 
-					<div class="aui-helper-hidden aui-tabview-content-item"></div>
+					<div class="aui-diagram-builder-content-container"></div>
 				</div>
 			</div>
 		</div>
-
-		<div class="aui-diagram-builder-content-container"></div>
+		<div class="aui-tabview-content-item" id="<portlet:namespace />formBuilderSourceTab">
+			<div class="aui-form-builder-source-wrapper" id="<portlet:namespace />formBuilderSourceWrapper">
+				<div class="aui-form-builder-source" id="<portlet:namespace />formBuilderEditor"></div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -160,8 +185,197 @@ for (int i = 0; i < locales.length; i++) {
 }
 %>
 
-<aui:script use="liferay-portlet-dynamic-data-mapping">
-	window.<portlet:namespace />formBuilder = new Liferay.FormBuilder(
+<aui:script use="event-custom-base,liferay-portlet-dynamic-data-mapping,aui-tabs,aui-ace-editor,aui-loading-mask,liferay-xml-beautifier">
+	var Lang = A.Lang;
+
+	var MESSAGE_FAILURE = 0;
+
+	var MESSAGE_SUCCESS = 1;
+
+	var CSS_MESSAGE_ERROR = 'portlet-msg-error';
+
+	var CSS_MESSAGE_SUCCESS = 'portlet-msg-success';
+
+	var SELECTOR_MESSAGE_CONTAINER = '#<portlet:namespace />messageContainer';
+
+	var SELECTOR_FORMBUILDER_VIEW = '#<portlet:namespace />formBuilderViewContent';
+
+	var STR_ACTIVE = 'active';
+
+	var STR_VALUE = 'value';
+
+	var formEditor;
+
+	var xmlBeautifier;
+
+	var displayMessage = function(type, message) {
+		var messageContainer = A.one(SELECTOR_MESSAGE_CONTAINER);
+
+		messageContainer.removeClass(CSS_MESSAGE_SUCCESS).removeClass(CSS_MESSAGE_ERROR);
+
+		var messageClass = MESSAGE_SUCCESS;
+
+		if (type === MESSAGE_FAILURE) {
+			messageClass = CSS_MESSAGE_ERROR;
+		}
+
+		messageContainer.addClass(messageClass);
+
+		messageContainer.html(message);
+
+		messageContainer.show();
+	};
+
+	var getFormEditor = function() {
+		if (!formEditor) {
+			formEditor = new A.AceEditor(
+				{
+					boundingBox: '#<portlet:namespace />formBuilderEditor',
+					height: 600,
+					mode: 'xml',
+					tabSize: 4,
+					width: A.one(SELECTOR_FORMBUILDER_VIEW).get('clientWidth')
+				}
+			).render();
+		}
+
+		return formEditor;
+	};
+
+	var getLoadingMask = function(node) {
+		node = node || A.one('#<portlet:namespace />formBuilderTab');
+
+		node.plug(
+			A.LoadingMask,
+			{
+				background: '#000'
+			}
+		);
+
+		return node.loadingmask;
+	};
+
+	var getXMLBeautifier = function() {
+		if (!xmlBeautifier) {
+			xmlBeautifier = new Liferay.XMLBeautifier();
+		}
+
+		return xmlBeautifier;
+	};
+
+	var hideLoadingMask = function(node) {
+		setLoadingMask(node, false);
+	};
+
+	var isViewTabActive = function() {
+		var tabView = formBuilderTabs.getTab(0);
+
+		return !!tabView.get(STR_ACTIVE);
+	};
+
+	var onFormBuilderDataFailure = function(message) {
+		displayMessage(MESSAGE_FAILURE, Liferay.Language.get('your-request-failed-to-complete'));
+	};
+
+	var onFormBuilderDataSuccess = function(event) {
+		var instance = this;
+
+		var responseData = instance.get('responseData');
+
+		if (Lang.isArray(responseData)) {
+			formBuilder.set('fields', responseData);
+		}
+		else if(Lang.isObject(responseData)) {
+			displayMessage(MESSAGE_FAILURE, responseData.exception);
+		}
+
+		hideLoadingMask();
+	};
+
+	var reloadFormBuilderData = function(content) {
+		showLoadingMask();
+
+		if (!Lang.isValue(content)) {
+			content = window.<portlet:namespace />getContentXSD();
+		}
+
+		content = xmlBeautifier.uglify(content);
+
+		A.io.request(
+			themeDisplay.getPathContext() + themeDisplay.getPathMain() + '/dynamic_data_mapping/get_structure_json',
+			{
+				data: {
+					xsd: content
+				},
+				dataType: 'json',
+				on: {
+					failure: onFormBuilderDataFailure,
+					success: onFormBuilderDataSuccess
+				}
+			}
+		);
+	};
+
+	var setEditorSize = function() {
+		if (!isViewTabActive()) {
+			formEditor.set('width', A.one(SELECTOR_FORMBUILDER_VIEW).get('clientWidth'));
+		}
+	}
+
+	var setLoadingMask = function(node, visible) {
+		var loadingMask = getLoadingMask(node);
+
+		if (visible) {
+			loadingMask.show();
+		}
+		else {
+			loadingMask.hide();
+		}
+	};
+
+	var showLoadingMask = function(node) {
+		setLoadingMask(node, true);
+	};
+
+	var switchToSource = function() {
+		formEditor = getFormEditor();
+
+		setEditorSize();
+
+		xmlBeautifier = getXMLBeautifier();
+
+		var content = formBuilder.getXSD();
+
+		content = xmlBeautifier.beautify(content);
+
+		formEditor.set(STR_VALUE, content);
+	};
+
+	var switchToView = function() {
+		reloadFormBuilderData(formEditor.get(STR_VALUE));
+	};
+
+	var formBuilderTabs = new A.TabView(
+		{
+			boundingBox: '#<portlet:namespace />formBuilderTabView',
+			contentNode: SELECTOR_FORMBUILDER_VIEW,
+			listNode: '#<portlet:namespace />formBuilderTabs'
+		}
+	).render();
+
+	formBuilderTabs.after(
+		'activeTabChange',
+		function(event) {
+			if (isViewTabActive()) {
+				switchToView();
+			}
+			else {
+				switchToSource();
+			}
+		}
+	);
+
+	var formBuilder = new Liferay.FormBuilder(
 		{
 			<c:if test="<%= Validator.isNotNull(scopeAvailableFields) %>">
 				availableFields: A.Object.getValue(window, '<%= HtmlUtil.escapeJS(scopeAvailableFields) %>'.split('.')),
@@ -192,4 +406,22 @@ for (int i = 0; i < locales.length; i++) {
 			srcNode: '#<portlet:namespace />formBuilderContent'
 		}
 	).render();
+
+	Liferay.Util.getWindow().after('widthChange', setEditorSize);
+
+	window.<portlet:namespace />formBuilder = formBuilder;
+	
+	window.<portlet:namespace />getContentXSD = function() {
+		var content;
+
+		if (formEditor && formBuilderTabs && formBuilderTabs.getTab(1).get(STR_ACTIVE)) {
+			content = formEditor.get(STR_VALUE);
+		}
+		else {
+			content = formBuilder.getXSD();
+		}
+
+		return content;
+	};
+
 </aui:script>

@@ -46,7 +46,12 @@ JSONArray scriptJSONArray = null;
 
 if (Validator.isNotNull(script)) {
 	if (structure != null) {
-		scriptJSONArray = DDMXSDUtil.getJSONArray(structure, script);
+		try {
+			scriptJSONArray = DDMXSDUtil.getJSONArray(structure, script);
+		}
+		catch (Exception e) {
+			scriptJSONArray = DDMXSDUtil.getJSONArray(structure.getDocument());
+		}
 	}
 	else {
 		scriptJSONArray = DDMXSDUtil.getJSONArray(script);
@@ -266,7 +271,7 @@ if (Validator.isNotNull(script)) {
 		window,
 		'<portlet:namespace />saveStructure',
 		function() {
-			document.<portlet:namespace />fm.<portlet:namespace />xsd.value = window.<portlet:namespace />formBuilder.getXSD();
+			document.<portlet:namespace />fm.<portlet:namespace />xsd.value = window.<portlet:namespace />formBuilder.getContentXSD();
 
 			submitForm(document.<portlet:namespace />fm);
 		},
