@@ -17,11 +17,13 @@
 <%@ include file="/html/taglib/ui/breadcrumb/init.jsp" %>
 
 <c:if test="<%= layout != null %>">
-	<h1>
-		<span>
-			<liferay-ui:message key="breadcrumb" />
-		</span>
-	</h1>
+	<nav class="site-breadcrumbs" id="breadcrumbs">
+		<h1>
+			<span>
+				<liferay-ui:message key="breadcrumb" />
+			</span>
+		</h1>
 
-	<liferay-util:include page='<%= "/html/taglib/ui/breadcrumb/display_style_" + displayStyle + ".jsp" %>' />
+		<liferay-util:include page='<%= "/html/taglib/ui/breadcrumb/display_style_" + displayStyle + ".jsp" %>' />
+	</nav>
 </c:if>
