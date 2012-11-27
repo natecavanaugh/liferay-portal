@@ -52,11 +52,11 @@ if (!denyAccess && (themeDisplay.isStatePopUp() || (layoutTypePortlet.hasStateMa
 	if (Validator.isNotNull(velocityTemplateId) && Validator.isNotNull(content)) {
 		sb = RuntimePageUtil.getProcessedTemplate(pageContext, ppid, new StringTemplateResource(velocityTemplateId, content));
 	}
-
 	%>
-		<liferay-ui:breadcrumb />
-	<%
 
+		<liferay-ui:breadcrumb />
+
+	<%
 	sb.writeTo(pageContext.getOut());
 }
 else {
