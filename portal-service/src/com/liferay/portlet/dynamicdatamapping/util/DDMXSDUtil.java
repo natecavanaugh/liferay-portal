@@ -88,6 +88,12 @@ public class DDMXSDUtil {
 		return getDDMXSD().getHTML(pageContext, xml, locale);
 	}
 
+	public static JSONArray getJSONArray(DDMStructure structure, String xsd)
+		throws DocumentException, JSONException {
+
+		return getDDMXSD().getJSONArray(structure, xsd);
+	}
+
 	public static JSONArray getJSONArray(Document document)
 		throws JSONException {
 
