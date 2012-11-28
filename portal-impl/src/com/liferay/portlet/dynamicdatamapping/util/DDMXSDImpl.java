@@ -14,9 +14,10 @@
 
 package com.liferay.portlet.dynamicdatamapping.util;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.template.Template;
@@ -269,11 +270,11 @@ public class DDMXSDImpl implements DDMXSD {
 		return getHTML(pageContext, xml, null, locale);
 	}
 
-	public JSONArray getJSONArray(Document document) throws JSONException {
+	public JSONArray getJSONArray(Document document) throws PortalException {
 		return getJSONArray(document.getRootElement());
 	}
 
-	public JSONArray getJSONArray(Element element) throws JSONException {
+	public JSONArray getJSONArray(Element element) throws PortalException {
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
 		Document document = element.getDocument();
@@ -362,9 +363,14 @@ public class DDMXSDImpl implements DDMXSD {
 	}
 
 	public JSONArray getJSONArray(String xml)
-		throws DocumentException, JSONException {
+		throws PortalException, SystemException {
 
-		return getJSONArray(SAXReaderUtil.read(xml));
+		try {
+			return getJSONArray(SAXReaderUtil.read(xml));
+		}
+		catch (DocumentException de) {
+			throw new SystemException();
+		}
 	}
 
 	protected Map<String, Object> getFieldContext(

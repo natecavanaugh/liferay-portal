@@ -541,12 +541,7 @@ public class JournalArticleLocalServiceImpl
 			return;
 		}
 
-		try {
-			checkStructure(article);
-		}
-		catch (DocumentException de) {
-			_log.error(de, de);
-		}
+		checkStructure(article);
 	}
 
 	public JournalArticle copyArticle(
@@ -1086,9 +1081,6 @@ public class JournalArticleLocalServiceImpl
 		}
 		catch (DocumentException de) {
 			throw new SystemException(de);
-		}
-		catch (IOException ioe) {
-			throw new SystemException(ioe);
 		}
 
 		try {
@@ -2691,7 +2683,7 @@ public class JournalArticleLocalServiceImpl
 	}
 
 	protected void checkStructure(JournalArticle article)
-		throws DocumentException, PortalException, SystemException {
+		throws PortalException, SystemException {
 
 		Group companyGroup = groupLocalService.getCompanyGroup(
 			article.getCompanyId());
@@ -2709,11 +2701,14 @@ public class JournalArticleLocalServiceImpl
 
 		String content = GetterUtil.getString(article.getContent());
 
-		Document contentDoc = SAXReaderUtil.read(content);
-		Document xsdDoc = SAXReaderUtil.read(structure.getXsd());
-
 		try {
-			checkStructure(contentDoc, xsdDoc.getRootElement());
+			Document contentDocument = SAXReaderUtil.read(content);
+			Document xsdDocument = SAXReaderUtil.read(structure.getXsd());
+
+			checkStructure(contentDocument, xsdDocument.getRootElement());
+		}
+		catch (DocumentException de) {
+			throw new SystemException(de);
 		}
 		catch (StructureXsdException sxsde) {
 			long groupId = article.getGroupId();
@@ -2917,10 +2912,7 @@ public class JournalArticleLocalServiceImpl
 			content = DDMXMLUtil.formatXML(document);
 		}
 		catch (DocumentException de) {
-			_log.error(de);
-		}
-		catch (IOException ioe) {
-			_log.error(ioe);
+			_log.error(de, de);
 		}
 
 		content = HtmlUtil.replaceMsWordCharacters(content);

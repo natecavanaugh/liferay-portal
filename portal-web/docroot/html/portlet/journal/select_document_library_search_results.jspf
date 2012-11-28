@@ -24,7 +24,7 @@ for (int i = 0; i < results.size(); i++) {
 
 	// Title
 
-	StringBundler sb = new StringBundler(10);
+	StringBundler sb = new StringBundler(14);
 
 	sb.append("<img alt=\"\" align=\"left\" border=\"0\" src=\"");
 
@@ -66,6 +66,8 @@ for (int i = 0; i < results.size(); i++) {
 	sb.append(DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay, StringPool.BLANK, false, false));
 	sb.append("', '");
 	sb.append(fileEntry.getUuid());
+	sb.append("', '");
+	sb.append(fileEntry.getGroupId());
 	sb.append("', '");
 	sb.append(HtmlUtil.escapeJS(fileEntry.getTitle()));
 	sb.append("', '");

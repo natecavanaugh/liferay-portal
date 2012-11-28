@@ -14,10 +14,10 @@
 
 package com.liferay.portlet.dynamicdatamapping.util;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.xml.Document;
-import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
@@ -60,11 +60,11 @@ public interface DDMXSD {
 	public String getHTML(PageContext pageContext, String xml, Locale locale)
 		throws Exception;
 
-	public JSONArray getJSONArray(Document document) throws JSONException;
+	public JSONArray getJSONArray(Document document) throws PortalException;
 
-	public JSONArray getJSONArray(Element element) throws JSONException;
+	public JSONArray getJSONArray(Element element) throws PortalException;
 
 	public JSONArray getJSONArray(String xml)
-		throws DocumentException, JSONException;
+		throws PortalException, SystemException;
 
 }

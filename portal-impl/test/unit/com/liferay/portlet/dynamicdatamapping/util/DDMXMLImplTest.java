@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Attribute;
 import com.liferay.portal.kernel.xml.Document;
-import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.Node;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
@@ -72,12 +71,12 @@ public class DDMXMLImplTest extends PowerMockito {
 	}
 
 	@Test
-	public void testUpdateContentDefaultLocale() {
+	public void testUpdateContentDefaultLocale() throws Exception {
 		updateContentDefaultLocale("dynamic-data-mapping-structures.xml", true);
 	}
 
 	@Test
-	public void testUpdateContentDefaultLocaleWrongFormat() {
+	public void testUpdateContentDefaultLocaleWrongFormat() throws Exception {
 		updateContentDefaultLocale(
 			"dynamic-data-mapping-structures-wrong-format.xml", false);
 	}
@@ -132,60 +131,50 @@ public class DDMXMLImplTest extends PowerMockito {
 	}
 
 	protected void updateContentDefaultLocale(
-		String fileName, boolean expectedResult) {
+			String fileName, boolean expectedResult)
+		throws Exception {
 
-		try {
-			String xml = readXML(fileName);
+		String xml = readXML(fileName);
 
-			Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.read(xml);
 
-			List<Node> structureNodes = document.selectNodes("//structure");
+		List<Node> structureNodes = document.selectNodes("//structure");
 
-			for (Node structureNode : structureNodes) {
-				String structureXML = structureNode.asXML();
+		for (Node structureNode : structureNodes) {
+			String structureXML = structureNode.asXML();
 
-				Document structureDocument = SAXReaderUtil.read(structureXML);
+			Document structureDocument = SAXReaderUtil.read(structureXML);
 
-				Element rootElement =
-					(Element)structureDocument.selectSingleNode(
-						"/structure/root");
+			Element rootElement = (Element)structureDocument.selectSingleNode(
+				"/structure/root");
 
-				Attribute defaultLocale = rootElement.attribute(
-					"default-locale");
+			Attribute defaultLocale = rootElement.attribute("default-locale");
 
-				Locale contentDefaultLocale = LocaleUtil.fromLanguageId(
-					defaultLocale.getValue());
+			Locale contentDefaultLocale = LocaleUtil.fromLanguageId(
+				defaultLocale.getValue());
 
-				Locale availableDefaultLocale = LocaleUtil.fromLanguageId(
-					"es_ES");
+			Locale availableDefaultLocale = LocaleUtil.fromLanguageId("es_ES");
 
-				String rootXML = rootElement.asXML();
+			String rootXML = rootElement.asXML();
 
-				structureXML = DDMXMLUtil.updateXMLDefaultLocale(
-					rootXML, contentDefaultLocale, availableDefaultLocale);
+			structureXML = DDMXMLUtil.updateXMLDefaultLocale(
+				rootXML, contentDefaultLocale, availableDefaultLocale);
 
-				Document updatedXMLDocument = SAXReaderUtil.read(structureXML);
+			Document updatedXMLDocument = SAXReaderUtil.read(structureXML);
 
-				rootElement = updatedXMLDocument.getRootElement();
+			rootElement = updatedXMLDocument.getRootElement();
 
-				if (checkLocale(
-						rootElement,
-						LocaleUtil.toLanguageId(availableDefaultLocale))) {
+			if (checkLocale(
+					rootElement,
+					LocaleUtil.toLanguageId(availableDefaultLocale))) {
 
-					Assert.assertTrue(expectedResult);
+				Assert.assertTrue(expectedResult);
 
-					return;
-				}
+				return;
 			}
+		}
 
-			Assert.assertFalse(expectedResult);
-		}
-		catch (DocumentException de) {
-			Assert.fail(de.getMessage());
-		}
-		catch (IOException ioe) {
-			Assert.fail(ioe.getMessage());
-		}
+		Assert.assertFalse(expectedResult);
 	}
 
 	private DDMXMLImpl _ddmXML = new DDMXMLImpl();

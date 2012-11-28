@@ -14,11 +14,12 @@
 
 package com.liferay.portlet.dynamicdatamapping.util;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.xml.Document;
-import com.liferay.portal.kernel.xml.DocumentException;
+import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
@@ -89,13 +90,19 @@ public class DDMXSDUtil {
 	}
 
 	public static JSONArray getJSONArray(Document document)
-		throws JSONException {
+		throws PortalException {
 
 		return getDDMXSD().getJSONArray(document);
 	}
 
+	public static JSONArray getJSONArray(Element element)
+		throws PortalException {
+
+		return getDDMXSD().getJSONArray(element);
+	}
+
 	public static JSONArray getJSONArray(String xml)
-		throws DocumentException, JSONException {
+		throws PortalException, SystemException {
 
 		return getDDMXSD().getJSONArray(xml);
 	}

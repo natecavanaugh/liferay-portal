@@ -14,10 +14,10 @@
 
 package com.liferay.portlet.dynamicdatamapping.util;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.xml.Document;
-import com.liferay.portal.kernel.xml.DocumentException;
-
-import java.io.IOException;
+import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 
 import java.util.Locale;
 
@@ -27,13 +27,19 @@ import java.util.Locale;
  */
 public interface DDMXML {
 
-	public String formatXML(Document document) throws IOException;
+	public String formatXML(Document document) throws SystemException;
 
-	public String formatXML(String xml) throws DocumentException, IOException;
+	public String formatXML(String xml) throws SystemException;
+
+	public String getXML(Fields fields)
+		throws PortalException, SystemException;
+
+	public String getXML(long ddmContentId, Fields fields, boolean mergeFields)
+		throws PortalException, SystemException;
 
 	public String updateXMLDefaultLocale(
 			String xml, Locale contentDefaultLocale,
 			Locale contentNewDefaultLocale)
-		throws DocumentException, IOException;
+		throws SystemException;
 
 }
