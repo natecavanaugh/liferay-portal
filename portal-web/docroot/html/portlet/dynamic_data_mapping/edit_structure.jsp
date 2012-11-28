@@ -45,11 +45,17 @@ String script = BeanParamUtil.getString(structure, request, "xsd");
 JSONArray scriptJSONArray = null;
 
 if (Validator.isNotNull(script)) {
-	scriptJSONArray = DDMXSDUtil.getJSONArray(script);
-}
-
-if (scriptJSONArray != null) {
-	scriptJSONArray = _addStructureFieldAttributes(structure, scriptJSONArray);
+	if (structure != null) {
+		try {
+			scriptJSONArray = DDMXSDUtil.getJSONArray(structure, script);
+		}
+		catch (Exception e) {
+			scriptJSONArray = DDMXSDUtil.getJSONArray(structure.getDocument());
+		}
+	}
+	else {
+		scriptJSONArray = DDMXSDUtil.getJSONArray(script);
+	}
 }
 %>
 
@@ -265,7 +271,7 @@ if (scriptJSONArray != null) {
 		window,
 		'<portlet:namespace />saveStructure',
 		function() {
-			document.<portlet:namespace />fm.<portlet:namespace />xsd.value = window.<portlet:namespace />formBuilder.getXSD();
+			document.<portlet:namespace />fm.<portlet:namespace />xsd.value = window.<portlet:namespace />formBuilder.getContentXSD();
 
 			submitForm(document.<portlet:namespace />fm);
 		},
@@ -276,35 +282,3 @@ if (scriptJSONArray != null) {
 		window.parent['<%= HtmlUtil.escapeJS(saveCallback) %>']('<%= classPK %>', '<%= HtmlUtil.escape(structure.getName(locale)) %>');
 	</c:if>
 </aui:script>
-
-<%!
-public JSONArray _addStructureFieldAttributes(DDMStructure structure, JSONArray scriptJSONArray) throws Exception {
-	for (int i = 0; i < scriptJSONArray.length(); i++) {
-		JSONObject jsonObject = scriptJSONArray.getJSONObject(i);
-
-		String fieldName = jsonObject.getString("name");
-
-		try {
-			jsonObject.put("readOnlyAttributes", _getFieldReadOnlyAttributes(structure, fieldName));
-		}
-		catch (StructureFieldException sfe) {
-		}
-	}
-
-	return scriptJSONArray;
-}
-
-public JSONArray _getFieldReadOnlyAttributes(DDMStructure structure, String fieldName) throws Exception {
-	JSONArray readOnlyAttributesJSONArray = JSONFactoryUtil.createJSONArray();
-
-	try {
-		if (DDMStorageLinkLocalServiceUtil.getStructureStorageLinksCount(structure.getStructureId()) > 0) {
-			readOnlyAttributesJSONArray.put("name");
-		}
-	}
-	catch (Exception e) {
-	}
-
-	return readOnlyAttributesJSONArray;
-}
-%>

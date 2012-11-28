@@ -60,6 +60,9 @@ public interface DDMXSD {
 	public String getHTML(PageContext pageContext, String xml, Locale locale)
 		throws Exception;
 
+	public JSONArray getJSONArray(DDMStructure structure, String xsd)
+		throws DocumentException, JSONException;
+
 	public JSONArray getJSONArray(Document document) throws JSONException;
 
 	public JSONArray getJSONArray(Element element) throws JSONException;

@@ -40,9 +40,11 @@ import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.dynamicdatamapping.StructureFieldException;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
+import com.liferay.portlet.dynamicdatamapping.service.DDMStorageLinkLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.util.freemarker.FreeMarkerTaglibFactoryUtil;
 
@@ -269,6 +271,27 @@ public class DDMXSDImpl implements DDMXSD {
 		return getHTML(pageContext, xml, null, locale);
 	}
 
+	public JSONArray getJSONArray(DDMStructure structure, String xsd)
+		throws DocumentException, JSONException {
+
+		JSONArray jsonArray;
+
+		if (Validator.isNull(xsd)) {
+			jsonArray = getJSONArray(structure.getDocument());
+		}
+		else {
+			jsonArray = getJSONArray(xsd);
+		}
+
+		try {
+			addStructureFieldAttributes(structure, jsonArray);
+		}
+		catch (Exception e) {
+		}
+
+		return jsonArray;
+	}
+
 	public JSONArray getJSONArray(Document document) throws JSONException {
 		return getJSONArray(document.getRootElement());
 	}
@@ -367,6 +390,27 @@ public class DDMXSDImpl implements DDMXSD {
 		return getJSONArray(SAXReaderUtil.read(xml));
 	}
 
+	protected JSONArray addStructureFieldAttributes(
+			DDMStructure structure, JSONArray scriptJSONArray)
+		throws Exception {
+
+		for (int i = 0; i < scriptJSONArray.length(); i++) {
+			JSONObject jsonObject = scriptJSONArray.getJSONObject(i);
+
+			String fieldName = jsonObject.getString("name");
+
+			try {
+				jsonObject.put(
+					"readOnlyAttributes",
+					getStructureFieldReadOnlyAttributes(structure, fieldName));
+			}
+			catch (StructureFieldException sfe) {
+			}
+		}
+
+		return scriptJSONArray;
+	}
+
 	protected Map<String, Object> getFieldContext(
 		Element dynamicElementElement, Locale locale) {
 
@@ -433,6 +477,26 @@ public class DDMXSDImpl implements DDMXSD {
 		ClassLoader classLoader = clazz.getClassLoader();
 
 		return classLoader.getResource(name);
+	}
+
+	protected JSONArray getStructureFieldReadOnlyAttributes(
+			DDMStructure structure, String fieldName)
+		throws Exception {
+
+		JSONArray readOnlyAttributesJSONArray =
+			JSONFactoryUtil.createJSONArray();
+
+		try {
+			if (DDMStorageLinkLocalServiceUtil.getStructureStorageLinksCount(
+					structure.getStructureId()) > 0) {
+
+				readOnlyAttributesJSONArray.put("name");
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return readOnlyAttributesJSONArray;
 	}
 
 	/**
