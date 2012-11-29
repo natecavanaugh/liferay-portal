@@ -1,0 +1,62 @@
+@import "compass";
+@import "compass/css3/user-interface";
+
+.charts-memory {
+	margin-bottom: 1em;
+	position: relative;
+
+	.chart-group {
+		float: left;
+		margin-left: 3em;
+	}
+
+	.title {
+		margin-top: 0;
+		text-align: center;
+	}
+
+	.chart {
+		height: 300px;
+		margin: 0 auto;
+		width: 200px;
+
+		*, & {
+			cursor: default;
+			outline: 0;
+		}
+	}
+
+	.yui3-pieSeriesLabel {
+		position: absolute;
+		z-index: 10;
+	}
+
+	.label-wrapper {
+		color: #222;
+		font-size: 18px;
+		font-weight: bold;
+		margin-top: -50%;
+		position: relative;
+		right: 50%;
+		text-align: center;
+		white-space: nowrap;
+	}
+
+	.label-MB {
+		font-size: 0.75em;
+		line-height: 1em;
+	}
+}
+
+/* ---------- Extras ---------- */
+.charts-memory {
+	.chart {
+		*, & {
+			@include user-select(none);
+		}
+	}
+
+	.label-wrapper {
+		@include opacity(0.5);
+	}
+}

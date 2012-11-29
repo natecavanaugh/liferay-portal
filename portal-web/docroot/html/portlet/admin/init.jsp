@@ -47,6 +47,46 @@ boolean showShardSelector = false;
 if (PropsValues.SHARD_SELECTOR.equals(ManualShardSelector.class.getName()) && (ShardUtil.getAvailableShardNames().length > 1)) {
 	showShardSelector = true;
 }
+
+Runtime runtime = Runtime.getRuntime();
+
+long memoryMax = runtime.maxMemory();
+long memoryTotal = runtime.totalMemory();
+long memoryTotalFree = runtime.freeMemory();
+
+long memoryTotalUsed = memoryTotal - memoryTotalFree;
+long memoryMaxFree = memoryMax - memoryTotalUsed;
+long memoryAllMaxFree = memoryMax - memoryTotalUsed - memoryTotalFree;
+
+memoryAllMaxFree = convertBytesToMB(memoryAllMaxFree);
+memoryMax = convertBytesToMB(memoryMax);
+memoryMaxFree = convertBytesToMB(memoryMaxFree);
+memoryTotal = convertBytesToMB(memoryTotal);
+memoryTotalFree = convertBytesToMB(memoryTotalFree);
+memoryTotalUsed = convertBytesToMB(memoryTotalUsed);
+
+memoryAllMaxFree = chartZeroValueFix(memoryAllMaxFree);
+memoryMaxFree = chartZeroValueFix(memoryMaxFree);
+memoryTotalFree = chartZeroValueFix(memoryTotalFree);
+memoryTotalUsed = chartZeroValueFix(memoryTotalUsed);
+%>
+
+<%!
+private long convertBytesToMB(long value) {
+	long binaryPrefix = 1024;
+
+	value = (value / binaryPrefix) / binaryPrefix;
+
+	return value;
+}
+
+private long chartZeroValueFix(long value) {
+	if (value == 0) {
+		value = 1;
+	}
+
+	return value;
+}
 %>
 
 <%@ include file="/html/portlet/admin/init-ext.jsp" %>

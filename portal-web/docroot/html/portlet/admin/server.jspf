@@ -765,66 +765,141 @@ serverURL.setParameter("tabs3", tabs3);
 				</aui:button-row>
 			</c:when>
 			<c:otherwise>
+				<liferay-ui:panel-container extended="<%= true %>" id="adminServerAdministrationChartsPanelContainer" persistState="<%= true %>">
+					<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="adminServerAdministrationChartsPanel" persistState="<%= true %>" title="memory">
 
-				<%
-				Runtime runtime = Runtime.getRuntime();
+						<%
+						numberFormat = NumberFormat.getInstance(locale);
+						%>
 
-				numberFormat = NumberFormat.getInstance(locale);
+						<table class="lfr-table">
+						<tr>
+							<th>
+								<liferay-ui:message key="used-memory" />:
+							</th>
+							<td>
+								<%= numberFormat.format(memoryTotalUsed) %> <liferay-ui:message key="mb" />
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<liferay-ui:message key="total-memory" />:
+							</th>
+							<td>
+								<%= numberFormat.format(memoryTotal) %> <liferay-ui:message key="mb" />
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<liferay-ui:message key="maximum-memory" />:
+							</th>
+							<td>
+								<%= numberFormat.format(memoryMax) %> <liferay-ui:message key="mb" />
+							</td>
+						</tr>
+						</table>
 
-				long totalMemory = runtime.totalMemory();
-				long usedMemory = totalMemory - runtime.freeMemory();
-				%>
+						<div class="separator"></div>
 
-				<div>
-					<portlet:resourceURL var="totalMemoryChartURL">
-						<portlet:param name="struts_action" value="/admin_server/view_chart" />
-						<portlet:param name="type" value="total" />
-						<portlet:param name="totalMemory" value="<%= String.valueOf(totalMemory) %>" />
-						<portlet:param name="usedMemory" value="<%= String.valueOf(usedMemory) %>" />
-					</portlet:resourceURL>
+						<div class="charts-memory aui-helper-clearfix">
+							<div class="memory-total chart-group">
+								<h2 class="title" >
+									<liferay-ui:message key="total-memory" />
+								</h2>
 
-					<img border="0" src="<%= totalMemoryChartURL %>" />
+								<div class="chart"></div>
+							</div>
 
-					<portlet:resourceURL var="maxMemoryChartURL">
-						<portlet:param name="struts_action" value="/admin_server/view_chart" />
-						<portlet:param name="type" value="max" />
-						<portlet:param name="maxMemory" value="<%= String.valueOf(runtime.maxMemory()) %>" />
-						<portlet:param name="usedMemory" value="<%= String.valueOf(usedMemory) %>" />
-					</portlet:resourceURL>
+							<div class="memory-max chart-group">
+								<h2 class="title" >
+									<liferay-ui:message key="maximum-memory" />
+								</h2>
 
-					<img border="0" src="<%= maxMemoryChartURL %>" />
-				</div>
+								<div class="chart" ></div>
+							</div>
 
-				<br />
+							<div class="memory-all chart-group">
+								<h2 class="title" >
+									<liferay-ui:message key="memory" /> <i>(<liferay-ui:message key="aggregate" />)</i>
+								</h2>
 
-				<table class="lfr-table">
-				<tr>
-					<td>
-						<liferay-ui:message key="used-memory" />:
-					</td>
-					<td>
-						<%= numberFormat.format(usedMemory) %> <liferay-ui:message key="bytes" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<liferay-ui:message key="total-memory" />:
-					</td>
-					<td>
-						<%= numberFormat.format(runtime.totalMemory()) %> <liferay-ui:message key="bytes" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<liferay-ui:message key="maximum-memory" />:
-					</td>
-					<td>
-						<%= numberFormat.format(runtime.maxMemory()) %> <liferay-ui:message key="bytes" />
-					</td>
-				</tr>
-				</table>
+								<div class="chart" ></div>
+							</div>
+						</div>
 
-				<br />
+						<aui:script use="liferay-admin-charts">
+							var STYLES_COLOR_MAX = '#EEE';
+							var STYLES_COLOR_TOTAL = '#C1CCD9';
+							var STYLES_COLOR_USED = '#3B7391';
+
+							var renderMemoryAllContainer = A.one('.charts-memory .memory-all .chart');
+							var renderMemoryMaxContainer = A.one('.charts-memory .memory-max .chart');
+							var renderMemoryTotalContainer = A.one('.charts-memory .memory-total .chart');
+
+							var allDataProvider = [
+								{
+									category: '<liferay-ui:message key="used-memory" />',
+									values: <%= String.valueOf(memoryTotalUsed) %>
+								},
+								{
+									category: '<liferay-ui:message key="free-total-memory" />',
+									values: <%= String.valueOf(memoryTotalFree) %>
+								},
+								{
+									category: '<liferay-ui:message key="free-maximum-memory" />',
+									values: <%= String.valueOf(memoryAllMaxFree) %>
+								}
+							];
+
+							var maxDataProvider = [
+								{
+									category: '<liferay-ui:message key="used-memory" />',
+									values: <%= String.valueOf(memoryTotalUsed) %>
+								},
+								{
+									category: '<liferay-ui:message key="free-maximum-memory" />',
+									values: <%= String.valueOf(memoryMaxFree) %>
+								}
+							];
+
+							var totalDataProvider = [
+								{
+									category: '<liferay-ui:message key="used-memory" />',
+									values: <%= String.valueOf(memoryTotalUsed) %>
+								},
+								{
+									category: '<liferay-ui:message key="free-total-memory" />',
+									values: <%= String.valueOf(memoryTotalFree) %>
+								}
+							];
+
+							new Liferay.Portlet.AdminPieChart(
+								{
+									boundingBox: renderMemoryTotalContainer,
+									dataProvider: totalDataProvider,
+									stylesColors: [STYLES_COLOR_USED, STYLES_COLOR_TOTAL]
+								}
+							);
+
+
+							new Liferay.Portlet.AdminPieChart(
+								{
+									boundingBox: renderMemoryMaxContainer,
+									dataProvider: maxDataProvider,
+									stylesColors: [STYLES_COLOR_USED, STYLES_COLOR_MAX]
+								}
+							);
+
+							new Liferay.Portlet.AdminPieChart(
+								{
+									boundingBox: renderMemoryAllContainer,
+									dataProvider: allDataProvider,
+									stylesColors: [STYLES_COLOR_USED, STYLES_COLOR_TOTAL, STYLES_COLOR_MAX]
+								}
+							);
+						</aui:script>
+					</liferay-ui:panel>
+				</liferay-ui:panel-container>
 
 				<liferay-ui:panel-container extended="<%= true %>" id="adminServerAdministrationActionsPanelContainer" persistState="<%= true %>">
 					<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="adminServerAdministrationActionsPanel" persistState="<%= true %>" title="actions">
