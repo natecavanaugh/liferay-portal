@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
+import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -40,7 +41,8 @@ import java.util.Date;
  * @see com.liferay.portlet.journal.model.impl.JournalFeedModelImpl
  * @generated
  */
-public interface JournalFeedModel extends BaseModel<JournalFeed>, GroupedModel {
+public interface JournalFeedModel extends BaseModel<JournalFeed>, GroupedModel,
+	StagedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -382,19 +384,19 @@ public interface JournalFeedModel extends BaseModel<JournalFeed>, GroupedModel {
 	public void setContentField(String contentField);
 
 	/**
-	 * Returns the feed type of this journal feed.
+	 * Returns the feed format of this journal feed.
 	 *
-	 * @return the feed type of this journal feed
+	 * @return the feed format of this journal feed
 	 */
 	@AutoEscape
-	public String getFeedType();
+	public String getFeedFormat();
 
 	/**
-	 * Sets the feed type of this journal feed.
+	 * Sets the feed format of this journal feed.
 	 *
-	 * @param feedType the feed type of this journal feed
+	 * @param feedFormat the feed format of this journal feed
 	 */
-	public void setFeedType(String feedType);
+	public void setFeedFormat(String feedFormat);
 
 	/**
 	 * Returns the feed version of this journal feed.
@@ -437,6 +439,8 @@ public interface JournalFeedModel extends BaseModel<JournalFeed>, GroupedModel {
 	public CacheModel<JournalFeed> toCacheModel();
 
 	public JournalFeed toEscapedModel();
+
+	public JournalFeed toUnescapedModel();
 
 	public String toString();
 

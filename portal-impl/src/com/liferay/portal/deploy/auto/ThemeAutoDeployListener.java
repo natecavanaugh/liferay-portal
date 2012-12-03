@@ -29,7 +29,7 @@ import java.io.File;
 public class ThemeAutoDeployListener extends BaseAutoDeployListener {
 
 	public ThemeAutoDeployListener() {
-		_autoDeployer = new ThemeAutoDeployer();
+		_autoDeployer = new ThreadSafeAutoDeployer(new ThemeAutoDeployer());
 	}
 
 	public void deploy(AutoDeploymentContext autoDeploymentContext)

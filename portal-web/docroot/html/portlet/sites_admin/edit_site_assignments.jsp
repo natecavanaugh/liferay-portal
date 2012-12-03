@@ -135,8 +135,6 @@ request.setAttribute("edit_site_assignments.jsp-portletURL", portletURL);
 				</c:if>
 			</div>
 
-			<liferay-util:include page="/html/portlet/sites_admin/edit_site_assignments_organization.jsp" />
-
 			<liferay-util:include page="/html/portlet/sites_admin/edit_site_assignments_users.jsp" />
 
 			<liferay-util:include page="/html/portlet/sites_admin/edit_site_assignments_organizations.jsp" />
@@ -270,6 +268,6 @@ request.setAttribute("edit_site_assignments.jsp-portletURL", portletURL);
 </aui:script>
 
 <%
-PortalUtil.addPortletBreadcrumbEntry(request, HtmlUtil.escape(group.getDescriptiveName(locale)), null);
+PortalUtil.addPortletBreadcrumbEntry(request, group.getDescriptiveName(locale), null);
 PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "assign-members"), currentURL);
 %>

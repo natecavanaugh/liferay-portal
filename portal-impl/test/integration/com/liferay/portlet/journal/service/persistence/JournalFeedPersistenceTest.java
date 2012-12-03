@@ -151,7 +151,7 @@ public class JournalFeedPersistenceTest {
 
 		newJournalFeed.setContentField(ServiceTestUtil.randomString());
 
-		newJournalFeed.setFeedType(ServiceTestUtil.randomString());
+		newJournalFeed.setFeedFormat(ServiceTestUtil.randomString());
 
 		newJournalFeed.setFeedVersion(ServiceTestUtil.nextDouble());
 
@@ -202,8 +202,8 @@ public class JournalFeedPersistenceTest {
 			newJournalFeed.getTargetPortletId());
 		Assert.assertEquals(existingJournalFeed.getContentField(),
 			newJournalFeed.getContentField());
-		Assert.assertEquals(existingJournalFeed.getFeedType(),
-			newJournalFeed.getFeedType());
+		Assert.assertEquals(existingJournalFeed.getFeedFormat(),
+			newJournalFeed.getFeedFormat());
 		AssertUtils.assertEquals(existingJournalFeed.getFeedVersion(),
 			newJournalFeed.getFeedVersion());
 	}
@@ -388,7 +388,7 @@ public class JournalFeedPersistenceTest {
 
 		journalFeed.setContentField(ServiceTestUtil.randomString());
 
-		journalFeed.setFeedType(ServiceTestUtil.randomString());
+		journalFeed.setFeedFormat(ServiceTestUtil.randomString());
 
 		journalFeed.setFeedVersion(ServiceTestUtil.nextDouble());
 

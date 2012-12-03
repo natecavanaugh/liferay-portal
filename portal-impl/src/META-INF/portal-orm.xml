@@ -133,6 +133,7 @@
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
+			<transient name="virtualHostname" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portal.model.impl.ContactModelImpl">
@@ -459,6 +460,7 @@
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
+			<transient name="virtualHostname" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portal.model.impl.LayoutSetBranchModelImpl">
@@ -1112,6 +1114,7 @@
 			<basic name="screenName" />
 			<basic name="emailAddress" />
 			<basic name="facebookId" />
+			<basic name="ldapServerId" />
 			<basic name="openId" />
 			<basic name="portraitId" />
 			<basic name="languageId" />
@@ -2508,7 +2511,7 @@
 			<basic name="targetLayoutFriendlyUrl" />
 			<basic name="targetPortletId" />
 			<basic name="contentField" />
-			<basic name="feedType" />
+			<basic name="feedFormat" />
 			<basic name="feedVersion" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
@@ -3613,7 +3616,9 @@
 			<basic name="statusDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
+			<transient name="containerModelId" />
 			<transient name="modelAttributes" />
+			<transient name="parentContainerModelId" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="statusByUserUuid" />
@@ -3701,6 +3706,7 @@
 		<table name="Company" />
 		<attributes>
 			<transient name="keyObj" />
+			<transient name="virtualHostname" />
 		</attributes>
 	</entity>
 	<entity class="com.liferay.portal.model.impl.ContactImpl" name="Contact">
@@ -3754,6 +3760,7 @@
 		<table name="LayoutSet" />
 		<attributes>
 			<transient name="settingsProperties" />
+			<transient name="virtualHostname" />
 		</attributes>
 	</entity>
 	<entity class="com.liferay.portal.model.impl.LayoutSetBranchImpl" name="LayoutSetBranch">
@@ -3899,6 +3906,7 @@
 			<transient name="showPortletInactive" />
 			<transient name="socialActivityInterpreterClass" />
 			<transient name="socialRequestInterpreterClass" />
+			<transient name="stagedModelDataHandlerClasses" />
 			<transient name="static" />
 			<transient name="staticStart" />
 			<transient name="strutsPath" />
@@ -4283,7 +4291,7 @@
 	<entity class="com.liferay.portlet.messageboards.model.impl.MBMessageImpl" name="MBMessage">
 		<table name="MBMessage" />
 		<attributes>
-			<transient name="attachmentsDir" />
+			<transient name="attachmentsFolderId" />
 		</attributes>
 	</entity>
 	<entity class="com.liferay.portlet.messageboards.model.impl.MBStatsUserImpl" name="MBStatsUser">
@@ -4444,8 +4452,7 @@
 	<entity class="com.liferay.portlet.wiki.model.impl.WikiPageImpl" name="WikiPage">
 		<table name="WikiPage" />
 		<attributes>
-			<transient name="attachmentsDir" />
-			<transient name="deletedAttachmentsDir" />
+			<transient name="attachmentsFolderId" />
 		</attributes>
 	</entity>
 	<entity class="com.liferay.portlet.wiki.model.impl.WikiPageResourceImpl" name="WikiPageResource">

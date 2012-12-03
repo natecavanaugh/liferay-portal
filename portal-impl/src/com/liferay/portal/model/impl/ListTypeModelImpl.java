@@ -78,6 +78,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 				"value.object.column.bitmask.enabled.com.liferay.portal.model.ListType"),
 			true);
 	public static long TYPE_COLUMN_BITMASK = 1L;
+	public static long NAME_COLUMN_BITMASK = 2L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -236,13 +237,12 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 
 	@Override
 	public ListType toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ListType)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ListType)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -376,7 +376,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	}
 
 	private static ClassLoader _classLoader = ListType.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ListType.class
 		};
 	private int _listTypeId;
@@ -384,5 +384,5 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	private String _type;
 	private String _originalType;
 	private long _columnBitmask;
-	private ListType _escapedModelProxy;
+	private ListType _escapedModel;
 }

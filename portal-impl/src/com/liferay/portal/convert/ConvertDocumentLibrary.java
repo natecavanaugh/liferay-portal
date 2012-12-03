@@ -22,19 +22,18 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.service.persistence.ImageActionableDynamicQuery;
 import com.liferay.portal.util.MaintenanceUtil;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
@@ -155,12 +154,12 @@ public class ConvertDocumentLibrary extends ConvertProcess {
 	}
 
 	protected void migrateDLFileEntry(
-			long companyId, long repositoryId, DLFileEntry fileEntry)
+			long companyId, long repositoryId, DLFileEntry dlFileEntry)
 		throws SystemException {
 
-		String fileName = fileEntry.getName();
+		String fileName = dlFileEntry.getName();
 
-		List<DLFileVersion> dlFileVersions = getDLFileVersions(fileEntry);
+		List<DLFileVersion> dlFileVersions = getDLFileVersions(dlFileEntry);
 
 		if (dlFileVersions.isEmpty()) {
 			String versionNumber = Store.VERSION_DEFAULT;
@@ -195,28 +194,6 @@ public class ConvertDocumentLibrary extends ConvertProcess {
 		}
 		catch (Exception e) {
 			_log.error("Migration failed for " + fileName, e);
-		}
-	}
-
-	protected void migrateFiles(
-			long companyId, String dirName, String[] fileNames)
-		throws PortalException, SystemException {
-
-		long repositoryId = CompanyConstants.SYSTEM;
-		String versionNumber = Store.VERSION_DEFAULT;
-
-		try {
-			_targetStore.addDirectory(companyId, repositoryId, dirName);
-		}
-		catch (DuplicateDirectoryException dde) {
-		}
-
-		for (String fileName : fileNames) {
-			if (fileName.startsWith(StringPool.SLASH)) {
-				fileName = fileName.substring(1);
-			}
-
-			migrateFile(companyId, repositoryId, fileName, versionNumber);
 		}
 	}
 
@@ -258,9 +235,15 @@ public class ConvertDocumentLibrary extends ConvertProcess {
 
 				MBMessage mbMessage = (MBMessage)object;
 
-				migrateFiles(
-					mbMessage.getCompanyId(), mbMessage.getAttachmentsDir(),
-					mbMessage.getAttachmentsFiles());
+				for (FileEntry fileEntry :
+						mbMessage.getAttachmentsFileEntries()) {
+
+					DLFileEntry dlFileEntry = (DLFileEntry)fileEntry.getModel();
+
+					migrateDLFileEntry(
+						mbMessage.getCompanyId(), dlFileEntry.getRepositoryId(),
+						dlFileEntry);
+				}
 			}
 
 		};
@@ -297,9 +280,15 @@ public class ConvertDocumentLibrary extends ConvertProcess {
 
 				WikiPage wikiPage = (WikiPage)object;
 
-				migrateFiles(
-					wikiPage.getCompanyId(), wikiPage.getAttachmentsDir(),
-					wikiPage.getAttachmentsFiles());
+				for (FileEntry fileEntry :
+						wikiPage.getAttachmentsFileEntries()) {
+
+					DLFileEntry dlFileEntry = (DLFileEntry)fileEntry.getModel();
+
+					migrateDLFileEntry(
+						wikiPage.getCompanyId(), dlFileEntry.getRepositoryId(),
+						dlFileEntry);
+				}
 			}
 
 		};

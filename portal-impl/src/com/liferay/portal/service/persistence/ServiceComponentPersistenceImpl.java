@@ -16,7 +16,6 @@ package com.liferay.portal.service.persistence;
 
 import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.NoSuchServiceComponentException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -34,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -72,39 +72,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_BUILDNAMESPACE =
-		new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
-			ServiceComponentImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByBuildNamespace",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE =
-		new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
-			ServiceComponentImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByBuildNamespace",
-			new String[] { String.class.getName() },
-			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_BUILDNAMESPACE = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByBuildNamespace",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_BNS_BNU = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
-			ServiceComponentImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByBNS_BNU",
-			new String[] { String.class.getName(), Long.class.getName() },
-			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK |
-			ServiceComponentModelImpl.BUILDNUMBER_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_BNS_BNU = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByBNS_BNU",
-			new String[] { String.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
 			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
 			ServiceComponentImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -116,420 +83,29 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
 			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the service component in the entity cache if it is enabled.
-	 *
-	 * @param serviceComponent the service component
-	 */
-	public void cacheResult(ServiceComponent serviceComponent) {
-		EntityCacheUtil.putResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentImpl.class, serviceComponent.getPrimaryKey(),
-			serviceComponent);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,
-			new Object[] {
-				serviceComponent.getBuildNamespace(),
-				Long.valueOf(serviceComponent.getBuildNumber())
-			}, serviceComponent);
-
-		serviceComponent.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the service components in the entity cache if it is enabled.
-	 *
-	 * @param serviceComponents the service components
-	 */
-	public void cacheResult(List<ServiceComponent> serviceComponents) {
-		for (ServiceComponent serviceComponent : serviceComponents) {
-			if (EntityCacheUtil.getResult(
-						ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-						ServiceComponentImpl.class,
-						serviceComponent.getPrimaryKey()) == null) {
-				cacheResult(serviceComponent);
-			}
-			else {
-				serviceComponent.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all service components.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ServiceComponentImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ServiceComponentImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the service component.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(ServiceComponent serviceComponent) {
-		EntityCacheUtil.removeResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentImpl.class, serviceComponent.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(serviceComponent);
-	}
-
-	@Override
-	public void clearCache(List<ServiceComponent> serviceComponents) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (ServiceComponent serviceComponent : serviceComponents) {
-			EntityCacheUtil.removeResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-				ServiceComponentImpl.class, serviceComponent.getPrimaryKey());
-
-			clearUniqueFindersCache(serviceComponent);
-		}
-	}
-
-	protected void clearUniqueFindersCache(ServiceComponent serviceComponent) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_BNS_BNU,
-			new Object[] {
-				serviceComponent.getBuildNamespace(),
-				Long.valueOf(serviceComponent.getBuildNumber())
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_BUILDNAMESPACE =
+		new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
+			ServiceComponentImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByBuildNamespace",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	}
-
-	/**
-	 * Creates a new service component with the primary key. Does not add the service component to the database.
-	 *
-	 * @param serviceComponentId the primary key for the new service component
-	 * @return the new service component
-	 */
-	public ServiceComponent create(long serviceComponentId) {
-		ServiceComponent serviceComponent = new ServiceComponentImpl();
-
-		serviceComponent.setNew(true);
-		serviceComponent.setPrimaryKey(serviceComponentId);
-
-		return serviceComponent;
-	}
-
-	/**
-	 * Removes the service component with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param serviceComponentId the primary key of the service component
-	 * @return the service component that was removed
-	 * @throws com.liferay.portal.NoSuchServiceComponentException if a service component with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ServiceComponent remove(long serviceComponentId)
-		throws NoSuchServiceComponentException, SystemException {
-		return remove(Long.valueOf(serviceComponentId));
-	}
-
-	/**
-	 * Removes the service component with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the service component
-	 * @return the service component that was removed
-	 * @throws com.liferay.portal.NoSuchServiceComponentException if a service component with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ServiceComponent remove(Serializable primaryKey)
-		throws NoSuchServiceComponentException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			ServiceComponent serviceComponent = (ServiceComponent)session.get(ServiceComponentImpl.class,
-					primaryKey);
-
-			if (serviceComponent == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchServiceComponentException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(serviceComponent);
-		}
-		catch (NoSuchServiceComponentException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected ServiceComponent removeImpl(ServiceComponent serviceComponent)
-		throws SystemException {
-		serviceComponent = toUnwrappedModel(serviceComponent);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (serviceComponent.isCachedModel()) {
-				serviceComponent = (ServiceComponent)session.get(ServiceComponentImpl.class,
-						serviceComponent.getPrimaryKeyObj());
-			}
-
-			if (serviceComponent != null) {
-				session.delete(serviceComponent);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (serviceComponent != null) {
-			clearCache(serviceComponent);
-		}
-
-		return serviceComponent;
-	}
-
-	@Override
-	public ServiceComponent updateImpl(
-		com.liferay.portal.model.ServiceComponent serviceComponent)
-		throws SystemException {
-		serviceComponent = toUnwrappedModel(serviceComponent);
-
-		boolean isNew = serviceComponent.isNew();
-
-		ServiceComponentModelImpl serviceComponentModelImpl = (ServiceComponentModelImpl)serviceComponent;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (serviceComponent.isNew()) {
-				session.save(serviceComponent);
-
-				serviceComponent.setNew(false);
-			}
-			else {
-				session.merge(serviceComponent);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ServiceComponentModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((serviceComponentModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						serviceComponentModelImpl.getOriginalBuildNamespace()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE,
-					args);
-
-				args = new Object[] {
-						serviceComponentModelImpl.getBuildNamespace()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-			ServiceComponentImpl.class, serviceComponent.getPrimaryKey(),
-			serviceComponent);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,
-				new Object[] {
-					serviceComponent.getBuildNamespace(),
-					Long.valueOf(serviceComponent.getBuildNumber())
-				}, serviceComponent);
-		}
-		else {
-			if ((serviceComponentModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_BNS_BNU.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						serviceComponentModelImpl.getOriginalBuildNamespace(),
-						Long.valueOf(serviceComponentModelImpl.getOriginalBuildNumber())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BNS_BNU, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_BNS_BNU, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,
-					new Object[] {
-						serviceComponent.getBuildNamespace(),
-						Long.valueOf(serviceComponent.getBuildNumber())
-					}, serviceComponent);
-			}
-		}
-
-		return serviceComponent;
-	}
-
-	protected ServiceComponent toUnwrappedModel(
-		ServiceComponent serviceComponent) {
-		if (serviceComponent instanceof ServiceComponentImpl) {
-			return serviceComponent;
-		}
-
-		ServiceComponentImpl serviceComponentImpl = new ServiceComponentImpl();
-
-		serviceComponentImpl.setNew(serviceComponent.isNew());
-		serviceComponentImpl.setPrimaryKey(serviceComponent.getPrimaryKey());
-
-		serviceComponentImpl.setServiceComponentId(serviceComponent.getServiceComponentId());
-		serviceComponentImpl.setBuildNamespace(serviceComponent.getBuildNamespace());
-		serviceComponentImpl.setBuildNumber(serviceComponent.getBuildNumber());
-		serviceComponentImpl.setBuildDate(serviceComponent.getBuildDate());
-		serviceComponentImpl.setData(serviceComponent.getData());
-
-		return serviceComponentImpl;
-	}
-
-	/**
-	 * Returns the service component with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the service component
-	 * @return the service component
-	 * @throws com.liferay.portal.NoSuchModelException if a service component with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ServiceComponent findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the service component with the primary key or throws a {@link com.liferay.portal.NoSuchServiceComponentException} if it could not be found.
-	 *
-	 * @param serviceComponentId the primary key of the service component
-	 * @return the service component
-	 * @throws com.liferay.portal.NoSuchServiceComponentException if a service component with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ServiceComponent findByPrimaryKey(long serviceComponentId)
-		throws NoSuchServiceComponentException, SystemException {
-		ServiceComponent serviceComponent = fetchByPrimaryKey(serviceComponentId);
-
-		if (serviceComponent == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					serviceComponentId);
-			}
-
-			throw new NoSuchServiceComponentException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				serviceComponentId);
-		}
-
-		return serviceComponent;
-	}
-
-	/**
-	 * Returns the service component with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the service component
-	 * @return the service component, or <code>null</code> if a service component with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ServiceComponent fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the service component with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param serviceComponentId the primary key of the service component
-	 * @return the service component, or <code>null</code> if a service component with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ServiceComponent fetchByPrimaryKey(long serviceComponentId)
-		throws SystemException {
-		ServiceComponent serviceComponent = (ServiceComponent)EntityCacheUtil.getResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-				ServiceComponentImpl.class, serviceComponentId);
-
-		if (serviceComponent == _nullServiceComponent) {
-			return null;
-		}
-
-		if (serviceComponent == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				serviceComponent = (ServiceComponent)session.get(ServiceComponentImpl.class,
-						Long.valueOf(serviceComponentId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (serviceComponent != null) {
-					cacheResult(serviceComponent);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
-						ServiceComponentImpl.class, serviceComponentId,
-						_nullServiceComponent);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return serviceComponent;
-	}
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE =
+		new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
+			ServiceComponentImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByBuildNamespace",
+			new String[] { String.class.getName() },
+			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK |
+			ServiceComponentModelImpl.BUILDNUMBER_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_BUILDNAMESPACE = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByBuildNamespace",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the service components where buildNamespace = &#63;.
@@ -548,7 +124,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 * Returns a range of all the service components where buildNamespace = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.ServiceComponentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param buildNamespace the build namespace
@@ -566,7 +142,7 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 * Returns an ordered range of all the service components where buildNamespace = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.ServiceComponentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param buildNamespace the build namespace
@@ -579,11 +155,13 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	public List<ServiceComponent> findByBuildNamespace(String buildNamespace,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE;
 			finderArgs = new Object[] { buildNamespace };
 		}
@@ -639,8 +217,8 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(ServiceComponentModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -659,22 +237,29 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 					qPos.add(buildNamespace);
 				}
 
-				list = (List<ServiceComponent>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ServiceComponent>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<ServiceComponent>(list);
+				}
+				else {
+					list = (List<ServiceComponent>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -910,7 +495,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 				}
 			}
 		}
-
 		else {
 			query.append(ServiceComponentModelImpl.ORDER_BY_JPQL);
 		}
@@ -945,6 +529,100 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the service components where buildNamespace = &#63; from the database.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByBuildNamespace(String buildNamespace)
+		throws SystemException {
+		for (ServiceComponent serviceComponent : findByBuildNamespace(
+				buildNamespace, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(serviceComponent);
+		}
+	}
+
+	/**
+	 * Returns the number of service components where buildNamespace = &#63;.
+	 *
+	 * @param buildNamespace the build namespace
+	 * @return the number of matching service components
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByBuildNamespace(String buildNamespace)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_BUILDNAMESPACE;
+
+		Object[] finderArgs = new Object[] { buildNamespace };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SERVICECOMPONENT_WHERE);
+
+			if (buildNamespace == null) {
+				query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_1);
+			}
+			else {
+				if (buildNamespace.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (buildNamespace != null) {
+					qPos.add(buildNamespace);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_1 = "serviceComponent.buildNamespace IS NULL";
+	private static final String _FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_2 = "serviceComponent.buildNamespace = ?";
+	private static final String _FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_3 = "(serviceComponent.buildNamespace IS NULL OR serviceComponent.buildNamespace = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_BNS_BNU = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentModelImpl.FINDER_CACHE_ENABLED,
+			ServiceComponentImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByBNS_BNU",
+			new String[] { String.class.getName(), Long.class.getName() },
+			ServiceComponentModelImpl.BUILDNAMESPACE_COLUMN_BITMASK |
+			ServiceComponentModelImpl.BUILDNUMBER_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_BNS_BNU = new FinderPath(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByBNS_BNU",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the service component where buildNamespace = &#63; and buildNumber = &#63; or throws a {@link com.liferay.portal.NoSuchServiceComponentException} if it could not be found.
@@ -1046,8 +724,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 
 			query.append(_FINDER_COLUMN_BNS_BNU_BUILDNUMBER_2);
 
-			query.append(ServiceComponentModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -1067,16 +743,14 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 
 				List<ServiceComponent> list = q.list();
 
-				result = list;
-
-				ServiceComponent serviceComponent = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,
 						finderArgs, list);
 				}
 				else {
-					serviceComponent = list.get(0);
+					ServiceComponent serviceComponent = list.get(0);
+
+					result = serviceComponent;
 
 					cacheResult(serviceComponent);
 
@@ -1088,157 +762,23 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 							finderArgs, serviceComponent);
 					}
 				}
-
-				return serviceComponent;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_BNS_BNU,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_BNS_BNU,
-						finderArgs);
-				}
-
-				closeSession(session);
-			}
-		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (ServiceComponent)result;
-			}
-		}
-	}
-
-	/**
-	 * Returns all the service components.
-	 *
-	 * @return the service components
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ServiceComponent> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the service components.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of service components
-	 * @param end the upper bound of the range of service components (not inclusive)
-	 * @return the range of service components
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ServiceComponent> findAll(int start, int end)
-		throws SystemException {
-		return findAll(start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the service components.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of service components
-	 * @param end the upper bound of the range of service components (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of service components
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ServiceComponent> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<ServiceComponent> list = (List<ServiceComponent>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_SERVICECOMPONENT);
-
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_SERVICECOMPONENT.concat(ServiceComponentModelImpl.ORDER_BY_JPQL);
-			}
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				if (orderByComparator == null) {
-					list = (List<ServiceComponent>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-				}
-				else {
-					list = (List<ServiceComponent>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
-		return list;
-	}
-
-	/**
-	 * Removes all the service components where buildNamespace = &#63; from the database.
-	 *
-	 * @param buildNamespace the build namespace
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByBuildNamespace(String buildNamespace)
-		throws SystemException {
-		for (ServiceComponent serviceComponent : findByBuildNamespace(
-				buildNamespace)) {
-			remove(serviceComponent);
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (ServiceComponent)result;
 		}
 	}
 
@@ -1260,83 +800,6 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	}
 
 	/**
-	 * Removes all the service components from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (ServiceComponent serviceComponent : findAll()) {
-			remove(serviceComponent);
-		}
-	}
-
-	/**
-	 * Returns the number of service components where buildNamespace = &#63;.
-	 *
-	 * @param buildNamespace the build namespace
-	 * @return the number of matching service components
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByBuildNamespace(String buildNamespace)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { buildNamespace };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SERVICECOMPONENT_WHERE);
-
-			if (buildNamespace == null) {
-				query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_1);
-			}
-			else {
-				if (buildNamespace.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (buildNamespace != null) {
-					qPos.add(buildNamespace);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
 	 * Returns the number of service components where buildNamespace = &#63; and buildNumber = &#63;.
 	 *
 	 * @param buildNamespace the build namespace
@@ -1346,10 +809,12 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	 */
 	public int countByBNS_BNU(String buildNamespace, long buildNumber)
 		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_BNS_BNU;
+
 		Object[] finderArgs = new Object[] { buildNamespace, buildNumber };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_BNS_BNU,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(3);
@@ -1388,23 +853,569 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 				qPos.add(buildNumber);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_BNS_BNU,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
 
 		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_BNS_BNU_BUILDNAMESPACE_1 = "serviceComponent.buildNamespace IS NULL AND ";
+	private static final String _FINDER_COLUMN_BNS_BNU_BUILDNAMESPACE_2 = "serviceComponent.buildNamespace = ? AND ";
+	private static final String _FINDER_COLUMN_BNS_BNU_BUILDNAMESPACE_3 = "(serviceComponent.buildNamespace IS NULL OR serviceComponent.buildNamespace = ?) AND ";
+	private static final String _FINDER_COLUMN_BNS_BNU_BUILDNUMBER_2 = "serviceComponent.buildNumber = ?";
+
+	/**
+	 * Caches the service component in the entity cache if it is enabled.
+	 *
+	 * @param serviceComponent the service component
+	 */
+	public void cacheResult(ServiceComponent serviceComponent) {
+		EntityCacheUtil.putResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentImpl.class, serviceComponent.getPrimaryKey(),
+			serviceComponent);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,
+			new Object[] {
+				serviceComponent.getBuildNamespace(),
+				Long.valueOf(serviceComponent.getBuildNumber())
+			}, serviceComponent);
+
+		serviceComponent.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the service components in the entity cache if it is enabled.
+	 *
+	 * @param serviceComponents the service components
+	 */
+	public void cacheResult(List<ServiceComponent> serviceComponents) {
+		for (ServiceComponent serviceComponent : serviceComponents) {
+			if (EntityCacheUtil.getResult(
+						ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+						ServiceComponentImpl.class,
+						serviceComponent.getPrimaryKey()) == null) {
+				cacheResult(serviceComponent);
+			}
+			else {
+				serviceComponent.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all service components.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ServiceComponentImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ServiceComponentImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the service component.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(ServiceComponent serviceComponent) {
+		EntityCacheUtil.removeResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentImpl.class, serviceComponent.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(serviceComponent);
+	}
+
+	@Override
+	public void clearCache(List<ServiceComponent> serviceComponents) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (ServiceComponent serviceComponent : serviceComponents) {
+			EntityCacheUtil.removeResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+				ServiceComponentImpl.class, serviceComponent.getPrimaryKey());
+
+			clearUniqueFindersCache(serviceComponent);
+		}
+	}
+
+	protected void clearUniqueFindersCache(ServiceComponent serviceComponent) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_BNS_BNU,
+			new Object[] {
+				serviceComponent.getBuildNamespace(),
+				Long.valueOf(serviceComponent.getBuildNumber())
+			});
+	}
+
+	/**
+	 * Creates a new service component with the primary key. Does not add the service component to the database.
+	 *
+	 * @param serviceComponentId the primary key for the new service component
+	 * @return the new service component
+	 */
+	public ServiceComponent create(long serviceComponentId) {
+		ServiceComponent serviceComponent = new ServiceComponentImpl();
+
+		serviceComponent.setNew(true);
+		serviceComponent.setPrimaryKey(serviceComponentId);
+
+		return serviceComponent;
+	}
+
+	/**
+	 * Removes the service component with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param serviceComponentId the primary key of the service component
+	 * @return the service component that was removed
+	 * @throws com.liferay.portal.NoSuchServiceComponentException if a service component with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent remove(long serviceComponentId)
+		throws NoSuchServiceComponentException, SystemException {
+		return remove(Long.valueOf(serviceComponentId));
+	}
+
+	/**
+	 * Removes the service component with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the service component
+	 * @return the service component that was removed
+	 * @throws com.liferay.portal.NoSuchServiceComponentException if a service component with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ServiceComponent remove(Serializable primaryKey)
+		throws NoSuchServiceComponentException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ServiceComponent serviceComponent = (ServiceComponent)session.get(ServiceComponentImpl.class,
+					primaryKey);
+
+			if (serviceComponent == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchServiceComponentException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(serviceComponent);
+		}
+		catch (NoSuchServiceComponentException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected ServiceComponent removeImpl(ServiceComponent serviceComponent)
+		throws SystemException {
+		serviceComponent = toUnwrappedModel(serviceComponent);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(serviceComponent)) {
+				serviceComponent = (ServiceComponent)session.get(ServiceComponentImpl.class,
+						serviceComponent.getPrimaryKeyObj());
+			}
+
+			if (serviceComponent != null) {
+				session.delete(serviceComponent);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (serviceComponent != null) {
+			clearCache(serviceComponent);
+		}
+
+		return serviceComponent;
+	}
+
+	@Override
+	public ServiceComponent updateImpl(
+		com.liferay.portal.model.ServiceComponent serviceComponent)
+		throws SystemException {
+		serviceComponent = toUnwrappedModel(serviceComponent);
+
+		boolean isNew = serviceComponent.isNew();
+
+		ServiceComponentModelImpl serviceComponentModelImpl = (ServiceComponentModelImpl)serviceComponent;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (serviceComponent.isNew()) {
+				session.save(serviceComponent);
+
+				serviceComponent.setNew(false);
+			}
+			else {
+				session.merge(serviceComponent);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ServiceComponentModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((serviceComponentModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						serviceComponentModelImpl.getOriginalBuildNamespace()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE,
+					args);
+
+				args = new Object[] {
+						serviceComponentModelImpl.getBuildNamespace()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BUILDNAMESPACE,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_BUILDNAMESPACE,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+			ServiceComponentImpl.class, serviceComponent.getPrimaryKey(),
+			serviceComponent);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,
+				new Object[] {
+					serviceComponent.getBuildNamespace(),
+					Long.valueOf(serviceComponent.getBuildNumber())
+				}, serviceComponent);
+		}
+		else {
+			if ((serviceComponentModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_BNS_BNU.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						serviceComponentModelImpl.getOriginalBuildNamespace(),
+						Long.valueOf(serviceComponentModelImpl.getOriginalBuildNumber())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_BNS_BNU, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_BNS_BNU, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_BNS_BNU,
+					new Object[] {
+						serviceComponent.getBuildNamespace(),
+						Long.valueOf(serviceComponent.getBuildNumber())
+					}, serviceComponent);
+			}
+		}
+
+		return serviceComponent;
+	}
+
+	protected ServiceComponent toUnwrappedModel(
+		ServiceComponent serviceComponent) {
+		if (serviceComponent instanceof ServiceComponentImpl) {
+			return serviceComponent;
+		}
+
+		ServiceComponentImpl serviceComponentImpl = new ServiceComponentImpl();
+
+		serviceComponentImpl.setNew(serviceComponent.isNew());
+		serviceComponentImpl.setPrimaryKey(serviceComponent.getPrimaryKey());
+
+		serviceComponentImpl.setServiceComponentId(serviceComponent.getServiceComponentId());
+		serviceComponentImpl.setBuildNamespace(serviceComponent.getBuildNamespace());
+		serviceComponentImpl.setBuildNumber(serviceComponent.getBuildNumber());
+		serviceComponentImpl.setBuildDate(serviceComponent.getBuildDate());
+		serviceComponentImpl.setData(serviceComponent.getData());
+
+		return serviceComponentImpl;
+	}
+
+	/**
+	 * Returns the service component with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the service component
+	 * @return the service component
+	 * @throws com.liferay.portal.NoSuchModelException if a service component with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ServiceComponent findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the service component with the primary key or throws a {@link com.liferay.portal.NoSuchServiceComponentException} if it could not be found.
+	 *
+	 * @param serviceComponentId the primary key of the service component
+	 * @return the service component
+	 * @throws com.liferay.portal.NoSuchServiceComponentException if a service component with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent findByPrimaryKey(long serviceComponentId)
+		throws NoSuchServiceComponentException, SystemException {
+		ServiceComponent serviceComponent = fetchByPrimaryKey(serviceComponentId);
+
+		if (serviceComponent == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					serviceComponentId);
+			}
+
+			throw new NoSuchServiceComponentException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				serviceComponentId);
+		}
+
+		return serviceComponent;
+	}
+
+	/**
+	 * Returns the service component with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the service component
+	 * @return the service component, or <code>null</code> if a service component with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ServiceComponent fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the service component with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param serviceComponentId the primary key of the service component
+	 * @return the service component, or <code>null</code> if a service component with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ServiceComponent fetchByPrimaryKey(long serviceComponentId)
+		throws SystemException {
+		ServiceComponent serviceComponent = (ServiceComponent)EntityCacheUtil.getResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+				ServiceComponentImpl.class, serviceComponentId);
+
+		if (serviceComponent == _nullServiceComponent) {
+			return null;
+		}
+
+		if (serviceComponent == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				serviceComponent = (ServiceComponent)session.get(ServiceComponentImpl.class,
+						Long.valueOf(serviceComponentId));
+
+				if (serviceComponent != null) {
+					cacheResult(serviceComponent);
+				}
+				else {
+					EntityCacheUtil.putResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+						ServiceComponentImpl.class, serviceComponentId,
+						_nullServiceComponent);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ServiceComponentModelImpl.ENTITY_CACHE_ENABLED,
+					ServiceComponentImpl.class, serviceComponentId);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return serviceComponent;
+	}
+
+	/**
+	 * Returns all the service components.
+	 *
+	 * @return the service components
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ServiceComponent> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the service components.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.ServiceComponentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of service components
+	 * @param end the upper bound of the range of service components (not inclusive)
+	 * @return the range of service components
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ServiceComponent> findAll(int start, int end)
+		throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the service components.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.ServiceComponentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of service components
+	 * @param end the upper bound of the range of service components (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of service components
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ServiceComponent> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<ServiceComponent> list = (List<ServiceComponent>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_SERVICECOMPONENT);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_SERVICECOMPONENT;
+
+				if (pagination) {
+					sql = sql.concat(ServiceComponentModelImpl.ORDER_BY_JPQL);
+				}
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (!pagination) {
+					list = (List<ServiceComponent>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<ServiceComponent>(list);
+				}
+				else {
+					list = (List<ServiceComponent>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the service components from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (ServiceComponent serviceComponent : findAll()) {
+			remove(serviceComponent);
+		}
 	}
 
 	/**
@@ -1426,18 +1437,17 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 				Query q = session.createQuery(_SQL_COUNT_SERVICECOMPONENT);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1473,142 +1483,14 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 	public void destroy() {
 		EntityCacheUtil.removeCache(ServiceComponentImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = AccountPersistence.class)
-	protected AccountPersistence accountPersistence;
-	@BeanReference(type = AddressPersistence.class)
-	protected AddressPersistence addressPersistence;
-	@BeanReference(type = BrowserTrackerPersistence.class)
-	protected BrowserTrackerPersistence browserTrackerPersistence;
-	@BeanReference(type = ClassNamePersistence.class)
-	protected ClassNamePersistence classNamePersistence;
-	@BeanReference(type = ClusterGroupPersistence.class)
-	protected ClusterGroupPersistence clusterGroupPersistence;
-	@BeanReference(type = CompanyPersistence.class)
-	protected CompanyPersistence companyPersistence;
-	@BeanReference(type = ContactPersistence.class)
-	protected ContactPersistence contactPersistence;
-	@BeanReference(type = CountryPersistence.class)
-	protected CountryPersistence countryPersistence;
-	@BeanReference(type = EmailAddressPersistence.class)
-	protected EmailAddressPersistence emailAddressPersistence;
-	@BeanReference(type = GroupPersistence.class)
-	protected GroupPersistence groupPersistence;
-	@BeanReference(type = ImagePersistence.class)
-	protected ImagePersistence imagePersistence;
-	@BeanReference(type = LayoutPersistence.class)
-	protected LayoutPersistence layoutPersistence;
-	@BeanReference(type = LayoutBranchPersistence.class)
-	protected LayoutBranchPersistence layoutBranchPersistence;
-	@BeanReference(type = LayoutPrototypePersistence.class)
-	protected LayoutPrototypePersistence layoutPrototypePersistence;
-	@BeanReference(type = LayoutRevisionPersistence.class)
-	protected LayoutRevisionPersistence layoutRevisionPersistence;
-	@BeanReference(type = LayoutSetPersistence.class)
-	protected LayoutSetPersistence layoutSetPersistence;
-	@BeanReference(type = LayoutSetBranchPersistence.class)
-	protected LayoutSetBranchPersistence layoutSetBranchPersistence;
-	@BeanReference(type = LayoutSetPrototypePersistence.class)
-	protected LayoutSetPrototypePersistence layoutSetPrototypePersistence;
-	@BeanReference(type = ListTypePersistence.class)
-	protected ListTypePersistence listTypePersistence;
-	@BeanReference(type = LockPersistence.class)
-	protected LockPersistence lockPersistence;
-	@BeanReference(type = MembershipRequestPersistence.class)
-	protected MembershipRequestPersistence membershipRequestPersistence;
-	@BeanReference(type = OrganizationPersistence.class)
-	protected OrganizationPersistence organizationPersistence;
-	@BeanReference(type = OrgGroupRolePersistence.class)
-	protected OrgGroupRolePersistence orgGroupRolePersistence;
-	@BeanReference(type = OrgLaborPersistence.class)
-	protected OrgLaborPersistence orgLaborPersistence;
-	@BeanReference(type = PasswordPolicyPersistence.class)
-	protected PasswordPolicyPersistence passwordPolicyPersistence;
-	@BeanReference(type = PasswordPolicyRelPersistence.class)
-	protected PasswordPolicyRelPersistence passwordPolicyRelPersistence;
-	@BeanReference(type = PasswordTrackerPersistence.class)
-	protected PasswordTrackerPersistence passwordTrackerPersistence;
-	@BeanReference(type = PhonePersistence.class)
-	protected PhonePersistence phonePersistence;
-	@BeanReference(type = PluginSettingPersistence.class)
-	protected PluginSettingPersistence pluginSettingPersistence;
-	@BeanReference(type = PortalPreferencesPersistence.class)
-	protected PortalPreferencesPersistence portalPreferencesPersistence;
-	@BeanReference(type = PortletPersistence.class)
-	protected PortletPersistence portletPersistence;
-	@BeanReference(type = PortletItemPersistence.class)
-	protected PortletItemPersistence portletItemPersistence;
-	@BeanReference(type = PortletPreferencesPersistence.class)
-	protected PortletPreferencesPersistence portletPreferencesPersistence;
-	@BeanReference(type = RegionPersistence.class)
-	protected RegionPersistence regionPersistence;
-	@BeanReference(type = ReleasePersistence.class)
-	protected ReleasePersistence releasePersistence;
-	@BeanReference(type = RepositoryPersistence.class)
-	protected RepositoryPersistence repositoryPersistence;
-	@BeanReference(type = RepositoryEntryPersistence.class)
-	protected RepositoryEntryPersistence repositoryEntryPersistence;
-	@BeanReference(type = ResourceActionPersistence.class)
-	protected ResourceActionPersistence resourceActionPersistence;
-	@BeanReference(type = ResourceBlockPersistence.class)
-	protected ResourceBlockPersistence resourceBlockPersistence;
-	@BeanReference(type = ResourceBlockPermissionPersistence.class)
-	protected ResourceBlockPermissionPersistence resourceBlockPermissionPersistence;
-	@BeanReference(type = ResourcePermissionPersistence.class)
-	protected ResourcePermissionPersistence resourcePermissionPersistence;
-	@BeanReference(type = ResourceTypePermissionPersistence.class)
-	protected ResourceTypePermissionPersistence resourceTypePermissionPersistence;
-	@BeanReference(type = RolePersistence.class)
-	protected RolePersistence rolePersistence;
-	@BeanReference(type = ServiceComponentPersistence.class)
-	protected ServiceComponentPersistence serviceComponentPersistence;
-	@BeanReference(type = ShardPersistence.class)
-	protected ShardPersistence shardPersistence;
-	@BeanReference(type = SubscriptionPersistence.class)
-	protected SubscriptionPersistence subscriptionPersistence;
-	@BeanReference(type = TeamPersistence.class)
-	protected TeamPersistence teamPersistence;
-	@BeanReference(type = TicketPersistence.class)
-	protected TicketPersistence ticketPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
-	@BeanReference(type = UserGroupPersistence.class)
-	protected UserGroupPersistence userGroupPersistence;
-	@BeanReference(type = UserGroupGroupRolePersistence.class)
-	protected UserGroupGroupRolePersistence userGroupGroupRolePersistence;
-	@BeanReference(type = UserGroupRolePersistence.class)
-	protected UserGroupRolePersistence userGroupRolePersistence;
-	@BeanReference(type = UserIdMapperPersistence.class)
-	protected UserIdMapperPersistence userIdMapperPersistence;
-	@BeanReference(type = UserNotificationEventPersistence.class)
-	protected UserNotificationEventPersistence userNotificationEventPersistence;
-	@BeanReference(type = UserTrackerPersistence.class)
-	protected UserTrackerPersistence userTrackerPersistence;
-	@BeanReference(type = UserTrackerPathPersistence.class)
-	protected UserTrackerPathPersistence userTrackerPathPersistence;
-	@BeanReference(type = VirtualHostPersistence.class)
-	protected VirtualHostPersistence virtualHostPersistence;
-	@BeanReference(type = WebDAVPropsPersistence.class)
-	protected WebDAVPropsPersistence webDAVPropsPersistence;
-	@BeanReference(type = WebsitePersistence.class)
-	protected WebsitePersistence websitePersistence;
-	@BeanReference(type = WorkflowDefinitionLinkPersistence.class)
-	protected WorkflowDefinitionLinkPersistence workflowDefinitionLinkPersistence;
-	@BeanReference(type = WorkflowInstanceLinkPersistence.class)
-	protected WorkflowInstanceLinkPersistence workflowInstanceLinkPersistence;
 	private static final String _SQL_SELECT_SERVICECOMPONENT = "SELECT serviceComponent FROM ServiceComponent serviceComponent";
 	private static final String _SQL_SELECT_SERVICECOMPONENT_WHERE = "SELECT serviceComponent FROM ServiceComponent serviceComponent WHERE ";
 	private static final String _SQL_COUNT_SERVICECOMPONENT = "SELECT COUNT(serviceComponent) FROM ServiceComponent serviceComponent";
 	private static final String _SQL_COUNT_SERVICECOMPONENT_WHERE = "SELECT COUNT(serviceComponent) FROM ServiceComponent serviceComponent WHERE ";
-	private static final String _FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_1 = "serviceComponent.buildNamespace IS NULL";
-	private static final String _FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_2 = "serviceComponent.buildNamespace = ?";
-	private static final String _FINDER_COLUMN_BUILDNAMESPACE_BUILDNAMESPACE_3 = "(serviceComponent.buildNamespace IS NULL OR serviceComponent.buildNamespace = ?)";
-	private static final String _FINDER_COLUMN_BNS_BNU_BUILDNAMESPACE_1 = "serviceComponent.buildNamespace IS NULL AND ";
-	private static final String _FINDER_COLUMN_BNS_BNU_BUILDNAMESPACE_2 = "serviceComponent.buildNamespace = ? AND ";
-	private static final String _FINDER_COLUMN_BNS_BNU_BUILDNAMESPACE_3 = "(serviceComponent.buildNamespace IS NULL OR serviceComponent.buildNamespace = ?) AND ";
-	private static final String _FINDER_COLUMN_BNS_BNU_BUILDNUMBER_2 = "serviceComponent.buildNumber = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "serviceComponent.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ServiceComponent exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ServiceComponent exists with the key {";

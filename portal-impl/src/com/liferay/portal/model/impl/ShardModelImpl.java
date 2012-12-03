@@ -64,6 +64,8 @@ public class ShardModelImpl extends BaseModelImpl<Shard> implements ShardModel {
 		};
 	public static final String TABLE_SQL_CREATE = "create table Shard (shardId LONG not null primary key,classNameId LONG,classPK LONG,name VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table Shard";
+	public static final String ORDER_BY_JPQL = " ORDER BY shard.shardId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Shard.shardId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -79,6 +81,7 @@ public class ShardModelImpl extends BaseModelImpl<Shard> implements ShardModel {
 	public static long CLASSNAMEID_COLUMN_BITMASK = 1L;
 	public static long CLASSPK_COLUMN_BITMASK = 2L;
 	public static long NAME_COLUMN_BITMASK = 4L;
+	public static long SHARDID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.Shard"));
 
@@ -256,13 +259,12 @@ public class ShardModelImpl extends BaseModelImpl<Shard> implements ShardModel {
 
 	@Override
 	public Shard toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Shard)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Shard)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -408,9 +410,7 @@ public class ShardModelImpl extends BaseModelImpl<Shard> implements ShardModel {
 	}
 
 	private static ClassLoader _classLoader = Shard.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Shard.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Shard.class };
 	private long _shardId;
 	private long _classNameId;
 	private long _originalClassNameId;
@@ -421,5 +421,5 @@ public class ShardModelImpl extends BaseModelImpl<Shard> implements ShardModel {
 	private String _name;
 	private String _originalName;
 	private long _columnBitmask;
-	private Shard _escapedModelProxy;
+	private Shard _escapedModel;
 }

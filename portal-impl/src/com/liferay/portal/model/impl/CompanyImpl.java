@@ -178,21 +178,28 @@ public class CompanyImpl extends CompanyBaseImpl {
 		return getDefaultUser().getTimeZone();
 	}
 
+	@Override
 	public String getVirtualHostname() {
+		if (_virtualHostname != null) {
+			return _virtualHostname;
+		}
+
 		try {
 			VirtualHost virtualHost =
 				VirtualHostLocalServiceUtil.fetchVirtualHost(getCompanyId(), 0);
 
 			if (virtualHost == null) {
-				return StringPool.BLANK;
+				_virtualHostname = StringPool.BLANK;
 			}
 			else {
-				return virtualHost.getHostname();
+				_virtualHostname = virtualHost.getHostname();
 			}
 		}
 		catch (Exception e) {
-			return StringPool.BLANK;
+			_virtualHostname = StringPool.BLANK;
 		}
+
+		return _virtualHostname;
 	}
 
 	public boolean hasCompanyMx(String emailAddress) throws SystemException {
@@ -277,7 +284,15 @@ public class CompanyImpl extends CompanyBaseImpl {
 		_keyObj = keyObj;
 	}
 
+	@Override
+	public void setVirtualHostname(String virtualHostname) {
+		_virtualHostname = virtualHostname;
+	}
+
 	@CacheField
 	private Key _keyObj;
+
+	@CacheField
+	private String _virtualHostname;
 
 }

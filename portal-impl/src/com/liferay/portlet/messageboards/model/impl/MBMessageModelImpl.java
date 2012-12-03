@@ -122,6 +122,8 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	public static long THREADID_COLUMN_BITMASK = 256L;
 	public static long USERID_COLUMN_BITMASK = 512L;
 	public static long UUID_COLUMN_BITMASK = 1024L;
+	public static long CREATEDATE_COLUMN_BITMASK = 2048L;
+	public static long MESSAGEID_COLUMN_BITMASK = 4096L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -963,13 +965,12 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 
 	@Override
 	public MBMessage toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (MBMessage)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (MBMessage)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -1408,7 +1409,7 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	}
 
 	private static ClassLoader _classLoader = MBMessage.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			MBMessage.class
 		};
 	private String _uuid;
@@ -1461,5 +1462,5 @@ public class MBMessageModelImpl extends BaseModelImpl<MBMessage>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private long _columnBitmask;
-	private MBMessage _escapedModelProxy;
+	private MBMessage _escapedModel;
 }

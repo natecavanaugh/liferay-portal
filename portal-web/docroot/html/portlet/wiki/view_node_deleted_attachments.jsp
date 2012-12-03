@@ -21,7 +21,7 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 WikiNode node = (WikiNode)request.getAttribute(WebKeys.WIKI_NODE);
 
-List<Tuple> attachments = node.getDeletedAttachmentsFiles();
+List<FileEntry> attachmentsFileEntries = node.getDeletedAttachmentsFiles();
 
 PortletURL portletURL = renderResponse.createRenderURL();
 
@@ -58,7 +58,7 @@ iteratorURL.setParameter("viewTrashAttachments", Boolean.TRUE.toString());
 	emptyMessage="remove-the-attachments-for-this-wiki-node"
 	infoMessage="attachments-that-have-been-removed-for-more-than-x-days-will-be-automatically-deleted"
 	portletURL="<%= emptyTrashURL.toString() %>"
-	totalEntries="<%= attachments.size() %>"
+	totalEntries="<%= attachmentsFileEntries.size() %>"
 />
 
 <liferay-ui:search-container
@@ -66,54 +66,41 @@ iteratorURL.setParameter("viewTrashAttachments", Boolean.TRUE.toString());
 	iteratorURL="<%= iteratorURL %>"
 >
 	<liferay-ui:search-container-results
-		results="<%= ListUtil.subList(attachments, searchContainer.getStart(), searchContainer.getEnd()) %>"
-		total="<%= attachments.size() %>"
+		results="<%= ListUtil.subList(attachmentsFileEntries, searchContainer.getStart(), searchContainer.getEnd()) %>"
+		total="<%= attachmentsFileEntries.size() %>"
 	/>
 
 	<liferay-ui:search-container-row
-		className="com.liferay.portal.kernel.util.Tuple"
-		modelVar="tuple"
-		rowVar="row"
+		className="com.liferay.portal.kernel.repository.model.FileEntry"
+		modelVar="fileEntry"
 	>
 
 		<%
-		String fileName = (String)tuple.getObject(1);
+		WikiPage wikiPage = WikiPageAttachmentsUtil.getPage(fileEntry.getFileEntryId());
 
-		String shortFileName = FileUtil.getShortFileName(fileName);
-
-		long fileSize = DLStoreUtil.getFileSize(company.getCompanyId(), CompanyConstants.SYSTEM, fileName);
-
-		WikiPage wikiPage = WikiPageLocalServiceUtil.getPage((Long)tuple.getObject(0));
-
-		row.setObject(new Object[] {node, wikiPage, fileName});
-
-		row.setPrimaryKey(fileName);
+		DLFileEntry dlFileEntry = (DLFileEntry)fileEntry.getModel();
 		%>
 
 		<liferay-portlet:actionURL varImpl="rowURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 			<portlet:param name="struts_action" value="/wiki/get_page_attachment" />
+			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="nodeId" value="<%= String.valueOf(node.getNodeId()) %>" />
 			<portlet:param name="title" value="<%= wikiPage.getTitle() %>" />
-			<portlet:param name="fileName" value="<%= shortFileName %>" />
+			<portlet:param name="fileName" value="<%= dlFileEntry.getTitle() %>" />
+			<portlet:param name="status" value="<%= String.valueOf(WorkflowConstants.STATUS_IN_TRASH) %>" />
 		</liferay-portlet:actionURL>
 
 		<liferay-ui:search-container-column-text
 			href="<%= rowURL %>"
 			name="file-name"
 		>
-			<img align="left" border="0" src="<%= themeDisplay.getPathThemeImages() %>/file_system/small/<%= DLUtil.getFileIcon(shortFileName) %>.png"> <%= shortFileName %>
+			<img align="left" alt="" border="0" src="<%= themeDisplay.getPathThemeImages() %>/file_system/small/<%= DLUtil.getFileIcon(fileEntry.getExtension()) %>.png"> <%= fileEntry.getTitle() %>
 		</liferay-ui:search-container-column-text>
 
 		<liferay-ui:search-container-column-text
 			href="<%= rowURL %>"
-			name="page"
-			value="<%= wikiPage.getTitle() %>"
-		/>
-
-		<liferay-ui:search-container-column-text
-			href="<%= rowURL %>"
 			name="size"
-			value="<%= TextFormatter.formatStorageSize(fileSize, locale) %>"
+			value="<%= TextFormatter.formatStorageSize(fileEntry.getSize(), locale) %>"
 		/>
 
 		<liferay-ui:search-container-column-jsp
@@ -124,3 +111,18 @@ iteratorURL.setParameter("viewTrashAttachments", Boolean.TRUE.toString());
 
 	<liferay-ui:search-iterator />
 </liferay-ui:search-container>
+
+<aui:script use="liferay-restore-entry">
+	<portlet:actionURL var="restoreEntryURL">
+		<portlet:param name="struts_action" value="/wiki/restore_page_attachment" />
+		<portlet:param name="redirect" value="<%= redirect %>" />
+	</portlet:actionURL>
+
+	new Liferay.RestoreEntry(
+		{
+			checkEntryURL: '<portlet:actionURL><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.CHECK %>" /><portlet:param name="struts_action" value="/wiki/restore_page_attachment" /></portlet:actionURL>',
+			namespace: '<portlet:namespace />',
+			restoreEntryURL: '<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/wiki/restore_entry" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="restoryEntryURL" value="<%= restoreEntryURL %>" /></portlet:renderURL>'
+		}
+	);
+</aui:script>

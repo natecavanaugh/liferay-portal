@@ -82,6 +82,8 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 		};
 	public static final String TABLE_SQL_CREATE = "create table LayoutSet (layoutSetId LONG not null primary key,groupId LONG,companyId LONG,createDate DATE null,modifiedDate DATE null,privateLayout BOOLEAN,logo BOOLEAN,logoId LONG,themeId VARCHAR(75) null,colorSchemeId VARCHAR(75) null,wapThemeId VARCHAR(75) null,wapColorSchemeId VARCHAR(75) null,css STRING null,pageCount INTEGER,settings_ STRING null,layoutSetPrototypeUuid VARCHAR(75) null,layoutSetPrototypeLinkEnabled BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table LayoutSet";
+	public static final String ORDER_BY_JPQL = " ORDER BY layoutSet.layoutSetId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY LayoutSet.layoutSetId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -97,6 +99,7 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 	public static long GROUPID_COLUMN_BITMASK = 1L;
 	public static long LAYOUTSETPROTOTYPEUUID_COLUMN_BITMASK = 2L;
 	public static long PRIVATELAYOUT_COLUMN_BITMASK = 4L;
+	public static long LAYOUTSETID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -550,6 +553,13 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 		_layoutSetPrototypeLinkEnabled = layoutSetPrototypeLinkEnabled;
 	}
 
+	public java.lang.String getVirtualHostname() {
+		return null;
+	}
+
+	public void setVirtualHostname(java.lang.String virtualHostname) {
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -569,13 +579,12 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 
 	@Override
 	public LayoutSet toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (LayoutSet)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (LayoutSet)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -761,6 +770,8 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 
 		layoutSetCacheModel.layoutSetPrototypeLinkEnabled = getLayoutSetPrototypeLinkEnabled();
 
+		layoutSetCacheModel._virtualHostname = getVirtualHostname();
+
 		return layoutSetCacheModel;
 	}
 
@@ -889,7 +900,7 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 	}
 
 	private static ClassLoader _classLoader = LayoutSet.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			LayoutSet.class
 		};
 	private long _layoutSetId;
@@ -915,5 +926,5 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 	private String _originalLayoutSetPrototypeUuid;
 	private boolean _layoutSetPrototypeLinkEnabled;
 	private long _columnBitmask;
-	private LayoutSet _escapedModelProxy;
+	private LayoutSet _escapedModel;
 }

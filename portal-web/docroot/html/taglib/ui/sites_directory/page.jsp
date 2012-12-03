@@ -27,150 +27,140 @@
 	branchGroups.add(group);
 	branchGroups.addAll(group.getAncestors());
 
-	if (rootGroupType.equals("relative")) {
-		if ((rootGroupLevel >= 0) && (rootGroupLevel < branchGroups.size())) {
-			rootGroup = branchGroups.get(rootGroupLevel);
-		}
-		else {
-			rootGroup = null;
-		}
+	if (sites.equals(SitesDirectoryTag.SITES_TOP_LEVEL)) {
 	}
-	else if (rootGroupType.equals("absolute")) {
-		int ancestorIndex = branchGroups.size() - rootGroupLevel;
-
-		if ((ancestorIndex >= 0) && (ancestorIndex < branchGroups.size())) {
-			rootGroup = branchGroups.get(ancestorIndex);
-		}
-		else if (ancestorIndex == branchGroups.size()) {
-			rootGroup = null;
-		}
-		else {
-			hidden = true;
-		}
+	else if (sites.equals(SitesDirectoryTag.SITES_CHILDREN) && (branchGroups.size() > 0)) {
+		rootGroup = branchGroups.get(0);
+	}
+	else if (sites.equals(SitesDirectoryTag.SITES_SIBLINGS) && (branchGroups.size() > 1)) {
+		rootGroup = branchGroups.get(1);
+	}
+	else if (sites.equals(SitesDirectoryTag.SITES_SIBLINGS) && group.isRoot()) {
+	}
+	else if (sites.equals(SitesDirectoryTag.SITES_PARENT_LEVEL) && (branchGroups.size() > 2)) {
+		rootGroup = branchGroups.get(2);
+	}
+	else if (sites.equals(SitesDirectoryTag.SITES_PARENT_LEVEL) && (branchGroups.size() == 2)) {
+	}
+	else {
+		hidden = true;
 	}
 	%>
 
-	<div class="sites-directory-taglib nav-menu nav-menu-style-<%= bulletStyle %>">
+	<div class="sites-directory-taglib nav-menu">
 		<c:choose>
-			<c:when test='<%= headerType.equals("root-group") && (rootGroup != null) %>'>
-				<h2>
-					<a href="<%= PortalUtil.getGroupFriendlyURL(rootGroup, !rootGroup.hasPublicLayouts(), themeDisplay) %>"><%= rootGroup.getDescriptiveName(locale) %></a>
-				</h2>
+			<c:when test="<%= hidden %>">
+				<div class="portlet-msg-info">
+					<liferay-ui:message key="no-sites-were-found" />
+				</div>
 			</c:when>
-			<c:when test='<%= headerType.equals("portlet-title") %>'>
-				<h2><%= portletDisplay.getTitle() %></h2>
-			</c:when>
-			<c:when test='<%= headerType.equals("breadcrumb") %>'>
-				<liferay-ui:breadcrumb />
-			</c:when>
-		</c:choose>
-
-		<c:if test="<%= !hidden %>">
-			<c:choose>
-				<c:when test='<%= displayStyle.equals("descriptive") || displayStyle.equals("icon") %>'>
-					<c:choose>
-						<c:when test="<%= Validator.isNull(portletDisplay.getId()) %>">
-							<div class="portlet-msg-info">
-								<liferay-ui:message arguments="<%= displayStyle %>" key="the-display-style-x-cannot-be-used-in-this-context" />
-							</div>
-						</c:when>
-						<c:otherwise>
-
-							<%
-							PortletURL portletURL = PortletURLFactoryUtil.create(request, portletDisplay.getId(), plid, PortletRequest.RENDER_PHASE);
-							%>
-
-							<liferay-ui:search-container iteratorURL="<%= portletURL %>">
+			<c:otherwise>
+				<c:choose>
+					<c:when test='<%= displayStyle.equals("descriptive") || displayStyle.equals("icon") %>'>
+						<c:choose>
+							<c:when test="<%= Validator.isNull(portletDisplay.getId()) %>">
+								<div class="portlet-msg-info">
+									<liferay-ui:message arguments="<%= displayStyle %>" key="the-display-style-x-cannot-be-used-in-this-context" />
+								</div>
+							</c:when>
+							<c:otherwise>
 
 								<%
-								List<Group> childGroups = null;
-
-								if (rootGroup != null) {
-									childGroups = rootGroup.getChildrenWithLayouts(true, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-								}
-								else {
-									childGroups = GroupLocalServiceUtil.getLayoutsGroups(group.getCompanyId(), GroupConstants.DEFAULT_LIVE_GROUP_ID, true, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-								}
-
-								List<Group> visibleGroups = new UniqueList<Group>();
-
-								for (Group childGroup : childGroups) {
-									if (childGroup.hasPublicLayouts()) {
-										visibleGroups.add(childGroup);
-									}
-									else if (GroupLocalServiceUtil.hasUserGroup(user.getUserId(), childGroup.getGroupId())) {
-										visibleGroups.add(childGroup);
-									}
-								}
+								PortletURL portletURL = PortletURLFactoryUtil.create(request, portletDisplay.getId(), plid, PortletRequest.RENDER_PHASE);
 								%>
 
-								<liferay-ui:search-container-results
-									results="<%= ListUtil.subList(visibleGroups, searchContainer.getStart(), searchContainer.getEnd()) %>"
-									total="<%= visibleGroups.size() %>"
-								/>
-
-								<liferay-ui:search-container-row
-									className="com.liferay.portal.model.Group"
-									modelVar="childGroup"
-								>
+								<liferay-ui:search-container emptyResultsMessage="no-sites-were-found" iteratorURL="<%= portletURL %>">
 
 									<%
-									LayoutSet layoutSet = null;
+									List<Group> childGroups = null;
 
-									if (childGroup.hasPublicLayouts()) {
-										layoutSet = childGroup.getPublicLayoutSet();
+									if (rootGroup != null) {
+										childGroups = rootGroup.getChildrenWithLayouts(true, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 									}
 									else {
-										layoutSet = childGroup.getPrivateLayoutSet();
+										childGroups = GroupLocalServiceUtil.getLayoutsGroups(group.getCompanyId(), GroupConstants.DEFAULT_LIVE_GROUP_ID, true, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+									}
+
+									List<Group> visibleGroups = new UniqueList<Group>();
+
+									for (Group childGroup : childGroups) {
+										if (childGroup.hasPublicLayouts()) {
+											visibleGroups.add(childGroup);
+										}
+										else if (GroupLocalServiceUtil.hasUserGroup(user.getUserId(), childGroup.getGroupId())) {
+											visibleGroups.add(childGroup);
+										}
 									}
 									%>
 
-									<liferay-ui:app-view-entry
-										assetCategoryClassName="<%= Group.class.getName() %>"
-										assetCategoryClassPK="<%= childGroup.getGroupId() %>"
-										assetTagClassName="<%= Group.class.getName() %>"
-										assetTagClassPK="<%= childGroup.getGroupId() %>"
-										description="<%= childGroup.getDescription() %>"
-										displayStyle="<%= displayStyle %>"
-										showCheckbox="<%= false %>"
-										thumbnailSrc='<%= themeDisplay.getPathImage() + "/layout_set_logo?img_id=" + layoutSet.getLogoId() + "&t=" + WebServerServletTokenUtil.getToken(layoutSet.getLogoId()) %>'
-										title="<%= HtmlUtil.escape(childGroup.getDescriptiveName(locale)) %>"
-										url="<%= PortalUtil.getGroupFriendlyURL(childGroup, !childGroup.hasPublicLayouts(), themeDisplay) %>"
+									<liferay-ui:search-container-results
+										results="<%= ListUtil.subList(visibleGroups, searchContainer.getStart(), searchContainer.getEnd()) %>"
+										total="<%= visibleGroups.size() %>"
 									/>
-								</liferay-ui:search-container-row>
 
-								<liferay-ui:search-iterator />
-							</liferay-ui:search-container>
-						</c:otherwise>
-					</c:choose>
-				</c:when>
-				<c:otherwise>
+									<liferay-ui:search-container-row
+										className="com.liferay.portal.model.Group"
+										modelVar="childGroup"
+									>
 
-					<%
-					StringBundler sb = new StringBundler();
+										<%
+										LayoutSet layoutSet = null;
 
-					_buildSitesDirectory(rootGroup, group, branchGroups, themeDisplay, 1, includedGroups, nestedChildren, sb);
+										if (childGroup.hasPublicLayouts()) {
+											layoutSet = childGroup.getPublicLayoutSet();
+										}
+										else {
+											layoutSet = childGroup.getPrivateLayoutSet();
+										}
+										%>
 
-					String content = sb.toString();
-					%>
+										<liferay-ui:app-view-entry
+											assetCategoryClassName="<%= Group.class.getName() %>"
+											assetCategoryClassPK="<%= childGroup.getGroupId() %>"
+											assetTagClassName="<%= Group.class.getName() %>"
+											assetTagClassPK="<%= childGroup.getGroupId() %>"
+											description="<%= childGroup.getDescription() %>"
+											displayStyle="<%= displayStyle %>"
+											showCheckbox="<%= false %>"
+											thumbnailSrc='<%= themeDisplay.getPathImage() + "/layout_set_logo?img_id=" + layoutSet.getLogoId() + "&t=" + WebServerServletTokenUtil.getToken(layoutSet.getLogoId()) %>'
+											title="<%= HtmlUtil.escape(childGroup.getDescriptiveName(locale)) %>"
+											url="<%= PortalUtil.getGroupFriendlyURL(childGroup, !childGroup.hasPublicLayouts(), themeDisplay) %>"
+										/>
+									</liferay-ui:search-container-row>
 
-					<%= content %>
+									<liferay-ui:search-iterator />
+								</liferay-ui:search-container>
+							</c:otherwise>
+						</c:choose>
+					</c:when>
+					<c:otherwise>
 
-				</c:otherwise>
-			</c:choose>
-		</c:if>
+						<%
+						StringBundler sb = new StringBundler();
+
+						_buildSitesList(rootGroup, group, branchGroups, themeDisplay, 1, displayStyle.equals("list-hierarchy"), true, sb);
+
+						String content = sb.toString();
+						%>
+
+						<%= content %>
+
+					</c:otherwise>
+				</c:choose>
+			</c:otherwise>
+		</c:choose>
 	</div>
 </c:if>
 
 <%!
-private void _buildSitesDirectory(Group rootGroup, Group selGroup, List<Group> branchGroups, ThemeDisplay themeDisplay, int groupLevel, String includedGroups, boolean nestedChildren, StringBundler sb) throws Exception {
+private void _buildSitesList(Group rootGroup, Group curGroup, List<Group> branchGroups, ThemeDisplay themeDisplay, int groupLevel, boolean showHierarchy, boolean nestedChildren, StringBundler sb) throws Exception {
 	List<Group> childGroups = null;
 
 	if (rootGroup != null) {
 		childGroups = rootGroup.getChildrenWithLayouts(true, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 	else {
-		childGroups = GroupLocalServiceUtil.getLayoutsGroups(selGroup.getCompanyId(), GroupConstants.DEFAULT_LIVE_GROUP_ID, true, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		childGroups = GroupLocalServiceUtil.getLayoutsGroups(curGroup.getCompanyId(), GroupConstants.DEFAULT_LIVE_GROUP_ID, true, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 
 	List<Group> visibleGroups = new UniqueList<Group>();
@@ -191,6 +181,12 @@ private void _buildSitesDirectory(Group rootGroup, Group selGroup, List<Group> b
 	}
 
 	if (childGroups.isEmpty()) {
+		if (sb.length() == 0) {
+			sb.append("<div class=\"portlet-msg-info\">");
+			sb.append(LanguageUtil.get(themeDisplay.getLocale(), "no-sites-were-found"));
+			sb.append("</div>");
+		}
+
 		return;
 	}
 
@@ -207,11 +203,7 @@ private void _buildSitesDirectory(Group rootGroup, Group selGroup, List<Group> b
 	for (Group childGroup : childGroups) {
 		boolean open = false;
 
-		if (includedGroups.equals("auto") && branchGroups.contains(childGroup) && !childGroup.getChildren(true).isEmpty()) {
-			open = true;
-		}
-
-		if (includedGroups.equals("all")) {
+		if (showHierarchy) {
 			open = true;
 		}
 
@@ -221,7 +213,7 @@ private void _buildSitesDirectory(Group rootGroup, Group selGroup, List<Group> b
 			className += "open ";
 		}
 
-		if (selGroup.getGroupId() == childGroup.getGroupId()) {
+		if (curGroup.getGroupId() == childGroup.getGroupId()) {
 			className += "selected ";
 		}
 
@@ -259,7 +251,7 @@ private void _buildSitesDirectory(Group rootGroup, Group selGroup, List<Group> b
 				childGroupSB = tailSB;
 			}
 
-			_buildSitesDirectory(childGroup, selGroup, branchGroups, themeDisplay, groupLevel + 1, includedGroups, nestedChildren, childGroupSB);
+			_buildSitesList(childGroup, curGroup, branchGroups, themeDisplay, groupLevel + 1, showHierarchy, nestedChildren, childGroupSB);
 		}
 
 		sb.append("</li>");

@@ -70,6 +70,8 @@ public class PluginSettingModelImpl extends BaseModelImpl<PluginSetting>
 		};
 	public static final String TABLE_SQL_CREATE = "create table PluginSetting (pluginSettingId LONG not null primary key,companyId LONG,pluginId VARCHAR(75) null,pluginType VARCHAR(75) null,roles STRING null,active_ BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table PluginSetting";
+	public static final String ORDER_BY_JPQL = " ORDER BY pluginSetting.pluginSettingId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY PluginSetting.pluginSettingId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -85,6 +87,7 @@ public class PluginSettingModelImpl extends BaseModelImpl<PluginSetting>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long PLUGINID_COLUMN_BITMASK = 2L;
 	public static long PLUGINTYPE_COLUMN_BITMASK = 4L;
+	public static long PLUGINSETTINGID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -336,13 +339,12 @@ public class PluginSettingModelImpl extends BaseModelImpl<PluginSetting>
 
 	@Override
 	public PluginSetting toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (PluginSetting)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (PluginSetting)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -516,7 +518,7 @@ public class PluginSettingModelImpl extends BaseModelImpl<PluginSetting>
 	}
 
 	private static ClassLoader _classLoader = PluginSetting.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			PluginSetting.class
 		};
 	private long _pluginSettingId;
@@ -530,5 +532,5 @@ public class PluginSettingModelImpl extends BaseModelImpl<PluginSetting>
 	private String _roles;
 	private boolean _active;
 	private long _columnBitmask;
-	private PluginSetting _escapedModelProxy;
+	private PluginSetting _escapedModel;
 }

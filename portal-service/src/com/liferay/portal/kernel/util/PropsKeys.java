@@ -93,6 +93,8 @@ public interface PropsKeys {
 
 	public static final String APPLICATION_STARTUP_EVENTS = "application.startup.events";
 
+	public static final String ASSET_CATEGORIES_NAVIGATION_DISPLAY_TEMPLATES_CONFIG = "asset.categories.navigation.display.templates.config";
+
 	public static final String ASSET_CATEGORIES_NAVIGATION_DISPLAY_TEMPLATES_HELP = "asset.categories.navigation.display.templates.help";
 
 	public static final String ASSET_CATEGORIES_PROPERTIES_DEFAULT = "asset.categories.properties.default";
@@ -109,6 +111,8 @@ public interface PropsKeys {
 
 	public static final String ASSET_PUBLISHER_DISPLAY_STYLES = "asset.publisher.display.styles";
 
+	public static final String ASSET_PUBLISHER_DISPLAY_TEMPLATES_CONFIG = "asset.publisher.display.templates.config";
+
 	public static final String ASSET_PUBLISHER_DISPLAY_TEMPLATES_HELP = "asset.publisher.display.templates.help";
 
 	public static final String ASSET_RENDERER_ENABLED = "asset.renderer.enabled.";
@@ -116,6 +120,8 @@ public interface PropsKeys {
 	public static final String ASSET_TAG_PROPERTIES_DEFAULT = "asset.tag.properties.default";
 
 	public static final String ASSET_TAG_SUGGESTIONS_ENABLED = "asset.tag.suggestions.enabled";
+
+	public static final String ASSET_TAGS_NAVIGATION_DISPLAY_TEMPLATES_CONFIG = "asset.tags.navigation.display.templates.config";
 
 	public static final String ASSET_TAGS_NAVIGATION_DISPLAY_TEMPLATES_HELP = "asset.tags.navigation.display.templates.help";
 
@@ -216,6 +222,8 @@ public interface PropsKeys {
 	public static final String AUTO_LOGIN_IGNORE_PATHS = "auto.login.ignore.paths";
 
 	public static final String BASIC_AUTH_PASSWORD_REQUIRED = "basic.auth.password.required";
+
+	public static final String BLOGS_DISPLAY_TEMPLATES_CONFIG = "blogs.display.templates.config";
 
 	public static final String BLOGS_DISPLAY_TEMPLATES_HELP = "blogs.display.templates.help";
 
@@ -568,6 +576,10 @@ public interface PropsKeys {
 	public static final String DL_COMPARABLE_FILE_EXTENSIONS = "dl.comparable.file.extensions";
 
 	public static final String DL_DEFAULT_DISPLAY_VIEW = "dl.default.display.view";
+
+	public static final String DL_DISPLAY_TEMPLATES_CONFIG = "dl.display.templates.config";
+
+	public static final String DL_DISPLAY_TEMPLATES_HELP = "dl.display.templates.help";
 
 	public static final String DL_DISPLAY_VIEWS = "dl.display.views";
 
@@ -980,6 +992,8 @@ public interface PropsKeys {
 	public static final String JOURNAL_ARTICLE_FORCE_AUTOGENERATE_ID = "journal.article.force.autogenerate.id";
 
 	public static final String JOURNAL_ARTICLE_FORM_ADD = "journal.article.form.add";
+
+	public static final String JOURNAL_ARTICLE_FORM_DEFAULT_VALUES = "journal.article.form.default.values";
 
 	public static final String JOURNAL_ARTICLE_FORM_TRANSLATE = "journal.article.form.translate";
 
@@ -1885,6 +1899,10 @@ public interface PropsKeys {
 
 	public static final String RSS_CONNECTION_TIMEOUT = "rss.connection.timeout";
 
+	public static final String RSS_FEED_TYPE_DEFAULT = "rss.feed.type.default";
+
+	public static final String RSS_FEED_TYPES = "rss.feed.types";
+
 	public static final String RSS_FEEDS_ENABLED = "rss.feeds.enabled";
 
 	public static final String SANDBOX_DEPLOY_DIR = "sandbox.deploy.dir";
@@ -2062,10 +2080,6 @@ public interface PropsKeys {
 	public static final String SITEMINDER_USER_HEADER = "siteminder.user.header";
 
 	public static final String SITES_CONTROL_PANEL_MEMBERS_VISIBLE = "sites.control.panel.members.visible";
-
-	public static final String SITES_DIRECTORY_DISPLAY_STYLE_DEFAULT = "sites.directory.display.style.default";
-
-	public static final String SITES_DIRECTORY_DISPLAY_STYLE_OPTIONS = "sites.directory.display.style.options";
 
 	public static final String SITES_EMAIL_FROM_ADDRESS = "sites.email.from.address";
 
@@ -2380,6 +2394,8 @@ public interface PropsKeys {
 	public static final String WEBDAV_NONCE_EXPIRATION = "webdav.nonce.expiration";
 
 	public static final String WIDGET_SERVLET_MAPPING = "widget.servlet.mapping";
+
+	public static final String WIKI_DISPLAY_TEMPLATES_CONFIG = "wiki.display.templates.config";
 
 	public static final String WIKI_DISPLAY_TEMPLATES_HELP = "wiki.display.templates.help";
 

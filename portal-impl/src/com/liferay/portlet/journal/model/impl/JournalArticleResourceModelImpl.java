@@ -64,6 +64,8 @@ public class JournalArticleResourceModelImpl extends BaseModelImpl<JournalArticl
 		};
 	public static final String TABLE_SQL_CREATE = "create table JournalArticleResource (uuid_ VARCHAR(75) null,resourcePrimKey LONG not null primary key,groupId LONG,articleId VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table JournalArticleResource";
+	public static final String ORDER_BY_JPQL = " ORDER BY journalArticleResource.resourcePrimKey ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY JournalArticleResource.resourcePrimKey ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -79,6 +81,7 @@ public class JournalArticleResourceModelImpl extends BaseModelImpl<JournalArticl
 	public static long ARTICLEID_COLUMN_BITMASK = 1L;
 	public static long GROUPID_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long RESOURCEPRIMKEY_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.journal.model.JournalArticleResource"));
 
@@ -239,13 +242,12 @@ public class JournalArticleResourceModelImpl extends BaseModelImpl<JournalArticl
 
 	@Override
 	public JournalArticleResource toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (JournalArticleResource)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (JournalArticleResource)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -395,7 +397,7 @@ public class JournalArticleResourceModelImpl extends BaseModelImpl<JournalArticl
 	}
 
 	private static ClassLoader _classLoader = JournalArticleResource.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			JournalArticleResource.class
 		};
 	private String _uuid;
@@ -407,5 +409,5 @@ public class JournalArticleResourceModelImpl extends BaseModelImpl<JournalArticl
 	private String _articleId;
 	private String _originalArticleId;
 	private long _columnBitmask;
-	private JournalArticleResource _escapedModelProxy;
+	private JournalArticleResource _escapedModel;
 }

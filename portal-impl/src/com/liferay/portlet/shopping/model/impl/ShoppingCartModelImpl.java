@@ -74,6 +74,8 @@ public class ShoppingCartModelImpl extends BaseModelImpl<ShoppingCart>
 		};
 	public static final String TABLE_SQL_CREATE = "create table ShoppingCart (cartId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,itemIds STRING null,couponCodes VARCHAR(75) null,altShipping INTEGER,insure BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table ShoppingCart";
+	public static final String ORDER_BY_JPQL = " ORDER BY shoppingCart.cartId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY ShoppingCart.cartId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -88,6 +90,7 @@ public class ShoppingCartModelImpl extends BaseModelImpl<ShoppingCart>
 			true);
 	public static long GROUPID_COLUMN_BITMASK = 1L;
 	public static long USERID_COLUMN_BITMASK = 2L;
+	public static long CARTID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.shopping.model.ShoppingCart"));
 
@@ -364,13 +367,12 @@ public class ShoppingCartModelImpl extends BaseModelImpl<ShoppingCart>
 
 	@Override
 	public ShoppingCart toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ShoppingCart)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ShoppingCart)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -603,7 +605,7 @@ public class ShoppingCartModelImpl extends BaseModelImpl<ShoppingCart>
 	}
 
 	private static ClassLoader _classLoader = ShoppingCart.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ShoppingCart.class
 		};
 	private long _cartId;
@@ -623,5 +625,5 @@ public class ShoppingCartModelImpl extends BaseModelImpl<ShoppingCart>
 	private int _altShipping;
 	private boolean _insure;
 	private long _columnBitmask;
-	private ShoppingCart _escapedModelProxy;
+	private ShoppingCart _escapedModel;
 }

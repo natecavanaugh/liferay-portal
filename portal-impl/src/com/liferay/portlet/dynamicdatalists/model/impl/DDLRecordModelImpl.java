@@ -82,6 +82,8 @@ public class DDLRecordModelImpl extends BaseModelImpl<DDLRecord>
 		};
 	public static final String TABLE_SQL_CREATE = "create table DDLRecord (uuid_ VARCHAR(75) null,recordId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,versionUserId LONG,versionUserName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,DDMStorageId LONG,recordSetId LONG,version VARCHAR(75) null,displayIndex INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table DDLRecord";
+	public static final String ORDER_BY_JPQL = " ORDER BY ddlRecord.recordId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY DDLRecord.recordId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -99,6 +101,7 @@ public class DDLRecordModelImpl extends BaseModelImpl<DDLRecord>
 	public static long RECORDSETID_COLUMN_BITMASK = 4L;
 	public static long USERID_COLUMN_BITMASK = 8L;
 	public static long UUID_COLUMN_BITMASK = 16L;
+	public static long RECORDID_COLUMN_BITMASK = 32L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -528,13 +531,12 @@ public class DDLRecordModelImpl extends BaseModelImpl<DDLRecord>
 
 	@Override
 	public DDLRecord toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (DDLRecord)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (DDLRecord)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -810,7 +812,7 @@ public class DDLRecordModelImpl extends BaseModelImpl<DDLRecord>
 	}
 
 	private static ClassLoader _classLoader = DDLRecord.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			DDLRecord.class
 		};
 	private String _uuid;
@@ -839,5 +841,5 @@ public class DDLRecordModelImpl extends BaseModelImpl<DDLRecord>
 	private String _version;
 	private int _displayIndex;
 	private long _columnBitmask;
-	private DDLRecord _escapedModelProxy;
+	private DDLRecord _escapedModel;
 }

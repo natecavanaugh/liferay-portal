@@ -81,6 +81,8 @@ public class NewJVMJUnitTestRunner extends BlockJUnit4ClassRunner {
 			arguments.add(_JPDA_OPTIONS);
 		}
 
+		arguments.add("-Djava.net.preferIPv4Stack=true");
+
 		String fileName = System.getProperty(
 			"net.sourceforge.cobertura.datafile");
 

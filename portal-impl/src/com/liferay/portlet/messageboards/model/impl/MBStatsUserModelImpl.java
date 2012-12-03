@@ -271,13 +271,12 @@ public class MBStatsUserModelImpl extends BaseModelImpl<MBStatsUser>
 
 	@Override
 	public MBStatsUser toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (MBStatsUser)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (MBStatsUser)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -443,7 +442,7 @@ public class MBStatsUserModelImpl extends BaseModelImpl<MBStatsUser>
 	}
 
 	private static ClassLoader _classLoader = MBStatsUser.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			MBStatsUser.class
 		};
 	private long _statsUserId;
@@ -460,5 +459,5 @@ public class MBStatsUserModelImpl extends BaseModelImpl<MBStatsUser>
 	private boolean _setOriginalMessageCount;
 	private Date _lastPostDate;
 	private long _columnBitmask;
-	private MBStatsUser _escapedModelProxy;
+	private MBStatsUser _escapedModel;
 }

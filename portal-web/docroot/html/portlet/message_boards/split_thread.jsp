@@ -80,12 +80,12 @@ boolean splitThread = true;
 
 	<%
 	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER, treeWalker);
-	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE, message);
-	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CUR_MESSAGE, message);
 	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CATEGORY, category);
-	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD, thread);
-	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_LAST_NODE, Boolean.valueOf(false));
+	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_CUR_MESSAGE, message);
 	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_DEPTH, new Integer(0));
+	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_LAST_NODE, Boolean.valueOf(false));
+	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_SEL_MESSAGE, message);
+	request.setAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_THREAD, thread);
 	%>
 
 	<liferay-util:include page="/html/portlet/message_boards/view_thread_shortcut.jsp" />
@@ -109,7 +109,14 @@ boolean splitThread = true;
 			<aui:input model="<%= MBMessage.class %>" name="subject" value='<%= LanguageUtil.get(pageContext, "thread-split") %>' />
 
 			<aui:field-wrapper label="body">
-				<%@ include file="/html/portlet/message_boards/bbcode_editor.jspf" %>
+				<c:choose>
+					<c:when test="<%= message.isFormatBBCode() %>">
+						<%@ include file="/html/portlet/message_boards/bbcode_editor.jspf" %>
+					</c:when>
+					<c:otherwise>
+						<%@ include file="/html/portlet/message_boards/html_editor.jspf" %>
+					</c:otherwise>
+				</c:choose>
 
 				<aui:input name="body" type="hidden" />
 			</aui:field-wrapper>

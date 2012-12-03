@@ -99,6 +99,7 @@ public class WebsiteModelImpl extends BaseModelImpl<Website>
 	public static long COMPANYID_COLUMN_BITMASK = 4L;
 	public static long PRIMARY_COLUMN_BITMASK = 8L;
 	public static long USERID_COLUMN_BITMASK = 16L;
+	public static long CREATEDATE_COLUMN_BITMASK = 32L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -486,13 +487,12 @@ public class WebsiteModelImpl extends BaseModelImpl<Website>
 
 	@Override
 	public Website toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Website)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Website)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -729,7 +729,7 @@ public class WebsiteModelImpl extends BaseModelImpl<Website>
 	}
 
 	private static ClassLoader _classLoader = Website.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Website.class
 		};
 	private long _websiteId;
@@ -755,5 +755,5 @@ public class WebsiteModelImpl extends BaseModelImpl<Website>
 	private boolean _originalPrimary;
 	private boolean _setOriginalPrimary;
 	private long _columnBitmask;
-	private Website _escapedModelProxy;
+	private Website _escapedModel;
 }

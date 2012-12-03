@@ -156,27 +156,29 @@ public class JournalArticleLocalServiceImpl
 		User user = userPersistence.findByPrimaryKey(userId);
 		articleId = articleId.trim().toUpperCase();
 
-		Date displayDate = PortalUtil.getDate(
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, user.getTimeZone(),
-			ArticleDisplayDateException.class);
-
+		Date displayDate = null;
 		Date expirationDate = null;
-
-		if (!neverExpire) {
-			expirationDate = PortalUtil.getDate(
-				expirationDateMonth, expirationDateDay, expirationDateYear,
-				expirationDateHour, expirationDateMinute, user.getTimeZone(),
-				ArticleExpirationDateException.class);
-		}
-
 		Date reviewDate = null;
 
-		if (!neverReview) {
-			reviewDate = PortalUtil.getDate(
-				reviewDateMonth, reviewDateDay, reviewDateYear, reviewDateHour,
-				reviewDateMinute, user.getTimeZone(),
-				ArticleReviewDateException.class);
+		if (classNameId == JournalArticleConstants.CLASSNAME_ID_DEFAULT) {
+			displayDate = PortalUtil.getDate(
+				displayDateMonth, displayDateDay, displayDateYear,
+				displayDateHour, displayDateMinute, user.getTimeZone(),
+				ArticleDisplayDateException.class);
+
+			if (!neverExpire) {
+				expirationDate = PortalUtil.getDate(
+					expirationDateMonth, expirationDateDay, expirationDateYear,
+					expirationDateHour, expirationDateMinute,
+					user.getTimeZone(), ArticleExpirationDateException.class);
+			}
+
+			if (!neverReview) {
+				reviewDate = PortalUtil.getDate(
+					reviewDateMonth, reviewDateDay, reviewDateYear,
+					reviewDateHour, reviewDateMinute, user.getTimeZone(),
+					ArticleReviewDateException.class);
+			}
 		}
 
 		byte[] smallImageBytes = null;
@@ -539,12 +541,7 @@ public class JournalArticleLocalServiceImpl
 			return;
 		}
 
-		try {
-			checkStructure(article);
-		}
-		catch (DocumentException de) {
-			_log.error(de, de);
-		}
+		checkStructure(article);
 	}
 
 	public JournalArticle copyArticle(
@@ -1084,9 +1081,6 @@ public class JournalArticleLocalServiceImpl
 		}
 		catch (DocumentException de) {
 			throw new SystemException(de);
-		}
-		catch (IOException ioe) {
-			throw new SystemException(ioe);
 		}
 
 		try {
@@ -2044,37 +2038,6 @@ public class JournalArticleLocalServiceImpl
 		User user = userPersistence.findByPrimaryKey(userId);
 		articleId = articleId.trim().toUpperCase();
 
-		Date displayDate = PortalUtil.getDate(
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, user.getTimeZone(),
-			ArticleDisplayDateException.class);
-
-		Date expirationDate = null;
-
-		if (!neverExpire) {
-			expirationDate = PortalUtil.getDate(
-				expirationDateMonth, expirationDateDay, expirationDateYear,
-				expirationDateHour, expirationDateMinute, user.getTimeZone(),
-				ArticleExpirationDateException.class);
-		}
-
-		Date now = new Date();
-
-		boolean expired = false;
-
-		if ((expirationDate != null) && expirationDate.before(now)) {
-			expired = true;
-		}
-
-		Date reviewDate = null;
-
-		if (!neverReview) {
-			reviewDate = PortalUtil.getDate(
-				reviewDateMonth, reviewDateDay, reviewDateYear, reviewDateHour,
-				reviewDateMinute, user.getTimeZone(),
-				ArticleReviewDateException.class);
-		}
-
 		byte[] smallImageBytes = null;
 
 		try {
@@ -2120,6 +2083,41 @@ public class JournalArticleLocalServiceImpl
 
 				version = MathUtil.format(latestVersion + 0.1, 1, 1);
 			}
+		}
+
+		Date displayDate = null;
+		Date expirationDate = null;
+		Date reviewDate = null;
+
+		if (article.getClassNameId() ==
+				JournalArticleConstants.CLASSNAME_ID_DEFAULT) {
+
+			displayDate = PortalUtil.getDate(
+				displayDateMonth, displayDateDay, displayDateYear,
+				displayDateHour, displayDateMinute, user.getTimeZone(),
+				ArticleDisplayDateException.class);
+
+			if (!neverExpire) {
+				expirationDate = PortalUtil.getDate(
+					expirationDateMonth, expirationDateDay, expirationDateYear,
+					expirationDateHour, expirationDateMinute,
+					user.getTimeZone(), ArticleExpirationDateException.class);
+			}
+
+			if (!neverReview) {
+				reviewDate = PortalUtil.getDate(
+					reviewDateMonth, reviewDateDay, reviewDateYear,
+					reviewDateHour, reviewDateMinute, user.getTimeZone(),
+					ArticleReviewDateException.class);
+			}
+		}
+
+		Date now = new Date();
+
+		boolean expired = false;
+
+		if ((expirationDate != null) && expirationDate.before(now)) {
+			expired = true;
 		}
 
 		validate(
@@ -2685,7 +2683,7 @@ public class JournalArticleLocalServiceImpl
 	}
 
 	protected void checkStructure(JournalArticle article)
-		throws DocumentException, PortalException, SystemException {
+		throws PortalException, SystemException {
 
 		Group companyGroup = groupLocalService.getCompanyGroup(
 			article.getCompanyId());
@@ -2703,11 +2701,14 @@ public class JournalArticleLocalServiceImpl
 
 		String content = GetterUtil.getString(article.getContent());
 
-		Document contentDoc = SAXReaderUtil.read(content);
-		Document xsdDoc = SAXReaderUtil.read(structure.getXsd());
-
 		try {
-			checkStructure(contentDoc, xsdDoc.getRootElement());
+			Document contentDocument = SAXReaderUtil.read(content);
+			Document xsdDocument = SAXReaderUtil.read(structure.getXsd());
+
+			checkStructure(contentDocument, xsdDocument.getRootElement());
+		}
+		catch (DocumentException de) {
+			throw new SystemException(de);
 		}
 		catch (StructureXsdException sxsde) {
 			long groupId = article.getGroupId();
@@ -2911,10 +2912,7 @@ public class JournalArticleLocalServiceImpl
 			content = DDMXMLUtil.formatXML(document);
 		}
 		catch (DocumentException de) {
-			_log.error(de);
-		}
-		catch (IOException ioe) {
-			_log.error(ioe);
+			_log.error(de, de);
 		}
 
 		content = HtmlUtil.replaceMsWordCharacters(content);

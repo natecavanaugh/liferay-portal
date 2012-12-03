@@ -956,6 +956,10 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return new MBMessageWrapper(_mbMessage.toEscapedModel());
 	}
 
+	public com.liferay.portlet.messageboards.model.MBMessage toUnescapedModel() {
+		return new MBMessageWrapper(_mbMessage.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _mbMessage.toString();
@@ -975,14 +979,29 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return _mbMessage.getAssetTagNames();
 	}
 
-	public java.lang.String getAttachmentsDir() {
-		return _mbMessage.getAttachmentsDir();
-	}
-
-	public java.lang.String[] getAttachmentsFiles()
+	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getAttachmentsFileEntries()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _mbMessage.getAttachmentsFiles();
+		return _mbMessage.getAttachmentsFileEntries();
+	}
+
+	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getAttachmentsFileEntries(
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbMessage.getAttachmentsFileEntries(start, end);
+	}
+
+	public int getAttachmentsFileEntriesCount()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbMessage.getAttachmentsFileEntriesCount();
+	}
+
+	public long getAttachmentsFolderId()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbMessage.getAttachmentsFolderId();
 	}
 
 	public java.lang.String getBody(boolean translate) {
@@ -995,14 +1014,23 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return _mbMessage.getCategory();
 	}
 
-	public java.lang.String getDeletedAttachmentsDir() {
-		return _mbMessage.getDeletedAttachmentsDir();
-	}
-
-	public java.lang.String[] getDeletedAttachmentsFiles()
+	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getDeletedAttachmentsFileEntries()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _mbMessage.getDeletedAttachmentsFiles();
+		return _mbMessage.getDeletedAttachmentsFileEntries();
+	}
+
+	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getDeletedAttachmentsFileEntries(
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbMessage.getDeletedAttachmentsFileEntries(start, end);
+	}
+
+	public int getDeletedAttachmentsFileEntriesCount()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbMessage.getDeletedAttachmentsFileEntriesCount();
 	}
 
 	public com.liferay.portlet.messageboards.model.MBThread getThread()
@@ -1011,8 +1039,10 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return _mbMessage.getThread();
 	}
 
-	public java.lang.String getThreadAttachmentsDir() {
-		return _mbMessage.getThreadAttachmentsDir();
+	public long getThreadAttachmentsFolderId()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mbMessage.getThreadAttachmentsFolderId();
 	}
 
 	public java.lang.String getWorkflowClassName() {
@@ -1041,8 +1071,8 @@ public class MBMessageWrapper implements MBMessage, ModelWrapper<MBMessage> {
 		return _mbMessage.isRoot();
 	}
 
-	public void setAttachmentsDir(java.lang.String attachmentsDir) {
-		_mbMessage.setAttachmentsDir(attachmentsDir);
+	public void setAttachmentsFolderId(long attachmentsFolderId) {
+		_mbMessage.setAttachmentsFolderId(attachmentsFolderId);
 	}
 
 	/**

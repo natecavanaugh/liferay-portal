@@ -19,20 +19,3 @@
 ##
 ##  $themeDisplay: the theme display
 ##
-## It is possible to use these variables to create advanced templates to display
-## your wiki pages. Here's a simple template example:
-##
-## #set ($wikiPage = $entry)
-##
-##  <h1 class="header-title">$wikiPage.getTitle()</h1>
-##
-##  <p>$formattedContent</p>
-##
-##  <h3>Children Pages</h3>
-##
-##  <ul>
-##    #foreach ($childPage in $wikiPage.getChildPages())
-##      <li>$childPage.getTitle()</li>
-##    #end
-##  </ul>
-##

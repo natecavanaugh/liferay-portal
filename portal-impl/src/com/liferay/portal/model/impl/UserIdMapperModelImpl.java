@@ -66,6 +66,8 @@ public class UserIdMapperModelImpl extends BaseModelImpl<UserIdMapper>
 		};
 	public static final String TABLE_SQL_CREATE = "create table UserIdMapper (userIdMapperId LONG not null primary key,userId LONG,type_ VARCHAR(75) null,description VARCHAR(75) null,externalUserId VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table UserIdMapper";
+	public static final String ORDER_BY_JPQL = " ORDER BY userIdMapper.userIdMapperId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY UserIdMapper.userIdMapperId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -81,6 +83,7 @@ public class UserIdMapperModelImpl extends BaseModelImpl<UserIdMapper>
 	public static long EXTERNALUSERID_COLUMN_BITMASK = 1L;
 	public static long TYPE_COLUMN_BITMASK = 2L;
 	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long USERIDMAPPERID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.UserIdMapper"));
 
@@ -271,13 +274,12 @@ public class UserIdMapperModelImpl extends BaseModelImpl<UserIdMapper>
 
 	@Override
 	public UserIdMapper toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (UserIdMapper)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (UserIdMapper)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -442,7 +444,7 @@ public class UserIdMapperModelImpl extends BaseModelImpl<UserIdMapper>
 	}
 
 	private static ClassLoader _classLoader = UserIdMapper.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			UserIdMapper.class
 		};
 	private long _userIdMapperId;
@@ -456,5 +458,5 @@ public class UserIdMapperModelImpl extends BaseModelImpl<UserIdMapper>
 	private String _externalUserId;
 	private String _originalExternalUserId;
 	private long _columnBitmask;
-	private UserIdMapper _escapedModelProxy;
+	private UserIdMapper _escapedModel;
 }

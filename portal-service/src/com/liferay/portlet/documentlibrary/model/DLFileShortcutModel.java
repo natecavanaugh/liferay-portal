@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
+import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.model.WorkflowedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -42,7 +43,7 @@ import java.util.Date;
  * @generated
  */
 public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
-	GroupedModel, WorkflowedModel {
+	GroupedModel, StagedModel, WorkflowedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -422,6 +423,8 @@ public interface DLFileShortcutModel extends BaseModel<DLFileShortcut>,
 	public CacheModel<DLFileShortcut> toCacheModel();
 
 	public DLFileShortcut toEscapedModel();
+
+	public DLFileShortcut toUnescapedModel();
 
 	public String toString();
 

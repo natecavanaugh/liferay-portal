@@ -64,6 +64,8 @@ public class UserTrackerPathModelImpl extends BaseModelImpl<UserTrackerPath>
 		};
 	public static final String TABLE_SQL_CREATE = "create table UserTrackerPath (userTrackerPathId LONG not null primary key,userTrackerId LONG,path_ STRING null,pathDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table UserTrackerPath";
+	public static final String ORDER_BY_JPQL = " ORDER BY userTrackerPath.userTrackerPathId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY UserTrackerPath.userTrackerPathId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -77,6 +79,7 @@ public class UserTrackerPathModelImpl extends BaseModelImpl<UserTrackerPath>
 				"value.object.column.bitmask.enabled.com.liferay.portal.model.UserTrackerPath"),
 			true);
 	public static long USERTRACKERID_COLUMN_BITMASK = 1L;
+	public static long USERTRACKERPATHID_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.UserTrackerPath"));
 
@@ -214,13 +217,12 @@ public class UserTrackerPathModelImpl extends BaseModelImpl<UserTrackerPath>
 
 	@Override
 	public UserTrackerPath toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (UserTrackerPath)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (UserTrackerPath)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -367,7 +369,7 @@ public class UserTrackerPathModelImpl extends BaseModelImpl<UserTrackerPath>
 	}
 
 	private static ClassLoader _classLoader = UserTrackerPath.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			UserTrackerPath.class
 		};
 	private long _userTrackerPathId;
@@ -377,5 +379,5 @@ public class UserTrackerPathModelImpl extends BaseModelImpl<UserTrackerPath>
 	private String _path;
 	private Date _pathDate;
 	private long _columnBitmask;
-	private UserTrackerPath _escapedModelProxy;
+	private UserTrackerPath _escapedModel;
 }

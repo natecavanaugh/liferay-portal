@@ -470,13 +470,12 @@ public class SocialActivityModelImpl extends BaseModelImpl<SocialActivity>
 
 	@Override
 	public SocialActivity toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (SocialActivity)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (SocialActivity)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -719,7 +718,7 @@ public class SocialActivityModelImpl extends BaseModelImpl<SocialActivity>
 	}
 
 	private static ClassLoader _classLoader = SocialActivity.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			SocialActivity.class
 		};
 	private long _activityId;
@@ -754,5 +753,5 @@ public class SocialActivityModelImpl extends BaseModelImpl<SocialActivity>
 	private long _originalReceiverUserId;
 	private boolean _setOriginalReceiverUserId;
 	private long _columnBitmask;
-	private SocialActivity _escapedModelProxy;
+	private SocialActivity _escapedModel;
 }

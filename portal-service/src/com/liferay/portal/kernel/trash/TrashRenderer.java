@@ -25,11 +25,13 @@ import javax.portlet.RenderResponse;
  */
 public interface TrashRenderer {
 
+	public String getClassName();
+
+	public long getClassPK();
+
 	public String getIconPath(PortletRequest portletRequest);
 
 	public String getPortletId();
-
-	public String getRestorePath(RenderRequest renderRequest);
 
 	public String getSummary(Locale locale);
 

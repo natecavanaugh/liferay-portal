@@ -63,6 +63,8 @@ public class BrowserTrackerModelImpl extends BaseModelImpl<BrowserTracker>
 		};
 	public static final String TABLE_SQL_CREATE = "create table BrowserTracker (browserTrackerId LONG not null primary key,userId LONG,browserKey LONG)";
 	public static final String TABLE_SQL_DROP = "drop table BrowserTracker";
+	public static final String ORDER_BY_JPQL = " ORDER BY browserTracker.browserTrackerId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY BrowserTracker.browserTrackerId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -76,6 +78,7 @@ public class BrowserTrackerModelImpl extends BaseModelImpl<BrowserTracker>
 				"value.object.column.bitmask.enabled.com.liferay.portal.model.BrowserTracker"),
 			true);
 	public static long USERID_COLUMN_BITMASK = 1L;
+	public static long BROWSERTRACKERID_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.BrowserTracker"));
 
@@ -201,13 +204,12 @@ public class BrowserTrackerModelImpl extends BaseModelImpl<BrowserTracker>
 
 	@Override
 	public BrowserTracker toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (BrowserTracker)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (BrowserTracker)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -332,7 +334,7 @@ public class BrowserTrackerModelImpl extends BaseModelImpl<BrowserTracker>
 	}
 
 	private static ClassLoader _classLoader = BrowserTracker.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			BrowserTracker.class
 		};
 	private long _browserTrackerId;
@@ -342,5 +344,5 @@ public class BrowserTrackerModelImpl extends BaseModelImpl<BrowserTracker>
 	private boolean _setOriginalUserId;
 	private long _browserKey;
 	private long _columnBitmask;
-	private BrowserTracker _escapedModelProxy;
+	private BrowserTracker _escapedModel;
 }

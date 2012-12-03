@@ -120,11 +120,9 @@ long[] selectedLayoutIds = new long[0];
 
 boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout", tabs1.equals("private-pages"));
 
-if (selPlid > 0) {
-	treeKey = treeKey + privateLayout + layoutSetBranchId;
+treeKey = treeKey + privateLayout + layoutSetBranchId;
 
-	selectedLayoutIds = GetterUtil.getLongValues(StringUtil.split(SessionTreeJSClicks.getOpenNodes(request, treeKey + "SelectedNode"), ','));
-}
+selectedLayoutIds = GetterUtil.getLongValues(StringUtil.split(SessionTreeJSClicks.getOpenNodes(request, treeKey + "SelectedNode"), ','));
 
 List results = new ArrayList();
 
@@ -208,11 +206,11 @@ request.setAttribute("edit_pages.jsp-portletURL", portletURL);
 response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 %>
 
-<c:if test='<%= SessionMessages.contains(renderRequest, "request_processed") %>'>
+<c:if test='<%= SessionMessages.contains(renderRequest, "requestProcessed") %>'>
 	<div class="portlet-msg-success">
 
 		<%
-		String successMessage = (String)SessionMessages.get(renderRequest, "request_processed");
+		String successMessage = (String)SessionMessages.get(renderRequest, "requestProcessed");
 		%>
 
 		<c:choose>

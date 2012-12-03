@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.messageboards.service.impl;
 
+import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -68,8 +69,11 @@ public class MBThreadServiceImpl extends MBThreadServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return mbThreadFinder.findByG_U_MD_S(
-				groupId, userId, modifiedDate, status, start, end);
+			QueryDefinition queryDefinition = new QueryDefinition(
+				status, start, end, null);
+
+			return mbThreadFinder.findByG_U_LPD(
+				groupId, userId, modifiedDate, queryDefinition);
 		}
 
 		long[] categoryIds = mbCategoryService.getCategoryIds(
@@ -119,8 +123,11 @@ public class MBThreadServiceImpl extends MBThreadServiceBaseImpl {
 		}
 		else {
 			if (subscribed) {
-				return mbThreadFinder.filterFindByS_G_U_C_S(
-					groupId, userId, categoryIds, status, start, end);
+				QueryDefinition queryDefinition = new QueryDefinition(
+					status, start, end, null);
+
+				return mbThreadFinder.filterFindByS_G_U_C(
+					groupId, userId, categoryIds, queryDefinition);
 			}
 			else {
 				if (includeAnonymous) {
@@ -167,8 +174,10 @@ public class MBThreadServiceImpl extends MBThreadServiceBaseImpl {
 		throws SystemException {
 
 		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return mbThreadFinder.countByG_U_MD_S(
-				groupId, userId, modifiedDate, status);
+			QueryDefinition queryDefinition = new QueryDefinition(status);
+
+			return mbThreadFinder.countByG_U_LPD(
+				groupId, userId, modifiedDate, queryDefinition);
 		}
 
 		long[] categoryIds = mbCategoryService.getCategoryIds(
@@ -218,8 +227,10 @@ public class MBThreadServiceImpl extends MBThreadServiceBaseImpl {
 		}
 		else {
 			if (subscribed) {
-				return mbThreadFinder.filterCountByS_G_U_C_S(
-					groupId, userId, categoryIds, status);
+				QueryDefinition queryDefinition = new QueryDefinition(status);
+
+				return mbThreadFinder.filterCountByS_G_U_C(
+					groupId, userId, categoryIds, queryDefinition);
 			}
 			else {
 				if (includeAnonymous) {
@@ -243,8 +254,11 @@ public class MBThreadServiceImpl extends MBThreadServiceBaseImpl {
 				groupId, categoryId, start, end);
 		}
 		else {
-			return mbThreadFinder.filterFindByG_C_S(
-				groupId, categoryId, status, start, end);
+			QueryDefinition queryDefinition = new QueryDefinition(
+				status, start, end, null);
+
+			return mbThreadFinder.filterFindByG_C(
+				groupId, categoryId, queryDefinition);
 		}
 	}
 
@@ -255,8 +269,10 @@ public class MBThreadServiceImpl extends MBThreadServiceBaseImpl {
 			return mbThreadFinder.filterCountByG_C(groupId, categoryId);
 		}
 		else {
-			return mbThreadFinder.filterCountByG_C_S(
-				groupId, categoryId, status);
+			QueryDefinition queryDefinition = new QueryDefinition(status);
+
+			return mbThreadFinder.filterCountByG_C(
+				groupId, categoryId, queryDefinition);
 		}
 	}
 
@@ -367,16 +383,23 @@ public class MBThreadServiceImpl extends MBThreadServiceBaseImpl {
 			}
 		}
 		else if (subscribed) {
-			return mbThreadFinder.findByS_G_U_S(
-				groupId, userId, status, start, end);
+			QueryDefinition queryDefinition = new QueryDefinition(
+				status, start, end, null);
+
+			return mbThreadFinder.findByS_G_U(groupId, userId, queryDefinition);
 		}
 		else if (includeAnonymous) {
-			return mbThreadFinder.findByG_U_S(
-				groupId, userId, status, start, end);
+			QueryDefinition queryDefinition = new QueryDefinition(
+				status, start, end, null);
+
+			return mbThreadFinder.findByG_U(groupId, userId, queryDefinition);
 		}
 		else {
-			return mbThreadFinder.findByG_U_A_S(
-				groupId, userId, false, status, start, end);
+			QueryDefinition queryDefinition = new QueryDefinition(
+				status, start, end, null);
+
+			return mbThreadFinder.findByG_U_A(
+				groupId, userId, false, queryDefinition);
 		}
 	}
 
@@ -394,14 +417,21 @@ public class MBThreadServiceImpl extends MBThreadServiceBaseImpl {
 			}
 		}
 		else if (subscribed) {
-			return mbThreadFinder.countByS_G_U_S(groupId, userId, status);
+			QueryDefinition queryDefinition = new QueryDefinition(status);
+
+			return mbThreadFinder.countByS_G_U(
+				groupId, userId, queryDefinition);
 		}
 		else if (includeAnonymous) {
-			return mbThreadFinder.countByG_U_S(groupId, userId, status);
+			QueryDefinition queryDefinition = new QueryDefinition(status);
+
+			return mbThreadFinder.countByG_U(groupId, userId, queryDefinition);
 		}
 		else {
-			return mbThreadFinder.countByG_U_A_S(
-				groupId, userId, false, status);
+			QueryDefinition queryDefinition = new QueryDefinition(status);
+
+			return mbThreadFinder.countByG_U_A(
+				groupId, userId, false, queryDefinition);
 		}
 	}
 

@@ -20,7 +20,8 @@
 String tabs1 = ParamUtil.getString(request, "tabs1", "web-content");
 
 String redirect = ParamUtil.getString(request, "redirect");
-String originalRedirect = ParamUtil.getString(request, "originalRedirect");
+
+String referringPortletResource = ParamUtil.getString(request, "referringPortletResource");
 
 String orderByCol = ParamUtil.getString(request, "orderByCol");
 
@@ -41,7 +42,7 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 		portletURL.setParameter("struts_action", "/journal/view_article_history");
 		portletURL.setParameter("tabs1", tabs1);
 		portletURL.setParameter("redirect", redirect);
-		portletURL.setParameter("originalRedirect", originalRedirect);
+		portletURL.setParameter("referringPortletResource", referringPortletResource);
 		portletURL.setParameter("articleId", article.getArticleId());
 		%>
 
@@ -49,7 +50,7 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 
 		<aui:form action="<%= portletURL.toString() %>" method="post" name="fm">
 			<aui:input name="<%= Constants.CMD %>" type="hidden" />
-			<aui:input name="originalRedirect" type="hidden" value="<%= originalRedirect %>" />
+			<aui:input name="referringPortletResource" type="hidden" value="<%= referringPortletResource %>" />
 			<aui:input name="articleId" type="hidden" value="<%= article.getArticleId() %>" />
 			<aui:input name="articleIds" type="hidden" />
 			<aui:input name="expireArticleIds" type="hidden" />
@@ -60,8 +61,6 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 			List headerNames = searchContainer.getHeaderNames();
 
 			headerNames.add(2, "version");
-			headerNames.add(3, "status");
-			headerNames.add(StringPool.BLANK);
 
 			Map<String, String> orderableHeaders = searchContainer.getOrderableHeaders();
 

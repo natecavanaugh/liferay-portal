@@ -114,6 +114,7 @@ public class BlogsEntryModelImpl extends BaseModelImpl<BlogsEntry>
 	public static long URLTITLE_COLUMN_BITMASK = 16L;
 	public static long USERID_COLUMN_BITMASK = 32L;
 	public static long UUID_COLUMN_BITMASK = 64L;
+	public static long CREATEDATE_COLUMN_BITMASK = 128L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -843,13 +844,12 @@ public class BlogsEntryModelImpl extends BaseModelImpl<BlogsEntry>
 
 	@Override
 	public BlogsEntry toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (BlogsEntry)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (BlogsEntry)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -1262,7 +1262,7 @@ public class BlogsEntryModelImpl extends BaseModelImpl<BlogsEntry>
 	}
 
 	private static ClassLoader _classLoader = BlogsEntry.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			BlogsEntry.class
 		};
 	private String _uuid;
@@ -1302,5 +1302,5 @@ public class BlogsEntryModelImpl extends BaseModelImpl<BlogsEntry>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private long _columnBitmask;
-	private BlogsEntry _escapedModelProxy;
+	private BlogsEntry _escapedModel;
 }

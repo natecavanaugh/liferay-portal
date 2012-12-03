@@ -14,11 +14,13 @@
 
 package com.liferay.portlet.wiki.engines.mediawiki.matchers;
 
-import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.CallbackMatcher;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.wiki.model.WikiPage;
 
 import java.util.regex.MatchResult;
@@ -32,14 +34,23 @@ public class DirectURLMatcher extends CallbackMatcher {
 		_page = page;
 		_attachmentURLPrefix = attachmentURLPrefix;
 
-		setRegex(_REGEX);
+		setRegex(_URL_REGEX);
 	}
 
-	public String replaceMatches(CharSequence charSequence) {
+	public String replaceMatches(
+		CharSequence charSequence, boolean hasUnderscore) {
+
+		if (hasUnderscore) {
+			setRegex(_UNDERSCORE_REGEX);
+		}
+
 		return replaceMatches(charSequence, _callBack);
 	}
 
-	private static final String _REGEX =
+	private static final String _UNDERSCORE_REGEX =
+		"<p>([^|<]*)[|]*?([^|<]*)<\\/p>";
+
+	private static final String _URL_REGEX =
 		"<a href=\"[^\"]*?Special:Edit[^\"]*?topic=[^\"]*?\".*?title=\"" +
 			"([^\"]*?)\".*?>(.*?)</a>";
 
@@ -48,35 +59,38 @@ public class DirectURLMatcher extends CallbackMatcher {
 	private Callback _callBack = new Callback() {
 
 		public String foundMatch(MatchResult matchResult) {
-			String fileName = matchResult.group(1);
-			String title = matchResult.group(2);
+			String fileName = StringUtil.replace(
+				matchResult.group(1), "%5F", StringPool.UNDERLINE);
+			String title = StringUtil.replace(
+				matchResult.group(2), "%5F", StringPool.UNDERLINE);
+
+			if (Validator.isNull(title)) {
+				title = fileName;
+			}
 
 			String url = _attachmentURLPrefix + HttpUtil.encodeURL(fileName);
 
 			try {
-				String[] attachments = _page.getAttachmentsFiles();
+				for (FileEntry fileEntry : _page.getAttachmentsFileEntries()) {
+					if (!fileName.equals(fileEntry.getTitle())) {
+						continue;
+					}
 
-				String link =
-					StringPool.SLASH + _page.getAttachmentsDir() +
-						StringPool.SLASH + fileName;
+					StringBundler sb = new StringBundler(5);
 
-				if (!ArrayUtil.contains(attachments, link)) {
-					return null;
+					sb.append("<a href=\"");
+					sb.append(url);
+					sb.append("\">");
+					sb.append(title);
+					sb.append("</a>");
+
+					return sb.toString();
 				}
 			}
 			catch (Exception e) {
-				return null;
 			}
 
-			StringBundler sb = new StringBundler(5);
-
-			sb.append("<a href=\"");
-			sb.append(url);
-			sb.append("\">");
-			sb.append(title);
-			sb.append("</a>");
-
-			return sb.toString();
+			return null;
 		}
 
 	};

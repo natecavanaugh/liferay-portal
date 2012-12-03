@@ -19,16 +19,13 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
-String originalRedirect = ParamUtil.getString(request, "originalRedirect", StringPool.BLANK);
-
-if (originalRedirect.equals(StringPool.BLANK)) {
-	originalRedirect = redirect;
-}
-else {
-	redirect = originalRedirect;
-}
+String referringPortletResource = ParamUtil.getString(request, "referringPortletResource");
 
 JournalStructure structure = (JournalStructure)request.getAttribute(WebKeys.JOURNAL_STRUCTURE);
+
+long groupId = BeanParamUtil.getLong(structure, request, "groupId", scopeGroupId);
+
+Group group = GroupLocalServiceUtil.getGroup(groupId);
 
 long classNameId = PortalUtil.getClassNameId(JournalStructure.class.getName());
 
@@ -37,10 +34,6 @@ long classPK = 0;
 if (structure != null) {
 	classPK = structure.getId();
 }
-
-long groupId = BeanParamUtil.getLong(structure, request, "groupId", scopeGroupId);
-
-Group group = GroupLocalServiceUtil.getGroup(groupId);
 
 String structureId = BeanParamUtil.getString(structure, request, "structureId");
 String newStructureId = ParamUtil.getString(request, "newStructureId");
@@ -97,7 +90,7 @@ int tabIndex = 1;
 	<input name="scroll" type="hidden" value="" />
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-	<aui:input name="originalRedirect" type="hidden" value="<%= originalRedirect %>" />
+	<aui:input name="referringPortletResource" type="hidden" value="<%= referringPortletResource %>" />
 	<aui:input name="groupId" type="hidden" value="<%= groupId %>" />
 	<aui:input name="structureId" type="hidden" value="<%= structureId %>" />
 	<aui:input name="move_up" type="hidden" />

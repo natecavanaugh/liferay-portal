@@ -117,9 +117,7 @@ public class S3Store extends BaseStore {
 				_s3Bucket.getName(), getKey(companyId, repositoryId, dirName),
 				null);
 
-			for (int i = 0; i < s3Objects.length; i++) {
-				S3Object s3Object = s3Objects[i];
-
+			for (S3Object s3Object : s3Objects) {
 				_s3Service.deleteObject(_s3Bucket, s3Object.getKey());
 			}
 		}
@@ -137,9 +135,7 @@ public class S3Store extends BaseStore {
 				_s3Bucket.getName(), getKey(companyId, repositoryId, fileName),
 				null);
 
-			for (int i = 0; i < s3Objects.length; i++) {
-				S3Object s3Object = s3Objects[i];
-
+			for (S3Object s3Object : s3Objects) {
 				_s3Service.deleteObject(_s3Bucket, s3Object.getKey());
 			}
 		}
@@ -220,25 +216,15 @@ public class S3Store extends BaseStore {
 	public String[] getFileNames(long companyId, long repositoryId)
 		throws SystemException {
 
-		List<String> fileNames = new ArrayList<String>();
-
 		try {
-			S3Object[] searchObjects = _s3Service.listObjects(
+			S3Object[] s3Objects = _s3Service.listObjects(
 				_s3Bucket.getName(), getKey(companyId, repositoryId), null);
 
-			for (int i = 0; i < searchObjects.length; i++) {
-				S3Object currentObject = searchObjects[i];
-
-				String fileName = getFileName(currentObject.getKey());
-
-				fileNames.add(fileName);
-			}
+			return getFileNames(s3Objects);
 		}
 		catch (S3ServiceException s3se) {
 			throw new SystemException(s3se);
 		}
-
-		return fileNames.toArray(new String[fileNames.size()]);
 	}
 
 	@Override
@@ -247,30 +233,11 @@ public class S3Store extends BaseStore {
 		throws SystemException {
 
 		try {
-			List<String> list = new ArrayList<String>();
-
 			S3Object[] s3Objects = _s3Service.listObjects(
 				_s3Bucket.getName(), getKey(companyId, repositoryId, dirName),
 				null);
 
-			for (int i = 0; i < s3Objects.length; i++) {
-				S3Object s3Object = s3Objects[i];
-
-				// Convert /${companyId}/${repositoryId}/${dirName}/${fileName}
-				// /${versionLabel} to /${dirName}/${fileName}
-
-				String key = s3Object.getKey();
-
-				int x = key.indexOf(CharPool.SLASH);
-
-				x = key.indexOf(CharPool.SLASH, x + 1);
-
-				int y = key.lastIndexOf(CharPool.SLASH);
-
-				list.add(key.substring(x, y));
-			}
-
-			return list.toArray(new String[list.size()]);
+			return getFileNames(s3Objects);
 		}
 		catch (S3ServiceException s3se) {
 			throw new SystemException(s3se);
@@ -341,9 +308,7 @@ public class S3Store extends BaseStore {
 				_s3Bucket.getName(), getKey(companyId, repositoryId, fileName),
 				null);
 
-			for (int i = 0; i < s3Objects.length; i++) {
-				S3Object oldS3Object = s3Objects[i];
-
+			for (S3Object oldS3Object : s3Objects) {
 				String oldKey = oldS3Object.getKey();
 
 				oldS3Object = _s3Service.getObject(_s3Bucket.getName(), oldKey);
@@ -394,9 +359,7 @@ public class S3Store extends BaseStore {
 				_s3Bucket.getName(), getKey(companyId, repositoryId, fileName),
 				null);
 
-			for (int i = 0; i < s3Objects.length; i++) {
-				S3Object oldS3Object = s3Objects[i];
-
+			for (S3Object oldS3Object : s3Objects) {
 				String oldKey = oldS3Object.getKey();
 
 				oldS3Object = _s3Service.getObject(_s3Bucket.getName(), oldKey);
@@ -537,13 +500,29 @@ public class S3Store extends BaseStore {
 	}
 
 	protected String getFileName(String key) {
+
+		// Convert /${companyId}/${repositoryId}/${dirName}/${fileName}
+		// /${versionLabel} to /${dirName}/${fileName}
+
 		int x = key.indexOf(CharPool.SLASH);
 
 		x = key.indexOf(CharPool.SLASH, x + 1);
 
 		int y = key.lastIndexOf(CharPool.SLASH);
 
-		return key.substring(x + 1, y);
+		return key.substring(x, y);
+	}
+
+	protected String[] getFileNames(S3Object[] s3Objects) {
+		List<String> fileNames = new ArrayList<String>();
+
+		for (S3Object s3Object : s3Objects) {
+			String fileName = getFileName(s3Object.getKey());
+
+			fileNames.add(fileName);
+		}
+
+		return fileNames.toArray(new String[fileNames.size()]);
 	}
 
 	protected String getHeadVersionLabel(
@@ -582,7 +561,6 @@ public class S3Store extends BaseStore {
 		sb.append(companyId);
 		sb.append(StringPool.SLASH);
 		sb.append(repositoryId);
-		sb.append(StringPool.SLASH);
 
 		return sb.toString();
 	}
@@ -590,14 +568,12 @@ public class S3Store extends BaseStore {
 	protected String getKey(
 		long companyId, long repositoryId, String fileName) {
 
-		StringBundler sb = new StringBundler(6);
+		StringBundler sb = new StringBundler(4);
 
 		sb.append(companyId);
 		sb.append(StringPool.SLASH);
 		sb.append(repositoryId);
-		sb.append(StringPool.SLASH);
-		sb.append(fileName);
-		sb.append(StringPool.SLASH);
+		sb.append(getNormalizedFileName(fileName));
 
 		return sb.toString();
 	}
@@ -606,17 +582,31 @@ public class S3Store extends BaseStore {
 		long companyId, long repositoryId, String fileName,
 		String versionLabel) {
 
-		StringBundler sb = new StringBundler(7);
+		StringBundler sb = new StringBundler(6);
 
 		sb.append(companyId);
 		sb.append(StringPool.SLASH);
 		sb.append(repositoryId);
-		sb.append(StringPool.SLASH);
-		sb.append(fileName);
+		sb.append(getNormalizedFileName(fileName));
 		sb.append(StringPool.SLASH);
 		sb.append(versionLabel);
 
 		return sb.toString();
+	}
+
+	protected String getNormalizedFileName(String fileName) {
+		String normalizedFileName = fileName;
+
+		if (!fileName.startsWith(StringPool.SLASH)) {
+			normalizedFileName = StringPool.SLASH + normalizedFileName;
+		}
+
+		if (fileName.endsWith(StringPool.SLASH)) {
+			normalizedFileName = normalizedFileName.substring(
+				0, normalizedFileName.length() - 1);
+		}
+
+		return normalizedFileName;
 	}
 
 	protected S3Bucket getS3Bucket() throws S3ServiceException {
@@ -644,7 +634,7 @@ public class S3Store extends BaseStore {
 		sb.append(
 			DateUtil.getCurrentDate(
 				_TEMP_DIR_PATTERN, LocaleUtil.getDefault()));
-		sb.append(fileName);
+		sb.append(getNormalizedFileName(fileName));
 
 		Date lastModifiedDate = s3Object.getLastModifiedDate();
 

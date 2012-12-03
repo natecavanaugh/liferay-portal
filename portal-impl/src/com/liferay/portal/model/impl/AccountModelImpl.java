@@ -83,6 +83,8 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 		};
 	public static final String TABLE_SQL_CREATE = "create table Account_ (accountId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,parentAccountId LONG,name VARCHAR(75) null,legalName VARCHAR(75) null,legalId VARCHAR(75) null,legalType VARCHAR(75) null,sicCode VARCHAR(75) null,tickerSymbol VARCHAR(75) null,industry VARCHAR(75) null,type_ VARCHAR(75) null,size_ VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table Account_";
+	public static final String ORDER_BY_JPQL = " ORDER BY account.accountId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Account_.accountId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -517,13 +519,12 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 
 	@Override
 	public Account toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Account)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Account)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -832,7 +833,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 	}
 
 	private static ClassLoader _classLoader = Account.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Account.class
 		};
 	private long _accountId;
@@ -852,5 +853,5 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 	private String _industry;
 	private String _type;
 	private String _size;
-	private Account _escapedModelProxy;
+	private Account _escapedModel;
 }

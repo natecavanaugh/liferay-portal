@@ -18,7 +18,9 @@ import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
+import com.liferay.portal.model.ContainerModel;
 import com.liferay.portal.model.GroupedModel;
+import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.model.WorkflowedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -41,8 +43,8 @@ import java.util.Date;
  * @see com.liferay.portlet.wiki.model.impl.WikiNodeModelImpl
  * @generated
  */
-public interface WikiNodeModel extends BaseModel<WikiNode>, GroupedModel,
-	WorkflowedModel {
+public interface WikiNodeModel extends BaseModel<WikiNode>, ContainerModel,
+	GroupedModel, StagedModel, WorkflowedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -376,6 +378,41 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, GroupedModel,
 	 */
 	public boolean isScheduled();
 
+	/**
+	 * Returns the container model ID of this wiki node.
+	 *
+	 * @return the container model ID of this wiki node
+	 */
+	public long getContainerModelId();
+
+	/**
+	 * Sets the container model ID of this wiki node.
+	 *
+	 * @param container model ID of this wiki node
+	 */
+	public void setContainerModelId(long containerModelId);
+
+	/**
+	 * Returns the container name of this wiki node.
+	 *
+	 * @return the container name of this wiki node
+	 */
+	public String getContainerModelName();
+
+	/**
+	 * Returns the parent container model ID of this wiki node.
+	 *
+	 * @return the parent container model ID of this wiki node
+	 */
+	public long getParentContainerModelId();
+
+	/**
+	 * Sets the parent container model ID of this wiki node.
+	 *
+	 * @param parent container model ID of this wiki node
+	 */
+	public void setParentContainerModelId(long parentContainerModelId);
+
 	public boolean isNew();
 
 	public void setNew(boolean n);
@@ -403,6 +440,8 @@ public interface WikiNodeModel extends BaseModel<WikiNode>, GroupedModel,
 	public CacheModel<WikiNode> toCacheModel();
 
 	public WikiNode toEscapedModel();
+
+	public WikiNode toUnescapedModel();
 
 	public String toString();
 

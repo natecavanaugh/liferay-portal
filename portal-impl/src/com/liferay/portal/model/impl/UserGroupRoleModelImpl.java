@@ -65,6 +65,8 @@ public class UserGroupRoleModelImpl extends BaseModelImpl<UserGroupRole>
 		};
 	public static final String TABLE_SQL_CREATE = "create table UserGroupRole (userId LONG not null,groupId LONG not null,roleId LONG not null,primary key (userId, groupId, roleId))";
 	public static final String TABLE_SQL_DROP = "drop table UserGroupRole";
+	public static final String ORDER_BY_JPQL = " ORDER BY userGroupRole.id.userId ASC, userGroupRole.id.groupId ASC, userGroupRole.id.roleId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY UserGroupRole.userId ASC, UserGroupRole.groupId ASC, UserGroupRole.roleId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -262,13 +264,12 @@ public class UserGroupRoleModelImpl extends BaseModelImpl<UserGroupRole>
 
 	@Override
 	public UserGroupRole toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (UserGroupRole)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (UserGroupRole)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -393,7 +394,7 @@ public class UserGroupRoleModelImpl extends BaseModelImpl<UserGroupRole>
 	}
 
 	private static ClassLoader _classLoader = UserGroupRole.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			UserGroupRole.class
 		};
 	private long _userId;
@@ -407,5 +408,5 @@ public class UserGroupRoleModelImpl extends BaseModelImpl<UserGroupRole>
 	private long _originalRoleId;
 	private boolean _setOriginalRoleId;
 	private long _columnBitmask;
-	private UserGroupRole _escapedModelProxy;
+	private UserGroupRole _escapedModel;
 }

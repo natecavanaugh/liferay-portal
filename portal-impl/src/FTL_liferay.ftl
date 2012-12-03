@@ -19,6 +19,22 @@ LPS-30525.
 	<#assign js_main_file = htmlUtil.escape(portalUtil.getStaticResourceURL(request, "${themeDisplay.getPathThemeJavaScript()}/main.js")) />
 </#if>
 
+<#function max x y>
+	<#if (x < y)>
+		<#return y>
+	<#else>
+		<#return x>
+	</#if>
+</#function>
+
+<#function min x y>
+	<#if (x > y)>
+		<#return y>
+	<#else>
+		<#return x>
+	</#if>
+</#function>
+
 <#macro css file_name>
 	<#if file_name = css_main_file>
 		<link class="lfr-css-file" href="${file_name}" id="mainLiferayThemeCSS" rel="stylesheet" type="text/css" />

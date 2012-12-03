@@ -42,6 +42,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.PortletURLImpl;
 import com.liferay.portlet.asset.AssetCategoryException;
 import com.liferay.portlet.asset.AssetTagException;
@@ -81,6 +82,7 @@ import javax.portlet.PortletContext;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletRequestDispatcher;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -198,6 +200,28 @@ public class EditArticleAction extends PortletAction {
 				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 			Layout layout = themeDisplay.getLayout();
+
+			if (cmd.equals(Constants.DELETE) &&
+				!ActionUtil.hasArticle(actionRequest)) {
+
+				String referringPortletResource = ParamUtil.getString(
+					actionRequest, "referringPortletResource");
+
+				if (Validator.isNotNull(referringPortletResource)) {
+					setForward(
+						actionRequest,
+						"portlet.journal.asset.add_asset_redirect");
+
+					return;
+				}
+				else {
+					PortletURL portletURL = PortletURLFactoryUtil.create(
+						actionRequest, portletConfig.getPortletName(),
+						themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+
+					redirect = portletURL.toString();
+				}
+			}
 
 			if (cmd.equals(Constants.DELETE_TRANSLATION) ||
 				cmd.equals(Constants.TRANSLATE)) {
@@ -373,8 +397,8 @@ public class EditArticleAction extends PortletAction {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		String originalRedirect = ParamUtil.getString(
-			actionRequest, "originalRedirect");
+		String referringPortletResource = ParamUtil.getString(
+			actionRequest, "referringPortletResource");
 
 		String languageId = ParamUtil.getString(actionRequest, "languageId");
 
@@ -387,7 +411,8 @@ public class EditArticleAction extends PortletAction {
 		portletURL.setParameter("struts_action", "/journal/edit_article");
 		portletURL.setParameter(Constants.CMD, Constants.UPDATE, false);
 		portletURL.setParameter("redirect", redirect, false);
-		portletURL.setParameter("originalRedirect", originalRedirect, false);
+		portletURL.setParameter(
+			"referringPortletResource", referringPortletResource, false);
 		portletURL.setParameter(
 			"groupId", String.valueOf(article.getGroupId()), false);
 		portletURL.setParameter("articleId", article.getArticleId(), false);

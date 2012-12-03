@@ -86,10 +86,10 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 			{ "targetLayoutFriendlyUrl", Types.VARCHAR },
 			{ "targetPortletId", Types.VARCHAR },
 			{ "contentField", Types.VARCHAR },
-			{ "feedType", Types.VARCHAR },
+			{ "feedFormat", Types.VARCHAR },
 			{ "feedVersion", Types.DOUBLE }
 		};
-	public static final String TABLE_SQL_CREATE = "create table JournalFeed (uuid_ VARCHAR(75) null,id_ LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,feedId VARCHAR(75) null,name VARCHAR(75) null,description STRING null,type_ VARCHAR(75) null,structureId VARCHAR(75) null,templateId VARCHAR(75) null,rendererTemplateId VARCHAR(75) null,delta INTEGER,orderByCol VARCHAR(75) null,orderByType VARCHAR(75) null,targetLayoutFriendlyUrl VARCHAR(255) null,targetPortletId VARCHAR(75) null,contentField VARCHAR(75) null,feedType VARCHAR(75) null,feedVersion DOUBLE)";
+	public static final String TABLE_SQL_CREATE = "create table JournalFeed (uuid_ VARCHAR(75) null,id_ LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,feedId VARCHAR(75) null,name VARCHAR(75) null,description STRING null,type_ VARCHAR(75) null,structureId VARCHAR(75) null,templateId VARCHAR(75) null,rendererTemplateId VARCHAR(75) null,delta INTEGER,orderByCol VARCHAR(75) null,orderByType VARCHAR(75) null,targetLayoutFriendlyUrl VARCHAR(255) null,targetPortletId VARCHAR(75) null,contentField VARCHAR(75) null,feedFormat VARCHAR(75) null,feedVersion DOUBLE)";
 	public static final String TABLE_SQL_DROP = "drop table JournalFeed";
 	public static final String ORDER_BY_JPQL = " ORDER BY journalFeed.feedId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY JournalFeed.feedId ASC";
@@ -144,7 +144,7 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 		model.setTargetLayoutFriendlyUrl(soapModel.getTargetLayoutFriendlyUrl());
 		model.setTargetPortletId(soapModel.getTargetPortletId());
 		model.setContentField(soapModel.getContentField());
-		model.setFeedType(soapModel.getFeedType());
+		model.setFeedFormat(soapModel.getFeedFormat());
 		model.setFeedVersion(soapModel.getFeedVersion());
 
 		return model;
@@ -225,7 +225,7 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 		attributes.put("targetLayoutFriendlyUrl", getTargetLayoutFriendlyUrl());
 		attributes.put("targetPortletId", getTargetPortletId());
 		attributes.put("contentField", getContentField());
-		attributes.put("feedType", getFeedType());
+		attributes.put("feedFormat", getFeedFormat());
 		attributes.put("feedVersion", getFeedVersion());
 
 		return attributes;
@@ -360,10 +360,10 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 			setContentField(contentField);
 		}
 
-		String feedType = (String)attributes.get("feedType");
+		String feedFormat = (String)attributes.get("feedFormat");
 
-		if (feedType != null) {
-			setFeedType(feedType);
+		if (feedFormat != null) {
+			setFeedFormat(feedFormat);
 		}
 
 		Double feedVersion = (Double)attributes.get("feedVersion");
@@ -683,17 +683,17 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 	}
 
 	@JSON
-	public String getFeedType() {
-		if (_feedType == null) {
+	public String getFeedFormat() {
+		if (_feedFormat == null) {
 			return StringPool.BLANK;
 		}
 		else {
-			return _feedType;
+			return _feedFormat;
 		}
 	}
 
-	public void setFeedType(String feedType) {
-		_feedType = feedType;
+	public void setFeedFormat(String feedFormat) {
+		_feedFormat = feedFormat;
 	}
 
 	@JSON
@@ -724,13 +724,12 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 
 	@Override
 	public JournalFeed toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (JournalFeed)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (JournalFeed)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -758,7 +757,7 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 		journalFeedImpl.setTargetLayoutFriendlyUrl(getTargetLayoutFriendlyUrl());
 		journalFeedImpl.setTargetPortletId(getTargetPortletId());
 		journalFeedImpl.setContentField(getContentField());
-		journalFeedImpl.setFeedType(getFeedType());
+		journalFeedImpl.setFeedFormat(getFeedFormat());
 		journalFeedImpl.setFeedVersion(getFeedVersion());
 
 		journalFeedImpl.resetOriginalValues();
@@ -972,12 +971,12 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 			journalFeedCacheModel.contentField = null;
 		}
 
-		journalFeedCacheModel.feedType = getFeedType();
+		journalFeedCacheModel.feedFormat = getFeedFormat();
 
-		String feedType = journalFeedCacheModel.feedType;
+		String feedFormat = journalFeedCacheModel.feedFormat;
 
-		if ((feedType != null) && (feedType.length() == 0)) {
-			journalFeedCacheModel.feedType = null;
+		if ((feedFormat != null) && (feedFormat.length() == 0)) {
+			journalFeedCacheModel.feedFormat = null;
 		}
 
 		journalFeedCacheModel.feedVersion = getFeedVersion();
@@ -1031,8 +1030,8 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 		sb.append(getTargetPortletId());
 		sb.append(", contentField=");
 		sb.append(getContentField());
-		sb.append(", feedType=");
-		sb.append(getFeedType());
+		sb.append(", feedFormat=");
+		sb.append(getFeedFormat());
 		sb.append(", feedVersion=");
 		sb.append(getFeedVersion());
 		sb.append("}");
@@ -1132,8 +1131,8 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 		sb.append(getContentField());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>feedType</column-name><column-value><![CDATA[");
-		sb.append(getFeedType());
+			"<column><column-name>feedFormat</column-name><column-value><![CDATA[");
+		sb.append(getFeedFormat());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>feedVersion</column-name><column-value><![CDATA[");
@@ -1146,7 +1145,7 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 	}
 
 	private static ClassLoader _classLoader = JournalFeed.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			JournalFeed.class
 		};
 	private String _uuid;
@@ -1177,8 +1176,8 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 	private String _targetLayoutFriendlyUrl;
 	private String _targetPortletId;
 	private String _contentField;
-	private String _feedType;
+	private String _feedFormat;
 	private double _feedVersion;
 	private long _columnBitmask;
-	private JournalFeed _escapedModelProxy;
+	private JournalFeed _escapedModel;
 }

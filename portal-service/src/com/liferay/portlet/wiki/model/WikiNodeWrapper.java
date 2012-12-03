@@ -572,6 +572,51 @@ public class WikiNodeWrapper implements WikiNode, ModelWrapper<WikiNode> {
 		return _wikiNode.isScheduled();
 	}
 
+	/**
+	* Returns the container model ID of this wiki node.
+	*
+	* @return the container model ID of this wiki node
+	*/
+	public long getContainerModelId() {
+		return _wikiNode.getContainerModelId();
+	}
+
+	/**
+	* Sets the container model ID of this wiki node.
+	*
+	* @param container model ID of this wiki node
+	*/
+	public void setContainerModelId(long containerModelId) {
+		_wikiNode.setContainerModelId(containerModelId);
+	}
+
+	/**
+	* Returns the container name of this wiki node.
+	*
+	* @return the container name of this wiki node
+	*/
+	public java.lang.String getContainerModelName() {
+		return _wikiNode.getContainerModelName();
+	}
+
+	/**
+	* Returns the parent container model ID of this wiki node.
+	*
+	* @return the parent container model ID of this wiki node
+	*/
+	public long getParentContainerModelId() {
+		return _wikiNode.getParentContainerModelId();
+	}
+
+	/**
+	* Sets the parent container model ID of this wiki node.
+	*
+	* @param parent container model ID of this wiki node
+	*/
+	public void setParentContainerModelId(long parentContainerModelId) {
+		_wikiNode.setParentContainerModelId(parentContainerModelId);
+	}
+
 	public boolean isNew() {
 		return _wikiNode.isNew();
 	}
@@ -631,6 +676,10 @@ public class WikiNodeWrapper implements WikiNode, ModelWrapper<WikiNode> {
 		return new WikiNodeWrapper(_wikiNode.toEscapedModel());
 	}
 
+	public com.liferay.portlet.wiki.model.WikiNode toUnescapedModel() {
+		return new WikiNodeWrapper(_wikiNode.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _wikiNode.toString();
@@ -645,7 +694,7 @@ public class WikiNodeWrapper implements WikiNode, ModelWrapper<WikiNode> {
 		_wikiNode.persist();
 	}
 
-	public java.util.List<com.liferay.portal.kernel.util.Tuple> getDeletedAttachmentsFiles()
+	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getDeletedAttachmentsFiles()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _wikiNode.getDeletedAttachmentsFiles();

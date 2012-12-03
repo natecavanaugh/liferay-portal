@@ -69,6 +69,8 @@ public class ReleaseModelImpl extends BaseModelImpl<Release>
 		};
 	public static final String TABLE_SQL_CREATE = "create table Release_ (releaseId LONG not null primary key,createDate DATE null,modifiedDate DATE null,servletContextName VARCHAR(75) null,buildNumber INTEGER,buildDate DATE null,verified BOOLEAN,state_ INTEGER,testString VARCHAR(1024) null)";
 	public static final String TABLE_SQL_DROP = "drop table Release_";
+	public static final String ORDER_BY_JPQL = " ORDER BY release.releaseId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Release_.releaseId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -82,6 +84,7 @@ public class ReleaseModelImpl extends BaseModelImpl<Release>
 				"value.object.column.bitmask.enabled.com.liferay.portal.model.Release"),
 			true);
 	public static long SERVLETCONTEXTNAME_COLUMN_BITMASK = 1L;
+	public static long RELEASEID_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.Release"));
 
@@ -301,13 +304,12 @@ public class ReleaseModelImpl extends BaseModelImpl<Release>
 
 	@Override
 	public Release toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Release)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Release)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -517,7 +519,7 @@ public class ReleaseModelImpl extends BaseModelImpl<Release>
 	}
 
 	private static ClassLoader _classLoader = Release.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Release.class
 		};
 	private long _releaseId;
@@ -531,5 +533,5 @@ public class ReleaseModelImpl extends BaseModelImpl<Release>
 	private int _state;
 	private String _testString;
 	private long _columnBitmask;
-	private Release _escapedModelProxy;
+	private Release _escapedModel;
 }

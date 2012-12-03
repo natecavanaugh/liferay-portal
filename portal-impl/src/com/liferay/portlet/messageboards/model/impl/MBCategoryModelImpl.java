@@ -101,6 +101,7 @@ public class MBCategoryModelImpl extends BaseModelImpl<MBCategory>
 	public static long GROUPID_COLUMN_BITMASK = 2L;
 	public static long PARENTCATEGORYID_COLUMN_BITMASK = 4L;
 	public static long UUID_COLUMN_BITMASK = 8L;
+	public static long NAME_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -533,13 +534,12 @@ public class MBCategoryModelImpl extends BaseModelImpl<MBCategory>
 
 	@Override
 	public MBCategory toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (MBCategory)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (MBCategory)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -846,7 +846,7 @@ public class MBCategoryModelImpl extends BaseModelImpl<MBCategory>
 	}
 
 	private static ClassLoader _classLoader = MBCategory.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			MBCategory.class
 		};
 	private String _uuid;
@@ -873,5 +873,5 @@ public class MBCategoryModelImpl extends BaseModelImpl<MBCategory>
 	private int _messageCount;
 	private Date _lastPostDate;
 	private long _columnBitmask;
-	private MBCategory _escapedModelProxy;
+	private MBCategory _escapedModel;
 }

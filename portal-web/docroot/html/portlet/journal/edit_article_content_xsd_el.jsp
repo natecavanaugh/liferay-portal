@@ -115,13 +115,15 @@ Element contentEl = (Element)request.getAttribute(WebKeys.JOURNAL_ARTICLE_CONTEN
 
 			<div class="journal-article-move-handler"></div>
 
-			<label class="journal-article-field-label">
-				<span><%= HtmlUtil.escape(elLabel) %></span>
+			<c:if test='<%= !elType.equals("selection_break") %>'>
+				<label class="journal-article-field-label">
+					<span><%= HtmlUtil.escape(elLabel) %></span>
 
-				<c:if test="<%= (Validator.isNotNull(elInstructions) && displayAsTooltip) %>">
-					<img align="top" class="journal-article-instructions-container" src="/html/themes/classic/images/portlet/help.png" />
-				</c:if>
-			</label>
+					<c:if test="<%= (Validator.isNotNull(elInstructions) && displayAsTooltip) %>">
+						<img align="top" class="journal-article-instructions-container" src="/html/themes/classic/images/portlet/help.png" />
+					</c:if>
+				</label>
+			</c:if>
 
 			<div class="journal-article-component-container">
 				<c:if test='<%= elType.equals("text") %>'>
@@ -153,7 +155,15 @@ Element contentEl = (Element)request.getAttribute(WebKeys.JOURNAL_ARTICLE_CONTEN
 				<c:if test='<%= elType.equals("text_area") %>'>
 
 					<%
-					String textAreaInputName = "structure_el_" + elName + elRepeatCount + "_content";
+					StringBundler sb = new StringBundler(5);
+
+					sb.append("structure_el_");
+					sb.append(elInstanceId);
+					sb.append(elName);
+					sb.append(elRepeatCount);
+					sb.append("_content");
+
+					String textAreaInputName = sb.toString();
 
 					if (Validator.isNull(elContent)) {
 						elContent = ParamUtil.getString(request, textAreaInputName);
@@ -192,7 +202,7 @@ Element contentEl = (Element)request.getAttribute(WebKeys.JOURNAL_ARTICLE_CONTEN
 							String journalImageContentInputName = "journalImageContent_" + elName + elRepeatCount;
 							%>
 
-							<aui:input name="<%= HtmlUtil.escapeAttribute(journalImageContentInputName) %>" type="hidden" value="<%= elContent %>" />
+							<aui:input inputCssClass="journal-image-preview-content" name="<%= HtmlUtil.escapeAttribute(journalImageContentInputName) %>" type="hidden" value="<%= elContent %>" />
 
 							<aui:input name="journalImageDelete" type="hidden" value="" />
 
@@ -396,7 +406,14 @@ Element contentEl = (Element)request.getAttribute(WebKeys.JOURNAL_ARTICLE_CONTEN
 				<c:if test='<%= elType.equals("link_to_layout") %>'>
 
 					<%
-					String linkSelectName = "structure_el" + elName + elRepeatCount + "_content";
+					StringBundler sb = new StringBundler(4);
+
+					sb.append("structure_el");
+					sb.append(elName);
+					sb.append(elRepeatCount);
+					sb.append("_content");
+
+					String linkSelectName = sb.toString();
 
 					if (Validator.isNull(elContent)) {
 						elContent = ParamUtil.getString(request, linkSelectName);
@@ -426,7 +443,7 @@ Element contentEl = (Element)request.getAttribute(WebKeys.JOURNAL_ARTICLE_CONTEN
 				</c:if>
 			</div>
 
-			<c:if test="<%= Validator.isNull(toLanguageId) %>">
+			<c:if test='<%= Validator.isNull(toLanguageId) && !elType.equals("selection_break") %>'>
 				<aui:input cssClass="journal-article-localized-checkbox" label="localizable" name='<%= elInstanceId + "localized-checkbox" %>' type="checkbox" value="<%= !elLanguageId.equals(StringPool.BLANK) %>" />
 			</c:if>
 

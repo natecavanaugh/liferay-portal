@@ -46,12 +46,12 @@ public class LiferayPackageAutoDeployer implements AutoDeployer {
 
 	public LiferayPackageAutoDeployer() {
 		try {
-			baseDir = PrefsPropsUtil.getString(
+			_baseDir = PrefsPropsUtil.getString(
 				PropsKeys.AUTO_DEPLOY_DEPLOY_DIR,
 				PropsValues.AUTO_DEPLOY_DEPLOY_DIR);
 		}
 		catch (Exception e) {
-			_log.error(e);
+			_log.error(e, e);
 		}
 	}
 
@@ -106,7 +106,7 @@ public class LiferayPackageAutoDeployer implements AutoDeployer {
 						fileNames.add(zipEntryFileName);
 
 						FileUtil.write(
-							baseDir + StringPool.SLASH + zipEntryFileName,
+							_baseDir + StringPool.SLASH + zipEntryFileName,
 							inputStream);
 					}
 				}
@@ -142,9 +142,13 @@ public class LiferayPackageAutoDeployer implements AutoDeployer {
 		}
 	}
 
-	protected String baseDir;
+	public AutoDeployer cloneAutoDeployer() {
+		return new LiferayPackageAutoDeployer();
+	}
 
 	private static Log _log = LogFactoryUtil.getLog(
 		LiferayPackageAutoDeployer.class);
+
+	private String _baseDir;
 
 }

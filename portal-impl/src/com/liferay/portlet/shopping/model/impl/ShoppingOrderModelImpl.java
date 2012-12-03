@@ -139,6 +139,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 	public static long PPPAYMENTSTATUS_COLUMN_BITMASK = 4L;
 	public static long PPTXNID_COLUMN_BITMASK = 8L;
 	public static long USERID_COLUMN_BITMASK = 16L;
+	public static long CREATEDATE_COLUMN_BITMASK = 32L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -1355,13 +1356,12 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 
 	@Override
 	public ShoppingOrder toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ShoppingOrder)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ShoppingOrder)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -2143,7 +2143,7 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 	}
 
 	private static ClassLoader _classLoader = ShoppingOrder.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ShoppingOrder.class
 		};
 	private long _orderId;
@@ -2206,5 +2206,5 @@ public class ShoppingOrderModelImpl extends BaseModelImpl<ShoppingOrder>
 	private boolean _sendOrderEmail;
 	private boolean _sendShippingEmail;
 	private long _columnBitmask;
-	private ShoppingOrder _escapedModelProxy;
+	private ShoppingOrder _escapedModel;
 }

@@ -28,7 +28,7 @@ import java.io.File;
 public class WebAutoDeployListener extends BaseAutoDeployListener {
 
 	public WebAutoDeployListener() {
-		_autoDeployer = new WebAutoDeployer();
+		_autoDeployer = new ThreadSafeAutoDeployer(new WebAutoDeployer());
 	}
 
 	public void deploy(AutoDeploymentContext autoDeploymentContext)

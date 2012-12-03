@@ -16,6 +16,8 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
+<%@ page import="com.liferay.taglib.ui.SitesDirectoryTag" %>
+
 <%
 PortletPreferences preferences = renderRequest.getPreferences();
 
@@ -25,13 +27,8 @@ if (Validator.isNotNull(portletResource)) {
 	preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 }
 
-String bulletStyle = PrefsParamUtil.getString(preferences, renderRequest, "bulletStyle", GetterUtil.getString(themeDisplay.getThemeSetting("bullet-style"), "dots"));
-String displayStyle = PrefsParamUtil.getString(preferences, renderRequest, "displayStyle", PropsValues.SITES_DIRECTORY_DISPLAY_STYLE_DEFAULT);
-String headerType = PrefsParamUtil.getString(preferences, renderRequest, "headerType", "none");
-String includedGroups = PrefsParamUtil.getString(preferences, renderRequest, "includedGroups", "current");
-int rootGroupLevel = PrefsParamUtil.getInteger(preferences, renderRequest, "rootGroupLevel", 1);
-String rootGroupType = PrefsParamUtil.getString(preferences, renderRequest, "rootGroupType", "absolute");
-boolean nestedChildren = PrefsParamUtil.getBoolean(preferences, renderRequest, "nestedChildren", true);
+String displayStyle = PrefsParamUtil.getString(preferences, renderRequest, "displayStyle", "descriptive");
+String sites = PrefsParamUtil.getString(preferences, renderRequest, "sites", SitesDirectoryTag.SITES_TOP_LEVEL);
 %>
 
 <%@ include file="/html/portlet/sites_directory/init-ext.jsp" %>

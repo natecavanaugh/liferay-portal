@@ -84,6 +84,7 @@ public class ShoppingItemPriceModelImpl extends BaseModelImpl<ShoppingItemPrice>
 				"value.object.column.bitmask.enabled.com.liferay.portlet.shopping.model.ShoppingItemPrice"),
 			true);
 	public static long ITEMID_COLUMN_BITMASK = 1L;
+	public static long ITEMPRICEID_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.shopping.model.ShoppingItemPrice"));
 
@@ -317,13 +318,12 @@ public class ShoppingItemPriceModelImpl extends BaseModelImpl<ShoppingItemPrice>
 
 	@Override
 	public ShoppingItemPrice toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ShoppingItemPrice)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ShoppingItemPrice)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -531,7 +531,7 @@ public class ShoppingItemPriceModelImpl extends BaseModelImpl<ShoppingItemPrice>
 	}
 
 	private static ClassLoader _classLoader = ShoppingItemPrice.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ShoppingItemPrice.class
 		};
 	private long _itemPriceId;
@@ -547,5 +547,5 @@ public class ShoppingItemPriceModelImpl extends BaseModelImpl<ShoppingItemPrice>
 	private boolean _useShippingFormula;
 	private int _status;
 	private long _columnBitmask;
-	private ShoppingItemPrice _escapedModelProxy;
+	private ShoppingItemPrice _escapedModel;
 }

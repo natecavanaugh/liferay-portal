@@ -89,6 +89,8 @@ public class MBMailingListModelImpl extends BaseModelImpl<MBMailingList>
 		};
 	public static final String TABLE_SQL_CREATE = "create table MBMailingList (uuid_ VARCHAR(75) null,mailingListId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,categoryId LONG,emailAddress VARCHAR(75) null,inProtocol VARCHAR(75) null,inServerName VARCHAR(75) null,inServerPort INTEGER,inUseSSL BOOLEAN,inUserName VARCHAR(75) null,inPassword VARCHAR(75) null,inReadInterval INTEGER,outEmailAddress VARCHAR(75) null,outCustom BOOLEAN,outServerName VARCHAR(75) null,outServerPort INTEGER,outUseSSL BOOLEAN,outUserName VARCHAR(75) null,outPassword VARCHAR(75) null,allowAnonymous BOOLEAN,active_ BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table MBMailingList";
+	public static final String ORDER_BY_JPQL = " ORDER BY mbMailingList.mailingListId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY MBMailingList.mailingListId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -106,6 +108,7 @@ public class MBMailingListModelImpl extends BaseModelImpl<MBMailingList>
 	public static long COMPANYID_COLUMN_BITMASK = 4L;
 	public static long GROUPID_COLUMN_BITMASK = 8L;
 	public static long UUID_COLUMN_BITMASK = 16L;
+	public static long MAILINGLISTID_COLUMN_BITMASK = 32L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.messageboards.model.MBMailingList"));
 
@@ -695,13 +698,12 @@ public class MBMailingListModelImpl extends BaseModelImpl<MBMailingList>
 
 	@Override
 	public MBMailingList toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (MBMailingList)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (MBMailingList)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -1127,7 +1129,7 @@ public class MBMailingListModelImpl extends BaseModelImpl<MBMailingList>
 	}
 
 	private static ClassLoader _classLoader = MBMailingList.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			MBMailingList.class
 		};
 	private String _uuid;
@@ -1167,5 +1169,5 @@ public class MBMailingListModelImpl extends BaseModelImpl<MBMailingList>
 	private boolean _originalActive;
 	private boolean _setOriginalActive;
 	private long _columnBitmask;
-	private MBMailingList _escapedModelProxy;
+	private MBMailingList _escapedModel;
 }

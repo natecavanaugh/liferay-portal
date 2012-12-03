@@ -33,6 +33,8 @@ public interface ModelHints {
 
 	public Map<String, String> getHints(String model, String field);
 
+	public int getMaxLength(String model, String field);
+
 	public List<String> getModels();
 
 	public Tuple getSanitizeTuple(String model, String field);
@@ -42,6 +44,9 @@ public interface ModelHints {
 	public String getType(String model, String field);
 
 	public List<Tuple> getValidators(String model, String field);
+
+	public String getValue(
+		String model, String field, String name, String defaultValue);
 
 	public boolean isCustomValidator(String validatorName);
 

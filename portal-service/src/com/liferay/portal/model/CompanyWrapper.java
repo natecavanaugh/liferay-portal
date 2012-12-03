@@ -393,6 +393,10 @@ public class CompanyWrapper implements Company, ModelWrapper<Company> {
 		return new CompanyWrapper(_company.toEscapedModel());
 	}
 
+	public com.liferay.portal.model.Company toUnescapedModel() {
+		return new CompanyWrapper(_company.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _company.toString();
@@ -528,6 +532,10 @@ public class CompanyWrapper implements Company, ModelWrapper<Company> {
 
 	public void setKeyObj(java.security.Key keyObj) {
 		_company.setKeyObj(keyObj);
+	}
+
+	public void setVirtualHostname(java.lang.String virtualHostname) {
+		_company.setVirtualHostname(virtualHostname);
 	}
 
 	/**

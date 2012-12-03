@@ -14,6 +14,7 @@
 
 package com.liferay.portal.struts;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -29,6 +30,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -203,7 +205,7 @@ public class PortletAction extends Action {
 		String successMessage = ParamUtil.getString(
 			actionRequest, "successMessage");
 
-		SessionMessages.add(actionRequest, "request_processed", successMessage);
+		SessionMessages.add(actionRequest, "requestProcessed", successMessage);
 	}
 
 	protected String getForward(PortletRequest portletRequest) {
@@ -248,6 +250,49 @@ public class PortletAction extends Action {
 		return _CHECK_METHOD_ON_PROCESS_ACTION;
 	}
 
+	protected boolean isDisplaySuccessMessage(PortletRequest portletRequest)
+		throws SystemException {
+
+		if (!SessionErrors.isEmpty(portletRequest)) {
+			return false;
+		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		Layout layout = themeDisplay.getLayout();
+
+		if (layout.isTypeControlPanel()) {
+			return true;
+		}
+
+		String portletId = (String)portletRequest.getAttribute(
+			WebKeys.PORTLET_ID);
+
+		try {
+			LayoutTypePortlet layoutTypePortlet =
+				themeDisplay.getLayoutTypePortlet();
+
+			if (layoutTypePortlet.hasPortletId(portletId)) {
+				return true;
+			}
+		}
+		catch (PortalException pe) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(pe, pe);
+			}
+		}
+
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(
+			themeDisplay.getCompanyId(), portletId);
+
+		if (portlet.isAddDefaultResource()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	protected boolean redirectToLogin(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException {
@@ -282,30 +327,8 @@ public class PortletAction extends Action {
 			String redirect)
 		throws IOException, SystemException {
 
-		if (SessionErrors.isEmpty(actionRequest)) {
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
-			LayoutTypePortlet layoutTypePortlet =
-				themeDisplay.getLayoutTypePortlet();
-
-			boolean hasPortletId = false;
-
-			String portletId = (String)actionRequest.getAttribute(
-				WebKeys.PORTLET_ID);
-
-			try {
-				hasPortletId = layoutTypePortlet.hasPortletId(portletId);
-			}
-			catch (Exception e) {
-			}
-
-			Portlet portlet = PortletLocalServiceUtil.getPortletById(
-				themeDisplay.getCompanyId(), portletId);
-
-			if (hasPortletId || portlet.isAddDefaultResource()) {
-				addSuccessMessage(actionRequest, actionResponse);
-			}
+		if (isDisplaySuccessMessage(actionRequest)) {
+			addSuccessMessage(actionRequest, actionResponse);
 		}
 
 		if (Validator.isNull(redirect)) {

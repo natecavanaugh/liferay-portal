@@ -533,6 +533,25 @@ public class WikiNodeModelImpl extends BaseModelImpl<WikiNode>
 		_statusDate = statusDate;
 	}
 
+	public long getContainerModelId() {
+		return getNodeId();
+	}
+
+	public void setContainerModelId(long containerModelId) {
+		_nodeId = containerModelId;
+	}
+
+	public String getContainerModelName() {
+		return String.valueOf(getName());
+	}
+
+	public long getParentContainerModelId() {
+		return 0;
+	}
+
+	public void setParentContainerModelId(long parentContainerModelId) {
+	}
+
 	/**
 	 * @deprecated {@link #isApproved}
 	 */
@@ -640,13 +659,12 @@ public class WikiNodeModelImpl extends BaseModelImpl<WikiNode>
 
 	@Override
 	public WikiNode toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (WikiNode)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (WikiNode)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -948,7 +966,7 @@ public class WikiNodeModelImpl extends BaseModelImpl<WikiNode>
 	}
 
 	private static ClassLoader _classLoader = WikiNode.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			WikiNode.class
 		};
 	private String _uuid;
@@ -977,5 +995,5 @@ public class WikiNodeModelImpl extends BaseModelImpl<WikiNode>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private long _columnBitmask;
-	private WikiNode _escapedModelProxy;
+	private WikiNode _escapedModel;
 }

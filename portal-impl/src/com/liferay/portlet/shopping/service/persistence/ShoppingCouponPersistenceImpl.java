@@ -15,7 +15,6 @@
 package com.liferay.portlet.shopping.service.persistence;
 
 import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -33,10 +32,10 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.shopping.NoSuchCouponException;
@@ -74,36 +73,6 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingCouponImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingCouponImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			ShoppingCouponModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_CODE = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingCouponImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByCode",
-			new String[] { String.class.getName() },
-			ShoppingCouponModelImpl.CODE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_CODE = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCode",
-			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED,
 			ShoppingCouponImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -115,414 +84,28 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the shopping coupon in the entity cache if it is enabled.
-	 *
-	 * @param shoppingCoupon the shopping coupon
-	 */
-	public void cacheResult(ShoppingCoupon shoppingCoupon) {
-		EntityCacheUtil.putResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey(),
-			shoppingCoupon);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
-			new Object[] { shoppingCoupon.getCode() }, shoppingCoupon);
-
-		shoppingCoupon.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the shopping coupons in the entity cache if it is enabled.
-	 *
-	 * @param shoppingCoupons the shopping coupons
-	 */
-	public void cacheResult(List<ShoppingCoupon> shoppingCoupons) {
-		for (ShoppingCoupon shoppingCoupon : shoppingCoupons) {
-			if (EntityCacheUtil.getResult(
-						ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey()) == null) {
-				cacheResult(shoppingCoupon);
-			}
-			else {
-				shoppingCoupon.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all shopping coupons.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ShoppingCouponImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ShoppingCouponImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the shopping coupon.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(ShoppingCoupon shoppingCoupon) {
-		EntityCacheUtil.removeResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(shoppingCoupon);
-	}
-
-	@Override
-	public void clearCache(List<ShoppingCoupon> shoppingCoupons) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (ShoppingCoupon shoppingCoupon : shoppingCoupons) {
-			EntityCacheUtil.removeResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-				ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey());
-
-			clearUniqueFindersCache(shoppingCoupon);
-		}
-	}
-
-	protected void clearUniqueFindersCache(ShoppingCoupon shoppingCoupon) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CODE,
-			new Object[] { shoppingCoupon.getCode() });
-	}
-
-	/**
-	 * Creates a new shopping coupon with the primary key. Does not add the shopping coupon to the database.
-	 *
-	 * @param couponId the primary key for the new shopping coupon
-	 * @return the new shopping coupon
-	 */
-	public ShoppingCoupon create(long couponId) {
-		ShoppingCoupon shoppingCoupon = new ShoppingCouponImpl();
-
-		shoppingCoupon.setNew(true);
-		shoppingCoupon.setPrimaryKey(couponId);
-
-		return shoppingCoupon;
-	}
-
-	/**
-	 * Removes the shopping coupon with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param couponId the primary key of the shopping coupon
-	 * @return the shopping coupon that was removed
-	 * @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingCoupon remove(long couponId)
-		throws NoSuchCouponException, SystemException {
-		return remove(Long.valueOf(couponId));
-	}
-
-	/**
-	 * Removes the shopping coupon with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the shopping coupon
-	 * @return the shopping coupon that was removed
-	 * @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingCoupon remove(Serializable primaryKey)
-		throws NoSuchCouponException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			ShoppingCoupon shoppingCoupon = (ShoppingCoupon)session.get(ShoppingCouponImpl.class,
-					primaryKey);
-
-			if (shoppingCoupon == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchCouponException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(shoppingCoupon);
-		}
-		catch (NoSuchCouponException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected ShoppingCoupon removeImpl(ShoppingCoupon shoppingCoupon)
-		throws SystemException {
-		shoppingCoupon = toUnwrappedModel(shoppingCoupon);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (shoppingCoupon.isCachedModel()) {
-				shoppingCoupon = (ShoppingCoupon)session.get(ShoppingCouponImpl.class,
-						shoppingCoupon.getPrimaryKeyObj());
-			}
-
-			if (shoppingCoupon != null) {
-				session.delete(shoppingCoupon);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (shoppingCoupon != null) {
-			clearCache(shoppingCoupon);
-		}
-
-		return shoppingCoupon;
-	}
-
-	@Override
-	public ShoppingCoupon updateImpl(
-		com.liferay.portlet.shopping.model.ShoppingCoupon shoppingCoupon)
-		throws SystemException {
-		shoppingCoupon = toUnwrappedModel(shoppingCoupon);
-
-		boolean isNew = shoppingCoupon.isNew();
-
-		ShoppingCouponModelImpl shoppingCouponModelImpl = (ShoppingCouponModelImpl)shoppingCoupon;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (shoppingCoupon.isNew()) {
-				session.save(shoppingCoupon);
-
-				shoppingCoupon.setNew(false);
-			}
-			else {
-				session.merge(shoppingCoupon);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ShoppingCouponModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((shoppingCouponModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(shoppingCouponModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(shoppingCouponModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey(),
-			shoppingCoupon);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
-				new Object[] { shoppingCoupon.getCode() }, shoppingCoupon);
-		}
-		else {
-			if ((shoppingCouponModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_CODE.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						shoppingCouponModelImpl.getOriginalCode()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CODE, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CODE, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
-					new Object[] { shoppingCoupon.getCode() }, shoppingCoupon);
-			}
-		}
-
-		return shoppingCoupon;
-	}
-
-	protected ShoppingCoupon toUnwrappedModel(ShoppingCoupon shoppingCoupon) {
-		if (shoppingCoupon instanceof ShoppingCouponImpl) {
-			return shoppingCoupon;
-		}
-
-		ShoppingCouponImpl shoppingCouponImpl = new ShoppingCouponImpl();
-
-		shoppingCouponImpl.setNew(shoppingCoupon.isNew());
-		shoppingCouponImpl.setPrimaryKey(shoppingCoupon.getPrimaryKey());
-
-		shoppingCouponImpl.setCouponId(shoppingCoupon.getCouponId());
-		shoppingCouponImpl.setGroupId(shoppingCoupon.getGroupId());
-		shoppingCouponImpl.setCompanyId(shoppingCoupon.getCompanyId());
-		shoppingCouponImpl.setUserId(shoppingCoupon.getUserId());
-		shoppingCouponImpl.setUserName(shoppingCoupon.getUserName());
-		shoppingCouponImpl.setCreateDate(shoppingCoupon.getCreateDate());
-		shoppingCouponImpl.setModifiedDate(shoppingCoupon.getModifiedDate());
-		shoppingCouponImpl.setCode(shoppingCoupon.getCode());
-		shoppingCouponImpl.setName(shoppingCoupon.getName());
-		shoppingCouponImpl.setDescription(shoppingCoupon.getDescription());
-		shoppingCouponImpl.setStartDate(shoppingCoupon.getStartDate());
-		shoppingCouponImpl.setEndDate(shoppingCoupon.getEndDate());
-		shoppingCouponImpl.setActive(shoppingCoupon.isActive());
-		shoppingCouponImpl.setLimitCategories(shoppingCoupon.getLimitCategories());
-		shoppingCouponImpl.setLimitSkus(shoppingCoupon.getLimitSkus());
-		shoppingCouponImpl.setMinOrder(shoppingCoupon.getMinOrder());
-		shoppingCouponImpl.setDiscount(shoppingCoupon.getDiscount());
-		shoppingCouponImpl.setDiscountType(shoppingCoupon.getDiscountType());
-
-		return shoppingCouponImpl;
-	}
-
-	/**
-	 * Returns the shopping coupon with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the shopping coupon
-	 * @return the shopping coupon
-	 * @throws com.liferay.portal.NoSuchModelException if a shopping coupon with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingCoupon findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the shopping coupon with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchCouponException} if it could not be found.
-	 *
-	 * @param couponId the primary key of the shopping coupon
-	 * @return the shopping coupon
-	 * @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingCoupon findByPrimaryKey(long couponId)
-		throws NoSuchCouponException, SystemException {
-		ShoppingCoupon shoppingCoupon = fetchByPrimaryKey(couponId);
-
-		if (shoppingCoupon == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + couponId);
-			}
-
-			throw new NoSuchCouponException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				couponId);
-		}
-
-		return shoppingCoupon;
-	}
-
-	/**
-	 * Returns the shopping coupon with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the shopping coupon
-	 * @return the shopping coupon, or <code>null</code> if a shopping coupon with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingCoupon fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the shopping coupon with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param couponId the primary key of the shopping coupon
-	 * @return the shopping coupon, or <code>null</code> if a shopping coupon with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingCoupon fetchByPrimaryKey(long couponId)
-		throws SystemException {
-		ShoppingCoupon shoppingCoupon = (ShoppingCoupon)EntityCacheUtil.getResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-				ShoppingCouponImpl.class, couponId);
-
-		if (shoppingCoupon == _nullShoppingCoupon) {
-			return null;
-		}
-
-		if (shoppingCoupon == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				shoppingCoupon = (ShoppingCoupon)session.get(ShoppingCouponImpl.class,
-						Long.valueOf(couponId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (shoppingCoupon != null) {
-					cacheResult(shoppingCoupon);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingCouponImpl.class, couponId, _nullShoppingCoupon);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return shoppingCoupon;
-	}
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingCouponImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByGroupId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
+		new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingCouponImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
+			new String[] { Long.class.getName() },
+			ShoppingCouponModelImpl.GROUPID_COLUMN_BITMASK |
+			ShoppingCouponModelImpl.CREATEDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the shopping coupons where groupId = &#63;.
@@ -540,7 +123,7 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 	 * Returns a range of all the shopping coupons where groupId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.shopping.model.impl.ShoppingCouponModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -558,7 +141,7 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 	 * Returns an ordered range of all the shopping coupons where groupId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.shopping.model.impl.ShoppingCouponModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -570,11 +153,13 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 	 */
 	public List<ShoppingCoupon> findByGroupId(long groupId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
 			finderArgs = new Object[] { groupId };
 		}
@@ -615,8 +200,8 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(ShoppingCouponModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -633,22 +218,29 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 
 				qPos.add(groupId);
 
-				list = (List<ShoppingCoupon>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ShoppingCoupon>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<ShoppingCoupon>(list);
+				}
+				else {
+					list = (List<ShoppingCoupon>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -872,7 +464,6 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingCouponModelImpl.ORDER_BY_JPQL);
 		}
@@ -905,6 +496,82 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the shopping coupons where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByGroupId(long groupId) throws SystemException {
+		for (ShoppingCoupon shoppingCoupon : findByGroupId(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(shoppingCoupon);
+		}
+	}
+
+	/**
+	 * Returns the number of shopping coupons where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching shopping coupons
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByGroupId(long groupId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
+
+		Object[] finderArgs = new Object[] { groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SHOPPINGCOUPON_WHERE);
+
+			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "shoppingCoupon.groupId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_CODE = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingCouponImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByCode",
+			new String[] { String.class.getName() },
+			ShoppingCouponModelImpl.CODE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_CODE = new FinderPath(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCouponModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCode",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns the shopping coupon where code = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchCouponException} if it could not be found.
@@ -993,8 +660,6 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 				}
 			}
 
-			query.append(ShoppingCouponModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -1012,16 +677,14 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 
 				List<ShoppingCoupon> list = q.list();
 
-				result = list;
-
-				ShoppingCoupon shoppingCoupon = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
 						finderArgs, list);
 				}
 				else {
-					shoppingCoupon = list.get(0);
+					ShoppingCoupon shoppingCoupon = list.get(0);
+
+					result = shoppingCoupon;
 
 					cacheResult(shoppingCoupon);
 
@@ -1031,155 +694,23 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 							finderArgs, shoppingCoupon);
 					}
 				}
-
-				return shoppingCoupon;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CODE,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CODE,
-						finderArgs);
-				}
-
-				closeSession(session);
-			}
-		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (ShoppingCoupon)result;
-			}
-		}
-	}
-
-	/**
-	 * Returns all the shopping coupons.
-	 *
-	 * @return the shopping coupons
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ShoppingCoupon> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the shopping coupons.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of shopping coupons
-	 * @param end the upper bound of the range of shopping coupons (not inclusive)
-	 * @return the range of shopping coupons
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ShoppingCoupon> findAll(int start, int end)
-		throws SystemException {
-		return findAll(start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the shopping coupons.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of shopping coupons
-	 * @param end the upper bound of the range of shopping coupons (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of shopping coupons
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<ShoppingCoupon> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<ShoppingCoupon> list = (List<ShoppingCoupon>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_SHOPPINGCOUPON);
-
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_SHOPPINGCOUPON.concat(ShoppingCouponModelImpl.ORDER_BY_JPQL);
-			}
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				if (orderByComparator == null) {
-					list = (List<ShoppingCoupon>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-				}
-				else {
-					list = (List<ShoppingCoupon>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
-		return list;
-	}
-
-	/**
-	 * Removes all the shopping coupons where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByGroupId(long groupId) throws SystemException {
-		for (ShoppingCoupon shoppingCoupon : findByGroupId(groupId)) {
-			remove(shoppingCoupon);
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (ShoppingCoupon)result;
 		}
 	}
 
@@ -1198,70 +729,6 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 	}
 
 	/**
-	 * Removes all the shopping coupons from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (ShoppingCoupon shoppingCoupon : findAll()) {
-			remove(shoppingCoupon);
-		}
-	}
-
-	/**
-	 * Returns the number of shopping coupons where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching shopping coupons
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByGroupId(long groupId) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_GROUPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SHOPPINGCOUPON_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_GROUPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
 	 * Returns the number of shopping coupons where code = &#63;.
 	 *
 	 * @param code the code
@@ -1269,10 +736,12 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int countByCode(String code) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_CODE;
+
 		Object[] finderArgs = new Object[] { code };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_CODE,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(2);
@@ -1307,23 +776,562 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CODE,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
 
 		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_CODE_CODE_1 = "shoppingCoupon.code IS NULL";
+	private static final String _FINDER_COLUMN_CODE_CODE_2 = "shoppingCoupon.code = ?";
+	private static final String _FINDER_COLUMN_CODE_CODE_3 = "(shoppingCoupon.code IS NULL OR shoppingCoupon.code = ?)";
+
+	/**
+	 * Caches the shopping coupon in the entity cache if it is enabled.
+	 *
+	 * @param shoppingCoupon the shopping coupon
+	 */
+	public void cacheResult(ShoppingCoupon shoppingCoupon) {
+		EntityCacheUtil.putResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey(),
+			shoppingCoupon);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
+			new Object[] { shoppingCoupon.getCode() }, shoppingCoupon);
+
+		shoppingCoupon.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the shopping coupons in the entity cache if it is enabled.
+	 *
+	 * @param shoppingCoupons the shopping coupons
+	 */
+	public void cacheResult(List<ShoppingCoupon> shoppingCoupons) {
+		for (ShoppingCoupon shoppingCoupon : shoppingCoupons) {
+			if (EntityCacheUtil.getResult(
+						ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey()) == null) {
+				cacheResult(shoppingCoupon);
+			}
+			else {
+				shoppingCoupon.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all shopping coupons.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ShoppingCouponImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ShoppingCouponImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the shopping coupon.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(ShoppingCoupon shoppingCoupon) {
+		EntityCacheUtil.removeResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(shoppingCoupon);
+	}
+
+	@Override
+	public void clearCache(List<ShoppingCoupon> shoppingCoupons) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (ShoppingCoupon shoppingCoupon : shoppingCoupons) {
+			EntityCacheUtil.removeResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+				ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey());
+
+			clearUniqueFindersCache(shoppingCoupon);
+		}
+	}
+
+	protected void clearUniqueFindersCache(ShoppingCoupon shoppingCoupon) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CODE,
+			new Object[] { shoppingCoupon.getCode() });
+	}
+
+	/**
+	 * Creates a new shopping coupon with the primary key. Does not add the shopping coupon to the database.
+	 *
+	 * @param couponId the primary key for the new shopping coupon
+	 * @return the new shopping coupon
+	 */
+	public ShoppingCoupon create(long couponId) {
+		ShoppingCoupon shoppingCoupon = new ShoppingCouponImpl();
+
+		shoppingCoupon.setNew(true);
+		shoppingCoupon.setPrimaryKey(couponId);
+
+		return shoppingCoupon;
+	}
+
+	/**
+	 * Removes the shopping coupon with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param couponId the primary key of the shopping coupon
+	 * @return the shopping coupon that was removed
+	 * @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingCoupon remove(long couponId)
+		throws NoSuchCouponException, SystemException {
+		return remove(Long.valueOf(couponId));
+	}
+
+	/**
+	 * Removes the shopping coupon with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the shopping coupon
+	 * @return the shopping coupon that was removed
+	 * @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingCoupon remove(Serializable primaryKey)
+		throws NoSuchCouponException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ShoppingCoupon shoppingCoupon = (ShoppingCoupon)session.get(ShoppingCouponImpl.class,
+					primaryKey);
+
+			if (shoppingCoupon == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchCouponException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(shoppingCoupon);
+		}
+		catch (NoSuchCouponException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected ShoppingCoupon removeImpl(ShoppingCoupon shoppingCoupon)
+		throws SystemException {
+		shoppingCoupon = toUnwrappedModel(shoppingCoupon);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(shoppingCoupon)) {
+				shoppingCoupon = (ShoppingCoupon)session.get(ShoppingCouponImpl.class,
+						shoppingCoupon.getPrimaryKeyObj());
+			}
+
+			if (shoppingCoupon != null) {
+				session.delete(shoppingCoupon);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (shoppingCoupon != null) {
+			clearCache(shoppingCoupon);
+		}
+
+		return shoppingCoupon;
+	}
+
+	@Override
+	public ShoppingCoupon updateImpl(
+		com.liferay.portlet.shopping.model.ShoppingCoupon shoppingCoupon)
+		throws SystemException {
+		shoppingCoupon = toUnwrappedModel(shoppingCoupon);
+
+		boolean isNew = shoppingCoupon.isNew();
+
+		ShoppingCouponModelImpl shoppingCouponModelImpl = (ShoppingCouponModelImpl)shoppingCoupon;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (shoppingCoupon.isNew()) {
+				session.save(shoppingCoupon);
+
+				shoppingCoupon.setNew(false);
+			}
+			else {
+				session.merge(shoppingCoupon);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ShoppingCouponModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((shoppingCouponModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(shoppingCouponModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(shoppingCouponModelImpl.getGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCouponImpl.class, shoppingCoupon.getPrimaryKey(),
+			shoppingCoupon);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
+				new Object[] { shoppingCoupon.getCode() }, shoppingCoupon);
+		}
+		else {
+			if ((shoppingCouponModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_CODE.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						shoppingCouponModelImpl.getOriginalCode()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CODE, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CODE, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CODE,
+					new Object[] { shoppingCoupon.getCode() }, shoppingCoupon);
+			}
+		}
+
+		return shoppingCoupon;
+	}
+
+	protected ShoppingCoupon toUnwrappedModel(ShoppingCoupon shoppingCoupon) {
+		if (shoppingCoupon instanceof ShoppingCouponImpl) {
+			return shoppingCoupon;
+		}
+
+		ShoppingCouponImpl shoppingCouponImpl = new ShoppingCouponImpl();
+
+		shoppingCouponImpl.setNew(shoppingCoupon.isNew());
+		shoppingCouponImpl.setPrimaryKey(shoppingCoupon.getPrimaryKey());
+
+		shoppingCouponImpl.setCouponId(shoppingCoupon.getCouponId());
+		shoppingCouponImpl.setGroupId(shoppingCoupon.getGroupId());
+		shoppingCouponImpl.setCompanyId(shoppingCoupon.getCompanyId());
+		shoppingCouponImpl.setUserId(shoppingCoupon.getUserId());
+		shoppingCouponImpl.setUserName(shoppingCoupon.getUserName());
+		shoppingCouponImpl.setCreateDate(shoppingCoupon.getCreateDate());
+		shoppingCouponImpl.setModifiedDate(shoppingCoupon.getModifiedDate());
+		shoppingCouponImpl.setCode(shoppingCoupon.getCode());
+		shoppingCouponImpl.setName(shoppingCoupon.getName());
+		shoppingCouponImpl.setDescription(shoppingCoupon.getDescription());
+		shoppingCouponImpl.setStartDate(shoppingCoupon.getStartDate());
+		shoppingCouponImpl.setEndDate(shoppingCoupon.getEndDate());
+		shoppingCouponImpl.setActive(shoppingCoupon.isActive());
+		shoppingCouponImpl.setLimitCategories(shoppingCoupon.getLimitCategories());
+		shoppingCouponImpl.setLimitSkus(shoppingCoupon.getLimitSkus());
+		shoppingCouponImpl.setMinOrder(shoppingCoupon.getMinOrder());
+		shoppingCouponImpl.setDiscount(shoppingCoupon.getDiscount());
+		shoppingCouponImpl.setDiscountType(shoppingCoupon.getDiscountType());
+
+		return shoppingCouponImpl;
+	}
+
+	/**
+	 * Returns the shopping coupon with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the shopping coupon
+	 * @return the shopping coupon
+	 * @throws com.liferay.portal.NoSuchModelException if a shopping coupon with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingCoupon findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the shopping coupon with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchCouponException} if it could not be found.
+	 *
+	 * @param couponId the primary key of the shopping coupon
+	 * @return the shopping coupon
+	 * @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingCoupon findByPrimaryKey(long couponId)
+		throws NoSuchCouponException, SystemException {
+		ShoppingCoupon shoppingCoupon = fetchByPrimaryKey(couponId);
+
+		if (shoppingCoupon == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + couponId);
+			}
+
+			throw new NoSuchCouponException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				couponId);
+		}
+
+		return shoppingCoupon;
+	}
+
+	/**
+	 * Returns the shopping coupon with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the shopping coupon
+	 * @return the shopping coupon, or <code>null</code> if a shopping coupon with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingCoupon fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the shopping coupon with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param couponId the primary key of the shopping coupon
+	 * @return the shopping coupon, or <code>null</code> if a shopping coupon with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingCoupon fetchByPrimaryKey(long couponId)
+		throws SystemException {
+		ShoppingCoupon shoppingCoupon = (ShoppingCoupon)EntityCacheUtil.getResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+				ShoppingCouponImpl.class, couponId);
+
+		if (shoppingCoupon == _nullShoppingCoupon) {
+			return null;
+		}
+
+		if (shoppingCoupon == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				shoppingCoupon = (ShoppingCoupon)session.get(ShoppingCouponImpl.class,
+						Long.valueOf(couponId));
+
+				if (shoppingCoupon != null) {
+					cacheResult(shoppingCoupon);
+				}
+				else {
+					EntityCacheUtil.putResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingCouponImpl.class, couponId, _nullShoppingCoupon);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ShoppingCouponModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingCouponImpl.class, couponId);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return shoppingCoupon;
+	}
+
+	/**
+	 * Returns all the shopping coupons.
+	 *
+	 * @return the shopping coupons
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ShoppingCoupon> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the shopping coupons.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.shopping.model.impl.ShoppingCouponModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of shopping coupons
+	 * @param end the upper bound of the range of shopping coupons (not inclusive)
+	 * @return the range of shopping coupons
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ShoppingCoupon> findAll(int start, int end)
+		throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the shopping coupons.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.shopping.model.impl.ShoppingCouponModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of shopping coupons
+	 * @param end the upper bound of the range of shopping coupons (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of shopping coupons
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ShoppingCoupon> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<ShoppingCoupon> list = (List<ShoppingCoupon>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_SHOPPINGCOUPON);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_SHOPPINGCOUPON;
+
+				if (pagination) {
+					sql = sql.concat(ShoppingCouponModelImpl.ORDER_BY_JPQL);
+				}
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (!pagination) {
+					list = (List<ShoppingCoupon>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<ShoppingCoupon>(list);
+				}
+				else {
+					list = (List<ShoppingCoupon>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the shopping coupons from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (ShoppingCoupon shoppingCoupon : findAll()) {
+			remove(shoppingCoupon);
+		}
 	}
 
 	/**
@@ -1345,18 +1353,17 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 				Query q = session.createQuery(_SQL_COUNT_SHOPPINGCOUPON);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1392,35 +1399,14 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 	public void destroy() {
 		EntityCacheUtil.removeCache(ShoppingCouponImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = ShoppingCartPersistence.class)
-	protected ShoppingCartPersistence shoppingCartPersistence;
-	@BeanReference(type = ShoppingCategoryPersistence.class)
-	protected ShoppingCategoryPersistence shoppingCategoryPersistence;
-	@BeanReference(type = ShoppingCouponPersistence.class)
-	protected ShoppingCouponPersistence shoppingCouponPersistence;
-	@BeanReference(type = ShoppingItemPersistence.class)
-	protected ShoppingItemPersistence shoppingItemPersistence;
-	@BeanReference(type = ShoppingItemFieldPersistence.class)
-	protected ShoppingItemFieldPersistence shoppingItemFieldPersistence;
-	@BeanReference(type = ShoppingItemPricePersistence.class)
-	protected ShoppingItemPricePersistence shoppingItemPricePersistence;
-	@BeanReference(type = ShoppingOrderPersistence.class)
-	protected ShoppingOrderPersistence shoppingOrderPersistence;
-	@BeanReference(type = ShoppingOrderItemPersistence.class)
-	protected ShoppingOrderItemPersistence shoppingOrderItemPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_SHOPPINGCOUPON = "SELECT shoppingCoupon FROM ShoppingCoupon shoppingCoupon";
 	private static final String _SQL_SELECT_SHOPPINGCOUPON_WHERE = "SELECT shoppingCoupon FROM ShoppingCoupon shoppingCoupon WHERE ";
 	private static final String _SQL_COUNT_SHOPPINGCOUPON = "SELECT COUNT(shoppingCoupon) FROM ShoppingCoupon shoppingCoupon";
 	private static final String _SQL_COUNT_SHOPPINGCOUPON_WHERE = "SELECT COUNT(shoppingCoupon) FROM ShoppingCoupon shoppingCoupon WHERE ";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "shoppingCoupon.groupId = ?";
-	private static final String _FINDER_COLUMN_CODE_CODE_1 = "shoppingCoupon.code IS NULL";
-	private static final String _FINDER_COLUMN_CODE_CODE_2 = "shoppingCoupon.code = ?";
-	private static final String _FINDER_COLUMN_CODE_CODE_3 = "(shoppingCoupon.code IS NULL OR shoppingCoupon.code = ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "shoppingCoupon.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ShoppingCoupon exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ShoppingCoupon exists with the key {";

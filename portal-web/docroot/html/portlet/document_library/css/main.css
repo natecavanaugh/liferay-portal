@@ -1,3 +1,5 @@
+@import "compass";
+
 .portlet-document-library, .portlet-document-library-display {
 	.file-entry-list-description {
 		font-style: italic;
@@ -82,7 +84,8 @@
 			background-color: #FDD;
 			background-image: url(@theme_image_path@/messages/error.png);
 			font-weight: normal;
-			opacity: 0.6;
+
+			@include opacity(0.6);
 
 			.error-message {
 				position: absolute;
@@ -185,7 +188,7 @@
 			}
 		}
 
-		.aui-icon-delete, .aui-icon-download, .aui-icon-edit, .aui-icon-lock, .aui-icon-move, .aui-icon-permissions, .aui-icon-undo, .aui-icon-unlock {
+		.aui-icon-delete, .aui-icon-download, .aui-icon-edit, .aui-icon-lock, .aui-icon-move, .aui-icon-permissions, .aui-icon-trash, .aui-icon-undo, .aui-icon-unlock {
 			background: url() no-repeat 0 0;
 		}
 
@@ -211,6 +214,10 @@
 
 		.aui-icon-permissions {
 			background-image: url(@theme_image_path@/common/permissions.png);
+		}
+
+		.aui-icon-trash {
+			background-image: url(@theme_image_path@/common/trash.png);
 		}
 
 		.aui-icon-undo {

@@ -29,7 +29,8 @@ import java.io.File;
 public class LayoutTemplateAutoDeployListener extends BaseAutoDeployListener {
 
 	public LayoutTemplateAutoDeployListener() {
-		_autoDeployer = new LayoutTemplateAutoDeployer();
+		_autoDeployer = new ThreadSafeAutoDeployer(
+			new LayoutTemplateAutoDeployer());
 	}
 
 	public void deploy(AutoDeploymentContext autoDeploymentContext)

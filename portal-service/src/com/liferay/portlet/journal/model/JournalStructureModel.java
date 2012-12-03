@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
+import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -44,7 +45,7 @@ import java.util.Map;
  * @generated
  */
 public interface JournalStructureModel extends BaseModel<JournalStructure>,
-	GroupedModel {
+	GroupedModel, StagedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -468,6 +469,8 @@ public interface JournalStructureModel extends BaseModel<JournalStructure>,
 	public CacheModel<JournalStructure> toCacheModel();
 
 	public JournalStructure toEscapedModel();
+
+	public JournalStructure toUnescapedModel();
 
 	public String toString();
 

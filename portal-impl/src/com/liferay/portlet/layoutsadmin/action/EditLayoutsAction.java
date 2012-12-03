@@ -248,6 +248,9 @@ public class EditLayoutsAction extends PortletAction {
 			}
 
 			if (Validator.isNotNull(closeRedirect)) {
+				redirect = HttpUtil.setParameter(
+					redirect, "closeRedirect", closeRedirect);
+
 				LiferayPortletConfig liferayPortletConfig =
 					(LiferayPortletConfig)portletConfig;
 
@@ -763,7 +766,9 @@ public class EditLayoutsAction extends PortletAction {
 				value = ParamUtil.getString(actionRequest, property);
 			}
 
-			if (!value.equals(layoutSet.getThemeSetting(key, device))) {
+			if (!Validator.equals(
+					value, layoutSet.getThemeSetting(key, device))) {
+
 				typeSettingsProperties.setProperty(
 					ThemeSettingImpl.namespaceProperty(device, key), value);
 			}

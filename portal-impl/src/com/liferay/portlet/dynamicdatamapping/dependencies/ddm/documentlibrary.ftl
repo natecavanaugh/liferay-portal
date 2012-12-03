@@ -26,7 +26,7 @@
 	</#if>
 </#if>
 
-<@aui["field-wrapper"]>
+<@aui["field-wrapper"] data=data>
 	<@aui.input inlineField=true label=escape(label) name="${namespacedFieldName}Title" readonly="readonly" type="text" url=fileEntryURL value=fileEntryTitle>
 		<#if required>
 			<@aui.validator name="required" />
@@ -46,7 +46,7 @@
 
 <@aui.script>
 	window['${portletNamespace}${namespacedFieldName}clearFileEntry'] = function() {
-		window['${portletNamespace}${namespacedFieldName}setFileEntry']('', '', '', '');
+		window['${portletNamespace}${namespacedFieldName}setFileEntry']('', '', '', '', '');
 	};
 
 	Liferay.provide(
@@ -71,7 +71,7 @@
 	Liferay.provide(
 		window,
 		'${portletNamespace}${namespacedFieldName}setFileEntry',
-		function(url, uuid, title, version) {
+		function(url, uuid, groupId, title, version) {
 			var A = AUI();
 
 			var inputNode = A.one('#${portletNamespace}${namespacedFieldName}');
@@ -81,7 +81,7 @@
 					inputNode.val(
 						A.JSON.stringify(
 							{
-								groupId: ${scopeGroupId?c},
+								groupId: groupId,
 								uuid: uuid,
 								version: version
 							}

@@ -75,6 +75,8 @@ public class SocialActivityCounterModelImpl extends BaseModelImpl<SocialActivity
 		};
 	public static final String TABLE_SQL_CREATE = "create table SocialActivityCounter (activityCounterId LONG not null primary key,groupId LONG,companyId LONG,classNameId LONG,classPK LONG,name VARCHAR(75) null,ownerType INTEGER,currentValue INTEGER,totalValue INTEGER,graceValue INTEGER,startPeriod INTEGER,endPeriod INTEGER,active_ BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table SocialActivityCounter";
+	public static final String ORDER_BY_JPQL = " ORDER BY socialActivityCounter.activityCounterId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY SocialActivityCounter.activityCounterId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -94,6 +96,7 @@ public class SocialActivityCounterModelImpl extends BaseModelImpl<SocialActivity
 	public static long NAME_COLUMN_BITMASK = 16L;
 	public static long OWNERTYPE_COLUMN_BITMASK = 32L;
 	public static long STARTPERIOD_COLUMN_BITMASK = 64L;
+	public static long ACTIVITYCOUNTERID_COLUMN_BITMASK = 128L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.social.model.SocialActivityCounter"));
 
@@ -458,13 +461,12 @@ public class SocialActivityCounterModelImpl extends BaseModelImpl<SocialActivity
 
 	@Override
 	public SocialActivityCounter toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (SocialActivityCounter)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (SocialActivityCounter)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -707,7 +709,7 @@ public class SocialActivityCounterModelImpl extends BaseModelImpl<SocialActivity
 	}
 
 	private static ClassLoader _classLoader = SocialActivityCounter.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			SocialActivityCounter.class
 		};
 	private long _activityCounterId;
@@ -737,5 +739,5 @@ public class SocialActivityCounterModelImpl extends BaseModelImpl<SocialActivity
 	private boolean _setOriginalEndPeriod;
 	private boolean _active;
 	private long _columnBitmask;
-	private SocialActivityCounter _escapedModelProxy;
+	private SocialActivityCounter _escapedModel;
 }

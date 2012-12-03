@@ -117,6 +117,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 	public static long TITLE_COLUMN_BITMASK = 32L;
 	public static long UUID_COLUMN_BITMASK = 64L;
 	public static long VERSION_COLUMN_BITMASK = 128L;
+	public static long CREATEDATE_COLUMN_BITMASK = 256L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -890,13 +891,12 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 
 	@Override
 	public DLFileVersion toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (DLFileVersion)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (DLFileVersion)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -1345,7 +1345,7 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 	}
 
 	private static ClassLoader _classLoader = DLFileVersion.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			DLFileVersion.class
 		};
 	private String _uuid;
@@ -1389,5 +1389,5 @@ public class DLFileVersionModelImpl extends BaseModelImpl<DLFileVersion>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private long _columnBitmask;
-	private DLFileVersion _escapedModelProxy;
+	private DLFileVersion _escapedModel;
 }

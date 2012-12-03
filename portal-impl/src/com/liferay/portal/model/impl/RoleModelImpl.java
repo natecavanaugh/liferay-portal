@@ -626,13 +626,12 @@ public class RoleModelImpl extends BaseModelImpl<Role> implements RoleModel {
 
 	@Override
 	public Role toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Role)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Role)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -849,9 +848,7 @@ public class RoleModelImpl extends BaseModelImpl<Role> implements RoleModel {
 	}
 
 	private static ClassLoader _classLoader = Role.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Role.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Role.class };
 	private long _roleId;
 	private long _companyId;
 	private long _originalCompanyId;
@@ -874,5 +871,5 @@ public class RoleModelImpl extends BaseModelImpl<Role> implements RoleModel {
 	private String _subtype;
 	private String _originalSubtype;
 	private long _columnBitmask;
-	private Role _escapedModelProxy;
+	private Role _escapedModel;
 }

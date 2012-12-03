@@ -64,6 +64,8 @@ public class WikiPageResourceModelImpl extends BaseModelImpl<WikiPageResource>
 		};
 	public static final String TABLE_SQL_CREATE = "create table WikiPageResource (uuid_ VARCHAR(75) null,resourcePrimKey LONG not null primary key,nodeId LONG,title VARCHAR(255) null)";
 	public static final String TABLE_SQL_DROP = "drop table WikiPageResource";
+	public static final String ORDER_BY_JPQL = " ORDER BY wikiPageResource.resourcePrimKey ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY WikiPageResource.resourcePrimKey ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -79,6 +81,7 @@ public class WikiPageResourceModelImpl extends BaseModelImpl<WikiPageResource>
 	public static long NODEID_COLUMN_BITMASK = 1L;
 	public static long TITLE_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long RESOURCEPRIMKEY_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.wiki.model.WikiPageResource"));
 
@@ -239,13 +242,12 @@ public class WikiPageResourceModelImpl extends BaseModelImpl<WikiPageResource>
 
 	@Override
 	public WikiPageResource toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (WikiPageResource)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (WikiPageResource)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -395,7 +397,7 @@ public class WikiPageResourceModelImpl extends BaseModelImpl<WikiPageResource>
 	}
 
 	private static ClassLoader _classLoader = WikiPageResource.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			WikiPageResource.class
 		};
 	private String _uuid;
@@ -407,5 +409,5 @@ public class WikiPageResourceModelImpl extends BaseModelImpl<WikiPageResource>
 	private String _title;
 	private String _originalTitle;
 	private long _columnBitmask;
-	private WikiPageResource _escapedModelProxy;
+	private WikiPageResource _escapedModel;
 }

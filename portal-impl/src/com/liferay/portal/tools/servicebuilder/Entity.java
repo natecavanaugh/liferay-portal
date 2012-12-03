@@ -65,14 +65,23 @@ public class Entity {
 	public static boolean hasColumn(
 		String name, List<EntityColumn> columnList) {
 
-		int pos = columnList.indexOf(new EntityColumn(name));
+		return hasColumn(name, null, columnList);
+	}
 
-		if (pos != -1) {
-			return true;
+	public static boolean hasColumn(
+		String name, String type, List<EntityColumn> columnList) {
+
+		int index = columnList.indexOf(new EntityColumn(name));
+
+		if (index != -1) {
+			EntityColumn col = columnList.get(index);
+
+			if ((type == null) || type.equals(col.getType())) {
+				return true;
+			}
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public Entity(String name) {
@@ -374,7 +383,7 @@ public class Entity {
 		while (itr.hasNext()) {
 			EntityFinder finder = itr.next();
 
-			if (finder.isCollection()) {
+			if (finder.isCollection() && !finder.isUnique()) {
 				itr.remove();
 			}
 		}
@@ -402,6 +411,10 @@ public class Entity {
 
 	public boolean hasColumn(String name) {
 		return hasColumn(name, _columnList);
+	}
+
+	public boolean hasColumn(String name, String type) {
+		return hasColumn(name, type, _columnList);
 	}
 
 	public boolean hasColumns() {
@@ -531,15 +544,14 @@ public class Entity {
 	}
 
 	public boolean isAuditedModel() {
-		if (hasColumn("companyId") && hasColumn("createDate") &&
-			hasColumn("modifiedDate") && hasColumn("userId") &&
+		if (hasColumn("companyId") && hasColumn("createDate", "Date") &&
+			hasColumn("modifiedDate", "Date") && hasColumn("userId") &&
 			hasColumn("userName")) {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isCacheEnabled() {
@@ -675,6 +687,14 @@ public class Entity {
 		else {
 			return false;
 		}
+	}
+
+	public boolean isStagedModel() {
+		if (isGroupedModel() && hasUuid()) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public boolean isWorkflowEnabled() {

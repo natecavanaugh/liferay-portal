@@ -640,6 +640,10 @@
 
 	<definition name="portlet.journal" extends="portlet" />
 
+	<definition name="portlet.journal.asset.add_asset_redirect" extends="portlet.journal">
+		<put name="portlet_content" value="/portlet/journal/asset/add_asset_redirect.jsp" />
+	</definition>
+
 	<definition name="portlet.journal.copy_article" extends="portlet.journal">
 		<put name="portlet_content" value="/portlet/journal/copy_article.jsp" />
 	</definition>
@@ -910,6 +914,10 @@
 
 	<definition name="portlet.message_boards.error" extends="portlet.message_boards">
 		<put name="portlet_content" value="/portlet/message_boards/error.jsp" />
+	</definition>
+
+	<definition name="portlet.message_boards.move_category" extends="portlet.message_boards">
+		<put name="portlet_content" value="/portlet/message_boards/move_category.jsp" />
 	</definition>
 
 	<definition name="portlet.message_boards.move_thread" extends="portlet.message_boards">
@@ -1583,6 +1591,10 @@
 
 	<definition name="portlet.trash.view" extends="portlet.trash">
 		<put name="portlet_content" value="/portlet/trash/view.jsp" />
+	</definition>
+
+	<definition name="portlet.trash.view_container_model" extends="portlet.trash">
+		<put name="portlet_content" value="/portlet/trash/view_container_model.jsp" />
 	</definition>
 
 	<definition name="portlet.trash.view_content" extends="portlet.trash">

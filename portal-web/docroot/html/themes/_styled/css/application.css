@@ -1,3 +1,5 @@
+@import "compass";
+
 /* ---------- Main ---------- */
 
 .aui-state-default {
@@ -148,7 +150,7 @@
 }
 
 .portlet-boundary.yui3-dd-dragging {
-	opacity: .6;
+	@include opacity(0.6);
 
 	.portlet {
 		border: 2px dashed #CCC;
@@ -156,7 +158,7 @@
 }
 
 .aui-portal-layout-proxy {
-	opacity: 1 !important;
+	@include opacity(1);
 
 	.portlet-topper {
 		background-image: none;
@@ -165,7 +167,9 @@
 
 .aui-proxy {
 	cursor: move;
-	opacity: 0.65;
+
+	@include opacity(0.65);
+
 	position: absolute;
 
 	&.generic-portlet {
@@ -281,15 +285,6 @@
 	}
 }
 
-.tag-cloud {
-	line-height: 2.5em;
-
-	.tag-asset-count {
-		clip: rect(0 0 0 0);
-		position: absolute;
-	}
-}
-
 .tag-selected {
 	color: #000;
 	font-weight: bold;
@@ -298,11 +293,6 @@
 
 .tag-cloud {
 	line-height: 2.5em;
-
-	.tag-asset-count {
-		clip: rect(0 0 0 0);
-		position: absolute;
-	}
 
 	$tag-popularity-font-size: 0.7em;
 
@@ -573,7 +563,9 @@
 	background-color: #FFF;
 	font-size: 1.5em;
 	margin: 1em;
-	opacity: 0.9;
+
+	@include opacity(0.9);
+
 	padding: 1em;
 	position: absolute;
 	z-index: 15;
@@ -593,10 +585,8 @@
 	width: 20px;
 }
 
-.ie7 .aui-paginator-link {
-	color: transparent;
-	font-size: 0;
-	overflow: hidden;
+.aui-paginator-page-link {
+	height: auto;
 	text-indent: 0;
 }
 
@@ -605,23 +595,6 @@
 	border-color: #38B6EF #006D9E #006D9E #46B4E6;
 	color: #FFF;
 	text-shadow: -1px -1px #003C57;
-}
-
-.ie7 .aui-paginator-current-page {
-	color: #FFF;
-}
-
-.aui-paginator-page-link {
-	height: auto;
-	text-indent: 0;
-}
-
-.ie7 .aui-paginator-page-link {
-	color: #1F1E1E;
-	font-size: 1em;
-	height: auto;
-	overflow: visible;
-	text-indent: 0;
 }
 
 .aui-paginator-first-link {
@@ -706,23 +679,9 @@
 }
 
 .ie {
-	.portlet-boundary.yui3-dd-dragging {
-		-ms-filter: alpha(opacity=60);
-		filter: alpha(opacity=60);
-	}
-
-	.aui-proxy {
-		filter: alpha(opacity=65);
-	}
-
 	.aui-proxy.not-intersecting .forbidden-action {
 		right: 2px;
 		top: 2px;
-	}
-
-	.layout-customizable-controls {
-		-ms-filter: alpha(opacity=90);
-		filter: alpha(opacity=90);
 	}
 }
 
@@ -733,6 +692,27 @@
 
 	.aui-menu-content li {
 		z-index: 10;
+	}
+
+	.aui-paginator-link {
+		color: transparent;
+		font-size: 0;
+		overflow: hidden;
+		text-indent: 0;
+		vertical-align: middle;
+	}
+
+	.aui-paginator-page-link {
+		color: #1F1E1E;
+		font-size: 1em;
+		height: auto;
+		line-height: 1.4;
+		overflow: visible;
+		text-indent: 0;
+	}
+
+	.aui-paginator-current-page {
+		color: #FFF;
 	}
 }
 

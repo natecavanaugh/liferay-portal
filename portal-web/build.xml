@@ -5,7 +5,7 @@
 
 	<property name="war.file" value="${ant.project.name}" />
 
-	<property name="alloy.file" value="alloy-1.7.0pr2.zip" />
+	<property name="alloy.file" value="alloy-1.7.0pr3.zip" />
 
 	<!--
 	When upgrading CKEditor, make sure to delete
@@ -907,7 +907,7 @@
 				<copy todir="@{module.name}" overwrite="true" preservelastmodified="true">
 					<fileset
 						dir="docroot/html/themes/_unstyled"
-						excludes="templates/init.vm"
+						excludes="templates/init.ftl,templates/init.vm"
 					/>
 				</copy>
 
@@ -1126,6 +1126,44 @@
 			<contains string="${jspc.output}" substring="JasperException" />
 			<then>
 				<fail>JSPs failed to compile.</fail>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${app.server.type}" arg2="tomcat" />
+			<then>
+				<fileset dir="${jspc.classes.dir}" id="oversize.files">
+					<include name="**/*.java" />
+					<size units="K" value="700" when="more" />
+				</fileset>
+
+				<pathconvert
+					dirsep="/"
+					pathsep="${line.separator}"
+					property="oversize.files.java"
+					refid="oversize.files"
+				/>
+
+				<if>
+					<not>
+						<equals arg1="${oversize.files.java}" arg2="" />
+					</not>
+					<then>
+						<antelope:stringutil property="oversize.files.jsp" string="${oversize.files.java}">
+							<replace regex="\.java" replacement="" />
+							<replace regex="${jspc.classes.dir}/org/apache/jsp" replacement="docroot" />
+							<replace regex="_jsp" replacement=".jsp" />
+							<replace regex="_002d" replacement="-" />
+							<replace regex="_005f" replacement="_" />
+						</antelope:stringutil>
+
+						<fail>
+The following JSPs may be too large for some application servers. Ssee LPS-27841
+for more information.
+
+${oversize.files.jsp}</fail>
+					</then>
+				</if>
 			</then>
 		</if>
 

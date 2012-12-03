@@ -297,13 +297,12 @@ public class SCProductScreenshotModelImpl extends BaseModelImpl<SCProductScreens
 
 	@Override
 	public SCProductScreenshot toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (SCProductScreenshot)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (SCProductScreenshot)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -497,7 +496,7 @@ public class SCProductScreenshotModelImpl extends BaseModelImpl<SCProductScreens
 	}
 
 	private static ClassLoader _classLoader = SCProductScreenshot.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			SCProductScreenshot.class
 		};
 	private long _productScreenshotId;
@@ -516,5 +515,5 @@ public class SCProductScreenshotModelImpl extends BaseModelImpl<SCProductScreens
 	private int _originalPriority;
 	private boolean _setOriginalPriority;
 	private long _columnBitmask;
-	private SCProductScreenshot _escapedModelProxy;
+	private SCProductScreenshot _escapedModel;
 }

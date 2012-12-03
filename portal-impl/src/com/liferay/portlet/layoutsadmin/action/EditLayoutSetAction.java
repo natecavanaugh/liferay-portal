@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
@@ -86,10 +87,14 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 				updateLayoutSet(actionRequest, actionResponse);
 			}
 
+			String redirect = ParamUtil.getString(actionRequest, "redirect");
 			String closeRedirect = ParamUtil.getString(
 				actionRequest, "closeRedirect");
 
 			if (Validator.isNotNull(closeRedirect)) {
+				redirect = HttpUtil.setParameter(
+					redirect, "closeRedirect", closeRedirect);
+
 				LiferayPortletConfig liferayPortletConfig =
 					(LiferayPortletConfig)portletConfig;
 
@@ -100,7 +105,7 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 					closeRedirect);
 			}
 
-			sendRedirect(actionRequest, actionResponse);
+			sendRedirect(actionRequest, actionResponse, redirect);
 		}
 		catch (Exception e) {
 			if (e instanceof PrincipalException ||

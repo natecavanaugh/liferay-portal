@@ -72,6 +72,8 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 		};
 	public static final String TABLE_SQL_CREATE = "create table ResourcePermission (resourcePermissionId LONG not null primary key,companyId LONG,name VARCHAR(255) null,scope INTEGER,primKey VARCHAR(255) null,roleId LONG,ownerId LONG,actionIds LONG)";
 	public static final String TABLE_SQL_DROP = "drop table ResourcePermission";
+	public static final String ORDER_BY_JPQL = " ORDER BY resourcePermission.resourcePermissionId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY ResourcePermission.resourcePermissionId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -91,6 +93,7 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 	public static long PRIMKEY_COLUMN_BITMASK = 16L;
 	public static long ROLEID_COLUMN_BITMASK = 32L;
 	public static long SCOPE_COLUMN_BITMASK = 64L;
+	public static long RESOURCEPERMISSIONID_COLUMN_BITMASK = 128L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -416,13 +419,12 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 
 	@Override
 	public ResourcePermission toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ResourcePermission)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ResourcePermission)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -624,7 +626,7 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 	}
 
 	private static ClassLoader _classLoader = ResourcePermission.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ResourcePermission.class
 		};
 	private long _resourcePermissionId;
@@ -648,5 +650,5 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 	private long _originalActionIds;
 	private boolean _setOriginalActionIds;
 	private long _columnBitmask;
-	private ResourcePermission _escapedModelProxy;
+	private ResourcePermission _escapedModel;
 }

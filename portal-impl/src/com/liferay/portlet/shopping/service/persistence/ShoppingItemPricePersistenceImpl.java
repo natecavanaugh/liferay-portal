@@ -15,7 +15,6 @@
 package com.liferay.portlet.shopping.service.persistence;
 
 import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -33,9 +32,9 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.shopping.NoSuchItemPriceException;
@@ -73,6 +72,17 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingItemPriceModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingItemPriceImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingItemPriceModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingItemPriceImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingItemPriceModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ITEMID = new FinderPath(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingItemPriceModelImpl.FINDER_CACHE_ENABLED,
 			ShoppingItemPriceImpl.class,
@@ -80,8 +90,8 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID =
 		new FinderPath(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
@@ -94,388 +104,6 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 			ShoppingItemPriceModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByItemId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemPriceModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingItemPriceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemPriceModelImpl.FINDER_CACHE_ENABLED,
-			ShoppingItemPriceImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemPriceModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the shopping item price in the entity cache if it is enabled.
-	 *
-	 * @param shoppingItemPrice the shopping item price
-	 */
-	public void cacheResult(ShoppingItemPrice shoppingItemPrice) {
-		EntityCacheUtil.putResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemPriceImpl.class, shoppingItemPrice.getPrimaryKey(),
-			shoppingItemPrice);
-
-		shoppingItemPrice.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the shopping item prices in the entity cache if it is enabled.
-	 *
-	 * @param shoppingItemPrices the shopping item prices
-	 */
-	public void cacheResult(List<ShoppingItemPrice> shoppingItemPrices) {
-		for (ShoppingItemPrice shoppingItemPrice : shoppingItemPrices) {
-			if (EntityCacheUtil.getResult(
-						ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingItemPriceImpl.class,
-						shoppingItemPrice.getPrimaryKey()) == null) {
-				cacheResult(shoppingItemPrice);
-			}
-			else {
-				shoppingItemPrice.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all shopping item prices.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ShoppingItemPriceImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ShoppingItemPriceImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the shopping item price.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(ShoppingItemPrice shoppingItemPrice) {
-		EntityCacheUtil.removeResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemPriceImpl.class, shoppingItemPrice.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<ShoppingItemPrice> shoppingItemPrices) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (ShoppingItemPrice shoppingItemPrice : shoppingItemPrices) {
-			EntityCacheUtil.removeResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-				ShoppingItemPriceImpl.class, shoppingItemPrice.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new shopping item price with the primary key. Does not add the shopping item price to the database.
-	 *
-	 * @param itemPriceId the primary key for the new shopping item price
-	 * @return the new shopping item price
-	 */
-	public ShoppingItemPrice create(long itemPriceId) {
-		ShoppingItemPrice shoppingItemPrice = new ShoppingItemPriceImpl();
-
-		shoppingItemPrice.setNew(true);
-		shoppingItemPrice.setPrimaryKey(itemPriceId);
-
-		return shoppingItemPrice;
-	}
-
-	/**
-	 * Removes the shopping item price with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param itemPriceId the primary key of the shopping item price
-	 * @return the shopping item price that was removed
-	 * @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingItemPrice remove(long itemPriceId)
-		throws NoSuchItemPriceException, SystemException {
-		return remove(Long.valueOf(itemPriceId));
-	}
-
-	/**
-	 * Removes the shopping item price with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the shopping item price
-	 * @return the shopping item price that was removed
-	 * @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingItemPrice remove(Serializable primaryKey)
-		throws NoSuchItemPriceException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			ShoppingItemPrice shoppingItemPrice = (ShoppingItemPrice)session.get(ShoppingItemPriceImpl.class,
-					primaryKey);
-
-			if (shoppingItemPrice == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchItemPriceException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(shoppingItemPrice);
-		}
-		catch (NoSuchItemPriceException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected ShoppingItemPrice removeImpl(ShoppingItemPrice shoppingItemPrice)
-		throws SystemException {
-		shoppingItemPrice = toUnwrappedModel(shoppingItemPrice);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (shoppingItemPrice.isCachedModel()) {
-				shoppingItemPrice = (ShoppingItemPrice)session.get(ShoppingItemPriceImpl.class,
-						shoppingItemPrice.getPrimaryKeyObj());
-			}
-
-			if (shoppingItemPrice != null) {
-				session.delete(shoppingItemPrice);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (shoppingItemPrice != null) {
-			clearCache(shoppingItemPrice);
-		}
-
-		return shoppingItemPrice;
-	}
-
-	@Override
-	public ShoppingItemPrice updateImpl(
-		com.liferay.portlet.shopping.model.ShoppingItemPrice shoppingItemPrice)
-		throws SystemException {
-		shoppingItemPrice = toUnwrappedModel(shoppingItemPrice);
-
-		boolean isNew = shoppingItemPrice.isNew();
-
-		ShoppingItemPriceModelImpl shoppingItemPriceModelImpl = (ShoppingItemPriceModelImpl)shoppingItemPrice;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (shoppingItemPrice.isNew()) {
-				session.save(shoppingItemPrice);
-
-				shoppingItemPrice.setNew(false);
-			}
-			else {
-				session.merge(shoppingItemPrice);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ShoppingItemPriceModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((shoppingItemPriceModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(shoppingItemPriceModelImpl.getOriginalItemId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ITEMID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(shoppingItemPriceModelImpl.getItemId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ITEMID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-			ShoppingItemPriceImpl.class, shoppingItemPrice.getPrimaryKey(),
-			shoppingItemPrice);
-
-		return shoppingItemPrice;
-	}
-
-	protected ShoppingItemPrice toUnwrappedModel(
-		ShoppingItemPrice shoppingItemPrice) {
-		if (shoppingItemPrice instanceof ShoppingItemPriceImpl) {
-			return shoppingItemPrice;
-		}
-
-		ShoppingItemPriceImpl shoppingItemPriceImpl = new ShoppingItemPriceImpl();
-
-		shoppingItemPriceImpl.setNew(shoppingItemPrice.isNew());
-		shoppingItemPriceImpl.setPrimaryKey(shoppingItemPrice.getPrimaryKey());
-
-		shoppingItemPriceImpl.setItemPriceId(shoppingItemPrice.getItemPriceId());
-		shoppingItemPriceImpl.setItemId(shoppingItemPrice.getItemId());
-		shoppingItemPriceImpl.setMinQuantity(shoppingItemPrice.getMinQuantity());
-		shoppingItemPriceImpl.setMaxQuantity(shoppingItemPrice.getMaxQuantity());
-		shoppingItemPriceImpl.setPrice(shoppingItemPrice.getPrice());
-		shoppingItemPriceImpl.setDiscount(shoppingItemPrice.getDiscount());
-		shoppingItemPriceImpl.setTaxable(shoppingItemPrice.isTaxable());
-		shoppingItemPriceImpl.setShipping(shoppingItemPrice.getShipping());
-		shoppingItemPriceImpl.setUseShippingFormula(shoppingItemPrice.isUseShippingFormula());
-		shoppingItemPriceImpl.setStatus(shoppingItemPrice.getStatus());
-
-		return shoppingItemPriceImpl;
-	}
-
-	/**
-	 * Returns the shopping item price with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the shopping item price
-	 * @return the shopping item price
-	 * @throws com.liferay.portal.NoSuchModelException if a shopping item price with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingItemPrice findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the shopping item price with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchItemPriceException} if it could not be found.
-	 *
-	 * @param itemPriceId the primary key of the shopping item price
-	 * @return the shopping item price
-	 * @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingItemPrice findByPrimaryKey(long itemPriceId)
-		throws NoSuchItemPriceException, SystemException {
-		ShoppingItemPrice shoppingItemPrice = fetchByPrimaryKey(itemPriceId);
-
-		if (shoppingItemPrice == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + itemPriceId);
-			}
-
-			throw new NoSuchItemPriceException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				itemPriceId);
-		}
-
-		return shoppingItemPrice;
-	}
-
-	/**
-	 * Returns the shopping item price with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the shopping item price
-	 * @return the shopping item price, or <code>null</code> if a shopping item price with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public ShoppingItemPrice fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the shopping item price with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param itemPriceId the primary key of the shopping item price
-	 * @return the shopping item price, or <code>null</code> if a shopping item price with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public ShoppingItemPrice fetchByPrimaryKey(long itemPriceId)
-		throws SystemException {
-		ShoppingItemPrice shoppingItemPrice = (ShoppingItemPrice)EntityCacheUtil.getResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-				ShoppingItemPriceImpl.class, itemPriceId);
-
-		if (shoppingItemPrice == _nullShoppingItemPrice) {
-			return null;
-		}
-
-		if (shoppingItemPrice == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				shoppingItemPrice = (ShoppingItemPrice)session.get(ShoppingItemPriceImpl.class,
-						Long.valueOf(itemPriceId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (shoppingItemPrice != null) {
-					cacheResult(shoppingItemPrice);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
-						ShoppingItemPriceImpl.class, itemPriceId,
-						_nullShoppingItemPrice);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return shoppingItemPrice;
-	}
 
 	/**
 	 * Returns all the shopping item prices where itemId = &#63;.
@@ -493,7 +121,7 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 	 * Returns a range of all the shopping item prices where itemId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.shopping.model.impl.ShoppingItemPriceModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param itemId the item ID
@@ -511,7 +139,7 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 	 * Returns an ordered range of all the shopping item prices where itemId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.shopping.model.impl.ShoppingItemPriceModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param itemId the item ID
@@ -523,11 +151,13 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 	 */
 	public List<ShoppingItemPrice> findByItemId(long itemId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID;
 			finderArgs = new Object[] { itemId };
 		}
@@ -568,8 +198,8 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(ShoppingItemPriceModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -586,22 +216,29 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 
 				qPos.add(itemId);
 
-				list = (List<ShoppingItemPrice>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<ShoppingItemPrice>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<ShoppingItemPrice>(list);
+				}
+				else {
+					list = (List<ShoppingItemPrice>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -825,7 +462,6 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 				}
 			}
 		}
-
 		else {
 			query.append(ShoppingItemPriceModelImpl.ORDER_BY_JPQL);
 		}
@@ -860,6 +496,443 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 	}
 
 	/**
+	 * Removes all the shopping item prices where itemId = &#63; from the database.
+	 *
+	 * @param itemId the item ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByItemId(long itemId) throws SystemException {
+		for (ShoppingItemPrice shoppingItemPrice : findByItemId(itemId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(shoppingItemPrice);
+		}
+	}
+
+	/**
+	 * Returns the number of shopping item prices where itemId = &#63;.
+	 *
+	 * @param itemId the item ID
+	 * @return the number of matching shopping item prices
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByItemId(long itemId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_ITEMID;
+
+		Object[] finderArgs = new Object[] { itemId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SHOPPINGITEMPRICE_WHERE);
+
+			query.append(_FINDER_COLUMN_ITEMID_ITEMID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(itemId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_ITEMID_ITEMID_2 = "shoppingItemPrice.itemId = ?";
+
+	/**
+	 * Caches the shopping item price in the entity cache if it is enabled.
+	 *
+	 * @param shoppingItemPrice the shopping item price
+	 */
+	public void cacheResult(ShoppingItemPrice shoppingItemPrice) {
+		EntityCacheUtil.putResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingItemPriceImpl.class, shoppingItemPrice.getPrimaryKey(),
+			shoppingItemPrice);
+
+		shoppingItemPrice.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the shopping item prices in the entity cache if it is enabled.
+	 *
+	 * @param shoppingItemPrices the shopping item prices
+	 */
+	public void cacheResult(List<ShoppingItemPrice> shoppingItemPrices) {
+		for (ShoppingItemPrice shoppingItemPrice : shoppingItemPrices) {
+			if (EntityCacheUtil.getResult(
+						ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingItemPriceImpl.class,
+						shoppingItemPrice.getPrimaryKey()) == null) {
+				cacheResult(shoppingItemPrice);
+			}
+			else {
+				shoppingItemPrice.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all shopping item prices.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ShoppingItemPriceImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ShoppingItemPriceImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the shopping item price.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(ShoppingItemPrice shoppingItemPrice) {
+		EntityCacheUtil.removeResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingItemPriceImpl.class, shoppingItemPrice.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<ShoppingItemPrice> shoppingItemPrices) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (ShoppingItemPrice shoppingItemPrice : shoppingItemPrices) {
+			EntityCacheUtil.removeResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+				ShoppingItemPriceImpl.class, shoppingItemPrice.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new shopping item price with the primary key. Does not add the shopping item price to the database.
+	 *
+	 * @param itemPriceId the primary key for the new shopping item price
+	 * @return the new shopping item price
+	 */
+	public ShoppingItemPrice create(long itemPriceId) {
+		ShoppingItemPrice shoppingItemPrice = new ShoppingItemPriceImpl();
+
+		shoppingItemPrice.setNew(true);
+		shoppingItemPrice.setPrimaryKey(itemPriceId);
+
+		return shoppingItemPrice;
+	}
+
+	/**
+	 * Removes the shopping item price with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param itemPriceId the primary key of the shopping item price
+	 * @return the shopping item price that was removed
+	 * @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemPrice remove(long itemPriceId)
+		throws NoSuchItemPriceException, SystemException {
+		return remove(Long.valueOf(itemPriceId));
+	}
+
+	/**
+	 * Removes the shopping item price with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the shopping item price
+	 * @return the shopping item price that was removed
+	 * @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingItemPrice remove(Serializable primaryKey)
+		throws NoSuchItemPriceException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			ShoppingItemPrice shoppingItemPrice = (ShoppingItemPrice)session.get(ShoppingItemPriceImpl.class,
+					primaryKey);
+
+			if (shoppingItemPrice == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchItemPriceException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(shoppingItemPrice);
+		}
+		catch (NoSuchItemPriceException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected ShoppingItemPrice removeImpl(ShoppingItemPrice shoppingItemPrice)
+		throws SystemException {
+		shoppingItemPrice = toUnwrappedModel(shoppingItemPrice);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(shoppingItemPrice)) {
+				shoppingItemPrice = (ShoppingItemPrice)session.get(ShoppingItemPriceImpl.class,
+						shoppingItemPrice.getPrimaryKeyObj());
+			}
+
+			if (shoppingItemPrice != null) {
+				session.delete(shoppingItemPrice);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (shoppingItemPrice != null) {
+			clearCache(shoppingItemPrice);
+		}
+
+		return shoppingItemPrice;
+	}
+
+	@Override
+	public ShoppingItemPrice updateImpl(
+		com.liferay.portlet.shopping.model.ShoppingItemPrice shoppingItemPrice)
+		throws SystemException {
+		shoppingItemPrice = toUnwrappedModel(shoppingItemPrice);
+
+		boolean isNew = shoppingItemPrice.isNew();
+
+		ShoppingItemPriceModelImpl shoppingItemPriceModelImpl = (ShoppingItemPriceModelImpl)shoppingItemPrice;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (shoppingItemPrice.isNew()) {
+				session.save(shoppingItemPrice);
+
+				shoppingItemPrice.setNew(false);
+			}
+			else {
+				session.merge(shoppingItemPrice);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ShoppingItemPriceModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((shoppingItemPriceModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(shoppingItemPriceModelImpl.getOriginalItemId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ITEMID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(shoppingItemPriceModelImpl.getItemId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ITEMID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ITEMID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingItemPriceImpl.class, shoppingItemPrice.getPrimaryKey(),
+			shoppingItemPrice);
+
+		return shoppingItemPrice;
+	}
+
+	protected ShoppingItemPrice toUnwrappedModel(
+		ShoppingItemPrice shoppingItemPrice) {
+		if (shoppingItemPrice instanceof ShoppingItemPriceImpl) {
+			return shoppingItemPrice;
+		}
+
+		ShoppingItemPriceImpl shoppingItemPriceImpl = new ShoppingItemPriceImpl();
+
+		shoppingItemPriceImpl.setNew(shoppingItemPrice.isNew());
+		shoppingItemPriceImpl.setPrimaryKey(shoppingItemPrice.getPrimaryKey());
+
+		shoppingItemPriceImpl.setItemPriceId(shoppingItemPrice.getItemPriceId());
+		shoppingItemPriceImpl.setItemId(shoppingItemPrice.getItemId());
+		shoppingItemPriceImpl.setMinQuantity(shoppingItemPrice.getMinQuantity());
+		shoppingItemPriceImpl.setMaxQuantity(shoppingItemPrice.getMaxQuantity());
+		shoppingItemPriceImpl.setPrice(shoppingItemPrice.getPrice());
+		shoppingItemPriceImpl.setDiscount(shoppingItemPrice.getDiscount());
+		shoppingItemPriceImpl.setTaxable(shoppingItemPrice.isTaxable());
+		shoppingItemPriceImpl.setShipping(shoppingItemPrice.getShipping());
+		shoppingItemPriceImpl.setUseShippingFormula(shoppingItemPrice.isUseShippingFormula());
+		shoppingItemPriceImpl.setStatus(shoppingItemPrice.getStatus());
+
+		return shoppingItemPriceImpl;
+	}
+
+	/**
+	 * Returns the shopping item price with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the shopping item price
+	 * @return the shopping item price
+	 * @throws com.liferay.portal.NoSuchModelException if a shopping item price with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingItemPrice findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the shopping item price with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchItemPriceException} if it could not be found.
+	 *
+	 * @param itemPriceId the primary key of the shopping item price
+	 * @return the shopping item price
+	 * @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemPrice findByPrimaryKey(long itemPriceId)
+		throws NoSuchItemPriceException, SystemException {
+		ShoppingItemPrice shoppingItemPrice = fetchByPrimaryKey(itemPriceId);
+
+		if (shoppingItemPrice == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + itemPriceId);
+			}
+
+			throw new NoSuchItemPriceException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				itemPriceId);
+		}
+
+		return shoppingItemPrice;
+	}
+
+	/**
+	 * Returns the shopping item price with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the shopping item price
+	 * @return the shopping item price, or <code>null</code> if a shopping item price with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ShoppingItemPrice fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the shopping item price with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param itemPriceId the primary key of the shopping item price
+	 * @return the shopping item price, or <code>null</code> if a shopping item price with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ShoppingItemPrice fetchByPrimaryKey(long itemPriceId)
+		throws SystemException {
+		ShoppingItemPrice shoppingItemPrice = (ShoppingItemPrice)EntityCacheUtil.getResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+				ShoppingItemPriceImpl.class, itemPriceId);
+
+		if (shoppingItemPrice == _nullShoppingItemPrice) {
+			return null;
+		}
+
+		if (shoppingItemPrice == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				shoppingItemPrice = (ShoppingItemPrice)session.get(ShoppingItemPriceImpl.class,
+						Long.valueOf(itemPriceId));
+
+				if (shoppingItemPrice != null) {
+					cacheResult(shoppingItemPrice);
+				}
+				else {
+					EntityCacheUtil.putResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+						ShoppingItemPriceImpl.class, itemPriceId,
+						_nullShoppingItemPrice);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ShoppingItemPriceModelImpl.ENTITY_CACHE_ENABLED,
+					ShoppingItemPriceImpl.class, itemPriceId);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return shoppingItemPrice;
+	}
+
+	/**
 	 * Returns all the shopping item prices.
 	 *
 	 * @return the shopping item prices
@@ -873,7 +946,7 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 	 * Returns a range of all the shopping item prices.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.shopping.model.impl.ShoppingItemPriceModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of shopping item prices
@@ -890,7 +963,7 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 	 * Returns an ordered range of all the shopping item prices.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.shopping.model.impl.ShoppingItemPriceModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of shopping item prices
@@ -901,11 +974,13 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 	 */
 	public List<ShoppingItemPrice> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -933,7 +1008,11 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SHOPPINGITEMPRICE.concat(ShoppingItemPriceModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SHOPPINGITEMPRICE;
+
+				if (pagination) {
+					sql = sql.concat(ShoppingItemPriceModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -943,47 +1022,34 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<ShoppingItemPrice>)QueryUtil.list(q,
 							getDialect(), start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<ShoppingItemPrice>(list);
 				}
 				else {
 					list = (List<ShoppingItemPrice>)QueryUtil.list(q,
 							getDialect(), start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the shopping item prices where itemId = &#63; from the database.
-	 *
-	 * @param itemId the item ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByItemId(long itemId) throws SystemException {
-		for (ShoppingItemPrice shoppingItemPrice : findByItemId(itemId)) {
-			remove(shoppingItemPrice);
-		}
 	}
 
 	/**
@@ -995,59 +1061,6 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 		for (ShoppingItemPrice shoppingItemPrice : findAll()) {
 			remove(shoppingItemPrice);
 		}
-	}
-
-	/**
-	 * Returns the number of shopping item prices where itemId = &#63;.
-	 *
-	 * @param itemId the item ID
-	 * @return the number of matching shopping item prices
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByItemId(long itemId) throws SystemException {
-		Object[] finderArgs = new Object[] { itemId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ITEMID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SHOPPINGITEMPRICE_WHERE);
-
-			query.append(_FINDER_COLUMN_ITEMID_ITEMID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(itemId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ITEMID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1069,18 +1082,17 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 				Query q = session.createQuery(_SQL_COUNT_SHOPPINGITEMPRICE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1116,32 +1128,14 @@ public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<Shoppi
 	public void destroy() {
 		EntityCacheUtil.removeCache(ShoppingItemPriceImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = ShoppingCartPersistence.class)
-	protected ShoppingCartPersistence shoppingCartPersistence;
-	@BeanReference(type = ShoppingCategoryPersistence.class)
-	protected ShoppingCategoryPersistence shoppingCategoryPersistence;
-	@BeanReference(type = ShoppingCouponPersistence.class)
-	protected ShoppingCouponPersistence shoppingCouponPersistence;
-	@BeanReference(type = ShoppingItemPersistence.class)
-	protected ShoppingItemPersistence shoppingItemPersistence;
-	@BeanReference(type = ShoppingItemFieldPersistence.class)
-	protected ShoppingItemFieldPersistence shoppingItemFieldPersistence;
-	@BeanReference(type = ShoppingItemPricePersistence.class)
-	protected ShoppingItemPricePersistence shoppingItemPricePersistence;
-	@BeanReference(type = ShoppingOrderPersistence.class)
-	protected ShoppingOrderPersistence shoppingOrderPersistence;
-	@BeanReference(type = ShoppingOrderItemPersistence.class)
-	protected ShoppingOrderItemPersistence shoppingOrderItemPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_SHOPPINGITEMPRICE = "SELECT shoppingItemPrice FROM ShoppingItemPrice shoppingItemPrice";
 	private static final String _SQL_SELECT_SHOPPINGITEMPRICE_WHERE = "SELECT shoppingItemPrice FROM ShoppingItemPrice shoppingItemPrice WHERE ";
 	private static final String _SQL_COUNT_SHOPPINGITEMPRICE = "SELECT COUNT(shoppingItemPrice) FROM ShoppingItemPrice shoppingItemPrice";
 	private static final String _SQL_COUNT_SHOPPINGITEMPRICE_WHERE = "SELECT COUNT(shoppingItemPrice) FROM ShoppingItemPrice shoppingItemPrice WHERE ";
-	private static final String _FINDER_COLUMN_ITEMID_ITEMID_2 = "shoppingItemPrice.itemId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "shoppingItemPrice.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No ShoppingItemPrice exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No ShoppingItemPrice exists with the key {";

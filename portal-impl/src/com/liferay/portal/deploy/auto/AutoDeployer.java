@@ -30,4 +30,6 @@ public interface AutoDeployer {
 	public int autoDeploy(AutoDeploymentContext autoDeploymentContext)
 		throws AutoDeployException;
 
+	public AutoDeployer cloneAutoDeployer() throws AutoDeployException;
+
 }

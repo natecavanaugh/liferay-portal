@@ -67,6 +67,8 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 		};
 	public static final String TABLE_SQL_CREATE = "create table TrashVersion (versionId LONG not null primary key,entryId LONG,classNameId LONG,classPK LONG,status INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table TrashVersion";
+	public static final String ORDER_BY_JPQL = " ORDER BY trashVersion.versionId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY TrashVersion.versionId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -82,6 +84,7 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 	public static long CLASSNAMEID_COLUMN_BITMASK = 1L;
 	public static long CLASSPK_COLUMN_BITMASK = 2L;
 	public static long ENTRYID_COLUMN_BITMASK = 4L;
+	public static long VERSIONID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.trash.model.TrashVersion"));
 
@@ -271,13 +274,12 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 
 	@Override
 	public TrashVersion toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (TrashVersion)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (TrashVersion)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -428,7 +430,7 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 	}
 
 	private static ClassLoader _classLoader = TrashVersion.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			TrashVersion.class
 		};
 	private long _versionId;
@@ -443,5 +445,5 @@ public class TrashVersionModelImpl extends BaseModelImpl<TrashVersion>
 	private boolean _setOriginalClassPK;
 	private int _status;
 	private long _columnBitmask;
-	private TrashVersion _escapedModelProxy;
+	private TrashVersion _escapedModel;
 }

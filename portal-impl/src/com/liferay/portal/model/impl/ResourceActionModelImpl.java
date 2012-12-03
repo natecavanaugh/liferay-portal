@@ -79,6 +79,7 @@ public class ResourceActionModelImpl extends BaseModelImpl<ResourceAction>
 			true);
 	public static long ACTIONID_COLUMN_BITMASK = 1L;
 	public static long NAME_COLUMN_BITMASK = 2L;
+	public static long BITWISEVALUE_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.ResourceAction"));
 
@@ -231,13 +232,12 @@ public class ResourceActionModelImpl extends BaseModelImpl<ResourceAction>
 
 	@Override
 	public ResourceAction toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ResourceAction)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ResourceAction)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -395,7 +395,7 @@ public class ResourceActionModelImpl extends BaseModelImpl<ResourceAction>
 	}
 
 	private static ClassLoader _classLoader = ResourceAction.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ResourceAction.class
 		};
 	private long _resourceActionId;
@@ -405,5 +405,5 @@ public class ResourceActionModelImpl extends BaseModelImpl<ResourceAction>
 	private String _originalActionId;
 	private long _bitwiseValue;
 	private long _columnBitmask;
-	private ResourceAction _escapedModelProxy;
+	private ResourceAction _escapedModel;
 }

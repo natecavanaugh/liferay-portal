@@ -60,7 +60,7 @@ public class HookAutoDeployer extends HookDeployer implements AutoDeployer {
 			checkArguments();
 		}
 		catch (Exception e) {
-			_log.error(e);
+			_log.error(e, e);
 		}
 	}
 

@@ -28,7 +28,7 @@ import java.io.File;
 public class HookAutoDeployListener extends BaseAutoDeployListener {
 
 	public HookAutoDeployListener() {
-		_autoDeployer = new HookAutoDeployer();
+		_autoDeployer = new ThreadSafeAutoDeployer(new HookAutoDeployer());
 	}
 
 	public void deploy(AutoDeploymentContext autoDeploymentContext)

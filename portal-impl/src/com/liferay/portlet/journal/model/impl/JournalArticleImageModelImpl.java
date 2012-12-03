@@ -68,6 +68,8 @@ public class JournalArticleImageModelImpl extends BaseModelImpl<JournalArticleIm
 		};
 	public static final String TABLE_SQL_CREATE = "create table JournalArticleImage (articleImageId LONG not null primary key,groupId LONG,articleId VARCHAR(75) null,version DOUBLE,elInstanceId VARCHAR(75) null,elName VARCHAR(75) null,languageId VARCHAR(75) null,tempImage BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table JournalArticleImage";
+	public static final String ORDER_BY_JPQL = " ORDER BY journalArticleImage.articleImageId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY JournalArticleImage.articleImageId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -87,6 +89,7 @@ public class JournalArticleImageModelImpl extends BaseModelImpl<JournalArticleIm
 	public static long LANGUAGEID_COLUMN_BITMASK = 16L;
 	public static long TEMPIMAGE_COLUMN_BITMASK = 32L;
 	public static long VERSION_COLUMN_BITMASK = 64L;
+	public static long ARTICLEIMAGEID_COLUMN_BITMASK = 128L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.journal.model.JournalArticleImage"));
 
@@ -367,13 +370,12 @@ public class JournalArticleImageModelImpl extends BaseModelImpl<JournalArticleIm
 
 	@Override
 	public JournalArticleImage toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (JournalArticleImage)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (JournalArticleImage)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -583,7 +585,7 @@ public class JournalArticleImageModelImpl extends BaseModelImpl<JournalArticleIm
 	}
 
 	private static ClassLoader _classLoader = JournalArticleImage.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			JournalArticleImage.class
 		};
 	private long _articleImageId;
@@ -605,5 +607,5 @@ public class JournalArticleImageModelImpl extends BaseModelImpl<JournalArticleIm
 	private boolean _originalTempImage;
 	private boolean _setOriginalTempImage;
 	private long _columnBitmask;
-	private JournalArticleImage _escapedModelProxy;
+	private JournalArticleImage _escapedModel;
 }

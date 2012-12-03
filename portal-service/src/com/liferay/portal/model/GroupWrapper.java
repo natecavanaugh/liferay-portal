@@ -526,6 +526,10 @@ public class GroupWrapper implements Group, ModelWrapper<Group> {
 		return new GroupWrapper(_group.toEscapedModel());
 	}
 
+	public com.liferay.portal.model.Group toUnescapedModel() {
+		return new GroupWrapper(_group.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _group.toString();
@@ -587,6 +591,11 @@ public class GroupWrapper implements Group, ModelWrapper<Group> {
 		return _group.getLiveGroup();
 	}
 
+	public java.lang.String getLiveParentTypeSettingsProperty(
+		java.lang.String key) {
+		return _group.getLiveParentTypeSettingsProperty(key);
+	}
+
 	public long getOrganizationId() {
 		return _group.getOrganizationId();
 	}
@@ -595,6 +604,10 @@ public class GroupWrapper implements Group, ModelWrapper<Group> {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _group.getParentGroup();
+	}
+
+	public com.liferay.portal.kernel.util.UnicodeProperties getParentLiveGroupTypeSettingsProperties() {
+		return _group.getParentLiveGroupTypeSettingsProperties();
 	}
 
 	public java.lang.String getPathFriendlyURL(boolean privateLayout,

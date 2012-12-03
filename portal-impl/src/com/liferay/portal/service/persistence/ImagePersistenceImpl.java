@@ -16,7 +16,6 @@ package com.liferay.portal.service.persistence;
 
 import com.liferay.portal.NoSuchImageException;
 import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -34,14 +33,13 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.ImageImpl;
 import com.liferay.portal.model.impl.ImageModelImpl;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
-
-import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryPersistence;
 
 import java.io.Serializable;
 
@@ -73,19 +71,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByLtSize",
-			new String[] {
-				Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByLtSize",
-			new String[] { Integer.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -95,341 +80,19 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
 			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the image in the entity cache if it is enabled.
-	 *
-	 * @param image the image
-	 */
-	public void cacheResult(Image image) {
-		EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageImpl.class, image.getPrimaryKey(), image);
-
-		image.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the images in the entity cache if it is enabled.
-	 *
-	 * @param images the images
-	 */
-	public void cacheResult(List<Image> images) {
-		for (Image image : images) {
-			if (EntityCacheUtil.getResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-						ImageImpl.class, image.getPrimaryKey()) == null) {
-				cacheResult(image);
-			}
-			else {
-				image.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all images.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ImageImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ImageImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the image.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(Image image) {
-		EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageImpl.class, image.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<Image> images) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (Image image : images) {
-			EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-				ImageImpl.class, image.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new image with the primary key. Does not add the image to the database.
-	 *
-	 * @param imageId the primary key for the new image
-	 * @return the new image
-	 */
-	public Image create(long imageId) {
-		Image image = new ImageImpl();
-
-		image.setNew(true);
-		image.setPrimaryKey(imageId);
-
-		return image;
-	}
-
-	/**
-	 * Removes the image with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param imageId the primary key of the image
-	 * @return the image that was removed
-	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image remove(long imageId)
-		throws NoSuchImageException, SystemException {
-		return remove(Long.valueOf(imageId));
-	}
-
-	/**
-	 * Removes the image with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the image
-	 * @return the image that was removed
-	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Image remove(Serializable primaryKey)
-		throws NoSuchImageException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Image image = (Image)session.get(ImageImpl.class, primaryKey);
-
-			if (image == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchImageException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(image);
-		}
-		catch (NoSuchImageException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected Image removeImpl(Image image) throws SystemException {
-		image = toUnwrappedModel(image);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (image.isCachedModel()) {
-				image = (Image)session.get(ImageImpl.class,
-						image.getPrimaryKeyObj());
-			}
-
-			if (image != null) {
-				session.delete(image);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (image != null) {
-			clearCache(image);
-		}
-
-		return image;
-	}
-
-	@Override
-	public Image updateImpl(com.liferay.portal.model.Image image)
-		throws SystemException {
-		image = toUnwrappedModel(image);
-
-		boolean isNew = image.isNew();
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (image.isNew()) {
-				session.save(image);
-
-				image.setNew(false);
-			}
-			else {
-				session.merge(image);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ImageModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-			ImageImpl.class, image.getPrimaryKey(), image);
-
-		return image;
-	}
-
-	protected Image toUnwrappedModel(Image image) {
-		if (image instanceof ImageImpl) {
-			return image;
-		}
-
-		ImageImpl imageImpl = new ImageImpl();
-
-		imageImpl.setNew(image.isNew());
-		imageImpl.setPrimaryKey(image.getPrimaryKey());
-
-		imageImpl.setImageId(image.getImageId());
-		imageImpl.setModifiedDate(image.getModifiedDate());
-		imageImpl.setText(image.getText());
-		imageImpl.setType(image.getType());
-		imageImpl.setHeight(image.getHeight());
-		imageImpl.setWidth(image.getWidth());
-		imageImpl.setSize(image.getSize());
-
-		return imageImpl;
-	}
-
-	/**
-	 * Returns the image with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the image
-	 * @return the image
-	 * @throws com.liferay.portal.NoSuchModelException if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Image findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the image with the primary key or throws a {@link com.liferay.portal.NoSuchImageException} if it could not be found.
-	 *
-	 * @param imageId the primary key of the image
-	 * @return the image
-	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image findByPrimaryKey(long imageId)
-		throws NoSuchImageException, SystemException {
-		Image image = fetchByPrimaryKey(imageId);
-
-		if (image == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + imageId);
-			}
-
-			throw new NoSuchImageException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				imageId);
-		}
-
-		return image;
-	}
-
-	/**
-	 * Returns the image with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the image
-	 * @return the image, or <code>null</code> if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Image fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the image with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param imageId the primary key of the image
-	 * @return the image, or <code>null</code> if a image with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Image fetchByPrimaryKey(long imageId) throws SystemException {
-		Image image = (Image)EntityCacheUtil.getResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-				ImageImpl.class, imageId);
-
-		if (image == _nullImage) {
-			return null;
-		}
-
-		if (image == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				image = (Image)session.get(ImageImpl.class,
-						Long.valueOf(imageId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (image != null) {
-					cacheResult(image);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
-						ImageImpl.class, imageId, _nullImage);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return image;
-	}
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageModelImpl.FINDER_CACHE_ENABLED, ImageImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByLtSize",
+			new String[] {
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE = new FinderPath(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByLtSize",
+			new String[] { Integer.class.getName() });
 
 	/**
 	 * Returns all the images where size &lt; &#63;.
@@ -446,7 +109,7 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 * Returns a range of all the images where size &lt; &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.ImageModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param size the size
@@ -464,7 +127,7 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 * Returns an ordered range of all the images where size &lt; &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.ImageModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param size the size
@@ -476,6 +139,7 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 */
 	public List<Image> findByLtSize(int size, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -514,8 +178,8 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(ImageModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -532,21 +196,29 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 
 				qPos.add(size);
 
-				list = (List<Image>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Image>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Image>(list);
+				}
+				else {
+					list = (List<Image>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -765,7 +437,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 				}
 			}
 		}
-
 		else {
 			query.append(ImageModelImpl.ORDER_BY_JPQL);
 		}
@@ -800,6 +471,407 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	}
 
 	/**
+	 * Removes all the images where size &lt; &#63; from the database.
+	 *
+	 * @param size the size
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByLtSize(int size) throws SystemException {
+		for (Image image : findByLtSize(size, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(image);
+		}
+	}
+
+	/**
+	 * Returns the number of images where size &lt; &#63;.
+	 *
+	 * @param size the size
+	 * @return the number of matching images
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByLtSize(int size) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE;
+
+		Object[] finderArgs = new Object[] { size };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_IMAGE_WHERE);
+
+			query.append(_FINDER_COLUMN_LTSIZE_SIZE_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(size);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_LTSIZE_SIZE_2 = "image.size < ?";
+
+	/**
+	 * Caches the image in the entity cache if it is enabled.
+	 *
+	 * @param image the image
+	 */
+	public void cacheResult(Image image) {
+		EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageImpl.class, image.getPrimaryKey(), image);
+
+		image.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the images in the entity cache if it is enabled.
+	 *
+	 * @param images the images
+	 */
+	public void cacheResult(List<Image> images) {
+		for (Image image : images) {
+			if (EntityCacheUtil.getResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+						ImageImpl.class, image.getPrimaryKey()) == null) {
+				cacheResult(image);
+			}
+			else {
+				image.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all images.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ImageImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ImageImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the image.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(Image image) {
+		EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageImpl.class, image.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<Image> images) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (Image image : images) {
+			EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+				ImageImpl.class, image.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new image with the primary key. Does not add the image to the database.
+	 *
+	 * @param imageId the primary key for the new image
+	 * @return the new image
+	 */
+	public Image create(long imageId) {
+		Image image = new ImageImpl();
+
+		image.setNew(true);
+		image.setPrimaryKey(imageId);
+
+		return image;
+	}
+
+	/**
+	 * Removes the image with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param imageId the primary key of the image
+	 * @return the image that was removed
+	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image remove(long imageId)
+		throws NoSuchImageException, SystemException {
+		return remove(Long.valueOf(imageId));
+	}
+
+	/**
+	 * Removes the image with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the image
+	 * @return the image that was removed
+	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Image remove(Serializable primaryKey)
+		throws NoSuchImageException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Image image = (Image)session.get(ImageImpl.class, primaryKey);
+
+			if (image == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchImageException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(image);
+		}
+		catch (NoSuchImageException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected Image removeImpl(Image image) throws SystemException {
+		image = toUnwrappedModel(image);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(image)) {
+				image = (Image)session.get(ImageImpl.class,
+						image.getPrimaryKeyObj());
+			}
+
+			if (image != null) {
+				session.delete(image);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (image != null) {
+			clearCache(image);
+		}
+
+		return image;
+	}
+
+	@Override
+	public Image updateImpl(com.liferay.portal.model.Image image)
+		throws SystemException {
+		image = toUnwrappedModel(image);
+
+		boolean isNew = image.isNew();
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (image.isNew()) {
+				session.save(image);
+
+				image.setNew(false);
+			}
+			else {
+				session.merge(image);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ImageModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+			ImageImpl.class, image.getPrimaryKey(), image);
+
+		return image;
+	}
+
+	protected Image toUnwrappedModel(Image image) {
+		if (image instanceof ImageImpl) {
+			return image;
+		}
+
+		ImageImpl imageImpl = new ImageImpl();
+
+		imageImpl.setNew(image.isNew());
+		imageImpl.setPrimaryKey(image.getPrimaryKey());
+
+		imageImpl.setImageId(image.getImageId());
+		imageImpl.setModifiedDate(image.getModifiedDate());
+		imageImpl.setText(image.getText());
+		imageImpl.setType(image.getType());
+		imageImpl.setHeight(image.getHeight());
+		imageImpl.setWidth(image.getWidth());
+		imageImpl.setSize(image.getSize());
+
+		return imageImpl;
+	}
+
+	/**
+	 * Returns the image with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the image
+	 * @return the image
+	 * @throws com.liferay.portal.NoSuchModelException if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Image findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the image with the primary key or throws a {@link com.liferay.portal.NoSuchImageException} if it could not be found.
+	 *
+	 * @param imageId the primary key of the image
+	 * @return the image
+	 * @throws com.liferay.portal.NoSuchImageException if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image findByPrimaryKey(long imageId)
+		throws NoSuchImageException, SystemException {
+		Image image = fetchByPrimaryKey(imageId);
+
+		if (image == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + imageId);
+			}
+
+			throw new NoSuchImageException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				imageId);
+		}
+
+		return image;
+	}
+
+	/**
+	 * Returns the image with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the image
+	 * @return the image, or <code>null</code> if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Image fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the image with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param imageId the primary key of the image
+	 * @return the image, or <code>null</code> if a image with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Image fetchByPrimaryKey(long imageId) throws SystemException {
+		Image image = (Image)EntityCacheUtil.getResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+				ImageImpl.class, imageId);
+
+		if (image == _nullImage) {
+			return null;
+		}
+
+		if (image == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				image = (Image)session.get(ImageImpl.class,
+						Long.valueOf(imageId));
+
+				if (image != null) {
+					cacheResult(image);
+				}
+				else {
+					EntityCacheUtil.putResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+						ImageImpl.class, imageId, _nullImage);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ImageModelImpl.ENTITY_CACHE_ENABLED,
+					ImageImpl.class, imageId);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return image;
+	}
+
+	/**
 	 * Returns all the images.
 	 *
 	 * @return the images
@@ -813,7 +885,7 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 * Returns a range of all the images.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.ImageModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of images
@@ -829,7 +901,7 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 * Returns an ordered range of all the images.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.model.impl.ImageModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of images
@@ -840,11 +912,13 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	 */
 	public List<Image> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -872,7 +946,11 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_IMAGE.concat(ImageModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_IMAGE;
+
+				if (pagination) {
+					sql = sql.concat(ImageModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -882,47 +960,34 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<Image>)QueryUtil.list(q, getDialect(), start,
 							end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<Image>(list);
 				}
 				else {
 					list = (List<Image>)QueryUtil.list(q, getDialect(), start,
 							end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the images where size &lt; &#63; from the database.
-	 *
-	 * @param size the size
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByLtSize(int size) throws SystemException {
-		for (Image image : findByLtSize(size)) {
-			remove(image);
-		}
 	}
 
 	/**
@@ -934,59 +999,6 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 		for (Image image : findAll()) {
 			remove(image);
 		}
-	}
-
-	/**
-	 * Returns the number of images where size &lt; &#63;.
-	 *
-	 * @param size the size
-	 * @return the number of matching images
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByLtSize(int size) throws SystemException {
-		Object[] finderArgs = new Object[] { size };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_IMAGE_WHERE);
-
-			query.append(_FINDER_COLUMN_LTSIZE_SIZE_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(size);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_LTSIZE,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1008,18 +1020,17 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 				Query q = session.createQuery(_SQL_COUNT_IMAGE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1055,138 +1066,14 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 	public void destroy() {
 		EntityCacheUtil.removeCache(ImageImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = AccountPersistence.class)
-	protected AccountPersistence accountPersistence;
-	@BeanReference(type = AddressPersistence.class)
-	protected AddressPersistence addressPersistence;
-	@BeanReference(type = BrowserTrackerPersistence.class)
-	protected BrowserTrackerPersistence browserTrackerPersistence;
-	@BeanReference(type = ClassNamePersistence.class)
-	protected ClassNamePersistence classNamePersistence;
-	@BeanReference(type = ClusterGroupPersistence.class)
-	protected ClusterGroupPersistence clusterGroupPersistence;
-	@BeanReference(type = CompanyPersistence.class)
-	protected CompanyPersistence companyPersistence;
-	@BeanReference(type = ContactPersistence.class)
-	protected ContactPersistence contactPersistence;
-	@BeanReference(type = CountryPersistence.class)
-	protected CountryPersistence countryPersistence;
-	@BeanReference(type = EmailAddressPersistence.class)
-	protected EmailAddressPersistence emailAddressPersistence;
-	@BeanReference(type = GroupPersistence.class)
-	protected GroupPersistence groupPersistence;
-	@BeanReference(type = ImagePersistence.class)
-	protected ImagePersistence imagePersistence;
-	@BeanReference(type = LayoutPersistence.class)
-	protected LayoutPersistence layoutPersistence;
-	@BeanReference(type = LayoutBranchPersistence.class)
-	protected LayoutBranchPersistence layoutBranchPersistence;
-	@BeanReference(type = LayoutPrototypePersistence.class)
-	protected LayoutPrototypePersistence layoutPrototypePersistence;
-	@BeanReference(type = LayoutRevisionPersistence.class)
-	protected LayoutRevisionPersistence layoutRevisionPersistence;
-	@BeanReference(type = LayoutSetPersistence.class)
-	protected LayoutSetPersistence layoutSetPersistence;
-	@BeanReference(type = LayoutSetBranchPersistence.class)
-	protected LayoutSetBranchPersistence layoutSetBranchPersistence;
-	@BeanReference(type = LayoutSetPrototypePersistence.class)
-	protected LayoutSetPrototypePersistence layoutSetPrototypePersistence;
-	@BeanReference(type = ListTypePersistence.class)
-	protected ListTypePersistence listTypePersistence;
-	@BeanReference(type = LockPersistence.class)
-	protected LockPersistence lockPersistence;
-	@BeanReference(type = MembershipRequestPersistence.class)
-	protected MembershipRequestPersistence membershipRequestPersistence;
-	@BeanReference(type = OrganizationPersistence.class)
-	protected OrganizationPersistence organizationPersistence;
-	@BeanReference(type = OrgGroupRolePersistence.class)
-	protected OrgGroupRolePersistence orgGroupRolePersistence;
-	@BeanReference(type = OrgLaborPersistence.class)
-	protected OrgLaborPersistence orgLaborPersistence;
-	@BeanReference(type = PasswordPolicyPersistence.class)
-	protected PasswordPolicyPersistence passwordPolicyPersistence;
-	@BeanReference(type = PasswordPolicyRelPersistence.class)
-	protected PasswordPolicyRelPersistence passwordPolicyRelPersistence;
-	@BeanReference(type = PasswordTrackerPersistence.class)
-	protected PasswordTrackerPersistence passwordTrackerPersistence;
-	@BeanReference(type = PhonePersistence.class)
-	protected PhonePersistence phonePersistence;
-	@BeanReference(type = PluginSettingPersistence.class)
-	protected PluginSettingPersistence pluginSettingPersistence;
-	@BeanReference(type = PortalPreferencesPersistence.class)
-	protected PortalPreferencesPersistence portalPreferencesPersistence;
-	@BeanReference(type = PortletPersistence.class)
-	protected PortletPersistence portletPersistence;
-	@BeanReference(type = PortletItemPersistence.class)
-	protected PortletItemPersistence portletItemPersistence;
-	@BeanReference(type = PortletPreferencesPersistence.class)
-	protected PortletPreferencesPersistence portletPreferencesPersistence;
-	@BeanReference(type = RegionPersistence.class)
-	protected RegionPersistence regionPersistence;
-	@BeanReference(type = ReleasePersistence.class)
-	protected ReleasePersistence releasePersistence;
-	@BeanReference(type = RepositoryPersistence.class)
-	protected RepositoryPersistence repositoryPersistence;
-	@BeanReference(type = RepositoryEntryPersistence.class)
-	protected RepositoryEntryPersistence repositoryEntryPersistence;
-	@BeanReference(type = ResourceActionPersistence.class)
-	protected ResourceActionPersistence resourceActionPersistence;
-	@BeanReference(type = ResourceBlockPersistence.class)
-	protected ResourceBlockPersistence resourceBlockPersistence;
-	@BeanReference(type = ResourceBlockPermissionPersistence.class)
-	protected ResourceBlockPermissionPersistence resourceBlockPermissionPersistence;
-	@BeanReference(type = ResourcePermissionPersistence.class)
-	protected ResourcePermissionPersistence resourcePermissionPersistence;
-	@BeanReference(type = ResourceTypePermissionPersistence.class)
-	protected ResourceTypePermissionPersistence resourceTypePermissionPersistence;
-	@BeanReference(type = RolePersistence.class)
-	protected RolePersistence rolePersistence;
-	@BeanReference(type = ServiceComponentPersistence.class)
-	protected ServiceComponentPersistence serviceComponentPersistence;
-	@BeanReference(type = ShardPersistence.class)
-	protected ShardPersistence shardPersistence;
-	@BeanReference(type = SubscriptionPersistence.class)
-	protected SubscriptionPersistence subscriptionPersistence;
-	@BeanReference(type = TeamPersistence.class)
-	protected TeamPersistence teamPersistence;
-	@BeanReference(type = TicketPersistence.class)
-	protected TicketPersistence ticketPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
-	@BeanReference(type = UserGroupPersistence.class)
-	protected UserGroupPersistence userGroupPersistence;
-	@BeanReference(type = UserGroupGroupRolePersistence.class)
-	protected UserGroupGroupRolePersistence userGroupGroupRolePersistence;
-	@BeanReference(type = UserGroupRolePersistence.class)
-	protected UserGroupRolePersistence userGroupRolePersistence;
-	@BeanReference(type = UserIdMapperPersistence.class)
-	protected UserIdMapperPersistence userIdMapperPersistence;
-	@BeanReference(type = UserNotificationEventPersistence.class)
-	protected UserNotificationEventPersistence userNotificationEventPersistence;
-	@BeanReference(type = UserTrackerPersistence.class)
-	protected UserTrackerPersistence userTrackerPersistence;
-	@BeanReference(type = UserTrackerPathPersistence.class)
-	protected UserTrackerPathPersistence userTrackerPathPersistence;
-	@BeanReference(type = VirtualHostPersistence.class)
-	protected VirtualHostPersistence virtualHostPersistence;
-	@BeanReference(type = WebDAVPropsPersistence.class)
-	protected WebDAVPropsPersistence webDAVPropsPersistence;
-	@BeanReference(type = WebsitePersistence.class)
-	protected WebsitePersistence websitePersistence;
-	@BeanReference(type = WorkflowDefinitionLinkPersistence.class)
-	protected WorkflowDefinitionLinkPersistence workflowDefinitionLinkPersistence;
-	@BeanReference(type = WorkflowInstanceLinkPersistence.class)
-	protected WorkflowInstanceLinkPersistence workflowInstanceLinkPersistence;
-	@BeanReference(type = DLFileEntryPersistence.class)
-	protected DLFileEntryPersistence dlFileEntryPersistence;
 	private static final String _SQL_SELECT_IMAGE = "SELECT image FROM Image image";
 	private static final String _SQL_SELECT_IMAGE_WHERE = "SELECT image FROM Image image WHERE ";
 	private static final String _SQL_COUNT_IMAGE = "SELECT COUNT(image) FROM Image image";
 	private static final String _SQL_COUNT_IMAGE_WHERE = "SELECT COUNT(image) FROM Image image WHERE ";
-	private static final String _FINDER_COLUMN_LTSIZE_SIZE_2 = "image.size < ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "image.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Image exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Image exists with the key {";

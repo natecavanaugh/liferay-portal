@@ -150,7 +150,10 @@ public class SubscriptionSender implements Serializable {
 					_runtimeSubscribersOVPs) {
 
 				String toAddress = ovp.getKey();
-				String toName = ovp.getValue();
+
+				if (Validator.isNull(toAddress)) {
+					continue;
+				}
 
 				if (_sentEmailAddresses.contains(toAddress)) {
 					if (_log.isDebugEnabled()) {
@@ -158,17 +161,18 @@ public class SubscriptionSender implements Serializable {
 							"Do not send a duplicate email to " + toAddress);
 					}
 
-					return;
+					continue;
 				}
-				else {
-					if (_log.isDebugEnabled()) {
-						_log.debug(
-							"Add " + toAddress + " to the list of users who " +
-								"have received an email");
-					}
 
-					_sentEmailAddresses.add(toAddress);
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						"Add " + toAddress + " to the list of users who " +
+							"have received an email");
 				}
+
+				_sentEmailAddresses.add(toAddress);
+
+				String toName = ovp.getValue();
 
 				InternetAddress to = new InternetAddress(toAddress, toName);
 
@@ -214,7 +218,7 @@ public class SubscriptionSender implements Serializable {
 		setContextAttribute("[$COMPANY_ID$]", company.getCompanyId());
 		setContextAttribute("[$COMPANY_MX$]", company.getMx());
 		setContextAttribute("[$COMPANY_NAME$]", company.getName());
-		setContextAttribute("[$PORTAL_URL$]", getPortalURL(company));
+		setContextAttribute("[$PORTAL_URL$]", company.getPortalURL(groupId));
 
 		if (groupId > 0) {
 			Group group = GroupLocalServiceUtil.getGroup(groupId);
@@ -352,18 +356,6 @@ public class SubscriptionSender implements Serializable {
 
 		SubscriptionLocalServiceUtil.deleteSubscription(
 			subscription.getSubscriptionId());
-	}
-
-	protected String getPortalURL(Company company) throws Exception {
-		if (serviceContext != null) {
-			String portalURL = serviceContext.getPortalURL();
-
-			if (Validator.isNotNull(portalURL)) {
-				return portalURL;
-			}
-		}
-
-		return company.getPortalURL(groupId);
 	}
 
 	protected boolean hasPermission(Subscription subscription, User user)
@@ -548,8 +540,8 @@ public class SubscriptionSender implements Serializable {
 				"href=\"/", "src=\"/"
 			},
 			new String[] {
-				"href=\"" + getPortalURL(company) + "/",
-				"src=\"" + getPortalURL(company) + "/"
+				"href=\"" + company.getPortalURL(groupId) + "/",
+				"src=\"" + company.getPortalURL(groupId) + "/"
 			});
 
 		return content;

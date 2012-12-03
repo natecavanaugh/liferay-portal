@@ -354,6 +354,20 @@ public interface UserModel extends BaseModel<User> {
 	public void setFacebookId(long facebookId);
 
 	/**
+	 * Returns the ldap server ID of this user.
+	 *
+	 * @return the ldap server ID of this user
+	 */
+	public long getLdapServerId();
+
+	/**
+	 * Sets the ldap server ID of this user.
+	 *
+	 * @param ldapServerId the ldap server ID of this user
+	 */
+	public void setLdapServerId(long ldapServerId);
+
+	/**
 	 * Returns the open ID of this user.
 	 *
 	 * @return the open ID of this user
@@ -706,6 +720,8 @@ public interface UserModel extends BaseModel<User> {
 	public CacheModel<User> toCacheModel();
 
 	public User toEscapedModel();
+
+	public User toUnescapedModel();
 
 	public String toString();
 

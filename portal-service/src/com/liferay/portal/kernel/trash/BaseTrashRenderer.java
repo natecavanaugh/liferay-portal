@@ -37,7 +37,11 @@ public abstract class BaseTrashRenderer implements TrashRenderer {
 		return themeDisplay.getPathThemeImages() + "/common/page.png";
 	}
 
-	public String getRestorePath(RenderRequest renderRequest) {
+	public String render(
+			RenderRequest renderRequest, RenderResponse renderResponse,
+			String template)
+		throws Exception {
+
 		return null;
 	}
 

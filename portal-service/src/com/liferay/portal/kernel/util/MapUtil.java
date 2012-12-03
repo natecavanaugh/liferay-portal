@@ -211,7 +211,13 @@ public class MapUtil {
 	}
 
 	public static String toString(Map<?, ?> map) {
-		if (map.isEmpty()) {
+		return toString(map, null, null);
+	}
+
+	public static String toString(
+		Map<?, ?> map, String hideIncludesRegex, String hideExcludesRegex) {
+
+		if ((map == null) || map.isEmpty()) {
 			return StringPool.OPEN_CURLY_BRACE + StringPool.CLOSE_CURLY_BRACE;
 		}
 
@@ -223,7 +229,21 @@ public class MapUtil {
 			Object key = entry.getKey();
 			Object value = entry.getValue();
 
-			sb.append(key);
+			String keyString = String.valueOf(key);
+
+			if (hideIncludesRegex != null) {
+				if (!keyString.matches(hideIncludesRegex)) {
+					value = "********";
+				}
+			}
+
+			if (hideExcludesRegex != null) {
+				if (keyString.matches(hideExcludesRegex)) {
+					value = "********";
+				}
+			}
+
+			sb.append(keyString);
 			sb.append(StringPool.EQUAL);
 
 			if (value instanceof Map<?, ?>) {

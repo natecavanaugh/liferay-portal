@@ -26,6 +26,7 @@ import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.AssetCategoryException;
 import com.liferay.portlet.asset.AssetTagException;
 import com.liferay.portlet.journal.DuplicateArticleIdException;
@@ -33,13 +34,14 @@ import com.liferay.portlet.journal.DuplicateFolderNameException;
 import com.liferay.portlet.journal.NoSuchArticleException;
 import com.liferay.portlet.journal.NoSuchFolderException;
 import com.liferay.portlet.journal.model.JournalArticle;
-import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portlet.journal.service.JournalArticleServiceUtil;
 import com.liferay.portlet.journal.service.JournalFolderServiceUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -77,10 +79,29 @@ public class EditEntryAction extends PortletAction {
 				ParamUtil.getString(actionRequest, "redirect"));
 
 			if (cmd.equals(Constants.DELETE_VERSIONS) &&
-				hasArticle(actionRequest)) {
+				!ActionUtil.hasArticle(actionRequest)) {
 
-				redirect = ParamUtil.getString(
-					actionRequest, "originalRedirect");
+				String referringPortletResource = ParamUtil.getString(
+					actionRequest, "referringPortletResource");
+
+				if (Validator.isNotNull(referringPortletResource)) {
+					setForward(
+						actionRequest,
+						"portlet.journal.asset.add_asset_redirect");
+
+					return;
+				}
+				else {
+					ThemeDisplay themeDisplay =
+						(ThemeDisplay)actionRequest.getAttribute(
+							WebKeys.THEME_DISPLAY);
+
+					PortletURL portletURL = PortletURLFactoryUtil.create(
+						actionRequest, portletConfig.getPortletName(),
+						themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+
+					redirect = portletURL.toString();
+				}
 			}
 
 			if (Validator.isNotNull(redirect)) {
@@ -178,23 +199,6 @@ public class EditEntryAction extends PortletAction {
 		for (String expireArticleId : expireArticleIds) {
 			ActionUtil.expireArticle(actionRequest, expireArticleId);
 		}
-	}
-
-	protected boolean hasArticle(ActionRequest actionRequest) throws Exception {
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		String articleId = ParamUtil.getString(actionRequest, "articleId");
-
-		try {
-			JournalArticleLocalServiceUtil.getArticle(
-				themeDisplay.getScopeGroupId(), articleId);
-		}
-		catch (NoSuchArticleException nsae) {
-			return true;
-		}
-
-		return false;
 	}
 
 	protected void moveEntries(ActionRequest actionRequest) throws Exception {

@@ -873,7 +873,7 @@ create table JournalFeed (
 	targetLayoutFriendlyUrl VARCHAR(255) null,
 	targetPortletId VARCHAR(75) null,
 	contentField VARCHAR(75) null,
-	feedType VARCHAR(75) null,
+	feedFormat VARCHAR(75) null,
 	feedVersion DOUBLE
 );
 
@@ -2035,6 +2035,7 @@ create table User_ (
 	screenName VARCHAR(75) null,
 	emailAddress VARCHAR(75) null,
 	facebookId LONG,
+	ldapServerId LONG,
 	openId VARCHAR(1024) null,
 	portraitId LONG,
 	languageId VARCHAR(75) null,

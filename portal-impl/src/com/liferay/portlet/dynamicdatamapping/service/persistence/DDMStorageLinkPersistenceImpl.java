@@ -15,7 +15,6 @@
 package com.liferay.portlet.dynamicdatamapping.service.persistence;
 
 import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -33,11 +32,11 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException;
@@ -75,57 +74,6 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			DDMStorageLinkModelImpl.UUID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_CLASSPK = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByClassPK", new String[] { Long.class.getName() },
-			DDMStorageLinkModelImpl.CLASSPK_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSPK = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByClassPK",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID =
-		new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByStructureId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
-		new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
-			DDMStorageLinkImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
-			new String[] { Long.class.getName() },
-			DDMStorageLinkModelImpl.STRUCTUREID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
-			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
 			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -137,434 +85,26 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
 			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the d d m storage link in the entity cache if it is enabled.
-	 *
-	 * @param ddmStorageLink the d d m storage link
-	 */
-	public void cacheResult(DDMStorageLink ddmStorageLink) {
-		EntityCacheUtil.putResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey(),
-			ddmStorageLink);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
-			new Object[] { Long.valueOf(ddmStorageLink.getClassPK()) },
-			ddmStorageLink);
-
-		ddmStorageLink.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the d d m storage links in the entity cache if it is enabled.
-	 *
-	 * @param ddmStorageLinks the d d m storage links
-	 */
-	public void cacheResult(List<DDMStorageLink> ddmStorageLinks) {
-		for (DDMStorageLink ddmStorageLink : ddmStorageLinks) {
-			if (EntityCacheUtil.getResult(
-						DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-						DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey()) == null) {
-				cacheResult(ddmStorageLink);
-			}
-			else {
-				ddmStorageLink.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all d d m storage links.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(DDMStorageLinkImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(DDMStorageLinkImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the d d m storage link.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(DDMStorageLink ddmStorageLink) {
-		EntityCacheUtil.removeResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(ddmStorageLink);
-	}
-
-	@Override
-	public void clearCache(List<DDMStorageLink> ddmStorageLinks) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (DDMStorageLink ddmStorageLink : ddmStorageLinks) {
-			EntityCacheUtil.removeResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-				DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey());
-
-			clearUniqueFindersCache(ddmStorageLink);
-		}
-	}
-
-	protected void clearUniqueFindersCache(DDMStorageLink ddmStorageLink) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSPK,
-			new Object[] { Long.valueOf(ddmStorageLink.getClassPK()) });
-	}
-
-	/**
-	 * Creates a new d d m storage link with the primary key. Does not add the d d m storage link to the database.
-	 *
-	 * @param storageLinkId the primary key for the new d d m storage link
-	 * @return the new d d m storage link
-	 */
-	public DDMStorageLink create(long storageLinkId) {
-		DDMStorageLink ddmStorageLink = new DDMStorageLinkImpl();
-
-		ddmStorageLink.setNew(true);
-		ddmStorageLink.setPrimaryKey(storageLinkId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		ddmStorageLink.setUuid(uuid);
-
-		return ddmStorageLink;
-	}
-
-	/**
-	 * Removes the d d m storage link with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param storageLinkId the primary key of the d d m storage link
-	 * @return the d d m storage link that was removed
-	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStorageLink remove(long storageLinkId)
-		throws NoSuchStorageLinkException, SystemException {
-		return remove(Long.valueOf(storageLinkId));
-	}
-
-	/**
-	 * Removes the d d m storage link with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the d d m storage link
-	 * @return the d d m storage link that was removed
-	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public DDMStorageLink remove(Serializable primaryKey)
-		throws NoSuchStorageLinkException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			DDMStorageLink ddmStorageLink = (DDMStorageLink)session.get(DDMStorageLinkImpl.class,
-					primaryKey);
-
-			if (ddmStorageLink == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchStorageLinkException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(ddmStorageLink);
-		}
-		catch (NoSuchStorageLinkException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected DDMStorageLink removeImpl(DDMStorageLink ddmStorageLink)
-		throws SystemException {
-		ddmStorageLink = toUnwrappedModel(ddmStorageLink);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (ddmStorageLink.isCachedModel()) {
-				ddmStorageLink = (DDMStorageLink)session.get(DDMStorageLinkImpl.class,
-						ddmStorageLink.getPrimaryKeyObj());
-			}
-
-			if (ddmStorageLink != null) {
-				session.delete(ddmStorageLink);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (ddmStorageLink != null) {
-			clearCache(ddmStorageLink);
-		}
-
-		return ddmStorageLink;
-	}
-
-	@Override
-	public DDMStorageLink updateImpl(
-		com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink ddmStorageLink)
-		throws SystemException {
-		ddmStorageLink = toUnwrappedModel(ddmStorageLink);
-
-		boolean isNew = ddmStorageLink.isNew();
-
-		DDMStorageLinkModelImpl ddmStorageLinkModelImpl = (DDMStorageLinkModelImpl)ddmStorageLink;
-
-		if (Validator.isNull(ddmStorageLink.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			ddmStorageLink.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (ddmStorageLink.isNew()) {
-				session.save(ddmStorageLink);
-
-				ddmStorageLink.setNew(false);
-			}
-			else {
-				session.merge(ddmStorageLink);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !DDMStorageLinkModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						ddmStorageLinkModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { ddmStorageLinkModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(ddmStorageLinkModelImpl.getOriginalStructureId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(ddmStorageLinkModelImpl.getStructureId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-			DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey(),
-			ddmStorageLink);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
-				new Object[] { Long.valueOf(ddmStorageLink.getClassPK()) },
-				ddmStorageLink);
-		}
-		else {
-			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_CLASSPK.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(ddmStorageLinkModelImpl.getOriginalClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSPK, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSPK, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
-					new Object[] { Long.valueOf(ddmStorageLink.getClassPK()) },
-					ddmStorageLink);
-			}
-		}
-
-		return ddmStorageLink;
-	}
-
-	protected DDMStorageLink toUnwrappedModel(DDMStorageLink ddmStorageLink) {
-		if (ddmStorageLink instanceof DDMStorageLinkImpl) {
-			return ddmStorageLink;
-		}
-
-		DDMStorageLinkImpl ddmStorageLinkImpl = new DDMStorageLinkImpl();
-
-		ddmStorageLinkImpl.setNew(ddmStorageLink.isNew());
-		ddmStorageLinkImpl.setPrimaryKey(ddmStorageLink.getPrimaryKey());
-
-		ddmStorageLinkImpl.setUuid(ddmStorageLink.getUuid());
-		ddmStorageLinkImpl.setStorageLinkId(ddmStorageLink.getStorageLinkId());
-		ddmStorageLinkImpl.setClassNameId(ddmStorageLink.getClassNameId());
-		ddmStorageLinkImpl.setClassPK(ddmStorageLink.getClassPK());
-		ddmStorageLinkImpl.setStructureId(ddmStorageLink.getStructureId());
-
-		return ddmStorageLinkImpl;
-	}
-
-	/**
-	 * Returns the d d m storage link with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the d d m storage link
-	 * @return the d d m storage link
-	 * @throws com.liferay.portal.NoSuchModelException if a d d m storage link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public DDMStorageLink findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the d d m storage link with the primary key or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException} if it could not be found.
-	 *
-	 * @param storageLinkId the primary key of the d d m storage link
-	 * @return the d d m storage link
-	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStorageLink findByPrimaryKey(long storageLinkId)
-		throws NoSuchStorageLinkException, SystemException {
-		DDMStorageLink ddmStorageLink = fetchByPrimaryKey(storageLinkId);
-
-		if (ddmStorageLink == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + storageLinkId);
-			}
-
-			throw new NoSuchStorageLinkException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				storageLinkId);
-		}
-
-		return ddmStorageLink;
-	}
-
-	/**
-	 * Returns the d d m storage link with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the d d m storage link
-	 * @return the d d m storage link, or <code>null</code> if a d d m storage link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public DDMStorageLink fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the d d m storage link with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param storageLinkId the primary key of the d d m storage link
-	 * @return the d d m storage link, or <code>null</code> if a d d m storage link with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStorageLink fetchByPrimaryKey(long storageLinkId)
-		throws SystemException {
-		DDMStorageLink ddmStorageLink = (DDMStorageLink)EntityCacheUtil.getResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-				DDMStorageLinkImpl.class, storageLinkId);
-
-		if (ddmStorageLink == _nullDDMStorageLink) {
-			return null;
-		}
-
-		if (ddmStorageLink == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				ddmStorageLink = (DDMStorageLink)session.get(DDMStorageLinkImpl.class,
-						Long.valueOf(storageLinkId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (ddmStorageLink != null) {
-					cacheResult(ddmStorageLink);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
-						DDMStorageLinkImpl.class, storageLinkId,
-						_nullDDMStorageLink);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return ddmStorageLink;
-	}
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
+			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
+			DDMStorageLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] { String.class.getName() },
+			DDMStorageLinkModelImpl.UUID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the d d m storage links where uuid = &#63;.
@@ -582,7 +122,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 * Returns a range of all the d d m storage links where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.dynamicdatamapping.model.impl.DDMStorageLinkModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -600,7 +140,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 * Returns an ordered range of all the d d m storage links where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.dynamicdatamapping.model.impl.DDMStorageLinkModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -612,11 +152,13 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 */
 	public List<DDMStorageLink> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -646,7 +188,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDMSTORAGELINK_WHERE);
@@ -667,6 +209,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
+			else
+			 if (pagination) {
+				query.append(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -683,22 +229,29 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 					qPos.add(uuid);
 				}
 
-				list = (List<DDMStorageLink>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStorageLink>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<DDMStorageLink>(list);
+				}
+				else {
+					list = (List<DDMStorageLink>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -930,6 +483,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 				}
 			}
 		}
+		else {
+			query.append(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -961,6 +517,96 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the d d m storage links where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (DDMStorageLink ddmStorageLink : findByUuid(uuid,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(ddmStorageLink);
+		}
+	}
+
+	/**
+	 * Returns the number of d d m storage links where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching d d m storage links
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_DDMSTORAGELINK_WHERE);
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else {
+				if (uuid.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_UUID_UUID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_UUID_UUID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (uuid != null) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "ddmStorageLink.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "ddmStorageLink.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(ddmStorageLink.uuid IS NULL OR ddmStorageLink.uuid = ?)";
+	public static final FinderPath FINDER_PATH_FETCH_BY_CLASSPK = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
+			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByClassPK", new String[] { Long.class.getName() },
+			DDMStorageLinkModelImpl.CLASSPK_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSPK = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByClassPK",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns the d d m storage link where classPK = &#63; or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException} if it could not be found.
@@ -1034,7 +680,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_DDMSTORAGELINK_WHERE);
 
@@ -1055,16 +701,14 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 
 				List<DDMStorageLink> list = q.list();
 
-				result = list;
-
-				DDMStorageLink ddmStorageLink = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
 						finderArgs, list);
 				}
 				else {
-					ddmStorageLink = list.get(0);
+					DDMStorageLink ddmStorageLink = list.get(0);
+
+					result = ddmStorageLink;
 
 					cacheResult(ddmStorageLink);
 
@@ -1073,30 +717,115 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 							finderArgs, ddmStorageLink);
 					}
 				}
-
-				return ddmStorageLink;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSPK,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSPK,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (DDMStorageLink)result;
-			}
+			return (DDMStorageLink)result;
 		}
 	}
+
+	/**
+	 * Removes the d d m storage link where classPK = &#63; from the database.
+	 *
+	 * @param classPK the class p k
+	 * @return the d d m storage link that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStorageLink removeByClassPK(long classPK)
+		throws NoSuchStorageLinkException, SystemException {
+		DDMStorageLink ddmStorageLink = findByClassPK(classPK);
+
+		return remove(ddmStorageLink);
+	}
+
+	/**
+	 * Returns the number of d d m storage links where classPK = &#63;.
+	 *
+	 * @param classPK the class p k
+	 * @return the number of matching d d m storage links
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByClassPK(long classPK) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_CLASSPK;
+
+		Object[] finderArgs = new Object[] { classPK };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_DDMSTORAGELINK_WHERE);
+
+			query.append(_FINDER_COLUMN_CLASSPK_CLASSPK_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classPK);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_CLASSPK_CLASSPK_2 = "ddmStorageLink.classPK = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
+			DDMStorageLinkImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByStructureId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID =
+		new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED,
+			DDMStorageLinkImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByStructureId",
+			new String[] { Long.class.getName() },
+			DDMStorageLinkModelImpl.STRUCTUREID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_STRUCTUREID = new FinderPath(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByStructureId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the d d m storage links where structureId = &#63;.
@@ -1115,7 +844,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 * Returns a range of all the d d m storage links where structureId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.dynamicdatamapping.model.impl.DDMStorageLinkModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param structureId the structure ID
@@ -1133,7 +862,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 * Returns an ordered range of all the d d m storage links where structureId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.dynamicdatamapping.model.impl.DDMStorageLinkModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param structureId the structure ID
@@ -1145,11 +874,13 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 */
 	public List<DDMStorageLink> findByStructureId(long structureId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID;
 			finderArgs = new Object[] { structureId };
 		}
@@ -1179,7 +910,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_DDMSTORAGELINK_WHERE);
@@ -1189,6 +920,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1204,22 +939,29 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 
 				qPos.add(structureId);
 
-				list = (List<DDMStorageLink>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<DDMStorageLink>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<DDMStorageLink>(list);
+				}
+				else {
+					list = (List<DDMStorageLink>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1443,6 +1185,9 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 				}
 			}
 		}
+		else {
+			query.append(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1474,6 +1219,500 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	}
 
 	/**
+	 * Removes all the d d m storage links where structureId = &#63; from the database.
+	 *
+	 * @param structureId the structure ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByStructureId(long structureId) throws SystemException {
+		for (DDMStorageLink ddmStorageLink : findByStructureId(structureId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(ddmStorageLink);
+		}
+	}
+
+	/**
+	 * Returns the number of d d m storage links where structureId = &#63;.
+	 *
+	 * @param structureId the structure ID
+	 * @return the number of matching d d m storage links
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByStructureId(long structureId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_STRUCTUREID;
+
+		Object[] finderArgs = new Object[] { structureId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_DDMSTORAGELINK_WHERE);
+
+			query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(structureId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2 = "ddmStorageLink.structureId = ?";
+
+	/**
+	 * Caches the d d m storage link in the entity cache if it is enabled.
+	 *
+	 * @param ddmStorageLink the d d m storage link
+	 */
+	public void cacheResult(DDMStorageLink ddmStorageLink) {
+		EntityCacheUtil.putResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey(),
+			ddmStorageLink);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
+			new Object[] { Long.valueOf(ddmStorageLink.getClassPK()) },
+			ddmStorageLink);
+
+		ddmStorageLink.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the d d m storage links in the entity cache if it is enabled.
+	 *
+	 * @param ddmStorageLinks the d d m storage links
+	 */
+	public void cacheResult(List<DDMStorageLink> ddmStorageLinks) {
+		for (DDMStorageLink ddmStorageLink : ddmStorageLinks) {
+			if (EntityCacheUtil.getResult(
+						DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+						DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey()) == null) {
+				cacheResult(ddmStorageLink);
+			}
+			else {
+				ddmStorageLink.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all d d m storage links.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(DDMStorageLinkImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(DDMStorageLinkImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the d d m storage link.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(DDMStorageLink ddmStorageLink) {
+		EntityCacheUtil.removeResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(ddmStorageLink);
+	}
+
+	@Override
+	public void clearCache(List<DDMStorageLink> ddmStorageLinks) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (DDMStorageLink ddmStorageLink : ddmStorageLinks) {
+			EntityCacheUtil.removeResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+				DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey());
+
+			clearUniqueFindersCache(ddmStorageLink);
+		}
+	}
+
+	protected void clearUniqueFindersCache(DDMStorageLink ddmStorageLink) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSPK,
+			new Object[] { Long.valueOf(ddmStorageLink.getClassPK()) });
+	}
+
+	/**
+	 * Creates a new d d m storage link with the primary key. Does not add the d d m storage link to the database.
+	 *
+	 * @param storageLinkId the primary key for the new d d m storage link
+	 * @return the new d d m storage link
+	 */
+	public DDMStorageLink create(long storageLinkId) {
+		DDMStorageLink ddmStorageLink = new DDMStorageLinkImpl();
+
+		ddmStorageLink.setNew(true);
+		ddmStorageLink.setPrimaryKey(storageLinkId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		ddmStorageLink.setUuid(uuid);
+
+		return ddmStorageLink;
+	}
+
+	/**
+	 * Removes the d d m storage link with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param storageLinkId the primary key of the d d m storage link
+	 * @return the d d m storage link that was removed
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStorageLink remove(long storageLinkId)
+		throws NoSuchStorageLinkException, SystemException {
+		return remove(Long.valueOf(storageLinkId));
+	}
+
+	/**
+	 * Removes the d d m storage link with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the d d m storage link
+	 * @return the d d m storage link that was removed
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DDMStorageLink remove(Serializable primaryKey)
+		throws NoSuchStorageLinkException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			DDMStorageLink ddmStorageLink = (DDMStorageLink)session.get(DDMStorageLinkImpl.class,
+					primaryKey);
+
+			if (ddmStorageLink == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchStorageLinkException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(ddmStorageLink);
+		}
+		catch (NoSuchStorageLinkException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected DDMStorageLink removeImpl(DDMStorageLink ddmStorageLink)
+		throws SystemException {
+		ddmStorageLink = toUnwrappedModel(ddmStorageLink);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(ddmStorageLink)) {
+				ddmStorageLink = (DDMStorageLink)session.get(DDMStorageLinkImpl.class,
+						ddmStorageLink.getPrimaryKeyObj());
+			}
+
+			if (ddmStorageLink != null) {
+				session.delete(ddmStorageLink);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (ddmStorageLink != null) {
+			clearCache(ddmStorageLink);
+		}
+
+		return ddmStorageLink;
+	}
+
+	@Override
+	public DDMStorageLink updateImpl(
+		com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink ddmStorageLink)
+		throws SystemException {
+		ddmStorageLink = toUnwrappedModel(ddmStorageLink);
+
+		boolean isNew = ddmStorageLink.isNew();
+
+		DDMStorageLinkModelImpl ddmStorageLinkModelImpl = (DDMStorageLinkModelImpl)ddmStorageLink;
+
+		if (Validator.isNull(ddmStorageLink.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			ddmStorageLink.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (ddmStorageLink.isNew()) {
+				session.save(ddmStorageLink);
+
+				ddmStorageLink.setNew(false);
+			}
+			else {
+				session.merge(ddmStorageLink);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !DDMStorageLinkModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						ddmStorageLinkModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { ddmStorageLinkModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(ddmStorageLinkModelImpl.getOriginalStructureId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(ddmStorageLinkModelImpl.getStructureId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_STRUCTUREID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+			DDMStorageLinkImpl.class, ddmStorageLink.getPrimaryKey(),
+			ddmStorageLink);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
+				new Object[] { Long.valueOf(ddmStorageLink.getClassPK()) },
+				ddmStorageLink);
+		}
+		else {
+			if ((ddmStorageLinkModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_CLASSPK.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(ddmStorageLinkModelImpl.getOriginalClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSPK, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSPK, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSPK,
+					new Object[] { Long.valueOf(ddmStorageLink.getClassPK()) },
+					ddmStorageLink);
+			}
+		}
+
+		return ddmStorageLink;
+	}
+
+	protected DDMStorageLink toUnwrappedModel(DDMStorageLink ddmStorageLink) {
+		if (ddmStorageLink instanceof DDMStorageLinkImpl) {
+			return ddmStorageLink;
+		}
+
+		DDMStorageLinkImpl ddmStorageLinkImpl = new DDMStorageLinkImpl();
+
+		ddmStorageLinkImpl.setNew(ddmStorageLink.isNew());
+		ddmStorageLinkImpl.setPrimaryKey(ddmStorageLink.getPrimaryKey());
+
+		ddmStorageLinkImpl.setUuid(ddmStorageLink.getUuid());
+		ddmStorageLinkImpl.setStorageLinkId(ddmStorageLink.getStorageLinkId());
+		ddmStorageLinkImpl.setClassNameId(ddmStorageLink.getClassNameId());
+		ddmStorageLinkImpl.setClassPK(ddmStorageLink.getClassPK());
+		ddmStorageLinkImpl.setStructureId(ddmStorageLink.getStructureId());
+
+		return ddmStorageLinkImpl;
+	}
+
+	/**
+	 * Returns the d d m storage link with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the d d m storage link
+	 * @return the d d m storage link
+	 * @throws com.liferay.portal.NoSuchModelException if a d d m storage link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DDMStorageLink findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the d d m storage link with the primary key or throws a {@link com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException} if it could not be found.
+	 *
+	 * @param storageLinkId the primary key of the d d m storage link
+	 * @return the d d m storage link
+	 * @throws com.liferay.portlet.dynamicdatamapping.NoSuchStorageLinkException if a d d m storage link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStorageLink findByPrimaryKey(long storageLinkId)
+		throws NoSuchStorageLinkException, SystemException {
+		DDMStorageLink ddmStorageLink = fetchByPrimaryKey(storageLinkId);
+
+		if (ddmStorageLink == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + storageLinkId);
+			}
+
+			throw new NoSuchStorageLinkException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				storageLinkId);
+		}
+
+		return ddmStorageLink;
+	}
+
+	/**
+	 * Returns the d d m storage link with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the d d m storage link
+	 * @return the d d m storage link, or <code>null</code> if a d d m storage link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public DDMStorageLink fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the d d m storage link with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param storageLinkId the primary key of the d d m storage link
+	 * @return the d d m storage link, or <code>null</code> if a d d m storage link with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DDMStorageLink fetchByPrimaryKey(long storageLinkId)
+		throws SystemException {
+		DDMStorageLink ddmStorageLink = (DDMStorageLink)EntityCacheUtil.getResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+				DDMStorageLinkImpl.class, storageLinkId);
+
+		if (ddmStorageLink == _nullDDMStorageLink) {
+			return null;
+		}
+
+		if (ddmStorageLink == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				ddmStorageLink = (DDMStorageLink)session.get(DDMStorageLinkImpl.class,
+						Long.valueOf(storageLinkId));
+
+				if (ddmStorageLink != null) {
+					cacheResult(ddmStorageLink);
+				}
+				else {
+					EntityCacheUtil.putResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+						DDMStorageLinkImpl.class, storageLinkId,
+						_nullDDMStorageLink);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DDMStorageLinkModelImpl.ENTITY_CACHE_ENABLED,
+					DDMStorageLinkImpl.class, storageLinkId);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return ddmStorageLink;
+	}
+
+	/**
 	 * Returns all the d d m storage links.
 	 *
 	 * @return the d d m storage links
@@ -1487,7 +1726,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 * Returns a range of all the d d m storage links.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.dynamicdatamapping.model.impl.DDMStorageLinkModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of d d m storage links
@@ -1504,7 +1743,7 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 * Returns an ordered range of all the d d m storage links.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.dynamicdatamapping.model.impl.DDMStorageLinkModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of d d m storage links
@@ -1515,11 +1754,13 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	 */
 	public List<DDMStorageLink> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1548,6 +1789,10 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 			}
 			else {
 				sql = _SQL_SELECT_DDMSTORAGELINK;
+
+				if (pagination) {
+					sql = sql.concat(DDMStorageLinkModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1557,73 +1802,34 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<DDMStorageLink>)QueryUtil.list(q,
 							getDialect(), start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<DDMStorageLink>(list);
 				}
 				else {
 					list = (List<DDMStorageLink>)QueryUtil.list(q,
 							getDialect(), start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the d d m storage links where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (DDMStorageLink ddmStorageLink : findByUuid(uuid)) {
-			remove(ddmStorageLink);
-		}
-	}
-
-	/**
-	 * Removes the d d m storage link where classPK = &#63; from the database.
-	 *
-	 * @param classPK the class p k
-	 * @return the d d m storage link that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public DDMStorageLink removeByClassPK(long classPK)
-		throws NoSuchStorageLinkException, SystemException {
-		DDMStorageLink ddmStorageLink = findByClassPK(classPK);
-
-		return remove(ddmStorageLink);
-	}
-
-	/**
-	 * Removes all the d d m storage links where structureId = &#63; from the database.
-	 *
-	 * @param structureId the structure ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByStructureId(long structureId) throws SystemException {
-		for (DDMStorageLink ddmStorageLink : findByStructureId(structureId)) {
-			remove(ddmStorageLink);
-		}
 	}
 
 	/**
@@ -1635,177 +1841,6 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		for (DDMStorageLink ddmStorageLink : findAll()) {
 			remove(ddmStorageLink);
 		}
-	}
-
-	/**
-	 * Returns the number of d d m storage links where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching d d m storage links
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_DDMSTORAGELINK_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of d d m storage links where classPK = &#63;.
-	 *
-	 * @param classPK the class p k
-	 * @return the number of matching d d m storage links
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByClassPK(long classPK) throws SystemException {
-		Object[] finderArgs = new Object[] { classPK };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_CLASSPK,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_DDMSTORAGELINK_WHERE);
-
-			query.append(_FINDER_COLUMN_CLASSPK_CLASSPK_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classPK);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSPK,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of d d m storage links where structureId = &#63;.
-	 *
-	 * @param structureId the structure ID
-	 * @return the number of matching d d m storage links
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByStructureId(long structureId) throws SystemException {
-		Object[] finderArgs = new Object[] { structureId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_DDMSTORAGELINK_WHERE);
-
-			query.append(_FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(structureId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_STRUCTUREID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1827,18 +1862,17 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 				Query q = session.createQuery(_SQL_COUNT_DDMSTORAGELINK);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1874,30 +1908,14 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 	public void destroy() {
 		EntityCacheUtil.removeCache(DDMStorageLinkImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = DDMContentPersistence.class)
-	protected DDMContentPersistence ddmContentPersistence;
-	@BeanReference(type = DDMStorageLinkPersistence.class)
-	protected DDMStorageLinkPersistence ddmStorageLinkPersistence;
-	@BeanReference(type = DDMStructurePersistence.class)
-	protected DDMStructurePersistence ddmStructurePersistence;
-	@BeanReference(type = DDMStructureLinkPersistence.class)
-	protected DDMStructureLinkPersistence ddmStructureLinkPersistence;
-	@BeanReference(type = DDMTemplatePersistence.class)
-	protected DDMTemplatePersistence ddmTemplatePersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_DDMSTORAGELINK = "SELECT ddmStorageLink FROM DDMStorageLink ddmStorageLink";
 	private static final String _SQL_SELECT_DDMSTORAGELINK_WHERE = "SELECT ddmStorageLink FROM DDMStorageLink ddmStorageLink WHERE ";
 	private static final String _SQL_COUNT_DDMSTORAGELINK = "SELECT COUNT(ddmStorageLink) FROM DDMStorageLink ddmStorageLink";
 	private static final String _SQL_COUNT_DDMSTORAGELINK_WHERE = "SELECT COUNT(ddmStorageLink) FROM DDMStorageLink ddmStorageLink WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "ddmStorageLink.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "ddmStorageLink.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(ddmStorageLink.uuid IS NULL OR ddmStorageLink.uuid = ?)";
-	private static final String _FINDER_COLUMN_CLASSPK_CLASSPK_2 = "ddmStorageLink.classPK = ?";
-	private static final String _FINDER_COLUMN_STRUCTUREID_STRUCTUREID_2 = "ddmStorageLink.structureId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "ddmStorageLink.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No DDMStorageLink exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No DDMStorageLink exists with the key {";

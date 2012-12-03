@@ -68,6 +68,8 @@ public class ClassNameModelImpl extends BaseModelImpl<ClassName>
 		};
 	public static final String TABLE_SQL_CREATE = "create table ClassName_ (classNameId LONG not null primary key,value VARCHAR(200) null)";
 	public static final String TABLE_SQL_DROP = "drop table ClassName_";
+	public static final String ORDER_BY_JPQL = " ORDER BY className.classNameId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY ClassName_.classNameId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -81,6 +83,7 @@ public class ClassNameModelImpl extends BaseModelImpl<ClassName>
 				"value.object.column.bitmask.enabled.com.liferay.portal.model.ClassName"),
 			true);
 	public static long VALUE_COLUMN_BITMASK = 1L;
+	public static long CLASSNAMEID_COLUMN_BITMASK = 2L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -246,13 +249,12 @@ public class ClassNameModelImpl extends BaseModelImpl<ClassName>
 
 	@Override
 	public ClassName toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ClassName)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ClassName)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -372,12 +374,12 @@ public class ClassNameModelImpl extends BaseModelImpl<ClassName>
 	}
 
 	private static ClassLoader _classLoader = ClassName.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ClassName.class
 		};
 	private long _classNameId;
 	private String _value;
 	private String _originalValue;
 	private long _columnBitmask;
-	private ClassName _escapedModelProxy;
+	private ClassName _escapedModel;
 }

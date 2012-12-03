@@ -14,28 +14,22 @@
 
 package com.liferay.portlet.messageboards.service.impl;
 
+import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.increment.BufferedIncrement;
 import com.liferay.portal.kernel.increment.NumberIncrement;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
-import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.WorkflowInstanceLink;
+import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
-import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
-import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.portlet.messageboards.SplitThreadException;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBCategoryConstants;
@@ -47,10 +41,6 @@ import com.liferay.portlet.messageboards.model.MBTreeWalker;
 import com.liferay.portlet.messageboards.service.base.MBThreadLocalServiceBaseImpl;
 import com.liferay.portlet.social.model.SocialActivityConstants;
 import com.liferay.portlet.trash.model.TrashEntry;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -139,15 +129,7 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 		// Attachments
 
-		long companyId = rootMessage.getCompanyId();
-		long repositoryId = CompanyConstants.SYSTEM;
-		String dirName = thread.getAttachmentsDir();
-
-		try {
-			DLStoreUtil.deleteDirectory(companyId, repositoryId, dirName);
-		}
-		catch (NoSuchDirectoryException nsde) {
-		}
+		PortletFileRepositoryUtil.deleteFolder(thread.getAttachmentsFolderId());
 
 		// Subscriptions
 
@@ -262,144 +244,232 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		}
 	}
 
+	/**
+	 * @deprecated {@link #getGroupThreads(long, QueryDefinition)}
+	 */
 	public List<MBThread> getGroupThreads(
 			long groupId, int status, int start, int end)
 		throws SystemException {
 
-		if (status == WorkflowConstants.STATUS_ANY) {
-			return mbThreadPersistence.findByG_NotC(
-				groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID, start,
-				end);
-		}
-		else {
-			return mbThreadPersistence.findByG_NotC_S(
-				groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID, status,
-				start, end);
-		}
+		QueryDefinition queryDefinition = new QueryDefinition(
+			status, start, end, null);
+
+		return getGroupThreads(groupId, queryDefinition);
 	}
 
 	public List<MBThread> getGroupThreads(
-			long groupId, long userId, int status, boolean subscribed,
-			boolean includeAnonymous, int start, int end)
-		throws PortalException, SystemException {
+			long groupId, long userId, boolean subscribed,
+			boolean includeAnonymous, QueryDefinition queryDefinition)
+		throws SystemException {
 
 		if (userId <= 0) {
-			if (status == WorkflowConstants.STATUS_ANY) {
-				return mbThreadPersistence.findByG_NotC(
-					groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID, start,
-					end);
-			}
-			else {
-				return mbThreadPersistence.findByG_NotC_S(
-					groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID, status,
-					start, end);
-			}
+			return getGroupThreads(groupId, queryDefinition);
 		}
 		else {
 			if (subscribed) {
-				return mbThreadFinder.findByS_G_U_C_S(
-					groupId, userId, null, status, start, end);
+				return mbThreadFinder.findByS_G_U_C(
+					groupId, userId, null, queryDefinition);
 			}
 			else {
-				List<Long> threadIds = null;
-
 				if (includeAnonymous) {
-					threadIds = mbMessageFinder.findByG_U_C_S(
-						groupId, userId, null, status, start, end);
+					return mbThreadFinder.findByG_U_C(
+						groupId, userId, null, queryDefinition);
 				}
 				else {
-					threadIds = mbMessageFinder.findByG_U_C_A_S(
-						groupId, userId, null, false, status, start, end);
+					return mbThreadFinder.findByG_U_C_A(
+						groupId, userId, null, false, queryDefinition);
 				}
-
-				List<MBThread> threads = new ArrayList<MBThread>(
-					threadIds.size());
-
-				for (long threadId : threadIds) {
-					MBThread thread = mbThreadPersistence.findByPrimaryKey(
-						threadId);
-
-					threads.add(thread);
-				}
-
-				return threads;
 			}
 		}
 	}
 
+	public List<MBThread> getGroupThreads(
+			long groupId, long userId, boolean subscribed,
+			QueryDefinition queryDefinition)
+		throws SystemException {
+
+		return getGroupThreads(
+			groupId, userId, subscribed, true, queryDefinition);
+	}
+
+	/**
+	 * @deprecated {@link #getGroupThreads(
+	 * 				long, long, boolean, boolean, QueryDefinition)}
+	 */
+	public List<MBThread> getGroupThreads(
+			long groupId, long userId, int status, boolean subscribed,
+			boolean includeAnonymous, int start, int end)
+		throws SystemException {
+
+		QueryDefinition queryDefinition = new QueryDefinition(
+			status, start, end, null);
+
+		return getGroupThreads(
+			groupId, userId, subscribed, includeAnonymous, queryDefinition);
+	}
+
+	/**
+	 * @deprecated {@link #getGroupThreads(
+	 * 				long, long, boolean, QueryDefinition)}
+	 */
 	public List<MBThread> getGroupThreads(
 			long groupId, long userId, int status, boolean subscribed,
 			int start, int end)
-		throws PortalException, SystemException {
+		throws SystemException {
 
-		return getGroupThreads(
-			groupId, userId, status, subscribed, true, start, end);
+		QueryDefinition queryDefinition = new QueryDefinition(
+			status, start, end, null);
+
+		return getGroupThreads(groupId, userId, subscribed, queryDefinition);
+	}
+
+	/**
+	 * @deprecated {@link #getGroupThreads(
+	 * 				long, long, QueryDefinition)}
+	 */
+	public List<MBThread> getGroupThreads(
+			long groupId, long userId, int status, int start, int end)
+		throws SystemException {
+
+		QueryDefinition queryDefinition = new QueryDefinition(
+			status, start, end, null);
+
+		return getGroupThreads(groupId, userId, false, queryDefinition);
 	}
 
 	public List<MBThread> getGroupThreads(
-			long groupId, long userId, int status, int start, int end)
-		throws PortalException, SystemException {
-
-		return getGroupThreads(groupId, userId, status, false, start, end);
-	}
-
-	public int getGroupThreadsCount(long groupId, int status)
+			long groupId, long userId, QueryDefinition queryDefinition)
 		throws SystemException {
 
-		if (status == WorkflowConstants.STATUS_ANY) {
-			return mbThreadPersistence.countByG_NotC(
-				groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID);
+		return getGroupThreads(groupId, userId, false, queryDefinition);
+	}
+
+	public List<MBThread> getGroupThreads(
+			long groupId, QueryDefinition queryDefinition)
+		throws SystemException {
+
+		if (queryDefinition.isExcludeStatus()) {
+			return mbThreadPersistence.findByG_NotC_NotS(
+				groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID,
+				queryDefinition.getStatus(), queryDefinition.getStart(),
+				queryDefinition.getEnd());
 		}
 		else {
-			return mbThreadPersistence.countByG_NotC_S(
-				groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID, status);
+			return mbThreadPersistence.findByG_NotC_S(
+				groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID,
+				queryDefinition.getStatus(), queryDefinition.getStart(),
+				queryDefinition.getEnd());
 		}
 	}
 
+	/**
+	 * @deprecated {@link #getGroupThreadsCount(
+	 * 				long, QueryDefinition)}
+	 */
+	public int getGroupThreadsCount(long groupId, int status)
+			throws SystemException {
+
+		QueryDefinition queryDefinition = new QueryDefinition(status);
+
+		return getGroupThreadsCount(groupId, queryDefinition);
+	}
+
+	public int getGroupThreadsCount(
+			long groupId, long userId, boolean subscribed,
+			boolean includeAnonymous, QueryDefinition queryDefinition)
+		throws SystemException {
+
+		if (userId <= 0) {
+			return getGroupThreadsCount(groupId, queryDefinition);
+		}
+		else {
+			if (subscribed) {
+				return mbThreadFinder.countByS_G_U_C(
+					groupId, userId, null, queryDefinition);
+			}
+			else {
+				if (includeAnonymous) {
+					return mbThreadFinder.countByG_U_C(
+						groupId, userId, null, queryDefinition);
+				}
+				else {
+					return mbThreadFinder.countByG_U_C_A(
+						groupId, userId, null, false, queryDefinition);
+				}
+			}
+		}
+	}
+
+	public int getGroupThreadsCount(
+			long groupId, long userId, boolean subscribed,
+			QueryDefinition queryDefinition)
+		throws SystemException {
+
+		return getGroupThreadsCount(
+			groupId, userId, subscribed, true, queryDefinition);
+	}
+
+	/**
+	 * @deprecated {@link #getGroupThreadsCount(
+	 * 				long, long, QueryDefinition)}
+	 */
 	public int getGroupThreadsCount(long groupId, long userId, int status)
 		throws SystemException {
 
-		return getGroupThreadsCount(groupId, userId, status, false);
+		QueryDefinition queryDefinition = new QueryDefinition(status);
+
+		return getGroupThreadsCount(groupId, userId, false, queryDefinition);
 	}
 
+	/**
+	 * @deprecated {@link #getGroupThreadsCount(
+	 * 				long, long, boolean, QueryDefinition)}
+	 */
 	public int getGroupThreadsCount(
 			long groupId, long userId, int status, boolean subscribed)
 		throws SystemException {
 
-		return getGroupThreadsCount(groupId, userId, status, subscribed, true);
+		QueryDefinition queryDefinition = new QueryDefinition(status);
+
+		return getGroupThreadsCount(
+			groupId, userId, subscribed, true, queryDefinition);
 	}
 
+	/**
+	 * @deprecated {@link #getGroupThreadsCount(
+	 * 				long, long, boolean, boolean, QueryDefinition)}
+	 */
 	public int getGroupThreadsCount(
 			long groupId, long userId, int status, boolean subscribed,
 			boolean includeAnonymous)
 		throws SystemException {
 
-		if (userId <= 0) {
-			if (status == WorkflowConstants.STATUS_ANY) {
-				return mbThreadPersistence.countByG_NotC(
-					groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID);
-			}
-			else {
-				return mbThreadPersistence.countByG_NotC_S(
-					groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID,
-					status);
-			}
+		QueryDefinition queryDefinition = new QueryDefinition(status);
+
+		return getGroupThreadsCount(
+			groupId, userId, subscribed, includeAnonymous, queryDefinition);
+	}
+
+	public int getGroupThreadsCount(
+			long groupId, long userId, QueryDefinition queryDefinition)
+		throws SystemException {
+
+		return getGroupThreadsCount(groupId, userId, false, queryDefinition);
+	}
+
+	public int getGroupThreadsCount(
+			long groupId, QueryDefinition queryDefinition)
+		throws SystemException {
+
+		if (queryDefinition.isExcludeStatus()) {
+			return mbThreadPersistence.countByG_NotC_NotS(
+				groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID,
+				queryDefinition.getStatus());
 		}
 		else {
-			if (subscribed) {
-				return mbThreadFinder.countByS_G_U_C_S(
-					groupId, userId, null, status);
-			}
-			else {
-				if (includeAnonymous) {
-					return mbMessageFinder.countByG_U_C_S(
-						groupId, userId, null, status);
-				}
-				else {
-					return mbMessageFinder.countByG_U_C_A_S(
-						groupId, userId, null, false, status);
-				}
-			}
+			return mbThreadPersistence.countByG_NotC_S(
+				groupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID,
+				queryDefinition.getStatus());
 		}
 	}
 
@@ -723,7 +793,6 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		MBThread oldThread = message.getThread();
 		MBMessage rootMessage = mbMessagePersistence.findByPrimaryKey(
 			oldThread.getRootMessageId());
-		String oldAttachmentsDir = message.getAttachmentsDir();
 
 		// Message flags
 
@@ -773,13 +842,8 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		message.setThreadId(thread.getThreadId());
 		message.setRootMessageId(thread.getRootMessageId());
 		message.setParentMessageId(0);
-		message.setAttachmentsDir(null);
 
 		mbMessagePersistence.update(message);
-
-		// Attachments
-
-		moveAttachmentsFromOldThread(message, oldAttachmentsDir);
 
 		// Indexer
 
@@ -860,81 +924,6 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		return thread;
 	}
 
-	protected void moveAttachmentFromOldThread(
-			long companyId, String fileName, String newAttachmentsDir)
-		throws PortalException, SystemException {
-
-		long repositoryId = CompanyConstants.SYSTEM;
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append(newAttachmentsDir);
-		sb.append(StringPool.SLASH);
-		sb.append(StringUtil.extractLast(fileName, CharPool.SLASH));
-
-		String newFileName = sb.toString();
-
-		try {
-			File file = DLStoreUtil.getFile(companyId, repositoryId, fileName);
-
-			DLStoreUtil.addFile(
-				companyId, repositoryId, newFileName, false, file);
-		}
-		catch (UnsupportedOperationException uoe) {
-			InputStream is = DLStoreUtil.getFileAsStream(
-				companyId, repositoryId, fileName);
-
-			try {
-				DLStoreUtil.addFile(
-					companyId, repositoryId, newFileName, false, is);
-			}
-			finally {
-				try {
-					is.close();
-				}
-				catch (IOException ioe) {
-					_log.error(ioe);
-				}
-			}
-		}
-
-		DLStoreUtil.deleteFile(companyId, repositoryId, fileName);
-	}
-
-	protected void moveAttachmentsFromOldThread(
-			MBMessage message, String oldAttachmentsDir)
-		throws PortalException, SystemException {
-
-		if (!message.getAttachments()) {
-			return;
-		}
-
-		long companyId = message.getCompanyId();
-		long repositoryId = CompanyConstants.SYSTEM;
-		String newAttachmentsDir = message.getAttachmentsDir();
-
-		try {
-			DLStoreUtil.addDirectory(
-				companyId, repositoryId, newAttachmentsDir);
-		}
-		catch (DuplicateDirectoryException dde) {
-		}
-
-		String[] fileNames = DLStoreUtil.getFileNames(
-			companyId, repositoryId, oldAttachmentsDir);
-
-		for (String fileName : fileNames) {
-			moveAttachmentFromOldThread(companyId, fileName, newAttachmentsDir);
-		}
-
-		try {
-			DLStoreUtil.deleteDirectory(
-				companyId, repositoryId, oldAttachmentsDir);
-		}
-		catch (NoSuchDirectoryException nsde) {
-		}
-	}
-
 	protected int moveChildrenMessages(
 			MBMessage parentMessage, MBCategory category, long oldThreadId)
 		throws PortalException, SystemException {
@@ -945,16 +934,11 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			oldThreadId, parentMessage.getMessageId());
 
 		for (MBMessage message : messages) {
-			String oldAttachmentsDir = message.getAttachmentsDir();
-
 			message.setCategoryId(parentMessage.getCategoryId());
 			message.setThreadId(parentMessage.getThreadId());
 			message.setRootMessageId(parentMessage.getRootMessageId());
-			message.setAttachmentsDir(null);
 
 			mbMessagePersistence.update(message);
-
-			moveAttachmentsFromOldThread(message, oldAttachmentsDir);
 
 			if (!message.isDiscussion()) {
 				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
@@ -1051,8 +1035,5 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			indexer.reindex(message);
 		}
 	}
-
-	private static Log _log = LogFactoryUtil.getLog(
-		MBThreadLocalServiceImpl.class);
 
 }

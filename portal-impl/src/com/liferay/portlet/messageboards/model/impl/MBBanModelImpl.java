@@ -75,6 +75,8 @@ public class MBBanModelImpl extends BaseModelImpl<MBBan> implements MBBanModel {
 		};
 	public static final String TABLE_SQL_CREATE = "create table MBBan (banId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,banUserId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table MBBan";
+	public static final String ORDER_BY_JPQL = " ORDER BY mbBan.banId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY MBBan.banId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -90,6 +92,7 @@ public class MBBanModelImpl extends BaseModelImpl<MBBan> implements MBBanModel {
 	public static long BANUSERID_COLUMN_BITMASK = 1L;
 	public static long GROUPID_COLUMN_BITMASK = 2L;
 	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long BANID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -381,13 +384,12 @@ public class MBBanModelImpl extends BaseModelImpl<MBBan> implements MBBanModel {
 
 	@Override
 	public MBBan toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (MBBan)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (MBBan)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -585,9 +587,7 @@ public class MBBanModelImpl extends BaseModelImpl<MBBan> implements MBBanModel {
 	}
 
 	private static ClassLoader _classLoader = MBBan.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			MBBan.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { MBBan.class };
 	private long _banId;
 	private long _groupId;
 	private long _originalGroupId;
@@ -605,5 +605,5 @@ public class MBBanModelImpl extends BaseModelImpl<MBBan> implements MBBanModel {
 	private long _originalBanUserId;
 	private boolean _setOriginalBanUserId;
 	private long _columnBitmask;
-	private MBBan _escapedModelProxy;
+	private MBBan _escapedModel;
 }

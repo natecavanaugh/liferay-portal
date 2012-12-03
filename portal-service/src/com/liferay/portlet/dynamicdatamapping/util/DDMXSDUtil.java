@@ -14,11 +14,12 @@
 
 package com.liferay.portlet.dynamicdatamapping.util;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.xml.Document;
-import com.liferay.portal.kernel.xml.DocumentException;
+import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
@@ -37,6 +38,26 @@ public class DDMXSDUtil {
 		PortalRuntimePermission.checkGetBeanProperty(DDMXSDUtil.class);
 
 		return _ddmXSD;
+	}
+
+	public static String getFieldHTML(
+			PageContext pageContext, Element element, Fields fields,
+			String namespace, String mode, boolean readOnly, Locale locale)
+		throws Exception {
+
+		return getDDMXSD().getFieldHTML(
+			pageContext, element, fields, namespace, mode, readOnly, locale);
+	}
+
+	public static String getFieldHTMLByName(
+			PageContext pageContext, long classNameId, long classPK,
+			String fieldName, int repeatableIndex, Fields fields,
+			String namespace, String mode, boolean readOnly, Locale locale)
+		throws Exception {
+
+		return getDDMXSD().getFieldHTMLByName(
+			pageContext, classNameId, classPK, fieldName, repeatableIndex,
+			fields, namespace, mode, readOnly, locale);
 	}
 
 	public static String getHTML(
@@ -89,15 +110,27 @@ public class DDMXSDUtil {
 	}
 
 	public static JSONArray getJSONArray(Document document)
-		throws JSONException {
+		throws PortalException {
 
 		return getDDMXSD().getJSONArray(document);
 	}
 
+	public static JSONArray getJSONArray(Element element)
+		throws PortalException {
+
+		return getDDMXSD().getJSONArray(element);
+	}
+
 	public static JSONArray getJSONArray(String xml)
-		throws DocumentException, JSONException {
+		throws PortalException, SystemException {
 
 		return getDDMXSD().getJSONArray(xml);
+	}
+
+	public static String getXSD(long classNameId, long classPK)
+		throws PortalException, SystemException {
+
+		return getDDMXSD().getXSD(classNameId, classPK);
 	}
 
 	public void setDDMXSD(DDMXSD ddmXSD) {

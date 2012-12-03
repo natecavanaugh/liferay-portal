@@ -151,7 +151,7 @@ AUI.add(
 								fallback.show();
 							}
 							else {
-								instance.one('#fileUpload').append(Lang.sub(TPL_ERROR_MESSAGE, [Liferay.Language.get('multiple-file-uploading-not-available')]));
+								instance.one('#fileUpload').append(Lang.sub(TPL_ERROR_MESSAGE, [Liferay.Language.get('multiple-file-uploading-is-not-available')]));
 							}
 
 							instance._preventRenderHandle = instance.on(

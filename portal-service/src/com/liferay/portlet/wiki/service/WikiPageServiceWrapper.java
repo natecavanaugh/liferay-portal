@@ -142,6 +142,12 @@ public class WikiPageServiceWrapper implements WikiPageService,
 			tempFolderName);
 	}
 
+	public void deleteTrashPageAttachments(long nodeId, java.lang.String title)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_wikiPageService.deleteTrashPageAttachments(nodeId, title);
+	}
+
 	public com.liferay.portlet.wiki.model.WikiPage getDraftPage(long nodeId,
 		java.lang.String title)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -165,6 +171,13 @@ public class WikiPageServiceWrapper implements WikiPageService,
 			displayStyle, feedURL, entryURL);
 	}
 
+	public java.util.List<com.liferay.portlet.wiki.model.WikiPage> getOrphans(
+		long groupId, long nodeId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _wikiPageService.getOrphans(groupId, nodeId);
+	}
+
 	public com.liferay.portlet.wiki.model.WikiPage getPage(long nodeId,
 		java.lang.String title)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -186,6 +199,35 @@ public class WikiPageServiceWrapper implements WikiPageService,
 		return _wikiPageService.getPage(nodeId, title, version);
 	}
 
+	public java.util.List<com.liferay.portlet.wiki.model.WikiPage> getPages(
+		long groupId, long nodeId, boolean head, int status, int start,
+		int end, com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _wikiPageService.getPages(groupId, nodeId, head, status, start,
+			end, obc);
+	}
+
+	public java.util.List<com.liferay.portlet.wiki.model.WikiPage> getPages(
+		long groupId, long userId, long nodeId, int status, int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _wikiPageService.getPages(groupId, userId, nodeId, status,
+			start, end);
+	}
+
+	public int getPagesCount(long groupId, long nodeId, boolean head)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _wikiPageService.getPagesCount(groupId, nodeId, head);
+	}
+
+	public int getPagesCount(long groupId, long userId, long nodeId, int status)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _wikiPageService.getPagesCount(groupId, userId, nodeId, status);
+	}
+
 	public java.lang.String getPagesRSS(long companyId, long nodeId,
 		java.lang.String title, int max, java.lang.String type, double version,
 		java.lang.String displayStyle, java.lang.String feedURL,
@@ -194,6 +236,19 @@ public class WikiPageServiceWrapper implements WikiPageService,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _wikiPageService.getPagesRSS(companyId, nodeId, title, max,
 			type, version, displayStyle, feedURL, entryURL, locale);
+	}
+
+	public java.util.List<com.liferay.portlet.wiki.model.WikiPage> getRecentChanges(
+		long groupId, long nodeId, int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _wikiPageService.getRecentChanges(groupId, nodeId, start, end);
+	}
+
+	public int getRecentChangesCount(long groupId, long nodeId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _wikiPageService.getRecentChangesCount(groupId, nodeId);
 	}
 
 	public java.lang.String[] getTempPageAttachmentNames(long nodeId,
@@ -212,16 +267,8 @@ public class WikiPageServiceWrapper implements WikiPageService,
 		_wikiPageService.movePage(nodeId, title, newTitle, serviceContext);
 	}
 
-	public void movePageAttachmentFromTrash(long nodeId,
-		java.lang.String title, java.lang.String deletedFileName)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_wikiPageService.movePageAttachmentFromTrash(nodeId, title,
-			deletedFileName);
-	}
-
-	public java.lang.String movePageAttachmentToTrash(long nodeId,
-		java.lang.String title, java.lang.String fileName)
+	public long movePageAttachmentToTrash(long nodeId, java.lang.String title,
+		java.lang.String fileName)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _wikiPageService.movePageAttachmentToTrash(nodeId, title,
@@ -239,6 +286,13 @@ public class WikiPageServiceWrapper implements WikiPageService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_wikiPageService.movePageToTrash(nodeId, title, version);
+	}
+
+	public void restorePageAttachmentFromTrash(long nodeId,
+		java.lang.String title, java.lang.String fileName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_wikiPageService.restorePageAttachmentFromTrash(nodeId, title, fileName);
 	}
 
 	public void restorePageFromTrash(long resourcePrimKey)

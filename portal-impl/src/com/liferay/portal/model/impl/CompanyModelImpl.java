@@ -74,6 +74,8 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 		};
 	public static final String TABLE_SQL_CREATE = "create table Company (companyId LONG not null primary key,accountId LONG,webId VARCHAR(75) null,key_ TEXT null,mx VARCHAR(75) null,homeURL STRING null,logoId LONG,system BOOLEAN,maxUsers INTEGER,active_ BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table Company";
+	public static final String ORDER_BY_JPQL = " ORDER BY company.companyId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Company.companyId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -90,6 +92,7 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	public static long MX_COLUMN_BITMASK = 2L;
 	public static long SYSTEM_COLUMN_BITMASK = 4L;
 	public static long WEBID_COLUMN_BITMASK = 8L;
+	public static long COMPANYID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -418,6 +421,13 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	public void setKeyObj(java.security.Key keyObj) {
 	}
 
+	public java.lang.String getVirtualHostname() {
+		return null;
+	}
+
+	public void setVirtualHostname(java.lang.String virtualHostname) {
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -437,13 +447,12 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 
 	@Override
 	public Company toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Company)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Company)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -579,6 +588,8 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 
 		companyCacheModel._keyObj = getKeyObj();
 
+		companyCacheModel._virtualHostname = getVirtualHostname();
+
 		return companyCacheModel;
 	}
 
@@ -665,7 +676,7 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	}
 
 	private static ClassLoader _classLoader = Company.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Company.class
 		};
 	private long _companyId;
@@ -685,5 +696,5 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 	private int _maxUsers;
 	private boolean _active;
 	private long _columnBitmask;
-	private Company _escapedModelProxy;
+	private Company _escapedModel;
 }

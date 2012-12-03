@@ -885,39 +885,6 @@ AUI.add(
 						}
 					},
 
-					_displayVocabularyCategoriesImpl: function(categories, callback, renderMode) {
-						var instance = this;
-
-						instance._createCategoryView(categories, renderMode);
-
-						if (categories.length <= 0) {
-							instance._showCateroryMessage();
-						}
-
-						var vocabularyList = A.one(instance._vocabularyListSelector);
-
-						var listLinks = vocabularyList.all('li');
-
-						listLinks.unplug(A.Plugin.Drop);
-
-						var bubbleTargets = [instance];
-
-						if (instance._categoriesTreeView) {
-							bubbleTargets.push(instance._categoriesTreeView);
-						}
-
-						listLinks.plug(
-							A.Plugin.Drop,
-							{
-								bubbleTargets: bubbleTargets
-							}
-						);
-
-						if (callback) {
-							callback();
-						}
-					},
-
 					_displayList: function(callback) {
 						var instance = this;
 
@@ -997,6 +964,39 @@ AUI.add(
 								instance._displayVocabularyCategoriesImpl(result.categories, callback, renderMode);
 							}
 						);
+					},
+
+					_displayVocabularyCategoriesImpl: function(categories, callback, renderMode) {
+						var instance = this;
+
+						instance._createCategoryView(categories, renderMode);
+
+						if (categories.length <= 0) {
+							instance._showCateroryMessage();
+						}
+
+						var vocabularyList = A.one(instance._vocabularyListSelector);
+
+						var listLinks = vocabularyList.all('li');
+
+						listLinks.unplug(A.Plugin.Drop);
+
+						var bubbleTargets = [instance];
+
+						if (instance._categoriesTreeView) {
+							bubbleTargets.push(instance._categoriesTreeView);
+						}
+
+						listLinks.plug(
+							A.Plugin.Drop,
+							{
+								bubbleTargets: bubbleTargets
+							}
+						);
+
+						if (callback) {
+							callback();
+						}
 					},
 
 					_filterCategory: function(categories, parentCategoryId) {
@@ -1665,13 +1665,19 @@ AUI.add(
 						else {
 							var errorKey = STR_EMPTY;
 
-							if (exception.indexOf('DuplicateCategoryException') > -1) {
-								errorKey = Liferay.Language.get('that-category-already-exists');
-							}
-							else if ((exception.indexOf('CategoryNameException') > -1) ||
-									(exception.indexOf('AssetCategoryException') > -1)) {
-
+							if	(exception.indexOf('AssetCategoryException') > -1) {
 								errorKey = Liferay.Language.get('one-of-your-fields-contains-invalid-characters');
+							}
+							else if (exception.indexOf('CategoryNameException') > -1) {
+								errorKey = Liferay.Language.get('please-enter-a-valid-category-name');
+							}
+							else if ((exception.indexOf('CategoryPropertyKeyException') > -1) ||
+									 (exception.indexOf('CategoryPropertyValueException') > -1)) {
+
+								errorKey = Liferay.Language.get('one-of-your-property-fields-contains-invalid-characters');
+							}
+							else if (exception.indexOf('DuplicateCategoryException') > -1) {
+								errorKey = Liferay.Language.get('that-category-already-exists');
 							}
 							else if (exception.indexOf(EXCEPTION_NO_SUCH_VOCABULARY) > -1) {
 								errorKey = Liferay.Language.get('that-vocabulary-does-not-exist');
@@ -2133,6 +2139,23 @@ AUI.add(
 						}
 					},
 
+					_processSearch: function() {
+						var instance = this;
+
+						instance._restartSearch = true;
+
+						if (!instance._liveSearch.get(STR_QUERY) || instance._searchType.val() == STR_VOCABULARIES) {
+							instance._selectedVocabularyId = null;
+
+							instance._loadData();
+						}
+						else if (instance._selectedVocabularyId) {
+							instance._closeEditSection();
+
+							instance._displayVocabularyCategories(instance._selectedVocabularyId, null, MODE_RENDER_FLAT);
+						}
+					},
+
 					_processVocabularyDeletion: function(result) {
 						var instance = this;
 
@@ -2154,23 +2177,6 @@ AUI.add(
 							}
 
 							instance._sendMessage(MESSAGE_TYPE_ERROR, errorKey);
-						}
-					},
-
-					_processSearch: function() {
-						var instance = this;
-
-						instance._restartSearch = true;
-
-						if (!instance._liveSearch.get(STR_QUERY) || instance._searchType.val() == STR_VOCABULARIES) {
-							instance._selectedVocabularyId = null;
-
-							instance._loadData();
-						}
-						else if (instance._selectedVocabularyId) {
-							instance._closeEditSection();
-
-							instance._displayVocabularyCategories(instance._selectedVocabularyId, null, MODE_RENDER_FLAT);
 						}
 					},
 

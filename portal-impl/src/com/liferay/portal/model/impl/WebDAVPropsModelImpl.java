@@ -69,6 +69,8 @@ public class WebDAVPropsModelImpl extends BaseModelImpl<WebDAVProps>
 		};
 	public static final String TABLE_SQL_CREATE = "create table WebDAVProps (webDavPropsId LONG not null primary key,companyId LONG,createDate DATE null,modifiedDate DATE null,classNameId LONG,classPK LONG,props TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table WebDAVProps";
+	public static final String ORDER_BY_JPQL = " ORDER BY webDAVProps.webDavPropsId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY WebDAVProps.webDavPropsId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -83,6 +85,7 @@ public class WebDAVPropsModelImpl extends BaseModelImpl<WebDAVProps>
 			true);
 	public static long CLASSNAMEID_COLUMN_BITMASK = 1L;
 	public static long CLASSPK_COLUMN_BITMASK = 2L;
+	public static long WEBDAVPROPSID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.WebDAVProps"));
 
@@ -295,13 +298,12 @@ public class WebDAVPropsModelImpl extends BaseModelImpl<WebDAVProps>
 
 	@Override
 	public WebDAVProps toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (WebDAVProps)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (WebDAVProps)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -486,7 +488,7 @@ public class WebDAVPropsModelImpl extends BaseModelImpl<WebDAVProps>
 	}
 
 	private static ClassLoader _classLoader = WebDAVProps.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			WebDAVProps.class
 		};
 	private long _webDavPropsId;
@@ -501,5 +503,5 @@ public class WebDAVPropsModelImpl extends BaseModelImpl<WebDAVProps>
 	private boolean _setOriginalClassPK;
 	private String _props;
 	private long _columnBitmask;
-	private WebDAVProps _escapedModelProxy;
+	private WebDAVProps _escapedModel;
 }

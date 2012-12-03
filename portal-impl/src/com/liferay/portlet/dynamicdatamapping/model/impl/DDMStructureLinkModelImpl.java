@@ -66,6 +66,8 @@ public class DDMStructureLinkModelImpl extends BaseModelImpl<DDMStructureLink>
 		};
 	public static final String TABLE_SQL_CREATE = "create table DDMStructureLink (structureLinkId LONG not null primary key,classNameId LONG,classPK LONG,structureId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table DDMStructureLink";
+	public static final String ORDER_BY_JPQL = " ORDER BY ddmStructureLink.structureLinkId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY DDMStructureLink.structureLinkId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -81,6 +83,7 @@ public class DDMStructureLinkModelImpl extends BaseModelImpl<DDMStructureLink>
 	public static long CLASSNAMEID_COLUMN_BITMASK = 1L;
 	public static long CLASSPK_COLUMN_BITMASK = 2L;
 	public static long STRUCTUREID_COLUMN_BITMASK = 4L;
+	public static long STRUCTURELINKID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.dynamicdatamapping.model.DDMStructureLink"));
 
@@ -255,13 +258,12 @@ public class DDMStructureLinkModelImpl extends BaseModelImpl<DDMStructureLink>
 
 	@Override
 	public DDMStructureLink toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (DDMStructureLink)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (DDMStructureLink)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -404,7 +406,7 @@ public class DDMStructureLinkModelImpl extends BaseModelImpl<DDMStructureLink>
 	}
 
 	private static ClassLoader _classLoader = DDMStructureLink.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			DDMStructureLink.class
 		};
 	private long _structureLinkId;
@@ -418,5 +420,5 @@ public class DDMStructureLinkModelImpl extends BaseModelImpl<DDMStructureLink>
 	private long _originalStructureId;
 	private boolean _setOriginalStructureId;
 	private long _columnBitmask;
-	private DDMStructureLink _escapedModelProxy;
+	private DDMStructureLink _escapedModel;
 }

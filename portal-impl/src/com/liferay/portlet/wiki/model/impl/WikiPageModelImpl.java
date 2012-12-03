@@ -914,13 +914,12 @@ public class WikiPageModelImpl extends BaseModelImpl<WikiPage>
 
 	@Override
 	public WikiPage toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (WikiPage)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (WikiPage)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -1367,7 +1366,7 @@ public class WikiPageModelImpl extends BaseModelImpl<WikiPage>
 	}
 
 	private static ClassLoader _classLoader = WikiPage.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			WikiPage.class
 		};
 	private String _uuid;
@@ -1417,5 +1416,5 @@ public class WikiPageModelImpl extends BaseModelImpl<WikiPage>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private long _columnBitmask;
-	private WikiPage _escapedModelProxy;
+	private WikiPage _escapedModel;
 }

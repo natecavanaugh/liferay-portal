@@ -44,18 +44,18 @@ public class PortletAutoDeployListener extends BaseAutoDeployListener {
 			_log.debug("Invoking deploy for " + file.getPath());
 		}
 
-		AutoDeployer deployer = null;
+		AutoDeployer autoDeployer = null;
 
 		if (isMatchingFile(
 				file, "WEB-INF/" + Portal.PORTLET_XML_FILE_NAME_STANDARD)) {
 
-			deployer = _autoDeployer;
+			autoDeployer = _autoDeployer;
 		}
 		else if (isMatchingFile(file, "index_mvc.jsp")) {
-			deployer = getMvcDeployer();
+			autoDeployer = getMvcDeployer();
 		}
 		else if (isMatchingFile(file, "index.php")) {
-			deployer = getPhpDeployer();
+			autoDeployer = getPhpDeployer();
 		}
 		else if (!isExtPlugin(file) && !isHookPlugin(file) &&
 				 !isMatchingFile(
@@ -67,7 +67,7 @@ public class PortletAutoDeployListener extends BaseAutoDeployListener {
 				_log.info("Deploying package as a web application");
 			}
 
-			deployer = getWaiDeployer();
+			autoDeployer = getWaiDeployer();
 		}
 		else {
 			return;
@@ -78,10 +78,12 @@ public class PortletAutoDeployListener extends BaseAutoDeployListener {
 		}
 
 		if (_log.isDebugEnabled()) {
-			_log.debug("Using deployer " + deployer.getClass().getName());
+			_log.debug("Using deployer " + autoDeployer.getClass().getName());
 		}
 
-		int code = deployer.autoDeploy(autoDeploymentContext);
+		autoDeployer = new ThreadSafeAutoDeployer(autoDeployer);
+
+		int code = autoDeployer.autoDeploy(autoDeploymentContext);
 
 		if ((code == AutoDeployer.CODE_DEFAULT) && _log.isInfoEnabled()) {
 			_log.info(

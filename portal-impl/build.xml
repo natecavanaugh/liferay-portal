@@ -116,7 +116,7 @@ public class Creole10Parser]]></replacevalue>
 			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 		</tstamp>
 
-		<unzip src="${project.dir}/tools/icu4j-4_0_1-src.jar" dest="${tstamp.value}" />
+		<unzip dest="${tstamp.value}" src="${project.dir}/tools/icu4j-4_0_1-src.jar" />
 
 		<move file="${tstamp.value}/src/com/ibm" todir="${tstamp.value}/src/com/liferay" />
 
@@ -160,14 +160,14 @@ public class Creole10Parser]]></replacevalue>
 	</target>
 
 	<target name="build-json-java">
-		<tstamp>
-			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
-		</tstamp>
-
 		<get
 			dest="json-java.zip"
 			src="https://github.com/douglascrockford/JSON-java/zipball/master"
 		/>
+
+		<tstamp>
+			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+		</tstamp>
 
 		<unzip
 			dest="${tstamp.value}/org/json"
@@ -187,11 +187,10 @@ public class Creole10Parser]]></replacevalue>
 			<param name="javac.srcdir" value="${tstamp.value}" />
 		</antcall>
 
-		<zip destfile="${project.dir}/lib/portal/json-java.jar">
-			<zipfileset
-				dir="${tstamp.value}"
-			/>
-		</zip>
+		<zip
+			basedir="${tstamp.value}"
+			destfile="${project.dir}/lib/portal/json-java.jar.new"
+		/>
 
 		<delete dir="${tstamp.value}" />
 	</target>
@@ -714,6 +713,67 @@ public class Creole10Parser]]></replacevalue>
 		<antcall target="build-service-portlets" />
 	</target>
 
+	<target name="build-struts">
+		<get
+			dest="struts-1.2.9-bin.zip"
+			src="http://archive.apache.org/dist/struts/binaries/struts-1.2.9-bin.zip"
+		/>
+
+		<unzip
+			dest="."
+			src="struts-1.2.9-bin.zip"
+		>
+			<patternset
+				includes="**/struts.jar"
+			/>
+			<flattenmapper />
+		</unzip>
+
+		<move file="struts.jar" tofile="${project.dir}/lib/portal/struts.jar.new" />
+
+		<delete file="struts-1.2.9-bin.zip" />
+
+		<get
+			dest="struts-1.2.9-src.zip"
+			src="http://archive.apache.org/dist/struts/source/struts-1.2.9-src.zip"
+		/>
+
+		<tstamp>
+			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+		</tstamp>
+
+		<unzip
+			dest="${tstamp.value}/org/apache/struts/tiles/xmlDefinition"
+			src="struts-1.2.9-src.zip"
+		>
+			<patternset
+				includes="**/I18nFactorySet.java"
+			/>
+			<flattenmapper />
+		</unzip>
+
+		<delete file="struts-1.2.9-src.zip" />
+
+		<replace file="${tstamp.value}/org/apache/struts/tiles/xmlDefinition/I18nFactorySet.java">
+			<replacefilter token="private XmlDefinitionsSet " value="protected XmlDefinitionsSet " />
+			<replacefilter token="com/ibm" value="com/liferay/ibm" />
+		</replace>
+
+		<antcall target="compile-java">
+			<param name="javac.classpathref" value="project.classpath" />
+			<param name="javac.destdir" value="${tstamp.value}" />
+			<param name="javac.srcdir" value="${tstamp.value}" />
+		</antcall>
+
+		<zip
+			basedir="${tstamp.value}"
+			destfile="${project.dir}/lib/portal/struts.jar.new"
+			update="yes"
+		/>
+
+		<delete dir="${tstamp.value}" />
+	</target>
+
 	<target name="build-themes">
 		<ant dir="../portal-web" target="build-themes" />
 	</target>
@@ -765,7 +825,10 @@ public class Creole10Parser]]></replacevalue>
 							<then>
 								<mkdir dir="${upgrade.table.dir}/${zip.version}" />
 
-								<unzip src="@{zip.file}" dest="${upgrade.table.dir}/${zip.version}">
+								<unzip
+									dest="${upgrade.table.dir}/${zip.version}"
+									src="@{zip.file}"
+								>
 									<patternset>
 										<include name="**/*ModelImpl.java" />
 										<include name="**/sql/indexes.sql" />
@@ -794,7 +857,10 @@ public class Creole10Parser]]></replacevalue>
 			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
 		</tstamp>
 
-		<unzip src="${project.dir}/tools/velocity-1.6.3.zip" dest="${tstamp.value}" />
+		<unzip
+			dest="${tstamp.value}"
+			src="${project.dir}/tools/velocity-1.6.3.zip"
+		/>
 
 		<replace file="${tstamp.value}/velocity-1.6.3/src/java/org/apache/velocity/Template.java">
 			<replacetoken><![CDATA[BufferedReader br = new BufferedReader( new InputStreamReader( is, encoding ) );]]></replacetoken>

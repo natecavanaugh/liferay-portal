@@ -37,7 +37,8 @@ import java.util.Date;
  * @see com.liferay.portal.model.impl.RepositoryModelImpl
  * @generated
  */
-public interface RepositoryModel extends BaseModel<Repository>, GroupedModel {
+public interface RepositoryModel extends BaseModel<Repository>, GroupedModel,
+	StagedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -311,6 +312,8 @@ public interface RepositoryModel extends BaseModel<Repository>, GroupedModel {
 	public CacheModel<Repository> toCacheModel();
 
 	public Repository toEscapedModel();
+
+	public Repository toUnescapedModel();
 
 	public String toString();
 

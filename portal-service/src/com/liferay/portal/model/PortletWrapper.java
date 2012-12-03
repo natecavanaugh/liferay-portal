@@ -259,6 +259,10 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 		return new PortletWrapper(_portlet.toEscapedModel());
 	}
 
+	public com.liferay.portal.model.Portlet toUnescapedModel() {
+		return new PortletWrapper(_portlet.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _portlet.toString();
@@ -313,6 +317,7 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	* @param obj the object to compare this portlet against
 	* @return <code>true</code> if the portlet is equal to the specified object
 	*/
+	@Override
 	public boolean equals(java.lang.Object obj) {
 		return _portlet.equals(obj);
 	}
@@ -731,10 +736,10 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	}
 
 	/**
-	* Returns the name of the classes that represent indexers associated with
+	* Returns the names of the classes that represent indexers associated with
 	* the portlet.
 	*
-	* @return the name of the classes that represent indexers associated with
+	* @return the names of the classes that represent indexers associated with
 	the portlet
 	*/
 	public java.util.List<java.lang.String> getIndexerClasses() {
@@ -1346,6 +1351,26 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	*/
 	public com.liferay.portlet.social.model.SocialRequestInterpreter getSocialRequestInterpreterInstance() {
 		return _portlet.getSocialRequestInterpreterInstance();
+	}
+
+	/**
+	* Returns the names of the classes that represent staged model data
+	* handlers associated with the portlet.
+	*
+	* @return the names of the classes that represent staged model data
+	handlers associated with the portlet
+	*/
+	public java.util.List<java.lang.String> getStagedModelDataHandlerClasses() {
+		return _portlet.getStagedModelDataHandlerClasses();
+	}
+
+	/**
+	* Returns the staged model data handler instances of the portlet.
+	*
+	* @return the staged model data handler instances of the portlet
+	*/
+	public java.util.List<com.liferay.portal.kernel.lar.StagedModelDataHandler<?>> getStagedModelDataHandlerInstances() {
+		return _portlet.getStagedModelDataHandlerInstances();
 	}
 
 	/**
@@ -1981,7 +2006,7 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	}
 
 	/**
-	* Sets the name of the classes that represent asset types associated with
+	* Sets the names of the classes that represent asset types associated with
 	* the portlet.
 	*
 	* @param assetRendererFactoryClasses the names of the classes that
@@ -1993,7 +2018,7 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	}
 
 	/**
-	* Sets the name of the classes that represent atom collection adapters
+	* Sets the names of the classes that represent atom collection adapters
 	* associated with the portlet.
 	*
 	* @param atomCollectionAdapterClasses the names of the classes that
@@ -2075,7 +2100,7 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	}
 
 	/**
-	* Sets the name of the classes that represent custom attribute displays
+	* Sets the names of the classes that represent custom attribute displays
 	* associated with the portlet.
 	*
 	* @param customAttributesDisplayClasses the names of the classes that
@@ -2285,10 +2310,10 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	}
 
 	/**
-	* Sets the name of the classes that represent indexers associated with the
+	* Sets the names of the classes that represent indexers associated with the
 	* portlet.
 	*
-	* @param indexerClasses the name of the classes that represent indexers
+	* @param indexerClasses the names of the classes that represent indexers
 	associated with the portlet
 	*/
 	public void setIndexerClasses(
@@ -2756,6 +2781,18 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	}
 
 	/**
+	* Sets the names of the classes that represent staged model data handlers
+	* associated with the portlet.
+	*
+	* @param stagedModelDataHandlerClasses the names of the classes that
+	represent staged model data handlers associated with the portlet
+	*/
+	public void setStagedModelDataHandlerClasses(
+		java.util.List<java.lang.String> stagedModelDataHandlerClasses) {
+		_portlet.setStagedModelDataHandlerClasses(stagedModelDataHandlerClasses);
+	}
+
+	/**
 	* Set to <code>true</code> if the portlet is a static portlet that is
 	* cannot be moved.
 	*
@@ -2817,7 +2854,7 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	}
 
 	/**
-	* Sets the name of the classes that represent trash handlers associated to
+	* Sets the names of the classes that represent trash handlers associated to
 	* the portlet.
 	*
 	* @param trashHandlerClasses the names of the classes that represent trash
@@ -2915,7 +2952,7 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	}
 
 	/**
-	* Sets the name of the classes that represent workflow handlers associated
+	* Sets the names of the classes that represent workflow handlers associated
 	* to the portlet.
 	*
 	* @param workflowHandlerClasses the names of the classes that represent

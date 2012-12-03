@@ -103,6 +103,7 @@ public class BookmarksEntryModelImpl extends BaseModelImpl<BookmarksEntry>
 	public static long RESOURCEBLOCKID_COLUMN_BITMASK = 8L;
 	public static long USERID_COLUMN_BITMASK = 16L;
 	public static long UUID_COLUMN_BITMASK = 32L;
+	public static long NAME_COLUMN_BITMASK = 64L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -559,13 +560,12 @@ public class BookmarksEntryModelImpl extends BaseModelImpl<BookmarksEntry>
 
 	@Override
 	public BookmarksEntry toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (BookmarksEntry)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (BookmarksEntry)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -873,7 +873,7 @@ public class BookmarksEntryModelImpl extends BaseModelImpl<BookmarksEntry>
 	}
 
 	private static ClassLoader _classLoader = BookmarksEntry.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			BookmarksEntry.class
 		};
 	private String _uuid;
@@ -904,5 +904,5 @@ public class BookmarksEntryModelImpl extends BaseModelImpl<BookmarksEntry>
 	private int _visits;
 	private int _priority;
 	private long _columnBitmask;
-	private BookmarksEntry _escapedModelProxy;
+	private BookmarksEntry _escapedModel;
 }

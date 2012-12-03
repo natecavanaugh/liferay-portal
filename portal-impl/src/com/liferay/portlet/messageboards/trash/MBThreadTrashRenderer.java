@@ -49,6 +49,14 @@ public class MBThreadTrashRenderer extends BaseTrashRenderer {
 			thread.getRootMessageId());
 	}
 
+	public String getClassName() {
+		return MBThread.class.getName();
+	}
+
+	public long getClassPK() {
+		return _rootMessage.getClassPK();
+	}
+
 	@Override
 	public String getIconPath(ThemeDisplay themeDisplay) {
 		return themeDisplay.getPathThemeImages() + "/common/conversation.png";
@@ -70,6 +78,7 @@ public class MBThreadTrashRenderer extends BaseTrashRenderer {
 		return TYPE;
 	}
 
+	@Override
 	public String render(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			String template)

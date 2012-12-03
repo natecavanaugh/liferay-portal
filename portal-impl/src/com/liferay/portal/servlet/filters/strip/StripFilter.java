@@ -390,7 +390,7 @@ public class StripFilter extends BasePortalFilter {
 
 				unsyncByteArrayOutputStream.writeTo(response.getOutputStream());
 			}
-			else {
+			else if (!response.isCommitted()) {
 				strip(request, response, oldCharBuffer, response.getWriter());
 			}
 		}
@@ -695,7 +695,7 @@ public class StripFilter extends BasePortalFilter {
 
 	private static final char[] _MARKER_INPUT_OPEN = "input".toCharArray();
 
-	private static final String _MARKER_LANGUAGE = "language=\"";
+	private static final String _MARKER_LANGUAGE = "language=";
 
 	private static final int[] _MARKER_LANGUAGE_NEXTS = KMPSearch.generateNexts(
 		_MARKER_LANGUAGE);

@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
+import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -41,7 +42,7 @@ import java.util.Date;
  * @generated
  */
 public interface MBMailingListModel extends BaseModel<MBMailingList>,
-	GroupedModel {
+	GroupedModel, StagedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -514,6 +515,8 @@ public interface MBMailingListModel extends BaseModel<MBMailingList>,
 	public CacheModel<MBMailingList> toCacheModel();
 
 	public MBMailingList toEscapedModel();
+
+	public MBMailingList toUnescapedModel();
 
 	public String toString();
 

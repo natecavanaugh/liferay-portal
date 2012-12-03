@@ -54,6 +54,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.persistence.ImageUtil;
 import com.liferay.portal.service.persistence.LayoutUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.lar.DLPortletDataHandlerImpl;
@@ -891,7 +892,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 						feed.getOrderByCol(), feed.getOrderByType(),
 						feed.getTargetLayoutFriendlyUrl(),
 						feed.getTargetPortletId(), feed.getContentField(),
-						feed.getFeedType(), feed.getFeedVersion(),
+						feed.getFeedFormat(), feed.getFeedVersion(),
 						serviceContext);
 				}
 				else {
@@ -903,7 +904,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 						feed.getOrderByCol(), feed.getOrderByType(),
 						feed.getTargetLayoutFriendlyUrl(),
 						feed.getTargetPortletId(), feed.getContentField(),
-						feed.getFeedType(), feed.getFeedVersion(),
+						feed.getFeedFormat(), feed.getFeedVersion(),
 						serviceContext);
 				}
 			}
@@ -916,7 +917,8 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 					feed.getOrderByCol(), feed.getOrderByType(),
 					feed.getTargetLayoutFriendlyUrl(),
 					feed.getTargetPortletId(), feed.getContentField(),
-					feed.getFeedType(), feed.getFeedVersion(), serviceContext);
+					feed.getFeedFormat(), feed.getFeedVersion(),
+					serviceContext);
 			}
 
 			portletDataContext.importClassedModel(
@@ -1437,16 +1439,19 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 		boolean legacyURL = true;
 
 		while (true) {
+			String contextPath = PortalUtil.getPathContext();
+
 			currentLocation = content.lastIndexOf(
-				"/c/document_library/get_file?", beginPos);
+				contextPath.concat("/c/document_library/get_file?"), beginPos);
 
 			if (currentLocation == -1) {
 				currentLocation = content.lastIndexOf(
-					"/image/image_gallery?", beginPos);
+					contextPath.concat("/image/image_gallery?"), beginPos);
 			}
 
 			if (currentLocation == -1) {
-				currentLocation = content.lastIndexOf("/documents/", beginPos);
+				currentLocation = content.lastIndexOf(
+					contextPath.concat("/documents/"), beginPos);
 
 				legacyURL = false;
 			}
@@ -1455,7 +1460,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 				return sb.toString();
 			}
 
-			beginPos = currentLocation;
+			beginPos = currentLocation + contextPath.length();
 
 			int endPos1 = content.indexOf(CharPool.APOSTROPHE, beginPos);
 			int endPos2 = content.indexOf(CharPool.CLOSE_BRACKET, beginPos);
@@ -1628,6 +1633,8 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 					continue;
 				}
 
+				beginPos = currentLocation;
+
 				DLPortletDataHandlerImpl.exportFileEntry(
 					portletDataContext, dlFileEntryTypesElement,
 					dlFoldersElement, dlFileEntriesElement, dlFileRanksElement,
@@ -1781,6 +1788,17 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 		String friendlyURLPublicPath =
 			PropsValues.LAYOUT_FRIENDLY_URL_PUBLIC_SERVLET_MAPPING;
 
+		String portalContextPath = PortalUtil.getPathContext();
+
+		if (Validator.isNotNull(portalContextPath)) {
+			friendlyURLPrivateGroupPath = portalContextPath.concat(
+				friendlyURLPrivateGroupPath);
+			friendlyURLPrivateUserPath = portalContextPath.concat(
+				friendlyURLPrivateUserPath);
+			friendlyURLPublicPath = portalContextPath.concat(
+				friendlyURLPublicPath);
+		}
+
 		String href = "href=";
 
 		int beginPos = content.length();
@@ -1864,8 +1882,14 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 				continue;
 			}
 
+			int contextLength = 0;
+
+			if (Validator.isNotNull(portalContextPath)) {
+				contextLength = portalContextPath.length();
+			}
+
 			int beginGroupPos = content.indexOf(
-				CharPool.SLASH, beginPos + hrefLength + 1);
+				CharPool.SLASH, beginPos + hrefLength + contextLength + 1);
 
 			if (beginGroupPos == -1) {
 				beginPos--;

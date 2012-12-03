@@ -381,6 +381,10 @@
 			<finder-column name="companyId" />
 			<finder-column name="friendlyURL" />
 		</finder>
+		<finder name="C_S" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="site" />
+		</finder>
 		<finder name="T_A" return-type="Collection">
 			<finder-column name="type" />
 			<finder-column name="active" />
@@ -1476,7 +1480,7 @@
 
 		<!-- Finder methods -->
 
-		<finder name="ServletContextName" return-type="Release">
+		<finder name="ServletContextName" return-type="Release" unique="true">
 			<finder-column name="servletContextName" case-sensitive="false" />
 		</finder>
 	</entity>
@@ -2012,6 +2016,7 @@
 		<column name="screenName" type="String" />
 		<column name="emailAddress" type="String" />
 		<column name="facebookId" type="long" />
+		<column name="ldapServerId" type="long" />
 		<column name="openId" type="String" />
 		<column name="portraitId" type="long" />
 		<column name="languageId" type="String" />

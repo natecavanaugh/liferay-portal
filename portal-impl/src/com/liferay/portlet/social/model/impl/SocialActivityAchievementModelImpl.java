@@ -69,6 +69,8 @@ public class SocialActivityAchievementModelImpl extends BaseModelImpl<SocialActi
 		};
 	public static final String TABLE_SQL_CREATE = "create table SocialActivityAchievement (activityAchievementId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate LONG,name VARCHAR(75) null,firstInGroup BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table SocialActivityAchievement";
+	public static final String ORDER_BY_JPQL = " ORDER BY socialActivityAchievement.activityAchievementId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY SocialActivityAchievement.activityAchievementId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -85,6 +87,7 @@ public class SocialActivityAchievementModelImpl extends BaseModelImpl<SocialActi
 	public static long GROUPID_COLUMN_BITMASK = 2L;
 	public static long NAME_COLUMN_BITMASK = 4L;
 	public static long USERID_COLUMN_BITMASK = 8L;
+	public static long ACTIVITYACHIEVEMENTID_COLUMN_BITMASK = 16L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.social.model.SocialActivityAchievement"));
 
@@ -314,13 +317,12 @@ public class SocialActivityAchievementModelImpl extends BaseModelImpl<SocialActi
 
 	@Override
 	public SocialActivityAchievement toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (SocialActivityAchievement)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (SocialActivityAchievement)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -497,7 +499,7 @@ public class SocialActivityAchievementModelImpl extends BaseModelImpl<SocialActi
 	}
 
 	private static ClassLoader _classLoader = SocialActivityAchievement.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			SocialActivityAchievement.class
 		};
 	private long _activityAchievementId;
@@ -516,5 +518,5 @@ public class SocialActivityAchievementModelImpl extends BaseModelImpl<SocialActi
 	private boolean _originalFirstInGroup;
 	private boolean _setOriginalFirstInGroup;
 	private long _columnBitmask;
-	private SocialActivityAchievement _escapedModelProxy;
+	private SocialActivityAchievement _escapedModel;
 }

@@ -63,6 +63,8 @@ public class ExpandoTableModelImpl extends BaseModelImpl<ExpandoTable>
 		};
 	public static final String TABLE_SQL_CREATE = "create table ExpandoTable (tableId LONG not null primary key,companyId LONG,classNameId LONG,name VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table ExpandoTable";
+	public static final String ORDER_BY_JPQL = " ORDER BY expandoTable.tableId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY ExpandoTable.tableId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -78,6 +80,7 @@ public class ExpandoTableModelImpl extends BaseModelImpl<ExpandoTable>
 	public static long CLASSNAMEID_COLUMN_BITMASK = 1L;
 	public static long COMPANYID_COLUMN_BITMASK = 2L;
 	public static long NAME_COLUMN_BITMASK = 4L;
+	public static long TABLEID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portlet.expando.model.ExpandoTable"));
 
@@ -242,13 +245,12 @@ public class ExpandoTableModelImpl extends BaseModelImpl<ExpandoTable>
 
 	@Override
 	public ExpandoTable toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ExpandoTable)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ExpandoTable)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -394,7 +396,7 @@ public class ExpandoTableModelImpl extends BaseModelImpl<ExpandoTable>
 	}
 
 	private static ClassLoader _classLoader = ExpandoTable.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ExpandoTable.class
 		};
 	private long _tableId;
@@ -407,5 +409,5 @@ public class ExpandoTableModelImpl extends BaseModelImpl<ExpandoTable>
 	private String _name;
 	private String _originalName;
 	private long _columnBitmask;
-	private ExpandoTable _escapedModelProxy;
+	private ExpandoTable _escapedModel;
 }

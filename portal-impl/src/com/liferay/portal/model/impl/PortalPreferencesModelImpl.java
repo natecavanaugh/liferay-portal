@@ -63,6 +63,8 @@ public class PortalPreferencesModelImpl extends BaseModelImpl<PortalPreferences>
 		};
 	public static final String TABLE_SQL_CREATE = "create table PortalPreferences (portalPreferencesId LONG not null primary key,ownerId LONG,ownerType INTEGER,preferences TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table PortalPreferences";
+	public static final String ORDER_BY_JPQL = " ORDER BY portalPreferences.portalPreferencesId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY PortalPreferences.portalPreferencesId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -77,6 +79,7 @@ public class PortalPreferencesModelImpl extends BaseModelImpl<PortalPreferences>
 			true);
 	public static long OWNERID_COLUMN_BITMASK = 1L;
 	public static long OWNERTYPE_COLUMN_BITMASK = 2L;
+	public static long PORTALPREFERENCESID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.PortalPreferences"));
 
@@ -226,13 +229,12 @@ public class PortalPreferencesModelImpl extends BaseModelImpl<PortalPreferences>
 
 	@Override
 	public PortalPreferences toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (PortalPreferences)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (PortalPreferences)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -376,7 +378,7 @@ public class PortalPreferencesModelImpl extends BaseModelImpl<PortalPreferences>
 	}
 
 	private static ClassLoader _classLoader = PortalPreferences.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			PortalPreferences.class
 		};
 	private long _portalPreferencesId;
@@ -388,5 +390,5 @@ public class PortalPreferencesModelImpl extends BaseModelImpl<PortalPreferences>
 	private boolean _setOriginalOwnerType;
 	private String _preferences;
 	private long _columnBitmask;
-	private PortalPreferences _escapedModelProxy;
+	private PortalPreferences _escapedModel;
 }

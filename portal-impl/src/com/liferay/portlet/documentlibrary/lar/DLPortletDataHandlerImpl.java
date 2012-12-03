@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Repository;
 import com.liferay.portal.model.RepositoryEntry;
+import com.liferay.portal.repository.liferayrepository.LiferayRepository;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RepositoryEntryLocalServiceUtil;
@@ -48,6 +49,7 @@ import com.liferay.portal.service.RepositoryLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.persistence.RepositoryEntryUtil;
 import com.liferay.portal.service.persistence.RepositoryUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
@@ -597,6 +599,22 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 					repository.getUuid(), portletDataContext.getScopeGroupId());
 
 				if (existingRepository == null) {
+					existingRepository =
+						RepositoryLocalServiceUtil.fetchRepository(
+							portletDataContext.getScopeGroupId(),
+							repository.getName());
+				}
+
+				long classNameId = 0;
+
+				if (existingRepository != null) {
+					classNameId = existingRepository.getClassNameId();
+				}
+
+				if ((existingRepository == null) ||
+					(classNameId !=
+						PortalUtil.getClassNameId(LiferayRepository.class))) {
+
 					serviceContext.setUuid(repository.getUuid());
 
 					importedRepositoryId =

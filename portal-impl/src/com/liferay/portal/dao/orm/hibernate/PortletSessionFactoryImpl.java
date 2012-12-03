@@ -52,10 +52,12 @@ public class PortletSessionFactoryImpl extends SessionFactoryImpl {
 
 	@Override
 	public void closeSession(Session session) throws ORMException {
-		session.flush();
+		if (session != null) {
+			session.flush();
 
-		if (!PropsValues.SPRING_HIBERNATE_SESSION_DELEGATED) {
-			session.close();
+			if (!PropsValues.SPRING_HIBERNATE_SESSION_DELEGATED) {
+				session.close();
+			}
 		}
 	}
 

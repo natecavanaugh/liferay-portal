@@ -28,7 +28,7 @@ import java.io.File;
 public class ExtAutoDeployListener extends BaseAutoDeployListener {
 
 	public ExtAutoDeployListener() {
-		_autoDeployer = new ExtAutoDeployer();
+		_autoDeployer = new ThreadSafeAutoDeployer(new ExtAutoDeployer());
 	}
 
 	public void deploy(AutoDeploymentContext autoDeploymentContext)

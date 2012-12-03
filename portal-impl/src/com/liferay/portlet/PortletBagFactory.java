@@ -18,6 +18,8 @@ import com.liferay.portal.dao.shard.ShardPollerProcessorWrapper;
 import com.liferay.portal.kernel.atom.AtomCollectionAdapter;
 import com.liferay.portal.kernel.atom.AtomCollectionAdapterRegistryUtil;
 import com.liferay.portal.kernel.lar.PortletDataHandler;
+import com.liferay.portal.kernel.lar.StagedModelDataHandler;
+import com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.poller.PollerProcessor;
@@ -148,6 +150,9 @@ public class PortletBagFactory {
 
 		PortletDataHandler portletDataHandlerInstance = newPortletDataHandler(
 			portlet);
+
+		List<StagedModelDataHandler<?>> stagedModelDataHandlerInstances =
+			newStagedModelDataHandler(portlet);
 
 		PortletDisplayTemplateHandler portletDisplayTemplateHandlerInstance =
 			newPortletDisplayTemplateHandler(portlet);
@@ -317,7 +322,8 @@ public class PortletBagFactory {
 			portlet.getPortletId(), _servletContext, portletInstance,
 			configurationActionInstance, indexerInstances, openSearchInstance,
 			friendlyURLMapperInstance, urlEncoderInstance,
-			portletDataHandlerInstance, portletDisplayTemplateHandlerInstance,
+			portletDataHandlerInstance, stagedModelDataHandlerInstances,
+			portletDisplayTemplateHandlerInstance,
 			portletLayoutListenerInstance, pollerProcessorInstance,
 			popMessageListenerInstance, socialActivityInterpreterInstance,
 			socialRequestInterpreterInstance, webDAVStorageInstance,
@@ -855,6 +861,31 @@ public class PortletBagFactory {
 		return (PortletLayoutListener)newInstance(
 			PortletLayoutListener.class,
 			portlet.getPortletLayoutListenerClass());
+	}
+
+	protected List<StagedModelDataHandler<?>> newStagedModelDataHandler(
+			Portlet portlet)
+		throws Exception {
+
+		List<StagedModelDataHandler<?>> stagedModelDataHandlerInstances =
+			new ArrayList<StagedModelDataHandler<?>>();
+
+		List<String> stagedModelDataHandlerClasses =
+			portlet.getStagedModelDataHandlerClasses();
+
+		for (String stagedModelDataHandlerClass :
+				stagedModelDataHandlerClasses) {
+
+			StagedModelDataHandler<?> stagedModelDataHandler =
+				(StagedModelDataHandler<?>)newInstance(
+					StagedModelDataHandler.class, stagedModelDataHandlerClass);
+
+			stagedModelDataHandlerInstances.add(stagedModelDataHandler);
+
+			StagedModelDataHandlerRegistryUtil.register(stagedModelDataHandler);
+		}
+
+		return stagedModelDataHandlerInstances;
 	}
 
 	protected URLEncoder newURLEncoder(Portlet portlet) throws Exception {

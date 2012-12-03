@@ -918,12 +918,12 @@ public class PortalImpl implements Portal {
 		int pos = canonicalURL.indexOf(virtualHost);
 
 		if (pos > 0) {
-			pos += virtualHost.length();
-
-			pos = canonicalURL.indexOf(CharPool.SLASH, pos);
+			pos = canonicalURL.indexOf(
+				CharPool.SLASH, pos + virtualHost.length());
 
 			if (Validator.isNotNull(_pathContext)) {
-				pos = canonicalURL.indexOf(CharPool.SLASH, pos + 1);
+				pos = canonicalURL.indexOf(
+					CharPool.SLASH, pos + _pathContext.length());
 			}
 
 			if ((pos > 0) && (pos < canonicalURL.length())) {
@@ -1145,6 +1145,12 @@ public class PortalImpl implements Portal {
 	public String getCDNHost(HttpServletRequest request)
 		throws PortalException, SystemException {
 
+		boolean cdnEnabled = ParamUtil.getBoolean(request, "cdn_enabled", true);
+
+		if (!cdnEnabled) {
+			return StringPool.BLANK;
+		}
+
 		String cdnHost = null;
 
 		Company company = getCompany(request);
@@ -1155,8 +1161,6 @@ public class PortalImpl implements Portal {
 		else {
 			cdnHost = getCDNHostHttp(company.getCompanyId());
 		}
-
-		cdnHost = ParamUtil.getString(request, "cdn_host", cdnHost);
 
 		if (Validator.isUrl(cdnHost)) {
 			return cdnHost;
@@ -2105,20 +2109,64 @@ public class PortalImpl implements Portal {
 			group, privateLayoutSet, themeDisplay, false);
 	}
 
+	public String getGroupFriendlyURL(
+			Group group, boolean privateLayoutSet, ThemeDisplay themeDisplay,
+			Locale locale)
+		throws PortalException, SystemException {
+
+		String i18nLanguageId = themeDisplay.getI18nLanguageId();
+		String i18nPath = themeDisplay.getI18nPath();
+
+		try {
+			setThemeDisplayI18n(themeDisplay, locale);
+
+			return getGroupFriendlyURL(group, privateLayoutSet, themeDisplay);
+		}
+		finally {
+			resetThemeDisplayI18n(themeDisplay, i18nLanguageId, i18nPath);
+		}
+	}
+
 	public String[] getGroupPermissions(HttpServletRequest request) {
 		return request.getParameterValues("groupPermissions");
+	}
+
+	public String[] getGroupPermissions(
+		HttpServletRequest request, String className) {
+
+		return request.getParameterValues("groupPermissions_" + className);
 	}
 
 	public String[] getGroupPermissions(PortletRequest portletRequest) {
 		return portletRequest.getParameterValues("groupPermissions");
 	}
 
+	public String[] getGroupPermissions(
+		PortletRequest portletRequest, String className) {
+
+		return portletRequest.getParameterValues(
+			"groupPermissions_" + className);
+	}
+
 	public String[] getGuestPermissions(HttpServletRequest request) {
 		return request.getParameterValues("guestPermissions");
 	}
 
+	public String[] getGuestPermissions(
+		HttpServletRequest request, String className) {
+
+		return request.getParameterValues("guestPermissions_" + className);
+	}
+
 	public String[] getGuestPermissions(PortletRequest portletRequest) {
 		return portletRequest.getParameterValues("guestPermissions");
+	}
+
+	public String[] getGuestPermissions(
+		PortletRequest portletRequest, String className) {
+
+		return portletRequest.getParameterValues(
+			"guestPermissions_" + className);
 	}
 
 	public String getHomeURL(HttpServletRequest request)
@@ -2408,26 +2456,12 @@ public class PortalImpl implements Portal {
 		String i18nPath = themeDisplay.getI18nPath();
 
 		try {
-			String tempI18nLanguageId = null;
-			String tempI18nPath = null;
-
-			if ((I18nFilter.getLanguageIds().contains(locale.toString()) &&
-				 ((PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE == 1) &&
-				  !locale.equals(LocaleUtil.getDefault()))) ||
-				(PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE == 2)) {
-
-				tempI18nLanguageId = locale.toString();
-				tempI18nPath = buildI18NPath(locale);
-			}
-
-			themeDisplay.setI18nLanguageId(tempI18nLanguageId);
-			themeDisplay.setI18nPath(tempI18nPath);
+			setThemeDisplayI18n(themeDisplay, locale);
 
 			return getLayoutFriendlyURL(layout, themeDisplay);
 		}
 		finally {
-			themeDisplay.setI18nLanguageId(i18nLanguageId);
-			themeDisplay.setI18nPath(i18nPath);
+			resetThemeDisplayI18n(themeDisplay, i18nLanguageId, i18nPath);
 		}
 	}
 
@@ -3083,7 +3117,10 @@ public class PortalImpl implements Portal {
 
 		StringBundler sb = new StringBundler();
 
-		if (secure || Http.HTTPS.equals(PropsValues.WEB_SERVER_PROTOCOL)) {
+		boolean https =
+			secure || Http.HTTPS.equals(PropsValues.WEB_SERVER_PROTOCOL);
+
+		if (https) {
 			sb.append(Http.HTTPS_WITH_SLASH);
 		}
 		else {
@@ -3097,7 +3134,7 @@ public class PortalImpl implements Portal {
 			sb.append(PropsValues.WEB_SERVER_HOST);
 		}
 
-		if (!secure) {
+		if (!https) {
 			if (PropsValues.WEB_SERVER_HTTP_PORT == -1) {
 				if ((serverPort != Http.HTTP_PORT) &&
 					(serverPort != Http.HTTPS_PORT)) {
@@ -3113,8 +3150,7 @@ public class PortalImpl implements Portal {
 				}
 			}
 		}
-
-		if (secure) {
+		else {
 			if (PropsValues.WEB_SERVER_HTTPS_PORT == -1) {
 				if ((serverPort != Http.HTTP_PORT) &&
 					(serverPort != Http.HTTPS_PORT)) {
@@ -4046,8 +4082,16 @@ public class PortalImpl implements Portal {
 			while (uniqueElementIds.contains(
 						namespace.concat(uniqueElementId))) {
 
-				uniqueElementId = elementId.concat(StringPool.UNDERLINE).concat(
-					String.valueOf(i));
+				if (Validator.isNull(elementId) ||
+						elementId.endsWith(StringPool.UNDERLINE)) {
+
+					uniqueElementId = elementId.concat(String.valueOf(i));
+				}
+				else {
+					uniqueElementId =
+						elementId.concat(StringPool.UNDERLINE).concat(
+							String.valueOf(i));
+				}
 
 				i++;
 			}
@@ -4906,6 +4950,18 @@ public class PortalImpl implements Portal {
 		return permissionChecker.isGroupAdmin(groupId);
 	}
 
+	public boolean isGroupFriendlyURL(
+		String fullURL, String groupFriendlyURL, String layoutFriendlyURL) {
+
+		if (fullURL.endsWith(groupFriendlyURL) &&
+			!fullURL.endsWith(groupFriendlyURL.concat(layoutFriendlyURL))) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	public boolean isGroupOwner(User user, long groupId) throws Exception {
 		PermissionChecker permissionChecker =
 			PermissionCheckerFactoryUtil.create(user);
@@ -5698,6 +5754,12 @@ public class PortalImpl implements Portal {
 			primaryKey = portletPrimaryKey;
 		}
 		else {
+			Group group = GroupLocalServiceUtil.fetchGroup(groupId);
+
+			if ((group != null) && group.isStagingGroup()) {
+				groupId = group.getLiveGroupId();
+			}
+
 			name = ResourceActionsUtil.getPortletBaseResource(rootPortletId);
 			primaryKey = String.valueOf(groupId);
 		}
@@ -5812,8 +5874,8 @@ public class PortalImpl implements Portal {
 						DefaultControlPanelEntryFactory.getInstance();
 				}
 
-				if (!controlPanelEntry.isVisible(
-						portlet, category, themeDisplay)) {
+				if (!controlPanelEntry.hasAccessPermission(
+						themeDisplay.getPermissionChecker(), group, portlet)) {
 
 					itr.remove();
 				}
@@ -6274,6 +6336,32 @@ public class PortalImpl implements Portal {
 		}
 
 		return url;
+	}
+
+	protected void resetThemeDisplayI18n(
+		ThemeDisplay themeDisplay, String languageId, String path) {
+
+		themeDisplay.setI18nLanguageId(languageId);
+		themeDisplay.setI18nPath(path);
+	}
+
+	protected void setThemeDisplayI18n(
+		ThemeDisplay themeDisplay, Locale locale) {
+
+		String i18nLanguageId = null;
+		String i18nPath = null;
+
+		if ((I18nFilter.getLanguageIds().contains(locale.toString()) &&
+			((PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE == 1) &&
+				!locale.equals(LocaleUtil.getDefault()))) ||
+			(PropsValues.LOCALE_PREPEND_FRIENDLY_URL_STYLE == 2)) {
+
+			i18nLanguageId = locale.toString();
+			i18nPath = buildI18NPath(locale);
+		}
+
+		themeDisplay.setI18nLanguageId(i18nLanguageId);
+		themeDisplay.setI18nPath(i18nPath);
 	}
 
 	private static final String _J_SECURITY_CHECK = "j_security_check";

@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.ContainerModel;
-import com.liferay.portal.model.Group;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.ServiceContext;
@@ -29,7 +28,7 @@ import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.trash.model.TrashEntry;
 
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 import javax.portlet.PortletRequest;
@@ -65,19 +64,6 @@ public abstract class BaseTrashHandler implements TrashHandler {
 		throws PortalException, SystemException {
 	}
 
-	/**
-	 * Deletes the group's attachments that were trashed before the given date.
-	 *
-	 * @param  group ID the primary key of the group
-	 * @param  date the date from which attachments will be deleted
-	 * @throws PortalException if any one of the attachment file paths were
-	 *         invalid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void deleteTrashAttachments(Group group, Date date)
-		throws PortalException, SystemException {
-	}
-
 	public void deleteTrashEntries(long[] classPKs)
 		throws PortalException, SystemException {
 
@@ -109,6 +95,10 @@ public abstract class BaseTrashHandler implements TrashHandler {
 		throws PortalException, SystemException {
 
 		return null;
+	}
+
+	public String getContainerModelClassName() {
+		return StringPool.BLANK;
 	}
 
 	public String getContainerModelName() {
@@ -150,7 +140,7 @@ public abstract class BaseTrashHandler implements TrashHandler {
 			long classPK, long containerModelId, int start, int end)
 		throws PortalException, SystemException {
 
-		return null;
+		return Collections.emptyList();
 	}
 
 	/**
@@ -179,6 +169,26 @@ public abstract class BaseTrashHandler implements TrashHandler {
 
 	public String getDeleteMessage() {
 		return "deleted-in-x";
+	}
+
+	/**
+	 * @throws PortalException
+	 * @throws SystemException if a system exception occurred
+	 */
+	public ContainerModel getParentContainerModel(long classPK)
+		throws PortalException, SystemException {
+
+		return null;
+	}
+
+	/**
+	 * @throws PortalException
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<ContainerModel> getParentContainerModels(long containerModelId)
+		throws PortalException, SystemException {
+
+		return Collections.emptyList();
 	}
 
 	/**
@@ -220,6 +230,56 @@ public abstract class BaseTrashHandler implements TrashHandler {
 
 	public String getSubcontainerModelName() {
 		return StringPool.BLANK;
+	}
+
+	public String getTrashContainedModelName() {
+		return StringPool.BLANK;
+	}
+
+	/**
+	 * @throws PortalException
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int getTrashContainedModelsCount(long classPK)
+		throws PortalException, SystemException {
+
+		return 0;
+	}
+
+	/**
+	 * @throws PortalException
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<TrashRenderer> getTrashContainedModelTrashRenderers(
+			long classPK, int start, int end)
+		throws PortalException, SystemException {
+
+		return Collections.emptyList();
+	}
+
+	public String getTrashContainerModelName() {
+		return StringPool.BLANK;
+	}
+
+	/**
+	 * @throws PortalException
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int getTrashContainerModelsCount(long classPK)
+		throws PortalException, SystemException {
+
+		return 0;
+	}
+
+	/**
+	 * @throws PortalException
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<TrashRenderer> getTrashContainerModelTrashRenderers(
+			long classPK, int start, int end)
+		throws PortalException, SystemException {
+
+		return Collections.emptyList();
 	}
 
 	public TrashRenderer getTrashRenderer(long classPK)
@@ -265,6 +325,14 @@ public abstract class BaseTrashHandler implements TrashHandler {
 		return hasPermission(permissionChecker, classPK, actionId);
 	}
 
+	public boolean isContainerModel() {
+		return false;
+	}
+
+	public boolean isMovable() {
+		return false;
+	}
+
 	/**
 	 * Returns <code>true</code> if the trash entry can be restored to its
 	 * original location.
@@ -288,7 +356,16 @@ public abstract class BaseTrashHandler implements TrashHandler {
 		return true;
 	}
 
-	public TrashEntry moveTrashEntry(
+	/**
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public void moveEntry(
+			long classPK, long containerModelId, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+	}
+
+	public void moveTrashEntry(
 			long classPK, long containerModelId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 

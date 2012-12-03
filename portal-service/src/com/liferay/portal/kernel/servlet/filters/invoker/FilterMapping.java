@@ -57,6 +57,10 @@ public class FilterMapping {
 			return false;
 		}
 
+		Matcher matcher = _uriJSessionIdPattern.matcher(uri);
+
+		uri = matcher.replaceFirst(StringPool.BLANK);
+
 		boolean matchURLPattern = false;
 
 		for (String urlPattern : _urlPatterns) {
@@ -241,6 +245,8 @@ public class FilterMapping {
 	private boolean _dispatcherInclude;
 	private boolean _dispatcherRequest;
 	private Filter _filter;
+	private Pattern _uriJSessionIdPattern = Pattern.compile(
+		";jsessionid=[0-9A-F]*");
 	private List<String> _urlPatterns;
 	private Pattern _urlRegexIgnorePattern;
 	private Pattern _urlRegexPattern;

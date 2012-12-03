@@ -15,7 +15,6 @@
 package com.liferay.portlet.messageboards.service.persistence;
 
 import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -33,9 +32,9 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.portlet.messageboards.NoSuchDiscussionException;
@@ -73,6 +72,15 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, MBDiscussionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, MBDiscussionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CLASSNAMEID =
 		new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
 			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, MBDiscussionImpl.class,
@@ -80,8 +88,8 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID =
 		new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
@@ -93,467 +101,6 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByClassNameId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_THREADID = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, MBDiscussionImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByThreadId",
-			new String[] { Long.class.getName() },
-			MBDiscussionModelImpl.THREADID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_THREADID = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByThreadId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_C = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, MBDiscussionImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			MBDiscussionModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			MBDiscussionModelImpl.CLASSPK_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, MBDiscussionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, MBDiscussionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the message boards discussion in the entity cache if it is enabled.
-	 *
-	 * @param mbDiscussion the message boards discussion
-	 */
-	public void cacheResult(MBDiscussion mbDiscussion) {
-		EntityCacheUtil.putResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionImpl.class, mbDiscussion.getPrimaryKey(), mbDiscussion);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
-			new Object[] { Long.valueOf(mbDiscussion.getThreadId()) },
-			mbDiscussion);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-			new Object[] {
-				Long.valueOf(mbDiscussion.getClassNameId()),
-				Long.valueOf(mbDiscussion.getClassPK())
-			}, mbDiscussion);
-
-		mbDiscussion.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the message boards discussions in the entity cache if it is enabled.
-	 *
-	 * @param mbDiscussions the message boards discussions
-	 */
-	public void cacheResult(List<MBDiscussion> mbDiscussions) {
-		for (MBDiscussion mbDiscussion : mbDiscussions) {
-			if (EntityCacheUtil.getResult(
-						MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-						MBDiscussionImpl.class, mbDiscussion.getPrimaryKey()) == null) {
-				cacheResult(mbDiscussion);
-			}
-			else {
-				mbDiscussion.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all message boards discussions.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(MBDiscussionImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(MBDiscussionImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the message boards discussion.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(MBDiscussion mbDiscussion) {
-		EntityCacheUtil.removeResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionImpl.class, mbDiscussion.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(mbDiscussion);
-	}
-
-	@Override
-	public void clearCache(List<MBDiscussion> mbDiscussions) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (MBDiscussion mbDiscussion : mbDiscussions) {
-			EntityCacheUtil.removeResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-				MBDiscussionImpl.class, mbDiscussion.getPrimaryKey());
-
-			clearUniqueFindersCache(mbDiscussion);
-		}
-	}
-
-	protected void clearUniqueFindersCache(MBDiscussion mbDiscussion) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_THREADID,
-			new Object[] { Long.valueOf(mbDiscussion.getThreadId()) });
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
-			new Object[] {
-				Long.valueOf(mbDiscussion.getClassNameId()),
-				Long.valueOf(mbDiscussion.getClassPK())
-			});
-	}
-
-	/**
-	 * Creates a new message boards discussion with the primary key. Does not add the message boards discussion to the database.
-	 *
-	 * @param discussionId the primary key for the new message boards discussion
-	 * @return the new message boards discussion
-	 */
-	public MBDiscussion create(long discussionId) {
-		MBDiscussion mbDiscussion = new MBDiscussionImpl();
-
-		mbDiscussion.setNew(true);
-		mbDiscussion.setPrimaryKey(discussionId);
-
-		return mbDiscussion;
-	}
-
-	/**
-	 * Removes the message boards discussion with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param discussionId the primary key of the message boards discussion
-	 * @return the message boards discussion that was removed
-	 * @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a message boards discussion with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBDiscussion remove(long discussionId)
-		throws NoSuchDiscussionException, SystemException {
-		return remove(Long.valueOf(discussionId));
-	}
-
-	/**
-	 * Removes the message boards discussion with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the message boards discussion
-	 * @return the message boards discussion that was removed
-	 * @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a message boards discussion with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MBDiscussion remove(Serializable primaryKey)
-		throws NoSuchDiscussionException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			MBDiscussion mbDiscussion = (MBDiscussion)session.get(MBDiscussionImpl.class,
-					primaryKey);
-
-			if (mbDiscussion == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchDiscussionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(mbDiscussion);
-		}
-		catch (NoSuchDiscussionException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected MBDiscussion removeImpl(MBDiscussion mbDiscussion)
-		throws SystemException {
-		mbDiscussion = toUnwrappedModel(mbDiscussion);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (mbDiscussion.isCachedModel()) {
-				mbDiscussion = (MBDiscussion)session.get(MBDiscussionImpl.class,
-						mbDiscussion.getPrimaryKeyObj());
-			}
-
-			if (mbDiscussion != null) {
-				session.delete(mbDiscussion);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		if (mbDiscussion != null) {
-			clearCache(mbDiscussion);
-		}
-
-		return mbDiscussion;
-	}
-
-	@Override
-	public MBDiscussion updateImpl(
-		com.liferay.portlet.messageboards.model.MBDiscussion mbDiscussion)
-		throws SystemException {
-		mbDiscussion = toUnwrappedModel(mbDiscussion);
-
-		boolean isNew = mbDiscussion.isNew();
-
-		MBDiscussionModelImpl mbDiscussionModelImpl = (MBDiscussionModelImpl)mbDiscussion;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			if (mbDiscussion.isNew()) {
-				session.save(mbDiscussion);
-
-				mbDiscussion.setNew(false);
-			}
-			else {
-				session.merge(mbDiscussion);
-			}
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !MBDiscussionModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((mbDiscussionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(mbDiscussionModelImpl.getOriginalClassNameId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(mbDiscussionModelImpl.getClassNameId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-			MBDiscussionImpl.class, mbDiscussion.getPrimaryKey(), mbDiscussion);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
-				new Object[] { Long.valueOf(mbDiscussion.getThreadId()) },
-				mbDiscussion);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-				new Object[] {
-					Long.valueOf(mbDiscussion.getClassNameId()),
-					Long.valueOf(mbDiscussion.getClassPK())
-				}, mbDiscussion);
-		}
-		else {
-			if ((mbDiscussionModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_THREADID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(mbDiscussionModelImpl.getOriginalThreadId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_THREADID, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_THREADID, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
-					new Object[] { Long.valueOf(mbDiscussion.getThreadId()) },
-					mbDiscussion);
-			}
-
-			if ((mbDiscussionModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_C_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(mbDiscussionModelImpl.getOriginalClassNameId()),
-						Long.valueOf(mbDiscussionModelImpl.getOriginalClassPK())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
-					new Object[] {
-						Long.valueOf(mbDiscussion.getClassNameId()),
-						Long.valueOf(mbDiscussion.getClassPK())
-					}, mbDiscussion);
-			}
-		}
-
-		return mbDiscussion;
-	}
-
-	protected MBDiscussion toUnwrappedModel(MBDiscussion mbDiscussion) {
-		if (mbDiscussion instanceof MBDiscussionImpl) {
-			return mbDiscussion;
-		}
-
-		MBDiscussionImpl mbDiscussionImpl = new MBDiscussionImpl();
-
-		mbDiscussionImpl.setNew(mbDiscussion.isNew());
-		mbDiscussionImpl.setPrimaryKey(mbDiscussion.getPrimaryKey());
-
-		mbDiscussionImpl.setDiscussionId(mbDiscussion.getDiscussionId());
-		mbDiscussionImpl.setClassNameId(mbDiscussion.getClassNameId());
-		mbDiscussionImpl.setClassPK(mbDiscussion.getClassPK());
-		mbDiscussionImpl.setThreadId(mbDiscussion.getThreadId());
-
-		return mbDiscussionImpl;
-	}
-
-	/**
-	 * Returns the message boards discussion with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the message boards discussion
-	 * @return the message boards discussion
-	 * @throws com.liferay.portal.NoSuchModelException if a message boards discussion with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MBDiscussion findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the message boards discussion with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchDiscussionException} if it could not be found.
-	 *
-	 * @param discussionId the primary key of the message boards discussion
-	 * @return the message boards discussion
-	 * @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a message boards discussion with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBDiscussion findByPrimaryKey(long discussionId)
-		throws NoSuchDiscussionException, SystemException {
-		MBDiscussion mbDiscussion = fetchByPrimaryKey(discussionId);
-
-		if (mbDiscussion == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + discussionId);
-			}
-
-			throw new NoSuchDiscussionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				discussionId);
-		}
-
-		return mbDiscussion;
-	}
-
-	/**
-	 * Returns the message boards discussion with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the message boards discussion
-	 * @return the message boards discussion, or <code>null</code> if a message boards discussion with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MBDiscussion fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the message boards discussion with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param discussionId the primary key of the message boards discussion
-	 * @return the message boards discussion, or <code>null</code> if a message boards discussion with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBDiscussion fetchByPrimaryKey(long discussionId)
-		throws SystemException {
-		MBDiscussion mbDiscussion = (MBDiscussion)EntityCacheUtil.getResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-				MBDiscussionImpl.class, discussionId);
-
-		if (mbDiscussion == _nullMBDiscussion) {
-			return null;
-		}
-
-		if (mbDiscussion == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				mbDiscussion = (MBDiscussion)session.get(MBDiscussionImpl.class,
-						Long.valueOf(discussionId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (mbDiscussion != null) {
-					cacheResult(mbDiscussion);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
-						MBDiscussionImpl.class, discussionId, _nullMBDiscussion);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return mbDiscussion;
-	}
 
 	/**
 	 * Returns all the message boards discussions where classNameId = &#63;.
@@ -572,7 +119,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 * Returns a range of all the message boards discussions where classNameId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param classNameId the class name ID
@@ -590,7 +137,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 * Returns an ordered range of all the message boards discussions where classNameId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param classNameId the class name ID
@@ -602,11 +149,13 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	public List<MBDiscussion> findByClassNameId(long classNameId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID;
 			finderArgs = new Object[] { classNameId };
 		}
@@ -636,7 +185,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_MBDISCUSSION_WHERE);
@@ -646,6 +195,10 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(MBDiscussionModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -661,22 +214,29 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 
 				qPos.add(classNameId);
 
-				list = (List<MBDiscussion>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<MBDiscussion>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<MBDiscussion>(list);
+				}
+				else {
+					list = (List<MBDiscussion>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -900,6 +460,9 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 				}
 			}
 		}
+		else {
+			query.append(MBDiscussionModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -929,6 +492,82 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the message boards discussions where classNameId = &#63; from the database.
+	 *
+	 * @param classNameId the class name ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByClassNameId(long classNameId) throws SystemException {
+		for (MBDiscussion mbDiscussion : findByClassNameId(classNameId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(mbDiscussion);
+		}
+	}
+
+	/**
+	 * Returns the number of message boards discussions where classNameId = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @return the number of matching message boards discussions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByClassNameId(long classNameId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_CLASSNAMEID;
+
+		Object[] finderArgs = new Object[] { classNameId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MBDISCUSSION_WHERE);
+
+			query.append(_FINDER_COLUMN_CLASSNAMEID_CLASSNAMEID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_CLASSNAMEID_CLASSNAMEID_2 = "mbDiscussion.classNameId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_THREADID = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, MBDiscussionImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByThreadId",
+			new String[] { Long.class.getName() },
+			MBDiscussionModelImpl.THREADID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_THREADID = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByThreadId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns the message boards discussion where threadId = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchDiscussionException} if it could not be found.
@@ -1002,7 +641,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_SELECT_MBDISCUSSION_WHERE);
 
@@ -1023,16 +662,14 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 
 				List<MBDiscussion> list = q.list();
 
-				result = list;
-
-				MBDiscussion mbDiscussion = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
 						finderArgs, list);
 				}
 				else {
-					mbDiscussion = list.get(0);
+					MBDiscussion mbDiscussion = list.get(0);
+
+					result = mbDiscussion;
 
 					cacheResult(mbDiscussion);
 
@@ -1041,30 +678,103 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 							finderArgs, mbDiscussion);
 					}
 				}
-
-				return mbDiscussion;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_THREADID,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_THREADID,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (MBDiscussion)result;
-			}
+			return (MBDiscussion)result;
 		}
 	}
+
+	/**
+	 * Removes the message boards discussion where threadId = &#63; from the database.
+	 *
+	 * @param threadId the thread ID
+	 * @return the message boards discussion that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBDiscussion removeByThreadId(long threadId)
+		throws NoSuchDiscussionException, SystemException {
+		MBDiscussion mbDiscussion = findByThreadId(threadId);
+
+		return remove(mbDiscussion);
+	}
+
+	/**
+	 * Returns the number of message boards discussions where threadId = &#63;.
+	 *
+	 * @param threadId the thread ID
+	 * @return the number of matching message boards discussions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByThreadId(long threadId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_THREADID;
+
+		Object[] finderArgs = new Object[] { threadId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MBDISCUSSION_WHERE);
+
+			query.append(_FINDER_COLUMN_THREADID_THREADID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(threadId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_THREADID_THREADID_2 = "mbDiscussion.threadId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_C_C = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, MBDiscussionImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MBDiscussionModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			MBDiscussionModelImpl.CLASSPK_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the message boards discussion where classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.portlet.messageboards.NoSuchDiscussionException} if it could not be found.
@@ -1145,7 +855,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_MBDISCUSSION_WHERE);
 
@@ -1170,16 +880,14 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 
 				List<MBDiscussion> list = q.list();
 
-				result = list;
-
-				MBDiscussion mbDiscussion = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
 						finderArgs, list);
 				}
 				else {
-					mbDiscussion = list.get(0);
+					MBDiscussion mbDiscussion = list.get(0);
+
+					result = mbDiscussion;
 
 					cacheResult(mbDiscussion);
 
@@ -1189,29 +897,532 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 							finderArgs, mbDiscussion);
 					}
 				}
-
-				return mbDiscussion;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
+			return (MBDiscussion)result;
+		}
+	}
+
+	/**
+	 * Removes the message boards discussion where classNameId = &#63; and classPK = &#63; from the database.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the message boards discussion that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBDiscussion removeByC_C(long classNameId, long classPK)
+		throws NoSuchDiscussionException, SystemException {
+		MBDiscussion mbDiscussion = findByC_C(classNameId, classPK);
+
+		return remove(mbDiscussion);
+	}
+
+	/**
+	 * Returns the number of message boards discussions where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the number of matching message boards discussions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_C(long classNameId, long classPK)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_C;
+
+		Object[] finderArgs = new Object[] { classNameId, classPK };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MBDISCUSSION_WHERE);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
-			else {
-				return (MBDiscussion)result;
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
 			}
 		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "mbDiscussion.classNameId = ? AND ";
+	private static final String _FINDER_COLUMN_C_C_CLASSPK_2 = "mbDiscussion.classPK = ?";
+
+	/**
+	 * Caches the message boards discussion in the entity cache if it is enabled.
+	 *
+	 * @param mbDiscussion the message boards discussion
+	 */
+	public void cacheResult(MBDiscussion mbDiscussion) {
+		EntityCacheUtil.putResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionImpl.class, mbDiscussion.getPrimaryKey(), mbDiscussion);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
+			new Object[] { Long.valueOf(mbDiscussion.getThreadId()) },
+			mbDiscussion);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
+			new Object[] {
+				Long.valueOf(mbDiscussion.getClassNameId()),
+				Long.valueOf(mbDiscussion.getClassPK())
+			}, mbDiscussion);
+
+		mbDiscussion.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the message boards discussions in the entity cache if it is enabled.
+	 *
+	 * @param mbDiscussions the message boards discussions
+	 */
+	public void cacheResult(List<MBDiscussion> mbDiscussions) {
+		for (MBDiscussion mbDiscussion : mbDiscussions) {
+			if (EntityCacheUtil.getResult(
+						MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+						MBDiscussionImpl.class, mbDiscussion.getPrimaryKey()) == null) {
+				cacheResult(mbDiscussion);
+			}
+			else {
+				mbDiscussion.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all message boards discussions.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(MBDiscussionImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(MBDiscussionImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the message boards discussion.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(MBDiscussion mbDiscussion) {
+		EntityCacheUtil.removeResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionImpl.class, mbDiscussion.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(mbDiscussion);
+	}
+
+	@Override
+	public void clearCache(List<MBDiscussion> mbDiscussions) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (MBDiscussion mbDiscussion : mbDiscussions) {
+			EntityCacheUtil.removeResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+				MBDiscussionImpl.class, mbDiscussion.getPrimaryKey());
+
+			clearUniqueFindersCache(mbDiscussion);
+		}
+	}
+
+	protected void clearUniqueFindersCache(MBDiscussion mbDiscussion) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_THREADID,
+			new Object[] { Long.valueOf(mbDiscussion.getThreadId()) });
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C,
+			new Object[] {
+				Long.valueOf(mbDiscussion.getClassNameId()),
+				Long.valueOf(mbDiscussion.getClassPK())
+			});
+	}
+
+	/**
+	 * Creates a new message boards discussion with the primary key. Does not add the message boards discussion to the database.
+	 *
+	 * @param discussionId the primary key for the new message boards discussion
+	 * @return the new message boards discussion
+	 */
+	public MBDiscussion create(long discussionId) {
+		MBDiscussion mbDiscussion = new MBDiscussionImpl();
+
+		mbDiscussion.setNew(true);
+		mbDiscussion.setPrimaryKey(discussionId);
+
+		return mbDiscussion;
+	}
+
+	/**
+	 * Removes the message boards discussion with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param discussionId the primary key of the message boards discussion
+	 * @return the message boards discussion that was removed
+	 * @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a message boards discussion with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBDiscussion remove(long discussionId)
+		throws NoSuchDiscussionException, SystemException {
+		return remove(Long.valueOf(discussionId));
+	}
+
+	/**
+	 * Removes the message boards discussion with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the message boards discussion
+	 * @return the message boards discussion that was removed
+	 * @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a message boards discussion with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MBDiscussion remove(Serializable primaryKey)
+		throws NoSuchDiscussionException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MBDiscussion mbDiscussion = (MBDiscussion)session.get(MBDiscussionImpl.class,
+					primaryKey);
+
+			if (mbDiscussion == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchDiscussionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(mbDiscussion);
+		}
+		catch (NoSuchDiscussionException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected MBDiscussion removeImpl(MBDiscussion mbDiscussion)
+		throws SystemException {
+		mbDiscussion = toUnwrappedModel(mbDiscussion);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(mbDiscussion)) {
+				mbDiscussion = (MBDiscussion)session.get(MBDiscussionImpl.class,
+						mbDiscussion.getPrimaryKeyObj());
+			}
+
+			if (mbDiscussion != null) {
+				session.delete(mbDiscussion);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (mbDiscussion != null) {
+			clearCache(mbDiscussion);
+		}
+
+		return mbDiscussion;
+	}
+
+	@Override
+	public MBDiscussion updateImpl(
+		com.liferay.portlet.messageboards.model.MBDiscussion mbDiscussion)
+		throws SystemException {
+		mbDiscussion = toUnwrappedModel(mbDiscussion);
+
+		boolean isNew = mbDiscussion.isNew();
+
+		MBDiscussionModelImpl mbDiscussionModelImpl = (MBDiscussionModelImpl)mbDiscussion;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (mbDiscussion.isNew()) {
+				session.save(mbDiscussion);
+
+				mbDiscussion.setNew(false);
+			}
+			else {
+				session.merge(mbDiscussion);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !MBDiscussionModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((mbDiscussionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(mbDiscussionModelImpl.getOriginalClassNameId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(mbDiscussionModelImpl.getClassNameId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CLASSNAMEID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+			MBDiscussionImpl.class, mbDiscussion.getPrimaryKey(), mbDiscussion);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
+				new Object[] { Long.valueOf(mbDiscussion.getThreadId()) },
+				mbDiscussion);
+
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
+				new Object[] {
+					Long.valueOf(mbDiscussion.getClassNameId()),
+					Long.valueOf(mbDiscussion.getClassPK())
+				}, mbDiscussion);
+		}
+		else {
+			if ((mbDiscussionModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_THREADID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(mbDiscussionModelImpl.getOriginalThreadId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_THREADID, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_THREADID, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_THREADID,
+					new Object[] { Long.valueOf(mbDiscussion.getThreadId()) },
+					mbDiscussion);
+			}
+
+			if ((mbDiscussionModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_C_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(mbDiscussionModelImpl.getOriginalClassNameId()),
+						Long.valueOf(mbDiscussionModelImpl.getOriginalClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_C, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_C,
+					new Object[] {
+						Long.valueOf(mbDiscussion.getClassNameId()),
+						Long.valueOf(mbDiscussion.getClassPK())
+					}, mbDiscussion);
+			}
+		}
+
+		return mbDiscussion;
+	}
+
+	protected MBDiscussion toUnwrappedModel(MBDiscussion mbDiscussion) {
+		if (mbDiscussion instanceof MBDiscussionImpl) {
+			return mbDiscussion;
+		}
+
+		MBDiscussionImpl mbDiscussionImpl = new MBDiscussionImpl();
+
+		mbDiscussionImpl.setNew(mbDiscussion.isNew());
+		mbDiscussionImpl.setPrimaryKey(mbDiscussion.getPrimaryKey());
+
+		mbDiscussionImpl.setDiscussionId(mbDiscussion.getDiscussionId());
+		mbDiscussionImpl.setClassNameId(mbDiscussion.getClassNameId());
+		mbDiscussionImpl.setClassPK(mbDiscussion.getClassPK());
+		mbDiscussionImpl.setThreadId(mbDiscussion.getThreadId());
+
+		return mbDiscussionImpl;
+	}
+
+	/**
+	 * Returns the message boards discussion with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the message boards discussion
+	 * @return the message boards discussion
+	 * @throws com.liferay.portal.NoSuchModelException if a message boards discussion with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MBDiscussion findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the message boards discussion with the primary key or throws a {@link com.liferay.portlet.messageboards.NoSuchDiscussionException} if it could not be found.
+	 *
+	 * @param discussionId the primary key of the message boards discussion
+	 * @return the message boards discussion
+	 * @throws com.liferay.portlet.messageboards.NoSuchDiscussionException if a message boards discussion with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBDiscussion findByPrimaryKey(long discussionId)
+		throws NoSuchDiscussionException, SystemException {
+		MBDiscussion mbDiscussion = fetchByPrimaryKey(discussionId);
+
+		if (mbDiscussion == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + discussionId);
+			}
+
+			throw new NoSuchDiscussionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				discussionId);
+		}
+
+		return mbDiscussion;
+	}
+
+	/**
+	 * Returns the message boards discussion with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the message boards discussion
+	 * @return the message boards discussion, or <code>null</code> if a message boards discussion with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MBDiscussion fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the message boards discussion with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param discussionId the primary key of the message boards discussion
+	 * @return the message boards discussion, or <code>null</code> if a message boards discussion with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBDiscussion fetchByPrimaryKey(long discussionId)
+		throws SystemException {
+		MBDiscussion mbDiscussion = (MBDiscussion)EntityCacheUtil.getResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+				MBDiscussionImpl.class, discussionId);
+
+		if (mbDiscussion == _nullMBDiscussion) {
+			return null;
+		}
+
+		if (mbDiscussion == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				mbDiscussion = (MBDiscussion)session.get(MBDiscussionImpl.class,
+						Long.valueOf(discussionId));
+
+				if (mbDiscussion != null) {
+					cacheResult(mbDiscussion);
+				}
+				else {
+					EntityCacheUtil.putResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+						MBDiscussionImpl.class, discussionId, _nullMBDiscussion);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(MBDiscussionModelImpl.ENTITY_CACHE_ENABLED,
+					MBDiscussionImpl.class, discussionId);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return mbDiscussion;
 	}
 
 	/**
@@ -1228,7 +1439,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 * Returns a range of all the message boards discussions.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of message boards discussions
@@ -1245,7 +1456,7 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 * Returns an ordered range of all the message boards discussions.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portlet.messageboards.model.impl.MBDiscussionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of message boards discussions
@@ -1256,11 +1467,13 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	 */
 	public List<MBDiscussion> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1289,6 +1502,10 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 			}
 			else {
 				sql = _SQL_SELECT_MBDISCUSSION;
+
+				if (pagination) {
+					sql = sql.concat(MBDiscussionModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1298,76 +1515,34 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<MBDiscussion>)QueryUtil.list(q, getDialect(),
 							start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<MBDiscussion>(list);
 				}
 				else {
 					list = (List<MBDiscussion>)QueryUtil.list(q, getDialect(),
 							start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the message boards discussions where classNameId = &#63; from the database.
-	 *
-	 * @param classNameId the class name ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByClassNameId(long classNameId) throws SystemException {
-		for (MBDiscussion mbDiscussion : findByClassNameId(classNameId)) {
-			remove(mbDiscussion);
-		}
-	}
-
-	/**
-	 * Removes the message boards discussion where threadId = &#63; from the database.
-	 *
-	 * @param threadId the thread ID
-	 * @return the message boards discussion that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBDiscussion removeByThreadId(long threadId)
-		throws NoSuchDiscussionException, SystemException {
-		MBDiscussion mbDiscussion = findByThreadId(threadId);
-
-		return remove(mbDiscussion);
-	}
-
-	/**
-	 * Removes the message boards discussion where classNameId = &#63; and classPK = &#63; from the database.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @return the message boards discussion that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MBDiscussion removeByC_C(long classNameId, long classPK)
-		throws NoSuchDiscussionException, SystemException {
-		MBDiscussion mbDiscussion = findByC_C(classNameId, classPK);
-
-		return remove(mbDiscussion);
 	}
 
 	/**
@@ -1379,171 +1554,6 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 		for (MBDiscussion mbDiscussion : findAll()) {
 			remove(mbDiscussion);
 		}
-	}
-
-	/**
-	 * Returns the number of message boards discussions where classNameId = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @return the number of matching message boards discussions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByClassNameId(long classNameId) throws SystemException {
-		Object[] finderArgs = new Object[] { classNameId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MBDISCUSSION_WHERE);
-
-			query.append(_FINDER_COLUMN_CLASSNAMEID_CLASSNAMEID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classNameId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSNAMEID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of message boards discussions where threadId = &#63;.
-	 *
-	 * @param threadId the thread ID
-	 * @return the number of matching message boards discussions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByThreadId(long threadId) throws SystemException {
-		Object[] finderArgs = new Object[] { threadId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_THREADID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MBDISCUSSION_WHERE);
-
-			query.append(_FINDER_COLUMN_THREADID_THREADID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(threadId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_THREADID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of message boards discussions where classNameId = &#63; and classPK = &#63;.
-	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
-	 * @return the number of matching message boards discussions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_C(long classNameId, long classPK)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { classNameId, classPK };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_MBDISCUSSION_WHERE);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1565,18 +1575,17 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 				Query q = session.createQuery(_SQL_COUNT_MBDISCUSSION);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1612,35 +1621,14 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 	public void destroy() {
 		EntityCacheUtil.removeCache(MBDiscussionImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = MBBanPersistence.class)
-	protected MBBanPersistence mbBanPersistence;
-	@BeanReference(type = MBCategoryPersistence.class)
-	protected MBCategoryPersistence mbCategoryPersistence;
-	@BeanReference(type = MBDiscussionPersistence.class)
-	protected MBDiscussionPersistence mbDiscussionPersistence;
-	@BeanReference(type = MBMailingListPersistence.class)
-	protected MBMailingListPersistence mbMailingListPersistence;
-	@BeanReference(type = MBMessagePersistence.class)
-	protected MBMessagePersistence mbMessagePersistence;
-	@BeanReference(type = MBStatsUserPersistence.class)
-	protected MBStatsUserPersistence mbStatsUserPersistence;
-	@BeanReference(type = MBThreadPersistence.class)
-	protected MBThreadPersistence mbThreadPersistence;
-	@BeanReference(type = MBThreadFlagPersistence.class)
-	protected MBThreadFlagPersistence mbThreadFlagPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_MBDISCUSSION = "SELECT mbDiscussion FROM MBDiscussion mbDiscussion";
 	private static final String _SQL_SELECT_MBDISCUSSION_WHERE = "SELECT mbDiscussion FROM MBDiscussion mbDiscussion WHERE ";
 	private static final String _SQL_COUNT_MBDISCUSSION = "SELECT COUNT(mbDiscussion) FROM MBDiscussion mbDiscussion";
 	private static final String _SQL_COUNT_MBDISCUSSION_WHERE = "SELECT COUNT(mbDiscussion) FROM MBDiscussion mbDiscussion WHERE ";
-	private static final String _FINDER_COLUMN_CLASSNAMEID_CLASSNAMEID_2 = "mbDiscussion.classNameId = ?";
-	private static final String _FINDER_COLUMN_THREADID_THREADID_2 = "mbDiscussion.threadId = ?";
-	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "mbDiscussion.classNameId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_CLASSPK_2 = "mbDiscussion.classPK = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "mbDiscussion.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No MBDiscussion exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No MBDiscussion exists with the key {";

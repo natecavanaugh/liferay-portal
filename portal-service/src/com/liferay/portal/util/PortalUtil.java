@@ -539,20 +539,53 @@ public class PortalUtil {
 			group, privateLayoutSet, themeDisplay);
 	}
 
+	public static String getGroupFriendlyURL(
+			Group group, boolean privateLayoutSet, ThemeDisplay themeDisplay,
+			Locale locale)
+		throws PortalException, SystemException {
+
+		return getPortal().getGroupFriendlyURL(
+			group, privateLayoutSet, themeDisplay, locale);
+	}
+
 	public static String[] getGroupPermissions(HttpServletRequest request) {
 		return getPortal().getGroupPermissions(request);
+	}
+
+	public static String[] getGroupPermissions(
+		HttpServletRequest request, String className) {
+
+		return getPortal().getGroupPermissions(request, className);
 	}
 
 	public static String[] getGroupPermissions(PortletRequest portletRequest) {
 		return getPortal().getGroupPermissions(portletRequest);
 	}
 
+	public static String[] getGroupPermissions(
+		PortletRequest portletRequest, String className) {
+
+		return getPortal().getGroupPermissions(portletRequest, className);
+	}
+
 	public static String[] getGuestPermissions(HttpServletRequest request) {
 		return getPortal().getGuestPermissions(request);
 	}
 
+	public static String[] getGuestPermissions(
+		HttpServletRequest request, String className) {
+
+		return getPortal().getGuestPermissions(request, className);
+	}
+
 	public static String[] getGuestPermissions(PortletRequest portletRequest) {
 		return getPortal().getGuestPermissions(portletRequest);
+	}
+
+	public static String[] getGuestPermissions(
+		PortletRequest portletRequest, String className) {
+
+		return getPortal().getGuestPermissions(portletRequest, className);
 	}
 
 	public static String getHomeURL(HttpServletRequest request)
@@ -1412,6 +1445,13 @@ public class PortalUtil {
 		throws Exception {
 
 		return getPortal().isGroupAdmin(user, groupId);
+	}
+
+	public static boolean isGroupFriendlyURL(
+		String fullURL, String groupFriendlyURL, String layoutFriendlyURL) {
+
+		return getPortal().isGroupFriendlyURL(
+			fullURL, groupFriendlyURL, layoutFriendlyURL);
 	}
 
 	public static boolean isGroupOwner(User user, long groupId)

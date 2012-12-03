@@ -23,8 +23,11 @@ import com.liferay.portal.kernel.util.CamelCaseUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MethodParameter;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.ServiceContext;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
@@ -79,6 +82,22 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 		}
 
 		return new JSONRPCResponse(jsonRPCRequest, result, exception);
+	}
+
+	private Object _convertListToArray(List<?> list, Class<?> componentType) {
+		Object array = Array.newInstance(componentType, list.size());
+
+		for (int i = 0; i < list.size(); i++) {
+			Object entry = list.get(i);
+
+			if (entry != null) {
+				entry = TypeConverterManager.convertType(entry, componentType);
+			}
+
+			Array.set(array, i, entry);
+		}
+
+		return array;
 	}
 
 	private Object _createDefaultParameterValue(
@@ -239,13 +258,22 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 
 					calendar.setLenient(false);
 					calendar.setTimeInMillis(
-						GetterUtil.getLong(value.toString()));
+						GetterUtil.getLong(_valueToString(value)));
 
 					parameterValue = calendar;
 				}
 				else if (parameterType.equals(List.class)) {
+					String stringValue = _valueToString(value);
+
+					stringValue = stringValue.trim();
+
+					if (!stringValue.startsWith(StringPool.OPEN_BRACKET)) {
+						stringValue = StringPool.OPEN_BRACKET.concat(
+							stringValue).concat(StringPool.CLOSE_BRACKET);
+					}
+
 					List<?> list = JSONFactoryUtil.looseDeserializeSafe(
-						value.toString(), ArrayList.class);
+						stringValue, ArrayList.class);
 
 					list = _generifyList(
 						list, methodParameters[i].getGenericTypes());
@@ -254,20 +282,53 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 				}
 				else if (parameterType.equals(Locale.class)) {
 					parameterValue = LocaleUtil.fromLanguageId(
-						value.toString());
+						_valueToString(value));
 				}
 				else if (parameterType.equals(Map.class)) {
 					Map<?, ?> map = JSONFactoryUtil.looseDeserializeSafe(
-						value.toString(), HashMap.class);
+						_valueToString(value), HashMap.class);
 
 					map = _generifyMap(
 						map, methodParameters[i].getGenericTypes());
 
 					parameterValue = map;
 				}
+				else if (parameterType.isArray()) {
+					String stringValue = _valueToString(value);
+
+					stringValue = stringValue.trim();
+
+					if (!stringValue.startsWith(StringPool.OPEN_BRACKET)) {
+						stringValue = StringPool.OPEN_BRACKET.concat(
+							stringValue).concat(StringPool.CLOSE_BRACKET);
+					}
+
+					List<?> list = JSONFactoryUtil.looseDeserializeSafe(
+						stringValue, ArrayList.class);
+
+					parameterValue = _convertListToArray(
+						list, parameterType.getComponentType());
+
+				}
 				else {
-					parameterValue = TypeConverterManager.convertType(
-						value, parameterType);
+					try {
+						parameterValue = TypeConverterManager.convertType(
+							value, parameterType);
+					}
+					catch (ClassCastException cce) {
+						String stringValue = _valueToString(value);
+
+						stringValue = stringValue.trim();
+
+						if (!stringValue.startsWith(
+								StringPool.OPEN_CURLY_BRACE)) {
+
+							throw cce;
+						}
+
+						parameterValue = JSONFactoryUtil.looseDeserializeSafe(
+							stringValue, parameterType);
+					}
 				}
 			}
 
@@ -277,6 +338,16 @@ public class JSONWebServiceActionImpl implements JSONWebServiceAction {
 		}
 
 		return parameters;
+	}
+
+	private String _valueToString(Object value) {
+		Class<?> valueType = value.getClass();
+
+		if (valueType.isArray()) {
+			return StringUtil.merge((Object[])value);
+		}
+
+		return value.toString();
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

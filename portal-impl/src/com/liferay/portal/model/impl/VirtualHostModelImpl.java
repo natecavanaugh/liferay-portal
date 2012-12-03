@@ -63,6 +63,8 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 		};
 	public static final String TABLE_SQL_CREATE = "create table VirtualHost (virtualHostId LONG not null primary key,companyId LONG,layoutSetId LONG,hostname VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table VirtualHost";
+	public static final String ORDER_BY_JPQL = " ORDER BY virtualHost.virtualHostId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY VirtualHost.virtualHostId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -78,6 +80,7 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long HOSTNAME_COLUMN_BITMASK = 2L;
 	public static long LAYOUTSETID_COLUMN_BITMASK = 4L;
+	public static long VIRTUALHOSTID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
 				"lock.expiration.time.com.liferay.portal.model.VirtualHost"));
 
@@ -237,13 +240,12 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 
 	@Override
 	public VirtualHost toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (VirtualHost)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (VirtualHost)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -389,7 +391,7 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 	}
 
 	private static ClassLoader _classLoader = VirtualHost.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			VirtualHost.class
 		};
 	private long _virtualHostId;
@@ -402,5 +404,5 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 	private String _hostname;
 	private String _originalHostname;
 	private long _columnBitmask;
-	private VirtualHost _escapedModelProxy;
+	private VirtualHost _escapedModel;
 }

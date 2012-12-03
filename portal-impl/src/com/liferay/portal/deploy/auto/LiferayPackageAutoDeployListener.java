@@ -28,7 +28,8 @@ import java.io.File;
 public class LiferayPackageAutoDeployListener extends BaseAutoDeployListener {
 
 	public LiferayPackageAutoDeployListener() {
-		_autoDeployer = new LiferayPackageAutoDeployer();
+		_autoDeployer = new ThreadSafeAutoDeployer(
+			new LiferayPackageAutoDeployer());
 	}
 
 	public void deploy(AutoDeploymentContext autoDeploymentContext)

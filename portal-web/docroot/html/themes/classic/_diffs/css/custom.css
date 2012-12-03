@@ -27,8 +27,17 @@ p { line-height: 1.25; }
 .site-navigation a { border-radius: 0.5em; color: inherit; outline: 0; }
 .site-navigation a:focus, .site-navigation a:hover { background: #333; box-shadow: inset 0 0.375em 1em rgba(0,0,0,0.5); color: #FFF; }
 
+<<<<<<< HEAD
 .site-navigation .expand { display: none; height: 1em; width: 0.25em; }
 .site-navigation .expand:after { border-radius: 0.25em; -webkit-box-shadow: 0 1em #EEE, 0 1.5em #EEE, 0 2em #EEE; box-shadow: 0 1em, 0 1.5em, 0 2em; content: ""; height: 0.25em; position: absolute; right: 0.625em; top: -0.625em; width: 1.5em; }
+=======
+.portlet-asset-publisher .asset-content, .portlet-asset-publisher .asset-summary, .portlet-asset-publisher .asset-title, .portlet-asset-publisher .header-title, .portlet-asset-publisher li.title-list, .portlet-asset-publisher .results-row, .portlet-blogs .entry-body, .portlet-blogs .entry-title, .portlet-blogs .header-title, .portlet-journal-content .journal-content-article, .portlet-message-boards .header-title, .portlet-message-boards .thread-body, .portlet-search .results-row {
+	@include hyphenation;
+}
+
+.portlet-icons {
+	float: none;
+>>>>>>> 5b8ea42797253f6a5260ad97250238387c83c077
 
 .site-navigation .search { float: right; margin: 0 0.25em; position: relative; }
 
