@@ -260,7 +260,7 @@ if (scriptJSONArray != null) {
 	);
 </aui:script>
 
-<aui:script use="liferay-portlet-dynamic-data-mapping">
+<aui:script use="liferay-portlet-dynamic-data-mapping-init">
 	Liferay.provide(
 		window,
 		'<portlet:namespace />saveStructure',
