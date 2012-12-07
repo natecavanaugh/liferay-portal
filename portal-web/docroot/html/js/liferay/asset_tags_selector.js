@@ -287,7 +287,7 @@ AUI.add(
 					_getTagsDataSource: function() {
 						var instance = this;
 
-						var AssetTagSearch = Liferay.Service.bind('/assettag/search');
+						var AssetTagSearch = Liferay.Service.sbind('/assettag/search');
 
 						AssetTagSearch._serviceQueryCache = {};
 
