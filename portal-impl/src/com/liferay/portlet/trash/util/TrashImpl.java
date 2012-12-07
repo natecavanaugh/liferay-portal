@@ -322,6 +322,6 @@ public class TrashImpl implements Trash {
 		return title.substring(0, index);
 	}
 
-	private Log _log = LogFactoryUtil.getLog(TrashImpl.class);
+	private static Log _log = LogFactoryUtil.getLog(TrashImpl.class);
 
 }
