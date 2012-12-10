@@ -98,6 +98,7 @@ public class SourceFormatter {
 						_formatSQL();
 						_formatStrutsConfigXML();
 						_formatTilesDefsXML();
+						_formatTLD();
 						_formatWebXML();
 					}
 					catch (Exception e) {
@@ -601,7 +602,7 @@ public class SourceFormatter {
 
 	private static void _compareJavaTermNames(
 		String fileName, String previousJavaTermName, String javaTermName,
-		int lineCount) {
+		int javaTermType, int lineCount) {
 
 		if (Validator.isNull(previousJavaTermName) ||
 			Validator.isNull(javaTermName)) {
@@ -609,24 +610,26 @@ public class SourceFormatter {
 			return;
 		}
 
-		if (javaTermName.equals("_log")) {
-			_sourceFormatterHelper.printError(
-				fileName, "sort: " + fileName + " " + lineCount);
+		if (javaTermType == _TYPE_VARIABLE_PRIVATE_STATIC) {
+			if (javaTermName.equals("_log")) {
+				_sourceFormatterHelper.printError(
+					fileName, "sort: " + fileName + " " + lineCount);
 
-			return;
-		}
+				return;
+			}
 
-		if (previousJavaTermName.equals("_instance") ||
-			previousJavaTermName.equals("_log")) {
+			if (previousJavaTermName.equals("_instance") ||
+				previousJavaTermName.equals("_log")) {
 
-			return;
-		}
+				return;
+			}
 
-		if (javaTermName.equals("_instance")) {
-			_sourceFormatterHelper.printError(
-				fileName, "sort: " + fileName + " " + lineCount);
+			if (javaTermName.equals("_instance")) {
+				_sourceFormatterHelper.printError(
+					fileName, "sort: " + fileName + " " + lineCount);
 
-			return;
+				return;
+			}
 		}
 
 		if (previousJavaTermName.compareToIgnoreCase(javaTermName) <= 0) {
@@ -1679,7 +1682,8 @@ public class SourceFormatter {
 									else {
 										_compareJavaTermNames(
 											fileName, previousJavaTermName,
-											javaTermName, lineCount);
+											javaTermName, javaTermType,
+											lineCount);
 									}
 								}
 							}
@@ -3084,6 +3088,36 @@ public class SourceFormatter {
 			_fileUtil.write(file, newContent);
 
 			_sourceFormatterHelper.printError(fileName, file);
+		}
+	}
+
+	private static void _formatTLD() throws IOException {
+		String basedir = "./";
+
+		DirectoryScanner directoryScanner = new DirectoryScanner();
+
+		directoryScanner.setBasedir(basedir);
+		directoryScanner.setIncludes(new String[] {"**\\*.tld"});
+		directoryScanner.setExcludes(
+			new String[] {
+				"**\\classes\\**", "**\\bin\\**", "**\\WEB-INF\\tld\\**"
+			});
+
+		List<String> fileNames = _sourceFormatterHelper.scanForFiles(
+			directoryScanner);
+
+		for (String fileName : fileNames) {
+			File file = new File(basedir + fileName);
+
+			String content = _fileUtil.read(file);
+
+			String newContent = _trimContent(content);
+
+			if ((newContent != null) && !content.equals(newContent)) {
+				_fileUtil.write(file, newContent);
+
+				_sourceFormatterHelper.printError(fileName, file);
+			}
 		}
 	}
 

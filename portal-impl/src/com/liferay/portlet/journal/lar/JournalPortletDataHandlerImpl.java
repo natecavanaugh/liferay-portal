@@ -401,17 +401,8 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		String content = article.getContent();
 
-		content = importDLFileEntries(
+		content = importReferencedContent(
 			portletDataContext, articleElement, content);
-
-		Group group = GroupLocalServiceUtil.getGroup(
-			portletDataContext.getScopeGroupId());
-
-		content = StringUtil.replace(
-			content, "@data_handler_group_friendly_url@",
-			group.getFriendlyURL());
-
-		content = importLinksToLayout(portletDataContext, content);
 
 		article.setContent(content);
 
@@ -961,14 +952,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		content = importDLFileEntries(
 			portletDataContext, parentElement, content);
-
-		Group group = GroupLocalServiceUtil.getGroup(
-			portletDataContext.getScopeGroupId());
-
-		content = StringUtil.replace(
-			content, "@data_handler_group_friendly_url@",
-			group.getFriendlyURL());
-
+		content = importLayoutFriendlyURLs(portletDataContext, content);
 		content = importLinksToLayout(portletDataContext, content);
 
 		return content;
@@ -1225,13 +1209,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		String xsl = template.getXsl();
 
-		xsl = importDLFileEntries(portletDataContext, templateElement, xsl);
-
-		Group group = GroupLocalServiceUtil.getGroup(
-			portletDataContext.getScopeGroupId());
-
-		xsl = StringUtil.replace(
-			xsl, "@data_handler_group_friendly_url@", group.getFriendlyURL());
+		xsl = importReferencedContent(portletDataContext, templateElement, xsl);
 
 		template.setXsl(xsl);
 
@@ -1781,22 +1759,22 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		StringBuilder sb = new StringBuilder(content);
 
-		String friendlyURLPrivateGroupPath =
+		String privateGroupServletMapping =
 			PropsValues.LAYOUT_FRIENDLY_URL_PRIVATE_GROUP_SERVLET_MAPPING;
-		String friendlyURLPrivateUserPath =
+		String privateUserServletMapping =
 			PropsValues.LAYOUT_FRIENDLY_URL_PRIVATE_USER_SERVLET_MAPPING;
-		String friendlyURLPublicPath =
+		String publicServletMapping =
 			PropsValues.LAYOUT_FRIENDLY_URL_PUBLIC_SERVLET_MAPPING;
 
 		String portalContextPath = PortalUtil.getPathContext();
 
 		if (Validator.isNotNull(portalContextPath)) {
-			friendlyURLPrivateGroupPath = portalContextPath.concat(
-				friendlyURLPrivateGroupPath);
-			friendlyURLPrivateUserPath = portalContextPath.concat(
-				friendlyURLPrivateUserPath);
-			friendlyURLPublicPath = portalContextPath.concat(
-				friendlyURLPublicPath);
+			privateGroupServletMapping = portalContextPath.concat(
+				privateGroupServletMapping);
+			privateUserServletMapping = portalContextPath.concat(
+				privateUserServletMapping);
+			publicServletMapping = portalContextPath.concat(
+				publicServletMapping);
 		}
 
 		String href = "href=";
@@ -1873,9 +1851,9 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 			String url = content.substring(beginPos + hrefLength, endPos);
 
-			if (!url.startsWith(friendlyURLPrivateGroupPath) &&
-				!url.startsWith(friendlyURLPrivateUserPath) &&
-				!url.startsWith(friendlyURLPublicPath)) {
+			if (!url.startsWith(privateGroupServletMapping) &&
+				!url.startsWith(privateUserServletMapping) &&
+				!url.startsWith(publicServletMapping)) {
 
 				beginPos--;
 
@@ -1914,6 +1892,25 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 					beginGroupPos, endGroupPos,
 					"@data_handler_group_friendly_url@");
 			}
+
+			String dataHandlerServletMapping = StringPool.BLANK;
+
+			if (url.startsWith(privateGroupServletMapping)) {
+				dataHandlerServletMapping =
+					"@data_handler_private_group_servlet_mapping@";
+			}
+			else if (url.startsWith(privateUserServletMapping)) {
+				dataHandlerServletMapping =
+					"@data_handler_private_user_servlet_mapping@";
+			}
+			else {
+				dataHandlerServletMapping =
+					"@data_handler_public_servlet_mapping@";
+			}
+
+			sb.replace(
+				beginPos + hrefLength, beginGroupPos,
+				dataHandlerServletMapping);
 
 			beginPos--;
 		}
@@ -2387,6 +2384,48 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		portletDataContext.importClassedModel(
 			folder, importedFolder, _NAMESPACE);
+	}
+
+	protected static String importLayoutFriendlyURLs(
+			PortletDataContext portletDataContext, String content)
+		throws Exception {
+
+		String privateGroupServletMapping =
+			PropsValues.LAYOUT_FRIENDLY_URL_PRIVATE_GROUP_SERVLET_MAPPING;
+		String privateUserServletMapping =
+			PropsValues.LAYOUT_FRIENDLY_URL_PRIVATE_USER_SERVLET_MAPPING;
+		String publicServletMapping =
+			PropsValues.LAYOUT_FRIENDLY_URL_PUBLIC_SERVLET_MAPPING;
+
+		String portalContextPath = PortalUtil.getPathContext();
+
+		if (Validator.isNotNull(portalContextPath)) {
+			privateGroupServletMapping = portalContextPath.concat(
+				privateGroupServletMapping);
+			privateUserServletMapping = portalContextPath.concat(
+				privateUserServletMapping);
+			publicServletMapping = portalContextPath.concat(
+				publicServletMapping);
+		}
+
+		content = StringUtil.replace(
+			content, "@data_handler_private_group_servlet_mapping@",
+			privateGroupServletMapping);
+		content = StringUtil.replace(
+			content, "@data_handler_private_user_servlet_mapping@",
+			privateUserServletMapping);
+		content = StringUtil.replace(
+			content, "@data_handler_public_servlet_mapping@",
+			publicServletMapping);
+
+		Group group = GroupLocalServiceUtil.getGroup(
+			portletDataContext.getScopeGroupId());
+
+		content = StringUtil.replace(
+			content, "@data_handler_group_friendly_url@",
+			group.getFriendlyURL());
+
+		return content;
 	}
 
 	protected static String importLinksToLayout(

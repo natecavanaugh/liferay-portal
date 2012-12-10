@@ -174,6 +174,14 @@ public abstract class BaseSeleniumImpl
 			"getFirstNumberIncrement", new String[] {locator,});
 	}
 
+	public String getNumberDecrement(String value) {
+		return LiferaySeleniumHelper.getNumberDecrement(value);
+	}
+
+	public String getNumberIncrement(String value) {
+		return LiferaySeleniumHelper.getNumberIncrement(value);
+	}
+
 	public void goBackAndWait() {
 		super.goBack();
 		super.waitForPageToLoad("30000");

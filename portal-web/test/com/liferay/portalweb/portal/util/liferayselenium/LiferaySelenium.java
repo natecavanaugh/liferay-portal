@@ -85,6 +85,10 @@ public interface LiferaySelenium extends Selenium {
 
 	public String getFirstNumberIncrement(String locator);
 
+	public String getNumberDecrement(String value);
+
+	public String getNumberIncrement(String value);
+
 	public void goBackAndWait();
 
 	public boolean isElementNotPresent(String locator);

@@ -64,9 +64,22 @@ public class FlexjsonObjectJSONTransformer
 			PathExpression pathExpression = new PathExpression(
 				path.concat(name), false);
 
-			if (!pathExpressions.contains(pathExpression)) {
-				pathExpressions.add(pathExpression);
+			for (int i = 0; i < pathExpressions.size(); i++) {
+				PathExpression curPathExpression = pathExpressions.get(i);
+
+				if (pathExpression.equals(curPathExpression) &&
+					curPathExpression.isIncluded()) {
+
+					// Same path expression found, but it was included,
+					// therefore, replace it with the excluded path expression
+
+					pathExpressions.set(i, pathExpression);
+
+					return;
+				}
 			}
+
+			pathExpressions.add(pathExpression);
 		}
 	}
 

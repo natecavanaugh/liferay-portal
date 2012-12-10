@@ -160,7 +160,7 @@ for (int i = 0; i < locales.length; i++) {
 }
 %>
 
-<aui:script position="inline" use="liferay-portlet-dynamic-data-mapping">
+<aui:script use="aui-datepicker,json,liferay-portlet-dynamic-data-lists,liferay-portlet-dynamic-data-mapping,liferay-portlet-dynamic-data-mapping-custom-fields">
 	var availableFields;
 
 	<c:if test="<%= Validator.isNotNull(scopeAvailableFields) %>">
@@ -199,4 +199,11 @@ for (int i = 0; i < locales.length; i++) {
 			srcNode: '#<portlet:namespace />formBuilderContent'
 		}
 	).render();
+
+	Liferay.fire(
+		'<portlet:namespace />formBuilderLoaded',
+		{
+			formBuilder: window.<portlet:namespace />formBuilder
+		}
+	);
 </aui:script>

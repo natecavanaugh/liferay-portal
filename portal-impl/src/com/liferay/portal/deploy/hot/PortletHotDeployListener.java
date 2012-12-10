@@ -24,6 +24,8 @@ import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
 import com.liferay.portal.kernel.deploy.hot.HotDeployException;
 import com.liferay.portal.kernel.javadoc.JavadocManagerUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.lar.StagedModelDataHandler;
+import com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletBag;
@@ -219,6 +221,14 @@ public class PortletHotDeployListener extends BaseHotDeployListener {
 						schedulerEntry, StorageType.MEMORY_CLUSTERED);
 				}
 			}
+		}
+
+		List<StagedModelDataHandler<?>> stagedModelDataHandlers =
+			portlet.getStagedModelDataHandlerInstances();
+
+		if (stagedModelDataHandlers != null) {
+			StagedModelDataHandlerRegistryUtil.unregister(
+				stagedModelDataHandlers);
 		}
 
 		PollerProcessorUtil.deletePollerProcessor(portlet.getPortletId());

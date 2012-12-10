@@ -79,6 +79,8 @@ public class PropsValues {
 
 	public static final boolean ASSET_CATEGORIES_SEARCH_HIERARCHICAL = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ASSET_CATEGORIES_SEARCH_HIERARCHICAL));
 
+	public static final int ASSET_CATEGORIES_SELECTOR_MAX_ENTRIES = GetterUtil.getInteger(PropsUtil.get(PropsKeys.ASSET_CATEGORIES_SELECTOR_MAX_ENTRIES));
+
 	public static final boolean ASSET_ENTRY_INCREMENT_VIEW_COUNTER_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ASSET_ENTRY_INCREMENT_VIEW_COUNTER_ENABLED));
 
 	public static final String ASSET_ENTRY_VALIDATOR = PropsUtil.get(PropsKeys.ASSET_ENTRY_VALIDATOR);
@@ -783,10 +785,6 @@ public class PropsValues {
 
 	public static final boolean JOURNAL_PUBLISH_VERSION_HISTORY_BY_DEFAULT = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.JOURNAL_PUBLISH_VERSION_HISTORY_BY_DEFAULT));
 
-	public static final boolean JOURNAL_STRUCTURE_FORCE_AUTOGENERATE_ID = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.JOURNAL_STRUCTURE_FORCE_AUTOGENERATE_ID));
-
-	public static final boolean JOURNAL_TEMPLATE_FORCE_AUTOGENERATE_ID = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.JOURNAL_TEMPLATE_FORCE_AUTOGENERATE_ID));
-
 	public static final String[] JOURNAL_TEMPLATE_FREEMARKER_RESTRICTED_VARIABLES = PropsUtil.getArray(PropsKeys.JOURNAL_TEMPLATE_FREEMARKER_RESTRICTED_VARIABLES);
 
 	public static final String[] JOURNAL_TEMPLATE_VELOCITY_RESTRICTED_VARIABLES = PropsUtil.getArray(PropsKeys.JOURNAL_TEMPLATE_VELOCITY_RESTRICTED_VARIABLES);
@@ -1164,6 +1162,8 @@ public class PropsValues {
 	public static final long[] OMNIADMIN_USERS = StringUtil.split(PropsUtil.get(PropsKeys.OMNIADMIN_USERS), 0L);
 
 	public static final boolean OPEN_ID_AUTH_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.OPEN_ID_AUTH_ENABLED));
+
+	public static final String[] OPEN_ID_PROVIDERS = PropsUtil.getArray(PropsKeys.OPEN_ID_PROVIDERS);
 
 	public static final boolean OPEN_SSO_AUTH_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.OPEN_SSO_AUTH_ENABLED));
 

@@ -148,7 +148,7 @@ public class MBMessageServiceImpl extends MBMessageServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		MBMessage parentMessage = mbMessagePersistence.fetchByPrimaryKey(
+		MBMessage parentMessage = mbMessagePersistence.findByPrimaryKey(
 			parentMessageId);
 
 		checkReplyToPermission(
@@ -640,7 +640,7 @@ public class MBMessageServiceImpl extends MBMessageServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		MBMessage message = mbMessageLocalService.getMessage(messageId);
+		MBMessage message = mbMessagePersistence.findByPrimaryKey(messageId);
 
 		boolean preview = ParamUtil.getBoolean(serviceContext, "preview");
 
@@ -697,11 +697,7 @@ public class MBMessageServiceImpl extends MBMessageServiceBaseImpl {
 				return;
 			}
 
-			MBMessage parentMessage = mbMessagePersistence.fetchByPrimaryKey(
-				parentMessageId);
-
-			if ((parentMessage == null) ||
-				!MBCategoryPermission.contains(
+			if (!MBCategoryPermission.contains(
 					getPermissionChecker(), groupId, categoryId,
 					ActionKeys.REPLY_TO_MESSAGE)) {
 

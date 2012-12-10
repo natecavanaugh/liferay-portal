@@ -40,9 +40,8 @@ public abstract class BasePortalFilter extends BaseFilter {
 		return _log;
 	}
 
-	private Log _log = LogFactoryUtil.getLog(getClass());
-
 	private boolean _filterEnabled = GetterUtil.getBoolean(
 		PropsUtil.get(getClass().getName()), true);
+	private Log _log = LogFactoryUtil.getLog(getClass());
 
 }

@@ -480,7 +480,9 @@
 
 			<!-- Dependent Libraries -->
 
+			<arg value="util-bridges/util-bridges.jar" />
 			<arg value="util-java/util-java.jar" />
+			<arg value="util-taglib/util-taglib.jar" />
 		</java>
 
 		<java
@@ -506,7 +508,9 @@
 
 			<!-- Dependent Libraries -->
 
+			<arg value="util-bridges/util-bridges.jar" />
 			<arg value="util-java/util-java.jar" />
+			<arg value="util-taglib/util-taglib.jar" />
 		</java>
 
 		<java
@@ -525,6 +529,12 @@
 			<jvmarg value="-Ddeployer.app.server.type=${deployer.app.server.type}" />
 			<jvmarg value="-Ddeployer.unpack.war=true" />
 			<jvmarg value="-Ddeployer.file.pattern=*-layouttpl-*.war" />
+
+			<!-- Dependent Libraries -->
+
+			<arg value="util-bridges/util-bridges.jar" />
+			<arg value="util-java/util-java.jar" />
+			<arg value="util-taglib/util-taglib.jar" />
 		</java>
 
 		<java
@@ -587,6 +597,7 @@
 
 			<!-- Dependent Libraries -->
 
+			<arg value="util-bridges/util-bridges.jar" />
 			<arg value="util-java/util-java.jar" />
 			<arg value="util-taglib/util-taglib.jar" />
 		</java>
@@ -614,7 +625,9 @@
 
 			<!-- Dependent Libraries -->
 
+			<arg value="util-bridges/util-bridges.jar" />
 			<arg value="util-java/util-java.jar" />
+			<arg value="util-taglib/util-taglib.jar" />
 		</java>
 	</target>
 
@@ -947,6 +960,8 @@ release was successful.</echo>
 					<replacevalue>
 						<![CDATA[
 							<paths>
+								<path name="com/sun/crypto" />
+								<path name="com/sun/crypto/provider" />
 								<path name="com/sun/image/codec/jpeg" />
 								<path name="com/sun/org/apache/xml/internal/resolver" />
 								<path name="com/sun/org/apache/xml/internal/resolver/tools" />

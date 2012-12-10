@@ -33,7 +33,9 @@ public class JSONFactoryTest extends TestCase {
 	public void setUp() throws Exception {
 		JSONInit.init();
 
-		new JSONFactoryUtil().setJSONFactory(new JSONFactoryImpl());
+		JSONFactoryUtil jsonFactoryUtil = new JSONFactoryUtil();
+
+		jsonFactoryUtil.setJSONFactory(new JSONFactoryImpl());
 	}
 
 	public void testHasProperty() {

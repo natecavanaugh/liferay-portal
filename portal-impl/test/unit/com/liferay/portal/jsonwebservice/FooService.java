@@ -26,6 +26,14 @@ import java.util.Locale;
  */
 public class FooService {
 
+	public static BarData bar() {
+		return new BarData();
+	}
+
+	public static String camel(String goodName, String badNAME) {
+		return goodName + '*' + badNAME;
+	}
+
 	public static FooData getFooData(int id) {
 		FooData fooData = new FooDataImpl();
 

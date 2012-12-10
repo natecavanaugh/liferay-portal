@@ -130,6 +130,6 @@ public class CreoleWikiEngine implements WikiEngine {
 		return creole10Parser.getWikiPageNode();
 	}
 
-	private Log _log = LogFactoryUtil.getLog(CreoleWikiEngine.class);
+	private static Log _log = LogFactoryUtil.getLog(CreoleWikiEngine.class);
 
 }

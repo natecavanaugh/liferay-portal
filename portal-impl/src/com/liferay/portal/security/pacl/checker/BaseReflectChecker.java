@@ -17,12 +17,20 @@ package com.liferay.portal.security.pacl.checker;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.config.AbstractMessagingConfigurator;
+import com.liferay.portal.kernel.security.pacl.permission.CheckMemberAccessPermission;
 import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.kernel.util.PathUtil;
+import com.liferay.portal.kernel.util.ReferenceEntry;
+import com.liferay.portal.kernel.util.ReferenceRegistry;
 import com.liferay.portal.kernel.util.ServerDetector;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.security.pacl.PACLClassUtil;
 
 import java.beans.Introspector;
+
+import java.security.Permission;
+
+import jodd.util.ReflectUtil;
 
 import org.hibernate.property.BasicPropertyAccessor;
 import org.hibernate.tuple.entity.EntityTuplizerFactory;
@@ -38,10 +46,12 @@ import sun.reflect.Reflection;
 /**
  * @author Brian Wing Shun Chan
  * @author Raymond Augé
+ * @author Zsolt Berentey
  */
 public abstract class BaseReflectChecker extends BaseChecker {
 
-	protected boolean hasReflect(String name, String actions) {
+	protected boolean hasReflect(Permission permission) {
+
 		/*for (int i = 6; i <= 15; i++) {
 			System.out.println(
 				"Caller class " + i + " " + Reflection.getCallerClass(i));
@@ -49,13 +59,56 @@ public abstract class BaseReflectChecker extends BaseChecker {
 
 		// JSP compiler
 
+		String name = permission.getName();
+		String actions = permission.getActions();
+
 		if (isJSPCompiler(name, actions)) {
 			return true;
 		}
 
-		// com.caucho.config.reflect.ReflectionAnnotatedType
+		Class<?> callerClass9 = null;
 
-		Class<?> callerClass9 = Reflection.getCallerClass(9);
+		if (permission instanceof CheckMemberAccessPermission) {
+			CheckMemberAccessPermission checkMemberAccessPermission =
+				(CheckMemberAccessPermission)permission;
+
+			if (checkMemberAccessPermission.getCallerClass() ==
+					ReferenceRegistry.class) {
+
+				Class<?> checkMemberAccessPermissionCallerClass =
+					checkMemberAccessPermission.getCallerClass();
+
+				int depth = 9;
+
+				while (checkMemberAccessPermissionCallerClass ==
+							ReferenceRegistry.class) {
+
+					depth++;
+
+					checkMemberAccessPermissionCallerClass =
+						Reflection.getCallerClass(depth);
+				}
+
+				ClassLoader callerClassLoader =
+					PACLClassLoaderUtil.getClassLoader(
+						checkMemberAccessPermissionCallerClass);
+
+				if (callerClassLoader ==
+						checkMemberAccessPermission.getSubjectClassLoader()) {
+
+					logReflect(checkMemberAccessPermissionCallerClass, depth);
+
+					return true;
+				}
+			}
+
+			callerClass9 = checkMemberAccessPermission.getCallerClass();
+		}
+		else {
+			callerClass9 = Reflection.getCallerClass(9);
+		}
+
+		// com.caucho.config.reflect.ReflectionAnnotatedType
 
 		if (isResinReflectionAnnotatedType(callerClass9)) {
 			logReflect(callerClass9, 9);
@@ -90,13 +143,30 @@ public abstract class BaseReflectChecker extends BaseChecker {
 			}
 		//}
 
+		// jodd.util.ReflectUtil
+
+		if (callerClass9 == ReflectUtil.class) {
+			logReflect(callerClass9, 9);
+
+			return true;
+		}
+
 		// java.lang.Class
 
 		Class<?> callerClass7 = Reflection.getCallerClass(7);
+		Class<?> callerClass8 = Reflection.getCallerClass(8);
+
+		if (name.equals("suppressAccessChecks") &&
+			(callerClass7 == ReferenceEntry.class)) {
+
+			if (callerClass8 == ReferenceRegistry.class) {
+				logReflect(callerClass7, 7);
+
+				return true;
+			}
+		}
 
 		if (JavaDetector.isIBM() || JavaDetector.isJDK7()) {
-			Class<?> callerClass8 = Reflection.getCallerClass(8);
-
 			if ((callerClass8.getEnclosingClass() == Class.class) &&
 				CheckerUtil.isAccessControllerDoPrivileged(9)) {
 

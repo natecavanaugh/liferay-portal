@@ -20,6 +20,7 @@
 page import="com.liferay.portal.kernel.search.Document" %><%@
 page import="com.liferay.portal.kernel.search.FacetedSearcher" %><%@
 page import="com.liferay.portal.kernel.search.Hits" %><%@
+page import="com.liferay.portal.kernel.search.HitsOpenSearchImpl" %><%@
 page import="com.liferay.portal.kernel.search.Indexer" %><%@
 page import="com.liferay.portal.kernel.search.IndexerRegistryUtil" %><%@
 page import="com.liferay.portal.kernel.search.OpenSearch" %><%@
@@ -38,7 +39,6 @@ page import="com.liferay.portal.kernel.search.facet.config.FacetConfigurationUti
 page import="com.liferay.portal.kernel.search.facet.util.FacetFactoryUtil" %><%@
 page import="com.liferay.portal.kernel.search.facet.util.RangeParserUtil" %><%@
 page import="com.liferay.portal.kernel.util.DateFormatFactoryUtil" %><%@
-page import="com.liferay.portal.kernel.util.PortalClassLoaderUtil" %><%@
 page import="com.liferay.portal.kernel.xml.Element" %><%@
 page import="com.liferay.portal.kernel.xml.SAXReaderUtil" %><%@
 page import="com.liferay.portal.security.permission.comparator.ModelResourceComparator" %><%@

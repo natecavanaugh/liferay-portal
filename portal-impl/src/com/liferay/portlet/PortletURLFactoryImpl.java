@@ -26,17 +26,17 @@ import javax.servlet.http.HttpServletRequest;
 public class PortletURLFactoryImpl implements PortletURLFactory {
 
 	public LiferayPortletURL create(
-		HttpServletRequest request, String portletName, long plid,
+		HttpServletRequest request, String portletId, long plid,
 		String lifecycle) {
 
-		return new PortletURLImpl(request, portletName, plid, lifecycle);
+		return new PortletURLImpl(request, portletId, plid, lifecycle);
 	}
 
 	public LiferayPortletURL create(
-		PortletRequest portletRequest, String portletName, long plid,
+		PortletRequest portletRequest, String portletId, long plid,
 		String lifecycle) {
 
-		return new PortletURLImpl(portletRequest, portletName, plid, lifecycle);
+		return new PortletURLImpl(portletRequest, portletId, plid, lifecycle);
 	}
 
 }

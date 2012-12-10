@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.tools.servicebuilder.ServiceBuilder;
 import com.liferay.portal.util.InitUtil;
 import com.liferay.util.ant.Java2WsddTask;
 
@@ -60,7 +61,9 @@ public class WSDDBuilder {
 			FileUtil.write(_serverConfigFileName, serverConfigContent);
 		}
 
-		Document document = SAXReaderUtil.read(new File(_fileName), true);
+		String content = ServiceBuilder.getContent(_fileName);
+
+		Document document = SAXReaderUtil.read(content, true);
 
 		Element rootElement = document.getRootElement();
 

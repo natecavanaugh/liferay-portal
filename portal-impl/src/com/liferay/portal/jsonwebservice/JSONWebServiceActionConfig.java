@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.MethodParameter;
 import com.liferay.portal.kernel.util.MethodParametersResolverUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.lang.reflect.Method;
 
@@ -64,6 +65,28 @@ public class JSONWebServiceActionConfig
 		return _signature.compareTo(jsonWebServiceActionConfig._signature);
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+
+		if (!(object instanceof JSONWebServiceActionConfig)) {
+			return false;
+		}
+
+		JSONWebServiceActionConfig jsonWebServiceActionConfig =
+			(JSONWebServiceActionConfig)object;
+
+		if (Validator.equals(
+				_signature, jsonWebServiceActionConfig._signature)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	public Class<?> getActionClass() {
 		return _actionClass;
 	}
@@ -94,6 +117,11 @@ public class JSONWebServiceActionConfig
 
 	public String getSignature() {
 		return _signature;
+	}
+
+	@Override
+	public int hashCode() {
+		return _signature.hashCode();
 	}
 
 	@Override

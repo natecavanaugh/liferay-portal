@@ -27,7 +27,9 @@ public class JSONIncludesManagerTest extends TestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 
-		new JSONFactoryUtil().setJSONFactory(new JSONFactoryImpl());
+		JSONFactoryUtil jsonFactoryUtil = new JSONFactoryUtil();
+
+		jsonFactoryUtil.setJSONFactory(new JSONFactoryImpl());
 	}
 
 	public void testExtendsOne() {

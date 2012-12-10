@@ -50,6 +50,7 @@ AUI.add(
 		 * vocabularyGroupIds (string): The groupIds of the vocabularies.
 		 *
 		 * Optional
+		 * maxEntries {Number}: The maximum number of entries that will be loaded. The default value is -1, which will load all categories.
 		 * portalModelResource {boolean}: Whether the asset model is on the portal level.
 		 */
 
@@ -85,6 +86,10 @@ AUI.add(
 							return A.one(value) || A.Attribute.INVALID_VALUE;
 						},
 						value: null
+					},
+					maxEntries: {
+						validator: Lang.isNumber,
+						value: -1
 					},
 					singleSelect: {
 						validator: Lang.isBoolean,
@@ -259,9 +264,15 @@ AUI.add(
 
 						if (vocabularyIds.length > 0) {
 							Liferay.Service(
-								'/assetvocabulary/get-vocabularies',
 								{
-									vocabularyIds: vocabularyIds
+									'$vocabularies = /assetvocabulary/get-vocabularies': {
+										vocabularyIds: vocabularyIds,
+
+										'$categoriesCount = /assetcategory/get-vocabulary-categories-count': {
+											'groupId': themeDisplay.getScopeGroupId(),
+											'@vocabularyId': '$vocabularies.vocabularyId'
+										}
+									}
 								},
 								callback
 							);
@@ -274,10 +285,16 @@ AUI.add(
 							groupIds.push(themeDisplay.getCompanyGroupId());
 
 							Liferay.Service(
-								'/assetvocabulary/get-groups-vocabularies',
 								{
-									groupIds: groupIds,
-									className: className
+									'$vocabularies = /assetvocabulary/get-groups-vocabularies': {
+										groupIds: groupIds,
+										className: className,
+
+										'$categoriesCount = /assetcategory/get-vocabulary-categories-count': {
+											'groupId': '$vocabularies.groupId',
+											'@vocabularyId': '$vocabularies.vocabularyId'
+										}
+									}
 								},
 								callback
 							);
@@ -560,6 +577,22 @@ AUI.add(
 							type: 'io'
 						};
 
+						var paginatorConfig = {
+							offsetParam: 'start'
+						};
+
+						var maxEntries = instance.get('maxEntries');
+
+						if (maxEntries > 0) {
+							paginatorConfig.limit = maxEntries;
+							paginatorConfig.moreResultsLabel = Liferay.Language.get('load-more-results');
+							paginatorConfig.total = item.categoriesCount;
+						}
+						else {
+							paginatorConfig.end = -1;
+							paginatorConfig.start = -1;
+						}
+
 						instance.TREEVIEWS[vocabularyId] = new A.TreeView(
 							{
 								children: [vocabularyRootNode],
@@ -585,11 +618,7 @@ AUI.add(
 									formatter: A.bind(instance._formatJSONResult, instance),
 									url: themeDisplay.getPathMain() + '/asset/get_categories'
 								},
-								paginator: {
-									end: -1,
-									offsetParam: 'start',
-									start: -1
-								}
+								paginator: paginatorConfig
 							}
 						).render(popup.entriesNode);
 					}

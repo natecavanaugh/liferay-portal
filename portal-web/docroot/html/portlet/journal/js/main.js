@@ -618,7 +618,6 @@ AUI.add(
 					var form = instance.getPrincipalForm();
 
 					var groupId = instance.getByName(form, 'groupId');
-					var structureGroupId = instance.getByName(form, 'structureGroupId');
 					var structureIdInput = instance.getByName(form, 'structureId');
 					var structureNameInput = instance.getByName(form, 'structureName');
 					var structureDescriptionInput = instance.getByName(form, 'structureDescription');
@@ -2394,39 +2393,6 @@ AUI.add(
 						'click',
 						function() {
 							instance.previewArticle();
-						}
-					);
-				}
-
-				if (publishButton) {
-					publishButton.detach('click');
-
-					publishButton.on(
-						'click',
-						function() {
-							instance.saveArticle('publish');
-						}
-					);
-				}
-
-				if (saveButton) {
-					saveButton.detach('click');
-
-					saveButton.on(
-						'click',
-						function() {
-							instance.saveArticle();
-						}
-					);
-				}
-
-				if (translateButton) {
-					translateButton.detach('click');
-
-					translateButton.on(
-						'click',
-						function() {
-							instance.translateArticle();
 						}
 					);
 				}
