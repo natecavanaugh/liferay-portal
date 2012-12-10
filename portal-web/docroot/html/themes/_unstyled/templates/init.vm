@@ -8,7 +8,7 @@
 
 #set ($css_class = $theme_display.getColorScheme().getCssClass() + " yui3-skin-sam")
 
-#set ($liferay_toggle_controls = $sessionClicks.get($request, "liferay_toggle_controls", "visible"))
+#set ($liferay_toggle_controls = $sessionClicks.get($request, "liferay_toggle_controls", "hidden"))
 
 #if ($layout)
 	#set ($page_group = $layout.getGroup())
