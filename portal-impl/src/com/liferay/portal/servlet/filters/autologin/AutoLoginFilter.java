@@ -225,7 +225,7 @@ public class AutoLoginFilter extends BasePortalFilter {
 					sb.append("Current URL ");
 
 					String currentURL = PortalUtil.getCurrentURL(request);
-					
+
 					sb.append(currentURL);
 
 					sb.append(" generates exception: ");

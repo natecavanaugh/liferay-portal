@@ -48,7 +48,6 @@ html {
 
 body {
 	background: #FFF;
-	font: 62.5%/1.4 Arial, Helvetica, Verdana, sans-serif;
 
 	&.portal-popup {
 		background: none;
