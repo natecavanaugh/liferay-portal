@@ -53,8 +53,8 @@ public class BaseTranslationManagerTag extends com.liferay.taglib.util.IncludeTa
 		return _id;
 	}
 
-	public boolean getOnlyMarkup() {
-		return _onlyMarkup;
+	public boolean getInitialize() {
+		return _initialize;
 	}
 
 	public void setAvailableLocales(java.util.Locale[] availableLocales) {
@@ -87,10 +87,10 @@ public class BaseTranslationManagerTag extends com.liferay.taglib.util.IncludeTa
 		setScopedAttribute("id", id);
 	}
 
-	public void setOnlyMarkup(boolean onlyMarkup) {
-		_onlyMarkup = onlyMarkup;
+	public void setInitialize(boolean initialize) {
+		_initialize = initialize;
 
-		setScopedAttribute("onlyMarkup", onlyMarkup);
+		setScopedAttribute("initialize", initialize);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class BaseTranslationManagerTag extends com.liferay.taglib.util.IncludeTa
 		_defaultLanguageId = null;
 		_editingLanguageId = null;
 		_id = null;
-		_onlyMarkup = false;
+		_initialize = true;
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class BaseTranslationManagerTag extends com.liferay.taglib.util.IncludeTa
 		setNamespacedAttribute(request, "defaultLanguageId", _defaultLanguageId);
 		setNamespacedAttribute(request, "editingLanguageId", _editingLanguageId);
 		setNamespacedAttribute(request, "id", _id);
-		setNamespacedAttribute(request, "onlyMarkup", _onlyMarkup);
+		setNamespacedAttribute(request, "initialize", _initialize);
 	}
 
 	protected static final String _ATTRIBUTE_NAMESPACE = "aui:translation-manager:";
@@ -128,6 +128,6 @@ public class BaseTranslationManagerTag extends com.liferay.taglib.util.IncludeTa
 	private java.lang.String _defaultLanguageId = null;
 	private java.lang.String _editingLanguageId = null;
 	private java.lang.String _id = null;
-	private boolean _onlyMarkup = false;
+	private boolean _initialize = true;
 
 }
