@@ -33,10 +33,44 @@ DDLRecordVersion recordVersion = null;
 if (record != null) {
 	recordVersion = record.getLatestRecordVersion();
 }
+
+DDLRecordSet recordSet = DDLRecordSetLocalServiceUtil.getRecordSet(recordSetId);
+
+DDMStructure ddmStructure = recordSet.getDDMStructure(formDDMTemplateId);
+
+Fields fields = null;
+
+if (recordVersion != null) {
+	fields = StorageEngineUtil.getFields(recordVersion.getDDMStorageId());
+}
+
+String defaultLanguageId = themeDisplay.getLanguageId();
+String languageId = ParamUtil.getString(request, "languageId");
+
+Locale[] availableLocales = new Locale[] {};
+
+if (fields != null) {
+	availableLocales = fields.getAvailableLocales().toArray(new Locale[] {});
+	defaultLanguageId = LocaleUtil.toLanguageId(fields.getDefaultLocale());
+}
+
+defaultLanguageId = ParamUtil.getString(request, "defaultLanguageId", defaultLanguageId);
+
+boolean translating = false;
+
+if (Validator.isNotNull(languageId)) {
+	translating = true;
+
+	redirect = currentURL;
+}
+else {
+	languageId = defaultLanguageId;
+}
 %>
 
 <liferay-ui:header
 	backURL="<%= backURL %>"
+	showBackURL="<%= !translating %>"
 	title='<%= (record != null) ? "edit-record" : "new-record" %>'
 />
 
@@ -48,6 +82,8 @@ if (record != null) {
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="backURL" type="hidden" value="<%= backURL %>" />
+	<aui:input name="defaultLanguageId" type="hidden" value="<%= defaultLanguageId %>" />
+	<aui:input name="languageId" type="hidden" value="<%= languageId %>" />
 	<aui:input name="recordSetId" type="hidden" value="<%= recordSetId %>" />
 	<aui:input name="recordId" type="hidden" value="<%= recordId %>" />
 	<aui:input name="workflowAction" type="hidden" value="<%= WorkflowConstants.ACTION_PUBLISH %>" />
@@ -58,32 +94,116 @@ if (record != null) {
 
 	<liferay-ui:error exception="<%= StorageFieldRequiredException.class %>" message="please-fill-out-all-required-fields" />
 
-	<c:if test="<%= recordVersion != null %>">
-		<aui:model-context bean="<%= recordVersion %>" model="<%= DDLRecordVersion.class %>" />
+	<c:if test="<%= !translating %>">
+		<c:if test="<%= recordVersion != null %>">
+			<aui:model-context bean="<%= recordVersion %>" model="<%= DDLRecordVersion.class %>" />
 
-		<aui:workflow-status model="<%= DDLRecord.class %>" status="<%= recordVersion.getStatus() %>" version="<%= recordVersion.getVersion() %>" />
+			<aui:workflow-status model="<%= DDLRecord.class %>" status="<%= recordVersion.getStatus() %>" version="<%= recordVersion.getVersion() %>" />
+		</c:if>
+
+		<liferay-util:include page="/html/portlet/dynamic_data_lists/record_toolbar.jsp" />
 	</c:if>
 
-	<liferay-util:include page="/html/portlet/dynamic_data_lists/record_toolbar.jsp" />
-
 	<aui:fieldset>
+		<c:if test="<%= !translating %>">
 
-		<%
-		DDLRecordSet recordSet = DDLRecordSetLocalServiceUtil.getRecordSet(recordSetId);
+			<aui:translation-manager availableLocales="<%= availableLocales %>" canAddTranslations="<%= recordId > 0 %>" defaultLanguageId="<%= defaultLanguageId %>" id="translationManager" />
 
-		DDMStructure ddmStructure = recordSet.getDDMStructure(formDDMTemplateId);
+			<liferay-portlet:renderURL copyCurrentRenderParameters="<%= true %>" var="updateDefaultLanguageURL">
+				<portlet:param name="struts_action" value="/dynamic_data_lists/edit_record" />
+				<portlet:param name="defaultLanguageId" value="{defaultLanguageId}" />
+			</liferay-portlet:renderURL>
 
-		Fields fields = null;
+			<liferay-portlet:renderURL copyCurrentRenderParameters="<%= true %>" var="translateRecordURL" windowState="pop_up">
+				<portlet:param name="struts_action" value="/dynamic_data_lists/edit_record" />
+				<portlet:param name="languageId" value="{languageId}" />
+			</liferay-portlet:renderURL>
 
-		if (recordVersion != null) {
-			fields = StorageEngineUtil.getFields(recordVersion.getDDMStorageId());
-		}
-		%>
+			<aui:script use="liferay-translation-manager">
+				var translationManager = Liferay.component('translationManager');
+
+				translationManager.on(
+					{
+						defaultLocaleChange: function(event) {
+							if (!confirm('<%= UnicodeLanguageUtil.get(pageContext, "changing-the-default-language-will-delete-all-unsaved-content") %>')) {
+								event.preventDefault();
+							}
+						}
+					}
+				);
+
+				translationManager.after(
+					{
+						defaultLocaleChange: function(event) {
+							var url = A.Lang.sub(
+								decodeURIComponent('<%= updateDefaultLanguageURL %>'),
+								{
+									defaultLanguageId: event.newVal
+								}
+							);
+
+							location.href = url;
+						},
+						deleteAvailableLocale: function(event) {
+							var locale = event.locale;
+
+							Liferay.Service(
+								'/ddlrecord/delete-record-locale',
+								{
+									recordId: <%= recordId %>,
+									locale: locale,
+									serviceContext: JSON.stringify(
+										{
+											scopeGroupId: themeDisplay.getScopeGroupId(),
+											userId: themeDisplay.getUserId()
+										}
+									)
+								}
+							);
+
+						},
+						editingLocaleChange: function(event) {
+							var editingLocale = event.newVal;
+							var defaultLocale = translationManager.get('defaultLocale');
+
+							if (editingLocale !== defaultLocale) {
+								var uri = A.Lang.sub(
+									decodeURIComponent('<%= translateRecordURL %>'),
+									{
+										languageId: editingLocale
+									}
+								);
+
+								Liferay.Util.openWindow(
+									{
+										cache: false,
+										id: event.newVal,
+										title: '<%= UnicodeLanguageUtil.get(pageContext, "web-content-translation") %>',
+										uri: uri
+									},
+									function(translationWindow) {
+										translationWindow.once(
+											'visibleChange',
+											function(event) {
+												if (!event.newVal) {
+													translationManager.set('editingLocale', defaultLocale);
+												}
+											}
+										);
+									}
+								);
+							}
+						}
+					}
+				);
+			</aui:script>
+		</c:if>
 
 		<liferay-ddm:html
 			classNameId="<%= PortalUtil.getClassNameId(DDMStructure.class) %>"
 			classPK="<%= ddmStructure.getStructureId() %>"
 			fields="<%= fields %>"
+			requestedLocale="<%= LocaleUtil.fromLanguageId(languageId) %>"
 		/>
 
 		<%
@@ -102,25 +222,36 @@ if (record != null) {
 
 		<aui:button-row>
 
-			<%
-			String saveButtonLabel = "save";
+			<c:choose>
+				<c:when test="<%= !translating %>">
 
-			if ((recordVersion == null) || recordVersion.isDraft() || recordVersion.isApproved()) {
-				saveButtonLabel = "save-as-draft";
-			}
+					<%
+					String saveButtonLabel = "save";
 
-			String publishButtonLabel = "publish";
+					if ((recordVersion == null) || recordVersion.isDraft() || recordVersion.isApproved()) {
+						saveButtonLabel = "save-as-draft";
+					}
 
-			if (WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, DDLRecordSet.class.getName(), recordSetId)) {
-				publishButtonLabel = "submit-for-publication";
-			}
-			%>
+					String publishButtonLabel = "publish";
 
-			<aui:button name="saveButton" onClick='<%= renderResponse.getNamespace() + "setWorkflowAction(true);" %>' type="submit" value="<%= saveButtonLabel %>" />
+					if (WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, DDLRecordSet.class.getName(), recordSetId)) {
+						publishButtonLabel = "submit-for-publication";
+					}
+					%>
 
-			<aui:button disabled="<%= pending %>" name="publishButton" onClick='<%= renderResponse.getNamespace() + "setWorkflowAction(false);" %>' type="submit" value="<%= publishButtonLabel %>" />
+					<aui:button name="saveButton" onClick='<%= renderResponse.getNamespace() + "setWorkflowAction(true);" %>' type="submit" value="<%= saveButtonLabel %>" />
 
-			<aui:button href="<%= redirect %>" name="cancelButton" type="cancel" />
+					<aui:button disabled="<%= pending %>" name="publishButton" onClick='<%= renderResponse.getNamespace() + "setWorkflowAction(false);" %>' type="submit" value="<%= publishButtonLabel %>" />
+
+					<aui:button href="<%= redirect %>" name="cancelButton" type="cancel" />
+				</c:when>
+				<c:otherwise>
+					<aui:button name="saveTranslationButton" onClick='<%= renderResponse.getNamespace() + "setWorkflowAction(false);" %>' type="submit" value="add-translation" />
+
+					<aui:button href="<%= redirect %>" name="cancelButton" type="cancel" />
+				</c:otherwise>
+			</c:choose>
+
 		</aui:button-row>
 	</aui:fieldset>
 </aui:form>
@@ -143,8 +274,6 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("struts_action", "/dynamic_data_lists/view_record_set");
 portletURL.setParameter("recordSetId", String.valueOf(recordSetId));
-
-DDLRecordSet recordSet = DDLRecordSetLocalServiceUtil.getRecordSet(recordSetId);
 
 PortalUtil.addPortletBreadcrumbEntry(request, recordSet.getName(locale), portletURL.toString());
 
