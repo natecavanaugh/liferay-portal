@@ -41,8 +41,6 @@ AUI.add(
 
 		var LOCALIZABLE_FIELD_ATTRS = ['label', 'predefinedValue', 'tip'];
 
-		var MSG_CHANGE_DEFAULT_LANGUAGE = Liferay.Language.get('changing-the-default-language-will-delete-all-unsaved-content');
-
 		var MSG_DEACTIVATE_LANGUAGE = Liferay.Language.get('are-you-sure-you-want-to-deactivate-this-language');
 
 		var STR_BLANK = '';
@@ -89,6 +87,11 @@ AUI.add(
 
 					availableTranslationsLinksNode: {
 						valueFn: '_valueAvailableTranslationsLinksNode'
+					},
+
+					canAddTranslations: {
+						validator: Lang.isBoolean,
+						value: true
 					},
 
 					changeDefaultLocaleNode: {
@@ -146,7 +149,7 @@ AUI.add(
 					iconMenuNode: STR_DOT + CSS_ICON_MENU
 				},
 
-				UI_ATTRS: ['availableLocales', 'defaultLocale', 'editingLocale'],
+				UI_ATTRS: ['availableLocales', 'canAddTranslations', 'defaultLocale', 'editingLocale'],
 
 				prototype: {
 					renderUI: function() {
@@ -214,6 +217,13 @@ AUI.add(
 
 							instance.set('availableLocales', availableLocales);
 						}
+
+						instance.fire(
+							'addAvailableLocale',
+							{
+								locale: locale
+							}
+						);
 					},
 
 					deleteAvailableLocale: function(locale) {
@@ -224,6 +234,13 @@ AUI.add(
 						AArray.removeItem(availableLocales, locale);
 
 						instance.set('availableLocales', availableLocales);
+
+						instance.fire(
+							'deleteAvailableLocale',
+							{
+								locale: locale
+							}
+						);
 					},
 
 					toggleDefaultLocales: function() {
@@ -250,10 +267,7 @@ AUI.add(
 					_afterDefaultLocaleChange: function(event) {
 						var instance = this;
 
-						var defaultLocale = event.newVal;
-
-						instance.set('availableLocales', [defaultLocale]);
-						instance.set('editingLocale', defaultLocale);
+						instance.set('editingLocale', event.newVal);
 					},
 
 					_getFormattedBuffer: function(tpl) {
@@ -328,14 +342,6 @@ AUI.add(
 						instance._getMenuOverlay().hide();
 					},
 
-					_onDefaultLocaleChange: function(event) {
-						var instance = this;
-
-						if (!confirm(MSG_CHANGE_DEFAULT_LANGUAGE)) {
-							event.preventDefault();
-						}
-					},
-
 					_onDefaultLocaleNodeChange: function(event) {
 						var instance = this;
 
@@ -365,6 +371,7 @@ AUI.add(
 					_uiSetAvailableLocales: function(val) {
 						var instance = this;
 
+						var canAddTranslations = instance.get('canAddTranslations');
 						var defaultLocale = instance.get('defaultLocale');
 						var editingLocale = instance.get('editingLocale');
 						var localesMap = instance.get('localesMap');
@@ -393,9 +400,15 @@ AUI.add(
 							}
 						);
 
-						instance._availableTranslationsNode.toggle(!!buffer.length);
+						instance._availableTranslationsNode.toggle(!!buffer.length && canAddTranslations);
 
 						instance._availableTranslationsLinksNode.setContent(buffer.join(STR_BLANK));
+					},
+
+					_uiSetCanAddTranslations: function(val) {
+						var instance = this;
+
+						instance._iconMenuNode.toggle(val);
 					},
 
 					_uiSetDefaultLocale: function(val) {
@@ -415,6 +428,15 @@ AUI.add(
 
 							instance._defaultLocaleTextNode.setContent(content);
 						}
+
+						instance._uiSetAvailableLocales(
+							AArray.filter(
+								instance.get('availableLocales'),
+								function(item, index, collection) {
+									return item !== val;
+								}
+							)
+						);
 					},
 
 					_uiSetEditingLocale: function(val) {
