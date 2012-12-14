@@ -805,9 +805,10 @@
 				<outputType>java.lang.String</outputType>
 			</attribute>
 			<attribute>
-				<name>onlyMarkup</name>
+				<name>initialize</name>
 				<inputType>boolean</inputType>
 				<outputType>boolean</outputType>
+				<defaultValue>true</defaultValue>
 			</attribute>
 		</attributes>
 	</component>

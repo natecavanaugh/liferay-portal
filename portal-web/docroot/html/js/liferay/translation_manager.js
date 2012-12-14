@@ -39,8 +39,6 @@ AUI.add(
 
 		var CSS_TRANSLATION_ITEM = 'lfr-translation-manager-translation-item';
 
-		var LOCALIZABLE_FIELD_ATTRS = ['label', 'predefinedValue', 'tip'];
-
 		var MSG_DEACTIVATE_LANGUAGE = Liferay.Language.get('are-you-sure-you-want-to-deactivate-this-language');
 
 		var STR_BLANK = '';
@@ -310,15 +308,13 @@ AUI.add(
 					_onClickTranslation: function(event) {
 						var instance = this;
 
-						var availableLocales = instance.get('availableLocales');
-
 						var locale = event.currentTarget.attr('locale');
 
 						if (event.target.hasClass(CSS_DELETE_TRANSLATION)) {
 							if (confirm(MSG_DEACTIVATE_LANGUAGE)) {
 								instance.deleteAvailableLocale(locale);
 
-								if (locale == instance.get('editingLocale')) {
+								if (locale === instance.get('editingLocale')) {
 									instance._resetEditingLocale();
 								}
 							}
@@ -429,14 +425,7 @@ AUI.add(
 							instance._defaultLocaleTextNode.setContent(content);
 						}
 
-						instance._uiSetAvailableLocales(
-							AArray.filter(
-								instance.get('availableLocales'),
-								function(item, index, collection) {
-									return item !== val;
-								}
-							)
-						);
+						instance._uiSetAvailableLocales(instance.get('availableLocales'));
 					},
 
 					_uiSetEditingLocale: function(val) {
@@ -452,7 +441,7 @@ AUI.add(
 
 						var localeNode;
 
-						if (val == instance.get('defaultLocale')) {
+						if (val === instance.get('defaultLocale')) {
 							localeNode = defaultLocaleTextNode;
 						}
 						else {

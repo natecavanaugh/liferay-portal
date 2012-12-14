@@ -16,35 +16,33 @@
 
 <%@ include file="/html/taglib/aui/translation_manager/init.jsp" %>
 
-<div class="lfr-translation-manager" id="<%= id %>">
-	<div class="lfr-translation-manager-content">
+<div class="lfr-translation-manager" id="<%= namespace + id %>">
+	<div class="lfr-translation-manager-content nobr">
 		<label class="lfr-translation-manager-default-locale-label" for="<portlet:namespace />defaultLanguageId"><liferay-ui:message key="web-content-default-language" />:</label>
 
-		<span class="lfr-translation-manager-selector nobr">
-			<span class="lfr-translation-manager-default-locale-text lfr-translation-manager-translation lfr-translation-manager-translation-editing">
-				<img src="<%= themeDisplay.getPathThemeImages() %>/language/<%= defaultLanguageId %>.png" />
+		<span class="lfr-translation-manager-default-locale-text lfr-translation-manager-translation lfr-translation-manager-translation-editing">
+			<img src="<%= themeDisplay.getPathThemeImages() %>/language/<%= defaultLanguageId %>.png" />
 
-				<%= LocaleUtil.fromLanguageId(defaultLanguageId).getDisplayName(locale) %>
-			</span>
-
-			<select class="aui-helper-hidden lfr-translation-manager-default-locale">
-
-				<%
-				Locale[] locales = LanguageUtil.getAvailableLocales();
-
-				for (int i = 0; i < locales.length; i++) {
-				%>
-
-					<aui:option label="<%= locales[i].getDisplayName(locale) %>" selected="<%= defaultLanguageId.equals(LocaleUtil.toLanguageId(locales[i])) %>" value="<%= LocaleUtil.toLanguageId(locales[i]) %>" />
-
-				<%
-				}
-				%>
-
-			</select>
-
-			<a class="lfr-translation-manager-change-default-locale" href="javascript:;"><liferay-ui:message key="change" /></a>
+			<%= LocaleUtil.fromLanguageId(defaultLanguageId).getDisplayName(locale) %>
 		</span>
+
+		<select class="aui-helper-hidden lfr-translation-manager-default-locale">
+
+			<%
+			Locale[] locales = LanguageUtil.getAvailableLocales();
+
+			for (int i = 0; i < locales.length; i++) {
+			%>
+
+				<aui:option label="<%= locales[i].getDisplayName(locale) %>" selected="<%= defaultLanguageId.equals(LocaleUtil.toLanguageId(locales[i])) %>" value="<%= LocaleUtil.toLanguageId(locales[i]) %>" />
+
+			<%
+			}
+			%>
+
+		</select>
+
+		<a class="lfr-translation-manager-change-default-locale" href="javascript:;"><liferay-ui:message key="change" /></a>
 
 		<c:if test="<%= canAddTranslations %>">
 			<span class="lfr-translation-manager-add-menu">
@@ -108,7 +106,7 @@
 	</div>
 </div>
 
-<c:if test="<%= !onlyMarkup %>">
+<c:if test="<%= initialize %>">
 
 	<%
 	JSONArray availableLocalesJSONArray = JSONFactoryUtil.createJSONArray();
@@ -125,27 +123,30 @@
 	%>
 
 	<aui:script use="liferay-translation-manager">
-	var translationManager;
+		var translationManager;
 
-	(Liferay.component(
-		'<%= id %>',
-		function() {
-			if (!translationManager) {
-				translationManager = new Liferay.TranslationManager(
-					{
-						availableLocales: <%= availableLocalesJSONArray.toString() %>,
-						boundingBox: '#<%= HtmlUtil.escapeJS(id) %>',
-						canAddTranslations: <%= canAddTranslations %>,
-						defaultLocale: '<%= HtmlUtil.escapeJS(defaultLanguageId) %>',
-						editingLocale: '<%= HtmlUtil.escapeJS(editingLanguageId) %>',
-						localesMap: <%= localesMapJSONObject.toString() %>,
-						srcNode: '#<%= HtmlUtil.escapeJS(id) %> .lfr-translation-manager-content'
-					}
-				).render();
+		Liferay.component(
+			'<%= namespace + id %>',
+			function() {
+
+				if (!translationManager) {
+					translationManager = new Liferay.TranslationManager(
+						{
+							availableLocales: <%= availableLocalesJSONArray.toString() %>,
+							boundingBox: '#<%= namespace + id %>',
+							canAddTranslations: <%= canAddTranslations %>,
+							defaultLocale: '<%= defaultLanguageId %>',
+							editingLocale: '<%= editingLanguageId %>',
+							localesMap: <%= localesMapJSONObject.toString() %>,
+							srcNode: '#<%= namespace + id %> .lfr-translation-manager-content'
+						}
+					).render();
+				}
+
+				return translationManager;
 			}
+		);
 
-			return translationManager;
-		}
-	))();
+		Liferay.component('<%= namespace + id %>');
 	</aui:script>
 </c:if>

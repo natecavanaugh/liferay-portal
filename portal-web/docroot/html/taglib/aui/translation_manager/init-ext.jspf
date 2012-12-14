@@ -15,7 +15,9 @@
 --%>
 
 <%
+String randomNamespace = PwdGenerator.getPassword(PwdGenerator.KEY3, 4) + StringPool.UNDERLINE;
+
 if (Validator.isNull(id)) {
-	id = namespace.concat(PwdGenerator.getPassword(PwdGenerator.KEY3, 4)).concat("TranslationManager");
+	id = randomNamespace;
 }
 %>

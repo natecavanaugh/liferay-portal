@@ -44,27 +44,32 @@ if (recordVersion != null) {
 	fields = StorageEngineUtil.getFields(recordVersion.getDDMStorageId());
 }
 
-String defaultLanguageId = themeDisplay.getLanguageId();
-String languageId = ParamUtil.getString(request, "languageId");
-
 Locale[] availableLocales = new Locale[] {};
 
 if (fields != null) {
-	availableLocales = fields.getAvailableLocales().toArray(new Locale[] {});
-	defaultLanguageId = LocaleUtil.toLanguageId(fields.getDefaultLocale());
+	availableLocales = fields.getAvailableLocales().toArray(availableLocales);
 }
 
-defaultLanguageId = ParamUtil.getString(request, "defaultLanguageId", defaultLanguageId);
+String defaultLanguageId = ParamUtil.getString(request, "defaultLanguageId");
+
+if (Validator.isNull(defaultLanguageId)) {
+	defaultLanguageId = themeDisplay.getLanguageId();
+
+	if (fields != null) {
+		defaultLanguageId = LocaleUtil.toLanguageId(fields.getDefaultLocale());
+	}
+}
+
+String languageId = ParamUtil.getString(request, "languageId", defaultLanguageId);
 
 boolean translating = false;
 
-if (Validator.isNotNull(languageId)) {
+if (!defaultLanguageId.equals(languageId)) {
 	translating = true;
-
-	redirect = currentURL;
 }
-else {
-	languageId = defaultLanguageId;
+
+if (translating) {
+	redirect = currentURL;
 }
 %>
 
@@ -120,7 +125,7 @@ else {
 			</liferay-portlet:renderURL>
 
 			<aui:script use="liferay-translation-manager">
-				var translationManager = Liferay.component('translationManager');
+				var translationManager = Liferay.component('<portlet:namespace />translationManager');
 
 				translationManager.on(
 					{
@@ -150,8 +155,8 @@ else {
 							Liferay.Service(
 								'/ddlrecord/delete-record-locale',
 								{
-									recordId: <%= recordId %>,
 									locale: locale,
+									recordId: <%= recordId %>,
 									serviceContext: JSON.stringify(
 										{
 											scopeGroupId: themeDisplay.getScopeGroupId(),
@@ -177,6 +182,9 @@ else {
 								Liferay.Util.openWindow(
 									{
 										cache: false,
+										dialog: {
+											modal: true
+										},
 										id: event.newVal,
 										title: '<%= UnicodeLanguageUtil.get(pageContext, "web-content-translation") %>',
 										uri: uri
@@ -223,7 +231,12 @@ else {
 		<aui:button-row>
 
 			<c:choose>
-				<c:when test="<%= !translating %>">
+				<c:when test="<%= translating %>">
+					<aui:button name="saveTranslationButton" onClick='<%= renderResponse.getNamespace() + "setWorkflowAction(false);" %>' type="submit" value="add-translation" />
+
+					<aui:button href="<%= redirect %>" name="cancelButton" type="cancel" />
+				</c:when>
+				<c:otherwise>
 
 					<%
 					String saveButtonLabel = "save";
@@ -242,11 +255,6 @@ else {
 					<aui:button name="saveButton" onClick='<%= renderResponse.getNamespace() + "setWorkflowAction(true);" %>' type="submit" value="<%= saveButtonLabel %>" />
 
 					<aui:button disabled="<%= pending %>" name="publishButton" onClick='<%= renderResponse.getNamespace() + "setWorkflowAction(false);" %>' type="submit" value="<%= publishButtonLabel %>" />
-
-					<aui:button href="<%= redirect %>" name="cancelButton" type="cancel" />
-				</c:when>
-				<c:otherwise>
-					<aui:button name="saveTranslationButton" onClick='<%= renderResponse.getNamespace() + "setWorkflowAction(false);" %>' type="submit" value="add-translation" />
 
 					<aui:button href="<%= redirect %>" name="cancelButton" type="cancel" />
 				</c:otherwise>
