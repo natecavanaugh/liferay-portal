@@ -1837,7 +1837,7 @@
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<name>onlyMarkup</name>
+			<name>initialize</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
