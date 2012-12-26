@@ -54,6 +54,7 @@ import com.liferay.portlet.dynamicdatamapping.service.DDMStructureServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.storage.Field;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
+import com.liferay.util.PwdGenerator;
 import com.liferay.util.freemarker.FreeMarkerTaglibFactoryUtil;
 
 import freemarker.ext.servlet.HttpRequestHashModel;
@@ -150,7 +151,8 @@ public class DDMXSDImpl implements DDMXSD {
 		StringBuffer sb = new StringBuffer(valuesSize);
 
 		for (int i = 0; i < valuesSize; i++) {
-			fieldStructure.put("repeatableIndex", String.valueOf(i));
+			fieldStructure.put("randomNamespace", PwdGenerator.getPassword(4));
+			fieldStructure.put("valueIndex", i);
 
 			String childrenHTML = getHTML(
 				pageContext, element, fields, namespace, mode, readOnly,
@@ -168,8 +170,8 @@ public class DDMXSDImpl implements DDMXSD {
 
 	public String getFieldHTMLByName(
 			PageContext pageContext, long classNameId, long classPK,
-			String fieldName, int repeatableIndex, Fields fields,
-			String namespace, String mode, boolean readOnly, Locale locale)
+			String fieldName, Fields fields, String namespace, String mode,
+			boolean readOnly, Locale locale)
 		throws Exception {
 
 		String xsd = getXSD(classNameId, classPK);
@@ -185,11 +187,6 @@ public class DDMXSDImpl implements DDMXSD {
 		Node node = xPathSelector.selectSingleNode(document.getRootElement());
 
 		Element element = (Element)node.asXPathResult(node.getParent());
-
-		if (repeatableIndex > 0) {
-			element.addAttribute(
-				"repeatableIndex", String.valueOf(repeatableIndex));
-		}
 
 		return getFieldHTML(
 			pageContext, element, fields, namespace, mode, readOnly, locale);
