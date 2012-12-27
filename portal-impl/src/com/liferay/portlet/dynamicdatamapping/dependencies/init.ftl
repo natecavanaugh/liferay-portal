@@ -18,7 +18,7 @@
 
 <#-- Field name -->
 
-<#assign randomNamespace = "_INSTANCE_" + fieldStructure.randomNamespace>
+<#assign fieldNamespace = "_INSTANCE_" + fieldStructure.fieldNamespace>
 
 <#assign fieldName = fieldStructure.name>
 
@@ -33,7 +33,7 @@
 
 <#assign namespace = namespace!"">
 
-<#assign namespacedFieldName = "${namespace}${fieldName}${randomNamespace}">
+<#assign namespacedFieldName = "${namespace}${fieldName}${fieldNamespace}">
 
 <#assign namespacedParentName = "${namespace}${parentName}">
 
@@ -41,7 +41,7 @@
 
 <#assign data = {
 	"fieldName": fieldStructure.name,
-	"randomNamespace": randomNamespace,
+	"fieldNamespace": fieldNamespace,
 	"repeatable": repeatable?string
 }>
 

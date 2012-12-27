@@ -179,7 +179,7 @@ public class DDMXSDImpl implements DDMXSD {
 		StringBuffer sb = new StringBuffer(endValueIndex - startValueIndex);
 
 		for (int i = startValueIndex; i < endValueIndex; i++) {
-			fieldStructure.put("randomNamespace", PwdGenerator.getPassword(4));
+			fieldStructure.put("fieldNamespace", PwdGenerator.getPassword(4));
 			fieldStructure.put("valueIndex", i);
 
 			String childrenHTML = getHTML(

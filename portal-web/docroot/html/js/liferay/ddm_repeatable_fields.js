@@ -84,9 +84,9 @@ AUI.add(
 						var instance = this;
 
 						var fieldName = fieldNode.getData('fieldName');
-						var randomNamespace = fieldNode.getData('randomNamespace');
+						var fieldNamespace = fieldNode.getData('fieldNamespace');
 
-						var tree = [fieldName + randomNamespace];
+						var tree = [fieldName + fieldNamespace];
 
 						instance.getFieldsList(null, fieldNode).each(
 							function(item, index, collection) {
@@ -167,6 +167,14 @@ AUI.add(
 						);
 					},
 
+					removeField: function(fieldNode) {
+						var instance = this;
+
+						fieldNode.remove();
+
+						instance.syncUI();
+					},
+
 					renderRepeatableToolbar: function(fieldNode) {
 						var instance = this;
 
@@ -210,7 +218,7 @@ AUI.add(
 							instance.insertField(fieldNode);
 						}
 						else if (currentTarget.hasClass('lfr-ddm-repeatable-delete-button')) {
-							fieldNode.remove();
+							instance.removeField(fieldNode);
 						}
 					},
 
