@@ -13,6 +13,22 @@
 		float: right;
 	}
 
+	.subscription-breadcrumbs {
+		color: #999;
+
+		a {
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.col-category-subscription {
+		font-size: 1.4em;
+	}
+
 	.code {
 		background: #fff;
 		border: 1px solid #777;
