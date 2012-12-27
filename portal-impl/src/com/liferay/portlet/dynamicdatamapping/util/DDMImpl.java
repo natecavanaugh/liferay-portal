@@ -16,7 +16,6 @@ package com.liferay.portlet.dynamicdatamapping.util;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
@@ -28,6 +27,8 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CompanyConstants;
@@ -62,9 +63,11 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -77,6 +80,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author Marcellus Tavares
  */
 public class DDMImpl implements DDM {
+
+	public static final String INSTANCE_SEPARATOR = "_INSTANCE_";
 
 	public static final String TYPE_CHECKBOX = "checkbox";
 
@@ -105,39 +110,56 @@ public class DDMImpl implements DDM {
 		DDMStructure ddmStructure = getDDMStructure(
 			ddmStructureId, ddmTemplateId);
 
+		String defaultLanguageId = GetterUtil.getString(
+			serviceContext.getAttribute("defaultLanguageId"));
+
+		Locale defaultLocale = LocaleUtil.fromLanguageId(defaultLanguageId);
+
 		Set<String> fieldNames = ddmStructure.getFieldNames();
+
+		String fieldsTreeAttribute = GetterUtil.getString(
+			serviceContext.getAttribute("_fieldsTree"));
+
+		String[] fieldsTree = StringUtil.split(fieldsTreeAttribute);
+
+		Map<String, List<String>> fieldsParameterNamesMap =
+			getFieldsParameterNamesMap(fieldNames, fieldNamespace, fieldsTree);
+
+		String languageId = GetterUtil.getString(
+			serviceContext.getAttribute("languageId"),
+			serviceContext.getLanguageId());
+
+		Locale locale = LocaleUtil.fromLanguageId(languageId);
 
 		Fields fields = new Fields();
 
 		for (String fieldName : fieldNames) {
-			JSONObject repeatabaleFieldsMapJSONObject =
-				getRepeatableFieldsMapJSONObject(serviceContext);
-
 			List<Serializable> fieldValues = getFieldValues(
-				ddmStructure, repeatabaleFieldsMapJSONObject, fieldName,
-				fieldNamespace, serviceContext);
+				ddmStructure, fieldName, fieldNamespace,
+				fieldsParameterNamesMap, serviceContext);
 
 			if ((fieldValues == null) || fieldValues.isEmpty()) {
 				continue;
 			}
 
-			String languageId = GetterUtil.getString(
-				serviceContext.getAttribute("languageId"),
-				serviceContext.getLanguageId());
-
-			Locale locale = LocaleUtil.fromLanguageId(languageId);
-
 			Field field = new Field(
 				ddmStructureId, fieldName, fieldValues, locale);
-
-			String defaultLanguageId = GetterUtil.getString(
-				serviceContext.getAttribute("defaultLanguageId"));
-
-			Locale defaultLocale = LocaleUtil.fromLanguageId(defaultLanguageId);
 
 			field.setDefaultLocale(defaultLocale);
 
 			fields.put(field);
+		}
+
+		if (Validator.isNotNull(fieldsTree)) {
+			List<Serializable> fieldsTreeValues = getFieldsTreeValues(
+				fieldsTree, fieldNamespace);
+
+			Field fieldsTreeField = new Field(
+				ddmStructureId, "_fieldsTree", fieldsTreeValues, locale);
+
+			fieldsTreeField.setDefaultLocale(defaultLocale);
+
+			fields.put(fieldsTreeField);
 		}
 
 		return fields;
@@ -243,7 +265,7 @@ public class DDMImpl implements DDM {
 	}
 
 	public Fields mergeFields(Fields newFields, Fields existingFields) {
-		Iterator<Field> itr = newFields.iterator();
+		Iterator<Field> itr = newFields.iterator(true);
 
 		while (itr.hasNext()) {
 			Field newField = itr.next();
@@ -325,8 +347,13 @@ public class DDMImpl implements DDM {
 
 		Fields fields = StorageEngineUtil.getFields(storageId);
 
-		List<String> fieldNames = getFieldNames(
-			structureId, fieldNamespace, fieldName, serviceContext);
+		String fieldsTreeAttribute = GetterUtil.getString(
+			serviceContext.getAttribute("_fieldsTree"));
+
+		String[] fieldsTree = StringUtil.split(fieldsTreeAttribute);
+
+		List<String> fieldNames = getFieldParameterName(
+			fieldName, fieldNamespace, fieldsTree);
 
 		List<Serializable> fieldValues = new ArrayList<Serializable>(
 			fieldNames.size());
@@ -398,73 +425,96 @@ public class DDMImpl implements DDM {
 		return ddmStructure;
 	}
 
-	protected List<String> getFieldNames(
-			DDMStructure ddmStructure, String fieldName, String fieldNamespace,
-			JSONObject repeatableFieldsMapJSONObject)
+	protected List<String> getFieldParameterName(
+			String fieldName, String fieldNamespace, String[] fieldsTree)
 		throws PortalException, SystemException {
 
-		List<String> fieldNames = new ArrayList<String>();
+		List<String> fieldParameterNames = new ArrayList<String>();
 
-		fieldNames.add(fieldNamespace + fieldName);
+		String namespacedFieldName = fieldNamespace.concat(fieldName);
 
-		boolean repeatable = ddmStructure.isFieldRepeatable(fieldName);
+		if (fieldsTree.length != 0) {
+			for (String fieldTree : fieldsTree) {
+				int index = fieldTree.indexOf(INSTANCE_SEPARATOR);
 
-		if (repeatable && (repeatableFieldsMapJSONObject != null)) {
-			JSONArray jsonArray = repeatableFieldsMapJSONObject.getJSONArray(
-				fieldNamespace + fieldName);
+				String localNamespacedFieldName = fieldTree.substring(0, index);
 
-			for (int i = 0; i < jsonArray.length(); i++) {
-				fieldNames.add(
-					fieldNamespace + fieldName + jsonArray.getString(i));
+				if (Validator.equals(
+						namespacedFieldName, localNamespacedFieldName)) {
+
+					fieldParameterNames.add(fieldTree);
+				}
 			}
 		}
+		else {
+			fieldParameterNames.add(namespacedFieldName);
+		}
 
-		return fieldNames;
+		return fieldParameterNames;
 	}
 
-	protected List<String> getFieldNames(
-			long structureId, String fieldNamespace, String fieldName,
-			ServiceContext serviceContext)
+	protected Map<String, List<String>> getFieldsParameterNamesMap(
+			Set<String> fieldNames, String fieldNamespace, String[] fieldsTree)
 		throws PortalException, SystemException {
 
-		DDMStructure structure = DDMStructureLocalServiceUtil.getDDMStructure(
-			structureId);
+		Map<String, List<String>> fieldsParameterNamesMap =
+			new HashMap<String, List<String>>();
 
-		JSONObject repeatableFieldsMapJSONObject =
-			getRepeatableFieldsMapJSONObject(serviceContext);
+		for (String fieldName : fieldNames) {
+			List<String> fieldParameterNames = getFieldParameterName(
+				fieldName, fieldNamespace, fieldsTree);
 
-		return getFieldNames(
-			structure, fieldName, fieldNamespace,
-			repeatableFieldsMapJSONObject);
+			fieldsParameterNamesMap.put(fieldName, fieldParameterNames);
+		}
+
+		return fieldsParameterNamesMap;
+	}
+
+	protected List<Serializable> getFieldsTreeValues(
+		String[] fieldsTree, String fieldNamespace) {
+
+		List<Serializable> serializables = new ArrayList<Serializable>();
+
+		for (String fieldTree : fieldsTree) {
+			int index = fieldTree.indexOf(INSTANCE_SEPARATOR);
+
+			String fieldName = fieldTree.substring(0, index);
+
+			fieldName = StringUtil.replace(
+				fieldName, fieldNamespace, StringPool.BLANK);
+
+			serializables.add(fieldName);
+		}
+
+		return serializables;
 	}
 
 	protected List<Serializable> getFieldValues(
-			DDMStructure ddmStructure,
-			JSONObject repeatabaleFieldsMapJSONObject, String fieldName,
-			String fieldNamespace, ServiceContext serviceContext)
+			DDMStructure ddmStructure, String fieldName, String fieldNamespace,
+			Map<String, List<String>> fieldsParameterNamesMap,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		String fieldDataType = ddmStructure.getFieldDataType(fieldName);
 		String fieldType = ddmStructure.getFieldType(fieldName);
 
-		List<String> fieldNames = getFieldNames(
-			ddmStructure, fieldName, fieldNamespace,
-			repeatabaleFieldsMapJSONObject);
+		List<String> fieldParameterNames = fieldsParameterNamesMap.get(
+			fieldName);
 
 		List<Serializable> fieldValues = new ArrayList<Serializable>(
-			fieldNames.size());
+			fieldParameterNames.size());
 
-		for (String fieldNameValue : fieldNames) {
+		for (String fieldParameterName : fieldParameterNames) {
 			Serializable fieldValue = serviceContext.getAttribute(
-				fieldNameValue);
+				fieldParameterName);
 
 			if (fieldDataType.equals(FieldConstants.DATE)) {
 				int fieldValueMonth = GetterUtil.getInteger(
-					serviceContext.getAttribute(fieldNameValue + "Month"));
+					serviceContext.getAttribute(fieldParameterName + "Month"));
 				int fieldValueDay = GetterUtil.getInteger(
-					serviceContext.getAttribute(fieldNameValue + "Day"));
+					serviceContext.getAttribute(fieldParameterName + "Day"));
 				int fieldValueYear = GetterUtil.getInteger(
-					serviceContext.getAttribute(fieldNameValue + "Year"));
+					serviceContext.getAttribute(fieldParameterName + "Year"));
 
 				Date fieldValueDate = PortalUtil.getDate(
 					fieldValueMonth, fieldValueDay, fieldValueYear);
@@ -498,20 +548,6 @@ public class DDMImpl implements DDM {
 		}
 
 		return fieldValues;
-	}
-
-	protected JSONObject getRepeatableFieldsMapJSONObject(
-		ServiceContext serviceContext) {
-
-		try {
-			String repeatabaleFieldsMap = GetterUtil.getString(
-				serviceContext.getAttribute("__repeatabaleFieldsMap"));
-
-			return JSONFactoryUtil.createJSONObject(repeatabaleFieldsMap);
-		}
-		catch (Exception e) {
-			return null;
-		}
 	}
 
 	protected String storeFieldFile(

@@ -70,6 +70,7 @@ import java.io.Writer;
 import java.net.URL;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -109,7 +110,8 @@ public class DDMXSDImpl implements DDMXSD {
 
 	public String getFieldHTML(
 			PageContext pageContext, Element element, Fields fields,
-			String namespace, String mode, boolean readOnly, Locale locale)
+			String namespace, String mode, boolean readOnly, Locale locale,
+			int parentRepeatablePosition)
 		throws Exception {
 
 		HttpServletRequest request =
@@ -131,7 +133,8 @@ public class DDMXSDImpl implements DDMXSD {
 		Map<String, Object> fieldStructure =
 			(Map<String, Object>)freeMarkerContext.get("fieldStructure");
 
-		int valuesSize = 1;
+		int startValueIndex = 0;
+		int endValueIndex = 1;
 
 		if (fields != null) {
 			freeMarkerContext.put("fields", fields);
@@ -144,19 +147,44 @@ public class DDMXSDImpl implements DDMXSD {
 				List<Serializable> values = field.getValues(
 					themeDisplay.getLocale());
 
-				valuesSize = values.size();
+				Field fieldsTree = fields.get("_fieldsTree");
+
+				if ((parentRepeatablePosition != -1) && (fieldsTree != null)) {
+					Map<String, Object> parentFieldStructure =
+						(Map<String, Object>)freeMarkerContext.get(
+							"parentFieldStructure");
+
+					String parentFieldName = (String)parentFieldStructure.get(
+						"name");
+
+					List<Serializable> fieldsTreeValues = fieldsTree.getValues(
+						locale);
+
+					int parentFieldIndex = getFieldIndex(
+						parentFieldName, parentRepeatablePosition,
+						fieldsTreeValues);
+
+					startValueIndex = getStartValueIndex(
+						name, parentFieldIndex, fieldsTreeValues);
+					endValueIndex = getEndValueIndex(
+						name, parentFieldName, parentFieldIndex,
+						startValueIndex, fieldsTreeValues);
+				}
+				else {
+					endValueIndex = values.size();
+				}
 			}
 		}
 
-		StringBuffer sb = new StringBuffer(valuesSize);
+		StringBuffer sb = new StringBuffer(endValueIndex - startValueIndex);
 
-		for (int i = 0; i < valuesSize; i++) {
+		for (int i = startValueIndex; i < endValueIndex; i++) {
 			fieldStructure.put("randomNamespace", PwdGenerator.getPassword(4));
 			fieldStructure.put("valueIndex", i);
 
 			String childrenHTML = getHTML(
-				pageContext, element, fields, namespace, mode, readOnly,
-				locale);
+				pageContext, element, fields, namespace, mode, readOnly, locale,
+				i);
 
 			fieldStructure.put("children", childrenHTML);
 
@@ -189,7 +217,8 @@ public class DDMXSDImpl implements DDMXSD {
 		Element element = (Element)node.asXPathResult(node.getParent());
 
 		return getFieldHTML(
-			pageContext, element, fields, namespace, mode, readOnly, locale);
+			pageContext, element, fields, namespace, mode, readOnly, locale,
+			-1);
 	}
 
 	public String getHTML(
@@ -218,13 +247,14 @@ public class DDMXSDImpl implements DDMXSD {
 		throws Exception {
 
 		return getHTML(
-			pageContext, element, fields, StringPool.BLANK, null, false,
-			locale);
+			pageContext, element, fields, StringPool.BLANK, null, false, locale,
+			-1);
 	}
 
 	public String getHTML(
 			PageContext pageContext, Element element, Fields fields,
-			String namespace, String mode, boolean readOnly, Locale locale)
+			String namespace, String mode, boolean readOnly, Locale locale,
+			int parentRepeatablePosition)
 		throws Exception {
 
 		List<Element> dynamicElementElements = element.elements(
@@ -236,7 +266,7 @@ public class DDMXSDImpl implements DDMXSD {
 			sb.append(
 				getFieldHTML(
 					pageContext, dynamicElementElement, fields, namespace, mode,
-					readOnly, locale));
+					readOnly, locale, parentRepeatablePosition));
 		}
 
 		return sb.toString();
@@ -282,7 +312,7 @@ public class DDMXSDImpl implements DDMXSD {
 
 		return getHTML(
 			pageContext, document.getRootElement(), fields, namespace, mode,
-			readOnly, locale);
+			readOnly, locale, -1);
 	}
 
 	public String getHTML(PageContext pageContext, String xml, Locale locale)
@@ -455,6 +485,27 @@ public class DDMXSDImpl implements DDMXSD {
 		return jsonArray;
 	}
 
+	protected int getEndValueIndex(
+		String fieldName, String parentFieldName, int parentFieldIndex,
+		int startValueIndex, List<Serializable> fieldsTreeValues) {
+
+		int i = startValueIndex;
+
+		for (int j = parentFieldIndex + 1; j < fieldsTreeValues.size(); j++) {
+			Serializable value = fieldsTreeValues.get(j);
+
+			if (Validator.equals(value, parentFieldName)) {
+				break;
+			}
+
+			if (Validator.equals(value, fieldName)) {
+				i++;
+			}
+		}
+
+		return i;
+	}
+
 	protected Map<String, Object> getFieldContext(
 		Element dynamicElementElement, Locale locale) {
 
@@ -493,6 +544,32 @@ public class DDMXSDImpl implements DDMXSD {
 		return field;
 	}
 
+	protected int getFieldIndex(
+		String fieldName, int fieldPosition,
+		List<Serializable> fieldsTreeValues) {
+
+		int fieldIndex = 0;
+		int fieldCurrentPosition = 0;
+
+		Iterator<Serializable> itr = fieldsTreeValues.iterator();
+
+		while (itr.hasNext()) {
+			Serializable value = itr.next();
+
+			if (Validator.equals(fieldName, value)) {
+				if (fieldPosition == fieldCurrentPosition) {
+					break;
+				}
+
+				fieldCurrentPosition++;
+			}
+
+			fieldIndex++;
+		}
+
+		return fieldIndex;
+	}
+
 	protected Map<String, Object> getFreeMarkerContext(
 		Element dynamicElementElement, Locale locale) {
 
@@ -522,6 +599,23 @@ public class DDMXSDImpl implements DDMXSD {
 		ClassLoader classLoader = clazz.getClassLoader();
 
 		return classLoader.getResource(name);
+	}
+
+	protected int getStartValueIndex(
+		String fieldName, int endValueIndex,
+		List<Serializable> fieldsTreeValues) {
+
+		int i = 0;
+
+		for (int j = 0; j < endValueIndex; j++) {
+			Serializable value = fieldsTreeValues.get(j);
+
+			if (Validator.equals(fieldName, value)) {
+				i = i + 1;
+			}
+		}
+
+		return i;
 	}
 
 	protected JSONArray getStructureFieldReadOnlyAttributes(

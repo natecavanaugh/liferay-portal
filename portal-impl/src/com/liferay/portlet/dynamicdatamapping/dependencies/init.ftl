@@ -18,7 +18,7 @@
 
 <#-- Field name -->
 
-<#assign randomNamespace = "_" + fieldStructure.randomNamespace>
+<#assign randomNamespace = "_INSTANCE_" + fieldStructure.randomNamespace>
 
 <#assign fieldName = fieldStructure.name>
 
