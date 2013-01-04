@@ -16,21 +16,21 @@
 
 <%@ include file="/html/taglib/ddm/html/init.jsp" %>
 
-<div class="lfr-ddm-container" id="<portlet:namespace /><%= containerId %>">
+<div class="lfr-ddm-container" id="<%= randomNamespace %>">
 	<c:if test="<%= Validator.isNotNull(xsd) %>">
 		<%= DDMXSDUtil.getHTML(pageContext, xsd, fields, fieldsNamespace, readOnly, requestedLocale) %>
 
 		<c:if test="<%= repeatable %>">
-			<aui:input id='<%= containerId + "fieldsTree" %>' name="_fieldsTree" type="hidden" />
+			<aui:input name="<%= fieldsTreeInputName %>" type="hidden" />
 
 			<aui:script use="liferay-ddm-repeatable-fields">
 				new Liferay.DDM.RepeatableFields(
 					{
 						classNameId: <%= classNameId %>,
 						classPK: <%= classPK %>,
-						container: '#<portlet:namespace /><%= containerId %>',
-						fieldsTreeInput: '#<portlet:namespace /><%= containerId %>fieldsTree',
-						namespace: '<portlet:namespace />'
+						container: '#<%= randomNamespace %>',
+						fieldsTreeInput: '#<portlet:namespace /><%= fieldsTreeInputName %>',
+						portletNamespace: '<portlet:namespace />'
 					}
 				);
 			</aui:script>

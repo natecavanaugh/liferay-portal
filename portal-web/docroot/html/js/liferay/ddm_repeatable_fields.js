@@ -19,18 +19,14 @@ AUI.add(
 					},
 
 					container: {
-						setter: A.one,
-						validator: A.Lang.isNode,
-						value: null
-					},
-
-					namespace: {
+						setter: A.one
 					},
 
 					fieldsTreeInput: {
-						setter: A.one,
-						validator: A.Lang.isNode,
-						value: null
+						setter: A.one
+					},
+
+					portletNamespace: {
 					}
 				},
 
@@ -41,8 +37,6 @@ AUI.add(
 				prototype: {
 					initializer: function() {
 						var instance = this;
-
-						instance.fieldsTree = [];
 
 						instance.bindUI();
 						instance.syncUI();
@@ -60,24 +54,28 @@ AUI.add(
 						container.delegate('hover', hoverHandler, hoverHandler, SELECTOR_REPEAT_BUTTONS, instance);
 					},
 
-					syncUI: function() {
+					syncFieldsTreeUI: function() {
 						var instance = this;
 
-						instance.fieldsTree = [];
+						var fieldsTree = [];
+
+						var fieldsTreeInput = instance.get('fieldsTreeInput');
 
 						instance.getFieldsList().each(
 							function(item, index, collection) {
-								instance.renderRepeatableToolbar(item);
+								instance.renderRepeatableUI(item);
 
-								instance.fieldsTree = instance.fieldsTree.concat(
-									instance.createFieldTree(item)
-								);
+								fieldsTree = fieldsTree.concat(instance.createFieldTree(item));
 							}
 						);
 
-						instance.get('fieldsTreeInput').val(
-							instance.fieldsTree.join()
-						);
+						fieldsTreeInput.val(fieldsTree.join());
+					},
+
+					syncUI: function() {
+						var instance = this;
+
+						instance.syncFieldsTreeUI();
 					},
 
 					createFieldTree: function(fieldNode) {
@@ -90,9 +88,7 @@ AUI.add(
 
 						instance.getFieldsList(null, fieldNode).each(
 							function(item, index, collection) {
-								tree = tree.concat(
-									instance.createFieldTree(item)
-								);
+								tree = tree.concat(instance.createFieldTree(item));
 							}
 						);
 
@@ -109,8 +105,8 @@ AUI.add(
 									classNameId: instance.get('classNameId'),
 									classPK: instance.get('classPK'),
 									fieldName: fieldName,
-									namespace: instance.get('namespace'),
 									p_p_isolated: true,
+									portletNamespace: instance.get('portletNamespace'),
 									readOnly: instance.get('readOnly')
 								},
 								on: {
@@ -127,29 +123,40 @@ AUI.add(
 					getFieldsList: function(fieldName, parentNode) {
 						var instance = this;
 
-						var container = parentNode || instance.get('container');
+						var container;
 
-						var query = ['>'];
+						if (parentNode) {
+							container = parentNode;
+						}
+						else {
+							container = instance.get('container');
+						}
+
+						var selector = ['>'];
 
 						if (container.test('.aui-field-wrapper')) {
-							query.push(' .aui-field-wrapper-content >');
+							selector.push(' .aui-field-wrapper-content >');
 						}
 
-						query.push(' .aui-field-wrapper');
+						selector.push(' .aui-field-wrapper');
 
 						if (fieldName) {
-							query.push('[data-fieldName="' + fieldName + '"]');
+							selector.push('[data-fieldName="' + fieldName + '"]');
 						}
 
-						return container.all(query.join(''));
+						return container.all(selector.join(''));
 					},
 
-					getParentFieldNode: function(fieldNode) {
+					getFieldParentNode: function(fieldNode) {
 						var instance = this;
 
-						var container = instance.get('container');
+						var parentNode = fieldNode.ancestor('.aui-field-wrapper');
 
-						return fieldNode.ancestor('.aui-field-wrapper') || container;
+						if (!parentNode) {
+							parentNode = instance.get('container');
+						}
+
+						return parentNode;
 					},
 
 					insertField: function(fieldNode) {
@@ -162,7 +169,7 @@ AUI.add(
 							function(newFieldHTML) {
 								fieldNode.insert(newFieldHTML, 'after');
 
-								instance.syncUI();
+								instance.syncFieldsTreeUI();
 							}
 						);
 					},
@@ -172,19 +179,19 @@ AUI.add(
 
 						fieldNode.remove();
 
-						instance.syncUI();
+						instance.syncFieldsTreeUI();
 					},
 
-					renderRepeatableToolbar: function(fieldNode) {
+					renderRepeatableUI: function(fieldNode) {
 						var instance = this;
 
 						if (fieldNode.getData('repeatable') === 'true') {
 							if (!fieldNode.getData('rendered-toolbar')) {
 								var fieldName = fieldNode.getData('fieldName');
 
-								var parentFieldNode = instance.getParentFieldNode(fieldNode);
+								var parentNode = instance.getFieldParentNode(fieldNode);
 
-								var fieldsList = instance.getFieldsList(fieldName, parentFieldNode);
+								var fieldsList = instance.getFieldsList(fieldName, parentNode);
 
 								var html = TPL_ADD_REPEATABLE;
 
@@ -201,7 +208,7 @@ AUI.add(
 
 							instance.getFieldsList(null, fieldNode).each(
 								function(item, index, collection) {
-									instance.renderRepeatableToolbar(item);
+									instance.renderRepeatableUI(item);
 								}
 							);
 						}
