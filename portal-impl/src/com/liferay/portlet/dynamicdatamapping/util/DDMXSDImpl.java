@@ -138,11 +138,11 @@ public class DDMXSDImpl implements DDMXSD {
 		if (fields != null) {
 			freeMarkerContext.put("fields", fields);
 
-			Field privateFieldsTree = fields.get(DDMImpl.PRIVATE_FIELDS_TREE);
+			Field fieldsDisplayField = fields.get(DDMImpl.FIELDS_DISPLAY_NAME);
 
-			if (privateFieldsTree != null) {
-				String[] fieldsTree = StringUtil.split(
-					(String)privateFieldsTree.getValue());
+			if (fieldsDisplayField != null) {
+				String[] fieldsDisplayValues = StringUtil.split(
+					(String)fieldsDisplayField.getValue());
 
 				Map<String, Object> parentFieldStructure =
 					(Map<String, Object>)freeMarkerContext.get(
@@ -151,10 +151,10 @@ public class DDMXSDImpl implements DDMXSD {
 				String parentFieldName = (String)parentFieldStructure.get(
 					"name");
 
-				int offset = fieldsCounter.get(DDMImpl.PRIVATE_FIELDS_TREE);
+				int offset = fieldsCounter.get(DDMImpl.FIELDS_DISPLAY_NAME);
 
 				fieldRepetition = countFieldRepetition(
-					fieldsTree, parentFieldName, offset);
+					fieldsDisplayValues, parentFieldName, offset);
 			}
 		}
 
@@ -167,7 +167,7 @@ public class DDMXSDImpl implements DDMXSD {
 			fieldStructure.put("valueIndex", fieldsCounter.get(name));
 
 			fieldsCounter.incrementKey(name);
-			fieldsCounter.incrementKey(DDMImpl.PRIVATE_FIELDS_TREE);
+			fieldsCounter.incrementKey(DDMImpl.FIELDS_DISPLAY_NAME);
 
 			String childrenHTML = getHTML(
 				pageContext, element, fields, namespace, mode, readOnly,
@@ -473,16 +473,16 @@ public class DDMXSDImpl implements DDMXSD {
 	}
 
 	protected int countFieldRepetition(
-		String[] fieldsTree, String parentFieldName, int offset) {
+		String[] fieldsDisplayValues, String parentFieldName, int offset) {
 
 		int total = 0;
 
 		String fieldName = StringUtil.extractFirst(
-			fieldsTree[offset], DDMImpl.INSTANCE_SEPARATOR);
+			fieldsDisplayValues[offset], DDMImpl.INSTANCE_SEPARATOR);
 
-		for (; offset < fieldsTree.length; offset++) {
+		for (; offset < fieldsDisplayValues.length; offset++) {
 			String fieldNameValue = StringUtil.extractFirst(
-				fieldsTree[offset], DDMImpl.INSTANCE_SEPARATOR);
+				fieldsDisplayValues[offset], DDMImpl.INSTANCE_SEPARATOR);
 
 			if (fieldNameValue.equals(fieldName)) {
 				total++;

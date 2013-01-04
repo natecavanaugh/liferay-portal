@@ -80,9 +80,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class DDMImpl implements DDM {
 
-	public static final String INSTANCE_SEPARATOR = "_INSTANCE_";
+	public static final String FIELDS_DISPLAY_NAME = "_fieldsDisplay";
 
-	public static final String PRIVATE_FIELDS_TREE = "_fieldsTree";
+	public static final String INSTANCE_SEPARATOR = "_INSTANCE_";
 
 	public static final String TYPE_CHECKBOX = "checkbox";
 
@@ -405,20 +405,22 @@ public class DDMImpl implements DDM {
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		String[] fieldsTree = StringUtil.split(
+		String[] fieldsDisplayValues = StringUtil.split(
 			(String)serviceContext.getAttribute(
-				fieldNamespace + PRIVATE_FIELDS_TREE));
+				fieldNamespace + FIELDS_DISPLAY_NAME));
 
 		List<String> privateFieldNames = ListUtil.fromArray(
 			PropsValues.DYNAMIC_DATA_MAPPING_STRUCTURE_PRIVATE_FIELD_NAMES);
 
 		List<String> fieldNames = new ArrayList<String>();
 
-		if (privateFieldNames.contains(fieldName) || (fieldsTree.length == 0)) {
+		if ((fieldsDisplayValues.length == 0) ||
+			 privateFieldNames.contains(fieldName)) {
+
 			fieldNames.add(fieldNamespace + fieldName);
 		}
 		else {
-			for (String namespacedFieldName : fieldsTree) {
+			for (String namespacedFieldName : fieldsDisplayValues) {
 				String fieldNameValue = StringUtil.extractFirst(
 					namespacedFieldName, INSTANCE_SEPARATOR);
 

@@ -22,7 +22,7 @@ AUI.add(
 						setter: A.one
 					},
 
-					fieldsTreeInput: {
+					fieldsDisplayInput: {
 						setter: A.one
 					},
 
@@ -57,19 +57,19 @@ AUI.add(
 					syncFieldsTreeUI: function() {
 						var instance = this;
 
-						var fieldsTree = [];
+						var fieldsDisplay = [];
 
-						var fieldsTreeInput = instance.get('fieldsTreeInput');
+						var fieldsDisplayInput = instance.get('fieldsDisplayInput');
 
 						instance.getFieldsList().each(
 							function(item, index, collection) {
 								instance.renderRepeatableUI(item);
 
-								fieldsTree = fieldsTree.concat(instance.createFieldTree(item));
+								fieldsDisplay = fieldsDisplay.concat(instance.createFieldTree(item));
 							}
 						);
 
-						fieldsTreeInput.val(fieldsTree.join());
+						fieldsDisplayInput.val(fieldsDisplay.join());
 					},
 
 					syncUI: function() {

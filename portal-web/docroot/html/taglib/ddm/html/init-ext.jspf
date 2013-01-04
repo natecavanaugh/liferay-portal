@@ -19,7 +19,7 @@
 <%
 String randomNamespace = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
 
-String fieldsTreeInputName = fieldsNamespace + "_fieldsTree";
+String fieldsDisplayInputName = fieldsNamespace + "_fieldsDisplay";
 
 String xsd = DDMXSDUtil.getXSD(classNameId, classPK);
 
