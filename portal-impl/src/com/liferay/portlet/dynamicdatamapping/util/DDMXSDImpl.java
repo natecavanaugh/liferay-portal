@@ -64,13 +64,11 @@ import freemarker.template.ObjectWrapper;
 import freemarker.template.TemplateHashModel;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 
 import java.net.URL;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -110,8 +108,7 @@ public class DDMXSDImpl implements DDMXSD {
 
 	public String getFieldHTML(
 			PageContext pageContext, Element element, Fields fields,
-			String namespace, String mode, boolean readOnly, Locale locale,
-			int parentRepeatablePosition)
+			String namespace, String mode, boolean readOnly, Locale locale)
 		throws Exception {
 
 		HttpServletRequest request =
@@ -133,64 +130,56 @@ public class DDMXSDImpl implements DDMXSD {
 		Map<String, Object> fieldStructure =
 			(Map<String, Object>)freeMarkerContext.get("fieldStructure");
 
-		int startValueIndex = 0;
-		int endValueIndex = 1;
+		int fieldRepetition = 1;
+
+		FieldsCounter fieldsCounter = getFieldsCounter(
+			pageContext, fields, portletNamespace, namespace);
 
 		if (fields != null) {
 			freeMarkerContext.put("fields", fields);
 
-			String name = element.attributeValue("name");
+			Field privateFieldsTree = fields.get(DDMImpl.PRIVATE_FIELDS_TREE);
 
-			Field field = fields.get(name);
+			if (privateFieldsTree != null) {
+				String[] fieldsTree = StringUtil.split(
+					(String)privateFieldsTree.getValue());
 
-			if (field != null) {
-				List<Serializable> values = field.getValues(
-					themeDisplay.getLocale());
+				Map<String, Object> parentFieldStructure =
+					(Map<String, Object>)freeMarkerContext.get(
+						"parentFieldStructure");
 
-				Field fieldsTree = fields.get("_fieldsTree");
+				String parentFieldName = (String)parentFieldStructure.get(
+					"name");
 
-				if ((parentRepeatablePosition != -1) && (fieldsTree != null)) {
-					Map<String, Object> parentFieldStructure =
-						(Map<String, Object>)freeMarkerContext.get(
-							"parentFieldStructure");
+				int offset = fieldsCounter.get(DDMImpl.PRIVATE_FIELDS_TREE);
 
-					String parentFieldName = (String)parentFieldStructure.get(
-						"name");
-
-					List<Serializable> fieldsTreeValues = fieldsTree.getValues(
-						locale);
-
-					int parentFieldIndex = getFieldIndex(
-						parentFieldName, parentRepeatablePosition,
-						fieldsTreeValues);
-
-					startValueIndex = getStartValueIndex(
-						name, parentFieldIndex, fieldsTreeValues);
-					endValueIndex = getEndValueIndex(
-						name, parentFieldName, parentFieldIndex,
-						startValueIndex, fieldsTreeValues);
-				}
-				else {
-					endValueIndex = values.size();
-				}
+				fieldRepetition = countFieldRepetition(
+					fieldsTree, parentFieldName, offset);
 			}
 		}
 
-		StringBuffer sb = new StringBuffer(endValueIndex - startValueIndex);
+		String name = element.attributeValue("name");
 
-		for (int i = startValueIndex; i < endValueIndex; i++) {
+		StringBuffer sb = new StringBuffer(fieldRepetition);
+
+		while (fieldRepetition > 0) {
 			fieldStructure.put("fieldNamespace", PwdGenerator.getPassword(4));
-			fieldStructure.put("valueIndex", i);
+			fieldStructure.put("valueIndex", fieldsCounter.get(name));
+
+			fieldsCounter.incrementKey(name);
+			fieldsCounter.incrementKey(DDMImpl.PRIVATE_FIELDS_TREE);
 
 			String childrenHTML = getHTML(
-				pageContext, element, fields, namespace, mode, readOnly, locale,
-				i);
+				pageContext, element, fields, namespace, mode, readOnly,
+				locale);
 
 			fieldStructure.put("children", childrenHTML);
 
 			sb.append(
 				processFTL(
 					pageContext, element, mode, readOnly, freeMarkerContext));
+
+			fieldRepetition--;
 		}
 
 		return sb.toString();
@@ -217,8 +206,7 @@ public class DDMXSDImpl implements DDMXSD {
 		Element element = (Element)node.asXPathResult(node.getParent());
 
 		return getFieldHTML(
-			pageContext, element, fields, namespace, mode, readOnly, locale,
-			-1);
+			pageContext, element, fields, namespace, mode, readOnly, locale);
 	}
 
 	public String getHTML(
@@ -247,14 +235,13 @@ public class DDMXSDImpl implements DDMXSD {
 		throws Exception {
 
 		return getHTML(
-			pageContext, element, fields, StringPool.BLANK, null, false, locale,
-			-1);
+			pageContext, element, fields, StringPool.BLANK, null, false,
+			locale);
 	}
 
 	public String getHTML(
 			PageContext pageContext, Element element, Fields fields,
-			String namespace, String mode, boolean readOnly, Locale locale,
-			int parentRepeatablePosition)
+			String namespace, String mode, boolean readOnly, Locale locale)
 		throws Exception {
 
 		List<Element> dynamicElementElements = element.elements(
@@ -266,7 +253,7 @@ public class DDMXSDImpl implements DDMXSD {
 			sb.append(
 				getFieldHTML(
 					pageContext, dynamicElementElement, fields, namespace, mode,
-					readOnly, locale, parentRepeatablePosition));
+					readOnly, locale));
 		}
 
 		return sb.toString();
@@ -312,7 +299,7 @@ public class DDMXSDImpl implements DDMXSD {
 
 		return getHTML(
 			pageContext, document.getRootElement(), fields, namespace, mode,
-			readOnly, locale, -1);
+			readOnly, locale);
 	}
 
 	public String getHTML(PageContext pageContext, String xml, Locale locale)
@@ -485,25 +472,28 @@ public class DDMXSDImpl implements DDMXSD {
 		return jsonArray;
 	}
 
-	protected int getEndValueIndex(
-		String fieldName, String parentFieldName, int parentFieldIndex,
-		int startValueIndex, List<Serializable> fieldsTreeValues) {
+	protected int countFieldRepetition(
+		String[] fieldsTree, String parentFieldName, int offset) {
 
-		int i = startValueIndex;
+		int total = 0;
 
-		for (int j = parentFieldIndex + 1; j < fieldsTreeValues.size(); j++) {
-			Serializable value = fieldsTreeValues.get(j);
+		String fieldName = StringUtil.extractFirst(
+			fieldsTree[offset], DDMImpl.INSTANCE_SEPARATOR);
 
-			if (Validator.equals(value, parentFieldName)) {
-				break;
+		for (; offset < fieldsTree.length; offset++) {
+			String fieldNameValue = StringUtil.extractFirst(
+				fieldsTree[offset], DDMImpl.INSTANCE_SEPARATOR);
+
+			if (fieldNameValue.equals(fieldName)) {
+				total++;
 			}
 
-			if (Validator.equals(value, fieldName)) {
-				i++;
+			if (fieldNameValue.equals(parentFieldName)) {
+				break;
 			}
 		}
 
-		return i;
+		return total;
 	}
 
 	protected Map<String, Object> getFieldContext(
@@ -544,30 +534,22 @@ public class DDMXSDImpl implements DDMXSD {
 		return field;
 	}
 
-	protected int getFieldIndex(
-		String fieldName, int fieldPosition,
-		List<Serializable> fieldsTreeValues) {
+	protected FieldsCounter getFieldsCounter(
+		PageContext pageContext, Fields fields, String portletNamespace,
+		String namespace) {
 
-		int fieldIndex = 0;
-		int fieldCurrentPosition = 0;
+		String fieldsCounterKey = portletNamespace + namespace + "fieldsCount";
 
-		Iterator<Serializable> itr = fieldsTreeValues.iterator();
+		FieldsCounter fieldsCounter = (FieldsCounter)pageContext.getAttribute(
+			fieldsCounterKey);
 
-		while (itr.hasNext()) {
-			Serializable value = itr.next();
+		if (fieldsCounter == null) {
+			fieldsCounter = new FieldsCounter();
 
-			if (Validator.equals(fieldName, value)) {
-				if (fieldPosition == fieldCurrentPosition) {
-					break;
-				}
-
-				fieldCurrentPosition++;
-			}
-
-			fieldIndex++;
+			pageContext.setAttribute(fieldsCounterKey, fieldsCounter);
 		}
 
-		return fieldIndex;
+		return fieldsCounter;
 	}
 
 	protected Map<String, Object> getFreeMarkerContext(
@@ -599,23 +581,6 @@ public class DDMXSDImpl implements DDMXSD {
 		ClassLoader classLoader = clazz.getClassLoader();
 
 		return classLoader.getResource(name);
-	}
-
-	protected int getStartValueIndex(
-		String fieldName, int endValueIndex,
-		List<Serializable> fieldsTreeValues) {
-
-		int i = 0;
-
-		for (int j = 0; j < endValueIndex; j++) {
-			Serializable value = fieldsTreeValues.get(j);
-
-			if (Validator.equals(fieldName, value)) {
-				i = i + 1;
-			}
-		}
-
-		return i;
 	}
 
 	protected JSONArray getStructureFieldReadOnlyAttributes(
@@ -803,5 +768,26 @@ public class DDMXSDImpl implements DDMXSD {
 
 	private TemplateResource _defaultReadOnlyTemplateResource;
 	private TemplateResource _defaultTemplateResource;
+
+	private class FieldsCounter extends HashMap<Object, Integer> {
+
+		@Override
+		public Integer get(Object key) {
+			if (!containsKey(key)) {
+				put(key, 0);
+			}
+
+			return super.get(key);
+		}
+
+		public int incrementKey(Object key) {
+			int value = get(key);
+
+			put(key, value++);
+
+			return value;
+		}
+
+	}
 
 }

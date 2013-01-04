@@ -42,13 +42,11 @@ public class DDMXSDUtil {
 
 	public static String getFieldHTML(
 			PageContext pageContext, Element element, Fields fields,
-			String namespace, String mode, boolean readOnly, Locale locale,
-			int parentRepeatablePosition)
+			String namespace, String mode, boolean readOnly, Locale locale)
 		throws Exception {
 
 		return getDDMXSD().getFieldHTML(
-			pageContext, element, fields, namespace, mode, readOnly, locale,
-			parentRepeatablePosition);
+			pageContext, element, fields, namespace, mode, readOnly, locale);
 	}
 
 	public static String getFieldHTMLByName(
