@@ -23,12 +23,6 @@ a {
 	}
 }
 
-hr, .separator {
-	border-color: #BFBFBF transparent #FFF;
-	border-style: solid;
-	border-width: 1px 0;
-}
-
 #wrapper {
 	background: none;
 	margin: 0 auto;
