@@ -50,10 +50,10 @@ List<AssetRendererFactory> classTypesAssetRendererFactories = new ArrayList<Asse
 			<aui:input name="preferences--selectionStyle--" type="hidden" value="dynamic" />
 		</c:when>
 		<c:otherwise>
-			<aui:select label="asset-selection" name="preferences--selectionStyle--" onChange='<%= renderResponse.getNamespace() + "chooseSelectionStyle();" %>'>
-				<aui:option label="dynamic" selected='<%= selectionStyle.equals("dynamic") %>'/>
-				<aui:option label="manual" selected='<%= selectionStyle.equals("manual") %>'/>
-			</aui:select>
+			<aui:fieldset label="asset-selection">
+				<aui:input checked='<%= selectionStyle.equals("dynamic") %>' id="selectionStyleDynamic" label="dynamic" name="preferences--selectionStyle--" onChange='<%= renderResponse.getNamespace() + "chooseSelectionStyle();" %>' type="radio" value="dynamic" />
+				<aui:input checked='<%= selectionStyle.equals("manual") %>' id="selectionStyleManual" label="manual" name="preferences--selectionStyle--" onChange='<%= renderResponse.getNamespace() + "chooseSelectionStyle();" %>' type="radio" value="manual" />
+			</aui:fieldset>
 		</c:otherwise>
 	</c:choose>
 
