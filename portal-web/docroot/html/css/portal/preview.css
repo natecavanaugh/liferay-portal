@@ -15,6 +15,10 @@
 	text-align: center;
 }
 
+.lfr-preview-video-content div.aui-video-node {
+	min-height: 100%;
+}
+
 .lfr-preview-audio-content, .lfr-preview-image-content, .lfr-preview-video-content {
 	padding-left: 0;
 }
