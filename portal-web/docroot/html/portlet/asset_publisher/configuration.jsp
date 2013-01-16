@@ -85,14 +85,14 @@ List<AssetRendererFactory> classTypesAssetRendererFactories = new ArrayList<Asse
 		</aui:select>
 
 		<%
-		Set<Group> groups = new HashSet<Group>();
+		Set<Group> availableGroups = new HashSet<Group>();
 
-		groups.add(company.getGroup());
-		groups.add(themeDisplay.getScopeGroup());
+		availableGroups.add(company.getGroup());
+		availableGroups.add(themeDisplay.getScopeGroup());
 
 		for (Layout curLayout : LayoutLocalServiceUtil.getLayouts(layout.getGroupId(), layout.isPrivateLayout())) {
 			if (curLayout.hasScopeGroup()) {
-				groups.add(curLayout.getScopeGroup());
+				availableGroups.add(curLayout.getScopeGroup());
 			}
 		}
 
@@ -112,16 +112,71 @@ List<AssetRendererFactory> classTypesAssetRendererFactories = new ArrayList<Asse
 
 		Arrays.sort(groupIds);
 
-		for (Group group : groups) {
+		for (Group group : availableGroups) {
 			if (Arrays.binarySearch(groupIds, group.getGroupId()) < 0) {
 				scopesRightList.add(new KeyValuePair(_getScopeId(group, scopeGroupId), _getName(themeDisplay, group, locale)));
 			}
 		}
 
 		scopesRightList = ListUtil.sort(scopesRightList, new KeyValuePairComparator(false, true));
+
+
+		List<Group> selectedGroups = GroupLocalServiceUtil.getGroups(groupIds);
 		%>
 
 		<aui:input name="preferences--scopeIds--" type="hidden" />
+
+		<liferay-ui:search-container
+			emptyResultsMessage="no-scope-selected-yet"
+			iteratorURL="<%= configurationRenderURL %>"
+		>
+
+			<liferay-ui:search-container-results
+				results="<%= selectedGroups %>"
+				total="<%= selectedGroups.size() %>"
+			/>
+
+			<liferay-ui:search-container-row
+				className="com.liferay.portal.model.Group"
+				modelVar="group"
+			>
+
+				<%
+				group = group.toEscapedModel();
+				%>
+
+				<liferay-ui:search-container-column-text
+					name="name"
+				>
+					<liferay-ui:icon
+						label="<%= true %>"
+						message="<%= group.getDescriptiveName(locale) %>"
+				        src="<%= group.getGroupIcon(themeDisplay) %>"
+				    />
+				</liferay-ui:search-container-column-text>
+
+				<liferay-ui:search-container-column-text
+					name="type"
+					value="<%= LanguageUtil.get(pageContext, getGroupType(group, themeDisplay.getCompanyGroupId(), themeDisplay.getScopeGroupId())) %>"
+				/>
+
+				<liferay-ui:search-container-column-text
+					align="right"
+				>
+					<liferay-portlet:actionURL portletConfiguration="true" var="deleteURL">
+						<portlet:param name="<%= Constants.CMD %>" value="remove-scope-selection" />
+						<portlet:param name="redirect" value="<%= currentURL %>" />
+						<portlet:param name="groupId" value="<%= String.valueOf(group.getGroupId()) %>" />
+					</liferay-portlet:actionURL>
+
+					<liferay-ui:icon-delete
+						url="<%= deleteURL %>"
+					/>
+				</liferay-ui:search-container-column-text>
+			</liferay-ui:search-container-row>
+
+			<liferay-ui:search-iterator />
+		</liferay-ui:search-container>
 
 		<div class="<%= defaultScope ? "aui-helper-hidden" : "" %>" id="<portlet:namespace />scopesBoxes">
 			<liferay-ui:input-move-boxes
@@ -306,4 +361,41 @@ private String _getScopeId(Group group, long scopeGroupId) throws Exception {
 
 	return key;
 }
+
+private String getGroupType (Group group, long companyGroupId, long scopeGroupId) {
+	if (group.getGroupId() == companyGroupId) {
+		return "global-site";
+	}
+	if (group.getGroupId() == scopeGroupId) {
+		return "current-site";
+	}
+	else if (group.isSite()) {
+		return "site";
+	}
+	else if (group.isLayout()) {
+		return "page";
+	}
+	else {
+		return "other";
+	}
+}
+
+private String getGroupIcon (Group group, long companyGroupId, long scopeGroupId) {
+	if (group.getGroupId() == companyGroupId) {
+		return "global-site";
+	}
+	if (group.getGroupId() == scopeGroupId) {
+		return "current-site";
+	}
+	else if (group.isSite()) {
+		return "site";
+	}
+	else if (group.isLayout()) {
+		return "page";
+	}
+	else {
+		return "other";
+	}
+}
+
 %>
