@@ -58,7 +58,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.PortletMode;
-import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
@@ -126,7 +125,7 @@ public class AssetUtil {
 			LiferayPortletRequest liferayPortletRequest,
 			LiferayPortletResponse liferayPortletResponse, String className,
 			long classTypeId, long[] allAssetCategoryIds,
-			String[] allAssetTagNames)
+			String[] allAssetTagNames, String redirect)
 		throws Exception {
 
 		ThemeDisplay themeDisplay =
@@ -151,17 +150,9 @@ public class AssetUtil {
 			return null;
 		}
 
-		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
-
-		PortletURL redirectURL = liferayPortletResponse.createLiferayPortletURL(
-			themeDisplay.getPlid(), portletDisplay.getId(),
-			PortletRequest.RENDER_PHASE, false);
-
-		redirectURL.setParameter(
-			"struts_action", "/asset_publisher/add_asset_redirect");
-		redirectURL.setWindowState(LiferayWindowState.POP_UP);
-
-		addPortletURL.setParameter("redirect", redirectURL.toString());
+		if (redirect != null) {
+			addPortletURL.setParameter("redirect", redirect);
+		}
 
 		String referringPortletResource = ParamUtil.getString(
 			liferayPortletRequest, "portletResource");
@@ -171,6 +162,8 @@ public class AssetUtil {
 				"referringPortletResource", referringPortletResource);
 		}
 		else {
+			PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
+
 			addPortletURL.setParameter(
 				"referringPortletResource", portletDisplay.getId());
 
