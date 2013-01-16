@@ -146,7 +146,7 @@ public class GroupImpl extends GroupBaseImpl {
 		String image = themeDisplay.getPathThemeImages() + "/common/";
 
 		if (isCompany()) {
-			image = image.concat("folder.png");
+			image = image.concat("global.png");
 		}
 		else if (isOrganization()) {
 			image = image.concat("organization_icon.png");
