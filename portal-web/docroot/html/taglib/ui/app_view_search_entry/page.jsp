@@ -19,7 +19,7 @@
 <%
 String actionJsp = (String)request.getAttribute("liferay-ui:app-view-search-entry:actionJsp");
 String description = (String)request.getAttribute("liferay-ui:app-view-search-entry:description");
-String displayStyle = (String)request.getAttribute("liferay-ui:app-view-search-entry:displayStyle");
+String cssClass = (String)request.getAttribute("liferay-ui:app-view-search-entry:cssClass");
 String folderName = (String)request.getAttribute("liferay-ui:app-view-search-entry:folderName");
 boolean locked = GetterUtil.getBoolean(request.getAttribute("liferay-ui:app-view-search-entry:locked"));
 List<MBMessage> messages = (List<MBMessage>)request.getAttribute("liferay-ui:app-view-search-entry:messages");
@@ -35,7 +35,7 @@ String url = (String)request.getAttribute("liferay-ui:app-view-search-entry:url"
 String shortTitle = StringUtil.shorten(title, 60);
 %>
 
-<div class="app-view-search-entry-taglib entry-display-style <%= showCheckbox ? "selectable" : StringPool.BLANK %> <%= displayStyle %>" data-title="<%= HtmlUtil.escapeAttribute(shortTitle) %>">
+<div class="app-view-search-entry-taglib entry-display-style <%= showCheckbox ? "selectable" : StringPool.BLANK %> <%= cssClass %>" data-title="<%= HtmlUtil.escapeAttribute(shortTitle) %>">
 	<a class="entry-link" href="<%= url %>" title="<%= HtmlUtil.escapeAttribute(title + " - " + description) %>">
 		<c:if test="<%= Validator.isNotNull(thumbnailSrc) %>">
 			<div class="entry-thumbnail">

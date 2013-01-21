@@ -40,8 +40,8 @@ public class AppViewSearchEntryTag extends IncludeTag {
 		_description = HtmlUtil.unescape(description);
 	}
 
-	public void setDisplayStyle(String displayStyle) {
-		_displayStyle = displayStyle;
+	public void setCssClass(String cssClass) {
+		_cssClass = cssClass;
 	}
 
 	public void setFolderName(String folderName) {
@@ -92,7 +92,7 @@ public class AppViewSearchEntryTag extends IncludeTag {
 	protected void cleanUp() {
 		_actionJsp = null;
 		_description = null;
-		_displayStyle = null;
+		_cssClass = null;
 		_folderName = null;
 		_locked = false;
 		_messages = null;
@@ -123,7 +123,7 @@ public class AppViewSearchEntryTag extends IncludeTag {
 		request.setAttribute(
 			"liferay-ui:app-view-search-entry:description", _description);
 		request.setAttribute(
-			"liferay-ui:app-view-search-entry:displayStyle", _displayStyle);
+			"liferay-ui:app-view-search-entry:cssClass", _cssClass);
 		request.setAttribute(
 			"liferay-ui:app-view-search-entry:folderName", _folderName);
 		request.setAttribute(
@@ -153,7 +153,7 @@ public class AppViewSearchEntryTag extends IncludeTag {
 
 	private String _actionJsp;
 	private String _description;
-	private String _displayStyle;
+	private String _cssClass;
 	private String _folderName;
 	private boolean _locked;
 	private List<MBMessage> _messages;
