@@ -183,47 +183,26 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 				searchContext.setAttribute("paginationType", "regular");
 				searchContext.setEnd(entryEnd);
 				searchContext.setFolderIds(folderIdsArray);
+				searchContext.setIncludeDiscussions(true);
 				searchContext.setKeywords(keywords);
 				searchContext.setStart(entryStart);
 
 				Hits hits = DLAppServiceUtil.search(searchRepositoryId, searchContext);
 
-				List results = new ArrayList();
-
-				Document[] docs = hits.getDocs();
-
-				if (docs != null) {
-					for (Document doc : docs) {
-
-						// Folder and document
-
-						long fileEntryId = GetterUtil.getLong(doc.get(Field.ENTRY_CLASS_PK));
-
-						FileEntry fileEntry = null;
-
-						try {
-							fileEntry = DLAppLocalServiceUtil.getFileEntry(fileEntryId);
-						}
-						catch (Exception e) {
-							if (_log.isWarnEnabled()) {
-								_log.warn("Documents and Media search index is stale and contains file entry {" + fileEntryId + "}");
-							}
-
-							continue;
-						}
-
-						results.add(fileEntry);
-					}
-				}
+				String[] queryTerms = hits.getQueryTerms();
 
 				total = hits.getLength();
 
 				request.setAttribute("view.jsp-total", String.valueOf(total));
 
-				for (int i = 0; i < results.size(); i++) {
-				%>
+				Map<Long, List<MBMessage>> results = DLUtil.getDLEntries(hits);
 
-					<%@ include file="/html/portlet/document_library/cast_result.jspf" %>
+				int i = 0;
+
+				for (Map.Entry<Long, List<MBMessage>> entry : results.entrySet()) {
+					FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(entry.getKey());
+					Folder curFolder = fileEntry.getFolder();
+				%>
 
 					<c:choose>
 						<c:when test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.VIEW) %>">
@@ -235,11 +214,32 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 							tempRowURL.setParameter("redirect", HttpUtil.removeParameter(currentURL, liferayPortletResponse.getNamespace() + "ajax"));
 							tempRowURL.setParameter("fileEntryId", String.valueOf(fileEntry.getFileEntryId()));
 
+							FileVersion latestFileVersion = fileEntry.getFileVersion();
+
+							if ((user.getUserId() == fileEntry.getUserId()) || permissionChecker.isCompanyAdmin() || permissionChecker.isGroupAdmin(scopeGroupId) || DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE)) {
+								latestFileVersion = fileEntry.getLatestFileVersion();
+							}
+
 							request.setAttribute("view_entries.jsp-fileEntry", fileEntry);
 							request.setAttribute("view_entries.jsp-tempRowURL", tempRowURL);
 							%>
 
-							<liferay-util:include page="/html/portlet/document_library/view_file_entry_descriptive.jsp" />
+							<liferay-ui:app-view-search-entry
+								actionJsp="/html/portlet/document_library/file_entry_action.jsp"
+								description="<%= fileEntry.getDescription() %>"
+								displayStyle='<%= MathUtil.isEven(i++) ? "alt" : StringPool.BLANK %>'
+								folderName="<%= DLUtil.getAbsolutePath(liferayPortletRequest, curFolder.getFolderId()) %>"
+								locked="<%= fileEntry.isCheckedOut() %>"
+								messages="<%= entry.getValue() %>"
+								queryTerms="<%= queryTerms %>"
+								rowCheckerId="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
+								rowCheckerName="<%= FileEntry.class.getSimpleName() %>"
+								showCheckbox="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.DELETE) || DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) %>"
+								status="<%= latestFileVersion.getStatus() %>"
+								thumbnailSrc="<%= DLUtil.getThumbnailSrc(fileEntry, null, themeDisplay) %>"
+								title="<%= fileEntry.getTitle() %>"
+								url="<%= tempRowURL.toString() %>"
+							/>
 						</c:when>
 
 						<c:otherwise>
