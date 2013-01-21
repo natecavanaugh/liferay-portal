@@ -189,8 +189,6 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 
 				Hits hits = DLAppServiceUtil.search(searchRepositoryId, searchContext);
 
-				String[] queryTerms = hits.getQueryTerms();
-
 				total = hits.getLength();
 
 				request.setAttribute("view.jsp-total", String.valueOf(total));
@@ -227,11 +225,11 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 							<liferay-ui:app-view-search-entry
 								actionJsp="/html/portlet/document_library/file_entry_action.jsp"
 								description="<%= fileEntry.getDescription() %>"
-								displayStyle='<%= MathUtil.isEven(i++) ? "alt" : StringPool.BLANK %>'
+								displayStyle='<%= MathUtil.isEven(i) ? "alt" : StringPool.BLANK %>'
 								folderName="<%= DLUtil.getAbsolutePath(liferayPortletRequest, curFolder.getFolderId()) %>"
 								locked="<%= fileEntry.isCheckedOut() %>"
 								messages="<%= entry.getValue() %>"
-								queryTerms="<%= queryTerms %>"
+								queryTerms="<%= hits.getQueryTerms() %>"
 								rowCheckerId="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
 								rowCheckerName="<%= FileEntry.class.getSimpleName() %>"
 								showCheckbox="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.DELETE) || DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) %>"
@@ -250,6 +248,7 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 					</c:choose>
 
 				<%
+					i++;
 				}
 				%>
 
