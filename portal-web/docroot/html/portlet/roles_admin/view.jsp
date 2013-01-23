@@ -88,7 +88,7 @@ String portletURLString = portletURL.toString();
 
 		// Name
 
-		row.addText(role.getTitle(locale), rowURL);
+		row.addText(role.getName(), rowURL);
 
 		// Type
 

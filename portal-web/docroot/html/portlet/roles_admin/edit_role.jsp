@@ -35,7 +35,7 @@ String subtype = BeanParamUtil.getString(role, request, "subtype");
 <liferay-ui:header
 	backURL="<%= backURL %>"
 	localizeTitle="<%= (role == null) %>"
-	title='<%= (role == null) ? "new-role" : role.getTitle(locale) %>'
+	title='<%= (role == null) ? "new-role" : role.getName() %>'
 />
 
 <c:if test="<%= role != null %>">
