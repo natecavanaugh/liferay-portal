@@ -105,6 +105,7 @@ if ((trashEnabled == 0) && ArrayUtil.contains(advancedSections, "recycle-bin")) 
 
 String[][] categorySections = {mainSections, seoSections, advancedSections, miscellaneousSections};
 %>
+
 <table class="lfr-table" id="<portlet:namespace />siteSettingsWrapper" width="100%">
 <tr>
 	<td class="lfr-top">
@@ -131,6 +132,7 @@ String[][] categorySections = {mainSections, seoSections, advancedSections, misc
 		<liferay-ui:header
 			backURL="<%= backURL %>"
 			localizeTitle="<%= localizeTitle %>"
+			showBackURL="<%= showBackURL %>"
 			title="<%= title %>"
 		/>
 
