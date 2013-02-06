@@ -3,13 +3,15 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 		var Lang = A.Lang;
+		var LString = Lang.String;
 		var HistoryManager = Liferay.HistoryManager;
 		var UploaderQueue = A.Uploader.Queue;
 
-		var UA = A.UA;
-
-		var LString = Lang.String;
 		var sub = Lang.sub;
+
+		var DOC = A.config.doc;
+
+		var UA = A.UA;
 
 		var CSS_ACTIVE_AREA = 'active-area';
 
@@ -17,19 +19,13 @@ AUI.add(
 
 		var CSS_COLUMN_CONTENT = '.aui-column-content';
 
-		var CSS_DRAG_HIGHLIGHT = 'drag-highlight';
-
 		var CSS_ENTRY_DISPLAY_STYLE = 'entry-display-style';
-
-		var CSS_ENTRY_ROW_CLASS = CSS_APP_VIEW_ENTRY + ' ' + CSS_ENTRY_DISPLAY_STYLE + ' results-row ';
 
 		var CSS_ICON = 'icon';
 
 		var CSS_PORTLET_SECTION_BODY = 'portlet-section-body';
 
 		var CSS_PORTLET_SECTION_ALT = 'alt portlet-section-alternate';
-
-		var SELECTOR_OVERLAY_MASK = '.aui-overlaymask';
 
 		var CSS_TAGLIB_ICON = 'taglib-icon';
 
@@ -61,27 +57,17 @@ AUI.add(
 
 		var SELECTOR_DISPLAY_ICON = '.display-icon';
 
-		var SELECTOR_DOCUMENT_CONTAINER = '.document-container';
-
 		var SELECTOR_DOCUMENT_ENTRIES_PAGINATOR = '.document-entries-paginator';
 
 		var SELECTOR_ENTRIES_EMPTY = '.entries-empty';
 
 		var SELECTOR_ENTRY_LINK = '.entry-link';
 
-		var SELECTOR_ENTRY_THUMBNAIL = '.entry-thumbnail';
-
-		var SELECTOR_ENTRY_TITLE = '.entry-title';
-
 		var SELECTOR_ENTRY_TITLE_TEXT = '.entry-title-text';
 
 		var SELECTOR_HEADER_ROW = '.lfr-header-row';
 
-		var SELECTOR_HIDDEN = '.aui-helper-hidden';
-
 		var SELECTOR_IMAGE_ICON = 'img.icon';
-
-		var SELECTOR_TEMPLATE_ROW = 'tr.lfr-template';
 
 		var SELECTOR_SEARCH_CONTAINER = '.aui-searchcontainer';
 
@@ -94,8 +80,6 @@ AUI.add(
 		var STR_BOUNDING_BOX = 'boundingBox';
 
 		var STR_CONTENT_BOX = 'contentBox';
-
-		var STR_DATA_FOLDER_ID = 'data-folder-id';
 
 		var STR_EXTENSION_PDF = '.pdf';
 
@@ -127,8 +111,6 @@ AUI.add(
 
 		var UPLOADER_TYPE = A.Uploader.TYPE || 'none';
 
-		var UPLOADING = A.Uploader.Queue.UPLOADING;
-
 		var TPL_ENTRY_ROW_TITLE = '<span class="' + CSS_APP_VIEW_ENTRY + ' ' + CSS_ENTRY_DISPLAY_STYLE + '">' +
 			'<a class="' + CSS_TAGLIB_ICON + '">' +
 				'<img alt="" class="' + CSS_ICON + '" src="' + PATH_THEME_IMAGES + '/file_system/small/page.png" />' +
@@ -154,6 +136,14 @@ AUI.add(
 		DocumentLibraryUpload.NAME = 'documentlibraryupload';
 
 		DocumentLibraryUpload.prototype = {
+			initializer: function() {
+				var instance = this;
+
+				if (themeDisplay.isSignedIn()) {
+					instance._initDLUpload();
+				}
+			},
+
 			destructor: function() {
 				var instance = this;
 
@@ -176,16 +166,14 @@ AUI.add(
 				instance._detachSubscriptions();
 
 				if (instance._tooltips.length) {
-					instance._deallocateTooltips();
+					instance._destroyTooltips();
 				}
 			},
 
 			_addFilesToQueueBottom: function(files) {
 				var instance = this;
 
-				var uploader = instance._getUploader();
-
-				var queue = uploader.queue;
+				var queue = instance._getUploader().queue;
 
 				AArray.each(
 					files,
@@ -198,7 +186,7 @@ AUI.add(
 			_attachEventHandlers: function() {
 				var instance = this;
 
-				var docElement = A.one(document.documentElement);
+				var docElement = A.one(DOC.documentElement);
 
 				var entriesContainer = instance._entriesContainer;
 
@@ -290,11 +278,10 @@ AUI.add(
 			_attachSubscriptions: function(data) {
 				var instance = this;
 
-				var displayStyle = instance._getDisplayStyle();
-
 				var handles = instance._handles;
 
 				var uploader = instance._getUploader();
+				var displayStyle = instance._getDisplayStyle();
 
 				if (data.folder) {
 					handles.push(
@@ -322,50 +309,6 @@ AUI.add(
 						fileList.push(item);
 					}
 				);
-			},
-
-			_consumeFilesSelected: function(target, files) {
-				var instance = this;
-
-				var validFiles = files.valid;
-
-				var key = instance._getFolderId(target);
-
-				var keyData = instance._getUploadContext(key);
-
-				if (keyData) {
-					instance._updateDataSetEntry(key, keyData, validFiles);
-				}
-				else {
-					var dataSet = instance._getDataSet();
-
-					var folderNode = null;
-
-					if (key != instance._folderId) {
-						folderNode = instance._getFolderEntryNode(target);
-					}
-
-					dataSet.add(
-						key,
-						{
-							fileList: validFiles,
-							target: folderNode,
-							folder: (key != instance._folderId),
-							folderId: key,
-							invalidFiles: files.invalid
-						}
-					);
-				}
-
-				if (!instance._isUploading()) {
-					var emptyMessage = instance._getEmptyMessage();
-
-					if (emptyMessage) {
-						emptyMessage.hide();
-					}
-
-					instance._startUpload();
-				}
 			},
 
 			_createEntryNode: function(name, size, displayStyle) {
@@ -469,7 +412,7 @@ AUI.add(
 					}
 				).render();
 
-				overlay.get(STR_BOUNDING_BOX).addClass('upload-mask');
+				overlay.get(STR_BOUNDING_BOX).addClass('portlet-document-library-upload-mask');
 
 				return overlay;
 			},
@@ -499,12 +442,7 @@ AUI.add(
 				);
 			},
 
-			/* centralize logic for creating an "Upload Context" which is
-				* an overlay
-				* a progress bar
-				* a target (required only for single file upload contexts)
-			*/
-			_createUploadContext: function(target, file) {
+			_createUploadStatus: function(target, file) {
 				var instance = this;
 
 				var overlay = instance._createOverlay(target);
@@ -524,14 +462,14 @@ AUI.add(
 				}
 			},
 
-			_dellocateEntry: function() {
+			_destroyEntry: function() {
 				var instance = this;
 
 				var currentUploadData = instance._getCurrentUploadData();
 
-				if (!currentUploadData.folder) {
-					var fileList = currentUploadData.fileList;
+				var fileList = currentUploadData.fileList;
 
+				if (!currentUploadData.folder) {
 					AArray.each(
 						fileList,
 						function(item, index, collection) {
@@ -545,16 +483,24 @@ AUI.add(
 				AArray.invoke(fileList, 'destroy');
 			},
 
-			_deallocateTooltips: function() {
+			_destroyTooltips: function() {
 				var instance = this;
 
-				AArray.invoke(instance._tooltips, 'destroy');
+				var tooltips = instance._tooltips;
+
+				AArray.invoke(tooltips, 'destroy');
+
+				tooltips.length = 0;
 			},
 
 			_detachSubscriptions: function() {
 				var instance = this;
 
-				AArray.invoke(instance._handles, 'detach');
+				var handles = instance._handles;
+
+				AArray.invoke(handles, 'detach');
+
+				handles.length = 0;
 			},
 
 			_detectFolderUploadError: function(event, data) {
@@ -614,8 +560,6 @@ AUI.add(
 
 					node.tooltip = tooltip;
 
-					// since we can produce an infinite amount of these guys...
-					// lets keep them in a structure that we can flush out later
 					instance._tooltips.push(tooltip);
 				}
 
@@ -729,20 +673,6 @@ AUI.add(
 				return emptyMessage;
 			},
 
-			/*
-				The Jist: I give you any target, you return to me null or the
-				.app-view-entry (folder target) node
-
-				There are multiple targets that should result in a folder entry
-				upload
-
-				acceptable targets are:
-
-				* app-view-entry node
-				* any child of app-view-entry node
-				* an overlay indicating upload in progress
-				* the progressbar itself if you have very good aim :)
-			*/
 			_getFolderEntryNode: function(target) {
 				var instance = this;
 
@@ -751,27 +681,19 @@ AUI.add(
 				var overlayContentBox = target.hasClass('aui-overlay-content');
 
 				if (overlayContentBox) {
-					/*
-						We got a target of progressbar or overlay content box
-						Refer to the target from his original config
-					*/
 					var overlay = A.Widget.getByNode(target);
 
 					folderEntry = overlay._originalConfig.target;
 				}
-
 				else {
-					// target was app-view-entry node && was a Folder!
 					if (target.attr('data-folder') == 'true') {
 						folderEntry = target;
 					}
 
-					// check if target is a child of app-view-entry node
 					if (!folderEntry) {
 						folderEntry = target.ancestor(SELECTOR_ENTRY_LINK + SELECTOR_DATA_FOLDER);
 					}
 
-					// necessary for list view
 					if (!folderEntry) {
 						folderEntry = target.ancestor(SELECTOR_DATA_FOLDER_DATA_TITLE);
 					}
@@ -782,9 +704,6 @@ AUI.add(
 				return folderEntry;
 			},
 
-			/*
-				given any target, return to me his folder id as an Integer
-			*/
 			_getFolderId: function(target) {
 				var instance = this;
 
@@ -792,7 +711,6 @@ AUI.add(
 
 				var dataFolder = folderEntry && folderEntry.one('[data-folder-id]');
 
-				// yes, i need these paren: (dataFolder && ...)
 				return (dataFolder && A.Lang.toInt(dataFolder.attr('data-folder-id')) || instance._folderId);
 			},
 
@@ -979,7 +897,6 @@ AUI.add(
 					instance._dimensions = foldersConfig.dimensions;
 
 					instance._handles = [];
-
 					instance._tooltips = [];
 
 					var appViewEntryTemplates = instance.byId('appViewEntryTemplates');
@@ -990,8 +907,6 @@ AUI.add(
 					instance._maxFileSize = maxFileSize;
 
 					instance._viewFileEntryUrl = config.viewFileEntryUrl;
-
-					// Upload Error Messages
 
 					instance._invalidFileSizeText = Liferay.Language.get('please-enter-a-file-with-a-valid-file-size-no-larger-than-x');
 					instance._zeroByteFileText = Liferay.Language.get('the-file-contains-no-data-and-cannot-be-uploaded.-please-use-the-classic-uploader');
@@ -1033,11 +948,11 @@ AUI.add(
 					event.halt();
 				}
 				else {
-					instance._deallocateTooltips();
+					instance._destroyTooltips();
 				}
 			},
 
-			_getUploadContext: function(key) {
+			_getUploadStatus: function(key) {
 				var instance = this;
 
 				var dataSet = instance._getDataSet();
@@ -1052,22 +967,63 @@ AUI.add(
 
 				var files = instance._validateFiles(event.fileList);
 
-				instance._updateUI(target, files);
+				instance._updateStatusUI(target, files);
 
-				instance._consumeFilesSelected(target, files);
+				instance._queueSelectedFiles(target, files);
 			},
 
 			_positionProgressBar: function(overlay, progressBar) {
 				var instance = this;
 
-				var overlayBoundingBox = overlay.get(STR_BOUNDING_BOX);
-				var overlayContentBox = overlay.get(STR_CONTENT_BOX);
-
 				var progressBarBoundingBox = progressBar.get(STR_BOUNDING_BOX);
 
-				progressBar.render(overlayBoundingBox);
+				progressBar.render(overlay.get(STR_BOUNDING_BOX));
 
-				progressBarBoundingBox.center(overlayContentBox);
+				progressBarBoundingBox.center(overlay.get(STR_CONTENT_BOX));
+			},
+
+			_queueSelectedFiles: function(target, files) {
+				var instance = this;
+
+				var validFiles = files.valid;
+
+				var key = instance._getFolderId(target);
+
+				var keyData = instance._getUploadStatus(key);
+
+				if (keyData) {
+					instance._updateDataSetEntry(key, keyData, validFiles);
+				}
+				else {
+					var dataSet = instance._getDataSet();
+
+					var folderNode = null;
+
+					if (key != instance._folderId) {
+						folderNode = instance._getFolderEntryNode(target);
+					}
+
+					dataSet.add(
+						key,
+						{
+							fileList: validFiles,
+							target: folderNode,
+							folder: (key != instance._folderId),
+							folderId: key,
+							invalidFiles: files.invalid
+						}
+					);
+				}
+
+				if (!instance._isUploading()) {
+					var emptyMessage = instance._getEmptyMessage();
+
+					if (emptyMessage) {
+						emptyMessage.hide();
+					}
+
+					instance._startUpload();
+				}
 			},
 
 			_showFileUploadComplete: function(event, displayStyle) {
@@ -1235,11 +1191,6 @@ AUI.add(
 				}
 			},
 
-			/* centralize logic for updating progress for an "Upload Context"
-				applies to
-					* Folder-target uploads
-					* non-Folder-target uploads
-			*/
 			_updateProgress: function(progressBar, value) {
 				var instance = this;
 
@@ -1256,30 +1207,11 @@ AUI.add(
 				imageNode.attr('src', thumbnailPath);
 			},
 
-			/* looking for a better name */
-			_updateUI: function(target, files) {
-				var instance = this;
-
-				instance._uploadContextUtility(target, files);
-			},
-
-			_uploadContextUtility: function(target, files) {
+			_updateStatusUI: function(target, files) {
 				var instance = this;
 
 				var folderId = instance._getFolderId(target);
-				/*
-					A folder target will only need to create one upload context
-					that is attached to an already existing document library
-					entry for the folder.
 
-					A non-folder target needs to generate a newDocLibEntry
-					and then attach a new upload context to that new entry.
-					this will be done for each item in fileList
-
-					One easy way of checking if we are uploading to a folder is
-					if the folderId of the target is anything other than the
-					value of `instance._folderId`
-				*/
 				var folder = (folderId !== instance._folderId);
 
 				if (folder) {
@@ -1288,16 +1220,12 @@ AUI.add(
 					var folderEntryNodeOverlay = folderEntryNode.overlay;
 
 					if (folderEntryNodeOverlay) {
-						/*
-							if an upload context already exists for this target
-							which means we can just .show() his overlay
-						*/
 						folderEntryNodeOverlay.show();
 
 						instance._updateProgress(folderEntryNode.progressBar, 0);
 					}
 					else {
-						instance._createUploadContext(folderEntryNode);
+						instance._createUploadStatus(folderEntryNode);
 					}
 
 					folderEntryNode.removeClass(CSS_ACTIVE_AREA);
@@ -1310,7 +1238,7 @@ AUI.add(
 						function(file) {
 							var entryNode = instance._createEntryNode(file.name, file.size, displayStyle);
 
-							instance._createUploadContext(entryNode, file);
+							instance._createUploadStatus(entryNode, file);
 						}
 					);
 
@@ -1363,8 +1291,8 @@ AUI.add(
 				);
 
 				return {
-					valid: validFiles,
-					invalid: invalidFiles
+					invalid: invalidFiles,
+					valid: validFiles
 				};
 			}
 		};
