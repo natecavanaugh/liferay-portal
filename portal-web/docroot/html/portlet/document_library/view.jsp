@@ -73,6 +73,8 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 %>
 
+<liferay-util:buffer var="uploadURL"><liferay-portlet:actionURL><portlet:param name="struts_action" value="/document_library/view_file_entry" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD_DYNAMIC %>" /><portlet:param name="folderId" value="{folderId}" /><portlet:param name="repositoryId" value="<%= String.valueOf(repositoryId) %>" /></liferay-portlet:actionURL><liferay-ui:input-permissions-params modelName="<%= DLFileEntryConstants.getClassName() %>" /></liferay-util:buffer>
+
 <portlet:actionURL var="undoTrashURL">
 	<portlet:param name="struts_action" value="/document_library/edit_entry" />
 	<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.RESTORE %>" />
@@ -273,7 +275,7 @@ if (folder != null) {
 			syncMessageDisabled: <%= !PropsValues.DL_SHOW_LIFERAY_SYNC_MESSAGE %>,
 			syncMessageSuppressed: <%= !GetterUtil.getBoolean(SessionClicks.get(request, liferayPortletResponse.getNamespace() + "show-sync-message", "true")) %>,
 			updateable: <%= DLFolderPermission.contains(permissionChecker, scopeGroupId, folderId, ActionKeys.UPDATE) %>,
-			uploadURL: '<liferay-portlet:actionURL><portlet:param name="struts_action" value="/document_library/view_file_entry" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD_DYNAMIC %>" /><portlet:param name="folderId" value="{folderId}" /><portlet:param name="repositoryId" value="<%= String.valueOf(repositoryId) %>" /></liferay-portlet:actionURL><liferay-ui:input-permissions-params modelName="<%= DLFileEntryConstants.getClassName() %>" />',
+			uploadURL: '<%= uploadURL %>',
 			viewFileEntryURL: '<portlet:renderURL><portlet:param name="struts_action" value="/document_library/view_file_entry" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>'
 		}
 	);

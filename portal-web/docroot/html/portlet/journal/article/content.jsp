@@ -528,12 +528,19 @@ if (Validator.isNotNull(content)) {
 					if ((article != null) && Validator.isNotNull(article.getStructureId()) && Validator.isNotNull(content)) {
 						ddmFields = JournalConverterUtil.getDDMFields(ddmStructure, content);
 					}
+
+					String requestedLanguageId = toLanguageId;
+
+					if (Validator.isNull(languageId)) {
+						requestedLanguageId = defaultLanguageId;
+					}
 					%>
 
 					<liferay-ddm:html
 						classNameId="<%= PortalUtil.getClassNameId(DDMStructure.class) %>"
 						classPK="<%= ddmStructure.getStructureId() %>"
 						fields="<%= ddmFields %>"
+						requestedLocale="<%= LocaleUtil.fromLanguageId(requestedLanguageId) %>"
 					/>
 
 				</c:otherwise>
