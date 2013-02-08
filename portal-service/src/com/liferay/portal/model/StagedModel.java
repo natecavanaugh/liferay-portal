@@ -19,6 +19,8 @@ package com.liferay.portal.model;
  */
 public interface StagedModel extends GroupedModel {
 
+	public Object clone();
+
 	public String getUuid();
 
 }

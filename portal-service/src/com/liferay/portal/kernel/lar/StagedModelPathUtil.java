@@ -30,20 +30,35 @@ public class StagedModelPathUtil {
 	public static String getPath(
 		PortletDataContext portletDataContext, String className, long classPK) {
 
+		return getPath(portletDataContext, className, classPK, null);
+	}
+
+	public static String getPath(
+		PortletDataContext portletDataContext, String className, long classPK,
+		String dependentFileName) {
+
 		return getPath(
-			portletDataContext.getSourceGroupId(), className, classPK);
+			portletDataContext.getSourceGroupId(), className, classPK,
+			dependentFileName);
 	}
 
 	public static String getPath(StagedModel stagedModel) {
+		return getPath(stagedModel, null);
+	}
+
+	public static String getPath(
+		StagedModel stagedModel, String dependentFileName) {
+
 		ClassedModel classedModel = (ClassedModel)stagedModel;
 
 		return getPath(
 			stagedModel.getGroupId(), classedModel.getModelClassName(),
-			classedModel.getPrimaryKeyObj());
+			classedModel.getPrimaryKeyObj(), dependentFileName);
 	}
 
 	protected static String getPath(
-		long groupId, String className, Serializable primaryKeyObj) {
+		long groupId, String className, Serializable primaryKeyObj,
+		String dependentFileName) {
 
 		StringBundler sb = new StringBundler(7);
 
@@ -53,7 +68,14 @@ public class StagedModelPathUtil {
 		sb.append(className);
 		sb.append(StringPool.FORWARD_SLASH);
 		sb.append(primaryKeyObj.toString());
-		sb.append(".xml");
+
+		if (dependentFileName == null) {
+			sb.append(".xml");
+		}
+		else {
+			sb.append(StringPool.FORWARD_SLASH);
+			sb.append(dependentFileName);
+		}
 
 		return sb.toString();
 	}

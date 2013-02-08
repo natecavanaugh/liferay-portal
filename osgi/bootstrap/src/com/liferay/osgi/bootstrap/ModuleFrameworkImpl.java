@@ -96,8 +96,7 @@ import org.springframework.context.ApplicationContext;
  * @author Raymond Augé
  * @author Miguel Pastor
  */
-public class ModuleFrameworkImpl
-	implements ModuleFramework, ModuleFrameworkConstants {
+public class ModuleFrameworkImpl implements ModuleFramework {
 
 	public Object addBundle(String location) throws PortalException {
 		return addBundle(location, null);
@@ -357,7 +356,7 @@ public class ModuleFrameworkImpl
 
 		FrameworkFactory frameworkFactory = frameworkFactories.get(0);
 
-		Map<String, String> properties = _buildProperties();
+		Map<String, String> properties = _buildFrameworkProperties();
 
 		_framework = frameworkFactory.newFramework(properties);
 
@@ -467,7 +466,7 @@ public class ModuleFrameworkImpl
 		}
 	}
 
-	private Map<String, String> _buildProperties() {
+	private Map<String, String> _buildFrameworkProperties() {
 		Map<String, String> properties = new HashMap<String, String>();
 
 		properties.put(
@@ -475,14 +474,18 @@ public class ModuleFrameworkImpl
 		properties.put(Constants.BUNDLE_NAME, ReleaseInfo.getName());
 		properties.put(Constants.BUNDLE_VENDOR, ReleaseInfo.getVendor());
 		properties.put(Constants.BUNDLE_VERSION, ReleaseInfo.getVersion());
-		properties.put(FELIX_FILEINSTALL_DIR, _getFelixFileInstallDir());
 		properties.put(
-			FELIX_FILEINSTALL_LOG_LEVEL, _getFelixFileInstallLogLevel());
+			FrameworkPropsKeys.FELIX_FILEINSTALL_DIR,
+			_getFelixFileInstallDir());
 		properties.put(
-			FELIX_FILEINSTALL_POLL,
+			FrameworkPropsKeys.FELIX_FILEINSTALL_LOG_LEVEL,
+			_getFelixFileInstallLogLevel());
+		properties.put(
+			FrameworkPropsKeys.FELIX_FILEINSTALL_POLL,
 			String.valueOf(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL));
 		properties.put(
-			FELIX_FILEINSTALL_TMPDIR, System.getProperty("java.io.tmpdir"));
+			FrameworkPropsKeys.FELIX_FILEINSTALL_TMPDIR,
+			System.getProperty("java.io.tmpdir"));
 		properties.put(
 			Constants.FRAMEWORK_BEGINNING_STARTLEVEL,
 			String.valueOf(PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
@@ -667,7 +670,7 @@ public class ModuleFrameworkImpl
 		Enumeration<URL> enu = Collections.enumeration(Collections.emptyList());
 
 		try {
-			enu = classLoader.getResources(MANIFEST_PATH);
+			enu = classLoader.getResources("META-INF/MANIFEST.MF");
 		}
 		catch (IOException ioe) {
 			_log.error(ioe, ioe);
@@ -958,10 +961,9 @@ public class ModuleFrameworkImpl
 
 		Hashtable<String, Object> properties = new Hashtable<String, Object>();
 
-		properties.put(SERVICE_PROPERTY_KEY_BEAN_ID, beanName);
-		properties.put(SERVICE_PROPERTY_KEY_ORIGINAL_BEAN, Boolean.TRUE);
-		properties.put(
-			SERVICE_PROPERTY_KEY_SERVICE_VENDOR, ReleaseInfo.getVendor());
+		properties.put(ServicePropsKeys.BEAN_ID, beanName);
+		properties.put(ServicePropsKeys.ORIGINAL_BEAN, Boolean.TRUE);
+		properties.put(ServicePropsKeys.VENDOR, ReleaseInfo.getVendor());
 
 		bundleContext.registerService(
 			names.toArray(new String[names.size()]), bean, properties);
@@ -973,10 +975,9 @@ public class ModuleFrameworkImpl
 		Hashtable<String, Object> properties = new Hashtable<String, Object>();
 
 		properties.put(
-			SERVICE_PROPERTY_KEY_BEAN_ID, ServletContext.class.getName());
-		properties.put(SERVICE_PROPERTY_KEY_ORIGINAL_BEAN, Boolean.TRUE);
-		properties.put(
-			SERVICE_PROPERTY_KEY_SERVICE_VENDOR, ReleaseInfo.getVendor());
+			ServicePropsKeys.BEAN_ID, ServletContext.class.getName());
+		properties.put(ServicePropsKeys.ORIGINAL_BEAN, Boolean.TRUE);
+		properties.put(ServicePropsKeys.VENDOR, ReleaseInfo.getVendor());
 
 		bundleContext.registerService(
 			new String[] {ServletContext.class.getName()}, servletContext,

@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.lar.BasePortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
+import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -179,34 +180,34 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 		if (Validator.isNotNull(article.getStructureId())) {
 			DDMStructure ddmStructure =
 				DDMStructureLocalServiceUtil.getStructure(
-					article.getGroupId(), article.getStructureId(), true);
+					article.getGroupId(),
+					PortalUtil.getClassNameId(JournalArticle.class),
+					article.getStructureId(), true);
 
 			articleElement.addAttribute(
 				"ddm-structure-uuid", ddmStructure.getUuid());
 
-			String ddmStructurePath = getDDMStructurePath(
-				portletDataContext, ddmStructure.getUuid());
-
-			DDMPortletDataHandler.exportStructure(
-				portletDataContext, ddmStructuresElement, ddmStructurePath,
-				ddmStructure);
+			StagedModelDataHandlerUtil.exportStagedModel(
+				portletDataContext, ddmStructuresElement, ddmStructure);
 		}
 
 		if (Validator.isNotNull(article.getTemplateId())) {
 			DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(
-				article.getGroupId(), article.getTemplateId(), true);
+				article.getGroupId(),
+				PortalUtil.getClassNameId(DDMStructure.class),
+				article.getTemplateId(), true);
 
 			articleElement.addAttribute(
 				"ddm-template-uuid", ddmTemplate.getUuid());
 
-			String ddmTemplatePath = getDDMTemplatePath(
-				portletDataContext, ddmTemplate);
-
-			DDMPortletDataHandler.exportTemplate(
-				portletDataContext, ddmTemplatesElement,
-				dlFileEntryTypesElement, dlFoldersElement, dlFileEntriesElement,
-				dlFileRanksElement, dlRepositoriesElement,
-				dlRepositoryEntriesElement, ddmTemplatePath, ddmTemplate);
+			StagedModelDataHandlerUtil.exportStagedModel(
+				portletDataContext,
+				new Element[] {
+					ddmTemplatesElement, dlFileEntryTypesElement,
+					dlFoldersElement, dlFileEntriesElement, dlFileRanksElement,
+					dlRepositoriesElement, dlRepositoryEntriesElement
+				},
+				ddmTemplate);
 		}
 
 		if (article.isSmallImage()) {
@@ -520,8 +521,9 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 					article.getStructureId());
 
 				if (Validator.isNotNull(newStructureId)) {
-					existingDDMStructure = DDMStructureUtil.fetchByG_S(
+					existingDDMStructure = DDMStructureUtil.fetchByG_C_S(
 						portletDataContext.getScopeGroupId(),
+						PortalUtil.getClassNameId(JournalArticle.class),
 						String.valueOf(newStructureId));
 				}
 
@@ -569,8 +571,10 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 					article.getTemplateId());
 
 				if (Validator.isNotNull(newTemplateId)) {
-					existingDDMTemplate = DDMTemplateUtil.fetchByG_T(
-						portletDataContext.getScopeGroupId(), newTemplateId);
+					existingDDMTemplate = DDMTemplateUtil.fetchByG_C_T(
+						portletDataContext.getScopeGroupId(),
+						PortalUtil.getClassNameId(DDMStructure.class),
+						newTemplateId);
 				}
 
 				if (existingDDMTemplate == null) {
@@ -1647,12 +1651,8 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 			if (portletDataContext.isWithinDateRange(
 					ddmStructure.getModifiedDate())) {
 
-				String ddmStructurePath = getDDMStructurePath(
-					portletDataContext, ddmStructure.getUuid());
-
-				DDMPortletDataHandler.exportStructure(
-					portletDataContext, ddmStructuresElement, ddmStructurePath,
-					ddmStructure);
+				StagedModelDataHandlerUtil.exportStagedModel(
+					portletDataContext, ddmStructuresElement, ddmStructure);
 			}
 
 			ddmTemplates.addAll(ddmStructure.getTemplates());
@@ -1673,12 +1673,8 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 			if (portletDataContext.isWithinDateRange(
 					ddmTemplate.getModifiedDate())) {
 
-				String ddmTemplatePath = getDDMTemplatePath(
-					portletDataContext, ddmTemplate);
-
-				DDMPortletDataHandler.exportTemplate(
-					portletDataContext, ddmTemplatesElement, ddmTemplatePath,
-					ddmTemplate);
+				StagedModelDataHandlerUtil.exportStagedModel(
+					portletDataContext, ddmTemplatesElement, ddmTemplate);
 			}
 		}
 
@@ -1760,7 +1756,7 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 			"structure");
 
 		for (Element ddmStructureElement : ddmStructureElements) {
-			DDMPortletDataHandler.importStructure(
+			StagedModelDataHandlerUtil.importStagedModel(
 				portletDataContext, ddmStructureElement);
 		}
 
@@ -1770,7 +1766,7 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 			"template");
 
 		for (Element ddmTemplateElement : ddmTemplateElements) {
-			DDMPortletDataHandler.importTemplate(
+			StagedModelDataHandlerUtil.importStagedModel(
 				portletDataContext, ddmTemplateElement);
 		}
 

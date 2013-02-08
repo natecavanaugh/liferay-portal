@@ -102,7 +102,7 @@ public class BookmarksPortletDataHandler extends BasePortletDataHandler {
 
 		final Element foldersElement = rootElement.addElement("folders");
 
-		ActionableDynamicQuery foldersActionableDynamicQuery =
+		ActionableDynamicQuery folderActionableDynamicQuery =
 			new BookmarksFolderActionableDynamicQuery() {
 
 			@Override
@@ -121,14 +121,14 @@ public class BookmarksPortletDataHandler extends BasePortletDataHandler {
 
 		};
 
-		foldersActionableDynamicQuery.setGroupId(
+		folderActionableDynamicQuery.setGroupId(
 			portletDataContext.getScopeGroupId());
 
-		foldersActionableDynamicQuery.performActions();
+		folderActionableDynamicQuery.performActions();
 
 		final Element entriesElement = rootElement.addElement("entries");
 
-		ActionableDynamicQuery entriesActionableDynamicQuery =
+		ActionableDynamicQuery entryActionableDynamicQuery =
 			new BookmarksEntryActionableDynamicQuery() {
 
 			@Override
@@ -148,10 +148,10 @@ public class BookmarksPortletDataHandler extends BasePortletDataHandler {
 
 		};
 
-		entriesActionableDynamicQuery.setGroupId(
+		entryActionableDynamicQuery.setGroupId(
 			portletDataContext.getScopeGroupId());
 
-		entriesActionableDynamicQuery.performActions();
+		entryActionableDynamicQuery.performActions();
 
 		return rootElement.formattedString();
 	}

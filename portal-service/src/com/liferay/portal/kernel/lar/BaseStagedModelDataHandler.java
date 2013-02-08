@@ -45,7 +45,8 @@ public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 		}
 
 		try {
-			doExportStagedModel(portletDataContext, elements, stagedModel);
+			doExportStagedModel(
+				portletDataContext, elements, (T)stagedModel.clone());
 		}
 		catch (Exception e) {
 			throw new PortletDataException(e);

@@ -26,7 +26,7 @@ AUI.add(
 						setter: A.one
 					},
 
-					portletNamespace: {
+					namespace: {
 					},
 
 					repeatable: {
@@ -92,8 +92,8 @@ AUI.add(
 									classNameId: instance.get('classNameId'),
 									classPK: instance.get('classPK'),
 									fieldName: fieldName,
+									namespace: instance.get('namespace'),
 									p_p_isolated: true,
-									portletNamespace: instance.get('portletNamespace'),
 									readOnly: instance.get('readOnly')
 								},
 								on: {
@@ -172,7 +172,7 @@ AUI.add(
 					renderRepeatableUI: function(fieldNode) {
 						var instance = this;
 
-						if ((instance.get('repeatable') === 'true') && (fieldNode.getData('repeatable') === 'true')) {
+						if ((instance.get('repeatable') === true) && (fieldNode.getData('repeatable') === 'true')) {
 							if (!fieldNode.getData('rendered-toolbar')) {
 								var fieldName = fieldNode.getData('fieldName');
 

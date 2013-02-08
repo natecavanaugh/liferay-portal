@@ -315,6 +315,7 @@ public class PortalImpl implements Portal {
 		_pathFriendlyURLPublic = _pathContext + _PUBLIC_GROUP_SERVLET_MAPPING;
 		_pathImage = _pathContext + PATH_IMAGE;
 		_pathMain = _pathContext + PATH_MAIN;
+		_pathModule = _pathContext + PATH_MODULE;
 
 		// Groups
 
@@ -2901,6 +2902,10 @@ public class PortalImpl implements Portal {
 
 	public String getPathMain() {
 		return _pathMain;
+	}
+
+	public String getPathModule() {
+		return _pathModule;
 	}
 
 	public String getPathProxy() {
@@ -6482,6 +6487,7 @@ public class PortalImpl implements Portal {
 	private String _pathFriendlyURLPublic;
 	private String _pathImage;
 	private String _pathMain;
+	private String _pathModule;
 	private String _pathProxy;
 	private Map<String, Long> _plidToPortletIdMap =
 		new ConcurrentHashMap<String, Long>();

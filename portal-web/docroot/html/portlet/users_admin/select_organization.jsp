@@ -17,11 +17,13 @@
 <%@ include file="/html/portlet/users_admin/init.jsp" %>
 
 <%
+String eventName = ParamUtil.getString(request, "eventName", "selectOrganization");
 String target = ParamUtil.getString(request, "target");
 
 PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("struts_action", "/users_admin/select_organization");
+portletURL.setParameter("eventName", eventName);
 
 if (Validator.isNotNull(target)) {
 	portletURL.setParameter("target", target);
@@ -150,7 +152,7 @@ if (Validator.isNotNull(target)) {
 		function(event) {
 			var result = Util.getAttributes(event.currentTarget, 'data-');
 
-			Util.getOpener().Liferay.fire('<portlet:namespace />selectOrganization', result);
+			Util.getOpener().Liferay.fire('<portlet:namespace /><%= eventName %>', result);
 
 			Util.getWindow().close();
 		},

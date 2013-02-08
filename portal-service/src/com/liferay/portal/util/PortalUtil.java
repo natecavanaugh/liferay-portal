@@ -857,6 +857,10 @@ public class PortalUtil {
 		return getPortal().getPathMain();
 	}
 
+	public static String getPathModule() {
+		return getPortal().getPathModule();
+	}
+
 	public static String getPathProxy() {
 		return getPortal().getPathProxy();
 	}

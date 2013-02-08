@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroupRole;
@@ -80,7 +81,9 @@ public class UserGroupRoleLocalServiceImpl
 		PermissionCacheUtil.clearCache();
 	}
 
-	public void checkMembershipPolicy(User user) throws SystemException {
+	public void checkMembershipPolicy(User user)
+		throws PortalException, SystemException {
+
 		LinkedHashMap<String, Object> groupParams =
 			new LinkedHashMap<String, Object>();
 
@@ -107,16 +110,47 @@ public class UserGroupRoleLocalServiceImpl
 				}
 			}
 
-			Set<Role> forbiddenRoles = MembershipPolicyUtil.getForbiddenRoles(
-				group, user);
+			List<Role> roles = roleLocalService.getUserGroupRoles(
+				user.getUserId(), group.getGroupId());
 
-			for (Role role : forbiddenRoles) {
-				if (hasUserGroupRole(
-						user.getUserId(), group.getGroupId(), role.getRoleId(),
-						false)) {
+			for (Role role : roles) {
+				if (!MembershipPolicyUtil.isMembershipAllowed(
+						group, role, user)) {
 
 					deleteUserGroupRoles(
 						user.getUserId(), group.getGroupId(),
+						new long[] {role.getRoleId()});
+				}
+			}
+		}
+
+		List<Organization> organizations =
+			organizationLocalService.getUserOrganizations(user.getUserId());
+
+		for (Organization organization : organizations) {
+			Set<Role> mandatoryRoles = MembershipPolicyUtil.getMandatoryRoles(
+				organization, user);
+
+			for (Role role : mandatoryRoles) {
+				if (!hasUserGroupRole(
+						user.getUserId(), organization.getGroupId(),
+						role.getRoleId(), false)) {
+
+					addUserGroupRoles(
+						user.getUserId(), organization.getGroupId(),
+						new long[] {role.getRoleId()});
+				}
+			}
+
+			List<Role> roles = roleLocalService.getUserGroupRoles(
+				user.getUserId(), organization.getGroupId());
+
+			for (Role role : roles) {
+				if (!MembershipPolicyUtil.isMembershipAllowed(
+						organization, role, user)) {
+
+					deleteUserGroupRoles(
+						user.getUserId(), organization.getGroupId(),
 						new long[] {role.getRoleId()});
 				}
 			}

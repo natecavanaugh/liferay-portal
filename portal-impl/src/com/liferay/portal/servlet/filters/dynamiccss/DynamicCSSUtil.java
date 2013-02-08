@@ -247,6 +247,18 @@ public class DynamicCSSUtil {
 
 		String themeId = ParamUtil.getString(request, "themeId");
 
+		if (Validator.isNotNull(themeId)) {
+			try {
+				Theme theme = ThemeLocalServiceUtil.getTheme(
+					companyId, themeId, false);
+
+				return theme;
+			}
+			catch (Exception e) {
+				_log.error(e, e);
+			}
+		}
+
 		String requestURI = URLDecoder.decode(
 			request.getRequestURI(), StringPool.UTF8);
 
