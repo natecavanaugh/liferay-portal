@@ -162,7 +162,7 @@ public class PortletURLUtil {
 	public static String getRefreshURL(
 		HttpServletRequest request, ThemeDisplay themeDisplay) {
 
-		StringBundler sb = new StringBundler(32);
+		StringBundler sb = new StringBundler();
 
 		sb.append(themeDisplay.getPathMain());
 		sb.append("/portal/render_portlet?p_l_id=");
@@ -229,6 +229,9 @@ public class PortletURLUtil {
 		}
 
 		sb.append("&p_p_isolated=1");
+
+		sb.append("&p_v_l_s_g_id=");
+		sb.append(themeDisplay.getSiteGroupId());
 
 		String doAsUserId = themeDisplay.getDoAsUserId();
 
