@@ -189,13 +189,13 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 						</c:if>
 
 						<aui:button-row>
-							<aui:button id='<%= namespace + randomNamespace + "postReplyButton" + i %>' onClick='<%= randomNamespace + "postReply(" + i + ");" %>' value="<%= postReplyButtonLabel %>" />
+							<aui:button cssClass="aui-button-comment" id='<%= namespace + randomNamespace + "postReplyButton" + i %>' onClick='<%= randomNamespace + "postReply(" + i + ");" %>' value="<%= postReplyButtonLabel %>" />
 
 							<%
 							String taglibCancel = "document.getElementById('" + randomNamespace + "postReplyForm" + i + "').style.display = 'none'; document.getElementById('" + namespace + randomNamespace + "postReplyBody" + i + "').value = ''; void('');";
 							%>
 
-							<aui:button onClick="<%= taglibCancel %>" type="cancel" />
+							<aui:button cssClass="aui-button-comment" onClick="<%= taglibCancel %>" type="cancel" />
 						</aui:button-row>
 					</div>
 				</aui:fieldset>
@@ -430,13 +430,13 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 									<aui:input id='<%= randomNamespace + "postReplyBody" + i %>' label="" name='<%= "postReplyBody" + i %>' style='<%= "height: " + ModelHintsConstants.TEXTAREA_DISPLAY_HEIGHT + "px; width: " + ModelHintsConstants.TEXTAREA_DISPLAY_WIDTH + "px;" %>' type="textarea" wrap="soft" />
 
 									<aui:button-row>
-										<aui:button id='<%= namespace + randomNamespace + "postReplyButton" + i %>' onClick='<%= randomNamespace + "postReply(" + i + ");" %>' value='<%= themeDisplay.isSignedIn() ? "reply" : "reply-as" %>' />
+										<aui:button cssClass="aui-button-comment" id='<%= namespace + randomNamespace + "postReplyButton" + i %>' onClick='<%= randomNamespace + "postReply(" + i + ");" %>' value='<%= themeDisplay.isSignedIn() ? "reply" : "reply-as" %>' />
 
 										<%
 										String taglibCancel = "document.getElementById('" + randomNamespace + "postReplyForm" + i + "').style.display = 'none'; document.getElementById('" + namespace + randomNamespace + "postReplyBody" + i + "').value = ''; void('');";
 										%>
 
-										<aui:button onClick="<%= taglibCancel %>" type="cancel" />
+										<aui:button cssClass="aui-button-comment" onClick="<%= taglibCancel %>" type="cancel" />
 									</aui:button-row>
 								</div>
 
@@ -610,12 +610,16 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 			window,
 			'<portlet:namespace />sendMessage',
 			function(form, refreshPage) {
+				var Util = Liferay.Util;
+
 				var A = AUI();
 
-				var uri = form.getAttribute('action');
+				form = A.one(form);
+
+				var commentButtonList = form.all('.aui-button-comment input');
 
 				A.io.request(
-					uri,
+					form.attr('action'),
 					{
 						dataType: 'json',
 						form: {
@@ -624,6 +628,11 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 						on: {
 							failure: function(event, id, obj) {
 								<portlet:namespace />showStatusMessage('error', '<%= UnicodeLanguageUtil.get(pageContext, "your-request-failed-to-complete") %>');
+
+								Util.toggleDisabled(commentButtonList, false);
+							},
+							start: function() {
+								Util.toggleDisabled(commentButtonList, true);
 							},
 							success: function(event, id, obj) {
 								var response = this.get('responseData');
@@ -661,6 +670,8 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 
 									<portlet:namespace />showStatusMessage('error', errorKey);
 								}
+
+								Util.toggleDisabled(commentButtonList, false);
 							}
 						}
 					}
