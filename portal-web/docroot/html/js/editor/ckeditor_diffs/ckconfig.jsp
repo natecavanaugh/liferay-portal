@@ -27,6 +27,9 @@ boolean inlineEdit = ParamUtil.getBoolean(request, "inlineEdit");
 String languageId = ParamUtil.getString(request, "languageId");
 
 response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
+
+//TODO: check portal properties to decide which spellchecker(s) should be active
+String spellcheckerPlugins="'SpellChecker', 'Scayt', 'jQuerySpellChecker'";
 %>
 
 if (!CKEDITOR.stylesSet.get('liferayStyles')) {
@@ -67,7 +70,7 @@ CKEDITOR.config.contentsCss = '<%= HtmlUtil.escapeJS(cssPath) %>/main.css';
 
 CKEDITOR.config.entities = false;
 
-CKEDITOR.config.extraPlugins = 'ajaxsave,restore';
+CKEDITOR.config.extraPlugins = 'ajaxsave,restore,jqueryspellchecker';
 
 CKEDITOR.config.height = 265;
 
@@ -80,14 +83,14 @@ CKEDITOR.config.toolbar_editInPlace = [
 	['Bold', 'Italic', 'Underline', 'Strike'],
 	['Subscript', 'Superscript', 'SpecialChar'],
 	['Undo', 'Redo'],
-	['SpellChecker', 'Scayt'],
+	[<%=spellcheckerPlugins%>],
 	['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'], ['Source', 'RemoveFormat'],
 ];
 
 CKEDITOR.config.toolbar_email = [
 	['FontSize', 'TextColor', 'BGColor', '-', 'Bold', 'Italic', 'Underline', 'Strike'],
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-	['SpellChecker', 'Scayt'],
+	[<%=spellcheckerPlugins%>],
 	'/',
 	['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
 	['Source'],
@@ -109,7 +112,7 @@ CKEDITOR.config.toolbar_liferay = [
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 	['Image', 'Link', 'Unlink', 'Anchor'],
 	['Flash', 'Table', '-', 'Smiley', 'SpecialChar'],
-	['Find', 'Replace', 'SpellChecker', 'Scayt'],
+	['Find', 'Replace', <%=spellcheckerPlugins%>],
 	['SelectAll', 'RemoveFormat'],
 	['Subscript', 'Superscript']
 
@@ -124,7 +127,7 @@ CKEDITOR.config.toolbar_liferayArticle = [
 	['Subscript', 'Superscript'],
 	'/',
 	['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
-	['Find', 'Replace', 'SpellChecker', 'Scayt'],
+    ['Find', 'Replace', <%=spellcheckerPlugins%>],
 	['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 	'/',
