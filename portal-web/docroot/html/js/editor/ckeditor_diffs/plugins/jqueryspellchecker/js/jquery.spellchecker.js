@@ -419,6 +419,14 @@
   };
 
   WebService.prototype.checkWords = function(text, callback) {
+    //CUSTOM START
+	//checkWords {"outcome":"success","data":[["denounncing","Noo","consequencse\\'s","caonsequences"]]}
+	if (this.defaultConfig.data.driver == "test") {
+		var testResponse = {"outcome":"success","data":[["denounncing","Noo","consequencse\\'s","caonsequences"]]};
+		callback(testResponse);
+		return;
+	}
+    //CUSTOM END
     return this.makeRequest({
       data: {
         action: 'get_incorrect_words',
@@ -429,6 +437,23 @@
   };
 
   WebService.prototype.getSuggestions = function(word, callback) {
+    //CUSTOM START
+	if (this.defaultConfig.data.driver == "test") {
+		//getSuggestions("denounncing") ["denouncing","renouncing","announcing","trouncing","denounce","demonising","demonizing","defencing","denounced","denounces","penancing"]
+		//getSuggestions("consequencse's") ["consequence's","consequences","consequence","conscience's","convergence's","consciences","Constance's","convergences","consensuses","conservancies"]
+		var testData = {
+			"spelt":["spelled"],
+			"denounncing": ["denouncing","renouncing","announcing","trouncing","denounce","demonising","demonizing","defencing","denounced","denounces","penancing"],
+			"Noo": ["Ono","No","Nook","Noon","Boo","Moo","NOW","Noe","Nor","Now","NCO","Nov","Nob","Nod","Non","Nos","Not","Koo","Coo","Foo","Goo","Loo","Poo","Too","Woo","Zoo","No's"],
+			"consequencse's":["consequence's","consequences","consequence","conscience's","convergence's","consciences","Constance's","convergences","consensuses","conservancies"],
+			"caonsequences":["consequences","consequence's","consequence","consciences","conscience's","convergences","convergence's","Constance's"]
+		};
+		var testResponse = testData[word];
+		callback(testResponse);
+		return;
+	}
+    //CUSTOM END
+
     return this.makeRequest({
       data: {
         action: 'get_suggestions',
@@ -763,7 +788,7 @@
         words = $.grep(words, function(el, index){
           return index === $.inArray(el, words);
         });
-        this.incorrectWords.get(i).addWords(words); 
+        this.incorrectWords.get(i).addWords(words);
       }
     }.bind(this));
     this.suggestBox.reattach();

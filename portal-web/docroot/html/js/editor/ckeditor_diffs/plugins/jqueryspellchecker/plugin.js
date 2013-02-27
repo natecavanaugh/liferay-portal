@@ -3,6 +3,17 @@
  * https://github.com/badsyntax/jquery-spellchecker
  * Copyright (c) 2012 Richard Willis; Licensed MIT
  */
+//CUSTOM START
+var baseJscPluginPath = themeDisplay.getPathJavaScript() + '/editor/ckeditor/plugins/jqueryspellchecker';
+//1. Tried loading these only if the plugin loads but ran into scoping issue on the SpellChecker object even though the files were loaded correctly
+//CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(baseJscPluginPath + "/js/jquery-1.8.2.min.js"), function (success) {
+//	CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(baseJscPluginPath + "/js/jquery.spellchecker.js"));
+//});
+
+//2. The stock jqueryspellchecker attaches its stylesheet to the document itself but that didn't seem to work in our initial testing.
+//CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl(baseJscPluginPath + "/css/jquery.spellchecker.css"));
+CKEDITOR.config.contentsCss = [CKEDITOR.config.contentsCss,baseJscPluginPath + '/css/jquery.spellchecker.css']
+//CUSTOM END
 
 CKEDITOR.plugins.add('jqueryspellchecker', {
 
@@ -11,7 +22,10 @@ CKEDITOR.plugins.add('jqueryspellchecker', {
     parser: 'html',
     webservice: {
       path: '/webservices/php/SpellChecker.php',
-      driver: 'pspell'
+	  //CUSTOM START - "test" will use static json data with a small set of words
+      //driver: 'pspell'
+      driver: 'test'
+      //CUSTOM END
     },
     suggestBox: {
       position: 'below',
@@ -36,7 +50,9 @@ CKEDITOR.plugins.add('jqueryspellchecker', {
 
     editor.ui.addButton('jQuerySpellChecker', {
       label: 'SpellCheck',
-      icon: themeDisplay.getPathJavaScript() + '/editor/ckeditor/plugins/jqueryspellchecker/assets/spellchecker.png',
+//CUSTOM START
+      icon: baseJscPluginPath + '/assets/spellchecker.png',
+//CUSTOM END
       command: pluginName,
       toolbar: 'spellchecker,10'
     });
@@ -89,7 +105,10 @@ CKEDITOR.plugins.add('jqueryspellchecker', {
       return $('<div />').append(t.editor.getData()).text();
     };
 
-    t.spellchecker = new SpellChecker(t.editor.document.$.body, this.config);
+	//CUSTOM START - needed to get past scope problem when loaded w/i Liferay
+    //t.spellchecker = new SpellChecker(t.editor.document.$.body, this.config);
+    t.spellchecker = new window.$.SpellChecker(t.editor.document.$.body, this.config);
+    //CUSTOM END
 
     t.spellchecker.on('check.success', function() {
       alert('There are no incorrectly spelled words.');
