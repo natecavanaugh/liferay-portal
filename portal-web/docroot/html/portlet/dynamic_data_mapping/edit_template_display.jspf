@@ -76,7 +76,7 @@ boolean useRichEditor = editorType.equals("rich");
 	</liferay-ui:panel>
 </liferay-ui:panel-container>
 
-<aui:script use="aui-ace-editor">
+<aui:script use="aui-ace-autocomplete-plugin,aui-ace-autocomplete-freemarker">
 	var editorType = '<%= HtmlUtil.escapeJS(editorType) %>';
 
 	var plainEditorField = A.one('#<portlet:namespace />plainEditorField');
@@ -84,6 +84,8 @@ boolean useRichEditor = editorType.equals("rich");
 	var richEditor;
 
 	var prevEditorContent;
+
+	var selectLanguageNode = A.one('#<portlet:namespace />language');
 
 	function getEditorContent(type) {
 		var content = '';
@@ -107,6 +109,31 @@ boolean useRichEditor = editorType.equals("rich");
 		}
 
 		prevEditorContent = content;
+	}
+
+	function updateEditorPlugins(event) {
+		var selectedOptionValue = selectLanguageNode.one('option:selected').val();
+
+		if (selectedOptionValue === 'ftl') {
+			richEditor.plug(
+				A.Plugin.AceAutoComplete,
+				{
+					fillMode: 1,
+					processor: new A.AceEditor.AutoCompleteFreemarker(
+						{
+							variables: <%= DDMTemplateHelperUtil.getAutocompleteJSON(request) %>
+						}
+					),
+					render: true,
+					visible: false,
+					width: 250,
+					zIndex: 10000
+				}
+			);
+		}
+		else {
+			richEditor.unplug(A.Plugin.AceAutoComplete);
+		}
 	}
 
 	function updateEditorType(event) {
@@ -164,6 +191,10 @@ boolean useRichEditor = editorType.equals("rich");
 					editorContentElement.val(getEditorContent());
 				}
 			);
+
+			selectLanguageNode.on('change', updateEditorPlugins);
+
+			updateEditorPlugins();
 		},
 		'#<portlet:namespace />richEditor'
 	);
