@@ -7,12 +7,18 @@ AUI.add(
 
 		var DIRECTION_RIGHT = 1;
 
+		var HOVER = 'hover';
+
 		var MAP_HOVER = {};
 
 		var NAME = 'liferaynavigationinteraction';
 
 		var hideMenu = function() {
-			Liferay.fire('hideNavigationMenu', MAP_HOVER);
+			if (MAP_HOVER.menu) {
+				Liferay.fire('hideNavigationMenu', MAP_HOVER);
+
+				MAP_HOVER = {};
+			}
 		};
 
 		var NavigationInteraction = A.Component.create(
@@ -32,44 +38,66 @@ AUI.add(
 
 						var hostULId = '#' + navigation.guid();
 
+						var UA = A.UA;
+						var nonIETouch = (UA.touch && !UA.ie);
+
 						instance._directLiChild = hostULId + '> li';
 
 						instance._hostULId = hostULId;
 
 						Liferay.on(
-							['showNavigationMenu', 'hideNavigationMenu'],
+							['hideNavigationMenu', 'showNavigationMenu'],
 							function(event) {
 								var showMenu = event.type == 'showNavigationMenu';
 
-								event.menu.toggleClass('hover', showMenu);
+								event.menu.toggleClass(HOVER, showMenu);
 							}
 						);
 
-						if (navigation) {
-							navigation.delegate('mouseenter', instance._onMouseToggle, '> li', instance);
-							navigation.delegate('mouseleave', instance._onMouseToggle, '> li', instance);
+						if (nonIETouch) {
+							if (navigation) {
+								navigation.delegate(
+									'click',
+									instance._onTouchClick,
+									'> li > a',
+									instance
+								);
+							}
+						}
+						else {
+							if (navigation) {
+								navigation.delegate(
+									['mouseenter', 'mouseleave'],
+									instance._onMouseToggle,
+									'> li',
+									instance
+								);
 
 							navigation.delegate('keydown', instance._handleKeyDown, 'a', instance);
-						}
-
-						host.plug(
-							A.Plugin.NodeFocusManager,
-							{
-								descendants: 'a',
-								focusClass: 'active',
-								keys: {
-									next: 'down:40',
-									previous: 'down:38'
-								}
 							}
-						);
 
-						var focusManager = host.focusManager;
+							host.plug(
+								A.Plugin.NodeFocusManager,
+								{
+									descendants: 'a',
+									focusClass: 'active',
+									keys: {
+										next: 'down:40',
+										previous: 'down:38'
+									}
+								}
+							);
 
-						focusManager.after('activeDescendantChange', instance._showMenu, instance);
-						focusManager.after('focusedChange', instance._showMenu, instance);
+							var focusManager = host.focusManager;
 
-						instance._focusManager = focusManager;
+							focusManager.after(
+								['activeDescendantChange', 'focusedChange'],
+								instance._showMenu,
+								instance
+							);
+
+							instance._focusManager = focusManager;
+						}
 					},
 
 					_handleExit: function(event) {
@@ -169,23 +197,73 @@ AUI.add(
 						Liferay.fire(eventType, MAP_HOVER);
 					},
 
+					_onTouchClick: function(event) {
+						var instance = this;
+
+						var menuNew = event.currentTarget.ancestor(instance._directLiChild);
+						var menuOld = MAP_HOVER.menu;
+
+						var childMenu = menuNew.one('.child-menu');
+
+						if (childMenu && !menuNew.hasClass(HOVER)) {
+							event.preventDefault();
+						}
+
+						if (menuOld) {
+							if (menuOld != menuNew) {
+								Liferay.fire('hideNavigationMenu', MAP_HOVER);
+
+								MAP_HOVER.menu = menuNew;
+
+								Liferay.fire('showNavigationMenu', MAP_HOVER);
+							}
+						}
+						else {
+							MAP_HOVER.menu = menuNew;
+
+							Liferay.fire('showNavigationMenu', MAP_HOVER);
+						}
+					},
+
 					_showMenu: function(event) {
 						var instance = this;
 
 						event.halt();
 
-						var focusManager = instance._focusManager;
+						var menuOld = MAP_HOVER.menu;
 
-						var activeDescendant = focusManager.get(ACTIVE_DESCENDANT);
-						var descendants = focusManager.get('descendants');
+						var newVal = event.newVal;
+						var handleHover = (newVal || newVal === 0);
 
-						if (MAP_HOVER.menu) {
-							Liferay.fire('hideNavigationMenu', MAP_HOVER);
+						if (handleHover) {
+							var focusManager = instance._focusManager;
+
+							var activeDescendant = focusManager.get(ACTIVE_DESCENDANT);
+							var descendants = focusManager.get('descendants');
+							var link = descendants.item(activeDescendant);
+
+							var menuNew = link.ancestor(instance._directLiChild);
+
+							if (menuOld) {
+								if (menuOld != menuNew) {
+									Liferay.fire('hideNavigationMenu', MAP_HOVER);
+
+									MAP_HOVER.menu = menuNew;
+
+									Liferay.fire('showNavigationMenu', MAP_HOVER);
+								}
+							}
+							else {
+								MAP_HOVER.menu = menuNew;
+
+								Liferay.fire('showNavigationMenu', MAP_HOVER);
+							}
 						}
+						else if (menuOld) {
+							Liferay.fire('hideNavigationMenu', MAP_HOVER);
 
-						MAP_HOVER.menu = descendants.item(activeDescendant).ancestors(instance._directLiChild);
-
-						Liferay.fire('showNavigationMenu', MAP_HOVER);
+							MAP_HOVER = {};
+						}
 					}
 				}
 			}
