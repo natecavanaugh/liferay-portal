@@ -5,13 +5,17 @@ AUI.add(
 			register: function(config) {
 				var instance = this;
 
-				var icon = A.one('#' + config.id);
+				var icon = document.getElementById(config.id);
 
 				var srcHover = config.srcHover;
 				var src = config.src;
 				var forcePost = config.forcePost;
 
 				if (icon) {
+					if (forcePost || srcHover) {
+						icon = A.one(icon);
+					}
+
 					if (srcHover) {
 						instance._onMouseOver = A.rbind(instance._onMouseHover, instance, srcHover);
 						instance._onMouseOut = A.rbind(instance._onMouseHover, instance, src);
