@@ -7,24 +7,25 @@ AUI.add(
 
 				var icon = document.getElementById(config.id);
 
-				var srcHover = config.srcHover;
-				var src = config.src;
-				var forcePost = config.forcePost;
-
 				if (icon) {
+					var forcePost = config.forcePost;
+					var srcHover = config.srcHover;
+
 					if (forcePost || srcHover) {
 						icon = A.one(icon);
-					}
 
-					if (srcHover) {
-						instance._onMouseOver = A.rbind(instance._onMouseHover, instance, srcHover);
-						instance._onMouseOut = A.rbind(instance._onMouseHover, instance, src);
+						if (forcePost) {
+							icon.on('click', instance._onClick, instance);
+						}
 
-						icon.hover(instance._onMouseOver, instance._onMouseOut);
-					}
+						if (srcHover) {
+							var src = config.src;
 
-					if (forcePost) {
-						icon.on('click', instance._onClick, instance);
+							instance._onMouseOver = A.rbind(instance._onMouseHover, instance, srcHover);
+							instance._onMouseOut = A.rbind(instance._onMouseHover, instance, src);
+
+							icon.hover(instance._onMouseOver, instance._onMouseOut);
+						}
 					}
 				}
 			},
