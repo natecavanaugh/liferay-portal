@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -117,14 +116,6 @@ public class DataAccess {
 		throws SQLException {
 
 		Connection con = getConnection();
-
-		DatabaseMetaData metaData = con.getMetaData();
-
-		String productName = metaData.getDatabaseProductName();
-
-		if (!productName.equals("Microsoft SQL Server")) {
-			return con;
-		}
 
 		Thread currentThread = Thread.currentThread();
 

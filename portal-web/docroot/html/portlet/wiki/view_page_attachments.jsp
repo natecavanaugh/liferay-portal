@@ -76,7 +76,7 @@ PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "att
 			<liferay-ui:trash-empty
 				confirmMessage="are-you-sure-you-want-to-remove-the-attachments-for-this-page"
 				emptyMessage="remove-the-attachments-for-this-page"
-				infoMessage="attachments-that-have-been-removed-for-more-than-x-days-will-be-automatically-deleted"
+				infoMessage="attachments-that-have-been-removed-for-more-than-x-will-be-automatically-deleted"
 				portletURL="<%= emptyTrashURL.toString() %>"
 				totalEntries="<%= wikiPage.getDeletedAttachmentsFileEntriesCount() %>"
 			/>
