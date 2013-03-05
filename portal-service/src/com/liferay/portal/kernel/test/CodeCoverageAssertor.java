@@ -81,10 +81,10 @@ public class CodeCoverageAssertor implements TestRule {
 			}
 		};
 	}
-	
+
 	protected ClassLoader getClassLoader() {
 		Class<?> clazz = getClass();
-		
+
 		return clazz.getClassLoader();
 	}
 
