@@ -131,7 +131,15 @@ boolean useRichEditor = editorType.equals("rich");
 				</div>
 			</div>
 	
-			<div class="lfr-editor-container lfr-editor-container-full" id="<portlet:namespace />editorContainer">
+			<%
+			String editorContainerClass = "lfr-editor-container";
+
+			if (!language.equalsIgnoreCase("ftl")) {
+				editorContainerClass += " lfr-editor-container-full";
+			}
+			%>
+
+			<div class="<%= editorContainerClass %>" id="<portlet:namespace />editorContainer">
 				<div class="lfr-plain-editor <%= useRichEditor ? "aui-helper-hidden" : StringPool.BLANK %>" id="<portlet:namespace />plainEditor">
 					<aui:input cssClass="lfr-template-editor" inputCssClass="lfr-editor-textarea" label="" name="plainEditorField" onKeyDown="Liferay.Util.checkTab(this); Liferay.Util.disableEsc();" type="textarea" value="" wrap="off" />
 				</div>
@@ -423,7 +431,7 @@ boolean useRichEditor = editorType.equals("rich");
 				}
 			).render();
 
-			var editorContentElement = panelScriptContainer.one('#<portlet:namespace />scriptContent');
+			var editorContentElement = A.one('#<portlet:namespace />scriptContent');
 
 			if (editorContentElement) {
 				setEditorContent(editorType, editorContentElement.val());
