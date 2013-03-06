@@ -5,13 +5,13 @@ AUI.add(
 			register: function(config) {
 				var instance = this;
 
-				var icon = document.getElementById(config.id);
+				var forcePost = config.forcePost;
+				var srcHover = config.srcHover;
 
-				if (icon) {
-					var forcePost = config.forcePost;
-					var srcHover = config.srcHover;
+				if (forcePost || srcHover) {
+					var icon = document.getElementById(config.id);
 
-					if (forcePost || srcHover) {
+					if (icon) {
 						icon = A.one(icon);
 
 						if (forcePost) {
@@ -19,10 +19,10 @@ AUI.add(
 						}
 
 						if (srcHover) {
-							var src = config.src;
+							var onMouseHover = instance._onMouseHover;
 
-							instance._onMouseOver = A.rbind(instance._onMouseHover, instance, srcHover);
-							instance._onMouseOut = A.rbind(instance._onMouseHover, instance, src);
+							instance._onMouseOver = A.rbind(onMouseHover, instance, srcHover);
+							instance._onMouseOut = A.rbind(onMouseHover, instance, config.src);
 
 							icon.hover(instance._onMouseOver, instance._onMouseOut);
 						}
