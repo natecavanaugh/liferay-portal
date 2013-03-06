@@ -14,12 +14,11 @@
 
 package com.liferay.portal.words.service.impl;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.words.service.base.WordsServiceBaseImpl;
+
 import java.util.List;
 
 /**
@@ -37,29 +36,48 @@ import java.util.List;
  * @see com.liferay.portal.words.service.WordsServiceUtil
  */
 public class WordsServiceImpl extends WordsServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
+
+	/**
+	 * Checks the spelling of a block of text.
 	 *
-	 * Never reference this interface directly. Always use {@link com.liferay.portal.words.service.WordsServiceUtil} to access the words remote service.
+	 * <p>
+	 * This method handles spell checking of text. It takes a block of text
+	 * as input,and returns a list of any incorrectly spelled words found.
+	 * </p>
+	 *
+	 * @param  text the block of text to be spell checked.
+	 * @return the mis-spelled words
 	 */
-    public JSONObject checkSpelling(String text) {
-        JSONArray inner = JSONFactoryUtil.createJSONArray();
-        for (String s : wordsLocalService.checkSpelling(text))
-            inner.put(s);
+	public JSONObject checkSpelling(String text) {
+		JSONArray inner = JSONFactoryUtil.createJSONArray();
+		for (String s : wordsLocalService.checkSpelling(text))
+			inner.put(s);
 
-        JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
-        jsonObj.put(OUTCOME, SUCCESS);
-        jsonObj.put(DATA, JSONFactoryUtil.createJSONArray().put(inner));
+		JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
+		jsonObj.put(OUTCOME, SUCCESS);
+		jsonObj.put(DATA, JSONFactoryUtil.createJSONArray().put(inner));
 
-        return jsonObj;
-    }
+		return jsonObj;
+	}
 
-    public List<String> getSuggestions(String word) {
-        return wordsLocalService.getSuggestions(word);
-    }
+	/**
+	 * Finds suggestions for a misspelled word.
+	 *
+	 * <p>
+	 * This method finds suggested spellings for a misspelled word.
+	 * It takes a misspelled word as input,and returns a list of
+	 * suggested correctly spelled words.
+	 * </p>
+	 *
+	 * @param  word the misspelled word.
+	 * @return the suggested corrections.
+	 */
+	public List<String> getSuggestions(String word) {
+		return wordsLocalService.getSuggestions(word);
+	}
 
-    private static final String OUTCOME = "outcome";
-    private static final String SUCCESS = "success";
-    private static final String DATA = "data";
+	private static final String DATA = "data";
+	private static final String OUTCOME = "outcome";
+	private static final String SUCCESS = "success";
 
 }

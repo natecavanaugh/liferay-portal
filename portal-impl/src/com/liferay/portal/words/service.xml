@@ -2,8 +2,8 @@
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
 
 <service-builder package-path="com.liferay.portal.words">
-    <namespace>Words</namespace>
-    <entity name="Words" local-service="true" remote-service="true">
-        <!-- Words has no database table -->
-    </entity>
-</service-builder> 
+	<namespace>Words</namespace>
+	<entity name="Words" local-service="true" remote-service="true">
+		<!-- Words has no database table -->
+	</entity>
+</service-builder>

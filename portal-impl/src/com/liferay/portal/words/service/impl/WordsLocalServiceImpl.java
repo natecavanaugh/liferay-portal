@@ -14,10 +14,8 @@
 
 package com.liferay.portal.words.service.impl;
 
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.model.PublicRenderParameter;
-import com.liferay.portal.words.service.base.WordsLocalServiceBaseImpl;
 import com.liferay.portal.words.WordsUtil;
+import com.liferay.portal.words.service.base.WordsLocalServiceBaseImpl;
 import com.liferay.util.jazzy.InvalidWord;
 
 import java.util.ArrayList;
@@ -33,37 +31,59 @@ import java.util.List;
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
- * @author Brian Wing Shun Chan
+ * @author Ken Boyer
  * @see com.liferay.portal.words.service.base.WordsLocalServiceBaseImpl
  * @see com.liferay.portal.words.service.WordsLocalServiceUtil
  */
 public class WordsLocalServiceImpl extends WordsLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
+
+	/**
+	 * Checks the spelling of a block of text.
 	 *
-	 * Never reference this interface directly. Always use {@link com.liferay.portal.words.service.WordsLocalServiceUtil} to access the words local service.
+	 * <p>
+	 * This method handles spell checking of text. It takes a block of text
+	 * as input,and returns a list of any incorrectly spelled words found.
+	 * </p>
+	 *
+	 * @param  text the block of text to be spell checked.
+	 * @return the mis-spelled words
 	 */
-    public List<String> checkSpelling(String text) {
-        List<String> invalid = new ArrayList<String>();
-        List<InvalidWord> invalidWords = WordsUtil.checkSpelling(text);
+	public List<String> checkSpelling(String text) {
+		List<String> invalid = new ArrayList<String>();
+		List<InvalidWord> invalidWords = WordsUtil.checkSpelling(text);
 
-        for (InvalidWord invalidWord : invalidWords) {
-            System.out.println("Invalid Word:  " + invalidWord.getInvalidWord());
-            invalid.add(invalidWord.getInvalidWord());
-        }
-        return invalid;
-    }
+		for (InvalidWord invalidWord : invalidWords) {
+			invalid.add(invalidWord.getInvalidWord());
+		}
 
-    public List<String> getSuggestions(String word) {
-        List<String> suggestions;
-        List<InvalidWord> invalidWords = WordsUtil.checkSpelling(word);
+		return invalid;
+	}
 
-        if (!invalidWords.isEmpty() && !invalidWords.get(0).getSuggestions().isEmpty()) {
-            suggestions = invalidWords.get(0).getSuggestions();
-        }
-        else {
-            suggestions  = new ArrayList<String>();
-        }
-        return suggestions;
-    }
+	/**
+	 * Finds suggestions for a misspelled word.
+	 *
+	 * <p>
+	 * This method finds suggested spellings for a misspelled word.
+	 * It takes a misspelled word as input,and returns a list of
+	 * suggested correctly spelled words.
+	 * </p>
+	 *
+	 * @param  word the misspelled word.
+	 * @return the suggested corrections.
+	 */
+	public List<String> getSuggestions(String word) {
+		List<String> suggestions;
+		List<InvalidWord> invalidWords = WordsUtil.checkSpelling(word);
+
+		if (!invalidWords.isEmpty() &&
+			!invalidWords.get(0).getSuggestions().isEmpty()) {
+				suggestions = invalidWords.get(0).getSuggestions();
+		}
+		else {
+			suggestions = new ArrayList<String>();
+		}
+
+		return suggestions;
+	}
+
 }
