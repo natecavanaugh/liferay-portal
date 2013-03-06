@@ -14,27 +14,33 @@
 
 package com.liferay.portal.words.service;
 
-import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.transaction.Isolation;
+import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.service.BaseLocalService;
 
 /**
- * The utility for the words local service. This utility wraps {@link com.liferay.portal.words.service.impl.WordsLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
+ * The interface for the words local service.
  *
  * <p>
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
  * @author Brian Wing Shun Chan
- * @see WordsLocalService
+ * @see WordsLocalServiceUtil
  * @see com.liferay.portal.words.service.base.WordsLocalServiceBaseImpl
  * @see com.liferay.portal.words.service.impl.WordsLocalServiceImpl
  * @generated
  */
-public class WordsLocalServiceUtil {
+@Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
+	PortalException.class, SystemException.class})
+public interface WordsLocalService extends BaseLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portal.words.service.impl.WordsLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
+	 * Never modify or reference this interface directly. Always use {@link WordsLocalServiceUtil} to access the words local service. Add custom service methods to {@link com.liferay.portal.words.service.impl.WordsLocalServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 
 	/**
@@ -42,18 +48,14 @@ public class WordsLocalServiceUtil {
 	*
 	* @return the Spring bean ID for this bean
 	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
-	}
+	public java.lang.String getBeanIdentifier();
 
 	/**
 	* Sets the Spring bean ID for this bean.
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
-	}
+	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
 	/**
 	* Checks the spelling of a block of text.
@@ -66,10 +68,7 @@ public class WordsLocalServiceUtil {
 	* @param text the block of text to be spell checked.
 	* @return the mis-spelled words
 	*/
-	public static java.util.List<java.lang.String> checkSpelling(
-		java.lang.String text) {
-		return getService().checkSpelling(text);
-	}
+	public java.util.List<java.lang.String> checkSpelling(java.lang.String text);
 
 	/**
 	* Finds suggestions for a misspelled word.
@@ -83,27 +82,7 @@ public class WordsLocalServiceUtil {
 	* @param word the misspelled word.
 	* @return the suggested corrections.
 	*/
-	public static java.util.List<java.lang.String> getSuggestions(
-		java.lang.String word) {
-		return getService().getSuggestions(word);
-	}
-
-	public static WordsLocalService getService() {
-		if (_service == null) {
-			_service = (WordsLocalService)PortalBeanLocatorUtil.locate(WordsLocalService.class.getName());
-
-			ReferenceRegistry.registerReference(WordsLocalServiceUtil.class,
-				"_service");
-		}
-
-		return _service;
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public void setService(WordsLocalService service) {
-	}
-
-	private static WordsLocalService _service;
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.lang.String> getSuggestions(
+		java.lang.String word);
 }

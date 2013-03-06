@@ -18,23 +18,23 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the words local service. This utility wraps {@link com.liferay.portal.words.service.impl.WordsLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
+ * The utility for the words remote service. This utility wraps {@link com.liferay.portal.words.service.impl.WordsServiceImpl} and is the primary access point for service operations in application layer code running on a remote server.
  *
  * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
+ * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
  * </p>
  *
  * @author Brian Wing Shun Chan
- * @see WordsLocalService
- * @see com.liferay.portal.words.service.base.WordsLocalServiceBaseImpl
- * @see com.liferay.portal.words.service.impl.WordsLocalServiceImpl
+ * @see WordsService
+ * @see com.liferay.portal.words.service.base.WordsServiceBaseImpl
+ * @see com.liferay.portal.words.service.impl.WordsServiceImpl
  * @generated
  */
-public class WordsLocalServiceUtil {
+public class WordsServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portal.words.service.impl.WordsLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
+	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portal.words.service.impl.WordsServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
 
 	/**
@@ -66,7 +66,7 @@ public class WordsLocalServiceUtil {
 	* @param text the block of text to be spell checked.
 	* @return the mis-spelled words
 	*/
-	public static java.util.List<java.lang.String> checkSpelling(
+	public static com.liferay.portal.kernel.json.JSONObject checkSpelling(
 		java.lang.String text) {
 		return getService().checkSpelling(text);
 	}
@@ -88,11 +88,11 @@ public class WordsLocalServiceUtil {
 		return getService().getSuggestions(word);
 	}
 
-	public static WordsLocalService getService() {
+	public static WordsService getService() {
 		if (_service == null) {
-			_service = (WordsLocalService)PortalBeanLocatorUtil.locate(WordsLocalService.class.getName());
+			_service = (WordsService)PortalBeanLocatorUtil.locate(WordsService.class.getName());
 
-			ReferenceRegistry.registerReference(WordsLocalServiceUtil.class,
+			ReferenceRegistry.registerReference(WordsServiceUtil.class,
 				"_service");
 		}
 
@@ -102,8 +102,8 @@ public class WordsLocalServiceUtil {
 	/**
 	 * @deprecated
 	 */
-	public void setService(WordsLocalService service) {
+	public void setService(WordsService service) {
 	}
 
-	private static WordsLocalService _service;
+	private static WordsService _service;
 }
