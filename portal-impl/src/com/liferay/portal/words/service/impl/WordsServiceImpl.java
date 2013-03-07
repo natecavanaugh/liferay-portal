@@ -50,12 +50,13 @@ public class WordsServiceImpl extends WordsServiceBaseImpl {
 	 */
 	public JSONObject checkSpelling(String text) {
 		JSONArray inner = JSONFactoryUtil.createJSONArray();
+
 		for (String s : wordsLocalService.checkSpelling(text))
 			inner.put(s);
 
 		JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
-		jsonObj.put(OUTCOME, SUCCESS);
-		jsonObj.put(DATA, JSONFactoryUtil.createJSONArray().put(inner));
+		jsonObj.put(_OUTCOME, _SUCCESS);
+		jsonObj.put(_DATA, JSONFactoryUtil.createJSONArray().put(inner));
 
 		return jsonObj;
 	}
@@ -76,8 +77,8 @@ public class WordsServiceImpl extends WordsServiceBaseImpl {
 		return wordsLocalService.getSuggestions(word);
 	}
 
-	private static final String DATA = "data";
-	private static final String OUTCOME = "outcome";
-	private static final String SUCCESS = "success";
+	private static final String _DATA = "data";
+	private static final String _OUTCOME = "outcome";
+	private static final String _SUCCESS = "success";
 
 }
