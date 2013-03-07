@@ -68,6 +68,10 @@ public class DocumentImpl implements Document {
 			_SORTABLE_TEXT_FIELD_SUFFIX);
 	}
 
+	public static boolean isSortableTextField(String name) {
+		return _defaultSortableTextFields.contains(name);
+	}
+
 	public void add(Field field) {
 		_fields.put(field.getName(), field);
 	}
@@ -594,7 +598,7 @@ public class DocumentImpl implements Document {
 		return field.getValues();
 	}
 
-	public boolean isSortableTextField(String name) {
+	public boolean isDocumentSortableTextField(String name) {
 		return _sortableTextFields.contains(name);
 	}
 

@@ -286,7 +286,7 @@ public abstract class BaseIndexer implements Indexer {
 	public String getSortField(String orderByCol) {
 		String sortField = doGetSortField(orderByCol);
 
-		if (_document.isSortableTextField(sortField)) {
+		if (_document.isDocumentSortableTextField(sortField)) {
 			return DocumentImpl.getSortableFieldName(sortField);
 		}
 

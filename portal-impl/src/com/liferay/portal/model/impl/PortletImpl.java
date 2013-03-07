@@ -110,6 +110,7 @@ public class PortletImpl extends PortletBaseImpl {
 		_indexerClasses = new ArrayList<String>();
 		_schedulerEntries = new ArrayList<SchedulerEntry>();
 		_stagedModelDataHandlerClasses = new ArrayList<String>();
+		_socialActivityInterpreterClasses = new ArrayList<String>();
 		_assetRendererFactoryClasses = new ArrayList<String>();
 		_atomCollectionAdapterClasses = new ArrayList<String>();
 		_customAttributesDisplayClasses = new ArrayList<String>();
@@ -153,7 +154,8 @@ public class PortletImpl extends PortletBaseImpl {
 		List<String> stagedModelDataHandlerClasses,
 		String portletDisplayTemplateHandlerClass,
 		String portletLayoutListenerClass, String pollerProcessorClass,
-		String popMessageListenerClass, String socialActivityInterpreterClass,
+		String popMessageListenerClass,
+		List<String> socialActivityInterpreterClasses,
 		String socialRequestInterpreterClass, String webDAVStorageToken,
 		String webDAVStorageClass, String xmlRpcMethodClass,
 		String controlPanelEntryCategory, double controlPanelEntryWeight,
@@ -218,7 +220,7 @@ public class PortletImpl extends PortletBaseImpl {
 		_portletLayoutListenerClass = portletLayoutListenerClass;
 		_pollerProcessorClass = pollerProcessorClass;
 		_popMessageListenerClass = popMessageListenerClass;
-		_socialActivityInterpreterClass = socialActivityInterpreterClass;
+		_socialActivityInterpreterClasses = socialActivityInterpreterClasses;
 		_socialRequestInterpreterClass = socialRequestInterpreterClass;
 		_webDAVStorageToken = webDAVStorageToken;
 		_webDAVStorageClass = webDAVStorageClass;
@@ -358,7 +360,7 @@ public class PortletImpl extends PortletBaseImpl {
 			getPortletDataHandlerClass(), getStagedModelDataHandlerClasses(),
 			getPortletDisplayTemplateHandlerClass(),
 			getPortletLayoutListenerClass(), getPollerProcessorClass(),
-			getPopMessageListenerClass(), getSocialActivityInterpreterClass(),
+			getPopMessageListenerClass(), getSocialActivityInterpreterClasses(),
 			getSocialRequestInterpreterClass(), getWebDAVStorageToken(),
 			getWebDAVStorageClass(), getXmlRpcMethodClass(),
 			getControlPanelEntryCategory(), getControlPanelEntryWeight(),
@@ -1548,29 +1550,31 @@ public class PortletImpl extends PortletBaseImpl {
 	}
 
 	/**
-	 * Returns the name of the social activity interpreter class of the portlet.
+	 * Returns the names of the classes that represent social activity
+	 * interpreters associated with the portlet.
 	 *
-	 * @return the name of the social activity interpreter class of the portlet
+	 * @return the names of the classes that represent social activity
+	 *         interpreters associated with the portlet
 	 */
-	public String getSocialActivityInterpreterClass() {
-		return _socialActivityInterpreterClass;
+	public List<String> getSocialActivityInterpreterClasses() {
+		return _socialActivityInterpreterClasses;
 	}
 
 	/**
-	 * Returns the name of the social activity interpreter instance of the
-	 * portlet.
+	 * Returns the social activity interpreter instances of the portlet.
 	 *
-	 * @return the name of the social activity interpreter instance of the
-	 *         portlet
+	 * @return the social activity interpreter instances of the portlet
 	 */
-	public SocialActivityInterpreter getSocialActivityInterpreterInstance() {
-		if (Validator.isNull(getSocialActivityInterpreterClass())) {
+	public List<SocialActivityInterpreter>
+		getSocialActivityInterpreterInstances() {
+
+		if (_socialActivityInterpreterClasses.isEmpty()) {
 			return null;
 		}
 
 		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
 
-		return portletBag.getSocialActivityInterpreterInstance();
+		return portletBag.getSocialActivityInterpreterInstances();
 	}
 
 	/**
@@ -3182,15 +3186,16 @@ public class PortletImpl extends PortletBaseImpl {
 	}
 
 	/**
-	 * Sets the name of the social activity interpreter class of the portlet.
+	 * Sets the names of the classes that represent social activity interpreters
+	 * associated with the portlet.
 	 *
-	 * @param socialActivityInterpreterClass the name of the activity
-	 *        interpreter class of the portlet
+	 * @param socialActivityInterpreterClasses the names of the classes that
+	 *        represent social activity interpreters associated with the portlet
 	 */
-	public void setSocialActivityInterpreterClass(
-		String socialActivityInterpreterClass) {
+	public void setSocialActivityInterpreterClasses(
+		List<String> socialActivityInterpreterClasses) {
 
-		_socialActivityInterpreterClass = socialActivityInterpreterClass;
+		_socialActivityInterpreterClasses = socialActivityInterpreterClasses;
 	}
 
 	/**
@@ -3850,9 +3855,10 @@ public class PortletImpl extends PortletBaseImpl {
 		PropsValues.LAYOUT_SHOW_PORTLET_INACTIVE;
 
 	/**
-	 * The name of the social activity interpreter class of the portlet.
+	 * The names of the classes that represents social activity interpreters
+	 * associated with the portlet.
 	 */
-	private String _socialActivityInterpreterClass;
+	private List<String> _socialActivityInterpreterClasses;
 
 	/**
 	 * The name of the social request interpreter class of the portlet.

@@ -518,7 +518,7 @@
 	</library>
 	<library>
 		<file-name>lib/development/junit.jar</file-name>
-		<version>4.8.2</version>
+		<version>4.11</version>
 		<project-name>JUnit</project-name>
 		<project-url>http://www.junit.org/index.htm</project-url>
 		<licenses>
@@ -608,7 +608,7 @@
 	</library>
 	<library>
 		<file-name>lib/development/mysql.jar</file-name>
-		<version>5.0.7</version>
+		<version>5.1.23</version>
 		<project-name>MySQL Connector/J</project-name>
 		<project-url>http://www.mysql.com/products/connector/j</project-url>
 		<licenses>
@@ -616,14 +616,6 @@
 				<license-name>GPL 2.0</license-name>
 			</license>
 		</licenses>
-		<comments>
-			5.0.7 is the fastest of the MySQL drivers under performance tests.
-			Do not upgrade to 5.0.8 or to 5.1.x unless the 5.0.7 driver causes a
-			specific issue.
-
-			See the property "setup.database.jar.download.url" in
-			portal.properties.
-		</comments>
 	</library>
 	<library>
 		<file-name>lib/development/objenesis.jar</file-name>
@@ -1660,18 +1652,7 @@
 	</library>
 	<library>
 		<file-name>lib/portal/ehcache-core.jar</file-name>
-		<version>2.4.6</version>
-		<project-name>Ehcache</project-name>
-		<project-url>http://ehcache.sourceforge.net</project-url>
-		<licenses>
-			<license>
-				<license-name>Apache License 2.0</license-name>
-			</license>
-		</licenses>
-	</library>
-	<library>
-		<file-name>lib/portal/ehcache-jgroupsreplication.jar</file-name>
-		<version>1.4.0</version>
+		<version>2.6.5</version>
 		<project-name>Ehcache</project-name>
 		<project-url>http://ehcache.sourceforge.net</project-url>
 		<licenses>
@@ -2250,18 +2231,7 @@
 	</library>
 	<library>
 		<file-name>lib/portal/jodd.jar</file-name>
-		<version>3.3.4</version>
-		<project-name>Jodd</project-name>
-		<project-url>http://jodd.org</project-url>
-		<licenses>
-			<license>
-				<license-name>BSD Style License</license-name>
-			</license>
-		</licenses>
-	</library>
-	<library>
-		<file-name>lib/portal/jodd-wot.jar</file-name>
-		<version>3.3.4</version>
+		<version>3.4.2</version>
 		<project-name>Jodd</project-name>
 		<project-url>http://jodd.org</project-url>
 		<licenses>

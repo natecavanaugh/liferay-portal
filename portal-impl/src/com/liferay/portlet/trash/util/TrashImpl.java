@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
+import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.trash.TrashRenderer;
@@ -65,6 +66,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Sergio González
  * @author Julio Camarero
  */
+@DoPrivileged
 public class TrashImpl implements Trash {
 
 	public void addBaseModelBreadcrumbEntries(
@@ -113,7 +115,7 @@ public class TrashImpl implements Trash {
 
 		for (String attachmentFileName : attachmentFileNames) {
 			String trashTime = TrashUtil.getTrashTime(
-				attachmentFileName, TrashUtil.TRASH_TIME_SEPARATOR);
+				attachmentFileName, TRASH_TIME_SEPARATOR);
 
 			long timestamp = GetterUtil.getLong(trashTime);
 
@@ -267,7 +269,13 @@ public class TrashImpl implements Trash {
 			return false;
 		}
 
-		return trashHandler.isInTrash(classPK);
+		if (trashHandler.isInTrash(classPK) ||
+			trashHandler.isInTrashContainer(classPK)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public boolean isTrashEnabled(long groupId)
@@ -281,17 +289,17 @@ public class TrashImpl implements Trash {
 		int companyTrashEnabled = PrefsPropsUtil.getInteger(
 			group.getCompanyId(), PropsKeys.TRASH_ENABLED);
 
-		if (companyTrashEnabled == TrashUtil.TRASH_DISABLED) {
+		if (companyTrashEnabled == TRASH_DISABLED) {
 			return false;
 		}
 
 		int groupTrashEnabled = GetterUtil.getInteger(
 			typeSettingsProperties.getProperty("trashEnabled"),
-			TrashUtil.TRASH_DEFAULT_VALUE);
+			TRASH_DEFAULT_VALUE);
 
-		if ((groupTrashEnabled == TrashUtil.TRASH_ENABLED) ||
-			((companyTrashEnabled == TrashUtil.TRASH_ENABLED_BY_DEFAULT) &&
-			 (groupTrashEnabled == TrashUtil.TRASH_DEFAULT_VALUE))) {
+		if ((groupTrashEnabled == TRASH_ENABLED) ||
+			((companyTrashEnabled == TRASH_ENABLED_BY_DEFAULT) &&
+			 (groupTrashEnabled == TRASH_DEFAULT_VALUE))) {
 
 			return true;
 		}

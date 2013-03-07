@@ -14,10 +14,25 @@
 
 package com.liferay.portlet.dynamicdatamapping.util;
 
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.template.StringTemplateResource;
+import com.liferay.portal.kernel.template.Template;
+import com.liferay.portal.kernel.template.TemplateConstants;
+import com.liferay.portal.kernel.template.TemplateContextType;
+import com.liferay.portal.kernel.template.TemplateManagerUtil;
+import com.liferay.portal.kernel.template.TemplateResource;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Juan Fernández
@@ -38,5 +53,67 @@ public class DDMTemplateHelperImpl implements DDMTemplateHelper {
 
 		return null;
 	}
+
+	public String getAutocompleteJSON(HttpServletRequest request)
+		throws Exception {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		TemplateResource templateResource = new StringTemplateResource(
+			_TEMPLATE_ID, _TEMPLATE_CONTENT);
+
+		Template template = TemplateManagerUtil.getTemplate(
+			TemplateConstants.LANG_TYPE_FTL, templateResource,
+			TemplateContextType.STANDARD);
+
+		template.prepare(request);
+
+		for (String key : template.getKeys()) {
+			JSONObject valueJSONObject = JSONFactoryUtil.createJSONObject();
+
+			Object value = template.get(key);
+
+			if (value == null) {
+				continue;
+			}
+
+			Class<?> clazz = value.getClass();
+
+			for (Field field : clazz.getFields()) {
+				valueJSONObject.put(field.getName());
+			}
+
+			for (Method method : clazz.getMethods()) {
+				Class<?>[] parameterTypes = method.getParameterTypes();
+
+				StringBundler sb = new StringBundler(
+					3 + ((parameterTypes.length * 2) - 1));
+
+				sb.append(method.getName());
+				sb.append(StringPool.OPEN_PARENTHESIS);
+
+				for (Class<?> parameterType : parameterTypes) {
+					sb.append(parameterType.getSimpleName());
+					sb.append(StringPool.COMMA_AND_SPACE);
+				}
+
+				if (parameterTypes.length > 0) {
+					sb.setIndex(sb.index() - 1);
+				}
+
+				sb.append(StringPool.CLOSE_PARENTHESIS);
+
+				valueJSONObject.put(sb.toString());
+			}
+
+			jsonObject.put(key, valueJSONObject);
+		}
+
+		return jsonObject.toString();
+	}
+
+	private static final String _TEMPLATE_CONTENT = "# Placeholder";
+
+	private static final String _TEMPLATE_ID = "0";
 
 }

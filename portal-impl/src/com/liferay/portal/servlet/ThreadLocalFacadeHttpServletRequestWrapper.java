@@ -85,8 +85,9 @@ public class ThreadLocalFacadeHttpServletRequestWrapper
 	}
 
 	@Override
-	public void setRequest(ServletRequest request) {
-		_nextHttpServletRequestThreadLocal.set((HttpServletRequest)request);
+	public void setRequest(ServletRequest servletRequest) {
+		_nextHttpServletRequestThreadLocal.set(
+			(HttpServletRequest)servletRequest);
 	}
 
 	private static ThreadLocal<HttpServletRequest>

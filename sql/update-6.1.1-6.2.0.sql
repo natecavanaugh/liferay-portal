@@ -351,7 +351,11 @@ create table JournalFolder (
 	modifiedDate DATE null,
 	parentFolderId LONG,
 	name VARCHAR(100) null,
-	description STRING null
+	description STRING null,
+	status INTEGER,
+	statusByUserId LONG,
+	statusByUserName VARCHAR(75) null,
+	statusDate DATE null
 );
 
 drop index IX_228562AD on Lock_;
@@ -374,6 +378,12 @@ update MBCategory set statusDate = modifiedDate;
 update MBMessage set status = 2 where status = 9;
 
 alter table MBMessage drop column attachments;
+
+alter table MBThreadFlag add uuid_ VARCHAR(75) null;
+alter table MBThreadFlag add groupId LONG;
+alter table MBThreadFlag add companyId LONG;
+alter table MBThreadFlag add userName VARCHAR(75) null;
+alter table MBThreadFlag add createdDate DATE null;
 
 drop table OrgGroupPermission;
 

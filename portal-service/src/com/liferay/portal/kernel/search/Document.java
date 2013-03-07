@@ -193,7 +193,7 @@ public interface Document extends Cloneable, Serializable {
 
 	public String[] getValues(String name);
 
-	public boolean isSortableTextField(String name);
+	public boolean isDocumentSortableTextField(String name);
 
 	public void remove(String name);
 

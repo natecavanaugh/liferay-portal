@@ -90,14 +90,14 @@ public class OutputTag extends PositionTagSupport {
 		_outputKey = outputKey;
 	}
 
-	private static OutputData _getOutputData(ServletRequest request) {
-		OutputData outputData = (OutputData)request.getAttribute(
+	private static OutputData _getOutputData(ServletRequest servletRequest) {
+		OutputData outputData = (OutputData)servletRequest.getAttribute(
 			WebKeys.OUTPUT_DATA);
 
 		if (outputData == null) {
 			outputData = new OutputData();
 
-			request.setAttribute(WebKeys.OUTPUT_DATA, outputData);
+			servletRequest.setAttribute(WebKeys.OUTPUT_DATA, outputData);
 		}
 
 		return outputData;
