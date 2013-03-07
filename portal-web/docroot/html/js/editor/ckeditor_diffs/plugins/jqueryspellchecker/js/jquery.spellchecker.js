@@ -426,14 +426,21 @@
 		callback(testResponse);
 		return;
 	}
+    Liferay.Service(
+        '/words/check-spelling',
+        {
+          text: text
+        },
+        callback
+    );
+//    return this.makeRequest({
+//      data: {
+//        action: 'get_incorrect_words',
+//        text: text
+//      },
+//      success: callback
+//    });
     //CUSTOM END
-    return this.makeRequest({
-      data: {
-        action: 'get_incorrect_words',
-        text: text
-      },
-      success: callback
-    });
   };
 
   WebService.prototype.getSuggestions = function(word, callback) {
@@ -452,15 +459,22 @@
 		callback(testResponse);
 		return;
 	}
-    //CUSTOM END
-
-    return this.makeRequest({
-      data: {
-        action: 'get_suggestions',
-        word: word
+    Liferay.Service(
+      '/words/get-suggestions',
+      {
+          word: word
       },
-      success: callback
-    });
+      callback
+    );
+
+//    return this.makeRequest({
+//      data: {
+//        action: 'get_suggestions',
+//        word: word
+//      },
+//      success: callback
+//    });
+      //CUSTOM END
   };
 
   /* Spellchecker base parser
