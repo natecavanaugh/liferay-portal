@@ -93,7 +93,7 @@ CKEDITOR.plugins.add('jqueryspellchecker', {
     this.editor.commands.jqueryspellchecker.toggleState();
       // CUSTOM START - workaround since AUI doesn't have an off function
       // AUI().one(this.editorWindow).off('.spellchecker');
-      AUI().one(this.editorWindow).on('scroll.spellchecker', null);
+      // AUI().one(this.editorWindow).on('scroll.spellchecker', null);
       // CUSTOM END
   },
 
@@ -113,7 +113,7 @@ CKEDITOR.plugins.add('jqueryspellchecker', {
         var text = t.editor.getData();
         // CUSTOM START -- removing .append
         //return A.Node.create('<div />').append(text.text());
-        return A.Node.create('<div />').append(text);
+        return A.Node.create('<div />').append(text).attr('textContent');
         // CUSTOM END
     };
 
