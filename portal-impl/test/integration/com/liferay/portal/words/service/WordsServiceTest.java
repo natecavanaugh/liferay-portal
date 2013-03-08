@@ -12,7 +12,7 @@
  * details.
  */
 
-package integration.com.liferay.portal.words.service;
+package com.liferay.portal.words.service;
 
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
