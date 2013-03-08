@@ -110,7 +110,7 @@ if (layout != null) {
 
 	<aui:script use="liferay-navigation">
 		var UA = A.UA;
-		var nonIETouch = (UA.touch && !UA.ie);
+		var nonIETouch = (!UA.ie && UA.touch);
 
 		Liferay.once(
 			'initNavigation',

@@ -39,7 +39,7 @@ AUI.add(
 						var hostULId = '#' + navigation.guid();
 
 						var UA = A.UA;
-						var nonIETouch = (UA.touch && !UA.ie);
+						var nonIETouch = (!UA.ie && UA.touch);
 
 						instance._directLiChild = hostULId + '> li';
 
@@ -56,12 +56,7 @@ AUI.add(
 
 						if (nonIETouch) {
 							if (navigation) {
-								navigation.delegate(
-									'click',
-									instance._onTouchClick,
-									'> li > a',
-									instance
-								);
+								navigation.delegate('click', instance._onTouchClick, '> li > a', instance);
 							}
 						}
 						else {
@@ -73,7 +68,7 @@ AUI.add(
 									instance
 								);
 
-							navigation.delegate('keydown', instance._handleKeyDown, 'a', instance);
+								navigation.delegate('keydown', instance._handleKeyDown, 'a', instance);
 							}
 
 							host.plug(
@@ -209,20 +204,7 @@ AUI.add(
 							event.preventDefault();
 						}
 
-						if (menuOld) {
-							if (menuOld != menuNew) {
-								Liferay.fire('hideNavigationMenu', MAP_HOVER);
-
-								MAP_HOVER.menu = menuNew;
-
-								Liferay.fire('showNavigationMenu', MAP_HOVER);
-							}
-						}
-						else {
-							MAP_HOVER.menu = menuNew;
-
-							Liferay.fire('showNavigationMenu', MAP_HOVER);
-						}
+						instance._showNavigationMenu(menuNew, menuOld);
 					},
 
 					_showMenu: function(event) {
@@ -244,25 +226,31 @@ AUI.add(
 
 							var menuNew = link.ancestor(instance._directLiChild);
 
-							if (menuOld) {
-								if (menuOld != menuNew) {
-									Liferay.fire('hideNavigationMenu', MAP_HOVER);
-
-									MAP_HOVER.menu = menuNew;
-
-									Liferay.fire('showNavigationMenu', MAP_HOVER);
-								}
-							}
-							else {
-								MAP_HOVER.menu = menuNew;
-
-								Liferay.fire('showNavigationMenu', MAP_HOVER);
-							}
+							instance._showNavigationMenu(menuNew, menuOld);
 						}
 						else if (menuOld) {
 							Liferay.fire('hideNavigationMenu', MAP_HOVER);
 
 							MAP_HOVER = {};
+						}
+					},
+
+					_showNavigationMenu: function(menuNew, menuOld) {
+						var instance = this;
+
+						if (menuOld) {
+							if (menuOld != menuNew) {
+								Liferay.fire('hideNavigationMenu', MAP_HOVER);
+
+								MAP_HOVER.menu = menuNew;
+
+								Liferay.fire('showNavigationMenu', MAP_HOVER);
+							}
+						}
+						else {
+							MAP_HOVER.menu = menuNew;
+
+							Liferay.fire('showNavigationMenu', MAP_HOVER);
 						}
 					}
 				}
