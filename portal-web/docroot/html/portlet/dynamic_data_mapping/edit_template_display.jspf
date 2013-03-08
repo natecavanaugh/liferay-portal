@@ -65,72 +65,93 @@ boolean useRichEditor = editorType.equals("rich");
 				<aui:option label="plain" selected="<%= !useRichEditor %>" value="plain" />
 			</aui:select>
 		</div>
-		
+
 		<div class="lfr-template-editor-container">
+
 			<%
 			String cssClassPalette = "lfr-template-palette-container";
 
 			if (!language.equalsIgnoreCase("ftl")) {
 				cssClassPalette += " aui-helper-hidden";
 			}
+
+			Map<String, TemplateVariableGroup> templateVariablesMap = null;
+
+			if (template != null) {
+				templateVariablesMap = TemplateContextHelper.getTemplateVariablesMap(template.getClassNameId(), classPK);
+			}
+			else if (classNameId > 0) {
+				templateVariablesMap = TemplateContextHelper.getTemplateVariablesMap(classNameId, classPK);
+			}
 			%>
 
-			<div class="<%= cssClassPalette %>" id="<portlet:namespace />templatePaletteContainer">
-				<div class="minimize-panels" id="<portlet:namespace />paletteToggler">
-					<a href="javascript:;">
-						<span><liferay-ui:message key="minimize-panels" /></span>
-					</a>
-				</div>
+			<c:if test="<%= (templateVariablesMap != null) && !templateVariablesMap.isEmpty() %>">
+				<div class="<%= cssClassPalette %>" id="<portlet:namespace />templatePaletteContainer">
+					<div class="minimize-panels" id="<portlet:namespace />paletteToggler">
+						<a href="javascript:;">
+							<span><liferay-ui:message key="minimize-panels" /></span>
+						</a>
+					</div>
 
-				<div class="lfr-template-palette" id="<portlet:namespace />paletteDataContainer">
-					<div id="<portlet:namespace />paletteData">
-						<div>
-							<div class="palette-item-header aui-toggler-header-expanded">
-								<span class="palette-item-header-icon"></span>
-								<span>Fields</span>
+					<div class="lfr-template-palette" id="<portlet:namespace />paletteDataContainer">
+						<div id="<portlet:namespace />paletteData">
+
+							<%
+							for (TemplateVariableGroup templateVariableGroup : templateVariablesMap.values()) {
+							%>
+
+							<div>
+								<div class="palette-item-header aui-toggler-header-expanded">
+									<span class="palette-item-header-icon"></span>
+									<span><liferay-ui:message key="<%= templateVariableGroup.getLabelKey() %>" /></span>
+								</div>
+								<ul class="palette-item-content">
+
+									<%
+									for (TemplateVariableDefinition variableDefinition : templateVariableGroup.getVariableDefinitions()) {
+										if (variableDefinition.isCollection()) {
+											TemplateVariableDefinition itemVariableDefinition = variableDefinition.getCollectionItem();
+									%>
+
+											<li class="palette-item-container">
+												<span class="palette-item"
+													  data-content1="<#list <%= itemVariableDefinition.getName() %> as <%= variableDefinition.getName() %>>"
+													  data-content2="</#list>"
+													  title="<%= HtmlUtil.escapeAttribute(_getPaletteItemTitle(pageContext, variableDefinition)) %>" />
+													<liferay-ui:message key="<%= variableDefinition.getLabelKey() %>" />*
+												</span>
+											</li>
+
+									<%
+										}
+										else {
+									%>
+
+											<li class="palette-item-container">
+												<span class="palette-item"
+													  data-content1="\${<%= variableDefinition.getName() %>}"
+													  title="<%= HtmlUtil.escapeAttribute(_getPaletteItemTitle(pageContext, variableDefinition)) %>">
+													<liferay-ui:message key="<%= variableDefinition.getLabelKey() %>" />
+												</span>
+											</li>
+
+									<%
+										}
+									}
+									%>
+
+								</ul>
 							</div>
-							<ul class="palette-item-content">
-								<li class="palette-item-container">
-									<span class="palette-item" data-content1="<#list animals as being>" data-content2="</#list>" title="This is an example tooltip.<br>It will provide useful information<br>For more information, click &lt;a href=&quot;liferay.com&quot; target=&quot;blank&quot;&gt;here&lt;/a&gt;">Picture</span>
-								</li>
-								<li class="palette-item-container">
-									<span class="palette-item"
-										data-content1="<#list animals as being>"
-										data-content2="<li>\${being.name} for \${being.price} Euros"
-										data-content3="</#list>" title="Test123">Link</span>
-								</li>
-								<li class="palette-item-container">
-									<span class="palette-item" title="Test123">Preference</span>
-								</li>
-								<li class="palette-item-container">
-									<span class="palette-item" title="Test123">Collection</span>
-								</li>
-								<li class="palette-item-container">
-									<span class="palette-item" title="Test123">Email</span>
-								</li>
-							</ul>
-						</div>
-						<div>
-							<div class="palette-item-header aui-toggler-header-expanded">
-								<span class="palette-item-header-icon"></span>
-								<span>Variables</span>
-							</div>
-							<ul class="palette-item-content">
-								<li class="palette-item-container">
-									<span class="palette-item" title="Test123">themeDsiplay</span>
-								</li>
-								<li class="palette-item-container">
-									<span class="palette-item" title="Test123">request</span>
-								</li>
-								<li class="palette-item-container">
-									<span class="palette-item" title="Test123">serviceLocator</span>
-								</li>
-							</ul>
+
+							<%
+							}
+							%>
+
 						</div>
 					</div>
 				</div>
-			</div>
-	
+			</c:if>
+
 			<%
 			String editorContainerClass = "lfr-editor-container";
 
@@ -476,3 +497,66 @@ boolean useRichEditor = editorType.equals("rich");
 		'#<portlet:namespace />richEditor'
 	);
 </aui:script>
+
+<%!
+private String _getPaletteItemTitle(PageContext pageContext, TemplateVariableDefinition variableDefinition) {
+	StringBundler sb = new StringBundler();
+
+	sb.append("<p>");
+	sb.append(LanguageUtil.get(pageContext, variableDefinition.getLabelKey() + "-help"));
+	sb.append("</p>");
+	sb.append(LanguageUtil.get(pageContext, "variable"));
+	sb.append(StringPool.COLON);
+	sb.append("&nbsp;");
+	sb.append(variableDefinition.getName());
+
+	Class clazz = variableDefinition.getClazz();
+
+	sb.append(_getPaletteItemTitleClass(pageContext, "class", clazz));
+
+	if (variableDefinition.isCollection()) {
+		TemplateVariableDefinition itemVariableDefinition = variableDefinition.getCollectionItem();
+
+		clazz = itemVariableDefinition.getClazz();
+
+		sb.append(_getPaletteItemTitleClass(pageContext, "items-class", clazz));
+	}
+
+	return sb.toString();
+}
+
+private String _getPaletteItemTitleClass(PageContext pageContext, String label, Class clazz) {
+	StringBundler sb = new StringBundler();
+
+	if (clazz == null) {
+		return StringPool.BLANK;
+	}
+
+	String className = clazz.getName();
+
+	sb.append("<br />");
+	sb.append(LanguageUtil.get(pageContext, label));
+	sb.append(StringPool.COLON);
+	sb.append("&nbsp;");
+
+	String javadocURL = null;
+
+	if (className.startsWith("com.liferay")) {
+		javadocURL = "http://docs.liferay.com/portal/6.1/javadocs/";
+	}
+	if (Validator.isNotNull(javadocURL)) {
+		sb.append("<a href=\"");
+		sb.append(javadocURL);
+		sb.append(StringUtil.replace(className, StringPool.PERIOD, StringPool.SLASH));
+		sb.append(".html\" target=\"_blank\">");
+	}
+
+	sb.append(clazz.getSimpleName());
+
+	if (Validator.isNull(javadocURL)) {
+		sb.append("</a>");
+	}
+
+	return sb.toString();
+}
+%>

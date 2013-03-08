@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.servlet.GenericServletWrapper;
 import com.liferay.portal.kernel.servlet.PipingServletResponse;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateContextType;
+import com.liferay.portal.kernel.template.TemplateVariableGroup;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
@@ -45,7 +46,9 @@ import freemarker.template.ObjectWrapper;
 import freemarker.template.TemplateHashModel;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.PortletPreferences;
@@ -159,6 +162,67 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 		}
 
 		return portletDisplayDDMTemplateId;
+	}
+
+	public Map<String, TemplateVariableGroup> getTemplateVariablesMap() {
+		Map<String, TemplateVariableGroup> templateVariableGroupMap =
+			new LinkedHashMap<String, TemplateVariableGroup>();
+
+		TemplateVariableGroup fieldsTemplateVariableGroup =
+			new TemplateVariableGroup("fields");
+
+		fieldsTemplateVariableGroup.addCollectionVariable(
+			"entries", List.class, PortletDisplayTemplateConstants.ENTRIES,
+			"entries-item", null, "curEntry");
+		fieldsTemplateVariableGroup.addVariable(
+			"entry", null, PortletDisplayTemplateConstants.ENTRY);
+
+		templateVariableGroupMap.put("fields", fieldsTemplateVariableGroup);
+
+		TemplateVariableGroup generalVariablesTemplateVariableGroup =
+			new TemplateVariableGroup("general-variables");
+
+		generalVariablesTemplateVariableGroup.addVariable(
+			"locale", Locale.class, PortletDisplayTemplateConstants.LOCALE);
+		generalVariablesTemplateVariableGroup.addVariable(
+			"template-id", null,
+			PortletDisplayTemplateConstants.DDM_TEMPLATE_ID);
+		generalVariablesTemplateVariableGroup.addVariable(
+			"current-url", String.class,
+			PortletDisplayTemplateConstants.CURRENT_URL);
+		generalVariablesTemplateVariableGroup.addVariable(
+			"theme-display", ThemeDisplay.class,
+			PortletDisplayTemplateConstants.THEME_DISPLAY);
+		generalVariablesTemplateVariableGroup.addVariable(
+			"portlet-preferences", Map.class,
+			PortletDisplayTemplateConstants.PORTLET_PREFERENCES);
+
+		templateVariableGroupMap.put(
+			"general-variables", generalVariablesTemplateVariableGroup);
+
+		TemplateVariableGroup utilTemplateVariableGroup =
+			new TemplateVariableGroup("util");
+
+		utilTemplateVariableGroup.addVariable(
+			"http-request", HttpServletRequest.class,
+			PortletDisplayTemplateConstants.REQUEST
+		);
+		utilTemplateVariableGroup.addVariable(
+			"render-request", RenderRequest.class,
+			PortletDisplayTemplateConstants.RENDER_REQUEST
+		);
+		utilTemplateVariableGroup.addVariable(
+			"render-response", RenderResponse.class,
+			PortletDisplayTemplateConstants.RENDER_RESPONSE
+		);
+		utilTemplateVariableGroup.addVariable(
+			"liferay-taglib", VelocityTaglib.class,
+			PortletDisplayTemplateConstants.TAGLIB_LIFERAY
+		);
+
+		templateVariableGroupMap.put("util", utilTemplateVariableGroup);
+
+		return templateVariableGroupMap;
 	}
 
 	public String renderDDMTemplate(
