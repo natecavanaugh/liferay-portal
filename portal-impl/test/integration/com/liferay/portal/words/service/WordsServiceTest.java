@@ -16,9 +16,13 @@ package integration.com.liferay.portal.words.service;
 
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.test.EnvironmentExecutionTestListener;
 import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.words.service.WordsServiceUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,98 +36,94 @@ import org.junit.runner.RunWith;
 @RunWith(LiferayIntegrationJUnitTestRunner.class)
 public class WordsServiceTest {
 
-    @Test
-    public void testCheckSpellingStructure() throws Exception {
-        JSONObject json = WordsServiceUtil.checkSpelling("");
-        Assert.assertTrue("Invalid number of objects", json.length() == 2);
-
-        Assert.assertTrue("\"outcome\" object not found", json.has(OUTCOME));
-        Assert.assertTrue(
-                "\"outcome\" object has no value", !json.isNull(OUTCOME));
-        Assert.assertTrue(
-                "Invalid value for \"outcome\"",
-                SUCCESS.equals(json.getString(OUTCOME)));
-
-        Assert.assertTrue("\"data\" object not found", json.has(DATA));
-        Assert.assertTrue("\"data\" object has no value", !json.isNull(DATA));
-        Assert.assertTrue("\"data\" object has no value", !json.isNull(DATA));
-
-        Assert.assertTrue(
-                "\"data\" object is not an array of arrays",
-                json.getJSONArray(DATA).length() == 1);
-        Assert.assertTrue(
-                "\"data\" object inner array is null element",
-                json.getJSONArray(DATA).getJSONArray(0).isNull(0));
-    }
-
-    @Test
-    public void testCheckSpellingNoInput() throws Exception {
-        JSONObject json = WordsServiceUtil.checkSpelling("");
-        Assert.assertTrue(
-                "Output not empty when no input",
-                json.getJSONArray(DATA).getJSONArray(0).length() == 0);
-    }
-
-    @Test
-    public void testCheckSpellingSpaceInput() throws Exception {
-        JSONObject json = WordsServiceUtil.checkSpelling(" ");
-        Assert.assertTrue(
-                "Output not empty when space input",
-                json.getJSONArray(DATA).getJSONArray(0).length() == 0);
-    }
-
 	@Test
-	public void testCheckSpellingMisspellings() throws Exception {
-		JSONObject json = WordsServiceUtil.checkSpelling(
-				"acceptible catagory definitly experiance imediately " +
-				"lisence personel recieve tommorrow youre");
-		Assert.assertTrue(
-				"Undetected missspellings",
-				json.getJSONArray(DATA).getJSONArray(0).length() == 10);
-	}
+	public void testCheckSpelling() throws Exception {
+		List<TestCondition> testConditions = new ArrayList<TestCondition>();
 
+		testConditions.add(
+				new TestCondition(
+						StringPool.BLANK, 0, "Invalid result for empty input"));
 
-	@Test
-	public void testCheckSpellingNoMisspellings() throws Exception {
-		JSONObject json = WordsServiceUtil.checkSpelling(
-				"acceptable category definitely experience immediately " +
-				"license personnel receive tomorrow you're");
-		Assert.assertTrue(
-				"Invalid detection of misspelling",
-				json.getJSONArray(DATA).getJSONArray(0).length() == 0);
+		testConditions.add(
+				new TestCondition(
+						StringPool.SPACE, 0, "Invalid result for space input"));
+
+		testConditions.add(
+				new TestCondition(
+						"acceptible catagory definitly experiance imediately " +
+				"lisence personel recieve tommorrow youre", 10,
+				"Undetected missspellings"));
+
+		testConditions.add(
+				new TestCondition(
+						"acceptable category definitely experience " +
+				"immediately license personnel receive tomorrow you're",
+						0,"Invalid misspellings returned"));
+
+		for (TestCondition tc : testConditions) {
+			JSONObject json = WordsServiceUtil.checkSpelling(tc.getWords());
+
+			Assert.assertEquals(
+					tc.getMessage(), tc.getLength(),
+					json.getJSONArray(_DATA).getJSONArray(0).length());
+		}
 	}
 
 	@Test
-	public void testGetSuggestionsCorrectSpelling() throws Exception {
+	public void testCheckSpellingStructure() throws Exception {
+		JSONObject json = WordsServiceUtil.checkSpelling(StringPool.BLANK);
 
-		Assert.assertTrue(
-				"Correct spelling not detected",
-				WordsServiceUtil.getSuggestions("Apple").isEmpty());
+		Assert.assertEquals(
+				"Valid \"outcome\" object not found", _SUCCESS,
+				json.getString(_OUTCOME));
+
+		Assert.assertEquals(
+				"Valid \"data\" object not found", _EMPTY_RESULT,
+				json.getJSONArray(_DATA).getString(0));
 	}
 
 	@Test
-	public void testGetSuggestionsMisSpelling() throws Exception {
-		Assert.assertTrue(
-				"Misspelling not found",
-				WordsServiceUtil.getSuggestions("Aple").contains("apple"));
+	public void testGetNoSuggestions() throws Exception {
+		List<TestCondition> testConditions = new ArrayList<TestCondition>();
+
+		testConditions.add(
+				new TestCondition(
+						StringPool.BLANK, 0, "Invalid result for empty input"));
+
+		testConditions.add(
+				new TestCondition(
+						StringPool.SPACE, 0, "Invalid result for space input"));
+
+		testConditions.add(
+				new TestCondition(
+						_GOOD_APPLE, 0,
+						"Suggestions returned for correctly spelled word"));
+
+		for (TestCondition tc : testConditions) {
+			JSONObject json = WordsServiceUtil.checkSpelling(tc.getWords());
+			Assert.assertEquals(
+					tc.getMessage(), tc.getLength(),
+					WordsServiceUtil.getSuggestions(tc.getWords()).size());
+		}
 	}
 
 	@Test
-	public void testGetSuggestionsNoInput() throws Exception {
+	public void testGetSuggestions() throws Exception {
+		TestCondition testCondition = new TestCondition(
+				_BAD_APPLE, 0,
+				"Suggestions not returned for incorrectly spelled word");
+
 		Assert.assertTrue(
-				"Empty input returned non-empty result",
-				WordsServiceUtil.getSuggestions("").isEmpty());
+				testCondition.getMessage(),
+				WordsServiceUtil.getSuggestions(
+						testCondition.getWords()).size() > 0);
 	}
 
-	@Test
-	public void testGetSuggestionsSpaceInput() throws Exception {
-		Assert.assertTrue(
-				"Space input returned non-empty result",
-				WordsServiceUtil.getSuggestions(" ").isEmpty());
-	}
-
-	private static final String DATA = "data";
-	private static final String OUTCOME = "outcome";
-	private static final String SUCCESS = "success";
+	private static final String _BAD_APPLE = "Aple";
+	private static final String _DATA = "data";
+	private static final String _EMPTY_RESULT ="[]";
+	private static final String _GOOD_APPLE = "Apple";
+	private static final String _OUTCOME = "outcome";
+	private static final String _SUCCESS = "success";
 
 }

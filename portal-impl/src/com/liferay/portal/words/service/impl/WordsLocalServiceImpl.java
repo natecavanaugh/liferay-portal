@@ -72,15 +72,11 @@ public class WordsLocalServiceImpl extends WordsLocalServiceBaseImpl {
 	 * @return the suggested corrections.
 	 */
 	public List<String> getSuggestions(String word) {
-		List<String> suggestions;
 		List<InvalidWord> invalidWords = WordsUtil.checkSpelling(word);
+		List<String> suggestions = new ArrayList<String>();
 
-		if (!invalidWords.isEmpty() &&
-			!invalidWords.get(0).getSuggestions().isEmpty()) {
-				suggestions = invalidWords.get(0).getSuggestions();
-		}
-		else {
-			suggestions = new ArrayList<String>();
+		if (!invalidWords.isEmpty()) {
+			suggestions = invalidWords.get(0).getSuggestions();
 		}
 
 		return suggestions;
