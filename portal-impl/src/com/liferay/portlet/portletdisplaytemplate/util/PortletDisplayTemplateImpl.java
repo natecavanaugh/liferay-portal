@@ -180,7 +180,7 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 			PortletDisplayTemplateConstants.DDM_TEMPLATE_ID, ddmTemplateId);
 		contextObjects.put(PortletDisplayTemplateConstants.ENTRIES, entries);
 
-		if (entries.size() == 1) {
+		if (entries.size() > 0) {
 			contextObjects.put(
 				PortletDisplayTemplateConstants.ENTRY, entries.get(0));
 		}
@@ -305,6 +305,9 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 		PortletPreferences portletPreferences = renderRequest.getPreferences();
 
 		Map<String, String[]> map = portletPreferences.getMap();
+
+		contextObjects.put(
+			PortletDisplayTemplateConstants.PORTLET_PREFERENCES, map);
 
 		for (Map.Entry<String, String[]> entry : map.entrySet()) {
 			String[] values = entry.getValue();
