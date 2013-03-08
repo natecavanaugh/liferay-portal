@@ -205,20 +205,16 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 
 		utilTemplateVariableGroup.addVariable(
 			"http-request", HttpServletRequest.class,
-			PortletDisplayTemplateConstants.REQUEST
-		);
+			PortletDisplayTemplateConstants.REQUEST);
 		utilTemplateVariableGroup.addVariable(
 			"render-request", RenderRequest.class,
-			PortletDisplayTemplateConstants.RENDER_REQUEST
-		);
+			PortletDisplayTemplateConstants.RENDER_REQUEST);
 		utilTemplateVariableGroup.addVariable(
 			"render-response", RenderResponse.class,
-			PortletDisplayTemplateConstants.RENDER_RESPONSE
-		);
+			PortletDisplayTemplateConstants.RENDER_RESPONSE);
 		utilTemplateVariableGroup.addVariable(
 			"liferay-taglib", VelocityTaglib.class,
-			PortletDisplayTemplateConstants.TAGLIB_LIFERAY
-		);
+			PortletDisplayTemplateConstants.TAGLIB_LIFERAY);
 
 		templateVariableGroupMap.put("util", utilTemplateVariableGroup);
 
@@ -244,7 +240,7 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 			PortletDisplayTemplateConstants.DDM_TEMPLATE_ID, ddmTemplateId);
 		contextObjects.put(PortletDisplayTemplateConstants.ENTRIES, entries);
 
-		if (entries.size() > 0) {
+		if (!entries.isEmpty()) {
 			contextObjects.put(
 				PortletDisplayTemplateConstants.ENTRY, entries.get(0));
 		}
