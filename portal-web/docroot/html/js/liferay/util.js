@@ -11,7 +11,17 @@
 	var isArray = Lang.isArray;
 	var arrayIndexOf = AArray.indexOf;
 
+	var BUTTON_INPUT_PREFIX = 'aui-button-input';
+
+	var BUTTON_PREFIX = 'aui-button';
+
+	var DISABLED_SUFFIX = '-disabled';
+
 	var EVENT_CLICK = 'click';
+
+	var FIELD_PREFIX = 'aui-field';
+
+	var FIELD_INPUT_PREFIX = 'aui-field-input';
 
 	var htmlEscapedValues = [];
 	var htmlUnescapedValues = [];
@@ -1822,19 +1832,100 @@
 		['liferay-store']
 	);
 
+	/**
+	 * OPTIONS
+	 *
+	 * Required
+	 * element {string || node || nodelist}: The input(s) or parent element of input(s) to toggle disabled.
+	 *
+	 * Optional
+	 * bool {boolean}: True by default.  If true, toggle disabled; if false, toggle enabled.
+	 */
+
 	Liferay.provide(
 		Util,
 		'toggleDisabled',
-		function(button, state) {
-			if (!A.instanceOf(button, A.NodeList)) {
-				button = A.all(button);
+		function(element, bool) {
+			if (!A.instanceOf(element, A.NodeList)) {
+				element = A.all(element);
+			}
+			if (bool == null || bool === '') {
+				bool = true;
 			}
 
-			button.each(
+			element.each(
 				function(item, index, collection) {
-					item.attr('disabled', state);
+					var parentClass, disabledClass;
 
-					item.ancestor('.aui-button').toggleClass('aui-button-disabled', state);
+					if(item.attr('type')) {
+						item.attr('disabled', bool);
+
+						if (item.hasClass(FIELD_INPUT_PREFIX)) {
+							parentClass = FIELD_PREFIX;
+						}
+						else if (item.hasClass(BUTTON_INPUT_PREFIX)) {
+							parentClass = BUTTON_PREFIX;
+						}
+
+						disabledClass = parentClass + DISABLED_SUFFIX;
+						if (bool) {
+							item.ancestor('.' + parentClass).addClass(disabledClass);
+						}
+						else {
+							item.ancestor('.' + parentClass).removeClass(disabledClass);
+						}
+					}
+					else {
+						var node = A.one(item);
+						var children = node.all('button, input, select, textarea');
+
+						if (children.size() != 0) {
+							children.attr('disabled', bool);
+
+							var childFieldClass, childButtonClass;
+							if (node.one('.' + FIELD_PREFIX)) {
+								childFieldClass = FIELD_PREFIX;
+							}
+							if (node.one('.' + BUTTON_PREFIX)) {
+								childButtonClass = BUTTON_PREFIX;
+							}
+							else if (node.ancestor('.' + FIELD_PREFIX)) {
+								parentClass = FIELD_PREFIX;
+							}
+							else if (node.ancestor('.' + BUTTON_PREFIX)) {
+								parentClass = BUTTON_PREFIX;
+							}
+
+							if (bool) {
+								if (childFieldClass) {
+									disabledClass = childFieldClass + DISABLED_SUFFIX;
+									node.all('.' + childFieldClass).addClass(disabledClass);
+								}
+								if (childButtonClass) {
+									disabledClass = childButtonClass + DISABLED_SUFFIX;
+									node.all('.' + childButtonClass).addClass(disabledClass);
+								}
+								else if (parentClass) {
+									disabledClass = parentClass + DISABLED_SUFFIX;
+									item.ancestor('.' + parentClass).addClass(disabledClass);
+								}
+							}
+							else {
+								if (childFieldClass) {
+									disabledClass = childFieldClass + DISABLED_SUFFIX;
+									node.all('.' + childFieldClass).removeClass(disabledClass);
+								}
+								if (childButtonClass) {
+									disabledClass = childButtonClass + DISABLED_SUFFIX;
+									node.all('.' + childButtonClass).removeClass(disabledClass);
+								}
+								else if (parentClass) {
+									disabledClass = parentClass + DISABLED_SUFFIX;
+									item.ancestor('.' + parentClass).removeClass(disabledClass);
+								}
+							}
+						}
+					}
 				}
 			);
 		},

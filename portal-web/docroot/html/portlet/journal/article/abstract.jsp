@@ -95,9 +95,9 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 
 				types.item(index).set('checked', true);
 
-				values.set('disabled', true);
+				Liferay.Util.toggleDisabled(values, true);
 
-				values.item(index).set('disabled', false);
+				Liferay.Util.toggleDisabled(values.item(index), false);
 			};
 
 			container.delegate(
@@ -129,13 +129,13 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 								types.each(
 									function (item, index, collection) {
 										if (item.get('checked')) {
-											values.item(index).set('disabled', false);
+											Liferay.Util.toggleDisabled(item, false);
 										}
 									}
 								);
 							}
 							else {
-								values.set('disabled', true);
+								Liferay.Util.toggleDisabled(values, true);
 							}
 						}
 					}

@@ -488,7 +488,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 					function(message) {
 						var A = AUI();
 
-						A.one('#<%= clusterNode.getClusterNodeId() %>_registerCheckbox').attr('disabled', false);
+						Liferay.Util.toggleDisabled(A.one('#<%= clusterNode.getClusterNodeId() %>_registerCheckbox'), false);
 
 						if (!message) {
 							A.one('#<%= clusterNode.getClusterNodeId() %>_licenseProperties').html('License information is not available.');
