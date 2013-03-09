@@ -54,19 +54,12 @@ AUI.add(
 							}
 						);
 
-						if (nonIETouch) {
-							if (navigation) {
-								navigation.delegate('click', instance._onTouchClick, '> li > a', instance);
-							}
+						if (nonIETouch && navigation) {
+							navigation.delegate('click', instance._onTouchClick, '> li > a', instance);
 						}
 						else {
 							if (navigation) {
-								navigation.delegate(
-									['mouseenter', 'mouseleave'],
-									instance._onMouseToggle,
-									'> li',
-									instance
-								);
+								navigation.delegate(['mouseenter', 'mouseleave'], instance._onMouseToggle, '> li', instance);
 
 								navigation.delegate('keydown', instance._handleKeyDown, 'a', instance);
 							}
@@ -85,11 +78,7 @@ AUI.add(
 
 							var focusManager = host.focusManager;
 
-							focusManager.after(
-								['activeDescendantChange', 'focusedChange'],
-								instance._showMenu,
-								instance
-							);
+							focusManager.after(['activeDescendantChange', 'focusedChange'], instance._showMenu, instance);
 
 							instance._focusManager = focusManager;
 						}
@@ -196,7 +185,6 @@ AUI.add(
 						var instance = this;
 
 						var menuNew = event.currentTarget.ancestor(instance._directLiChild);
-						var menuOld = MAP_HOVER.menu;
 
 						var childMenu = menuNew.one('.child-menu');
 
@@ -204,7 +192,7 @@ AUI.add(
 							event.preventDefault();
 						}
 
-						instance._showNavigationMenu(menuNew, menuOld);
+						instance._showNavigationMenu(menuNew, MAP_HOVER.menu);
 					},
 
 					_showMenu: function(event) {
@@ -222,6 +210,7 @@ AUI.add(
 
 							var activeDescendant = focusManager.get(ACTIVE_DESCENDANT);
 							var descendants = focusManager.get('descendants');
+
 							var link = descendants.item(activeDescendant);
 
 							var menuNew = link.ancestor(instance._directLiChild);
@@ -238,20 +227,18 @@ AUI.add(
 					_showNavigationMenu: function(menuNew, menuOld) {
 						var instance = this;
 
-						if (menuOld) {
-							if (menuOld != menuNew) {
-								Liferay.fire('hideNavigationMenu', MAP_HOVER);
+						var updateMenu = (menuOld && menuOld != menuNew);
 
-								MAP_HOVER.menu = menuNew;
-
-								Liferay.fire('showNavigationMenu', MAP_HOVER);
-							}
+						if (updateMenu) {
+							Liferay.fire('hideNavigationMenu', MAP_HOVER);
 						}
-						else {
+
+						if (!menuOld || updateMenu) {
 							MAP_HOVER.menu = menuNew;
 
 							Liferay.fire('showNavigationMenu', MAP_HOVER);
 						}
+
 					}
 				}
 			}
