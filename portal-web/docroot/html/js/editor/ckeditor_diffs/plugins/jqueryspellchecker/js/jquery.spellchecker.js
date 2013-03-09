@@ -248,7 +248,7 @@
     Events.call(this);
     this.config = config;
     this.parser = parser;
-    this.spellCheckerElement = this.element = A.one(element);
+    this.spellCheckerElement = this.element = AUI().one(element);
     this.bindEvents();
   };
   inherits(IncorrectWordsInline, Events);
@@ -776,7 +776,9 @@
     regExp += '(' + incorrectWords.join('|') + ')';
     regExp += '(?=[^' + letterChars + '])';
 
-    this.replaceText(new RegExp(regExp, 'g'), element[0], this.highlightWordsHandler(incorrectWords), 2);
+    // CUSTOM - removing element[0]
+
+    this.replaceText(new RegExp(regExp, 'g'), element.getDOMNode(), this.highlightWordsHandler(incorrectWords), 2);
   };
 
   HtmlParser.prototype.highlightWordsHandler = function(incorrectWords) {
@@ -787,9 +789,11 @@
     return function(fill, i, word) {
 
       // Replacement node
-      var span = A.Node.create('<span />', {
+      var span = AUI().Node.create('<span />', {
         'class': pluginName + '-word-highlight'
       });
+
+      span = span.getDOMNode();
 
       // If we have a new match
       if (i !== c) {
@@ -797,6 +801,8 @@
         replaceElement = span;
       }
 
+      // CUSTOM -- need to change to AUI
+      // TODO: change to AUI
       span
       .text(fill)
       .data({
@@ -863,7 +869,12 @@
 
   SpellChecker.prototype.setupIncorrectWords = function() {
 
-    this.incorrectWords = new Collection(this.elements, function(element) {
+    // CUSTOM START - adding elements to an array so the collection can read it
+    var elements = [];
+    elements.push(this.elements);
+    // CUSTOM END
+
+    this.incorrectWords = new Collection(elements, function(element) {
       return this.config.parser === 'html' ?
         new IncorrectWordsInline(this.config, this.parser, element) :
         new IncorrectWordsBox(this.config, this.parser, element);
@@ -889,9 +900,9 @@
     // this.suggestBox.on('ignore.word', this.onIgnoreWord.bind(this));
     // this.suggestBox.on('select.word', this.onSelectWord.bind(this));
     // CUSTOM -- changing handler
-    this.on('check.fail', this.onCheckFail);
-    this.suggestBox.on('ignore.word', this.onIgnoreWord);
-    this.suggestBox.on('select.word', this.onSelectWord);
+    this.on('check.fail', this.onCheckFail.bind(this));
+    this.suggestBox.on('ignore.word', this.onIgnoreWord.bind(this));
+    this.suggestBox.on('select.word', this.onSelectWord.bind(this));
     // CUSTOM -- commenting out for now
     // TODO
     // this.incorrectWords.on('select.word', this.onIncorrectWordSelect.bind(this));
@@ -957,12 +968,13 @@
     // CUSTOM -- commenting out for now
     // this.suggestBox.detach();
     // CUSTOM START
-    AUI().each(badWords, function(words) {
+    AUI().each(badWords, function(words, i) {
       if (words.length > 0) {
         // Make array unique
         // words = A.grep(words, function(el, index){
-          // return index === A.Array.indexOf(words, el);
+        //   return index === A.Array.indexOf(words, el);
         // });
+        // words.push('denounncing');
         words = AUI().Array.unique(
             words,
             function(a, b, index, array) {
@@ -1043,7 +1055,18 @@ window.findAndReplaceDOMText = (function() {
     var m, matches = [], text = _getText(node);
     var replaceFn = _genReplacer(replacementNode);
 
-    if (!text) { return; }
+    // if (!text) { return; }
+
+    // CUSTOM START
+    var array = [];
+    array.push('denounncing');
+    var test = [];
+      test.push(0);
+      test.push(10);
+      test.push(array);
+
+      matches.push(test);
+    // CUSTOM END
 
     if (regex.global) {
       while (!!(m = regex.exec(text))) {
@@ -1085,6 +1108,12 @@ window.findAndReplaceDOMText = (function() {
    * to broken innerText/textContent
    */
   function _getText(node) {
+
+    // CUSTOM -- test
+    if (node.nodeType === 1) {
+        return node.textContent;
+    }
+    // CUSTOM END
 
     if (node.nodeType === 3) {
       return node.data;
