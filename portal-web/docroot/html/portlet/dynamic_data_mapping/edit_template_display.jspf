@@ -100,7 +100,7 @@ boolean useRichEditor = editorType.equals("rich");
 							for (TemplateVariableGroup templateVariableGroup : templateVariablesMap.values()) {
 							%>
 
-							<div>
+							<div class="palette-section">
 								<div class="palette-item-header aui-toggler-header-expanded">
 									<span class="palette-item-header-icon"></span>
 									<span><liferay-ui:message key="<%= templateVariableGroup.getLabelKey() %>" /></span>
@@ -109,34 +109,32 @@ boolean useRichEditor = editorType.equals("rich");
 
 									<%
 									for (TemplateVariableDefinition variableDefinition : templateVariableGroup.getVariableDefinitions()) {
+
+										String dataContent1 = "${" + variableDefinition.getName() + "}";
+										String dataContent2 = StringPool.BLANK;
+
 										if (variableDefinition.isCollection()) {
 											TemplateVariableDefinition itemVariableDefinition = variableDefinition.getCollectionItem();
+
+											dataContent1 = "<#list " + itemVariableDefinition.getName() + " as " +variableDefinition.getName() + ">";
+											dataContent2 = "</#list>";
 									%>
 
-											<li class="palette-item-container">
-												<span class="palette-item"
-													  data-content1="<#list <%= itemVariableDefinition.getName() %> as <%= variableDefinition.getName() %>>"
-													  data-content2="</#list>"
-													  title="<%= HtmlUtil.escapeAttribute(_getPaletteItemTitle(pageContext, variableDefinition)) %>" />
-													<liferay-ui:message key="<%= variableDefinition.getLabelKey() %>" />*
-												</span>
-											</li>
 
 									<%
 										}
-										else {
 									%>
 
-											<li class="palette-item-container">
-												<span class="palette-item"
-													  data-content1="\${<%= variableDefinition.getName() %>}"
-													  title="<%= HtmlUtil.escapeAttribute(_getPaletteItemTitle(pageContext, variableDefinition)) %>">
-													<liferay-ui:message key="<%= variableDefinition.getLabelKey() %>" />
-												</span>
-											</li>
+										<li class="palette-item-container">
+											<span class="palette-item"
+												  data-content1="<%= dataContent1 %>"
+												  <%= Validator.isNotNull(dataContent2) ? "data-content2=\"" + dataContent2 + "\"" : StringPool.BLANK %>
+												  title="<%= HtmlUtil.escapeAttribute(_getPaletteItemTitle(pageContext, variableDefinition)) %>">
+												<liferay-ui:message key="<%= variableDefinition.getLabelKey() %>" />
+											</span>
+										</li>
 
 									<%
-										}
 									}
 									%>
 
@@ -174,11 +172,8 @@ boolean useRichEditor = editorType.equals("rich");
 </liferay-ui:panel-container>
 
 <aui:script use="aui-ace-autocomplete-freemarker,aui-ace-autocomplete-plugin,aui-toggler,aui-tooltip,event-mouseenter,transition">
-	var Util = Liferay.Util;
-
 	var AObject = A.Object;
-
-	var CSS_HIDDEN = 'aui-helper-hidden';
+	var Util = Liferay.Util;
 
 	var CSS_EDITOR_CONTAINER_FULL = 'lfr-editor-container-full';
 
@@ -186,46 +181,36 @@ boolean useRichEditor = editorType.equals("rich");
 
 	var CSS_PALETTE_CONTAINER_MINIMIZED = 'lfr-template-palette-container-minimized';
 
-	var editorType = '<%= HtmlUtil.escapeJS(editorType) %>';
-
-	var panelScriptContainer = A.one('#templateScriptContainer');
-
-	var plainEditorField = panelScriptContainer.one('#<portlet:namespace />plainEditorField');
-
-	var selectLanguageNode = panelScriptContainer.one('#<portlet:namespace />language');
-
-	var paletteContainer = panelScriptContainer.one('#<portlet:namespace />templatePaletteContainer');
-
-	var paletteDataContainer = panelScriptContainer.one('#<portlet:namespace />paletteDataContainer');
-
-	var paletteDataNode = panelScriptContainer.one('#<portlet:namespace />paletteData');
-
-	var paletteToggler = panelScriptContainer.one('#<portlet:namespace />paletteToggler');
-
-	var paletteTogglerLink = paletteToggler.one('a');
-
-	var editorContainer = panelScriptContainer.one('#<portlet:namespace />editorContainer');
-
-	var selectLanguageNode = panelScriptContainer.one('#<portlet:namespace />language');
-
-	var richEditor;
-
-	var prevEditorContent;
-
-	var paletteMouseEnterLeaveHandles;
-
-	var eventOpacities = {
+	var MAP_OPACITY = {
 		mouseenter: 1,
 		mouseleave: 0
 	};
 
-	function attachPaletteMouseEnterLeave() {
-		paletteMouseEnterLeaveHandles = paletteContainer.on(['mouseenter', 'mouseleave'], togglePaletteAction);
+	var editorType = '<%= HtmlUtil.escapeJS(editorType) %>';
+
+	var panelScriptContainer = A.one('#templateScriptContainer');
+
+	var editorContainer = panelScriptContainer.one('#<portlet:namespace />editorContainer');
+	var paletteContainer = panelScriptContainer.one('#<portlet:namespace />templatePaletteContainer');
+	var paletteDataContainer = panelScriptContainer.one('#<portlet:namespace />paletteDataContainer');
+	var paletteDataNode = panelScriptContainer.one('#<portlet:namespace />paletteData');
+	var paletteToggler = panelScriptContainer.one('#<portlet:namespace />paletteToggler');
+	var plainEditorField = panelScriptContainer.one('#<portlet:namespace />plainEditorField');
+	var selectLanguageNode = panelScriptContainer.one('#<portlet:namespace />language');
+
+	var paletteTogglerLink = paletteToggler.one('a');
+
+	var paletteHandle;
+	var prevEditorContent;
+	var richEditor;
+
+	function attachPaletteInteraction() {
+		paletteHandle = paletteContainer.on(['mouseenter', 'mouseleave'], togglePaletteAction);
 	}
 
-	function detachPaletteMouseEnterLeave() {
-		if (paletteMouseEnterLeaveHandles) {
-			paletteMouseEnterLeaveHandles.detach();
+	function detachPaletteInteraction() {
+		if (paletteHandle) {
+			paletteHandle.detach();
 		}
 	}
 
@@ -243,68 +228,13 @@ boolean useRichEditor = editorType.equals("rich");
 	}
 
 	function getSelectedLanguage() {
-		return selectLanguageNode.one('option:selected').val();
+		return selectLanguageNode.val();
 	}
 
 	function hidePalette() {
-		paletteContainer.addClass(CSS_HIDDEN);
+		paletteContainer.hide();
 
 		editorContainer.addClass(CSS_EDITOR_CONTAINER_FULL);
-	}
-
-	function onPaletteItemChosen(event) {
-		var editor = richEditor.getEditor();
-
-		var item = event.currentTarget;
-
-		var contentAttrs = Util.getAttributes(item, "data-content");
-
-		var curCursorPosition;
-
-		var processed;
-
-		AObject.each(
-			contentAttrs,
-			function(item, index) {
-				if (processed) {
-					editor.insert('\n');
-
-					curCursorPosition = editor.getCursorPosition();
-
-					editor.insert('\n');
-				}
-
-				processed = true;
-
-				editor.insert(item);
-			}
-		);
-
-		if (curCursorPosition) {
-			editor.moveCursorToPosition(curCursorPosition);
-		}
-
-		editor.focus();
-	}
-
-	function minimizePalette() {
-		paletteDataNode.remove();
-
-		detachPaletteMouseEnterLeave();
-
-		paletteContainer.transition(
-			{
-				duration: 0.5,
-				width: '13px'
-			},
-			function() {
-				paletteContainer.addClass(CSS_PALETTE_CONTAINER_MINIMIZED);
-
-				editorContainer.addClass(CSS_EDITOR_CONTAINER_PALETTE_MINIMIZED);
-
-				paletteToggler.setStyle('opacity', '1');
-			}
-		);
 	}
 
 	function maximizePalette() {
@@ -320,14 +250,66 @@ boolean useRichEditor = editorType.equals("rich");
 
 				paletteDataContainer.appendChild(paletteDataNode);
 
-				attachPaletteMouseEnterLeave();
+				attachPaletteInteraction();
 			}
 		);
 	}
 
+	function minimizePalette() {
+		paletteDataNode.remove();
+
+		detachPaletteInteraction();
+
+		paletteContainer.transition(
+			{
+				duration: 0.5,
+				width: '13px'
+			},
+			function() {
+				paletteContainer.addClass(CSS_PALETTE_CONTAINER_MINIMIZED);
+				editorContainer.addClass(CSS_EDITOR_CONTAINER_PALETTE_MINIMIZED);
+
+				paletteToggler.setStyle('opacity', '1');
+			}
+		);
+	}
+
+	function onPaletteItemChosen(event) {
+		var editor = richEditor.getEditor();
+
+		var item = event.currentTarget;
+
+		var contentAttrs = Util.getAttributes(item, 'data-content');
+
+		var cursorPos;
+		var processed;
+
+		AObject.each(
+			contentAttrs,
+			function(item, index) {
+				if (processed) {
+					editor.insert('\n');
+
+					cursorPos = editor.getCursorPosition();
+
+					editor.insert('\n');
+				}
+
+				processed = true;
+
+				editor.insert(item);
+			}
+		);
+
+		if (cursorPos) {
+			editor.moveCursorToPosition(cursorPos);
+		}
+
+		editor.focus();
+	}
+
 	function onTemplateLanguageChange(event) {
 		updatePalette(event);
-
 		updateEditorPlugins(event);
 	}
 
@@ -345,10 +327,10 @@ boolean useRichEditor = editorType.equals("rich");
 	function showPalette() {
 		editorContainer.removeClass(CSS_EDITOR_CONTAINER_FULL);
 
-		paletteContainer.removeClass(CSS_HIDDEN);
+		paletteContainer.show();
 	}
 
-	function togglePalette() {
+	function togglePaletteCollapse() {
 		if (paletteContainer.hasClass(CSS_PALETTE_CONTAINER_MINIMIZED)) {
 			maximizePalette();
 		}
@@ -358,11 +340,11 @@ boolean useRichEditor = editorType.equals("rich");
 	}
 
 	function togglePaletteAction(event) {
-		var opacity = 0;
-
 		if (!paletteContainer.hasClass(CSS_PALETTE_CONTAINER_MINIMIZED)) {
+			var opacity = 0;
+
 			if (event) {
-				opacity = eventOpacities[event.type];
+				opacity = MAP_OPACITY[event.type];
 			}
 
 			paletteToggler.transition(
@@ -426,9 +408,7 @@ boolean useRichEditor = editorType.equals("rich");
 	}
 
 	function updatePalette() {
-		var selectedLanguage = getSelectedLanguage();
-
-		if (selectedLanguage === 'ftl') {
+		if (getSelectedLanguage() === 'ftl') {
 			showPalette();
 		}
 		else {
@@ -446,9 +426,9 @@ boolean useRichEditor = editorType.equals("rich");
 			richEditor = new A.AceEditor(
 				{
 					boundingBox: '#<portlet:namespace />richEditor',
-					width: '100%',
-					height: '400',
-					mode: '<%= EditorUtil.getEditorMode(langType) %>'
+					height: 400,
+					mode: '<%= EditorUtil.getEditorMode(langType) %>',
+					width: '100%'
 				}
 			).render();
 
@@ -473,9 +453,9 @@ boolean useRichEditor = editorType.equals("rich");
 
 			paletteContainer.delegate('click', onPaletteItemChosen, '.palette-item');
 
-			attachPaletteMouseEnterLeave();
+			attachPaletteInteraction();
 
-			paletteToggler.on('click', togglePalette);
+			paletteToggler.on('click', togglePaletteCollapse);
 
 			var togglerDelegate = new A.TogglerDelegate(
 				{
@@ -488,7 +468,9 @@ boolean useRichEditor = editorType.equals("rich");
 
 			var t1 = new A.Tooltip(
 				{
-					align: { points: [ 'bl', 'tr' ] },
+					align: {
+						points: ['bl', 'tr']
+					},
 					title: true,
 					trigger: '.palette-item'
 				}

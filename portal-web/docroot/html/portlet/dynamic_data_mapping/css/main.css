@@ -1,3 +1,5 @@
+@import "compass";
+
 .aui-document-library-file-entry-cell-editor-hidden {
 	display: none;
 }
@@ -106,7 +108,7 @@
 			width: 200px;
 
 			.minimize-panels {
-				opacity: 0;
+				@include opacity(0);
 
 				a {
 					background-position: 1px 0;
@@ -123,29 +125,26 @@
 					font-weight: bold;
 
 					.palette-item-header-icon {
+						background: url() no-repeat 50%;
 						display: inline-block;
 						height: 10px;
 						width: 9px;
 					}
 				}
 
-				.aui-toggler-header-collapsed {
-					.palette-item-header-icon {
-						background: url(@theme_image_path@/arrows/05_right.png);
-					}
+				.aui-toggler-header-collapsed .palette-item-header-icon {
+					background-image: url(@theme_image_path@/arrows/05_right.png);
 				}
 
-				.aui-toggler-header-expanded {
-					.palette-item-header-icon {
-						background: url(@theme_image_path@/arrows/05_down.png);
-						vertical-align: middle;
-					}
+				.aui-toggler-header-expanded .palette-item-header-icon {
+					background-image: url(@theme_image_path@/arrows/05_down.png);
+					vertical-align: middle;
 				}
 
 				.palette-item-header {
-					font-style: italic;
-					margin: 0.5em 0.5em;
 					cursor: pointer;
+					font-style: italic;
+					margin: 0.5em;
 				}
 
 				.palette-item-content {
@@ -168,7 +167,7 @@
 
 				a {
 					background-position: 1px -34px;
-					opacity: 1;
+					@include opacity(1);
 				}
 			}
 		}
