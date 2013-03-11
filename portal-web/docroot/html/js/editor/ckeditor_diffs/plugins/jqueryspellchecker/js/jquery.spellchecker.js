@@ -259,7 +259,9 @@
 
   IncorrectWordsInline.prototype.addWords = function(words) {
     var highlighted = this.parser.highlightWords(words, this.element);
-    this.element.html(highlighted);
+    if (highlighted != null) {
+        this.element.html(highlighted);
+    }
   };
 
   IncorrectWordsInline.prototype.removeWord = function(elem) {};
@@ -789,9 +791,13 @@
     return function(fill, i, word) {
 
       // Replacement node
-      var span = AUI().Node.create('<span />', {
+      /*var span = AUI().Node.create('<span />', {
         'class': pluginName + '-word-highlight'
-      });
+      });*/
+      var span = AUI().Node.create('<span />');
+
+      span.addClass(pluginName + '-word-highlight');
+      span.text(fill);
 
       span = span.getDOMNode();
 
@@ -803,14 +809,15 @@
 
       // CUSTOM -- need to change to AUI
       // TODO: change to AUI
-      span
+      /*span
       .text(fill)
       .data({
         'firstElement': replaceElement,
         'word': word
-      });
+      });*/
 
-      return span[0];
+      // return span[0];
+      return span;
     };
   };
 
@@ -1062,20 +1069,23 @@ window.findAndReplaceDOMText = (function() {
     array.push('denounncing');
     var test = [];
       test.push(0);
-      test.push(10);
+      test.push(11);
       test.push(array);
 
       matches.push(test);
     // CUSTOM END
 
-    if (regex.global) {
+      var a = regex.exec(text);
+      var b = regex.test(text);
+
+    /*if (regex.global) {
       while (!!(m = regex.exec(text))) {
         matches.push(_getMatchIndexes(m, captureGroup));
       }
     } else {
       m = text.match(regex);
       matches.push(_getMatchIndexes(m, captureGroup));
-    }
+    }*/
 
     if (matches.length) {
       _stepThroughMatches(node, matches, replaceFn);
