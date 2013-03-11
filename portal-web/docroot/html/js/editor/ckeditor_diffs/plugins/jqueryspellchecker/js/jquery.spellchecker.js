@@ -85,7 +85,12 @@
             this._handlers[name] = [];
         }
 
-        this._handlers[name] = handler;
+        if (name == 'destroy') {
+            this._handlers[name].push(handler);
+        }
+        else {
+            this._handlers[name] = handler;
+        }
       // CUSTOM END
     },
     trigger: function(name) {
@@ -93,16 +98,27 @@
       // CUSTOM START
       // if (A.isFunction(name)) {
       var instance = this;
-      if (typeof instance[name] === 'function') {
+      if (typeof instance[name] === 'function' && name != 'destroy') {
       // CUSTOM END
         // return name.apply(this, args);
           return instance[name](args);
       }
       if (this._handlers[name]) {
         // this._handlers[name].fireWith(this, args);
-        var handler = this._handlers[name];
-        // CUSTOM -- set to get the first index of the array
-        handler(args[0]);
+          var handler = this._handlers[name];
+          if (name != 'destroy') {
+              // CUSTOM -- set to get the first index of the array
+              handler(args[0]);
+              return;
+          }
+
+          AUI().each(
+              handler,
+              function (destroy) {
+                  destroy(args[0]);
+              },
+              this
+          );
       }
     },
     handler: function(name) {
@@ -267,7 +283,7 @@
   IncorrectWordsInline.prototype.removeWord = function(elem) {};
 
   IncorrectWordsInline.prototype.destroy = function() {
-    this.element.off('.' + pluginName);
+    // this.element.off('.' + pluginName);
     try {
       window.findAndReplaceDOMText.revert();
     } catch(e) {}
@@ -891,9 +907,12 @@
       this.incorrectWords.get(index).removeWord(this.incorrectWordElement);
     }.bind(this));
 
-    this.on('destroy', function() {
+    /*this.on('destroy', function() {
       this.incorrectWords.destroy();
-    }, this);
+    }, this);*/
+      this.on('destroy', function() {
+          this.incorrectWords.instances[0].destroy();
+      }.bind(this));
   };
 
   SpellChecker.prototype.setupParser = function() {
@@ -1064,28 +1083,16 @@ window.findAndReplaceDOMText = (function() {
 
     // if (!text) { return; }
 
-    // CUSTOM START
-    var array = [];
-    array.push('denounncing');
-    var test = [];
-      test.push(0);
-      test.push(11);
-      test.push(array);
+    // TODO: doesn't work if 'denounncing' is the only word
 
-      matches.push(test);
-    // CUSTOM END
-
-      var a = regex.exec(text);
-      var b = regex.test(text);
-
-    /*if (regex.global) {
+    if (regex.global) {
       while (!!(m = regex.exec(text))) {
         matches.push(_getMatchIndexes(m, captureGroup));
       }
     } else {
       m = text.match(regex);
       matches.push(_getMatchIndexes(m, captureGroup));
-    }*/
+    }
 
     if (matches.length) {
       _stepThroughMatches(node, matches, replaceFn);
