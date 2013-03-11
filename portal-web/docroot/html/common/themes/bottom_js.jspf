@@ -109,6 +109,9 @@ if (layout != null) {
 	</c:if>
 
 	<aui:script use="liferay-navigation">
+		var UA = A.UA;
+		var nonIETouch = (!UA.ie && UA.touch);
+
 		Liferay.once(
 			'initNavigation',
 			function() {
@@ -123,10 +126,10 @@ if (layout != null) {
 							%>
 
 								{
-									deletable: <%= LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), curLayout, ActionKeys.DELETE) %>,
+									deletable: nonIETouch ? false : <%= LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), curLayout, ActionKeys.DELETE) %>,
 									id: <%= curLayout.getLayoutId() %>,
-									sortable: <%= GroupPermissionUtil.contains(themeDisplay.getPermissionChecker(), scopeGroupId, ActionKeys.MANAGE_LAYOUTS) && SitesUtil.isLayoutSortable(curLayout) %>,
-									updateable: <%= LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), curLayout, ActionKeys.UPDATE) %>
+									sortable: nonIETouch ? false : <%= GroupPermissionUtil.contains(themeDisplay.getPermissionChecker(), scopeGroupId, ActionKeys.MANAGE_LAYOUTS) && SitesUtil.isLayoutSortable(curLayout) %>,
+									updateable: nonIETouch ? false : <%= LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), curLayout, ActionKeys.UPDATE) %>
 								},
 
 							<%
@@ -148,14 +151,19 @@ if (layout != null) {
 		var navBlock = A.one('#navigation');
 
 		if (navBlock) {
-			var handle = navBlock.on(
-				['mousemove', 'touchstart'],
-				function() {
-					handle.detach();
+			if (nonIETouch) {
+				Liferay.fire('initNavigation');
+			}
+			else {
+				var handle = navBlock.on(
+					'mousemove',
+					function() {
+						handle.detach();
 
-					Liferay.fire('initNavigation');
-				}
-			);
+						Liferay.fire('initNavigation');
+					}
+				);
+			}
 		}
 	</aui:script>
 </c:if>
