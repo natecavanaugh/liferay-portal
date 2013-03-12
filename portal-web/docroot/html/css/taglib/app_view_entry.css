@@ -77,10 +77,3 @@
 		zoom: 1;
 	}
 }
-
-.ie6 .selected {
-		background-color: transparent;
-		clip: auto;
-		position: static;
-	}
-}

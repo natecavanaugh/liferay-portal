@@ -7,7 +7,7 @@ This file allows you to override and define new FreeMarker variables.
 <#macro aui_drop_down_ul nav_items orientation>
 	<#assign aui_guid = aui_guid + 1 />
 
-	<#assign menu_class="yui3-menu" />
+	<#assign menu_class = "yui3-menu" />
 
 	<#if validator.isNotNull(orientation)>
 		<#assign menu_class = "${menu_class} yui3-menu-${orientation}" />
@@ -37,7 +37,7 @@ This file allows you to override and define new FreeMarker variables.
 					</#if>
 
 					<li class="${menu_item}" data-layoutId="${nav_item.getLayout().getLayoutId()}">
-						<a class="${menu_item_label} ${selected_anchor} ${has_child}" href="${nav_item.getURL()}" ${nav_item.getTarget()}>${nav_item.icon()} ${nav_item.getName()}</a>
+						<a class="${menu_item_label} ${selected_anchor} ${has_child}" href="${nav_item.getURL()}" ${nav_item.getTarget()}><span>${nav_item.icon()} ${nav_item.getName()}</span></a>
 
 						<#if nav_item.hasChildren()>
 							<@aui_drop_down_ul nav_items=nav_item.getChildren() orientation="" />

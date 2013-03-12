@@ -12,7 +12,7 @@
 
 		<menu class="portlet-topper-toolbar" id="portlet-topper-toolbar_${portlet_id}" type="toolbar">
 			<#if portlet_display.isShowBackIcon()>
-				<a href="${portlet_back_url}" class="portlet-icon-back"><@liferay.language key="return-to-full-page" /></a>
+				<a class="portlet-icon-back" href="${portlet_back_url}"><@liferay.language key="return-to-full-page" /></a>
 			<#else>
 				${theme.iconOptions()}
 				${theme.iconMinimize()}

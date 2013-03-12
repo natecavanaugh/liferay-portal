@@ -3,8 +3,8 @@
 <#assign theme_display = themeDisplay />
 <#assign portlet_display = portletDisplay />
 
-<#assign theme_timestamp = themeDisplay.getTheme().getTimestamp() />
-<#assign theme_settings = themeDisplay.getThemeSettings() />
+<#assign theme_timestamp = theme_display.getTheme().getTimestamp() />
+<#assign theme_settings = theme_display.getThemeSettings() />
 
 <#assign css_class = theme_display.getColorScheme().getCssClass() />
 
@@ -14,11 +14,11 @@
 	<#assign page_group = layout.getGroup() />
 
 	<#if page_group.isStagingGroup()>
-		<#assign css_class = css_class + " staging local-staging" />
+		<#assign css_class = "${css_class} staging local-staging" />
 	<#elseif theme_display.isShowStagingIcon() && page_group.hasStagingGroup()>
-		<#assign css_class = css_class + " live-view" />
+		<#assign css_class = "${css_class} live-view" />
 	<#elseif theme_display.isShowStagingIcon() && page_group.isStagedRemotely()>
-		<#assign css_class = css_class + " staging remote-staging" />
+		<#assign css_class = "${css_class} staging remote-staging" />
 	</#if>
 
 	<#if page_group.isControlPanel()>
@@ -29,17 +29,17 @@
 <#assign liferay_dockbar_pinned = getterUtil.getBoolean(sessionClicks.get(request, "liferay_dockbar_pinned", ""), false) />
 
 <#if liferay_toggle_controls = "visible">
-	<#assign css_class = css_class + " controls-visible" />
+	<#assign css_class = "${css_class} controls-visible" />
 <#else>
-	<#assign css_class = css_class + " controls-hidden" />
+	<#assign css_class = "${css_class} controls-hidden" />
 </#if>
 
 <#if liferay_dockbar_pinned>
-	<#assign css_class = css_class + " lfr-dockbar-pinned" />
+	<#assign css_class = "${css_class} lfr-dockbar-pinned" />
 </#if>
 
 <#if layoutTypePortlet.hasStateMax()>
-	<#assign css_class = css_class + " page-maximized" />
+	<#assign css_class = "${css_class} page-maximized" />
 </#if>
 
 <#assign css_folder = theme_display.getPathThemeCss() />
@@ -158,7 +158,7 @@
 <#assign the_title = "" />
 <#assign selectable = theme_display.isTilesSelectable() />
 <#assign is_maximized = layoutTypePortlet.hasStateMax() />
-<#assign is_freeform = themeDisplay.isFreeformLayout() />
+<#assign is_freeform = theme_display.isFreeformLayout() />
 
 <#assign page_javascript_1 = "" />
 <#assign page_javascript_2 = "" />
@@ -204,27 +204,27 @@
 	<#assign is_guest_group = page_group.getName() == "Guest" />
 
 	<#if is_guest_group>
-		<#assign css_class = css_class + " guest-site" />
+		<#assign css_class = "${css_class} guest-site" />
 	</#if>
 
 	<#if is_signed_in>
-		<#assign css_class = css_class + " signed-in" />
+		<#assign css_class = "${css_class} signed-in" />
 	<#else>
-		<#assign css_class = css_class + " signed-out" />
+		<#assign css_class = "${css_class} signed-out" />
 	</#if>
 
 	<#if layout.isPublicLayout()>
-		<#assign css_class = css_class + " public-page" />
+		<#assign css_class = "${css_class} public-page" />
 	<#else>
-		<#assign css_class = css_class + " private-page" />
+		<#assign css_class = "${css_class} private-page" />
 	</#if>
 
 	<#if page_group.isLayoutPrototype()>
-		<#assign css_class = css_class + " page-template" />
+		<#assign css_class = "${css_class} page-template" />
 	</#if>
 
 	<#if page_group.isLayoutSetPrototype()>
-		<#assign css_class = css_class + " site-template" />
+		<#assign css_class = "${css_class} site-template" />
 	</#if>
 
 	<#if page_group.isCompany()>
@@ -237,7 +237,7 @@
 		<#assign site_type = "site" />
 	</#if>
 
-	<#assign css_class = css_class + " " + site_type />
+	<#assign css_class = "${css_class} ${site_type}" />
 
 	<#assign my_sites_portlet_url = portletURLFactory.create(request, "49", page.getPlid(), "ACTION_PHASE") />
 
@@ -282,7 +282,7 @@
 </#if>
 
 <#if pageSubtitle??>
-	<#assign the_title = pageSubtitle + " - " + the_title />
+	<#assign the_title = "${pageSubtitle} - ${the_title}" />
 </#if>
 
 <#if tilesTitle != "">
@@ -309,9 +309,9 @@
 <#assign site_logo_width = company_logo_width />
 
 <#if company.getLogoId() == 0 && use_company_logo>
-	<#assign logo_css_class = logo_css_class + " default-logo" />
+	<#assign logo_css_class = "${logo_css_class} default-logo" />
 <#else>
-	<#assign logo_css_class = logo_css_class + " custom-logo" />
+	<#assign logo_css_class = "${logo_css_class} custom-logo" />
 </#if>
 
 <#if is_guest_group>
@@ -339,7 +339,7 @@
 <#assign nav_css_class = "sort-pages modify-pages" />
 
 <#if !has_navigation>
-	<#assign nav_css_class = nav_css_class + " aui-helper-hidden" />
+	<#assign nav_css_class = "${nav_css_class} aui-helper-hidden" />
 </#if>
 
 <#-- ---------- Staging ---------- -->

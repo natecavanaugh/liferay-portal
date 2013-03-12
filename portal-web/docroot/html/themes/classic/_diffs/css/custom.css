@@ -122,7 +122,7 @@ hr, .separator {
 		padding: 3px;
 	}
 
-	li, a {
+	a, li {
 		display: inline-block;
 	}
 
@@ -152,7 +152,7 @@ hr, .separator {
 		background-color: #313334;
 	}
 
-	a:focus, .yui3-dd-dragging, .yui3-menuitem-active a, .selected .yui3-menu-label-active, .yui3-menu-label-active, .yui3-menu-label-menuvisible {
+	a:focus, .selected .yui3-menu-label-active, .yui3-dd-dragging, .yui3-menu-label-active, .yui3-menu-label-menuvisible, .yui3-menuitem-active a {
 		background-color: #202223;
 	}
 
@@ -206,7 +206,7 @@ hr, .separator {
 				outline: 0;
 			}
 
-			.selected-anchor, .yui3-menu-label-active, .yui3-menu-label-menuvisible, .yui3-menuitem-active a {
+			.selected-anchor, .yui3-menu-label-active, .yui3-menuitem-active a, .yui3-menu-label-menuvisible {
 				background-color: #202223;
 			}
 
@@ -401,6 +401,20 @@ hr, .separator {
 
 /* ---------- Internet Explorer ---------- */
 
+.ie {
+	.lfr-portlet-title-editable {
+		margin-top: -6px;
+	}
+
+	.lfr-portlet-title-editable-content {
+		margin-top: 4px;
+	}
+
+	.portlet-title {
+		padding-bottom: 5px;
+	}
+}
+
 .ie6, .ie7 {
 	#navigation {
 		.has-child {
@@ -439,9 +453,21 @@ hr, .separator {
 		}
 
 		li {
-			li, li a {
-				display: block;
+			li {
+				&, & a {
+					display: block;
+				}
 			}
+		}
+	}
+
+	#wrapper {
+		width: 90%;
+	}
+
+	#banner {
+		&, & h1.logo {
+			height: 1%;
 		}
 	}
 }
@@ -460,32 +486,8 @@ hr, .separator {
 	}
 }
 
-.ie6 {
-	#wrapper {
-		width: 90%;
-	}
-
-	#banner, #banner h1.logo {
-		height: 1%;
-	}
-}
-
 .ie6 .portlet-topper, .ie7 #navigation .child-menu li a {
 	zoom: 1;
-}
-
-.ie {
-	.lfr-portlet-title-editable {
-		margin-top: -6px;
-	}
-
-	.lfr-portlet-title-editable-content {
-		margin-top: 4px;
-	}
-
-	.portlet-title {
-		padding-bottom: 5px;
-	}
 }
 
 /* ---------- Extras ---------- */
