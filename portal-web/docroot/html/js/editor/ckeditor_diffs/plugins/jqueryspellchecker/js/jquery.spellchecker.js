@@ -106,36 +106,41 @@
 			if (this._handlers[name]) {
 				// this._handlers[name].fireWith(this, args);
 				var handler = this._handlers[name];
-				if (name == 'select.word') {
-					var e = args[0];
-					var word = args[1];
-					var element = args[2];
-					var incorrectWords = args[3];
+                var isArray = (AUI().Array.test(handler) == 1);
 
-					handler(e, word, element, incorrectWords);
-					return;
-				}
-
-				if (name != 'destroy') {
-					// CUSTOM -- set to get the first index of the array
-					handler(args[0]);
-					return;
-				}
-
-				AUI().each(
-					handler,
-					function (destroy) {
-						destroy(args[0]);
-					},
-					this
-				);
+                if (isArray) {
+                    AUI().each(
+                        handler,
+                        function (destroy) {
+                            destroy(args[0]);
+                        },
+                        this
+                    );
+                }
+                else {
+                    this._fireHandler(name, handler, args);
+                }
 			}
 		},
 		handler: function(name) {
 			return function(e) {
 				this.trigger(name, e);
 			}.bind(this);
-		}
+		},
+        _fireHandler: function(name, handler, args) {
+            if (name == 'select.word') {
+                var e = args[0];
+                var word = args[1];
+                var element = args[2];
+                var incorrectWords = args[3];
+
+                handler(e, word, element, incorrectWords);
+            }
+            else {
+                // CUSTOM -- set to get the first index of the array
+                handler(args[0]);
+            }
+        }
 	};
 
 	/* Handlers
@@ -323,10 +328,11 @@
 	SuggestBox.prototype.bindEvents = function() {
 		var click = 'click.' + pluginName;
 		this.container.on(click, this.onContainerClick.bind(this));
-		this.container.on(click, '.ignore-word', selectWordHandler.call(this, 'ignore.word'));
+		// this.container.on(click, '.ignore-word', selectWordHandler.call(this, 'ignore.word'));
 		this.container.on(click, '.ignore-all', this.handler('ignore.all'));
 		this.container.on(click, '.ignore-forever', this.handler('ignore.forever'));
 		// this.container.on(click, '.words a', selectWordHandler.call(this, 'select.word'));
+        this.container.delegate('click', selectWordHandler.call(this, 'ignore.word'), '.ignore-word');
 		this.container.delegate('click', selectWordHandler.call(this, 'select.word'), '.words a');
 		AUI().one('html').on(click, this.onWindowClick.bind(this));
 		// CUSTOM START -- element is not an array
@@ -691,6 +697,7 @@
 					text = textGetter(element);
 				}
 				else {
+                    // TODO: not being used because this is for text area?
 					text = A.one(element)
 						.clone()
 						.find('[class^="spellchecker-"]')
@@ -746,8 +753,9 @@
 				if (word == oldWord) {
 					word = null;
 				}
-
-				mapped.push(word);
+                else {
+                    mapped.push(word);
+                }
 			}
 		);
 
@@ -983,6 +991,7 @@
 		this.trigger('replace.word.before');
 		this.parser.replaceWord(oldWord, replacement, element);
 		this.trigger('replace.word', index);
+        this.suggestBox.bindEvents();
 	};
 
 	SpellChecker.prototype.destroy = function() {

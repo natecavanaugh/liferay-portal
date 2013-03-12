@@ -126,11 +126,6 @@ CKEDITOR.plugins.add('jqueryspellchecker', {
       alert('There are no incorrectly spelled words.');
       t.destroy();
     });
-    t.spellchecker.on('replace.word', function() {
-      if (t.spellchecker.parser.incorrectWords.length === 0) {
-        t.destroy();
-      }
-    });
   },
 
   positionSuggestBox: function() {
