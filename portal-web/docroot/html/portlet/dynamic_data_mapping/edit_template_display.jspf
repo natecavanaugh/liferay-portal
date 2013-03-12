@@ -125,7 +125,6 @@ boolean useRichEditor = editorType.equals("rich");
 					),
 					render: true,
 					visible: false,
-					width: 250,
 					zIndex: 10000
 				}
 			);
