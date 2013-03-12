@@ -89,7 +89,7 @@
             this._handlers[name].push(handler);
         }
         else {
-            this._handlers[name] = handler;
+        this._handlers[name] = handler;
         }
       // CUSTOM END
     },
@@ -105,18 +105,18 @@
       }
       if (this._handlers[name]) {
         // this._handlers[name].fireWith(this, args);
-          var handler = this._handlers[name];
+        var handler = this._handlers[name];
           if (name != 'destroy') {
-              // CUSTOM -- set to get the first index of the array
-              handler(args[0]);
+        // CUSTOM -- set to get the first index of the array
+        handler(args[0]);
               return;
-          }
+      }
 
           AUI().each(
               handler,
               function (destroy) {
                   destroy(args[0]);
-              },
+    },
               this
           );
       }
@@ -138,8 +138,8 @@
       e.preventDefault();
       e.stopPropagation();
 
-      var element = A.one(e.currentTarget);
-      var word = A.lang.trim(element.data('word') || element.text());
+      var element = AUI().one(e.currentTarget);
+      var word = AUI().Lang.trim(element.get('textContent') || element.text());
 
       this.trigger(handlerName, e, word, element, this);
 
@@ -270,7 +270,9 @@
   inherits(IncorrectWordsInline, Events);
 
   IncorrectWordsInline.prototype.bindEvents = function() {
-    this.element.on('click.' + pluginName, '.' + pluginName + '-word-highlight', selectWordHandler.call(this, 'select.word'));
+    // this.element.on('click.' + pluginName, '.' + pluginName + '-word-highlight', selectWordHandler.call(this, 'select.word'));
+      var body = this.element;
+      body.delegate('click', selectWordHandler.call(this, 'select.word'), '.' + pluginName + '-word-highlight');
   };
 
   IncorrectWordsInline.prototype.addWords = function(words) {
@@ -301,10 +303,8 @@
     }
     // CUSTOM START
     // this.position = A.isFunction(config.suggestBox.position) ? config.suggestBox.position : this.position;
-    var func = config.suggestBox.position;
-    if (typeof this[func] === 'function') {
-        this.position = config.suggestBox.position;
-    }
+
+      this.position = typeof config.suggestBox.position === 'function' ? config.suggestBox.position : this.position;
     // CUSTOM END
     Box.apply(this, arguments);
   };
@@ -321,7 +321,7 @@
     // CUSTOM START -- element is not an array
     // if (this.element[0].nodeName === 'BODY') {
     if (this.element.nodeName === 'BODY') {
-      // this.element.parent().on(click, this.onWindowClick.bind(this));
+      AUI().one(this.element.parentNode).on(click, this.onWindowClick.bind(this));
     }
     // CUSTOM END
   };
@@ -910,7 +910,7 @@
     /*this.on('destroy', function() {
       this.incorrectWords.destroy();
     }, this);*/
-      this.on('destroy', function() {
+    this.on('destroy', function() {
           this.incorrectWords.instances[0].destroy();
       }.bind(this));
   };
@@ -931,7 +931,7 @@
     this.suggestBox.on('select.word', this.onSelectWord.bind(this));
     // CUSTOM -- commenting out for now
     // TODO
-    // this.incorrectWords.on('select.word', this.onIncorrectWordSelect.bind(this));
+    this.incorrectWords.instances[0].on('select.word', this.onIncorrectWordSelect.bind(this));
   };
 
   /* Pubic API methods */
