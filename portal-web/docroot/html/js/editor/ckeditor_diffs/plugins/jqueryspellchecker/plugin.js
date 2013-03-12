@@ -140,21 +140,28 @@ CKEDITOR.plugins.add('jqueryspellchecker', {
     return function() {
 
       var ed = t.editor;
-      var word = (this.wordElement.data('firstElement') || this.wordElement)[0];
+      // var word = (this.wordElement.data('firstElement') || this.wordElement)[0];
+      var word = this.wordElement;
 
-      var p1 = A.one(ed.container.AUI).find('iframe').offset();
-      var p2 = A.one(ed.container.AUI).offset();
-      var p3 = A.one(word).offset();
+      var container = AUI().one(ed.container.$);
 
-      var left = p3.left + p2.left;
-      var top = p3.top + p2.top + (p1.top - p2.top) + word.offsetHeight;
+      var p1 = container.one('iframe').getXY();
+      var p2 = container.getXY();
+      var p3 = AUI().one(word).getXY();
 
-      top -= A.one(t.editorWindow).scrollTop();
+      // var left = p3.left + p2.left;
+      var left = p3[0] + p2[0];
+      // var top = p3.top + p2.top + (p1.top - p2.top) + word.offsetHeight;
+      var top = p3[1] + p2[1] + (p1[1] - p2[1]) + word.innerHeight();
 
-      this.container.css({ 
+      // top -= AUI().one(t.editorWindow).scrollTop();
+
+      /*this.container.css({
         top: top, 
         left: left  
-      });
+      });*/
+      this.container.setStyle('top', top);
+      this.container.setStyle('left', left);
     };
   }
 });

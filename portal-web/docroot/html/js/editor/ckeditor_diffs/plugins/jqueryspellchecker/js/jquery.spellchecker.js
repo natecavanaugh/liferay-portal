@@ -104,19 +104,29 @@
           return instance[name](args);
       }
       if (this._handlers[name]) {
-        // this._handlers[name].fireWith(this, args);
-        var handler = this._handlers[name];
-          if (name != 'destroy') {
-        // CUSTOM -- set to get the first index of the array
-        handler(args[0]);
+          // this._handlers[name].fireWith(this, args);
+          var handler = this._handlers[name];
+          if (name == 'select.word') {
+              var e = args[0];
+              var word = args[1];
+              var element = args[2];
+              var incorrectWords = args[3];
+
+              handler(e, word, element, incorrectWords);
               return;
-      }
+          }
+
+          if (name != 'destroy') {
+            // CUSTOM -- set to get the first index of the array
+            handler(args[0]);
+            return;
+          }
 
           AUI().each(
               handler,
               function (destroy) {
                   destroy(args[0]);
-    },
+              },
               this
           );
       }
@@ -321,7 +331,10 @@
     // CUSTOM START -- element is not an array
     // if (this.element[0].nodeName === 'BODY') {
     if (this.element.nodeName === 'BODY') {
-      AUI().one(this.element.parentNode).on(click, this.onWindowClick.bind(this));
+      // AUI().one(this.element.parentNode).on(click, this.onWindowClick.bind(this));
+        var onWindowClick = AUI().bind(this.onWindowClick, this);
+        var parentNode = AUI().one(this.element.parentNode);
+        parentNode.delegate('click', onWindowClick, 'html');
     }
     // CUSTOM END
   };
@@ -383,12 +396,13 @@
   };
 
   SuggestBox.prototype.showSuggestedWords = function(getWords, word, wordElement) {
-    this.wordElement = A.one(wordElement);
+    this.wordElement = AUI().one(wordElement);
     getWords(word, this.onGetWords.bind(this));
   };
 
   SuggestBox.prototype.loading = function(show) {
-    this.footer.hide();
+    // TODO: footer
+    // this.footer.hide();
     this.words.html(show ? this.loadingMsg.clone() : '');
     this.position();
     this.open();
@@ -422,13 +436,15 @@
 
   SuggestBox.prototype.open = function() {
     this.position();
-    this.container.fadeIn(180);
+    // this.container.fadeIn(180);
+    this.container.setStyle('display', 'inline');
   };
 
   SuggestBox.prototype.close = function() {
-    this.container.fadeOut(100, function(){
+    /*this.container.fadeOut(100, function(){
       this.footer.hide();
-    }.bind(this));
+    }.bind(this));*/
+    this.container.setStyle('display', 'none');
   };
 
   SuggestBox.prototype.detach = function() {
@@ -448,8 +464,9 @@
   };
 
   SuggestBox.prototype.onGetWords = function(words) {
-    this.addWords(words);
-    this.footer.show();
+      // TODO
+    //this.addWords(words);
+    //this.footer.show();
     this.position();
     this.open();
   };
@@ -1030,7 +1047,7 @@
     this.incorrectWord = word;
     this.incorrectWordElement = element;
     this.spellCheckerElement = incorrectWords.spellCheckerElement;
-    this.spellCheckerIndex = this.elements.index(this.spellCheckerElement);
+    // this.spellCheckerIndex = this.elements.index(this.spellCheckerElement);
     this.suggestBox.showSuggestedWords(this.getSuggestions.bind(this), word, element);
     this.trigger('select.word', e);
   };
