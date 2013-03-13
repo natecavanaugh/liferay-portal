@@ -40,6 +40,11 @@ CKEDITOR.plugins.add('jqueryspellchecker', {
     var t = this;
     var pluginName = 'jqueryspellchecker';
 
+    var path = t.path;
+    var dependency = [CKEDITOR.getUrl(path + 'js/jquery.spellchecker.js')];
+
+    CKEDITOR.scriptLoader.load(dependency);
+
     this.config.suggestBox.position = this.positionSuggestBox();
     
     editor.addCommand(pluginName, {

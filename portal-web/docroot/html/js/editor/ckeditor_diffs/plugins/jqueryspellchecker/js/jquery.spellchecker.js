@@ -704,6 +704,12 @@
 		var cleanMap = [];
 		var elements = this.elements;
 
+        var isArray = !!(AUI().Array.test(elements) == 1);
+
+        if (!isArray) {
+            elements = AUI().Array(elements);
+        }
+
 		AUI().each(
 			elements,
 			function(element) {
@@ -832,10 +838,7 @@
 		incorrectWords = mapped;
 		// CUSTOM END
 
-		var regExp = '';
-		regExp += '([^' + letterChars + '])';
-		regExp += '(' + incorrectWords.join('|') + ')';
-		regExp += '(?=[^' + letterChars + '])';
+        var regExp = '(^|[^' + letterChars + '])(' + this.incorrectWords.join('|') + ')(?=[^' + letterChars + ']|$)';
 
 		// CUSTOM - removing element[0]
 

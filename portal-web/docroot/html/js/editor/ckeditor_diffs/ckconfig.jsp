@@ -19,6 +19,7 @@
 <%@ page import="com.liferay.portal.kernel.util.ContentTypes" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.StringBundler" %>
 <%@ page import="com.liferay.portal.util.PropsValues" %>
 
 <%
@@ -29,15 +30,22 @@ String languageId = ParamUtil.getString(request, "languageId");
 
 response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
-String spellcheckerPlugins = "";
-
+StringBundler extraPluginsSb = new StringBundler("ajaxsave,restore");
+StringBundler spellcheckerPluginsSb = new StringBundler();
 if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_WEBSPELLCHECKER) {
-	spellcheckerPlugins = spellcheckerPlugins + "'SpellChecker', 'Scayt', ";
+    spellcheckerPluginsSb.append("'SpellChecker', 'Scayt'");
 }
 
 if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_LIFERAY) {
-	spellcheckerPlugins = spellcheckerPlugins + "'jQuerySpellChecker'";
+    extraPluginsSb.append(",jqueryspellchecker");
+    if (spellcheckerPluginsSb.length() == 0) {
+        spellcheckerPluginsSb.append(',');
+    }
+    spellcheckerPluginsSb.append("'jQuerySpellChecker'");
 }
+
+String extraPlugins = extraPluginsSb.toString();
+String spellcheckerPlugins = spellcheckerPluginsSb.toString();
 %>
 
 if (!CKEDITOR.stylesSet.get('liferayStyles')) {
@@ -78,7 +86,7 @@ CKEDITOR.config.contentsCss = '<%= HtmlUtil.escapeJS(cssPath) %>/main.css';
 
 CKEDITOR.config.entities = false;
 
-CKEDITOR.config.extraPlugins = 'ajaxsave,restore,jqueryspellchecker';
+CKEDITOR.config.extraPlugins = '<%= extraPlugins %>';
 
 CKEDITOR.config.height = 265;
 
