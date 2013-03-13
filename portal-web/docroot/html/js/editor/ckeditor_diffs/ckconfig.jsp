@@ -17,11 +17,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ page import="com.liferay.portal.kernel.util.ContentTypes" %>
-<%@ page import="com.liferay.portal.kernel.util.GetterUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
-<%@ page import="com.liferay.portal.util.PropsKeys" %>
-<%@ page import="com.liferay.portal.util.PropsUtil" %>
+<%@ page import="com.liferay.portal.util.PropsValues" %>
 
 <%
 String cssPath = ParamUtil.getString(request, "cssPath");
@@ -31,18 +29,15 @@ String languageId = ParamUtil.getString(request, "languageId");
 
 response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
-// Ken Boyer: Modification start
 String spellcheckerPlugins = "";
 
-if (GetterUtil.getBoolean(PropsUtil.get(PropsKeys.EDITOR_SPELLCHECKER_WEBSPELLCHECKER))) {
+if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_WEBSPELLCHECKER) {
 	spellcheckerPlugins = spellcheckerPlugins + "'SpellChecker', 'Scayt', ";
 }
 
-if (GetterUtil.getBoolean(PropsUtil.get(PropsKeys.EDITOR_SPELLCHECKER_LIFERAY))) {
+if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_LIFERAY) {
 	spellcheckerPlugins = spellcheckerPlugins + "'jQuerySpellChecker'";
 }
-// Ken Boyer: Modification end
-
 %>
 
 if (!CKEDITOR.stylesSet.get('liferayStyles')) {
