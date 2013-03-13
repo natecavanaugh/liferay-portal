@@ -526,13 +526,19 @@
 			return;
 		}
 		//CUSTOM END
-		return this.makeRequest({
+        Liferay.Service('/words/check-spelling',
+            {
+                text: text
+            },
+            callback
+        );
+		/*return this.makeRequest({
 			data: {
 				action: 'get_incorrect_words',
 				text: text
 			},
 			success: callback
-		});
+		});*/
 	};
 
 	WebService.prototype.getSuggestions = function(word, callback) {
@@ -553,13 +559,21 @@
 		}
 		//CUSTOM END
 
-		return this.makeRequest({
+        Liferay.Service(
+            '/words/get-suggestions',
+            {
+                word: word
+            },
+            callback
+        );
+
+		/*return this.makeRequest({
 			data: {
 				action: 'get_suggestions',
 				word: word
 			},
 			success: callback
-		});
+		});*/
 	};
 
 	/* Spellchecker base parser

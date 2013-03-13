@@ -25,7 +25,8 @@ CKEDITOR.plugins.add('jqueryspellchecker', {
       path: '/webservices/php/SpellChecker.php',
     //CUSTOM START - "test" will use static json data with a small set of words
       //driver: 'pspell'
-      driver: 'test'
+      // driver: 'test'
+      driver: 'liferay'
       //CUSTOM END
     },
     suggestBox: {
