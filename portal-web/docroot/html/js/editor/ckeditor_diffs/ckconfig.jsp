@@ -17,8 +17,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ page import="com.liferay.portal.kernel.util.ContentTypes" %>
+<%@ page import="com.liferay.portal.kernel.util.GetterUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+<%@ page import="com.liferay.portal.util.PropsKeys" %>
+<%@ page import="com.liferay.portal.util.PropsUtil" %>
 
 <%
 String cssPath = ParamUtil.getString(request, "cssPath");
@@ -28,8 +31,18 @@ String languageId = ParamUtil.getString(request, "languageId");
 
 response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
-//TODO: check portal properties to decide which spellchecker(s) should be active
-String spellcheckerPlugins="'SpellChecker', 'Scayt', 'jQuerySpellChecker'";
+// Ken Boyer: Modification start
+String spellcheckerPlugins = "";
+
+if (GetterUtil.getBoolean(PropsUtil.get(PropsKeys.EDITOR_SPELLCHECKER_WEBSPELLCHECKER))) {
+	spellcheckerPlugins = spellcheckerPlugins + "'SpellChecker', 'Scayt', ";
+}
+
+if (GetterUtil.getBoolean(PropsUtil.get(PropsKeys.EDITOR_SPELLCHECKER_LIFERAY))) {
+	spellcheckerPlugins = spellcheckerPlugins + "'jQuerySpellChecker'";
+}
+// Ken Boyer: Modification end
+
 %>
 
 if (!CKEDITOR.stylesSet.get('liferayStyles')) {
@@ -83,14 +96,14 @@ CKEDITOR.config.toolbar_editInPlace = [
 	['Bold', 'Italic', 'Underline', 'Strike'],
 	['Subscript', 'Superscript', 'SpecialChar'],
 	['Undo', 'Redo'],
-	[<%=spellcheckerPlugins%>],
+	[<%= spellcheckerPlugins %>],
 	['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'], ['Source', 'RemoveFormat'],
 ];
 
 CKEDITOR.config.toolbar_email = [
 	['FontSize', 'TextColor', 'BGColor', '-', 'Bold', 'Italic', 'Underline', 'Strike'],
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-	[<%=spellcheckerPlugins%>],
+	[<%= spellcheckerPlugins %>],
 	'/',
 	['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
 	['Source'],
@@ -112,7 +125,7 @@ CKEDITOR.config.toolbar_liferay = [
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 	['Image', 'Link', 'Unlink', 'Anchor'],
 	['Flash', 'Table', '-', 'Smiley', 'SpecialChar'],
-	['Find', 'Replace', <%=spellcheckerPlugins%>],
+	['Find', 'Replace', <%= spellcheckerPlugins %>],
 	['SelectAll', 'RemoveFormat'],
 	['Subscript', 'Superscript']
 
@@ -127,7 +140,7 @@ CKEDITOR.config.toolbar_liferayArticle = [
 	['Subscript', 'Superscript'],
 	'/',
 	['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
-    ['Find', 'Replace', <%=spellcheckerPlugins%>],
+	['Find', 'Replace', <%= spellcheckerPlugins %>],
 	['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 	'/',
