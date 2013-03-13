@@ -785,6 +785,8 @@ public interface PropsKeys {
 
 	public static final String DYNAMIC_RESOURCE_SERVLET_ALLOWED_PATHS = "dynamic.resource.servlet.allowed.paths";
 
+	// Ken Boyer: Modification start
+
 	public static final String EDITOR_SPELLCHECKER_LIFERAY = "editor.spellchecker.liferay";
 
 	public static final String EDITOR_SPELLCHECKER_WEBSPELLCHECKER = "editor.spellchecker.webspellchecker";
@@ -792,8 +794,6 @@ public interface PropsKeys {
 	// Ken Boyer: Modification end
 
 	public static final String EDITOR_WYSIWYG_DEFAULT = "editor.wysiwyg.default";
-
-	// Ken Boyer: Modification start
 
 	public static final String EHCACHE_BLOCKING_CACHE_ALLOWED = "ehcache.blocking.cache.allowed";
 
