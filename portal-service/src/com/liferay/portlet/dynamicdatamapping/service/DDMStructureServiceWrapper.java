@@ -61,9 +61,9 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	* @param nameMap the structure's locales and localized names
 	* @param descriptionMap the structure's locales and localized descriptions
 	* @param xsd the structure's XML schema definition
-	* @param serviceContext the structure's service context. Can set the UUID,
-	creation date, modification date, guest permissions, and group
-	permissions for the structure.
+	* @param serviceContext the service context to be applied. Can set the
+	UUID, creation date, modification date, guest permissions, and
+	group permissions for the structure.
 	* @return the structure
 	* @throws PortalException if a user with the primary key could not be
 	found, if the user did not have permission to add the structure,
@@ -101,9 +101,9 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	com.liferay.portlet.dynamicdatamapping.storage.StorageType}.
 	* @param type the structure's type. For more information, see {@link
 	com.liferay.portlet.dynamicdatamapping.model.DDMStructureConstants}.
-	* @param serviceContext the structure's service context. Can set the UUID,
-	creation date, modification date, guest permissions, and group
-	permissions for the structure.
+	* @param serviceContext the service context to be applied. Can set the
+	UUID, creation date, modification date, guest permissions, and
+	group permissions for the structure.
 	* @return the structure
 	* @throws PortalException if the user did not have permission to add the
 	structure, if the XSD is not well formed, or if a portal
@@ -539,14 +539,14 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public DDMStructureService getWrappedDDMStructureService() {
 		return _ddmStructureService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedDDMStructureService(
 		DDMStructureService ddmStructureService) {

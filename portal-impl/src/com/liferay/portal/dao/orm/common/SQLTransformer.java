@@ -265,6 +265,10 @@ public class SQLTransformer {
 		return matcher.replaceAll("$1 ($2)");
 	}
 
+	private String _replaceNotEqualsBlankStringComparison(String sql) {
+		return StringUtil.replace(sql, " != ''", " IS NOT NULL");
+	}
+
 	private String _replaceReplace(String newSQL) {
 		return newSQL.replaceAll("(?i)replace\\(", "str_replace(");
 	}
@@ -301,6 +305,9 @@ public class SQLTransformer {
 			if (!db.isSupportsStringCaseSensitiveQuery()) {
 				newSQL = _removeLower(newSQL);
 			}
+		}
+		else if (_vendorOracle) {
+			newSQL = _replaceNotEqualsBlankStringComparison(newSQL);
 		}
 		else if (_vendorPostgreSQL) {
 			newSQL = _replaceNegativeComparison(newSQL);

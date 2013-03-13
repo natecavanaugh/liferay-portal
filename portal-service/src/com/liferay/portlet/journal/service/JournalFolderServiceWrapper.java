@@ -79,6 +79,13 @@ public class JournalFolderServiceWrapper implements JournalFolderService,
 		return _journalFolderService.getFolder(folderId);
 	}
 
+	public java.util.List<java.lang.Long> getFolderIds(long groupId,
+		long folderId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalFolderService.getFolderIds(groupId, folderId);
+	}
+
 	public java.util.List<com.liferay.portlet.journal.model.JournalFolder> getFolders(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -196,14 +203,14 @@ public class JournalFolderServiceWrapper implements JournalFolderService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public JournalFolderService getWrappedJournalFolderService() {
 		return _journalFolderService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedJournalFolderService(
 		JournalFolderService journalFolderService) {

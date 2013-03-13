@@ -479,7 +479,7 @@ public abstract class BaseIndexer implements Indexer {
 	}
 
 	/**
-	 * @deprecated {@link #addSearchLocalizedTerm(BooleanQuery, SearchContext,
+	 * @deprecated As of 6.2.0, replaced by {@link #addSearchLocalizedTerm(BooleanQuery, SearchContext,
 	 *             String, boolean)}
 	 */
 	protected void addLocalizedSearchTerm(
@@ -803,6 +803,21 @@ public abstract class BaseIndexer implements Indexer {
 		searchQuery.addTerms(Field.KEYWORDS, keywords);
 
 		addSearchExpando(searchQuery, searchContext, keywords);
+	}
+
+	protected void addSearchLocalizedDDMStructure(
+			BooleanQuery searchQuery, SearchContext searchContext,
+			DDMStructure ddmStructure)
+		throws Exception {
+
+		Set<String> fieldNames = ddmStructure.getFieldNames();
+
+		for (String fieldName : fieldNames) {
+			String name = DDMIndexerUtil.encodeName(
+				ddmStructure.getStructureId(), fieldName);
+
+			addSearchLocalizedTerm(searchQuery, searchContext, name, false);
+		}
 	}
 
 	protected void addSearchLocalizedTerm(

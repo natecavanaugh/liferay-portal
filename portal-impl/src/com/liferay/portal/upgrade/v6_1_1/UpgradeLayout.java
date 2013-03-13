@@ -114,13 +114,11 @@ public class UpgradeLayout extends UpgradeProcess {
 			// template. If the layoutUuid points to a page template, remove
 			// it. Otherwise, it points to a site template page, so leave it.
 
-			StringBundler sb = new StringBundler(6);
+			StringBundler sb = new StringBundler(4);
 
 			sb.append("select plid, layoutPrototypeUuid, ");
 			sb.append("sourcePrototypeLayoutUuid from Layout where ");
-			sb.append("layoutPrototypeUuid is not null and ");
 			sb.append("layoutPrototypeUuid != '' and ");
-			sb.append("sourcePrototypeLayoutUuid is not null and ");
 			sb.append("sourcePrototypeLayoutUuid != ''");
 
 			ps = con.prepareStatement(sb.toString());

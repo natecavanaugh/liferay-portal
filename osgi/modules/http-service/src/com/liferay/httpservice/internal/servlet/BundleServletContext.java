@@ -29,8 +29,11 @@ import com.liferay.portal.util.PortalUtil;
 
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.ServletRequestListener;
@@ -120,6 +123,15 @@ public class BundleServletContext extends LiferayServletContext {
 		ServletContext servletContext) {
 
 		super(servletContext);
+
+		_bundle = bundle;
+	}
+
+	public void close() {
+	}
+
+	public Bundle getBundle() {
+		return _bundle;
 	}
 
 	public ClassLoader getClassLoader() {
@@ -140,9 +152,30 @@ public class BundleServletContext extends LiferayServletContext {
 		return null;
 	}
 
+	public void open() {
+	}
+
+	public void registerFilter(
+		String filterMapping, Filter filter, Map<String, String> initParameters,
+		HttpContext httpContext) {
+	}
+
+	public void registerServlet(
+		String alias, Servlet servlet, Map<String, String> initParameters,
+		HttpContext httpContext) {
+	}
+
 	public void setServletContextName(String servletContextName) {
 	}
 
+	public void unregisterFilter(String filterMapping) {
+	}
+
+	public void unregisterServlet(String alias) {
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(BundleServletContext.class);
+
+	private Bundle _bundle;
 
 }

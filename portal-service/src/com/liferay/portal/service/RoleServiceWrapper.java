@@ -60,7 +60,7 @@ public class RoleServiceWrapper implements RoleService,
 	<code>null</code>)
 	* @param type the role's type (optionally <code>0</code>)
 	* @param subType the role's subtype (optionally <code>null</code>)
-	* @param serviceContext the role's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set the expando bridge attributes for the
 	role.
 	* @return the role
@@ -97,8 +97,8 @@ public class RoleServiceWrapper implements RoleService,
 	the class name or the role name were invalid, or if the role
 	is a duplicate
 	* @throws SystemException if a system exception occurred
-	* @deprecated {@link #addRole(String, long, String, Map, Map, int, String,
-	ServiceContext)}
+	* @deprecated As of 6.2.0, replaced by {@link #addRole(String, long,
+	String, Map, Map, int, String, ServiceContext)}
 	*/
 	public com.liferay.portal.model.Role addRole(java.lang.String name,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
@@ -330,7 +330,7 @@ public class RoleServiceWrapper implements RoleService,
 	* @param descriptionMap the new localized descriptions (optionally
 	<code>null</code>) to replace those existing for the role
 	* @param subtype the role's new subtype (optionally <code>null</code>)
-	* @param serviceContext the role's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set the expando bridge attributes for the
 	role.
 	* @return the role with the primary key
@@ -352,14 +352,14 @@ public class RoleServiceWrapper implements RoleService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public RoleService getWrappedRoleService() {
 		return _roleService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedRoleService(RoleService roleService) {
 		_roleService = roleService;

@@ -313,8 +313,9 @@ public class GroupLocalServiceUtil {
 	found, or if a valid friendly URL could not be created for
 	the group
 	* @throws SystemException if a system exception occurred
-	* @deprecated {@link #addGroup(long, long, String, long, long, String,
-	String, int, String, boolean, boolean, ServiceContext)}
+	* @deprecated As of 6.2.0, replaced by {@link #addGroup(long, long, String,
+	long, long, String, String, int, String, boolean, boolean,
+	ServiceContext)}
 	*/
 	public static com.liferay.portal.model.Group addGroup(long userId,
 		long parentGroupId, java.lang.String className, long classPK,
@@ -367,11 +368,6 @@ public class GroupLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService().checkCompanyGroup(companyId);
-	}
-
-	public static void checkMembershipPolicy(com.liferay.portal.model.User user)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().checkMembershipPolicy(user);
 	}
 
 	/**
@@ -2302,7 +2298,7 @@ public class GroupLocalServiceUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.2.0
 	 */
 	public void setService(GroupLocalService service) {
 	}

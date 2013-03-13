@@ -49,7 +49,7 @@ import javax.servlet.http.HttpServletRequest;
 public class UsersAdminUtil {
 
 	/**
-	 * @deprecated {@link UsersAdmin#CUSTOM_QUESTION}
+	 * @deprecated As of 6.2.0, replaced by {@link UsersAdmin#CUSTOM_QUESTION}
 	 */
 	public static final String CUSTOM_QUESTION = "write-my-own-question";
 
@@ -72,15 +72,6 @@ public class UsersAdminUtil {
 		throws PortalException, SystemException {
 
 		return getUsersAdmin().addRequiredRoles(user, roleIds);
-	}
-
-	public static long[] filterDeleteGroupRoleUserIds(
-			PermissionChecker permissionChecker, long groupId, long roleId,
-			long[] userIds)
-		throws PortalException, SystemException {
-
-		return getUsersAdmin().filterDeleteGroupRoleUserIds(
-			permissionChecker, groupId, roleId, userIds);
 	}
 
 	public static List<Role> filterGroupRoles(

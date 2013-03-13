@@ -68,9 +68,10 @@ public class CalEventServiceWrapper implements CalEventService,
 	}
 
 	/**
-	* @deprecated {@link #addEvent(String, String, String, int, int, int, int,
-	int, int, int, boolean, boolean, String, boolean,
-	TZSRecurrence, int, int, int, ServiceContext)}
+	* @deprecated As of 6.2.0, replaced by {@link #addEvent(String, String,
+	String, int, int, int, int, int, int, int, boolean, boolean,
+	String, boolean, TZSRecurrence, int, int, int,
+	ServiceContext)}
 	*/
 	public com.liferay.portlet.calendar.model.CalEvent addEvent(
 		java.lang.String title, java.lang.String description,
@@ -206,9 +207,10 @@ public class CalEventServiceWrapper implements CalEventService,
 	}
 
 	/**
-	* @deprecated {@link #updateEvent(long, String, String, String, int, int,
-	int, int, int, int, int, boolean, boolean, String, boolean,
-	TZSRecurrence, int, int, int, ServiceContext)}
+	* @deprecated As of 6.2.0, replaced by {@link #updateEvent(long, String,
+	String, String, int, int, int, int, int, int, int, boolean,
+	boolean, String, boolean, TZSRecurrence, int, int, int,
+	ServiceContext)}
 	*/
 	public com.liferay.portlet.calendar.model.CalEvent updateEvent(
 		long eventId, java.lang.String title, java.lang.String description,
@@ -231,14 +233,14 @@ public class CalEventServiceWrapper implements CalEventService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public CalEventService getWrappedCalEventService() {
 		return _calEventService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedCalEventService(CalEventService calEventService) {
 		_calEventService = calEventService;

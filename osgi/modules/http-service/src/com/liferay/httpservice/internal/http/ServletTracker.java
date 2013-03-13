@@ -14,31 +14,50 @@
 
 package com.liferay.httpservice.internal.http;
 
+import com.liferay.httpservice.internal.servlet.BundleServletContext;
+import com.liferay.portal.kernel.util.GetterUtil;
+
+import java.util.Map;
+
 import javax.servlet.Servlet;
 
 import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
+import org.osgi.service.http.HttpContext;
 
 /**
  * @author Raymond Augé
  * @author Miguel Pastor
  */
 public class ServletTracker
-	implements ServiceTrackerCustomizer<Servlet, Servlet> {
+	extends BaseServiceTrackerCustomizer<Servlet, Servlet> {
 
 	public ServletTracker(HttpSupport httpSupport) {
+		super(httpSupport);
 	}
 
-	public Servlet addingService(ServiceReference<Servlet> serviceReference) {
-		return null;
+	@Override
+	protected void registerService(
+			BundleServletContext bundleServletContext,
+			ServiceReference<Servlet> serviceReference, Servlet servlet,
+			Map<String, String> initParameters, HttpContext httpContext)
+		throws Exception {
+
+		String alias = GetterUtil.getString(
+			serviceReference.getProperty("alias"));
+
+		bundleServletContext.registerServlet(
+			alias, servlet, initParameters, httpContext);
 	}
 
-	public void modifiedService(
-		ServiceReference<Servlet> serviceReference, Servlet servlet) {
-	}
+	@Override
+	protected void unregisterService(
+		BundleServletContext bundleServletContext,
+		ServiceReference<Servlet> serviceReference) {
 
-	public void removedService(
-		ServiceReference<Servlet> serviceReference, Servlet servlet) {
+		String alias = GetterUtil.getString(
+			serviceReference.getProperty("alias"));
+
+		bundleServletContext.unregisterServlet(alias);
 	}
 
 }

@@ -271,18 +271,17 @@ public class DLFolderServiceWrapper implements DLFolderService,
 			expirationTime);
 	}
 
-	public void unlockFolder(long groupId, long folderId,
-		java.lang.String lockUuid)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_dlFolderService.unlockFolder(groupId, folderId, lockUuid);
-	}
-
 	public void unlockFolder(long groupId, long parentFolderId,
 		java.lang.String name, java.lang.String lockUuid)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_dlFolderService.unlockFolder(groupId, parentFolderId, name, lockUuid);
+	}
+
+	public void unlockFolder(long folderId, java.lang.String lockUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_dlFolderService.unlockFolder(folderId, lockUuid);
 	}
 
 	public com.liferay.portlet.documentlibrary.model.DLFolder updateFolder(
@@ -306,14 +305,14 @@ public class DLFolderServiceWrapper implements DLFolderService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public DLFolderService getWrappedDLFolderService() {
 		return _dlFolderService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedDLFolderService(DLFolderService dlFolderService) {
 		_dlFolderService = dlFolderService;

@@ -88,7 +88,7 @@ public class OrganizationServiceWrapper implements OrganizationService,
 	* @param orgLabors the organization's hours of operation
 	* @param phones the organization's phone numbers
 	* @param websites the organization's websites
-	* @param serviceContext the organization's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set asset category IDs, asset tag names,
 	and expando bridge attributes for the organization.
 	* @return the organization
@@ -136,7 +136,7 @@ public class OrganizationServiceWrapper implements OrganizationService,
 	* @param comments the comments about the organization
 	* @param site whether the organization is to be associated with a main
 	site
-	* @param serviceContext the organization's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set asset category IDs, asset tag names,
 	and expando bridge attributes for the organization.
 	* @return the organization
@@ -215,7 +215,8 @@ public class OrganizationServiceWrapper implements OrganizationService,
 	* @return the organizations which the user has permission to manage
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
-	* @deprecated Replaced by {@link #getOrganizations(long, long, int, int)}
+	* @deprecated As of 6.2.0, replaced by {@link #getOrganizations(long, long,
+	int, int)}
 	*/
 	public java.util.List<com.liferay.portal.model.Organization> getManageableOrganizations(
 		java.lang.String actionId, int max)
@@ -406,7 +407,7 @@ public class OrganizationServiceWrapper implements OrganizationService,
 	* @param orgLabors the organization's hours of operation
 	* @param phones the organization's phone numbers
 	* @param websites the organization's websites
-	* @param serviceContext the organization's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set asset category IDs and asset tag
 	names for the organization, and merge expando bridge attributes
 	for the organization.
@@ -451,7 +452,7 @@ public class OrganizationServiceWrapper implements OrganizationService,
 	* @param comments the comments about the organization
 	* @param site whether the organization is to be associated with a main
 	site
-	* @param serviceContext the organization's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set asset category IDs and asset tag
 	names for the organization, and merge expando bridge attributes
 	for the organization.
@@ -475,14 +476,14 @@ public class OrganizationServiceWrapper implements OrganizationService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public OrganizationService getWrappedOrganizationService() {
 		return _organizationService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedOrganizationService(
 		OrganizationService organizationService) {

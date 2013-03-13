@@ -51,7 +51,6 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.model.impl.OrganizationImpl;
-import com.liferay.portal.security.auth.MembershipPolicyUtil;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.OrganizationLocalServiceBaseImpl;
@@ -123,7 +122,7 @@ public class OrganizationLocalServiceImpl
 	 * @param  comments the comments about the organization
 	 * @param  site whether the organization is to be associated with a main
 	 *         site
-	 * @param  serviceContext the organization's service context (optionally
+	 * @param  serviceContext the service context to be applied (optionally
 	 *         <code>null</code>). Can set asset category IDs, asset tag names,
 	 *         and expando bridge attributes for the organization.
 	 * @return the organization
@@ -257,34 +256,6 @@ public class OrganizationLocalServiceImpl
 
 		passwordPolicyRelLocalService.addPasswordPolicyRels(
 			passwordPolicyId, Organization.class.getName(), organizationIds);
-	}
-
-	public void checkMembershipPolicy(User user)
-		throws PortalException, SystemException {
-
-		List<Organization> organizations =
-			organizationLocalService.getUserOrganizations(user.getUserId());
-
-		for (Organization organization : organizations) {
-			if (!MembershipPolicyUtil.isMembershipAllowed(organization, user)) {
-				userLocalService.unsetOrganizationUsers(
-					organization.getOrganizationId(),
-					new long[] {user.getUserId()});
-			}
-		}
-
-		Set<Organization> mandatoryOrganizations =
-			MembershipPolicyUtil.getMandatoryOrganizations(user);
-
-		for (Organization organization : mandatoryOrganizations) {
-			if (!hasUserOrganization(
-					user.getUserId(), organization.getOrganizationId())) {
-
-				userLocalService.addOrganizationUsers(
-					organization.getOrganizationId(),
-					new long[] {user.getUserId()});
-			}
-		}
 	}
 
 	/**
@@ -1651,7 +1622,7 @@ public class OrganizationLocalServiceImpl
 	 * @param  comments the comments about the organization
 	 * @param  site whether the organization is to be associated with a main
 	 *         site
-	 * @param  serviceContext the organization's service context (optionally
+	 * @param  serviceContext the service context to be applied (optionally
 	 *         <code>null</code>). Can set asset category IDs and asset tag
 	 *         names for the organization, and merge expando bridge attributes
 	 *         for the organization.

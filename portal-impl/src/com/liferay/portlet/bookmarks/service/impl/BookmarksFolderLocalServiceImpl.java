@@ -325,9 +325,17 @@ public class BookmarksFolderLocalServiceImpl
 			long userId, long folderId, long parentFolderId)
 		throws PortalException, SystemException {
 
-		restoreFolderFromTrash(userId, folderId);
+		BookmarksFolder folder = bookmarksFolderPersistence.findByPrimaryKey(
+			folderId);
 
-		return moveFolder(folderId, parentFolderId);
+		if (folder.isInTrash()) {
+			restoreFolderFromTrash(userId, folderId);
+		}
+		else {
+			updateStatus(userId, folder, WorkflowConstants.STATUS_APPROVED);
+		}
+
+		return bookmarksFolderLocalService.moveFolder(folderId, parentFolderId);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
@@ -627,13 +635,9 @@ public class BookmarksFolderLocalServiceImpl
 
 					// Asset
 
-					if (entry.getStatus() ==
-							WorkflowConstants.STATUS_APPROVED) {
-
-						assetEntryLocalService.updateVisible(
-							BookmarksEntry.class.getName(), entry.getEntryId(),
-							false);
-					}
+					assetEntryLocalService.updateVisible(
+						BookmarksEntry.class.getName(), entry.getEntryId(),
+						false);
 
 					// Social
 

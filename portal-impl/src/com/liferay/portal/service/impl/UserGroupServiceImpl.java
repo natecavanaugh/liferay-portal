@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.security.membershippolicy.UserGroupMembershipPolicyUtil;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.UserGroupServiceBaseImpl;
@@ -26,9 +27,13 @@ import com.liferay.portal.service.permission.PortalPermissionUtil;
 import com.liferay.portal.service.permission.TeamPermissionUtil;
 import com.liferay.portal.service.permission.UserGroupPermissionUtil;
 import com.liferay.portal.service.permission.UserPermissionUtil;
+import com.liferay.portlet.expando.model.ExpandoBridge;
+
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The implementation of the user group remote service.
@@ -89,7 +94,8 @@ public class UserGroupServiceImpl extends UserGroupServiceBaseImpl {
 	 * @throws     PortalException if the user group's information was invalid
 	 *             or if the user did not have permission to add the user group
 	 * @throws     SystemException if a system exception occurred
-	 * @deprecated {@link #addUserGroup(String, String, serviceContext)}
+	 * @deprecated As of 6.2.0, replaced by {@link #addUserGroup(String, String,
+	 *             serviceContext)}
 	 */
 	public UserGroup addUserGroup(String name, String description)
 		throws PortalException, SystemException {
@@ -107,7 +113,7 @@ public class UserGroupServiceImpl extends UserGroupServiceBaseImpl {
 	 *
 	 * @param  name the user group's name
 	 * @param  description the user group's description
-	 * @param  serviceContext the user group's service context (optionally
+	 * @param  serviceContext the service context to be applied (optionally
 	 *         <code>null</code>). Can set expando bridge attributes for the
 	 *         user group.
 	 * @return the user group
@@ -124,9 +130,13 @@ public class UserGroupServiceImpl extends UserGroupServiceBaseImpl {
 
 		User user = getUser();
 
-		return userGroupLocalService.addUserGroup(
+		UserGroup userGroup = userGroupLocalService.addUserGroup(
 			user.getUserId(), user.getCompanyId(), name, description,
 			serviceContext);
+
+		UserGroupMembershipPolicyUtil.verifyPolicy(userGroup);
+
+		return userGroup;
 	}
 
 	/**
@@ -259,14 +269,28 @@ public class UserGroupServiceImpl extends UserGroupServiceBaseImpl {
 	 *             found, if the new information was invalid, or if the user did
 	 *             not have permission to update the user group information
 	 * @throws     SystemException if a system exception occurred
-	 * @deprecated {@link #updateUserGroup(long, String, String,
-	 *             serviceContext)}
+	 * @deprecated As of 6.2.0, replaced by {@link #updateUserGroup(long,
+	 *             String, String, serviceContext)}
 	 */
 	public UserGroup updateUserGroup(
 			long userGroupId, String name, String description)
 		throws PortalException, SystemException {
 
-		return updateUserGroup(userGroupId, name, description, null);
+		UserGroup oldUserGroup = userGroupPersistence.findByPrimaryKey(
+			userGroupId);
+
+		ExpandoBridge oldExpandoBridge = oldUserGroup.getExpandoBridge();
+
+		Map<String, Serializable> oldExpandoAttributes =
+			oldExpandoBridge.getAttributes();
+
+		UserGroup userGroup = updateUserGroup(
+			userGroupId, name, description, null);
+
+		UserGroupMembershipPolicyUtil.verifyPolicy(
+			userGroup, oldUserGroup, oldExpandoAttributes);
+
+		return userGroup;
 	}
 
 	/**
@@ -275,7 +299,7 @@ public class UserGroupServiceImpl extends UserGroupServiceBaseImpl {
 	 * @param  userGroupId the primary key of the user group
 	 * @param  name the user group's name
 	 * @param  description the the user group's description
-	 * @param  serviceContext the user group's service context (optionally
+	 * @param  serviceContext the service context to be applied (optionally
 	 *         <code>null</code>). Can set expando bridge attributes for the
 	 *         user group.
 	 * @return the user group

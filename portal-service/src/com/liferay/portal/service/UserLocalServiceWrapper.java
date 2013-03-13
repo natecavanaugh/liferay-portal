@@ -426,7 +426,7 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	* @param userGroupIds the primary keys of the user's user groups
 	* @param sendEmail whether to send the user an email notification about
 	their new account
-	* @param serviceContext the user's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set the UUID (with the <code>uuid</code>
 	attribute), asset category IDs, asset tag names, and expando
 	bridge attributes for the user.
@@ -510,7 +510,7 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	* @param userGroupIds the primary keys of the user's user groups
 	* @param sendEmail whether to send the user an email notification about
 	their new account
-	* @param serviceContext the user's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set the UUID (with the <code>uuid</code>
 	attribute), asset category IDs, asset tag names, and expando
 	bridge attributes for the user.
@@ -851,10 +851,11 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	* the confirmation email.
 	*
 	* @param user the user
-	* @param serviceContext the user's service context. Can set whether a
-	password should be generated (with the <code>autoPassword</code>
-	attribute) and whether the confirmation email should be sent
-	(with the <code>sendEmail</code> attribute) for the user.
+	* @param serviceContext the service context to be applied. Can set whether
+	a password should be generated (with the
+	<code>autoPassword</code> attribute) and whether the confirmation
+	email should be sent (with the <code>sendEmail</code> attribute)
+	for the user.
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
@@ -1611,7 +1612,8 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	* @return the user with the UUID
 	* @throws PortalException if a user with the UUID could not be found
 	* @throws SystemException if a system exception occurred
-	* @deprecated {@link #getUserByUuidAndCompanyId(String, long)}
+	* @deprecated As of 6.2.0, replaced by {@link
+	#getUserByUuidAndCompanyId(String, long)}
 	*/
 	public com.liferay.portal.model.User getUserByUuid(java.lang.String uuid)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -2108,9 +2110,9 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	*
 	* @param user the verification email recipient
 	* @param emailAddress the recipient's email address
-	* @param serviceContext the service context. Must set the portal URL, main
-	path, primary key of the layout, remote address, remote host, and
-	agent for the user.
+	* @param serviceContext the service context to be applied. Must set the
+	portal URL, main path, primary key of the layout, remote address,
+	remote host, and agent for the user.
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
@@ -2137,7 +2139,7 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	specified in <code>portal.properties</code> will be used.
 	* @param body the email body. If <code>null</code>, the body specified in
 	<code>portal.properties</code> will be used.
-	* @param serviceContext the user's service context
+	* @param serviceContext the service context to be applied
 	* @throws PortalException if a user with the email address could not be
 	found
 	* @throws SystemException if a system exception occurred
@@ -2201,7 +2203,8 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	*
 	* @param groupId the primary key of the group
 	* @param userIds the primary keys of the users
-	* @param serviceContext the service context (optionally <code>null</code>)
+	* @param serviceContext the service context to be applied (optionally
+	<code>null</code>)
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
@@ -2375,9 +2378,9 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	* @param password the user's password
 	* @param emailAddress1 the user's new email address
 	* @param emailAddress2 the user's new email address confirmation
-	* @param serviceContext the service context. Must set the portal URL, main
-	path, primary key of the layout, remote address, remote host, and
-	agent for the user.
+	* @param serviceContext the service context to be applied. Must set the
+	portal URL, main path, primary key of the layout, remote address,
+	remote host, and agent for the user.
 	* @return the user
 	* @throws PortalException if a user with the primary key could not be found
 	* @throws SystemException if a system exception occurred
@@ -2430,7 +2433,8 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	*
 	* @param userId the primary key of the user
 	* @param newGroupIds the primary keys of the groups
-	* @param serviceContext the service context (optionally <code>null</code>)
+	* @param serviceContext the service context to be applied (optionally
+	<code>null</code>)
 	* @throws PortalException if a portal exception occurred
 	* @throws SystemException if a system exception occurred
 	*/
@@ -2473,7 +2477,7 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	* @param updateUserInformation whether to update the user's information
 	* @param sendEmail whether to send the user an email notification about
 	their new account
-	* @param serviceContext the user's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set expando bridge attributes for the
 	user.
 	* @return the user
@@ -2642,8 +2646,8 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	*
 	* @param userId the primary key of the user
 	* @param newOrganizationIds the primary keys of the organizations
-	* @param serviceContext the service context. Must set whether user
-	indexing is enabled.
+	* @param serviceContext the service context to be applied. Must set
+	whether user indexing is enabled.
 	* @throws PortalException if a user with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
@@ -2855,7 +2859,7 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	* @param roleIds the primary keys of the user's roles
 	* @param userGroupRoles the user user's group roles
 	* @param userGroupIds the primary keys of the user's user groups
-	* @param serviceContext the user's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set the UUID (with the <code>uuid</code>
 	attribute), asset category IDs, asset tag names, and expando
 	bridge attributes for the user.
@@ -2914,14 +2918,14 @@ public class UserLocalServiceWrapper implements UserLocalService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public UserLocalService getWrappedUserLocalService() {
 		return _userLocalService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedUserLocalService(UserLocalService userLocalService) {
 		_userLocalService = userLocalService;

@@ -18,6 +18,7 @@ import com.liferay.counter.model.Counter;
 import com.liferay.counter.model.impl.CounterImpl;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -33,6 +34,8 @@ import com.liferay.portal.model.ContactConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutConstants;
+import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutTypePortletConstants;
 import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.PortletPreferences;
@@ -48,6 +51,7 @@ import com.liferay.portal.model.impl.CompanyImpl;
 import com.liferay.portal.model.impl.ContactImpl;
 import com.liferay.portal.model.impl.GroupImpl;
 import com.liferay.portal.model.impl.LayoutImpl;
+import com.liferay.portal.model.impl.LayoutSetImpl;
 import com.liferay.portal.model.impl.PortletPreferencesImpl;
 import com.liferay.portal.model.impl.ResourcePermissionImpl;
 import com.liferay.portal.model.impl.RoleImpl;
@@ -128,12 +132,17 @@ import java.util.Map;
 public class DataFactory {
 
 	public DataFactory(
-			String baseDir, int maxGroupsCount, int maxJournalArticleSize,
+			String baseDir, int maxBlogsEntryCount, int maxGroupsCount,
+			int maxJournalArticleSize, int maxMBCategoryCount,
+			int maxMBThreadCount, int maxMBMessageCount,
 			int maxUserToGroupCount)
-		throws IOException {
+		throws Exception {
 
 		_baseDir = baseDir;
+		_maxBlogsEntryCount = maxBlogsEntryCount;
 		_maxGroupsCount = maxGroupsCount;
+		_maxMBMessageCount =
+			maxMBCategoryCount * maxMBThreadCount * maxMBMessageCount;
 		_maxUserToGroupCount = maxUserToGroupCount;
 
 		_counter = new SimpleCounter(_maxGroupsCount + 1);
@@ -160,12 +169,13 @@ public class DataFactory {
 			_classNamesMap.put(model, classNameId);
 		}
 
-		_companyId = _counter.get();
 		_accountId = _counter.get();
+		_companyId = _counter.get();
+		_sampleUserId = _counter.get();
 
 		initCompany();
 		initDLFileEntryType();
-		initGuestGroup();
+		initGroups();
 		initJournalArticle(maxJournalArticleSize);
 		initRoles();
 		initUserNames();
@@ -239,6 +249,10 @@ public class DataFactory {
 
 	public long getGroupClassNameId() {
 		return _classNamesMap.get(Group.class.getName());
+	}
+
+	public List<Group> getGroups() {
+		return _groups;
 	}
 
 	public Group getGuestGroup() {
@@ -332,15 +346,22 @@ public class DataFactory {
 			DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT);
 	}
 
-	public void initGuestGroup() {
-		_guestGroup = new GroupImpl();
+	public void initGroups() throws Exception {
+		long groupClassNameId = getGroupClassNameId();
 
-		_guestGroup.setGroupId(_counter.get());
-		_guestGroup.setClassNameId(getGroupClassNameId());
-		_guestGroup.setClassPK(_guestGroup.getGroupId());
-		_guestGroup.setName(GroupConstants.GUEST);
-		_guestGroup.setFriendlyURL("/guest");
-		_guestGroup.setSite(true);
+		long guestGroupId = _counter.get();
+
+		_guestGroup = newGroup(
+			guestGroupId, groupClassNameId, guestGroupId, GroupConstants.GUEST,
+			true);
+
+		_groups = new ArrayList<Group>(_maxGroupsCount);
+
+		for (int i = 1; i <= _maxGroupsCount; i++) {
+			Group group = newGroup(i, groupClassNameId, i, "Site " + i, true);
+
+			_groups.add(group);
+		}
 	}
 
 	public void initJournalArticle(int maxJournalArticleSize) {
@@ -449,9 +470,11 @@ public class DataFactory {
 
 	public void initUsers() {
 		_defaultUser = newUser(
-			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, true);
-		_guestUser = newUser("Test", "Test", "Test", false);
-		_sampleUser = newUser("Sample", "Sample", "Sample", false);
+			_counter.get(), StringPool.BLANK, StringPool.BLANK,
+			StringPool.BLANK, true);
+		_guestUser = newUser(_counter.get(), "Test", "Test", "Test", false);
+		_sampleUser = newUser(
+			_sampleUserId, "Sample", "Sample", "Sample", false);
 	}
 
 	public void initVirtualHost() {
@@ -495,11 +518,15 @@ public class DataFactory {
 		return blogsEntry;
 	}
 
-	public BlogsStatsUser newBlogsStatsUser(long groupId, long userId) {
+	public BlogsStatsUser newBlogsStatsUser(long groupId) {
 		BlogsStatsUser blogsStatsUser = new BlogsStatsUserImpl();
 
+		blogsStatsUser.setStatsUserId(_counter.get());
 		blogsStatsUser.setGroupId(groupId);
-		blogsStatsUser.setUserId(userId);
+		blogsStatsUser.setCompanyId(_companyId);
+		blogsStatsUser.setUserId(_sampleUserId);
+		blogsStatsUser.setEntryCount(_maxBlogsEntryCount);
+		blogsStatsUser.setLastPostDate(new Date());
 
 		return blogsStatsUser;
 	}
@@ -753,20 +780,10 @@ public class DataFactory {
 		return dlSync;
 	}
 
-	public Group newGroup(
-		long groupId, long classNameId, long classPK, String name,
-		String friendlyURL, boolean site) {
-
-		Group group = new GroupImpl();
-
-		group.setGroupId(groupId);
-		group.setClassNameId(classNameId);
-		group.setClassPK(classPK);
-		group.setName(name);
-		group.setFriendlyURL(friendlyURL);
-		group.setSite(site);
-
-		return group;
+	public Group newGroup(User user) throws Exception {
+		return newGroup(
+			_counter.get(), getUserClassNameId(), user.getUserId(),
+			user.getScreenName(), false);
 	}
 
 	public IntegerWrapper newInteger() {
@@ -800,16 +817,29 @@ public class DataFactory {
 	}
 
 	public Layout newLayout(
-		int layoutId, String name, String friendlyURL, String column1,
-		String column2) {
+		long groupId, String name, String column1, String column2) {
+
+		SimpleCounter simpleCounter = _layoutCounters.get(groupId);
+
+		if (simpleCounter == null) {
+			simpleCounter = new SimpleCounter();
+
+			_layoutCounters.put(groupId, simpleCounter);
+		}
 
 		Layout layout = new LayoutImpl();
 
+		layout.setUuid(SequentialUUID.generate());
 		layout.setPlid(_counter.get());
-		layout.setPrivateLayout(false);
-		layout.setLayoutId(layoutId);
-		layout.setName(name);
-		layout.setFriendlyURL(friendlyURL);
+		layout.setGroupId(groupId);
+		layout.setCompanyId(_companyId);
+		layout.setCreateDate(new Date());
+		layout.setModifiedDate(new Date());
+		layout.setLayoutId(simpleCounter.get());
+		layout.setName(
+			"<?xml version=\"1.0\"?><root><name>" + name + "</name></root>");
+		layout.setType(LayoutConstants.TYPE_PORTLET);
+		layout.setFriendlyURL(StringPool.FORWARD_SLASH + name);
 
 		UnicodeProperties typeSettingsProperties = new UnicodeProperties(true);
 
@@ -824,6 +854,17 @@ public class DataFactory {
 		layout.setTypeSettings(typeSettings);
 
 		return layout;
+	}
+
+	public List<LayoutSet> newLayoutSets(
+		long groupId, int publicLayoutSetPageCount) {
+
+		List<LayoutSet> layoutSets = new ArrayList<LayoutSet>(2);
+
+		layoutSets.add(newLayoutSet(groupId, true, 0));
+		layoutSets.add(newLayoutSet(groupId, false, publicLayoutSetPageCount));
+
+		return layoutSets;
 	}
 
 	public MBCategory newMBCategory(
@@ -880,11 +921,14 @@ public class DataFactory {
 		return mbMessage;
 	}
 
-	public MBStatsUser newMBStatsUser(long groupId, long userId) {
+	public MBStatsUser newMBStatsUser(long groupId) {
 		MBStatsUser mbStatsUser = new MBStatsUserImpl();
 
+		mbStatsUser.setStatsUserId(_counter.get());
 		mbStatsUser.setGroupId(groupId);
-		mbStatsUser.setUserId(userId);
+		mbStatsUser.setUserId(_sampleUserId);
+		mbStatsUser.setMessageCount(_maxMBMessageCount);
+		mbStatsUser.setLastPostDate(new Date());
 
 		return mbStatsUser;
 	}
@@ -895,9 +939,14 @@ public class DataFactory {
 
 		MBThread mbThread = new MBThreadImpl();
 
+		mbThread.setUuid(SequentialUUID.generate());
 		mbThread.setThreadId(threadId);
 		mbThread.setGroupId(groupId);
 		mbThread.setCompanyId(companyId);
+		mbThread.setUserId(_sampleUserId);
+		mbThread.setUserName(_sampleUser.getFullName());
+		mbThread.setCreateDate(new Date());
+		mbThread.setModifiedDate(new Date());
 		mbThread.setCategoryId(categoryId);
 		mbThread.setRootMessageId(rootMessageId);
 		mbThread.setRootMessageUserId(lastPostByUserId);
@@ -920,6 +969,18 @@ public class DataFactory {
 		portletPreferences.setPreferences(preferences);
 
 		return portletPreferences;
+	}
+
+	public List<Layout> newPublicLayouts(long groupId) {
+		List<Layout> layouts = new ArrayList<Layout>();
+
+		layouts.add(newLayout(groupId, "welcome", "58,", "47,"));
+		layouts.add(newLayout(groupId, "blogs", "", "33,"));
+		layouts.add(newLayout(groupId, "document_library", "", "20,"));
+		layouts.add(newLayout(groupId, "forums", "", "19,"));
+		layouts.add(newLayout(groupId, "wiki", "", "36,"));
+
+		return layouts;
 	}
 
 	public List<ResourcePermission> newResourcePermission(
@@ -979,8 +1040,8 @@ public class DataFactory {
 		String[] userName = nextUserName(currentIndex - 1);
 
 		return newUser(
-			userName[0], userName[1], "test" + _userScreenNameCounter.get(),
-			false);
+			_counter.get(), userName[0], userName[1],
+			"test" + _userScreenNameCounter.get(), false);
 	}
 
 	public WikiNode newWikiNode(
@@ -1026,6 +1087,49 @@ public class DataFactory {
 		return userName;
 	}
 
+	protected Group newGroup(
+			long groupId, long classNameId, long classPK, String name,
+			boolean site)
+		throws Exception {
+
+		Group group = new GroupImpl();
+
+		group.setGroupId(groupId);
+		group.setCompanyId(_companyId);
+		group.setCreatorUserId(_sampleUserId);
+		group.setClassNameId(classNameId);
+		group.setClassPK(classPK);
+		group.setTreePath(group.buildTreePath());
+		group.setName(name);
+		group.setFriendlyURL(
+			StringPool.FORWARD_SLASH +
+				FriendlyURLNormalizerUtil.normalize(name));
+		group.setSite(site);
+		group.setActive(true);
+
+		return group;
+	}
+
+	protected LayoutSet newLayoutSet(
+		long groupId, boolean privateLayout, int pageCount) {
+
+		LayoutSet layoutSet = new LayoutSetImpl();
+
+		layoutSet.setLayoutSetId(_counter.get());
+		layoutSet.setGroupId(groupId);
+		layoutSet.setCompanyId(_companyId);
+		layoutSet.setCreateDate(new Date());
+		layoutSet.setModifiedDate(new Date());
+		layoutSet.setPrivateLayout(privateLayout);
+		layoutSet.setThemeId("classic");
+		layoutSet.setColorSchemeId("01");
+		layoutSet.setWapThemeId("mobile");
+		layoutSet.setWapColorSchemeId("01");
+		layoutSet.setPageCount(pageCount);
+
+		return layoutSet;
+	}
+
 	protected Role newRole(String name, int type) {
 		Role role = new RoleImpl();
 
@@ -1040,10 +1144,8 @@ public class DataFactory {
 	}
 
 	protected User newUser(
-		String firstName, String lastName, String screenName,
+		long userId, String firstName, String lastName, String screenName,
 		boolean defaultUser) {
-
-		long userId = _counter.get();
 
 		if (Validator.isNull(screenName)) {
 			screenName = String.valueOf(userId);
@@ -1099,18 +1201,24 @@ public class DataFactory {
 	private User _defaultUser;
 	private List<String> _firstNames;
 	private SimpleCounter _futureDateCounter;
+	private List<Group> _groups;
 	private Group _guestGroup;
 	private Role _guestRole;
 	private User _guestUser;
 	private String _journalArticleContent;
 	private List<String> _lastNames;
+	private Map<Long, SimpleCounter> _layoutCounters =
+		new HashMap<Long, SimpleCounter>();
+	private int _maxBlogsEntryCount;
 	private int _maxGroupsCount;
+	private int _maxMBMessageCount;
 	private int _maxUserToGroupCount;
 	private Role _ownerRole;
 	private Role _powerUserRole;
 	private SimpleCounter _resourcePermissionCounter;
 	private List<Role> _roles;
 	private User _sampleUser;
+	private long _sampleUserId;
 	private Format _simpleDateFormat =
 		FastDateFormatFactoryUtil.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private SimpleCounter _socialActivityCounter;

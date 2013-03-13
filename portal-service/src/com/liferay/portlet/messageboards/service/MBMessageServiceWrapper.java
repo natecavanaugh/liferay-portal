@@ -63,8 +63,8 @@ public class MBMessageServiceWrapper implements MBMessageService,
 	}
 
 	/**
-	* @deprecated {@link #addMessage(long, String, String, String,
-	java.util.List, boolean, double, boolean,
+	* @deprecated As of 6.2.0, replaced by {@link #addMessage(long, String,
+	String, String, java.util.List, boolean, double, boolean,
 	com.liferay.portal.service.ServiceContext)}
 	*/
 	public com.liferay.portlet.messageboards.model.MBMessage addMessage(
@@ -302,14 +302,14 @@ public class MBMessageServiceWrapper implements MBMessageService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public MBMessageService getWrappedMBMessageService() {
 		return _mbMessageService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedMBMessageService(MBMessageService mbMessageService) {
 		_mbMessageService = mbMessageService;

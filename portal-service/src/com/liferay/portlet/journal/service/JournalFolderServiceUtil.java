@@ -85,6 +85,13 @@ public class JournalFolderServiceUtil {
 		return getService().getFolder(folderId);
 	}
 
+	public static java.util.List<java.lang.Long> getFolderIds(long groupId,
+		long folderId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getFolderIds(groupId, folderId);
+	}
+
 	public static java.util.List<com.liferay.portlet.journal.model.JournalFolder> getFolders(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -210,7 +217,7 @@ public class JournalFolderServiceUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.2.0
 	 */
 	public void setService(JournalFolderService service) {
 	}

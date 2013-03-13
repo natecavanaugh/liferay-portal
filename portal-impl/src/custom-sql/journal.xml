@@ -13,19 +13,6 @@
 				[$FOLDER_ID$]
 		]]>
 	</sql>
-	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.countByG_U_C">
-		<![CDATA[
-			SELECT
-				COUNT(DISTINCT JournalArticle.articleId) AS COUNT_VALUE
-			FROM
-				JournalArticle
-			WHERE
-				(groupId = ?) AND
-				(userId = ?) AND
-				(classNameId = ?) AND
-				([$STATUS$])
-		]]>
-	</sql>
 	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.countByG_C_S">
 		<![CDATA[
 			SELECT
@@ -36,6 +23,20 @@
 				(groupId = ?) AND
 				(classNameId = ?) AND
 				(structureId = ?) AND
+				([$STATUS$])
+		]]>
+	</sql>
+	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.countByG_U_F_C">
+		<![CDATA[
+			SELECT
+				COUNT(DISTINCT JournalArticle.articleId) AS COUNT_VALUE
+			FROM
+				JournalArticle
+			WHERE
+				(groupId = ?) AND
+				(userId = ?) AND
+				([$FOLDER_ID$]) AND
+				(classNameId = ?) AND
 				([$STATUS$])
 		]]>
 	</sql>
@@ -119,7 +120,7 @@
 				version DESC
 		]]>
 	</sql>
-	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.findByG_U_C">
+	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.findByG_F">
 		<![CDATA[
 			SELECT
 				JournalArticle.*
@@ -130,8 +131,7 @@
 					FROM
 						JournalArticle
 					WHERE
-						(groupId = ?) AND
-						(classNameId = ?)
+						(groupId = ?)
 					GROUP BY
 						groupId, articleId
 				) TEMP_TABLE
@@ -141,8 +141,8 @@
 						(TEMP_TABLE.tempArticleId = JournalArticle.articleId) AND
 						(TEMP_TABLE.tempVersion = JournalArticle.version)
 			WHERE
-				(userId = ?) AND
-				([$STATUS$])
+				([$STATUS$]) AND
+				[$FOLDER_ID$]
 			ORDER BY
 				id_ ASC
 		]]>
@@ -170,6 +170,35 @@
 						(TEMP_TABLE.tempVersion = JournalArticle.version)
 			WHERE
 				(structureId = ?) AND
+				([$STATUS$])
+			ORDER BY
+				id_ ASC
+		]]>
+	</sql>
+	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.findByG_U_F_C">
+		<![CDATA[
+			SELECT
+				JournalArticle.*
+			FROM
+				(
+					SELECT
+						groupId AS tempGroupId, articleId AS tempArticleId, MAX(version) AS tempVersion
+					FROM
+						JournalArticle
+					WHERE
+						(groupId = ?) AND
+						(classNameId = ?)
+					GROUP BY
+						groupId, articleId
+				) TEMP_TABLE
+				INNER JOIN
+					JournalArticle ON
+						(TEMP_TABLE.tempGroupId = JournalArticle.groupId) AND
+						(TEMP_TABLE.tempArticleId = JournalArticle.articleId) AND
+						(TEMP_TABLE.tempVersion = JournalArticle.version)
+			WHERE
+				(userId = ?) AND
+				([$FOLDER_ID$]) AND
 				([$STATUS$])
 			ORDER BY
 				id_ ASC

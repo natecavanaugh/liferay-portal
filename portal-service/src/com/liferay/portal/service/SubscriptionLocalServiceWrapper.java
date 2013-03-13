@@ -416,7 +416,6 @@ public class SubscriptionLocalServiceWrapper implements SubscriptionLocalService
 	* @param userId the primary key of the user
 	* @param start the lower bound of the range of results
 	* @param end the upper bound of the range of results (not inclusive)
-	* @param
 	* @return the range of subscriptions of the user
 	* @throws SystemException if a system exception occurred
 	*/
@@ -493,14 +492,14 @@ public class SubscriptionLocalServiceWrapper implements SubscriptionLocalService
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public SubscriptionLocalService getWrappedSubscriptionLocalService() {
 		return _subscriptionLocalService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedSubscriptionLocalService(
 		SubscriptionLocalService subscriptionLocalService) {

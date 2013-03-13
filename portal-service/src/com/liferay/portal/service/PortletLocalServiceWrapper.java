@@ -265,7 +265,7 @@ public class PortletLocalServiceWrapper implements PortletLocalService,
 	}
 
 	/**
-	* @deprecated {@link #clonePortlet(String)}
+	* @deprecated As of 6.1.0, replaced by {@link #clonePortlet(String)}
 	*/
 	public com.liferay.portal.model.Portlet clonePortlet(long companyId,
 		java.lang.String portletId) {
@@ -418,14 +418,14 @@ public class PortletLocalServiceWrapper implements PortletLocalService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public PortletLocalService getWrappedPortletLocalService() {
 		return _portletLocalService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedPortletLocalService(
 		PortletLocalService portletLocalService) {

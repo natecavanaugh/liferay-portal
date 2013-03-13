@@ -103,8 +103,8 @@ public class GroupServiceWrapper implements GroupService,
 	information was invalid, if a layout could not be found, or
 	if a valid friendly URL could not be created for the group
 	* @throws SystemException if a system exception occurred
-	* @deprecated {@link #addGroup(long, long, String, String, int, String,
-	boolean, boolean, ServiceContext)}
+	* @deprecated As of 6.2.0, replaced by {@link #addGroup(long, long, String,
+	String, int, String, boolean, boolean, ServiceContext)}
 	*/
 	public com.liferay.portal.model.Group addGroup(long parentGroupId,
 		java.lang.String name, java.lang.String description, int type,
@@ -117,8 +117,8 @@ public class GroupServiceWrapper implements GroupService,
 	}
 
 	/**
-	* @deprecated {@link #addGroup(long, String, String, int, String, boolean,
-	boolean, ServiceContext)}
+	* @deprecated As of 6.2.0, replaced by {@link #addGroup(long, String,
+	String, int, String, boolean, boolean, ServiceContext)}
 	*/
 	public com.liferay.portal.model.Group addGroup(java.lang.String name,
 		java.lang.String description, int type, java.lang.String friendlyURL,
@@ -615,14 +615,14 @@ public class GroupServiceWrapper implements GroupService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public GroupService getWrappedGroupService() {
 		return _groupService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedGroupService(GroupService groupService) {
 		_groupService = groupService;

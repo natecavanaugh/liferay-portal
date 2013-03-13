@@ -17,7 +17,6 @@ package com.liferay.portlet.layoutsadmin.action;
 import com.liferay.portal.DuplicateLockException;
 import com.liferay.portal.ImageTypeException;
 import com.liferay.portal.LayoutFriendlyURLException;
-import com.liferay.portal.LayoutHiddenException;
 import com.liferay.portal.LayoutNameException;
 import com.liferay.portal.LayoutParentLayoutIdException;
 import com.liferay.portal.LayoutPrototypeException;
@@ -67,6 +66,7 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeServiceUtil;
 import com.liferay.portal.service.LayoutRevisionLocalServiceUtil;
 import com.liferay.portal.service.LayoutServiceUtil;
@@ -169,6 +169,21 @@ public class EditLayoutsAction extends PortletAction {
 					closeRedirect, null, layout, oldFriendlyURL);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
+				long plid = ParamUtil.getLong(actionRequest, "plid");
+
+				if (plid <= 0) {
+					long groupId = ParamUtil.getLong(actionRequest, "groupId");
+					boolean privateLayout = ParamUtil.getBoolean(
+						actionRequest, "privateLayout");
+					long layoutId = ParamUtil.getLong(
+						actionRequest, "layoutId");
+
+					layout = LayoutLocalServiceUtil.getLayout(
+						groupId, privateLayout, layoutId);
+
+					plid = layout.getPlid();
+				}
+
 				Object[] returnValue = SitesUtil.deleteLayout(
 					actionRequest, actionResponse);
 
@@ -178,8 +193,13 @@ public class EditLayoutsAction extends PortletAction {
 
 				redirect = updateCloseRedirect(
 					redirect, group, null, oldFriendlyURL);
-				redirect = HttpUtil.setParameter(
-					redirect, "refererPlid", newRefererPlid);
+
+				long refererPlid = themeDisplay.getRefererPlid();
+
+				if (plid == refererPlid) {
+					redirect = HttpUtil.setParameter(
+						redirect, "refererPlid", newRefererPlid);
+				}
 
 				closeRedirect = updateCloseRedirect(
 					closeRedirect, group, null, oldFriendlyURL);
@@ -212,6 +232,9 @@ public class EditLayoutsAction extends PortletAction {
 
 					layoutTypePortlet.resetUserPreferences();
 				}
+			}
+			else if (cmd.equals("reset_merge_fail_count_and_merge")) {
+				resetMergeFailCountAndMerge(actionRequest);
 			}
 			else if (cmd.equals("reset_prototype")) {
 				SitesUtil.resetPrototype(themeDisplay.getLayout());
@@ -258,7 +281,6 @@ public class EditLayoutsAction extends PortletAction {
 			}
 			else if (e instanceof ImageTypeException ||
 					 e instanceof LayoutFriendlyURLException ||
-					 e instanceof LayoutHiddenException ||
 					 e instanceof LayoutNameException ||
 					 e instanceof LayoutParentLayoutIdException ||
 					 e instanceof LayoutSetVirtualHostException ||
@@ -492,25 +514,6 @@ public class EditLayoutsAction extends PortletAction {
 				throw new PrincipalException();
 			}
 		}
-		else if (cmd.equals("reset_prototype")) {
-			if (!LayoutPermissionUtil.contains(
-					permissionChecker, layout, ActionKeys.UPDATE)) {
-
-				throw new PrincipalException();
-			}
-			else if (!group.isUser() &&
-					 !GroupPermissionUtil.contains(
-						permissionChecker, layout.getGroupId(),
-						ActionKeys.UPDATE)) {
-
-				throw new PrincipalException();
-			}
-			else if (group.isUser() &&
-					 (permissionChecker.getUserId() != group.getClassPK())) {
-
-				throw new PrincipalException();
-			}
-		}
 		else {
 			checkPermission(permissionChecker, group, layout, selPlid);
 		}
@@ -676,6 +679,37 @@ public class EditLayoutsAction extends PortletAction {
 	@Override
 	protected boolean isCheckMethodOnProcessAction() {
 		return _CHECK_METHOD_ON_PROCESS_ACTION;
+	}
+
+	protected void resetMergeFailCountAndMerge(ActionRequest actionRequest)
+		throws Exception {
+
+		long layoutPrototypeId = ParamUtil.getLong(
+			actionRequest, "layoutPrototypeId");
+
+		LayoutPrototype layoutPrototype =
+			LayoutPrototypeLocalServiceUtil.getLayoutPrototype(
+				layoutPrototypeId);
+
+		SitesUtil.setMergeFailCount(layoutPrototype, 0);
+
+		long selPlid = ParamUtil.getLong(actionRequest, "selPlid");
+
+		Layout selLayout = LayoutLocalServiceUtil.getLayout(selPlid);
+
+		SitesUtil.resetPrototype(selLayout);
+
+		SitesUtil.mergeLayoutPrototypeLayout(selLayout.getGroup(), selLayout);
+
+		layoutPrototype = LayoutPrototypeServiceUtil.getLayoutPrototype(
+			layoutPrototypeId);
+
+		int mergeFailCountAfterMerge = SitesUtil.getMergeFailCount(
+			layoutPrototype);
+
+		if (mergeFailCountAfterMerge > 0) {
+			SessionErrors.add(actionRequest, "resetMergeFailCountAndMerge");
+		}
 	}
 
 	protected void selectLayoutBranch(ActionRequest actionRequest)

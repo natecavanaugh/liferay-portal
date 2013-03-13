@@ -30,7 +30,7 @@ public class Field implements Serializable {
 	public static final String ASSET_CATEGORY_IDS = "assetCategoryIds";
 
 	/**
-	 * @deprecated {@link #ASSET_CATEGORY_TITLES}
+	 * @deprecated As of 6.2.0, replaced by {@link #ASSET_CATEGORY_TITLES}
 	 */
 	public static final String ASSET_CATEGORY_NAMES = "assetCategoryNames";
 
@@ -77,7 +77,7 @@ public class Field implements Serializable {
 	};
 
 	/**
-	 * @deprecated {@link #MODIFIED_DATE}
+	 * @deprecated As of 6.1.0, replaced by {@link #MODIFIED_DATE}
 	 */
 	public static final String MODIFIED = "modified";
 
@@ -146,7 +146,7 @@ public class Field implements Serializable {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.1.0
 	 */
 	public Field(String name, String value, boolean tokenized) {
 		this(name, value);
@@ -160,7 +160,7 @@ public class Field implements Serializable {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.1.0
 	 */
 	public Field(String name, String[] values, boolean tokenized) {
 		this(name, values);
@@ -169,7 +169,7 @@ public class Field implements Serializable {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.1.0
 	 */
 	public Field(String name, String[] values, boolean tokenized, float boost) {
 		this(name, values);
@@ -188,6 +188,10 @@ public class Field implements Serializable {
 
 	public String getName() {
 		return _name;
+	}
+
+	public Class<? extends Number> getNumericClass() {
+		return _numericClass;
 	}
 
 	public String getValue() {
@@ -232,6 +236,10 @@ public class Field implements Serializable {
 		_numeric = numeric;
 	}
 
+	public void setNumericClass(Class<? extends Number> numericClass) {
+		_numericClass = numericClass;
+	}
+
 	public void setTokenized(boolean tokenized) {
 		_tokenized = tokenized;
 	}
@@ -248,6 +256,7 @@ public class Field implements Serializable {
 	private Map<Locale, String> _localizedValues;
 	private String _name;
 	private boolean _numeric;
+	private Class<? extends Number> _numericClass;
 	private boolean _tokenized;
 	private String[] _values;
 

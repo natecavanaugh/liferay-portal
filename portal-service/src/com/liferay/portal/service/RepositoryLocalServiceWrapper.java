@@ -274,8 +274,9 @@ public class RepositoryLocalServiceWrapper implements RepositoryLocalService,
 	}
 
 	/**
-	* @deprecated {@link #addRepository(long, long, long, long, String, String,
-	String, UnicodeProperties, boolean, ServiceContext)}
+	* @deprecated As of 6.2.0, replaced by {@link #addRepository(long, long,
+	long, long, String, String, String, UnicodeProperties,
+	boolean, ServiceContext)}
 	*/
 	public long addRepository(long userId, long groupId, long classNameId,
 		long parentFolderId, java.lang.String name,
@@ -357,14 +358,14 @@ public class RepositoryLocalServiceWrapper implements RepositoryLocalService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public RepositoryLocalService getWrappedRepositoryLocalService() {
 		return _repositoryLocalService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedRepositoryLocalService(
 		RepositoryLocalService repositoryLocalService) {

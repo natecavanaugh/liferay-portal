@@ -27,6 +27,8 @@ import java.util.Map;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Alexander Chow
  * @author Jorge Ferrer
@@ -77,6 +79,12 @@ public class LocalizationUtil {
 	}
 
 	public static Map<Locale, String> getLocalizationMap(
+		HttpServletRequest request, String parameter) {
+
+		return getLocalization().getLocalizationMap(request, parameter);
+	}
+
+	public static Map<Locale, String> getLocalizationMap(
 		PortletPreferences preferences, String parameter) {
 
 		return getLocalization().getLocalizationMap(preferences, parameter);
@@ -115,7 +123,7 @@ public class LocalizationUtil {
 	}
 
 	/**
-	 * @deprecated Use <code>getLocalizationMap</code>.
+	 * @deprecated As of 6.2.0, replaced by {@link #getLocalizationMap}
 	 */
 	public static Map<Locale, String> getLocalizedParameter(
 		PortletRequest portletRequest, String parameter) {

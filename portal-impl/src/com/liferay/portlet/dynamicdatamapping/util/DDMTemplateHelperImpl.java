@@ -80,7 +80,9 @@ public class DDMTemplateHelperImpl implements DDMTemplateHelper {
 			Class<?> clazz = value.getClass();
 
 			for (Field field : clazz.getFields()) {
-				valueJSONObject.put(field.getName());
+				valueJSONObject.put(
+					field.getName(),
+					JSONFactoryUtil.getUnmodifiableJSONObject());
 			}
 
 			for (Method method : clazz.getMethods()) {
@@ -103,7 +105,8 @@ public class DDMTemplateHelperImpl implements DDMTemplateHelper {
 
 				sb.append(StringPool.CLOSE_PARENTHESIS);
 
-				valueJSONObject.put(sb.toString());
+				valueJSONObject.put(
+					sb.toString(), JSONFactoryUtil.getUnmodifiableJSONObject());
 			}
 
 			jsonObject.put(key, valueJSONObject);

@@ -14,8 +14,27 @@
 
 package com.liferay.portal.tools.seleniumbuilder;
 
+import java.util.Map;
+
 /**
  * @author Michael Hashimoto
  */
 public class FunctionConverter extends BaseConverter {
+
+	public FunctionConverter(SeleniumBuilderContext seleniumBuilderContext) {
+		super(seleniumBuilderContext);
+	}
+
+	public void convert(String functionName) throws Exception {
+		Map<String, Object> context = getContext();
+
+		context.put("functionName", functionName);
+
+		String content = processTemplate("function.ftl", context);
+
+		seleniumBuilderFileUtil.writeFile(
+			seleniumBuilderContext.getFunctionJavaFileName(functionName),
+			content, true);
+	}
+
 }

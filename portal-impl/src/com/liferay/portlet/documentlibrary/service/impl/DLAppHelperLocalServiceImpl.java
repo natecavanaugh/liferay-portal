@@ -146,6 +146,10 @@ public class DLAppHelperLocalServiceImpl
 			long userId, Folder folder, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
+		if (!DLAppHelperThreadLocal.isEnabled()) {
+			return;
+		}
+
 		updateAsset(
 			userId, folder, serviceContext.getAssetCategoryIds(),
 			serviceContext.getAssetTagNames(),
@@ -313,6 +317,10 @@ public class DLAppHelperLocalServiceImpl
 	public void deleteFolder(Folder folder)
 		throws PortalException, SystemException {
 
+		if (!DLAppHelperThreadLocal.isEnabled()) {
+			return;
+		}
+
 		// Sync
 
 		if (!isStagingGroup(folder.getGroupId())) {
@@ -377,7 +385,8 @@ public class DLAppHelperLocalServiceImpl
 	}
 
 	/**
-	 * @deprecated {@link #getFileShortcuts(long, long, boolean, int)}
+	 * @deprecated As of 6.2.0, replaced by {@link #getFileShortcuts(long, long,
+	 *             boolean, int)}
 	 */
 	public List<DLFileShortcut> getFileShortcuts(
 			long groupId, long folderId, int status)
@@ -395,7 +404,8 @@ public class DLAppHelperLocalServiceImpl
 	}
 
 	/**
-	 * @deprecated {@link #getFileShortcutsCount(long, long, boolean, int)}
+	 * @deprecated As of 6.2.0, replaced by {@link #getFileShortcutsCount(long,
+	 *             long, boolean, int)}
 	 */
 	public int getFileShortcutsCount(long groupId, long folderId, int status)
 		throws SystemException {
@@ -541,12 +551,14 @@ public class DLAppHelperLocalServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		boolean hasLock = dlFolderService.hasFolderLock(folder.getFolderId());
+		boolean hasLock = dlFolderLocalService.hasFolderLock(
+			userId, folder.getFolderId());
 
 		Lock lock = null;
 
 		if (!hasLock) {
-			lock = dlFolderService.lockFolder(folder.getFolderId());
+			lock = dlFolderLocalService.lockFolder(
+				userId, folder.getFolderId());
 		}
 
 		try {
@@ -555,8 +567,8 @@ public class DLAppHelperLocalServiceImpl
 		}
 		finally {
 			if (!hasLock) {
-				dlFolderService.unlockFolder(
-					folder.getGroupId(), folder.getFolderId(), lock.getUuid());
+				dlFolderLocalService.unlockFolder(
+					folder.getFolderId(), lock.getUuid());
 			}
 		}
 	}
@@ -573,12 +585,14 @@ public class DLAppHelperLocalServiceImpl
 	public Folder moveFolderToTrash(long userId, Folder folder)
 		throws PortalException, SystemException {
 
-		boolean hasLock = dlFolderService.hasFolderLock(folder.getFolderId());
+		boolean hasLock = dlFolderLocalService.hasFolderLock(
+			userId, folder.getFolderId());
 
 		Lock lock = null;
 
 		if (!hasLock) {
-			lock = dlFolderService.lockFolder(folder.getFolderId());
+			lock = dlFolderLocalService.lockFolder(
+				userId, folder.getFolderId());
 		}
 
 		try {
@@ -586,8 +600,8 @@ public class DLAppHelperLocalServiceImpl
 		}
 		finally {
 			if (!hasLock) {
-				dlFolderService.unlockFolder(
-					folder.getGroupId(), folder.getFolderId(), lock.getUuid());
+				dlFolderLocalService.unlockFolder(
+					folder.getFolderId(), lock.getUuid());
 			}
 		}
 	}

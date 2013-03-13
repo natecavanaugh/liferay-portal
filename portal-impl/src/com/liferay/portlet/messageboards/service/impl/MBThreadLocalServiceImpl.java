@@ -54,10 +54,13 @@ import java.util.List;
  */
 public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
-	public MBThread addThread(long categoryId, MBMessage message)
+	public MBThread addThread(
+			long categoryId, MBMessage message, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Thread
+
+		Date now = new Date();
 
 		long threadId = message.getThreadId();
 
@@ -67,8 +70,13 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 		MBThread thread = mbThreadPersistence.create(threadId);
 
+		thread.setUuid(serviceContext.getUuid());
 		thread.setGroupId(message.getGroupId());
 		thread.setCompanyId(message.getCompanyId());
+		thread.setUserId(message.getUserId());
+		thread.setUserName(message.getUserName());
+		thread.setCreateDate(serviceContext.getCreateDate(now));
+		thread.setModifiedDate(serviceContext.getModifiedDate(now));
 		thread.setCategoryId(categoryId);
 		thread.setRootMessageId(message.getMessageId());
 		thread.setRootMessageUserId(message.getUserId());
@@ -99,10 +107,10 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			assetEntryLocalService.updateEntry(
 				message.getUserId(), message.getGroupId(),
 				thread.getStatusDate(), thread.getLastPostDate(),
-				MBThread.class.getName(), thread.getThreadId(), null, 0,
-				new long[0], new String[0], false, null, null, null, null,
-				String.valueOf(thread.getRootMessageId()), null, null, null,
-				null, 0, 0, null, false);
+				MBThread.class.getName(), thread.getThreadId(),
+				thread.getUuid(), 0, new long[0], new String[0], false, null,
+				null, null, null, String.valueOf(thread.getRootMessageId()),
+				null, null, null, null, 0, 0, null, false);
 		}
 
 		return thread;
@@ -264,7 +272,8 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 	}
 
 	/**
-	 * @deprecated {@link #getGroupThreads(long, QueryDefinition)}
+	 * @deprecated As of 6.2.0, replaced by {@link #getGroupThreads(long,
+	 *             QueryDefinition)}
 	 */
 	public List<MBThread> getGroupThreads(
 			long groupId, int status, int start, int end)
@@ -603,6 +612,13 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			category = mbCategoryPersistence.findByPrimaryKey(categoryId);
 		}
 
+		// Thread
+
+		thread.setModifiedDate(new Date());
+		thread.setCategoryId(categoryId);
+
+		mbThreadPersistence.update(thread);
+
 		// Messages
 
 		List<MBMessage> messages = mbMessagePersistence.findByG_C_T(
@@ -622,12 +638,6 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 				indexer.reindex(message);
 			}
 		}
-
-		// Thread
-
-		thread.setCategoryId(categoryId);
-
-		mbThreadPersistence.update(thread);
 
 		// Category
 
@@ -732,7 +742,12 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 		// Create new thread
 
-		MBThread thread = addThread(message.getCategoryId(), message);
+		MBThread thread = addThread(
+			message.getCategoryId(), message, serviceContext);
+
+		oldThread.setModifiedDate(serviceContext.getModifiedDate(new Date()));
+
+		mbThreadPersistence.update(oldThread);
 
 		// Update messages
 
@@ -857,6 +872,7 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 				mbMessagePersistence.update(rootMessage);
 			}
 
+			thread.setModifiedDate(now);
 			thread.setStatus(status);
 			thread.setStatusByUserId(user.getUserId());
 			thread.setStatusByUserName(user.getFullName());
@@ -924,7 +940,8 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 	}
 
 	/**
-	 * @deprecated {@link #incrementViewCounter(long, int)}
+	 * @deprecated As of 6.2.0, replaced by {@link #incrementViewCounter(long,
+	 *             int)}
 	 */
 	public MBThread updateThread(long threadId, int viewCount)
 		throws PortalException, SystemException {

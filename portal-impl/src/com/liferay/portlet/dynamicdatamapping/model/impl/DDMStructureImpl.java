@@ -307,7 +307,16 @@ public class DDMStructureImpl extends DDMStructureBaseImpl {
 		return fieldsMap;
 	}
 
-	public String getWebDavURL(ThemeDisplay themeDisplay) {
+	/**
+	 * Returns the WebDAV URL to access the structure.
+	 *
+	 * @param  themeDisplay the theme display needed to build the URL. It can
+	 *         set HTTPS access, the server name, the server port, the path
+	 *         context, and the scope group.
+	 * @param  webDAVToken the WebDAV token for the URL
+	 * @return the WebDAV URL
+	 */
+	public String getWebDavURL(ThemeDisplay themeDisplay, String webDAVToken) {
 		StringBundler sb = new StringBundler(11);
 
 		boolean secure = false;
@@ -331,6 +340,8 @@ public class DDMStructureImpl extends DDMStructureBaseImpl {
 
 		sb.append(group.getFriendlyURL());
 
+		sb.append(StringPool.SLASH);
+		sb.append(webDAVToken);
 		sb.append(StringPool.SLASH);
 		sb.append("Structures");
 		sb.append(StringPool.SLASH);

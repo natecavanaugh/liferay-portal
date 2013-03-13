@@ -107,9 +107,10 @@ public class AssetEntryServiceWrapper implements AssetEntryService,
 	}
 
 	/**
-	* @deprecated {@link #updateEntry(long, String, long, String, long, long[],
-	String[], boolean, Date, Date, Date, String, String, String,
-	String, String, String, int, int, Integer, boolean)}
+	* @deprecated As of 6.2.0, replaced by {@link #updateEntry(long, String,
+	long, String, long, long[], String[], boolean, Date, Date,
+	Date, String, String, String, String, String, String, int,
+	int, Integer, boolean)}
 	*/
 	public com.liferay.portlet.asset.model.AssetEntry updateEntry(
 		long groupId, java.lang.String className, long classPK,
@@ -130,10 +131,10 @@ public class AssetEntryServiceWrapper implements AssetEntryService,
 	}
 
 	/**
-	* @deprecated {@link #updateEntry(long, Date, Date. String, long, String,
-	long, long[], String[], boolean, Date, Date, Date, String,
-	String, String, String, String, String, int, int, Integer,
-	boolean)}
+	* @deprecated As of 6.2.0, replaced by {@link #updateEntry(long, Date,
+	Date. String, long, String, long, long[], String[], boolean,
+	Date, Date, Date, String, String, String, String, String,
+	String, int, int, Integer, boolean)}
 	*/
 	public com.liferay.portlet.asset.model.AssetEntry updateEntry(
 		long groupId, java.lang.String className, long classPK,
@@ -153,14 +154,14 @@ public class AssetEntryServiceWrapper implements AssetEntryService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public AssetEntryService getWrappedAssetEntryService() {
 		return _assetEntryService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedAssetEntryService(AssetEntryService assetEntryService) {
 		_assetEntryService = assetEntryService;

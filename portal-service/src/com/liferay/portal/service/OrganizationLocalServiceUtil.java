@@ -293,7 +293,7 @@ public class OrganizationLocalServiceUtil {
 	* @param comments the comments about the organization
 	* @param site whether the organization is to be associated with a main
 	site
-	* @param serviceContext the organization's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set asset category IDs, asset tag names,
 	and expando bridge attributes for the organization.
 	* @return the organization
@@ -344,12 +344,6 @@ public class OrganizationLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getService()
 			.addPasswordPolicyOrganizations(passwordPolicyId, organizationIds);
-	}
-
-	public static void checkMembershipPolicy(com.liferay.portal.model.User user)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().checkMembershipPolicy(user);
 	}
 
 	/**
@@ -1279,7 +1273,7 @@ public class OrganizationLocalServiceUtil {
 	* @param comments the comments about the organization
 	* @param site whether the organization is to be associated with a main
 	site
-	* @param serviceContext the organization's service context (optionally
+	* @param serviceContext the service context to be applied (optionally
 	<code>null</code>). Can set asset category IDs and asset tag
 	names for the organization, and merge expando bridge attributes
 	for the organization.
@@ -1314,7 +1308,7 @@ public class OrganizationLocalServiceUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.2.0
 	 */
 	public void setService(OrganizationLocalService service) {
 	}

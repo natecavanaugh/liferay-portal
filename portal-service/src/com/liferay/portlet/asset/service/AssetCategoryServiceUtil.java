@@ -118,7 +118,8 @@ public class AssetCategoryServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #search(long[], String, long[], int, int)}
+	* @deprecated As of 6.2.0, replaced by {@link #search(long[], String,
+	long[], int, int)}
 	*/
 	public static com.liferay.portal.kernel.json.JSONArray getJSONSearch(
 		long groupId, java.lang.String name, long[] vocabularyIds, int start,
@@ -130,7 +131,8 @@ public class AssetCategoryServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getVocabularyCategoriesDisplay(long, int, int,
+	* @deprecated As of 6.2.0, replaced by {@link
+	#getVocabularyCategoriesDisplay(long, int, int,
 	OrderByComparator)}
 	*/
 	public static com.liferay.portal.kernel.json.JSONObject getJSONVocabularyCategories(
@@ -143,8 +145,9 @@ public class AssetCategoryServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getVocabularyCategoriesDisplay(long, String, long,
-	int, int, OrderByComparator)}
+	* @deprecated As of 6.2.0, replaced by {@link
+	#getVocabularyCategoriesDisplay(long, String, long, int, int,
+	OrderByComparator)}
 	*/
 	public static com.liferay.portal.kernel.json.JSONObject getJSONVocabularyCategories(
 		long groupId, java.lang.String name, long vocabularyId, int start,
@@ -216,6 +219,11 @@ public class AssetCategoryServiceUtil {
 			start, end, obc);
 	}
 
+	/**
+	* @deprecated As of 6.2.0, replaced by {@link #
+	getVocabularyRootCategories(long, long, int, int,
+	OrderByComparator)}
+	*/
 	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> getVocabularyRootCategories(
 		long vocabularyId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
@@ -223,6 +231,22 @@ public class AssetCategoryServiceUtil {
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .getVocabularyRootCategories(vocabularyId, start, end, obc);
+	}
+
+	public static java.util.List<com.liferay.portlet.asset.model.AssetCategory> getVocabularyRootCategories(
+		long groupId, long vocabularyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getVocabularyRootCategories(groupId, vocabularyId, start,
+			end, obc);
+	}
+
+	public static int getVocabularyRootCategoriesCount(long groupId,
+		long vocabularyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getVocabularyRootCategoriesCount(groupId, vocabularyId);
 	}
 
 	public static com.liferay.portlet.asset.model.AssetCategory moveCategory(
@@ -284,7 +308,7 @@ public class AssetCategoryServiceUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.2.0
 	 */
 	public void setService(AssetCategoryService service) {
 	}

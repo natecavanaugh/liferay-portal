@@ -288,9 +288,9 @@ public class DDMStructureLocalServiceUtil {
 	com.liferay.portlet.dynamicdatamapping.storage.StorageType}.
 	* @param type the structure's type. For more information, see {@link
 	com.liferay.portlet.dynamicdatamapping.model.DDMStructureConstants}.
-	* @param serviceContext the structure's service context. Can set the UUID,
-	creation date, modification date, guest permissions, and group
-	permissions for the structure.
+	* @param serviceContext the service context to be applied. Can set the
+	UUID, creation date, modification date, guest permissions, and
+	group permissions for the structure.
 	* @return the structure
 	* @throws PortalException if a user with the primary key could not be
 	found, if the XSD was not well-formed, or if a portal exception
@@ -324,9 +324,9 @@ public class DDMStructureLocalServiceUtil {
 	* @param nameMap the structure's locales and localized names
 	* @param descriptionMap the structure's locales and localized descriptions
 	* @param xsd the structure's XML schema definition
-	* @param serviceContext the structure's service context. Can set the UUID,
-	creation date, modification date, guest permissions, and group
-	permissions for the structure.
+	* @param serviceContext the service context to be applied. Can set the
+	UUID, creation date, modification date, guest permissions, and
+	group permissions for the structure.
 	* @return the structure
 	* @throws PortalException if a user with the primary key could not be
 	found, if the XSD was not well-formed, or if a portal exception
@@ -366,9 +366,9 @@ public class DDMStructureLocalServiceUtil {
 	com.liferay.portlet.dynamicdatamapping.storage.StorageType}.
 	* @param type the structure's type. For more information, see {@link
 	com.liferay.portlet.dynamicdatamapping.model.DDMStructureConstants}.
-	* @param serviceContext the structure's service context. Can set the UUID,
-	creation date, modification date, guest permissions and group
-	permissions for the structure.
+	* @param serviceContext the service context to be applied. Can set the
+	UUID, creation date, modification date, guest permissions and
+	group permissions for the structure.
 	* @return the structure
 	* @throws PortalException if a user with the primary key could not be
 	found, if the XSD was not well-formed, or if a portal exception
@@ -621,7 +621,8 @@ public class DDMStructureLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getClassStructures(long, long)}
+	* @deprecated As of 6.2.0, replaced by {@link #getClassStructures(long,
+	long)}
 	*/
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getClassStructures(
 		long classNameId)
@@ -630,7 +631,8 @@ public class DDMStructureLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getClassStructures(long, long, int, int)}
+	* @deprecated As of 6.2.0, replaced by {@link #getClassStructures(long,
+	long, int, int)}
 	*/
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getClassStructures(
 		long classNameId, int start, int end)
@@ -703,7 +705,8 @@ public class DDMStructureLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getClassStructures(long, long, OrderByComparator)}
+	* @deprecated As of 6.2.0, replaced by {@link #getClassStructures(long,
+	long, OrderByComparator)}
 	*/
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getClassStructures(
 		long classNameId,
@@ -806,7 +809,7 @@ public class DDMStructureLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getStructures}
+	* @deprecated As of 6.2.0, replaced by {@link #getStructures}
 	*/
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructureEntries()
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -814,7 +817,7 @@ public class DDMStructureLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getStructures(long)}
+	* @deprecated As of 6.2.0, replaced by {@link #getStructures(long)}
 	*/
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructureEntries(
 		long groupId)
@@ -823,7 +826,8 @@ public class DDMStructureLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getStructures(long, int, int)}
+	* @deprecated As of 6.2.0, replaced by {@link #getStructures(long, int,
+	int)}
 	*/
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructureEntries(
 		long groupId, int start, int end)
@@ -978,6 +982,23 @@ public class DDMStructureLocalServiceUtil {
 		long[] groupIds)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getStructures(groupIds);
+	}
+
+	/**
+	* Returns all the structures matching the class name ID and belonging to
+	* the groups.
+	*
+	* @param groupIds the primary keys of the groups
+	* @param classNameId the primary key of the class name for the structure's
+	related model
+	* @return the structures matching the class name ID and belonging to the
+	groups
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructures(
+		long[] groupIds, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getStructures(groupIds, classNameId);
 	}
 
 	/**
@@ -1266,7 +1287,7 @@ public class DDMStructureLocalServiceUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.2.0
 	 */
 	public void setService(DDMStructureLocalService service) {
 	}

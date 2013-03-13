@@ -26,9 +26,9 @@ public class ExpandTask {
 	public static void expand(File source, File destination) {
 		Expand expand = new Expand();
 
+		expand.setDest(destination);
 		expand.setProject(AntUtil.getProject());
 		expand.setSrc(source);
-		expand.setDest(destination);
 
 		expand.execute();
 	}

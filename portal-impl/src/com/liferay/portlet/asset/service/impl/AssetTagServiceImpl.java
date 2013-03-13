@@ -28,7 +28,6 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.model.AssetTagDisplay;
-import com.liferay.portlet.asset.model.impl.AssetTagDisplayImpl;
 import com.liferay.portlet.asset.service.base.AssetTagServiceBaseImpl;
 import com.liferay.portlet.asset.service.permission.AssetPermission;
 import com.liferay.portlet.asset.service.permission.AssetTagPermission;
@@ -131,11 +130,12 @@ public class AssetTagServiceImpl extends AssetTagServiceBaseImpl {
 			total = getGroupTagsCount(groupId);
 		}
 
-		return new AssetTagDisplayImpl(tags, total, start, end);
+		return new AssetTagDisplay(tags, total, start, end);
 	}
 
 	/**
-	 * @deprecated {@link #getGroupTagsDisplay(long, String, int, int)}
+	 * @deprecated As of 6.2.0, replaced by {@link #getGroupTagsDisplay(long,
+	 *             String, int, int)}
 	 */
 	public JSONObject getJSONGroupTags(
 			long groupId, String name, int start, int end)

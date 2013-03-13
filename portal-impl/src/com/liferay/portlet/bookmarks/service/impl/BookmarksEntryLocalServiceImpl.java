@@ -300,9 +300,16 @@ public class BookmarksEntryLocalServiceImpl
 			long userId, long entryId, long parentFolderId)
 		throws PortalException, SystemException {
 
-		restoreEntryFromTrash(userId, entryId);
+		BookmarksEntry entry = getBookmarksEntry(entryId);
 
-		return moveEntry(entryId, parentFolderId);
+		if (entry.isInTrash()) {
+			restoreEntryFromTrash(userId, entryId);
+		}
+		else {
+			updateStatus(userId, entry, entry.getStatus());
+		}
+
+		return bookmarksEntryLocalService.moveEntry(entryId, parentFolderId);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)

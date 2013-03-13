@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.QueryConfig;
@@ -609,6 +611,9 @@ public class JournalArticleLocalServiceImpl
 		newArticle.setArticleId(newArticleId);
 		newArticle.setVersion(JournalArticleConstants.VERSION_DEFAULT);
 		newArticle.setTitle(oldArticle.getTitle());
+		newArticle.setUrlTitle(
+			getUniqueUrlTitle(
+				id, groupId, newArticleId, oldArticle.getTitleCurrentValue()));
 		newArticle.setDescription(oldArticle.getDescription());
 
 		try {
@@ -1636,8 +1641,15 @@ public class JournalArticleLocalServiceImpl
 	public int getNotInTrashArticlesCount(long groupId, long folderId)
 		throws SystemException {
 
-		return journalArticlePersistence.countByG_F_NotST(
-			groupId, folderId, WorkflowConstants.STATUS_IN_TRASH);
+		QueryDefinition queryDefinition = new QueryDefinition(
+			WorkflowConstants.STATUS_ANY);
+
+		List<Long> folderIds = new ArrayList<Long>();
+
+		folderIds.add(folderId);
+
+		return journalArticleFinder.countByG_F(
+			groupId, folderIds, queryDefinition);
 	}
 
 	public List<JournalArticle> getStructureArticles(
@@ -1721,8 +1733,10 @@ public class JournalArticleLocalServiceImpl
 		}
 	}
 
-	public void moveArticle(long groupId, String articleId, long newFolderId)
-		throws SystemException {
+	@Indexable(type = IndexableType.REINDEX)
+	public JournalArticle moveArticle(
+			long groupId, String articleId, long newFolderId)
+		throws PortalException, SystemException {
 
 		List<JournalArticle> articles = journalArticlePersistence.findByG_A(
 			groupId, articleId);
@@ -1732,17 +1746,26 @@ public class JournalArticleLocalServiceImpl
 
 			journalArticlePersistence.update(article);
 		}
+
+		return getArticle(groupId, articleId);
 	}
 
 	public JournalArticle moveArticleFromTrash(
-			long userId, long groupId, JournalArticle article, long newFolderId)
+			long userId, long groupId, JournalArticle article, long newFolderId,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		restoreArticleFromTrash(userId, article);
+		if (article.isInTrash()) {
+			restoreArticleFromTrash(userId, article);
+		}
+		else {
+			updateStatus(
+				userId, article, article.getStatus(), null,
+				new HashMap<String, Serializable>(), serviceContext);
+		}
 
-		moveArticle(groupId, article.getArticleId(), newFolderId);
-
-		return article;
+		return journalArticleLocalService.moveArticle(
+			groupId, article.getArticleId(), newFolderId);
 	}
 
 	public JournalArticle moveArticleToTrash(
@@ -2495,8 +2518,9 @@ public class JournalArticleLocalServiceImpl
 	}
 
 	/**
-	 * @deprecated {@link #updateArticleTranslation(long, String, double,
-	 *             Locale, String, String, String, Map, ServiceContext)}
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 *             #updateArticleTranslation(long, String, double, Locale,
+	 *             String, String, String, Map, ServiceContext)}
 	 */
 	public JournalArticle updateArticleTranslation(
 			long groupId, String articleId, double version, Locale locale,

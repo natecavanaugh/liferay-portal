@@ -15,12 +15,14 @@
 package com.liferay.portal.kernel.upgrade.dao.orm;
 
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.util.PortalUtil;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,8 +32,18 @@ import java.sql.SQLException;
  */
 public class UpgradeOptimizedConnectionHandler implements InvocationHandler {
 
-	public UpgradeOptimizedConnectionHandler(Connection connection) {
+	public UpgradeOptimizedConnectionHandler(Connection connection)
+		throws SQLException {
+
 		_connection = connection;
+
+		DatabaseMetaData metaData = _connection.getMetaData();
+
+		String productName = metaData.getDatabaseProductName();
+
+		if (productName.equals("Microsoft SQL Server")) {
+			_useUpgradeOptimizedPreparedStatementHandler = true;
+		}
 	}
 
 	public Object invoke(Object proxy, Method method, Object[] arguments)
@@ -60,6 +72,12 @@ public class UpgradeOptimizedConnectionHandler implements InvocationHandler {
 
 		ClassLoader classLoader = currentThread.getContextClassLoader();
 
+		sql = PortalUtil.transformSQL(sql);
+
+		if (!_useUpgradeOptimizedPreparedStatementHandler) {
+			return _connection.prepareStatement(sql);
+		}
+
 		PreparedStatement preparedStatement = _connection.prepareStatement(
 			sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
@@ -69,5 +87,6 @@ public class UpgradeOptimizedConnectionHandler implements InvocationHandler {
 	}
 
 	private Connection _connection;
+	private boolean _useUpgradeOptimizedPreparedStatementHandler;
 
 }

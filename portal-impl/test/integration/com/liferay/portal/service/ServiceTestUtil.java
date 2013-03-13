@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.Portlet;
@@ -87,6 +88,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -388,6 +391,20 @@ public class ServiceTestUtil {
 
 	public static boolean randomBoolean() throws Exception {
 		return _random.nextBoolean();
+	}
+
+	public static Map<Locale, String> randomLocaleStringMap(Locale locale)
+		throws Exception {
+
+		Map<Locale, String> map = new HashMap<Locale, String>();
+
+		map.put(LocaleUtil.getDefault(), randomString());
+
+		return map;
+	}
+
+	public static Map<Locale, String> randomLocaleStringMap() throws Exception {
+		return randomLocaleStringMap(LocaleUtil.getDefault());
 	}
 
 	public static long randomLong() throws Exception {

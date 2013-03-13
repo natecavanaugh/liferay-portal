@@ -58,8 +58,6 @@ public interface JSONObject {
 
 	public JSONArray names();
 
-	public JSONObject put(String key);
-
 	public JSONObject put(String key, boolean value);
 
 	public JSONObject put(String key, Date value);

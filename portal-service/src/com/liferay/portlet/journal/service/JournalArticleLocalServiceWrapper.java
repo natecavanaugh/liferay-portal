@@ -883,20 +883,23 @@ public class JournalArticleLocalServiceWrapper
 			version, status);
 	}
 
-	public void moveArticle(long groupId, java.lang.String articleId,
-		long newFolderId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		_journalArticleLocalService.moveArticle(groupId, articleId, newFolderId);
+	public com.liferay.portlet.journal.model.JournalArticle moveArticle(
+		long groupId, java.lang.String articleId, long newFolderId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalArticleLocalService.moveArticle(groupId, articleId,
+			newFolderId);
 	}
 
 	public com.liferay.portlet.journal.model.JournalArticle moveArticleFromTrash(
 		long userId, long groupId,
 		com.liferay.portlet.journal.model.JournalArticle article,
-		long newFolderId)
+		long newFolderId,
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _journalArticleLocalService.moveArticleFromTrash(userId,
-			groupId, article, newFolderId);
+			groupId, article, newFolderId, serviceContext);
 	}
 
 	public com.liferay.portlet.journal.model.JournalArticle moveArticleToTrash(
@@ -1117,8 +1120,9 @@ public class JournalArticleLocalServiceWrapper
 	}
 
 	/**
-	* @deprecated {@link #updateArticleTranslation(long, String, double,
-	Locale, String, String, String, Map, ServiceContext)}
+	* @deprecated As of 6.2.0, replaced by {@link
+	#updateArticleTranslation(long, String, double, Locale,
+	String, String, String, Map, ServiceContext)}
 	*/
 	public com.liferay.portlet.journal.model.JournalArticle updateArticleTranslation(
 		long groupId, java.lang.String articleId, double version,
@@ -1204,14 +1208,14 @@ public class JournalArticleLocalServiceWrapper
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public JournalArticleLocalService getWrappedJournalArticleLocalService() {
 		return _journalArticleLocalService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedJournalArticleLocalService(
 		JournalArticleLocalService journalArticleLocalService) {

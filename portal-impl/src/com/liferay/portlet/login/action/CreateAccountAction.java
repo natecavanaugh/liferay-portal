@@ -51,6 +51,7 @@ import com.liferay.portal.kernel.captcha.CaptchaUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -70,6 +71,7 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.login.util.LoginUtil;
+import com.liferay.util.PwdGenerator;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -322,10 +324,12 @@ public class CreateAccountAction extends PortletAction {
 
 		String login = null;
 
-		if (company.getAuthType().equals(CompanyConstants.AUTH_TYPE_ID)) {
+		String authType = company.getAuthType();
+
+		if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
 			login = String.valueOf(user.getUserId());
 		}
-		else if (company.getAuthType().equals(CompanyConstants.AUTH_TYPE_SN)) {
+		else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
 			login = user.getScreenName();
 		}
 		else {
@@ -414,7 +418,17 @@ public class CreateAccountAction extends PortletAction {
 		String screenName = ParamUtil.getString(actionRequest, "screenName");
 		String emailAddress = ParamUtil.getString(
 			actionRequest, "emailAddress");
-		long facebookId = ParamUtil.getLong(actionRequest, "facebookId");
+
+		HttpSession session = request.getSession();
+
+		long facebookId = GetterUtil.getLong(
+			session.getAttribute(WebKeys.FACEBOOK_INCOMPLETE_USER_ID));
+
+		if (facebookId > 0) {
+			password1 = PwdGenerator.getPassword();
+			password2 = password1;
+		}
+
 		String openId = ParamUtil.getString(actionRequest, "openId");
 		String firstName = ParamUtil.getString(actionRequest, "firstName");
 		String middleName = ParamUtil.getString(actionRequest, "middleName");
@@ -440,6 +454,41 @@ public class CreateAccountAction extends PortletAction {
 			suffixId, male, birthdayMonth, birthdayDay, birthdayYear, jobTitle,
 			sendEmail, updateUserInformation, serviceContext);
 
+		if (facebookId > 0) {
+			UserLocalServiceUtil.updateLastLogin(
+				user.getUserId(), user.getLoginIP());
+
+			UserLocalServiceUtil.updatePasswordReset(user.getUserId(), false);
+
+			UserLocalServiceUtil.updateEmailAddressVerified(
+				user.getUserId(), true);
+
+			session.removeAttribute(WebKeys.FACEBOOK_INCOMPLETE_USER_ID);
+
+			Company company = themeDisplay.getCompany();
+
+			// Send redirect
+
+			String login = null;
+
+			String authType = company.getAuthType();
+
+			if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
+				login = String.valueOf(user.getUserId());
+			}
+			else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+				login = user.getScreenName();
+			}
+			else {
+				login = user.getEmailAddress();
+			}
+
+			sendRedirect(
+				actionRequest, actionResponse, themeDisplay, login, password1);
+
+			return;
+		}
+
 		// Session messages
 
 		if (user.getStatus() == WorkflowConstants.STATUS_APPROVED) {
@@ -457,10 +506,12 @@ public class CreateAccountAction extends PortletAction {
 
 		Company company = themeDisplay.getCompany();
 
-		if (company.getAuthType().equals(CompanyConstants.AUTH_TYPE_ID)) {
+		String authType = company.getAuthType();
+
+		if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
 			login = String.valueOf(user.getUserId());
 		}
-		else if (company.getAuthType().equals(CompanyConstants.AUTH_TYPE_SN)) {
+		else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
 			login = user.getScreenName();
 		}
 		else {

@@ -14,7 +14,6 @@
 
 package com.liferay.portal.upgrade.v6_0_3;
 
-import com.liferay.portal.dao.orm.common.SQLTransformer;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -184,9 +183,7 @@ public class UpgradePermission extends UpgradeProcess {
 			sb.append("from User_, UserGroupRole where User_.userId = ");
 			sb.append("UserGroupRole.userId and UserGroupRole.roleId = ?)");
 
-			String sql = sb.toString();
-
-			ps = con.prepareStatement(sql);
+			ps = con.prepareStatement(sb.toString());
 
 			ps.setLong(1, roleId);
 			ps.setLong(2, roleId);
@@ -270,11 +267,7 @@ public class UpgradePermission extends UpgradeProcess {
 			sb.append("mod((ResourcePermission.actionIds / ");
 			sb.append("ResourceAction.bitwiseValue), 2) = 1");
 
-			String sql = sb.toString();
-
-			sql = SQLTransformer.transform(sql);
-
-			ps = con.prepareStatement(sql);
+			ps = con.prepareStatement(sb.toString());
 
 			rs = ps.executeQuery();
 

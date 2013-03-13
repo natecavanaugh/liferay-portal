@@ -31,7 +31,6 @@ import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetCategoryConstants;
 import com.liferay.portlet.asset.model.AssetCategoryDisplay;
 import com.liferay.portlet.asset.model.AssetVocabulary;
-import com.liferay.portlet.asset.model.impl.AssetCategoryDisplayImpl;
 import com.liferay.portlet.asset.service.base.AssetCategoryServiceBaseImpl;
 import com.liferay.portlet.asset.service.permission.AssetCategoryPermission;
 import com.liferay.util.Autocomplete;
@@ -143,17 +142,19 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 	}
 
 	/**
-	 * @deprecated {@link #search(long[], String, long[], int, int)}
+	 * @deprecated As of 6.2.0, replaced by {@link #search(long[], String,
+	 *             long[], int, int)}
 	 */
 	public JSONArray getJSONSearch(
 			long groupId, String name, long[] vocabularyIds, int start, int end)
 		throws PortalException, SystemException {
 
-		return search(new long[]{groupId}, name, vocabularyIds, start, end);
+		return search(new long[] {groupId}, name, vocabularyIds, start, end);
 	}
 
 	/**
-	 * @deprecated {@link #getVocabularyCategoriesDisplay(long, int, int,
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 *             #getVocabularyCategoriesDisplay(long, int, int,
 	 *             OrderByComparator)}
 	 */
 	public JSONObject getJSONVocabularyCategories(
@@ -173,8 +174,9 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 	}
 
 	/**
-	 * @deprecated {@link #getVocabularyCategoriesDisplay(long, String, long,
-	 *             int, int, OrderByComparator)}
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 *             #getVocabularyCategoriesDisplay(long, String, long, int, int,
+	 *             OrderByComparator)}
 	 */
 	public JSONObject getJSONVocabularyCategories(
 			long groupId, String name, long vocabularyId, int start, int end,
@@ -274,7 +276,7 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 			assetCategoryLocalService.getVocabularyCategories(
 				vocabularyId, start, end, obc));
 
-		return new AssetCategoryDisplayImpl(
+		return new AssetCategoryDisplay(
 			categories, categories.size(), start, end);
 	}
 
@@ -298,16 +300,41 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 			total = getVocabularyCategoriesCount(groupId, vocabularyId);
 		}
 
-		return new AssetCategoryDisplayImpl(categories, total, start, end);
+		return new AssetCategoryDisplay(categories, total, start, end);
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link #
+	 *             getVocabularyRootCategories(long, long, int, int,
+	 *             OrderByComparator)}
+	 */
 	public List<AssetCategory> getVocabularyRootCategories(
 			long vocabularyId, int start, int end, OrderByComparator obc)
 		throws PortalException, SystemException {
 
-		return filterCategories(
-			assetCategoryLocalService.getVocabularyRootCategories(
-				vocabularyId, start, end, obc));
+		AssetVocabulary vocabulary = assetVocabularyLocalService.getVocabulary(
+			vocabularyId);
+
+		return getVocabularyRootCategories(
+			vocabulary.getGroupId(), vocabularyId, start, end, obc);
+	}
+
+	public List<AssetCategory> getVocabularyRootCategories(
+			long groupId, long vocabularyId, int start, int end,
+			OrderByComparator obc)
+		throws SystemException {
+
+		return assetCategoryPersistence.filterFindByG_P_V(
+			groupId, AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID,
+			vocabularyId, start, end, obc);
+	}
+
+	public int getVocabularyRootCategoriesCount(long groupId, long vocabularyId)
+		throws SystemException {
+
+		return assetCategoryPersistence.filterCountByG_P_V(
+			groupId, AssetCategoryConstants.DEFAULT_PARENT_CATEGORY_ID,
+			vocabularyId);
 	}
 
 	public AssetCategory moveCategory(

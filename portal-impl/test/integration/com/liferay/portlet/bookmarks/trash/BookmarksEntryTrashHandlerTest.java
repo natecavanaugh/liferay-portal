@@ -67,12 +67,17 @@ public class BookmarksEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 	}
 
 	@Override
-	public void testTrashVersionAndDelete() throws Exception {
+	public void testTrashVersionBaseModelAndDelete() throws Exception {
 		Assert.assertTrue("This test does not apply", true);
 	}
 
 	@Override
-	public void testTrashVersionAndRestore() throws Exception {
+	public void testTrashVersionBaseModelAndRestore() throws Exception {
+		Assert.assertTrue("This test does not apply", true);
+	}
+
+	@Override
+	public void testTrashVersionParentBaseModel() throws Exception {
 		Assert.assertTrue("This test does not apply", true);
 	}
 
@@ -111,6 +116,13 @@ public class BookmarksEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 	}
 
 	@Override
+	protected int getMineBaseModelsCount(long groupId, long userId)
+			throws Exception {
+
+		return BookmarksEntryServiceUtil.getGroupEntriesCount(groupId, userId);
+	}
+
+	@Override
 	protected int getNotInTrashBaseModelsCount(BaseModel<?> parentBaseModel)
 		throws Exception {
 
@@ -137,6 +149,11 @@ public class BookmarksEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 	}
 
 	@Override
+	protected int getRecentBaseModelsCount(long groupId) throws Exception {
+		return BookmarksEntryServiceUtil.getGroupEntriesCount(groupId, 0);
+	}
+
+	@Override
 	protected String getSearchKeywords() {
 		return "Title";
 	}
@@ -153,15 +170,6 @@ public class BookmarksEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 		BookmarksEntry entry = (BookmarksEntry)baseModel;
 
 		return entry;
-	}
-
-	@Override
-	protected boolean isInTrashContainer(ClassedModel classedModel)
-		throws Exception {
-
-		BookmarksEntry entry = (BookmarksEntry)baseModel;
-
-		return entry.isInTrashContainer();
 	}
 
 	@Override
@@ -190,22 +198,6 @@ public class BookmarksEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 		throws Exception {
 
 		BookmarksFolderServiceUtil.moveFolderToTrash(primaryKey);
-	}
-
-	@Override
-	protected BaseModel<?> updateBaseModel(
-			long primaryKey, ServiceContext serviceContext)
-		throws Exception {
-
-		BookmarksEntry entry = BookmarksEntryLocalServiceUtil.getEntry(
-			primaryKey);
-
-		String description = "Content: Enterprise. Open Source. For Life.";
-
-		return BookmarksEntryLocalServiceUtil.updateEntry(
-			entry.getUserId(), primaryKey, entry.getGroupId(),
-			entry.getFolderId(), entry.getName(), entry.getUrl(), description,
-			serviceContext);
 	}
 
 }

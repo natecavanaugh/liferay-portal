@@ -163,13 +163,17 @@ if (Validator.isNotNull(structureAvailableFields)) {
 				<aui:input name="description" />
 
 				<c:if test="<%= template != null %>">
+					<aui:field-wrapper helpMessage="template-key-help" label="template-key">
+						<%= template.getTemplateKey() %>
+					</aui:field-wrapper>
+
 					<aui:field-wrapper label="url">
 						<liferay-ui:input-resource url='<%= themeDisplay.getPortalURL() + themeDisplay.getPathMain() + "/dynamic_data_mapping/get_template?templateId=" + templateId %>' />
 					</aui:field-wrapper>
 
-					<c:if test="<%= portletDisplay.isWebDAVEnabled() %>">
+					<c:if test="<%= Validator.isNotNull(refererWebDAVToken) %>">
 						<aui:field-wrapper label="webdav-url">
-							<liferay-ui:input-resource url="<%= template.getWebDavURL(themeDisplay) %>" />
+							<liferay-ui:input-resource url="<%= template.getWebDavURL(themeDisplay, refererWebDAVToken) %>" />
 						</aui:field-wrapper>
 					</c:if>
 				</c:if>

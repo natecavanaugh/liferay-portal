@@ -28,6 +28,8 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.TestPropsValues;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
+import com.liferay.portlet.dynamicdatamapping.util.DDMStructureTestUtil;
+import com.liferay.portlet.dynamicdatamapping.util.DDMTemplateTestUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleConstants;
 import com.liferay.portlet.journal.model.JournalFolder;
@@ -37,6 +39,7 @@ import com.liferay.portlet.journal.util.JournalTestUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -62,7 +65,8 @@ public class JournalArticleFinderTest {
 	public void setUp() throws Exception {
 		_group = GroupTestUtil.addGroup();
 
-		_ddmStructure = JournalTestUtil.addDDMStructure(_group.getGroupId());
+		_ddmStructure = DDMStructureTestUtil.addStructure(
+			_group.getGroupId(), JournalArticle.class.getName());
 
 		_folder = JournalTestUtil.addFolder(_group.getGroupId(), "Folder 1");
 
@@ -73,7 +77,7 @@ public class JournalArticleFinderTest {
 		JournalFolder folder = JournalTestUtil.addFolder(
 			_group.getGroupId(), "Folder 2");
 
-		DDMTemplate ddmTemplate = JournalTestUtil.addDDMTemplate(
+		DDMTemplate ddmTemplate = DDMTemplateTestUtil.addTemplate(
 			_group.getGroupId(), _ddmStructure.getStructureId());
 
 		JournalTestUtil.addArticleWithXMLContent(
@@ -239,24 +243,25 @@ public class JournalArticleFinderTest {
 
 		Assert.assertEquals(
 			2,
-			JournalArticleFinderUtil.countByG_U_C(
+			JournalArticleFinderUtil.countByG_U_F_C(
 				_group.getGroupId(), TestPropsValues.getUserId(),
+				Collections.<Long>emptyList(),
 				JournalArticleConstants.CLASSNAME_ID_DEFAULT, queryDefinition));
 
 		queryDefinition.setStatus(WorkflowConstants.STATUS_IN_TRASH);
 
 		Assert.assertEquals(
 			1,
-			JournalArticleFinderUtil.countByG_U_C(
-				_group.getGroupId(), _USER_ID,
+			JournalArticleFinderUtil.countByG_U_F_C(
+				_group.getGroupId(), _USER_ID, Collections.<Long>emptyList(),
 				JournalArticleConstants.CLASSNAME_ID_DEFAULT, queryDefinition));
 
 		queryDefinition.setStatus(WorkflowConstants.STATUS_IN_TRASH, true);
 
 		Assert.assertEquals(
 			0,
-			JournalArticleFinderUtil.countByG_U_C(
-				_group.getGroupId(), _USER_ID,
+			JournalArticleFinderUtil.countByG_U_F_C(
+				_group.getGroupId(), _USER_ID, Collections.<Long>emptyList(),
 				JournalArticleConstants.CLASSNAME_ID_DEFAULT, queryDefinition));
 	}
 
