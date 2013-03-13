@@ -636,6 +636,14 @@ public class PropsValues {
 
 	public static final String EDITOR_WYSIWYG_DEFAULT = PropsUtil.get(PropsKeys.EDITOR_WYSIWYG_DEFAULT);
 
+    // Ken Boyer: Modification start
+
+    public static final boolean EDITOR_SPELLCHECKER_LIFERAY = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.EDITOR_SPELLCHECKER_LIFERAY));
+
+    public static final boolean EDITOR_SPELLCHECKER_WEBSPELLCHECKER = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.EDITOR_SPELLCHECKER_WEBSPELLCHECKER));
+
+    // Ken Boyer: Modification end
+
 	public static final boolean EHCACHE_BLOCKING_CACHE_ALLOWED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.EHCACHE_BLOCKING_CACHE_ALLOWED));
 
 	public static final String EHCACHE_BOOTSTRAP_CACHE_LOADER_FACTORY = PropsUtil.get(PropsKeys.EHCACHE_BOOTSTRAP_CACHE_LOADER_FACTORY);
