@@ -13,6 +13,8 @@ AUI.add(
 
 		var NAME = 'liferaynavigationinteraction';
 
+		var TOUCH = A.UA.touch;
+
 		var hideMenu = function() {
 			if (MAP_HOVER.menu) {
 				Liferay.fire('hideNavigationMenu', MAP_HOVER);
@@ -38,7 +40,7 @@ AUI.add(
 
 						var hostULId = '#' + navigation.guid();
 
-						instance._directLiChild = hostULId + '> li';
+						instance._directChildLi = hostULId + '> li';
 
 						instance._hostULId = hostULId;
 
@@ -51,16 +53,18 @@ AUI.add(
 							}
 						);
 
-						if (A.UA.touch && navigation) {
-							navigation.delegate('click', instance._onTouchClick, '> li > a', instance);
-						}
-						else {
-							if (navigation) {
+						if (navigation) {
+							if (TOUCH) {
+								navigation.delegate('click', instance._onTouchClick, '> li > a', instance);
+							}
+							else {
 								navigation.delegate(['mouseenter', 'mouseleave'], instance._onMouseToggle, '> li', instance);
 
 								navigation.delegate('keydown', instance._handleKeyDown, 'a', instance);
 							}
+						}
 
+						if (!TOUCH) {
 							host.plug(
 								A.Plugin.NodeFocusManager,
 								{
@@ -103,7 +107,7 @@ AUI.add(
 
 						var target = event.target;
 
-						var parent = target.ancestors(instance._directLiChild).item(0);
+						var parent = target.ancestors(instance._directChildLi).item(0);
 
 						var fallbackFirst = true;
 						var item;
@@ -181,7 +185,7 @@ AUI.add(
 					_onTouchClick: function(event) {
 						var instance = this;
 
-						var menuNew = event.currentTarget.ancestor(instance._directLiChild);
+						var menuNew = event.currentTarget.ancestor(instance._directChildLi);
 
 						var childMenu = menuNew.one('.child-menu');
 
@@ -200,6 +204,7 @@ AUI.add(
 						var menuOld = MAP_HOVER.menu;
 
 						var newVal = event.newVal;
+
 						var handleHover = (newVal || newVal === 0);
 
 						if (handleHover) {
@@ -210,7 +215,7 @@ AUI.add(
 
 							var link = descendants.item(activeDescendant);
 
-							var menuNew = link.ancestor(instance._directLiChild);
+							var menuNew = link.ancestor(instance._directChildLi);
 
 							instance._showNavigationMenu(menuNew, menuOld);
 						}
