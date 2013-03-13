@@ -19,6 +19,7 @@
 <%@ page import="com.liferay.portal.kernel.util.ContentTypes" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.StringBundler" %>
 
 <%
 String cssPath = ParamUtil.getString(request, "cssPath");
@@ -29,7 +30,23 @@ String languageId = ParamUtil.getString(request, "languageId");
 response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 //TODO: check portal properties to decide which spellchecker(s) should be active
-String spellcheckerPlugins="'SpellChecker', 'Scayt', 'jQuerySpellChecker'";
+//TODO: added isJQuerySpellCheckerEnabled for setting up a place for portal property
+boolean isJQuerySpellCheckerEnabled = true;
+String spellcheckerPlugins = "'SpellChecker', 'Scayt'";
+String extraPlugins = "ajaxsave,restore";
+
+if (isJQuerySpellCheckerEnabled) {
+    StringBundler sb = new StringBundler();
+
+    sb.append(spellcheckerPlugins);
+    sb.append(", 'jQuerySpellChecker'");
+    spellcheckerPlugins = sb.toString();
+
+    sb = new StringBundler();
+    sb.append(extraPlugins);
+    sb.append(",jqueryspellchecker");
+    extraPlugins = sb.toString();
+}
 %>
 
 if (!CKEDITOR.stylesSet.get('liferayStyles')) {
@@ -70,7 +87,7 @@ CKEDITOR.config.contentsCss = '<%= HtmlUtil.escapeJS(cssPath) %>/main.css';
 
 CKEDITOR.config.entities = false;
 
-CKEDITOR.config.extraPlugins = 'ajaxsave,restore,jqueryspellchecker';
+CKEDITOR.config.extraPlugins = '<%= extraPlugins %>';
 
 CKEDITOR.config.height = 265;
 
