@@ -141,47 +141,107 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 						boolean anyAssetSubType = GetterUtil.getBoolean(preferences.getValue("anyClassType" + className, Boolean.TRUE.toString()));
 					%>
 
-					<div class='asset-subtype <%= (assetSelectedClassTypeIds.length < 1) ? "" : "aui-helper-hidden" %>' id="<portlet:namespace /><%= className %>Options">
-						<aui:select label='<%= LanguageUtil.format(pageContext, "x-subtype", ResourceActionsUtil.getModelResource(locale, assetRendererFactory.getClassName())) %>' name='<%= "preferences--anyClassType" + className + "--" %>'>
-							<aui:option label="any" selected="<%= anyAssetSubType %>" value="<%= true %>" />
-							<aui:option label='<%= LanguageUtil.get(pageContext, "select-more-than-one") + StringPool.TRIPLE_PERIOD %>' selected="<%= !anyAssetSubType && (assetSelectedClassTypeIds.length > 1) %>" value="<%= false %>" />
+						<div class='asset-subtype <%= (assetSelectedClassTypeIds.length < 1) ? "" : "aui-helper-hidden" %>' id="<portlet:namespace /><%= className %>Options">
+							<aui:select label='<%= LanguageUtil.format(pageContext, "x-subtype", ResourceActionsUtil.getModelResource(locale, assetRendererFactory.getClassName())) %>' name='<%= "preferences--anyClassType" + className + "--" %>'>
+								<aui:option label="any" selected="<%= anyAssetSubType %>" value="<%= true %>" />
+								<aui:option label='<%= LanguageUtil.get(pageContext, "select-more-than-one") + StringPool.TRIPLE_PERIOD %>' selected="<%= !anyAssetSubType && (assetSelectedClassTypeIds.length > 1) %>" value="<%= false %>" />
 
-							<optgroup label="<liferay-ui:message key="subtype" />">
+								<optgroup label="<liferay-ui:message key="subtype" />">
 
-								<%
-								for (Long classTypeId : assetAvailableClassTypes.keySet()) {
-									if (Arrays.binarySearch(assetSelectedClassTypeIds, classTypeId) < 0) {
-										subTypesRightList.add(new KeyValuePair(String.valueOf(classTypeId), HtmlUtil.escape(assetAvailableClassTypes.get(classTypeId))));
+									<%
+									for (Long classTypeId : assetAvailableClassTypes.keySet()) {
+										if (Arrays.binarySearch(assetSelectedClassTypeIds, classTypeId) < 0) {
+											subTypesRightList.add(new KeyValuePair(String.valueOf(classTypeId), HtmlUtil.escape(assetAvailableClassTypes.get(classTypeId))));
+										}
+									%>
+
+										<aui:option label="<%= HtmlUtil.escapeAttribute(assetAvailableClassTypes.get(classTypeId)) %>" selected="<%= !anyAssetSubType && (assetSelectedClassTypeIds.length == 1) && (classTypeId.equals(assetSelectedClassTypeIds[0])) %>" value="<%= classTypeId %>" />
+
+									<%
 									}
-								%>
+									%>
 
-									<aui:option label="<%= HtmlUtil.escapeAttribute(assetAvailableClassTypes.get(classTypeId)) %>" selected="<%= !anyAssetSubType && (assetSelectedClassTypeIds.length == 1) && (classTypeId.equals(assetSelectedClassTypeIds[0])) %>" value="<%= classTypeId %>" />
+								</optgroup>
+							</aui:select>
 
-								<%
+							<aui:input name='<%= "preferences--classTypeIds" + className + "--" %>' type="hidden" />
+
+							<%
+							typesRightList = ListUtil.sort(typesRightList, new KeyValuePairComparator(false, true));
+							%>
+
+							<div class="<%= assetSelectedClassTypeIds.length > 1 ? "" : "aui-helper-hidden" %>" id="<portlet:namespace /><%= className %>Boxes">
+								<liferay-ui:input-move-boxes
+									leftBoxName='<%= className + "currentClassTypeIds" %>'
+									leftList="<%= subTypesLeftList %>"
+									leftReorder="true"
+									leftTitle="selected"
+									rightBoxName='<%= className + "availableClassTypeIds" %>'
+									rightList="<%= subTypesRightList %>"
+									rightTitle="available"
+								/>
+							</div>
+
+							<%
+							for (long assetAvailableClassTypeId : assetAvailableClassTypeIds) {
+								if (!assetRendererFactory.hasClassTypeFieldNames(assetAvailableClassTypeId, locale)) {
+									continue;
 								}
-								%>
 
-							</optgroup>
-						</aui:select>
+								Map<String, Map<String, String>> classTypeFieldNames = assetRendererFactory.getClassTypeFieldNames(assetAvailableClassTypeId, locale);
 
-						<aui:input name='<%= "preferences--classTypeIds" + className + "--" %>' type="hidden" />
+								boolean anySubTypeField = GetterUtil.getBoolean(preferences.getValue("ddmStructureFieldName" + assetAvailableClassTypeId + "_" + className, Boolean.TRUE.toString()));
 
-						<%
-						typesRightList = ListUtil.sort(typesRightList, new KeyValuePairComparator(false, true));
-						%>
+								String ddmStructureFieldName = GetterUtil.getString(preferences.getValue("ddmStructureFieldName" + assetAvailableClassTypeId + "_" + className, StringPool.BLANK));
+							%>
 
-						<div class="<%= assetSelectedClassTypeIds.length > 1 ? "" : "aui-helper-hidden" %>" id="<portlet:namespace /><%= className %>Boxes">
-							<liferay-ui:input-move-boxes
-								leftBoxName='<%= className + "currentClassTypeIds" %>'
-								leftList="<%= subTypesLeftList %>"
-								leftReorder="true"
-								leftTitle="selected"
-								rightBoxName='<%= className + "availableClassTypeIds" %>'
-								rightList="<%= subTypesRightList %>"
-								rightTitle="available"
-							/>
+								<div class="asset-subtypefields aui-helper-hidden" id="<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options">
+									<aui:select label='<%= LanguageUtil.format(pageContext, "x-fields", HtmlUtil.escapeAttribute(assetAvailableClassTypes.get(assetAvailableClassTypeId))) %>' name='<%= "preferences--ddmStructureFieldName" + assetAvailableClassTypeId + "_" + className + "--" %>'>
+										<aui:option label="any" selected="<%= anySubTypeField %>" value="<%= true %>" />
+
+										<optgroup label="<liferay-ui:message key="fields" />">
+
+											<%
+											for (Map.Entry<String, Map<String, String>> classTypeFieldName : classTypeFieldNames.entrySet()) {
+												Map<String, String> attributes = classTypeFieldName.getValue();
+
+												String label = attributes.get("label");
+											%>
+
+												<aui:option label="<%= HtmlUtil.escapeAttribute(label) %>" selected="<%= !anySubTypeField && classTypeFieldName.getKey().equals(ddmStructureFieldName) %>" value="<%= classTypeFieldName.getKey() %>" />
+
+											<%
+											}
+											%>
+
+										</optgroup>
+									</aui:select>
+
+									<%
+									for (Map.Entry<String, Map<String, String>> classTypeFieldName : classTypeFieldNames.entrySet()) {
+										Map<String, String> attributes = classTypeFieldName.getValue();
+
+										String label = attributes.get("label");
+										String name = attributes.get("name");
+
+										String ddmStructureFieldValue = GetterUtil.getString(preferences.getValue("ddmStructureFieldValue" + assetAvailableClassTypeId + "_" + className + "_" + classTypeFieldName.getKey(), StringPool.BLANK));
+									%>
+
+										<span class="aui-helper-hidden" id="<portlet:namespace />ddmStructureFieldValue<%= assetAvailableClassTypeId %>_<%= className %>_<%= HtmlUtil.escapeJS(name) %>">
+											<aui:input label='<%= LanguageUtil.format(pageContext, "value-for-x", HtmlUtil.escapeAttribute(label)) %>' name='<%= "preferences--ddmStructureFieldValue" + assetAvailableClassTypeId + "_" + className + "_" + classTypeFieldName.getKey() + "--" %>' value="<%= ddmStructureFieldValue %>" />
+										</span>
+
+									<%
+									}
+									%>
+
+								</div>
+
+							<%
+							}
+							%>
+
 						</div>
-					</div>
 
 					<%
 					}
@@ -434,6 +494,80 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 				<portlet:namespace /><%= className %>Options.hide();
 			}
 		}
+
+		<%
+		if (curRendererFactory.getClassTypes(new long[] {themeDisplay.getCompanyGroupId(), scopeGroupId}, themeDisplay.getLocale()) == null) {
+			continue;
+		}
+	  	%>
+
+		var <portlet:namespace /><%= className %>SubTypeSelector = A.one('#<portlet:namespace />anyClassType<%= className %>');
+
+		<%
+		Map<Long, String> assetAvailableClassTypes = curRendererFactory.getClassTypes(new long[] {themeDisplay.getCompanyGroupId(), scopeGroupId}, themeDisplay.getLocale());
+
+		Set<Long> assetAvailableClassTypeIdsSet = assetAvailableClassTypes.keySet();
+
+		Long[] assetAvailableClassTypeIds = assetAvailableClassTypeIdsSet.toArray(new Long[assetAvailableClassTypeIdsSet.size()]);
+
+		for (long assetAvailableClassTypeId : assetAvailableClassTypeIds) {
+			if (!curRendererFactory.hasClassTypeFieldNames(assetAvailableClassTypeId, locale)) {
+				continue;
+			}
+		%>
+
+			var <portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options = A.one('#<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options');
+
+			function <portlet:namespace />toggle<%= assetAvailableClassTypeId %>_<%= className %>() {
+				if (<portlet:namespace /><%= className %>SubTypeSelector.val() == '<%= assetAvailableClassTypeId %>') {
+					<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options.show();
+				}
+				else {
+					<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options.hide();
+				}
+			}
+
+			<%
+			Map<String, Map<String, String>> classTypeFieldNames = curRendererFactory.getClassTypeFieldNames(assetAvailableClassTypeId, locale);
+
+			for (Map.Entry<String, Map<String, String>> classTypeFieldName : classTypeFieldNames.entrySet()) {
+				Map<String, String> attributes = classTypeFieldName.getValue();
+
+				String name = attributes.get("name");
+			%>
+
+				Liferay.Util.toggleSelectBox('<portlet:namespace />ddmStructureFieldName<%= assetAvailableClassTypeId %>_<%= className %>', '<%= classTypeFieldName.getKey() %>', '<portlet:namespace />ddmStructureFieldValue<%= assetAvailableClassTypeId %>_<%= className %>_<%= HtmlUtil.escapeJS(name) %>');
+
+		<%
+			}
+		}
+		%>
+
+		function <portlet:namespace /><%= className %>toggleSubclassesFields() {
+
+			<%
+			for (long assetAvailableClassTypeId : assetAvailableClassTypeIds) {
+				if (!curRendererFactory.hasClassTypeFieldNames(assetAvailableClassTypeId, locale)) {
+					continue;
+				}
+			%>
+
+				<portlet:namespace />toggle<%= assetAvailableClassTypeId %>_<%= className %>();
+
+			<%
+			}
+			%>
+
+		}
+
+		<portlet:namespace /><%= className %>toggleSubclassesFields();
+
+		<portlet:namespace /><%= className %>SubTypeSelector.on(
+			'change',
+			function(event) {
+				<portlet:namespace /><%= className %>toggleSubclassesFields();
+			}
+		);
 
 	<%
 	}

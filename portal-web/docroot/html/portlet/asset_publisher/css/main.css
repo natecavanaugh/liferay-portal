@@ -279,6 +279,10 @@
 		margin-left: 2em;
 	}
 
+	.asset-subtypefields {
+		margin-left: 4em;
+	}
+
 	.select-asset-selector {
 		margin: 1em 0;
 		overflow: auto;

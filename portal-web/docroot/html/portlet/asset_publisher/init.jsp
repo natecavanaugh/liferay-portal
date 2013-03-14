@@ -106,6 +106,21 @@ if (selectionStyle.equals("dynamic")) {
 
 	assetEntryQuery.setClassTypeIds(classTypeIds);
 
+	if ((classNameIds.length == 1) && (classTypeIds.length == 1)) {
+		AssetRendererFactory assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(PortalUtil.getClassName(classNameIds[0]));
+
+		String className = AssetPublisherUtil.getClassName(assetRendererFactory);
+
+		String ddmStructureFieldName = GetterUtil.getString(preferences.getValue("ddmStructureFieldName" + classTypeIds[0] + "_" + className, StringPool.BLANK));
+
+		String ddmStructureFieldValue = GetterUtil.getString(preferences.getValue("ddmStructureFieldValue" + classTypeIds[0] + "_" + className + "_" + ddmStructureFieldName, StringPool.BLANK));
+
+		if (Validator.isNotNull(ddmStructureFieldName) && Validator.isNotNull(ddmStructureFieldValue)) {
+			assetEntryQuery.setAttribute("ddmStructureFieldValue", ddmStructureFieldValue);
+			assetEntryQuery.setAttribute("ddmStructureFieldName", ddmStructureFieldName);
+		}
+	}
+
 	AssetPublisherUtil.addUserAttributes(user, StringUtil.split(customUserAttributes), assetEntryQuery);
 }
 
