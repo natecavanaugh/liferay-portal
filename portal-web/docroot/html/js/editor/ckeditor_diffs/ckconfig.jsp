@@ -45,7 +45,14 @@ if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_LIFERAY) {
 }
 
 String extraPlugins = extraPluginsSb.toString();
-String spellcheckerPlugins = spellcheckerPluginsSb.toString();
+String spellcheckerPluginsArray = "";
+String spellcheckerPluginsEntries = "";
+
+if (spellcheckerPluginsSb.length() > 0) {
+    String spellcheckerPlugins = spellcheckerPluginsSb.toString();
+    spellcheckerPluginsArray = "[" + spellcheckerPlugins + "],";
+    spellcheckerPluginsEntries = "," + spellcheckerPlugins;
+}
 %>
 
 if (!CKEDITOR.stylesSet.get('liferayStyles')) {
@@ -99,14 +106,14 @@ CKEDITOR.config.toolbar_editInPlace = [
 	['Bold', 'Italic', 'Underline', 'Strike'],
 	['Subscript', 'Superscript', 'SpecialChar'],
 	['Undo', 'Redo'],
-	[<%= spellcheckerPlugins %>],
+	<%= spellcheckerPluginsArray %>
 	['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'], ['Source', 'RemoveFormat'],
 ];
 
 CKEDITOR.config.toolbar_email = [
 	['FontSize', 'TextColor', 'BGColor', '-', 'Bold', 'Italic', 'Underline', 'Strike'],
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-	[<%= spellcheckerPlugins %>],
+	<%= spellcheckerPluginsArray %>
 	'/',
 	['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
 	['Source'],
@@ -128,7 +135,7 @@ CKEDITOR.config.toolbar_liferay = [
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 	['Image', 'Link', 'Unlink', 'Anchor'],
 	['Flash', 'Table', '-', 'Smiley', 'SpecialChar'],
-	['Find', 'Replace', <%= spellcheckerPlugins %>],
+	['Find', 'Replace', <%= spellcheckerPluginsEntries %>],
 	['SelectAll', 'RemoveFormat'],
 	['Subscript', 'Superscript']
 
@@ -143,7 +150,7 @@ CKEDITOR.config.toolbar_liferayArticle = [
 	['Subscript', 'Superscript'],
 	'/',
 	['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
-	['Find', 'Replace', <%= spellcheckerPlugins %>],
+	['Find', 'Replace' <%= spellcheckerPluginsEntries %>],
 	['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 	'/',
