@@ -76,11 +76,6 @@
 
 	Events.prototype = {
 		on: function(name, handler) {
-			// CUSTOM START
-			/*if (!this._handlers[name]) {
-			 this._handlers[name] = Callbacks();
-			 }
-			 this._handlers[name].add(handler);*/
 			if (!this._handlers[name]) {
 				this._handlers[name] = [];
 			}
@@ -91,7 +86,6 @@
 			else {
 				this._handlers[name] = handler;
 			}
-			// CUSTOM END
 		},
 		trigger: function(name) {
 			var args = Array.prototype.slice.call(arguments, 1);
@@ -99,12 +93,9 @@
 			// if (A.isFunction(name)) {
 			var instance = this;
 			if (typeof instance[name] === 'function' && name != 'destroy') {
-				// CUSTOM END
-				// return name.apply(this, args);
 				return instance[name](args);
 			}
 			if (this._handlers[name]) {
-				// this._handlers[name].fireWith(this, args);
 				var handler = this._handlers[name];
                 var isArray = (AUI().Array.test(handler) == 1);
 
@@ -137,7 +128,6 @@
                 handler(e, word, element, incorrectWords);
             }
             else {
-                // CUSTOM -- set to get the first index of the array
                 handler(args[0]);
             }
         }
@@ -197,7 +187,6 @@
 		Events.call(this);
 		this.config = config;
 		this.parser = parser;
-		// TODO: double check
 		this.spellCheckerElement = AUI().one(element);
 		this.createBox();
 		this.bindEvents();
@@ -239,10 +228,6 @@
 			return index === A.Array.indexOf(words, el);
 		});
 
-		// CUSTOM START
-		/*var html = $.map(words, function(word) {
-		 return '<a href="#">' + word + '</a>';
-		 }).join('');*/
 		var mapped = [];
 
 		AUI().each(
@@ -254,7 +239,6 @@
 		);
 
 		var html = mapped.join('');
-		// CUSTOM END
 
 		this.container.html(html).show();
 	};
@@ -316,11 +300,8 @@
 		} else {
 			this.body = (this.element.length && this.element[0].nodeName === 'BODY') ? this.element : 'body';
 		}
-		// CUSTOM START
-		// this.position = A.isFunction(config.suggestBox.position) ? config.suggestBox.position : this.position;
 
 		this.position = typeof config.suggestBox.position === 'function' ? config.suggestBox.position : this.position;
-		// CUSTOM END
 		Box.apply(this, arguments);
 	};
 	inherits(SuggestBox, Box);
@@ -335,15 +316,12 @@
         this.container.delegate('click', selectWordHandler.call(this, 'ignore.word'), '.ignore-word');
 		this.container.delegate('click', selectWordHandler.call(this, 'select.word'), '.words a');
 		AUI().one('html').on(click, this.onWindowClick.bind(this));
-		// CUSTOM START -- element is not an array
-		// if (this.element[0].nodeName === 'BODY') {
 		if (this.element.nodeName === 'BODY') {
 			// AUI().one(this.element.parentNode).on(click, this.onWindowClick.bind(this));
 			var onWindowClick = AUI().bind(this.onWindowClick, this);
 			var parentNode = AUI().one(this.element.parentNode);
 			parentNode.delegate('click', onWindowClick, parentNode.attr('localName'));
 		}
-		// CUSTOM END
 	};
 
 	SuggestBox.prototype.createBox = function() {
@@ -371,8 +349,7 @@
 			'</div>'
 		].join(''));
 
-		// CUSTOM -- commenting out for now
-		// TODO
+		// commenting out for now
 		// this.footer = this.container.find('.footer').hide();
 	};
 
@@ -387,10 +364,6 @@
 		else if (!words.length) {
 			html = '<em>' + this.config.local.noSuggestions + '</em>';
 		} else {
-			// CUSTOM START
-			/*html = $.map(words, function(word) {
-			 return '<a href="#">' + word + '</a>';
-			 }).slice(0, this.config.suggestBox.numWords).join('');*/
 			AUI().each(
 				words,
 				function(word) {
@@ -399,7 +372,6 @@
 			);
 
 			html = mapped.slice(0, this.config.suggestBox.numWords).join('');
-			// CUSTOM END
 		}
 
 		this.words.html(html);
@@ -411,7 +383,7 @@
 	};
 
 	SuggestBox.prototype.loading = function(show) {
-		// TODO: footer
+		// Commenting out for now
 		// this.footer.hide();
 		this.words.html(show ? this.loadingMsg.clone() : '');
 		this.position();
@@ -511,39 +483,39 @@
 
 		var defaultConfig = AUI().aggregate({}, this.defaultConfig);
 
-		// CUSTOM START
-		// return $.ajax(AUI().aggregate(defaultConfig, config, true));
 		return A.io.request(AUI().aggregate(defaultConfig, config, true));
-		// CUSTOM END
 	};
 
 	WebService.prototype.checkWords = function(text, callback) {
-		//CUSTOM START
-		//checkWords {"outcome":"success","data":[["denounncing","Noo","consequencse\\'s","caonsequences"]]}
-		if (this.defaultConfig.data.driver == "test") {
+        var dataDriver = this.defaultConfig.data.driver;
+		if (dataDriver == "test") {
 			var testResponse = {"outcome":"success","data":[["denounncing","Noo","consequencse\\'s","caonsequences"]]};
 			callback(testResponse);
 			return;
 		}
-		//CUSTOM END
-        Liferay.Service('/words/check-spelling',
-            {
-                text: text
-            },
-            callback
-        );
-		/*return this.makeRequest({
-			data: {
-				action: 'get_incorrect_words',
-				text: text
-			},
-			success: callback
-		});*/
-	};
+        else if (dataDriver == "pspell") {
+            return this.makeRequest({
+                data: {
+                    action: 'get_incorrect_words',
+                    text: text
+                },
+                success: callback
+            });
+        }
+        else {
+            Liferay.Service('/words/check-spelling',
+                {
+                    text: text
+                },
+                callback
+            );
+        }
+
+    };
 
 	WebService.prototype.getSuggestions = function(word, callback) {
-		//CUSTOM START
-		if (this.defaultConfig.data.driver == "test") {
+        var dataDriver = this.defaultConfig.data.driver;
+		if (dataDriver == "test") {
 			//getSuggestions("denounncing") ["denouncing","renouncing","announcing","trouncing","denounce","demonising","demonizing","defencing","denounced","denounces","penancing"]
 			//getSuggestions("consequencse's") ["consequence's","consequences","consequence","conscience's","convergence's","consciences","Constance's","convergences","consensuses","conservancies"]
 			var testData = {
@@ -557,23 +529,24 @@
 			callback(testResponse);
 			return;
 		}
-		//CUSTOM END
-
-        Liferay.Service(
-            '/words/get-suggestions',
-            {
-                word: word
-            },
-            callback
-        );
-
-		/*return this.makeRequest({
-			data: {
-				action: 'get_suggestions',
-				word: word
-			},
-			success: callback
-		});*/
+        else if (dataDriver == "pspell") {
+            return this.makeRequest({
+                data: {
+                    action: 'get_suggestions',
+                    word: word
+                },
+                success: callback
+            });
+        }
+        else {
+            Liferay.Service(
+                '/words/get-suggestions',
+                {
+                    word: word
+                },
+                callback
+            );
+        }
 	};
 
 	/* Spellchecker base parser
@@ -600,10 +573,6 @@
 		text = AUI().Lang.trim(text.replace(/\s{2,}/g, ' '));         // remove extra whitespace
 
 		// Remove numbers
-		// CUSTOM START
-		/*text = $.map(text.split(' '), function(word) {
-		 return (/^\d+$/.test(word)) ? null : word;
-		 }).join(' ');*/
 		var array = text.split(' ');
 		var mapped = [];
 
@@ -619,7 +588,6 @@
 		);
 
 		text = mapped.join(' ');
-		// CUSTOM END
 
 		return text;
 	};
@@ -633,10 +601,6 @@
 	inherits(TextParser, Parser);
 
 	TextParser.prototype.getText = function(text, textGetter) {
-		// CUSTOM START
-		/*return $.map(this.elements, function(element) {
-		 return this.clean(textGetter ? textGetter(element) : A.one(element).val());
-		 }.bind(this));*/
 		var instance = this;
 		var elements = instance.elements;
 		var mapped = [];
@@ -651,7 +615,6 @@
 		);
 
 		return mapped;
-		// CUSTOM END
 	};
 
 	TextParser.prototype.replaceWordInText = function(oldWord, newWord, text) {
@@ -673,28 +636,6 @@
 	};
 	inherits(HtmlParser, Parser);
 
-	// CUSTOM START
-	/*HtmlParser.prototype.getText = function(text, textGetter) {
-	 if (text && (text = A.one(text)).length) {
-	 return this.clean(text.text());
-	 }
-	 return $.map(this.elements, function(element) {
-
-	 if (textGetter) {
-	 text = textGetter(element);
-	 } else {
-	 text = A.one(element)
-	 .clone()
-	 .find('[class^="spellchecker-"]')
-	 .remove()
-	 .end()
-	 .text();
-	 }
-
-	 return this.clean(text);
-
-	 }.bind(this));
-	 };*/
 	HtmlParser.prototype.getText = function(text, textGetter) {
 		if (text && (text == A.one(text).length)) {
 			return this.clean(text.text());
@@ -730,14 +671,12 @@
 			}
 		);
 
-		// CUSTOM -- cleaned and put into another array
 		for (var i = 0; i < mapped.length; i++) {
 			cleanMap.push(this.clean(mapped[i]));
 		}
 
 		return cleanMap;
 	};
-	// CUSTOM END
 
 	HtmlParser.prototype.replaceText = function(regExp, element, replaceText, captureGroup) {
 		window.findAndReplaceDOMText(regExp, element, replaceText, captureGroup);
@@ -754,10 +693,6 @@
 		this.replaceText(regExp, element.getDOMNode(), this.replaceTextHandler(oldWord, replacement), 2);
 
 		// Remove this word from the list of incorrect words
-		// CUSTOM START
-		/*this.incorrectWords = $.map(this.incorrectWords || [], function(word) {
-		 return word === oldWord ? null : word;
-		 });*/
 		var instance = this;
 		var incorrectWords = instance.incorrectWords;
 
@@ -780,7 +715,6 @@
 		);
 
 		instance.incorrectWords = mapped;
-		// CUSTOM END
 
 		this.highlightWords(this.incorrectWords, element);
 	};
@@ -821,10 +755,6 @@
 
 		this.incorrectWords = incorrectWords;
 
-		// CUSTOM START
-		/*incorrectWords = $.map(incorrectWords, function(word) {
-		 return RegExp.escape(word);
-		 });*/
 		var mapped = [];
 
 		AUI().each(
@@ -836,11 +766,8 @@
 		);
 
 		incorrectWords = mapped;
-		// CUSTOM END
 
         var regExp = '(^|[^' + letterChars + '])(' + this.incorrectWords.join('|') + ')(?=[^' + letterChars + ']|$)';
-
-		// CUSTOM - removing element[0]
 
 		this.replaceText(new RegExp(regExp, 'g'), element.getDOMNode(), this.highlightWordsHandler(incorrectWords), 2);
 	};
@@ -869,16 +796,6 @@
 				replaceElement = span;
 			}
 
-			// CUSTOM -- need to change to AUI
-			// TODO: change to AUI
-			/*span
-			 .text(fill)
-			 .data({
-			 'firstElement': replaceElement,
-			 'word': word
-			 });*/
-
-			// return span[0];
 			return span;
 		};
 	};
@@ -895,17 +812,13 @@
 		Events.call(this);
 
 		// this.elements = elements.attributes.spellcheck=false;
-		// CUSTOM START -- add the editor to get the text
 		this.elements = elements;
-		// CUSTOM END
 		this.config = AUI().aggregate(defaultConfig, config, true);
 
 		this.setupWebService();
 		this.setupParser();
 
-		// CUSTOM -- removed this.elements.length
 		var type = typeof this.elements;
-		// if (this.elements.length) {
 		if (type !== 'undefined' || type != null) {
 			this.setupSuggestBox();
 			this.setupIncorrectWords();
@@ -938,10 +851,8 @@
 
 	SpellChecker.prototype.setupIncorrectWords = function() {
 
-		// CUSTOM START - adding elements to an array so the collection can read it
 		var elements = [];
 		elements.push(this.elements);
-		// CUSTOM END
 
 		this.incorrectWords = new Collection(elements, function(element) {
 			return this.config.parser === 'html' ?
@@ -968,14 +879,9 @@
 	};
 
 	SpellChecker.prototype.bindEvents = function() {
-		// this.on('check.fail', this.onCheckFail.bind(this));
-		// this.suggestBox.on('ignore.word', this.onIgnoreWord.bind(this));
-		// this.suggestBox.on('select.word', this.onSelectWord.bind(this));
-		// CUSTOM -- changing handler
 		this.on('check.fail', this.onCheckFail.bind(this));
 		this.suggestBox.on('ignore.word', this.onIgnoreWord.bind(this));
 		this.suggestBox.on('select.word', this.onSelectWord.bind(this));
-		// CUSTOM -- commenting out for now
 		// TODO
 		this.incorrectWords.instances[0].on('select.word', this.onIncorrectWordSelect.bind(this));
 	};
@@ -1039,9 +945,6 @@
 	};
 
 	SpellChecker.prototype.onCheckFail = function(badWords) {
-		// CUSTOM -- commenting out for now
-		// this.suggestBox.detach();
-		// CUSTOM START
 		AUI().each(badWords, function(words, i) {
 			if (words.length > 0) {
 				// Make array unique
@@ -1059,8 +962,6 @@
 				this.incorrectWords.get(i).addWords(words);
 			}
 		}.bind(this));
-		// this.suggestBox.reattach();
-		// CUSTOM END
 	};
 
 	SpellChecker.prototype.onSelectWord = function(e, word, element) {
@@ -1174,11 +1075,9 @@ window.findAndReplaceDOMText = (function() {
 	 */
 	function _getText(node) {
 
-		// CUSTOM -- test
 		if (node.nodeType === 1) {
 			return node.textContent;
 		}
-		// CUSTOM END
 
 		if (node.nodeType === 3) {
 			return node.data;
