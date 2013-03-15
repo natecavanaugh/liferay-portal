@@ -135,7 +135,7 @@ CKEDITOR.config.toolbar_liferay = [
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 	['Image', 'Link', 'Unlink', 'Anchor'],
 	['Flash', 'Table', '-', 'Smiley', 'SpecialChar'],
-	['Find', 'Replace', <%= spellcheckerPluginsEntries %>],
+	['Find', 'Replace' <%= spellcheckerPluginsEntries %>],
 	['SelectAll', 'RemoveFormat'],
 	['Subscript', 'Superscript']
 
