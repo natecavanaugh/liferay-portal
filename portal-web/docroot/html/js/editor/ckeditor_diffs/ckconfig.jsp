@@ -19,6 +19,8 @@
 <%@ page import="com.liferay.portal.kernel.util.ContentTypes" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.StringBundler" %>
+<%@ page import="com.liferay.portal.util.PropsValues" %>
 
 <%
 String cssPath = ParamUtil.getString(request, "cssPath");
@@ -28,6 +30,30 @@ String languageId = ParamUtil.getString(request, "languageId");
 boolean resizable = ParamUtil.getBoolean(request, "resizable");
 
 response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
+
+StringBundler extraPluginsSb = new StringBundler("ajaxsave,restore");
+StringBundler spellcheckerPluginsSb = new StringBundler();
+if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_WEBSPELLCHECKER) {
+    spellcheckerPluginsSb.append("'SpellChecker', 'Scayt'");
+}
+
+if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_LIFERAY) {
+    extraPluginsSb.append(",jqueryspellchecker");
+    if (spellcheckerPluginsSb.length() == 0) {
+        spellcheckerPluginsSb.append(',');
+    }
+    spellcheckerPluginsSb.append("'jQuerySpellChecker'");
+}
+
+String extraPlugins = extraPluginsSb.toString();
+String spellcheckerPluginsArray = "";
+String spellcheckerPluginsEntries = "";
+
+if (spellcheckerPluginsSb.length() > 0) {
+    String spellcheckerPlugins = spellcheckerPluginsSb.toString();
+    spellcheckerPluginsArray = "[" + spellcheckerPlugins + "],";
+    spellcheckerPluginsEntries = "," + spellcheckerPlugins;
+}
 %>
 
 if (!CKEDITOR.stylesSet.get('liferayStyles')) {
@@ -58,8 +84,6 @@ if (!CKEDITOR.stylesSet.get('liferayStyles')) {
 	);
 }
 
-CKEDITOR.config.autoParagraph = false;
-
 CKEDITOR.config.autoSaveTimeout = 3000;
 
 CKEDITOR.config.bodyClass = 'html-editor <%= HtmlUtil.escapeJS(cssClasses) %>';
@@ -70,7 +94,7 @@ CKEDITOR.config.contentsCss = '<%= HtmlUtil.escapeJS(cssPath) %>/main.css';
 
 CKEDITOR.config.entities = false;
 
-CKEDITOR.config.extraPlugins = 'ajaxsave,restore';
+CKEDITOR.config.extraPlugins = '<%= extraPlugins %>';
 
 CKEDITOR.config.height = 265;
 
@@ -89,14 +113,14 @@ CKEDITOR.config.toolbar_editInPlace = [
 	['Bold', 'Italic', 'Underline', 'Strike'],
 	['Subscript', 'Superscript', 'SpecialChar'],
 	['Undo', 'Redo'],
-	['SpellChecker', 'Scayt'],
+	<%= spellcheckerPluginsArray %>
 	['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'], ['Source', 'RemoveFormat'],
 ];
 
 CKEDITOR.config.toolbar_email = [
 	['FontSize', 'TextColor', 'BGColor', '-', 'Bold', 'Italic', 'Underline', 'Strike'],
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-	['SpellChecker', 'Scayt'],
+	<%= spellcheckerPluginsArray %>
 	'/',
 	['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
 	['Source'],
@@ -118,7 +142,7 @@ CKEDITOR.config.toolbar_liferay = [
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 	['Image', 'Link', 'Unlink', 'Anchor'],
 	['Flash', 'Table', '-', 'Smiley', 'SpecialChar'],
-	['Find', 'Replace', 'SpellChecker', 'Scayt'],
+	['Find', 'Replace' <%= spellcheckerPluginsEntries %>],
 	['SelectAll', 'RemoveFormat'],
 	['Subscript', 'Superscript']
 
@@ -133,7 +157,7 @@ CKEDITOR.config.toolbar_liferayArticle = [
 	['Subscript', 'Superscript'],
 	'/',
 	['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
-	['Find', 'Replace', 'SpellChecker', 'Scayt'],
+	['Find', 'Replace' <%= spellcheckerPluginsEntries %>],
 	['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
 	['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
 	'/',
