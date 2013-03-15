@@ -108,13 +108,13 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 
 					<%
 					for (AssetRendererFactory assetRendererFactory : AssetRendererFactoryRegistryUtil.getAssetRendererFactories()) {
-						if (assetRendererFactory.getClassTypes(new long[] {themeDisplay.getCompanyGroupId(), scopeGroupId}, themeDisplay.getLocale()) == null) {
+						Map<Long, String> assetAvailableClassTypes = assetRendererFactory.getClassTypes(new long[] {themeDisplay.getCompanyGroupId(), scopeGroupId}, themeDisplay.getLocale());
+
+						if ((assetAvailableClassTypes == null) || assetAvailableClassTypes.isEmpty()) {
 							continue;
 						}
 
 						classTypesAssetRendererFactories.add(assetRendererFactory);
-
-						Map<Long, String> assetAvailableClassTypes = assetRendererFactory.getClassTypes(new long[] {themeDisplay.getCompanyGroupId(), scopeGroupId}, themeDisplay.getLocale());
 
 						String className = AssetPublisherUtil.getClassName(assetRendererFactory);
 
@@ -141,7 +141,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 						boolean anyAssetSubType = GetterUtil.getBoolean(preferences.getValue("anyClassType" + className, Boolean.TRUE.toString()));
 					%>
 
-						<div class='asset-subtype <%= (assetSelectedClassTypeIds.length < 1) ? "" : "aui-helper-hidden" %>' id="<portlet:namespace /><%= className %>Options">
+						<div class='asset-subtype <%= (assetSelectedClassTypeIds.length < 1) ? StringPool.BLANK : "aui-helper-hidden" %>' id="<portlet:namespace /><%= className %>Options">
 							<aui:select label='<%= LanguageUtil.format(pageContext, "x-subtype", ResourceActionsUtil.getModelResource(locale, assetRendererFactory.getClassName())) %>' name='<%= "preferences--anyClassType" + className + "--" %>'>
 								<aui:option label="any" selected="<%= anyAssetSubType %>" value="<%= true %>" />
 								<aui:option label='<%= LanguageUtil.get(pageContext, "select-more-than-one") + StringPool.TRIPLE_PERIOD %>' selected="<%= !anyAssetSubType && (assetSelectedClassTypeIds.length > 1) %>" value="<%= false %>" />
@@ -170,7 +170,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 							typesRightList = ListUtil.sort(typesRightList, new KeyValuePairComparator(false, true));
 							%>
 
-							<div class="<%= assetSelectedClassTypeIds.length > 1 ? "" : "aui-helper-hidden" %>" id="<portlet:namespace /><%= className %>Boxes">
+							<div class="<%= assetSelectedClassTypeIds.length > 1 ? StringPool.BLANK : "aui-helper-hidden" %>" id="<portlet:namespace /><%= className %>Boxes">
 								<liferay-ui:input-move-boxes
 									leftBoxName='<%= className + "currentClassTypeIds" %>'
 									leftList="<%= subTypesLeftList %>"
@@ -184,31 +184,25 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 
 							<%
 							for (long assetAvailableClassTypeId : assetAvailableClassTypeIds) {
-								if (!assetRendererFactory.hasClassTypeFieldNames(assetAvailableClassTypeId, locale)) {
-									continue;
-								}
-
 								Map<String, Map<String, String>> classTypeFieldNames = assetRendererFactory.getClassTypeFieldNames(assetAvailableClassTypeId, locale);
 
-								boolean anySubTypeField = GetterUtil.getBoolean(preferences.getValue("ddmStructureFieldName" + assetAvailableClassTypeId + "_" + className, Boolean.TRUE.toString()));
-
-								String ddmStructureFieldName = GetterUtil.getString(preferences.getValue("ddmStructureFieldName" + assetAvailableClassTypeId + "_" + className, StringPool.BLANK));
+								if ((classTypeFieldNames == null) || classTypeFieldNames.isEmpty()) {
+									continue;
+								}
 							%>
 
 								<div class="asset-subtypefields aui-helper-hidden" id="<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options">
-									<aui:select label='<%= LanguageUtil.format(pageContext, "x-fields", HtmlUtil.escapeAttribute(assetAvailableClassTypes.get(assetAvailableClassTypeId))) %>' name='<%= "preferences--ddmStructureFieldName" + assetAvailableClassTypeId + "_" + className + "--" %>'>
-										<aui:option label="any" selected="<%= anySubTypeField %>" value="<%= true %>" />
+									<aui:select cssClass="asset-subtypefields-selector" label='<%= LanguageUtil.format(pageContext, "filter-by-a-field-of-x", HtmlUtil.escapeAttribute(assetAvailableClassTypes.get(assetAvailableClassTypeId))) %>' name='<%= "ddmStructureFieldName" + assetAvailableClassTypeId + "_" + className %>'>
+										<aui:option label="none" selected="<%= Validator.isNull(ddmStructureFieldName) %>" value="" />
 
 										<optgroup label="<liferay-ui:message key="fields" />">
 
 											<%
 											for (Map.Entry<String, Map<String, String>> classTypeFieldName : classTypeFieldNames.entrySet()) {
 												Map<String, String> attributes = classTypeFieldName.getValue();
-
-												String label = attributes.get("label");
 											%>
 
-												<aui:option label="<%= HtmlUtil.escapeAttribute(label) %>" selected="<%= !anySubTypeField && classTypeFieldName.getKey().equals(ddmStructureFieldName) %>" value="<%= classTypeFieldName.getKey() %>" />
+												<aui:option label='<%= HtmlUtil.escapeAttribute(attributes.get("label")) %>' selected="<%= classTypeFieldName.getKey().equals(ddmStructureFieldName) %>" value="<%= classTypeFieldName.getKey() %>" />
 
 											<%
 											}
@@ -216,25 +210,6 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 
 										</optgroup>
 									</aui:select>
-
-									<%
-									for (Map.Entry<String, Map<String, String>> classTypeFieldName : classTypeFieldNames.entrySet()) {
-										Map<String, String> attributes = classTypeFieldName.getValue();
-
-										String label = attributes.get("label");
-										String name = attributes.get("name");
-
-										String ddmStructureFieldValue = GetterUtil.getString(preferences.getValue("ddmStructureFieldValue" + assetAvailableClassTypeId + "_" + className + "_" + classTypeFieldName.getKey(), StringPool.BLANK));
-									%>
-
-										<span class="aui-helper-hidden" id="<portlet:namespace />ddmStructureFieldValue<%= assetAvailableClassTypeId %>_<%= className %>_<%= HtmlUtil.escapeJS(name) %>">
-											<aui:input label='<%= LanguageUtil.format(pageContext, "value-for-x", HtmlUtil.escapeAttribute(label)) %>' name='<%= "preferences--ddmStructureFieldValue" + assetAvailableClassTypeId + "_" + className + "_" + classTypeFieldName.getKey() + "--" %>' value="<%= ddmStructureFieldValue %>" />
-										</span>
-
-									<%
-									}
-									%>
-
 								</div>
 
 							<%
@@ -247,6 +222,11 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 					}
 					%>
 
+					<div class="asset-subtypefield-selected <%= Validator.isNull(ddmStructureFieldName) ? "aui-helper-hidden" : StringPool.BLANK %>" id="<portlet:namespace />ddmStructureFieldValueContainer">
+						<aui:input name='<%= "preferences--ddmStructureFieldName--" %>' type="hidden" value="<%= ddmStructureFieldName %>" />
+
+						<aui:input label="value" name='<%= "preferences--ddmStructureFieldValue--" %>' value="<%= ddmStructureFieldValue %>" />
+					</div>
 				</aui:fieldset>
 			</liferay-ui:panel>
 
@@ -472,6 +452,10 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 <aui:script use="aui-base">
 	var assetSelector = A.one('#<portlet:namespace />anyAssetType');
 	var assetMulitpleSelector = A.one('#<portlet:namespace />currentClassNameIds');
+	var sourcePanel = A.one('#assetPublisherSourcePanel');
+	var ddmStructureFieldValueContainer = A.one('#<portlet:namespace />ddmStructureFieldValueContainer');
+	var ddmStructureFieldName = A.one('#<portlet:namespace />ddmStructureFieldName');
+	var ddmStructureFieldValue = ddmStructureFieldValueContainer.one('#<portlet:namespace />ddmStructureFieldValue');
 
 	<%
 	for (AssetRendererFactory curRendererFactory : classTypesAssetRendererFactories) {
@@ -496,68 +480,23 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 		}
 
 		<%
-		if (curRendererFactory.getClassTypes(new long[] {themeDisplay.getCompanyGroupId(), scopeGroupId}, themeDisplay.getLocale()) == null) {
+		Map<Long, String> assetAvailableClassTypes = curRendererFactory.getClassTypes(new long[] {themeDisplay.getCompanyGroupId(), scopeGroupId}, themeDisplay.getLocale());
+
+		if ((assetAvailableClassTypes == null) || assetAvailableClassTypes.isEmpty()) {
 			continue;
 		}
 	  	%>
 
 		var <portlet:namespace /><%= className %>SubTypeSelector = A.one('#<portlet:namespace />anyClassType<%= className %>');
 
-		<%
-		Map<Long, String> assetAvailableClassTypes = curRendererFactory.getClassTypes(new long[] {themeDisplay.getCompanyGroupId(), scopeGroupId}, themeDisplay.getLocale());
-
-		Set<Long> assetAvailableClassTypeIdsSet = assetAvailableClassTypes.keySet();
-
-		Long[] assetAvailableClassTypeIds = assetAvailableClassTypeIdsSet.toArray(new Long[assetAvailableClassTypeIdsSet.size()]);
-
-		for (long assetAvailableClassTypeId : assetAvailableClassTypeIds) {
-			if (!curRendererFactory.hasClassTypeFieldNames(assetAvailableClassTypeId, locale)) {
-				continue;
-			}
-		%>
-
-			var <portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options = A.one('#<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options');
-
-			function <portlet:namespace />toggle<%= assetAvailableClassTypeId %>_<%= className %>() {
-				if (<portlet:namespace /><%= className %>SubTypeSelector.val() == '<%= assetAvailableClassTypeId %>') {
-					<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options.show();
-				}
-				else {
-					<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options.hide();
-				}
-			}
-
-			<%
-			Map<String, Map<String, String>> classTypeFieldNames = curRendererFactory.getClassTypeFieldNames(assetAvailableClassTypeId, locale);
-
-			for (Map.Entry<String, Map<String, String>> classTypeFieldName : classTypeFieldNames.entrySet()) {
-				Map<String, String> attributes = classTypeFieldName.getValue();
-
-				String name = attributes.get("name");
-			%>
-
-				Liferay.Util.toggleSelectBox('<portlet:namespace />ddmStructureFieldName<%= assetAvailableClassTypeId %>_<%= className %>', '<%= classTypeFieldName.getKey() %>', '<portlet:namespace />ddmStructureFieldValue<%= assetAvailableClassTypeId %>_<%= className %>_<%= HtmlUtil.escapeJS(name) %>');
-
-		<%
-			}
-		}
-		%>
-
 		function <portlet:namespace /><%= className %>toggleSubclassesFields() {
+			var selectedSubType = <portlet:namespace /><%= className %>SubTypeSelector.val();
 
-			<%
-			for (long assetAvailableClassTypeId : assetAvailableClassTypeIds) {
-				if (!curRendererFactory.hasClassTypeFieldNames(assetAvailableClassTypeId, locale)) {
-					continue;
-				}
-			%>
+			var structureOptions = A.one('#<portlet:namespace />' + selectedSubType + '_<%= className %>Options');
 
-				<portlet:namespace />toggle<%= assetAvailableClassTypeId %>_<%= className %>();
-
-			<%
+			if (structureOptions) {
+				structureOptions.show();
 			}
-			%>
-
 		}
 
 		<portlet:namespace /><%= className %>toggleSubclassesFields();
@@ -565,8 +504,32 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 		<portlet:namespace /><%= className %>SubTypeSelector.on(
 			'change',
 			function(event) {
+				sourcePanel.all('.asset-subtypefields').hide();
+
+				ddmStructureFieldValueContainer.hide();
+
 				<portlet:namespace /><%= className %>toggleSubclassesFields();
 			}
+		);
+
+		sourcePanel.delegate(
+			'change',
+			function(event){
+				ddmStructureFieldValueContainer.hide();
+
+				ddmStructureFieldValue.val('');
+
+				var fieldName = event.target.val();
+
+				console.log("cambia selector de field", fieldName);
+
+				if (fieldName) {
+					ddmStructureFieldValueContainer.show();
+				}
+
+				ddmStructureFieldName.val(fieldName);
+			},
+			'.asset-subtypefields-selector'
 		);
 
 	<%
@@ -593,6 +556,11 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 	assetSelector.on(
 		'change',
 		function(event) {
+			ddmStructureFieldValueContainer.hide();
+
+			ddmStructureFieldName.val('');
+			ddmStructureFieldValue.val('');
+
 			<portlet:namespace />toggleSubclasses();
 		}
 	);

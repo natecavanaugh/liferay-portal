@@ -283,6 +283,10 @@
 		margin-left: 4em;
 	}
 
+	.asset-subtypefield-selected {
+			margin-left: 6em;
+	}
+
 	.select-asset-selector {
 		margin: 1em 0;
 		overflow: auto;
