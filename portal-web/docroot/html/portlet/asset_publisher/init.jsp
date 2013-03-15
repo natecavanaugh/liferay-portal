@@ -86,7 +86,7 @@ boolean anyAssetType = GetterUtil.getBoolean(preferences.getValue("anyAssetType"
 
 long[] classNameIds = AssetPublisherUtil.getClassNameIds(preferences, availableClassNameIds);
 
-long[] classTypeIds = GetterUtil.getLongValues(portletPreferences.getValues("classTypeIds", null));
+long[] classTypeIds = GetterUtil.getLongValues(preferences.getValues("classTypeIds", null));
 
 String customUserAttributes = GetterUtil.getString(preferences.getValue("customUserAttributes", StringPool.BLANK));
 
