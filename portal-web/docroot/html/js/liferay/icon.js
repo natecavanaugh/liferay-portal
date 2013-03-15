@@ -5,22 +5,27 @@ AUI.add(
 			register: function(config) {
 				var instance = this;
 
-				var icon = A.one('#' + config.id);
-
-				var srcHover = config.srcHover;
-				var src = config.src;
 				var forcePost = config.forcePost;
+				var srcHover = config.srcHover;
 
-				if (icon) {
-					if (srcHover) {
-						instance._onMouseOver = A.rbind(instance._onMouseHover, instance, srcHover);
-						instance._onMouseOut = A.rbind(instance._onMouseHover, instance, src);
+				if (forcePost || srcHover) {
+					var icon = document.getElementById(config.id);
 
-						icon.hover(instance._onMouseOver, instance._onMouseOut);
-					}
+					if (icon) {
+						icon = A.one(icon);
 
-					if (forcePost) {
-						icon.on('click', instance._onClick, instance);
+						if (forcePost) {
+							icon.on('click', instance._onClick, instance);
+						}
+
+						if (srcHover) {
+							var onMouseHover = instance._onMouseHover;
+
+							instance._onMouseOver = A.rbind(onMouseHover, instance, srcHover);
+							instance._onMouseOut = A.rbind(onMouseHover, instance, config.src);
+
+							icon.hover(instance._onMouseOver, instance._onMouseOut);
+						}
 					}
 				}
 			},
