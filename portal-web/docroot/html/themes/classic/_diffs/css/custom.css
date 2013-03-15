@@ -138,6 +138,10 @@ hr, .separator {
 		margin: 0 1px;
 		padding: 3px 15px;
 		text-decoration: none;
+
+		.touch & {
+			padding: 10px 20px;
+		}
 	}
 
 	.yui3-dd-drop a {
@@ -154,15 +158,15 @@ hr, .separator {
 
 #navigation {
 	li.hover .child-menu {
-		background: #1E2529;
 		display: block;
-		position: absolute;
-		width: 200px;
-		z-index: 250;
 	}
 
 	.child-menu {
+		background: #1E2529;
 		display: none;
+		position: absolute;
+		width: 200px;
+		z-index: 250;
 
 		li {
 			border-width: 0 0 1px;
