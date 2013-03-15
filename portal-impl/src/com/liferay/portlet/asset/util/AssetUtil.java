@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,9 +21,18 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.search.Document;
+import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Hits;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.search.SearchContextFactory;
+import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -37,23 +46,29 @@ import com.liferay.portlet.asset.NoSuchCategoryException;
 import com.liferay.portlet.asset.NoSuchTagException;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetCategoryProperty;
+import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.model.AssetTagProperty;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetCategoryPropertyLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagPropertyLocalServiceUtil;
+import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
+import com.liferay.portlet.assetpublisher.util.AssetSearcher;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -246,6 +261,28 @@ public class AssetUtil {
 		return addPortletURL;
 	}
 
+	public static List<AssetEntry> getAssetEntries(Hits hits) {
+		List<AssetEntry> assetEntries = new ArrayList<AssetEntry>();
+
+		for (Document document : hits.getDocs()) {
+			String className = GetterUtil.getString(
+				document.get(Field.ENTRY_CLASS_NAME));
+			long classPK = GetterUtil.getLong(
+				document.get(Field.ENTRY_CLASS_PK));
+
+			try {
+				AssetEntry assetEntry = AssetEntryLocalServiceUtil.getEntry(
+					className, classPK);
+
+				assetEntries.add(assetEntry);
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return assetEntries;
+	}
+
 	public static String getAssetKeywords(String className, long classPK)
 		throws SystemException {
 
@@ -303,6 +340,37 @@ public class AssetUtil {
 		}
 
 		return true;
+	}
+
+	public static Hits search(
+			HttpServletRequest request, AssetEntryQuery assetEntryQuery,
+			int start, int end)
+		throws Exception {
+
+		SearchContext searchContext = SearchContextFactory.getInstance(request);
+
+		return search(searchContext, assetEntryQuery, start, end);
+	}
+
+	public static Hits search(
+			SearchContext searchContext, AssetEntryQuery assetEntryQuery,
+			int start, int end)
+		throws Exception {
+
+		Indexer searcher = AssetSearcher.getInstance();
+
+		AssetSearcher assetSearcher = (AssetSearcher)searcher;
+
+		assetSearcher.setAssetEntryQuery(assetEntryQuery);
+
+		searchContext.setClassTypeIds(assetEntryQuery.getClassTypeIds());
+		searchContext.setEnd(end);
+		searchContext.setGroupIds(assetEntryQuery.getGroupIds());
+		searchContext.setSorts(
+			getSorts(assetEntryQuery, searchContext.getLocale()));
+		searchContext.setStart(start);
+
+		return assetSearcher.search(searchContext);
 	}
 
 	public static String substituteCategoryPropertyVariables(
@@ -389,6 +457,57 @@ public class AssetUtil {
 
 			return new String(textCharArray);
 		}
+	}
+
+	protected static Sort getSort(
+		String orderByType, String sortField, Locale locale) {
+
+		if (Validator.isNull(orderByType)) {
+			orderByType = "asc";
+		}
+
+		int sortType = Sort.STRING_TYPE;
+
+		if (sortField.equals(Field.CREATE_DATE) ||
+			sortField.equals(Field.EXPIRATION_DATE) ||
+			sortField.equals(Field.PUBLISH_DATE) ||
+			sortField.equals("modifiedDate")) {
+
+			sortType = Sort.LONG_TYPE;
+		}
+		else if (sortField.equals(Field.PRIORITY) ||
+				 sortField.equals(Field.RATINGS)) {
+
+			sortType = Sort.DOUBLE_TYPE;
+		}
+		else if (sortField.equals(Field.VIEW_COUNT)) {
+			sortType = Sort.INT_TYPE;
+		}
+
+		if (sortField.equals("modifiedDate")) {
+			sortField = Field.MODIFIED_DATE;
+		}
+		else if (sortField.equals("title")) {
+			sortField = "localized_title_".concat(
+				LocaleUtil.toLanguageId(locale));
+		}
+
+		return new Sort(
+			sortField, sortType, !orderByType.equalsIgnoreCase("asc"));
+	}
+
+	protected static Sort[] getSorts(
+			AssetEntryQuery assetEntryQuery, Locale locale)
+		throws Exception {
+
+		Sort sort1 = getSort(
+			assetEntryQuery.getOrderByType1(), assetEntryQuery.getOrderByCol1(),
+			locale);
+		Sort sort2 = getSort(
+			assetEntryQuery.getOrderByType2(), assetEntryQuery.getOrderByCol2(),
+			locale);
+
+		return new Sort[] {sort1, sort2};
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(AssetUtil.class);

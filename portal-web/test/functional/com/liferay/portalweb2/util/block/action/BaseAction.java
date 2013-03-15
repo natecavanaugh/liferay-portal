@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,6 +26,14 @@ public class BaseAction {
 
 	public BaseAction(LiferaySelenium liferaySelenium) {
 		this.liferaySelenium = liferaySelenium;
+	}
+
+	protected String getLocator(String target) {
+		if (paths.containsKey(target)) {
+			return paths.get(target);
+		}
+
+		return target;
 	}
 
 	protected LiferaySelenium liferaySelenium;

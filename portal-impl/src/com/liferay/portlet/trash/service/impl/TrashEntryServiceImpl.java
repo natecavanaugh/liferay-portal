@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,16 +15,21 @@
 package com.liferay.portlet.trash.service.impl;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.trash.TrashActionKeys;
 import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.trash.TrashEntryConstants;
 import com.liferay.portlet.trash.model.TrashEntry;
 import com.liferay.portlet.trash.model.TrashEntryList;
 import com.liferay.portlet.trash.model.TrashEntrySoap;
@@ -39,6 +44,7 @@ import java.util.List;
  * com.liferay.portlet.trash.service.impl.TrashEntryLocalServiceImpl}.
  *
  * @author Julio Camarero
+ * @author Zsolt Berentey
  */
 public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 
@@ -53,28 +59,40 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 	public void deleteEntries(long groupId)
 		throws PrincipalException, SystemException {
 
-		List<TrashEntry> entries = trashEntryLocalService.getEntries(groupId);
-
-		PermissionChecker permissionChecker = getPermissionChecker();
+		List<TrashEntry> entries = trashEntryPersistence.findByGroupId(groupId);
 
 		for (TrashEntry entry : entries) {
-			String className = entry.getClassName();
-			long classPK = entry.getClassPK();
-
 			try {
-				TrashHandler trashHandler =
-					TrashHandlerRegistryUtil.getTrashHandler(className);
-
-				if (trashHandler.hasTrashPermission(
-						permissionChecker, 0, classPK, ActionKeys.DELETE)) {
-
-					trashHandler.deleteTrashEntry(classPK);
-				}
+				deleteEntry(entry);
 			}
 			catch (Exception e) {
 				_log.error(e, e);
 			}
 		}
+	}
+
+	public void deleteEntries(long[] entryIds)
+		throws PortalException, SystemException {
+
+		for (long entryId : entryIds) {
+			deleteEntry(entryId);
+		}
+	}
+
+	public void deleteEntry(long entryId)
+		throws PortalException, SystemException {
+
+		TrashEntry entry = trashEntryPersistence.findByPrimaryKey(entryId);
+
+		deleteEntry(entry);
+	}
+
+	public void deleteEntry(String className, long classPK)
+		throws PortalException, SystemException {
+
+		TrashEntry entry = trashEntryLocalService.getEntry(className, classPK);
+
+		deleteEntry(entry);
 	}
 
 	/**
@@ -111,13 +129,13 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 
 		TrashEntryList trashEntriesList = new TrashEntryList();
 
-		int entriesCount = trashEntryLocalService.getEntriesCount(groupId);
+		int entriesCount = trashEntryPersistence.countByGroupId(groupId);
 
 		boolean approximate = entriesCount > PropsValues.TRASH_SEARCH_LIMIT;
 
 		trashEntriesList.setApproximate(approximate);
 
-		List<TrashEntry> entries = trashEntryLocalService.getEntries(
+		List<TrashEntry> entries = trashEntryPersistence.findByGroupId(
 			groupId, 0, end + PropsValues.TRASH_SEARCH_LIMIT, obc);
 
 		List<TrashEntry> filteredEntries = new ArrayList<TrashEntry>();
@@ -161,6 +179,117 @@ public class TrashEntryServiceImpl extends TrashEntryServiceBaseImpl {
 		trashEntriesList.setCount(filteredEntriesCount);
 
 		return trashEntriesList;
+	}
+
+	public void moveEntry(
+			String className, long classPK, long destinationContainerModelId,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		PermissionChecker permissionChecker = getPermissionChecker();
+
+		TrashEntry entry = trashEntryLocalService.getEntry(className, classPK);
+
+		TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(
+			className);
+
+		if (!trashHandler.hasTrashPermission(
+				permissionChecker, entry.getGroupId(),
+				destinationContainerModelId, TrashActionKeys.MOVE)) {
+
+			throw new PrincipalException();
+		}
+
+		if (trashHandler.isInTrash(classPK) &&
+			!trashHandler.hasTrashPermission(
+				permissionChecker, 0, classPK, TrashActionKeys.RESTORE)) {
+
+			throw new PrincipalException();
+		}
+
+		trashHandler.checkDuplicateTrashEntry(
+			entry, destinationContainerModelId, StringPool.BLANK);
+
+		if (trashHandler.isInTrash(classPK)) {
+			trashHandler.moveTrashEntry(
+				getUserId(), classPK, destinationContainerModelId,
+				serviceContext);
+		}
+		else {
+			trashHandler.moveEntry(
+				getUserId(), classPK, destinationContainerModelId,
+				serviceContext);
+		}
+	}
+
+	public TrashEntry restoreEntry(long entryId)
+			throws PortalException, SystemException {
+
+		return restoreEntry(entryId, 0, null);
+	}
+
+	public TrashEntry restoreEntry(
+			long entryId, long overrideClassPK, String name)
+		throws PortalException, SystemException {
+
+		PermissionChecker permissionChecker = getPermissionChecker();
+
+		TrashEntry entry = trashEntryPersistence.findByPrimaryKey(entryId);
+
+		TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(
+			entry.getClassName());
+
+		if (!trashHandler.hasTrashPermission(
+				permissionChecker, 0, entry.getClassPK(),
+				TrashActionKeys.RESTORE)) {
+
+			throw new PrincipalException();
+		}
+
+		if (overrideClassPK > 0) {
+			if (!trashHandler.hasTrashPermission(
+					permissionChecker, 0, overrideClassPK,
+					TrashActionKeys.OVERWRITE)) {
+
+				throw new PrincipalException();
+			}
+
+			trashHandler.deleteTrashEntry(overrideClassPK);
+		}
+		else if (name != null) {
+			if (!trashHandler.hasTrashPermission(
+					permissionChecker, 0, entry.getClassPK(),
+					TrashActionKeys.RENAME)) {
+
+				throw new PrincipalException();
+			}
+
+			trashHandler.updateTitle(entry.getClassPK(), name);
+		}
+
+		trashHandler.checkDuplicateTrashEntry(
+			entry, TrashEntryConstants.DEFAULT_CONTAINER_ID, null);
+
+		trashHandler.restoreTrashEntry(getUserId(), entry.getClassPK());
+
+		return entry;
+	}
+
+	protected void deleteEntry(TrashEntry entry)
+		throws PortalException, SystemException {
+
+		PermissionChecker permissionChecker = getPermissionChecker();
+
+		TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(
+			entry.getClassName());
+
+		if (!trashHandler.hasTrashPermission(
+				permissionChecker, 0, entry.getClassPK(), ActionKeys.DELETE)) {
+
+			throw new PrincipalException();
+		}
+
+		trashHandler.deleteTrashEntry(entry.getClassPK());
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

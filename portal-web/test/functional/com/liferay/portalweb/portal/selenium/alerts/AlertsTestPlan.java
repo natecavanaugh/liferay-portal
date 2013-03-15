@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,6 +16,7 @@ package com.liferay.portalweb.portal.selenium.alerts;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
 import com.liferay.portalweb.portal.selenium.alerts.assertconfirmation.AssertConfirmationTests;
+import com.liferay.portalweb.portal.selenium.alerts.waitforconfirmation.WaitForConfirmationTests;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -29,6 +30,7 @@ public class AlertsTestPlan extends BaseTestSuite {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(AssertConfirmationTests.suite());
+		testSuite.addTest(WaitForConfirmationTests.suite());
 
 		return testSuite;
 	}

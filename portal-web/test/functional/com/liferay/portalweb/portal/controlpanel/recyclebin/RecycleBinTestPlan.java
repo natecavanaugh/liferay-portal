@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,6 +17,7 @@ package com.liferay.portalweb.portal.controlpanel.recyclebin;
 import com.liferay.portalweb.portal.BaseTestSuite;
 import com.liferay.portalweb.portal.controlpanel.recyclebin.blogs.BlogsTestPlan;
 import com.liferay.portalweb.portal.controlpanel.recyclebin.bookmarks.BookmarksTestPlan;
+import com.liferay.portalweb.portal.controlpanel.recyclebin.messageboards.MessageBoardsTestPlan;
 import com.liferay.portalweb.portal.controlpanel.recyclebin.webcontent.WebContentTestPlan;
 import com.liferay.portalweb.portal.controlpanel.recyclebin.wiki.WikiTestPlan;
 
@@ -33,6 +34,7 @@ public class RecycleBinTestPlan extends BaseTestSuite {
 
 		testSuite.addTest(BlogsTestPlan.suite());
 		testSuite.addTest(BookmarksTestPlan.suite());
+		testSuite.addTest(MessageBoardsTestPlan.suite());
 		testSuite.addTest(WebContentTestPlan.suite());
 		testSuite.addTest(WikiTestPlan.suite());
 

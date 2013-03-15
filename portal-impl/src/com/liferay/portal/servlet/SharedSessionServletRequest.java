@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -75,8 +75,13 @@ public class SharedSessionServletRequest extends HttpServletRequestWrapper {
 			return _portalSession;
 		}
 		else {
-			return getSharedSessionWrapper(
-				_portalSession, super.getSession(create));
+			HttpSession portletSession = super.getSession(create);
+
+			if (portletSession != null) {
+				return getSharedSessionWrapper(_portalSession, portletSession);
+			}
+
+			return null;
 		}
 	}
 

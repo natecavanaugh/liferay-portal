@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -147,7 +147,7 @@ String scopeAvailableFields = ParamUtil.getString(request, "scopeAvailableFields
 				dialog: {
 					width:680
 				},
-				saveCallback: '<%= renderResponse.getNamespace() + "selectDDMStructure" %>',
+				eventName: '<portlet:namespace />selectDDMStructure',
 				showGlobalScope: true,
 				showManageTemplates: false,
 				showToolbar: true,
@@ -156,6 +156,17 @@ String scopeAvailableFields = ParamUtil.getString(request, "scopeAvailableFields
 				structureType: 'com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata',
 				struts_action: '/dynamic_data_mapping/select_structure',
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "metadata-sets") %>'
+			},
+			function(event){
+				var A = AUI();
+
+				var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />ddmStructuresSearchContainer');
+
+				var ddmStructureLink = '<a class="modify-link" data-rowId="' + ddmStructureId + '" href="javascript:;"><%= UnicodeFormatter.toString(removeStructureIcon) %></a>';
+
+				searchContainer.addRow([event.name, ddmStructureLink], event.ddmstructureid);
+
+				searchContainer.updateDataStore();
 			}
 		);
 	}
@@ -169,27 +180,6 @@ String scopeAvailableFields = ParamUtil.getString(request, "scopeAvailableFields
 			submitForm(document.<portlet:namespace />fm);
 		},
 		['liferay-portlet-dynamic-data-mapping']
-	);
-
-	Liferay.provide(
-		window,
-		'<portlet:namespace />selectDDMStructure',
-		function(ddmStructureId, ddmStructureName, dialog) {
-			var A = AUI();
-
-			var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />ddmStructuresSearchContainer');
-
-			var ddmStructureLink = '<a class="modify-link" data-rowId="' + ddmStructureId + '" href="javascript:;"><%= UnicodeFormatter.toString(removeStructureIcon) %></a>';
-
-			searchContainer.addRow([ddmStructureName, ddmStructureLink], ddmStructureId);
-
-			searchContainer.updateDataStore();
-
-			if (dialog) {
-				dialog.close();
-			}
-		},
-		['liferay-search-container']
 	);
 </aui:script>
 

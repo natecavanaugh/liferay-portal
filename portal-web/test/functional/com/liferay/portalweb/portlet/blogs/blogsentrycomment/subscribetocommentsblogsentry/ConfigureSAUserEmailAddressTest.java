@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,7 +40,7 @@ public class ConfigureSAUserEmailAddressTest extends BaseTestCase {
 			RuntimeVariables.replace("My Account"));
 		selenium.waitForPageToLoad("30000");
 		selenium.type("//input[@id='_2_emailAddress']",
-			RuntimeVariables.replace("liferay.qa.testing.trunk@gmail.com"));
+			RuntimeVariables.replace("liferay.qa3@gmail.com"));
 		selenium.clickAt("//input[@value='Save']",
 			RuntimeVariables.replace("Save"));
 		selenium.waitForPageToLoad("30000");

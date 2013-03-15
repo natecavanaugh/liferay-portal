@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,12 +20,9 @@ import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationEventListener;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.security.pacl.PACLConstants;
 import com.liferay.portal.kernel.security.pacl.permission.PortalMessageBusPermission;
 
 import java.lang.reflect.Method;
-
-import java.security.Permission;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,24 +145,16 @@ public abstract class AbstractMessagingConfigurator
 
 	public void setDestinations(List<Destination> destinations) {
 		for (Destination destination : destinations) {
-			SecurityManager securityManager = System.getSecurityManager();
-
-			if (securityManager != null) {
-				Permission permission = new PortalMessageBusPermission(
-					PACLConstants.PORTAL_MESSAGE_BUS_PERMISSION_LISTEN,
+			try {
+				PortalMessageBusPermission.checkPermission(
 					destination.getName());
-
-				try {
-					securityManager.checkPermission(permission);
+			}
+			catch (SecurityException se) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Rejecting destination " + destination.getName());
 				}
-				catch (SecurityException se) {
-					if (_log.isInfoEnabled()) {
-						_log.info(
-							"Rejecting destination " + destination.getName());
-					}
 
-					continue;
-				}
+				continue;
 			}
 
 			_destinations.add(destination);

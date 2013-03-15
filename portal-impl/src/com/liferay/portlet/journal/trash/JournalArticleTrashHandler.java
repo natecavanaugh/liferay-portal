@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -27,7 +27,6 @@ import com.liferay.portlet.journal.model.JournalArticleResource;
 import com.liferay.portlet.journal.model.JournalFolder;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portlet.journal.service.JournalArticleResourceLocalServiceUtil;
-import com.liferay.portlet.journal.service.JournalArticleServiceUtil;
 import com.liferay.portlet.journal.service.permission.JournalArticlePermission;
 import com.liferay.portlet.journal.util.JournalUtil;
 import com.liferay.portlet.trash.DuplicateEntryException;
@@ -40,6 +39,7 @@ import javax.portlet.PortletRequest;
  *
  * @author Levente Hudák
  * @author Sergio González
+ * @author Zsolt Berentey
  */
 public class JournalArticleTrashHandler extends JournalBaseTrashHandler {
 
@@ -79,22 +79,14 @@ public class JournalArticleTrashHandler extends JournalBaseTrashHandler {
 		}
 	}
 
-	public void deleteTrashEntries(long[] classPKs, boolean checkPermission)
+	public void deleteTrashEntry(long classPK)
 		throws PortalException, SystemException {
 
-		for (long classPK : classPKs) {
-			JournalArticle article =
-				JournalArticleLocalServiceUtil.getLatestArticle(classPK);
+		JournalArticle article =
+			JournalArticleLocalServiceUtil.getLatestArticle(classPK);
 
-			if (checkPermission) {
-				JournalArticleServiceUtil.deleteArticle(
-					article.getGroupId(), article.getArticleId(), null, null);
-			}
-			else {
-				JournalArticleLocalServiceUtil.deleteArticle(
-					article.getGroupId(), article.getArticleId(), null);
-			}
-		}
+		JournalArticleLocalServiceUtil.deleteArticle(
+			article.getGroupId(), article.getArticleId(), null);
 	}
 
 	public String getClassName() {
@@ -140,6 +132,16 @@ public class JournalArticleTrashHandler extends JournalBaseTrashHandler {
 	}
 
 	@Override
+	public ContainerModel getTrashContainer(long classPK)
+		throws PortalException, SystemException {
+
+		JournalArticle article =
+			JournalArticleLocalServiceUtil.getLatestArticle(classPK);
+
+		return article.getTrashContainer();
+	}
+
+	@Override
 	public TrashRenderer getTrashRenderer(long classPK)
 		throws PortalException, SystemException {
 
@@ -180,35 +182,37 @@ public class JournalArticleTrashHandler extends JournalBaseTrashHandler {
 
 	@Override
 	public void moveEntry(
-			long classPK, long containerModelId, ServiceContext serviceContext)
+			long userId, long classPK, long containerModelId,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		JournalArticle article =
 			JournalArticleLocalServiceUtil.getLatestArticle(classPK);
 
-		JournalArticleServiceUtil.moveArticle(
+		JournalArticleLocalServiceUtil.moveArticle(
 			article.getGroupId(), article.getArticleId(), containerModelId);
 	}
 
 	@Override
 	public void moveTrashEntry(
-			long classPK, long containerId, ServiceContext serviceContext)
+			long userId, long classPK, long containerId,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		JournalArticle article =
 			JournalArticleLocalServiceUtil.getLatestArticle(classPK);
 
-		JournalArticleServiceUtil.moveArticleFromTrash(
-			article.getGroupId(), article.getArticleId(), containerId,
-			serviceContext);
+		JournalArticleLocalServiceUtil.moveArticleFromTrash(
+			userId, article.getGroupId(), article, containerId, serviceContext);
 	}
 
-	public void restoreTrashEntries(long[] classPKs)
+	public void restoreTrashEntry(long userId, long classPK)
 		throws PortalException, SystemException {
 
-		for (long classPK : classPKs) {
-			JournalArticleServiceUtil.restoreArticleFromTrash(classPK);
-		}
+		JournalArticle article =
+			JournalArticleLocalServiceUtil.getLatestArticle(classPK);
+
+		JournalArticleLocalServiceUtil.restoreArticleFromTrash(userId, article);
 	}
 
 	@Override

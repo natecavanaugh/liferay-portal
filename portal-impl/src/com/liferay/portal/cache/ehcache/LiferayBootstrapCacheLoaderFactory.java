@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,7 +28,7 @@ import net.sf.ehcache.bootstrap.BootstrapCacheLoaderFactory;
  * @author Brian Wing Shun Chan
  */
 public class LiferayBootstrapCacheLoaderFactory
-	extends BootstrapCacheLoaderFactory<BootstrapCacheLoader> {
+	extends BootstrapCacheLoaderFactory {
 
 	public LiferayBootstrapCacheLoaderFactory() {
 		String className = PropsValues.EHCACHE_BOOTSTRAP_CACHE_LOADER_FACTORY;
@@ -39,8 +39,8 @@ public class LiferayBootstrapCacheLoaderFactory
 
 		try {
 			_bootstrapCacheLoaderFactory =
-				(BootstrapCacheLoaderFactory<BootstrapCacheLoader>)
-					InstanceFactory.newInstance(className);
+				(BootstrapCacheLoaderFactory)InstanceFactory.newInstance(
+					className);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -58,7 +58,6 @@ public class LiferayBootstrapCacheLoaderFactory
 	private static Log _log = LogFactoryUtil.getLog(
 		LiferayBootstrapCacheLoaderFactory.class);
 
-	private BootstrapCacheLoaderFactory<BootstrapCacheLoader>
-		_bootstrapCacheLoaderFactory;
+	private BootstrapCacheLoaderFactory _bootstrapCacheLoaderFactory;
 
 }

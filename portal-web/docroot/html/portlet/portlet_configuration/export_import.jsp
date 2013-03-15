@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -117,6 +117,24 @@ if (layout.isTypeControlPanel()) {
 			<c:if test="<%= pde.getType() == PortletDataException.START_DATE_AFTER_END_DATE %>">
 				<liferay-ui:message key="please-enter-a-start-date-that-comes-before-the-end-date" />
 			</c:if>
+		</liferay-ui:error>
+
+		<liferay-ui:error exception="<%= RecordSetDuplicateRecordSetKeyException.class %>">
+
+			<%
+			RecordSetDuplicateRecordSetKeyException rsdrske = (RecordSetDuplicateRecordSetKeyException)errorException;
+			%>
+
+			<liferay-ui:message arguments="<%= rsdrske.getRecordSetKey() %>" key="dynamic-data-list-record-set-with-record-set-key-x-already-exists" />
+		</liferay-ui:error>
+
+		<liferay-ui:error exception="<%= StructureDuplicateStructureKeyException.class %>">
+
+			<%
+			StructureDuplicateStructureKeyException sdske = (StructureDuplicateStructureKeyException)errorException;
+			%>
+
+			<liferay-ui:message arguments="<%= sdske.getStructureKey() %>" key="dynamic-data-mapping-structure-with-structure-key-x-already-exists" />
 		</liferay-ui:error>
 
 		<portlet:actionURL var="exportImportPagesURL">

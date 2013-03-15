@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,6 +18,9 @@ import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.model.EventDefinition;
 import com.liferay.portal.model.PortletApp;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -29,6 +32,14 @@ public class EventDefinitionImpl implements EventDefinition {
 		_qName = qName;
 		_valueType = valueType;
 		_portletApp = portletApp;
+
+		_qNames = new HashSet<QName>();
+
+		_qNames.add(_qName);
+	}
+
+	public void addAliasQName(QName aliasQName) {
+		_qNames.add(aliasQName);
 	}
 
 	public PortletApp getPortletApp() {
@@ -37,6 +48,10 @@ public class EventDefinitionImpl implements EventDefinition {
 
 	public QName getQName() {
 		return _qName;
+	}
+
+	public Set<QName> getQNames() {
+		return _qNames;
 	}
 
 	public String getValueType() {
@@ -57,6 +72,7 @@ public class EventDefinitionImpl implements EventDefinition {
 
 	private PortletApp _portletApp;
 	private QName _qName;
+	private Set<QName> _qNames;
 	private String _valueType;
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -349,7 +349,11 @@ public class LayoutSetLocalServiceStagingAdvice
 			returnValue = wrapLayoutSet((LayoutSet)returnValue);
 		}
 		else if (returnValue instanceof List<?>) {
-			returnValue = wrapLayoutSets((List<LayoutSet>)returnValue);
+			List<?> list = (List<?>)returnValue;
+
+			if (!list.isEmpty() && (list.get(0) instanceof LayoutSet)) {
+				returnValue = wrapLayoutSets((List<LayoutSet>)returnValue);
+			}
 		}
 
 		return returnValue;

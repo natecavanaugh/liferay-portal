@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -288,12 +288,12 @@ public abstract class DLFileEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the document library file entry with the UUID in the group.
+	 * Returns the document library file entry matching the UUID and group.
 	 *
-	 * @param uuid the UUID of document library file entry
-	 * @param groupId the group id of the document library file entry
-	 * @return the document library file entry
-	 * @throws PortalException if a document library file entry with the UUID in the group could not be found
+	 * @param uuid the document library file entry's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching document library file entry
+	 * @throws PortalException if a matching document library file entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	public DLFileEntry getDLFileEntryByUuidAndGroupId(String uuid, long groupId)

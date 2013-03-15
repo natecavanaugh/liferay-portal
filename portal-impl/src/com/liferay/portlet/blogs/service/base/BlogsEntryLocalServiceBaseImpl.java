@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -272,12 +272,12 @@ public abstract class BlogsEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the blogs entry with the UUID in the group.
+	 * Returns the blogs entry matching the UUID and group.
 	 *
-	 * @param uuid the UUID of blogs entry
-	 * @param groupId the group id of the blogs entry
-	 * @return the blogs entry
-	 * @throws PortalException if a blogs entry with the UUID in the group could not be found
+	 * @param uuid the blogs entry's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching blogs entry
+	 * @throws PortalException if a matching blogs entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	public BlogsEntry getBlogsEntryByUuidAndGroupId(String uuid, long groupId)

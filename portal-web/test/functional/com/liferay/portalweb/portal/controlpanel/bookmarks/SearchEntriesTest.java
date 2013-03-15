@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -44,8 +44,10 @@ public class SearchEntriesTest extends BaseTestCase {
 			RuntimeVariables.replace("Search"));
 		selenium.waitForPageToLoad("30000");
 		assertEquals(RuntimeVariables.replace("Test Bookmark"),
-			selenium.getText("//tr[contains(.,'Test Bookmark')]/td[3]/a"));
+			selenium.getText(
+				"//tr[contains(.,'Test Bookmark')]/td[1]/span/a/span"));
 		assertEquals(RuntimeVariables.replace("Test Bookmark 2"),
-			selenium.getText("//tr[contains(.,'Test Bookmark 2')]/td[3]/a"));
+			selenium.getText(
+				"//tr[contains(.,'Test Bookmark 2')]/td[1]/span/a/span"));
 	}
 }

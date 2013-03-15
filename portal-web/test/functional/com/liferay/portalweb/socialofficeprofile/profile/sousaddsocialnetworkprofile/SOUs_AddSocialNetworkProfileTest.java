@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -42,7 +42,7 @@ public class SOUs_AddSocialNetworkProfileTest extends BaseTestCase {
 			RuntimeVariables.replace("socialoffice01"));
 		selenium.type("//input[contains(@id,'twitterSn')]",
 			RuntimeVariables.replace("socialoffice01"));
-		Thread.sleep(5000);
+		Thread.sleep(1000);
 		selenium.clickAt("//input[@value='Save']",
 			RuntimeVariables.replace("Save"));
 		selenium.waitForVisible("//div[@data-title='Social Network']/h3");

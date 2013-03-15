@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,19 +19,17 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
 import com.liferay.portal.security.pacl.checker.AuthorizationProperty;
 import com.liferay.portal.security.pacl.checker.Checker;
 import com.liferay.portal.security.pacl.checker.JNDIChecker;
-import com.liferay.portal.security.pacl.checker.PortalServiceChecker;
 import com.liferay.portal.security.pacl.checker.SQLChecker;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.IOException;
 
-import java.lang.reflect.Method;
-
+import java.security.AccessController;
 import java.security.Permission;
+import java.security.PrivilegedAction;
 
 import java.util.Enumeration;
 import java.util.Map;
@@ -59,23 +57,6 @@ public class GeneratingPACLPolicy extends ActivePACLPolicy {
 		if (!jndiChecker.hasJNDI(name)) {
 			AuthorizationProperty authorizationProperty =
 				jndiChecker.generateAuthorizationProperty(name);
-
-			mergeAuthorizationProperty(authorizationProperty);
-		}
-
-		return true;
-	}
-
-	@Override
-	public boolean hasPortalService(
-		Object object, Method method, Object[] arguments) {
-
-		PortalServiceChecker portalServiceChecker = getPortalServiceChecker();
-
-		if (!portalServiceChecker.hasService(object, method, arguments)) {
-			AuthorizationProperty authorizationProperty =
-				portalServiceChecker.generateAuthorizationProperty(
-					object, method, arguments);
 
 			mergeAuthorizationProperty(authorizationProperty);
 		}
@@ -125,49 +106,8 @@ public class GeneratingPACLPolicy extends ActivePACLPolicy {
 			return;
 		}
 
-		String key = authorizationProperty.getKey();
-
-		Set<String> values = _properties.get(key);
-
-		boolean modified = false;
-
-		if (values == null) {
-			values = getPropertySet(key);
-
-			modified = true;
-		}
-
-		for (String value : authorizationProperty.getValues()) {
-			if (!values.contains(value)) {
-				values.add(value);
-
-				modified = true;
-			}
-		}
-
-		if (!modified) {
-			return;
-		}
-
-		_reentrantLock.lock();
-
-		try {
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					getServletContextName() +
-						" generated authorization property " +
-							authorizationProperty);
-			}
-
-			_properties.put(key, values);
-
-			mergeExistingProperties();
-
-			writePACLPolicyFile();
-		}
-		finally {
-			_reentrantLock.unlock();
-		}
+		AccessController.doPrivileged(
+			new AuthorizationPropertyPrivilegedAction(authorizationProperty));
 	}
 
 	protected void mergeExistingProperties() {
@@ -195,11 +135,7 @@ public class GeneratingPACLPolicy extends ActivePACLPolicy {
 	}
 
 	protected void writePACLPolicyFile() {
-		boolean enabled = PortalSecurityManagerThreadLocal.isEnabled();
-
 		try {
-			PortalSecurityManagerThreadLocal.setEnabled(false);
-
 			StringBundler sb = new StringBundler();
 
 			for (Map.Entry<String, Set<String>> entry :
@@ -236,9 +172,6 @@ public class GeneratingPACLPolicy extends ActivePACLPolicy {
 		catch (IOException ioe) {
 			_log.error(ioe, ioe);
 		}
-		finally {
-			PortalSecurityManagerThreadLocal.setEnabled(enabled);
-		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(GeneratingPACLPolicy.class);
@@ -246,5 +179,66 @@ public class GeneratingPACLPolicy extends ActivePACLPolicy {
 	private Map<String, Set<String>> _properties =
 		new ConcurrentSkipListMap<String, Set<String>>();
 	private ReentrantLock _reentrantLock = new ReentrantLock();
+
+	private class AuthorizationPropertyPrivilegedAction
+		implements PrivilegedAction<Void> {
+
+		public AuthorizationPropertyPrivilegedAction(
+			AuthorizationProperty authorizationProperty) {
+
+			_authorizationProperty = authorizationProperty;
+		}
+
+		public Void run() {
+			String key = _authorizationProperty.getKey();
+
+			Set<String> values = _properties.get(key);
+
+			boolean modified = false;
+
+			if (values == null) {
+				values = getPropertySet(key);
+
+				modified = true;
+			}
+
+			for (String value : _authorizationProperty.getValues()) {
+				if (!values.contains(value)) {
+					values.add(value);
+
+					modified = true;
+				}
+			}
+
+			if (!modified) {
+				return null;
+			}
+
+			_reentrantLock.lock();
+
+			try {
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						getServletContextName() +
+							" generated authorization property " +
+								_authorizationProperty);
+				}
+
+				_properties.put(key, values);
+
+				mergeExistingProperties();
+
+				writePACLPolicyFile();
+			}
+			finally {
+				_reentrantLock.unlock();
+			}
+
+			return null;
+		}
+
+		private AuthorizationProperty _authorizationProperty;
+
+	}
 
 }

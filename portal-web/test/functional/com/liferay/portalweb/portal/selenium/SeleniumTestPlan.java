@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,6 +21,7 @@ import com.liferay.portalweb.portal.selenium.browsercommands.BrowserCommandsTest
 import com.liferay.portalweb.portal.selenium.clicking.ClickingTestPlan;
 import com.liferay.portalweb.portal.selenium.javascript.JavascriptTestPlan;
 import com.liferay.portalweb.portal.selenium.list.ListTestPlan;
+import com.liferay.portalweb.portal.selenium.mouseactions.MouseActionsTestPlan;
 import com.liferay.portalweb.portal.selenium.selection.SelectionTestPlan;
 import com.liferay.portalweb.portal.selenium.typing.TypingTestPlan;
 import com.liferay.portalweb.portal.selenium.waitfor.WaitForTestPlan;
@@ -42,6 +43,7 @@ public class SeleniumTestPlan extends BaseTestSuite {
 		testSuite.addTest(ClickingTestPlan.suite());
 		testSuite.addTest(JavascriptTestPlan.suite());
 		testSuite.addTest(ListTestPlan.suite());
+		testSuite.addTest(MouseActionsTestPlan.suite());
 		testSuite.addTest(SelectionTestPlan.suite());
 		testSuite.addTest(TypingTestPlan.suite());
 		testSuite.addTest(WaitForTestPlan.suite());

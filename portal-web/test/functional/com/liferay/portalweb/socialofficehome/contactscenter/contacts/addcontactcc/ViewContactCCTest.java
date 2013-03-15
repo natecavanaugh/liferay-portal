@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,7 +34,7 @@ public class ViewContactCCTest extends BaseTestCase {
 				"//input[@id='_1_WAR_contactsportlet_name']"));
 		selenium.type("//input[@id='_1_WAR_contactsportlet_name']",
 			RuntimeVariables.replace("social"));
-		Thread.sleep(5000);
+		Thread.sleep(1000);
 		assertEquals(RuntimeVariables.replace("Social01 Office01 Contact01"),
 			selenium.getText("//div[@class='lfr-contact-name']"));
 		selenium.clickAt("//div[@class='lfr-contact-name']",

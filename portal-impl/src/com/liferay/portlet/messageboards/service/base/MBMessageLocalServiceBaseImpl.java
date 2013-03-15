@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -283,12 +283,12 @@ public abstract class MBMessageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the message-boards message with the UUID in the group.
+	 * Returns the message-boards message matching the UUID and group.
 	 *
-	 * @param uuid the UUID of message-boards message
-	 * @param groupId the group id of the message-boards message
-	 * @return the message-boards message
-	 * @throws PortalException if a message-boards message with the UUID in the group could not be found
+	 * @param uuid the message-boards message's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching message-boards message
+	 * @throws PortalException if a matching message-boards message could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	public MBMessage getMBMessageByUuidAndGroupId(String uuid, long groupId)

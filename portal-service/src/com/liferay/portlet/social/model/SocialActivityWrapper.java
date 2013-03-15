@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -513,6 +513,15 @@ public class SocialActivityWrapper implements SocialActivity,
 	public com.liferay.portlet.asset.model.AssetEntry getAssetEntry()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _socialActivity.getAssetEntry();
+	}
+
+	public java.lang.String getExtraDataValue(java.lang.String key)
+		throws com.liferay.portal.kernel.json.JSONException {
+		return _socialActivity.getExtraDataValue(key);
+	}
+
+	public boolean isClassName(java.lang.String className) {
+		return _socialActivity.isClassName(className);
 	}
 
 	public void setAssetEntry(

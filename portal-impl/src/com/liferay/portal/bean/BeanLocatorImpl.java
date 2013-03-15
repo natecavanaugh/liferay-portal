@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,15 +19,10 @@ import com.liferay.portal.kernel.bean.BeanLocatorException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
-import com.liferay.portal.kernel.security.pacl.PACLConstants;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.util.ProxyUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.security.pacl.PACLBeanHandler;
 import com.liferay.portal.service.ResourceService;
-import com.liferay.portal.service.persistence.BasePersistence;
 import com.liferay.portal.service.persistence.ResourcePersistence;
-
-import java.security.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +53,8 @@ public class BeanLocatorImpl implements BeanLocator {
 	}
 
 	public ClassLoader getClassLoader() {
+		PortalRuntimePermission.checkGetClassLoader(_paclServletContextName);
+
 		return _classLoader;
 	}
 
@@ -74,9 +71,14 @@ public class BeanLocatorImpl implements BeanLocator {
 		}
 	}
 
-	public <T> Map<String, T> locate(Class<T> clazz) {
+	public <T> Map<String, T> locate(Class<T> clazz)
+		throws BeanLocatorException {
+
 		try {
-			return _applicationContext.getBeansOfType(clazz);
+			return doLocate(clazz);
+		}
+		catch (SecurityException se) {
+			throw se;
 		}
 		catch (Exception e) {
 			throw new BeanLocatorException(e);
@@ -120,8 +122,14 @@ public class BeanLocatorImpl implements BeanLocator {
 		_paclServletContextName = paclServletContextName;
 	}
 
-	public void setPACLWrapPersistence(boolean paclWrapPersistence) {
-		_paclWrapPersistence = paclWrapPersistence;
+	/**
+	 * This method ensures the calls stack is the proper length.
+	 */
+	protected <T> Map<String, T> doLocate(Class<T> clazz) throws Exception {
+		PortalRuntimePermission.checkGetBeanProperty(
+			_paclServletContextName, clazz);
+
+		return _applicationContext.getBeansOfType(clazz);
 	}
 
 	protected Object doLocate(String name) throws Exception {
@@ -130,16 +138,11 @@ public class BeanLocatorImpl implements BeanLocator {
 		}
 
 		if (name.equals("portletClassLoader")) {
-			SecurityManager securityManager = System.getSecurityManager();
-
-			if (securityManager != null) {
-				Permission permission = new RuntimePermission(
-					PACLConstants.RUNTIME_PERMISSION_GET_CLASSLOADER.concat(
-						StringPool.PERIOD).concat(_paclServletContextName));
-
-				securityManager.checkPermission(permission);
-			}
+			PortalRuntimePermission.checkGetClassLoader(
+				_paclServletContextName);
 		}
+
+		Object bean = null;
 
 		if (name.endsWith(VELOCITY_SUFFIX)) {
 			Object velocityBean = _velocityBeans.get(name);
@@ -148,40 +151,36 @@ public class BeanLocatorImpl implements BeanLocator {
 				String originalName = name.substring(
 					0, name.length() - VELOCITY_SUFFIX.length());
 
-				Object bean = _applicationContext.getBean(originalName);
+				Object curBean = _applicationContext.getBean(originalName);
 
 				velocityBean = ProxyUtil.newProxyInstance(
-					_classLoader, getInterfaces(bean),
-					new VelocityBeanHandler(bean, _classLoader));
+					_classLoader, getInterfaces(curBean),
+					new VelocityBeanHandler(curBean, _classLoader));
 
 				_velocityBeans.put(name, velocityBean);
 			}
 
-			return velocityBean;
+			bean = velocityBean;
+		}
+		else {
+			bean = _applicationContext.getBean(name);
 		}
 
-		Object bean = _applicationContext.getBean(name);
-
-		if (_paclWrapPersistence && (bean != null) &&
-			(bean instanceof BasePersistence)) {
-
-			Object paclPersistenceBean = _paclPersistenceBeans.get(name);
-
-			if (paclPersistenceBean != null) {
-				return paclPersistenceBean;
-			}
-
-			paclPersistenceBean = ProxyUtil.newProxyInstance(
-				_classLoader, getInterfaces(bean), new PACLBeanHandler(bean));
-
-			_paclPersistenceBeans.put(name, paclPersistenceBean);
-
-			return paclPersistenceBean;
+		if (bean == null) {
+			return bean;
 		}
+
+		PortalRuntimePermission.checkGetBeanProperty(
+			_paclServletContextName, bean.getClass());
 
 		return bean;
 	}
 
+	/**
+	 * @see {@link
+	 *      com.liferay.portal.security.lang.DoPrivilegedFactory#_getInterfaces(
+	 *      List, Class)}
+	 */
 	protected void getInterfaces(
 		List<Class<?>> interfaceClasses, Class<?> clazz) {
 
@@ -195,6 +194,11 @@ public class BeanLocatorImpl implements BeanLocator {
 		}
 	}
 
+	/**
+	 * @see {@link
+	 *      com.liferay.portal.security.lang.DoPrivilegedFactory#_getInterfaces(
+	 *      Object)}
+	 */
 	protected Class<?>[] getInterfaces(Object object) {
 		List<Class<?>> interfaceClasses = new ArrayList<Class<?>>();
 
@@ -219,10 +223,7 @@ public class BeanLocatorImpl implements BeanLocator {
 	private ClassLoader _classLoader;
 	private Map<String, Object> _deprecatedBeans =
 		new ConcurrentHashMap<String, Object>();
-	private Map<String, Object> _paclPersistenceBeans =
-		new ConcurrentHashMap<String, Object>();
 	private String _paclServletContextName;
-	private boolean _paclWrapPersistence;
 	private Map<String, Object> _velocityBeans =
 		new ConcurrentHashMap<String, Object>();
 

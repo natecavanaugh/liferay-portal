@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,7 +37,7 @@ public class SOUs_EditAddressProfileTest extends BaseTestCase {
 		selenium.clickAt("//div[@data-title='Addresses']",
 			RuntimeVariables.replace("Addresses:"));
 		selenium.waitForVisible("//input[contains(@id,'addressStreet1')]");
-		Thread.sleep(5000);
+		Thread.sleep(1000);
 		selenium.type("//input[contains(@id,'addressStreet1')]",
 			RuntimeVariables.replace("456 Liferay Ln."));
 		selenium.select("//select[contains(@id,'addressCountry')]",

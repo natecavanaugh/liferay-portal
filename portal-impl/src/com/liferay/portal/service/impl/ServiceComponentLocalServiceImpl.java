@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,9 +37,6 @@ import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.ServiceComponent;
-import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
-import com.liferay.portal.security.pacl.PACLPolicy;
-import com.liferay.portal.security.pacl.PACLPolicyManager;
 import com.liferay.portal.service.base.ServiceComponentLocalServiceBaseImpl;
 import com.liferay.portal.tools.servicebuilder.Entity;
 
@@ -188,34 +185,9 @@ public class ServiceComponentLocalServiceImpl
 			String tablesSQL, String sequencesSQL, String indexesSQL)
 		throws Exception {
 
-		PACLPolicy previousPACLPolicy =
-			PortalSecurityManagerThreadLocal.getPACLPolicy();
-
-		boolean checkGetClassLoader =
-			PortalSecurityManagerThreadLocal.isCheckGetClassLoader();
-		boolean checkReadFile =
-			PortalSecurityManagerThreadLocal.isCheckReadFile();
-
-		try {
-			PACLPolicy paclPolicy = PACLPolicyManager.getPACLPolicy(
-				classLoader);
-
-			PortalSecurityManagerThreadLocal.setPACLPolicy(paclPolicy);
-
-			PortalSecurityManagerThreadLocal.setCheckGetClassLoader(false);
-			PortalSecurityManagerThreadLocal.setCheckReadFile(false);
-
-			doUpgradeDB(
-				classLoader, buildNamespace, buildNumber, buildAutoUpgrade,
-				previousServiceComponent, tablesSQL, sequencesSQL, indexesSQL);
-		}
-		finally {
-			PortalSecurityManagerThreadLocal.setPACLPolicy(previousPACLPolicy);
-
-			PortalSecurityManagerThreadLocal.setCheckGetClassLoader(
-				checkGetClassLoader);
-			PortalSecurityManagerThreadLocal.setCheckReadFile(checkReadFile);
-		}
+		doUpgradeDB(
+			classLoader, buildNamespace, buildNumber, buildAutoUpgrade,
+			previousServiceComponent, tablesSQL, sequencesSQL, indexesSQL);
 	}
 
 	public void verifyDB() throws SystemException {

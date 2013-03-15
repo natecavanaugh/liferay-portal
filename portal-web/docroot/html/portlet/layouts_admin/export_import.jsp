@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -87,7 +87,7 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 <aui:form cssClass="lfr-export-dialog" method="post" name="fm1">
 	<c:choose>
 		<c:when test="<%= cmd.equals(Constants.EXPORT) %>">
-			<%@ include file="/html/portlet/layouts_admin/export_import_options.jspf" %>
+			<%@ include file="/html/portlet/layouts_admin/export_options.jspf" %>
 
 			<aui:button-row>
 				<aui:button type="submit" value="export" />
@@ -142,9 +142,27 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 				<liferay-ui:message arguments="<%= new String[] {StringUtil.merge(le.getSourceAvailableLocales(), StringPool.COMMA_AND_SPACE), StringUtil.merge(le.getTargetAvailableLocales(), StringPool.COMMA_AND_SPACE)} %>" key="the-available-languages-in-the-lar-file-x-do-not-match-the-portal's-available-languages-x" />
 			</liferay-ui:error>
 
+			<liferay-ui:error exception="<%= RecordSetDuplicateRecordSetKeyException.class %>">
+
+				<%
+				RecordSetDuplicateRecordSetKeyException rsdrske = (RecordSetDuplicateRecordSetKeyException)errorException;
+				%>
+
+				<liferay-ui:message arguments="<%= rsdrske.getRecordSetKey() %>" key="dynamic-data-list-record-set-with-record-set-key-x-already-exists" />
+			</liferay-ui:error>
+
+			<liferay-ui:error exception="<%= StructureDuplicateStructureKeyException.class %>">
+
+				<%
+				StructureDuplicateStructureKeyException sdske = (StructureDuplicateStructureKeyException)errorException;
+				%>
+
+				<liferay-ui:message arguments="<%= sdske.getStructureKey() %>" key="dynamic-data-mapping-structure-with-structure-key-x-already-exists" />
+			</liferay-ui:error>
+
 			<c:choose>
 				<c:when test="<%= (layout.getGroupId() != groupId) || (layout.isPrivateLayout() != privateLayout) %>">
-					<%@ include file="/html/portlet/layouts_admin/export_import_options.jspf" %>
+					<%@ include file="/html/portlet/layouts_admin/import_options.jspf" %>
 
 					<aui:button-row>
 						<aui:button type="submit" value="import" />

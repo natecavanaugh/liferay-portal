@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -188,12 +188,12 @@ public class DDMContentLocalServiceWrapper implements DDMContentLocalService,
 	}
 
 	/**
-	* Returns the d d m content with the UUID in the group.
+	* Returns the d d m content matching the UUID and group.
 	*
-	* @param uuid the UUID of d d m content
-	* @param groupId the group id of the d d m content
-	* @return the d d m content
-	* @throws PortalException if a d d m content with the UUID in the group could not be found
+	* @param uuid the d d m content's UUID
+	* @param groupId the primary key of the group
+	* @return the matching d d m content
+	* @throws PortalException if a matching d d m content could not be found
 	* @throws SystemException if a system exception occurred
 	*/
 	public com.liferay.portlet.dynamicdatamapping.model.DDMContent getDDMContentByUuidAndGroupId(

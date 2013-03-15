@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -87,5 +87,11 @@ public interface RestrictionsFactory {
 	public Criterion sizeLt(String propertyName, int size);
 
 	public Criterion sizeNe(String propertyName, int size);
+
+	public Criterion sqlRestriction(String sql);
+
+	public Criterion sqlRestriction(String sql, Object value, Type type);
+
+	public Criterion sqlRestriction(String sql, Object[] values, Type[] types);
 
 }

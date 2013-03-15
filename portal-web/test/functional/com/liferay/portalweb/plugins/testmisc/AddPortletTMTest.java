@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -45,8 +45,8 @@ public class AddPortletTMTest extends BaseTestCase {
 		selenium.waitForVisible("//input[@id='layout_configuration_content']");
 		selenium.sendKeys("//input[@id='layout_configuration_content']",
 			RuntimeVariables.replace("t"));
-		selenium.waitForVisible("//li[@title='Test Misc']/p/a");
-		selenium.clickAt("//li[@title='Test Misc']/p/a",
+		selenium.waitForVisible("//li[@title='Test Misc Localized Title']/p/a");
+		selenium.clickAt("//li[@title='Test Misc Localized Title']/p/a",
 			RuntimeVariables.replace("Add"));
 		selenium.waitForVisible("//section");
 		assertTrue(selenium.isVisible("//section"));

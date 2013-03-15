@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,15 +19,21 @@ import com.liferay.portal.kernel.cache.SingleVMPoolUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.template.TemplateResourceThreadLocal;
+import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.IOException;
 import java.io.Reader;
 
 import java.lang.reflect.Field;
+
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.velocity.Template;
@@ -78,6 +84,65 @@ public class LiferayResourceManager extends ResourceManagerImpl {
 			final String encoding)
 		throws Exception, ParseErrorException, ResourceNotFoundException {
 
+		String[] macroTemplateIds = PropsUtil.getArray(
+			PropsKeys.VELOCITY_ENGINE_VELOCIMACRO_LIBRARY);
+
+		for (String macroTemplateId : macroTemplateIds) {
+			if (resourceName.equals(macroTemplateId)) {
+
+				// This resource is provided by the portal, so invoke it from an
+				// access controller
+
+				try {
+					return AccessController.doPrivileged(
+						new ResourceActionPrivilegedAction(
+							resourceName, resourceType, encoding));
+				}
+				catch (PrivilegedActionException pae) {
+					throw (IOException)pae.getException();
+				}
+			}
+		}
+
+		return doGetResource(resourceName, resourceType, encoding);
+	}
+
+	@Override
+	public synchronized void initialize(RuntimeServices runtimeServices)
+		throws Exception {
+
+		ExtendedProperties extendedProperties =
+			runtimeServices.getConfiguration();
+
+		Field field = ReflectionUtil.getDeclaredField(
+			RuntimeInstance.class, "configuration");
+
+		field.set(
+			runtimeServices, new FastExtendedProperties(extendedProperties));
+
+		super.initialize(runtimeServices);
+	}
+
+	private Template _createTemplate(TemplateResource templateResource)
+		throws IOException {
+
+		Template template = new LiferayTemplate(templateResource.getReader());
+
+		template.setEncoding(TemplateConstants.DEFAUT_ENCODING);
+		template.setName(templateResource.getTemplateId());
+		template.setResourceLoader(new LiferayResourceLoader());
+		template.setRuntimeServices(rsvc);
+
+		template.process();
+
+		return template;
+	}
+
+	private Resource doGetResource(
+			final String resourceName, final int resourceType,
+			final String encoding)
+		throws Exception, ParseErrorException, ResourceNotFoundException {
+
 		if (resourceType != ResourceManager.RESOURCE_TEMPLATE) {
 			return super.getResource(resourceName, resourceType, encoding);
 		}
@@ -117,37 +182,6 @@ public class LiferayResourceManager extends ResourceManagerImpl {
 		return template;
 	}
 
-	@Override
-	public synchronized void initialize(RuntimeServices runtimeServices)
-		throws Exception {
-
-		ExtendedProperties extendedProperties =
-			runtimeServices.getConfiguration();
-
-		Field field = ReflectionUtil.getDeclaredField(
-			RuntimeInstance.class, "configuration");
-
-		field.set(
-			runtimeServices, new FastExtendedProperties(extendedProperties));
-
-		super.initialize(runtimeServices);
-	}
-
-	private Template _createTemplate(TemplateResource templateResource)
-		throws IOException {
-
-		Template template = new LiferayTemplate(templateResource.getReader());
-
-		template.setEncoding(TemplateConstants.DEFAUT_ENCODING);
-		template.setName(templateResource.getTemplateId());
-		template.setResourceLoader(new LiferayResourceLoader());
-		template.setRuntimeServices(rsvc);
-
-		template.process();
-
-		return template;
-	}
-
 	private PortalCache<TemplateResource, Object> _portalCache;
 
 	private class LiferayTemplate extends Template {
@@ -179,6 +213,27 @@ public class LiferayResourceManager extends ResourceManagerImpl {
 		}
 
 		private Reader _reader;
+
+	}
+
+	private class ResourceActionPrivilegedAction
+		implements PrivilegedExceptionAction<Resource> {
+
+		public ResourceActionPrivilegedAction(
+			String resourceName, int resourceType, String encoding) {
+
+			_resourceName = resourceName;
+			_resourceType = resourceType;
+			_encoding = encoding;
+		}
+
+		public Resource run() throws Exception {
+			return doGetResource(_resourceName, _resourceType, _encoding);
+		}
+
+		private String _encoding;
+		private String _resourceName;
+		private int _resourceType;
 
 	}
 

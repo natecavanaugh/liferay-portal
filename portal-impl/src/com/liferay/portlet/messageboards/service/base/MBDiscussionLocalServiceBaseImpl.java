@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -234,6 +234,20 @@ public abstract class MBDiscussionLocalServiceBaseImpl
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException, SystemException {
 		return mbDiscussionPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
+	/**
+	 * Returns the message boards discussion matching the UUID and group.
+	 *
+	 * @param uuid the message boards discussion's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching message boards discussion
+	 * @throws PortalException if a matching message boards discussion could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MBDiscussion getMBDiscussionByUuidAndGroupId(String uuid,
+		long groupId) throws PortalException, SystemException {
+		return mbDiscussionPersistence.findByUUID_G(uuid, groupId);
 	}
 
 	/**

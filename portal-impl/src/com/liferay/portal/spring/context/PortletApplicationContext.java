@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.util.AggregateClassLoader;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.PreloadClassLoader;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
+import com.liferay.portal.security.lang.DoPrivilegedFactory;
 import com.liferay.portal.security.pacl.PACLPolicyManager;
 import com.liferay.portal.spring.util.FilterClassLoader;
 import com.liferay.portal.util.ClassLoaderUtil;
@@ -34,6 +34,8 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
@@ -52,17 +54,8 @@ public class PortletApplicationContext extends XmlWebApplicationContext {
 
 	public static ClassLoader getBeanClassLoader() {
 		if (_isUseRestrictedClassLoader()) {
-			boolean enabled = PortalSecurityManagerThreadLocal.isEnabled();
-
-			try {
-				PortalSecurityManagerThreadLocal.setEnabled(false);
-
-				return new PreloadClassLoader(
-					PortletClassLoaderUtil.getClassLoader(), _classes);
-			}
-			finally {
-				PortalSecurityManagerThreadLocal.setEnabled(enabled);
-			}
+			return new PreloadClassLoader(
+				PortletClassLoaderUtil.getClassLoader(), _classes);
 		}
 
 		ClassLoader beanClassLoader =
@@ -113,6 +106,19 @@ public class PortletApplicationContext extends XmlWebApplicationContext {
 		xmlBeanDefinitionReader.setBeanClassLoader(getBeanClassLoader());
 	}
 
+	protected void injectExplicitBean(
+		Class<?> clazz, BeanDefinitionRegistry beanDefinitionRegistry) {
+
+		beanDefinitionRegistry.registerBeanDefinition(
+			clazz.getName(), new RootBeanDefinition(clazz));
+	}
+
+	protected void injectExplicitBeans(
+		BeanDefinitionRegistry beanDefinitionRegistry) {
+
+		injectExplicitBean(DoPrivilegedFactory.class, beanDefinitionRegistry);
+	}
+
 	@Override
 	protected void loadBeanDefinitions(
 		XmlBeanDefinitionReader xmlBeanDefinitionReader) {
@@ -123,13 +129,13 @@ public class PortletApplicationContext extends XmlWebApplicationContext {
 			return;
 		}
 
+		BeanDefinitionRegistry beanDefinitionRegistry =
+			xmlBeanDefinitionReader.getBeanFactory();
+
+		injectExplicitBeans(beanDefinitionRegistry);
+
 		for (String configLocation : configLocations) {
-			boolean checkReadFile =
-				PortalSecurityManagerThreadLocal.isCheckReadFile();
-
 			try {
-				PortalSecurityManagerThreadLocal.setCheckReadFile(false);
-
 				xmlBeanDefinitionReader.loadBeanDefinitions(configLocation);
 			}
 			catch (Exception e) {
@@ -143,10 +149,6 @@ public class PortletApplicationContext extends XmlWebApplicationContext {
 				else {
 					_log.error(e, e);
 				}
-			}
-			finally {
-				PortalSecurityManagerThreadLocal.setCheckReadFile(
-					checkReadFile);
 			}
 		}
 	}

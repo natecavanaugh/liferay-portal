@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,7 +26,12 @@ int totalEntries = GetterUtil.getInteger(request.getAttribute("liferay-ui:trash-
 
 <div class="lfr-message-info taglib-trash-empty">
 	<aui:form action="<%= portletURL %>" name="emptyForm">
-		<liferay-ui:message arguments="<%= LanguageUtil.getTimeDescription(locale, TrashUtil.getMaxAge(themeDisplay.getScopeGroup()) * Time.MINUTE) %>" key="<%= infoMessage %>" />
+
+		<%
+		String trashEntriesMaxAgeTimeDescription = LanguageUtil.getTimeDescription(locale, TrashUtil.getMaxAge(themeDisplay.getScopeGroup()) * Time.MINUTE, true);
+		%>
+
+		<liferay-ui:message arguments="<%= trashEntriesMaxAgeTimeDescription.toLowerCase() %>" key="<%= infoMessage %>" />
 
 		<c:if test="<%= totalEntries > 0 %>">
 			<a class="trash-empty-link" href="javascript:;" id="<%= namespace %>empty"><liferay-ui:message key="<%= emptyMessage %>" /></a>

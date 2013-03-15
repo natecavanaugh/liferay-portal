@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,17 +25,31 @@ public class SearchUserQuotesTest extends BaseTestCase {
 		selenium.selectWindow("null");
 		selenium.selectFrame("relative=top");
 		selenium.open("/web/guest/home/");
-		selenium.waitForVisible("link=Search Test Page");
 		selenium.clickAt("link=Search Test Page",
 			RuntimeVariables.replace("Search Test Page"));
 		selenium.waitForPageToLoad("30000");
 		selenium.waitForVisible("//input[@name='_3_keywords']");
 		selenium.type("//input[@name='_3_keywords']",
-			RuntimeVariables.replace("\"selenium01\""));
+			RuntimeVariables.replace("\"usersn\""));
 		selenium.clickAt("//input[@type='image']",
 			RuntimeVariables.replace("Search"));
 		selenium.waitForPageToLoad("30000");
-		assertEquals(RuntimeVariables.replace("selen01 lenn nium01"),
+		assertEquals(RuntimeVariables.replace("userfn userln"),
 			selenium.getText("//span[@class='asset-entry-title']/a"));
+		assertEquals(RuntimeVariables.replace("User"),
+			selenium.getText("//span[@class='asset-entry-type']"));
+		assertEquals(RuntimeVariables.replace("Showing 1 - 1."),
+			selenium.getText("//div[@class='search-results']"));
+		selenium.type("//input[@name='_3_keywords']",
+			RuntimeVariables.replace("\"userfn\""));
+		selenium.clickAt("//input[@type='image']",
+			RuntimeVariables.replace("Search"));
+		selenium.waitForPageToLoad("30000");
+		assertEquals(RuntimeVariables.replace("userfn userln"),
+			selenium.getText("//span[@class='asset-entry-title']/a"));
+		assertEquals(RuntimeVariables.replace("User"),
+			selenium.getText("//span[@class='asset-entry-type']"));
+		assertEquals(RuntimeVariables.replace("Showing 1 - 1."),
+			selenium.getText("//div[@class='search-results']"));
 	}
 }

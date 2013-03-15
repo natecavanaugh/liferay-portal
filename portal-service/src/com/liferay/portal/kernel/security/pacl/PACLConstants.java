@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -70,11 +70,25 @@ public interface PACLConstants {
 	public static final String PORTAL_RUNTIME_PERMISSION_GET_BEAN_PROPERTY =
 		"getBeanProperty";
 
+	public static final String PORTAL_RUNTIME_PERMISSION_GET_CLASSLOADER =
+		"getClassLoader";
+
+	public static final String PORTAL_RUNTIME_PERMISSION_PORTLET_BAG_POOL =
+		"portletBagPool";
+
+	public static final String
+		PORTAL_RUNTIME_PERMISSION_PORTLET_BAG_POOL_ALL_PORTLETS =
+			"<<ALL PORTLETS>>";
+
 	public static final String PORTAL_RUNTIME_PERMISSION_SEARCH_ENGINE =
 		"searchEngine";
 
 	public static final String PORTAL_RUNTIME_PERMISSION_SET_BEAN_PROPERTY =
 		"setBeanProperty";
+
+	public static final String
+		PORTAL_RUNTIME_PERMISSION_THREAD_POOL_ALL_EXECUTORS =
+			"<<ALL EXECUTORS>>";
 
 	public static final String PORTAL_RUNTIME_PERMISSION_THREAD_POOL_EXECUTOR =
 		"threadPoolExecutor";

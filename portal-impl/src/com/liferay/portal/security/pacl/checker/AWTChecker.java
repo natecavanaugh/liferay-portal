@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -33,18 +33,6 @@ public class AWTChecker extends BaseChecker {
 		initOperations();
 	}
 
-	public boolean implies(Permission permission) {
-		if (_permissions.implies(permission)) {
-			return true;
-		}
-
-		String name = permission.getName();
-
-		logSecurityException(_log, "Attempted operation " + name + " on AWT");
-
-		return false;
-	}
-
 	@Override
 	public AuthorizationProperty generateAuthorizationProperty
 		(Object... arguments) {
@@ -64,6 +52,18 @@ public class AWTChecker extends BaseChecker {
 		authorizationProperty.setValue(permission.getName());
 
 		return authorizationProperty;
+	}
+
+	public boolean implies(Permission permission) {
+		if (_permissions.implies(permission)) {
+			return true;
+		}
+
+		String name = permission.getName();
+
+		logSecurityException(_log, "Attempted operation " + name + " on AWT");
+
+		return false;
 	}
 
 	protected void initOperations() {

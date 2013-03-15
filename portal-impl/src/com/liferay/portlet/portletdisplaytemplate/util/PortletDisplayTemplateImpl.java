@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.servlet.GenericServletWrapper;
 import com.liferay.portal.kernel.servlet.PipingServletResponse;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateContextType;
+import com.liferay.portal.kernel.template.TemplateVariableGroup;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
@@ -45,7 +46,9 @@ import freemarker.template.ObjectWrapper;
 import freemarker.template.TemplateHashModel;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.PortletPreferences;
@@ -161,6 +164,63 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 		return portletDisplayDDMTemplateId;
 	}
 
+	public Map<String, TemplateVariableGroup> getTemplateVariableGroups() {
+		Map<String, TemplateVariableGroup> templateVariableGroups =
+			new LinkedHashMap<String, TemplateVariableGroup>();
+
+		TemplateVariableGroup fieldsTemplateVariableGroup =
+			new TemplateVariableGroup("fields");
+
+		fieldsTemplateVariableGroup.addCollectionVariable(
+			"entries", List.class, PortletDisplayTemplateConstants.ENTRIES,
+			"entries-item", null, "curEntry");
+		fieldsTemplateVariableGroup.addVariable(
+			"entry", null, PortletDisplayTemplateConstants.ENTRY);
+
+		templateVariableGroups.put("fields", fieldsTemplateVariableGroup);
+
+		TemplateVariableGroup generalVariablesTemplateVariableGroup =
+			new TemplateVariableGroup("general-variables");
+
+		generalVariablesTemplateVariableGroup.addVariable(
+			"current-url", String.class,
+			PortletDisplayTemplateConstants.CURRENT_URL);
+		generalVariablesTemplateVariableGroup.addVariable(
+			"locale", Locale.class, PortletDisplayTemplateConstants.LOCALE);
+		generalVariablesTemplateVariableGroup.addVariable(
+			"portlet-preferences", Map.class,
+			PortletDisplayTemplateConstants.PORTLET_PREFERENCES);
+		generalVariablesTemplateVariableGroup.addVariable(
+			"template-id", null,
+			PortletDisplayTemplateConstants.DDM_TEMPLATE_ID);
+		generalVariablesTemplateVariableGroup.addVariable(
+			"theme-display", ThemeDisplay.class,
+			PortletDisplayTemplateConstants.THEME_DISPLAY);
+
+		templateVariableGroups.put(
+			"general-variables", generalVariablesTemplateVariableGroup);
+
+		TemplateVariableGroup utilTemplateVariableGroup =
+			new TemplateVariableGroup("util");
+
+		utilTemplateVariableGroup.addVariable(
+			"http-request", HttpServletRequest.class,
+			PortletDisplayTemplateConstants.REQUEST);
+		utilTemplateVariableGroup.addVariable(
+			"liferay-taglib", VelocityTaglib.class,
+			PortletDisplayTemplateConstants.TAGLIB_LIFERAY);
+		utilTemplateVariableGroup.addVariable(
+			"render-request", RenderRequest.class,
+			PortletDisplayTemplateConstants.RENDER_REQUEST);
+		utilTemplateVariableGroup.addVariable(
+			"render-response", RenderResponse.class,
+			PortletDisplayTemplateConstants.RENDER_RESPONSE);
+
+		templateVariableGroups.put("util", utilTemplateVariableGroup);
+
+		return templateVariableGroups;
+	}
+
 	public String renderDDMTemplate(
 			PageContext pageContext, long ddmTemplateId, List<?> entries)
 		throws Exception {
@@ -180,7 +240,7 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 			PortletDisplayTemplateConstants.DDM_TEMPLATE_ID, ddmTemplateId);
 		contextObjects.put(PortletDisplayTemplateConstants.ENTRIES, entries);
 
-		if (entries.size() == 1) {
+		if (!entries.isEmpty()) {
 			contextObjects.put(
 				PortletDisplayTemplateConstants.ENTRY, entries.get(0));
 		}
@@ -305,6 +365,9 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 		PortletPreferences portletPreferences = renderRequest.getPreferences();
 
 		Map<String, String[]> map = portletPreferences.getMap();
+
+		contextObjects.put(
+			PortletDisplayTemplateConstants.PORTLET_PREFERENCES, map);
 
 		for (Map.Entry<String, String[]> entry : map.entrySet()) {
 			String[] values = entry.getValue();

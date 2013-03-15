@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,6 +15,7 @@
 package com.liferay.portlet.asset.service.persistence;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
@@ -22,6 +23,7 @@ import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
+import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceTestUtil;
@@ -110,6 +112,8 @@ public class AssetTagPersistenceTest {
 
 		AssetTag newAssetTag = _persistence.create(pk);
 
+		newAssetTag.setUuid(ServiceTestUtil.randomString());
+
 		newAssetTag.setGroupId(ServiceTestUtil.nextLong());
 
 		newAssetTag.setCompanyId(ServiceTestUtil.nextLong());
@@ -130,6 +134,7 @@ public class AssetTagPersistenceTest {
 
 		AssetTag existingAssetTag = _persistence.findByPrimaryKey(newAssetTag.getPrimaryKey());
 
+		Assert.assertEquals(existingAssetTag.getUuid(), newAssetTag.getUuid());
 		Assert.assertEquals(existingAssetTag.getTagId(), newAssetTag.getTagId());
 		Assert.assertEquals(existingAssetTag.getGroupId(),
 			newAssetTag.getGroupId());
@@ -188,6 +193,26 @@ public class AssetTagPersistenceTest {
 		AssetTag missingAssetTag = _persistence.fetchByPrimaryKey(pk);
 
 		Assert.assertNull(missingAssetTag);
+	}
+
+	@Test
+	public void testActionableDynamicQuery() throws Exception {
+		final IntegerWrapper count = new IntegerWrapper();
+
+		ActionableDynamicQuery actionableDynamicQuery = new AssetTagActionableDynamicQuery() {
+				@Override
+				protected void performAction(Object object) {
+					AssetTag assetTag = (AssetTag)object;
+
+					Assert.assertNotNull(assetTag);
+
+					count.increment();
+				}
+			};
+
+		actionableDynamicQuery.performActions();
+
+		Assert.assertEquals(count.getValue(), _persistence.countAll());
 	}
 
 	@Test
@@ -274,6 +299,12 @@ public class AssetTagPersistenceTest {
 
 		AssetTagModelImpl existingAssetTagModelImpl = (AssetTagModelImpl)_persistence.findByPrimaryKey(newAssetTag.getPrimaryKey());
 
+		Assert.assertTrue(Validator.equals(
+				existingAssetTagModelImpl.getUuid(),
+				existingAssetTagModelImpl.getOriginalUuid()));
+		Assert.assertEquals(existingAssetTagModelImpl.getGroupId(),
+			existingAssetTagModelImpl.getOriginalGroupId());
+
 		Assert.assertEquals(existingAssetTagModelImpl.getGroupId(),
 			existingAssetTagModelImpl.getOriginalGroupId());
 		Assert.assertTrue(Validator.equals(
@@ -285,6 +316,8 @@ public class AssetTagPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		AssetTag assetTag = _persistence.create(pk);
+
+		assetTag.setUuid(ServiceTestUtil.randomString());
 
 		assetTag.setGroupId(ServiceTestUtil.nextLong());
 

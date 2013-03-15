@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -73,6 +73,10 @@ public class SearchContext implements Serializable {
 
 	public long[] getCategoryIds() {
 		return _categoryIds;
+	}
+
+	public long[] getClassTypeIds() {
+		return _classTypeIds;
 	}
 
 	public long getCompanyId() {
@@ -225,6 +229,10 @@ public class SearchContext implements Serializable {
 		_categoryIds = categoryIds;
 	}
 
+	public void setClassTypeIds(long[] classTypeIds) {
+		_classTypeIds = classTypeIds;
+	}
+
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
 	}
@@ -330,6 +338,7 @@ public class SearchContext implements Serializable {
 	private Map<String, Serializable> _attributes;
 	private BooleanClause[] _booleanClauses;
 	private long[] _categoryIds;
+	private long[] _classTypeIds;
 	private long _companyId;
 	private int _end = QueryUtil.ALL_POS;
 	private String[] _entryClassNames;

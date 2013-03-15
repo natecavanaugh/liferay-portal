@@ -10,8 +10,9 @@
 var baseJscPluginPath = themeDisplay.getPathJavaScript() +
     '/editor/ckeditor/plugins/jqueryspellchecker';
 var A = AUI();
-CKEDITOR.config.contentsCss = [CKEDITOR.config.contentsCss,
-    baseJscPluginPath + '/css/jquery.spellchecker.min.css']
+var jscCssPath = baseJscPluginPath + '/css/jquery.spellchecker.css';
+CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl(jscCssPath));
+CKEDITOR.config.contentsCss = [CKEDITOR.config.contentsCss, jscCssPath];
 
 CKEDITOR.plugins.add('jqueryspellchecker', {
 

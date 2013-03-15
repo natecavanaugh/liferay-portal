@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.trash.TrashHandler;
+import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -27,11 +29,14 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
+import com.liferay.portlet.trash.util.TrashUtil;
 
 import java.util.List;
 
@@ -43,6 +48,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class BaseSocialActivityInterpreter
 	implements SocialActivityInterpreter {
+
+	public long getActivitySetId(long activityId) {
+		return 0;
+	}
 
 	public String getSelector() {
 		return StringPool.BLANK;
@@ -105,8 +114,43 @@ public abstract class BaseSocialActivityInterpreter
 			SocialActivity activity, ThemeDisplay themeDisplay)
 		throws Exception {
 
-		throw new UnsupportedOperationException(
-			"Please override #doInterpret(SocialActivity, ServiceContext)");
+		PermissionChecker permissionChecker =
+			themeDisplay.getPermissionChecker();
+
+		if (!hasPermissions(
+				permissionChecker, activity, ActionKeys.VIEW, themeDisplay)) {
+
+			return null;
+		}
+
+		String link = getLink(activity, themeDisplay);
+
+		String title = getTitle(activity, themeDisplay);
+
+		String body = getBody(activity, themeDisplay);
+
+		return new SocialActivityFeedEntry(link, title, body);
+	}
+
+	protected String getBody(SocialActivity activity, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		return StringPool.BLANK;
+	}
+
+	protected String getClassName(SocialActivity activity) {
+		return activity.getClassName();
+	}
+
+	protected long getClassPK(SocialActivity activity) {
+		return activity.getClassPK();
+	}
+
+	protected String getEntryTitle(
+			SocialActivity activity, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		return StringPool.BLANK;
 	}
 
 	protected String getGroupName(long groupId, ThemeDisplay themeDisplay) {
@@ -146,6 +190,77 @@ public abstract class BaseSocialActivityInterpreter
 		catch (Exception e) {
 			return StringPool.BLANK;
 		}
+	}
+
+	protected String getLink(SocialActivity activity, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(
+			getClassName(activity));
+
+		long classPK = getClassPK(activity);
+
+		if ((trashHandler != null) && (trashHandler.isInTrash(classPK) ||
+			trashHandler.isInTrashContainer(classPK))) {
+
+			return TrashUtil.getViewContentURL(
+				getClassName(activity), classPK, themeDisplay);
+		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(themeDisplay.getPortalURL());
+		sb.append(themeDisplay.getPathMain());
+		sb.append(getPath(activity));
+		sb.append(classPK);
+
+		return sb.toString();
+	}
+
+	protected String getPath(SocialActivity activity) throws Exception {
+		return StringPool.BLANK;
+	}
+
+	protected String getTitle(
+			SocialActivity activity, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		String groupName = StringPool.BLANK;
+
+		if (activity.getGroupId() != themeDisplay.getScopeGroupId()) {
+			groupName = getGroupName(activity.getGroupId(), themeDisplay);
+		}
+
+		String link = getLink(activity, themeDisplay);
+
+		String entryTitle = getEntryTitle(activity, themeDisplay);
+
+		Object[] titleArguments = getTitleArguments(
+			groupName, activity, link, entryTitle, themeDisplay);
+
+		String titlePattern = getTitlePattern(groupName, activity);
+
+		return themeDisplay.translate(titlePattern, titleArguments);
+	}
+
+	protected Object[] getTitleArguments(
+			String groupName, SocialActivity activity, String link,
+			String title, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		String userName = getUserName(activity.getUserId(), themeDisplay);
+
+		if (Validator.isNotNull(link)) {
+			title = wrapLink(link, title);
+		}
+
+		return new Object[] {groupName, userName, title};
+	}
+
+	protected String getTitlePattern(String groupName, SocialActivity activity)
+		throws Exception {
+
+		return StringPool.BLANK;
 	}
 
 	protected String getUserName(long userId, ThemeDisplay themeDisplay) {
@@ -203,6 +318,14 @@ public abstract class BaseSocialActivityInterpreter
 		}
 
 		return HtmlUtil.escape(defaultValue);
+	}
+
+	protected boolean hasPermissions(
+			PermissionChecker permissionChecker, SocialActivity activity,
+			String actionId, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		return false;
 	}
 
 	protected String wrapLink(String link, String text) {

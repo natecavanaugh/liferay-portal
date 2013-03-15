@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -67,6 +67,8 @@ public class AddSiteTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Search']",
 			RuntimeVariables.replace("Search"));
 		selenium.waitForPageToLoad("30000");
+		assertTrue(selenium.isVisible(
+				"//tr[contains(.,'Site Name')]/td[1]/input[@type='checkbox']"));
 		assertEquals(RuntimeVariables.replace("Site Name"),
 			selenium.getText("//tr[contains(.,'Site Name')]/td[2]/a"));
 		assertEquals(RuntimeVariables.replace("Open"),
@@ -79,8 +81,7 @@ public class AddSiteTest extends BaseTestCase {
 			selenium.getText("//tr[contains(.,'Site Name')]/td[6]"));
 		assertEquals(RuntimeVariables.replace(""),
 			selenium.getText("//tr[contains(.,'Site Name')]/td[7]"));
-		assertEquals(RuntimeVariables.replace("Actions"),
-			selenium.getText(
+		assertTrue(selenium.isVisible(
 				"//tr[contains(.,'Site Name')]/td[8]/span[@title='Actions']/ul/li/strong/a/span"));
 	}
 }

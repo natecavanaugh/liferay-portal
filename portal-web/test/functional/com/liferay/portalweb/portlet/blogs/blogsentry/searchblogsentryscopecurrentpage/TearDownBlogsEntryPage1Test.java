@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -104,8 +104,10 @@ public class TearDownBlogsEntryPage1Test extends BaseTestCase {
 			case 4:
 			case 5:
 			case 6:
-				assertEquals(RuntimeVariables.replace("Showing 0 results."),
-					selenium.getText("//div[@class='search-results']"));
+				assertEquals(RuntimeVariables.replace(
+						"The selected item was moved to the Recycle Bin. Undo"),
+					selenium.getText(
+						"//div[@class='portlet-msg-success taglib-trash-undo']"));
 				selenium.open("/web/guest/home/");
 				selenium.clickAt("//div[@id='dockbar']",
 					RuntimeVariables.replace("Dockbar"));

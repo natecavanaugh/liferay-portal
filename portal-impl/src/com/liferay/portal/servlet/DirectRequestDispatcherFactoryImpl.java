@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.servlet.DirectServletRegistryUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
 import com.liferay.portal.security.pacl.PACLPolicyManager;
 import com.liferay.portal.security.pacl.servlet.PACLRequestDispatcherWrapper;
 import com.liferay.portal.util.PropsValues;
@@ -46,9 +45,7 @@ public class DirectRequestDispatcherFactoryImpl
 		RequestDispatcher requestDispatcher = doGetRequestDispatcher(
 			servletContext, path);
 
-		if (PACLPolicyManager.isActive() &&
-			PortalSecurityManagerThreadLocal.isEnabled()) {
-
+		if (PACLPolicyManager.isActive()) {
 			requestDispatcher = new PACLRequestDispatcherWrapper(
 				servletContext, requestDispatcher);
 		}

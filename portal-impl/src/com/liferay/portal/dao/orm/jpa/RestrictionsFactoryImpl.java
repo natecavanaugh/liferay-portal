@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.dao.orm.Conjunction;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.Disjunction;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactory;
+import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 
 import java.util.Collection;
@@ -159,6 +160,18 @@ public class RestrictionsFactoryImpl implements RestrictionsFactory {
 	}
 
 	public Criterion sizeNe(String propertyName, int size) {
+		throw new UnsupportedOperationException();
+	}
+
+	public Criterion sqlRestriction(String sql) {
+		throw new UnsupportedOperationException();
+	}
+
+	public Criterion sqlRestriction(String sql, Object value, Type type) {
+		throw new UnsupportedOperationException();
+	}
+
+	public Criterion sqlRestriction(String sql, Object[] values, Type[] types) {
 		throw new UnsupportedOperationException();
 	}
 

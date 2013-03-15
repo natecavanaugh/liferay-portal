@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -231,12 +231,12 @@ public abstract class DDLRecordLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
-	 * Returns the d d l record with the UUID in the group.
+	 * Returns the d d l record matching the UUID and group.
 	 *
-	 * @param uuid the UUID of d d l record
-	 * @param groupId the group id of the d d l record
-	 * @return the d d l record
-	 * @throws PortalException if a d d l record with the UUID in the group could not be found
+	 * @param uuid the d d l record's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching d d l record
+	 * @throws PortalException if a matching d d l record could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	public DDLRecord getDDLRecordByUuidAndGroupId(String uuid, long groupId)

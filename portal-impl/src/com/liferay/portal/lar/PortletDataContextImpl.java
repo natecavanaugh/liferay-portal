@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -737,8 +737,16 @@ public class PortletDataContextImpl implements PortletDataContext {
 		return _expandoColumnsMap;
 	}
 
+	public Element getExportDataRootElement() {
+		return _exportDataRootElement;
+	}
+
 	public long getGroupId() {
 		return _groupId;
+	}
+
+	public Element getImportDataRootElement() {
+		return _importDataRootElement;
 	}
 
 	public String getLayoutPath(long layoutId) {
@@ -1282,8 +1290,16 @@ public class PortletDataContextImpl implements PortletDataContext {
 		_xStream.setClassLoader(classLoader);
 	}
 
+	public void setExportDataRootElement(Element exportDataRootElement) {
+		_exportDataRootElement = exportDataRootElement;
+	}
+
 	public void setGroupId(long groupId) {
 		_groupId = groupId;
+	}
+
+	public void setImportDataRootElement(Element importDataRootElement) {
+		_importDataRootElement = importDataRootElement;
 	}
 
 	public void setOldPlid(long oldPlid) {
@@ -1562,7 +1578,9 @@ public class PortletDataContextImpl implements PortletDataContext {
 	private Date _endDate;
 	private Map<String, List<ExpandoColumn>> _expandoColumnsMap =
 		new HashMap<String, List<ExpandoColumn>>();
+	private Element _exportDataRootElement;
 	private long _groupId;
+	private Element _importDataRootElement;
 	private Map<String, Lock> _locksMap = new HashMap<String, Lock>();
 	private Map<String, Map<?, ?>> _newPrimaryKeysMaps =
 		new HashMap<String, Map<?, ?>>();

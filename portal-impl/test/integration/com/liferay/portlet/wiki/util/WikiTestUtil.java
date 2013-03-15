@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,21 +31,30 @@ public class WikiTestUtil {
 			boolean approved)
 		throws Exception {
 
+		ServiceContext serviceContext = ServiceTestUtil.getServiceContext(
+			groupId);
+
+		return addPage(
+			userId, nodeId, title, "content", approved, serviceContext);
+	}
+
+	public static WikiPage addPage(
+			long userId, long nodeId, String title, String content,
+			boolean approved, ServiceContext serviceContext)
+		throws Exception {
+
 		boolean workflowEnabled = WorkflowThreadLocal.isEnabled();
 
 		try {
 			WorkflowThreadLocal.setEnabled(true);
 
-			ServiceContext serviceContext = ServiceTestUtil.getServiceContext(
-				groupId);
+			serviceContext = (ServiceContext)serviceContext.clone();
 
 			serviceContext.setWorkflowAction(
 				WorkflowConstants.ACTION_SAVE_DRAFT);
 
-			serviceContext = (ServiceContext)serviceContext.clone();
-
 			WikiPage page = WikiPageLocalServiceUtil.addPage(
-				userId, nodeId, title, "Content", "Summary", true,
+				userId, nodeId, title, content, "Summary", true,
 				serviceContext);
 
 			if (approved) {
@@ -59,6 +68,17 @@ public class WikiTestUtil {
 		finally {
 			WorkflowThreadLocal.setEnabled(workflowEnabled);
 		}
+	}
+
+	public static WikiPage updatePage(
+			WikiPage page, long userId, String content,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		return WikiPageLocalServiceUtil.updatePage(
+			userId, page.getNodeId(), page.getTitle(), page.getVersion(),
+			content, page.getSummary(), false, page.getFormat(),
+			page.getParentTitle(), page.getRedirectTitle(), serviceContext);
 	}
 
 }

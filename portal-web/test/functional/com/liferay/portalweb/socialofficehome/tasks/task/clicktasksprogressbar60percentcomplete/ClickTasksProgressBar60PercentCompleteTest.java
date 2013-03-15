@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -38,7 +38,7 @@ public class ClickTasksProgressBar60PercentCompleteTest extends BaseTestCase {
 		selenium.waitForPageToLoad("30000");
 		selenium.clickAt("//div[3]/a[3]",
 			RuntimeVariables.replace("60% Complete"));
-		Thread.sleep(5000);
+		Thread.sleep(1000);
 		selenium.mouseOver("//div[3]/a[3]");
 		selenium.waitForElementPresent("//div[@style='width: 60%;']");
 		assertEquals(RuntimeVariables.replace("Task Description"),

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,12 +18,17 @@ import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.tools.servicebuilder.ServiceBuilder;
 
 import java.io.File;
+
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Michael Hashimoto
@@ -36,6 +41,37 @@ public class SeleniumBuilderFileUtil {
 
 	public String getBaseDir() {
 		return _baseDir;
+	}
+
+	public Set<String> getChildElementAttributeValues(
+		Element element, String attributeName) {
+
+		Set<String> childElementAttributeValues = new TreeSet<String>();
+
+		List<Element> childElements = element.elements();
+
+		if (childElements.isEmpty()) {
+			return childElementAttributeValues;
+		}
+
+		for (Element childElement : childElements) {
+			String childElementName = childElement.attributeValue(
+				attributeName);
+
+			if (childElementName != null) {
+				int x = childElementName.lastIndexOf(StringPool.POUND);
+
+				if (x != -1) {
+					childElementAttributeValues.add(
+						childElementName.substring(0, x));
+				}
+			}
+
+			childElementAttributeValues.addAll(
+				getChildElementAttributeValues(childElement, attributeName));
+		}
+
+		return childElementAttributeValues;
 	}
 
 	public String getClassName(String fileName) {
@@ -53,7 +89,17 @@ public class SeleniumBuilderFileUtil {
 	public String getClassSuffix(String fileName) {
 		int x = fileName.indexOf(CharPool.PERIOD);
 
-		return StringUtil.upperCaseFirstLetter(fileName.substring(x + 1));
+		String classSuffix = StringUtil.upperCaseFirstLetter(
+			fileName.substring(x + 1));
+
+		if (classSuffix.equals("Testcase")) {
+			classSuffix = "TestCase";
+		}
+		else if (classSuffix.equals("Testsuite")) {
+			classSuffix = "TestSuite";
+		}
+
+		return classSuffix;
 	}
 
 	public String getJavaFileName(String fileName) {
@@ -136,12 +182,20 @@ public class SeleniumBuilderFileUtil {
 		String xml = rootElement.asXML();
 
 		for (int i = 1;; i++) {
-			if (xml.contains("${target" + i +"}")) {
+			if (xml.contains("${target" + i + "}")) {
 				continue;
+			}
+
+			if (i > 1) {
+				i--;
 			}
 
 			return i;
 		}
+	}
+
+	public String getVariableName(String name) {
+		return TextFormatter.format(name, TextFormatter.I);
 	}
 
 	public String normalizeFileName(String fileName) {
@@ -201,13 +255,6 @@ public class SeleniumBuilderFileUtil {
 
 			if ((tdText == null) || !shortFileName.equals(tdText)) {
 				System.out.println(fileName + " has an invalid <td>");
-			}
-		}
-		else {
-			String name = rootElement.attributeValue("name");
-
-			if ((name == null) || !name.equals(shortFileName)) {
-				System.out.println(fileName + " has an invalid name=\"\"");
 			}
 		}
 	}

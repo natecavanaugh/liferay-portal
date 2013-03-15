@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,9 +15,8 @@
 package com.liferay.httpservice.internal.servlet;
 
 import com.liferay.portal.kernel.util.JavaConstants;
-import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
-import com.liferay.portal.security.pacl.PACLPolicy;
-import com.liferay.portal.security.pacl.PACLPolicyManager;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.util.ClassLoaderUtil;
 
 import java.io.IOException;
@@ -36,6 +35,33 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class BundleRequestDispatcher implements RequestDispatcher {
 
+	public BundleRequestDispatcher(
+		String servletMapping, boolean extensionMapping, String requestURI,
+		BundleServletContext bundleServletContext,
+		BundleFilterChain bundleFilterChain) {
+
+		_servletMapping = servletMapping;
+		_extensionMapping = extensionMapping;
+		_requestURI = StringUtil.replace(
+			requestURI, StringPool.DOUBLE_SLASH, StringPool.SLASH);
+		_bundleServletContext = bundleServletContext;
+		_bundleFilterChain = bundleFilterChain;
+
+		if (!_extensionMapping) {
+			_servletPath = _servletMapping;
+		}
+		else {
+			_servletPath = _requestURI;
+		}
+
+		if ((_servletPath != null) &&
+			_requestURI.startsWith(_servletPath) &&
+			(_requestURI.length() > _servletPath.length())) {
+
+			_pathInfo = _requestURI.substring(_servletPath.length());
+		}
+	}
+
 	public void doDispatch(
 			ServletRequest servletRequest, ServletResponse servletResponse)
 		throws IOException, ServletException {
@@ -43,17 +69,9 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		ClassLoader contextClassLoader =
 			ClassLoaderUtil.getContextClassLoader();
 
-		PACLPolicy paclPolicy =
-			PortalSecurityManagerThreadLocal.getPACLPolicy();
-
 		try {
 			ClassLoader pluginClassLoader =
 				_bundleServletContext.getClassLoader();
-
-			PACLPolicy pluginPACLPolicy = PACLPolicyManager.getPACLPolicy(
-				pluginClassLoader);
-
-			PortalSecurityManagerThreadLocal.setPACLPolicy(pluginPACLPolicy);
 
 			ClassLoaderUtil.setContextClassLoader(pluginClassLoader);
 
@@ -81,8 +99,6 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		}
 		finally {
 			ClassLoaderUtil.setContextClassLoader(contextClassLoader);
-
-			PortalSecurityManagerThreadLocal.setPACLPolicy(paclPolicy);
 		}
 	}
 
@@ -152,9 +168,11 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 
 	private BundleFilterChain _bundleFilterChain;
 	private BundleServletContext _bundleServletContext;
+	private boolean _extensionMapping;
 	private String _pathInfo;
 	private String _queryString;
 	private String _requestURI;
+	private String _servletMapping;
 	private String _servletPath;
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -254,12 +254,13 @@ public abstract class DLAppTestUtil {
 
 		return updateFileEntry(
 			groupId, fileEntryId, sourceFileName, ContentTypes.TEXT_PLAIN,
-			title, majorVersion);
+			title, majorVersion, new ServiceContext());
 	}
 
 	public static FileEntry updateFileEntry(
 			long groupId, long fileEntryId, String sourceFileName,
-			String mimeType, String title, boolean majorVersion)
+			String mimeType, String title, boolean majorVersion,
+			ServiceContext serviceContext)
 		throws Exception {
 
 		String description = StringPool.BLANK;
@@ -272,8 +273,6 @@ public abstract class DLAppTestUtil {
 
 			bytes = newContent.getBytes();
 		}
-
-		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);

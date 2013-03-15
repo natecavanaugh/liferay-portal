@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,12 +14,15 @@
 
 package com.liferay.portal.tools.seleniumbuilder;
 
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Element;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.tools.ant.DirectoryScanner;
 
@@ -123,7 +126,8 @@ public class SeleniumBuilderContext {
 				_actionClassNames.put(
 					pathName, _getClassName(fileName, "Action"));
 
-				_actionJavaFileNames.put(pathName, _getJavaFileName(fileName));
+				_actionJavaFileNames.put(
+					pathName, _getJavaFileName(fileName, "Action"));
 
 				_actionNames.add(pathName);
 
@@ -209,6 +213,47 @@ public class SeleniumBuilderContext {
 				throw new IllegalArgumentException("Invalid file " + fileName);
 			}
 		}
+
+		String[] seleniumFileNames = {
+			"com/liferay/portalweb/portal/util/liferayselenium/" +
+				"SeleniumWrapper.java",
+			"com/liferay/portalweb/portal/util/liferayselenium/" +
+				"LiferaySelenium.java"
+		};
+
+		for (String seleniumFileName : seleniumFileNames) {
+			String content = _seleniumBuilderFileUtil.getNormalizedContent(
+				seleniumFileName);
+
+			Pattern pattern = Pattern.compile(
+				"public [a-z]* [A-Za-z0-9_]*\\(.*?\\)");
+
+			Matcher matcher = pattern.matcher(content);
+
+			while (matcher.find()) {
+				String methodSignature = matcher.group();
+
+				int x = methodSignature.indexOf(" ", 7);
+				int y = methodSignature.indexOf("(");
+
+				String seleniumCommandName = methodSignature.substring(
+					x + 1, y);
+
+				int count = 0;
+
+				int z = methodSignature.indexOf(")");
+
+				String parameters = methodSignature.substring(y + 1, z);
+
+				if (!parameters.equals("")) {
+					count = StringUtil.count(parameters, ",") + 1;
+				}
+
+				_seleniumParameterCounts.put(seleniumCommandName, count);
+			}
+		}
+
+		_seleniumParameterCounts.put("open", 1);
 	}
 
 	public String getActionClassName(String actionName) {
@@ -335,6 +380,10 @@ public class SeleniumBuilderContext {
 		return _pathSimpleClassNames.get(pathName);
 	}
 
+	public int getSeleniumParameterCount(String seleniumCommandName) {
+		return _seleniumParameterCounts.get(seleniumCommandName);
+	}
+
 	public String getTestCaseClassName(String testCaseName) {
 		return _testCaseClassNames.get(testCaseName);
 	}
@@ -401,6 +450,10 @@ public class SeleniumBuilderContext {
 
 	private String _getJavaFileName(String fileName) {
 		return _seleniumBuilderFileUtil.getJavaFileName(fileName);
+	}
+
+	private String _getJavaFileName(String fileName, String classSuffix) {
+		return _seleniumBuilderFileUtil.getJavaFileName(fileName, classSuffix);
 	}
 
 	private String _getName(String fileName) {
@@ -491,6 +544,8 @@ public class SeleniumBuilderContext {
 	private Map<String, String> _pathSimpleClassNames =
 		new HashMap<String, String>();
 	private SeleniumBuilderFileUtil _seleniumBuilderFileUtil;
+	private Map<String, Integer> _seleniumParameterCounts =
+		new HashMap<String, Integer>();
 	private Map<String, String> _testCaseClassNames =
 		new HashMap<String, String>();
 	private Map<String, String> _testCaseFileNames =

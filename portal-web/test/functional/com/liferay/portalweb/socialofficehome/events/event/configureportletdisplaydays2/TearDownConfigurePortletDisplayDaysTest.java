@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,7 +30,7 @@ public class TearDownConfigurePortletDisplayDaysTest extends BaseTestCase {
 			"Events");
 		assertEquals(RuntimeVariables.replace("Events"),
 			selenium.getText("xPath=(//span[@class='portlet-title-text'])[4]"));
-		Thread.sleep(5000);
+		Thread.sleep(1000);
 		assertEquals(RuntimeVariables.replace("Options"),
 			selenium.getText(
 				"//div[2]/div/div[2]/div/section/header/menu/span/ul/li/strong/a"));

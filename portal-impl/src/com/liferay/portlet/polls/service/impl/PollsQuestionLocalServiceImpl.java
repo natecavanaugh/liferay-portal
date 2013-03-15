@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -106,8 +106,8 @@ public class PollsQuestionLocalServiceImpl
 		if (choices != null) {
 			for (PollsChoice choice : choices) {
 				pollsChoiceLocalService.addChoice(
-					questionId, choice.getName(), choice.getDescription(),
-					new ServiceContext());
+					userId, questionId, choice.getName(),
+					choice.getDescription(), new ServiceContext());
 			}
 		}
 
@@ -276,13 +276,13 @@ public class PollsQuestionLocalServiceImpl
 
 				if (choice == null) {
 					pollsChoiceLocalService.addChoice(
-						questionId, choiceName, choiceDescription,
+						userId, questionId, choiceName, choiceDescription,
 						new ServiceContext());
 				}
 				else {
 					pollsChoiceLocalService.updateChoice(
 						choice.getChoiceId(), questionId, choiceName,
-						choiceDescription);
+						choiceDescription, new ServiceContext());
 				}
 			}
 		}

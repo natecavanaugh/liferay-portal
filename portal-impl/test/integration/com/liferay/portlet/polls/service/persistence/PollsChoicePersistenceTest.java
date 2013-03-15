@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,6 +15,7 @@
 package com.liferay.portlet.polls.service.persistence;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
@@ -22,6 +23,8 @@ import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
+import com.liferay.portal.kernel.util.IntegerWrapper;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceTestUtil;
 import com.liferay.portal.service.persistence.BasePersistence;
@@ -111,6 +114,18 @@ public class PollsChoicePersistenceTest {
 
 		newPollsChoice.setUuid(ServiceTestUtil.randomString());
 
+		newPollsChoice.setGroupId(ServiceTestUtil.nextLong());
+
+		newPollsChoice.setCompanyId(ServiceTestUtil.nextLong());
+
+		newPollsChoice.setUserId(ServiceTestUtil.nextLong());
+
+		newPollsChoice.setUserName(ServiceTestUtil.randomString());
+
+		newPollsChoice.setCreateDate(ServiceTestUtil.nextDate());
+
+		newPollsChoice.setModifiedDate(ServiceTestUtil.nextDate());
+
 		newPollsChoice.setQuestionId(ServiceTestUtil.nextLong());
 
 		newPollsChoice.setName(ServiceTestUtil.randomString());
@@ -125,6 +140,20 @@ public class PollsChoicePersistenceTest {
 			newPollsChoice.getUuid());
 		Assert.assertEquals(existingPollsChoice.getChoiceId(),
 			newPollsChoice.getChoiceId());
+		Assert.assertEquals(existingPollsChoice.getGroupId(),
+			newPollsChoice.getGroupId());
+		Assert.assertEquals(existingPollsChoice.getCompanyId(),
+			newPollsChoice.getCompanyId());
+		Assert.assertEquals(existingPollsChoice.getUserId(),
+			newPollsChoice.getUserId());
+		Assert.assertEquals(existingPollsChoice.getUserName(),
+			newPollsChoice.getUserName());
+		Assert.assertEquals(Time.getShortTimestamp(
+				existingPollsChoice.getCreateDate()),
+			Time.getShortTimestamp(newPollsChoice.getCreateDate()));
+		Assert.assertEquals(Time.getShortTimestamp(
+				existingPollsChoice.getModifiedDate()),
+			Time.getShortTimestamp(newPollsChoice.getModifiedDate()));
 		Assert.assertEquals(existingPollsChoice.getQuestionId(),
 			newPollsChoice.getQuestionId());
 		Assert.assertEquals(existingPollsChoice.getName(),
@@ -171,6 +200,26 @@ public class PollsChoicePersistenceTest {
 		PollsChoice missingPollsChoice = _persistence.fetchByPrimaryKey(pk);
 
 		Assert.assertNull(missingPollsChoice);
+	}
+
+	@Test
+	public void testActionableDynamicQuery() throws Exception {
+		final IntegerWrapper count = new IntegerWrapper();
+
+		ActionableDynamicQuery actionableDynamicQuery = new PollsChoiceActionableDynamicQuery() {
+				@Override
+				protected void performAction(Object object) {
+					PollsChoice pollsChoice = (PollsChoice)object;
+
+					Assert.assertNotNull(pollsChoice);
+
+					count.increment();
+				}
+			};
+
+		actionableDynamicQuery.performActions();
+
+		Assert.assertEquals(count.getValue(), _persistence.countAll());
 	}
 
 	@Test
@@ -257,6 +306,12 @@ public class PollsChoicePersistenceTest {
 
 		PollsChoiceModelImpl existingPollsChoiceModelImpl = (PollsChoiceModelImpl)_persistence.findByPrimaryKey(newPollsChoice.getPrimaryKey());
 
+		Assert.assertTrue(Validator.equals(
+				existingPollsChoiceModelImpl.getUuid(),
+				existingPollsChoiceModelImpl.getOriginalUuid()));
+		Assert.assertEquals(existingPollsChoiceModelImpl.getGroupId(),
+			existingPollsChoiceModelImpl.getOriginalGroupId());
+
 		Assert.assertEquals(existingPollsChoiceModelImpl.getQuestionId(),
 			existingPollsChoiceModelImpl.getOriginalQuestionId());
 		Assert.assertTrue(Validator.equals(
@@ -270,6 +325,18 @@ public class PollsChoicePersistenceTest {
 		PollsChoice pollsChoice = _persistence.create(pk);
 
 		pollsChoice.setUuid(ServiceTestUtil.randomString());
+
+		pollsChoice.setGroupId(ServiceTestUtil.nextLong());
+
+		pollsChoice.setCompanyId(ServiceTestUtil.nextLong());
+
+		pollsChoice.setUserId(ServiceTestUtil.nextLong());
+
+		pollsChoice.setUserName(ServiceTestUtil.randomString());
+
+		pollsChoice.setCreateDate(ServiceTestUtil.nextDate());
+
+		pollsChoice.setModifiedDate(ServiceTestUtil.nextDate());
 
 		pollsChoice.setQuestionId(ServiceTestUtil.nextLong());
 

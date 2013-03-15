@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -50,7 +50,7 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 	}
 
 	public void notifyElementEvicted(Ehcache ehcache, Element element) {
-		K key = (K)element.getObjectKey();
+		K key = (K)element.getKey();
 		V value = (V)element.getObjectValue();
 
 		_cacheListener.notifyEntryEvicted(_portalCache, key, value);
@@ -61,7 +61,7 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 	}
 
 	public void notifyElementExpired(Ehcache ehcache, Element element) {
-		K key = (K)element.getObjectKey();
+		K key = (K)element.getKey();
 		V value = (V)element.getObjectValue();
 
 		_cacheListener.notifyEntryExpired(_portalCache, key, value);
@@ -74,7 +74,7 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 	public void notifyElementPut(Ehcache ehcache, Element element)
 		throws CacheException {
 
-		K key = (K)element.getObjectKey();
+		K key = (K)element.getKey();
 		V value = (V)element.getObjectValue();
 
 		_cacheListener.notifyEntryPut(_portalCache, key, value);
@@ -87,7 +87,7 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 	public void notifyElementRemoved(Ehcache ehcache, Element element)
 		throws CacheException {
 
-		K key = (K)element.getObjectKey();
+		K key = (K)element.getKey();
 		V value = (V)element.getObjectValue();
 
 		_cacheListener.notifyEntryRemoved(_portalCache, key, value);
@@ -100,7 +100,7 @@ public class PortalCacheCacheEventListener<K extends Serializable, V>
 	public void notifyElementUpdated(Ehcache ehcache, Element element)
 		throws CacheException {
 
-		K key = (K)element.getObjectKey();
+		K key = (K)element.getKey();
 		V value = (V)element.getObjectValue();
 
 		_cacheListener.notifyEntryUpdated(_portalCache, key, value);

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -46,7 +46,9 @@ import com.liferay.portlet.trash.model.TrashEntry;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Brian Wing Shun Chan
@@ -205,7 +207,8 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 				MBCategory category = mbCategoryPersistence.findByPrimaryKey(
 					thread.getCategoryId());
 
-				MBUtil.updateCategoryStatistics(category);
+				MBUtil.updateCategoryStatistics(
+					category.getCompanyId(), category.getCategoryId());
 			}
 			catch (NoSuchCategoryException nsce) {
 				if (!thread.isInTrash()) {
@@ -642,11 +645,13 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		// Category
 
 		if ((oldCategory != null) && (categoryId != oldCategoryId)) {
-			MBUtil.updateCategoryStatistics(oldCategory);
+			MBUtil.updateCategoryStatistics(
+				oldCategory.getCompanyId(), oldCategory.getCategoryId());
 		}
 
 		if ((category != null) && (categoryId != oldCategoryId)) {
-			MBUtil.updateCategoryStatistics(category);
+			MBUtil.updateCategoryStatistics(
+				category.getCompanyId(), category.getCategoryId());
 		}
 
 		return thread;
@@ -807,11 +812,13 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 		// Update new thread
 
-		MBUtil.updateThreadMessageCount(thread);
+		MBUtil.updateThreadMessageCount(
+			thread.getCompanyId(), thread.getThreadId());
 
 		// Update old thread
 
-		MBUtil.updateThreadMessageCount(oldThread);
+		MBUtil.updateThreadMessageCount(
+			oldThread.getCompanyId(), oldThread.getThreadId());
 
 		// Category
 
@@ -820,7 +827,8 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			(message.getCategoryId() !=
 				MBCategoryConstants.DISCUSSION_CATEGORY_ID)) {
 
-			MBUtil.updateCategoryThreadCount(category);
+			MBUtil.updateCategoryThreadCount(
+				category.getCompanyId(), category.getCategoryId());
 		}
 
 		return thread;
@@ -882,7 +890,7 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 			// Messages
 
-			updateDependentStatus(threadId, status);
+			updateDependentStatus(thread.getGroupId(), threadId, status);
 
 			if (thread.getCategoryId() !=
 					MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) {
@@ -892,13 +900,9 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 				MBCategory category = mbCategoryPersistence.findByPrimaryKey(
 					thread.getCategoryId());
 
-				MBUtil.updateCategoryStatistics(category);
+				MBUtil.updateCategoryStatistics(
+					category.getCompanyId(), category.getCategoryId());
 			}
-
-			// Stats
-
-			mbStatsUserLocalService.updateStatsUser(
-				thread.getGroupId(), userId);
 
 			if (status == WorkflowConstants.STATUS_IN_TRASH) {
 
@@ -933,7 +937,7 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			}
 		}
 		else {
-			updateDependentStatus(threadId, status);
+			updateDependentStatus(thread.getGroupId(), threadId, status);
 		}
 
 		return thread;
@@ -980,8 +984,11 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		}
 	}
 
-	protected void updateDependentStatus(long threadId, int status)
+	protected void updateDependentStatus(
+			long groupId, long threadId, int status)
 		throws PortalException, SystemException {
+
+		Set<Long> userIds = new HashSet<Long>();
 
 		List<MBMessage> messages = mbMessageLocalService.getThreadMessages(
 			threadId, WorkflowConstants.STATUS_ANY);
@@ -990,6 +997,8 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 			if (message.isDiscussion()) {
 				continue;
 			}
+
+			userIds.add(message.getUserId());
 
 			if (status == WorkflowConstants.STATUS_IN_TRASH) {
 
@@ -1047,6 +1056,12 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 
 				indexer.reindex(message);
 			}
+		}
+
+		// Statistics
+
+		for (long userId : userIds) {
+			mbStatsUserLocalService.updateStatsUser(groupId, userId);
 		}
 	}
 

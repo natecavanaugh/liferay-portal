@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -326,6 +326,17 @@ public class Entity {
 		}
 	}
 
+	public String getPKVarNames() {
+		if (hasCompoundPK()) {
+			return getVarName() + "PKs";
+		}
+		else {
+			EntityColumn col = _getPKColumn();
+
+			return col.getNames();
+		}
+	}
+
 	public String getPortletName() {
 		return _portletName;
 	}
@@ -397,6 +408,21 @@ public class Entity {
 
 	public String getVarNames() {
 		return TextFormatter.formatPlural(getVarName());
+	}
+
+	public boolean hasActionableDynamicQuery() {
+		if (hasColumns() && hasLocalService()) {
+			if (hasCompoundPK()) {
+				EntityColumn col = _pkList.get(0);
+
+				return col.isPrimitiveType();
+			}
+			else {
+				return hasPrimitivePK();
+			}
+		}
+
+		return false;
 	}
 
 	public boolean hasArrayableOperator() {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.upgrade.v6_2_0.UpgradeAssetPublisher;
 import com.liferay.portal.upgrade.v6_2_0.UpgradeBlogs;
 import com.liferay.portal.upgrade.v6_2_0.UpgradeBlogsAggregator;
+import com.liferay.portal.upgrade.v6_2_0.UpgradeCompany;
 import com.liferay.portal.upgrade.v6_2_0.UpgradeCustomizablePortlets;
 import com.liferay.portal.upgrade.v6_2_0.UpgradeDocumentLibrary;
 import com.liferay.portal.upgrade.v6_2_0.UpgradeDynamicDataListDisplay;
@@ -51,6 +52,7 @@ public class UpgradeProcess_6_2_0 extends UpgradeProcess {
 		upgrade(UpgradeAssetPublisher.class);
 		upgrade(UpgradeBlogs.class);
 		upgrade(UpgradeBlogsAggregator.class);
+		upgrade(UpgradeCompany.class);
 		upgrade(UpgradeCustomizablePortlets.class);
 		upgrade(UpgradeDocumentLibrary.class);
 		upgrade(UpgradeDynamicDataListDisplay.class);

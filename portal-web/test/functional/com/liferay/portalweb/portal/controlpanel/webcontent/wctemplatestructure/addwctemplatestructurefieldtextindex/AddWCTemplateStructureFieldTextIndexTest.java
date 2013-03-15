@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -72,8 +72,9 @@ public class AddWCTemplateStructureFieldTextIndexTest extends BaseTestCase {
 		selenium.waitForPageToLoad("30000");
 		selenium.waitForVisible(
 			"//div[@class='aui-diagram-builder-drop-container']/div[1]");
-		selenium.clickAt("//div[@class='aui-diagram-builder-drop-container']/div[1]/div/label",
-			RuntimeVariables.replace("Text"));
+		assertEquals(RuntimeVariables.replace("Text"),
+			selenium.getText(
+				"//div[@class='aui-diagram-builder-drop-container']/div[1]/div/label"));
 		selenium.clickAt("//div[@class='aui-diagram-builder-drop-container']/div[1]",
 			RuntimeVariables.replace("Text Field"));
 		selenium.waitForVisible(

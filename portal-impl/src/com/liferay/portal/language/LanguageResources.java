@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
 import com.liferay.portal.tools.LangBuilder;
 
 import java.io.InputStream;
@@ -186,11 +185,7 @@ public class LanguageResources {
 	private static Properties _loadProperties(String name) {
 		Properties properties = new Properties();
 
-		boolean enabled = PortalSecurityManagerThreadLocal.isEnabled();
-
 		try {
-			PortalSecurityManagerThreadLocal.setEnabled(false);
-
 			ClassLoader classLoader = LanguageResources.class.getClassLoader();
 
 			Enumeration<URL> enu = classLoader.getResources(name);
@@ -229,9 +224,6 @@ public class LanguageResources {
 			if (_log.isWarnEnabled()) {
 				_log.warn(e, e);
 			}
-		}
-		finally {
-			PortalSecurityManagerThreadLocal.setEnabled(enabled);
 		}
 
 		return properties;

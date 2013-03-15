@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -68,6 +68,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @param  userGroupIds the primary keys of the user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addGroupUserGroups(long groupId, long[] userGroupIds)
 		throws SystemException {
 
@@ -83,6 +84,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @param  userGroupIds the primary keys of the user groups
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void addTeamUserGroups(long teamId, long[] userGroupIds)
 		throws SystemException {
 
@@ -198,6 +200,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @param  userId the primary key of the user
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void clearUserUserGroups(long userId) throws SystemException {
 		userPersistence.clearUserGroups(userId);
 
@@ -416,49 +419,6 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 		}
 
 		return userGroups;
-	}
-
-	/**
-	 * Returns all the user groups to which the user belongs.
-	 *
-	 * @param  userId the primary key of the user
-	 * @return the user groups to which the user belongs
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<UserGroup> getUserUserGroups(long userId)
-		throws SystemException {
-
-		return userPersistence.getUserGroups(userId);
-	}
-
-	/**
-	 * Returns <code>true</code> if the user group is associated with the group.
-	 *
-	 * @param  groupId the primary key of the group
-	 * @param  userGroupId the primary key of the user group
-	 * @return <code>true</code> if the user group belongs to the group;
-	 *         <code>false</code> otherwise
-	 * @throws SystemException if a system exception occurred
-	 */
-	public boolean hasGroupUserGroup(long groupId, long userGroupId)
-		throws SystemException {
-
-		return groupPersistence.containsUserGroup(groupId, userGroupId);
-	}
-
-	/**
-	 * Returns <code>true</code> if the user group belongs to the team.
-	 *
-	 * @param  teamId the primary key of the team
-	 * @param  userGroupId the primary key of the user group
-	 * @return <code>true</code> if the user group belongs to the team;
-	 *         <code>false</code> otherwise
-	 * @throws SystemException if a system exception occurred
-	 */
-	public boolean hasTeamUserGroup(long teamId, long userGroupId)
-		throws SystemException {
-
-		return teamPersistence.containsUserGroup(teamId, userGroupId);
 	}
 
 	/**
@@ -738,6 +698,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 	 * @throws PortalException if a portal exception occurred
 	 * @throws SystemException if a system exception occurred
 	 */
+	@Override
 	public void setUserUserGroups(long userId, long[] userGroupIds)
 		throws PortalException, SystemException {
 

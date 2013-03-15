@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -160,6 +160,8 @@ public class DLFileEntryIndexer extends BaseIndexer {
 
 		contextQuery.addRequiredTerm(
 			Field.HIDDEN, searchContext.isIncludeAttachments());
+
+		addSearchClassTypeIds(contextQuery, searchContext);
 
 		String structureField = (String)searchContext.getAttribute(
 			"ddmStructureFieldName");
@@ -367,6 +369,8 @@ public class DLFileEntryIndexer extends BaseIndexer {
 				}
 			}
 
+			document.addKeyword(
+				Field.CLASS_TYPE_ID, dlFileEntry.getFileEntryTypeId());
 			document.addText(Field.DESCRIPTION, dlFileEntry.getDescription());
 			document.addKeyword(Field.FOLDER_ID, dlFileEntry.getFolderId());
 			document.addKeyword(Field.HIDDEN, dlFileEntry.isInHiddenFolder());

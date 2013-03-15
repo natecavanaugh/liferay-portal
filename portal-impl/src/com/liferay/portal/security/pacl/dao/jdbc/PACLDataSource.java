@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,13 +15,9 @@
 package com.liferay.portal.security.pacl.dao.jdbc;
 
 import com.liferay.portal.dao.jdbc.util.DataSourceWrapper;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
-import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
-import com.liferay.portal.security.pacl.PACLClassUtil;
 import com.liferay.portal.security.pacl.PACLPolicy;
-import com.liferay.portal.security.pacl.PACLPolicyManager;
+import com.liferay.portal.security.pacl.PACLUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -37,25 +33,15 @@ public class PACLDataSource extends DataSourceWrapper {
 		super(dataSource);
 
 		_dataSource = dataSource;
-
-		_log.debug("Loading " + PACLConnectionHandler.class.getName());
 	}
 
 	@Override
 	public Connection getConnection() throws SQLException {
 		Connection connection = _dataSource.getConnection();
 
-		if (!PACLPolicyManager.isActive() ||
-			!PortalSecurityManagerThreadLocal.isCheckSQL() ||
-			!PortalSecurityManagerThreadLocal.isEnabled()) {
+		PACLPolicy paclPolicy = PACLUtil.getPACLPolicy();
 
-			return connection;
-		}
-
-		PACLPolicy paclPolicy = PACLClassUtil.getPACLPolicy(
-			false, _log.isDebugEnabled());
-
-		if ((paclPolicy == null) || !paclPolicy.isActive()) {
+		if (paclPolicy == null) {
 			return connection;
 		}
 
@@ -63,9 +49,6 @@ public class PACLDataSource extends DataSourceWrapper {
 			paclPolicy.getClassLoader(), new Class<?>[] {Connection.class},
 			new PACLConnectionHandler(connection, paclPolicy));
 	}
-
-	private static Log _log = LogFactoryUtil.getLog(
-		PACLDataSource.class.getName());
 
 	private DataSource _dataSource;
 

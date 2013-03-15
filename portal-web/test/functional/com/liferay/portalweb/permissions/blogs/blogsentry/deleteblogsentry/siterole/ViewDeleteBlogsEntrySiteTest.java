@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,7 +31,8 @@ public class ViewDeleteBlogsEntrySiteTest extends BaseTestCase {
 		assertTrue(selenium.isVisible("//input[@value='Add Blog Entry']"));
 		assertTrue(selenium.isVisible("//input[@value='Permissions']"));
 		assertTrue(selenium.isElementNotPresent("//div[@class='entry-title']"));
-		assertTrue(selenium.isElementNotPresent("//div[@class='entry-body']/p"));
+		assertTrue(selenium.isElementNotPresent(
+				"//div[@class='entry-body']/div"));
 		assertTrue(selenium.isElementNotPresent("//div[@class='entry-author']"));
 		assertTrue(selenium.isElementNotPresent("//span[@class='comments']/a"));
 		assertTrue(selenium.isElementNotPresent(
@@ -51,7 +52,5 @@ public class ViewDeleteBlogsEntrySiteTest extends BaseTestCase {
 		assertTrue(selenium.isPartialText(
 				"//div[@class='subscribe']/span/a[contains(@href,'subscribe')]",
 				"Subscribe"));
-		assertEquals(RuntimeVariables.replace("Showing 0 results."),
-			selenium.getText("//div[@class='search-results']"));
 	}
 }

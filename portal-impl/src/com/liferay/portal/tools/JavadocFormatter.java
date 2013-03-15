@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -355,11 +355,7 @@ public class JavadocFormatter {
 					comment = element.getText();
 				}
 
-				String elementName = null;
-
-				if (commentElement != null) {
-					elementName = element.elementText("name");
-				}
+				String elementName = element.elementText("name");
 
 				if (Validator.isNotNull(comment)) {
 					comment = _assembleTagComment(
@@ -528,11 +524,9 @@ public class JavadocFormatter {
 
 		value = _trimMultilineText(value);
 
-		if (Validator.isNotNull(value)) {
-			Element commentElement = paramElement.addElement("comment");
+		Element commentElement = paramElement.addElement("comment");
 
-			commentElement.addCDATA(value);
-		}
+		commentElement.addCDATA(value);
 	}
 
 	private void _addParamElements(
@@ -578,11 +572,9 @@ public class JavadocFormatter {
 
 		comment = _trimMultilineText(comment);
 
-		if (Validator.isNotNull(comment)) {
-			Element commentElement = returnElement.addElement("comment");
+		Element commentElement = returnElement.addElement("comment");
 
-			commentElement.addCDATA(comment);
-		}
+		commentElement.addCDATA(comment);
 	}
 
 	private void _addThrowsElement(
@@ -621,11 +613,9 @@ public class JavadocFormatter {
 
 		value = _trimMultilineText(value);
 
-		if (Validator.isNotNull(value)) {
-			Element commentElement = throwsElement.addElement("comment");
+		Element commentElement = throwsElement.addElement("comment");
 
-			commentElement.addCDATA(_getCDATA(value));
-		}
+		commentElement.addCDATA(_getCDATA(value));
 	}
 
 	private void _addThrowsElements(

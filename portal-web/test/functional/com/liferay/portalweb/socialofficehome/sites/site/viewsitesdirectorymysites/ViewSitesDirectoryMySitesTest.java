@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -43,7 +43,7 @@ public class ViewSitesDirectoryMySitesTest extends BaseTestCase {
 				"xPath=(//span[@class='name']/a)[contains(.,'Open Site1 Name')]"));
 		selenium.select("//span[@class='sites-tabs']/span/span/span/select",
 			RuntimeVariables.replace("My Sites"));
-		Thread.sleep(5000);
+		Thread.sleep(1000);
 		assertEquals(RuntimeVariables.replace("Open Site1 Name"),
 			selenium.getText(
 				"xPath=(//span[@class='name']/a)[contains(.,'Open Site1 Name')]"));

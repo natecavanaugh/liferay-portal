@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,9 +19,9 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.permission.PortalHookPermission;
 import com.liferay.portal.kernel.servlet.taglib.FileAvailabilityUtil;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
+import com.liferay.portal.kernel.util.CentralizedThreadLocal;
 import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.security.lang.PortalSecurityManager;
-import com.liferay.portal.security.pacl.checker.CheckerUtil;
 import com.liferay.portal.security.pacl.jndi.PACLInitialContextFactoryBuilder;
 
 import java.lang.reflect.Field;
@@ -108,7 +108,11 @@ public class PortalSecurityManagerImpl extends SecurityManager
 			throw new NullPointerException("Class cannot be null");
 		}
 
+		ClassLoader clazzClassLoader = clazz.getClassLoader();
+
 		if (accessibility == Member.PUBLIC) {
+			_checkMemberAccessClassLoader.set(clazzClassLoader);
+
 			return;
 		}
 
@@ -122,8 +126,6 @@ public class PortalSecurityManagerImpl extends SecurityManager
 		// [2] java.lang.Class.someReflectionAPI
 		// [1] java.lang.Class.checkMemberAccess
 		// [0] SecurityManager.checkMemberAccess
-
-		ClassLoader clazzClassLoader = clazz.getClassLoader();
 
 		if ((stack.length < 4) ||
 			(stack[3].getClassLoader() != clazzClassLoader)) {
@@ -213,17 +215,19 @@ public class PortalSecurityManagerImpl extends SecurityManager
 		return _policy;
 	}
 
+	protected void initClass(Class<?> clazz) {
+		_log.debug(
+			"Loading " + clazz.getName() + " and " +
+				clazz.getDeclaredClasses().length + " inner classes");
+	}
+
 	protected void initClasses() {
 
 		// Load dependent classes to prevent ClassCircularityError
 
-		_log.debug("Loading " + FileAvailabilityUtil.class.getName());
-		_log.debug("Loading " + PortalHookPermission.class.getName());
-
-		// Touch dependent classes to prevent NoClassDefError
-
-		CheckerUtil.isAccessControllerDoPrivileged(0);
-		PACLClassUtil.getPACLPolicyByReflection(false, false);
+		initClass(CentralizedThreadLocal.class);
+		initClass(FileAvailabilityUtil.class);
+		initClass(PortalHookPermission.class);
 	}
 
 	protected void initInitialContextFactoryBuilder() throws Exception {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -107,31 +107,6 @@ public interface TrashHandler {
 		throws PortalException, SystemException;
 
 	/**
-	 * Deletes all the model entities with the primary keys.
-	 *
-	 * @param  classPKs the primary keys of the model entities to delete
-	 * @throws PortalException if any one of the model entities could not be
-	 *         found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void deleteTrashEntries(long[] classPKs)
-		throws PortalException, SystemException;
-
-	/**
-	 * Deletes all the model entities with the primary keys, optionally checking
-	 * permission before deleting each model entity.
-	 *
-	 * @param  classPKs the primary keys of the model entities to delete
-	 * @param  checkPermission whether to check permission before deleting each
-	 *         model entity
-	 * @throws PortalException if any one of the model entities could not be
-	 *         found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void deleteTrashEntries(long[] classPKs, boolean checkPermission)
-		throws PortalException, SystemException;
-
-	/**
 	 * Deletes the model entity with the primary key.
 	 *
 	 * @param  classPK the primary key of the model entity to delete
@@ -140,19 +115,6 @@ public interface TrashHandler {
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void deleteTrashEntry(long classPK)
-		throws PortalException, SystemException;
-
-	/**
-	 * Deletes the model entity with the primary key.
-	 *
-	 * @param  classPK the primary key of the model entity to delete
-	 * @param  checkPermission whether to check permission before deleting the
-	 *         model entity
-	 * @throws PortalException if a model entity with the primary key could not
-	 *         be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void deleteTrashEntry(long classPK, boolean checkPermission)
 		throws PortalException, SystemException;
 
 	/**
@@ -398,6 +360,9 @@ public interface TrashHandler {
 			long classPK, int start, int end)
 		throws PortalException, SystemException;
 
+	public ContainerModel getTrashContainer(long classPK)
+		throws PortalException, SystemException;
+
 	/**
 	 * Returns the name of the container model.
 	 *
@@ -574,15 +539,27 @@ public interface TrashHandler {
 	/**
 	 * Moves the entity with the class primary key to the container model with
 	 * the class primary key
+	 *
+	 * @param  userId the user ID
+	 * @param  classPK the primary key of the model entity
+	 * @param  containerModelId the primary key of the destination container
+	 *         model
+	 * @param  serviceContext the service context to be applied
+	 * @throws PortalException if a model entity with the primary key or the
+	 *         destination container model with the primary key could not be
+	 *         found
+	 * @throws SystemException if a system exception occurred
 	 */
 	public void moveEntry(
-			long classPK, long containerModelId, ServiceContext serviceContext)
+			long userId, long classPK, long containerModelId,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException;
 
 	/**
 	 * Moves the model entity with the primary key out of the Recycle Bin to a
 	 * new destination identified by the container model ID.
 	 *
+	 * @param  userId the user ID
 	 * @param  classPK the primary key of the model entity
 	 * @param  containerModelId the primary key of the destination container
 	 *         model
@@ -593,7 +570,8 @@ public interface TrashHandler {
 	 * @throws SystemException if a system exception occurred
 	 */
 	public void moveTrashEntry(
-			long classPK, long containerModelId, ServiceContext serviceContext)
+			long userId, long classPK, long containerModelId,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException;
 
 	/**
@@ -615,25 +593,15 @@ public interface TrashHandler {
 		throws PortalException, SystemException;
 
 	/**
-	 * Restores all the model entities with the primary keys.
-	 *
-	 * @param  classPKs the primary keys of the model entities to restore
-	 * @throws PortalException if any one of the model entities could not be
-	 *         found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void restoreTrashEntries(long[] classPKs)
-		throws PortalException, SystemException;
-
-	/**
 	 * Restores the model entity with the primary key.
 	 *
+	 * @param  userId the user ID
 	 * @param  classPK the primary key of the model entity to restore
 	 * @throws PortalException if a model entity with the primary key could not
 	 *         be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void restoreTrashEntry(long classPK)
+	public void restoreTrashEntry(long userId, long classPK)
 		throws PortalException, SystemException;
 
 	/**

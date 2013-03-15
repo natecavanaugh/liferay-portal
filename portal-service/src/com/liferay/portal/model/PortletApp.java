@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -50,6 +50,8 @@ public interface PortletApp extends Serializable {
 	public Map<String, String> getCustomUserAttributes();
 
 	public String getDefaultNamespace();
+
+	public Set<EventDefinition> getEventDefinitions();
 
 	public PortletFilter getPortletFilter(String filterName);
 

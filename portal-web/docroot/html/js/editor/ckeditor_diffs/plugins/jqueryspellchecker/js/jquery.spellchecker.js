@@ -89,8 +89,6 @@
 		},
 		trigger: function(name) {
 			var args = Array.prototype.slice.call(arguments, 1);
-			// CUSTOM START
-			// if (A.isFunction(name)) {
 			var instance = this;
 			if (typeof instance[name] === 'function' && name != 'destroy') {
 				return instance[name](args);

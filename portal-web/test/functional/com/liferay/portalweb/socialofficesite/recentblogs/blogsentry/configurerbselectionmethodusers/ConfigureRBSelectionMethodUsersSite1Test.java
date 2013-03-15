@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,7 +36,7 @@ public class ConfigureRBSelectionMethodUsersSite1Test extends BaseTestCase {
 				assertTrue(selenium.isVisible("//input[@class='search-input']"));
 				selenium.type("//input[@class='search-input']",
 					RuntimeVariables.replace("Open Site1"));
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 				assertEquals(RuntimeVariables.replace("Open Site1 Name"),
 					selenium.getText(
 						"//li[contains(@class, 'social-office-enabled')]/span[2]/a"));
@@ -68,7 +68,7 @@ public class ConfigureRBSelectionMethodUsersSite1Test extends BaseTestCase {
 					"//section[@class='portlet']/header[contains(.,'Recent Blogs')]/menu/span/ul/li/strong/a");
 
 			case 2:
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 				assertTrue(selenium.isVisible(
 						"//section[@class='portlet']/header[contains(.,'Recent Blogs')]/menu/span/ul/li/strong/a"));
 				selenium.clickAt("//section[@class='portlet']/header[contains(.,'Recent Blogs')]/menu/span/ul/li/strong/a",

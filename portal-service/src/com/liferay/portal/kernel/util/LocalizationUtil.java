@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -98,6 +98,12 @@ public class LocalizationUtil {
 
 	public static Map<Locale, String> getLocalizationMap(String xml) {
 		return getLocalization().getLocalizationMap(xml);
+	}
+
+	public static Map<Locale, String> getLocalizationMap(
+		String xml, boolean useDefault) {
+
+		return getLocalization().getLocalizationMap(xml, useDefault);
 	}
 
 	public static Map<Locale, String> getLocalizationMap(

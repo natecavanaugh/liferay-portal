@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -79,7 +79,7 @@ public class TearDownWCWebContentTest extends BaseTestCase {
 					"//div[@class='portlet-msg-success taglib-trash-undo']/form");
 				assertTrue(selenium.isPartialText(
 						"//div[@class='portlet-msg-success taglib-trash-undo']/form",
-						"The selected item was moved to the Recycle Bin."));
+						"moved to the Recycle Bin."));
 
 			case 2:
 				assertEquals(RuntimeVariables.replace(

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -271,6 +271,14 @@ public abstract class BaseTrashHandlerTestCase {
 		return assetEntry.isVisible();
 	}
 
+	protected boolean isBaseModelContainerModel() {
+		if (baseModel instanceof ContainerModel) {
+			return true;
+		}
+
+		return false;
+	}
+
 	protected boolean isBaseModelMoveableFromTrash() {
 		return true;
 	}
@@ -469,7 +477,8 @@ public abstract class BaseTrashHandlerTestCase {
 			}
 		}
 		else {
-			trashHandler.restoreTrashEntry(getTrashEntryClassPK(baseModel));
+			trashHandler.restoreTrashEntry(
+				TestPropsValues.getUserId(), getTrashEntryClassPK(baseModel));
 
 			Assert.assertEquals(
 				initialBaseModelsCount + 1,
@@ -591,7 +600,7 @@ public abstract class BaseTrashHandlerTestCase {
 			moveBaseModelFromTrash(baseModel, group, serviceContext);
 
 			if (isIndexableBaseModel()) {
-				if (baseModel instanceof ContainerModel) {
+				if (isBaseModelContainerModel()) {
 					Assert.assertEquals(
 						initialBaseModelsSearchCount + 2,
 						searchBaseModelsCount(
@@ -856,7 +865,8 @@ public abstract class BaseTrashHandlerTestCase {
 			}
 		}
 		else {
-			trashHandler.restoreTrashEntry(getTrashEntryClassPK(baseModel));
+			trashHandler.restoreTrashEntry(
+				TestPropsValues.getUserId(), getTrashEntryClassPK(baseModel));
 
 			Assert.assertEquals(
 				initialBaseModelsCount + 1,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -55,9 +55,7 @@ public class NetChecker extends BaseChecker {
 
 			String className8 = callerClass8.getName();
 
-			if (className8.startsWith(_CLASS_NAME_SOCKS_SOCKET_IMPL) &&
-				CheckerUtil.isAccessControllerDoPrivileged(9)) {
-
+			if (className8.startsWith(_CLASS_NAME_SOCKS_SOCKET_IMPL)) {
 				logGetProxySelector(callerClass8, 8);
 
 				return true;
@@ -68,9 +66,7 @@ public class NetChecker extends BaseChecker {
 
 			String className7 = callerClass7.getName();
 
-			if (className7.startsWith(_CLASS_NAME_SOCKS_SOCKET_IMPL) &&
-				CheckerUtil.isAccessControllerDoPrivileged(8)) {
-
+			if (className7.startsWith(_CLASS_NAME_SOCKS_SOCKET_IMPL)) {
 				logGetProxySelector(callerClass7, 7);
 
 				return true;

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -253,12 +253,29 @@ public class SocialActivitySetLocalServiceUtil {
 	}
 
 	public static com.liferay.portlet.social.model.SocialActivitySet addActivitySet(
-		long userId, long activityId, java.lang.String className, long classPK,
-		int type)
+		long activityId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addActivitySet(userId, activityId, className, classPK, type);
+		return getService().addActivitySet(activityId);
+	}
+
+	public static void decrementActivityCount(long activitySetId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().decrementActivityCount(activitySetId);
+	}
+
+	public static void decrementActivityCount(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().decrementActivityCount(classNameId, classPK);
+	}
+
+	public static void incrementActivityCount(long activitySetId,
+		long activityId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().incrementActivityCount(activitySetId, activityId);
 	}
 
 	public static SocialActivitySetLocalService getService() {

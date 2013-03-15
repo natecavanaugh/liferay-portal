@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -103,7 +103,7 @@ public class Gmail_ViewPMMessageTest extends BaseTestCase {
 				selenium.clickAt("//div/div/span/b",
 					RuntimeVariables.replace(
 						"Joe Bloggs sent you a message on Liferay"));
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 				assertEquals(RuntimeVariables.replace(
 						"Joe Bloggs sent you a message."),
 					selenium.getText("//div[2]/div[2]/div[3]"));

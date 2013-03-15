@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -81,11 +81,11 @@ public class EhcachePortalCacheClusterReplicator implements CacheReplicator {
 
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), element.getObjectKey(),
+				ehcache.getName(), element.getKey(),
 				PortalCacheClusterEventType.PUT);
 
 		if (_replicatePutsViaCopy) {
-			portalCacheClusterEvent.setElementValue(element.getObjectValue());
+			portalCacheClusterEvent.setElementValue(element.getValue());
 		}
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);
@@ -100,7 +100,7 @@ public class EhcachePortalCacheClusterReplicator implements CacheReplicator {
 
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), element.getObjectKey(),
+				ehcache.getName(), element.getKey(),
 				PortalCacheClusterEventType.REMOVE);
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);
@@ -115,11 +115,11 @@ public class EhcachePortalCacheClusterReplicator implements CacheReplicator {
 
 		PortalCacheClusterEvent portalCacheClusterEvent =
 			new PortalCacheClusterEvent(
-				ehcache.getName(), element.getObjectKey(),
+				ehcache.getName(), element.getKey(),
 				PortalCacheClusterEventType.UPDATE);
 
 		if (_replicateUpdatesViaCopy) {
-			portalCacheClusterEvent.setElementValue(element.getObjectValue());
+			portalCacheClusterEvent.setElementValue(element.getValue());
 		}
 
 		PortalCacheClusterLinkUtil.sendEvent(portalCacheClusterEvent);

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -188,6 +188,23 @@ public class PollsChoiceLocalServiceWrapper implements PollsChoiceLocalService,
 	}
 
 	/**
+	* Returns the polls choice matching the UUID and group.
+	*
+	* @param uuid the polls choice's UUID
+	* @param groupId the primary key of the group
+	* @return the matching polls choice
+	* @throws PortalException if a matching polls choice could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.polls.model.PollsChoice getPollsChoiceByUuidAndGroupId(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsChoiceLocalService.getPollsChoiceByUuidAndGroupId(uuid,
+			groupId);
+	}
+
+	/**
 	* Returns a range of all the polls choices.
 	*
 	* <p>
@@ -247,12 +264,12 @@ public class PollsChoiceLocalServiceWrapper implements PollsChoiceLocalService,
 		_pollsChoiceLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
-	public com.liferay.portlet.polls.model.PollsChoice addChoice(
+	public com.liferay.portlet.polls.model.PollsChoice addChoice(long userId,
 		long questionId, java.lang.String name, java.lang.String description,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _pollsChoiceLocalService.addChoice(questionId, name,
+		return _pollsChoiceLocalService.addChoice(userId, questionId, name,
 			description, serviceContext);
 	}
 
@@ -275,11 +292,12 @@ public class PollsChoiceLocalServiceWrapper implements PollsChoiceLocalService,
 
 	public com.liferay.portlet.polls.model.PollsChoice updateChoice(
 		long choiceId, long questionId, java.lang.String name,
-		java.lang.String description)
+		java.lang.String description,
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _pollsChoiceLocalService.updateChoice(choiceId, questionId,
-			name, description);
+			name, description, serviceContext);
 	}
 
 	/**

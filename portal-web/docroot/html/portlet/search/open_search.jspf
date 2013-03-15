@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -317,7 +317,7 @@ for (int i = 0; i < portlets.size(); i++) {
 
 		// When the total is <= to the delta, we know the result is accurate
 		// since we've filtered the entire result set. Otherwise, we simply
-		// indicate that there are possibly many more. (à la Google)
+		// indicate that there are possibly many more. (ï¿½ la Google)
 
 		if (filterSearch && (openSearchSearchContainer.getTotal() > openSearchSearchContainer.getDelta())) {
 			sb.append(StringPool.SPACE);

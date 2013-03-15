@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,9 +20,7 @@ import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.polls.DuplicateVoteException;
@@ -178,6 +176,8 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 			PortletDataContext portletDataContext, PollsChoice choice)
 		throws Exception {
 
+		long userId = portletDataContext.getUserId(choice.getUserUuid());
+
 		Map<Long, Long> questionIds =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				PollsQuestion.class);
@@ -197,18 +197,18 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 				serviceContext.setUuid(choice.getUuid());
 
 				importedChoice = PollsChoiceLocalServiceUtil.addChoice(
-					questionId, choice.getName(), choice.getDescription(),
-					serviceContext);
+					userId, questionId, choice.getName(),
+					choice.getDescription(), serviceContext);
 			}
 			else {
 				importedChoice = PollsChoiceLocalServiceUtil.updateChoice(
 					existingChoice.getChoiceId(), questionId, choice.getName(),
-					choice.getDescription());
+					choice.getDescription(), new ServiceContext());
 			}
 		}
 		else {
 			importedChoice = PollsChoiceLocalServiceUtil.addChoice(
-				questionId, choice.getName(), choice.getDescription(),
+				userId, questionId, choice.getName(), choice.getDescription(),
 				new ServiceContext());
 		}
 
@@ -344,7 +344,7 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 		portletDataContext.addPermissions(
 			"com.liferay.portlet.polls", portletDataContext.getScopeGroupId());
 
-		Element rootElement = addExportRootElement();
+		Element rootElement = addExportDataRootElement(portletDataContext);
 
 		rootElement.addAttribute(
 			"group-id", String.valueOf(portletDataContext.getScopeGroupId()));
@@ -375,9 +375,7 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 			"com.liferay.portlet.polls", portletDataContext.getSourceGroupId(),
 			portletDataContext.getScopeGroupId());
 
-		Document document = SAXReaderUtil.read(data);
-
-		Element rootElement = document.getRootElement();
+		Element rootElement = portletDataContext.getImportDataRootElement();
 
 		Element questionsElement = rootElement.element("questions");
 

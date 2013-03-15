@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -257,26 +257,8 @@ portlets = ListUtil.sort(portlets, new PortletTitleComparator(application, local
 </aui:form>
 
 <%!
-private static final String[] _SITE_PORTLETS = {
-	PortletKeys.SITES_ADMIN,
-};
-
-private static final String[] _ORGANIZATION_PORTLETS = {
-	PortletKeys.USERS_ADMIN,
-};
-
-private static final String[] _PORTAL_PORTLETS = {
-	PortletKeys.SITES_ADMIN,
-	PortletKeys.MONITORING,
-	PortletKeys.PASSWORD_POLICIES_ADMIN,
-	PortletKeys.PLUGINS_ADMIN,
-	PortletKeys.ROLES_ADMIN,
-	PortletKeys.PORTAL_SETTINGS,
-	PortletKeys.USERS_ADMIN
-};
-
 private boolean _isSitePortlet(String portletId) {
-	return ArrayUtil.contains(_SITE_PORTLETS, portletId);
+	return _sitePortletIds.contains(portletId);
 }
 
 private boolean _isCurrent(String url, String portletResource, boolean showModelResources) {
@@ -301,10 +283,34 @@ private boolean _isCurrent(String url, String portletResource, boolean showModel
 }
 
 private boolean _isOrganizationPortlet(String portletId) {
-	return ArrayUtil.contains(_ORGANIZATION_PORTLETS, portletId);
+	return _organizationPortletIds.contains(portletId);
 }
 
 private boolean _isPortalPortlet(String portletId) {
-	return ArrayUtil.contains(_PORTAL_PORTLETS, portletId);
+	return _portalPortletIds.contains(portletId);
 }
+
+private static Set<String> _sitePortletIds = SetUtil.fromArray(
+	new String[] {
+		PortletKeys.SITES_ADMIN
+	});
+
+private static Set<String> _organizationPortletIds = SetUtil.fromArray(
+	new String[] {
+		PortletKeys.USERS_ADMIN
+	});
+
+private static Set<String> _portalPortletIds = SetUtil.fromArray(
+	new String[] {
+		PortletKeys.EXPANDO,
+		PortletKeys.LAYOUT_PROTOTYPE,
+		PortletKeys.LAYOUT_SET_PROTOTYPE,
+		PortletKeys.MONITORING,
+		PortletKeys.PASSWORD_POLICIES_ADMIN,
+		PortletKeys.PLUGINS_ADMIN,
+		PortletKeys.PORTAL_SETTINGS,
+		PortletKeys.ROLES_ADMIN,
+		PortletKeys.SITES_ADMIN,
+		PortletKeys.USERS_ADMIN
+	});
 %>

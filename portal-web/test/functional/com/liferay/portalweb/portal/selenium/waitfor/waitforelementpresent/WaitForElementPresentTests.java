@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -27,8 +27,10 @@ public class WaitForElementPresentTests extends BaseTestSuite {
 		TestSuite testSuite = new TestSuite();
 		testSuite.addTestSuite(WaitForElementPresent1Test.class);
 		testSuite.addTestSuite(WaitForElementPresent2Test.class);
+		testSuite.addTestSuite(WaitForElementPresent3Test.class);
 		testSuite.addTestSuite(WaitForElementNotPresent1Test.class);
 		testSuite.addTestSuite(WaitForElementNotPresent2Test.class);
+		testSuite.addTestSuite(WaitForElementNotPresent3Test.class);
 
 		return testSuite;
 	}
