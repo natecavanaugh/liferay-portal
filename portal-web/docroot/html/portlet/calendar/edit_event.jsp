@@ -340,30 +340,21 @@ int secondReminder = BeanParamUtil.getInteger(event, request, "secondReminder", 
 				durationHour.val('24');
 				durationMinute.val('0');
 
-				Liferay.Util.toggleDisabled(durationHour, true);
-				Liferay.Util.toggleDisabled(durationMinute, true);
-
 				timeZoneSensitiveCheckbox.attr('checked', false);
-				Liferay.Util.toggleDisabled(timeZoneSensitiveCheckbox, true);
-
-				startDateHour.disabled = true;
-				startDateMinute.disabled = true;
-				startDateAmPm.disabled = true;
 			}
 			else {
-				Liferay.Util.toggleDisabled(durationHour, false);
-				Liferay.Util.toggleDisabled(durationMinute, false);
-
-				Liferay.Util.toggleDisabled(timeZoneSensitiveCheckbox, false);
-
 				if (timeZoneSensitiveCheckbox.previous().val() === 'true') {
 					timeZoneSensitiveCheckbox.attr('checked', true);
 				}
-
-				startDateHour.disabled = false;
-				startDateMinute.disabled = false;
-				startDateAmPm.disabled = false;
 			}
+
+			startDateAmPm.disabled = allDayChecked;
+			startDateHour.disabled = allDayChecked;
+			startDateMinute.disabled = allDayChecked;
+
+			Liferay.Util.toggleDisabled(durationHour, allDayChecked);
+			Liferay.Util.toggleDisabled(durationMinute, allDayChecked);
+			Liferay.Util.toggleDisabled(timeZoneSensitiveCheckbox, allDayChecked);
 		}
 	);
 
