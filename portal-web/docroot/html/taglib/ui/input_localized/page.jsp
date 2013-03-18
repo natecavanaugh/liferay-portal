@@ -19,6 +19,7 @@
 <%
 String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_input_localized_page");
 
+boolean autoFocus = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-localized:autoFocus"));
 boolean autoSize = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-localized:autoSize"));
 String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-localized:cssClass"));
 String defaultLanguageId = (String)request.getAttribute("liferay-ui:input-localized:defaultLanguageId");
@@ -90,6 +91,12 @@ List<String> languageIds = new ArrayList<String>();
 			</c:if>
 		</c:when>
 	</c:choose>
+
+	<c:if test="<%= autoFocus %>">
+		<aui:script>
+			Liferay.Util.focusFormField('#<portlet:namespace /><%= id + StringPool.UNDERLINE + mainLanguageId %>');
+		</aui:script>
+	</c:if>
 
 	<c:if test="<%= (locales.length > 1) && Validator.isNull(languageId) %>">
 

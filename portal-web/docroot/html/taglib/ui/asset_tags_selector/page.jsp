@@ -17,6 +17,7 @@
 <%@ include file="/html/taglib/ui/asset_tags_selector/init.jsp" %>
 
 <%
+boolean autoFocus = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:asset-tags-selector:autoFocus"));
 String className = (String)request.getAttribute("liferay-ui:asset-tags-selector:className");
 long classPK = GetterUtil.getLong((String)request.getAttribute("liferay-ui:asset-tags-selector:classPK"));
 String hiddenInput = (String)request.getAttribute("liferay-ui:asset-tags-selector:hiddenInput");
@@ -72,4 +73,8 @@ if (curTagsParam != null) {
 			portalModelResource: <%= Validator.isNotNull(className) && (ResourceActionsUtil.isPortalModelResource(className) || className.equals(Group.class.getName())) %>
 		}
 	).render();
+
+	<c:if test="<%= autoFocus %>">
+		Liferay.Util.focusFormField('#<%= id %>assetTagNames');
+	</c:if>
 </aui:script>

@@ -23,6 +23,7 @@ if (GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-date:di
 	namespace = StringPool.BLANK;
 }
 
+boolean autoFocus = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-date:autoFocus"));
 String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-date:cssClass"));
 String formName = namespace + request.getAttribute("liferay-ui:input-date:name");
 String name = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-date:name"));
@@ -132,6 +133,11 @@ else if (yearNullable) {
 							<%@ include file="/html/taglib/ui/input_date/select_year.jspf" %>
 						</c:otherwise>
 					</c:choose>
+					<c:if test="<%= autoFocus %>">
+						<aui:script>
+							Liferay.Util.focusFormField('#<%= dayParamId %>');
+						</aui:script>
+					</c:if>
 				</c:when>
 			</c:choose>
 		</div>

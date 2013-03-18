@@ -33,6 +33,10 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		return super.doStartTag();
 	}
 
+	public boolean getAutoFocus() {
+		return _autoFocus;
+	}
+
 	public boolean getAutoSize() {
 		return _autoSize;
 	}
@@ -175,6 +179,12 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 
 	public java.lang.Object getValue() {
 		return _value;
+	}
+
+	public void setAutoFocus(boolean autoFocus) {
+		_autoFocus = autoFocus;
+
+		setScopedAttribute("autoFocus", autoFocus);
 	}
 
 	public void setAutoSize(boolean autoSize) {
@@ -395,6 +405,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	protected void cleanUp() {
+		_autoFocus = false;
 		_autoSize = false;
 		_bean = null;
 		_changesContext = false;
@@ -440,6 +451,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
+		setNamespacedAttribute(request, "autoFocus", _autoFocus);
 		setNamespacedAttribute(request, "autoSize", _autoSize);
 		setNamespacedAttribute(request, "bean", _bean);
 		setNamespacedAttribute(request, "changesContext", _changesContext);
@@ -483,6 +495,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 	private static final String _PAGE =
 		"/html/taglib/aui/input/page.jsp";
 
+	private boolean _autoFocus = false;
 	private boolean _autoSize = false;
 	private java.lang.Object _bean = null;
 	private boolean _changesContext = false;
