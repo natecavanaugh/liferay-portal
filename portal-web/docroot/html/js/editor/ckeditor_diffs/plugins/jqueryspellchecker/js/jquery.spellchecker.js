@@ -75,7 +75,7 @@
 			each(function(node){
 				fixWhiteSpace(node);
 			});
-		return a._node.innerHTML;
+		return a.text();
 	}
 
 	RegExp.escape = function(text) {
