@@ -162,8 +162,8 @@
 			e.preventDefault();
 			e.stopPropagation();
 
-			var element = AUI().one(e.currentTarget);
-			var word = AUI().Lang.trim(element.get('textContent') || element.text());
+			var element = AUI().one(e.currentTarget._node);
+			var word = AUI().Lang.trim(element.getData('word') || element.text());
 
 			this.trigger(handlerName, e, word, element, this);
 
@@ -304,6 +304,7 @@
 
 	IncorrectWordsInline.prototype.destroy = function() {
 		// this.element.off('.' + pluginName);
+		this.element.unsubscribe('.' + pluginName);
 		try {
 			window.findAndReplaceDOMText.revert();
 		} catch(e) {}
@@ -807,6 +808,8 @@
 
 			span.addClass(pluginName + '-word-highlight');
 			span.text(fill);
+			span.setData('word', word);
+			span.setData('firstElement', replaceElement);
 
 			span = span.getDOMNode();
 
