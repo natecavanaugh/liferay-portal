@@ -1846,10 +1846,6 @@
 		Util,
 		'toggleDisabled',
 		function(element, disable) {
-			if (disable !== false) {
-				disable = true;
-			}
-
 			if (!A.instanceOf(element, A.NodeList)) {
 				element = A.all(element);
 			}
@@ -1858,11 +1854,9 @@
 				function(item, index, collection) {
 					var parentClass;
 
-					var parentClassItem;
-
 					var toggleDisabledClass = function(item, parentClass) {
 						if (parentClass) {
-							parentClassItem = item.ancestor('.' + parentClass);
+							var parentClassItem = item.ancestor('.' + parentClass);
 
 							if (parentClassItem) {
 								parentClassItem.toggleClass(parentClass + DISABLED_SUFFIX, disable);
@@ -1870,45 +1864,40 @@
 						}
 					};
 
-					if (item.attr('type')) {
-						item.attr('disabled', disable);
+					var node = A.one(item);
 
-						if (item.hasClass(FIELD_INPUT_PREFIX)) {
-							parentClass = FIELD_PREFIX;
-						}
-						else if (item.hasClass(BUTTON_INPUT_PREFIX)) {
-							parentClass = BUTTON_PREFIX;
-						}
+					var children = node.all('button, input, select, textarea');
 
-						toggleDisabledClass(item, parentClass);
-					}
-					else {
-						var node = A.one(item);
+					var hasChildren = children.size();
 
-						var children = node.all('button, input, select, textarea');
+					var nodeEl = hasChildren ? children : node;
 
-						if (children.size()) {
-							children.attr('disabled', disable);
+					nodeEl.attr('disabled', disable);
 
-							if (node.one('.' + BUTTON_PREFIX)) {
-								node.all('.' + BUTTON_PREFIX).toggleClass(BUTTON_PREFIX + DISABLED_SUFFIX, disable);
-							}
-							else {
-								if (node.ancestor('.' + FIELD_PREFIX)) {
-									parentClass = FIELD_PREFIX;
-								}
-								else if (node.ancestor('.' + BUTTON_PREFIX)) {
-									parentClass = BUTTON_PREFIX;
-								}
+					if (nodeEl.hasClass(FIELD_INPUT_PREFIX)) {
+						parentClass = FIELD_PREFIX;
 
-								toggleDisabledClass(item, parentClass);
-							}
+						if (hasChildren) {
+							var hasFieldPrefix = node.all('.' + FIELD_PREFIX);
 
-							if (node.one('.' + FIELD_PREFIX)) {
-								node.all('.' + FIELD_PREFIX).toggleClass(FIELD_PREFIX + DISABLED_SUFFIX, disable);
+							if (hasFieldPrefix) {
+								hasFieldPrefix.toggleClass(FIELD_PREFIX + DISABLED_SUFFIX, disable);
 							}
 						}
 					}
+					else if (nodeEl.hasClass(BUTTON_INPUT_PREFIX)) {
+						parentClass = BUTTON_PREFIX;
+
+						if (hasChildren) {
+							var hasButtonPrefix = node.all('.' + BUTTON_PREFIX);
+
+							if (hasButtonPrefix) {
+								hasButtonPrefix.toggleClass(BUTTON_PREFIX + DISABLED_SUFFIX, disable);
+							}
+						}
+					}
+
+					toggleDisabledClass(item, parentClass);
 				}
 			);
 		},
