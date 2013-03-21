@@ -44,10 +44,6 @@ hr, .separator {
 	position: relative;
 }
 
-#banner nav {
-	z-index: 210;
-}
-
 .site-title .site-name {
 	background: #555 url(../images/common/site_icon.png) no-repeat 15px 50%;
 	color: #FFF;
@@ -117,7 +113,7 @@ hr, .separator {
 	min-height: 2.2em;
 	padding: 0 5px;
 	position: relative;
-	z-index: 1;
+	z-index: 210;
 
 	ul {
 		list-style: none;
