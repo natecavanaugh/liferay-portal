@@ -15,6 +15,8 @@
 
 	var BUTTON_PREFIX = 'aui-button';
 
+	var DOT = '.';
+
 	var DISABLED_SUFFIX = '-disabled';
 
 	var EVENT_CLICK = 'click';
@@ -1845,61 +1847,98 @@
 	Liferay.provide(
 		Util,
 		'toggleDisabled',
-		function(element, disable) {
-			if (!A.instanceOf(element, A.NodeList)) {
-				element = A.all(element);
+		function(field, force) {
+			var container;
+			var prefix;
+
+			var isFieldInput = field.hasClass(FIELD_INPUT_PREFIX);
+			var isButtonInput = field.hasClass(BUTTON_INPUT_PREFIX);
+
+			if (isFieldInput || isButtonInput) {
+				container = field.ancestor(DOT + BUTTON_PREFIX + ',' + DOT + FIELD_PREFIX);
+			}
+			else {
+				container = field;
+				field = field.children(DOT + BUTTON_PREFIX + ',' + DOT + FIELD_PREFIX);
 			}
 
-			element.each(
+			if (!A.instanceOf(field, A.NodeList)) {
+				field = A.all(field);
+			}
+
+			container.toggleClass(DOT + BUTTON_PREFIX + DISABLED_SUFFIX, force);
+			container.toggleClass(DOT + FIELD_PREFIX + DISABLED_SUFFIX, force);
+
+			field.each(
 				function(item, index, collection) {
-					var parentClass;
+					item.toggleClass(DOT + BUTTON_PREFIX + DISABLED_SUFFIX, force);
+					item.toggleClass(DOT + FIELD_PREFIX + DISABLED_SUFFIX, force);
 
-					var toggleDisabledClass = function(item, parentClass) {
-						if (parentClass) {
-							var parentClassItem = item.ancestor('.' + parentClass);
+					var disabled = (force !== undefined) ? force : !item.get('disabled');
 
-							if (parentClassItem) {
-								parentClassItem.toggleClass(parentClass + DISABLED_SUFFIX, disable);
-							}
-						}
-					};
-
-					var node = A.one(item);
-
-					var children = node.all('button, input, select, textarea');
-
-					var hasChildren = children.size();
-
-					var nodeEl = hasChildren ? children : node;
-
-					nodeEl.attr('disabled', disable);
-
-					if (nodeEl.hasClass(FIELD_INPUT_PREFIX)) {
-						parentClass = FIELD_PREFIX;
-
-						if (hasChildren) {
-							var hasFieldPrefix = node.all('.' + FIELD_PREFIX);
-
-							if (hasFieldPrefix) {
-								hasFieldPrefix.toggleClass(FIELD_PREFIX + DISABLED_SUFFIX, disable);
-							}
-						}
-					}
-					else if (nodeEl.hasClass(BUTTON_INPUT_PREFIX)) {
-						parentClass = BUTTON_PREFIX;
-
-						if (hasChildren) {
-							var hasButtonPrefix = node.all('.' + BUTTON_PREFIX);
-
-							if (hasButtonPrefix) {
-								hasButtonPrefix.toggleClass(BUTTON_PREFIX + DISABLED_SUFFIX, disable);
-							}
-						}
-					}
-
-					toggleDisabledClass(item, parentClass);
+					item.set('disabled', disabled);
 				}
 			);
+
+
+
+
+
+
+			// if (!A.instanceOf(field, A.NodeList)) {
+			// 	field = A.all(field);
+			// }
+
+			// field.each(
+			// 	function(item, index, collection) {
+			// 		var parentClass;
+
+			// 		var toggleDisabledClass = function(item, parentClass) {
+			// 			if (parentClass) {
+			// 				var parentClassItem = item.ancestor('.' + parentClass);
+
+			// 				if (parentClassItem) {
+			// 					 parentClassItem.toggleClass(parentClass + DISABLED_SUFFIX, force);
+			// 				}
+			// 			}
+			// 		};
+
+			// 		var node = A.one(item);
+
+			// 		var children = node.all('button, input, select, textarea');
+
+			// 		var hasChildren = children.size();
+
+			// 		var nodeEl = hasChildren ? children : node;
+
+			// 		nodeEl.attr('disabled', force);
+
+			// 		if (nodeEl.hasClass(FIELD_INPUT_PREFIX)) {
+			// 			parentClass = FIELD_PREFIX;
+
+			// 			if (hasChildren) {
+			// 				var hasFieldPrefix = node.all('.' + FIELD_PREFIX);
+
+			// 				if (hasFieldPrefix) {
+			// 					hasFieldPrefix.toggleClass(FIELD_PREFIX + DISABLED_SUFFIX, force);
+			// 				}
+			// 			}
+			// 		}
+			// 		else if (nodeEl.hasClass(BUTTON_INPUT_PREFIX)) {
+			// 			parentClass = BUTTON_PREFIX;
+
+			// 			if (hasChildren) {
+			// 				var hasButtonPrefix = node.all('.' + BUTTON_PREFIX);
+
+			// 				if (hasButtonPrefix) {
+			// 					hasButtonPrefix.toggleClass(BUTTON_PREFIX + DISABLED_SUFFIX, force);
+			// 				}
+			// 			}
+			// 		}
+
+			// 		toggleDisabledClass(item, parentClass);
+			// 	}
+			// );
 		},
 		['aui-base']
 	);
