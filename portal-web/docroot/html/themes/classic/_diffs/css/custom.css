@@ -42,6 +42,9 @@ hr, .separator {
 	height: auto;
 	margin-top: 1.4em;
 	position: relative;
+}
+
+#banner nav {
 	z-index: 210;
 }
 
