@@ -1640,11 +1640,18 @@
 		Util,
 		'selectEntity',
 		function(config, callback) {
-			this.openWindow(config);
+			var dialog = Util.getTop().Liferay.Util.Window._map[config.id];
 
-			var eventName = config.eventName || config.id;
+			if (dialog) {
+				dialog.show();
+			}
+			else {
+				this.openWindow(config);
 
-			Liferay.on(eventName, callback);
+				var eventName = config.eventName || config.id;
+
+				Liferay.on(eventName, callback);
+			}
 		},
 		['aui-base']
 	);
