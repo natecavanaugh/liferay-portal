@@ -18,6 +18,12 @@ AUI.add(
 							var nodeId = node.get('id');
 
 							proxyNode.one('.portlet-topper').html(Layout._getPortletTitle(nodeId));
+						},
+						portletAdded: function(event) {
+							var instance = this;
+
+							instance._setupNodeResize(event.portlet);
+							instance._setupNodeStack(event.portlet);
 						}
 					},
 					lazyStart: false

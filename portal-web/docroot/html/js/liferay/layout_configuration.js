@@ -224,8 +224,17 @@
 								}
 							}
 
+							var onComplete = function(portlet) {
+								Layout.fire("portletAdded",
+									{
+										portlet: portlet
+									}
+								);
+							};
+
 							var portletOptions = {
 								beforePortletLoaded: beforePortletLoaded,
+								onComplete: onComplete,
 								plid: plid,
 								placeHolder: placeHolder,
 								portletId: portletId,
