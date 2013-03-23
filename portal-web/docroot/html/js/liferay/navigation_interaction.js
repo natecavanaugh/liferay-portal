@@ -235,7 +235,7 @@ AUI.add(
 					_showNavigationMenu: function(menuNew, menuOld) {
 						var instance = this;
 
-						if (!(instance._lastShownMenu && (event.type.indexOf('focusedChange') !== -1))) {	
+						if (!(instance._lastShownMenu && (event.type.indexOf('focusedChange') !== -1))) {
 							var updateMenu = (menuOld && menuOld != menuNew);
 
 							if (updateMenu) {
@@ -248,7 +248,6 @@ AUI.add(
 								Liferay.fire('showNavigationMenu', MAP_HOVER);
 							}
 						}
-
 					}
 				}
 			}
