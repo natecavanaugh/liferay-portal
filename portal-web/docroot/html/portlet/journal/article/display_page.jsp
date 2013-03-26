@@ -538,7 +538,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 				}
 			);
 		},
-		['aui-dialog', 'aui-io', 'aui-tabs', 'aui-tree']
+		['aui-dialog-deprecated', 'aui-io', 'aui-tabs', 'aui-tree']
 	);
 
 	<c:choose>

@@ -741,7 +741,7 @@ if (Validator.isNotNull(content)) {
 	}
 </aui:script>
 
-<aui:script use="aui-base,aui-dialog-iframe,liferay-portlet-journal">
+<aui:script use="aui-base,aui-dialog-iframe-deprecated,liferay-portlet-journal">
 	var editDDMTemplate = A.one('#<portlet:namespace />editDDMTemplate');
 
 	if (editDDMTemplate) {

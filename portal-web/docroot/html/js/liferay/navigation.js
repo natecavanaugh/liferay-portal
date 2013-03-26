@@ -530,7 +530,7 @@ AUI.add(
 					instance.fire('editPage');
 				}
 			},
-			['aui-form-combobox', 'aui-overlay'],
+			['aui-form-combobox-deprecated', 'aui-overlay-deprecated'],
 			true
 		);
 
@@ -816,6 +816,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: []
+		requires: ['aui-component']
 	}
 );

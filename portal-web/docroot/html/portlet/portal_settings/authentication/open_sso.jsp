@@ -94,6 +94,6 @@ String openSsoLastNameAttr = PrefsPropsUtil.getString(company.getCompanyId(), Pr
 				}
 			);
 		},
-		['aui-dialog', 'aui-io']
+		['aui-dialog-deprecated', 'aui-io']
 	);
 </aui:script>

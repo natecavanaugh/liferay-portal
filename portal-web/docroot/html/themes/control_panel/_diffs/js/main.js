@@ -2,7 +2,7 @@ Liferay.Util.portletTitleEdit = function() {
 };
 
 if (!themeDisplay.isStatePopUp()) {
-	AUI().ready('aui-live-search', 'aui-overlay-context-panel', 'event-mouseenter', 'liferay-message', 'liferay-panel', 'liferay-store', 'node-focusmanager', 'transition',
+	AUI().ready('aui-live-search-deprecated', 'aui-overlay-context-panel-deprecated', 'event-mouseenter', 'liferay-message', 'liferay-panel', 'liferay-store', 'node-focusmanager', 'transition',
 		function(A) {
 			var body = A.getBody();
 

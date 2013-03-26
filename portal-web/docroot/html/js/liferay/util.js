@@ -1440,7 +1440,7 @@
 				}
 			}
 		},
-		['aui-editable']
+		['aui-editable-deprecated']
 	);
 
 	Liferay.provide(

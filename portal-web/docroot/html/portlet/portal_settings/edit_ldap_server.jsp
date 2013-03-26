@@ -414,7 +414,7 @@ for (int i = 0 ; i < groupMappingArray.length ; i++) {
 				);
 			}
 		},
-		['aui-dialog', 'aui-io']
+		['aui-dialog-deprecated', 'aui-io']
 	);
 
 	Liferay.provide(

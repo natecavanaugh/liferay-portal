@@ -129,6 +129,6 @@ portletURL.setParameter("struts_action", "/dynamic_data_lists/view");
 			).render();
 
 		},
-		['aui-dialog']
+		['aui-dialog-deprecated']
 	);
 </aui:script>

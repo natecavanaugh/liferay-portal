@@ -209,6 +209,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-data-set', 'base']
+		requires: ['aui-data-set-deprecated', 'base']
 	}
 );

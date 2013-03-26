@@ -75,6 +75,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog']
+		requires: ['aui-dialog-deprecated']
 	}
 );

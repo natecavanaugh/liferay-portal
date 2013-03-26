@@ -95,7 +95,7 @@ portletURL.setParameter("struts_action", "/layout_set_prototypes/view");
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script use="aui-base,aui-dialog">
+<aui:script use="aui-base,aui-dialog-deprecated">
 	A.getBody().delegate(
 		'click',
 		function(event) {

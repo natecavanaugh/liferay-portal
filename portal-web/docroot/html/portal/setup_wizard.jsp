@@ -214,7 +214,7 @@
 						</aui:button-row>
 					</aui:form>
 
-					<aui:script use="aui-base,aui-io-request,aui-loading-mask">
+					<aui:script use="aui-base,aui-io-request,aui-loading-mask-deprecated">
 						var customDatabaseOptions = A.one('#customDatabaseOptions');
 						var customDatabaseOptionsLink = A.one('#customDatabaseOptionsLink');
 						var databaseSelector = A.one('#databaseType');

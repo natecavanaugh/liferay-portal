@@ -23,7 +23,7 @@ Map<String, String> requestParams = (Map<String, String>)request.getAttribute("l
 %>
 
 <c:if test="<%= displayStyles.length > 1 %>">
-	<aui:script use="aui-base,aui-toolbar">
+	<aui:script use="aui-base,aui-toolbar-deprecated">
 		var buttonRow = A.one('#<portlet:namespace />displayStyleToolbar');
 
 		function onButtonClick(displayStyle) {

@@ -41,7 +41,7 @@ long reportedUserId = GetterUtil.getLong((String)request.getAttribute("liferay-u
 <c:if test="<%= !TrashUtil.isInTrash(className, classPK) %>">
 	<c:choose>
 		<c:when test="<%= PropsValues.FLAGS_GUEST_USERS_ENABLED || themeDisplay.isSignedIn() %>">
-			<aui:script use="aui-dialog">
+			<aui:script use="aui-dialog-deprecated">
 				var icon = A.one('.<%= randomNamespace %>');
 
 				if (icon) {
@@ -82,7 +82,7 @@ long reportedUserId = GetterUtil.getLong((String)request.getAttribute("liferay-u
 				<liferay-ui:message key="please-sign-in-to-flag-this-as-inappropriate" />
 			</div>
 
-			<aui:script use="aui-dialog">
+			<aui:script use="aui-dialog-deprecated">
 				var icon = A.one('.<%= randomNamespace %>');
 
 				if (icon) {

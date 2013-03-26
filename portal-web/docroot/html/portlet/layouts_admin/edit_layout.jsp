@@ -219,7 +219,7 @@ String[][] categorySections = {mainSections};
 					</div>
 				</c:if>
 
-				<aui:script use="aui-dialog,aui-dialog-iframe,aui-toolbar">
+				<aui:script use="aui-dialog-deprecated,aui-dialog-iframe-deprecated,aui-toolbar">
 					var buttonRow = A.one('#<portlet:namespace />layoutToolbar');
 
 					var popup = null;

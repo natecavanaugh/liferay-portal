@@ -201,6 +201,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog', 'aui-dialog-iframe']
+		requires: ['aui-dialog-deprecated', 'aui-dialog-iframe-deprecated']
 	}
 );

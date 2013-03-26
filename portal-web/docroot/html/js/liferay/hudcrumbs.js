@@ -117,6 +117,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'plugin']
+		requires: ['aui-base', 'aui-component', 'plugin']
 	}
 );

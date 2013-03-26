@@ -443,7 +443,7 @@ AUI.add(
 
 				instance._addMenu(options);
 			},
-			['aui-overlay-context', 'node-focusmanager']
+			['aui-overlay-context-deprecated', 'node-focusmanager']
 		);
 
 		Liferay.provide(
@@ -793,7 +793,7 @@ AUI.add(
 
 				Liferay.fire('dockbarLoaded');
 			},
-			['aui-io-request', 'aui-overlay-context', 'liferay-dockbar-underlay', 'liferay-store', 'node-focusmanager']
+			['aui-io-request', 'aui-overlay-context-deprecated', 'liferay-dockbar-underlay', 'liferay-store', 'node-focusmanager']
 		);
 
 		Liferay.provide(
@@ -874,6 +874,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-node', 'event-touch']
+		requires: ['aui-node', 'aui-overlay-context-deprecated', 'aui-overlay-manager-deprecated', 'event-touch']
 	}
 );

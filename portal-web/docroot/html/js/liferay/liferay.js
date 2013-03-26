@@ -14,7 +14,7 @@ Liferay = window.Liferay || {};
 	Liferay.namespace = A.namespace;
 
 	A.mix(
-		AUI.defaults.io,
+		AUI.config.io,
 		{
 			method: 'POST',
 			uriFormatter: function(value) {

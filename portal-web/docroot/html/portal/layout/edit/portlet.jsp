@@ -76,7 +76,7 @@
 </div>
 
 <c:if test="<%= LayoutPermissionUtil.contains(permissionChecker, selLayout, ActionKeys.UPDATE) %>">
-	<aui:script use="aui-button-item,aui-dialog">
+	<aui:script use="aui-button-item,aui-dialog-deprecated">
 		var content = A.one('#<portlet:namespace />copyPortletsFromPage');
 
 		var button = new A.ButtonItem(

@@ -199,7 +199,7 @@ if (fieldParamSelection.equals("0")) {
 	);
 </aui:script>
 
-<aui:script use="aui-datepicker">
+<aui:script use="aui-datepicker-deprecated">
 	var fromDatepicker = new A.DatePicker(
 		{
 			calendar: {
