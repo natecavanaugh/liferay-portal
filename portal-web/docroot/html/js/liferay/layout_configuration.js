@@ -4,6 +4,61 @@
 
 	var LayoutConfiguration = {};
 
+	Liferay.provide(
+		LayoutConfiguration,
+		'toggle',
+		function(ppid) {
+			var instance = this;
+
+			var dialog = instance._applicationsDialog;
+
+			if (!dialog) {
+				var body = A.getBody();
+
+				var url = themeDisplay.getPathMain() + '/portal/render_portlet';
+
+				dialog = new A.Dialog(
+					{
+						on: {
+							visibleChange: function(event) {
+								body.toggleClass('lfr-has-sidebar', event.newVal);
+							}
+						},
+						title: Liferay.Language.get('add-application'),
+						width: 250
+					}
+				).render();
+
+				var contentBox = dialog.get('contentBox');
+
+				dialog.plug(
+					A.Plugin.IO,
+					{
+						data: {
+							doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
+							p_l_id: themeDisplay.getPlid(),
+							p_p_id: ppid,
+							p_p_state: 'exclusive'
+						},
+						after: {
+							success: function(event) {
+								instance._dialogBody = contentBox;
+
+								instance._loadContent();
+							}
+						},
+						uri: url
+					}
+				);
+
+				instance._applicationsDialog = dialog;
+			}
+
+			dialog.show();
+		},
+		['aui-dialog-deprecated', 'liferay-layout-configuration']
+	);
+
 	A.add(
 		'liferay-layout-configuration',
 		function(A) {
@@ -24,7 +79,7 @@
 					init: function() {
 						var instance = this;
 
-						var menu = A.one('#portal_add_panel');
+						var menu = A.one('#portal_add_content');
 
 						instance.menu = menu;
 
@@ -58,7 +113,7 @@
 										node.hide();
 									},
 									input: searchInput,
-									nodes: '#portal_add_panel .lfr-portlet-item',
+									nodes: '#portal_add_content .lfr-portlet-item',
 									show: function(node) {
 										node.show();
 
@@ -117,7 +172,7 @@
 										node[action]();
 									},
 									input: searchInput,
-									nodes: '#portal_add_panel .lfr-add-content'
+									nodes: '#portal_add_content .lfr-add-content'
 								}
 							);
 						}
@@ -246,8 +301,6 @@
 
 						Util.addInputType();
 
-						instance._dialogBody = A.one('#portal_add_panel');
-
 						Liferay.on('closePortlet', instance._onPortletClose, instance);
 
 						instance._portletItems = instance._dialogBody.all('div.lfr-portlet-item');
@@ -272,7 +325,7 @@
 
 						var portletItemOptions = {
 							delegateConfig: {
-								container: '#portal_add_panel',
+								container: '#portal_add_content',
 								dragConfig: {
 									clickPixelThresh: 0,
 									clickTimeThresh: 0
@@ -327,7 +380,7 @@
 									heading.toggleClass('collapsed').toggleClass('expanded');
 								}
 							},
-							'.lfr-add-content .lfr-title-category > h2'
+							'.lfr-add-content > h2'
 						);
 
 						Util.focusFormField(instance._searchInput);
@@ -336,10 +389,10 @@
 					_onPortletClose: function(event) {
 						var instance = this;
 
-						var panel = instance._dialogBody;
+						var popup = A.one('#portal_add_content');
 
-						if (panel) {
-							var item = panel.one('.lfr-portlet-item[plid=' + event.plid + '][portletId=' + event.portletId + '][instanceable=false]');
+						if (popup) {
+							var item = popup.one('.lfr-portlet-item[plid=' + event.plid + '][portletId=' + event.portletId + '][instanceable=false]');
 
 							if (item && item.hasClass('lfr-portlet-used')) {
 								var portletId = item.attr('portletId');

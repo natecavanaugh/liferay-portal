@@ -87,7 +87,7 @@ WorkflowTask workflowTask = (WorkflowTask)row.getObject();
 	<aui:input cols="55" name="comment" rows="10" type="textarea" />
 </div>
 
-<aui:script use="aui-dialog">
+<aui:script use="aui-dialog-deprecated">
 	var showPopup = function(url, title) {
 		var form = A.Node.create('<form />');
 

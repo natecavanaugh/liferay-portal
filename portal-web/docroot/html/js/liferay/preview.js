@@ -446,6 +446,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-overlay-mask', 'aui-toolbar']
+		requires: ['aui-base', 'aui-overlay-mask-deprecated', 'aui-toolbar']
 	}
 );

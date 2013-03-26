@@ -3517,6 +3517,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-data-set', 'aui-datatype', 'aui-dialog', 'aui-dialog-iframe', 'aui-io-request', 'aui-nested-list', 'aui-overlay-context-panel', 'json']
+		requires: ['aui-base', 'aui-data-set-deprecated', 'aui-datatype', 'aui-dialog-deprecated', 'aui-dialog-iframe-deprecated', 'aui-io-request', 'aui-nested-list', 'aui-overlay-context-panel-deprecated', 'json']
 	}
 );

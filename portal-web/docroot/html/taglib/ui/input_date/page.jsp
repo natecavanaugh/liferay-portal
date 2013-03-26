@@ -145,7 +145,7 @@ else if (yearNullable) {
 
 <input class="<%= disabled ? "disabled" : "" %>" id="<%= imageInputId %>Input" type="hidden" />
 
-<aui:script use="aui-datepicker-select">
+<aui:script use="aui-datepicker-select-deprecated">
 	var displayDateNode = A.one('#<%= randomNamespace %>displayDate');
 
 	Liferay.component(

@@ -64,7 +64,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "add");
 				}
 			}
 		},
-		['aui-loading-mask']
+		['aui-loading-mask-deprecated']
 	);
 
 	function <portlet:namespace />saveRuleGroupsPriorities(dialog) {
@@ -100,7 +100,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "add");
 				}
 			);
 		},
-		['aui-loading-mask']
+		['aui-loading-mask-deprecated']
 	);
 </aui:script>
 

@@ -29,7 +29,7 @@ Liferay.provide(
 			}
 		);
 	},
-	['aui-dialog', 'liferay-portlet-url']
+	['aui-dialog-deprecated', 'liferay-portlet-url']
 );
 
 Liferay.provide(
@@ -61,5 +61,5 @@ Liferay.provide(
 			}
 		);
 	},
-	['aui-dialog', 'liferay-portlet-url']
+	['aui-dialog-deprecated', 'liferay-portlet-url']
 );

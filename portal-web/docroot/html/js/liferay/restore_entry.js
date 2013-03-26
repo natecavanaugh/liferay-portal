@@ -235,6 +235,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog', 'aui-io-request', 'liferay-portlet-base']
+		requires: ['aui-dialog-deprecated', 'aui-io-request', 'liferay-portlet-base']
 	}
 );

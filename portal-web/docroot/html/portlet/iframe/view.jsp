@@ -167,7 +167,7 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 	<portlet:namespace />init();
 </aui:script>
 
-<aui:script use="aui-resize-iframe">
+<aui:script use="aui-resize-iframe-deprecated">
 	var iframe = A.one('#<portlet:namespace />iframe');
 
 	if (iframe) {

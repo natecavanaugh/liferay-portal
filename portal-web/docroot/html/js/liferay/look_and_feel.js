@@ -1903,6 +1903,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-color-picker', 'aui-dialog', 'aui-io-request', 'aui-tabs-base']
+		requires: ['aui-color-picker-deprecated', 'aui-dialog-deprecated', 'aui-io-request', 'aui-tabs-base']
 	}
 );

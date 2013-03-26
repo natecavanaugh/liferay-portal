@@ -97,6 +97,6 @@ String casNoSuchUserRedirectURL = PrefsPropsUtil.getString(company.getCompanyId(
 				}
 			);
 		},
-		['aui-dialog', 'aui-io']
+		['aui-dialog-deprecated', 'aui-io']
 	);
 </aui:script>

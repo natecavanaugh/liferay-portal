@@ -88,7 +88,7 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 						</div>
 					</liferay-util:html-top>
 
-					<aui:script use="aui-dialog">
+					<aui:script use="aui-dialog-deprecated">
 						new A.Dialog(
 							{
 								align: Liferay.Util.Window.ALIGN_CENTER,
@@ -134,7 +134,7 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 	</div>
 </c:if>
 
-<aui:script use="aui-dialog,aui-toolbar">
+<aui:script use="aui-dialog-deprecated,aui-toolbar">
 	var popup;
 	var exportPopup;
 	var importPopup;

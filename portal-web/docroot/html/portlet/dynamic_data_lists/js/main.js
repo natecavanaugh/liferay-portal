@@ -735,6 +735,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-arraysort', 'aui-datatable', 'datatable-sort', 'aui-dialog', 'json', 'liferay-portlet-url']
+		requires: ['aui-arraysort', 'aui-datatable', 'datatable-sort', 'aui-dialog-deprecated', 'json', 'liferay-portlet-url']
 	}
 );

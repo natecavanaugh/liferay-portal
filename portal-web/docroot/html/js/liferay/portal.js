@@ -155,6 +155,6 @@
 				cached.refreshAlign();
 			}
 		},
-		['aui-tooltip']
+		['aui-tooltip-deprecated']
 	);
 })(AUI(), Liferay);

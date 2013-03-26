@@ -18,7 +18,7 @@
 
 <iframe allowTransparency="true" frameborder="0" id="<portlet:namespace />iframe" scrolling="no" src="<%= themeDisplay.getPathMain() %>/portal/license?p_p_state=pop_up" style="border: none; width: 100%;"></iframe>
 
-<aui:script use="aui-resize-iframe">
+<aui:script use="aui-resize-iframe-deprecated">
 	var iframe = A.one('#<portlet:namespace />iframe');
 
 	if (iframe) {

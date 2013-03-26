@@ -34,7 +34,7 @@ if ((article != null) && article.isDraft()) {
 
 <div class="article-toolbar" id="<portlet:namespace />articleToolbar"></div>
 
-<aui:script use="aui-toolbar,aui-dialog-iframe,liferay-util-window">
+<aui:script use="aui-toolbar,aui-dialog-iframe-deprecated,liferay-util-window">
 	var permissionPopUp = null;
 
 	var toolbarChildren = [];

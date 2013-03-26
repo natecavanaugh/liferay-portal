@@ -51,7 +51,7 @@
 				img.attr('src', icon);
 			}
 		},
-		['aui-dialog']
+		['aui-dialog-deprecated']
 	);
 
 	Liferay.provide(
@@ -108,7 +108,7 @@
 
 			dialog.move(dialog.get('x'), dialog.get('y') + 100);
 		},
-		['aui-dialog']
+		['aui-dialog-deprecated']
 	);
 
 	Liferay.provide(
@@ -142,7 +142,7 @@
 				}
 			);
 		},
-		['aui-dialog', 'aui-io']
+		['aui-dialog-deprecated', 'aui-io']
 	);
 
 	Liferay.provide(

@@ -539,13 +539,13 @@ AUI.add(
 					event.halt();
 				}
 			},
-			['aui-overlay']
+			['aui-overlay-deprecated']
 		);
 
 		Liferay.Menu = Menu;
 	},
 	'',
 	{
-		requires: ['aui-debounce', 'aui-node']
+		requires: ['array-invoke', 'aui-debounce', 'aui-node']
 	}
 );

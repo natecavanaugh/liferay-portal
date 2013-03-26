@@ -278,6 +278,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-overlay-base']
+		requires: ['aui-base', 'aui-overlay-base-deprecated']
 	}
 );
