@@ -193,9 +193,7 @@ AUI.add(
 
 						var menuNew = event.currentTarget.ancestor(instance._directChildLi);
 
-						var childMenu = menuNew.one('.child-menu');
-
-						if (childMenu && !menuNew.hasClass(HOVER)) {
+						if (menuNew.one('.child-menu') && !menuNew.hasClass(HOVER)) {
 							event.preventDefault();
 						}
 
