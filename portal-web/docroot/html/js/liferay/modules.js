@@ -1,4 +1,4 @@
-YUI.Env.core.push('liferay-loader');
+YUI.Env.core.push('liferay-loader', 'liferay-browser-selectors');
 
 YUI.add(
 	'liferay-loader',
@@ -91,6 +91,10 @@ YUI.add(
 						'base',
 						'liferay-undo-manager'
 					]
+				},
+				'liferay-browser-selectors': {
+					fullpath: javaScriptRootPath + '/liferay/browser_selectors.js',
+					requires: ['yui-base']
 				},
 				'liferay-ddm-repeatable-field': {
 					fullpath: javaScriptRootPath + '/liferay/ddm_repeatable_field.js',
