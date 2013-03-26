@@ -1838,10 +1838,10 @@
 	 * OPTIONS
 	 *
 	 * Required
-	 * element {string || node || nodelist}: The input(s) or parent element of input(s) to toggle disabled.
+	 * field {string || node || nodelist}: The input(s) or parent element of input(s) to toggle disabled.
 	 *
 	 * Optional
-	 * disable {boolean}: True by default.  If true, toggle disabled; if false, toggle enabled.
+	 * force {boolean}: true: toggle disabled; false: toggle enabled.
 	 */
 
 	Liferay.provide(
@@ -1849,7 +1849,10 @@
 		'toggleDisabled',
 		function(field, force) {
 			var container;
-			var prefix;
+
+			if (A.Lang.isString(field)) {
+				field = A.one(field);
+			}
 
 			var isFieldInput = field.hasClass(FIELD_INPUT_PREFIX);
 			var isButtonInput = field.hasClass(BUTTON_INPUT_PREFIX);
@@ -1879,66 +1882,6 @@
 					item.set('disabled', disabled);
 				}
 			);
-
-
-
-
-
-
-			// if (!A.instanceOf(field, A.NodeList)) {
-			// 	field = A.all(field);
-			// }
-
-			// field.each(
-			// 	function(item, index, collection) {
-			// 		var parentClass;
-
-			// 		var toggleDisabledClass = function(item, parentClass) {
-			// 			if (parentClass) {
-			// 				var parentClassItem = item.ancestor('.' + parentClass);
-
-			// 				if (parentClassItem) {
-			// 					 parentClassItem.toggleClass(parentClass + DISABLED_SUFFIX, force);
-			// 				}
-			// 			}
-			// 		};
-
-			// 		var node = A.one(item);
-
-			// 		var children = node.all('button, input, select, textarea');
-
-			// 		var hasChildren = children.size();
-
-			// 		var nodeEl = hasChildren ? children : node;
-
-			// 		nodeEl.attr('disabled', force);
-
-			// 		if (nodeEl.hasClass(FIELD_INPUT_PREFIX)) {
-			// 			parentClass = FIELD_PREFIX;
-
-			// 			if (hasChildren) {
-			// 				var hasFieldPrefix = node.all('.' + FIELD_PREFIX);
-
-			// 				if (hasFieldPrefix) {
-			// 					hasFieldPrefix.toggleClass(FIELD_PREFIX + DISABLED_SUFFIX, force);
-			// 				}
-			// 			}
-			// 		}
-			// 		else if (nodeEl.hasClass(BUTTON_INPUT_PREFIX)) {
-			// 			parentClass = BUTTON_PREFIX;
-
-			// 			if (hasChildren) {
-			// 				var hasButtonPrefix = node.all('.' + BUTTON_PREFIX);
-
-			// 				if (hasButtonPrefix) {
-			// 					hasButtonPrefix.toggleClass(BUTTON_PREFIX + DISABLED_SUFFIX, force);
-			// 				}
-			// 			}
-			// 		}
-
-			// 		toggleDisabledClass(item, parentClass);
-			// 	}
-			// );
 		},
 		['aui-base']
 	);
