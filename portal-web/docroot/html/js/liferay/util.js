@@ -11,7 +11,19 @@
 	var isArray = Lang.isArray;
 	var arrayIndexOf = AArray.indexOf;
 
+	var BUTTON_INPUT_PREFIX = 'aui-button-input';
+
+	var BUTTON_PREFIX = 'aui-button';
+
+	var DOT = '.';
+
+	var DISABLED_SUFFIX = '-disabled';
+
 	var EVENT_CLICK = 'click';
+
+	var FIELD_PREFIX = 'aui-field';
+
+	var FIELD_INPUT_PREFIX = 'aui-field-input';
 
 	var htmlEscapedValues = [];
 	var htmlUnescapedValues = [];
@@ -545,7 +557,7 @@
 		},
 
 		randomInt: function() {
-			return (Math.ceil(Math.random() * (new Date).getTime()));
+			return (Math.ceil(Math.random() * (new Date()).getTime()));
 		},
 
 		randomMinMax: function(min, max) {
@@ -1265,7 +1277,7 @@
 				);
 			}
 
-			if (selectedOption && selectedOption.text() != '' && sort == true) {
+			if (selectedOption && (selectedOption.text() !== '') && (sort === true)) {
 				Util.sortBox(toBox);
 			}
 		},
@@ -1822,19 +1834,52 @@
 		['liferay-store']
 	);
 
+	/**
+	 * OPTIONS
+	 *
+	 * Required
+	 * field {string || node || nodelist}: The input(s) or parent element of input(s) to toggle disabled.
+	 *
+	 * Optional
+	 * force {boolean}: true: toggle disabled; false: toggle enabled.
+	 */
+
 	Liferay.provide(
 		Util,
 		'toggleDisabled',
-		function(button, state) {
-			if (!A.instanceOf(button, A.NodeList)) {
-				button = A.all(button);
+		function(field, force) {
+			var container;
+
+			if (A.Lang.isString(field)) {
+				field = A.one(field);
 			}
 
-			button.each(
-				function(item, index, collection) {
-					item.attr('disabled', state);
+			var isFieldInput = field.hasClass(FIELD_INPUT_PREFIX);
+			var isButtonInput = field.hasClass(BUTTON_INPUT_PREFIX);
 
-					item.ancestor('.aui-button').toggleClass('aui-button-disabled', state);
+			if (isFieldInput || isButtonInput) {
+				container = field.ancestor(DOT + BUTTON_PREFIX + ',' + DOT + FIELD_PREFIX);
+			}
+			else {
+				container = field;
+				field = field.children(DOT + BUTTON_PREFIX + ',' + DOT + FIELD_PREFIX);
+			}
+
+			if (!A.instanceOf(field, A.NodeList)) {
+				field = A.all(field);
+			}
+
+			container.toggleClass(DOT + BUTTON_PREFIX + DISABLED_SUFFIX, force);
+			container.toggleClass(DOT + FIELD_PREFIX + DISABLED_SUFFIX, force);
+
+			field.each(
+				function(item, index, collection) {
+					item.toggleClass(DOT + BUTTON_PREFIX + DISABLED_SUFFIX, force);
+					item.toggleClass(DOT + FIELD_PREFIX + DISABLED_SUFFIX, force);
+
+					var disabled = (force !== undefined) ? force : !item.get('disabled');
+
+					item.set('disabled', disabled);
 				}
 			);
 		},

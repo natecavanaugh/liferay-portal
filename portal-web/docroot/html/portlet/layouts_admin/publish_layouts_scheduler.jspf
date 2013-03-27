@@ -67,7 +67,7 @@ scheduledPublishEventsURL.setParameter("destinationName", localPublishing ? Dest
 			var addButton = A.one('#<portlet:namespace />addButton');
 
 			if (addButton) {
-				addButton.set('disabled', true);
+				Liferay.Util.toggleDisabled(addButton, true);
 			}
 
 			var form = A.one(document.<portlet:namespace />exportPagesFm);
@@ -158,7 +158,7 @@ scheduledPublishEventsURL.setParameter("destinationName", localPublishing ? Dest
 							var addButton = A.one('#<portlet:namespace />addButton');
 
 							if (addButton) {
-								addButton.set('disabled', false);
+								Liferay.Util.toggleDisabled(addButton, false);
 							}
 						}
 					}
