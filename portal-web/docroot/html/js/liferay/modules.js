@@ -22,6 +22,7 @@ YUI.add(
 						'liferay-app-view-move',
 						'liferay-history-manager',
 						'liferay-list-view',
+						'liferay-node',
 						'liferay-portlet-base'
 					]
 				},
@@ -324,6 +325,12 @@ YUI.add(
 						'aui-base'
 					]
 				},
+				'liferay-node': {
+					fullpath: javaScriptRootPath + '/liferay/node.js',
+					requires: [
+						'dom-base'
+					]
+				},
 				'liferay-panel': {
 					fullpath: javaScriptRootPath + '/liferay/panel.js',
 					requires: [
@@ -349,7 +356,8 @@ YUI.add(
 				'liferay-portlet-base': {
 					fullpath: javaScriptRootPath + '/liferay/portlet_base.js',
 					requires: [
-						'aui-base'
+						'aui-base',
+						'liferay-node'
 					]
 				},
 				'liferay-portlet-url': {

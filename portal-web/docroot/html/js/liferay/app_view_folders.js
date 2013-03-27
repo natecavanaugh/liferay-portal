@@ -653,6 +653,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-parse-content', 'liferay-app-view-move', 'liferay-history-manager', 'liferay-list-view', 'liferay-portlet-base']
+		requires: ['aui-base', 'aui-parse-content', 'liferay-app-view-move', 'liferay-history-manager', 'liferay-list-view', 'liferay-node', 'liferay-portlet-base']
 	}
 );
