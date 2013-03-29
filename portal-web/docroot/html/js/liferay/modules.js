@@ -115,7 +115,7 @@ YUI.add(
 				'liferay-dockbar-underlay': {
 					fullpath: javaScriptRootPath + '/liferay/dockbar_underlay.js',
 					requires: [
-						'aui-button-item',
+						'aui-button',
 						'aui-io-plugin',
 						'aui-overlay-manager-deprecated'
 					]
@@ -428,7 +428,7 @@ YUI.add(
 				'liferay-staging-version': {
 					fullpath: javaScriptRootPath + '/liferay/staging_version.js',
 					requires: [
-						'aui-button-item',
+						'aui-button',
 						'liferay-staging'
 					]
 				},

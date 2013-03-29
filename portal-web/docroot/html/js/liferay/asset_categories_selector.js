@@ -512,12 +512,11 @@ AUI.add(
 							{
 								children: [
 									{
-										handler: {
-											context: instance,
-											fn: instance._showSelectPopup
-										},
-										icon: 'search',
+										icon: 'aui-icon-search',
 										label: Liferay.Language.get('select'),
+										on: {
+											click: A.bind(instance._showSelectPopup, instance)
+										},
 										title: instance.get('title')
 									}
 								]

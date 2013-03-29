@@ -1,6 +1,7 @@
 AUI.add(
 	'liferay-app-view-select',
 	function(A) {
+		var AArray = A.Array;
 		var Lang = A.Lang;
 		var History = Liferay.HistoryManager;
 		var Util = Liferay.Util;
@@ -16,6 +17,8 @@ AUI.add(
 		var DATA_FOLDER_ID = 'data-folder-id';
 
 		var DATA_REPOSITORY_ID = 'data-repository-id';
+
+		var DISPLAY_STYLE_BUTTON_GROUP = 'displayStyleButtonGroup';
 
 		var DISPLAY_STYLE_LIST = 'list';
 
@@ -135,14 +138,14 @@ AUI.add(
 						var length = displayViews.length;
 
 						if (length > 1) {
-							var displayStyleToolbar = instance._displayStyleToolbar.getData(DISPLAY_STYLE_TOOLBAR);
+							var displayStyleButtonGroup = instance._displayStyleToolbar.getData(DISPLAY_STYLE_BUTTON_GROUP);
 
-							if (displayStyleToolbar) {
+							if (displayStyleButtonGroup) {
 								var displayStyle = instance._getDisplayStyle(instance._displayStyle);
 
-								for (var i = 0; i < length; i++) {
-									displayStyleToolbar.item(i).StateInteraction.set(STR_ACTIVE, displayStyle === displayViews[i]);
-								}
+								var selectedIndex = AArray.indexOf(displayViews, displayStyle);
+
+								displayStyleButtonGroup.select(selectedIndex);
 							}
 						}
 					},

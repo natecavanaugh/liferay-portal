@@ -37,18 +37,19 @@ long formDDMTemplateId = ParamUtil.getLong(request, "formDDMTemplateId");
 			</portlet:renderURL>
 
 			{
-				handler: function (event) {
-					window.location = '<%= viewHistoryURL %>';
-				},
-				icon: 'clock',
-				label: '<%= UnicodeLanguageUtil.get(pageContext, "view-history") %>'
+				icon: 'aui-icon-time',
+				label: '<%= UnicodeLanguageUtil.get(pageContext, "view-history") %>',
+				on: {
+					click: function (event) {
+						window.location = '<%= viewHistoryURL %>';
+					}
+				}
 			}
 		</c:if>
 	];
 
 	new A.Toolbar(
 		{
-			activeState: false,
 			boundingBox: '#<portlet:namespace />recordToolbar',
 			children: toolbarChildren
 		}

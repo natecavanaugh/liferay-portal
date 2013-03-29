@@ -79,43 +79,46 @@
 	<aui:script use="aui-button-item,aui-dialog-deprecated">
 		var content = A.one('#<portlet:namespace />copyPortletsFromPage');
 
-		var button = new A.ButtonItem(
+		var button = new A.Button(
 			{
-				handler: function(event) {
-					var popUp = new A.Dialog(
-						{
-							align: Liferay.Util.Window.ALIGN_CENTER,
-							bodyContent: content.show(),
-							destroyOnClose: true,
-							modal: true,
-							title: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>',
-							width: 500
-						}
-					).render();
-
-					popUp.show();
-
-					var submitButton = popUp.get('contentBox').one('#<portlet:namespace />copySubmitButton');
-
-					if (submitButton) {
-						submitButton.on(
-							'click',
-							function(event) {
-								popUp.close();
-
-								var form = A.one('#<portlet:namespace />fm');
-
-								if (form) {
-									form.append(content);
-								}
-
-								<portlet:namespace />saveLayout();
+				icon: 'aui-icon-list-alt',
+				label: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>',
+				on: {
+					click: function(event) {
+						var popUp = new A.Dialog(
+							{
+								align: Liferay.Util.Window.ALIGN_CENTER,
+								bodyContent: content.show(),
+								destroyOnClose: true,
+								modal: true,
+								title: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>',
+								width: 500
 							}
-						);
+						).render();
+
+						popUp.show();
+
+						var submitButton = popUp.get('contentBox').one('#<portlet:namespace />copySubmitButton');
+
+						if (submitButton) {
+							submitButton.on(
+								'click',
+								function(event) {
+									popUp.close();
+
+									var form = A.one('#<portlet:namespace />fm');
+
+									if (form) {
+										form.append(content);
+									}
+
+									<portlet:namespace />saveLayout();
+								}
+							);
+						}
 					}
 				},
-				icon: 'copy',
-				label: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>'
+				render: true
 			}
 		);
 
@@ -127,14 +130,23 @@
 			var layoutToolbar = buttonRow.getData('layoutToolbar');
 
 			if (layoutToolbar) {
-				layoutToolbar.add(button);
+				var layoutToolbarChildren = layoutToolbar.get('children');
+
+				layoutToolbarChildren[0].push(button);
+
+				layoutToolbar.set('children', layoutToolbarChildren);
 			}
 		}
 
 		Liferay.on(
 			'<portlet:namespace />toggleLayoutTypeFields',
 			function(event) {
-				button.toggle(event.type == 'portlet');
+				if (event.type == 'portlet') {
+					button.show();
+				}
+				else {
+					button.hide();
+				}
 			}
 		);
 	</aui:script>

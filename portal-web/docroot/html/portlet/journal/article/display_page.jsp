@@ -514,10 +514,11 @@ Group parentGroup = themeDisplay.getSiteGroup();
 								disabled: true,
 							</c:if>
 
-							icon: 'search',
-							id: '<portlet:namespace />chooseDisplayPage',
-							handler: onSelectDisplayPage,
-							label: '<%= UnicodeLanguageUtil.get(pageContext, "select") %>'
+							icon: 'aui-icon-search',
+							label: '<%= UnicodeLanguageUtil.get(pageContext, "select") %>',
+							on: {
+								click: onSelectDisplayPage
+							}
 						}
 					]
 				}

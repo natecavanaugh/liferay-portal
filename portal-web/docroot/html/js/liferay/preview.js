@@ -366,20 +366,28 @@ AUI.add(
 
 						instance._toolbar = new A.Toolbar(
 							{
-								contentBox: instance.get('toolbar'),
+								boundingBox: instance.get('toolbar'),
 								children: [
-									{
-										handler: A.bind('_updateIndex', instance, -1),
-										icon: 'arrow-1-l'
-									},
-									{
-										handler: A.bind('_maximizePreview', instance),
-										icon: 'zoomin'
-									},
-									{
-										handler: A.bind('_updateIndex', instance, 1),
-										icon: 'arrow-1-r'
-									}
+									[
+										{
+											icon: 'aui-icon-circle-arrow-left',
+											on: {
+												click: A.bind('_updateIndex', instance, -1)
+											}
+										},
+										{
+											icon: 'aui-icon-zoom-in',
+											on: {
+												click: A.bind('_maximizePreview', instance)
+											}
+										},
+										{
+											icon: 'aui-icon-circle-arrow-right',
+											on: {
+												click: A.bind('_updateIndex', instance, 1)
+											}
+										}
+									]
 								]
 							}
 						).render();

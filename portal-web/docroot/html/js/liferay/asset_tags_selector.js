@@ -449,39 +449,33 @@ AUI.add(
 
 						var contentBox = instance.get('contentBox');
 
-						var toolbar = [
+						var buttonGroup = [
 							{
-								handler: {
-									context: instance,
-									fn: instance._onAddEntryClick
-								},
-								icon: 'plus',
-								id: 'add',
+								icon: 'aui-icon-plus',
 								label: Liferay.Language.get('add'),
+								on: {
+									click: A.bind(instance._onAddEntryClick, instance)
+								},
 								title: Liferay.Language.get('add-tags')
 							},
 							{
-								handler: {
-									context: instance,
-									fn: instance._showSelectPopup
-								},
-								icon: 'search',
-								id: 'select',
+								icon: 'aui-icon-search',
 								label: Liferay.Language.get('select'),
+								on: {
+									click: A.bind(instance._showSelectPopup, instance)
+								},
 								title: Liferay.Language.get('select-tags')
 							}
 						];
 
 						if (instance.get('contentCallback')) {
-							toolbar.push(
+							buttonGroup.push(
 								{
-									handler: {
-										context: instance,
-										fn: instance._showSuggestionsPopup
-									},
-									icon: 'comment',
-									id: 'suggest',
+									icon: 'aui-icon-comment',
 									label: Liferay.Language.get('suggestions'),
+									on: {
+										click: A.bind(instance._showSuggestionsPopup, instance)
+									},
 									title: Liferay.Language.get('suggestions')
 								}
 							);
@@ -489,7 +483,9 @@ AUI.add(
 
 						instance.icons = new A.Toolbar(
 							{
-								children: toolbar
+								children: [
+									buttonGroup
+								]
 							}
 						).render(contentBox);
 
@@ -700,6 +696,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['array-extras', 'async-queue', 'aui-autocomplete-deprecated', 'aui-dialog-deprecated', 'aui-form-textfield-deprecated', 'aui-io-request', 'aui-live-search', 'aui-template', 'aui-textboxlist', 'datasource-cache', 'liferay-service-datasource']
+		requires: ['array-extras', 'async-queue', 'aui-autocomplete-deprecated', 'aui-dialog-deprecated', 'aui-form-textfield-deprecated', 'aui-io-request', 'aui-live-search', 'aui-template-deprecated', 'aui-textboxlist', 'datasource-cache', 'liferay-service-datasource']
 	}
 );
