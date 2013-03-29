@@ -35,22 +35,18 @@ AUI.add(
 
 					var layoutRevisionToolbar = new A.Toolbar(
 						{
-							activeState: false,
-							boundingBox: A.byIdNS(namespace, 'layoutRevisionToolbar'),
-							children: [
-								{
-									type: 'ToolbarSpacer'
-								}
-							]
+							boundingBox: A.byIdNS(namespace, 'layoutRevisionToolbar')
 						}
 					).render();
 
 					if (!event.hideHistory) {
 						layoutRevisionToolbar.add(
 							{
-								handler: A.bind('_onViewHistory', instance),
-								icon: 'clock',
-								label: Liferay.Language.get('history')
+								icon: 'aui-icon-time',
+								label: Liferay.Language.get('history'),
+								on: {
+									click: A.bind('_onViewHistory', instance)
+								}
 							}
 						);
 					}
@@ -60,20 +56,24 @@ AUI.add(
 					var redoText = Liferay.Language.get('redo');
 					var undoText = Liferay.Language.get('undo');
 
-					StagingBar.redoButton = new A.ButtonItem(
+					StagingBar.redoButton = new A.Button(
 						{
-							handler: A.bind('_onRevisionChange', instance, 'redo'),
-							icon: 'arrowreturnthick-1-r',
+							icon: 'aui-icon-forward',
 							label: redoText,
+							on: {
+								click: A.bind('_onRevisionChange', instance, 'redo')
+							},
 							title: redoText
 						}
 					);
 
-					StagingBar.undoButton = new A.ButtonItem(
+					StagingBar.undoButton = new A.Button(
 						{
-							handler: A.bind('_onRevisionChange', instance, 'undo'),
-							icon: 'arrowreturnthick-1-b',
+							icon: 'aui-icon-backward',
 							label: undoText,
+							on: {
+								click: A.bind('_onRevisionChange', instance, 'undo')
+							},
 							title: undoText
 						}
 					);
@@ -264,6 +264,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-button-item', 'liferay-staging']
+		requires: ['aui-button', 'liferay-staging']
 	}
 );

@@ -729,7 +729,7 @@ AUI.add(
 								}
 							).render();
 
-							var okButton = new A.ButtonItem(
+							var okButton = new A.Button(
 								{
 									label: Liferay.Language.get('ok'),
 									on: {
@@ -738,7 +738,7 @@ AUI.add(
 								}
 							);
 
-							var cancelButton = new A.ButtonItem(
+							var cancelButton = new A.Button(
 								{
 									label: Liferay.Language.get('cancel'),
 									on: {
@@ -1673,6 +1673,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog-deprecated', 'aui-dialog-iframe-deprecated', 'aui-loading-mask-deprecated', 'aui-paginator', 'autocomplete-base', 'aui-tree-view', 'dd', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
+		requires: ['aui-button', 'aui-dialog-deprecated', 'aui-dialog-iframe-deprecated', 'aui-loading-mask-deprecated', 'aui-paginator', 'autocomplete-base', 'aui-tree-view', 'dd', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
 	}
 );

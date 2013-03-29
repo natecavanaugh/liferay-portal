@@ -396,7 +396,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 											</div>
 										</div>
 
-										<aui:script use="aui-base,liferay-preview">
+										<aui:script use="liferay-preview">
 											new Liferay.Preview(
 												{
 													actionContent: '#<portlet:namespace />previewFileActions',
@@ -889,16 +889,18 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 	<c:if test="<%= showActions %>">
 		var buttonRow = A.one('#<portlet:namespace />fileEntryToolbar');
 
-		var fileEntryToolbarChildren = [];
+		var fileEntryButtonGroup = [];
 
 		<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.VIEW) %>">
-			fileEntryToolbarChildren.push(
+			fileEntryButtonGroup.push(
 				{
-					handler: function(event) {
-						location.href = '<%= DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, StringPool.BLANK) %>';
-					},
-					icon: 'download',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "download") %>'
+					icon: 'aui-icon-download',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "download") %>',
+					on: {
+						click: function(event) {
+							location.href = '<%= DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, StringPool.BLANK) %>';
+						}
+					}
 				}
 			);
 
@@ -906,13 +908,14 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 			if (DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.VIEW) && DLUtil.isOfficeExtension(extension) && portletDisplay.isWebDAVEnabled() && BrowserSnifferUtil.isIe(request)) {
 			%>
 
-				fileEntryToolbarChildren.push(
+				fileEntryButtonGroup.push(
 					{
-						handler: function(event) {
-							<portlet:namespace />openDocument('<%= DLUtil.getWebDavURL(themeDisplay, fileEntry.getFolder(), fileEntry, PropsValues.DL_FILE_ENTRY_OPEN_IN_MS_OFFICE_MANUAL_CHECK_IN_REQUIRED) %>');
-						},
-						icon: 'msoffice',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "open-in-ms-office") %>'
+						label: '<%= UnicodeLanguageUtil.get(pageContext, "open-in-ms-office") %>',
+						on: {
+							click: function(event) {
+								<portlet:namespace />openDocument('<%= DLUtil.getWebDavURL(themeDisplay, fileEntry.getFolder(), fileEntry, PropsValues.DL_FILE_ENTRY_OPEN_IN_MS_OFFICE_MANUAL_CHECK_IN_REQUIRED) %>');
+							}
+						}
 					}
 				);
 
@@ -923,7 +926,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 		</c:if>
 
 		<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) && (!fileEntry.isCheckedOut() || fileEntry.hasLock()) %>">
-			fileEntryToolbarChildren.push(
+			fileEntryButtonGroup.push(
 				{
 
 					<portlet:renderURL var="editURL">
@@ -932,11 +935,13 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
 					</portlet:renderURL>
 
-					handler: function(event) {
-						location.href = '<%= editURL.toString() %>';
-					},
-					icon: 'edit',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "edit") %>'
+					icon: 'aui-icon-pencil',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "edit") %>',
+					on: {
+						click: function(event) {
+							location.href = '<%= editURL.toString() %>';
+						}
+					}
 				},
 				{
 
@@ -946,54 +951,62 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
 					</portlet:renderURL>
 
-					handler: function(event) {
-						location.href = '<%= moveURL.toString() %>';
-					},
-					icon: 'move',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "move") %>'
+					icon: 'aui-icon-move',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "move") %>',
+					on: {
+						click: function(event) {
+							location.href = '<%= moveURL.toString() %>';
+						}
+					}
 				}
 			);
 
 			<c:if test="<%= !fileEntry.isCheckedOut() %>">
-				fileEntryToolbarChildren.push(
+				fileEntryButtonGroup.push(
 					{
 
-						handler: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
-							submitForm(document.<portlet:namespace />fm);
-						},
-						icon: 'lock',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "checkout[document]") %>'
+						icon: 'aui-icon-lock',
+						label: '<%= UnicodeLanguageUtil.get(pageContext, "checkout[document]") %>',
+						on: {
+							click: function(event) {
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
+								submitForm(document.<portlet:namespace />fm);
+							}
+						}
 					}
 				);
 			</c:if>
 
 			<c:if test="<%= fileEntry.isCheckedOut() && fileEntry.hasLock() %>">
-				fileEntryToolbarChildren.push(
+				fileEntryButtonGroup.push(
 					{
 
-						handler: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CANCEL_CHECKOUT %>';
-							submitForm(document.<portlet:namespace />fm);
-						},
-						icon: 'undo',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel-checkout[document]") %>'
+						icon: 'aui-icon-undo',
+						label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel-checkout[document]") %>',
+						on: {
+							click: function(event) {
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CANCEL_CHECKOUT %>';
+								submitForm(document.<portlet:namespace />fm);
+							}
+						}
 					},
 					{
 
-						handler: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKIN %>';
-							submitForm(document.<portlet:namespace />fm);
-						},
-						icon: 'unlock',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "checkin") %>'
+						icon: 'aui-icon-unlock',
+						label: '<%= UnicodeLanguageUtil.get(pageContext, "checkin") %>',
+						on: {
+							click: function(event) {
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKIN %>';
+								submitForm(document.<portlet:namespace />fm);
+							}
+						}
 					}
 				);
 			</c:if>
 		</c:if>
 
 		<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.PERMISSIONS) %>">
-			fileEntryToolbarChildren.push(
+			fileEntryButtonGroup.push(
 				{
 					<liferay-security:permissionsURL
 						modelResource="<%= DLFileEntryConstants.getClassName() %>"
@@ -1002,60 +1015,67 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						var="permissionsURL"
 					/>
 
-					handler: function(event) {
-						location.href = '<%= permissionsURL.toString() %>';
-					},
-					icon: 'permissions',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>'
+					icon: 'aui-icon-permissions',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>',
+					on: {
+						click: function(event) {
+							location.href = '<%= permissionsURL.toString() %>';
+						}
+					}
 				}
 			);
 		</c:if>
 
 		<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.DELETE) && (fileEntry.getModel() instanceof DLFileEntry) && TrashUtil.isTrashEnabled(scopeGroupId) %>">
-			fileEntryToolbarChildren.push(
+			fileEntryButtonGroup.push(
 				{
 					<portlet:renderURL var="viewFolderURL">
 						<portlet:param name="struts_action" value="/document_library/view" />
 						<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
 					</portlet:renderURL>
 
-					handler: function(event) {
-						document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.MOVE_TO_TRASH %>';
-						document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
-						submitForm(document.<portlet:namespace />fm);
-					},
-					icon: 'trash',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "move-to-the-recycle-bin") %>'
+					icon: 'aui-icon-trash',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "move-to-the-recycle-bin") %>',
+					on: {
+						click: function(event) {
+							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.MOVE_TO_TRASH %>';
+							document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
+							submitForm(document.<portlet:namespace />fm);
+						}
+					}
 				}
 			);
 		</c:if>
 
 		<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.DELETE) && (!(fileEntry.getModel() instanceof DLFileEntry) || !TrashUtil.isTrashEnabled(scopeGroupId)) %>">
-			fileEntryToolbarChildren.push(
+			fileEntryButtonGroup.push(
 				{
 					<portlet:renderURL var="viewFolderURL">
 						<portlet:param name="struts_action" value="/document_library/view" />
 						<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
 					</portlet:renderURL>
 
-					handler: function(event) {
-						if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") %>')) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
-							document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
-							submitForm(document.<portlet:namespace />fm);
+					icon: 'aui-icon-delete',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "delete") %>',
+					on: {
+						click: function(event) {
+							if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") %>')) {
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
+								document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
+								submitForm(document.<portlet:namespace />fm);
+							}
 						}
-					},
-					icon: 'delete',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "delete") %>'
+					}
 				}
 			);
 		</c:if>
 
 		var fileEntryToolbar = new A.Toolbar(
 			{
-				activeState: false,
 				boundingBox: buttonRow,
-				children: fileEntryToolbarChildren
+				children: [
+					fileEntryButtonGroup
+				]
 			}
 		).render();
 
