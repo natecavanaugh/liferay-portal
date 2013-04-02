@@ -271,7 +271,7 @@ if (fieldParamSelection.equals("0")) {
 <aui:script use="aui-form-validator">
 	var Util = Liferay.Util;
 
-	var DEFAULTS_FORM_VALIDATOR = AUI.defaults.FormValidator;
+	var DEFAULTS_FORM_VALIDATOR = A.config.FormValidator;
 
 	var REGEX_DATE = /^\d{4}(-)(0[1-9]|1[012])\1(0[1-9]|[12][0-9]|3[01])$/;
 

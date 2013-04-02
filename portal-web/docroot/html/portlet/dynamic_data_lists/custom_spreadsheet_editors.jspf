@@ -19,7 +19,7 @@
 
 	var STR_EMPTY = '';
 
-	var DEFAULTS_FORM_VALIDATOR = AUI.defaults.FormValidator;
+	var DEFAULTS_FORM_VALIDATOR = A.config.FormValidator;
 
 	DEFAULTS_FORM_VALIDATOR.RULES.requiredFields = function(value) {
 		var spreadSheet = window.<portlet:namespace />spreadSheet;
