@@ -33,7 +33,7 @@ if ((dynamicAttributes != null) && !dynamicAttributes.isEmpty()) {
 }
 
 int columnWidth = GetterUtil.getInteger(String.valueOf(request.getAttribute("aui:column:columnWidth")));
-java.lang.String cssClass = GetterUtil.getString((java.lang.String)request.getAttribute("aui:column:cssClass"));
+java.lang.String cssClass = StringPool.SPACE + GetterUtil.getString((java.lang.String)request.getAttribute("aui:column:cssClass")) + StringPool.SPACE;
 boolean first = GetterUtil.getBoolean(String.valueOf(request.getAttribute("aui:column:first")));
 java.lang.String id = GetterUtil.getString((java.lang.String)request.getAttribute("aui:column:id"));
 boolean last = GetterUtil.getBoolean(String.valueOf(request.getAttribute("aui:column:last")));

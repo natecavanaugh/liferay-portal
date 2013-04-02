@@ -107,7 +107,7 @@ String portletURLString = portletURL.toString();
 				var count = parseInt(responseData);
 
 				if (count > 0) {
-					status = <%= WorkflowConstants.STATUS_APPROVED %>
+					status = <%= WorkflowConstants.STATUS_APPROVED %>;
 
 					<portlet:namespace />getUsersCount(
 						className, ids, status,
