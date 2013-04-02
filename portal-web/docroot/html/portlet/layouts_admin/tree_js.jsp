@@ -570,7 +570,7 @@ if (!selectableTree) {
 							treeId: '<%= HtmlUtil.escape(treeId) %>'
 						};
 					},
-					method: AUI.defaults.io.method,
+					method: A.config.io.method,
 					on: {
 						success: function(event, id, xhr) {
 							var instance = this;

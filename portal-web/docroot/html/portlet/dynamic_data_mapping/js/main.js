@@ -8,7 +8,7 @@ AUI.add(
 		var instanceOf = A.instanceOf;
 		var isObject = Lang.isObject;
 
-		var DEFAULTS_FORM_VALIDATOR = AUI.defaults.FormValidator;
+		var DEFAULTS_FORM_VALIDATOR = A.config.FormValidator;
 
 		var LOCALIZABLE_FIELD_ATTRS = ['label', 'predefinedValue', 'tip'];
 
