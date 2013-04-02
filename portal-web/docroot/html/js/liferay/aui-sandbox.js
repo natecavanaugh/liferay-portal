@@ -1,4 +1,4 @@
-;(function(){
+;(function() {
 	var ALLOY = YUI();
 
 	window.AUI = function() {

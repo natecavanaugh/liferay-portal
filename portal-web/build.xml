@@ -94,7 +94,7 @@
 						files="bootstrap.css,bootstrap-responsive.css"
 					/>
 				</concat>
-				
+
 				<replace file="${alloy.temp.dir}/bootstrap.css">
 					<replacetoken><![CDATA[url("../img/]]></replacetoken>
 					<replacevalue><![CDATA[url("@theme_image_path@/aui/]]></replacevalue>
@@ -105,14 +105,14 @@
 					tofile="docroot/html/css/portal/bootstrap.css"
 					overwrite="true"
 				/>
-				
+
 				<concat destfile="${alloy.temp.dir}/aui_deprecated.css">
 					<filelist
 						dir="docroot/html/js/aui/aui-skin-deprecated"
 						files="aui-skin-deprecated.css"
 					/>
 				</concat>
-				
+
 				<for param="dir">
 					<path>
 						<dirset
@@ -163,7 +163,7 @@
 				<replace file="${alloy.temp.dir}/aui_deprecated.css">
 					<replacefilter token="../../../../../build/aui-skin-classic/images/" value="" />
 				</replace>
-				
+
 				<copy
 					file="${alloy.temp.dir}/aui_deprecated.css"
 					tofile="docroot/html/css/portal/aui_deprecated.css"
@@ -175,7 +175,7 @@
 				<copy todir="docroot/html/themes/_unstyled/images/aui">
 					<fileset dir="${alloy.build.dir}/aui-css/img" />
 				</copy>
-				
+
 				<copy todir="docroot/html/themes/_unstyled/images/aui">
 					<fileset dir="${alloy.build.dir}/aui-skin-deprecated/images" />
 				</copy>
