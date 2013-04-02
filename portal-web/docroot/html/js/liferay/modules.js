@@ -43,7 +43,7 @@ YUI.add(
 				'liferay-app-view-paginator': {
 					fullpath: javaScriptRootPath + '/liferay/app_view_paginator.js',
 					requires: [
-						'aui-paginator',
+						'aui-pagination',
 						'aui-parse-content',
 						'liferay-history-manager',
 						'liferay-portlet-base'
@@ -341,7 +341,7 @@ YUI.add(
 				'liferay-panel-floating': {
 					fullpath: javaScriptRootPath + '/liferay/panel_floating.js',
 					requires: [
-						'aui-paginator',
+						'aui-pagination',
 						'liferay-panel'
 					]
 				},

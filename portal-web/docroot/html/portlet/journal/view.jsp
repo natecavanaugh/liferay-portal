@@ -65,7 +65,7 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 		<aui:column columnWidth="<%= 20 %>" cssClass="navigation-pane" first="<%= true %>">
 			<liferay-util:include page="/html/portlet/journal/view_folders.jsp" />
 
-			<div class="folder-paginator"></div>
+			<div class="folder-pagination"></div>
 		</aui:column>
 
 		<aui:column columnWidth="80" cssClass="context-pane" last="<%= true %>">
@@ -104,7 +104,7 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 					<liferay-util:include page="/html/portlet/journal/view_entries.jsp" />
 				</div>
 
-				<div class="article-entries-paginator"></div>
+				<div class="article-entries-pagination"></div>
 			</aui:form>
 		</aui:column>
 	</aui:layout>

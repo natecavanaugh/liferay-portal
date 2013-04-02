@@ -85,7 +85,7 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 		<aui:column columnWidth="<%= 20 %>" cssClass="navigation-pane" first="<%= true %>">
 			<liferay-util:include page="/html/portlet/document_library/view_folders.jsp" />
 
-			<div class="folder-paginator"></div>
+			<div class="folder-pagination"></div>
 		</aui:column>
 
 		<aui:column columnWidth="<%= showFolderMenu ? 80 : 100 %>" cssClass="context-pane" last="<%= true %>">
@@ -149,7 +149,7 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 					</c:choose>
 				</div>
 
-				<div class="document-entries-paginator"></div>
+				<div class="document-entries-pagination"></div>
 			</aui:form>
 		</aui:column>
 	</aui:layout>
@@ -236,12 +236,10 @@ if (folder != null) {
 				entriesTotal: <%= entriesTotal %>,
 				entryEnd: <%= entryEnd %>,
 				entryRowsPerPage: <%= entryEnd - entryStart %>,
-				entryRowsPerPageOptions: [<%= StringUtil.merge(PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) %>],
 				entryStart: <%= entryStart %>,
 				folderEnd: <%= folderEnd %>,
 				folderId: <%= folderId %>,
 				folderRowsPerPage: <%= folderRowsPerPage %>,
-				folderRowsPerPageOptions: [<%= StringUtil.merge(PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) %>],
 				folderStart: <%= folderStart %>,
 				foldersTotal: <%= foldersTotal %>
 			},

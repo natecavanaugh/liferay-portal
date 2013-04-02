@@ -160,17 +160,13 @@ AUI.add(
 									var totalPages = pages.size();
 
 									if (totalPages > 1) {
-										var paginatorContainer = A.Node.create('<div class="paginator-container"></div>');
+										var paginationContainer = A.Node.create('<div class="pagination-container"></div>');
 
-										item.append(paginatorContainer);
+										item.append(paginationContainer);
 
-										var paginatorInstance = new A.Paginator(
+										var paginationInstance = new A.Pagination(
 											{
-												TPL: {
-													defaultOutput: '<span class="lfr-paginator-prev">{PrevPageLink}</span>{PageLinks}<span class="lfr-paginator-next">{NextPageLink}</span>'
-												},
-												containers: paginatorContainer,
-												on: {
+												after: {
 													changeRequest: function(newState) {
 														var page = newState.state.page;
 														var showPage = Math.max(0, page - 1);
@@ -181,6 +177,7 @@ AUI.add(
 														this.setState(newState);
 													}
 												},
+												boundingBox: paginationContainer,
 												total: totalPages
 											}
 										).render();
@@ -305,6 +302,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-paginator', 'liferay-panel']
+		requires: ['aui-pagination', 'liferay-panel']
 	}
 );

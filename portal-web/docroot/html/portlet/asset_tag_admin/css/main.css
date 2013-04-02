@@ -163,6 +163,15 @@
 		float: left;
 	}
 
+	.tags-pagination {
+		margin: 10px 0;
+		text-align: center;
+
+		.aui-pagination-content {
+			margin: 0;
+		}
+	}
+
 	.view-tag {
 		margin: 1em;
 

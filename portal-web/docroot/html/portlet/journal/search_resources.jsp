@@ -460,8 +460,8 @@ ArticleSearch searchContainer = new ArticleSearch(liferayPortletRequest, entryEn
 		Liferay.fire(
 			'<portlet:namespace />pageLoaded',
 			{
-				paginator: {
-					name: 'entryPaginator',
+				pagination: {
+					name: 'entryPagination',
 					state: {
 						page: <%= searchContainer.getCur() %>,
 						rowsPerPage: <%= searchContainer.getDelta() %>,

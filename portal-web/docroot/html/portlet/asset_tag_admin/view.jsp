@@ -80,7 +80,7 @@
 
 				<div class="tags-admin-list lfr-component"></div>
 
-				<div class="tags-paginator"></div>
+				<div class="tags-pagination"></div>
 			</aui:column>
 
 			<aui:column columnWidth="65" cssClass="tags-admin-edit-tag">
@@ -100,8 +100,7 @@
 	new Liferay.Portlet.AssetTagsAdmin(
 		{
 			portletId: '<%= portletDisplay.getId() %>',
-			tagsPerPage: <%= SearchContainer.DEFAULT_DELTA %>,
-			tagsPerPageOptions: [<%= StringUtil.merge(PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) %>]
+			tagsPerPage: <%= SearchContainer.DEFAULT_DELTA %>
 		}
 	);
 </aui:script>

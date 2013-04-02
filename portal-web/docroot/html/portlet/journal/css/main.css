@@ -415,8 +415,17 @@
 		}
 	}
 
-	.journal-container, .article-entries-paginator {
+	.journal-container, .article-entries-pagination {
 		clear: both;
+	}
+
+	.article-entries-pagination {
+		text-align: center;
+		margin: 10px 0;
+
+		.aui-pagination-content {
+			margin: 0;
+		}
 	}
 
 	.lfr-journal-small-image-content img {

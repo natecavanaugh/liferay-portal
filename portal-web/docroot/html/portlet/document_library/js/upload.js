@@ -57,7 +57,7 @@ AUI.add(
 
 		var SELECTOR_DISPLAY_ICON = '.display-icon';
 
-		var SELECTOR_DOCUMENT_ENTRIES_PAGINATOR = '.document-entries-paginator';
+		var SELECTOR_DOCUMENT_ENTRIES_PAGINATION = '.document-entries-pagination';
 
 		var SELECTOR_ENTRIES_EMPTY = '.entries-empty';
 
@@ -752,9 +752,9 @@ AUI.add(
 
 					var columnContent = container.ancestor(CSS_COLUMN_CONTENT);
 
-					var documentEntriesPaginator = A.one(SELECTOR_DOCUMENT_ENTRIES_PAGINATOR);
+					var documentEntriesPagination = A.one(SELECTOR_DOCUMENT_ENTRIES_PAGINATION);
 
-					var documentEntriesPaginatorOverlay = instance._createOverlay(documentEntriesPaginator, STR_NAVIGATION_OVERLAY_BACKGROUND);
+					var documentEntriesPaginationOverlay = instance._createOverlay(documentEntriesPagination, STR_NAVIGATION_OVERLAY_BACKGROUND);
 
 					var headerRow = columnContent.one(SELECTOR_HEADER_ROW);
 
@@ -764,7 +764,7 @@ AUI.add(
 
 					var navigationPaneOverlay = instance._createOverlay(navigationPane, STR_NAVIGATION_OVERLAY_BACKGROUND);
 
-					navigationOverlays = [documentEntriesPaginatorOverlay, headerRowOverlay, navigationPaneOverlay];
+					navigationOverlays = [documentEntriesPaginationOverlay, headerRowOverlay, navigationPaneOverlay];
 
 					instance._navigationOverlays = navigationOverlays;
 				}
