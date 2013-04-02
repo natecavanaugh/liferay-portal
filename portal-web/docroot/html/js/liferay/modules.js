@@ -76,7 +76,7 @@ YUI.add(
 						'aui-io-request',
 						'aui-live-search',
 						'aui-template',
-						'aui-textboxlist',
+						'aui-textboxlist-deprecated',
 						'datasource-cache',
 						'liferay-service-datasource'
 					]
@@ -97,8 +97,8 @@ YUI.add(
 					fullpath: javaScriptRootPath + '/liferay/browser_selectors.js',
 					requires: ['yui-base']
 				},
-				'liferay-ddm-repeatable-field': {
-					fullpath: javaScriptRootPath + '/liferay/ddm_repeatable_field.js',
+				'liferay-ddm-repeatable-fields': {
+					fullpath: javaScriptRootPath + '/liferay/ddm_repeatable_fields.js',
 					requires: [
 						'aui-base',
 						'aui-io-request',
@@ -366,6 +366,14 @@ YUI.add(
 						'aui-base',
 						'aui-io-request',
 						'querystring-stringify-simple'
+					]
+				},
+				'liferay-preview': {
+					fullpath: javaScriptRootPath + '/liferay/preview.js',
+					requires: [
+						'aui-base',
+						'aui-overlay-mask-deprecated',
+						'aui-toolbar'
 					]
 				},
 				'liferay-progress': {
