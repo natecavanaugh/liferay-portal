@@ -25,7 +25,7 @@ AUI.add(
 
 		var STR_KEYWORDS = 'keywords';
 
-		var STR_PAGINATOR_DATA = 'paginatorData';
+		var STR_PAGINATION_DATA = 'paginationData';
 
 		var STR_ROW_IDS_JOURNAL_FOLDER_CHECKBOX = 'rowIdsJournalFolderCheckbox';
 
@@ -110,8 +110,8 @@ AUI.add(
 
 						var paginatorConfig = config.paginator;
 
-						paginatorConfig.entryPaginatorContainer = '.article-entries-paginator';
-						paginatorConfig.folderPaginatorContainer = '.folder-paginator';
+						paginatorConfig.entryPaginationContainer = '.article-entries-pagination';
+						paginatorConfig.folderPaginationContainer = '.folder-pagination';
 						paginatorConfig.namespace = namespace;
 
 						var appViewPaginator = new Liferay.AppViewPaginator(paginatorConfig);
@@ -348,10 +348,10 @@ AUI.add(
 					_onPageLoaded: function(event) {
 						var instance = this;
 
-						var paginatorData = event.paginator;
+						var paginationData = event.pagination;
 
-						if (paginatorData) {
-							instance._appViewPaginator.set(STR_PAGINATOR_DATA, paginatorData);
+						if (paginationData) {
+							instance._appViewPaginator.set(STR_PAGINATION_DATA, paginationData);
 						}
 					},
 
@@ -399,7 +399,7 @@ AUI.add(
 							entriesContainer.html(searchingTPL);
 						}
 
-						instance._journalContainer.all('.article-entries-paginator').hide();
+						instance._journalContainer.all('.article-entries-pagination').hide();
 
 						var requestParams = {};
 

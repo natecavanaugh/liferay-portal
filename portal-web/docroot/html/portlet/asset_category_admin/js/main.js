@@ -340,6 +340,49 @@ AUI.add(
 						dropNode.removeClass(CSS_ACTIVE_AREA);
 					},
 
+					_afterVocabulariesPaginationChangeRequest: function(event) {
+						var instance = this;
+
+						var lastState = event.lastState;
+						var state = event.state;
+
+						var historyState = {};
+
+						var paginationMap = instance._getVocabulariesPaginationMap();
+
+						AObject.each(
+							paginationMap,
+							function(item, index, collection) {
+								if (owns(state, index)) {
+									var historyEntry = item.historyEntry;
+
+									var newItemValue = state[index];
+
+									var value = INVALID_VALUE;
+
+									if (newItemValue === item.defaultValue &&
+										Lang.isValue(HistoryManager.get(historyEntry))) {
+
+										value = null;
+									}
+									else if (lastState && (newItemValue !== lastState[index])) {
+										value = newItemValue;
+									}
+
+									if (value !== INVALID_VALUE) {
+										historyState[historyEntry] = value;
+									}
+								}
+							}
+						);
+
+						if (!AObject.isEmpty(historyState)) {
+							HistoryManager.add(historyState);
+						}
+
+						instance._loadData();
+					},
+
 					_alignFloatingPanels: function(contextPanel) {
 						var instance = this;
 
@@ -1373,50 +1416,46 @@ AUI.add(
 						return categoriesCount;
 					},
 
-					_getVocabulariesPaginator: function() {
+					_getVocabulariesPagination: function() {
 						var instance = this;
 
-						var vocabulariesPaginator = instance._vocabulariesPaginator;
+						var vocabulariesPagination = instance._vocabulariesPagination;
 
-						if (!vocabulariesPaginator) {
+						if (!vocabulariesPagination) {
 							var originalConfig = instance._originalConfig;
 
 							var config = {
-								alwaysVisible: false,
-								containers: '.vocabularies-paginator',
-								firstPageLinkLabel: '<<',
-								lastPageLinkLabel: '>>',
-								nextPageLinkLabel: '>',
-								prevPageLinkLabel: '<',
-								rowsPerPageOptions: originalConfig.itemsPerPageOptions
+								boundingBox: '.vocabularies-pagination',
+								circular: false,
+								visible: false
 							};
 
-							var paginatorMap = instance._getVocabulariesPaginatorMap();
+							var paginationMap = instance._getVocabulariesPaginationMap();
 
 							AObject.each(
-								paginatorMap,
+								paginationMap,
 								function(item, index, collection) {
 									config[index] = Number(HistoryManager.get(item.historyEntry)) || item.defaultValue;
 								}
 							);
 
-							vocabulariesPaginator = new A.Paginator(config).render();
+							vocabulariesPagination = new A.Pagination(config).render();
 
-							vocabulariesPaginator.on('changeRequest', instance._onVocabulariesPaginatorChangeRequest, instance);
+							vocabulariesPagination.after('changeRequest', instance._afterVocabulariesPaginationChangeRequest, instance);
 
-							instance._vocabulariesPaginator = vocabulariesPaginator;
+							instance._vocabulariesPagination = vocabulariesPagination;
 						}
 
-						return vocabulariesPaginator;
+						return vocabulariesPagination;
 					},
 
-					_getVocabulariesPaginatorMap: function() {
+					_getVocabulariesPaginationMap: function() {
 						var instance = this;
 
-						var paginatorMap = instance._paginatorMap;
+						var paginationMap = instance._paginationMap;
 
-						if (!paginatorMap) {
-							paginatorMap = {
+						if (!paginationMap) {
+							paginationMap = {
 								page: {
 									historyEntry: instance._prefixedPortletId + STR_PAGE,
 									defaultValue: 1,
@@ -1429,37 +1468,39 @@ AUI.add(
 								}
 							};
 
-							instance._paginatorMap = paginatorMap;
+							instance._paginationMap = paginationMap;
 						}
 
-						return paginatorMap;
+						return paginationMap;
 					},
 
 					_getVocabularies: function(callback) {
 						var instance = this;
 
-						var paginator = instance._getVocabulariesPaginator();
+						var pagination = instance._getVocabulariesPagination();
+
+						var config = instance._originalConfig;
+
+						var itemsPerPage = config.itemsPerPage;
 
 						var currentPage = 0;
 
 						var query = instance._liveSearch.get(STR_QUERY);
 
 						if (!instance._restartSearch) {
-							currentPage = paginator.get(STR_PAGE);
+							currentPage = pagination.get(STR_PAGE);
 
 							if (!currentPage) {
-								var paginatorMap = instance._getVocabulariesPaginatorMap();
+								var paginationMap = instance._getVocabulariesPaginationMap();
 
-								currentPage = paginatorMap[STR_PAGE].defaultValue;
+								currentPage = paginationMap[STR_PAGE].defaultValue;
 							}
 
 							currentPage -= 1;
 						}
 
-						var rowsPerPage = paginator.get(STR_ROWS_PER_PAGE);
-
-						var start = currentPage * rowsPerPage;
-						var end = start + rowsPerPage;
+						var start = currentPage * itemsPerPage;
+						var end = start + itemsPerPage;
 
 						var parentGroupId = themeDisplay.getParentGroupId();
 
@@ -1478,9 +1519,14 @@ AUI.add(
 								}
 							},
 							function(result) {
+								var total = result.total;
+
 								instance._restartSearch = false;
 
-								paginator.setState(result);
+								pagination.set('total', Math.ceil(total / itemsPerPage));
+								pagination.set('visible', (total > itemsPerPage));
+
+								pagination.setState(result);
 
 								if (callback) {
 									callback.apply(instance, arguments);
@@ -2110,12 +2156,12 @@ AUI.add(
 						var changed = event.changed;
 						var removed = event.removed;
 
-						var paginatorState = {};
+						var paginationState = {};
 
-						var paginatorMap = instance._getVocabulariesPaginatorMap();
+						var paginationMap = instance._getVocabulariesPaginationMap();
 
 						AObject.each(
-							paginatorMap,
+							paginationMap,
 							function(item, index, collection) {
 								var historyEntry = item.historyEntry;
 
@@ -2129,13 +2175,13 @@ AUI.add(
 								}
 
 								if (value) {
-									paginatorState[index] = value;
+									paginationState[index] = value;
 								}
 							}
 						);
 
-						if (!AObject.isEmpty(paginatorState)) {
-							instance._vocabulariesPaginator.setState(paginatorState);
+						if (!AObject.isEmpty(paginationState)) {
+							instance._vocabulariesPagination.setState(paginationState);
 
 							instance._loadData();
 						}
@@ -2242,49 +2288,6 @@ AUI.add(
 						var vocabularyId = instance._getVocabularyId(event.target);
 
 						instance._selectVocabulary(vocabularyId);
-					},
-
-					_onVocabulariesPaginatorChangeRequest: function(event) {
-						var instance = this;
-
-						var stateBefore = event.state.before;
-						var state = event.state;
-
-						var historyState = {};
-
-						var paginatorMap = instance._getVocabulariesPaginatorMap();
-
-						AObject.each(
-							paginatorMap,
-							function(item, index, collection) {
-								if (owns(state, index)) {
-									var historyEntry = item.historyEntry;
-
-									var newItemValue = state[index];
-
-									var value = INVALID_VALUE;
-
-									if (newItemValue === item.defaultValue &&
-										Lang.isValue(HistoryManager.get(historyEntry))) {
-
-										value = null;
-									}
-									else if (newItemValue !== stateBefore[index]) {
-										value = newItemValue;
-									}
-
-									if (value !== INVALID_VALUE) {
-										historyState[historyEntry] = value;
-									}
-								}
-							}
-						);
-
-						if (!AObject.isEmpty(historyState)) {
-							HistoryManager.add(historyState);
-						}
-
-						instance._loadData();
 					},
 
 					_processAutoFieldsTriggers: function(event, callback) {
@@ -2999,6 +3002,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-live-search', 'aui-dialog-deprecated', 'aui-dialog-iframe-deprecated', 'aui-paginator', 'autocomplete-base', 'aui-tree-view', 'dd', 'escape', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
+		requires: ['aui-live-search', 'aui-dialog-deprecated', 'aui-dialog-iframe-deprecated', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'escape', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
 	}
 );

@@ -310,6 +310,15 @@
 			margin: 1em auto;
 		}
 	}
+
+	.vocabularies-pagination {
+		margin: 10px 0;
+		text-align: center;
+
+		.aui-pagination-content {
+			margin: 0;
+		}
+	}
 }
 
 .portlet-asset-categories-admin-dialog {

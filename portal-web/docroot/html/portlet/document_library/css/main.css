@@ -111,8 +111,17 @@
 		overflow: auto;
 	}
 
-	.document-container, .document-entries-paginator {
+	.document-container, .document-entries-pagination {
 		clear: both;
+	}
+
+	.document-entries-pagination {
+		text-align: center;
+		margin: 10px 0;
+
+		.aui-pagination-content {
+			margin: 0;
+		}
 	}
 
 	.folder.error:hover {

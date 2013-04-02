@@ -331,8 +331,8 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 		Liferay.fire(
 			'<portlet:namespace />pageLoaded',
 			{
-				paginator: {
-					name: 'entryPaginator',
+				pagination: {
+					name: 'entryPagination',
 					state: {
 						page: <%= (total == 0) ? 0 : entryEnd / (entryEnd - entryStart) %>,
 						rowsPerPage: <%= (entryEnd - entryStart) %>,

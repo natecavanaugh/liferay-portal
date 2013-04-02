@@ -365,7 +365,7 @@ AUI.add(
 							instance._eventDataRequest,
 							{
 								requestParams: requestParams,
-								resetPaginator: true
+								resetPagination: true
 							}
 						);
 					},
@@ -379,7 +379,7 @@ AUI.add(
 							'liferay-app-view-folders:dataRequest',
 							{
 								requestParams: event.requestParams,
-								resetPaginator: event.resetPaginator,
+								resetPagination: event.resetPagination,
 								src: event.src
 							}
 						);
@@ -429,7 +429,7 @@ AUI.add(
 							instance._eventDataRequest,
 							{
 								requestParams: requestParams,
-								resetPaginator: true
+								resetPagination: true
 							}
 						);
 					},
