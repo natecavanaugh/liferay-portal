@@ -170,30 +170,6 @@
 		.advanced-search-column-content {
 			border-right: 0;
 		}
-
-		.article-advanced-search-icon {
-			background: #D4D4D4 url(@theme_image_path@/portlet/header_bg.png) repeat-x scroll 0 0;
-
-			&:hover {
-				background: #B9CED9 url(@theme_image_path@/application/state_hover_bg.png) repeat-x scroll 0 0;
-				border-color: #627782;
-				color: #369;
-			}
-
-			input {
-				background: url(@theme_image_path@/arrows/05_down.png) no-repeat scroll 9px 60% transparent;
-				width: 28px;
-
-				&.close-advanced-search {
-					background-image: url(@theme_image_path@/arrows/05_up.png);
-					background-position: 8px 50%;
-				}
-			}
-		}
-
-		.aui-button {
-			margin-left: 0;
-		}
 	}
 
 	.journal-article-container {
