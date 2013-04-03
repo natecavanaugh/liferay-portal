@@ -54,8 +54,8 @@ portletURL.setParameter("folderId", String.valueOf(folderId));
 
 			<aui:column cssClass="advanced-search-column">
 				<aui:button
-					cssClass="article-advanced-search-icon lfr-search-combobox-item"
-					inputCssClass='<%= advancedSearch ? "close-advanced-search" : StringPool.BLANK %>'
+					cssClass="article-advanced-search-button lfr-search-combobox-item"
+					icon='<%= advancedSearch ? "aui-icon-chevron-up" : "aui-icon-chevron-down" %>'
 					name="showAdvancedSearch"
 					type="button"
 				/>

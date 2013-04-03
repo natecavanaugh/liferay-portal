@@ -173,7 +173,7 @@ AUI.add(
 						journalContainer.delegate(
 							STR_CLICK,
 							A.bind('_onOpenAdvancedSearch', instance),
-							'.article-advanced-search-icon'
+							'.article-advanced-search-button'
 						);
 
 						instance._config = config;
@@ -290,7 +290,7 @@ AUI.add(
 						var showAdvancedSearch = instance.byId('showAdvancedSearch');
 
 						var searchData = {
-							advancedSearch: showAdvancedSearch.hasClass('close-advanced-search'),
+							advancedSearch: !showAdvancedSearch.hasClass('aui-helper-hidden'),
 							andOperator: instance._andOperatorNode.get('value'),
 							folderId: selectedFolder.id,
 							content: instance._contentNode.get('value'),
@@ -336,13 +336,16 @@ AUI.add(
 
 						var advancedSearch = instance.byId('advancedSearch');
 
-						var showAdvancedSearch = instance.byId('showAdvancedSearch');
+						var showAdvancedSearch = event.currentTarget;
 
-						var advancedSearchClosed = !showAdvancedSearch.hasClass('close-advanced-search');
+						var showAdvancedSearchIcon = showAdvancedSearch.one('i');
 
-						showAdvancedSearch.toggleClass('close-advanced-search', advancedSearchClosed);
+						var advancedSearchHidden = advancedSearch.hasClass('aui-helper-hidden');
 
-						advancedSearch.toggle(advancedSearchClosed);
+						showAdvancedSearchIcon.toggleClass('aui-icon-chevron-down', !advancedSearchHidden);
+						showAdvancedSearchIcon.toggleClass('aui-icon-chevron-up', advancedSearchHidden);
+
+						advancedSearch.toggleClass('aui-helper-hidden', !advancedSearchHidden);
 					},
 
 					_onPageLoaded: function(event) {
