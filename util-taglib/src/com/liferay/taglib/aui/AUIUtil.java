@@ -25,9 +25,9 @@ import java.util.Map;
  */
 public class AUIUtil {
 
-	public static final String BUTTON_INPUT_PREFIX = "aui-button-input";
+	public static final String BUTTON_INPUT_PREFIX = "aui-btn-input";
 
-	public static final String BUTTON_PREFIX = "aui-button";
+	public static final String BUTTON_PREFIX = "aui-btn";
 
 	public static final String FIELD_PREFIX = "aui-field";
 
@@ -84,8 +84,7 @@ public class AUIUtil {
 
 		if (disabled) {
 			sb.append(StringPool.SPACE);
-			sb.append(prefix);
-			sb.append("-disabled");
+			sb.append("aui-disabled");
 		}
 
 		if (first) {
