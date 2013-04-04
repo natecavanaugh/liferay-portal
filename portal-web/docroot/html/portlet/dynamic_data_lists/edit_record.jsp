@@ -187,9 +187,6 @@ if (translating) {
 								Liferay.Util.openWindow(
 									{
 										cache: false,
-										dialog: {
-											modal: true
-										},
 										id: event.newVal,
 										title: '<%= UnicodeLanguageUtil.get(pageContext, "web-content-translation") %>',
 										uri: uri

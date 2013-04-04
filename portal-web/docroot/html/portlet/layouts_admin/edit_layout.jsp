@@ -219,7 +219,7 @@ String[][] categorySections = {mainSections};
 					</div>
 				</c:if>
 
-				<aui:script use="aui-dialog-deprecated,aui-dialog-iframe-deprecated,aui-toolbar">
+				<aui:script use="aui-dialog-iframe-deprecated,aui-modal,aui-toolbar">
 					var buttonRow = A.one('#<portlet:namespace />layoutToolbar');
 
 					var popup = null;
@@ -236,11 +236,11 @@ String[][] categorySections = {mainSections};
 										var content = A.one('#<portlet:namespace />addLayout');
 
 										if (!popup) {
-											popup = new A.Dialog(
+											popup = new A.Modal(
 												{
-													align: Liferay.Util.Window.ALIGN_CENTER,
 													bodyContent: content.show(),
-													title: '<%= UnicodeLanguageUtil.get(pageContext, "add-child-page") %>',
+													centered: true,
+													headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "add-child-page") %>',
 													modal: true,
 													width: 500
 												}
@@ -266,9 +266,6 @@ String[][] categorySections = {mainSections};
 										Liferay.Util.openWindow(
 											{
 												cache: false,
-												dialog: {
-													width: 900
-												},
 												id: '<portlet:namespace /><%= selLayout.getFriendlyURL().substring(1) %>_permissions',
 												title: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>',
 												uri: '<%= permissionURL %>'

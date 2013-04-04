@@ -674,23 +674,10 @@ AUI.add(
 						function(event) {
 							event.preventDefault();
 
-							var fullDialog = event.currentTarget.ancestor('li').hasClass('full-dialog');
-
 							manageContent.hide();
-
-							var width = 960;
-
-							if (fullDialog) {
-								width = '90%';
-							}
 
 							instance._openWindow(
 								{
-									dialog: {
-										align: Util.Window.ALIGN_CENTER,
-										modal: fullDialog,
-										width: width
-									},
 									id: 'manageContentDialog'
 								},
 								event.currentTarget
@@ -768,12 +755,7 @@ AUI.add(
 							event.preventDefault();
 
 							instance._openWindow(
-								{
-									dialog: {
-										align: Util.Window.ALIGN_CENTER,
-										width: 960
-									}
-								},
+								{},
 								event.currentTarget
 							);
 						},

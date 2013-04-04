@@ -161,10 +161,6 @@ assetBrowserURL.setWindowState(LiferayWindowState.POP_UP);
 	function <%= randomNamespace %>openAssetBrowser(url, title) {
 		Liferay.Util.openWindow(
 			{
-				dialog: {
-					constrain: true,
-					width: 820
-				},
 				id: '<portlet:namespace />assetBrowser',
 				title: title,
 				uri: url

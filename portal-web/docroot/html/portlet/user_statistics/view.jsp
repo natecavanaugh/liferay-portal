@@ -98,7 +98,7 @@ if (!rankingNamesList.isEmpty()) {
 		</div>
 	</c:if>
 
-	<aui:script use="aui-io-plugin">
+	<aui:script use="aui-io-plugin-deprecated">
 		var searchTopUsers = A.one('#<portlet:namespace />searchTopUsers');
 
 		if (searchTopUsers) {

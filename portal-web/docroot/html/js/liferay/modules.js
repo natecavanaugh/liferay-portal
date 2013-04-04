@@ -71,10 +71,11 @@ YUI.add(
 						'array-extras',
 						'async-queue',
 						'aui-autocomplete-deprecated',
-						'aui-dialog-deprecated',
 						'aui-form-textfield-deprecated',
+						'aui-io-plugin-deprecated',
 						'aui-io-request',
 						'aui-live-search',
+						'aui-modal',
 						'aui-template',
 						'aui-textboxlist-deprecated',
 						'datasource-cache',
@@ -116,7 +117,7 @@ YUI.add(
 					fullpath: javaScriptRootPath + '/liferay/dockbar_underlay.js',
 					requires: [
 						'aui-button',
-						'aui-io-plugin',
+						'aui-io-plugin-deprecated',
 						'aui-overlay-manager-deprecated'
 					]
 				},
@@ -272,8 +273,9 @@ YUI.add(
 					fullpath: javaScriptRootPath + '/liferay/look_and_feel.js',
 					requires: [
 						'aui-color-picker-deprecated',
-						'aui-dialog-deprecated',
+						'aui-io-plugin-deprecated',
 						'aui-io-request',
+						'aui-modal',
 						'aui-tabs-base'
 					]
 				},
@@ -392,8 +394,9 @@ YUI.add(
 				'liferay-restore-entry': {
 					fullpath: javaScriptRootPath + '/liferay/restore_entry.js',
 					requires: [
-						'aui-dialog-deprecated',
+						'aui-io-plugin-deprecated',
 						'aui-io-request',
+						'aui-modal',
 						'liferay-portlet-base'
 					]
 				},
@@ -423,8 +426,8 @@ YUI.add(
 				'liferay-staging': {
 					fullpath: javaScriptRootPath + '/liferay/staging.js',
 					requires: [
-						'aui-dialog-deprecated',
-						'aui-io-plugin'
+						'aui-io-plugin-deprecated',
+						'aui-modal',
 					]
 				},
 				'liferay-staging-branch': {
@@ -485,8 +488,8 @@ YUI.add(
 				'liferay-util-window': {
 					fullpath: javaScriptRootPath + '/liferay/util_window.js',
 					requires: [
-						'aui-dialog-deprecated',
-						'aui-dialog-iframe-deprecated'
+						'aui-dialog-iframe-deprecated',
+						'aui-modal'
 					]
 				},
 				'liferay-xml-formatter': {

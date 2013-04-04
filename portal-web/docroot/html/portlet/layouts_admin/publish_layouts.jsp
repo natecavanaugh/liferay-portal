@@ -513,11 +513,11 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 				}
 			}
 		},
-		['aui-dialog-deprecated']
+		['aui-modal']
 	);
 </aui:script>
 
-<aui:script use="aui-base,aui-dialog-deprecated">
+<aui:script use="aui-base,aui-modal">
 	var dialog = A.DialogManager.findByChild('#<portlet:namespace />exportPagesFm');
 
 	if (dialog) {

@@ -752,10 +752,6 @@ if (Validator.isNotNull(content)) {
 			function (event) {
 				Liferay.Util.openWindow(
 					{
-						dialog: {
-							constrain: true,
-							width: 820
-						},
 						id: windowId,
 						title: '<%= UnicodeLanguageUtil.get(pageContext, "templates") %>',
 
@@ -814,10 +810,6 @@ if (Validator.isNotNull(content)) {
 
 					Liferay.Util.openWindow(
 					{
-						dialog: {
-							constrain: true,
-							width: 820
-						},
 						id: windowId,
 						title: '<%= UnicodeLanguageUtil.get(pageContext, "templates") %>',
 						uri: editTemplateURL

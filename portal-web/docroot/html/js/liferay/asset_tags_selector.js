@@ -221,15 +221,11 @@ AUI.add(
 						var instance = this;
 
 						if (!instance._popup) {
-							var popup = new A.Dialog(
+							var popup = new A.Modal(
 								{
 									bodyContent: TPL_LOADING,
-									constrain: true,
-									draggable: true,
+									headerContent: '',
 									hideClass: 'aui-helper-hidden-accessible',
-									preventOverlap: true,
-									stack: true,
-									title: '',
 									width: 320,
 									zIndex: 1000
 								}
@@ -696,6 +692,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['array-extras', 'async-queue', 'aui-autocomplete-deprecated', 'aui-dialog-deprecated', 'aui-form-textfield-deprecated', 'aui-io-request', 'aui-live-search', 'aui-template-deprecated', 'aui-textboxlist', 'datasource-cache', 'liferay-service-datasource']
+		requires: ['array-extras', 'async-queue', 'aui-autocomplete-deprecated', 'aui-form-textfield-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-live-search', 'aui-modal', 'aui-template-deprecated', 'aui-textboxlist', 'datasource-cache', 'liferay-service-datasource']
 	}
 );

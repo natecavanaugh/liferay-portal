@@ -102,9 +102,6 @@
 		function <portlet:namespace />openFeedsView() {
 			Liferay.Util.openWindow(
 				{
-					dialog: {
-						width: 820
-					},
 					id: '<portlet:namespace />openFeedsView',
 					title: '<%= UnicodeLanguageUtil.get(pageContext, "feeds") %>',
 					uri: '<liferay-portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/journal/view_feeds" /></liferay-portlet:renderURL>'

@@ -296,12 +296,12 @@ AUI.add(
 					_createTagPanelAdd: function() {
 						var instance = this;
 
-						var tagPanelAdd = new A.Dialog(
+						var tagPanelAdd = new A.Modal(
 							{
 								align: instance._dialogAlignConfig,
 								cssClass: CSS_TAG_DIALOG,
+								headerContent: Liferay.Language.get('add-tag'),
 								resizable: false,
-								title: Liferay.Language.get('add-tag'),
 								width: 550,
 								zIndex: 1000
 							}
@@ -319,12 +319,12 @@ AUI.add(
 					_createTagPanelEdit: function() {
 						var instance = this;
 
-						instance._tagPanelEdit = new A.Dialog(
+						instance._tagPanelEdit = new A.Modal(
 							{
 								align: instance._dialogAlignConfig,
 								cssClass: CSS_TAG_DIALOG,
+								headerContent: Liferay.Language.get('edit-tag'),
 								resizable: false,
-								title: Liferay.Language.get('edit-tag'),
 								width: 550,
 								zIndex: 1000
 							}
@@ -755,14 +755,14 @@ AUI.add(
 							var panelBodyContent = Lang.sub(TPL_TAG_MERGE_BODY, tplValues);
 							var panelFooterContent = Lang.sub(TPL_TAG_MERGE_FOOTER, tplValues);
 
-							tagPanelMerge = new A.Dialog(
+							tagPanelMerge = new A.Modal(
 								{
 									align: instance._dialogAlignConfig,
 									bodyContent: panelBodyContent,
 									cssClass: CSS_TAG_DIALOG,
 									footerContent: panelFooterContent,
+									headerContent: Liferay.Language.get('merge-tags'),
 									resizable: false,
-									title: Liferay.Language.get('merge-tags'),
 									width: 500,
 									zIndex: 1000
 								}
@@ -1676,6 +1676,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-button', 'aui-dialog-deprecated', 'aui-dialog-iframe-deprecated', 'aui-loading-mask-deprecated', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
+		requires: ['aui-button', 'aui-dialog-iframe-deprecated', 'aui-io-plugin-deprecated', 'aui-loading-mask-deprecated', 'aui-modal', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
 	}
 );

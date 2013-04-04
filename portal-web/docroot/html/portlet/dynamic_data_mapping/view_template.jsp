@@ -250,11 +250,6 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 	function <portlet:namespace />copyTemplate(uri) {
 		Liferay.Util.openWindow(
 			{
-				dialog: {
-					align: Liferay.Util.Window.ALIGN_CENTER,
-					constrain: true,
-					width: 600
-				},
 				id: '<portlet:namespace />copyTemplate',
 				refreshWindow: window,
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "copy-template") %>',

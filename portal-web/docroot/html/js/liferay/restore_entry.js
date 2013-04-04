@@ -136,12 +136,12 @@ AUI.add(
 						var popup = instance._popup;
 
 						if (!popup) {
-							popup = new A.Dialog(
+							popup = new A.Modal(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
+									headerContent: Liferay.Language.get('warning'),
+									centered: true,
 									cssClass: 'trash-restore-popup',
 									modal: true,
-									title: Liferay.Language.get('warning'),
 									width: 500
 								}
 							).plug(
@@ -235,6 +235,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog-deprecated', 'aui-io-request', 'liferay-portlet-base']
+		requires: ['aui-io-plugin-deprecated', 'aui-io-request', 'aui-modal', 'liferay-portlet-base']
 	}
 );

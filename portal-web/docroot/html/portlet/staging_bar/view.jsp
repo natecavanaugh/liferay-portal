@@ -250,10 +250,6 @@ if (layout != null) {
 
 								Liferay.Util.openWindow(
 									{
-										dialog:
-											{
-												width: 820
-											},
 										id: '<portlet:namespace />layoutSetBranches',
 										title: '<%= UnicodeLanguageUtil.get(pageContext, "manage-site-pages-variations") %>',
 										uri: event.currentTarget.attr('href')
@@ -466,10 +462,6 @@ if (layout != null) {
 
 										Liferay.Util.openWindow(
 											{
-												dialog:
-													{
-														width: 820
-													},
 												id: '<portlet:namespace />layoutRevisions',
 												title: '<%= UnicodeLanguageUtil.get(pageContext, "manage-page-variations") %>',
 												uri: event.currentTarget.attr('href')

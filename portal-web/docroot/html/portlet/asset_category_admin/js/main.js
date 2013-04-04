@@ -406,10 +406,8 @@ AUI.add(
 					_bindAlignFloatingPanelsEvent: function(contextPanel) {
 						var instance = this;
 
-						var dragInstance = contextPanel.get('dragInstance');
-
-						dragInstance.on(
-							'end',
+						contextPanel.on(
+							'drag:end',
 							function(event) {
 								instance._alignFloatingPanels(contextPanel);
 							}
@@ -611,12 +609,12 @@ AUI.add(
 					_createCategoryPanelAdd: function() {
 						var instance = this;
 
-						instance._categoryPanelAdd = new A.Dialog(
+						instance._categoryPanelAdd = new A.Modal(
 							{
-								align: instance._dialogAlignConfig,
+								centered: true,
 								cssClass: CSS_ADMIN_DIALOG,
-								title: Liferay.Language.get('add-category'),
-								resizable: false,
+								headerContent: Liferay.Language.get('add-category'),
+								modal: true,
 								width: 550,
 								zIndex: 1000
 							}
@@ -666,11 +664,12 @@ AUI.add(
 					_createVocabularyPanelAdd: function() {
 						var instance = this;
 
-						instance._vocabularyPanelAdd = new A.Dialog(
+						instance._vocabularyPanelAdd = new A.Modal(
 							{
-								align: instance._dialogAlignConfig,
+								centered: true,
 								cssClass: CSS_ADMIN_DIALOG,
-								title: Liferay.Language.get('add-vocabulary'),
+								headerContent: Liferay.Language.get('add-vocabulary'),
+								modal: true,
 								resizable: false,
 								width: 550,
 								zIndex: 1000
@@ -711,6 +710,7 @@ AUI.add(
 						var defaultConfig = {
 							align: instance._dialogAlignConfig,
 							cssClass: CSS_ADMIN_DIALOG,
+							modal: true,
 							resizable: false,
 							width: 550,
 							zIndex: 1000
@@ -723,7 +723,7 @@ AUI.add(
 							config = defaultConfig;
 						}
 
-						instance._panelEdit = new A.Dialog(config).render();
+						instance._panelEdit = new A.Modal(config).render();
 
 						instance._panelEdit.hide();
 
@@ -3007,6 +3007,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-live-search', 'aui-dialog-deprecated', 'aui-dialog-iframe-deprecated', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'escape', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
+		requires: ['aui-dialog-iframe-deprecated', 'aui-io-plugin-deprecated', 'aui-live-search-deprecated', 'aui-modal', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'escape', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
 	}
 );

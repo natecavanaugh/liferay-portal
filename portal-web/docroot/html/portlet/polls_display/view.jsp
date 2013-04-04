@@ -116,8 +116,9 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 
 	PortletURL redirectURL = liferayPortletResponse.createRenderURL();
 
-	redirectURL.setParameter("struts_action", "/polls_display/add_question_redirect");
 	redirectURL.setWindowState(LiferayWindowState.POP_UP);
+
+	redirectURL.setParameter("struts_action", "/polls_display/add_question_redirect");
 	%>
 
 	<div class="lfr-meta-actions icons-container">
@@ -131,7 +132,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 				</liferay-portlet:renderURL>
 
 				<%
-				String editQuestionURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960}, id: '" + liferayPortletResponse.getNamespace() + "editQuestion', title: '" + UnicodeFormatter.toString(ResourceActionsUtil.getModelResource(locale, PollsQuestion.class.getName())) + "', uri: '" + HtmlUtil.escapeURL(editPollURL.toString()) + "'});";
+				String editQuestionURL = "javascript:Liferay.Util.openWindow(id: '" + liferayPortletResponse.getNamespace() + "editQuestion', title: '" + UnicodeFormatter.toString(ResourceActionsUtil.getModelResource(locale, PollsQuestion.class.getName())) + "', uri:'" + HtmlUtil.escapeURL(editPollURL.toString()) + "'});";
 				%>
 
 				<liferay-ui:icon
@@ -163,7 +164,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 				</liferay-portlet:renderURL>
 
 				<%
-				String addQuestionURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960}, id: '" + liferayPortletResponse.getNamespace() + "editQuestion', title: '" + UnicodeFormatter.toString(ResourceActionsUtil.getModelResource(locale, PollsQuestion.class.getName())) + "', uri: '" + HtmlUtil.escapeURL(addPollURL.toString()) + "'});";
+				String addQuestionURL = "javascript:Liferay.Util.openWindow({id: '" + liferayPortletResponse.getNamespace() + "editQuestion', title: '" + UnicodeFormatter.toString(ResourceActionsUtil.getModelResource(locale, PollsQuestion.class.getName())) + "', uri:'" + HtmlUtil.escapeURL(addPollURL.toString()) + "'});";
 				%>
 
 				<liferay-ui:icon

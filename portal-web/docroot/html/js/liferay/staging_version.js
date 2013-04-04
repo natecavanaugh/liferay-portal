@@ -145,13 +145,12 @@ AUI.add(
 					var graphDialog = instance._graphDialog;
 
 					if (!graphDialog) {
-						graphDialog = new A.Dialog(
+						graphDialog = new A.Modal(
 							{
-								align: Liferay.Util.Window.ALIGN_CENTER,
-								draggable: true,
+								centered: true,
+								headerContent: Liferay.Language.get('history'),
 								height: 600,
 								modal: true,
-								title: Liferay.Language.get('history'),
 								width: 600
 							}
 						).plug(

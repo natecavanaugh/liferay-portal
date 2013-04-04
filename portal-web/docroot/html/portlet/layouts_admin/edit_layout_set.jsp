@@ -88,13 +88,13 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 						</div>
 					</liferay-util:html-top>
 
-					<aui:script use="aui-dialog-deprecated">
-						new A.Dialog(
+					<aui:script use="aui-modal">
+						new A.Modal(
 							{
-								align: Liferay.Util.Window.ALIGN_CENTER,
+								centered: true,
 								bodyContent: A.one('#<portlet:namespace />importPage').show(),
+								headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "import") %>',
 								modal: true,
-								title: '<%= UnicodeLanguageUtil.get(pageContext, "import") %>',
 								width: 600
 							}
 						).render();
@@ -134,7 +134,7 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 	</div>
 </c:if>
 
-<aui:script use="aui-dialog-deprecated,aui-toolbar">
+<aui:script use="aui-modal,aui-toolbar">
 	var popup;
 	var exportPopup;
 	var importPopup;
@@ -152,11 +152,11 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 						var content = A.one('#<portlet:namespace />addLayout');
 
 						if (!popup) {
-							popup = new A.Dialog(
+							popup = new A.Modal(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
+									centered: true,
 									bodyContent: content.show(),
-									title: '<%= UnicodeLanguageUtil.get(pageContext, "add-page") %>',
+									headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "add-page") %>',
 									modal: true,
 									width: 500
 								}
@@ -213,13 +213,6 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 
 							Liferay.Util.openWindow(
 								{
-									dialog:
-										{
-											align: Liferay.Util.Window.ALIGN_CENTER,
-											constrain: true,
-											modal: true,
-											width: 600
-										},
 									id: '<portlet:namespace />exportDialog',
 									title: '<%= UnicodeLanguageUtil.get(pageContext, "export") %>',
 									uri: '<%= exportPagesURL.toString() %>'
@@ -244,13 +237,6 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 
 							Liferay.Util.openWindow(
 								{
-									dialog:
-										{
-											align: Liferay.Util.Window.ALIGN_CENTER,
-											constrain: true,
-											modal: true,
-											width: 600
-										},
 									id: '<portlet:namespace />importDialog',
 									title: '<%= UnicodeLanguageUtil.get(pageContext, "import") %>',
 									uri: '<%= importPagesURL.toString() %>'

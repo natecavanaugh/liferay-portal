@@ -30,6 +30,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog-deprecated', 'aui-io-plugin']
+		requires: ['aui-io-plugin-deprecated', 'aui-modal']
 	}
 );
