@@ -51,7 +51,7 @@
 				img.attr('src', icon);
 			}
 		},
-		['aui-dialog-deprecated']
+		['aui-base']
 	);
 
 	Liferay.provide(
@@ -92,23 +92,13 @@
 					"</form>" +
 				"</div>";
 
-			new A.Dialog(
+			Liferay.Util.openWindow(
 				{
-					align: {
-						node: null,
-						points: ['tc', 'tc']
-					},
-					bodyContent: contents,
-					destroyOnClose: true,
-					modal: true,
-					title: title,
-					width: 350
+					title: contents
 				}
-			).render();
-
-			dialog.move(dialog.get('x'), dialog.get('y') + 100);
+			);
 		},
-		['aui-dialog-deprecated']
+		['liferay-util-window']
 	);
 
 	Liferay.provide(
@@ -120,20 +110,13 @@
 			var url = options.url;
 			var title = options.title;
 
-			var dialog = new A.Dialog(
+			var dialog = new A.Modal(
 				{
-					align: {
-						node: null,
-						points: ['tc', 'tc']
-					},
-					destroyOnClose: true,
+					headerContent: title,
 					modal: true,
-					title: title,
 					width: 600
 				}
 			).render();
-
-			dialog.move(dialog.get('x'), dialog.get('y') + 100);
 
 			dialog.plug(
 				A.Plugin.IO,
@@ -142,7 +125,7 @@
 				}
 			);
 		},
-		['aui-dialog-deprecated', 'aui-io']
+		['aui-io-plugin-deprecated', 'aui-modal']
 	);
 
 	Liferay.provide(

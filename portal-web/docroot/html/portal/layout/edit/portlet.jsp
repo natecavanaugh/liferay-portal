@@ -76,7 +76,7 @@
 </div>
 
 <c:if test="<%= LayoutPermissionUtil.contains(permissionChecker, selLayout, ActionKeys.UPDATE) %>">
-	<aui:script use="aui-button-item,aui-dialog-deprecated">
+	<aui:script use="aui-modal">
 		var content = A.one('#<portlet:namespace />copyPortletsFromPage');
 
 		var button = new A.Button(
@@ -85,13 +85,13 @@
 				label: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>',
 				on: {
 					click: function(event) {
-						var popUp = new A.Dialog(
+						var popUp = new A.Modal(
 							{
-								align: Liferay.Util.Window.ALIGN_CENTER,
+								centered: true,
 								bodyContent: content.show(),
 								destroyOnClose: true,
+								headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>',
 								modal: true,
-								title: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>',
 								width: 500
 							}
 						).render();

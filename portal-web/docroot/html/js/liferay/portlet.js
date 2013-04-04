@@ -664,15 +664,6 @@
 				Liferay.Util.openWindow(
 					{
 						cache: false,
-						dialog: {
-							align: Util.Window.ALIGN_CENTER,
-							after: {
-								render: function(event) {
-									this.set('y', this.get('y') + 50);
-								}
-							},
-							width: 820
-						},
 						dialogIframe: {
 							id: namespacedId + 'configurationIframe',
 							uri: configurationURL

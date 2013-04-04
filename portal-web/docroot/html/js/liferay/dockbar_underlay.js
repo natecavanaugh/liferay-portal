@@ -115,6 +115,6 @@ AUI().add(
 	},
 	'',
 	{
-		requires: ['aui-button', 'aui-io-plugin', 'aui-overlay-manager-deprecated']
+		requires: ['aui-button', 'aui-io-plugin-deprecated', 'aui-overlay-manager-deprecated']
 	}
 );

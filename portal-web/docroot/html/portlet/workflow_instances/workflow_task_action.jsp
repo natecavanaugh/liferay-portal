@@ -87,7 +87,7 @@ WorkflowTask workflowTask = (WorkflowTask)row.getObject();
 	<aui:input cols="55" name="comment" rows="10" type="textarea" />
 </div>
 
-<aui:script use="aui-dialog-deprecated">
+<aui:script use="aui-io-plugin-deprecated,aui-modal">
 	var showPopup = function(url, title) {
 		var form = A.Node.create('<form />');
 
@@ -102,26 +102,32 @@ WorkflowTask workflowTask = (WorkflowTask)row.getObject();
 			comments.show();
 		}
 
-		var dialog = new A.Dialog(
+		var dialog = new A.Modal(
 			{
-				align: Liferay.Util.Window.ALIGN_CENTER,
+				centered: true,
 				bodyContent: form,
-				buttons: [
-					{
-						handler: function() {
-							submitForm(form);
-						},
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "ok") %>'
-					},
-					{
-						handler: function() {
-							dialog.close();
-						},
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel") %>'
-					}
-				],
+				headerContent: title,
 				modal: true,
-				title: title,
+				toolbars: {
+					footer: [
+						{
+							label: '<%= UnicodeLanguageUtil.get(pageContext, "ok") %>',
+							on: {
+								click: function() {
+									submitForm(form);
+								}
+							}
+						},
+						{
+							label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel") %>',
+							on: {
+								click: function() {
+									dialog.close();
+								}
+							}
+						}
+					]
+				},
 				width: 400
 			}
 		).render();

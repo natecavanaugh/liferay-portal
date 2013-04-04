@@ -201,7 +201,7 @@ SitesUtil.addPortletBreadcrumbEntries(group, pagesName, redirectURL, request, re
 </aui:layout>
 
 <c:if test="<%= !group.isLayoutPrototype() %>">
-	<aui:script use="aui-io-plugin">
+	<aui:script use="aui-io-plugin-deprecated">
 		var layoutsContainer = A.one('#<portlet:namespace />layoutsContainer');
 
 		layoutsContainer.plug(

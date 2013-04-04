@@ -43,18 +43,18 @@ AUI.add(
 						}
 
 						if (!instance._currentPopup) {
-							instance._currentPopup = new A.Dialog(
+							instance._currentPopup = new A.Modal(
 								{
+									headerContent: Liferay.Language.get('look-and-feel'),
 									on: {
-										close: function() {
-											if (Browser.isIe() && Browser.getMajorVersion() == 6) {
+										visibleChange: function(event) {
+											if (!event.newVal && Browser.isIe() && Browser.getMajorVersion() == 6) {
 												window.location.reload(true);
 											}
 
 											instance._destroyColorPickers();
 										}
 									},
-									title: Liferay.Language.get('look-and-feel'),
 									width: 820
 								}
 							).render();
@@ -96,7 +96,6 @@ AUI.add(
 						}
 
 						instance._currentPopup.show();
-						instance._currentPopup.alignToViewport(20, 20);
 						instance._currentPopup.loadingmask.show();
 						instance._currentPopup.io.start();
 					}
@@ -1903,6 +1902,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-color-picker-deprecated', 'aui-dialog-deprecated', 'aui-io-request', 'aui-tabs-base']
+		requires: ['aui-color-picker-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-modal', 'aui-tabs-base']
 	}
 );

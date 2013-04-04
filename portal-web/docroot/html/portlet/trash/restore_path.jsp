@@ -81,12 +81,6 @@
 		function(uri) {
 			Liferay.Util.openWindow(
 				{
-					dialog: {
-						align: Liferay.Util.Window.ALIGN_CENTER,
-						cssClass: '',
-						modal: true,
-						width: 700
-					},
 					title: '<%= UnicodeLanguageUtil.get(pageContext, "warning") %>',
 					uri: uri
 				}

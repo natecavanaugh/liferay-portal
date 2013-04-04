@@ -134,10 +134,6 @@ Group ddmTemplateGroup = GroupLocalServiceUtil.getGroup(ddmTemplateGroupId);
 			function (event) {
 				Liferay.Util.openWindow(
 					{
-						dialog: {
-							constrain: true,
-							width: 820
-						},
 						id: windowId,
 						title: '<%= UnicodeLanguageUtil.get(pageContext, "application-display-templates") %>',
 

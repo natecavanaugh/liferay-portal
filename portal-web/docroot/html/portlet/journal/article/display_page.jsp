@@ -200,7 +200,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 						}
 					);
 
-					dialog = new A.Dialog(
+					dialog = new A.Modal(
 						{
 							align: {
 								node: A.one('#portlet_<%= portletDisplay.getId() %>'),
@@ -221,8 +221,8 @@ Group parentGroup = themeDisplay.getSiteGroup();
 							],
 							bodyContent: bodyContent,
 							cssClass: 'display-page-dialog',
+							headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "choose-a-display-page") %>',
 							resizable: false,
-							title: '<%= UnicodeLanguageUtil.get(pageContext, "choose-a-display-page") %>',
 							visible: false,
 							width: 450
 						}
@@ -539,7 +539,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 				}
 			);
 		},
-		['aui-dialog-deprecated', 'aui-io', 'aui-tabs', 'aui-tree']
+		['aui-io-plugin-deprecated', 'aui-io-request', 'aui-modal', 'aui-tabs', 'aui-tree']
 	);
 
 	<c:choose>

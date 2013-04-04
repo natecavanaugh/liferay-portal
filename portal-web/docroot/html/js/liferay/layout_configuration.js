@@ -17,14 +17,14 @@
 
 				var url = themeDisplay.getPathMain() + '/portal/render_portlet';
 
-				dialog = new A.Dialog(
+				dialog = new A.Modal(
 					{
 						on: {
 							visibleChange: function(event) {
 								body.toggleClass('lfr-has-sidebar', event.newVal);
 							}
 						},
-						title: Liferay.Language.get('add-application'),
+						headerContent: Liferay.Language.get('add-application'),
 						width: 250
 					}
 				).render();
@@ -56,7 +56,7 @@
 
 			dialog.show();
 		},
-		['aui-dialog-deprecated', 'liferay-layout-configuration']
+		['aui-io-plugin-deprecated', 'aui-modal', 'liferay-layout-configuration']
 	);
 
 	A.add(

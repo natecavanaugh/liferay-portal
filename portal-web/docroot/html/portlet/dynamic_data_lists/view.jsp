@@ -104,9 +104,9 @@ portletURL.setParameter("struts_action", "/dynamic_data_lists/view");
 				content.show();
 			}
 
-			var dialog = new A.Dialog(
+			var dialog = new A.Modal(
 				{
-					align: Liferay.Util.Window.ALIGN_CENTER,
+					centered: true,
 					bodyContent: form,
 					buttons: [
 						{
@@ -122,13 +122,13 @@ portletURL.setParameter("struts_action", "/dynamic_data_lists/view");
 							label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel") %>'
 						}
 					],
+					headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "export") %>',
 					modal: true,
-					title: '<%= UnicodeLanguageUtil.get(pageContext, "export") %>',
 					width: 400
 				}
 			).render();
 
 		},
-		['aui-dialog-deprecated']
+		['aui-modal']
 	);
 </aui:script>

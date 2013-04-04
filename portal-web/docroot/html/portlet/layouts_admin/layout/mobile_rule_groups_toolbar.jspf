@@ -135,7 +135,6 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "add");
 			'click',
 			function(event) {
 				config.dialog.title = '<%= UnicodeLanguageUtil.get(pageContext, "rule-group-priorities") %>';
-				config.dialog.width = 460;
 
 				config.id = '<portlet:namespace />ruleGroupsPriorities';
 				config.uri = '<%= managePrioritiesURL %>';

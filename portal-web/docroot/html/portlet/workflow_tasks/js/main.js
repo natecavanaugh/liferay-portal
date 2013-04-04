@@ -45,26 +45,32 @@ AUI.add(
 					comments.show();
 				}
 
-				var dialog = new A.Dialog(
+				var dialog = new A.Modal(
 					{
-						align: Liferay.Util.Window.ALIGN_CENTER,
+						centered: true,
 						bodyContent: form,
-						buttons: [
-							{
-								handler: function() {
-									submitForm(form);
-								},
-								label: Liferay.Language.get('ok')
-							},
-							{
-								handler: function() {
-									this.close();
-								},
-								label: Liferay.Language.get('cancel')
-							}
-						],
+						headerContent: title,
 						modal: true,
-						title: title,
+						toolbars: {
+							footer: [
+								{
+									label: Liferay.Language.get('ok'),
+									on: {
+										click: function() {
+											submitForm(form);
+										}
+									}
+								},
+								{
+									label: Liferay.Language.get('cancel'),
+									on: {
+										click: function() {
+											this.close();
+										}
+									}
+								}
+							]
+						},
 						width: 400
 					}
 				).render();
@@ -75,6 +81,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog-deprecated']
+		requires: ['aui-modal']
 	}
 );

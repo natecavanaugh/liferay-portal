@@ -311,7 +311,7 @@ String iconMenuId = null;
 					</portlet:renderURL>
 
 					<%
-					String taglibEditURL = "javascript:Liferay.Util.openWindow({dialog: {width: 420}, id: '" + renderResponse.getNamespace() + "selectFileEntryType', title: '" + UnicodeLanguageUtil.get(pageContext, "select-document-type") + "', uri: '" + editFileEntryURL.toString() + "'});";
+					String taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "selectFileEntryType', title: '" + UnicodeLanguageUtil.get(pageContext, "select-document-type") + "', uri:'" + editFileEntryURL.toString() + "'});";
 					%>
 
 					<liferay-ui:icon
@@ -334,7 +334,7 @@ String iconMenuId = null;
 					</liferay-portlet:renderURL>
 
 					<%
-					taglibEditURL = "javascript:Liferay.Util.openWindow({dialog: {centered: true, modal: true, width: 420}, id: '" + renderResponse.getNamespace() + "selectFileEntryType', title: '" + UnicodeLanguageUtil.get(pageContext, portletName.equals(PortletKeys.MEDIA_GALLERY_DISPLAY) ? "select-media-type" : "select-document-type") + "', uri: '" + editFileEntryURL.toString() + "'});";
+					taglibEditURL = "javascript:Liferay.Util.openWindow({id: '" + renderResponse.getNamespace() + "selectFileEntryType', title: '" + UnicodeLanguageUtil.get(pageContext, portletName.equals(PortletKeys.MEDIA_GALLERY_DISPLAY) ? "select-media-type" : "select-document-type") + "', uri:'" + editFileEntryURL.toString() + "'});";
 					%>
 
 					<liferay-ui:icon
@@ -458,7 +458,7 @@ String iconMenuId = null;
 	<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
 </portlet:renderURL>
 
-<aui:script use="aui-dialog-deprecated,uploader">
+<aui:script use="aui-modal,uploader">
 	if (!A.UA.ios && (A.Uploader.TYPE != 'none')) {
 		var uploadMultipleDocumentsIcon = A.all('.upload-multiple-documents:hidden');
 
@@ -486,13 +486,13 @@ String iconMenuId = null;
 			function(event) {
 				event.preventDefault();
 
-				var webdavDialog = new A.Dialog(
+				var webdavDialog = new A.Modal(
 					{
-						align: Liferay.Util.Window.ALIGN_CENTER,
 						bodyContent: A.one('#<%= randomNamespace %>webDav').html(),
+						centered: true,
 						destroyOnClose: true,
+						headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "access-from-desktop") %>',
 						modal: true,
-						title: '<%= UnicodeLanguageUtil.get(pageContext, "access-from-desktop") %>',
 						width: 500
 					}
 				);

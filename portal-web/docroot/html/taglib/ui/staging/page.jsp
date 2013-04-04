@@ -291,9 +291,6 @@ String publishScheduleMessage = LanguageUtil.get(pageContext, publishScheduleDia
 
 										Liferay.Util.openWindow(
 											{
-												dialog: {
-													width: 820
-												},
 												id: '<portlet:namespace />layoutSetBranches',
 												title: '<%= UnicodeLanguageUtil.get(pageContext, "manage-site-pages-variations") %>',
 												uri: event.currentTarget.attr('href')
