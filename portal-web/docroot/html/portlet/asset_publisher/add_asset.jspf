@@ -98,7 +98,7 @@ addPortletURLs = getAddPortletURLs(liferayPortletRequest, liferayPortletResponse
 				<c:when test="<%= addPortletURLs.size() == 1 %>">
 
 					<%
-					String taglibEditURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960}, id: '" + liferayPortletResponse.getNamespace() + "editAsset', title: '" + LanguageUtil.format(pageContext, "new-x", message) + "', uri:'" + addPortletURLString + "'});";
+					String taglibEditURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960, centered: true}, id: '" + liferayPortletResponse.getNamespace() + "editAsset', title: '" + LanguageUtil.format(pageContext, "new-x", message) + "', uri:'" + addPortletURLString + "'});";
 					%>
 
 					<aui:button
@@ -109,7 +109,7 @@ addPortletURLs = getAddPortletURLs(liferayPortletRequest, liferayPortletResponse
 				<c:otherwise>
 
 					<%
-					String taglibEditURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960}, id: '" + liferayPortletResponse.getNamespace() + "editAsset', title: '" + LanguageUtil.format(pageContext, "new-x", message) + "', uri:'" + HtmlUtil.escapeURL(addPortletURLString) + "'});";
+					String taglibEditURL = "javascript:Liferay.Util.openWindow({dialog: {width: 960, centered: true}, id: '" + liferayPortletResponse.getNamespace() + "editAsset', title: '" + LanguageUtil.format(pageContext, "new-x", message) + "', uri:'" + HtmlUtil.escapeURL(addPortletURLString) + "'});";
 					%>
 
 					<liferay-ui:icon
