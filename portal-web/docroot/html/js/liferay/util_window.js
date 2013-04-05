@@ -97,35 +97,41 @@ AUI.add(
 						}
 					);
 
-					Liferay.after(
-						'hashChange',
-						function(event) {
-							modal.iframe.set('uri', event.uri);
-						}
+					var liferayHandles = modal._liferayHandles;
+
+					liferayHandles.push(
+						Liferay.after(
+							'hashChange',
+							function(event) {
+								modal.iframe.set('uri', event.uri);
+							}
+						)
 					);
 
-					Liferay.after(
-						'popupReady',
-						function(event) {
-							var iframeId = id + instance.IFRAME_SUFFIX;
+					liferayHandles.push(
+						Liferay.after(
+							'popupReady',
+							function(event) {
+								var iframeId = id + instance.IFRAME_SUFFIX;
 
-							if (event.windowName === iframeId) {
-								event.dialog = modal;
-								event.details[0].dialog = modal;
+								if (event.windowName === iframeId) {
+									event.dialog = modal;
+									event.details[0].dialog = modal;
 
-								if (event.doc) {
-									Util.afterIframeLoaded(event);
+									if (event.doc) {
+										Util.afterIframeLoaded(event);
 
-									var modalUtil = event.win.Liferay.Util;
+										var modalUtil = event.win.Liferay.Util;
 
-									modalUtil.Window._opener = openingWindow;
+										modalUtil.Window._opener = openingWindow;
 
-									modalUtil.Window._name = id;
+										modalUtil.Window._name = id;
+									}
+
+									modal.iframe.node.focus();
 								}
-
-								modal.iframe.node.focus();
 							}
-						}
+						)
 					);
 				},
 
@@ -164,9 +170,9 @@ AUI.add(
 
 						modal.titleNode = titleNode;
 
-						instance._bindWindowHooks(modal, config);
-
 						instance._register(modal);
+
+						instance._bindWindowHooks(modal, config);
 					}
 					else {
 						if (dialogIframeConfig) {
@@ -219,31 +225,39 @@ AUI.add(
 								bindLoadHandler: function() {
 									var instance = this;
 
+									var modal = instance.get('host');
+
 									var popupReady = false;
 
-									Liferay.on(
-										'popupReady',
-										function(event) {
-											instance.fire('load', event);
+									var liferayHandles = modal._liferayHandles;
 
-											popupReady = true;
-										}
+									liferayHandles.push(
+										Liferay.on(
+											'popupReady',
+											function(event) {
+												instance.fire('load', event);
+
+												popupReady = true;
+											}
+										)
 									);
 
-									instance.node.on(
-										'load',
-										function(event) {
-											if (!popupReady) {
-												Liferay.fire(
-													'popupReady',
-													{
-														windowName: iframeId
-													}
-												);
-											}
+									liferayHandles.push(
+										instance.node.on(
+											'load',
+											function(event) {
+												if (!popupReady) {
+													Liferay.fire(
+														'popupReady',
+														{
+															windowName: iframeId
+														}
+													);
+												}
 
-											popupReady = false;
-										}
+												popupReady = false;
+											}
+										)
 									);
 								},
 
@@ -272,6 +286,8 @@ AUI.add(
 					var instance = this;
 
 					var id = modal.get('id');
+
+					modal._liferayHandles = [];
 
 					instance._map[id] = modal;
 					instance._map[id + instance.IFRAME_SUFFIX] = modal;
@@ -316,6 +332,8 @@ AUI.add(
 
 					delete instance._map[id];
 					delete instance._map[id + instance.IFRAME_SUFFIX];
+
+					A.Array.invoke(modal._liferayHandles, 'detach');
 				}
 			}
 		);
