@@ -50,6 +50,9 @@ long reportedUserId = GetterUtil.getLong((String)request.getAttribute("liferay-u
 						function() {
 							var popup = Liferay.Util.Window.getWindow(
 							    {
+								    dialog: {
+								    	destroyOnHide: true
+								    },
 									title: '<%= UnicodeLanguageUtil.get(pageContext, "report-inappropriate-content") %>'
 							    }
 							);
@@ -86,7 +89,8 @@ long reportedUserId = GetterUtil.getLong((String)request.getAttribute("liferay-u
 							var popup = Liferay.Util.Window.getWindow(
 							    {
 									dialog: {
-										bodyContent: A.one('#<%= randomNamespace %>signIn').html()
+										bodyContent: A.one('#<%= randomNamespace %>signIn').html(),
+										destroyOnHide: true
 									},
 									title: '<%= UnicodeLanguageUtil.get(pageContext, "report-inappropriate-content") %>'
 							    }

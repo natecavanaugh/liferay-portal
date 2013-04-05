@@ -14,6 +14,9 @@ Liferay.provide(
 
 		var dialog = Liferay.Util.Window.getWindow(
 			{
+				dialog: {
+					destroyOnHide: true
+				},
 				title: Liferay.Language.get('add-to-netvibes')
 			}
 		);
@@ -42,6 +45,9 @@ Liferay.provide(
 
 		var dialog = Liferay.Util.Window.getWindow(
 			{
+				dialog: {
+					destroyOnHide: true
+				},
 				title: Liferay.Language.get('add-to-any-website')
 			}
 		);

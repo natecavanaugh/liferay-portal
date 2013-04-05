@@ -217,7 +217,7 @@ if (Validator.isNotNull(script)) {
 				classPK: <%= (structure != null) ? structure.getPrimaryKey() : 0 %>,
 				ddmResource: '<%= ddmResource %>',
 				dialog: {
-					width: 820
+					destroyOnHide: true
 				},
 				eventName: '<portlet:namespace />selectParentStructure',
 				showGlobalScope: true,

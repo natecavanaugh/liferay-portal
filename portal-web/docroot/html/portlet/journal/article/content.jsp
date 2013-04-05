@@ -689,8 +689,7 @@ if (Validator.isNotNull(content)) {
 				classPK: <%= (ddmStructure != null) ? ddmStructure.getPrimaryKey() : 0 %>,
 				ddmResource: '<%= ddmResource %>',
 				dialog: {
-					modal: true,
-					width: '80%'
+					destroyOnHide: true
 				},
 				eventName: '<portlet:namespace />selectStructure',
 				groupId: <%= groupId %>,
@@ -720,8 +719,7 @@ if (Validator.isNotNull(content)) {
 				ddmResource: '<%= ddmResource %>',
 				ddmResourceActionId: '<%= ActionKeys.ADD_TEMPLATE %>',
 				dialog: {
-					modal: true,
-					width: '80%'
+					destroyOnHide: true
 				},
 				eventName: '<portlet:namespace />selectTemplate',
 				groupId: <%= groupId %>,

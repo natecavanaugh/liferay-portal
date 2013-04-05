@@ -94,6 +94,9 @@
 
 			Liferay.Util.openWindow(
 				{
+					dialog: {
+						destroyOnHide: true
+					},
 					title: contents
 				}
 			);
@@ -112,6 +115,9 @@
 
 			var dialog = Liferay.Util.Window.getWindow(
 				{
+					dialog: {
+						destroyOnHide: true
+					},
 					title: title
 				}
 			);

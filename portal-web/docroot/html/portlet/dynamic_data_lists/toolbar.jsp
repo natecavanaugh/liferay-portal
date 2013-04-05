@@ -53,7 +53,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "view-all");
 					{
 						ddmResource: '<%= ddmResource %>',
 						dialog: {
-							width: 820
+							destroyOnHide: true
 						},
 
 						<%
