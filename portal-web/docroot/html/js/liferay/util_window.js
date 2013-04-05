@@ -13,7 +13,7 @@ AUI.add(
 					modal: true,
 					headerContent: '&nbsp;',
 					visible: true,
-					zIndex: 1000
+					zIndex: Liferay.zIndex.WINDOW
 				},
 
 				IFRAME_SUFFIX: '_iframe_',
@@ -21,6 +21,14 @@ AUI.add(
 				TITLE_TEMPLATE: '<h3/>',
 
 				_winResizeHandler: null,
+
+				getByChild: function(child) {
+					var instance = this;
+
+					var node = A.one(child).ancestor('.aui-modal', true);
+
+					return A.Widget.getByNode(node);
+				},
 
 				getById: function(id) {
 					var instance = this;
@@ -37,11 +45,27 @@ AUI.add(
 
 					instance._setWindowDefaultSizeIfNeeded(modal);
 
-					modal.render();
-
 					instance._bindDOMWinResizeIfNeeded();
 
+					modal.render(A.getBody());
+
 					return modal;
+				},
+
+				hideByChild: function(child) {
+					var instance = this;
+
+					return instance.getByChild(child).hide();
+				},
+
+				refreshByChild: function(child) {
+					var instance = this;
+
+					var dialog = instance.getByChild(child);
+
+					if (dialog && dialog.io) {
+						dialog.io.start();
+					}
 				},
 
 				_bindDOMWinResizeIfNeeded: function() {
