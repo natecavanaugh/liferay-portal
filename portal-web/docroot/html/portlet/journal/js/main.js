@@ -315,14 +315,14 @@ AUI.add(
 
 				instance.closeEditFieldOptions();
 
-				saveStructureButton.ancestor('.aui-button').hide();
+				saveStructureButton.hide();
 				journalComponentList.hide();
 
 				var structureButtonText = Liferay.Language.get('edit');
 
 				editStructureLink.show();
 
-				editStructureButton.ancestor('.aui-button').hide();
+				editStructureButton.hide();
 
 				A.all('input.journal-list-label').attr('disabled', 'disabled');
 
@@ -414,11 +414,11 @@ AUI.add(
 				var saveStructureButton = instance.getById('saveStructureButton');
 
 				if (editStructureButton) {
-					editStructureButton.ancestor('.aui-button').show();
+					editStructureButton.ancestor('.aui-btn').show();
 				}
 
 				if (saveStructureButton) {
-					saveStructureButton.ancestor('.aui-button').show();
+					saveStructureButton.ancestor('.aui-btn').show();
 				}
 
 				instance._attachEditStructureEvents();
@@ -546,7 +546,7 @@ AUI.add(
 			getEditButton: function(source) {
 				var instance = this;
 
-				return source.one('.edit-button .aui-button-input');
+				return source.one('.edit-button');
 			},
 
 			getFieldInstance: function(source) {
@@ -1851,7 +1851,7 @@ AUI.add(
 						instance.editContainerContextPanel.set('trigger', editButton);
 						instance.editContainerContextPanel.show();
 					},
-					instance._getNamespacedId('#structureTree') + ' div.journal-article-buttons .edit-button .aui-button-input'
+					instance._getNamespacedId('#structureTree') + ' div.journal-article-buttons .edit-button'
 				);
 
 				container.delegate(
@@ -1861,7 +1861,7 @@ AUI.add(
 
 						instance.repeatField(source);
 					},
-					'.repeatable-field-add, .journal-article-buttons .repeatable-button .aui-button-input'
+					'.repeatable-field-add, .journal-article-buttons .repeatable-button'
 				);
 
 				container.delegate(
@@ -1944,7 +1944,7 @@ AUI.add(
 
 						instance.openPopupWindow(selectUrl, Liferay.Language.get('javax.portlet.title.20'), 'selectDocumentLibrary');
 					},
-					'.journal-documentlibrary-button .aui-button-input'
+					'.journal-documentlibrary-button'
 				);
 
 				container.delegate(
@@ -1972,8 +1972,8 @@ AUI.add(
 
 					var closeEditField = instance.closeEditFieldOptions;
 
-					editContainerWrapper.delegate('click', closeEditField, '.cancel-button .aui-button-input', instance);
-					editContainerWrapper.delegate('click', closeEditField, '.close-button .aui-button-input', instance);
+					editContainerWrapper.delegate('click', closeEditField, '.cancel-button', instance);
+					editContainerWrapper.delegate('click', closeEditField, '.close-button', instance);
 
 					editContainerWrapper.delegate(
 						'click',
@@ -1982,7 +1982,7 @@ AUI.add(
 
 							instance.saveEditFieldOptions(source);
 						},
-						'.save-button .aui-button-input'
+						'.save-button'
 					);
 				}
 

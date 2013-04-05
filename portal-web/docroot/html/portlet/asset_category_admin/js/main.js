@@ -84,7 +84,7 @@ AUI.add(
 
 		var REGEX_TREE_NODE_TYPE = /^(vocabulary|category)/;
 
-		var SELECTOR_BUTTON_CANCEL = '.aui-button-input-cancel';
+		var SELECTOR_BUTTON_CANCEL = '.aui-btn-cancel';
 
 		var SELECTOR_CATEGORY_ITEM = '.category-item';
 

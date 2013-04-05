@@ -897,7 +897,7 @@ AUI.add(
 
 						instance._tagFormAdd = tagFormAdd;
 
-						var closeButton = tagFormAdd.one('.aui-button-input-cancel');
+						var closeButton = tagFormAdd.one('.aui-btn-cancel');
 
 						closeButton.on(
 							EVENT_CLICK,
@@ -937,7 +937,7 @@ AUI.add(
 
 						tagFormEdit.on(EVENT_SUBMIT, instance._onTagFormSubmit, instance, tagFormEdit);
 
-						var closeButton = tagFormEdit.one('.aui-button-input-cancel');
+						var closeButton = tagFormEdit.one('.aui-btn-cancel');
 
 						closeButton.on(
 							EVENT_CLICK,

@@ -105,11 +105,7 @@ AUI.add(
 			src: STR_UI
 		};
 
-		var TPL_BUTTON_HOLDER = '<div class="' + [STR_SETTINGS_BUTTON_HOLDER].join(STR_SPACE) + ' aui-button aui-button-submit">' +
-				'<span class="aui-button-content">' +
-					'<input class="aui-button-input aui-button-input-submit" type="submit" value="' + STR_SAVE + '" />' +
-				'</span>' +
-			'</div>';
+		var TPL_BUTTON_HOLDER = '<button class="' + [STR_SETTINGS_BUTTON_HOLDER].join(STR_SPACE) + ' aui-btn aui-btn-submit">' + STR_SAVE + '</button>';
 
 		var TPL_BOUNDING_BOX_SETTINGS_FIELD = '<li class="' + [CSS_TOKEN, STR_SETTINGS_FIELD, STR_ACTION_FIELD].join(STR_SPACE) + '"></li>';
 
@@ -179,12 +175,8 @@ AUI.add(
 			'</div>',
 			'<div class="settings-container-label">{containerText}</div>',
 			'<ul class="container-drop-box yui3-widget-bd"></ul>',
-			'<div class="aui-button-row yui3-widget-ft">',
-				'<span class="aui-button aui-button-submit">',
-					'<span class="aui-button-content">',
-						'<input class="aui-button-input aui-button-input-submit" value="{saveText}" type="submit">',
-					'</span>',
-				'</span>',
+			'<div class="aui-btn-row yui3-widget-ft">',
+				'<button class="aui-btn aui-btn-submit">{saveText}</button>',
 			'</div>'
 		);
 
