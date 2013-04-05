@@ -1967,7 +1967,7 @@
 		Util,
 		'_openWindowProvider',
 		function(config, callback) {
-			Window._openWindow(config, callback);
+			Window.getWindow(config, callback);
 		},
 		['liferay-util-window']
 	);

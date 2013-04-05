@@ -221,17 +221,14 @@ AUI.add(
 						var instance = this;
 
 						if (!instance._popup) {
-							var popup = new A.Modal(
+							var popup = Liferay.Util.Window.getWindow(
 								{
-									bodyContent: TPL_LOADING,
-									headerContent: '',
-									hideClass: 'aui-helper-hidden-accessible',
-									width: 320,
-									zIndex: 1000
+									dialog: {
+										cssClass: CSS_POPUP,
+										hideClass: 'aui-helper-hidden-accessible'
+									}
 								}
-							).render();
-
-							popup.get('boundingBox').addClass(CSS_POPUP);
+							);
 
 							var bodyNode = popup.bodyNode;
 
@@ -521,24 +518,9 @@ AUI.add(
 
 						var popup = instance._getPopup();
 
-						if (event && event.currentTarget) {
-							var toolItem = event.currentTarget.get('boundingBox');
-
-							popup.align(toolItem, ['bl', 'tl']);
-						}
-
 						popup.entriesNode.html(TPL_LOADING);
 
 						popup.show();
-
-						if (popup.get('stack')) {
-							setTimeout(
-								function() {
-									A.DialogManager.bringToTop(popup);
-								},
-								0
-							);
-						}
 					},
 
 					_showSelectPopup: function(event) {
@@ -546,7 +528,7 @@ AUI.add(
 
 						instance._showPopup(event);
 
-						instance._popup.set('title', Liferay.Language.get('tags'));
+						instance._popup.titleNode.html(Liferay.Language.get('tags'));
 
 						instance._getEntries(
 							function(entries) {
@@ -560,7 +542,7 @@ AUI.add(
 
 						instance._showPopup(event);
 
-						instance._popup.set('title', Liferay.Language.get('suggestions'));
+						instance._popup.titleNode.html(Liferay.Language.get('suggestions'));
 
 						var contentCallback = instance.get('contentCallback');
 
@@ -692,6 +674,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['array-extras', 'async-queue', 'aui-autocomplete-deprecated', 'aui-form-textfield-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-live-search', 'aui-modal', 'aui-template-deprecated', 'aui-textboxlist', 'datasource-cache', 'liferay-service-datasource']
+		requires: ['array-extras', 'async-queue', 'aui-autocomplete-deprecated', 'aui-form-textfield-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-live-search', 'aui-template-deprecated', 'aui-textboxlist', 'datasource-cache', 'liferay-service-datasource', 'liferay-util-window']
 	}
 );

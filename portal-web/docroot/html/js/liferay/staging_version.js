@@ -145,15 +145,13 @@ AUI.add(
 					var graphDialog = instance._graphDialog;
 
 					if (!graphDialog) {
-						graphDialog = new A.Modal(
-							{
-								centered: true,
-								headerContent: Liferay.Language.get('history'),
-								height: 600,
-								modal: true,
-								width: 600
-							}
-						).plug(
+						graphDialog = Liferay.Util.Window.getWindow(
+						    {
+								title: Liferay.Language.get('history')
+						    }
+						);
+
+						graphDialog.plug(
 							A.Plugin.IO,
 							{
 								autoLoad: false,
@@ -165,9 +163,7 @@ AUI.add(
 								},
 								uri: themeDisplay.getPathMain() + '/staging_bar/view_layout_revisions'
 							}
-						).render();
-
-						graphDialog.move(graphDialog.get('x'), graphDialog.get('y') + 100);
+						);
 
 						graphDialog.bodyNode.delegate(
 							'click',

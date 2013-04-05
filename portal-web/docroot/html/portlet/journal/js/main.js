@@ -663,33 +663,32 @@ AUI.add(
 						}
 					};
 
-					instance._saveDialog = new A.Modal(
-						{
-							bodyContent: htmlTemplate,
-							centered: true,
-							headerContent: title,
-							modal: true,
-							toolbars: {
-								footer: [
-									{
-										label: Liferay.Language.get('save'),
-										on: {
-											click: saveCallback
-										}
-									},
-									{
-										label: Liferay.Language.get('cancel'),
-										on: {
-											click: function() {
-												instance._saveDialog.close();
+					instance._saveDialog = Liferay.Util.Window.getWindow(
+					    {
+							dialog: {
+								bodyContent: htmlTemplate,
+								toolbars: {
+									footer: [
+										{
+											label: Liferay.Language.get('save'),
+											on: {
+												click: saveCallback
+											}
+										},
+										{
+											label: Liferay.Language.get('cancel'),
+											on: {
+												click: function() {
+													instance._saveDialog.close();
+												}
 											}
 										}
-									}
-								]
+									]
+								}
 							},
-							width: 550
-						}
-					).render();
+							title: title
+					    }
+					);
 
 					instance._saveDialog.fields = {
 						autoGenerateIdMessage: Liferay.Language.get('autogenerate-id'),
@@ -3519,6 +3518,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-data-set-deprecated', 'aui-datatype', 'aui-dialog-iframe-deprecated', 'aui-io-request', 'aui-modal', 'aui-nested-list', 'aui-overlay-context-panel-deprecated', 'json']
+		requires: ['aui-base', 'aui-data-set-deprecated', 'aui-datatype', 'aui-dialog-iframe-deprecated', 'aui-io-request', 'aui-nested-list', 'aui-overlay-context-panel-deprecated', 'json', 'liferay-util-window']
 	}
 );

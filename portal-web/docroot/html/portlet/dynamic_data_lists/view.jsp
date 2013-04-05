@@ -104,31 +104,36 @@ portletURL.setParameter("struts_action", "/dynamic_data_lists/view");
 				content.show();
 			}
 
-			var dialog = new A.Modal(
-				{
-					centered: true,
-					bodyContent: form,
-					buttons: [
-						{
-							handler: function() {
-								submitForm(form, url, false);
-							},
-							label: '<%= UnicodeLanguageUtil.get(pageContext, "ok") %>'
-						},
-						{
-							handler: function() {
-								this.close();
-							},
-							label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel") %>'
+			var dialog = Liferay.Util.Window.getWindow(
+			    {
+					dialog: {
+						bodyContent: form,
+						toolbars: {
+							footer: [
+								{
+									label: '<%= UnicodeLanguageUtil.get(pageContext, "ok") %>',
+									on: {
+										click: function() {
+											submitForm(form, url, false);
+										}
+									}
+								},
+								{
+									label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel") %>',
+									on: {
+										click: function() {
+											dialog.hide();
+										}
+									}
+								}
+							]
 						}
-					],
-					headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "export") %>',
-					modal: true,
-					width: 400
-				}
-			).render();
+					},
+					title: '<%= UnicodeLanguageUtil.get(pageContext, "export") %>'
+			    }
+			);
 
 		},
-		['aui-modal']
+		['liferay-util-window']
 	);
 </aui:script>

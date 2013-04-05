@@ -110,13 +110,11 @@
 			var url = options.url;
 			var title = options.title;
 
-			var dialog = new A.Modal(
+			var dialog = Liferay.Util.Window.getWindow(
 				{
-					headerContent: title,
-					modal: true,
-					width: 600
+					title: title
 				}
-			).render();
+			);
 
 			dialog.plug(
 				A.Plugin.IO,
@@ -125,7 +123,7 @@
 				}
 			);
 		},
-		['aui-io-plugin-deprecated', 'aui-modal']
+		['aui-io-plugin-deprecated', 'liferay-util-window']
 	);
 
 	Liferay.provide(

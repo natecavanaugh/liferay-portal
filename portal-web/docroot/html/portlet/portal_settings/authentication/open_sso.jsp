@@ -76,15 +76,11 @@ String openSsoLastNameAttr = PrefsPropsUtil.getString(company.getCompanyId(), Pr
 
 			var url = "<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/portal_settings/test_opensso_configuration" /></portlet:renderURL>";
 
-			var dialog = new A.Modal(
-				{
-					centered: true,
-					destroyOnClose: true,
-					headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "open-sso") %>',
-					modal: true,
-					width: 600
-				}
-			).render();
+			var dialog = Liferay.Util.Window.getWindow(
+			    {
+					title: '<%= UnicodeLanguageUtil.get(pageContext, "open-sso") %>'
+			    }
+			);
 
 			dialog.plug(
 				A.Plugin.IO,
@@ -94,6 +90,6 @@ String openSsoLastNameAttr = PrefsPropsUtil.getString(company.getCompanyId(), Pr
 				}
 			);
 		},
-		['aui-io-plugin-deprecated', 'aui-io-request', 'aui-modal']
+		['aui-io-plugin-deprecated', 'aui-io-request', 'liferay-util-window']
 	);
 </aui:script>

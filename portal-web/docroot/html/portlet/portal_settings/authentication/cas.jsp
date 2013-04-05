@@ -79,15 +79,11 @@ String casNoSuchUserRedirectURL = PrefsPropsUtil.getString(company.getCompanyId(
 
 			var url = "<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/portal_settings/test_cas_configuration" /></portlet:renderURL>";
 
-			var dialog = new A.Modal(
-				{
-					centered: true,
-					destroyOnClose: true,
-					headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "cas") %>',
-					modal: true,
-					width: 600
-				}
-			).render();
+			var dialog = Liferay.Util.Window.getWindow(
+			    {
+					title: '<%= UnicodeLanguageUtil.get(pageContext, "cas") %>'
+			    }
+			);
 
 			dialog.plug(
 				A.Plugin.IO,
@@ -97,6 +93,6 @@ String casNoSuchUserRedirectURL = PrefsPropsUtil.getString(company.getCompanyId(
 				}
 			);
 		},
-		['aui-io-plugin-deprecated', 'aui-io-request', 'aui-modal']
+		['aui-io-plugin-deprecated', 'aui-io-request', 'liferay-util-window']
 	);
 </aui:script>

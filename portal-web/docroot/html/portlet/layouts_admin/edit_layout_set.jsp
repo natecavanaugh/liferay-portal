@@ -88,16 +88,15 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 						</div>
 					</liferay-util:html-top>
 
-					<aui:script use="aui-modal">
-						new A.Modal(
-							{
-								centered: true,
-								bodyContent: A.one('#<portlet:namespace />importPage').show(),
-								headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "import") %>',
-								modal: true,
-								width: 600
-							}
-						).render();
+					<aui:script use="liferay-util-window">
+						Liferay.Util.openWindow(
+						    {
+								dialog: {
+									bodyContent: A.one('#<portlet:namespace />importPage').show()
+								},
+								title: '<%= UnicodeLanguageUtil.get(pageContext, "import") %>'
+						    }
+						);
 					</aui:script>
 				</c:if>
 			</c:if>
@@ -134,7 +133,7 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 	</div>
 </c:if>
 
-<aui:script use="aui-modal,aui-toolbar">
+<aui:script use="aui-toolbar,liferay-util-window">
 	var popup;
 	var exportPopup;
 	var importPopup;
@@ -152,15 +151,14 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 						var content = A.one('#<portlet:namespace />addLayout');
 
 						if (!popup) {
-							popup = new A.Modal(
-								{
-									centered: true,
-									bodyContent: content.show(),
-									headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "add-page") %>',
-									modal: true,
-									width: 500
-								}
-							).render();
+							popup = Liferay.Util.Window.getWindow(
+							    {
+									dialog: {
+										bodyContent: content.show()
+									},
+									title: '<%= UnicodeLanguageUtil.get(pageContext, "add-page") %>'
+							    }
+							);
 						}
 
 						popup.show();

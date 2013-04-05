@@ -458,7 +458,7 @@ String iconMenuId = null;
 	<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
 </portlet:renderURL>
 
-<aui:script use="aui-modal,uploader">
+<aui:script use="uploader,liferay-util-window">
 	if (!A.UA.ios && (A.Uploader.TYPE != 'none')) {
 		var uploadMultipleDocumentsIcon = A.all('.upload-multiple-documents:hidden');
 
@@ -486,15 +486,13 @@ String iconMenuId = null;
 			function(event) {
 				event.preventDefault();
 
-				var webdavDialog = new A.Modal(
-					{
-						bodyContent: A.one('#<%= randomNamespace %>webDav').html(),
-						centered: true,
-						destroyOnClose: true,
-						headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "access-from-desktop") %>',
-						modal: true,
-						width: 500
-					}
+				var webdavDialog = Liferay.Util.Window.getWindow(
+				    {
+						dialog: {
+							bodyContent: A.one('#<%= randomNamespace %>webDav').html()
+						},
+						title: '<%= UnicodeLanguageUtil.get(pageContext, "access-from-desktop") %>'
+				    }
 				);
 
 				webdavDialog.after(

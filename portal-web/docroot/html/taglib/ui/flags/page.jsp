@@ -48,16 +48,11 @@ long reportedUserId = GetterUtil.getLong((String)request.getAttribute("liferay-u
 					icon.on(
 						'click',
 						function() {
-							var popup = new A.Modal(
-								{
-									centered: true,
-									destroyOnClose: true,
-									draggable: true,
-									headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "report-inappropriate-content") %>',
-									modal: true,
-									width: 435
-								}
-							).render();
+							var popup = Liferay.Util.Window.getWindow(
+							    {
+									title: '<%= UnicodeLanguageUtil.get(pageContext, "report-inappropriate-content") %>'
+							    }
+							);
 
 							popup.plug(
 								A.Plugin.IO, {
@@ -88,16 +83,14 @@ long reportedUserId = GetterUtil.getLong((String)request.getAttribute("liferay-u
 					icon.on(
 						'click',
 						function(event) {
-							var popup = new A.Modal(
-								{
-									centered: true,
-									bodyContent: A.one('#<%= randomNamespace %>signIn').html(),
-									destroyOnClose: true,
-									headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "report-inappropriate-content") %>',
-									modal: true,
-									width: 500
-								}
-							).render();
+							var popup = Liferay.Util.Window.getWindow(
+							    {
+									dialog: {
+										bodyContent: A.one('#<%= randomNamespace %>signIn').html()
+									},
+									title: '<%= UnicodeLanguageUtil.get(pageContext, "report-inappropriate-content") %>'
+							    }
+							);
 
 							event.preventDefault();
 						}

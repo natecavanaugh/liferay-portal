@@ -609,16 +609,14 @@ AUI.add(
 					_createCategoryPanelAdd: function() {
 						var instance = this;
 
-						instance._categoryPanelAdd = new A.Modal(
-							{
-								centered: true,
-								cssClass: CSS_ADMIN_DIALOG,
-								headerContent: Liferay.Language.get('add-category'),
-								modal: true,
-								width: 550,
-								zIndex: 1000
-							}
-						).render();
+						instance._categoryPanelAdd = Liferay.Util.Window.getWindow(
+						    {
+								dialog: {
+									cssClass: CSS_ADMIN_DIALOG
+								},
+								title: Liferay.Language.get('add-category')
+						    }
+						);
 
 						instance._categoryPanelAdd.hide();
 
@@ -664,17 +662,14 @@ AUI.add(
 					_createVocabularyPanelAdd: function() {
 						var instance = this;
 
-						instance._vocabularyPanelAdd = new A.Modal(
+						instance._vocabularyPanelAdd = Liferay.Util.Window.getWindow(
 							{
-								centered: true,
-								cssClass: CSS_ADMIN_DIALOG,
-								headerContent: Liferay.Language.get('add-vocabulary'),
-								modal: true,
-								resizable: false,
-								width: 550,
-								zIndex: 1000
+								dialog: {
+									cssClass: CSS_ADMIN_DIALOG
+								},
+								title: Liferay.Language.get('add-vocabulary')
 							}
-						).render();
+						);
 
 						instance._vocabularyPanelAdd.hide();
 
@@ -707,23 +702,15 @@ AUI.add(
 					_createPanelEdit: function(config) {
 						var instance = this;
 
-						var defaultConfig = {
-							align: instance._dialogAlignConfig,
-							cssClass: CSS_ADMIN_DIALOG,
-							modal: true,
-							resizable: false,
-							width: 550,
-							zIndex: 1000
-						};
-
-						if (Lang.isObject(config)) {
-							config = A.merge(defaultConfig, config);
-						}
-						else {
-							config = defaultConfig;
-						}
-
-						instance._panelEdit = new A.Modal(config).render();
+						instance._panelEdit = Liferay.Util.Window.getWindow(
+							{
+								dialog: {
+									align: instance._dialogAlignConfig,
+									cssClass: CSS_ADMIN_DIALOG
+								},
+								title: Liferay.Language.get('edit-category')
+							}
+						);
 
 						instance._panelEdit.hide();
 
@@ -753,7 +740,7 @@ AUI.add(
 						var panelPermissionsChange = instance._panelPermissionsChange;
 
 						if (!panelPermissionsChange) {
-							panelPermissionsChange = Util._openWindow(
+							panelPermissionsChange = Util.Window.getWindow(
 								{
 									dialog: {
 										align: instance._dialogAlignConfig,

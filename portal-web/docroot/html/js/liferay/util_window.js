@@ -11,6 +11,7 @@ AUI.add(
 				DEFAULTS: {
 					centered: true,
 					modal: true,
+					headerContent: '&nbsp;',
 					visible: true,
 					zIndex: 1000
 				},
@@ -25,6 +26,22 @@ AUI.add(
 					var instance = this;
 
 					return instance._map[id];
+				},
+
+				getWindow: function(config) {
+					var instance = this;
+
+					instance._ensureDefaultId(config);
+
+					var modal = instance._fetchOrCreateWindow(config);
+
+					instance._setWindowDefaultSizeIfNeeded(modal);
+
+					modal.render();
+
+					instance._bindDOMWinResizeIfNeeded();
+
+					return modal;
 				},
 
 				_bindDOMWinResizeIfNeeded: function() {
@@ -133,6 +150,10 @@ AUI.add(
 						}
 					}
 
+					if (!Lang.isValue(config.title)) {
+						config.title = instance.DEFAULTS.headerContent;
+					}
+
 					var modalConfig = instance._getWindowConfig(config);
 
 					modal.setAttrs(modalConfig);
@@ -221,22 +242,6 @@ AUI.add(
 					var instance = this;
 
 					return A.DOM.winWidth() * 0.95;
-				},
-
-				_openWindow: function(config) {
-					var instance = this;
-
-					instance._ensureDefaultId(config);
-
-					var modal = instance._fetchOrCreateWindow(config);
-
-					instance._setWindowDefaultSizeIfNeeded(modal);
-
-					modal.render();
-
-					instance._bindDOMWinResizeIfNeeded();
-
-					return modal;
 				},
 
 				_register: function(modal) {
