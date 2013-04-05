@@ -200,33 +200,38 @@ Group parentGroup = themeDisplay.getSiteGroup();
 						}
 					);
 
-					dialog = new A.Modal(
-						{
-							align: {
-								node: A.one('#portlet_<%= portletDisplay.getId() %>'),
-								points: ['tc', 'tc']
-							},
-							buttons: [
-								{
-									disabled: true,
-									handler: setDisplayPage,
-									label: '<%= UnicodeLanguageUtil.get(pageContext, "ok") %>'
+					dialog = Liferay.Util.Window.getWindow(
+					    {
+							dialog: {
+								align: {
+									node: A.one('#portlet_<%= portletDisplay.getId() %>'),
+									points: ['tc', 'tc']
 								},
-								{
-									handler: function(event) {
-										dialog.hide();
-									},
-									label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel") %>'
+								bodyContent: bodyContent,
+								cssClass: 'display-page-dialog',
+								toolbars: {
+									footer: [
+										{
+											disabled: true,
+											on: {
+												click: setDisplayPage
+											},
+											label: '<%= UnicodeLanguageUtil.get(pageContext, "ok") %>'
+										},
+										{
+											on: {
+												click: function () {
+													dialog.hide();
+												}
+											},
+											label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel") %>'
+										}
+									]
 								}
-							],
-							bodyContent: bodyContent,
-							cssClass: 'display-page-dialog',
-							headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "choose-a-display-page") %>',
-							resizable: false,
-							visible: false,
-							width: 450
-						}
-					).render();
+							},
+							title: '<%= UnicodeLanguageUtil.get(pageContext, "choose-a-display-page") %>'
+					    }
+					);
 
 					selectedNodeMessage = A.one('#<portlet:namespace />selectedPageMessage');
 
@@ -539,7 +544,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 				}
 			);
 		},
-		['aui-io-plugin-deprecated', 'aui-io-request', 'aui-modal', 'aui-tabs', 'aui-tree']
+		['aui-io-plugin-deprecated', 'aui-io-request', 'aui-tabs', 'aui-tree', 'liferay-util-window']
 	);
 
 	<c:choose>

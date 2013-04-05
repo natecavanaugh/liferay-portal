@@ -136,15 +136,16 @@ AUI.add(
 						var popup = instance._popup;
 
 						if (!popup) {
-							popup = new A.Modal(
+							popup = Liferay.Util.Window.getWindow(
 								{
-									headerContent: Liferay.Language.get('warning'),
-									centered: true,
-									cssClass: 'trash-restore-popup',
-									modal: true,
-									width: 500
+									dialog: {
+										cssClass: 'trash-restore-popup'
+									},
+									title: Liferay.Language.get('warning')
 								}
-							).plug(
+							);
+
+							popup.plug(
 								A.Plugin.IO,
 								{
 									after: {
@@ -152,7 +153,7 @@ AUI.add(
 									},
 									autoLoad: false
 								}
-							).render();
+							);
 
 							instance._popup = popup;
 						}
@@ -235,6 +236,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-io-plugin-deprecated', 'aui-io-request', 'aui-modal', 'liferay-portlet-base']
+		requires: ['aui-io-plugin-deprecated', 'aui-io-request', 'liferay-portlet-base', 'liferay-util-window']
 	}
 );

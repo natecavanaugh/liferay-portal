@@ -17,17 +17,19 @@
 
 				var url = themeDisplay.getPathMain() + '/portal/render_portlet';
 
-				dialog = new A.Modal(
+				dialog = Liferay.Util.Window.getWindow(
 					{
-						on: {
-							visibleChange: function(event) {
-								body.toggleClass('lfr-has-sidebar', event.newVal);
-							}
-						},
-						headerContent: Liferay.Language.get('add-application'),
-						width: 250
+						dialog: {
+							on: {
+								visibleChange: function(event) {
+									body.toggleClass('lfr-has-sidebar', event.newVal);
+								}
+							},
+							headerContent: Liferay.Language.get('add-application'),
+							width: 250
+						}
 					}
-				).render();
+				);
 
 				var contentBox = dialog.get('contentBox');
 
@@ -56,7 +58,7 @@
 
 			dialog.show();
 		},
-		['aui-io-plugin-deprecated', 'aui-modal', 'liferay-layout-configuration']
+		['aui-io-plugin-deprecated', 'liferay-layout-configuration', 'liferay-util-window']
 	);
 
 	A.add(

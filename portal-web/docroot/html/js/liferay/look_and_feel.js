@@ -43,21 +43,22 @@ AUI.add(
 						}
 
 						if (!instance._currentPopup) {
-							instance._currentPopup = new A.Modal(
+							instance._currentPopup = Liferay.Util.Window.getWindow(
 								{
-									headerContent: Liferay.Language.get('look-and-feel'),
-									on: {
-										visibleChange: function(event) {
-											if (!event.newVal && Browser.isIe() && Browser.getMajorVersion() == 6) {
-												window.location.reload(true);
+									dialog: {
+										on: {
+											visibleChange: function(event) {
+												if (!event.newVal && Browser.isIe() && Browser.getMajorVersion() == 6) {
+													window.location.reload(true);
+												}
 											}
 
 											instance._destroyColorPickers();
 										}
 									},
-									width: 820
+									title: Liferay.Language.get('look-and-feel')
 								}
-							).render();
+							);
 
 							instance._currentPopup.plug(
 								[
@@ -1902,6 +1903,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-color-picker-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-modal', 'aui-tabs-base']
+		requires: ['aui-color-picker-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-tabs-base', 'liferay-util-window']
 	}
 );

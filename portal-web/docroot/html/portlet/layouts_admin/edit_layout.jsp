@@ -219,7 +219,7 @@ String[][] categorySections = {mainSections};
 					</div>
 				</c:if>
 
-				<aui:script use="aui-dialog-iframe-deprecated,aui-modal,aui-toolbar">
+				<aui:script use="aui-dialog-iframe-deprecated,aui-toolbar,liferay-util-window">
 					var buttonRow = A.one('#<portlet:namespace />layoutToolbar');
 
 					var popup = null;
@@ -236,15 +236,14 @@ String[][] categorySections = {mainSections};
 										var content = A.one('#<portlet:namespace />addLayout');
 
 										if (!popup) {
-											popup = new A.Modal(
-												{
-													bodyContent: content.show(),
-													centered: true,
-													headerContent: '<%= UnicodeLanguageUtil.get(pageContext, "add-child-page") %>',
-													modal: true,
-													width: 500
-												}
-											).render();
+											popup = Liferay.Util.Window.getWindow(
+											    {
+													dialog: {
+														bodyContent: content.show()
+													},
+													title: '<%= UnicodeLanguageUtil.get(pageContext, "add-child-page") %>'
+											    }
+											);
 										}
 
 										popup.show();

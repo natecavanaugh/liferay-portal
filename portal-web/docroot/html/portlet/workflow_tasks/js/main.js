@@ -45,35 +45,34 @@ AUI.add(
 					comments.show();
 				}
 
-				var dialog = new A.Modal(
-					{
-						centered: true,
-						bodyContent: form,
-						headerContent: title,
-						modal: true,
-						toolbars: {
-							footer: [
-								{
-									label: Liferay.Language.get('ok'),
-									on: {
-										click: function() {
-											submitForm(form);
+				var dialog = Liferay.Util.Window.getWindow(
+				    {
+						dialog: {
+							bodyContent: form,
+							toolbars: {
+								footer: [
+									{
+										label: Liferay.Language.get('ok'),
+										on: {
+											click: function() {
+												submitForm(form);
+											}
+										}
+									},
+									{
+										label: Liferay.Language.get('cancel'),
+										on: {
+											click: function() {
+												this.close();
+											}
 										}
 									}
-								},
-								{
-									label: Liferay.Language.get('cancel'),
-									on: {
-										click: function() {
-											this.close();
-										}
-									}
-								}
-							]
+								]
+							}
 						},
-						width: 400
-					}
-				).render();
+						title: title
+				    }
+				);
 			}
 		};
 
@@ -81,6 +80,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-modal']
+		requires: ['liferay-util-window']
 	}
 );
