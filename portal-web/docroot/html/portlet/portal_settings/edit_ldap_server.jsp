@@ -397,6 +397,9 @@ for (int i = 0 ; i < groupMappingArray.length ; i++) {
 
 				var dialog = Liferay.Util.Window.getWindow(
 				    {
+				    	dialog: {
+				    		destroyOnHide: true
+				    	},
 						title: '<%= UnicodeLanguageUtil.get(pageContext, "ldap") %>'
 				    }
 				);

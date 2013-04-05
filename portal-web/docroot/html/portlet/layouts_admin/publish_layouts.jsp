@@ -373,7 +373,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 			<aui:button-row>
 
 				<%
-				String taglibOnClick = "AUI().DialogManager.refreshByChild('#" + renderResponse.getNamespace() + "exportPagesFm');";
+				String taglibOnClick = "Liferay.Util.Window.refreshByChild('#" + renderResponse.getNamespace() + "exportPagesFm');";
 				%>
 
 				<aui:button onClick="<%= taglibOnClick %>" value="select" />
@@ -497,7 +497,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 			var A = AUI();
 
 			if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-" + publishActionKey + "-these-pages") %>')) {
-				var dialog = A.DialogManager.findByChild('#<portlet:namespace />exportPagesFm');
+				var dialog = Liferay.Util.Window.getByChild('#<portlet:namespace />exportPagesFm');
 
 				if (dialog) {
 					dialog.io.set('uri', '<%= portletURL.toString() + "&etag=0&strip=0" %>');
@@ -513,12 +513,12 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 				}
 			}
 		},
-		['aui-modal']
+		['liferay-util-window']
 	);
 </aui:script>
 
 <aui:script use="aui-base,aui-modal">
-	var dialog = A.DialogManager.findByChild('#<portlet:namespace />exportPagesFm');
+	var dialog = Liferay.Util.Window.getByChild('#<portlet:namespace />exportPagesFm');
 
 	if (dialog) {
 		dialog.io.set('uri', '<%= selectURL %>');

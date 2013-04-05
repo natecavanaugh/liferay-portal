@@ -81,6 +81,9 @@ String casNoSuchUserRedirectURL = PrefsPropsUtil.getString(company.getCompanyId(
 
 			var dialog = Liferay.Util.Window.getWindow(
 			    {
+			    	dialog: {
+			    		destroyOnHide: true
+			    	},
 					title: '<%= UnicodeLanguageUtil.get(pageContext, "cas") %>'
 			    }
 			);

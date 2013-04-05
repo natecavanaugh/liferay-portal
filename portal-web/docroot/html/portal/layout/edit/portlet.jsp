@@ -88,7 +88,8 @@
 						var popUp = Liferay.Util.Window.getWindow(
 						    {
 								dialog: {
-									bodyContent: content.show()
+									bodyContent: content.show(),
+									destroyOnHide: true,
 								},
 								title: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>'
 						    }

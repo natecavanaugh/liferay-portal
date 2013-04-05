@@ -147,7 +147,7 @@ Folder folder = (Folder)request.getAttribute("view.jsp-folder");
 			{
 				ddmResource: '<%= ddmResource %>',
 				dialog: {
-					width: 820
+					destroyOnHide: true
 				},
 				showGlobalScope: 'true',
 				showManageTemplates: 'false',

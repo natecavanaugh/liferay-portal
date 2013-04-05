@@ -127,7 +127,7 @@ for (int i = 0; i < results.size(); i++) {
 <aui:button-row>
 
 	<%
-	String taglibURL = "AUI().DialogManager.refreshByChild('#" + renderResponse.getNamespace() + "exportPagesFm');";
+	String taglibURL = "Liferay.Util.Window.refreshByChild('#" + renderResponse.getNamespace() + "exportPagesFm');";
 	%>
 
 	<aui:button onClick="<%= taglibURL %>" value='<%= results.isEmpty() ? "select-pages" : "change-selection" %>' />

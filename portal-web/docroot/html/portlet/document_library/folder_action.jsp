@@ -489,7 +489,8 @@ String iconMenuId = null;
 				var webdavDialog = Liferay.Util.Window.getWindow(
 				    {
 						dialog: {
-							bodyContent: A.one('#<%= randomNamespace %>webDav').html()
+							bodyContent: A.one('#<%= randomNamespace %>webDav').html(),
+							destroyOnHide: true
 						},
 						title: '<%= UnicodeLanguageUtil.get(pageContext, "access-from-desktop") %>'
 				    }

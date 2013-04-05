@@ -78,6 +78,9 @@ String openSsoLastNameAttr = PrefsPropsUtil.getString(company.getCompanyId(), Pr
 
 			var dialog = Liferay.Util.Window.getWindow(
 			    {
+				    dialog: {
+				    	destroyOnHide: true
+				    },
 					title: '<%= UnicodeLanguageUtil.get(pageContext, "open-sso") %>'
 			    }
 			);

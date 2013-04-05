@@ -121,7 +121,7 @@
 				ddmResource: '<%= ddmResource %>',
 				ddmResourceActionId: '<%= ActionKeys.ADD_TEMPLATE %>',
 				dialog: {
-					width: 820
+					destroyOnHide: true
 				},
 				refererPortletName: '<%= PortletKeys.JOURNAL %>',
 				refererWebDAVToken: '<%= portlet.getWebDAVStorageToken() %>',

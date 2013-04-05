@@ -84,7 +84,7 @@ long reportedUserId = ParamUtil.getLong(request, "reportedUserId");
 	<p><strong><liferay-ui:message key="an-error-occurred-while-sending-the-report.-please-try-again-in-a-few-minutes" /></strong></p>
 </div>
 
-<aui:script use="aui-modal">
+<aui:script use="liferay-util-window">
 	function <portlet:namespace />flag() {
 		var reasonNode = A.one('#<portlet:namespace />reason');
 		var reason = (reasonNode && reasonNode.val()) || '';
@@ -106,7 +106,7 @@ long reportedUserId = ParamUtil.getLong(request, "reportedUserId");
 		var confirmationMessage = (confirmationMessageNode && confirmationMessageNode.html()) || '';
 
 		var setDialogContent = function(message) {
-			var dialog = A.DialogManager.findByChild(flagsPopupNode);
+			var dialog = Liferay.Util.Window.getByChild(flagsPopupNode);
 
 			dialog.setStdModContent('body', message);
 		};
