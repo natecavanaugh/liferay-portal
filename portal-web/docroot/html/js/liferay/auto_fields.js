@@ -9,9 +9,9 @@ AUI.add(
 
 		var TPL_INPUT_HIDDEN = '<input name="{name}" type="hidden" />';
 
-		var TPL_ADD_BUTTON = '<button type="button" class="add-row aui-buttonitem-content aui-buttonitem aui-state-default aui-buttonitem-icon-only aui-toolbar-first aui-toolbar-item" title=""><span class="aui-buttonitem-icon aui-icon aui-icon-plus"></span></button>';
+		var TPL_ADD_BUTTON = '<button type="button" class="add-row aui-btn-content aui-btn aui-state-default aui-btn-icon-only aui-toolbar-first aui-toolbar-item" title=""><span class="aui-btn-icon aui-icon aui-icon-plus"></span></button>';
 
-		var TPL_DELETE_BUTTON = '<button type="button" class="delete-row aui-buttonitem-content aui-buttonitem aui-state-default aui-buttonitem-icon-only aui-toolbar-last aui-toolbar-item" title=""><span class="aui-buttonitem-icon aui-icon aui-icon-minus"></span></button>';
+		var TPL_DELETE_BUTTON = '<button type="button" class="delete-row aui-btn-content aui-btn aui-state-default aui-btn-icon-only aui-toolbar-last aui-toolbar-item" title=""><span class="aui-btn-icon aui-icon aui-icon-minus"></span></button>';
 
 		var TPL_AUTOROW_CONTROLS =
 			'<span class="lfr-autorow-controls aui-toolbar aui-toolbar-horizontal"><span class="aui-toolbar-content">' +
@@ -94,7 +94,7 @@ AUI.add(
 									instance.deleteRow(currentRow);
 								}
 							},
-							'.lfr-autorow-controls .aui-buttonitem'
+							'.lfr-autorow-controls .aui-btn'
 						);
 
 						baseRows.each(
