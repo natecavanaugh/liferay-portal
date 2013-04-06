@@ -315,7 +315,7 @@ AUI.add(
 
 					A.each(
 						modals,
-						function (modal) {
+						function(modal) {
 							if (modal.get('visible')) {
 								instance._setWindowDefaultSizeIfNeeded(modal);
 
