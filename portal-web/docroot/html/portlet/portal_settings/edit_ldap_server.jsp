@@ -396,12 +396,12 @@ for (int i = 0 ; i < groupMappingArray.length ; i++) {
 				data.<portlet:namespace />credentials = document.<portlet:namespace />fm['<portlet:namespace />settings--<%= PropsKeys.LDAP_SECURITY_CREDENTIALS + postfix %>--'].value;
 
 				var dialog = Liferay.Util.Window.getWindow(
-				    {
-				    	dialog: {
-				    		destroyOnHide: true
-				    	},
+					{
+						dialog: {
+							destroyOnHide: true
+						},
 						title: '<%= UnicodeLanguageUtil.get(pageContext, "ldap") %>'
-				    }
+					}
 				);
 
 				dialog.plug(

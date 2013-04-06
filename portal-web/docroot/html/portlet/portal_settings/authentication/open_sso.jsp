@@ -77,12 +77,12 @@ String openSsoLastNameAttr = PrefsPropsUtil.getString(company.getCompanyId(), Pr
 			var url = "<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/portal_settings/test_opensso_configuration" /></portlet:renderURL>";
 
 			var dialog = Liferay.Util.Window.getWindow(
-			    {
-				    dialog: {
-				    	destroyOnHide: true
-				    },
+				{
+					dialog: {
+						destroyOnHide: true
+					},
 					title: '<%= UnicodeLanguageUtil.get(pageContext, "open-sso") %>'
-			    }
+				}
 			);
 
 			dialog.plug(

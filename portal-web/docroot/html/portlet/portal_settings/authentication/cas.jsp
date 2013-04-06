@@ -80,12 +80,12 @@ String casNoSuchUserRedirectURL = PrefsPropsUtil.getString(company.getCompanyId(
 			var url = "<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/portal_settings/test_cas_configuration" /></portlet:renderURL>";
 
 			var dialog = Liferay.Util.Window.getWindow(
-			    {
-			    	dialog: {
-			    		destroyOnHide: true
-			    	},
+				{
+					dialog: {
+						destroyOnHide: true
+					},
 					title: '<%= UnicodeLanguageUtil.get(pageContext, "cas") %>'
-			    }
+				}
 			);
 
 			dialog.plug(

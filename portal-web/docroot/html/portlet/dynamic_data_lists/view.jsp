@@ -105,7 +105,7 @@ portletURL.setParameter("struts_action", "/dynamic_data_lists/view");
 			}
 
 			var dialog = Liferay.Util.Window.getWindow(
-			    {
+				{
 					dialog: {
 						bodyContent: form,
 						toolbars: {
@@ -130,7 +130,7 @@ portletURL.setParameter("struts_action", "/dynamic_data_lists/view");
 						}
 					},
 					title: '<%= UnicodeLanguageUtil.get(pageContext, "export") %>'
-			    }
+				}
 			);
 
 		},

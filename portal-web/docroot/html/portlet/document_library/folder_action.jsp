@@ -487,13 +487,13 @@ String iconMenuId = null;
 				event.preventDefault();
 
 				var webdavDialog = Liferay.Util.Window.getWindow(
-				    {
+					{
 						dialog: {
 							bodyContent: A.one('#<%= randomNamespace %>webDav').html(),
 							destroyOnHide: true
 						},
 						title: '<%= UnicodeLanguageUtil.get(pageContext, "access-from-desktop") %>'
-				    }
+					}
 				);
 
 				webdavDialog.after(
