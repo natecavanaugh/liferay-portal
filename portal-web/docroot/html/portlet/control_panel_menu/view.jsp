@@ -326,23 +326,3 @@
 
 	</liferay-ui:panel-container>
 </div>
-
-<aui:script use="liferay-panel">
-	var trigger = A.one('#<portlet:namespace />groupSelector a');
-
-	var panelContainer = Liferay.Panel.get('controlPanelMenuAddContentPanelContainer');
-
-	if (trigger && panelContainer) {
-		trigger.on(
-			'click',
-			function(event) {
-				panelContainer.once(
-					'collapse',
-					function(event) {
-						event.preventDefault();
-					}
-				);
-			}
-		);
-	}
-</aui:script>

@@ -73,19 +73,6 @@ if (!themeDisplay.isStatePopUp()) {
 
 					instance._panelHolder.on(['mouseenter', 'mouseleave'], instance._togglePanelsAction, instance);
 
-					var sidebarPanel = Liferay.Panel.get('addContentPanelContainer');
-
-					if (sidebarPanel) {
-						sidebarPanel.on(
-							'collapse',
-							function(event) {
-								if (Liferay.get('controlPanelSidebarHidden')) {
-									event.preventDefault();
-								}
-							}
-						);
-					}
-
 					Liferay.publish(
 						'focusSearchBar',
 						{

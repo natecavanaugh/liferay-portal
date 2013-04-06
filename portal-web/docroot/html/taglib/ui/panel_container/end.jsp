@@ -18,14 +18,30 @@
 
 </div>
 
-<aui:script use="liferay-panel">
-	var panel = new Liferay.Panel(
-		{
-			accordion: <%= accordion %>,
-			container: '#<%= id %>',
-			persistState: <%= persistState %>
-		}
-	);
+<aui:script use="aui-toggler">
+	new A.TogglerDelegate({
+		animated: true,
+		container: '#<%= id %>',
+		content: '.aui-toggler-content',
+		header: '.aui-toggler-header',
+		on: {
+			'toggler:expandedChange': function(event) {
+				var header = event.target.get('header');
 
-	Liferay.Panel.register('<%= id %>', panel);
+				var persistId = header.getData('persist-id');
+
+				if (persistId) {
+					var data = {};
+
+					data[persistId] = event.newVal ? "open" : "closed";
+
+					Liferay.Store(data);
+				}
+			}
+		},
+		transition: {
+			duration: .3,
+			easing: 'cubic-bezier'
+		}
+	});
 </aui:script>

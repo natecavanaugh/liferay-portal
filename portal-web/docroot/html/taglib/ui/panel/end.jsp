@@ -16,19 +16,6 @@
 
 <%@ include file="/html/taglib/ui/panel/init.jsp" %>
 
+		</div>
 	</div>
 </div>
-
-<c:if test="<%= collapsible && (panelCount == null) %>">
-	<aui:script use="liferay-panel">
-		var panel = new Liferay.Panel(
-			{
-				collapsible: <%= collapsible %>,
-				panel: '#<%= id %>',
-				persistState: <%= persistState %>
-			}
-		);
-
-		Liferay.Panel.register('<%= id %>', panel);
-	</aui:script>
-</c:if>
