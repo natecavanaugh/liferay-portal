@@ -201,7 +201,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 					);
 
 					dialog = Liferay.Util.Window.getWindow(
-					    {
+						{
 							dialog: {
 								align: {
 									node: A.one('#portlet_<%= portletDisplay.getId() %>'),
@@ -230,7 +230,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 								}
 							},
 							title: '<%= UnicodeLanguageUtil.get(pageContext, "choose-a-display-page") %>'
-					    }
+						}
 					);
 
 					selectedNodeMessage = A.one('#<portlet:namespace />selectedPageMessage');

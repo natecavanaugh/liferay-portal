@@ -237,12 +237,12 @@ String[][] categorySections = {mainSections};
 
 										if (!popup) {
 											popup = Liferay.Util.Window.getWindow(
-											    {
+												{
 													dialog: {
 														bodyContent: content.show()
 													},
 													title: '<%= UnicodeLanguageUtil.get(pageContext, "add-child-page") %>'
-											    }
+												}
 											);
 										}
 

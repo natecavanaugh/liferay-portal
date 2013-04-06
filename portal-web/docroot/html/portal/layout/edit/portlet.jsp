@@ -86,13 +86,13 @@
 				on: {
 					click: function(event) {
 						var popUp = Liferay.Util.Window.getWindow(
-						    {
+							{
 								dialog: {
 									bodyContent: content.show(),
 									destroyOnHide: true,
 								},
 								title: '<%= UnicodeLanguageUtil.get(pageContext, "copy-portlets-from-page") %>'
-						    }
+							}
 						);
 
 						popUp.show();

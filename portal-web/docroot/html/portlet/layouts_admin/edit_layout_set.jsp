@@ -90,12 +90,12 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 
 					<aui:script use="liferay-util-window">
 						Liferay.Util.openWindow(
-						    {
+							{
 								dialog: {
 									bodyContent: A.one('#<portlet:namespace />importPage').show()
 								},
 								title: '<%= UnicodeLanguageUtil.get(pageContext, "import") %>'
-						    }
+							}
 						);
 					</aui:script>
 				</c:if>
@@ -152,12 +152,12 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 
 						if (!popup) {
 							popup = Liferay.Util.Window.getWindow(
-							    {
+								{
 									dialog: {
 										bodyContent: content.show()
 									},
 									title: '<%= UnicodeLanguageUtil.get(pageContext, "add-page") %>'
-							    }
+								}
 							);
 						}
 

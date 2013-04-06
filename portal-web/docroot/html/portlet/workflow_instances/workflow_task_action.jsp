@@ -103,7 +103,7 @@ WorkflowTask workflowTask = (WorkflowTask)row.getObject();
 		}
 
 		var dialog = Liferay.Util.Window.getWindow(
-		    {
+			{
 				dialog: {
 					bodyContent: form,
 					toolbars: {
@@ -128,7 +128,7 @@ WorkflowTask workflowTask = (WorkflowTask)row.getObject();
 					}
 				},
 				title: title
-		    }
+			}
 		);
 	};
 
