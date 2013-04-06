@@ -39,20 +39,25 @@ if (panelCount != null) {
 	}
 }
 
+if (extended) {
+	cssClass += " lfr-panel-extended";
+}
+
+String contentCssClass = StringPool.BLANK;
+String headerCssClass = StringPool.BLANK;
 String panelState = GetterUtil.getString(SessionClicks.get(request, id, null), defaultState);
 
 if (collapsible) {
-	cssClass += " lfr-collapsible";
+	contentCssClass += "aui-toggler-content";
+	headerCssClass += "aui-toggler-header";
 }
 
-if (!panelState.equals("open")) {
-	cssClass += " lfr-collapsed";
-}
-
-if (extended) {
-	cssClass += " lfr-extended";
+if (panelState.equals("open")) {
+	contentCssClass += " aui-toggler-content-expanded";
+	headerCssClass += " aui-toggler-header-expanded";
 }
 else {
-	cssClass += " lfr-panel-basic";
+	contentCssClass += " aui-toggler-content-collapsed";
+	headerCssClass += " aui-toggler-header-collapsed";
 }
 %>

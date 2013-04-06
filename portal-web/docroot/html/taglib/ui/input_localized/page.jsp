@@ -276,29 +276,6 @@ if (Validator.isNull(mainLanguageValue)) {
 
 		var form = A.one(document.<portlet:namespace /><%= formName %>);
 
-		var panel = new Liferay.PanelFloating(
-			{
-				collapsible: false,
-				container: '#<%= randomNamespace %>languageSelector',
-				on: {
-					hide: function(event) {
-						var instance = this;
-
-						instance._positionHelper.appendTo(form);
-					},
-					show: function(event) {
-						var instance = this;
-
-						instance._positionHelper.appendTo(document.body);
-					}
-				},
-				trigger: '#<%= randomNamespace %>languageSelectorTrigger',
-				width: 500
-			}
-		);
-
-		panel._positionHelper.appendTo(form);
-
 		var languageSelectorTrigger = A.one('#<%= randomNamespace %>languageSelectorTrigger');
 
 		if (languageSelectorTrigger) {
@@ -322,7 +299,6 @@ if (Validator.isNull(mainLanguageValue)) {
 					);
 
 					languageSelectorTrigger.setData('autoFieldsInstance', autoFields);
-					languageSelectorTrigger.setData('panelInstance', panel);
 				}
 			);
 

@@ -130,8 +130,6 @@ AUI.add(
 
 		var STR_PAGE = 'page';
 
-		var STR_PANEL_INSTANCE = 'panelInstance';
-
 		var STR_PARENT_NODE = 'parentNode';
 
 		var STR_PARENT_CATEGORY_ID = 'parentCategoryId';
@@ -383,37 +381,6 @@ AUI.add(
 						instance._loadData();
 					},
 
-					_alignFloatingPanels: function(contextPanel) {
-						var instance = this;
-
-						var boundingBox = contextPanel.get(STR_BOUNDING_BOX);
-
-						var autoFieldsTriggers = boundingBox.all(SELECTOR_FLOATING_TRIGGER);
-
-						autoFieldsTriggers.each(instance._alignToTriggers, instance);
-					},
-
-					_alignToTriggers: function(item, index, collection) {
-						var instance = this;
-
-						var panelInstance = item.getData(STR_PANEL_INSTANCE);
-
-						if (panelInstance && !panelInstance._positionHelper.test(':hidden')) {
-							panelInstance.position(item);
-						}
-					},
-
-					_bindAlignFloatingPanelsEvent: function(contextPanel) {
-						var instance = this;
-
-						contextPanel.on(
-							'drag:end',
-							function(event) {
-								instance._alignFloatingPanels(contextPanel);
-							}
-						);
-					},
-
 					_bindCloseEvent: function(contextPanel) {
 						var instance = this;
 
@@ -620,8 +587,6 @@ AUI.add(
 
 						instance._categoryPanelAdd.hide();
 
-						instance._bindAlignFloatingPanelsEvent(instance._categoryPanelAdd);
-
 						instance._bindCloseEvent(instance._categoryPanelAdd);
 
 						instance._categoryPanelAdd.on(
@@ -673,8 +638,6 @@ AUI.add(
 
 						instance._vocabularyPanelAdd.hide();
 
-						instance._bindAlignFloatingPanelsEvent(instance._vocabularyPanelAdd);
-
 						instance._bindCloseEvent(instance._vocabularyPanelAdd);
 
 						instance._vocabularyPanelAdd.on(
@@ -713,8 +676,6 @@ AUI.add(
 						);
 
 						instance._panelEdit.hide();
-
-						instance._bindAlignFloatingPanelsEvent(instance._panelEdit);
 
 						instance._bindCloseEvent(instance._panelEdit);
 
@@ -922,15 +883,11 @@ AUI.add(
 						);
 					},
 
-					_destroyFloatingPanels: function(autoFieldsInstance, panelInstance) {
+					_destroyFloatingPanels: function(autoFieldsInstance) {
 						var instance = this;
 
 						if (autoFieldsInstance) {
 							autoFieldsInstance.destroy();
-						}
-
-						if (panelInstance) {
-							panelInstance.destroy();
 						}
 					},
 
@@ -2294,9 +2251,8 @@ AUI.add(
 						autoFieldsTriggers.each(
 							function(item, index, collection) {
 								var autoFieldsInstance = item.getData(STR_AUTO_FIELDS_INSTANCE);
-								var panelInstance = item.getData(STR_PANEL_INSTANCE);
 
-								callback.call(instance, autoFieldsInstance, panelInstance);
+								callback.call(instance, autoFieldsInstance);
 							}
 						);
 					},
@@ -2422,15 +2378,11 @@ AUI.add(
 						autoFieldsInstance.reset();
 					},
 
-					_resetInputLocalized: function(autoFieldsInstance, panelInstance) {
+					_resetInputLocalized: function(autoFieldsInstance) {
 						var instance = this;
 
 						if (autoFieldsInstance) {
 							autoFieldsInstance.reset();
-						}
-
-						if (panelInstance) {
-							panelInstance.hide();
 						}
 					},
 

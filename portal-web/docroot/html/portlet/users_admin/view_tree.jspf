@@ -457,44 +457,6 @@ if (filterManageableOrganizations) {
 
 			</c:if>
 		</aui:layout>
-
-		<c:if test="<%= organization == null %>">
-			<aui:script use="liferay-panel">
-				var panelContainer = Liferay.Panel.get('usersAdminOrganizationPanelContainer');
-
-				var organizationsTrigger = A.one('#<portlet:namespace />allOrganizationsLink');
-
-				if (panelContainer && organizationsTrigger) {
-					organizationsTrigger.on(
-						'click',
-						function(event) {
-							panelContainer.once(
-								'collapse',
-								function(event) {
-									event.preventDefault();
-								}
-							);
-						}
-					);
-				}
-
-				var usersTrigger = A.one('#<portlet:namespace />allUsersLink');
-
-				if (panelContainer && usersTrigger) {
-					usersTrigger.on(
-						'click',
-						function(event) {
-							panelContainer.once(
-								'collapse',
-								function(event) {
-									event.preventDefault();
-								}
-							);
-						}
-					);
-				}
-			</aui:script>
-		</c:if>
 	</c:when>
 	<c:otherwise>
 		<div class="portlet-msg-info">
