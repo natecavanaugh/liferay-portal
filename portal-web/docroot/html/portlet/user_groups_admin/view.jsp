@@ -60,7 +60,7 @@ String portletURLString = portletURL.toString();
 	function <portlet:namespace />doDeleteUserGroup(className, id) {
 		var ids = id;
 
-		var status = <%= WorkflowConstants.STATUS_INACTIVE %>
+		var status = <%= WorkflowConstants.STATUS_INACTIVE %>;
 
 		<portlet:namespace />getUsersCount(
 			className, ids, status,
@@ -69,7 +69,7 @@ String portletURLString = portletURL.toString();
 				var count = parseInt(responseData);
 
 				if (count > 0) {
-					status = <%= WorkflowConstants.STATUS_APPROVED %>
+					status = <%= WorkflowConstants.STATUS_APPROVED %>;
 
 					<portlet:namespace />getUsersCount(
 						className, ids, status,
