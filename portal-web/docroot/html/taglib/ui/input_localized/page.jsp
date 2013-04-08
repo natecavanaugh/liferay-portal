@@ -213,7 +213,7 @@ if (Validator.isNull(mainLanguageValue)) {
 </span>
 
 <c:if test="<%= (locales.length > 1) && Validator.isNull(languageId) %>">
-	<aui:script use="liferay-auto-fields,liferay-panel-floating">
+	<aui:script use="liferay-auto-fields">
 		var updateLanguageFlag = function(event) {
 			var target = event.target;
 

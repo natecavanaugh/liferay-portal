@@ -850,6 +850,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-datatype', 'aui-template', 'liferay-portlet-base', 'transition']
+		requires: ['aui-base', 'aui-datatype', 'aui-template-deprecated', 'liferay-portlet-base', 'transition']
 	}
 );

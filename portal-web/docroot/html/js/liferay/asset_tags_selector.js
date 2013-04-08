@@ -674,6 +674,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['array-extras', 'async-queue', 'aui-autocomplete-deprecated', 'aui-form-textfield-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-live-search', 'aui-template-deprecated', 'aui-textboxlist', 'datasource-cache', 'liferay-service-datasource', 'liferay-util-window']
+		requires: ['array-extras', 'async-queue', 'aui-autocomplete-deprecated', 'aui-form-textfield-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-live-search-deprecated', 'aui-template-deprecated', 'aui-textboxlist', 'datasource-cache', 'liferay-service-datasource', 'liferay-util-window']
 	}
 );

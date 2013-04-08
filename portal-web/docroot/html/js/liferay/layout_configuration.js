@@ -572,7 +572,7 @@
 		},
 		'',
 		{
-			requires: ['aui-live-search', 'dd', 'liferay-layout']
+			requires: ['aui-live-search-deprecated', 'dd', 'liferay-layout']
 		}
 	);
 

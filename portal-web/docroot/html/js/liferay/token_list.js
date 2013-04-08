@@ -121,6 +121,6 @@ AUI().add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-template', 'escape']
+		requires: ['aui-base', 'aui-template-deprecated', 'escape']
 	}
 );
