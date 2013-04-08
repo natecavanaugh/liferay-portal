@@ -94,7 +94,7 @@ long classPK = ParamUtil.getLong(request, "classPK");
 			if (!templateHandlers.isEmpty()) {
 			%>
 
-				<liferay-ui:icon-menu align="left" cssClass='<%= "lfr-toolbar-button add-button " + (toolbarItem.equals("add") ? "current" : StringPool.BLANK) %>' direction="down" extended="<%= false %>" icon='<%= themeDisplay.getPathThemeImages() + "/common/add.png" %>' message="add" showWhenSingleIcon="<%= true %>">
+				<liferay-ui:icon-menu cssClass='<%= "lfr-toolbar-button add-button " + (toolbarItem.equals("add") ? "current" : StringPool.BLANK) %>' direction="down" extended="<%= false %>" icon='<%= themeDisplay.getPathThemeImages() + "/common/add.png" %>' message="add" showWhenSingleIcon="<%= true %>">
 
 					<liferay-portlet:renderURL varImpl="addPortletDisplayTemplateURL">
 						<portlet:param name="struts_action" value="/dynamic_data_mapping/edit_template" />

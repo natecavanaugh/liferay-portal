@@ -25,7 +25,6 @@
 				<aui:input cssClass="select-tags aui-state-default" inline="<%= true %>" label="" name="checkAllTags" title='<%= LanguageUtil.get(pageContext, "check-all-tags") %>' type="checkbox" />
 
 				<liferay-ui:icon-menu
-					align="left"
 					direction="down"
 					icon=""
 					message="actions"
