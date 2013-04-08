@@ -373,20 +373,6 @@ body.portal-popup:after, body.portal-popup:before {
 	padding-left: 20px;
 }
 
-.panel-page-menu #panel-manage-content.lfr-collapsed .lfr-panel-title .lfr-actions, .panels-minimized .panel-page-menu #panel-manage-content .lfr-panel-title .lfr-actions {
-	border-width: 0;
-	background-color: transparent;
-	background-image: none;
-}
-
-.panel-page-menu #panel-manage-content .lfr-panel-title .lfr-actions .lfr-trigger img {
-	vertical-align: text-bottom;
-}
-
-.panel-page-menu #panel-manage-content.lfr-collapsed .lfr-panel-title .lfr-actions .lfr-trigger img {
-	padding-left: 0;
-}
-
 .panel-page-menu #panel-manage-content .lfr-panel-title span a, .panels-minimized .panel-page-menu #panel-manage-content .lfr-panel-title {
 	font-size: 13px;
 	padding-left: 20px;

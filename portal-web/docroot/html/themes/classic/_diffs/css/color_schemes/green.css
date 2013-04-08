@@ -60,7 +60,7 @@ body.green, .green .portlet {
 		color: #677D5B;
 	}
 
-	.aui-menu-content li a, .lfr-menu-list ul li a {
+	.aui-menu-content li a {
 		color: #2F342C;
 	}
 
@@ -73,7 +73,7 @@ body.green, .green .portlet {
 		}
 	}
 
-	.aui-menu-content li a.aui-focus, .lfr-menu-list ul a.aui-focus, .lfr-menu-expanded li a:focus  {
+	.aui-menu-content li a.aui-focus, .lfr-menu-expanded li a:focus  {
 		background-color: #677D5B;
 		color: #FFF;
 		text-shadow: -1px -1px #2F342C;
@@ -250,10 +250,6 @@ body.green, .green .portlet {
 		color: #909683;
 	}
 
-	.lfr-actions .lfr-trigger li a:hover {
-		background-color: #909683;
-	}
-
 	.lfr-tag-selector-popup .aui-textfield-content {
 		background-color: #DBDED4;
 		border-color: #B9BDAF;
@@ -261,18 +257,18 @@ body.green, .green .portlet {
 
 	/* This CSS sets the default styles for forms. */
 
-	button, input[type="button"], input[type="reset"], input[type="submit"], .lfr-actions, .lfr-actions ul {
+	button, input[type="button"], input[type="reset"], input[type="submit"] {
 		color: #404F34;
 	}
 
-	button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover, .lfr-actions:hover, .lfr-actions:hover ul {
+	button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover {
 		background-color: #CFDABA;
 		background-image: url(@theme_image_path@/color_schemes/green/application/state_hover_bg.png);
 		border-color: #778362;
 		color: #669A33;
 	}
 
-	button:focus, input[type="button"]:focus, input[type="reset"]:focus, input[type="submit"]:focus, .lfr-actions:focus, .lfr-actions:focus ul {
+	button:focus, input[type="button"]:focus, input[type="reset"]:focus, input[type="submit"]:focus {
 		background-color: #ECECEC;
 		background-image: url(@theme_image_path@/application/state_active_bg.png);
 	}

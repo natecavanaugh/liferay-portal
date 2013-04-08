@@ -8,16 +8,6 @@
 	width: 100%;
 }
 
-.lfr-portlet-toolbar .lfr-actions .lfr-trigger strong {
-	padding: 0;
-}
-
-.lfr-portlet-toolbar .lfr-actions.show-arrow.direction-down.lfr-toolbar-button .lfr-trigger strong a {
-	padding-bottom: 3px;
-	padding-top: 4px;
-	padding-right: 25px;
-}
-
 .lfr-portlet-toolbar .lfr-toolbar-button a {
 	border: 1px solid transparent;
 	display: block;
@@ -40,14 +30,6 @@
 	background: #F6F8FB;
 }
 
-.lfr-portlet-toolbar .lfr-actions.show-arrow.direction-down.lfr-toolbar-button .lfr-trigger strong a {
-	background-position: 92% 7px;
-}
-
-.lfr-portlet-toolbar .lfr-toolbar-button a, .lfr-portlet-toolbar .lfr-toolbar-button a span {
-	color: #9EA8AD;
-}
-
 .lfr-portlet-toolbar .lfr-toolbar-button a {
 	background: url() no-repeat 5px 50%;
 	border-color: #F6F8FB;
@@ -60,9 +42,14 @@
 	color: #346799;
 }
 
+
 .lfr-portlet-toolbar .lfr-toolbar-button a:hover {
 	background-color: #DFF4FF;
 	border-color: #A7CEDF;
+}
+
+.lfr-portlet-toolbar .lfr-toolbar-button .aui-caret {
+	margin: 5px 0 0 5px;
 }
 
 .lfr-portlet-toolbar .lfr-toolbar-button.current a, .lfr-portlet-toolbar .lfr-toolbar-button.current a span {

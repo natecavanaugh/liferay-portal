@@ -29,7 +29,7 @@
 	.lfr-header-row-content {
 		position: relative;
 
-		.toolbar, .add-button {
+		.toolbar {
 			float: left;
 		}
 

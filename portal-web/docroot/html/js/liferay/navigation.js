@@ -512,7 +512,7 @@ AUI.add(
 				listItem._comboBox = comboBox;
 
 				overlayBoundingBox.setStyle('minWidth', listItem.get('offsetWidth') + 'px');
-				overlayContentBox.addClass('lfr-menu-list lfr-component lfr-page-templates');
+				overlayContentBox.addClass('lfr-menu-list lfr-page-templates');
 
 				comboContentBox.swallowEvent('click');
 				overlayContentBox.swallowEvent('click');

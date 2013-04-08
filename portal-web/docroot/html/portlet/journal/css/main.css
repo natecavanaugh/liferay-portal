@@ -152,20 +152,6 @@
 		background-color: #FAFAFA;
 	}
 
-	.lfr-actions {
-		&.lfr-extended .lfr-trigger {
-			min-width: auto;
-
-			strong {
-				min-width: 10px;
-			}
-		}
-
-		&.show-arrow.direction-down .lfr-trigger strong a {
-			background: url(@theme_image_path@/arrows/08_down.png) 100% -5px no-repeat;
-		}
-	}
-
 	.lfr-search-combobox {
 		.advanced-search-column-content {
 			border-right: 0;
@@ -526,24 +512,6 @@
 
 	.lfr-textarea {
 		width: 350px;
-	}
-
-	.lfr-header-row-content .add-button {
-		float: left;
-	}
-
-	.lfr-menu-list ul {
-		background: #F0F0F0;
-		position: relative;
-
-		&:after {
-			border: 10px solid transparent;
-			border-bottom-color: #F0F0F0;
-			content: '';
-			position: absolute;
-			right: 5px;
-			top: -10px;
-		}
 	}
 
 	.lfr-template-editor {
@@ -1029,12 +997,4 @@
 	background: #FFFFE0 url(@theme_image_path@/portlet/pop_up.png) no-repeat 10px 50%;
 	font-size: 1.2em;
 	padding: 0.3em 0.3em 0.3em 2em;
-}
-
-.ie7 {
-	.portlet-journal {
-		.lfr-actions .lfr-trigger strong {
-			min-width: 0px;
-		}
-	}
 }

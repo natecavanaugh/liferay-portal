@@ -1,6 +1,6 @@
 @import "compass";
 
-.aui-menu-content, body > .lfr-menu-list ul, .aui-underlay-content, .aui-dialog-content {
+.aui-menu-content, .aui-underlay-content, .aui-dialog-content {
 	@include box-shadow(2px 4px 7px rgba(0, 0, 0, 0.5));
 }
 
@@ -64,7 +64,7 @@
 	@include border-radius(10px);
 }
 
-body > .lfr-menu-list, body > .lfr-menu-list ul, button, input[type="button"], input[type="submit"], input[type="reset"], .active-area-proxy, .aui-dialog .yui3-widget-hd, .aui-dialog-content, .aui-paginator-link, .entry-display-style .entry-thumbnail img, .lfr-actions, .lfr-api-results, .lfr-header-row .aui-toolbar-only, .lfr-translation-manager, .lfr-translation-manager-translation, .lfr-upload-container .cancel-button .modify-pages .delete-tab, .portlet-image-gallery-display .image-thumbnail img, .portlet-journal .lfr-table .journal-metadata, .portlet-search .search-facet .facet-value, .rule-group-instance-container .rule-group-instance, .select-documents, .select-files, .staging-icon-menu-container.staging-icon-menu.lfr-actions .lfr-trigger strong a, .taglib-logo-selector .lfr-change-logo.show-background, .taglib-ratings.stars:hover, .taglib-ratings.stars:hover .liferay-rating-vote, .tags-search-combobox .aui-field-input-text {
+body > .lfr-menu-list ul, button, input[type="button"], input[type="submit"], input[type="reset"], .active-area-proxy, .aui-dialog .yui3-widget-hd, .aui-dialog-content, .aui-paginator-link, .entry-display-style .entry-thumbnail img, .lfr-api-results, .lfr-header-row .aui-toolbar-only, .lfr-translation-manager, .lfr-translation-manager-translation, .lfr-upload-container .cancel-button .modify-pages .delete-tab, .portlet-image-gallery-display .image-thumbnail img, .portlet-journal .lfr-table .journal-metadata, .portlet-search .search-facet .facet-value, .rule-group-instance-container .rule-group-instance, .select-documents, .select-files, .taglib-logo-selector .lfr-change-logo.show-background, .taglib-ratings.stars:hover, .taglib-ratings.stars:hover .liferay-rating-vote, .tags-search-combobox .aui-field-input-text {
 	@include border-radius(4px);
 }
 

@@ -92,15 +92,6 @@
 				}
 			}
 		}
-
-		.go-to-layout-set-branches-tab .lfr-trigger strong a {
-			background-image: url(@theme_image_path@/arrows/06_down.png);
-			text-decoration: none;
-
-			.taglib-text{
-				color: #EEE;
-			}
-		}
 	}
 
 	.staging-icon-menu-container {
@@ -115,49 +106,10 @@
 			float: right;
 			min-height: 15px;
 		}
-
-		.staging-icon-menu.lfr-actions .lfr-trigger strong {
-			min-width: 0;
-			padding: 0;
-
-			a {
-				background-image: url(@theme_image_path@/arrows/06_down.png);
-				background-position: 0 4px;
-
-				@include opacity(0.5);
-
-				padding: 0 5px;
-			}
-		}
-	}
-
-	.aui-tab-active {
-		.layoutset-branches-menu.lfr-actions {
-			li .taglib-text {
-				color: #FFF;
-			}
-
-			.lfr-trigger strong {
-				padding: 0;
-				text-shadow: 1px 1px #000;
-			}
-		}
-
-		.staging-icon-menu.lfr-actions .lfr-trigger strong a {
-			@include opacity(1);
-		}
 	}
 
 	.branch-results {
 		min-height: 300px;
-	}
-
-	.layoutset-branches-menu.lfr-actions {
-		float: none;
-
-		.lfr-trigger strong {
-			display: inline;
-		}
 	}
 
 	.staging-bar {
