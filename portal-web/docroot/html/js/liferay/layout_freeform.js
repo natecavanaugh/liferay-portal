@@ -18,6 +18,17 @@ AUI.add(
 							var nodeId = node.get('id');
 
 							proxyNode.one('.portlet-topper').html(Layout._getPortletTitle(nodeId));
+
+							node.addClass('liferay-portlet-dragging');
+						}
+					},
+					on: {
+						'drag:end': function(event) {
+							var instance = this;
+
+							var node = DDM.activeDrag.get('node');
+
+							node.removeClass('liferay-portlet-dragging');
 						}
 					},
 					lazyStart: false
