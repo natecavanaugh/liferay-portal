@@ -74,9 +74,9 @@ YUI.add(
 						'aui-form-textfield-deprecated',
 						'aui-io-plugin-deprecated',
 						'aui-io-request',
-						'aui-live-search',
+						'aui-live-search-deprecated',
 						'aui-modal',
-						'aui-template',
+						'aui-template-deprecated',
 						'aui-textboxlist-deprecated',
 						'datasource-cache',
 						'liferay-service-datasource'
@@ -236,7 +236,7 @@ YUI.add(
 				'liferay-layout-configuration': {
 					fullpath: javaScriptRootPath + '/liferay/layout_configuration.js',
 					requires: [
-						'aui-live-search',
+						'aui-live-search-deprecated',
 						'dd',
 						'liferay-layout'
 					]
@@ -331,20 +331,6 @@ YUI.add(
 					fullpath: javaScriptRootPath + '/liferay/node.js',
 					requires: [
 						'dom-base'
-					]
-				},
-				'liferay-panel': {
-					fullpath: javaScriptRootPath + '/liferay/panel.js',
-					requires: [
-						'aui-base',
-						'liferay-store'
-					]
-				},
-				'liferay-panel-floating': {
-					fullpath: javaScriptRootPath + '/liferay/panel_floating.js',
-					requires: [
-						'aui-pagination',
-						'liferay-panel'
 					]
 				},
 				'liferay-poller': {
@@ -473,7 +459,7 @@ YUI.add(
 					fullpath: javaScriptRootPath + '/liferay/upload.js',
 					requires: [
 						'aui-io-request',
-						'aui-template',
+						'aui-template-deprecated',
 						'collection',
 						'liferay-portlet-base',
 						'uploader'
