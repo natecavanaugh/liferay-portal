@@ -62,7 +62,7 @@ String usersListView = ParamUtil.get(request, "usersListView", UserConstants.LIS
 	%>
 
 	<c:if test="<%= hasAddOrganizationPermission || hasAddUserPermission %>">
-		<liferay-ui:icon-menu align="left" cssClass='<%= "lfr-toolbar-button add-button " + (toolbarItem.equals("add") ? "current" : StringPool.BLANK) %>' direction="down" extended="<%= false %>" icon='<%= themeDisplay.getPathThemeImages() + "/common/add.png" %>' message="add" showWhenSingleIcon="<%= true %>">
+		<liferay-ui:icon-menu cssClass='<%= "lfr-toolbar-button add-button " + (toolbarItem.equals("add") ? "current" : StringPool.BLANK) %>' direction="down" extended="<%= false %>" icon="" message="add" showWhenSingleIcon="<%= true %>">
 			<portlet:renderURL var="viewUsersURL">
 				<portlet:param name="struts_action" value="/users_admin/view" />
 				<portlet:param name="sitesListView" value="<%= usersListView %>" />

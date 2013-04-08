@@ -20,7 +20,7 @@
 Folder folder = (Folder)request.getAttribute("view.jsp-folder");
 %>
 
-<liferay-ui:icon-menu align="left" cssClass="actions-button aui-helper-hidden" direction="down" icon="" id="actionsButtonContainer" message="actions" showExpanded="<%= false %>" showWhenSingleIcon="<%= true %>">
+<liferay-ui:icon-menu cssClass="actions-button aui-helper-hidden" direction="down" icon="" id="actionsButtonContainer" message="actions" showExpanded="<%= false %>" showWhenSingleIcon="<%= true %>">
 
 	<%
 	Group scopeGroup = themeDisplay.getScopeGroup();
@@ -106,7 +106,7 @@ Folder folder = (Folder)request.getAttribute("view.jsp-folder");
 
 <span class="manage-button">
 	<c:if test="<%= !user.isDefaultUser() %>">
-		<liferay-ui:icon-menu align="left" direction="down" icon="" message="manage" showExpanded="<%= false %>" showWhenSingleIcon="<%= true %>">
+		<liferay-ui:icon-menu direction="down" icon="" message="manage" showExpanded="<%= false %>" showWhenSingleIcon="<%= true %>">
 
 			<%
 			String taglibURL = "javascript:" + renderResponse.getNamespace() + "openFileEntryTypeView()";

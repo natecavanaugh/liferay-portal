@@ -401,7 +401,6 @@ if (Validator.isNotNull(content)) {
 							<c:if test="<%= article != null %>">
 								<span class="lfr-translation-manager-add-menu">
 									<liferay-ui:icon-menu
-										align="left"
 										cssClass="add-translations-menu"
 										direction="down"
 										icon='<%= themeDisplay.getPathThemeImages() + "/common/add.png" %>'
