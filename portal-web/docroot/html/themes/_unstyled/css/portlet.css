@@ -89,9 +89,6 @@ body.portlet {
 
 	.portlet-close a {
 	}
-
-	.portlet-options li.lfr-trigger strong a {
-	}
 }
 
 .lfr-configurator-visibility {
@@ -431,46 +428,6 @@ body.portlet {
 .lfr-portlet-item {
 	&, & p a {
 	}
-}
-
-/* ---------- Actions button ---------- */
-
-.lfr-actions {
-	&.lfr-extended, &.lfr-extended ul {
-	}
-
-	ul {
-	}
-
-	.lfr-trigger {
-		&, & strong {
-		}
-
-		li {
-			a {
-				&:hover {
-				}
-			}
-
-			img {
-			}
-
-			&.last {
-			}
-		}
-	}
-
-	&.portlet-options {
-		.lfr-trigger {
-			strong {
-				a {
-				}
-			}
-		}
-	}
-}
-
-.visible.portlet-options .lfr-trigger strong a {
 }
 
 /* ---------- Breadcrumbs taglib ---------- */

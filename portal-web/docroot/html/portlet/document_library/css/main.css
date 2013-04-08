@@ -151,18 +151,8 @@
 		left: -5px;
 	}
 
-	.lfr-menu-list ul {
-		background: #F0F0F0;
-		position: relative;
-
-		&:after {
-			border: 10px solid transparent;
-			border-bottom-color: #F0F0F0;
-			content: '';
-			position: absolute;
-			right: 5px;
-			top: -10px;
-		}
+	.taglib-search-iterator .results-header input {
+		display: none;
 	}
 
 	.aui-button-holder.toolbar {
@@ -556,20 +546,6 @@
 			padding-left: 0;
 		}
 	}
-
-	.lfr-actions {
-		&.lfr-extended .lfr-trigger {
-			min-width: auto;
-
-			strong {
-				min-width: 10px;
-			}
-		}
-
-		&.show-arrow.direction-down .lfr-trigger strong a {
-			background: url(@theme_image_path@/arrows/08_down.png) 100% -5px no-repeat;
-		}
-	}
 }
 
 .portlet-document-library {
@@ -616,14 +592,6 @@
 			right: 0px;
 			width: 21px;
 			z-index: 1;
-		}
-	}
-}
-
-.ie7 {
-	.portlet-document-library {
-		.lfr-actions .lfr-trigger strong {
-			min-width: 0px;
 		}
 	}
 }

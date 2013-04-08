@@ -160,40 +160,6 @@ input, textarea {
 	}
 }
 
-.lfr-actions.lfr-extended {
-	&, ul {
-		@include button-default;
-
-		padding: 0;
-	}
-
-	&:focus {
-		&, ul {
-			@include button-focus;
-		}
-	}
-
-	&.disabled, &.disabled:hover {
-		&, ul {
-			@include button-disabled;
-		}
-	}
-
-	&:hover {
-		&, ul {
-			@include button-hover;
-		}
-	}
-
-	span {
-		cursor: pointer;
-	}
-}
-
-.lfr-actions.disabled .taglib-text {
-	color: #A9A9A9;
-}
-
 .aui-button-disabled {
 	button, input[type] {
 		&, &:focus, &:hover {

@@ -342,10 +342,6 @@
 			.taglib-text {
 				display: none;
 			}
-
-			.lfr-actions .lfr-trigger strong {
-				min-width: 0;
-			}
 		}
 
 		.last-post {

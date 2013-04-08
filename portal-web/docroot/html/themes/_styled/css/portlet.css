@@ -197,10 +197,6 @@ body.portlet {
 	.portlet-close a {
 		background-image: url(../images/portlet/close_borderless.png);
 	}
-
-	.portlet-options li.lfr-trigger strong a {
-		background-image: url(../images/portlet/options_borderless.png);
-	}
 }
 
 .lfr-configurator-visibility {
@@ -674,80 +670,6 @@ body.portlet {
 	&, & p a {
 		font-size: 1em;
 	}
-}
-
-/* ---------- Actions button ---------- */
-
-.lfr-actions {
-	&.lfr-extended, &.lfr-extended ul {
-		background: #FFF url(../images/forms/button.png) repeat-x 0 100%;
-		border: 1px solid;
-		border-color: #DEDEDE #BFBFBF #BFBFBF #DEDEDE;
-	}
-
-	ul {
-		bottom: -1px;
-	}
-
-	.lfr-trigger {
-		&, & strong {
-			background: none;
-		}
-
-		li {
-			background: transparent;
-			border-bottom: 1px solid #DEDEDE;
-			padding: 2px;
-
-			a {
-				padding: 5px 10px 5px 25px;
-
-				&:hover {
-					background-color: #828F95;
-					color: #FFF;
-				}
-			}
-
-			img {
-				left: 3px;
-				position: absolute;
-			}
-
-			&.last {
-				border-bottom: none;
-			}
-		}
-	}
-
-	&.portlet-options {
-		background: none;
-		border: none;
-		float: left;
-
-		.lfr-trigger {
-			padding: 0;
-
-			strong {
-				min-width: 0;
-				padding: 1px;
-
-				a {
-					background-image: url(../images/portlet/options.png);
-					background-position: 0 0;
-					display: block;
-					font-size: 0;
-					height: 16px;
-					padding: 0;
-					text-indent: -9999px;
-					width: 16px;
-				}
-			}
-		}
-	}
-}
-
-.visible.portlet-options .lfr-trigger strong a {
-	background-image: url(../images/portlet/options_selected.png);
 }
 
 /* ---------- Breadcrumbs taglib ---------- */

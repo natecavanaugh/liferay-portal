@@ -387,18 +387,6 @@
 
 /* ---------- Menus ---------- */
 
-.lfr-actions.portlet-options, .visible.portlet-options {
-	.lfr-trigger strong span {
-		background-image: url(../images/portlet/options.png);
-	}
-}
-
-.lfr-actions.portlet-options:hover {
-	&, ul {
-		background: transparent;
-	}
-}
-
 .lfr-menu-list {
 	z-index: 450;
 }
@@ -441,7 +429,7 @@
 	}
 }
 
-.aui-menu-content, .lfr-menu-list ul {
+.aui-menu-content {
 	background: #CCC9C9 url(../images/application/menu_bg.png) repeat-x 0 0;
 	border: 1px solid;
 	border-color: #AEAFB1 #777879 #777879 #AEAFB1;
@@ -457,12 +445,12 @@
 	text-shadow: 1px 1px #FFF;
 }
 
-.aui-menugroup-content ul, .lfr-menu-list ul ul {
+.aui-menugroup-content ul {
 	display: block;
 	min-width: 0;
 }
 
-.aui-menu-content li, .lfr-menu-list ul li {
+.aui-menu-content li {
 	border-bottom: 1px solid #BCBBBB;
 	border-top: 1px solid #EEE;
 	display: block;
@@ -478,26 +466,17 @@
 	}
 }
 
-.aui-menu-content li a, .lfr-menu-list ul li .taglib-icon, .aui-menu-content li .disabled {
+.aui-menu-content li a, .aui-menu-content li .disabled {
 	color: #2C2F34;
 	display: block;
 	padding: 4px 5px;
 	text-decoration: none;
 }
 
-.lfr-menu-list ul li.disabled .taglib-icon {
-	color: #666;
-}
-
-.aui-menu-content li a.aui-focus, .lfr-menu-expanded li a:focus, .lfr-menu-list ul .taglib-icon.aui-focus {
+.aui-menu-content li a.aui-focus, .lfr-menu-expanded li a:focus {
 	background-color: #5B677D;
 	color: #FFF;
 	text-shadow: -1px -1px #2C2F34;
-}
-
-.aui-menu-content a, .lfr-menu-list li .taglib-icon, .aui-menu-content .disabled, .lfr-actions .lfr-trigger, .lfr-actions .lfr-trigger strong {
-	font-weight: bold;
-	text-shadow: 1px 1px 0 0 #FFF;
 }
 
 /* ---------- Toolbar ---------- */
@@ -657,10 +636,6 @@
 
 .lfr-header-row {
 	background: #8F8F8F url(../images/application/header_row_bg.png) 0 0 repeat-x;
-
-	.lfr-actions.show-arrow.direction-down .lfr-trigger strong a {
-		background: url(../images/arrows/08_down.png) 100% -5px no-repeat;
-	}
 
 	.aui-toolbar {
 		.aui-toolbar-content {

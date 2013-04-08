@@ -38,10 +38,6 @@ td {
 		padding: 0;
 		list-style: none;
 	}
-
-	&.lfr-actions li img {
-		padding: 0 5px;
-	}
 }
 
 .lfr-component li img, img.icon {

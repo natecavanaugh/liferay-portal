@@ -228,16 +228,6 @@
 
 /* ---------- Menus ---------- */
 
-.lfr-actions.portlet-options, .visible.portlet-options {
-	.lfr-trigger strong span {
-	}
-}
-
-.lfr-actions.portlet-options:hover {
-	&, ul {
-	}
-}
-
 .lfr-menu-list {
 }
 
@@ -286,7 +276,7 @@
 .aui-menu-content li a.aui-focus, .lfr-menu-expanded li a:focus, .lfr-menu-list ul .taglib-icon.aui-focus {
 }
 
-.aui-menu-content a, .lfr-menu-list li .taglib-icon, .aui-menu-content .disabled, .lfr-actions .lfr-trigger, .lfr-actions .lfr-trigger strong {
+.aui-menu-content a, .lfr-menu-list li .taglib-icon, .aui-menu-content .disabled {
 }
 
 /* ---------- Toolbar ---------- */
@@ -376,9 +366,6 @@
 /* ---------- Header row ---------- */
 
 .lfr-header-row {
-	.lfr-actions.show-arrow.direction-down .lfr-trigger strong a {
-	}
-
 	.aui-toolbar {
 		.aui-toolbar-content {
 		}
