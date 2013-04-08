@@ -114,6 +114,8 @@ AUI.add(
 
 						instance._container = A.one('.tags-admin-container');
 						instance._tagViewContainer = A.one('.tag-view-container');
+						instance._stagedTagsWrapper = A.one('.selected-tags-wrapper');
+						instance._stagedTagsList = instance._stagedTagsWrapper.one('.tag-staging-area ul');
 						instance._tagsList = A.one('.tags-admin-list');
 
 						instance._tagsMessageContainer = Node.create(TPL_TAGS_MESSAGES);
@@ -131,6 +133,18 @@ AUI.add(
 						var portletMessageContainer = instance._portletMessageContainer;
 
 						instance._hideMessageTask = A.debounce('hide', 7000, portletMessageContainer);
+
+						instance._stagedTagsList.delegate(
+							EVENT_CLICK,
+							function(event) {
+								var tagItem = event.target.ancestor('li');
+
+								instance._removeStagedTagItem(tagItem);
+
+								instance._checkTags(tagItem, false);
+							},
+							'.tag-item-close'
+						);
 
 						instance._tagsList.on(EVENT_CLICK, instance._onTagsListClick, instance);
 						instance._tagsList.on('key', instance._onTagsListClick, 'up:13', instance);
@@ -290,9 +304,52 @@ AUI.add(
 					},
 
 					_checkAllTags: function(event) {
+						var instance = this;
+
 						var currentCheckedStatus = event.currentTarget.attr('checked');
 
-						A.all('.tag-item-check').attr('checked', currentCheckedStatus);
+						var tagItemChecks = instance._tagsList.all('.tag-item-check');
+
+						tagItemChecks.each(
+							function(item, index, collection) {
+								var checked = item.attr('checked');
+
+								if (currentCheckedStatus && !checked) {
+									instance._stageTagItem(item);
+								}
+								else if (!currentCheckedStatus && checked) {
+									instance._removeStagedTagItem(item);
+								}
+							}
+						);
+
+						tagItemChecks.attr('checked', currentCheckedStatus);
+					},
+
+					_checkStagedTags: function() {
+						var instance = this;
+
+						var selectedTags = instance._getStagedTags();
+
+						selectedTags.each(
+							function(item, index, collection) {
+								instance._checkTags(item, true);
+							}
+						);
+					},
+
+					_checkTags: function(node, checked) {
+						var instance = this;
+
+						var tagId = instance._getTagId(node);
+
+						var tagCheck = instance._getTagCheck(tagId);
+
+						if (tagCheck) {
+							tagCheck.attr('checked', checked);
+
+							Liferay.Util.checkAllBox(instance._tagsList, 'tag-item-check', '#' + instance._prefixedPortletId + 'checkAllTagsCheckbox');
+						}
 					},
 
 					_createTagPanelAdd: function() {
@@ -453,7 +510,7 @@ AUI.add(
 					_deleteSelectedTags: function(event) {
 						var instance = this;
 
-						var tagsNodes = A.all('.tag-item-check:checked');
+						var tagsNodes = instance._getStagedTags();
 
 						if (tagsNodes.size() > 0) {
 							if (confirm(Liferay.Language.get('are-you-sure-you-want-to-delete-the-selected-tags'))) {
@@ -473,10 +530,18 @@ AUI.add(
 						else {
 							alert(Liferay.Language.get('there-are-no-selected-tags'));
 						}
+
+						instance._hideStagedTagsList();
 					},
 
 					_deleteTag: function(tagId, callback) {
 						var instance = this;
+
+						var deletedTag = instance._getTagCheck(tagId);
+
+						if (deletedTag.attr('checked')) {
+							instance._removeStagedTagItem(deletedTag);
+						}
 
 						Liferay.Service(
 							'/assettag/delete-tag',
@@ -516,6 +581,8 @@ AUI.add(
 								loadingMask.hide();
 
 								instance._prepareTags(result.tags, callback);
+
+								instance._checkStagedTags();
 							}
 						);
 					},
@@ -645,10 +712,28 @@ AUI.add(
 						return ioTagDetails;
 					},
 
+					_getStagedTag: function(tagId) {
+						var instance = this;
+
+						return instance._stagedTagsList.one('li[data-tagId="' + tagId + '"]');
+					},
+
+					_getStagedTags: function() {
+						var instance = this;
+
+						return instance._stagedTagsList.all('li');
+					},
+
 					_getTag: function(tagId) {
 						var instance = this;
 
 						return instance._tagsList.one('li[data-tagId="' + tagId + '"]');
+					},
+
+					_getTagCheck: function(tagId) {
+						var instance = this;
+
+						return instance._tagsList.one('.tag-item-check[data-tagId="' + tagId + '"]');
 					},
 
 					_getTagId: function(expr) {
@@ -886,6 +971,14 @@ AUI.add(
 						);
 					},
 
+					_hideStagedTagsList: function () {
+						var instance = this;
+
+						instance._stagedTagsList.empty();
+
+						instance._stagedTagsWrapper.hide();
+					},
+
 					_initializeTagPanelAdd: function(callback) {
 						var instance = this;
 
@@ -1047,11 +1140,11 @@ AUI.add(
 					_mergeSelectedTags: function(event) {
 						var instance = this;
 
-						var selectedTagsNodes = A.all('.tag-item-check:checked');
+						var selectedTagsNodes = instance._getStagedTags();
 
 						if (selectedTagsNodes.size() > 1) {
 							var checkedItemsIds = selectedTagsNodes.attr('data-tagId');
-							var checkedItemsName = selectedTagsNodes.attr('data-tagName');
+							var checkedItemsName = selectedTagsNodes.attr('data-tag');
 
 							var tagPanelMerge = instance._getTagPanelMerge();
 
@@ -1101,6 +1194,8 @@ AUI.add(
 					},
 
 					_mergeTags: function(fromIds, toId, overrideProperties, callback) {
+						var instance = this;
+
 						Liferay.Service(
 							'/assettag/merge-tags',
 							{
@@ -1110,9 +1205,13 @@ AUI.add(
 							},
 							callback
 						);
+
+						instance._hideStagedTagsList();
 					},
 
 					_mergeTag: function(fromId, toId, callback) {
+						var instance = this;
+
 						Liferay.Service(
 							'/assettag/merge-tags',
 							{
@@ -1122,6 +1221,12 @@ AUI.add(
 							},
 							callback
 						);
+
+						var fromTag = instance._getTagCheck(fromId);
+
+						if (fromTag.attr('checked')) {
+							instance._removeStagedTagItem(fromTag);
+						}
 					},
 
 					_onDeleteTag: function(event) {
@@ -1218,6 +1323,8 @@ AUI.add(
 
 						if (target.hasClass('tag-item-check')) {
 							Liferay.Util.checkAllBox(event.currentTarget, 'tag-item-check', '#' + instance._prefixedPortletId + 'checkAllTagsCheckbox');
+
+							instance._toggleStagedTagItem(target);
 						}
 						else if (target.hasClass('tag-item-actions-trigger')) {
 							instance._onShowTagPanel(event, ACTION_EDIT);
@@ -1443,6 +1550,28 @@ AUI.add(
 						instance._displayTags();
 					},
 
+					_removeStagedTagItem: function(tagItem) {
+						var instance = this;
+
+						var tagId = instance._getTagId(tagItem);
+
+						var selectedTag = instance._getStagedTag(tagId);
+
+						selectedTag.transition(
+							{
+								duration: 0.25,
+								easing: 'ease-out',
+								opacity: 0
+							},
+							function() {
+								this.remove();
+
+								instance._stagedTagsWrapper.toggle(!!instance._getStagedTags().size());
+							}
+						);
+
+					},
+
 					_resetTagsProperties: function(event) {
 						var instance = this;
 
@@ -1590,6 +1719,38 @@ AUI.add(
 						}
 					},
 
+					_stageTagItem: function(tagItem) {
+						var instance = this;
+
+						var tagId = instance._getTagId(tagItem);
+
+						var tagName = instance._getTagName(tagItem.ancestor('li'));
+
+						var tagHTML = '<li data-tagId="' + tagId +'" data-tag="' + tagName + '">' +
+							'<span>' + tagName + '</span>' +
+							'<i class="icon-remove tag-item-close"></i>' +
+						'</li>';
+
+						var selectedTag = A.Node.create(tagHTML);
+
+						instance._stagedTagsList.append(selectedTag);
+
+						instance._stagedTagsWrapper.toggle(!!instance._getStagedTags().size());
+					},
+
+					_toggleStagedTagItem: function(tagItem) {
+						var instance = this;
+
+						var checked = tagItem.attr('checked');
+
+						if (checked) {
+							instance._stageTagItem(tagItem);
+						}
+						else {
+							instance._removeStagedTagItem(tagItem);
+						}
+					},
+
 					_updateMergeItemsTarget: function() {
 						var instance = this;
 
@@ -1677,6 +1838,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-button', 'aui-dialog-iframe-deprecated', 'aui-io-plugin-deprecated', 'aui-loading-mask-deprecated', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
+		requires: ['aui-button', 'aui-dialog-iframe-deprecated', 'aui-io-plugin-deprecated', 'aui-loading-mask-deprecated', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window', 'transition']
 	}
 );
