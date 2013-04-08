@@ -1,3 +1,5 @@
+@import "compass";
+
 .portlet-asset-tag-admin {
 	.lfr-app-column-view {
 		border: none;
@@ -144,6 +146,31 @@
 
 	}
 
+	.tag-staging-area {
+		color: #5C85AD;
+
+		ul {
+			margin: 10px;
+
+			li {
+				background-color: #DEE7F8;
+				border: 1px solid #CAD8F3;
+				display: inline;
+				float: left;
+				margin: 0 5px 4px 0;
+				padding: 2px 8px 2px 11px;
+
+				.tag-item-close {
+					margin-left: 4px;
+				}
+			}
+		}
+	}
+
+	.available-tags-wrapper {
+		clear: left;
+	}
+
 	.tags-admin-search {
 		background-image: url(@theme_image_path@/common/search.png);
 		background-position: 5px center;
@@ -208,5 +235,13 @@
 			font-weight: normal;
 			font-size: 120%;
 		}
+	}
+}
+
+/* ---------- Extras ---------- */
+
+.portlet-asset-tag-admin .tag-staging-area {
+	li, .tag-item-close {
+		@include border-radius(12px);
 	}
 }
