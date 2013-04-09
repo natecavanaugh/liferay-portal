@@ -3,18 +3,15 @@
 	overflow-x: hidden;
 }
 
-.lfr-menu-list-search-container {
-	overflow: hidden;
-}
-
-.lfr-menu-list-search {
-	border: 1px solid transparent;
-	padding: 2px;
-	width: 100%;
+.lfr-menu-list-search-container .lfr-menu-list-search {
+	margin-top: 2px;
+	margin-bottom: 0;
+	width: 215px;
 }
 
 .lfr-menu-list {
 	float: none;
+	overflow-y: auto;
 	position: relative;
 }
 
@@ -26,10 +23,4 @@
 	.lfr-menu-list-search {
 		width: auto;
 	}
-}
-
-/* Skin */
-
-.lfr-menu-list-search {
-	border-color: #FC0;
 }
