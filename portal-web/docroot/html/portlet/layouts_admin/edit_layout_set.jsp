@@ -77,7 +77,7 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 			<c:if test="<%= hasExportImportLayoutsPermission %>">
 				<c:if test="<%= SessionErrors.contains(liferayPortletRequest, LayoutImportException.class.getName()) || SessionErrors.contains(liferayPortletRequest, LARFileException.class.getName()) || SessionErrors.contains(liferayPortletRequest, LARFileSizeException.class.getName()) || SessionErrors.contains(liferayPortletRequest, LARTypeException.class.getName()) %>">
 					<liferay-util:html-top>
-						<div class="aui-helper-hidden" id="<portlet:namespace />importPage">
+						<div class="aui-hide" id="<portlet:namespace />importPage">
 							<liferay-util:include page="/html/portlet/layouts_admin/export_import.jsp">
 								<liferay-util:param name="<%= Constants.CMD %>" value="<%= Constants.IMPORT %>" />
 								<liferay-util:param name="groupId" value="<%= String.valueOf(groupId) %>" />

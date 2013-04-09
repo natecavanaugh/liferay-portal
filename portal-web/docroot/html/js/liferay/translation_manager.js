@@ -5,7 +5,7 @@ AUI.add(
 		var Lang = A.Lang;
 		var Node = A.Node;
 
-		var CSS_HELPER_HIDDEN = 'aui-helper-hidden';
+		var CSS_HELPER_HIDDEN = 'aui-hide';
 
 		var CSS_ACTIONS = 'lfr-actions';
 

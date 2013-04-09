@@ -1,7 +1,7 @@
 AUI.add(
 	'liferay-form-navigator',
 	function(A) {
-		var CSS_HIDDEN = 'aui-helper-hidden-accessible';
+		var CSS_HIDDEN = 'aui-hide-accessible';
 
 		var CSS_SECTION_ERROR = 'section-error';
 

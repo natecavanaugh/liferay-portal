@@ -106,7 +106,7 @@ User selUser = (User)request.getAttribute("user.selUser");
 
 	<liferay-ui:error exception="<%= NoSuchCountryException.class %>" message="please-select-a-country" />
 
-	<div class='<%= GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ORGANIZATIONS_COUNTRY_ENABLED, new Filter(String.valueOf(type)))) ? StringPool.BLANK : "aui-helper-hidden" %>' id="<portlet:namespace />countryDiv">
+	<div class='<%= GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ORGANIZATIONS_COUNTRY_ENABLED, new Filter(String.valueOf(type)))) ? StringPool.BLANK : "aui-hide" %>' id="<portlet:namespace />countryDiv">
 		<aui:select label="country" name="countryId" />
 
 		<aui:select label="region" name="regionId" />

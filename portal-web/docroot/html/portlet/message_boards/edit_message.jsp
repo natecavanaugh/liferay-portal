@@ -313,7 +313,7 @@ if (Validator.isNull(redirect)) {
 									/>
 								</span>
 
-								<aui:input cssClass="aui-helper-hidden" label="" name='<%= "msgFile" + (i + 1) %>' size="70" type="file" />
+								<aui:input cssClass="aui-hide" label="" name='<%= "msgFile" + (i + 1) %>' size="70" type="file" />
 
 								<liferay-ui:icon-delete
 									id='<%= "removeExisting" + (i + 1) %>'
@@ -338,7 +338,7 @@ if (Validator.isNull(redirect)) {
 									sb.append("');");
 									%>
 
-									<span class="aui-helper-hidden" id="<portlet:namespace />undoFile<%= i + 1 %>">
+									<span class="aui-hide" id="<portlet:namespace />undoFile<%= i + 1 %>">
 										<aui:input id='<%= "undoPath" + (i + 1) %>' name='<%= "undoPath" + (i + 1) %>' type="hidden" value="<%= fileEntry.getFileEntryId() %>" />
 
 										<span class="undo">(<liferay-ui:message key="marked-as-removed" />)</span> <a class="trash-undo-link" href="<%= sb.toString() %>" id="<portlet:namespace />undo"><liferay-ui:message key="undo" /></a>

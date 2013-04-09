@@ -46,8 +46,8 @@ if (referer.equals(themeDisplay.getPathMain() + "/portal/update_reminder_query")
 		<%@ include file="/html/portal/update_reminder_query_question.jspf" %>
 
 		<c:if test="<%= PropsValues.USERS_REMINDER_QUERIES_CUSTOM_QUESTION_ENABLED %>">
-			<div class="aui-helper-hidden" id="customQuestionContainer">
-				<aui:input bean="<%= user %>" fieldParam="reminderQueryCustomQuestion" label="custom-question" model="<%= User.class %>" name="reminderQueryQuestion" />
+			<div class="aui-hide" id="customQuestionContainer">
+				<aui:input bean="<%= user %>" fieldParam="reminderQueryCustomQuestion" label="" model="<%= User.class %>" name="reminderQueryQuestion" />
 			</div>
 		</c:if>
 

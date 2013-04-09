@@ -93,7 +93,7 @@ boolean expired = true;
 										<liferay-ui:icon
 											image="print"
 											label="<%= true %>"
-											message='<%= LanguageUtil.format(pageContext, "print-x-x", new Object[] {"aui-helper-hidden-accessible", articleDisplay.getTitle()}) %>'
+											message='<%= LanguageUtil.format(pageContext, "print-x-x", new Object[] {"aui-hide-accessible", articleDisplay.getTitle()}) %>'
 											url="javascript:print();"
 										/>
 									</div>
@@ -118,7 +118,7 @@ boolean expired = true;
 										<liferay-ui:icon
 											image="print"
 											label="<%= true %>"
-											message='<%= LanguageUtil.format(pageContext, "print-x-x", new Object[] {"aui-helper-hidden-accessible", articleDisplay.getTitle()}) %>'
+											message='<%= LanguageUtil.format(pageContext, "print-x-x", new Object[] {"aui-hide-accessible", articleDisplay.getTitle()}) %>'
 											url='<%= "javascript:" + renderResponse.getNamespace() + "printPage();" %>'
 										/>
 									</div>
@@ -154,7 +154,7 @@ boolean expired = true;
 										<liferay-ui:icon
 											image='<%= "../file_system/small/" + extension %>'
 											label="<%= true %>"
-											message='<%= LanguageUtil.format(pageContext, "x-convert-x-to-x", new Object[] {"aui-helper-hidden-accessible", articleDisplay.getTitle(), extension.toUpperCase()}) %>'
+											message='<%= LanguageUtil.format(pageContext, "x-convert-x-to-x", new Object[] {"aui-hide-accessible", articleDisplay.getTitle(), extension.toUpperCase()}) %>'
 											method="get"
 											url="<%= exportArticleURL.toString() %>"
 										/>

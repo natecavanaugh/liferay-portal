@@ -146,7 +146,7 @@ AUI.add(
 
 						instance._renderIcons();
 
-						instance.inputContainer.addClass('aui-helper-hidden-accessible');
+						instance.inputContainer.addClass('aui-hide-accessible');
 
 						instance._applyARIARoles();
 					},

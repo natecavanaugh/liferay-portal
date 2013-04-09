@@ -20,7 +20,7 @@
 Folder folder = (Folder)request.getAttribute("view.jsp-folder");
 %>
 
-<liferay-ui:icon-menu cssClass="actions-button aui-helper-hidden" direction="down" icon="" id="actionsButtonContainer" message="actions" showExpanded="<%= false %>" showWhenSingleIcon="<%= true %>">
+<liferay-ui:icon-menu cssClass="actions-button aui-hide" direction="down" icon="" id="actionsButtonContainer" message="actions" showExpanded="<%= false %>" showWhenSingleIcon="<%= true %>">
 
 	<%
 	Group scopeGroup = themeDisplay.getScopeGroup();

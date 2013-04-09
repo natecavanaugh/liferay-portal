@@ -434,7 +434,7 @@ else if (tabs2.equals("message-updated-email")) {
 					</table>
 				</td>
 				<td>
-					<table class='<%= (currentLocale.equals(defaultLocale) ? "aui-helper-hidden" : "") + " lfr-table" %>' id="<portlet:namespace />localized-priorities-table">
+					<table class='<%= (currentLocale.equals(defaultLocale) ? "aui-hide" : "") + " lfr-table" %>' id="<portlet:namespace />localized-priorities-table">
 					<tr>
 						<td class="lfr-label">
 							<liferay-ui:message key="name" />

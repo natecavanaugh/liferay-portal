@@ -38,7 +38,7 @@ AUI.add(
 
 		var NODE = 'node';
 
-		var TPL_PORTLET_MESSAGES = '<div class="aui-helper-hidden lfr-message-response" id="portletMessages" />';
+		var TPL_PORTLET_MESSAGES = '<div class="aui-hide lfr-message-response" id="portletMessages" />';
 
 		var TPL_TAG_LIST = '<li class="tag-item-container results-row {cssClassSelected}" data-tag="{name}" data-tagId="{tagId}" tabIndex="0">' +
 			'<div class="tags-admin-content-wrapper">' +
@@ -92,7 +92,7 @@ AUI.add(
 
 		var TPL_TAG_MERGE_ITEM = '<option value="{value}" title="{name}" selected>{name}</option>';
 
-		var TPL_TAGS_MESSAGES = '<div class="aui-helper-hidden lfr-message-response portlet-msg-info" id="tagsMessages" />';
+		var TPL_TAGS_MESSAGES = '<div class="aui-hide lfr-message-response portlet-msg-info" id="tagsMessages" />';
 
 		var AssetTagsAdmin = A.Component.create(
 			{

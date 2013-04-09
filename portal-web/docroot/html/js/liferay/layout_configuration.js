@@ -105,7 +105,7 @@
 							};
 
 							var isVisible = function(item, index, collection) {
-								return !item.hasClass('aui-helper-hidden');
+								return !item.hasClass('aui-hide');
 							};
 
 							new A.LiveSearch(

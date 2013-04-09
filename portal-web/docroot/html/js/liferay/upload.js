@@ -17,7 +17,7 @@ AUI.add(
 			'<tpl for=".">',
 				'<tpl if="!values.error">',
 					'<li class="upload-file {[ values.temp ? "upload-complete pending-file selectable" : "" ]}" data-fileId="{id}" data-fileName="{name}" id="{id}">',
-						'<input class="{[ !values.temp ? "aui-helper-hidden" : "" ]} select-file" data-fileName="{name}" id="{id}checkbox" name="{$ns}selectUploadedFileCheckbox" type="checkbox" value="{name}" />',
+						'<input class="{[ !values.temp ? "aui-hide" : "" ]} select-file" data-fileName="{name}" id="{id}checkbox" name="{$ns}selectUploadedFileCheckbox" type="checkbox" value="{name}" />',
 						'<span class="file-title" title="{name}">{name}</span>',
 						'<span class="progress-bar">',
 							'<span class="progress" id="{id}progress"></span>',
@@ -45,13 +45,13 @@ AUI.add(
 				'</div>',
 			'</div>',
 
-			'<div class="aui-helper-hidden upload-list-info" id="{$ns}listInfo">',
+			'<div class="aui-hide upload-list-info" id="{$ns}listInfo">',
 				'<h4>{[ this.uploadsCompleteText ]}</h4>',
 			'</div>',
 
-			'<div class="pending-files-info portlet-msg-alert aui-helper-hidden">{[ this.pendingFileText ]}</div>',
+			'<div class="pending-files-info portlet-msg-alert aui-hide">{[ this.pendingFileText ]}</div>',
 
-			'<div class="aui-helper-hidden float-container manage-upload-target" id="{$ns}manageUploadTarget">',
+			'<div class="aui-hide float-container manage-upload-target" id="{$ns}manageUploadTarget">',
 				'<span class="aui-field aui-field-choice select-files aui-state-default">',
 					'<span class="aui-field-content">',
 						'<span class="aui-field-element">',
@@ -60,8 +60,8 @@ AUI.add(
 					'</span>',
 				'</span>',
 
-				'<a href="javascript:;" class="lfr-button cancel-uploads aui-helper-hidden">{[ this.cancelUploadsText ]}</a>',
-				'<a href="javascript:;" class="lfr-button clear-uploads aui-helper-hidden">{[ this.clearRecentUploadsText ]}</a>',
+				'<a href="javascript:;" class="lfr-button cancel-uploads aui-hide">{[ this.cancelUploadsText ]}</a>',
+				'<a href="javascript:;" class="lfr-button clear-uploads aui-hide">{[ this.clearRecentUploadsText ]}</a>',
 			'</div>',
 
 			'<div class="upload-list" id="{$ns}fileList">',

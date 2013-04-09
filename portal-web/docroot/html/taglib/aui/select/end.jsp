@@ -34,7 +34,7 @@
 				</c:if>
 
 				<c:if test="<%= changesContext %>">
-					<span class="aui-helper-hidden-accessible"><liferay-ui:message key="changing-the-value-of-this-field-will-reload-the-page" />)</span>
+					<span class="aui-hide-accessible"><liferay-ui:message key="changing-the-value-of-this-field-will-reload-the-page" />)</span>
 				</c:if>
 			</label>
 		</c:if>

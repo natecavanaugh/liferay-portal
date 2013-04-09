@@ -169,11 +169,11 @@ AUI.add(
 				'<span class="category-path" title="{path}">{path}</span>' +
 			'</label>';
 
-		var TPL_MESSAGES_CATEGORY = '<div class="aui-helper-hidden lfr-message-response" id="vocabulary-category-messages" />';
+		var TPL_MESSAGES_CATEGORY = '<div class="aui-hide lfr-message-response" id="vocabulary-category-messages" />';
 
-		var TPL_MESSAGES_PORTLET = '<div class="aui-helper-hidden lfr-message-response" id="porlet-messages" />';
+		var TPL_MESSAGES_PORTLET = '<div class="aui-hide lfr-message-response" id="porlet-messages" />';
 
-		var TPL_MESSAGES_VOCABULARY = '<div class="aui-helper-hidden lfr-message-response" id="vocabulary-messages" />';
+		var TPL_MESSAGES_VOCABULARY = '<div class="aui-hide lfr-message-response" id="vocabulary-messages" />';
 
 		var TPL_SEARCH_QUERY = '%{0}%';
 

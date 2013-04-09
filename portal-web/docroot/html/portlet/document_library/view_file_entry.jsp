@@ -144,7 +144,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 				</liferay-ui:app-view-toolbar>
 			</c:if>
 
-			<div class="portlet-msg-error aui-helper-hidden" id="<portlet:namespace />openMSOfficeError"></div>
+			<div class="portlet-msg-error aui-hide" id="<portlet:namespace />openMSOfficeError"></div>
 
 			<c:if test="<%= (fileEntry.getLock() != null) && DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) %>">
 				<c:choose>
@@ -381,7 +381,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 													<div class="lfr-preview-file-image-container">
 														<img class="lfr-preview-file-image-current" id="<portlet:namespace />previewFileImage" src="<%= previewFileURL + "1" %>" />
 													</div>
-													<span class="lfr-preview-file-actions aui-helper-hidden" id="<portlet:namespace />previewFileActions">
+													<span class="lfr-preview-file-actions aui-hide" id="<portlet:namespace />previewFileActions">
 														<span class="lfr-preview-file-toolbar" id="<portlet:namespace />previewToolbar"></span>
 
 														<span class="lfr-preview-file-info">
@@ -516,7 +516,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							</c:choose>
 						</span>
 
-						<div class="lfr-asset-field url-file-container aui-helper-hidden">
+						<div class="lfr-asset-field url-file-container aui-hide">
 							<aui:field-wrapper name="url">
 								<liferay-ui:input-resource
 									id="url"
@@ -526,7 +526,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						</div>
 
 						<c:if test="<%= portletDisplay.isWebDAVEnabled() && fileEntry.isSupportsSocial() %>">
-							<div class="lfr-asset-field webdav-url-file-container aui-helper-hidden">
+							<div class="lfr-asset-field webdav-url-file-container aui-hide">
 
 								<%
 								String webDavHelpMessage = null;
@@ -870,7 +870,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 			function(event) {
 				var URLFileContainer = A.one('.url-file-container');
 
-				URLFileContainer.toggleClass('aui-helper-hidden');
+				URLFileContainer.toggleClass('aui-hide');
 			}
 		);
 	}
@@ -881,7 +881,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 			function(event) {
 				var WebDavFileContainer = A.one('.webdav-url-file-container');
 
-				WebDavFileContainer.toggleClass('aui-helper-hidden');
+				WebDavFileContainer.toggleClass('aui-hide');
 			}
 		);
 	}

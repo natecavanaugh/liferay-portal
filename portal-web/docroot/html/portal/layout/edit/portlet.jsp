@@ -16,7 +16,7 @@
 
 <%@ include file="/html/portal/layout/edit/init.jsp" %>
 
-<div class="aui-helper-hidden" id="<portlet:namespace />copyPortletsFromPage">
+<div class="aui-hide" id="<portlet:namespace />copyPortletsFromPage">
 
 	<p>
 		<liferay-ui:message arguments="<%= HtmlUtil.escape(selLayout.getName(locale)) %>" key="the-portlets-in-page-x-will-be-replaced-with-the-portlets-in-the-page-you-select-below" />

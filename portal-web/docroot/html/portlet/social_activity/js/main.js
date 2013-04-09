@@ -143,7 +143,7 @@ AUI.add(
 					'</div>',
 				'</tpl>',
 
-				'<div class="aui-helper-hidden settings-limit">',
+				'<div class="aui-hide settings-limit">',
 					'<tpl for="rows">',
 						'<div class="settings-limit-row">',
 							'<span class="field field-text">{limitFirstText}</span>',
@@ -170,7 +170,7 @@ AUI.add(
 			'<div class="settings-header yui3-widget-hd">',
 				'<div class="settings-header-label">{headerText}</div>',
 				'<ul class="settings-actions">',
-					'<li class="actions-conjunction aui-helper-hidden">{conjunctionText}</li>',
+					'<li class="actions-conjunction aui-hide">{conjunctionText}</li>',
 				'</ul>',
 			'</div>',
 			'<div class="settings-container-label">{containerText}</div>',

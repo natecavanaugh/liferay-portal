@@ -40,7 +40,7 @@
 			if (detail && img) {
 				var icon = LayoutExporter.icons.plus;
 
-				if (detail.hasClass('aui-helper-hidden')) {
+				if (detail.hasClass('aui-hide')) {
 					detail.show();
 					icon = LayoutExporter.icons.minus;
 				}

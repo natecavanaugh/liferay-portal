@@ -83,7 +83,7 @@ WorkflowTask workflowTask = (WorkflowTask)row.getObject();
 	</c:if>
 </liferay-ui:icon-menu>
 
-<div class="aui-helper-hidden" id="<%= randomId %>updateComments">
+<div class="aui-hide" id="<%= randomId %>updateComments">
 	<aui:input cols="55" name="comment" rows="10" type="textarea" />
 </div>
 

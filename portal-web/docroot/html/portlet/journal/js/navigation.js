@@ -290,7 +290,7 @@ AUI.add(
 						var showAdvancedSearch = instance.byId('showAdvancedSearch');
 
 						var searchData = {
-							advancedSearch: !showAdvancedSearch.hasClass('aui-helper-hidden'),
+							advancedSearch: !showAdvancedSearch.hasClass('aui-hide'),
 							andOperator: instance._andOperatorNode.get('value'),
 							folderId: selectedFolder.id,
 							content: instance._contentNode.get('value'),
@@ -340,12 +340,12 @@ AUI.add(
 
 						var showAdvancedSearchIcon = showAdvancedSearch.one('i');
 
-						var advancedSearchHidden = advancedSearch.hasClass('aui-helper-hidden');
+						var advancedSearchHidden = advancedSearch.hasClass('aui-hide');
 
 						showAdvancedSearchIcon.toggleClass('aui-icon-chevron-down', !advancedSearchHidden);
 						showAdvancedSearchIcon.toggleClass('aui-icon-chevron-up', advancedSearchHidden);
 
-						advancedSearch.toggleClass('aui-helper-hidden', !advancedSearchHidden);
+						advancedSearch.toggleClass('aui-hide', !advancedSearchHidden);
 					},
 
 					_onPageLoaded: function(event) {

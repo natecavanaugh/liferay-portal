@@ -83,7 +83,7 @@ if (!categories.isEmpty() || !portlets.isEmpty()) {
 			</h2>
 		</div>
 
-		<ul class="lfr-content-category <%= layout.isTypePortlet() ? "aui-helper-hidden" : "" %>">
+		<ul class="lfr-content-category <%= layout.isTypePortlet() ? "aui-hide" : "" %>">
 
 			<%
 			for (PortletCategory category : categories) {

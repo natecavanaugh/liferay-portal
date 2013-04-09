@@ -58,7 +58,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 <div id="<portlet:namespace />pagesContainer">
 	<aui:input id="pagesContainerInput" name="layoutUuid" type="hidden" value="<%= layoutUuid %>" />
 
-	<div class="display-page-item-container aui-helper-hidden" id="<portlet:namespace />displayPageItemContainer">
+	<div class="display-page-item-container aui-hide" id="<portlet:namespace />displayPageItemContainer">
 		<span class="display-page-item">
 			<span>
 				<span id="<portlet:namespace />displayPageNameInput"><%= layoutBreadcrumb %></span>

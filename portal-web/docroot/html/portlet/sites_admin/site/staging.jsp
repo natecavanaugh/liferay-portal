@@ -79,7 +79,7 @@ LayoutSet publicLayoutSet = LayoutSetLocalServiceUtil.getLayoutSet(liveGroup.get
 		}
 		%>
 
-		<div class="<%= showRemoteOptions ? StringPool.BLANK : "aui-helper-hidden" %> staging-section" id="<portlet:namespace />remoteStagingOptions">
+		<div class="<%= showRemoteOptions ? StringPool.BLANK : "aui-hide" %> staging-section" id="<portlet:namespace />remoteStagingOptions">
 			<br />
 
 			<liferay-ui:error exception="<%= RemoteExportException.class %>">
@@ -141,7 +141,7 @@ LayoutSet publicLayoutSet = LayoutSetLocalServiceUtil.getLayoutSet(liveGroup.get
 			</aui:fieldset>
 		</div>
 
-		<div class="<%= (liveGroup.isStaged() ? StringPool.BLANK : "aui-helper-hidden") %> staging-section" id="<portlet:namespace />stagedPortlets">
+		<div class="<%= (liveGroup.isStaged() ? StringPool.BLANK : "aui-hide") %> staging-section" id="<portlet:namespace />stagedPortlets">
 			<br />
 
 			<aui:fieldset helpMessage="page-versioning-help" label="page-versioning">
