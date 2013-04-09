@@ -196,6 +196,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-portal-layout', 'dd']
+		requires: ['aui-sortable-layout', 'dd']
 	}
 );
