@@ -102,7 +102,7 @@ if (fieldParamSelection.equals("0")) {
 				</c:if>
 			</li>
 
-			<div class="<%= !fieldParamSelection.equals(String.valueOf(index + 1)) ? "aui-helper-hidden" : StringPool.BLANK %> modified-custom-range" id="<%= randomNamespace %>custom-range">
+			<div class="<%= !fieldParamSelection.equals(String.valueOf(index + 1)) ? "aui-hide" : StringPool.BLANK %> modified-custom-range" id="<%= randomNamespace %>custom-range">
 				<div id="<%= randomNamespace %>custom-range-from">
 					<aui:input label="from" name='<%= facet.getFieldName() + "from" %>' size="14" />
 				</div>

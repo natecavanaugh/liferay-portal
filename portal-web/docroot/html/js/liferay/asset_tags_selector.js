@@ -225,7 +225,7 @@ AUI.add(
 								{
 									dialog: {
 										cssClass: CSS_POPUP,
-										hideClass: 'aui-helper-hidden-accessible'
+										hideClass: 'aui-hide-accessible'
 									}
 								}
 							);
@@ -352,7 +352,7 @@ AUI.add(
 
 										fieldsets.each(
 											function(item, index, collection) {
-												var visibleEntries = item.one('label:not(.aui-helper-hidden)');
+												var visibleEntries = item.one('label:not(.aui-hide)');
 
 												var action = 'addClass';
 

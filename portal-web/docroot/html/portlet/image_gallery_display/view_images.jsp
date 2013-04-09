@@ -121,7 +121,7 @@ SearchContainer searchContainer = (SearchContainer)request.getAttribute("view.js
 					</div>
 
 					<c:if test="<%= showActions %>">
-						<div class="aui-helper-hidden" id="<portlet:namespace />buttonsContainer_<%= thumbnailId %>">
+						<div class="aui-hide" id="<portlet:namespace />buttonsContainer_<%= thumbnailId %>">
 							<div class="buttons-container float-container" id="<portlet:namespace />buttons_<%= thumbnailId %>">
 								<%@ include file="/html/portlet/image_gallery_display/image_action.jspf" %>
 							</div>

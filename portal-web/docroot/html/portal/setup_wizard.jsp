@@ -163,7 +163,7 @@
 								</c:if>
 							</div>
 
-							<div class="aui-helper-hidden" id="customDatabaseOptions">
+							<div class="aui-hide" id="customDatabaseOptions">
 								<div class="connection-messages" id="connectionMessages"></div>
 
 								<a class="database-options" href="<%= HttpUtil.addParameter(themeDisplay.getPathMain() + "/portal/setup_wizard", "defaultDatabase", true) %>" id="defaultDatabaseOptionsLink">

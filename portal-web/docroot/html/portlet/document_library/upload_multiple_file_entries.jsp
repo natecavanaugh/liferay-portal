@@ -100,7 +100,7 @@ long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");
 		</aui:script>
 	</aui:column>
 	<aui:column columnWidth="50">
-		<div class="common-file-metadata-container aui-helper-hidden selected" id="<portlet:namespace />commonFileMetadataContainer">
+		<div class="common-file-metadata-container aui-hide selected" id="<portlet:namespace />commonFileMetadataContainer">
 			<liferay-util:include page="/html/portlet/document_library/upload_multiple_file_entries_resources.jsp" />
 		</div>
 

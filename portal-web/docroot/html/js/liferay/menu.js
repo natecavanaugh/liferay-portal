@@ -381,7 +381,7 @@ AUI.add(
 						A.Plugin.NodeFocusManager,
 						{
 							circular: true,
-							descendants: 'li:not(.aui-helper-hidden) a,input',
+							descendants: 'li:not(.aui-hide) a,input',
 							focusClass: 'aui-focus',
 							keys: {
 								next: 'down:40',

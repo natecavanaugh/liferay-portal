@@ -275,7 +275,7 @@ String signature = ParamUtil.getString(request, "signature");
 			}
 			%>
 
-			<div class="aui-helper-hidden lfr-api-results" id="serviceResults">
+			<div class="aui-hide lfr-api-results" id="serviceResults">
 				<liferay-ui:tabs
 					names="result,javascript-example,curl-example,url-example"
 					refresh="<%= false %>"
@@ -548,7 +548,7 @@ String signature = ParamUtil.getString(request, "signature");
 			);
 		</aui:script>
 
-<textarea class="aui-helper-hidden" id="scriptTpl">
+<textarea class="aui-hide" id="scriptTpl">
 Liferay.Service(
   '<%= invocationPath %>',
   <tpl if="data.length">{
@@ -561,14 +561,14 @@ Liferay.Service(
 );
 </textarea>
 
-<textarea class="aui-helper-hidden" id="curlTpl">
+<textarea class="aui-hide" id="curlTpl">
 curl <%= themeDisplay.getPortalURL() + jsonWSPath + invocationPath %> \\
   -u test@liferay.com:test <tpl if="data.length">\\
   <tpl for="data">-d {key}={[this.formatDataType(values.key, values.value)]} <tpl if="!$last">\\
   </tpl></tpl></tpl>
 </textarea>
 
-<textarea class="aui-helper-hidden" id="urlTpl">
+<textarea class="aui-hide" id="urlTpl">
 <%= themeDisplay.getPortalURL() + jsonWSPath + invocationPath %><tpl if="data.length">/<tpl for="data">{key:this.toURIParam}<tpl if="value.length">/{value}</tpl><tpl if="!$last">/</tpl></tpl></tpl><tpl if="extraData.length">?<tpl for="extraData">{key:this.toURIParam}={value}<tpl if="!$last">&amp;</tpl></tpl></tpl>
 </textarea>
 	</c:when>

@@ -124,7 +124,7 @@ if (Validator.isNull(mainLanguageValue)) {
 		}
 		%>
 
-		<div class="lfr-floating-container lfr-language-selector aui-helper-hidden" id="<%= randomNamespace %>languageSelector">
+		<div class="lfr-floating-container lfr-language-selector aui-hide" id="<%= randomNamespace %>languageSelector">
 			<div class="lfr-panel aui-form">
 				<div class="lfr-panel-titlebar">
 					<h3 class="lfr-panel-title"><span><liferay-ui:message key="other-languages" /></span></h3>

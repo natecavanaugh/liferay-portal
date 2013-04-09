@@ -1916,7 +1916,7 @@ AUI.add(
 						var showLabel = link.one('.show-label').show();
 						var hideLabel = link.one('.hide-label').show();
 
-						var visible = imagePreviewDiv.hasClass('aui-helper-hidden');
+						var visible = imagePreviewDiv.hasClass('aui-hide');
 
 						if (visible) {
 							showLabel.hide();
@@ -2144,7 +2144,7 @@ AUI.add(
 						instance.clonedSource.guid();
 
 						instance.clonedSource.show().setStyle('visibility', 'visible');
-						instance.clonedSource.removeClass('aui-helper-hidden');
+						instance.clonedSource.removeClass('aui-hide');
 						instance.clonedSource.addClass('dragging');
 
 						instance.createNestedList(
@@ -3177,7 +3177,7 @@ AUI.add(
 							var articleButtonsRowCSSClass = '';
 
 							if (!optionsEditable) {
-								articleButtonsRowCSSClass = 'aui-helper-hidden';
+								articleButtonsRowCSSClass = 'aui-hide';
 							}
 
 							var repeatableButtonTemplate = instance.getById('repeatableButtonTemplate');

@@ -831,7 +831,7 @@ AUI.add(
 
 							var emptyMessage = instance._getEmptyMessage();
 
-							if (emptyMessage && !emptyMessage.hasClass('aui-helper-hidden')) {
+							if (emptyMessage && !emptyMessage.hasClass('aui-hide')) {
 								emptyMessage.hide(true);
 							}
 						}

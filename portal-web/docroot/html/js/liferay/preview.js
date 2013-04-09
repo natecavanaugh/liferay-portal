@@ -21,7 +21,7 @@ AUI.add(
 
 		var TPL_LOADING_COUNT = '<span class="lfr-preview-file-loading-count"></span>';
 
-		var TPL_LOADING_INDICATOR = '<div class="lfr-preview-file-loading-indicator aui-helper-hidden">{0}&nbsp;</div>';
+		var TPL_LOADING_INDICATOR = '<div class="lfr-preview-file-loading-indicator aui-hide">{0}&nbsp;</div>';
 
 		var TPL_MAX_ARROW_LEFT = '<a href="javascript:;" class="aui-image-viewer-arrow aui-image-viewer-arrow-left lfr-preview-file-arrow lfr-preview-file-arrow-left"></a>';
 
@@ -147,7 +147,7 @@ AUI.add(
 						if (previewFileCountDown < maxIndex && imageListContentEl.scrollTop >= (imageListContentEl.scrollHeight - 700)) {
 							var loadingIndicator = instance._getLoadingIndicator();
 
-							if (loadingIndicator.hasClass('aui-helper-hidden')) {
+							if (loadingIndicator.hasClass('aui-hide')) {
 								var end = Math.min(maxIndex, previewFileCountDown + 10);
 								var start = Math.max(0, previewFileCountDown + 1);
 

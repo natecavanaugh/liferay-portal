@@ -151,7 +151,7 @@ if (workflowEnabled) {
 
 				<div id="<portlet:namespace />overrideParentSettings">
 					<c:if test="<%= workflowEnabled %>">
-						<div class='<%= (rootFolder || fileEntryTypes.isEmpty()) ? StringPool.BLANK : "aui-helper-hidden" %>' id="<portlet:namespace />defaultWorkflow">
+						<div class='<%= (rootFolder || fileEntryTypes.isEmpty()) ? StringPool.BLANK : "aui-hide" %>' id="<portlet:namespace />defaultWorkflow">
 							<aui:select label="default-workflow-for-all-document-types" name='<%= "workflowDefinition" + DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_ALL %>'>
 
 								<aui:option label="no-workflow" value="" />
@@ -252,7 +252,7 @@ if (workflowEnabled) {
 							url='<%= "javascript:" + renderResponse.getNamespace() + "openFileEntryTypeSelector();" %>'
 						/>
 
-						<aui:select cssClass='<%= !fileEntryTypes.isEmpty() ? "default-document-type" : "default-document-type aui-helper-hidden" %>' helpMessage="default-document-type-help" label="default-document-type" name="defaultFileEntryTypeId">
+						<aui:select cssClass='<%= !fileEntryTypes.isEmpty() ? "default-document-type" : "default-document-type aui-hide" %>' helpMessage="default-document-type-help" label="default-document-type" name="defaultFileEntryTypeId">
 
 							<%
 							for (DLFileEntryType fileEntryType : fileEntryTypes) {

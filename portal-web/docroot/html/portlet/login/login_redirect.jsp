@@ -23,7 +23,7 @@ boolean anonymousAccount = ParamUtil.getBoolean(request, "anonymousUser");
 %>
 
 <c:if test="<%= anonymousAccount && company.isStrangers() %>">
-	<div class="aui-helper-hidden lfr-message-response" id="<portlet:namespace />login-status-messages"></div>
+	<div class="aui-hide lfr-message-response" id="<portlet:namespace />login-status-messages"></div>
 
 	<div class="anonymous-account">
 		<portlet:actionURL var="updateIncompleteUserURL">

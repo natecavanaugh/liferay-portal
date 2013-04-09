@@ -38,7 +38,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 
 		<liferay-ui:panel-container extended="<%= true %>" id="assetPublisherDynamicSelectionAssetSelectionPanelContainer" persistState="<%= true %>">
 			<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="assetPublisherSourcePanel" persistState="<%= true %>" title="source">
-				<aui:fieldset cssClass='<%= rootPortletId.equals(PortletKeys.RELATED_ASSETS) ? "aui-helper-hidden" : "" %>' label="scope">
+				<aui:fieldset cssClass='<%= rootPortletId.equals(PortletKeys.RELATED_ASSETS) ? "aui-hide" : "" %>' label="scope">
 					<%= selectScope %>
 				</aui:fieldset>
 
@@ -94,7 +94,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 					typesRightList = ListUtil.sort(typesRightList, new KeyValuePairComparator(false, true));
 					%>
 
-					<div class="<%= anyAssetType ? "aui-helper-hidden" : "" %>" id="<portlet:namespace />classNamesBoxes">
+					<div class="<%= anyAssetType ? "aui-hide" : "" %>" id="<portlet:namespace />classNamesBoxes">
 						<liferay-ui:input-move-boxes
 							leftBoxName="currentClassNameIds"
 							leftList="<%= typesLeftList %>"
@@ -141,7 +141,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 						boolean anyAssetSubType = GetterUtil.getBoolean(preferences.getValue("anyClassType" + className, Boolean.TRUE.toString()));
 					%>
 
-						<div class='asset-subtype <%= (assetSelectedClassTypeIds.length < 1) ? StringPool.BLANK : "aui-helper-hidden" %>' id="<portlet:namespace /><%= className %>Options">
+						<div class='asset-subtype <%= (assetSelectedClassTypeIds.length < 1) ? StringPool.BLANK : "aui-hide" %>' id="<portlet:namespace /><%= className %>Options">
 							<aui:select label='<%= LanguageUtil.format(pageContext, "x-subtype", ResourceActionsUtil.getModelResource(locale, assetRendererFactory.getClassName())) %>' name='<%= "preferences--anyClassType" + className + "--" %>'>
 								<aui:option label="any" selected="<%= anyAssetSubType %>" value="<%= true %>" />
 								<aui:option label='<%= LanguageUtil.get(pageContext, "select-more-than-one") + StringPool.TRIPLE_PERIOD %>' selected="<%= !anyAssetSubType && (assetSelectedClassTypeIds.length > 1) %>" value="<%= false %>" />
@@ -170,7 +170,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 							typesRightList = ListUtil.sort(typesRightList, new KeyValuePairComparator(false, true));
 							%>
 
-							<div class="<%= assetSelectedClassTypeIds.length > 1 ? StringPool.BLANK : "aui-helper-hidden" %>" id="<portlet:namespace /><%= className %>Boxes">
+							<div class="<%= assetSelectedClassTypeIds.length > 1 ? StringPool.BLANK : "aui-hide" %>" id="<portlet:namespace /><%= className %>Boxes">
 								<liferay-ui:input-move-boxes
 									leftBoxName='<%= className + "currentClassTypeIds" %>'
 									leftList="<%= subTypesLeftList %>"
@@ -191,7 +191,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 								}
 							%>
 
-								<span class="asset-subtypefields aui-helper-hidden" id="<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options">
+								<span class="asset-subtypefields aui-hide" id="<portlet:namespace /><%= assetAvailableClassTypeId %>_<%= className %>Options">
 									<portlet:renderURL var="selectStructureFieldURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 										<portlet:param name="struts_action" value="/portlet_configuration/select_structure_field" />
 										<portlet:param name="portletResource" value="<%= portletResource %>" />
@@ -214,7 +214,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 					}
 					%>
 
-					<div class="asset-subtypefield-selected <%= Validator.isNull(ddmStructureFieldName) ? "aui-helper-hidden" : StringPool.BLANK %>" id="<portlet:namespace />ddmStructureFieldValueContainer">
+					<div class="asset-subtypefield-selected <%= Validator.isNull(ddmStructureFieldName) ? "aui-hide" : StringPool.BLANK %>" id="<portlet:namespace />ddmStructureFieldValueContainer">
 						<aui:input name='<%= "preferences--ddmStructureFieldName--" %>' type="hidden" value="<%= ddmStructureFieldName %>" />
 
 						<aui:input name='<%= "preferences--ddmStructureFieldValue--" %>' type="hidden" value="<%= ddmStructureFieldValue %>" />

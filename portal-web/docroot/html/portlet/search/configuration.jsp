@@ -31,7 +31,7 @@
 			</aui:field-wrapper>
 		</div>
 
-		<div class="basic-configuration <%= (advancedConfiguration ? "aui-helper-hidden" : "") %>" id="<portlet:namespace />basicConfiguration">
+		<div class="basic-configuration <%= (advancedConfiguration ? "aui-hide" : "") %>" id="<portlet:namespace />basicConfiguration">
 			<aui:input name="preferences--displayScopeFacet--" type="checkbox" value="<%= displayScopeFacet %>" />
 
 			<aui:input name="preferences--displayAssetTypeFacet--" type="checkbox" value="<%= displayAssetTypeFacet %>" />
@@ -47,7 +47,7 @@
 			<aui:input name="preferences--displayModifiedRangeFacet--" type="checkbox" value="<%= displayModifiedRangeFacet %>" />
 		</div>
 
-		<div class="advanced-configuration <%= (!advancedConfiguration ? "aui-helper-hidden" : "") %>" id="<portlet:namespace />advancedConfiguration">
+		<div class="advanced-configuration <%= (!advancedConfiguration ? "aui-hide" : "") %>" id="<portlet:namespace />advancedConfiguration">
 
 			<%
 			JSONObject searchConfigurationJSONObject = JSONFactoryUtil.createJSONObject(searchConfiguration);

@@ -48,7 +48,7 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 		<aui:input label="only-show-results-for-web-content-listed-in-a-web-content-display-portlet" name="preferences--showListed--" type="checkbox" value="<%= showListed %>" />
 
-		<div class="<%= !showListed ? StringPool.BLANK : " aui-helper-hidden" %>" id="<portlet:namespace />webContentDisplay">
+		<div class="<%= !showListed ? StringPool.BLANK : " aui-hide" %>" id="<portlet:namespace />webContentDisplay">
 			<aui:input cssClass="lfr-input-text-container" name="preferences--targetPortletId--" value="<%= targetPortletId %>" />
 		</div>
 	</aui:fieldset>

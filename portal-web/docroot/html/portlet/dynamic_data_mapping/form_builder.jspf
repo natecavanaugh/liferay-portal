@@ -30,7 +30,7 @@ String defaultLanguageId = LocalizationUtil.getDefaultLocale(script);
 
 <div class="separator"><!-- --></div>
 
-<div class="aui-helper-hidden lfr-message-response portlet-msg-error" id="<portlet:namespace />messageContainer"></div>
+<div class="aui-hide lfr-message-response portlet-msg-error" id="<portlet:namespace />messageContainer"></div>
 
 <liferay-ui:tabs
 	names='<%= LanguageUtil.get(pageContext, "view") + "," + LanguageUtil.get(pageContext, "source") %>'
@@ -180,7 +180,7 @@ for (Locale availableLocale : LanguageUtil.getAvailableLocales()) {
 	};
 
 	var isViewTabActive = function() {
-		return !A.one('#<portlet:namespace />formBuilderTab').ancestor().hasClass('aui-helper-hidden');
+		return !A.one('#<portlet:namespace />formBuilderTab').ancestor().hasClass('aui-hide');
 	};
 
 	var reloadFormBuilderData = function(content) {

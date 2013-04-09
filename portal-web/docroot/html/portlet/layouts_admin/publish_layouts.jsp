@@ -391,7 +391,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 					</span>
 				</div>
 
-				<div class="aui-helper-hidden" id="<portlet:namespace />publishedEvents">
+				<div class="aui-hide" id="<portlet:namespace />publishedEvents">
 					<liferay-ui:header
 						title="scheduled-events"
 					/>

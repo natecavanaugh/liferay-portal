@@ -27,7 +27,7 @@ String clickValue = GetterUtil.getString(SessionClicks.get(request, id, null), "
 
 String advancedFormCssClass = "taglib-search-toggle-advanced";
 String basicFormCssClass = "taglib-search-toggle-basic";
-String hiddenCssClass = " aui-helper-hidden";
+String hiddenCssClass = " aui-hide";
 
 if (clickValue.equals("basic")) {
 	advancedFormCssClass += hiddenCssClass;
