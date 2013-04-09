@@ -555,7 +555,7 @@ AUI.add(
 
 						if (AObject.owns(requestParams, namespacedShowRepositoryTabs) &&
 							!requestParams[namespacedShowRepositoryTabs] &&
-							!entriesContainer.one('ul.aui-tabview-list')) {
+							!entriesContainer.one('ul.aui-nav-tabs')) {
 
 							requestParams[namespacedShowRepositoryTabs] = true;
 
