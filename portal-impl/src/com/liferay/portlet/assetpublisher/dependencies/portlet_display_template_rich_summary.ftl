@@ -38,7 +38,7 @@
 
 				${assetRenderer.getSummary(locale)}
 
-				<a href="${viewURL}"><@liferay.language key="read-more" /><span class="aui-helper-hidden-accessible"><@liferay.language key="about" />${entry.getTitle(locale)}</span> &raquo;</a>
+				<a href="${viewURL}"><@liferay.language key="read-more" /><span class="aui-hide-accessible"><@liferay.language key="about" />${entry.getTitle(locale)}</span> &raquo;</a>
 			</div>
 
 			<@getRatings />
@@ -169,7 +169,7 @@
 		<@liferay_ui["icon"]
 			image="print"
 			message="print"
-			url="javascript:Liferay.Util.openWindow({dialog: {width: 960}, id:'" + renderResponse.getNamespace() + "printAsset', title: '" + languageUtil.format(locale, "print-x-x", ["aui-helper-hidden-accessible", htmlUtil.escape(assetRenderer.getTitle(locale))]) + "', uri: '" + htmlUtil.escapeURL(printURL.toString()) + "'});"
+			url="javascript:Liferay.Util.openWindow({dialog: {width: 960}, id:'" + renderResponse.getNamespace() + "printAsset', title: '" + languageUtil.format(locale, "print-x-x", ["aui-hide-accessible", htmlUtil.escape(assetRenderer.getTitle(locale))]) + "', uri: '" + htmlUtil.escapeURL(printURL.toString()) + "'});"
 		/>
 	</#if>
 </#macro>
