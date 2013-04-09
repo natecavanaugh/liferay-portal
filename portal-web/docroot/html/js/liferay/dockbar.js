@@ -9,6 +9,8 @@ AUI.add(
 
 		var BODY = A.getBody();
 
+		var CSS_ADD_CONTENT = 'lfr-has-add-content';
+
 		var BODY_CONTENT = 'bodyContent';
 
 		var BOUNDING_BOX = 'boundingBox';
@@ -16,6 +18,10 @@ AUI.add(
 		var CONTENT_BOX = 'contentBox';
 
 		var EVENT_CLICK = 'click';
+
+		var TPL_ADD_CONTENT =
+			'<div class="lfr-add-panel">' +
+			'</div>';
 
 		var Dockbar = {
 			init: function() {
@@ -129,6 +135,35 @@ AUI.add(
 				messagesContainer.removeClass('multiple-messages');
 
 				return messageId;
+			},
+
+			_addPanel: function() {
+				var instance = this;
+
+				instance._setLoadingAnimation();
+
+				var addPanelButton = A.one('#' + instance._namespace + 'addPanel');
+
+				if (addPanelButton) {
+					var uri = addPanelButton.attr('data-url');
+
+					A.io.request(
+						uri,
+						{
+							after: {
+								success: function(event, id, obj) {
+									var response = this.get('responseData');
+
+									var panelNode = instance._getPanelNode();
+
+									panelNode.plug(A.Plugin.ParseContent);
+
+									panelNode.setContent(response);
+								}
+							}
+						}
+					);
+				}
 			},
 
 			_addMenu: function(options) {
@@ -313,6 +348,49 @@ AUI.add(
 				return '<div class="dockbar-message ' + cssClass + '" id="' + messageId + '">' + message + '</div>';
 			},
 
+			_getPanelNode: function() {
+				var instance = this;
+
+				var addPanelNode = instance._addPanelNode;
+
+				if (!addPanelNode) {
+					addPanelNode = A.one('#' + instance._namespace + 'addPanelSidebar');
+
+					if (!addPanelNode) {
+						addPanelNode = A.Node.create(TPL_ADD_CONTENT);
+
+						addPanelNode.plug(A.Plugin.ParseContent);
+
+						BODY.appendChild(addPanelNode);
+
+						addPanelNode.set('id', instance._namespace + 'addPanelSidebar');
+
+						instance._addPanelNode = addPanelNode;
+					}
+				}
+
+				return addPanelNode;
+			},
+
+			_loadAddPanel: function() {
+				var instance = this;
+
+				BODY.toggleClass(CSS_ADD_CONTENT);
+
+				var addPanelNode = instance._getPanelNode();
+
+				if (BODY.hasClass(CSS_ADD_CONTENT)) {
+					instance._setPanelOffset();
+
+					instance._addPanel();
+
+					addPanelNode.show();
+				}
+				else {
+					addPanelNode.hide();
+				}
+			},
+
 			_openWindow: function(config, item) {
 				if (item) {
 					A.mix(
@@ -326,6 +404,20 @@ AUI.add(
 				}
 
 				Util.openWindow(config);
+			},
+
+			_setLoadingAnimation: function() {
+				var instance = this;
+
+				instance._getPanelNode().html('<div class="loading-animation" />');
+			},
+
+			_setPanelOffset: function() {
+				var instance = this;
+
+				var addContentNode = A.one('#' + instance._namespace + 'addPanelSidebar');
+
+				addContentNode.setStyle('top', instance.dockBar.get('offsetHeight') + 'px');
 			},
 
 			_toggleAppShortcut: function(item, force) {
@@ -388,6 +480,14 @@ AUI.add(
 				instance._addUnderlay(options);
 			},
 			['liferay-dockbar-underlay']
+		);
+
+		Liferay.provide(
+			Dockbar,
+			'loadPanel',
+			function(event, id, obj) {
+				Dockbar._loadAddPanel();
+			}
 		);
 
 		Liferay.provide(
@@ -597,62 +697,15 @@ AUI.add(
 					);
 				}
 
-				var addApplicationLink = A.one('#' + namespace + 'addApplication');
+				var addPanelButton = A.one('#' + instance._namespace + 'addPanel');
 
-				if (addApplicationLink) {
-					addApplicationLink.on(
+				if (addPanelButton) {
+					addPanelButton.on(
 						EVENT_CLICK,
 						function(event) {
 							addContent.hide();
 
-							var addApplication = Dockbar.addApplication;
-
-							if (!addApplication) {
-								var setAddApplicationUI = function(visible) {
-									BODY.toggleClass('lfr-has-sidebar', visible);
-								};
-
-								addApplication = instance._addUnderlay(
-									{
-										after: {
-											render: function(event) {
-												setAddApplicationUI(true);
-											}
-										},
-										className: 'add-application',
-										io: {
-											after: {
-												success: Dockbar._loadAddApplications
-											},
-											data: {
-												doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
-												p_l_id: themeDisplay.getPlid(),
-												p_p_id: 87,
-												p_p_state: 'exclusive'
-											},
-											uri: themeDisplay.getPathMain() + '/portal/render_portlet'
-										},
-										name: 'addApplication',
-										width: '255px'
-									}
-								);
-
-								addApplication.after(
-									'visibleChange',
-									function(event) {
-										if (event.newVal) {
-											Util.focusFormField('#layout_configuration_content');
-										}
-
-										setAddApplicationUI(event.newVal);
-									}
-								);
-							}
-							else {
-								addApplication.show();
-							}
-
-							addApplication.focus();
+							instance._loadAddPanel();
 						}
 					);
 				}
@@ -782,20 +835,7 @@ AUI.add(
 
 				Liferay.fire('dockbarLoaded');
 			},
-			['aui-io-request', 'aui-overlay-context', 'liferay-dockbar-underlay', 'liferay-store', 'node-focusmanager']
-		);
-
-		Liferay.provide(
-			Dockbar,
-			'_loadAddApplications',
-			function(event, id, obj) {
-				var contentBox = Dockbar.addApplication.get(CONTENT_BOX);
-
-				LayoutConfiguration._dialogBody = contentBox;
-
-				LayoutConfiguration._loadContent();
-			},
-			['liferay-layout-configuration']
+			['aui-io-request', 'aui-overlay-context', 'liferay-dockbar-underlay', 'liferay-portlet-url', 'liferay-store', 'node-focusmanager']
 		);
 
 		Liferay.provide(
@@ -842,6 +882,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-node', 'event-touch']
+		requires: ['aui-io-request', 'aui-node', 'event-touch']
 	}
 );
