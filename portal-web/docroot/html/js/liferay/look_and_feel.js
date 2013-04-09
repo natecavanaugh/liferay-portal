@@ -818,10 +818,10 @@ AUI.add(
 
 				instance._tabs = new A.TabView(
 					{
-						listNode: newPanel.one('.aui-tabview-list'),
-						contentNode: newPanel.one('.aui-tabview-content')
+						srcNode: newPanel,
+						panelNode: newPanel.one('.aui-tab-pane')
 					}
-				).render(newPanel.one('form'));
+				).render();
 
 				newPanel.show();
 
@@ -1903,6 +1903,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-color-picker-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-tabs-base', 'liferay-util-window']
+		requires: ['aui-color-picker-deprecated', 'aui-io-plugin-deprecated', 'aui-io-request', 'aui-tabview', 'liferay-util-window']
 	}
 );

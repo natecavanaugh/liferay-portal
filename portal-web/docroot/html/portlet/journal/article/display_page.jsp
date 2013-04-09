@@ -260,7 +260,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 					<c:if test="<%= parentGroup.getPrivateLayoutsPageCount() > 0 %>">
 						tabs.push(
 							{
-								label: '<%= UnicodeLanguageUtil.get(pageContext, "private-pages") %>',
+								label: '<%= UnicodeLanguageUtil.get(pageContext, "private-pages") %>sssssss',
 								content: Lang.sub(
 									TPL_TAB_CONTENT,
 									{
@@ -274,7 +274,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 
 					tabView = new A.TabView(
 						{
-							items: tabs,
+							children: tabs,
 							contentBox: '#<portlet:namespace />' + pagesTabViewId
 						}
 					);
@@ -544,7 +544,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 				}
 			);
 		},
-		['aui-io-plugin-deprecated', 'aui-io-request', 'aui-tabs', 'aui-tree', 'liferay-util-window']
+		['aui-io-plugin-deprecated', 'aui-io-request', 'aui-tabview', 'aui-tree', 'liferay-util-window']
 	);
 
 	<c:choose>
