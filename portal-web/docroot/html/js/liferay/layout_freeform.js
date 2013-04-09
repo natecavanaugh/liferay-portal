@@ -14,7 +14,7 @@ AUI.add(
 							var instance = this;
 
 							var proxyNode = instance.get('proxyNode');
-							var node = DDM.activeDrag.get('node');
+							var node = event.target.get('node');
 							var nodeId = node.get('id');
 
 							proxyNode.one('.portlet-topper').html(Layout._getPortletTitle(nodeId));
@@ -26,7 +26,7 @@ AUI.add(
 						'drag:end': function(event) {
 							var instance = this;
 
-							var node = DDM.activeDrag.get('node');
+							var node = event.target.get('node');
 
 							node.removeClass('liferay-portlet-dragging');
 						}
