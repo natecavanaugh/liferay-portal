@@ -18,7 +18,7 @@
 
 </div>
 
-<aui:script use="aui-toggler">
+<aui:script use="aui-toggler,liferay-store">
 	new A.TogglerDelegate({
 		animated: true,
 		container: '#<%= id %>',
