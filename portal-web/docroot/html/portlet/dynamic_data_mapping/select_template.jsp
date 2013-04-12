@@ -139,6 +139,6 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 
 			Util.getWindow().close();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

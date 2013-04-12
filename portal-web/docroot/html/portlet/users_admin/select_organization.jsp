@@ -166,6 +166,6 @@ if (Validator.isNotNull(target)) {
 
 			Util.getWindow().close();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>
