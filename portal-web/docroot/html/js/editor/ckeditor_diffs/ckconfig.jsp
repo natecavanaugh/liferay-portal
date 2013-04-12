@@ -147,11 +147,11 @@ CKEDITOR.on(
 	function(event) {
 		var dialogDefinition = event.data.definition;
 
-		var originalOnShow = dialogDefinition.onShow;
+		var onShow = dialogDefinition.onShow;
 
 		dialogDefinition.onShow = function() {
-			if (typeof originalOnShow != 'undefined') {
-				originalOnShow.apply(this);
+			if (typeof onShow === 'function') {
+				onShow.apply(this);
 			}
 
 			if (window.top != window.self) {
