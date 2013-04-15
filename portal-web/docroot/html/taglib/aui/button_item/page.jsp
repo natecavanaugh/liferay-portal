@@ -18,7 +18,7 @@
 
 <c:if test="<%= useMarkup %>">
 	<c:if test="<%= !hasBoundingBox %>">
-		<button class="aui-buttonitem aui-buttonitem-content aui-component aui-state-default aui-widget <%= (iconTypeClass != null) ? iconTypeClass : StringPool.BLANK %> <%= cssClass %>" id="<%= uniqueId %>BoundingBox" type="button">
+		<button class="aui-buttonitem aui-buttonitem-content aui-component aui-widget <%= (iconTypeClass != null) ? iconTypeClass : StringPool.BLANK %> <%= cssClass %>" id="<%= uniqueId %>BoundingBox" type="button">
 	</c:if>
 
 	<c:if test="<%= Validator.isNotNull(icon) %>">

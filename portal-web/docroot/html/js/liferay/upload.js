@@ -52,7 +52,7 @@ AUI.add(
 			'<div class="pending-files-info portlet-msg-alert aui-hide">{[ this.pendingFileText ]}</div>',
 
 			'<div class="aui-hide float-container manage-upload-target" id="{$ns}manageUploadTarget">',
-				'<span class="aui-field aui-field-choice select-files aui-state-default">',
+				'<span class="aui-field aui-field-choice select-files">',
 					'<span class="aui-field-content">',
 						'<span class="aui-field-element">',
 							'<input class="select-all-files" id="{$ns}allRowIdsCheckbox" name="{$ns}allRowIdsCheckbox" type="checkbox" />',
