@@ -7,12 +7,6 @@ body.orange, .orange .portlet {
 		background-color: #BFB8A7;
 	}
 
-	.aui-state-hover {
-		background-color: #DAC8BA;
-		background-image: url(@theme_image_path@/color_schemes/orange/application/state_hover_bg.png);
-		border-color: #837062;
-	}
-
 	.aui-icon {
 		background-image: url(@theme_image_path@/color_schemes/orange/aui/icon_sprite.png);
 	}

@@ -7,12 +7,6 @@ body.green, .green .portlet {
 		background-color: #AFBFA7;
 	}
 
-	.aui-state-hover {
-		background-color: #CFDABA;
-		background-image: url(@theme_image_path@/color_schemes/green/application/state_hover_bg.png);
-		border-color: #778362;
-	}
-
 	.aui-icon {
 		background-image: url(@theme_image_path@/color_schemes/green/aui/icon_sprite.png);
 	}
