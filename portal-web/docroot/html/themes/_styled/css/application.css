@@ -157,7 +157,7 @@
 	}
 }
 
-.aui-portal-layout-proxy {
+.aui-sortable-layout-proxy {
 	@include opacity(1);
 
 	.portlet-topper {
@@ -207,7 +207,7 @@
 	visibility: hidden;
 }
 
-.aui-portal-layout-drag-target-indicator {
+.aui-sortable-layout-drag-target-indicator {
 	margin: 2px 0;
 }
 
@@ -244,10 +244,6 @@
 
 	.aui-field .aui-field-content {
 		margin: 0;
-	}
-
-	.aui-toolbar {
-		margin-top: 5px;
 	}
 
 	.aui-textboxlist-input-container {
@@ -481,26 +477,6 @@
 
 /* ---------- Toolbar ---------- */
 
-.aui-toolbar li {
-	display: inline-block;
-	margin: 0;
-	margin-left: 10px;
-	padding: 0;
-	vertical-align: middle;
-}
-
-.aui-toolbar-separator {
-	background: url(../images/dockbar/separator.png) no-repeat 100% 50%;
-	border-width: 0;
-	cursor: default;
-	font-size: 1px;
-	height: 16px;
-	margin: 0 2px;
-	overflow: hidden;
-	vertical-align: middle;
-	width: 4px;
-}
-
 /* ---------- Loading Mask ---------- */
 
 .aui-loadingmask-content {
@@ -636,21 +612,6 @@
 
 .lfr-header-row {
 	background: #8F8F8F url(../images/application/header_row_bg.png) 0 0 repeat-x;
-
-	.aui-toolbar {
-		.aui-toolbar-content {
-			white-space: normal;
-			word-wrap: normal;
-		}
-
-		.aui-toolbar-item {
-			border-right-width: 0;
-		}
-
-		.aui-toolbar-last {
-			border-right-width: 1px;
-		}
-	}
 }
 
 /* ---------- Inline editing ---------- */
@@ -706,10 +667,6 @@
 }
 
 .ie7 {
-	.aui-tabview-list {
-		overflow: hidden;
-	}
-
 	.aui-menu-content li {
 		z-index: 10;
 	}
@@ -737,10 +694,6 @@
 }
 
 .ie6, .ie7 {
-	.aui-toolbar li {
-		display: inline;
-	}
-
 	.lfr-header-row .aui-buttonitem-content {
 		white-space: normal;
 

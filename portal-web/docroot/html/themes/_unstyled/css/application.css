@@ -91,7 +91,7 @@
 	}
 }
 
-.aui-portal-layout-proxy {
+.aui-sortable-layout-proxy {
 	.portlet-topper {
 	}
 }
@@ -115,7 +115,7 @@
 .lfr-freeform-layout-drag-indicator {
 }
 
-.aui-portal-layout-drag-target-indicator {
+.aui-sortable-layout-drag-target-indicator {
 }
 
 /* ---------- Portal tool tips ---------- */
@@ -393,9 +393,6 @@
 }
 
 .ie7 {
-	.aui-tabview-list {
-	}
-
 	.aui-menu-content li {
 	}
 

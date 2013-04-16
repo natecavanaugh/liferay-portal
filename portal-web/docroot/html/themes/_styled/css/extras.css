@@ -1,6 +1,6 @@
 @import "compass";
 
-.aui-menu-content, .aui-underlay-content, .aui-dialog-content {
+.aui-menu-content, .aui-underlay-content {
 	@include box-shadow(2px 4px 7px rgba(0, 0, 0, 0.5));
 }
 
@@ -22,10 +22,6 @@
 
 .my-sites-menu .current-site a {
 	@include box-shadow(inset 0 5px 15px rgba(255, 255, 255, 0.5));
-}
-
-.aui-dialog-hd {
-	@include box-shadow(1px 1px 0 #FFF);
 }
 
 .portlet-document-library, .portlet-dynamic-data-mapping {
@@ -64,7 +60,7 @@
 	@include border-radius(10px);
 }
 
-body > .lfr-menu-list ul, button, input[type="button"], input[type="submit"], input[type="reset"], .active-area-proxy, .aui-dialog .yui3-widget-hd, .aui-dialog-content, .aui-paginator-link, .entry-display-style .entry-thumbnail img, .lfr-api-results, .lfr-header-row .aui-toolbar-only, .lfr-translation-manager, .lfr-translation-manager-translation, .lfr-upload-container .cancel-button .modify-pages .delete-tab, .portlet-image-gallery-display .image-thumbnail img, .portlet-journal .lfr-table .journal-metadata, .portlet-search .search-facet .facet-value, .rule-group-instance-container .rule-group-instance, .select-documents, .select-files, .taglib-logo-selector .lfr-change-logo.show-background, .taglib-ratings.stars:hover, .taglib-ratings.stars:hover .liferay-rating-vote, .tags-search-combobox .aui-field-input-text {
+body > .lfr-menu-list ul, button, input[type="button"], input[type="submit"], input[type="reset"], .active-area-proxy, .entry-display-style .entry-thumbnail img, .lfr-api-results, .lfr-header-row .aui-toolbar-only, .lfr-translation-manager, .lfr-translation-manager-translation, .lfr-upload-container .cancel-button .modify-pages .delete-tab, .portlet-image-gallery-display .image-thumbnail img, .portlet-journal .lfr-table .journal-metadata, .portlet-search .search-facet .facet-value, .rule-group-instance-container .rule-group-instance, .select-documents, .select-files, .taglib-logo-selector .lfr-change-logo.show-background, .taglib-ratings.stars:hover, .taglib-ratings.stars:hover .liferay-rating-vote, .tags-search-combobox .aui-field-input-text {
 	@include border-radius(4px);
 }
 
