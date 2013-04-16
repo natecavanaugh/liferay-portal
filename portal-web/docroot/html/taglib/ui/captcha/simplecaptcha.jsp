@@ -38,8 +38,19 @@ catch (CaptchaMaxChallengesException cmce) {
 	<div class="taglib-captcha">
 		<img alt="<liferay-ui:message key="text-to-identify" />" class="captcha" src="<%= url %>" />
 
+		<aui:a href="javascript:;" id="new-captcha-image" label="new-captcha-image"></aui:a>
+
 		<aui:input label="text-verification" name="captchaText" size="10" type="text" value="">
 			<aui:validator name="required" />
 		</aui:input>
 	</div>
+
+	<aui:script use="aui-base">
+		A.one('#<portlet:namespace />new-captcha-image').on(
+			'click',
+			function() {
+				A.one('.captcha').attr('src', '<%= url %>&force=' + new Date().getMilliseconds());
+			}
+		);
+	</aui:script>
 </c:if>
