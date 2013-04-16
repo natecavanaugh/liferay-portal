@@ -329,9 +329,6 @@ String[][] categorySections = {mainSections};
 
 				document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= HttpUtil.setParameter(redirectURL.toString(), liferayPortletResponse.getNamespace() + "selPlid", selLayout.getParentPlid()) %>';
 			}
-			else {
-				document.<portlet:namespace />fm.<portlet:namespace />redirect.value += Liferay.Util.getHistoryParam('<portlet:namespace />');
-			}
 
 			document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = action;
 

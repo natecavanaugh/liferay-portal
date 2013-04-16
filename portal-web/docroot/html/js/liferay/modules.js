@@ -146,13 +146,6 @@ YUI.add(
 						'aui-form-validator'
 					]
 				},
-				'liferay-form-navigator': {
-					fullpath: javaScriptRootPath + '/liferay/form_navigator.js',
-					requires: [
-						'aui-base',
-						'aui-task-manager'
-					]
-				},
 				'liferay-form-placeholders': {
 					fullpath: javaScriptRootPath + '/liferay/form_placeholders.js',
 					requires: [

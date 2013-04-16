@@ -372,24 +372,6 @@
 			return columnId;
 		},
 
-		getHistoryParam: function(portletNamespace) {
-			var historyKey = '&' + portletNamespace + 'historyKey=';
-			var historyParam = '';
-
-			if (location.hash) {
-				historyParam = location.hash.replace('#_LFR_FN_', historyKey);
-			}
-			else if (location.href.indexOf(historyKey) > -1) {
-				var historyParamRE = new RegExp(historyKey + '([^#&]+)');
-
-				historyParam = location.href.match(historyParamRE);
-
-				historyParam = historyParam && historyParam[0];
-			}
-
-			return historyParam;
-		},
-
 		getOpener: function() {
 			var openingWindow = Window._opener;
 
