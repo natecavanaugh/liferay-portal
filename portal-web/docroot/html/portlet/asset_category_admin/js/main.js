@@ -1053,9 +1053,9 @@ AUI.add(
 								var checked = false;
 
 								return {
+									alwaysShowHitArea: item.hasChildren,
 									id: STR_CATEGORY_NODE + item.categoryId,
 									label: Liferay.Util.escapeHTML(item.titleCurrentValue),
-									leaf: !item.hasChildren,
 									type: 'check',
 									on: {
 										checkedChange: function(event) {
