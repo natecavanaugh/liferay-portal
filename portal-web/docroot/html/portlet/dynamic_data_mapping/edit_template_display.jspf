@@ -199,7 +199,9 @@ templateVariableGroups = TemplateContextHelper.getTemplateVariableGroups(classNa
 
 			<div class="<%= editorContainerClass %>" id="<portlet:namespace />editorContainer">
 				<div class="lfr-plain-editor <%= useRichEditor ? "aui-hide" : StringPool.BLANK %>" id="<portlet:namespace />plainEditor">
-					<aui:input cssClass="lfr-template-editor" inputCssClass="lfr-editor-textarea" label="" name="plainEditorField" onKeyDown="Liferay.Util.checkTab(this); Liferay.Util.disableEsc();" type="textarea" value="" wrap="off" />
+					<div class="lfr-template-editor">
+						<aui:input cssClass="lfr-editor-textarea" label="" name="plainEditorField" onKeyDown="Liferay.Util.checkTab(this); Liferay.Util.disableEsc();" type="textarea" value="" wrap="off" />
+					</div>
 				</div>
 
 				<div class="lfr-rich-editor <%= !useRichEditor ? "aui-hide" : StringPool.BLANK %>" id="<portlet:namespace />richEditor"></div>

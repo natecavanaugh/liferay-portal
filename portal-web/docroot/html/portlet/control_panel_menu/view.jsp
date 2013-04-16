@@ -22,7 +22,11 @@
 
 <div class="portal-add-content">
 	<div class="control-panel-tools">
-		<aui:input cssClass="search-panels" inputCssClass="search-panels-input" label="" name="searchPanel" />
+		<div class="search-panels">
+			<div class="search-panels-bar">
+				<aui:input cssClass="search-panels-input" label="" name="searchPanel" />
+			</div>
+		</div>
 	</div>
 
 	<liferay-ui:panel-container extended="<%= true %>" id="controlPanelMenuAddContentPanelContainer" persistState="<%= true %>">

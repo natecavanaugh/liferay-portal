@@ -38,6 +38,6 @@ else if (Validator.isNotNull(title)) {
 	title = LanguageUtil.get(pageContext, title);
 }
 
-String fieldCss = AUIUtil.buildCss(AUIUtil.FIELD_PREFIX, "select", inlineField, disabled, false, first, last, cssClass);
-String inputCss = AUIUtil.buildCss(AUIUtil.INPUT_PREFIX, "select", false, false, false, false, false, inputCssClass);
+String inputCss = AUIUtil.buildCss(AUIUtil.INPUT_PREFIX, false, false, false, false, false, inputCssClass);
+String fieldCss = AUIUtil.buildCss(AUIUtil.FIELD_PREFIX, disabled, first, last, cssClass);
 %>

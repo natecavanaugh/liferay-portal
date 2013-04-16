@@ -144,7 +144,7 @@ long folderId = ParamUtil.getLong(request, "folderId");
 		%>
 
 			<div class="settings-configuration <%= ((supportedConfigurations.length == 1) ? "aui-hide" : "") %>" id="<portlet:namespace />repository-<%= className %>-wrapper">
-				<aui:select id='<%= "repository-" + className %>' inputCssClass="repository-configuration" label="repository-configuration" name="settings--configuration-type--">
+				<aui:select cssClass="repository-configuration" id='<%= "repository-" + className %>' label="repository-configuration" name="settings--configuration-type--">
 					<aui:option label="<%= LanguageUtil.get(pageContext, StringUtil.replace(supportedConfiguration.toLowerCase(), CharPool.UNDERLINE, CharPool.DASH)) %>" selected="<%= supportedConfiguration.equals(supportedConfigurations[0]) %>" value="<%= supportedConfiguration %>" />
 				</aui:select>
 			</div>

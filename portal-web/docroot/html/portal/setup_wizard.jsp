@@ -412,7 +412,7 @@
 								</span>
 							</p>
 
-							<aui:input inputCssClass="properties-text" label="" name="portal-ext" type="textarea" value="<%= unicodeProperties.toSortedString() %>" wrap="soft" />
+							<aui:input cssClass="properties-text" label="" name="portal-ext" type="textarea" value="<%= unicodeProperties.toSortedString() %>" wrap="soft" />
 						</c:otherwise>
 					</c:choose>
 				</c:otherwise>
