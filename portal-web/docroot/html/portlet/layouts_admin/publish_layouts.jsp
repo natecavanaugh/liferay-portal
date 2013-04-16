@@ -221,12 +221,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 		color: #CCC;
 	}
 
-	#<portlet:namespace />pane th.col-3 {
-		text-align: left;
-		width: 74%;
-	}
-
-	#<portlet:namespace />pane td.col-1 {
+	#<portlet:namespace />pane td.first {
 		padding-top: 5px;
 	}
 

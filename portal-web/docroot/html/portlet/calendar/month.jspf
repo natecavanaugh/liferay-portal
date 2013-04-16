@@ -102,16 +102,16 @@ Format timeFormat = FastDateFormatFactoryUtil.getSimpleDateFormat("h:mma", local
 
 <br />
 
-<table class="calendar">
-<thead>
-	<tr class="portlet-section-header results-header">
+<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped calendar">
+<thead class="aui-table-columns">
+	<tr class="results-header">
 
 		<%
 		for (int i = 0; i < 7; i++) {
 			int daysIndex = (selCal.getFirstDayOfWeek() + i - 1) % 7;
 		%>
 
-			<th align="center" height="25" width="<%= (i == 0 || i == 6) ? "15" : "14" %>%">
+			<th align="center" class="aui-table-header" height="25" width="<%= (i == 0 || i == 6) ? "15" : "14" %>%">
 				<%= LanguageUtil.get(pageContext, days[daysIndex]) %>
 			</th>
 
@@ -121,7 +121,7 @@ Format timeFormat = FastDateFormatFactoryUtil.getSimpleDateFormat("h:mma", local
 
 	</tr>
 </thead>
-<tbody>
+<tbody class="aui-table-data">
 	<tr>
 
 		<%
@@ -137,7 +137,7 @@ Format timeFormat = FastDateFormatFactoryUtil.getSimpleDateFormat("h:mma", local
 		for (int i = 1; i < dayOfWeek; i++) {
 		%>
 
-			<td height="100"></td>
+			<td class="aui-table-cell" height="100"></td>
 
 		<%
 		}
@@ -177,10 +177,10 @@ Format timeFormat = FastDateFormatFactoryUtil.getSimpleDateFormat("h:mma", local
 			}
 			%>
 
-			<td class="lfr-top <%= className %>" height="100">
-				<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<td class="aui-table-cell lfr-top <%= className %>" height="100">
+				<table border="0" cellpadding="0" cellspacing="0" class="aui-table aui-table-bordered aui-table-hover aui-table-striped" width="100%">
 				<tr>
-					<td>
+					<td class="aui-table-cell">
 						<table border="0" cellpadding="4" cellspacing="0" width="100%">
 						<tr>
 							<td>
@@ -214,12 +214,6 @@ Format timeFormat = FastDateFormatFactoryUtil.getSimpleDateFormat("h:mma", local
 
 					boolean allDay = CalUtil.isAllDay(event, timeZone, locale);
 
-					className = "portlet-section-body results-row";
-
-					if (MathUtil.isEven(j)) {
-						className = "portlet-section-alternate results-row alt";
-					}
-
 					Date startDate = event.getStartDate();
 
 					if (event.isTimeZoneSensitive() && event.isRepeating()) {
@@ -227,15 +221,15 @@ Format timeFormat = FastDateFormatFactoryUtil.getSimpleDateFormat("h:mma", local
 					}
 				%>
 
-					<tr class="<%= className %>">
-						<td>
+					<tr class="results-row">
+						<td class="aui-table-cell">
 							<c:if test="<%= !allDay %>">
 								<c:choose>
 									<c:when test="<%= event.isTimeZoneSensitive() %>">
-										<%= dateFormatTime.format(Time.getDate(startDate, timeZone)) %>
+										<%= dateFormatTime.format(Time.getDate(getStartDate(), timeZone)) %>
 									</c:when>
 									<c:otherwise>
-										<%= dateFormatTime.format(Time.getDate(startDate, TimeZoneUtil.getDefault())) %>
+										<%= dateFormatTime.format(Time.getDate(getStartDate(), TimeZoneUtil.getDefault())) %>
 									</c:otherwise>
 								</c:choose>
 							</c:if>

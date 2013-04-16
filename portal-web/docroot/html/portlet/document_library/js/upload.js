@@ -23,10 +23,6 @@ AUI.add(
 
 		var CSS_ICON = 'icon';
 
-		var CSS_PORTLET_SECTION_BODY = 'portlet-section-body';
-
-		var CSS_PORTLET_SECTION_ALT = 'alt portlet-section-alternate';
-
 		var CSS_TAGLIB_ICON = 'taglib-icon';
 
 		var CSS_TAGLIB_TEXT = 'taglib-text';
@@ -388,14 +384,6 @@ AUI.add(
 				);
 
 				var row = searchContainer.addRow(columnValues, A.guid());
-
-				var rowCssClass = CSS_PORTLET_SECTION_ALT;
-
-				if (searchContainer._ids.length % 2) {
-					rowCssClass = CSS_PORTLET_SECTION_BODY;
-				}
-
-				row.addClass(rowCssClass);
 
 				row.attr('data-draggable', true);
 
