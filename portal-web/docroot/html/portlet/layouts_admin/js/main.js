@@ -1,5 +1,3 @@
-/*global Liferay*/
-
 AUI.add(
 	'export-layouts',
 	function(A) {
