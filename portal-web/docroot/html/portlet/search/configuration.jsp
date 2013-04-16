@@ -53,7 +53,7 @@
 			JSONObject searchConfigurationJSONObject = JSONFactoryUtil.createJSONObject(searchConfiguration);
 			%>
 
-			<aui:input helpMessage="search-configuration-help" inputCssClass="search-configuration-text" name="preferences--searchConfiguration--" type="textarea" value="<%= searchConfigurationJSONObject.toString(4) %>" />
+			<aui:input cssClass="search-configuration-text" helpMessage="search-configuration-help" name="preferences--searchConfiguration--" type="textarea" value="<%= searchConfigurationJSONObject.toString(4) %>" />
 		</div>
 	</aui:fieldset>
 

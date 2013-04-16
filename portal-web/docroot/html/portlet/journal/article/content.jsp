@@ -222,7 +222,7 @@ if (Validator.isNotNull(content)) {
 
 					<aui:layout>
 						<aui:column columnWidth="50" cssClass="article-structure">
-							<label class="article-structure-label"><liferay-ui:message key="structure" />:</label>
+							<span class="article-structure-label"><liferay-ui:message key="structure" />:</span>
 
 							<aui:fieldset cssClass="article-structure-toolbar">
 								<div class="journal-form-presentation-label">
@@ -261,7 +261,7 @@ if (Validator.isNotNull(content)) {
 						</aui:column>
 
 						<aui:column columnWidth="50" cssClass="article-template">
-							<label class="article-template-label"><liferay-ui:message key="template" />:</label>
+							<span class="article-template-label"><liferay-ui:message key="template" />:</span>
 
 							<aui:fieldset cssClass="article-template-toolbar">
 								<div class="journal-form-presentation-label">
@@ -368,7 +368,7 @@ if (Validator.isNotNull(content)) {
 				<div>
 					<c:choose>
 						<c:when test="<%= Validator.isNull(toLanguageId) %>">
-							<label for="<portlet:namespace />defaultLanguageId"><liferay-ui:message key="web-content-default-language" /></label>:
+							<span for="<portlet:namespace />defaultLanguageId"><liferay-ui:message key="web-content-default-language" /></span>:
 
 							<span class="lfr-translation-manager-selector nobr">
 								<span class="article-default-language lfr-token lfr-token-primary" id="<portlet:namespace />textLanguageId">
@@ -377,11 +377,9 @@ if (Validator.isNotNull(content)) {
 									<%= LocaleUtil.fromLanguageId(defaultLanguageId).getDisplayName(locale) %>
 								</span>
 
-								<liferay-ui:icon-help message="default-language-help" />
-
 								<a href="javascript:;" id="<portlet:namespace />changeLanguageId"><liferay-ui:message key="change" /></a>
 
-								<aui:select id="defaultLocale" inlineField="<%= true %>" inputCssClass="aui-hide" label="" name="defaultLanguageId">
+								<aui:select cssClass="aui-hide" id="defaultLocale" inlineField="<%= true %>" label="" name="defaultLanguageId">
 
 									<%
 									Locale[] locales = LanguageUtil.getAvailableLocales();
@@ -396,6 +394,8 @@ if (Validator.isNotNull(content)) {
 									%>
 
 								</aui:select>
+
+								<liferay-ui:icon-help message="default-language-help" />
 							</span>
 
 							<c:if test="<%= article != null %>">
