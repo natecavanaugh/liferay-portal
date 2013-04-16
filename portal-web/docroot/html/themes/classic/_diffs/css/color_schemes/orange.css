@@ -27,20 +27,6 @@ body.orange, .orange .portlet {
 		background-color: #DDD9D2;
 	}
 
-	.results-row {
-		&.alt td {
-			background-color: #E7E4DE;
-		}
-
-		&.hover td {
-			background-color: #CDC7BD;
-		}
-	}
-
-	.drop-area {
-		background-color: #DED8D4;
-	}
-
 	.aui-resizable-proxy {
 		border-color: #968A83;
 	}

@@ -27,16 +27,6 @@ body.green, .green .portlet {
 		background-color: #D7DDD2;
 	}
 
-	.results-row {
-		&.alt td {
-			background-color: #E2E7DE;
-		}
-
-		&.hover td {
-			background-color: #C4CDBD;
-		}
-	}
-
 	.drop-area {
 		background-color: #DBDED4;
 	}

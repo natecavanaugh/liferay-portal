@@ -67,9 +67,10 @@ request.setAttribute("view.jsp-showIconLabel", false);
 %>
 
 <c:if test="<%= assetEntryIndex == 0 %>">
-	<table class="taglib-search-iterator">
-	<tr class="portlet-section-header results-header">
-		<th>
+	<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
+	<thead class="aui-table-columns">
+	<tr class="results-header">
+		<th class="aui-table-header aui-table-sortable-column">
 			<liferay-ui:message key="title" />
 		</th>
 
@@ -77,7 +78,7 @@ request.setAttribute("view.jsp-showIconLabel", false);
 		for (int m = 0; m < metadataFields.length; m++) {
 		%>
 
-			<th>
+			<th class="aui-table-header">
 				<liferay-ui:message key="<%= metadataFields[m] %>" />
 			</th>
 
@@ -86,21 +87,17 @@ request.setAttribute("view.jsp-showIconLabel", false);
 		%>
 
 		<c:if test="<%= assetRenderer.hasEditPermission(permissionChecker) && (editPortletURL != null) && !stageableGroup.hasStagingGroup() %>">
-			<th></th>
+			<th class="aui-table-header"></th>
 		</c:if>
 	</tr>
+	</thead>
+
+	<tbody class="aui-table-data">
 </c:if>
 
-<%
-String style = "class=\"portlet-section-body results-row\" onmouseover=\"this.className = 'portlet-section-body-hover results-row hover';\" onmouseout=\"this.className = 'portlet-section-body results-row';\"";
 
-if ((assetEntryIndex % 2) == 0) {
-	style = "class=\"portlet-section-alternate results-row alt\" onmouseover=\"this.className = 'portlet-section-alternate-hover results-row alt hover';\" onmouseout=\"this.className = 'portlet-section-alternate results-row alt';\"";
-}
-%>
-
-<tr <%= style %>>
-	<td>
+<tr class="results-row">
+	<td class="aui-table-cell">
 		<c:choose>
 			<c:when test="<%= Validator.isNotNull(viewURL) %>">
 				<a href="<%= viewURL %>"><%= HtmlUtil.escape(title) %></a>
@@ -151,10 +148,10 @@ if ((assetEntryIndex % 2) == 0) {
 		else if (metadataFields[m].equals("categories")) {
 		%>
 
-			<td>
+			<td class="aui-table-cell">
 				<liferay-ui:asset-categories-summary
 					className="<%= assetEntry.getClassName() %>"
-					classPK="<%= assetEntry.getClassPK () %>"
+					classPK="<%= assetEntry.getClassPK() %>"
 					portletURL="<%= renderResponse.createRenderURL() %>"
 				/>
 			</td>
@@ -164,10 +161,10 @@ if ((assetEntryIndex % 2) == 0) {
 		else if (metadataFields[m].equals("tags")) {
 		%>
 
-			<td>
+			<td class="aui-table-cell">
 				<liferay-ui:asset-tags-summary
 					className="<%= assetEntry.getClassName() %>"
-					classPK="<%= assetEntry.getClassPK () %>"
+					classPK="<%= assetEntry.getClassPK() %>"
 					portletURL="<%= renderResponse.createRenderURL() %>"
 				/>
 			</td>
@@ -178,7 +175,7 @@ if ((assetEntryIndex % 2) == 0) {
 		if (value != null) {
 	%>
 
-			<td>
+			<td class="aui-table-cell">
 				<liferay-ui:message key="<%= value %>" />
 			</td>
 
@@ -188,12 +185,13 @@ if ((assetEntryIndex % 2) == 0) {
 	%>
 
 	<c:if test="<%= assetRenderer.hasEditPermission(permissionChecker) && (editPortletURL != null) && !stageableGroup.hasStagingGroup() %>">
-		<td>
+		<td class="aui-table-cell">
 			<liferay-util:include page="/html/portlet/asset_publisher/asset_actions.jsp" />
 		</td>
 	</c:if>
 </tr>
 
 <c:if test="<%= (assetEntryIndex + 1) == results.size() %>">
+	</tbody>
 	</table>
 </c:if>

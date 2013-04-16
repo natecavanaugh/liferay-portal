@@ -239,36 +239,6 @@ body.portlet {
 
 /* ---------- Sections ---------- */
 
-/* ---------- Table or section header ---------- */
-
-.portlet-section-header {
-	th {
-	}
-}
-
-/* ---------- Normal text in a table cell ---------- */
-
-.portlet-section-body {
-	td {
-	}
-}
-
-/* ---------- Text in every other row in the cell ---------- */
-
-.portlet-section-alternate {
-	td {
-	}
-}
-
-.portlet-section-alternate-hover td, .portlet-section-body-hover td {
-}
-
-.portlet-section-body td td, .portlet-section-body-hover td td {
-}
-
-.portlet-section-alternate td td, .portlet-section-alternate-hover td td {
-}
-
 /* ---------- Text in a selected cell range ---------- */
 
 .portlet-section-selected {
@@ -395,29 +365,29 @@ body.portlet {
 }
 
 .restricted, .alt.restricted {
-	td.col-1 {
+	td.first {
 	}
 }
 
 /* ---------- Permissions ---------- */
 
 .results-row, .results-row.hover {
-	&.lfr-role .col-1 {
+	&.lfr-role .first {
 	}
 
-	&.lfr-role-guest .col-1 {
+	&.lfr-role-guest .first {
 	}
 
-	&.lfr-role-regular .col-1 {
+	&.lfr-role-regular .first {
 	}
 
-	&.lfr-role-site .col-1 {
+	&.lfr-role-site .first {
 	}
 
-	&.lfr-role-organization .col-1 {
+	&.lfr-role-organization .first {
 	}
 
-	&.lfr-role-team .col-1 {
+	&.lfr-role-team .first {
 	}
 }
 

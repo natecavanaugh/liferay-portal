@@ -6,56 +6,6 @@
 .context-pane-content .results-grid {
 }
 
-.results-header {
-	th {
-		&.sort-column {
-			.result-column-name {
-			}
-		}
-
-		&.first {
-		}
-
-		&.last {
-		}
-	}
-
-	td, th {
-	}
-
-	th.sort-desc .result-column-name {
-	}
-
-	a, span {
-	}
-
-	a {
-		&:hover {
-		}
-	}
-}
-
-.results-row {
-	td {
-		&.sort-column {
-		}
-	}
-
-	&.selected td, &.selected.hover td {
-		& a {
-		}
-	}
-
-	&.alt.selected td, &.alt.selected.hover td {
-	}
-
-	&.alt td {
-	}
-
-	&.hover td {
-	}
-}
-
 .taglib-search-iterator .results-row {
 	td, th {
 		&.first {
@@ -404,8 +354,5 @@
 	.lfr-header-row .aui-buttonitem-content {
 		.aui-buttonitem-label {
 		}
-	}
-
-	.results-row.hover td {
 	}
 }

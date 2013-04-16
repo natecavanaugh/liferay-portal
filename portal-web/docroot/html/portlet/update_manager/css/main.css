@@ -1,24 +1,24 @@
 .results-row {
 	.status-installation-in-process, .status-update-ignored {
-		td, &.alt td {
+		td {
 			background-color: #9CF;
 		}
 	}
 
 	.status-up-to-date {
-		td, &.alt td {
+		td {
 			background-color: #CFC;
 		}
 	}
 
 	.status-unknown {
-		td, &.alt td {
+		td {
 			background-color: #FFC;
 		}
 	}
 
 	.status-update-available {
-		td, &.alt td {
+		td {
 			background-color: #F99;
 		}
 	}
