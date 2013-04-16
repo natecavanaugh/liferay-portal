@@ -9,31 +9,47 @@ AUI.add(
 
 		var CLICK = 'click';
 
+		var REGEX_LAYOUT_ID = /layoutId_(\d+)/;
+
 		var SET_NODE = '_setNode';
+
+		var STR_EMPTY = '';
 
 		var ExportLayouts = A.Component.create(
 			{
 				ATTRS: {
 					archivedSetupsNode: {
-						settter: SET_NODE
+						setter: SET_NODE
 					},
 					categoriesNode: {
-						settter: SET_NODE
+						setter: SET_NODE
 					},
 					layoutSetSettingsNode: {
-						settter: SET_NODE
+						setter: SET_NODE
 					},
 					logoNode: {
-						settter: SET_NODE
+						setter: SET_NODE
+					},
+					rangeAllNode: {
+						setter: SET_NODE
+					},
+					rangeDateRangeNode: {
+						setter: SET_NODE
+					},
+					rangeLastNode: {
+						setter: SET_NODE
+					},
+					rangeLastPublishNode: {
+						setter: SET_NODE
 					},
 					themeNode: {
-						settter: SET_NODE
+						setter: SET_NODE
 					},
 					themeReferenceNode: {
-						settter: SET_NODE
+						setter: SET_NODE
 					},
 					userPreferencesNode: {
-						settter: SET_NODE
+						setter: SET_NODE
 					}
 				},
 
@@ -81,11 +97,6 @@ AUI.add(
 							CLICK,
 							function(event) {
 								var portletId = event.currentTarget.attr('data-portletid');
-
-								// why are we getting this from data? if it is no special reason,
-								// please create an attribute and pass it via configuration, as any other attribute
-								// then change _getChangeContentDialog and remove its portletId param
-								// inside it may get the portlet id
 
 								var changeContentDialog = instance._getChangeContentDialog(portletId);
 
@@ -271,7 +282,7 @@ AUI.add(
 									buttons: [
 										{
 											handler: function() {
-												var selectedGlobalContent = '';
+												var selectedGlobalContent = STR_EMPTY;
 
 												if (instance.get('categoriesNode').attr(CHECKED)) {
 													selectedGlobalContent = Liferay.Language.get('categories');
@@ -334,19 +345,17 @@ AUI.add(
 													var rootNode = treeView.item(0);
 
 													if (rootNode.isChecked()) {
-														layoutIdsInput.val('');
+														layoutIdsInput.val(STR_EMPTY);
 
 														selectedPages.push(Liferay.Language.get('all-pages'));
 													}
 													else {
 														var layoutIds = [];
 
-														var regexLayoutId = /layoutId_(\d+)/;
-
 														treeView.eachChildren(
 															function(item, index, collection) {
 																if (item.isChecked()) {
-																	var match = regexLayoutId.exec(item.get('id'));
+																	var match = REGEX_LAYOUT_ID.exec(item.get('id'));
 
 																	if (match) {
 																		layoutIds.push(
@@ -429,9 +438,7 @@ AUI.add(
 									buttons: [
 										{
 											handler: function() {
-												var selectedRange = '';
-
-												// These below (like rangeAllNode) are missing in ATTRS?
+												var selectedRange = STR_EMPTY;
 
 												if (instance.get('rangeAllNode').attr(CHECKED)) {
 													selectedRange = Liferay.Language.get('all');
@@ -485,11 +492,13 @@ AUI.add(
 					},
 
 					_setNode: function(value) {
-						if (Lang.isString(value) && value.indexOf('#') !== 0) {
-							value = '#' + value;
+						var instance = this;
+
+						if (Lang.isString(value)) {
+							value = instance.byId(value);
 						}
 
-						return A.one(value);
+						return value;
 					}
 				}
 			}
