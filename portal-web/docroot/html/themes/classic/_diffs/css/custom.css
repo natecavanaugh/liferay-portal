@@ -8,22 +8,7 @@
 
 /* ---------- Base styles ---------- */
 
-body {
-	background: #EEF0F2;
-	font-size: 11px;
-}
-
-a {
-	color: #5B677D;
-	text-decoration: underline;
-
-	&:hover {
-		color: #06C;
-		text-decoration: none;
-	}
-}
-
-hr, .separator {
+.separator {
 	border-color: #BFBFBF transparent #FFF;
 	border-style: solid;
 	border-width: 1px 0;
