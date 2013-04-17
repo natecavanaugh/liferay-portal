@@ -65,7 +65,7 @@ int mountFoldersCount = DLAppServiceUtil.getMountFoldersCount(scopeGroupId, DLFo
 		title="search"
 	/>
 
-	<span class="aui-search-bar">
+	<span class="aui-form-search">
 		<aui:input inlineField="<%= true %>" label="" name="keywords" size="30" title="search-documents" type="text" value="<%= keywords %>" />
 
 		<aui:button type="submit" value="search" />

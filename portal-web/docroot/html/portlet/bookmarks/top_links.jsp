@@ -91,7 +91,7 @@ portletURL.setParameter("tag", StringPool.BLANK);
 					<aui:input name="breadcrumbsFolderId" type="hidden" value="<%= folderId %>" />
 					<aui:input name="searchFolderIds" type="hidden" value="<%= folderId %>" />
 
-					<span class="aui-search-bar">
+					<span class="aui-form-search">
 						<aui:input id="keywords1" inlineField="<%= true %>" label="" name="keywords" size="30" title="search-bookmarks" type="text" />
 
 						<aui:button type="submit" value="search" />
