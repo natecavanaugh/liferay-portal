@@ -17,13 +17,13 @@
 <%@ include file="/html/taglib/aui/field_wrapper/init.jsp" %>
 
 <%
-String fieldCss = AUIUtil.buildCss(AUIUtil.FIELD_PREFIX, inlineField, false, false, first, last, cssClass);
+String fieldCss = AUIUtil.buildCss(AUIUtil.FIELD_PREFIX, false, first, last, cssClass);
 %>
 
 <div class="<%= fieldCss %>" <%= AUIUtil.buildData(data) %>>
 	<div class="aui-field-wrapper-content">
 		<c:if test='<%= Validator.isNotNull(label) && !inlineLabel.equals("right") %>'>
-			<label <%= AUIUtil.buildLabel(inlineLabel, showForLabel, name, false) %>>
+			<label <%= AUIUtil.buildLabel("wrapper", showForLabel, name) %>>
 				<liferay-ui:message key="<%= label %>" />
 
 				<c:if test="<%= required %>">
