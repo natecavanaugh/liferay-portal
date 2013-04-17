@@ -16,7 +16,7 @@
 
 <%@ include file="/html/taglib/aui/select/init.jsp" %>
 
-<c:if test="<%=  inlineField || Validator.isNotNull(inlineLabel) %>">
+<c:if test="<%= inlineField || Validator.isNotNull(inlineLabel) %>">
 	<div class="<%= controlGroupCss %>">
 </c:if>
 
