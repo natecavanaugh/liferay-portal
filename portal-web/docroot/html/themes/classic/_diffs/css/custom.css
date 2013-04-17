@@ -316,19 +316,6 @@
 	background-color: transparent;
 }
 
-.aui-combobox {
-	.aui-field-input {
-		font-size: 11px;
-		height: 15px;
-		padding: 4px 3px 3px;
-	}
-
-	.aui-field {
-		float: left;
-		line-height: 0;
-	}
-}
-
 .lfr-portlet-title-editable-content .aui-field {
 	display: inline;
 	float: none;

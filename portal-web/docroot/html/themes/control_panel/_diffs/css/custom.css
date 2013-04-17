@@ -13,15 +13,6 @@ a {
 	color: #5C85AD;
 }
 
-input[type="text"], input[type="password"], select, textarea, .textarea {
-	background: #FFF;
-	border: 1px solid #A1A2A4;
-}
-
-select {
-	padding: 4px;
-}
-
 body.portal-popup:after, body.portal-popup:before {
 	background-image: none;
 }
@@ -228,17 +219,6 @@ body.portal-popup:after, body.portal-popup:before {
 
 .panels-minimized .search-panels {
 	cursor: pointer;
-}
-
-.search-panels .search-panels-input {
-	background: #FFF url(../images/custom/search_input_icon_bg.gif) 5px 50% no-repeat;
-	display: block;
-	padding: 3px 4px 3px 20px;
-	width: 191px;
-}
-
-.panels-minimized .search-panels-input {
-	visibility: hidden;
 }
 
 .panels-minimized .search-panels .aui-field-element {
@@ -680,17 +660,11 @@ body.portal-popup:after, body.portal-popup:before {
 
 /* ---------- Extras ---------- */
 
-input[type="text"], input[type="password"], select, textarea, .textarea, .aui-tagselector-content .aui-textboxlistentry-holder {
+.aui-tagselector-content .aui-textboxlistentry-holder {
 	@include box-shadow(0 1px 0 #FFF, 0 1px 2px #CCC inset);
 }
 
-.lfr-search-combobox {
-	.aui-field-input {
-		@include box-shadow(0 1px 2px #CCC inset);
-	}
-}
-
-input[type="text"], input[type="password"], select, textarea, .textarea, #breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .portlet-communities .layout-breadcrumb ul, .portlet-enterprise-admin .layout-breadcrumb ul, .aui-textboxlistentry-holder, .aui-field-element {
+#breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .portlet-communities .layout-breadcrumb ul, .portlet-enterprise-admin .layout-breadcrumb ul, .aui-textboxlistentry-holder {
 	@include border-radius(4px);
 }
 

@@ -7,12 +7,6 @@
 	overflow: hidden;
 }
 
-.aui-form-button.aui-input-disabled {
-	input:hover, button:hover {
-		cursor: auto;
-	}
-}
-
 .aui-form-validator-error-container .aui-field-element {
 	padding-right: 20px;
 }
@@ -32,10 +26,6 @@
 	.aui-form-validator-message {
 		clip: rect(auto auto auto auto);
 	}
-}
-
-.aui-field-element {
-	position: relative;
 }
 
 .lfr-ddm-container .aui-field-wrapper {
@@ -99,19 +89,6 @@ fieldset, .aui-form fieldset {
 }
 
 /* Skin */
-
-.aui-form-button.aui-input-disabled {
-	input, button {
-		background: #F5F5F5 url(../images/forms/button.png) repeat-x 0 0;
-		color: #ccc;
-
-		&:hover {
-			background: #F5F5F5 url(../images/forms/button.png) repeat-x 0 0;
-			border-color: #DEDEDE #BFBFBF #BFBFBF #DEDEDE;
-			color: #ccc;
-		}
-	}
-}
 
 .aui-form-validator-error-container {
 	color: #900;
