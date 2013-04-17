@@ -34,6 +34,28 @@
 			</then>
 		</if>
 
+		<if>
+			<contains string="string" substring="substring" />
+			<then>
+				<execute action="BaseLiferay#click" />
+			</then>
+			<elseif>
+				<equals arg1="arg1" arg2="arg2" />
+				<then>
+					<execute action="BaseLiferay#click" />
+				</then>
+			</elseif>
+			<elseif>
+				<isset var="var" />
+				<then>
+					<execute action="BaseLiferay#click" />
+				</then>
+			</elseif>
+			<else>
+				<execute action="BaseLiferay#click" />
+			</else>
+		</if>
+
 		<echo message="message" />
 
 		<fail message="message" />

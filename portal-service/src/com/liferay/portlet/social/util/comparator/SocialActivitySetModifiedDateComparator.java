@@ -43,15 +43,15 @@ public class SocialActivitySetModifiedDateComparator extends OrderByComparator {
 		SocialActivitySet activitySet1 = (SocialActivitySet)obj1;
 		SocialActivitySet activitySet2 = (SocialActivitySet)obj2;
 
-		long time1 = activitySet1.getModifiedDate();
-		long time2 = activitySet2.getModifiedDate();
+		long modifiedDate1 = activitySet1.getModifiedDate();
+		long modifiedDate2 = activitySet2.getModifiedDate();
 
 		int value = 0;
 
-		if (time1 == time2) {
+		if (modifiedDate1 == modifiedDate2) {
 			value = 0;
 		}
-		else if (time1 < time2) {
+		else if (modifiedDate1 < modifiedDate2) {
 			value = -1;
 		}
 		else {

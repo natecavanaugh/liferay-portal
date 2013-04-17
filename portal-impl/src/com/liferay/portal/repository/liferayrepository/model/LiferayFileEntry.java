@@ -54,7 +54,12 @@ public class LiferayFileEntry extends LiferayModel implements FileEntry {
 		LiferayFileEntry liferayFileEntry = new LiferayFileEntry(
 			_dlFileEntry, _escapedModel);
 
-		liferayFileEntry.setCachedFileVersion(getCachedFileVersion());
+		FileVersion cachedFileVersion = getCachedFileVersion();
+
+		if (cachedFileVersion != null) {
+			liferayFileEntry.setCachedFileVersion(cachedFileVersion);
+		}
+
 		liferayFileEntry.setCompanyId(getCompanyId());
 		liferayFileEntry.setCreateDate(getCreateDate());
 		liferayFileEntry.setGroupId(getGroupId());

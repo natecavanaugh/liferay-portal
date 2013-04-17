@@ -95,7 +95,7 @@ public class SocialActivitySetLocalServiceImpl
 		}
 	}
 
-	public SocialActivitySet fetchByC_C_T_First(
+	public SocialActivitySet getClassActivitySet(
 			long classNameId, long classPK, int type)
 		throws SystemException {
 
@@ -104,21 +104,21 @@ public class SocialActivitySetLocalServiceImpl
 			new SocialActivitySetModifiedDateComparator());
 	}
 
-	public SocialActivitySet fetchByG_U_T_First(
-			long groupId, long userId, int type)
-		throws SystemException {
-
-		return socialActivitySetPersistence.fetchByG_U_T_First(
-				groupId, userId, type,
-			new SocialActivitySetModifiedDateComparator());
-	}
-
-	public SocialActivitySet fetchByU_C_C_T_First(
+	public SocialActivitySet getClassActivitySet(
 			long userId, long classNameId, long classPK, int type)
 		throws SystemException {
 
 		return socialActivitySetPersistence.fetchByU_C_C_T_First(
 			userId, classNameId, classPK, type,
+			new SocialActivitySetModifiedDateComparator());
+	}
+
+	public SocialActivitySet getUserActivitySet(
+			long groupId, long userId, int type)
+		throws SystemException {
+
+		return socialActivitySetPersistence.fetchByG_U_T_First(
+			groupId, userId, type,
 			new SocialActivitySetModifiedDateComparator());
 	}
 

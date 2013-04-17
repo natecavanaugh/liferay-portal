@@ -250,24 +250,24 @@ public class JournalContentPortletDataHandler
 		JournalPortletDataHandler.importReferencedData(
 			portletDataContext, rootElement);
 
-		Element structuresElement =
+		Element ddmStructuresElement =
 			portletDataContext.getImportDataGroupElement(DDMStructure.class);
 
-		List<Element> structureElements = structuresElement.elements();
+		List<Element> ddmStructureElements = ddmStructuresElement.elements();
 
-		for (Element structureElement : structureElements) {
+		for (Element ddmStructureElement : ddmStructureElements) {
 			StagedModelDataHandlerUtil.importStagedModel(
-				portletDataContext, structureElement);
+				portletDataContext, ddmStructureElement);
 		}
 
-		Element templatesElement = portletDataContext.getImportDataGroupElement(
-			DDMTemplate.class);
+		Element ddmTemplatesElement =
+			portletDataContext.getImportDataGroupElement(DDMTemplate.class);
 
-		List<Element> templateElements = templatesElement.elements();
+		List<Element> ddmTemplateElements = ddmTemplatesElement.elements();
 
-		for (Element templateElement : templateElements) {
+		for (Element ddmTemplateElement : ddmTemplateElements) {
 			StagedModelDataHandlerUtil.importStagedModel(
-				portletDataContext, templateElement);
+				portletDataContext, ddmTemplateElement);
 		}
 
 		Element articleElement = rootElement.element("article");
