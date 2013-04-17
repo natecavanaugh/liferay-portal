@@ -65,10 +65,6 @@
 		margin: 0 auto;
 		padding: 0.5em;
 
-		label {
-			font-weight: bold;
-		}
-
 		.article-structure-toolbar, .article-template-toolbar {
 			display: inline;
 			margin-left: 0.5em;
@@ -87,10 +83,6 @@
 		display: block;
 		margin: 0 auto;
 		padding: 0.5em;
-
-		label {
-			font-weight: bold;
-		}
 
 		.add-translations-menu {
 			display: inline;
@@ -268,14 +260,6 @@
 
 		.folder-droppable {
 			clear: both;
-		}
-
-		.journal-article-field-label {
-			display: block;
-			font-weight: bold;
-			margin-left: 3px;
-			margin-top: 25px;
-			padding-bottom: 5px;
 		}
 
 		.journal-subfield input {
@@ -512,16 +496,6 @@
 
 	.lfr-textarea {
 		width: 350px;
-	}
-
-	.lfr-template-editor {
-		.aui-field-element, .aui-field-content, .aui-field-input-text {
-			display: block;
-		}
-
-		.aui-field-input-text {
-			height: 400px;
-		}
 	}
 
 	.localization-disabled {

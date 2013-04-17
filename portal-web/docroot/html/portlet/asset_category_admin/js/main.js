@@ -179,7 +179,7 @@ AUI.add(
 
 		var TPL_VOCABULARY_LIST = '<li class="vocabulary-category results-row {cssClassSelected}" data-vocabulary="{titleCurrentValue}" data-vocabularyId="{vocabularyId}" tabIndex="0">' +
 			'<div class="vocabulary-content-wrapper">' +
-				'<input type="checkbox" class="vocabulary-item-check aui-field-input-choice" name="vocabulary-item-check" data-vocabularyId="{vocabularyId}" data-vocabularyName="{titleCurrentValue}">' +
+				'<input type="checkbox" class="vocabulary-item-check" name="vocabulary-item-check" data-vocabularyId="{vocabularyId}" data-vocabularyName="{titleCurrentValue}">' +
 				'<span class="vocabulary-item">' +
 					'<a href="javascript:;" data-vocabularyId="{vocabularyId}" tabIndex="-1">{titleCurrentValue}</a>' +
 				'</span>' +

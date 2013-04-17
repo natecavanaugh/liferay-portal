@@ -97,5 +97,5 @@ String redirect = ParamUtil.getString(request, "redirect");
 		toggleCustomFields();
 	}
 
-	A.one('.checkBoxes').delegate('change', toggleCustomFields, '.aui-field-input-choice');
+	A.one('.checkBoxes').delegate('change', toggleCustomFields, 'input[type="checkbox"]');
 </aui:script>

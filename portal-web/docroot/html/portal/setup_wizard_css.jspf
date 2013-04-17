@@ -94,10 +94,6 @@ body {
 	display: block;
 }
 
-.aui-field-input-text {
-	width: 100%;
-}
-
 .aui-field-hint {
 	float: none;
 	font-style: italic;

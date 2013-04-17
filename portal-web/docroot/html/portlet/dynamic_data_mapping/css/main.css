@@ -63,11 +63,6 @@
 			white-space: nowrap;
 			width: 1%;
 		}
-
-		.aui-field-input-text {
-			margin: 5px;
-			width: 350px;
-		}
 	}
 
 	.lfr-ddm-small-image-content img {
@@ -172,18 +167,8 @@
 			position: relative;
 			margin-left: 200px;
 
-			.lfr-template-editor {
-				.aui-field-element, .aui-field-content, .aui-field-input-text {
-					display: block;
-				}
-
-				.aui-field-input-text {
-					height: 400px;
-				}
-
-				.lfr-rich-editor {
-					padding-left: 0.2em;
-				}
+			.lfr-template-editor .lfr-rich-editor {
+				padding-left: 0.2em;
 			}
 		}
 

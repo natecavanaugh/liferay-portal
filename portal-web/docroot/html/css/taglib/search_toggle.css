@@ -17,18 +17,4 @@
 		display: inline-block;
 		width: 30%;
 	}
-
-	.aui-field-input {
-		@include box-sizing("border-box");
-	}
-
-	.aui-field-input, .aui-field-element, .aui-field-content {
-		width: 100%;
-	}
-}
-
-.ie6, .ie7 {
-	.taglib-search-toggle-advanced .aui-fieldset .aui-field-input {
-		width: 98%;
-	}
 }

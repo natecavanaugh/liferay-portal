@@ -1,3 +1,7 @@
+.aui-control-group-inline {
+	display: inline-block;
+}
+
 .aui-field-wrapper {
 	clear: both;
 	overflow: hidden;
@@ -34,26 +38,9 @@
 	position: relative;
 }
 
-.lfr-dynamic-form {
-	.aui-field-radio .aui-field {
-		display: block;
-		margin-left: 10px;
-	}
-
-	.aui-field-text {
-		&, .aui-field-element {
-			display: block;
-		}
-
-		.aui-field-input {
-			width: 100%;
-		}
-	}
-}
-
 .lfr-ddm-container .aui-field-wrapper {
 	position: relative;
-	
+
 	.aui-field-wrapper {
 		margin-left: 20px;
 	}

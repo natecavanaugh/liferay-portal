@@ -50,14 +50,6 @@
 		}
 	}
 
-	.categories-admin-search .aui-field-input {
-		background-image: url(@theme_image_path@/common/search.png);
-		background-repeat: no-repeat;
-		background-position: 5px 50%;
-		padding-left: 25px;
-		width: 210px;
-	}
-
 	.select-vocabularies, .select-categories {
 		float: left;
 	}

@@ -37,17 +37,17 @@ AUI.add(
 							'<span class="aui-field-content">' +
 								'<span class="aui-field-element aui-field-label-right">' +
 									'<input type="hidden" value="false" name="{portletNamespace}{instanceId}localized-checkbox">' +
-									'<input type="checkbox" onclick="Liferay.Util.updateCheckboxValue(this); " name="{portletNamespace}{instanceId}localized-checkboxCheckbox" id="{portletNamespace}{instanceId}localized-checkboxCheckbox" class="aui-field-input aui-field-input-choice"> </span>' +
-									'<label for="{portletNamespace}{instanceId}localized-checkboxCheckbox" class="aui-field-label">{localizedLabelLanguage}</label>' +
+									'<input type="checkbox" onclick="Liferay.Util.updateCheckboxValue(this); " name="{portletNamespace}{instanceId}localized-checkboxCheckbox" id="{portletNamespace}{instanceId}localized-checkboxCheckbox"> </span>' +
+									'<label for="{portletNamespace}{instanceId}localized-checkboxCheckbox">{localizedLabelLanguage}</label>' +
 								'</span>' +
 							'</span>' +
 						'<div class="journal-article-required-message portlet-msg-error">{requiredFieldLanguage}</div>' +
 						'<div class="journal-article-buttons {articleButtonsRowCSSClass}">' +
 							'<span class="aui-field aui-field-inline aui-field-text journal-article-variable-name">' +
 								'<span class="aui-field-content">' +
-									'<label for="{portletNamespace}{instanceId}variableName" class="aui-field-label">{variableNameLanguage}</label>' +
+									'<label for="{portletNamespace}{instanceId}variableName">{variableNameLanguage}</label>' +
 									'<span class="aui-field-element ">' +
-										'<input type="text" size="25" value="{variableName}" name="{portletNamespace}variableName" id="{portletNamespace}{instanceId}variableName" class="aui-field-input aui-field-input-text">' +
+										'<input type="text" size="25" value="{variableName}" name="{portletNamespace}variableName" id="{portletNamespace}{instanceId}variableName">' +
 									'</span>' +
 								'</span>' +
 							'</span>' +
@@ -70,7 +70,7 @@ AUI.add(
 
 		var TPL_PLACEHOLDER = '<div class="aui-tree-placeholder aui-tree-sub-placeholder"></div>';
 
-		var TPL_STRUCTURE_FIELD_INPUT = '<input class="aui-field-input lfr-input-text" type="text" value="" size="40"/>';
+		var TPL_STRUCTURE_FIELD_INPUT = '<input class="lfr-input-text" type="text" value="" size="40"/>';
 
 		var TPL_TOOLTIP_IMAGE = '<img align="top" class="journal-article-instructions-container" src="' + themeDisplay.getPathThemeImages() + '/portlet/help.png" />';
 
@@ -850,7 +850,7 @@ AUI.add(
 
 				var componentContainer = source.one('div.journal-article-component-container');
 
-				return componentContainer.one('.aui-field-input');
+				return componentContainer.one('input');
 			},
 
 			getPrincipalForm: function(formName) {
@@ -1116,7 +1116,7 @@ AUI.add(
 					fieldInstance.set('source', newSource);
 					fieldInstance.set('instanceId', instanceId);
 
-					var localizedCheckbox = newSource.one('.journal-article-localized-checkbox .aui-field-input');
+					var localizedCheckbox = newSource.one('.journal-article-localized-checkbox input');
 
 					if (localizedCheckbox) {
 						localizedCheckbox.attr('checked', false);
@@ -1129,12 +1129,12 @@ AUI.add(
 					if (fieldType == 'boolean') {
 						componentContainer = newSource.one('.journal-article-component-container');
 
-						componentContainer.one('.aui-field-input').attr('checked', false);
+						componentContainer.one('input').attr('checked', false);
 					}
 					else if (fieldType == 'document_library' || fieldType == 'text') {
 						componentContainer = newSource.one('.journal-article-component-container');
 
-						componentContainer.one('.aui-field-input').val('');
+						componentContainer.one('input').val('');
 					}
 					else if (fieldType == 'image') {
 						newSource.all('.journal-image-preview, .journal-image-show-hide').remove(true);
@@ -1149,7 +1149,7 @@ AUI.add(
 					else if (fieldType == 'text_box') {
 						componentContainer = newSource.one('.journal-article-component-container');
 
-						componentContainer.one('.aui-field-input').html('');
+						componentContainer.one('input').html('');
 					}
 
 					return fieldInstance;
@@ -1873,7 +1873,7 @@ AUI.add(
 
 						instance._updateLocaleState(source, checkbox);
 					},
-					'.journal-article-localized-checkbox .aui-field-input-choice'
+					'.journal-article-localized-checkbox input'
 				);
 
 				container.delegate('keypress', keyPressAddItem, '.journal-list-key, .journal-list-value');
@@ -1936,7 +1936,7 @@ AUI.add(
 					'click',
 					function(event) {
 						var button = event.currentTarget;
-						var input = button.ancestor('.journal-article-component-container').one('.aui-field-input');
+						var input = button.ancestor('.journal-article-component-container').one('input');
 						var selectUrl = button.attr('data-documentlibraryUrl');
 
 						window[instance.portletNamespace + 'selectDocumentLibrary'] = function(url) {
@@ -3088,7 +3088,7 @@ AUI.add(
 						var type = instance.get('fieldType');
 						var componentContainer = source.one('div.journal-article-component-container');
 
-						var principalElement = componentContainer.one('.aui-field-input');
+						var principalElement = componentContainer.one('input');
 
 						if (type == 'boolean') {
 							content = principalElement.attr('checked');
@@ -3421,7 +3421,7 @@ AUI.add(
 						var fieldLabel = instance.getFieldLabelElement();
 
 						if (fieldLabel) {
-							var input = fieldLabel.get('parentNode').one('.journal-article-component-container .aui-field-input');
+							var input = fieldLabel.get('parentNode').one('.journal-article-component-container input');
 
 							if (input) {
 								input.attr('id', value);
