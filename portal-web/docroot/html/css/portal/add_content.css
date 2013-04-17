@@ -80,12 +80,6 @@
 				padding: 7px 6px 6px 2em;
 			}
 		}
-
-		.search-panel .add-content-search .aui-field-input {
-			@include box-sizing(border-box);
-
-			width: 100%;
-		}
 	}
 
 	.close-add-panel {
@@ -101,15 +95,6 @@
 		padding: 5px;
 		overflow: hidden;
 		white-space: nowrap;
-
-		.add-content-search .aui-field-input {
-			padding-left: 25px;
-			width: 150px;
-		}
-
-		.aui-field-content, .aui-field-element {
-			display: inherit;
-		}
 
 		.buttons {
 			float: left;
@@ -351,12 +336,6 @@
 
 	.search-panel {
 		background: #D3DBE4 url(@theme_image_path@/common/shadow_bottom_bg.png) repeat-x 0 100%;
-
-		.add-content-search .aui-field-input {
-			background-image: url(@theme_image_path@/common/search.png);
-			background-position: 5px 50%;
-			background-repeat: no-repeat;
-		}
 
 		.buttons {
 			font-size: 0;

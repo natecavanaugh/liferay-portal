@@ -83,7 +83,7 @@ AUI.add(
 
 		var SELECTOR_CONJUNCTION = STR_DOT + STR_CONJUNCTION;
 
-		var SELECTOR_FIELD_INPUT_CHOICE = '.aui-field-input-choice';
+		var SELECTOR_INPUT = 'input';
 
 		var SELECTOR_SETTINGS_DISPLAY = STR_DOT + A.getClassName(STR_SETTINGS_DISPLAY);
 
@@ -230,13 +230,13 @@ AUI.add(
 									if (currentTarget.test(SELECTOR_SOCIAL_ACTIVITY_ITEM) && !event.target.test('input')) {
 										instance._revealSection(currentTarget, getSocialActivitySettingMappingCallback);
 									}
-									else if (currentTarget.test(SELECTOR_FIELD_INPUT_CHOICE)) {
+									else if (currentTarget.test(SELECTOR_INPUT)) {
 										instance._updateCheckboxStatus(event);
 									}
 								},
 								250
 							),
-							[SELECTOR_SOCIAL_ACTIVITY_ITEM, SELECTOR_FIELD_INPUT_CHOICE].join()
+							[SELECTOR_SOCIAL_ACTIVITY_ITEM, SELECTOR_INPUT].join()
 						);
 
 						var lastIndex = socialActivityItems.size() - 1;
@@ -244,7 +244,7 @@ AUI.add(
 						A.some(
 							socialActivityItems,
 							function(item, index, collection) {
-								var checked = item.one(SELECTOR_FIELD_INPUT_CHOICE).attr('checked');
+								var checked = item.one(SELECTOR_INPUT).attr('checked');
 								var node = item;
 
 								if (!checked && index == lastIndex) {

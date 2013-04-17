@@ -42,7 +42,7 @@ AUI.add(
 
 		var TPL_TAG_LIST = '<li class="tag-item-container results-row {cssClassSelected}" data-tag="{name}" data-tagId="{tagId}" tabIndex="0">' +
 			'<div class="tags-admin-content-wrapper">' +
-					'<input type="checkbox" class="tag-item-check aui-field-input-choice" name="tag-item-check" data-tagId="{tagId}" data-tagName="{name}">' +
+					'<input type="checkbox" class="tag-item-check" name="tag-item-check" data-tagId="{tagId}" data-tagName="{name}">' +
 					'<span class="tag-item">' +
 						'<a href="javascript:;" data-tagId="{tagId}" tabIndex="-1">{name}</a>' +
 					'</span>' +

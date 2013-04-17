@@ -81,7 +81,7 @@ if (Validator.isNotNull(className)) {
 	%>
 
 		<span class="aui-field-content">
-			<label class="aui-field-label" id="<%= namespace %>assetCategoriesLabel_<%= vocabulary.getVocabularyId() %>">
+			<label id="<%= namespace %>assetCategoriesLabel_<%= vocabulary.getVocabularyId() %>">
 				<%= vocabulary.getTitle(locale) %>
 
 				<c:if test="<%= vocabulary.getGroupId() == themeDisplay.getCompanyGroupId() %>">

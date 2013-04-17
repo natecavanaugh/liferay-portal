@@ -603,10 +603,6 @@
 
 			.lfr-header-row-content .lfr-search-combobox {
 				width: 250px;
-
-				.aui-field-input-text {
-					width: 95%;
-				}
 			}
 		}
 	}
