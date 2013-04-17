@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/aui/field_wrapper/init.jsp" %>
 
 <%
-String fieldCss = AUIUtil.buildCss(AUIUtil.FIELD_PREFIX, "wrapper", inlineField, false, false, first, last, cssClass);
+String fieldCss = AUIUtil.buildCss(AUIUtil.FIELD_PREFIX, inlineField, false, false, first, last, cssClass);
 %>
 
 <div class="<%= fieldCss %>" <%= AUIUtil.buildData(data) %>>
