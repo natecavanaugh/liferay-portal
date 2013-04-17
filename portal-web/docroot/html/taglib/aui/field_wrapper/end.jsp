@@ -16,18 +16,17 @@
 
 <%@ include file="/html/taglib/aui/field_wrapper/init.jsp" %>
 
-		<c:if test='<%= inlineLabel.equals("right") %>'>
-			<label <%= AUIUtil.buildLabel("wrapper", showForLabel, name) %>>
-				<liferay-ui:message key="<%= label %>" />
+	<c:if test='<%= inlineLabel.equals("right") %>'>
+		<label <%= AUIUtil.buildLabel("wrapper", showForLabel, name) %>>
+			<liferay-ui:message key="<%= label %>" />
 
-				<c:if test="<%= required %>">
-					<span class="aui-label-required">(<liferay-ui:message key="required" />)</span>
-				</c:if>
+			<c:if test="<%= required %>">
+				<span class="aui-label-required">(<liferay-ui:message key="required" />)</span>
+			</c:if>
 
-				<c:if test="<%= Validator.isNotNull(helpMessage) %>">
-					<liferay-ui:icon-help message="<%= helpMessage %>" />
-				</c:if>
-			</label>
-		</c:if>
-	</div>
+			<c:if test="<%= Validator.isNotNull(helpMessage) %>">
+				<liferay-ui:icon-help message="<%= helpMessage %>" />
+			</c:if>
+		</label>
+	</c:if>
 </div>
