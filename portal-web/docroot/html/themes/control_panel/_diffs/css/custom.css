@@ -116,7 +116,7 @@ body.portal-popup:after, body.portal-popup:before {
 	border-width: 0;
 }
 
-#breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .taglib-search-toggle {
+#breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center {
 	background: #E8EAEB;
 	border: 1px solid #979798;
 	border-color: #979798 #FAFAFB #FAFAFB #BDBDBE;
@@ -153,7 +153,7 @@ body.portal-popup:after, body.portal-popup:before {
 	border-top: none;
 }
 
-#main-content .tags-admin-toolbar, #main-content .vocabulary-toolbar, .lfr-asset-column-actions-content .lfr-asset-column-actions-content, .taglib-search-toggle {
+#main-content .tags-admin-toolbar, #main-content .vocabulary-toolbar, .lfr-asset-column-actions-content .lfr-asset-column-actions-content {
 	padding: 5px 5px 2px;
 }
 
@@ -690,7 +690,7 @@ input[type="text"], input[type="password"], select, textarea, .textarea, .aui-ta
 	}
 }
 
-input[type="text"], input[type="password"], select, textarea, .textarea, #breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .taglib-search-toggle, .portlet-communities .layout-breadcrumb ul, .portlet-enterprise-admin .layout-breadcrumb ul, .aui-textboxlistentry-holder, .aui-field-element {
+input[type="text"], input[type="password"], select, textarea, .textarea, #breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .portlet-communities .layout-breadcrumb ul, .portlet-enterprise-admin .layout-breadcrumb ul, .aui-textboxlistentry-holder, .aui-field-element {
 	@include border-radius(4px);
 }
 
@@ -698,7 +698,7 @@ input[type="text"], input[type="password"], select, textarea, .textarea, #breadc
 	@include border-radius(4px 4px 0 0);
 }
 
-#breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .taglib-search-toggle {
+#breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center {
 	@include box-shadow(0 0 8px #CECECE inset);
 }
 
