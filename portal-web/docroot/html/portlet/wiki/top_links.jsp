@@ -177,7 +177,7 @@ if (categoryId > 0) {
 					<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 					<aui:input name="nodeId" type="hidden" value="<%= node.getNodeId() %>" />
 
-					<span class="aui-search-bar">
+					<span class="aui-form-search">
 						<aui:input inlineField="<%= true %>" label="" name="keywords" size="30" title="search-pages" type="text" value="<%= keywords %>" />
 
 						<aui:button type="submit" value="search" />

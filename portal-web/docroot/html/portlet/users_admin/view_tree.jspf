@@ -95,7 +95,7 @@ if (filterManageableOrganizations) {
 					/>
 				</c:when>
 				<c:otherwise>
-					<span class="aui-search-bar">
+					<span class="aui-form-search">
 						<aui:input inlineField="<%= true %>" label="" name="keywords" size="30" title="search-users-and-organizations" type="text" />
 
 						<aui:button onClick='<%= "javascript:" + renderResponse.getNamespace() + "search();" %>' value="search" />

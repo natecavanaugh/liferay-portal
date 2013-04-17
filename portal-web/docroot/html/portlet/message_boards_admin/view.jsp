@@ -59,7 +59,7 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 				<aui:input name="breadcrumbsCategoryId" type="hidden" value="<%= categoryId %>" />
 				<aui:input name="searchCategoryId" type="hidden" value="<%= categoryId %>" />
 
-				<span class="aui-search-bar">
+				<span class="aui-form-search">
 					<aui:input id="keywords1" inlineField="<%= true %>" label="" name="keywords" size="30" title="search-messages" type="text" />
 
 					<aui:button type="submit" value="search" />
