@@ -1712,12 +1712,6 @@
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
-			<name>inputCssClass</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>java.lang.String</type>
-		</attribute>
-		<attribute>
 			<name>label</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
