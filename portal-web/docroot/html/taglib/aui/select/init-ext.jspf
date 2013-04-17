@@ -48,5 +48,5 @@ if (Validator.isNotNull(inlineLabel)) {
 	controlGroupCss = controlGroupCss.concat(" aui-form-inline");
 }
 
-String fieldCss = AUIUtil.buildCss(AUIUtil.FIELD_PREFIX, disabled, first, last, cssClass);
+String fieldCss = AUIUtil.buildCss("aui-field-select", disabled, first, last, cssClass);
 %>

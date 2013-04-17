@@ -32,7 +32,7 @@
 	</c:if>
 </liferay-util:buffer>
 
-<c:if test="<%= !choiceField && (inlineField || Validator.isNotNull(inlineLabel)) %>">
+<c:if test="<%= !choiceField %>">
 	<div class="<%= controlGroupCss %>">
 </c:if>
 
@@ -210,7 +210,7 @@
 	</label>
 </c:if>
 
-<c:if test="<%= !choiceField && (inlineField || Validator.isNotNull(inlineLabel)) %>">
+<c:if test="<%= !choiceField %>">
 	</div>
 </c:if>
 
