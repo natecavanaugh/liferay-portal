@@ -494,9 +494,9 @@ public class PortletImporter {
 	}
 
 	/**
-	 * @see com.liferay.portlet.documentlibrary.lar.DLPortletDataHandler#getFileEntryTypeName(
+	 * @see com.liferay.portlet.documentlibrary.lar.DLFileEntryTypeStagedModelDataHandler#getFileEntryTypeName(
 	 *      String, long, String, int)
-	 * @see com.liferay.portlet.documentlibrary.lar.DLPortletDataHandler#getFolderName(
+	 * @see com.liferay.portlet.documentlibrary.lar.DLFileEntryTypeStagedModelDataHandler#getFolderName(
 	 *      String, long, long, String, int)
 	 */
 	protected String getAssetCategoryName(
@@ -1848,6 +1848,11 @@ public class PortletImporter {
 					 name.equals("classNameIds")) {
 
 				updateAssetPublisherClassNameIds(jxPreferences, name);
+			}
+			else if (name.equals("assetVocabularyId")) {
+				updatePreferencesClassPKs(
+					portletDataContext, jxPreferences, name,
+					AssetVocabulary.class, companyGroup.getGroupId());
 			}
 			else if (name.startsWith("queryName") &&
 					 value.equalsIgnoreCase("assetCategories")) {

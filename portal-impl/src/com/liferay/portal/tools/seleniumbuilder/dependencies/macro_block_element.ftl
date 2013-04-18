@@ -6,6 +6,12 @@
 	<#if name == "echo">
 		<#assign message = element.attributeValue("message")>
 
+		<#if message?contains("${") && message?contains("}")>
+			<#assign message = message?replace("${", "\" + commandScopeVariables.get(\"")>
+
+			<#assign message = message?replace("}", "\") + \"")>
+		</#if>
+
 		liferaySelenium.echo("${message}");
 	<#elseif name == "execute">
 		<#if element.attributeValue("action")??>
@@ -20,21 +26,25 @@
 	<#elseif name == "fail">
 		<#assign message = element.attributeValue("message")>
 
+		<#if message?contains("${") && message?contains("}")>
+			<#assign message = message?replace("${", "\" + commandScopeVariables.get(\"")>
+
+			<#assign message = message?replace("}", "\") + \"")>
+		</#if>
+
 		liferaySelenium.fail("${message}");
 	<#elseif name == "if">
-		<#assign conditionElement = element.element("condition")>
+		<#assign ifElement = element>
 
-		if (
-			<#assign actionElement = conditionElement>
+		<#include "macro_if_element.ftl">
 
-			<#include "action_element.ftl">
-		) {
-			<#assign thenElement = element.element("then")>
+		<#assign elseifElements = element.elements("elseif")>
 
-			<#assign blockElement = thenElement>
+		<#list elseifElements as elseifElement>
+			<#assign ifElement = elseifElement>
 
-			<#include "macro_block_element.ftl">
-		}
+			<#include "macro_if_element.ftl">
+		</#list>
 
 		<#if element.element("else")??>
 			<#assign elseElement = element.element("else")>
@@ -52,10 +62,8 @@
 
 		commandScopeVariables.put("${varName}", "${varValue}");
 	<#elseif name == "while">
-		<#assign conditionElement = element.element("condition")>
-
 		while (
-			<#assign actionElement = conditionElement>
+			<#assign actionElement = element.element("condition")>
 
 			<#include "action_element.ftl">
 		) {

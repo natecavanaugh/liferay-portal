@@ -36,9 +36,11 @@ import java.util.Map;
 public class DDLRecordSetStagedModelDataHandler
 	extends BaseStagedModelDataHandler<DDLRecordSet> {
 
+	public static final String[] CLASS_NAMES = {DDLRecordSet.class.getName()};
+
 	@Override
-	public String getClassName() {
-		return DDLRecordSet.class.getName();
+	public String[] getClassNames() {
+		return CLASS_NAMES;
 	}
 
 	@Override
@@ -94,13 +96,13 @@ public class DDLRecordSetStagedModelDataHandler
 			ddmStructureIds, recordSet.getDDMStructureId(),
 			recordSet.getDDMStructureId());
 
-		List<Element> templateElements =
+		List<Element> ddmTemplateElements =
 			portletDataContext.getReferencedDataElements(
 				recordSet, DDMTemplate.class);
 
-		for (Element templateElement : templateElements) {
+		for (Element ddmTemplateElement : ddmTemplateElements) {
 			StagedModelDataHandlerUtil.importStagedModel(
-				portletDataContext, templateElement);
+				portletDataContext, ddmTemplateElement);
 		}
 
 		ServiceContext serviceContext = portletDataContext.createServiceContext(

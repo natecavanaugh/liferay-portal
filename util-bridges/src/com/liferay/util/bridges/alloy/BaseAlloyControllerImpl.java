@@ -16,6 +16,7 @@ package com.liferay.util.bridges.alloy;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
+import com.liferay.portal.kernel.bean.ConstantsBeanFactoryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -295,6 +296,10 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		if (method != null) {
 			method.invoke(this);
 		}
+	}
+
+	protected Object getConstantsBean(Class<?> clazz) {
+		return ConstantsBeanFactoryUtil.getConstantsBean(clazz);
 	}
 
 	protected Method getMethod(String methodName, Class<?>... parameterTypes) {
