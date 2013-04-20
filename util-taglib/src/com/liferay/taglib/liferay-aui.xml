@@ -559,6 +559,20 @@
 			</attribute>
 		</attributes>
 	</component>
+	<component name="Nav" bodyContent="true">
+		<attributes>
+			<attribute>
+				<name>cssClass</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
+				<name>id</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+		</attributes>
+	</component>
 	<component name="NavBar" bodyContent="true">
 		<attributes>
 			<attribute>
