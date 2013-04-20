@@ -70,12 +70,6 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 	title="<%= title %>"
 />
 
-<liferay-util:include page="/html/portlet/dynamic_data_mapping/template_toolbar.jsp">
-	<liferay-util:param name="redirect" value="<%= currentURL %>" />
-	<liferay-util:param name="classNameId" value="<%= String.valueOf(classNameId) %>" />
-	<liferay-util:param name="classPK" value="<%= String.valueOf(classPK) %>" />
-</liferay-util:include>
-
 <aui:form action="<%= portletURL.toString() %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
@@ -104,9 +98,12 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 		rowChecker="<%= new RowChecker(renderResponse) %>"
 		searchContainer="<%= new TemplateSearch(renderRequest, portletURL) %>"
 	>
-		<liferay-ui:search-form
-			page="/html/portlet/dynamic_data_mapping/template_search.jsp"
-		/>
+
+		<liferay-util:include page="/html/portlet/dynamic_data_mapping/template_toolbar.jsp">
+			<liferay-util:param name="redirect" value="<%= currentURL %>" />
+			<liferay-util:param name="classNameId" value="<%= String.valueOf(classNameId) %>" />
+			<liferay-util:param name="classPK" value="<%= String.valueOf(classPK) %>" />
+		</liferay-util:include>
 
 		<liferay-ui:search-container-results>
 			<%@ include file="/html/portlet/dynamic_data_mapping/template_search_results.jspf" %>

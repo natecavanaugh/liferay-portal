@@ -40,12 +40,6 @@ portletURL.setParameter("tabs1", tabs1);
 	</c:if>
 </liferay-ui:error>
 
-<c:if test="<%= showToolbar %>">
-	<liferay-util:include page="/html/portlet/dynamic_data_mapping/toolbar.jsp">
-		<liferay-util:param name="toolbarItem" value="view-all" />
-	</liferay-util:include>
-</c:if>
-
 <aui:form action="<%= portletURL.toString() %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
@@ -75,9 +69,11 @@ portletURL.setParameter("tabs1", tabs1);
 		searchContainer="<%= new StructureSearch(renderRequest, portletURL) %>"
 	>
 
-		<liferay-ui:search-form
-			page="/html/portlet/dynamic_data_mapping/structure_search.jsp"
-		/>
+		<c:if test="<%= showToolbar %>">
+			<liferay-util:include page="/html/portlet/dynamic_data_mapping/toolbar.jsp">
+				<liferay-util:param name="toolbarItem" value="view-all" />
+			</liferay-util:include>
+		</c:if>
 
 		<liferay-ui:search-container-results>
 			<%@ include file="/html/portlet/dynamic_data_mapping/structure_search_results.jspf" %>
