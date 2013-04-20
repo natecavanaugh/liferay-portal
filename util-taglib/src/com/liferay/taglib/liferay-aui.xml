@@ -587,6 +587,30 @@
 			</attribute>
 		</attributes>
 	</component>
+	<component name="NavBarSearch" bodyContent="true">
+		<attributes>
+			<attribute>
+				<name>cssClass</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
+				<name>id</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
+				<name>file</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
+				<name>searchContainer</name>
+				<inputType>com.liferay.portal.kernel.dao.search.SearchContainer</inputType>
+				<outputType>com.liferay.portal.kernel.dao.search.SearchContainer</outputType>
+			</attribute>
+		</attributes>
+	</component>
 	<component name="Option" bodyContent="true">
 		<attributes>
 			<attribute>
