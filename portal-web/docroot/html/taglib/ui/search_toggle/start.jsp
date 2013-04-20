@@ -15,6 +15,11 @@
 --%>
 
 <%@ include file="/html/taglib/ui/search_toggle/init.jsp" %>
+<style>
+	.taglib-search-toggle .aui-popover .aui-arrow {
+		left: 70%;
+	}
+</style>
 <div class="taglib-search-toggle">
 	<div class="aui-form-search">
 		<div class="aui-input-append" id="<%= id %>simple">

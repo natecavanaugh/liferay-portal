@@ -52,7 +52,7 @@ function fetchOrCreatePopover() {
 				boundingBox: advancedNode,
 				srcNode: '#<%= id %>advancedContent',
 				visible: false,
-				width: 380,
+				width: 500,
 				zIndex: Liferay.zIndex.ALERT
 			}
 		);
@@ -72,7 +72,11 @@ function togglePopover(event) {
 		keywordsNode.focus();
 	}
 	else {
-		advancedNode.one('input:visible').focus();
+		var inputTextNode = advancedNode.one('input[type=text]');
+
+		if (inputTextNode) {
+			inputTextNode.focus();
+		}
 	}
 
 	var advancedSearchNode = advancedNode.one('#<%= id + displayTerms.ADVANCED_SEARCH %>');
