@@ -381,15 +381,12 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 		</c:when>
 		<c:otherwise>
 			<c:if test="<%= schedule %>">
-				<div class="lfr-portlet-toolbar">
-					<span class="lfr-toolbar-button view-button">
-						<aui:a href="javascript:;" label="view-all" />
-					</span>
-
-					<span class="lfr-toolbar-button add-button current">
-						<aui:a href="javascript:;" label="add" />
-					</span>
-				</div>
+				<aui:nav-bar>
+					<aui:nav>
+						<aui:nav-item label="view-all" />
+						<aui:nav-item label="add" />
+					</aui:nav>
+				</aui:nav-bar>
 
 				<div class="aui-hide" id="<portlet:namespace />publishedEvents">
 					<liferay-ui:header

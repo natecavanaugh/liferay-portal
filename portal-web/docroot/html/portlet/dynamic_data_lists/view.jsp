@@ -26,10 +26,6 @@ portletURL.setParameter("struts_action", "/dynamic_data_lists/view");
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
 
-	<liferay-util:include page="/html/portlet/dynamic_data_lists/toolbar.jsp">
-		<liferay-util:param name="toolbarItem" value="view-all" />
-	</liferay-util:include>
-
 	<liferay-ui:search-container
 		searchContainer="<%= new RecordSetSearch(renderRequest, portletURL) %>"
 	>
@@ -39,9 +35,9 @@ portletURL.setParameter("struts_action", "/dynamic_data_lists/view");
 		RecordSetSearchTerms searchTerms = (RecordSetSearchTerms)searchContainer.getSearchTerms();
 		%>
 
-		<liferay-ui:search-form
-			page="/html/portlet/dynamic_data_lists/record_set_search.jsp"
-		/>
+		<liferay-util:include page="/html/portlet/dynamic_data_lists/toolbar.jsp">
+			<liferay-util:param name="toolbarItem" value="view-all" />
+		</liferay-util:include>
 
 		<liferay-ui:search-container-results>
 			<%@ include file="/html/portlet/dynamic_data_lists/record_set_search_results.jspf" %>

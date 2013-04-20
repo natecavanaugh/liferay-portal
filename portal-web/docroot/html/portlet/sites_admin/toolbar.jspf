@@ -14,16 +14,10 @@
  */
 --%>
 
-<%@ include file="/html/portlet/sites_admin/init.jsp" %>
-
-<%
-String toolbarItem = ParamUtil.getString(request, "toolbarItem", "browse");
-
-String sitesListView = ParamUtil.get(request, "sitesListView", SiteConstants.LIST_VIEW_TREE);
-%>
-
 <aui:nav-bar>
 	<aui:nav>
 		<%@ include file="/html/portlet/sites_admin/toolbar_content.jspf" %>
 	</aui:nav>
+
+	<aui:nav-bar-search cssClass="aui-pull-right" file="/html/portlet/users_admin/group_search.jsp" searchContainer="<%= searchContainer %>" />
 </aui:nav-bar>
