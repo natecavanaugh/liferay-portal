@@ -74,12 +74,12 @@ int sortColumnIndex = -1;
 		</div>
 	</c:if>
 
-	<div class="results-grid" id="<%= namespace + id %>SearchContainer">
+	<div id="<%= namespace + id %>SearchContainer">
 		<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
 
 		<c:if test="<%= headerNames != null %>">
 			<thead class="aui-table-columns">
-				<tr class="results-header">
+				<tr>
 
 				<%
 				for (int i = 0; i < headerNames.size(); i++) {
@@ -117,14 +117,14 @@ int sortColumnIndex = -1;
 						cssClass = "only";
 					}
 					else if (i == 0) {
-						cssClass = "first aui-table-first-header";
+						cssClass = "aui-table-first-header";
 					}
 					else if (i == (headerNames.size() - 1)) {
-						cssClass = "last aui-table-last-header";
+						cssClass = "aui-table-last-header";
 					}
 
 					if (orderCurrentHeader) {
-						cssClass += " aui-table-header aui-table-sortable-column aui-table-sorted";
+						cssClass += " aui-table-sortable-column aui-table-sorted";
 
 						if (HtmlUtil.escapeAttribute(orderByType).equals("desc")) {
 							cssClass += " aui-table-sorted-desc";
@@ -141,7 +141,7 @@ int sortColumnIndex = -1;
 					}
 				%>
 
-					<th class="<%= cssClass %>" id="<%= namespace + id %>_col-<%= normalizedHeaderName %>"
+					<th class="aui-table-header <%= cssClass %>" id="<%= namespace + id %>_col-<%= normalizedHeaderName %>"
 
 						<%--
 
@@ -218,7 +218,7 @@ int sortColumnIndex = -1;
 		<tbody class="aui-table-data">
 
 		<c:if test="<%= resultRows.isEmpty() && (emptyResultsMessage != null) %>">
-			<tr class="results-row last">
+			<tr>
 				<td class="aui-table-cell">
 					<%= LanguageUtil.get(pageContext, emptyResultsMessage) %>
 				</td>
@@ -232,8 +232,6 @@ int sortColumnIndex = -1;
 			ResultRow row = (ResultRow)resultRows.get(i);
 
 			primaryKeys.add(HtmlUtil.escape(row.getPrimaryKey()));
-
-			row.setClassName("results-row");
 
 			request.setAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW, row);
 
@@ -263,7 +261,7 @@ int sortColumnIndex = -1;
 			Map<String, Object> data = row.getData();
 		%>
 
-			<tr class="row-results" <%= AUIUtil.buildData(data) %>>
+			<tr <%= AUIUtil.buildData(data) %>>
 
 			<%
 			for (int j = 0; j < entries.size(); j++) {
@@ -301,6 +299,7 @@ int sortColumnIndex = -1;
 			%>
 
 				<td class="aui-table-cell">
+
 					<%
 					entry.print(pageContext);
 					%>
@@ -319,7 +318,7 @@ int sortColumnIndex = -1;
 		%>
 
 		<c:if test="<%= headerNames != null %>">
-			<tr class="lfr-template results-row">
+			<tr class="lfr-template">
 
 				<%
 				for (int i = 0; i < headerNames.size(); i++) {

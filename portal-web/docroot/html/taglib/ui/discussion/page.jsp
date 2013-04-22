@@ -207,7 +207,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 				<c:if test="<%= treeWalker != null %>">
 				<table class="tree-walker aui-table aui-table-bordered aui-table-hover aui-table-striped">
 					<thead class="aui-table-columns">
-					<tr class="results-header">
+					<tr>
 						<th class="aui-table-header" colspan="2">
 							<liferay-ui:message key="threaded-replies" />
 						</th>

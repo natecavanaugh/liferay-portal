@@ -383,6 +383,7 @@ YUI.add(
 					fullpath: javaScriptRootPath + '/liferay/search_container.js',
 					requires: [
 						'aui-base',
+						'aui-datatable-core',
 						'event-mouseenter'
 					]
 				},

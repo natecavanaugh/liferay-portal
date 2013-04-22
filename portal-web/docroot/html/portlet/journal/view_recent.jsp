@@ -23,9 +23,9 @@
 <table class="lfr-table" width="100%">
 <tr>
 	<td class="lfr-top" width="33%">
-		<table border="0" cellpadding="4" cellspacing="0" class="aui-table aui-table-bordered aui-table-hover aui-table-striped" width="100%">
+		<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
 			<thead class="aui-table-columns">
-			<tr class="results-header" style="font-size: x-small; font-weight: bold;">
+			<tr>
 				<td class="aui-table-cell" colspan="2">
 					<%= LanguageUtil.format(pageContext, "last-x-web-content", String.valueOf(JournalUtil.MAX_STACK_SIZE), false) %>
 				</td>
@@ -33,6 +33,7 @@
 			</thead>
 
 			<tbody class="aui-table-data">
+
 				<%
 				Stack recentArticles = JournalUtil.getRecentArticles(renderRequest);
 
@@ -52,14 +53,15 @@
 						<portlet:param name="version" value="<%= String.valueOf(article.getVersion()) %>" />
 					</portlet:renderURL>
 
-				<tr class="results-row"  style="font-size: x-small;">
-					<td class="aui-table-cell" class="aui-table-cell">
+				<tr>
+					<td class="aui-table-cell">
 						<aui:a href="<%= editArticleURL %>"><%= article.getArticleId() %></aui:a>
 					</td>
-					<td class="aui-table-cell" class="aui-table-cell">
+					<td class="aui-table-cell">
 						<aui:a href="<%= editArticleURL %>"><%= article.getTitle(locale) %></aui:a>
 					</td>
 				</tr>
+
 			<%
 			}
 			%>
@@ -68,13 +70,13 @@
 		</table>
 	</td>
 	<td width="33%">
-		<table border="0" cellpadding="4" cellspacing="0" class="aui-table aui-table-bordered aui-table-hover aui-table-striped" width="100%">
+		<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
 			<thead class="aui-table-columns">
-			<tr class="results-header" style="font-size: x-small; font-weight: bold;">
-				<td class="aui-table-cell" colspan="2">
-					<%= LanguageUtil.format(pageContext, "last-x-structures", String.valueOf(JournalUtil.MAX_STACK_SIZE), false) %>
-				</td>
-			</tr>
+				<tr>
+					<td class="aui-table-cell" colspan="2">
+						<%= LanguageUtil.format(pageContext, "last-x-structures", String.valueOf(JournalUtil.MAX_STACK_SIZE), false) %>
+					</td>
+				</tr>
 			</thead>
 
 			<tbody class="aui-table-data">
@@ -90,7 +92,7 @@
 				ddmStructure = ddmStructure.toEscapedModel();
 			%>
 
-				<tr class="results-row" style="font-size: x-small;">
+				<tr>
 					<td class="aui-table-cell">
 						<%= ddmStructure.getName(locale) %>
 					</td>
@@ -104,13 +106,13 @@
 		</table>
 	</td>
 	<td width="33%">
-		<table border="0" cellpadding="4" cellspacing="0" class="aui-table aui-table-bordered aui-table-hover aui-table-striped" width="100%">
+		<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
 			<thead class="aui-table-columns">
-			<tr class="results-header" style="font-size: x-small; font-weight: bold;">
-				<td class="aui-table-cell" colspan="2">
-					<%= LanguageUtil.format(pageContext, "last-x-templates", String.valueOf(JournalUtil.MAX_STACK_SIZE), false) %>
-				</td>
-			</tr>
+				<tr>
+					<td class="aui-table-cell" colspan="2">
+						<%= LanguageUtil.format(pageContext, "last-x-templates", String.valueOf(JournalUtil.MAX_STACK_SIZE), false) %>
+					</td>
+				</tr>
 			</thead>
 
 			<tbody class="aui-table-data">
@@ -126,7 +128,7 @@
 				ddmTemplate = ddmTemplate.toEscapedModel();
 			%>
 
-				<tr class="results-row"  style="font-size: x-small;">
+				<tr>
 					<td class="aui-table-cell">
 						<%= ddmTemplate.getName(locale) %>
 					</td>

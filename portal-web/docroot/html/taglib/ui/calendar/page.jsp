@@ -74,7 +74,7 @@ int weekNumber = 1;
 		</tr>
 	</c:if>
 
-	<tr class="results-header">
+	<tr>
 
 		<%
 		for (int i = 0; i < 7; i++) {

@@ -2,26 +2,6 @@
 
 /* ---------- Main ---------- */
 
-.results-grid {
-	background-color: #FFF;
-}
-
-.context-pane-content .results-grid {
-	border-width: 0;
-}
-
-.taglib-search-iterator .results-row {
-	td, th {
-		&.first {
-			border-left-width: 0;
-		}
-
-		&.last {
-			border-right-width: 0;
-		}
-	}
-}
-
 /* ---------- Dragging/sorting indicators ---------- */
 
 .portlet-layout.dragging {
@@ -577,19 +557,5 @@
 
 	.aui-paginator-current-page {
 		color: #FFF;
-	}
-}
-
-.ie6, .ie7 {
-	.lfr-header-row .aui-buttonitem-content {
-		white-space: normal;
-
-		.aui-buttonitem-label {
-			white-space: nowrap;
-		}
-	}
-
-	.results-row.hover td {
-		border-color: #D3E8F1;
 	}
 }

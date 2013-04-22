@@ -76,9 +76,9 @@ decimalFormat.setMinimumFractionDigits(2);
 
 <c:choose>
 	<c:when test="<%= windowState.equals(WindowState.NORMAL) %>">
-		<table border="1" cellpadding="3" cellspacing="0" class="aui-table aui-table-bordered aui-table-hover aui-table-striped" width="100%">
+		<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
 		<thead class="aui-table-columns">
-		<tr class="results-header">
+		<tr>
 			<th class="aui-table-header">
 				<strong><liferay-ui:message key="currency" /></strong>
 			</th>
@@ -101,13 +101,14 @@ decimalFormat.setMinimumFractionDigits(2);
 		</thead>
 
 		<tbody class="aui-table-data">
+
 		<%
 		for (int i = 0; i < symbols.length; i++) {
 			String symbol = symbols[i];
 		%>
 
 			<tr>
-				<td class="aui-table-cell results-header">
+				<td class="aui-table-cell">
 					<%= symbol %>
 				</td>
 
@@ -121,11 +122,11 @@ decimalFormat.setMinimumFractionDigits(2);
 		%>
 
 						<c:if test="<%= i != j %>">
-							<td class="=aui-table-cell results-row"><%= currency.getRate() %></td>
+							<td class="aui-table-cell"><%= currency.getRate() %></td>
 						</c:if>
 
 						<c:if test="<%= i == j %>">
-							<td class="=aui-table-cell results-row">1</td>
+							<td class="aui-table-cell">1</td>
 						</c:if>
 
 		<%

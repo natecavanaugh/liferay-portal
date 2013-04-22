@@ -602,7 +602,7 @@ body.portlet {
 
 /* ---------- Permissions ---------- */
 
-.results-row {
+.aui-table-data tr {
 	&.lfr-role .first {
 		background-image: url();
 		background-position: 5px 50%;

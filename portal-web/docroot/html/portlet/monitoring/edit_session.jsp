@@ -99,14 +99,14 @@ userTracker = userTracker.toEscapedModel();
 
 				<liferay-ui:panel-container extended="<%= true %>" id="monitoringSessionHistoryPanelContainer" persistState="<%= true %>">
 					<liferay-ui:panel collapsible="<%= true %>" extended="<%= false %>" id="sessionAccessedURLsPanels" persistState="<%= true %>" title="accessed-urls">
-						<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped" width="100%">
+						<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
 
 							<%
 							for (int i = 0; i < paths.size(); i++) {
 								UserTrackerPath userTrackerPath = paths.get(i);
 							%>
 
-								<tr class="results-row">
+								<tr>
 									<td class="aui-table-cell">
 										<%= StringUtil.replace(userTrackerPath.getPath(), "&", "& ") %>
 									</td>
@@ -114,6 +114,7 @@ userTracker = userTracker.toEscapedModel();
 										<%= dateFormatDateTime.format(userTrackerPath.getPathDate()) %>
 									</td>
 								</tr>
+
 							<%
 							}
 							%>
@@ -122,7 +123,7 @@ userTracker = userTracker.toEscapedModel();
 					</liferay-ui:panel>
 
 					<liferay-ui:panel collapsible="<%= true %>" extended="<%= false %>" id="monitoringSessionAttributesPanel" persistState="<%= true %>" title="session-attributes">
-						<table border="0" cellpadding="4" cellspacing="0" class="aui-table aui-table-bordered aui-table-hover aui-table-striped" width="100%">
+						<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
 
 							<%
 							userSessionAlive = true;
@@ -146,7 +147,7 @@ userTracker = userTracker.toEscapedModel();
 									for (String attrName : sortedAttrNames) {
 							%>
 
-										<tr class="results-row" style="font-size: xx-small;">
+										<tr>
 											<td class="aui-table-cell">
 												<%= attrName %>
 											</td>
