@@ -130,10 +130,10 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 	<c:if test="<%= ldapServerIds.length > 0 %>">
 		<br /><br />
 
-		<div class="results-grid ldap-servers">
+		<div class="aui-searchcontainer-content ldap-servers">
 			<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
 			<thead class="aui-table-columns">
-			<tr class="results-header">
+			<tr>
 				<td class="aui-table-header">
 					<liferay-ui:message key="ldap-server-id" />
 				</th>
@@ -145,6 +145,7 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 			</thead>
 
 			<tbody>
+
 			<%
 			for (int i = 0; i < ldapServerIds.length; i++) {
 				long ldapServerId = ldapServerIds[i];
@@ -152,14 +153,14 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 				String ldapServerName = PrefsPropsUtil.getString(company.getCompanyId(), "ldap.server.name." + ldapServerId);
 			%>
 
-				<tr class="results-row" data-ldapServerId="<%= ldapServerId %>">
+				<tr data-ldapServerId="<%= ldapServerId %>">
 					<td class="aui-table-cell">
 						<%= ldapServerId %>
 					</td>
 					<td class="aui-table-cell">
 						<%= ldapServerName %>
 					</td>
-					<td class="aui-table-cell" align="right">
+					<td align="right" class="aui-table-cell">
 						<div class="control">
 							<c:if test="<%= ldapServerIds.length > 1 %>">
 
@@ -318,7 +319,7 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 
 			var ldapServerIds = [];
 
-			A.all('.ldap-servers .results-row').each(
+			A.all('.ldap-servers .aui-table-data tr').each(
 				function(item, index, collection) {
 					ldapServerIds.push(item.getAttribute('data-ldapServerId'));
 				}

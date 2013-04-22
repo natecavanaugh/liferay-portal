@@ -111,7 +111,6 @@ if (Validator.isNull(redirect)) {
 
 	request.setAttribute("edit_message.jsp-assetTagNames", ParamUtil.getString(request, "assetTagNames"));
 	request.setAttribute("edit_message.jsp-category", category);
-	request.setAttribute("edit_message.jsp-className", "results-row");
 	request.setAttribute("edit_message.jsp-depth", depth);
 	request.setAttribute("edit_message.jsp-editable", Boolean.FALSE);
 	request.setAttribute("edit_message.jsp-message", previewMessage);
@@ -448,7 +447,6 @@ if (Validator.isNull(redirect)) {
 		int depth = 0;
 
 		request.setAttribute("edit_message.jsp-category", category);
-		request.setAttribute("edit_message.jsp-className", "results-row");
 		request.setAttribute("edit_message.jsp-depth", depth);
 		request.setAttribute("edit_message.jsp-editable", Boolean.FALSE);
 		request.setAttribute("edit_message.jsp-message", message);

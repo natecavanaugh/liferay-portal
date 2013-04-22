@@ -23,10 +23,6 @@ body.orange, .orange .portlet {
 
 	/* ---------- Application styling ---------- */
 
-	.results-header {
-		background-color: #DDD9D2;
-	}
-
 	.aui-resizable-proxy {
 		border-color: #968A83;
 	}

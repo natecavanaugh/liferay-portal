@@ -45,7 +45,8 @@ List<DiffResult> targetResults = diffResults[1];
 			DiffResult sourceResult = sourceResults.get(i);
 			DiffResult targetResult = targetResults.get(i);
 		%>
-			<tr class="results-header">
+
+			<tr>
 				<th class="aui-table-header">
 					<liferay-ui:message key="line" /> <%= sourceResult.getLineNumber() %>
 				</th>

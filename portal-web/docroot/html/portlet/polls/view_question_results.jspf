@@ -19,9 +19,9 @@ NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
 NumberFormat percentFormat = NumberFormat.getPercentInstance(locale);
 %>
 
-<table border="0" cellpadding="4" cellspacing="0" class="aui-table aui-table-bordered aui-table-hover aui-table-striped" width="100%">
-<thead class="aui-table-columns"
-<tr class="results-header" style="font-size: x-small; font-weight: bold;">
+<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
+<thead class="aui-table-columns">
+<tr>
 	<td class="aui-table-cell">
 		%
 	</td>
@@ -57,7 +57,7 @@ for (int i = 0; i < choices.size(); i++) {
 %>
 
 <tbody class="aui-table-data">
-<tr class="results-row" style="font-size: x-small;">
+<tr>
 	<td class="aui-table-cell">
 		<%= percentFormat.format(votesPercent) %>
 	</td>
@@ -76,7 +76,7 @@ for (int i = 0; i < choices.size(); i++) {
 	<td class="aui-table-cell">
 		<strong><%= choice.getName() %>.</strong>
 	</td>
-	<td class="aui-table-cell" width="99%">
+	<td class="aui-table-cell">
 		<%= choice.getDescription(locale) %>
 	</td>
 </tr>

@@ -68,7 +68,6 @@ for (int i = 0; i < messages.size(); i++) {
 	viewableThread = true;
 
 	request.setAttribute("edit_message.jsp-category", category);
-	request.setAttribute("edit_message.jsp-className", "results-row");
 	request.setAttribute("edit_message.jsp-depth", depth);
 	request.setAttribute("edit_message.jsp-editable", Boolean.TRUE);
 	request.setAttribute("edit_message.jsp-message", message);

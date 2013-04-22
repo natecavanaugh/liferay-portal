@@ -26,7 +26,7 @@ boolean lastNode = ((Boolean)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WA
 int depth = ((Integer)request.getAttribute(WebKeys.MESSAGE_BOARDS_TREE_WALKER_DEPTH)).intValue();
 %>
 
-<tr class="results-row">
+<tr>
 	<td class="aui-table-cell" style="padding-left: <%= depth * 10 %>px; width: 90%">
 		<c:if test="<%= !message.isRoot() %>">
 			<c:choose>

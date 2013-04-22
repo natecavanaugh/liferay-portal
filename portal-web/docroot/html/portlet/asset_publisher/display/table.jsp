@@ -69,7 +69,7 @@ request.setAttribute("view.jsp-showIconLabel", false);
 <c:if test="<%= assetEntryIndex == 0 %>">
 	<table class="aui-table aui-table-bordered aui-table-hover aui-table-striped">
 	<thead class="aui-table-columns">
-	<tr class="results-header">
+	<tr>
 		<th class="aui-table-header aui-table-sortable-column">
 			<liferay-ui:message key="title" />
 		</th>
@@ -96,7 +96,7 @@ request.setAttribute("view.jsp-showIconLabel", false);
 </c:if>
 
 
-<tr class="results-row">
+<tr>
 	<td class="aui-table-cell">
 		<c:choose>
 			<c:when test="<%= Validator.isNotNull(viewURL) %>">
