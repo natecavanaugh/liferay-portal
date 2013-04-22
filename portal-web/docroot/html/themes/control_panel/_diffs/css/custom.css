@@ -3,16 +3,6 @@
 
 /* ---------- Base styles ---------- */
 
-body {
-	background: #EEF0F2 url(../images/custom/sidebar_bg.png) repeat-y 0 0;
-	color: #1A1A1A;
-	font-size: 12px;
-}
-
-a {
-	color: #5C85AD;
-}
-
 body.portal-popup:after, body.portal-popup:before {
 	background-image: none;
 }
