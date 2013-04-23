@@ -156,36 +156,20 @@
 			</ul>
 		</liferay-ui:panel>
 
-		<liferay-ui:panel collapsible="<%= true %>" cssClass="export-group-panel" id="otherPanel" persistState="<%= true %>" title="other">
+		<liferay-ui:panel collapsible="<%= false %>" cssClass="export-group-panel" id="permissionsPanel" persistState="<%= true %>" title="permissions">
 			<ul class="lfr-tree lfr-component">
 				<li class="tree-item">
 					<aui:input label="permissions" name="<%= PortletDataHandlerKeys.PERMISSIONS %>" type="checkbox" />
 
-					<ul id="<portlet:namespace />permissionsUl">
+					<ul id="<portlet:namespace />selectPermissions">
 						<li class="tree-item">
 							<aui:input label="permissions-assigned-to-roles" name="permissionsAssignedToRoles" type="checkbox" value="<%= true %>" />
 						</li>
 					</ul>
-				</li>
 
-				<li class="tree-item">
-					<aui:input helpMessage="export-import-theme-help" label="theme" name="<%= PortletDataHandlerKeys.THEME %>" type="checkbox" value="<%= true %>" />
-				</li>
-
-				<li class="tree-item">
-					<aui:input helpMessage="export-import-theme-settings-help" label="theme-settings" name="<%= PortletDataHandlerKeys.THEME_REFERENCE %>" type="checkbox" value="<%= true %>" />
-				</li>
-
-				<li class="tree-item">
-					<aui:input label="logo" name="<%= PortletDataHandlerKeys.LOGO %>" type="checkbox" value="<%= true %>" />
-				</li>
-
-				<li class="tree-item">
-					<aui:input label="site-pages-settings" name="<%= PortletDataHandlerKeys.LAYOUT_SET_SETTINGS %>" type="checkbox" value="<%= true %>" />
-				</li>
-
-				<li class="tree-item">
-					<aui:input helpMessage="export-import-categories-help" label="categories" name="<%= PortletDataHandlerKeys.CATEGORIES %>" type="checkbox" value="<%= false %>" />
+					<aui:script>
+						Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PERMISSIONS %>Checkbox', '<portlet:namespace />selectPermissions');
+					</aui:script>
 				</li>
 			</ul>
 		</liferay-ui:panel>
