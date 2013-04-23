@@ -53,17 +53,45 @@
 			</liferay-ui:panel>
 		</c:if>
 
-		<liferay-ui:panel collapsible="<%= true %>" cssClass="export-group-panel" id="portletDataPanel" persistState="<%= true %>" title="applications">
+		<liferay-ui:panel collapsible="<%= false %>" cssClass="export-group-panel" defaultState="open" id="applicationPanel" persistState="<%= true %>" title="application-configuration">
 			<ul class="lfr-tree lfr-component">
 				<li class="tree-item">
-					<aui:input label="setup" name="<%= PortletDataHandlerKeys.PORTLET_SETUP %>" type="checkbox" value="<%= true %>" />
+					<aui:input checked="<%= true %>" helpMessage="all-applications-help" label="all-applications" name="<%= PortletDataHandlerKeys.PORTLET_SETUP_ALL %>" type="checkbox" value="<%= true %>" />
+
+					<ul id="<portlet:namespace />showGlobalConfiguration">
+						<li class="tree-item">
+							<div class="selected-labels" id="<portlet:namespace />selectedGlobalConfiguration">
+								<liferay-ui:message key="archived-setups"></liferay-ui:message>,
+								<liferay-ui:message key="user-preferences"></liferay-ui:message>
+							</div>
+
+							<liferay-ui:icon
+								cssClass="modify-link"
+								id="globalConfigurationLink"
+								image="add"
+								label="<%= true %>"
+								message="change"
+								method="get"
+								url="javascript:;"
+							/>
+						</li>
+					</ul>
+
+					<aui:script>
+						Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_SETUP_ALL %>Checkbox', '<portlet:namespace />showGlobalConfiguration');
+					</aui:script>
+
+					<div class="aui-helper-hidden" id="<portlet:namespace />globalConfiguration">
+						<aui:fieldset cssClass="portlet-data-section" label="all-applications">
+							<aui:input label="archived-setups" name="<%= PortletDataHandlerKeys.PORTLET_ARCHIVED_SETUPS %>" type="checkbox" value="<%= true %>" />
+
+							<aui:input helpMessage="import-user-preferences-help" label="user-preferences" name="<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES %>" type="checkbox" value="<%= true %>" />
+						</aui:fieldset>
+					</div>
 				</li>
-				<li class="tree-item">
-					<aui:input label="archived-setups" name="<%= PortletDataHandlerKeys.PORTLET_ARCHIVED_SETUPS %>" type="checkbox" value="<%= true %>" />
-				</li>
-				<li class="tree-item">
-					<aui:input helpMessage="import-user-preferences-help" label="user-preferences" name="<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES %>" type="checkbox" value="<%= true %>" />
-				</li>
+			</ul>
+		</liferay-ui:panel>
+
 				<li class="tree-item">
 					<c:if test="<%= !group.isLayoutPrototype() %>">
 						<aui:input name="<%= PortletDataHandlerKeys.PORTLET_DATA_CONTROL_DEFAULT %>" type="hidden" value="<%= true %>" />
