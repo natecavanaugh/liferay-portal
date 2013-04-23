@@ -19,12 +19,37 @@
 
 	<liferay-ui:panel-container extended="<%= true %>" id="export-dialog-tree-panel-container" persistState="<%= true %>">
 		<c:if test="<%= !group.isLayoutPrototype() %>">
-			<liferay-ui:panel collapsible="<%= true %>" cssClass="export-group-panel" id="pagesPanel" persistState="<%= true %>" title="pages">
-				<ul class="lfr-tree lfr-component">
-					<li class="tree-item">
-						<aui:input helpMessage="delete-missing-layouts-help" label="delete-missing-layouts" name="<%= PortletDataHandlerKeys.DELETE_MISSING_LAYOUTS %>" type="checkbox" value="<%= false %>" />
-					</li>
-				</ul>
+			<liferay-ui:panel collapsible="<%= false %>" cssClass="export-group-panel" defaultState="open" id="pagesPanel" persistState="<%= true %>" title="pages">
+				<div class="selected-labels" id="<portlet:namespace />selectedPages">
+					<liferay-ui:message key="site-pages-settings"></liferay-ui:message>,
+					<liferay-ui:message key="theme"></liferay-ui:message>,
+					<liferay-ui:message key="theme-settings"></liferay-ui:message>,
+					<liferay-ui:message key="logo"></liferay-ui:message>
+				</div>
+
+				<liferay-ui:icon
+					cssClass="modify-link"
+					id="pagesLink"
+					image="add"
+					label="<%= true %>"
+					message="change"
+					method="get"
+					url="javascript:;"
+				/>
+
+				<div class="aui-helper-hidden" id="<portlet:namespace />pages">
+					<aui:fieldset cssClass="portlet-data-section" label="pages">
+							<aui:input helpMessage="delete-missing-layouts-help" label="delete-missing-layouts" name="<%= PortletDataHandlerKeys.DELETE_MISSING_LAYOUTS %>" type="checkbox" value="<%= false %>" />
+
+							<aui:input label="site-pages-settings" name="<%= PortletDataHandlerKeys.LAYOUT_SET_SETTINGS %>" type="checkbox" value="<%= true %>" />
+
+							<aui:input helpMessage="export-import-theme-help" label="theme" name="<%= PortletDataHandlerKeys.THEME %>" type="checkbox" value="<%= true %>" />
+
+							<aui:input helpMessage="export-import-theme-settings-help" label="theme-settings" name="<%= PortletDataHandlerKeys.THEME_REFERENCE %>" type="checkbox" value="<%= true %>" />
+
+							<aui:input label="logo" name="<%= PortletDataHandlerKeys.LOGO %>" type="checkbox" value="<%= true %>" />
+					</aui:fieldset>
+				</div>
 			</liferay-ui:panel>
 		</c:if>
 
