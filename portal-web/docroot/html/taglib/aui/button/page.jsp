@@ -16,25 +16,6 @@
 
 <%@ include file="/html/taglib/aui/button/init.jsp" %>
 
-<%
-if (Validator.isNotNull(href)) {
-	String escapedHref = HtmlUtil.escapeJS(PortalUtil.escapeRedirect(href));
-
-	if (Validator.isNotNull(escapedHref)) {
-		onClick = "location.href = '" + escapedHref + "';";
-	}
-	else {
-		onClick = "location.href = location.href.replace(location.hash, '');";
-	}
-}
-else if (onClick.startsWith(Http.HTTP_WITH_SLASH) || onClick.startsWith(Http.HTTPS_WITH_SLASH) || onClick.startsWith(StringPool.SLASH)) {
-	onClick = "location.href = '" + HtmlUtil.escape(PortalUtil.escapeRedirect(onClick)) + "';";
-}
-else if (onClick.startsWith("wsrp_rewrite?")) {
-	onClick = "location.href = '" + HtmlUtil.escape(onClick) + "';";
-}
-%>
-
 <button class="<%= AUIUtil.buildCss(AUIUtil.BUTTON_PREFIX, disabled, false, false, cssClass) %>" <%= disabled ? "disabled" : StringPool.BLANK %> <%= Validator.isNotNull(name) ? "id=\"" + namespace + name + "\"" : StringPool.BLANK %> <%= Validator.isNotNull(onClick) ? "onClick=\"" + onClick + "\"" : StringPool.BLANK %> type='<%= type.equals("cancel") ? "button" : type %>' <%= AUIUtil.buildData(data) %> <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>>
 	<c:if test='<%= Validator.isNotNull(icon) && iconAlign.equals("left") %>'>
 		<i class="<%= icon %>"></i>
