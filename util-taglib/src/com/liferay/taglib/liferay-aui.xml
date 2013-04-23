@@ -101,6 +101,12 @@
 				<outputType>java.lang.String</outputType>
 			</attribute>
 			<attribute>
+				<name>primary</name>
+				<inputType>java.lang.Object</inputType>
+				<outputType>java.lang.Object</outputType>
+				<defaultValue>null</defaultValue>
+			</attribute>
+			<attribute>
 				<name>type</name>
 				<inputType>java.lang.String</inputType>
 				<outputType>java.lang.String</outputType>
