@@ -204,7 +204,7 @@ boolean allowTrackbacks = PropsValues.BLOGS_TRACKBACK_ENABLED && BeanParamUtil.g
 		%>
 
 		<c:if test="<%= pending %>">
-			<div class="portlet-msg-info">
+			<div class="aui-alert aui-alert-info">
 				<liferay-ui:message key="there-is-a-publication-workflow-in-process" />
 			</div>
 		</c:if>
@@ -226,7 +226,7 @@ boolean allowTrackbacks = PropsValues.BLOGS_TRACKBACK_ENABLED && BeanParamUtil.g
 			%>
 
 			<c:if test="<%= (entry != null) && entry.isApproved() && WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(entry.getCompanyId(), entry.getGroupId(), BlogsEntry.class.getName()) %>">
-				<div class="portlet-msg-info">
+				<div class="aui-alert aui-alert-info">
 					<%= LanguageUtil.format(pageContext, "this-x-is-approved.-publishing-these-changes-will-cause-it-to-be-unpublished-and-go-through-the-approval-process-again", ResourceActionsUtil.getModelResource(locale, BlogsEntry.class.getName())) %>
 				</div>
 			</c:if>
@@ -349,7 +349,7 @@ boolean allowTrackbacks = PropsValues.BLOGS_TRACKBACK_ENABLED && BeanParamUtil.g
 						on: {
 							failure: function() {
 								if (saveStatus) {
-									saveStatus.set('className', 'save-status portlet-msg-error');
+									saveStatus.set('className', 'aui-alert aui-alert-error save-status');
 									saveStatus.html('<%= UnicodeLanguageUtil.get(pageContext, "could-not-save-draft-to-the-server") %>');
 								}
 							},
@@ -357,7 +357,7 @@ boolean allowTrackbacks = PropsValues.BLOGS_TRACKBACK_ENABLED && BeanParamUtil.g
 								Liferay.Util.toggleDisabled(publishButton, true);
 
 								if (saveStatus) {
-									saveStatus.set('className', 'save-status portlet-msg-info pending');
+									saveStatus.set('className', 'aui-alert aui-alert-info save-status pending');
 									saveStatus.html('<%= UnicodeLanguageUtil.get(pageContext, "saving-draft") %>');
 								}
 							},
@@ -390,7 +390,7 @@ boolean allowTrackbacks = PropsValues.BLOGS_TRACKBACK_ENABLED && BeanParamUtil.g
 									var now = saveText.replace(/\[TIME\]/gim, (new Date()).toString());
 
 									if (saveStatus) {
-										saveStatus.set('className', 'save-status portlet-msg-success');
+										saveStatus.set('className', 'aui-alert aui-alert-success save-status');
 										saveStatus.html(now);
 									}
 								}

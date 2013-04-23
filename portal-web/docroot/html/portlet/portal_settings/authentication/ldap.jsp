@@ -107,7 +107,7 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 <h3><liferay-ui:message key="ldap-servers" /></h3>
 
 <c:if test="<%= ldapAuthEnabled && (ldapServerIds.length <= 0) %>">
-	<div class="portlet-msg-info">
+	<div class="aui-alert aui-alert-info">
 		<liferay-ui:message key="default-ldap-server-settings-are-in-use-please-add-an-ldap-server-to-override-the-default-settings" />
 	</div>
 </c:if>

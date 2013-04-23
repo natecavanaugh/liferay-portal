@@ -271,7 +271,7 @@ boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChec
 			<c:if test="<%= themeDisplay.isImpersonated() %>">
 				<div class="aui-menu impersonation-menu aui-overlaycontext-hidden" id="<portlet:namespace />userOptionsContainer">
 					<div class="aui-menu-content">
-						<div class="notice-message portlet-msg-info">
+						<div class="notice-message aui-alert aui-alert-info">
 							<c:choose>
 								<c:when test="<%= themeDisplay.isSignedIn() %>">
 									<%= LanguageUtil.format(pageContext, "you-are-impersonating-x", new Object[] {HtmlUtil.escape(user.getFullName())}) %>

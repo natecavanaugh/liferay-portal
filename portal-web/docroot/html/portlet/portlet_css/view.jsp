@@ -117,7 +117,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 						<aui:option label="no" value="false" />
 					</aui:select>
 
-					<span class="form-hint portlet-msg-info aui-hide" id="border-note">
+					<span class="aui-alert aui-alert-info aui-hide form-hint" id="border-note">
 						<liferay-ui:message key="this-change-will-only-be-shown-after-you-refresh-the-page" />
 					</span>
 				</aui:fieldset>

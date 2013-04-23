@@ -134,7 +134,7 @@
 				%>
 
 					<li class="tree-item">
-						<div class="portlet-msg-error"><%= LanguageUtil.get(pageContext, "error-initializing-import-controls") %></div>
+						<div class="aui-alert aui-alert-error"><%= LanguageUtil.get(pageContext, "error-initializing-import-controls") %></div>
 					</li>
 
 				<%

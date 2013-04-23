@@ -425,7 +425,7 @@ ArticleSearch searchContainer = new ArticleSearch(liferayPortletRequest, entryEn
 				</c:choose>
 
 				<c:if test="<%= emptySearchResults %>">
-					<div class="portlet-msg-info">
+					<div class="aui-alert aui-alert-info">
 
 						<%
 						String message = LanguageUtil.get(pageContext, "no-articles-were-found-that-matched-the-specified-filters");

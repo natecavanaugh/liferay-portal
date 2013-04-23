@@ -11,7 +11,7 @@ AUI.add(
 
 		var CSS_ITEMS_LEFT = 'lfr-items-left';
 
-		var CSS_MESSAGE_INFO = 'portlet-msg-info';
+		var CSS_MESSAGE_INFO = 'aui-alert aui-alert-info';
 
 		var CSS_QUEUE = 'lfr-undo-queue';
 

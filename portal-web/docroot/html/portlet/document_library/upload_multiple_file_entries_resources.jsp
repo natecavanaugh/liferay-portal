@@ -80,7 +80,7 @@ long assetClassPK = 0;
 	<aui:input name="repositoryId" type="hidden" value="<%= String.valueOf(repositoryId) %>" />
 	<aui:input name="folderId" type="hidden" value="<%= String.valueOf(folderId) %>" />
 
-	<div class="no-files-selected-info portlet-msg-info aui-hide" id="<portlet:namespace />metadataExplanationContainer">
+	<div class="no-files-selected-info aui-alert aui-alert-info aui-hide" id="<portlet:namespace />metadataExplanationContainer">
 		<liferay-ui:message key="select-documents-from-the-left-to-add-them-to-the-documents-and-media" />
 	</div>
 

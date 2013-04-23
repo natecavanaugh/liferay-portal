@@ -32,12 +32,12 @@ if (referer.equals(themeDisplay.getPathMain() + "/portal/update_reminder_query")
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	<aui:input name="<%= WebKeys.REFERER %>" type="hidden" value="<%= referer %>" />
 
-	<div class="portlet-msg-info">
+	<div class="aui-alert aui-alert-info">
 		<liferay-ui:message key="please-choose-a-reminder-query" />
 	</div>
 
 	<c:if test="<%= SessionErrors.contains(request, UserReminderQueryException.class.getName()) %>">
-		<div class="portlet-msg-error">
+		<div class="aui-alert aui-alert-error">
 			<liferay-ui:message key="reminder-query-and-answer-cannot-be-empty" />
 		</div>
 	</c:if>

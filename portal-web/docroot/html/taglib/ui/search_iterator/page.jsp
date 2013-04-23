@@ -62,7 +62,7 @@ int sortColumnIndex = -1;
 %>
 
 <c:if test="<%= resultRows.isEmpty() && (emptyResultsMessage != null) %>">
-	<div class="portlet-msg-info">
+	<div class="aui-alert aui-alert-info">
 		<%= LanguageUtil.get(pageContext, emptyResultsMessage) %>
 	</div>
 </c:if>

@@ -38,12 +38,12 @@ boolean expired = true;
 				renderRequest.setAttribute(WebKeys.PORTLET_CONFIGURATOR_VISIBILITY, Boolean.TRUE);
 				%>
 
-				<div class="portlet-msg-info">
+				<div class="aui-alert aui-alert-info">
 					<liferay-ui:message key="select-existing-web-content-or-add-some-web-content-to-be-displayed-in-this-portlet" />
 				</div>
 			</c:when>
 			<c:otherwise>
-				<div class="portlet-msg-error">
+				<div class="aui-alert aui-alert-error">
 					<%= LanguageUtil.get(pageContext, "the-selected-web-content-no-longer-exists") %>
 				</div>
 			</c:otherwise>
@@ -223,7 +223,7 @@ boolean expired = true;
 							if (expired) {
 							%>
 
-								<div class="portlet-msg-alert">
+								<div class="aui-alert aui-alert-block">
 									<%= LanguageUtil.format(pageContext, "x-is-expired", title) %>
 								</div>
 
@@ -242,14 +242,14 @@ boolean expired = true;
 											<portlet:param name="version" value="<%= String.valueOf(article.getVersion()) %>" />
 										</liferay-portlet:renderURL>
 
-										<div class="portlet-msg-alert">
+										<div class="aui-alert aui-alert-block">
 											<a href="<%= editURL %>">
 												<%= LanguageUtil.format(pageContext, "x-is-not-approved", HtmlUtil.escape(title)) %>
 											</a>
 										</div>
 									</c:when>
 									<c:otherwise>
-										<div class="portlet-msg-alert">
+										<div class="aui-alert aui-alert-block">
 											<%= LanguageUtil.format(pageContext, "x-is-not-approved", HtmlUtil.escape(title)) %>
 										</div>
 									</c:otherwise>

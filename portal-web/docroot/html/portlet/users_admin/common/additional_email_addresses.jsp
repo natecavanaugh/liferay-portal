@@ -64,7 +64,7 @@ else {
 
 <h3><liferay-ui:message key="additional-email-addresses" /></h3>
 
-<div class="portlet-msg-info">
+<div class="aui-alert aui-alert-info">
 	<liferay-ui:message key="email-address-and-type-are-required-fields" />
 </div>
 

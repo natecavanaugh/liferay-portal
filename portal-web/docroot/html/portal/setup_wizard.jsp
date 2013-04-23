@@ -285,7 +285,7 @@
 						);
 
 						var updateMessage = function(message, type) {
-							connectionMessages.html('<span class="portlet-msg-' + type + '">' + message + '</span>');
+							connectionMessages.html('<span class="aui-alert aui-alert-' + type + '">' + message + '</span>');
 						};
 
 						var startInstall = function() {
@@ -371,7 +371,7 @@
 								<aui:input name="password" type="hidden" value="<%= PropsValues.DEFAULT_ADMIN_PASSWORD %>" />
 
 								<p>
-									<span class="portlet-msg-success">
+									<span class="aui-alert aui-alert-success">
 										<liferay-ui:message key="your-configuration-was-saved-sucessfully" />
 									</span>
 
@@ -402,7 +402,7 @@
 						</c:when>
 						<c:otherwise>
 							<p>
-								<span class="portlet-msg-alert">
+								<span class="aui-alert aui-alert-block">
 
 									<%
 									String taglibArguments = "<span class=\"lfr-inline-code\">" + PropsValues.LIFERAY_HOME + "</span>";

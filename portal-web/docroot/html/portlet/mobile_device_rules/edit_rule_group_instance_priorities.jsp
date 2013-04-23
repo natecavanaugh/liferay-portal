@@ -39,7 +39,7 @@ List<MDRRuleGroupInstance> ruleGroupInstances = MDRRuleGroupInstanceServiceUtil.
 	title="manage-rule-group-priorities"
 />
 
-<div class="portlet-msg-info">
+<div class="aui-alert aui-alert-info">
 	<liferay-ui:message key="to-manage-priorities,-drag-the-rule-group-to-the-desired-position" />
 </div>
 

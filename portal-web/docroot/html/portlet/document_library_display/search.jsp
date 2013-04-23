@@ -106,7 +106,7 @@ int mountFoldersCount = DLAppServiceUtil.getMountFoldersCount(scopeGroupId, DLFo
 		}
 		%>
 
-		<span class="portlet-msg-info">
+		<span class="aui-alert aui-alert-info">
 			<liferay-ui:message arguments="<%= sb.toString() %>" key="results-from-the-local-repository-search-in-x" />
 		</span>
 	</c:if>

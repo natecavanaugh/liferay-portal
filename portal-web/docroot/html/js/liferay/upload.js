@@ -11,7 +11,7 @@ AUI.add(
 
 		var STR_PARAM_FALLBACK = 'uploader=fallback';
 
-		var TPL_ERROR_MESSAGE = '<div class="portlet-msg-error">{0}</div>';
+		var TPL_ERROR_MESSAGE = '<div class="aui-alert aui-alert-error">{0}</div>';
 
 		var TPL_FILE_LIST = [
 			'<tpl for=".">',
@@ -49,7 +49,7 @@ AUI.add(
 				'<h4>{[ this.uploadsCompleteText ]}</h4>',
 			'</div>',
 
-			'<div class="pending-files-info portlet-msg-alert aui-hide">{[ this.pendingFileText ]}</div>',
+			'<div class="pending-files-info aui-alert aui-alert-block aui-hide">{[ this.pendingFileText ]}</div>',
 
 			'<div class="aui-hide float-container manage-upload-target" id="{$ns}manageUploadTarget">',
 				'<span class="aui-field aui-field-choice select-files">',

@@ -77,7 +77,7 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 			<aui:input helpMessage="delete-portlet-data-help" label="delete-portlet-data-before-importing" name="<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>" type="checkbox" />
 		</li>
 		<li class="aui-hide" id="<portlet:namespace />deletePortletDataWarning">
-			<div class="portlet-msg-alert">
+			<div class="aui-alert aui-alert-block">
 				<liferay-ui:message key="delete-portlet-data-warning" />
 			</div>
 		</li>
@@ -236,7 +236,7 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 							%>
 
 								<li class="tree-item">
-									<div class="portlet-msg-error">
+									<div class="aui-alert aui-alert-error">
 										<%= PortalUtil.getPortletTitle(portlet, application, locale) %>: <%= LanguageUtil.get(pageContext, "error-initializing-import-controls") %>
 									</div>
 								</li>
@@ -312,7 +312,7 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 							%>
 
 									<li class="tree-item">
-										<div class="portlet-msg-error">
+										<div class="aui-alert aui-alert-error">
 											<%= PortalUtil.getPortletTitle(portlet, application, locale) %>: <%= LanguageUtil.get(pageContext, "error-initializing-import-controls") %>
 										</div>
 									</li>

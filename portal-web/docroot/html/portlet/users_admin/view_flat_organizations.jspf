@@ -102,7 +102,7 @@ if (filterManageableOrganizations) {
 		</liferay-ui:search-container>
 	</c:when>
 	<c:otherwise>
-		<div class="portlet-msg-info">
+		<div class="aui-alert aui-alert-info">
 			<liferay-ui:message key="you-do-not-belong-to-an-organization-and-are-not-allowed-to-view-other-organizations" />
 		</div>
 	</c:otherwise>

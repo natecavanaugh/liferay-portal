@@ -312,7 +312,7 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 				%>
 
 				<c:if test="<%= searchResultsList.isEmpty() %>">
-					<div class="portlet-msg-info">
+					<div class="aui-alert aui-alert-info">
 						<%= LanguageUtil.format(pageContext, "no-documents-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(keywords) + "</strong>") %>
 					</div>
 				</c:if>
@@ -374,7 +374,7 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 										<%= searchResults %>
 									</c:when>
 									<c:otherwise>
-										<div class="portlet-msg-info">
+										<div class="aui-alert aui-alert-info">
 											<%= LanguageUtil.get(pageContext, "searching,-please-wait") %>
 										</div>
 										<div class="loading-animation"></div>
@@ -394,7 +394,7 @@ else if ((searchType == DLSearchConstants.SINGLE) && !ajaxRequest) {
 											<%= searchResults %>
 										</c:when>
 										<c:otherwise>
-											<div class="portlet-msg-info">
+											<div class="aui-alert aui-alert-info">
 												<%= LanguageUtil.get(pageContext, "searching,-please-wait") %>
 											</div>
 											<div class="loading-animation"></div>

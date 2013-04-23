@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/trash/init.jsp" %>
 
 <c:if test="<%= SessionMessages.contains(renderRequest, portletDisplay.getId() + SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA) %>">
-	<div class="portlet-msg-success">
+	<div class="aui-alert aui-alert-success">
 
 		<%
 		Map<String, List<String>> data = (HashMap<String, List<String>>)SessionMessages.get(renderRequest, portletDisplay.getId() + SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA);

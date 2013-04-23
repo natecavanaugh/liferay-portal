@@ -30,7 +30,7 @@ String defaultLanguageId = LocalizationUtil.getDefaultLocale(script);
 
 <div class="separator"><!-- --></div>
 
-<div class="aui-hide lfr-message-response portlet-msg-error" id="<portlet:namespace />messageContainer"></div>
+<div class="aui-hide lfr-message-response aui-alert aui-alert-error" id="<portlet:namespace />messageContainer"></div>
 
 <liferay-ui:tabs
 	names='<%= LanguageUtil.get(pageContext, "view") + "," + LanguageUtil.get(pageContext, "source") %>'
@@ -102,9 +102,9 @@ for (Locale availableLocale : LanguageUtil.getAvailableLocales()) {
 
 	var MESSAGE_SUCCESS = 1;
 
-	var CSS_MESSAGE_ERROR = 'portlet-msg-error';
+	var CSS_MESSAGE_ERROR = 'aui-alert aui-alert-error';
 
-	var CSS_MESSAGE_SUCCESS = 'portlet-msg-success';
+	var CSS_MESSAGE_SUCCESS = 'aui-alert aui-alert-success';
 
 	var STR_VALUE = 'value';
 

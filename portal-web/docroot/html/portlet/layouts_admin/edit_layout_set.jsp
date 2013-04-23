@@ -128,7 +128,7 @@ boolean hasExportImportLayoutsPermission = GroupPermissionUtil.contains(permissi
 		</c:if>
 	</liferay-ui:error>
 
-	<div class="portlet-msg-alert">
+	<div class="aui-alert aui-alert-block">
 		<liferay-ui:message key="the-staging-environment-is-activated-changes-have-to-be-published-to-make-them-available-to-end-users" />
 	</div>
 </c:if>

@@ -57,7 +57,7 @@ AUI.add(
 
 		var SRC_SEARCH_END = 4;
 
-		var TPL_MESSAGE_SEARCHING = '<div class="portlet-msg-info">{0}</div><div class="loading-animation" />';
+		var TPL_MESSAGE_SEARCHING = '<div class="aui-alert aui-alert-info">{0}</div><div class="loading-animation" />';
 
 		var JournalNavigation = A.Component.create(
 			{

@@ -52,7 +52,7 @@ request.setAttribute("view_layout_set_branches.jsp-currentLayoutSetBranchId", St
 	</c:if>
 </liferay-ui:error>
 
-<div class="portlet-msg-info">
+<div class="aui-alert aui-alert-info">
 	<liferay-ui:message key="pages-variations-help" />
 </div>
 

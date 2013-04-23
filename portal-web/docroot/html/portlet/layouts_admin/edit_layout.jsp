@@ -178,7 +178,7 @@ String[][] categorySections = {mainSections};
 						</c:if>
 					</liferay-ui:error>
 
-					<div class="portlet-msg-alert">
+					<div class="aui-alert aui-alert-block">
 						<liferay-ui:message key="the-staging-environment-is-activated-changes-have-to-be-published-to-make-them-available-to-end-users" />
 					</div>
 				</c:if>
@@ -197,12 +197,12 @@ String[][] categorySections = {mainSections};
 
 				<c:choose>
 					<c:when test="<%= !SitesUtil.isLayoutUpdateable(selLayout) %>">
-						<div class="portlet-msg-alert">
+						<div class="aui-alert aui-alert-block">
 							<liferay-ui:message key="this-page-cannot-be-modified-because-it-is-associated-to-a-site-template-does-not-allow-modifications-to-it" />
 						</div>
 					</c:when>
 					<c:when test="<%= !SitesUtil.isLayoutDeleteable(selLayout) %>">
-						<div class="portlet-msg-alert">
+						<div class="aui-alert aui-alert-block">
 							<liferay-ui:message key="this-page-cannot-be-deleted-because-it-is-associated-to-a-site-template" />
 						</div>
 					</c:when>
@@ -214,7 +214,7 @@ String[][] categorySections = {mainSections};
 					UserGroup userGroup = UserGroupLocalServiceUtil.getUserGroup(selLayoutGroup.getClassPK());
 					%>
 
-					<div class="portlet-msg-alert">
+					<div class="aui-alert aui-alert-block">
 						<liferay-ui:message arguments="<%= HtmlUtil.escape(userGroup.getName()) %>" key="this-page-cannot-be-modified-because-it-belongs-to-the-user-group-x" />
 					</div>
 				</c:if>

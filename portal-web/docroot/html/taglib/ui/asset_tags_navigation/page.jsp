@@ -45,7 +45,7 @@ else {
 	}
 %>
 
-	<div class="portlet-msg-info">
+	<div class="aui-alert aui-alert-info">
 		<liferay-ui:message key="there-are-no-tags" />
 	</div>
 

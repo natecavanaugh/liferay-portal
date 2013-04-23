@@ -91,7 +91,7 @@ String casServiceURL = ParamUtil.getString(request, "casServiceURL");
 
 <%!
 private String _getCssClass(String result) {
-	String cssClass = "portlet-msg-";
+	String cssClass = "aui-alert aui-alert-";
 
 	if (result.equals("pass")) {
 		cssClass += "success";

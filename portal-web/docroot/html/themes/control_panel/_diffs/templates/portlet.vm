@@ -4,7 +4,7 @@
 #set ($portlet_title = $portlet_display.getTitle())
 #set ($portlet_title_icon_css_class = "")
 #set ($portlet_description = $portlet_display.getDescription())
-#set ($portlet_description_css_class = "portlet-description lfr-message-help")
+#set ($portlet_description_css_class = "aui-alert aui-alert-info")
 #set ($portlet_back_url = $htmlUtil.escapeAttribute($portlet_display.getURLBack()))
 #set ($enable_portlet_descriptions = $sessionClicks.get($request, "enable-portlet-descriptions", "1"))
 #set ($show_portlet_description = $enable_portlet_descriptions == "1" && $sessionClicks.get($request, "show-portlet-description-$portlet_id", "1") == "1")

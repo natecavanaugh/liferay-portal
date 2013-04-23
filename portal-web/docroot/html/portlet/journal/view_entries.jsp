@@ -85,7 +85,7 @@ boolean showAddArticleButton = JournalPermission.contains(permissionChecker, sco
 	<aui:input name="<%= displayTerms.STRUCTURE_ID %>" type="hidden" value="<%= displayTerms.getStructureId() %>" />
 
 	<c:if test="<%= showAddArticleButton %>">
-		<div class="portlet-msg-info">
+		<div class="aui-alert aui-alert-info">
 
 			<%
 			String structureId = StringPool.BLANK;
@@ -124,7 +124,7 @@ boolean showAddArticleButton = JournalPermission.contains(permissionChecker, sco
 	<aui:input name="<%= displayTerms.TEMPLATE_ID %>" type="hidden" value="<%= displayTerms.getTemplateId() %>" />
 
 	<c:if test="<%= showAddArticleButton %>">
-		<div class="portlet-msg-info">
+		<div class="aui-alert aui-alert-info">
 
 			<%
 			DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(scopeGroupId, PortalUtil.getClassNameId(DDMStructure.class), displayTerms.getTemplateId());
@@ -246,7 +246,7 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer
 %>
 
 <c:if test="<%= results.isEmpty() %>">
-	<div class="entries-empty portlet-msg-info">
+	<div class="entries-empty aui-alert aui-alert-info">
 		<c:choose>
 			<c:when test="<%= Validator.isNotNull(displayTerms.getStructureId()) %>">
 				<c:if test="<%= total == 0 %>">

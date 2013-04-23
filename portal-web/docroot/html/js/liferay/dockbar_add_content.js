@@ -7,7 +7,7 @@ AUI.add(
 
 		var STR_CLICK = 'click';
 
-		var TPL_ERROR = '<div class="portlet-msg-error">{0}</div>';
+		var TPL_ERROR = '<div class="aui-alert aui-alert-error">{0}</div>';
 
 		var TPL_LOADING = '<div class="loading-animation" />';
 

@@ -7,9 +7,9 @@ AUI.add(
 
 		var BODY_CONTENT = 'bodyContent';
 
-		var CSS_SUCCESS = 'portlet-msg-success';
+		var CSS_SUCCESS = 'aui-alert aui-alert-success';
 
-		var CSS_ERROR = 'portlet-msg-error';
+		var CSS_ERROR = 'aui-alert aui-alert-error';
 
 		var EDITOR = 'editor';
 
@@ -24,7 +24,7 @@ AUI.add(
 		var RESPONSE_DATA = 'responseData';
 
 		var TPL_NOTICE =
-			'<div class="lfr-editable-notice portlet-msg-success">' +
+			'<div class="aui-alert aui-alert-success lfr-editable-notice">' +
 				'<span class="lfr-editable-notice-text yui3-widget-bd"></span>' +
 				'<a class="lfr-editable-notice-close yui3-widget-ft" href="javascript:;" tabindex="0"></a>' +
 			'</div>';

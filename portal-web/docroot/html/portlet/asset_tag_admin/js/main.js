@@ -92,7 +92,7 @@ AUI.add(
 
 		var TPL_TAG_MERGE_ITEM = '<option value="{value}" title="{name}" selected>{name}</option>';
 
-		var TPL_TAGS_MESSAGES = '<div class="aui-hide lfr-message-response portlet-msg-info" id="tagsMessages" />';
+		var TPL_TAGS_MESSAGES = '<div class="aui-alert aui-alert-info aui-hide lfr-message-response" id="tagsMessages" />';
 
 		var AssetTagsAdmin = A.Component.create(
 			{
@@ -297,13 +297,13 @@ AUI.add(
 						var instance = this;
 
 						var tagPanelAdd = Liferay.Util.Window.getWindow(
-						    {
+							{
 								dialog: {
 									align: instance._dialogAlignConfig,
 									cssClass: CSS_TAG_DIALOG
 								},
 								title: Liferay.Language.get('add-tag')
-						    }
+							}
 						);
 
 						tagPanelAdd.hide();
@@ -319,13 +319,13 @@ AUI.add(
 						var instance = this;
 
 						instance._tagPanelEdit = Liferay.Util.Window.getWindow(
-						    {
+							{
 								dialog: {
 									align: instance._dialogAlignConfig,
 									cssClass: CSS_TAG_DIALOG
 								},
 								title: Liferay.Language.get('edit-tag')
-						    }
+							}
 						);
 
 						instance._tagPanelEdit.hide();
@@ -754,15 +754,15 @@ AUI.add(
 							var panelFooterContent = Lang.sub(TPL_TAG_MERGE_FOOTER, tplValues);
 
 							tagPanelMerge = Liferay.Util.Window.getWindow(
-							    {
+								{
 									dialog: {
 										align: instance._dialogAlignConfig,
 										bodyContent: panelBodyContent,
 										cssClass: CSS_TAG_DIALOG,
-										footerContent: panelFooterContent,
+										footerContent: panelFooterContent
 									},
 									title: Liferay.Language.get('merge-tags')
-							    }
+								}
 							);
 
 							var okButton = new A.Button(
@@ -1483,10 +1483,9 @@ AUI.add(
 						var instance = this;
 
 						var output = instance._portletMessageContainer;
-						var typeClass = 'portlet-msg-' + type;
 
-						output.removeClass('portlet-msg-error').removeClass('portlet-msg-success');
-						output.addClass(typeClass);
+						output.removeClass('aui-alert-error').removeClass('aui-alert-success');
+						output.addClass('aui-alert aui-alert-' + type);
 						output.html(message);
 
 						output.show();

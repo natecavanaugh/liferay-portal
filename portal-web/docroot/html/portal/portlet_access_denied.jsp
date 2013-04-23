@@ -16,6 +16,6 @@
 
 <%@ include file="/html/portal/init.jsp" %>
 
-<div class="portlet-msg-error">
+<div class="aui-alert aui-alert-error">
 	<liferay-ui:message key="you-do-not-have-the-roles-required-to-access-this-portlet" />
 </div>

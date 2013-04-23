@@ -573,7 +573,7 @@ curl <%= themeDisplay.getPortalURL() + jsonWSPath + invocationPath %> \\
 </textarea>
 	</c:when>
 	<c:otherwise>
-		<div class="portlet-msg-info">
+		<div class="aui-alert aui-alert-info">
 			<liferay-ui:message key="please-select-a-method-on-the-left" />
 		</div>
 	</c:otherwise>

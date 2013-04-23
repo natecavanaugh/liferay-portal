@@ -197,11 +197,6 @@
 		cursor: default;
 	}
 
-	.portlet-msg-info {
-		margin-bottom: 0;
-		margin-top: 10px;
-	}
-
 	.lfr-portlet-used a {
 		display: none;
 	}
@@ -434,10 +429,6 @@
 .portal-add-content {
 	.lfr-portlet-used {
 		color: #ccc;
-	}
-
-	.portlet-msg-info {
-		color: #333;
 	}
 }
 

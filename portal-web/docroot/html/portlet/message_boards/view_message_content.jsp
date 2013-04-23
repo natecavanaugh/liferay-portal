@@ -357,7 +357,7 @@ MBThreadFlag threadFlag = MBThreadFlagLocalServiceUtil.getThreadFlag(themeDispla
 	</c:choose>
 
 	<c:if test="<%= !viewableThread %>">
-		<div class="portlet-msg-error">
+		<div class="aui-alert aui-alert-error">
 			<liferay-ui:message key="you-do-not-have-permission-to-access-the-requested-resource" />
 		</div>
 	</c:if>

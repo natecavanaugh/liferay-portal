@@ -65,7 +65,7 @@ if (step == 1) {
 				title="organization-roles"
 			/>
 
-			<div class="portlet-msg-info">
+			<div class="aui-alert aui-alert-info">
 				<liferay-ui:message key="please-select-an-organization-to-which-you-will-assign-an-organization-role" />
 			</div>
 

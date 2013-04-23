@@ -87,7 +87,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 			'</div>';
 
 			var TPL_TAB_VIEW = '<div id="<portlet:namespace />{pagesTabViewId}"></div>' +
-				'<div class="selected-page-message portlet-msg-alert" id="<portlet:namespace />selectedPageMessage">' +
+				'<div class="aui-alert aui-alert-block selected-page-message" id="<portlet:namespace />selectedPageMessage">' +
 					'<%= UnicodeLanguageUtil.get(pageContext, "there-is-no-selected-page") %>' +
 				'</div>';
 
@@ -161,7 +161,7 @@ Group parentGroup = themeDisplay.getSiteGroup();
 				var cssClass = 'selected-page-message';
 
 				if (type) {
-					cssClass += ' portlet-msg-' + type;
+					cssClass += ' aui-alert aui-alert-' + type;
 				}
 
 				selectedNodeMessage.attr('className', cssClass);
