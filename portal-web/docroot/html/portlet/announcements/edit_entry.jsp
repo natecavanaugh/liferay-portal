@@ -24,6 +24,12 @@ AnnouncementsEntry entry = (AnnouncementsEntry)request.getAttribute(WebKeys.ANNO
 long entryId = BeanParamUtil.getLong(entry, request, "entryId");
 
 String content = BeanParamUtil.getString(entry, request, "content");
+
+boolean autoDisplayDate = ParamUtil.getBoolean(request, "autoDisplayDate", false);
+
+if (entry == null) {
+	autoDisplayDate = true;
+}
 %>
 
 <aui:form method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveEntry();" %>'>
@@ -108,7 +114,16 @@ String content = BeanParamUtil.getString(entry, request, "content");
 			<aui:option label="important" selected="<%= (entry != null) && (entry.getPriority() == 1) %>" value="1" />
 		</aui:select>
 
-		<aui:input name="displayDate" />
+		<aui:input disabled="<%= autoDisplayDate %>" name="displayDate" />
+
+		<c:if test="<%= autoDisplayDate %>">
+
+			<%
+			String taglibAutoDisplayDateOnClick = renderResponse.getNamespace() + "toggleDisplayDate('displayDate', this.checked);";
+			%>
+
+			<aui:input label="display-immediately" name="autoDisplayDate" onClick="<%= taglibAutoDisplayDateOnClick %>" type="checkbox" value="<%= autoDisplayDate %>" />
+		</c:if>
 
 		<aui:input name="expirationDate" />
 	</aui:fieldset>
@@ -123,6 +138,20 @@ String content = BeanParamUtil.getString(entry, request, "content");
 </aui:form>
 
 <aui:script>
+	function <portlet:namespace />toggleDisplayDate(date, checked) {
+		var A = AUI();
+
+		document.<portlet:namespace />fm["<portlet:namespace />" + date + "Hour"].disabled = checked;
+		document.<portlet:namespace />fm["<portlet:namespace />" + date + "Minute"].disabled = checked;
+		document.<portlet:namespace />fm["<portlet:namespace />" + date + "AmPm"].disabled = checked;
+
+		var calendarWidget = A.Widget.getByNode(document.<portlet:namespace />fm["<portlet:namespace />" + date + "Month"]);
+
+		if (calendarWidget) {
+			calendarWidget.set('disabled', checked);
+		}
+	}
+
 	function <portlet:namespace />getContent() {
 		return window.<portlet:namespace />editor.getHTML();
 	}
