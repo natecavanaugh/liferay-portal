@@ -199,7 +199,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 %>
 
 <c:if test='<%= SessionMessages.contains(renderRequest, "requestProcessed") %>'>
-	<div class="portlet-msg-success">
+	<div class="aui-alert aui-alert-success">
 
 		<%
 		String successMessage = (String)SessionMessages.get(renderRequest, "requestProcessed");
@@ -352,7 +352,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 
 	<c:choose>
 		<c:when test="<%= selectPages %>">
-			<div class="portlet-msg-info">
+			<div class="aui-alert aui-alert-info">
 				<liferay-ui:message key="note-that-selecting-no-pages-from-tree-reverts-to-implicit-selection-of-all-pages" />
 			</div>
 

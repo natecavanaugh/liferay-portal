@@ -226,7 +226,7 @@ if (translating) {
 		%>
 
 		<c:if test="<%= pending %>">
-			<div class="portlet-msg-info">
+			<div class="aui-alert aui-alert-info">
 				<liferay-ui:message key="there-is-a-publication-workflow-in-process" />
 			</div>
 		</c:if>

@@ -17,7 +17,7 @@
 <div id="<portlet:namespace />saveStructureTemplateDialogWrapper" style="display: none;">
 	<aui:fieldset>
 		<div class="save-structure-template-dialog" id="<portlet:namespace />saveStructureTemplateDialog">
-			<div class="portlet-msg-success save-structure-message aui-hide" id="<portlet:namespace />saveStructureMessage">
+			<div class="aui-alert aui-alert-success save-structure-message aui-hide" id="<portlet:namespace />saveStructureMessage">
 				<liferay-ui:message key="your-request-processed-successfully" />
 			</div>
 
@@ -43,7 +43,7 @@
 <div class="journal-article-edit-field-wrapper aui-hide" id="<portlet:namespace />journalArticleEditFieldWrapper">
 	<aui:form method="post" name="fm3">
 		<div class="journal-article-edit-field" id="<portlet:namespace />journalArticleEditField">
-			<div class="portlet-msg-success journal-message aui-hide" id="<portlet:namespace />journalMessage">
+			<div class="aui-alert aui-alert-success aui-hide journal-message" id="<portlet:namespace />journalMessage">
 				<liferay-ui:message key="your-request-processed-successfully" />
 			</div>
 

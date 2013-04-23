@@ -229,7 +229,7 @@ String taglibOnSubmit = "event.preventDefault(); " + renderResponse.getNamespace
 	<liferay-util:buffer var="htmlBottom">
 		<c:if test="<%= (selUser != null) && (passwordPolicy != null) && selUser.getLockout() %>">
 			<aui:button-row>
-				<div class="portlet-msg-alert"><liferay-ui:message key="this-user-account-has-been-locked-due-to-excessive-failed-login-attempts" /></div>
+				<div class="aui-alert aui-alert-block"><liferay-ui:message key="this-user-account-has-been-locked-due-to-excessive-failed-login-attempts" /></div>
 
 				<%
 				String taglibOnClick = renderResponse.getNamespace() + "saveUser('unlock');";

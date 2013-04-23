@@ -49,7 +49,7 @@ try {
 
 			<br />
 
-			<div class="portlet-msg-info">
+			<div class="aui-alert aui-alert-info">
 				<liferay-ui:message key="select-an-existing-list-or-add-a-list-to-be-displayed-in-this-portlet" />
 			</div>
 		</c:otherwise>
@@ -60,7 +60,7 @@ try {
 catch (NoSuchRecordSetException nsrse) {
 %>
 
-	<div class="portlet-msg-error">
+	<div class="aui-alert aui-alert-error">
 		<%= LanguageUtil.get(pageContext, "the-selected-list-no-longer-exists") %>
 	</div>
 

@@ -450,7 +450,7 @@ AUI.add(
 				var customCSSClassName = instance._getNodeById('lfr-custom-css-class-name');
 				var customCSSContainer = customCSS.ancestor('.aui-field');
 				var customCSSClassNameContainer = customCSSClassName.ancestor('.aui-field');
-				var customPortletNoteHTML = '<p class="portlet-msg-info form-hint"></p>';
+				var customPortletNoteHTML = '<p class="aui-alert aui-alert-info form-hint"></p>';
 				var customPortletNote = A.one('#lfr-portlet-info');
 				var refreshText = '';
 
@@ -1048,11 +1048,11 @@ AUI.add(
 
 						if (type == 'success') {
 							message = Liferay.Language.get('your-request-processed-successfully');
-							messageClass = 'portlet-msg-success';
+							messageClass = 'aui-alert aui-alert-success';
 						}
 						else {
 							message = Liferay.Language.get('your-settings-could-not-be-saved');
-							messageClass = 'portlet-msg-error';
+							messageClass = 'aui-alert aui-alert-error';
 						}
 
 						if (!ajaxResponseMsg) {

@@ -710,12 +710,12 @@ AUI.add(
 
 				if (!previewDialog) {
 					previewDialog = Liferay.Util.Window.getWindow(
-					    {
+						{
 							dialog: {
 								bodyContent: content
 							},
 							title: Liferay.Language.get('preview')
-					    }
+						}
 					);
 
 					instance.previewDialog = previewDialog;

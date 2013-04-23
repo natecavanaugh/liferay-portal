@@ -145,96 +145,32 @@ body.portlet {
 .portlet-msg {
 }
 
-/* ---------- Status of the current operation ---------- */
+/* ---------- Status labels ---------- */
 
-.portlet-msg-status {
+.lfr-status-alert-label, .lfr-status-error-label, .lfr-status-info-label, .lfr-status-progress-label, .lfr-status-success-label {
 }
 
-/* ---------- Help messages, general additional information, etc. ---------- */
-
-.lfr-message-info, .portlet-msg-info {
+.lfr-status-alert-label {
 }
 
-.lfr-message-help, .portlet-msg-help {
+.lfr-status-error-label {
 }
 
-.lfr-message-progress, .portlet-msg-progress {
+.lfr-status-help-label, .lfr-status-info-label, .lfr-status-progress-label {
 }
 
-/* ---------- Error messages ---------- */
-
-.lfr-message-error, .portlet-msg-error {
+.lfr-status-help-label {
 }
 
-/* ---------- Warning messages ---------- */
-
-.lfr-message-alert, .portlet-msg-alert {
+.lfr-status-progress-label {
 }
 
-/* ---------- Success messages ---------- */
-
-.lfr-message-success, .portlet-msg-success {
-}
-
-/* ---------- Message labels ---------- */
-
-.portlet-msg-alert-label, .portlet-msg-error-label, .portlet-msg-info-label, .portlet-msg-progress-label, .portlet-msg-success-label {
-}
-
-.portlet-msg-alert-label {
-}
-
-.portlet-msg-error-label {
-}
-
-.portlet-msg-help-label, .portlet-msg-info-label, .portlet-msg-progress-label {
-}
-
-.portlet-msg-help-label {
-}
-
-.portlet-msg-progress-label {
-}
-
-.portlet-msg-success-label {
+.lfr-status-success-label {
 }
 
 /* ---------- Liferay Messages ---------- */
 
-.lfr-message-alert, .lfr-message-content, .lfr-message-error, .lfr-message-help, .lfr-message-info, .lfr-message-success {
-}
-
-.lfr-message {
-	.lfr-message-control {
-	}
-
-	.lfr-message-controls {
-	}
-
-	.lfr-message-close {
-	}
-
-	.lfr-message-close-all {
-		a {
-		}
-	}
-
-	.lfr-message-controls-hover .lfr-message-close-all {
-	}
-
-	&.pending {
-	}
-}
-
-.lfr-message-dismissible.lfr-message-hover {
-	.lfr-message-content {
-	}
-
-	.lfr-message-controls {
-	}
-}
-
-.lfr-message-close, .lfr-message-trigger {
+.lfr-message-content {
 }
 
 /* ---------- Sections ---------- */

@@ -221,7 +221,7 @@ catch (Exception e) {
 		</div>
 	</c:when>
 	<c:otherwise>
-		<div class="portlet-msg-error">
+		<div class="aui-alert aui-alert-error">
 			<%= LanguageUtil.format(pageContext, "cannot-be-found", HtmlUtil.escape(urls[i]), false) %>
 		</div>
 	</c:otherwise>

@@ -403,7 +403,7 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 		%>
 
 		<c:if test="<%= (groupThreadsUserId > 0) %>">
-			<div class="portlet-msg-info">
+			<div class="aui-alert aui-alert-info">
 				<liferay-ui:message key="filter-by-user" />: <%= HtmlUtil.escape(PortalUtil.getUserName(groupThreadsUserId, StringPool.BLANK)) %>
 			</div>
 		</c:if>

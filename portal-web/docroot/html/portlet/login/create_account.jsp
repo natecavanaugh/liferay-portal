@@ -113,7 +113,7 @@ birthdayCalendar.set(Calendar.YEAR, 1970);
 	<liferay-ui:error exception="<%= WebsiteURLException.class %>" message="please-enter-a-valid-url" />
 
 	<c:if test='<%= SessionMessages.contains(request, "missingOpenIdUserInformation") %>'>
-		<div class="portlet-msg-info">
+		<div class="aui-alert aui-alert-info">
 			<liferay-ui:message key="you-have-successfully-authenticated-please-provide-the-following-required-information-to-access-the-portal" />
 		</div>
 	</c:if>

@@ -39,7 +39,7 @@ int mdrRuleGroupInstancesCount = MDRRuleGroupInstanceServiceUtil.getRuleGroupIns
 <aui:input checked="<%= mdrRuleGroupInstancesCount > 0 %>" id="uniqueRuleGroupInstances" label="define-specific-mobile-rule-groups-for-this-page" name="inheritRuleGroupInstances" type="radio" value="<%= false %>" />
 
 <div class="<%= (mdrRuleGroupInstancesCount == 0) ? StringPool.BLANK : "aui-hide" %>" id="<portlet:namespace />inheritRuleGroupInstancesContainer">
-	<div class="portlet-msg-info">
+	<div class="aui-alert aui-alert-info">
 		<liferay-ui:message arguments="<%= new String[] {HtmlUtil.escape(rootNodeName), redirectURL.toString()} %>" key="mobile-device-rule-groups-will-be-inhertited-from-x-x" />
 	</div>
 </div>

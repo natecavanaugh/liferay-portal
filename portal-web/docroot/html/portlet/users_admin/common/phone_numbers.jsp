@@ -65,7 +65,7 @@ else {
 
 <h3><liferay-ui:message key="phone-numbers" /></h3>
 
-<div class="portlet-msg-info">
+<div class="aui-alert aui-alert-info">
 	<liferay-ui:message key="phone-number-and-type-are-required-fields.-extension-must-be-numeric" />
 </div>
 

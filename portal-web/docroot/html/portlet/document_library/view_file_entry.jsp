@@ -144,12 +144,12 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 				</liferay-ui:app-view-toolbar>
 			</c:if>
 
-			<div class="portlet-msg-error aui-hide" id="<portlet:namespace />openMSOfficeError"></div>
+			<div class="aui-alert aui-alert-error aui-hide" id="<portlet:namespace />openMSOfficeError"></div>
 
 			<c:if test="<%= (fileEntry.getLock() != null) && DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) %>">
 				<c:choose>
 					<c:when test="<%= fileEntry.hasLock() %>">
-						<div class="portlet-msg-lock portlet-msg-success">
+						<div class="aui-alert aui-alert-success">
 							<c:choose>
 								<c:when test="<%= lock.isNeverExpires() %>">
 									<liferay-ui:message key="you-now-have-an-indefinite-lock-on-this-document" />
@@ -166,7 +166,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						</div>
 					</c:when>
 					<c:otherwise>
-						<div class="portlet-msg-error">
+						<div class="aui-alert aui-alert-error">
 							<%= LanguageUtil.format(pageContext, "you-cannot-modify-this-document-because-it-was-locked-by-x-on-x", new Object[] {HtmlUtil.escape(PortalUtil.getUserName(lock.getUserId(), String.valueOf(lock.getUserId()))), dateFormatDateTime.format(lock.getCreateDate())}, false) %>
 						</div>
 					</c:otherwise>
@@ -338,7 +338,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						<c:choose>
 							<c:when test="<%= previewFileCount == 0 %>">
 								<c:if test="<%= AudioProcessorUtil.isAudioSupported(fileVersion) || ImageProcessorUtil.isImageSupported(fileVersion) || PDFProcessorUtil.isDocumentSupported(fileVersion) || VideoProcessorUtil.isVideoSupported(fileVersion) %>">
-									<div class="portlet-msg-info">
+									<div class="aui-alert aui-alert-info">
 										<liferay-ui:message key="generating-preview-will-take-a-few-minutes" />
 									</div>
 								</c:if>

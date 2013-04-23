@@ -29,7 +29,7 @@ LayoutSet publicLayoutSet = LayoutSetLocalServiceUtil.getLayoutSet(liveGroup.get
 
 <c:choose>
 	<c:when test="<%= privateLayoutSet.isLayoutSetPrototypeLinkActive() || publicLayoutSet.isLayoutSetPrototypeLinkActive() %>">
-		<div class="portlet-msg-info">
+		<div class="aui-alert aui-alert-info">
 			<liferay-ui:message key="staging-cannot-be-used-for-this-site-because-the-propagation-of-changes-from-the-site-template-is-enabled" />
 			<c:choose>
 				<c:when test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.UNLINK_LAYOUT_SET_PROTOTYPE) %>">
@@ -125,7 +125,7 @@ LayoutSet publicLayoutSet = LayoutSetLocalServiceUtil.getLayoutSet(liveGroup.get
 					</c:if>
 				</liferay-ui:error>
 
-				<div class="portlet-msg-info">
+				<div class="aui-alert aui-alert-info">
 					<liferay-ui:message key="remote-publish-help" />
 				</div>
 
@@ -151,11 +151,11 @@ LayoutSet publicLayoutSet = LayoutSetLocalServiceUtil.getLayoutSet(liveGroup.get
 			</aui:fieldset>
 
 			<aui:fieldset helpMessage="staged-portlets-help" label="staged-portlets">
-				<div class="portlet-msg-alert">
+				<div class="aui-alert aui-alert-block">
 					<liferay-ui:message key="staged-portlets-alert" />
 				</div>
 
-				<div class="portlet-msg-info">
+				<div class="aui-alert aui-alert-info">
 					<liferay-ui:message key="always-exported-portlets-help" />
 				</div>
 
@@ -227,7 +227,7 @@ LayoutSet publicLayoutSet = LayoutSetLocalServiceUtil.getLayoutSet(liveGroup.get
 		</aui:script>
 	</c:when>
 	<c:otherwise>
-		<div class="portlet-msg-info">
+		<div class="aui-alert aui-alert-info">
 			<liferay-ui:message key="you-do-not-have-permission-to-manage-settings-related-to-staging" />
 		</div>
 	</c:otherwise>

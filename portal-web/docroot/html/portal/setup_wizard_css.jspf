@@ -137,7 +137,7 @@ body {
 	padding: 3px;
 }
 
-.portlet-msg-alert .lfr-inline-code {
+.aui-alert-block .lfr-inline-code {
 	background-color: #EEB;
 	color: #333;
 }

@@ -74,12 +74,12 @@ if (!denyAccess && (themeDisplay.isStatePopUp() || (layoutTypePortlet.hasStateMa
 else {
 	String description = StringPool.BLANK;
 
-	String className = "portlet-msg-info";
+	String className = "aui-alert aui-alert-info";
 
 	if (denyAccess) {
 		description = LanguageUtil.get(pageContext, "you-do-not-have-the-required-permissions-to-access-this-application");
 
-		className = "portlet-msg-error";
+		className = "aui-alert aui-alert-error";
 	}
 
 	if (Validator.isNull(description)) {

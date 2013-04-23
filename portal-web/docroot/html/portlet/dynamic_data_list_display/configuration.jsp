@@ -43,7 +43,7 @@ request.setAttribute("record_set_action.jsp-selRecordSet", selRecordSet);
 
 	<liferay-ui:error exception="<%= NoSuchRecordSetException.class %>" message="the-list-could-not-be-found" />
 
-	<div class="portlet-msg-info">
+	<div class="aui-alert aui-alert-info">
 		<span class="displaying-help-message-holder <%= selRecordSet == null ? StringPool.BLANK : "aui-hide" %>">
 			<liferay-ui:message key="please-select-a-list-entry-from-the-list-below" />
 		</span>

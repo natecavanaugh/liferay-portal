@@ -117,7 +117,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 
 					<c:choose>
 						<c:when test="<%= TrashUtil.isInTrash(className, classPK) %>">
-							<div class="portlet-msg-alert">
+							<div class="aui-alert aui-alert-block">
 								<liferay-ui:message key="commenting-is-disabled-because-this-entry-is-in-the-recycle-bin" />
 							</div>
 						</c:when>
@@ -712,10 +712,9 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 
 				var messageContainer = A.one('#<portlet:namespace />discussion-status-messages');
 
-				messageContainer.removeClass('portlet-msg-error');
-				messageContainer.removeClass('portlet-msg-success');
+				messageContainer.removeClass('aui-alert-error').removeClass('aui-alert-success');
 
-				messageContainer.addClass('portlet-msg-' + type);
+				messageContainer.addClass('aui-alert aui-alert-' + type);
 
 				messageContainer.html(message);
 

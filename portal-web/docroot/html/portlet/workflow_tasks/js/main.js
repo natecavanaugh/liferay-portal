@@ -46,7 +46,7 @@ AUI.add(
 				}
 
 				var dialog = Liferay.Util.Window.getWindow(
-				    {
+					{
 						dialog: {
 							bodyContent: form,
 							toolbars: {
@@ -71,7 +71,7 @@ AUI.add(
 							}
 						},
 						title: title
-				    }
+					}
 				);
 			}
 		};

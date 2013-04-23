@@ -26,7 +26,7 @@ String redirect = ParamUtil.getString(request, "redirect");
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 
-	<div class="portlet-msg-info">
+	<div class="aui-alert aui-alert-info">
 		<liferay-ui:message key="define-the-behavior-of-this-search" />
 	</div>
 

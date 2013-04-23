@@ -51,7 +51,7 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 
 <c:choose>
 	<c:when test="<%= auth && Validator.isNull(userName) && !themeDisplay.isSignedIn() %>">
-		<div class="portlet-msg-info">
+		<div class="aui-alert aui-alert-info">
 			<a href="<%= themeDisplay.getURLSignIn() %>" target="_top"><liferay-ui:message key="please-sign-in-to-access-this-application" /></a>
 		</div>
 	</c:when>

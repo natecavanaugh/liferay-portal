@@ -16,6 +16,6 @@
 
 <%@ include file="/html/portal/init.jsp" %>
 
-<div class="portlet-msg-error">
+<div class="aui-alert aui-alert-error">
 	<liferay-ui:message key="jaas-is-not-configured-properly" />
 </div>

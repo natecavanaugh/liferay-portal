@@ -30,7 +30,7 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 
 <c:choose>
 	<c:when test="<%= article == null %>">
-		<div class="portlet-msg-error">
+		<div class="aui-alert aui-alert-error">
 			<%= LanguageUtil.get(pageContext, "the-selected-web-content-no-longer-exists") %>
 		</div>
 	</c:when>

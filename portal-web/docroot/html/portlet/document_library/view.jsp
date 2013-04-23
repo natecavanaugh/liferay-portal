@@ -116,7 +116,7 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 			</div>
 
 			<div class="aui-hide" id="<portlet:namespace />syncNotification">
-				<div class="lfr-message-info sync-notification" id="<portlet:namespace />syncNotificationContent">
+				<div class="aui-alert aui-alert-info sync-notification" id="<portlet:namespace />syncNotificationContent">
 					<a href="http://www.liferay.com/products/liferay-sync" target="_blank">
 						<liferay-ui:message key="access-these-files-offline-using-liferay-sync" />
 					</a>

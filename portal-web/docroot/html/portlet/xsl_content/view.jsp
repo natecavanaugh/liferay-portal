@@ -93,7 +93,7 @@ catch (Exception e) {
 	_log.error(e.getMessage());
 %>
 
-	<div class="portlet-msg-error">
+	<div class="aui-alert aui-alert-error">
 		<liferay-ui:message key="an-error-occurred-while-processing-your-xml-and-xsl" />
 	</div>
 

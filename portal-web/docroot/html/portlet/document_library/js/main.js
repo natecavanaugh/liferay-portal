@@ -55,7 +55,7 @@ AUI.add(
 
 		var SRC_SEARCH = 3;
 
-		var TPL_MESSAGE_SEARCHING = '<div class="portlet-msg-info">{0}</div><div class="loading-animation" />';
+		var TPL_MESSAGE_SEARCHING = '<div class="aui-alert aui-alert-info">{0}</div><div class="loading-animation" />';
 
 		var WIN = A.config.win;
 
@@ -94,7 +94,7 @@ AUI.add(
 									contentBox: instance.byId('syncNotificationContent'),
 									id: instance.NS + 'show-sync-message',
 									trigger: instance.one('#showSyncMessageIconContainer'),
-									visible: !config.syncMessageSuppressed
+									visible: true
 								}
 							).render();
 						}

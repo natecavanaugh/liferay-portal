@@ -338,7 +338,7 @@ else if (tabs2.equals("message-updated-email")) {
 			</div>
 		</c:when>
 		<c:when test='<%= tabs2.equals("thread-priorities") %>'>
-			<div class="portlet-msg-info">
+			<div class="aui-alert aui-alert-info">
 				<liferay-ui:message key="enter-the-name,-image,-and-priority-level-in-descending-order" />
 			</div>
 
@@ -595,7 +595,7 @@ else if (tabs2.equals("message-updated-email")) {
 			</aui:script>
 		</c:when>
 		<c:when test='<%= tabs2.equals("user-ranks") %>'>
-			<div class="portlet-msg-info">
+			<div class="aui-alert aui-alert-info">
 				<liferay-ui:message key="enter-rank-and-minimum-post-pairs-per-line" />
 			</div>
 

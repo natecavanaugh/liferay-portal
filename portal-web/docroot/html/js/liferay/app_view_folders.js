@@ -179,9 +179,9 @@ AUI.add(
 
 						var output = instance._portletMessageContainer;
 
-						output.removeClass('portlet-msg-error').removeClass('portlet-msg-success');
+						output.removeClass('aui-alert-error').removeClass('aui-alert-success');
 
-						output.addClass('portlet-msg-' + type);
+						output.addClass('aui-alert aui-alert-' + type);
 
 						output.html(message);
 

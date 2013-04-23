@@ -151,7 +151,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 			%>
 
 			<c:if test="<%= !deletedAssets.isEmpty() %>">
-				<div class="portlet-msg-info">
+				<div class="aui-alert aui-alert-info">
 					<liferay-ui:message key="the-selected-assets-have-been-removed-from-the-list-because-they-do-not-belong-in-the-scope-of-this-portlet" />
 				</div>
 			</c:if>

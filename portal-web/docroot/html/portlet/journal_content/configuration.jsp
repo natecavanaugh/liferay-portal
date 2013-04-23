@@ -51,7 +51,7 @@ type = ParamUtil.getString(request, "type", type);
 
 	<liferay-ui:error exception="<%= NoSuchArticleException.class %>" message="the-web-content-could-not-be-found" />
 
-	<div class="portlet-msg-info">
+	<div class="aui-alert aui-alert-info">
 		<span class="displaying-help-message-holder <%= article == null ? StringPool.BLANK : "aui-hide" %>">
 			<liferay-ui:message key="please-select-a-web-content-from-the-list-below" />
 		</span>

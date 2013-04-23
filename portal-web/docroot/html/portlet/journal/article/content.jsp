@@ -214,7 +214,7 @@ if (Validator.isNotNull(content)) {
 		<c:if test="<%= Validator.isNull(toLanguageId) %>">
 			<tr>
 				<td class="article-structure-template-toolbar journal-metadata">
-					<span class="portlet-msg-alert structure-message aui-hide" id="<portlet:namespace />structureMessage">
+					<span class="aui-alert aui-alert-block structure-message aui-hide" id="<portlet:namespace />structureMessage">
 						<liferay-ui:message key="this-structure-has-not-been-saved" />
 
 						<liferay-ui:message arguments='<%= new Object[] {"journal-save-structure-trigger", "#"} %>' key="click-here-to-save-it-now" />
@@ -361,7 +361,7 @@ if (Validator.isNotNull(content)) {
 
 		<tr>
 			<td class="article-translation-toolbar journal-metadata">
-				<div class="portlet-msg-info aui-hide" id="<portlet:namespace />translationsMessage">
+				<div class="aui-alert aui-alert-info aui-hide" id="<portlet:namespace />translationsMessage">
 					<liferay-ui:message key="the-changes-in-your-translations-will-be-available-once-the-content-is-published" />
 				</div>
 
@@ -522,7 +522,7 @@ if (Validator.isNotNull(content)) {
 
 										<aui:input cssClass="journal-article-localized-checkbox" label="localizable" name="localized" type="hidden" value="<%= true %>" />
 
-										<div class="journal-article-required-message portlet-msg-error">
+										<div class="aui-alert aui-alert-error journal-article-required-message">
 											<liferay-ui:message key="this-field-is-required" />
 										</div>
 

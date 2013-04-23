@@ -130,7 +130,7 @@ if (!rankingNamesList.isEmpty()) {
 else {
 %>
 
-	<div class="portlet-configuration portlet-msg-info">
+	<div class="aui-alert aui-alert-info portlet-configuration">
 		<a href="<%= portletDisplay.getURLConfiguration() %>" onClick="<%= portletDisplay.getURLConfigurationJS() %>">
 			<liferay-ui:message key="please-configure-this-portlet-and-select-at-least-one-ranking-criteria" />
 		</a>

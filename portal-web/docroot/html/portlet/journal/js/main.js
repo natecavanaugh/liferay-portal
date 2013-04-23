@@ -41,7 +41,7 @@ AUI.add(
 									'<label for="{portletNamespace}{instanceId}localized-checkboxCheckbox">{localizedLabelLanguage}</label>' +
 								'</span>' +
 							'</span>' +
-						'<div class="journal-article-required-message portlet-msg-error">{requiredFieldLanguage}</div>' +
+						'<div class="aui-alert aui-alert-error journal-article-required-message">{requiredFieldLanguage}</div>' +
 						'<div class="journal-article-buttons {articleButtonsRowCSSClass}">' +
 							'<span class="aui-field aui-field-inline aui-field-text journal-article-variable-name">' +
 								'<span class="aui-field-content">' +
@@ -64,7 +64,7 @@ AUI.add(
 			'<div class="forbidden-action"></div>' +
 		'</div>';
 
-		var TPL_INSTRUCTIONS_CONTAINER = '<div class="journal-article-instructions-container journal-article-instructions-message portlet-msg-info"></div>';
+		var TPL_INSTRUCTIONS_CONTAINER = '<div class="aui-alert aui-alert-info journal-article-instructions-container journal-article-instructions-message"></div>';
 
 		var TPL_OPTION = '<option></option>';
 
@@ -664,7 +664,7 @@ AUI.add(
 					};
 
 					instance._saveDialog = Liferay.Util.Window.getWindow(
-					    {
+						{
 							dialog: {
 								bodyContent: htmlTemplate,
 								toolbars: {
@@ -687,7 +687,7 @@ AUI.add(
 								}
 							},
 							title: title
-					    }
+						}
 					);
 
 					instance._saveDialog.fields = {
@@ -1314,7 +1314,7 @@ AUI.add(
 				var instance = this;
 
 				var journalMessage = A.one(selector);
-				var className = 'save-structure-message portlet-msg-' + (type || 'success');
+				var className = 'save-structure-message aui-alert aui-alert-' + (type || 'success');
 
 				journalMessage.attr('className', className);
 				journalMessage.show();

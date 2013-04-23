@@ -25,7 +25,7 @@ SearchContainer searchContainer = (SearchContainer)request.getAttribute("view.js
 
 <c:choose>
 	<c:when test="<%= results.isEmpty() %>">
-		<div class="portlet-msg-info">
+		<div class="aui-alert aui-alert-info">
 			<%= LanguageUtil.get(pageContext, "there-are-no-media-files-in-this-folder") %>
 		</div>
 	</c:when>

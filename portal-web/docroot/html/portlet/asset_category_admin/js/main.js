@@ -36,9 +36,9 @@ AUI.add(
 
 		var CSS_MESSAGE_RESPONSE = 'lfr-message-response';
 
-		var CSS_MESSAGE_ERROR = 'portlet-msg-error';
+		var CSS_MESSAGE_ERROR = 'aui-alert aui-alert-error';
 
-		var CSS_MESSAGE_SUCCESS = 'portlet-msg-success';
+		var CSS_MESSAGE_SUCCESS = 'aui-alert aui-alert-success';
 
 		var CSS_VOCABULARY_ITEM_CHECK = 'vocabulary-item-check';
 
@@ -577,12 +577,12 @@ AUI.add(
 						var instance = this;
 
 						instance._categoryPanelAdd = Liferay.Util.Window.getWindow(
-						    {
+							{
 								dialog: {
 									cssClass: CSS_ADMIN_DIALOG
 								},
 								title: Liferay.Language.get('add-category')
-						    }
+							}
 						);
 
 						instance._categoryPanelAdd.hide();
@@ -2442,7 +2442,7 @@ AUI.add(
 						var instance = this;
 
 						var output = instance._portletMessageContainer;
-						var typeClass = 'portlet-msg-' + type;
+						var typeClass = 'aui-alert aui-alert-' + type;
 
 						output.removeClass(CSS_MESSAGE_ERROR).removeClass(CSS_MESSAGE_SUCCESS);
 						output.addClass(typeClass);
@@ -2456,7 +2456,7 @@ AUI.add(
 					_showCateroryMessage: function(message, className) {
 						var categoryMessages = A.one(SELECTOR_VOCABULARY_CATEGORY_MESSAGES);
 
-						className = className || 'portlet-msg-info';
+						className = className || 'aui-alert aui-alert-info';
 
 						message = message || Liferay.Language.get('there-are-no-categories');
 
@@ -2605,7 +2605,7 @@ AUI.add(
 					_showVocabularyMessage: function(message, className) {
 						var vocabularyMessages = A.one(SELECTOR_VOCABULARY_MESSAGES);
 
-						className = className || 'portlet-msg-info';
+						className = className || 'aui-alert aui-alert-info';
 
 						message = message || Liferay.Language.get('there-are-no-vocabularies');
 

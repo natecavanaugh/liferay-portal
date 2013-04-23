@@ -218,7 +218,7 @@ if (!themeDisplay.isStatePopUp()) {
 								id: sessionKey,
 								persistenceCategory: 'enable-portlet-descriptions',
 								strings: {
-									dismissAll: Liferay.Language.get('or-disable-for-all-portlets')
+									dismissAll: Liferay.Language.get('disable-this-note-for-all-portlets')
 								},
 								trigger: portletInformationIcon,
 								type: 'help',
