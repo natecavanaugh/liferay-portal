@@ -15,14 +15,6 @@
 				padding: 3px 1px;
 			}
 
-			label, .label {
-				font-weight: bold;
-
-				input {
-					vertical-align: middle;
-				}
-			}
-
 			.aui-field {
 				margin-bottom: 10px;
 

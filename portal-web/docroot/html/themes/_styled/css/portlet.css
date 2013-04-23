@@ -356,7 +356,6 @@ body.portlet {
 .portlet-msg-alert-label, .portlet-msg-error-label, .portlet-msg-info-label, .portlet-msg-progress-label, .portlet-msg-success-label {
 	background: none no-repeat 0 50%;
 	padding: 3px 3px 3px 20px;
-	font-weight: bold;
 }
 
 .portlet-msg-alert-label {

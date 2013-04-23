@@ -68,14 +68,6 @@
 			}
 		}
 
-		.aui-tab-active .aui-tab-content {
-			.aui-tab-label {
-				color: #FFF;
-				font-weight: bold;
-				text-shadow: -1px -1px 0 #333;
-			}
-		}
-
 		.manage-layout-set-branches-tab .manage-layout-set-branches a {
 			border-left: 1px solid #999;
 			color: #DDD;
