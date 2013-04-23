@@ -996,6 +996,12 @@
 			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
+			<name>primary</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Object</type>
+		</attribute>
+		<attribute>
 			<name>type</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>

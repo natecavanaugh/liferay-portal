@@ -40,6 +40,7 @@ java.lang.String name = GetterUtil.getString((java.lang.String)request.getAttrib
 java.lang.String icon = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:icon"));
 java.lang.String iconAlign = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:iconAlign"), "left");
 java.lang.String onClick = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:onClick"));
+java.lang.Object primary = (java.lang.Object)request.getAttribute("aui:button:primary");
 java.lang.String type = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:type"), "button");
 java.lang.String value = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:value"));
 
@@ -51,6 +52,7 @@ _updateOptions(_options, "name", name);
 _updateOptions(_options, "icon", icon);
 _updateOptions(_options, "iconAlign", iconAlign);
 _updateOptions(_options, "onClick", onClick);
+_updateOptions(_options, "primary", primary);
 _updateOptions(_options, "type", type);
 _updateOptions(_options, "value", value);
 %>
