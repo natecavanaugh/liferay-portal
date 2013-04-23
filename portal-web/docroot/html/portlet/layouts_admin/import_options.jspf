@@ -92,36 +92,66 @@
 			</ul>
 		</liferay-ui:panel>
 
+		<liferay-ui:panel collapsible="<%= false %>" cssClass="export-group-panel" defaultState="open" id="contentPanel" persistState="<%= true %>" title="content">
+			<ul class="lfr-tree lfr-component">
 				<li class="tree-item">
-					<c:if test="<%= !group.isLayoutPrototype() %>">
-						<aui:input name="<%= PortletDataHandlerKeys.PORTLET_DATA_CONTROL_DEFAULT %>" type="hidden" value="<%= true %>" />
+					<aui:input checked="<%= true %>" helpMessage="all-content-help" label="all-content" name="<%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>" type="checkbox" value="<%= true %>" />
 
-						<aui:input label="data" name="<%= PortletDataHandlerKeys.PORTLET_DATA %>" type="checkbox" value="<%= true %>" />
+					<ul id="<portlet:namespace />showChangeGlobalContent">
+						<li>
+							<div class="selected-labels" id="<portlet:namespace />selectedGlobalContent"></div>
 
-						<ul id="<portlet:namespace />portletDataControls">
-							<li class="tree-item">
-								<aui:input helpMessage="delete-portlet-data-help" label="delete-portlet-data-before-importing" name="<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>" type="checkbox" />
-							</li>
+							<liferay-ui:icon
+								cssClass="modify-link"
+								id="globalContentLink"
+								image="add"
+								label="<%= true %>"
+								message="change"
+								method="get"
+								url="javascript:;"
+							/>
+						</li>
+					</ul>
 
-							<li class="tree-item">
-								<aui:fieldset cssClass="portlet-data-section" label="data-strategy">
-									<aui:input checked="<%= true %>" helpMessage="import-data-strategy-mirror-help" label="mirror" name="<%= PortletDataHandlerKeys.DATA_STRATEGY %>" type="radio" value="<%= PortletDataHandlerKeys.DATA_STRATEGY_MIRROR %>" />
+					<aui:script>
+						Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>Checkbox', '<portlet:namespace />showChangeGlobalContent');
+					</aui:script>
 
-									<aui:input helpMessage="import-data-strategy-mirror-with-overwriting-help" id="mirrorWithOverwriting" label="mirror-with-overwriting" name="<%= PortletDataHandlerKeys.DATA_STRATEGY %>" type="radio" value="<%= PortletDataHandlerKeys.DATA_STRATEGY_MIRROR_OVERWRITE %>" />
+					<div class="aui-helper-hidden" id="<portlet:namespace />globalContent">
+						<aui:fieldset cssClass="portlet-data-section" label="all-content">
+							<aui:input helpMessage="delete-portlet-data-help" label="delete-portlet-data-before-importing" name="<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>" type="checkbox" />
 
-									<aui:input helpMessage="import-data-strategy-copy-as-new-help" id="copyAsNew" label="copy-as-new" name="<%= PortletDataHandlerKeys.DATA_STRATEGY %>" type="radio" value="<%= PortletDataHandlerKeys.DATA_STRATEGY_COPY_AS_NEW %>" />
-								</aui:fieldset>
-							</li>
+							<ul id="<portlet:namespace />showDeleteContentWarning">
+								<div class="delete-content-warning">
+									<liferay-ui:message key="delete-content-before-importing-warning" />
+								</div>
 
-							<li class="tree-item">
-								<aui:fieldset cssClass="portlet-data-section" label="user-id-strategy">
-									<aui:input checked="<%= true %>" label="if-a-user-id-does-not-exist,-then-use-my-user-id" name="<%= PortletDataHandlerKeys.USER_ID_STRATEGY %>" type="radio" value="<%= UserIdStrategy.CURRENT_USER_ID %>" />
+								<div class="delete-content-suggestion">
+									<liferay-ui:message key="delete-content-before-importing-suggestion" />
+								</div>
+							</ul>
 
-									<aui:input label="always-use-my-user-id" name="<%= PortletDataHandlerKeys.USER_ID_STRATEGY %>" type="radio" value="<%= UserIdStrategy.ALWAYS_CURRENT_USER_ID %>" />
-								</aui:fieldset>
-							</li>
-						</ul>
-					</c:if>
+							<aui:input helpMessage="export-import-categories-help" label="categories" name="<%= PortletDataHandlerKeys.CATEGORIES %>" type="checkbox" value="<%= false %>" />
+						</aui:fieldset>
+
+						<aui:script>
+							Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>Checkbox', '<portlet:namespace />showDeleteContentWarning');
+						</aui:script>
+
+						<aui:fieldset cssClass="portlet-data-section" label="data-strategy">
+							<aui:input checked="<%= true %>" helpMessage="import-data-strategy-mirror-help" label="mirror" name="<%= PortletDataHandlerKeys.DATA_STRATEGY %>" type="radio" value="<%= PortletDataHandlerKeys.DATA_STRATEGY_MIRROR %>" />
+
+							<aui:input helpMessage="import-data-strategy-mirror-with-overwriting-help" id="mirrorWithOverwriting" label="mirror-with-overwriting" name="<%= PortletDataHandlerKeys.DATA_STRATEGY %>" type="radio" value="<%= PortletDataHandlerKeys.DATA_STRATEGY_MIRROR_OVERWRITE %>" />
+
+							<aui:input helpMessage="import-data-strategy-copy-as-new-help" id="copyAsNew" label="copy-as-new" name="<%= PortletDataHandlerKeys.DATA_STRATEGY %>" type="radio" value="<%= PortletDataHandlerKeys.DATA_STRATEGY_COPY_AS_NEW %>" />
+						</aui:fieldset>
+
+						<aui:fieldset cssClass="portlet-data-section" label="user-id-strategy">
+							<aui:input checked="<%= true %>" label="if-a-user-id-does-not-exist,-then-use-my-user-id" name="<%= PortletDataHandlerKeys.USER_ID_STRATEGY %>" type="radio" value="<%= UserIdStrategy.CURRENT_USER_ID %>" />
+
+							<aui:input label="always-use-my-user-id" name="<%= PortletDataHandlerKeys.USER_ID_STRATEGY %>" type="radio" value="<%= UserIdStrategy.ALWAYS_CURRENT_USER_ID %>" />
+						</aui:fieldset>
+					</div>
 				</li>
 			</ul>
 		</liferay-ui:panel>
