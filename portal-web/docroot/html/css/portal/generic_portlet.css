@@ -57,10 +57,6 @@
 }
 
 .lfr-table-grid {
-	.lfr-label {
-		font-weight: bold;
-	}
-
 	.aui-field-hint {
 		float: none;
 	}

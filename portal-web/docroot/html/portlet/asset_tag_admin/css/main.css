@@ -157,11 +157,6 @@
 	.view-tag {
 		margin: 1em;
 
-		label {
-			display: block;
-			font-weight: bold;
-		}
-
 		.tag-field {
 			clear: left;
 			margin: 1em auto;
@@ -225,12 +220,6 @@
 		.arrows-container {
 			top: 50%;
 			margin-top: -20px;
-		}
-
-		label {
-			color: #5C85AD;
-			display: inline-block;
-			margin-bottom: 0.5em;
 		}
 
 		.selected-tags-container, .target-tags-container {

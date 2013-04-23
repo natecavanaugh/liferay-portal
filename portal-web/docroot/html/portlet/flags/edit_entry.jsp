@@ -30,10 +30,6 @@ long reportedUserId = ParamUtil.getLong(request, "reportedUserId");
 		padding: 0;
 		width: 100%;
 	}
-
-	.portlet-flags .aui-form .aui-fieldset label {
-		font-weight: bold;
-	}
 </style>
 
 <div class="portlet-flags" id="<portlet:namespace />flagsPopup">
