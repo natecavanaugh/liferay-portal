@@ -68,7 +68,7 @@
 		<liferay-ui:panel collapsible="<%= false %>" cssClass="export-group-panel" defaultState="open" id="applicationPanel" persistState="<%= true %>" title="application-configuration">
 			<ul class="lfr-tree lfr-component">
 				<li class="tree-item">
-					<aui:input checked="<%= true %>" helpMessage="all-applications-help" id="allApplications" label="all-applications" name="<%= PortletDataHandlerKeys.PORTLET_SETUP_ALL %>" type="radio" value="<%= true %>" />
+					<aui:input checked="<%= true %>" helpMessage="all-applications-export-help" id="allApplications" label="all-applications" name="<%= PortletDataHandlerKeys.PORTLET_SETUP_ALL %>" type="radio" value="<%= true %>" />
 
 					<div class="aui-helper-hidden" id="<portlet:namespace />globalConfiguration">
 						<aui:fieldset cssClass="portlet-data-section" label="all-applications">
@@ -134,7 +134,7 @@
 		<liferay-ui:panel collapsible="<%= false %>" cssClass="export-group-panel" defaultState="open" id="contentPanel" persistState="<%= true %>" title="content">
 			<ul class="lfr-tree lfr-component">
 				<li class="tree-item">
-					<aui:input checked="<%= true %>" helpMessage="all-content-help" id="allContent" label="all-content" name="<%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>" type="radio" value="<%= true %>" />
+					<aui:input checked="<%= true %>" helpMessage="all-content-export-help" id="allContent" label="all-content" name="<%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>" type="radio" value="<%= true %>" />
 
 					<div class="aui-helper-hidden" id="<portlet:namespace />globalContent">
 						<aui:fieldset cssClass="portlet-data-section" label="all-content">
