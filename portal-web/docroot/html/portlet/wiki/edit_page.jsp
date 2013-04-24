@@ -424,7 +424,7 @@ if (Validator.isNull(redirect)) {
 					}
 					%>
 
-					<aui:button name="saveButton" type="submit" value="<%= saveButtonLabel %>" />
+					<aui:button name="saveButton" primary="<%= false %>" type="submit" value="<%= saveButtonLabel %>" />
 
 					<aui:button name="previewButton" onClick='<%= renderResponse.getNamespace() + "previewPage();" %>' value="preview" />
 
