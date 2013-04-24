@@ -26,7 +26,7 @@
 				<liferay-ui:message key="logo"></liferay-ui:message>
 			</div>
 
-			<aui:a cssClass="modify-link" id="pagesLink" href="javascript:;" label="change" method="get" />
+			<aui:a cssClass="modify-link" href="javascript:;" id="pagesLink" label="change" method="get" />
 
 			<div class="aui-helper-hidden" id="<portlet:namespace />pages">
 				<aui:fieldset cssClass="portlet-data-section" label="pages">
@@ -56,7 +56,7 @@
 							<liferay-ui:message key="user-preferences"></liferay-ui:message>
 						</div>
 
-						<aui:a cssClass="modify-link" id="globalConfigurationLink" href="javascript:;" label="change" method="get" />
+						<aui:a cssClass="modify-link" href="javascript:;" id="globalConfigurationLink" label="change" method="get" />
 					</li>
 				</ul>
 
@@ -87,7 +87,7 @@
 							<liferay-ui:message key="use-the-original-author"></liferay-ui:message>
 						</div>
 
-						<aui:a cssClass="modify-link" id="globalContentLink" href="javascript:;" label="change" method="get" />
+						<aui:a cssClass="modify-link" href="javascript:;" id="globalContentLink" label="change" method="get" />
 					</li>
 				</ul>
 
