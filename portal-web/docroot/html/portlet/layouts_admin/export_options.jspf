@@ -29,15 +29,7 @@
 				<liferay-ui:message key="logo"></liferay-ui:message>
 			</div>
 
-			<liferay-ui:icon
-				cssClass="modify-link"
-				id="pagesLink"
-				image="add"
-				label="<%= true %>"
-				message="change"
-				method="get"
-				url="javascript:;"
-			/>
+			<aui:a cssClass="modify-link" id="pagesLink" href="javascript:;" label="change" method="get" />
 
 			<div class="aui-helper-hidden" id="<portlet:namespace />pages">
 				<aui:fieldset cssClass="portlet-data-section" label="pages-to-export">
@@ -84,15 +76,7 @@
 							<liferay-ui:message key="user-preferences"></liferay-ui:message>
 						</div>
 
-						<liferay-ui:icon
-							cssClass="modify-link"
-							id="globalConfigurationLink"
-							image="add"
-							label="<%= true %>"
-							message="change"
-							method="get"
-							url="javascript:;"
-						/>
+						<aui:a cssClass="modify-link" id="globalConfigurationLink" href="javascript:;" label="change" method="get" />
 					</li>
 				</ul>
 
@@ -145,15 +129,7 @@
 					<li>
 						<div class="selected-labels" id="<portlet:namespace />selectedGlobalContent"></div>
 
-						<liferay-ui:icon
-							cssClass="modify-link"
-							id="globalContentLink"
-							image="add"
-							label="<%= true %>"
-							message="change"
-							method="get"
-							url="javascript:;"
-						/>
+						<aui:a cssClass="modify-link" id="globalContentLink" href="javascript:;" label="change" method="get" />
 					</li>
 				</ul>
 
@@ -267,15 +243,7 @@
 									<liferay-ui:message key="all"></liferay-ui:message>
 								</div>
 
-								<liferay-ui:icon
-									cssClass="modify-link"
-									id="rangeLink"
-									image="add"
-									label="<%= true %>"
-									message="change"
-									method="get"
-									url="javascript:;"
-								/>
+								<aui:a cssClass="modify-link" id="rangeLink" href="javascript:;" label="change" method="get" />
 							</li>
 						</ul>
 					</li>
@@ -383,15 +351,7 @@
 										data.put("portletid", portlet.getPortletId());
 										%>
 
-										<liferay-ui:icon
-											cssClass="modify-link content-link"
-											data="<%= data %>"
-											image="add"
-											label="<%= true %>"
-											message="change"
-											method="get"
-											url="javascript:;"
-										/>
+										<aui:a cssClass="modify-link content-link" data="<%= data %>" href="javascript:;" label="change" method="get" />
 									</li>
 								</ul>
 

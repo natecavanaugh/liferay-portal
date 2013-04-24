@@ -83,7 +83,7 @@ AUI.add(
 
 								contentDialog.show();
 							},
-							'.content-link a'
+							'.content-link'
 						);
 
 						instance.byId('globalConfigurationLink').on(
