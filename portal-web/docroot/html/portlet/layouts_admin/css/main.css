@@ -481,17 +481,6 @@
 	}
 }
 
-.delete-content-suggestion {
-	color: #999;
-	font-style: italic;
-}
-
-.delete-content-warning {
-	color: #F00;
-	font-weight: bold;
-	padding-bottom: 1em;
-}
-
 .lfr-export-dialog {
 	.date-range-options {
 		margin-bottom: 1em;
