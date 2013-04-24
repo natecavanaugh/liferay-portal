@@ -403,11 +403,11 @@ AUI.add(
 						}
 
 						if (instance._isChecked('currentUserIdNode')) {
-							selectedGlobalContent.push(Liferay.Language.get('if-a-user-id-does-not-exist,-then-use-my-user-id'));
+							selectedGlobalContent.push(Liferay.Language.get('use-the-original-author'));
 						}
 
 						if (instance._isChecked('alwaysCurrentUserIdNode')) {
-							selectedGlobalContent.push(Liferay.Language.get('always-use-my-user-id'));
+							selectedGlobalContent.push(Liferay.Language.get('use-the-current-user-as-author'));
 						}
 
 						instance._refreshSelectedLabel('selectedGlobalContent', selectedGlobalContent.join(', '));
