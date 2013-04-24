@@ -139,7 +139,7 @@
 						</aui:script>
 
 						<aui:fieldset cssClass="portlet-data-section" label="data-strategy">
-							<aui:input checked="<%= true %>" helpMessage="import-data-strategy-mirror-help" label="mirror" name="<%= PortletDataHandlerKeys.DATA_STRATEGY %>" type="radio" value="<%= PortletDataHandlerKeys.DATA_STRATEGY_MIRROR %>" />
+							<aui:input checked="<%= true %>" helpMessage="import-data-strategy-mirror-help" id="mirror" label="mirror" name="<%= PortletDataHandlerKeys.DATA_STRATEGY %>" type="radio" value="<%= PortletDataHandlerKeys.DATA_STRATEGY_MIRROR %>" />
 
 							<aui:input helpMessage="import-data-strategy-mirror-with-overwriting-help" id="mirrorWithOverwriting" label="mirror-with-overwriting" name="<%= PortletDataHandlerKeys.DATA_STRATEGY %>" type="radio" value="<%= PortletDataHandlerKeys.DATA_STRATEGY_MIRROR_OVERWRITE %>" />
 
@@ -147,9 +147,9 @@
 						</aui:fieldset>
 
 						<aui:fieldset cssClass="portlet-data-section" label="user-id-strategy">
-							<aui:input checked="<%= true %>" label="if-a-user-id-does-not-exist,-then-use-my-user-id" name="<%= PortletDataHandlerKeys.USER_ID_STRATEGY %>" type="radio" value="<%= UserIdStrategy.CURRENT_USER_ID %>" />
+							<aui:input checked="<%= true %>" id="currentUserId" label="if-a-user-id-does-not-exist,-then-use-my-user-id" name="<%= PortletDataHandlerKeys.USER_ID_STRATEGY %>" type="radio" value="<%= UserIdStrategy.CURRENT_USER_ID %>" />
 
-							<aui:input label="always-use-my-user-id" name="<%= PortletDataHandlerKeys.USER_ID_STRATEGY %>" type="radio" value="<%= UserIdStrategy.ALWAYS_CURRENT_USER_ID %>" />
+							<aui:input id="alwaysCurrentUserId" label="always-use-my-user-id" name="<%= PortletDataHandlerKeys.USER_ID_STRATEGY %>" type="radio" value="<%= UserIdStrategy.ALWAYS_CURRENT_USER_ID %>" />
 						</aui:fieldset>
 					</div>
 				</li>
@@ -176,19 +176,21 @@
 	</liferay-ui:panel-container>
 </div>
 
-<aui:script use="import-layouts">
-	new Liferay.ImportLayouts(
+<aui:script use="export-import">
+	new Liferay.ExportImport(
 		{
+			alwaysCurrentUserIdNode: '#alwaysCurrentUserIdNode',
 			archivedSetupsNode: '#<%= PortletDataHandlerKeys.PORTLET_ARCHIVED_SETUPS %>Checkbox',
 			categoriesNode: '#<%= PortletDataHandlerKeys.CATEGORIES %>Checkbox',
-			deleteMissingLayouts: '#<%= PortletDataHandlerKeys.DELETE_MISSING_LAYOUTS %>Checkbox',
+			copyAsNewNode: '#copyAsNew',
+			currentUserIdNode: '#currentUserId',
+			deleteMissingLayoutsNode: '#<%= PortletDataHandlerKeys.DELETE_MISSING_LAYOUTS %>Checkbox',
+			deletePortletDataNode: '#<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>Checkbox',
 			layoutSetSettingsNode: '#<%= PortletDataHandlerKeys.LAYOUT_SET_SETTINGS %>Checkbox',
 			logoNode: '#<%= PortletDataHandlerKeys.LOGO %>Checkbox',
+			mirrorNode: '#mirror',
+			mirrorWithOverwritingNode: '#mirrorWithOverwriting',
 			namespace: '<portlet:namespace />',
-			rangeAllNode: '#rangeAll',
-			rangeDateRangeNode: '#rangeDateRange',
-			rangeLastNode: '#rangeLast',
-			rangeLastPublishNode: '#rangeLastPublish',
 			themeNode: '#<%= PortletDataHandlerKeys.THEME %>Checkbox',
 			themeReferenceNode: '#<%= PortletDataHandlerKeys.THEME_REFERENCE %>Checkbox',
 			userPreferencesNode: '#<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES %>Checkbox'
