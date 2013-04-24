@@ -176,7 +176,7 @@ AUI.add(
 			'<div class="settings-container-label">{containerText}</div>',
 			'<ul class="container-drop-box yui3-widget-bd"></ul>',
 			'<div class="aui-btn-row yui3-widget-ft">',
-				'<button class="aui-btn aui-btn-submit">{saveText}</button>',
+				'<button class="aui-btn aui-btn-primary aui-btn-submit">{saveText}</button>',
 			'</div>'
 		);
 

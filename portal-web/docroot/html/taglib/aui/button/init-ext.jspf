@@ -40,8 +40,11 @@ if (primary == null) {
 		primary = false;
 	}
 }
+else {
+	primary = GetterUtil.getBoolean(String.valueOf(primary));
+}
 
-if ((Boolean)primary) {
+if (primary == Boolean.TRUE) {
 	cssClass += " aui-btn-primary";
 }
 %>
