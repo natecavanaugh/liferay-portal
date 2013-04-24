@@ -122,14 +122,11 @@
 
 					<div class="aui-helper-hidden" id="<portlet:namespace />globalContent">
 						<aui:fieldset cssClass="portlet-data-section" label="all-content">
-							<aui:input helpMessage="delete-portlet-data-help" label="delete-portlet-data-before-importing" name="<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>" type="checkbox" />
+							<aui:input label="delete-portlet-data-before-importing" name="<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>" type="checkbox" />
 
 							<ul id="<portlet:namespace />showDeleteContentWarning">
-								<div class="delete-content-warning">
+								<div class="portlet-msg-alert">
 									<liferay-ui:message key="delete-content-before-importing-warning" />
-								</div>
-
-								<div class="delete-content-suggestion">
 									<liferay-ui:message key="delete-content-before-importing-suggestion" />
 								</div>
 							</ul>
