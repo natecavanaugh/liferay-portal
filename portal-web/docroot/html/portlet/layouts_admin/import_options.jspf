@@ -99,7 +99,10 @@
 
 					<ul id="<portlet:namespace />showChangeGlobalContent">
 						<li>
-							<div class="selected-labels" id="<portlet:namespace />selectedGlobalContent"></div>
+							<div class="selected-labels" id="<portlet:namespace />selectedGlobalContent">
+								<liferay-ui:message key="mirror"></liferay-ui:message>,
+								<liferay-ui:message key="if-a-user-id-does-not-exist,-then-use-my-user-id"></liferay-ui:message>
+							</div>
 
 							<liferay-ui:icon
 								cssClass="modify-link"
