@@ -329,6 +329,8 @@ AUI.add(
 			},
 
 			_onPortletDragEnd: function(event) {
+				A.one('body').removeClass('dragging-portlet');
+
 				var dragNode = event.target.get('node');
 
 				var columnNode = dragNode.get('parentNode');
@@ -342,6 +344,8 @@ AUI.add(
 				var dragNode = event.target.get('node');
 
 				Layout.updateCurrentPortletInfo(dragNode);
+				
+				A.one('body').addClass('dragging-portlet');
 			}
 		};
 
