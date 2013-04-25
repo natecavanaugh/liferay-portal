@@ -1,0 +1,67 @@
+#*
+This file allows you to override and define new Velocity variables.
+*#
+
+#set($aui_guid = 0)
+
+#macro(aui_drop_down_ul $nav_items $orientation)
+	#set($aui_guid = $aui_guid + 1)
+
+	#set($menu_class = "yui3-menu")
+
+	#if($validator.isNotNull($orientation))
+		#set($menu_class = "$menu_class yui3-menu-${orientation}")
+	#else
+		#set($menu_class = "$menu_class yui3-menu-hidden")
+	#end
+
+	<div class="$menu_class" id="yui3-menu-${aui_guid}">
+		<div class="yui3-menu-content">
+			<ul>
+				#foreach ($nav_item in $nav_items)
+					#set($has_child = "")
+					#set($menu_item = "lfr-nav-item")
+					#set($menu_item_label = "yui3-menuitem-content")
+					#set($selected_anchor = "")
+
+					#if ($nav_item.hasChildren())
+						#set($has_child = "has-child")
+						#set($menu_item_label = "$menu_item_label yui3-menu-label")
+					#else
+						#set($menu_item = "$menu_item yui3-menuitem")
+					#end
+
+					#if ($nav_item.isSelected() || $nav_item.isChildSelected())
+						#set($menu_item = "$menu_item selected")
+						#set($selected_anchor = "selected-anchor")
+					#end
+
+					<li class="$menu_item" data-layoutId="$nav_item.getLayout().getLayoutId()">
+						<a class="$menu_item_label $selected_anchor $has_child" href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
+
+						#if ($nav_item.hasChildren())
+							#aui_drop_down_ul($nav_item.getChildren() "")
+						#end
+					</li>
+				#end
+			</ul>
+		</div>
+	</div>
+#end
+
+#macro(aui_drop_down $nav_items $orientation)
+	#set($menu_id = $aui_guid + 1)
+
+	#aui_drop_down_ul($nav_items)
+
+	<script type="text/javascript">
+		Liferay.Data.NAV_ITEM_SELECTOR = '> .yui3-menu > .yui3-menu-content > ul > li';
+
+		AUI().use(
+			'node-menunav',
+			function(A) {
+				A.one('\#yui3-menu-${menu_id}').plug(A.Plugin.NodeMenuNav);
+			}
+		);
+	</script>
+#end

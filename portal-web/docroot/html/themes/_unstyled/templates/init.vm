@@ -3,10 +3,10 @@
 #set ($theme_display = $themeDisplay)
 #set ($portlet_display = $portletDisplay)
 
-#set ($theme_timestamp = $themeDisplay.getTheme().getTimestamp())
-#set ($theme_settings = $themeDisplay.getThemeSettings())
+#set ($theme_timestamp = $theme_display.getTheme().getTimestamp())
+#set ($theme_settings = $theme_display.getThemeSettings())
 
-#set ($css_class = $theme_display.getColorScheme().getCssClass() + " yui3-skin-sam")
+#set ($css_class = $theme_display.getColorScheme().getCssClass())
 
 #set ($liferay_toggle_controls = $sessionClicks.get($request, "liferay_toggle_controls", "visible"))
 
@@ -14,11 +14,11 @@
 	#set ($page_group = $layout.getGroup())
 
 	#if ($page_group.isStagingGroup())
-		#set ($css_class = $css_class + " staging local-staging")
+		#set ($css_class = "$css_class staging local-staging")
 	#elseif ($theme_display.isShowStagingIcon() && $page_group.hasStagingGroup())
-		#set ($css_class = $css_class + " live-view")
+		#set ($css_class = "$css_class live-view")
 	#elseif ($theme_display.isShowStagingIcon() && $page_group.isStagedRemotely())
-		#set ($css_class = $css_class + " staging remote-staging")
+		#set ($css_class = "$css_class staging remote-staging")
 	#end
 
 	#if ($page_group.isControlPanel())
@@ -29,23 +29,23 @@
 #set ($liferay_dockbar_pinned = $getterUtil.getBoolean($sessionClicks.get($request, "liferay_dockbar_pinned", ""), false))
 
 #if ($liferay_toggle_controls == "visible")
-	#set ($css_class = $css_class + " controls-visible")
+	#set ($css_class = "$css_class controls-visible")
 #else
-	#set ($css_class = $css_class + " controls-hidden")
+	#set ($css_class = "$css_class controls-hidden")
 #end
 
 #if ($liferay_dockbar_pinned)
-	#set ($css_class = $css_class + " lfr-dockbar-pinned")
+	#set ($css_class = "$css_class lfr-dockbar-pinned")
 #end
 
 #if ($layoutTypePortlet.hasStateMax())
-	#set ($css_class = $css_class + " page-maximized")
+	#set ($css_class = "$css_class page-maximized")
 #end
 
-#set ($css_folder = "$theme_display.getPathThemeCss()")
-#set ($images_folder = "$theme_display.getPathThemeImages()")
-#set ($javascript_folder = "$theme_display.getPathThemeJavaScript()")
-#set ($templates_folder = "$theme_display.getPathThemeTemplates()")
+#set ($css_folder = $theme_display.getPathThemeCss())
+#set ($images_folder = $theme_display.getPathThemeImages())
+#set ($javascript_folder = $theme_display.getPathThemeJavaScript())
+#set ($templates_folder = $theme_display.getPathThemeTemplates())
 
 #set ($full_css_path = $fullCssPath)
 #set ($full_templates_path = $fullTemplatesPath)
@@ -158,7 +158,7 @@
 #set ($the_title = "")
 #set ($selectable = $theme_display.isTilesSelectable())
 #set ($is_maximized = $layoutTypePortlet.hasStateMax())
-#set ($is_freeform = $themeDisplay.isFreeformLayout())
+#set ($is_freeform = $theme_display.isFreeformLayout())
 
 #set ($page_javascript_1 = "")
 #set ($page_javascript_2 = "")
@@ -200,27 +200,27 @@
 	#set ($is_guest_group = $page_group.getName() == "Guest")
 
 	#if ($is_guest_group)
-		#set ($css_class = $css_class + " guest-site")
+		#set ($css_class = "$css_class guest-site")
 	#end
 
 	#if ($is_signed_in)
-		#set ($css_class = $css_class + " signed-in")
+		#set ($css_class = "$css_class signed-in")
 	#else
-		#set ($css_class = $css_class + " signed-out")
+		#set ($css_class = "$css_class signed-out")
 	#end
 
 	#if ($layout.isPublicLayout())
-		#set ($css_class = $css_class + " public-page")
+		#set ($css_class = "$css_class public-page")
 	#else
-		#set ($css_class = $css_class + " private-page")
+		#set ($css_class = "$css_class private-page")
 	#end
 
 	#if ($page_group.isLayoutPrototype())
-		#set ($css_class = $css_class + " page-template")
+		#set ($css_class = "$css_class page-template")
 	#end
 
 	#if ($page_group.isLayoutSetPrototype())
-		#set ($css_class = $css_class + " site-template")
+		#set ($css_class = "$css_class site-template")
 	#end
 
 	#if ($page_group.isCompany())
@@ -233,7 +233,7 @@
 		#set ($site_type = "site")
 	#end
 
-	#set ($css_class = $css_class + " " + $site_type)
+	#set ($css_class = "$css_class $site_type")
 
 	#set ($my_sites_portlet_url = $portletURLFactory.create($request, "49", $page.getPlid(), "ACTION_PHASE"))
 
@@ -276,7 +276,7 @@
 #end
 
 #if ($pageSubtitle)
-	#set ($the_title = $pageSubtitle + " - " + $the_title)
+	#set ($the_title = "$pageSubtitle - $the_title")
 #end
 
 #if ($tilesTitle != "")
@@ -334,7 +334,7 @@
 #set ($nav_css_class = "sort-pages modify-pages")
 
 #if (!$has_navigation)
-	#set ($nav_css_class = $nav_css_class + " aui-helper-hidden")
+	#set ($nav_css_class = "$nav_css_class aui-helper-hidden")
 #end
 
 ## ---------- Staging ---------- ##
@@ -365,13 +365,13 @@
 	#set ($dir_include = "/html")
 #end
 
-#set ($body_bottom_include = "$dir_include/common/themes/body_bottom.jsp")
-#set ($body_top_include = "$dir_include/common/themes/body_top.jsp")
-#set ($bottom_include = "$dir_include/common/themes/bottom.jsp")
+#set ($body_bottom_include = "${dir_include}/common/themes/body_bottom.jsp")
+#set ($body_top_include = "${dir_include}/common/themes/body_top.jsp")
+#set ($bottom_include = "${dir_include}/common/themes/bottom.jsp")
 #set ($bottom_ext_include = $bottom_include)
 #set ($content_include = "$dir_include$tilesContent")
-#set ($top_head_include = "$dir_include/common/themes/top_head.jsp")
-#set ($top_messages_include = "$dir_include/common/themes/top_messages.jsp")
+#set ($top_head_include = "${dir_include}/common/themes/top_head.jsp")
+#set ($top_messages_include = "${dir_include}/common/themes/top_messages.jsp")
 
 ## ---------- Date ---------- ##
 

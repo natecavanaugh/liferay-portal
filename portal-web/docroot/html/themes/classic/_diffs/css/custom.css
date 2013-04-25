@@ -121,71 +121,116 @@ hr, .separator {
 		padding: 3px;
 	}
 
-	li, a {
+	a, li {
 		display: inline-block;
 	}
 
 	li {
+		margin: 1px 0;
 		position: relative;
 		vertical-align: top;
+
+		li {
+			display: block;
+		}
 	}
 
 	a {
 		color: #FFF;
+		display: block;
 		font-size: 1.1em;
 		font-weight: bold;
 		margin: 0 1px;
 		padding: 3px 15px;
+		text-align: left;
 		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.selected a {
+		background-color: #313334;
+	}
+
+	a:focus, .selected .yui3-menu-label-active, .yui3-dd-dragging, .yui3-menu-label-active, .yui3-menu-label-menuvisible, .yui3-menuitem-active a {
+		background-color: #202223;
+	}
+
+	a:active {
+		background-color: #020509 !important;
+	}
+
+	.has-child:after {
+		content: "\25BC";
+		font-size: 0.7em;
+		padding: 0.5em;
+		position: relative;
+		top: -.1em;
 	}
 
 	.yui3-dd-drop a {
 		cursor: move;
 	}
-}
 
-#navigation a:focus, #navigation a:hover, #navigation .child-menu li a, #navigation li.hover a, #navigation .selected a, #navigation .yui3-dd-dragging, .lfr-navigation-proxy {
-	background: #313334;
-	color: #FFF;
-	outline: 0;
-	text-shadow: -1px -1px #000;
-}
+	.yui3-menu {
+		.yui3-menu-content {
+			background-image: none;
+			line-height: 2;
 
-#navigation {
-	li.hover .child-menu {
-		background: #1E2529;
-		display: block;
-		position: absolute;
-		width: 200px;
-		z-index: 250;
-	}
+			&, & li {
+				border-width: 0;
+			}
 
-	.child-menu {
-		display: none;
+			ul {
+				padding: 3px;
+			}
 
-		li {
-			border-width: 0 0 1px;
-			display: block;
-			float: none;
-			margin: 0;
-
-			a {
-				cursor: pointer !important;
+			li ul {
+				padding: 3px;
 			}
 		}
 
-		.selected a {
-			background: #020509 url(@theme_image_path@/navigation/bullet_selected.png) no-repeat 5px 50%;
+		.yui3-menu {
+			width: 150px;
+			z-index: 10;
+
+			.yui3-menu-content {
+				background-color: #313334;
+				border-top: 1px solid #202223;
+				margin-left: 1px;
+			}
+
+			a {
+				cursor: pointer;
+				outline: 0;
+			}
+
+			.selected-anchor, .yui3-menu-label-active, .yui3-menuitem-active a, .yui3-menu-label-menuvisible {
+				background-color: #202223;
+			}
+
+			.selected .yui3-menu-label-active {
+				background-color: #151617;
+			}
+
+			.yui3-menu .yui3-menu-content {
+				margin: 0;
+				position: relative;
+				right: 0px;
+				top: -5px;
+			}
+
+			.has-child:after {
+				content: "\25BA";
+				position: absolute;
+				right: 2px;
+				top: 0.25em;
+			}
+		}
+
+		a {
+			white-space: normal;
 		}
 	}
-
-	li a.active, .child-menu li a:hover {
-		background-color: #020509;
-	}
-}
-
-.nav-menu-style-arrows ul {
-	list-style-image: url(@theme_image_path@/navigation/bullet_selected.png);
 }
 
 /* ---------- Portlet wrapper and icons ---------- */
@@ -355,23 +400,68 @@ hr, .separator {
 
 /* ---------- Internet Explorer ---------- */
 
+.ie {
+	.lfr-portlet-title-editable {
+		margin-top: -6px;
+	}
+
+	.lfr-portlet-title-editable-content {
+		margin-top: 4px;
+	}
+
+	.portlet-title {
+		padding-bottom: 5px;
+	}
+}
+
 .ie6, .ie7 {
 	#navigation {
+		.has-child {
+			background-image: url(../images/arrows/06_down.png);
+			background-repeat: no-repeat;
+			background-position: 95% 50%;
+			padding-right: 25px;
+		}
+
+		li {
+			li .has-child {
+				background-image: url(../images/arrows/06_right.png);
+			}
+		}
+
+		.yui3-menu .yui3-menu .yui3-menu-content .yui3-menu-content {
+			top: -4px;
+		}
+	}
+}
+
+.ie6 {
+	#navigation {
+		zoom: 1;
+
 		li, a {
 			display: inline;
 			zoom: 1;
 			z-index: 200;
 		}
 
-		a {
-			padding: 4px 15px;
+		li {
+			li {
+				&, & a {
+					display: block;
+				}
+			}
 		}
-
 	}
 
-	#navigation li.hover ul.child-menu, #navigation ul.child-menu-visible {
-		left: 0;
-		top: 25px;
+	#wrapper {
+		width: 90%;
+	}
+
+	#banner {
+		&, & h1.logo {
+			height: 1%;
+		}
 	}
 }
 
@@ -389,32 +479,8 @@ hr, .separator {
 	}
 }
 
-.ie6 {
-	#wrapper {
-		width: 90%;
-	}
-
-	#banner, #banner h1.logo {
-		height: 1%;
-	}
-}
-
 .ie6 .portlet-topper, .ie7 #navigation .child-menu li a {
 	zoom: 1;
-}
-
-.ie {
-	.lfr-portlet-title-editable {
-		margin-top: -6px;
-	}
-
-	.lfr-portlet-title-editable-content {
-		margin-top: 4px;
-	}
-
-	.portlet-title {
-		padding-bottom: 5px;
-	}
 }
 
 /* ---------- Extras ---------- */
@@ -443,11 +509,24 @@ hr, .separator {
 	@include box-shadow(1px 1px 0 #FFF);
 }
 
-#navigation li.selected a {
-	@include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.8));
+#navigation {
+	.selected > a {
+		@include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.8));
+	}
+
+	.yui3-menu {
+		.yui3-menu .yui3-menu-content {
+		@include border-top-radius(0);
+			@include box-shadow(2px 3px 3px rgba(0, 0, 0, 0.5));
+
+		.yui3-menu-content {
+			@include border-top-right-radius(4px);
+			}
+		}
+	}
 }
 
 .aui-combobox .aui-toolbar-first {
-	@include border-top-left-radius(0);
 	@include border-bottom-left-radius(0);
+	@include border-top-left-radius(0);
 }
