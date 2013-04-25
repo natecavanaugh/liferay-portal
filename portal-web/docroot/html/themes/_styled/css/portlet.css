@@ -580,30 +580,6 @@ body.portlet {
 	}
 }
 
-/* ---------- Breadcrumbs taglib ---------- */
-
-.breadcrumbs {
-	&:after, &:before {
-		content: "\0020";
-		display: block;
-		height: 0;
-		visibility: hidden;
-	}
-
-	&:after {
-		clear: both;
-	}
-}
-
-.breadcrumbs-vertical {
-	display: inline-block;
-}
-
-.breadcrumbs-horizontal li {
-	display: inline-block;
-	vertical-align: middle;
-}
-
 /* ---------- Calendar taglib ---------- */
 
 .taglib-calendar {
@@ -694,11 +670,6 @@ body.portlet {
 
 	.portlet-title-default {
 		float: left;
-	}
-
-	.breadcrumbs-horizontal li, .breadcrumbs-vertical {
-		display: inline;
-		zoom: 1;
 	}
 
 	.lfr-message .lfr-message-close {

@@ -305,7 +305,7 @@ AUI.add(
 							node = node.ancestor(STR_DOT + instance._displayStyleCSSClass) || node;
 
 							if (!preventUpdate) {
-								var selectElement = node.one(STR_DOT + instance._selector + ' :checkbox');
+								var selectElement = node.one(STR_DOT + instance._selector);
 
 								selectElement.attr(ATTR_CHECKED, !selectElement.attr(ATTR_CHECKED));
 

@@ -23,7 +23,7 @@ body.portal-popup:after, body.portal-popup:before {
 	clear: none;
 }
 
-#skip-to-content, #banner, .minimize-panels span, #heading .site-title, #breadcrumbs h1, #navigation h1, .lfr-ctrl-panel .user-greeting {
+#skip-to-content, #banner, .minimize-panels span, #heading .site-title, #navigation h1, .lfr-ctrl-panel .user-greeting {
 	clip: rect(0 0 0 0);
 	position: absolute;
 }
@@ -46,58 +46,12 @@ body.portal-popup:after, body.portal-popup:before {
 	min-height: 100%;
 }
 
-#breadcrumbs {
-	display: inline-block;
-	width: 100%;
-}
-
-#breadcrumbs .first {
-	padding-left: 3px;
-}
-
-#breadcrumbs .last {
-	margin-top: 0;
-}
-
-#breadcrumbs .breadcrumbs {
-	margin-bottom: 0;
-}
-
-#breadcrumbs li.first a {
-	background: url(../images/common/control_panel.png) 0 0 no-repeat;
-	padding-left: 21px;
-}
-
-#breadcrumbs li, #breadcrumbs li.first a {
-	display: block;
-	float: left;
-}
-
-#breadcrumbs li {
-	background: url(../images/custom/breadcrumb_item_bg.png) 100% 50% no-repeat;
-	padding: 3px 20px 3px 15px;
-}
-
-#breadcrumbs li, #breadcrumbs li a {
-	color: #868686;
-	text-decoration: none;
-	word-wrap: break-word;
-}
-
-#breadcrumbs li a:hover {
-	text-decoration: underline;
-}
-
-#breadcrumbs li.last a {
-	color: #5C85AD;
-}
-
 .lfr-panel-container {
 	background: transparent;
 	border-width: 0;
 }
 
-#breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center {
+.form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center {
 	background: #E8EAEB;
 	border: 1px solid #979798;
 	border-color: #979798 #FAFAFB #FAFAFB #BDBDBE;
@@ -654,7 +608,7 @@ body.portal-popup:after, body.portal-popup:before {
 	@include box-shadow(0 1px 0 #FFF, 0 1px 2px #CCC inset);
 }
 
-#breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .portlet-communities .layout-breadcrumb ul, .portlet-enterprise-admin .layout-breadcrumb ul, .aui-textboxlistentry-holder {
+.form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center, .aui-textboxlistentry-holder {
 	@include border-radius(4px);
 }
 
@@ -662,7 +616,7 @@ body.portal-popup:after, body.portal-popup:before {
 	@include border-radius(4px 4px 0 0);
 }
 
-#breadcrumbs, .form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center {
+.form-navigation, .lfr-panel.lfr-extended, .portlet-enterprise-admin .form-navigation, .lfr-asset-column-actions-content, .lfr-ctrl-panel-content .aui-column-content-center {
 	@include box-shadow(0 0 8px #CECECE inset);
 }
 

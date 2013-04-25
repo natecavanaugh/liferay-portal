@@ -12,42 +12,6 @@
 	}
 }
 
-.breadcrumbs-horizontal {
-	margin-bottom: 1.5em;
-
-	li {
-		background: url(@theme_image_path@/arrows/05_right.png) no-repeat 100% 50%;
-		margin-right: 5px;
-		max-width: 50%;
-		padding-right: 15px;
-	}
-
-	.last {
-		margin-top: 0.2em;
-
-		a, .aui-tree-node-selected a {
-			color: #555;
-		}
-	}
-}
-
-.breadcrumbs-vertical {
-	li {
-		background: url(@theme_image_path@/arrows/07_down.png) no-repeat 50% 100%;
-		max-width: auto;
-		padding: 0 0 9px;
-	}
-
-	a {
-		text-align: center;
-		text-decoration: none;
-	}
-
-	.last {
-		font-weight: bold;
-	}
-}
-
 /* ---------- Hidden Accessible ---------- */
 
 #banner h2, #banner h3, #navigation h1, #skip-to-content, .site-breadcrumbs h1 {

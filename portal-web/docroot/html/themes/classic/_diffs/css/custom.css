@@ -234,59 +234,6 @@
 	text-align: right;
 }
 
-/* ---------- Site breadcrumbs ---------- */
-
-.site-breadcrumbs {
-	margin: 0 0 5px;
-	width: auto;
-
-	ul {
-		background-color: #FFF;
-		border: 1px solid #C0C2C5;
-		margin: 0;
-	}
-
-	li {
-		background-image: none;
-		margin-right: 0;
-		padding-left: 0.75em;
-		padding-right: 0;
-
-		span {
-			background: url(@theme_image_path@/common/breadcrumbs.png) no-repeat 100% 50%;
-			display: block;
-			padding: 0.5em 15px 0.5em 0;
-
-			a {
-				text-decoration: none;
-			}
-		}
-
-		&.first, &.only {
-			a {
-				color: #369;
-				font-weight: bold;
-			}
-		}
-
-		&.last a {
-			color: #4B5567;
-			font-size: 1.3em;
-		}
-	}
-
-	.last {
-		font-size: 1em;
-		margin-top: 0;
-		padding-right: 0;
-
-		span {
-			background-image: none;
-			padding: 0;
-		}
-	}
-}
-
 /* ---------- Hudcrumbs ---------- */
 
 .lfr-hudcrumbs {

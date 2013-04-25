@@ -92,7 +92,7 @@ SitesUtil.addPortletBreadcrumbEntries(group, pagesName, redirectURL, request, re
 	</c:when>
 	<c:otherwise>
 		<div class="layout-breadcrumb">
-			<liferay-ui:breadcrumb displayStyle="horizontal" showGuestGroup="<%= false %>" showLayout="<%= false %>" showParentGroups="<%= false %>" showPortletBreadcrumb="<%= true %>" />
+			<liferay-ui:breadcrumb showGuestGroup="<%= false %>" showLayout="<%= false %>" showParentGroups="<%= false %>" showPortletBreadcrumb="<%= true %>" />
 		</div>
 	</c:otherwise>
 </c:choose>

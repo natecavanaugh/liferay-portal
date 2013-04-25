@@ -336,22 +336,6 @@ body.portlet {
 	}
 }
 
-/* ---------- Breadcrumbs taglib ---------- */
-
-.breadcrumbs {
-	&:after, &:before {
-	}
-
-	&:after {
-	}
-}
-
-.breadcrumbs-vertical {
-}
-
-.breadcrumbs-horizontal li {
-}
-
 /* ---------- Calendar taglib ---------- */
 
 .taglib-calendar {
@@ -409,9 +393,6 @@ body.portlet {
 	}
 
 	.portlet-title-default {
-	}
-
-	.breadcrumbs-horizontal li, .breadcrumbs-vertical {
 	}
 
 	.lfr-message .lfr-message-close {

@@ -119,6 +119,19 @@ YUI.add(
 						'event-touch'
 					]
 				},
+				'liferay-dockbar-add-content': {
+					fullpath: javaScriptRootPath + '/liferay/dockbar_add_content.js',
+					requires: [
+						'aui-dialog',
+						'aui-io-request',
+						'aui-tooltip',
+						'autocomplete-base',
+						'event-mouseenter',
+						'liferay-dockbar',
+						'liferay-layout-configuration',
+						'liferay-portlet-base'
+					]
+				},
 				'liferay-dockbar-underlay': {
 					fullpath: javaScriptRootPath + '/liferay/dockbar_underlay.js',
 					requires: [
