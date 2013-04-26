@@ -122,3 +122,48 @@ body.html-editor {
 	font-weight: bold;
 	margin: 0 1px;
 }
+
+@-webkit-keyframes highlight {
+ 	0% {
+ 		background-color: #ffc;
+ 	}
+ 	100% {
+ 		background-color: none;
+ 	}
+}
+
+@-moz-keyframes highlight {
+ 	0% {
+ 		background-color: #ffc;
+ 	}
+ 	100% {
+ 		background-color: none;
+ 	}
+}
+
+@-o-keyframes highlight {
+ 	0% {
+ 		background-color: #ffc;
+ 	}
+ 	100% {
+ 		background-color: none;
+ 	}
+}
+
+@keyframes highlight {
+ 	0% {
+ 		background-color: #ffc;
+ 	}
+ 	100% {
+ 		background-color: none;
+ 	}
+}
+
+.highlight-animation {
+	-moz-animation: highlight .7s;
+	-webkit-animation: highlight .7s;
+	-o-animation: highlight .7s;
+	-ms-animation: highlight .7s;
+	-khtml-animation: highlight .7s;
+	animation: highlight .7s;
+}
