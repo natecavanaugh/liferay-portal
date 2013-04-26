@@ -335,13 +335,12 @@ body.portlet {
 
 /* ---------- Liferay Messages ---------- */
 
-.lfr-message-content {
-	border-left-width: 0;
-	border-right-width: 0;
-}
-
 .lfr-message {
 	position: relative;
+
+	.aui-alert {
+		margin-bottom: 0;
+	}
 
 	.lfr-message-control {
 		background-color: #333;
@@ -423,6 +422,10 @@ body.portlet {
 }
 
 /* ---------- Forms ---------- */
+
+.aui-alert .aui-form {
+	margin: 0;
+}
 
 /* ---------- Text used for the descriptive label of the whole form (not the labels for fields) ---------- */
 
