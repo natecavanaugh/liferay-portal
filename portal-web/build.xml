@@ -5,7 +5,7 @@
 
 	<property name="war.file" value="${ant.project.name}" />
 
-	<property name="alloy.version" value="2.0.0pr4" />
+	<property name="alloy.version" value="2.0.0pr5" />
 
 	<property name="alloy.file" value="alloy-${alloy.version}.zip" />
 
