@@ -215,6 +215,16 @@ YUI.add(
 						'aui-overlay-base-deprecated'
 					]
 				},
+				'liferay-input-localized': {
+					fullpath: javaScriptRootPath + '/liferay/input_localized.js',
+					requires: [
+						'aui-base',
+						'aui-component',
+						'aui-event-input',
+						'aui-palette',
+						'liferay-available-languages'
+					]
+				},
 				'liferay-input-move-boxes': {
 					fullpath: javaScriptRootPath + '/liferay/input_move_boxes.js',
 					requires: [

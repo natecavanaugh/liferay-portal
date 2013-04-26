@@ -88,10 +88,11 @@ AUI.add(
 								{
 									boundingBox: formNode,
 									fieldStrings: fieldStrings,
-									rules: rules
+									rules: rules,
+									validateOnBlur: false,
+									validateOnInput: true
 								}
 							);
-
 							instance.formValidator = formValidator;
 
 							instance._bindForm();

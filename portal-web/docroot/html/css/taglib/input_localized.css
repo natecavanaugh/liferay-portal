@@ -1,3 +1,34 @@
-.lfr-language-selector input, .lfr-language-selector textarea {
-	width: 200px;
+.aui-input-localized {
+	.aui-palette-item {
+	    border: 0;
+	}
+
+	.aui-palette-item-inner {
+	    height: 11px;
+	    width: 16px;
+
+	    img {
+    	    display: block;
+    	}
+	}
+
+	.aui-palette-item,
+	.aui-palette-item-inner,
+	.aui-palette-item-hover,
+	.aui-palette-item-hover .aui-palette-item-inner {
+	    border-color: transparent;
+	}
+
+	.lfr-input-localized-flag {
+	    opacity: 0.15;
+	}
+
+	.aui-palette-item-selected .lfr-input-localized-flag,
+	.aui-palette-item-hover .lfr-input-localized-flag {
+	    opacity: 1;
+	}
+
+	.aui-palette-container {
+	    margin-bottom: 12px;
+	}
 }
