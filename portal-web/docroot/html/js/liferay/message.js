@@ -13,13 +13,27 @@ AUI.add(
 
 		var REGEX_CSS_TYPE = A.DOM._getRegExp('\\blfr-message-(alert|error|help|info|success)\\b', 'g');
 
-		var TPL_HIDE_NOTICES = '<button type="button" class="aui-close">×</button>';
+		var TPL_HIDE_NOTICES = '<button type="button" class="aui-close">&#x00D7;</button>';
 
 		var Message = A.Component.create(
 			{
 				ATTRS: {
+					closeButton: {
+						valueFn: function() {
+							return A.Node.create(TPL_HIDE_NOTICES);
+						}
+					},
+
 					dismissible: {
 						value: true
+					},
+
+					hideAllNotices: {
+						valueFn: function() {
+							var instance = this;
+
+							return A.Node.create('<a href="javascript:;"><small>' + instance.get('strings.dismissAll') || Liferay.Language.get('disable-this-note-for-all-portlets') + '</small></a>');
+						}
 					},
 
 					persistenceCategory: {
@@ -37,6 +51,11 @@ AUI.add(
 					type: {
 						value: 'info'
 					}
+				},
+
+				HTML_PARSER: {
+					closeButton: '.aui-close',
+					hideAllNotices: '.aui-btn-link'
 				},
 
 				CSS_PREFIX: 'lfr-message',
@@ -66,12 +85,12 @@ AUI.add(
 
 							instance._trigger = trigger;
 
-							var closeButton = A.Node.create(TPL_HIDE_NOTICES);
+							var closeButton = instance.get('closeButton');
 
 							if (instance.get('persistenceCategory')) {
-								var hideAllNotices = A.Node.create('<a href="javascript:;"><small>' + instance.get('strings.dismissAll') || Liferay.Language.get('disable-this-note-for-all-portlets') + '</small></a>');
+								var hideAllNotices = instance.get('hideAllNotices');
 
-								instance._boundingBox.append(hideAllNotices);
+								instance._contentBox.append(hideAllNotices);
 
 								instance._contentBox.addClass('dismiss-all-notes');
 
