@@ -45,7 +45,7 @@
 	</c:if>
 
 	<aui:fieldset cssClass="options-group" label="application-configuration">
-		<ul class="lfr-tree lfr-component">
+		<ul class="lfr-component lfr-tree">
 			<li class="tree-item">
 				<aui:input checked="<%= true %>" helpMessage="all-applications-import-help" label="all-applications" name="<%= PortletDataHandlerKeys.PORTLET_SETUP_ALL %>" type="checkbox" value="<%= true %>" />
 
@@ -150,7 +150,7 @@
 	</aui:fieldset>
 </div>
 
-<aui:script use="export-import">
+<aui:script use="liferay-export-import">
 	new Liferay.ExportImport(
 		{
 			alwaysCurrentUserIdNode: '#alwaysCurrentUserIdNode',

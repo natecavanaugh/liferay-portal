@@ -1,5 +1,5 @@
 AUI.add(
-	'export-import',
+	'liferay-export-import',
 	function(A) {
 		var Lang = A.Lang;
 
