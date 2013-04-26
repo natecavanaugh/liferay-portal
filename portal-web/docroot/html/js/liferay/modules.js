@@ -94,6 +94,12 @@ YUI.add(
 						'liferay-undo-manager'
 					]
 				},
+				'liferay-available-languages': {
+					fullpath: javaScriptRootPath + '/liferay/available_languages.jsp?languageId=' + themeDisplay.getLanguageId(),
+					requires: [
+						'liferay-language'
+					]
+				},
 				'liferay-browser-selectors': {
 					fullpath: javaScriptRootPath + '/liferay/browser_selectors.js',
 					requires: ['yui-base']
