@@ -55,7 +55,9 @@ if (!denyAccess && (themeDisplay.isStatePopUp() || (layoutTypePortlet.hasStateMa
 	%>
 
 	<c:if test="<%= controlPanelCategory.equals(StringPool.BLANK) || controlPanelCategory.equals(StringPool.CONTENT) %>">
-		<liferay-ui:breadcrumb />
+		<div id="breadcrumb">
+			<liferay-ui:breadcrumb />
+		</div>
 	</c:if>
 
 	<%

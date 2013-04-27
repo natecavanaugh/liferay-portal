@@ -223,7 +223,13 @@ private void _buildPortletBreadcrumb(HttpServletRequest request, boolean showCur
 
 		sb.append("<li>");
 
-		if ((index < breadcrumbEntriesSize - 1) && Validator.isNotNull(breadcrumbURL)) {
+		boolean showAnchor = true;
+
+		if (index >= (breadcrumbEntriesSize - 1)) {
+			showAnchor = false;
+		}
+
+		if (showAnchor && Validator.isNotNull(breadcrumbURL)) {
 			sb.append("<a href=\"");
 			sb.append(HtmlUtil.escape(breadcrumbURL));
 			sb.append("\"");
@@ -233,11 +239,11 @@ private void _buildPortletBreadcrumb(HttpServletRequest request, boolean showCur
 
 		sb.append(HtmlUtil.escape(breadcrumbTitle));
 
-		if ((index < breadcrumbEntriesSize - 1) && Validator.isNotNull(breadcrumbURL)) {
+		if (showAnchor && Validator.isNotNull(breadcrumbURL)) {
 			sb.append("</a>");
 		}
 
-		if (index < breadcrumbEntriesSize - 1) {
+		if (showAnchor) {
 			sb.append("<span class=\"aui-divider\">/</span>");
 		}
 

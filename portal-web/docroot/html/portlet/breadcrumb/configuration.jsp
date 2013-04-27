@@ -59,11 +59,8 @@ String redirect = ParamUtil.getString(request, "redirect");
 <aui:script use="aui-base">
 	var formNode = A.one('#<portlet:namespace />fm');
 
-	var selectDisplayStyle = formNode.one('#<portlet:namespace />displayStyle');
-
 	var toggleCustomFields = function() {
 		var data = {
-			'_<%= portletResource %>_displayStyle': selectDisplayStyle.val(),
 			'_<%= portletResource %>_showCurrentGroup': formNode.one('#<portlet:namespace />showCurrentGroup').val(),
 			'_<%= portletResource %>_showCurrentPortlet': formNode.one('#<portlet:namespace />showCurrentPortlet').val(),
 			'_<%= portletResource %>_showGuestGroup': formNode.one('#<portlet:namespace />showGuestGroup').val(),
@@ -74,12 +71,6 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 		Liferay.Portlet.refresh('#p_p_id_<%= portletResource %>_', data);
 	};
-
-	if (selectDisplayStyle) {
-		selectDisplayStyle.on('change', toggleCustomFields);
-
-		toggleCustomFields();
-	}
 
 	A.one('.checkBoxes').delegate('change', toggleCustomFields, 'input[type="checkbox"]');
 </aui:script>
