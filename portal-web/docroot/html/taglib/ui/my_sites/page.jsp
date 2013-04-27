@@ -17,6 +17,7 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
+String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:my_sites:cssClass"));
 int max = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:my_sites:max"));
 
 if (max <= 0) {
@@ -27,7 +28,7 @@ List<Group> mySites = user.getMySites(true, max);
 %>
 
 <c:if test="<%= !mySites.isEmpty() %>">
-	<ul class="taglib-my-sites">
+	<ul class="taglib-my-sites <%= cssClass %>">
 
 		<%
 		PortletURL portletURL = new PortletURLImpl(request, PortletKeys.SITE_REDIRECTOR, plid, PortletRequest.ACTION_PHASE);
@@ -77,20 +78,20 @@ List<Group> mySites = user.getMySites(true, max);
 							}
 						}
 
-						String cssClass = StringPool.BLANK;
+						String itemCssClass = StringPool.BLANK;
 
 						if (firstSite) {
-							cssClass += " first";
+							itemCssClass += " first";
 						}
 
 						if (lastSite) {
-							cssClass += " last";
+							itemCssClass += " last";
 						}
 						%>
 
 						<c:choose>
 							<c:when test="<%= mySite.isControlPanel() %>">
-								<li class="control-panel<%= cssClass %>">
+								<li class="control-panel<%= itemCssClass %>">
 									<a href="<%= themeDisplay.getURLControlPanel() %>">
 
 										<%
@@ -137,7 +138,7 @@ List<Group> mySites = user.getMySites(true, max);
 									}
 									%>
 
-									<li class="<%= (selectedSite && layout.isPublicLayout()) ? "current-site" : "public-site" %> <%= cssClass %>">
+									<li class="<%= (selectedSite && layout.isPublicLayout()) ? "current-site" : "public-site" %> <%= itemCssClass %>">
 										<a href="<%= HtmlUtil.escape(portletURL.toString()) %>" onclick="Liferay.Util.forcePost(this); return false;">
 
 											<%
@@ -194,7 +195,7 @@ List<Group> mySites = user.getMySites(true, max);
 									}
 									%>
 
-									<li class="<%= (selectedSite && layout.isPrivateLayout()) ? "current-site" : "private-site" %> <%= cssClass %>">
+									<li class="<%= (selectedSite && layout.isPrivateLayout()) ? "current-site" : "private-site" %> <%= itemCssClass %>">
 										<a href="<%= HtmlUtil.escape(portletURL.toString()) %>" onclick="Liferay.Util.forcePost(this); return false;">
 
 											<%
