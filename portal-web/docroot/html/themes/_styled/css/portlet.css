@@ -338,10 +338,6 @@ body.portlet {
 .lfr-message {
 	position: relative;
 
-	.aui-alert {
-		margin-bottom: 0;
-	}
-
 	.lfr-message-control {
 		background-color: #333;
 		display: inline-block;
@@ -383,6 +379,10 @@ body.portlet {
 	&.pending {
 		background-image: url(../images/common/time.png);
 	}
+}
+
+.lfr-message-content.aui-alert {
+	margin-bottom: 0;
 }
 
 .lfr-message-close {
