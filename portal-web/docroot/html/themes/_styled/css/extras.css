@@ -60,7 +60,7 @@
 	@include border-radius(10px);
 }
 
-body > .lfr-menu-list ul, button, input[type="button"], input[type="submit"], input[type="reset"], .active-area-proxy, .entry-display-style .entry-thumbnail img, .lfr-api-results, .lfr-header-row .aui-toolbar-only, .lfr-translation-manager, .lfr-translation-manager-translation, .lfr-upload-container .cancel-button .modify-pages .delete-tab, .portlet-image-gallery-display .image-thumbnail img, .portlet-journal .lfr-table .journal-metadata, .portlet-search .search-facet .facet-value, .rule-group-instance-container .rule-group-instance, .select-documents, .select-files, .taglib-logo-selector .lfr-change-logo.show-background, .taglib-ratings.stars:hover, .taglib-ratings.stars:hover .liferay-rating-vote, .tags-search-combobox .aui-field-input-text {
+body > .lfr-menu-list ul, button, input[type="button"], input[type="submit"], input[type="reset"], .active-area-proxy, .entry-display-style .entry-thumbnail img, .lfr-api-results, .lfr-header-row .aui-toolbar-only, .lfr-translation-manager, .lfr-translation-manager-translation, .lfr-upload-container .cancel-button .modify-pages .delete-tab, .portlet-image-gallery-display .image-thumbnail img, .portlet-journal .lfr-table .journal-metadata, .portlet-search .search-facet .facet-value, .rule-group-instance-container .rule-group-instance, .select-documents, .select-files, .taglib-ratings.stars:hover, .taglib-ratings.stars:hover .liferay-rating-vote, .tags-search-combobox .aui-field-input-text {
 	@include border-radius(4px);
 }
 
@@ -151,10 +151,6 @@ body > .lfr-menu-list ul, button, input[type="button"], input[type="submit"], in
 
 .site-variations-tabview-list .aui-tab-content, .staging-tabview-list .aui-tab-active .aui-tab-content {
 	@include box-shadow(none);
-}
-
-.taglib-logo-selector .lfr-change-logo.show-background {
-	@include box-shadow(inset 0 0 3px #000, 0 1px 0 #FFF);
 }
 
 .staging-tabview-list {
