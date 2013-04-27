@@ -141,7 +141,6 @@ AUI.add(
 						var instance = this;
 
 						if (!event.shiftKey) {
-							Dockbar.MenuManager.hideAll();
 							Dockbar.UnderlayManager.hideAll();
 						}
 
@@ -227,7 +226,7 @@ AUI.add(
 							}
 
 							if (instance.get('hasAddLayoutPermission')) {
-								var addPageButton = A.one('#addPage');
+								var addPageButton = A.one('#' + Dockbar._namespace + 'addPage');
 
 								if (addPageButton) {
 									addPageButton.on('click', instance._addPage, instance);

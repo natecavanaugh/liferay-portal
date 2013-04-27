@@ -27,119 +27,18 @@ if (layout != null) {
 
 boolean hasLayoutCustomizePermission = LayoutPermissionUtil.contains(permissionChecker, layout, ActionKeys.CUSTOMIZE);
 boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChecker, layout, ActionKeys.UPDATE);
+
+String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "liferay_toggle_controls", ""));
+boolean isDockbarPinned = GetterUtil.getBoolean(SessionClicks.get(request, "liferay_dockbar_pinned", ""), false);
 %>
 
-<div class="dockbar" data-namespace="<portlet:namespace />" id="dockbar">
-	<ul class="aui-toolbar">
-		<li class="pin-dockbar">
-			<a href="javascript:;"><img alt='<liferay-ui:message key="pin-the-dockbar" />' src="<%= HtmlUtil.escape(themeDisplay.getPathThemeImages()) %>/spacer.png" /></a>
-		</li>
+<aui:nav-bar cssClass='<%= isDockbarPinned ? "dockbar aui-navbar-fixed-top" : "dockbar aui-navbar-static-top" %>' data-namespace="<%= renderResponse.getNamespace() %>" id="dockbar">
 
-		<c:if test="<%= !group.isControlPanel() && (!group.hasStagingGroup() || group.isStagingGroup()) && (GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.ADD_LAYOUT) || hasLayoutUpdatePermission || (layoutTypePortlet.isCustomizable() && layoutTypePortlet.isCustomizedView() && hasLayoutCustomizePermission)) %>">
-			<li class="add-content has-submenu" id="<portlet:namespace />addContent">
-				<a class="menu-button" href="javascript:;">
-					<span>
-						<liferay-ui:message key="add" />
-					</span>
-				</a>
+	<a class="aui-brand pin-dockbar" href="javascript:;"><img alt='<liferay-ui:message key="pin-the-dockbar" />' src="<%= HtmlUtil.escape(themeDisplay.getPathThemeImages()) %>/spacer.png" /></a>
 
-				<div class="aui-menu add-content-menu aui-overlaycontext-hidden" id="<portlet:namespace />addContentContainer">
-					<div class="aui-menu-content">
-						<ul>
-							<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_LAYOUT) && !group.isLayoutPrototype() %>">
-								<li class="first add-page">
-									<a href="javascript:;" id="addPage">
-										<liferay-ui:message key="page" />
-									</a>
-								</li>
-							</c:if>
+	<aui:nav>
 
-							<c:if test="<%= !themeDisplay.isStateMaximized() && layout.isTypePortlet() && !layout.isLayoutPrototypeLinkActive() %>">
-								<li class="add-application last">
-									<portlet:renderURL var="addContentURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-										<portlet:param name="struts_action" value="/dockbar/add_panel" />
-										<portlet:param name="viewEntries" value="<%= Boolean.TRUE.toString() %>" />
-									</portlet:renderURL>
-
-									<a href="<%= addContentURL.toString() %>" id="<portlet:namespace />addPanel">
-										<liferay-ui:message key="content-and-applications" />
-									</a>
-								</li>
-							</c:if>
-						</ul>
-					</div>
-				</div>
-			</li>
-		</c:if>
-
-		<c:if test="<%= !group.isControlPanel() && (themeDisplay.isShowLayoutTemplatesIcon() || themeDisplay.isShowManageSiteIcon() || themeDisplay.isShowPageSettingsIcon()) %>">
-			<li class="manage-content has-submenu" id="<portlet:namespace />manageContent">
-				<a class="menu-button" href="javascript:;">
-					<span>
-						<liferay-ui:message key="manage" />
-					</span>
-				</a>
-
-				<div class="aui-menu manage-content-menu aui-overlaycontext-hidden" id="<portlet:namespace />manageContentContainer">
-					<div class="aui-menu-content">
-						<ul>
-
-							<%
-							String useDialogFullDialog = StringPool.BLANK;
-
-							if (PropsValues.DOCKBAR_ADMINISTRATIVE_LINKS_SHOW_IN_POP_UP) {
-								useDialogFullDialog = " use-dialog full-dialog";
-							}
-							%>
-
-							<c:if test="<%= themeDisplay.isShowPageSettingsIcon() %>">
-								<li class='<%= "first manage-page" + useDialogFullDialog %>'>
-									<aui:a href='<%= themeDisplay.getURLPageSettings().toString() + "#details" %>' label="page" title="manage-page" />
-								</li>
-							</c:if>
-
-							<c:if test="<%= themeDisplay.isShowLayoutTemplatesIcon() %>">
-								<li class='<%= "page-layout" + useDialogFullDialog %>'>
-									<aui:a href='<%= themeDisplay.getURLPageSettings().toString() + "#layout" %>' label="page-layout" title="manage-page" />
-								</li>
-							</c:if>
-
-							<c:if test="<%= themeDisplay.isShowPageCustomizationIcon() && !themeDisplay.isStateMaximized() %>">
-								<li class="manage-page-customization">
-									<aui:a cssClass='<%= themeDisplay.isFreeformLayout() ? "disabled" : StringPool.BLANK %>' href='<%= themeDisplay.isFreeformLayout() ? null : "javascript:;" %>' id="manageCustomization" label='<%= group.isLayoutPrototype() ? "page-modifications" : "page-customizations" %>' title='<%= themeDisplay.isFreeformLayout() ? "it-is-not-possible-to-specify-customization-settings-for-freeform-layouts" : null %>' />
-								</li>
-							</c:if>
-
-							<c:if test="<%= themeDisplay.isShowManageSiteIcon() %>">
-								<li class='<%= "settings" + useDialogFullDialog %>'>
-									<aui:a href="<%= themeDisplay.getURLManageSite() %>" label="site" title="manage-site" />
-								</li>
-							</c:if>
-						</ul>
-					</div>
-				</div>
-			</li>
-
-			<c:if test="<%= themeDisplay.isShowPageCustomizationIcon() %>">
-				<div class="aui-hide layout-customizable-controls" id="<portlet:namespace />layout-customizable-controls">
-					<span title='<liferay-ui:message key="customizable-help" />'>
-						<aui:input cssClass="layout-customizable-checkbox" helpMessage='<%= group.isLayoutPrototype() ? "modifiable-help" : "customizable-help" %>' id="TypeSettingsProperties--[COLUMN_ID]-customizable--" label='<%= (group.isLayoutSetPrototype() || group.isLayoutPrototype()) ? "modifiable" : "customizable" %>' name="TypeSettingsProperties--[COLUMN_ID]-customizable--" type="checkbox" useNamespace="<%= false %>" />
-					</span>
-				</div>
-			</c:if>
-		</c:if>
-
-		<li class="aui-toolbar-separator">
-			<span></span>
-		</li>
-
-		<c:if test="<%= !group.isControlPanel() && hasLayoutUpdatePermission || (layoutTypePortlet.isCustomizable() && layoutTypePortlet.isCustomizedView() && hasLayoutCustomizePermission) %>">
-			<li class="toggle-controls" id="<portlet:namespace />toggleControls">
-				<a href="javascript:;">
-					<liferay-ui:message key="edit-controls" />
-				</a>
-			</li>
-		</c:if>
+		<aui:nav-item cssClass="aui-divider-vertical"></aui:nav-item>
 
 		<c:if test="<%= group.isControlPanel() %>">
 
@@ -192,169 +91,216 @@ boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChec
 			}
 			%>
 
-			<li class="back-link" id="<portlet:namespace />backLink">
-				<a class="portlet-icon-back nobr" href="<%= PortalUtil.escapeRedirect(backURL) %>">
-					<%= LanguageUtil.format(pageContext, "back-to-x", HtmlUtil.escape(refererGroupDescriptiveName), false) %>
-				</a>
-			</li>
-		</c:if>
-	</ul>
-
-	<ul class="aui-toolbar user-toolbar">
-		<c:if test="<%= user.hasMySites() %>">
-			<li class="my-sites has-submenu" id="<portlet:namespace />mySites">
-				<a class="menu-button" href="javascript:;">
-					<span>
-						<liferay-ui:message key="go-to" />
-					</span>
-				</a>
-
-				<div class="aui-menu my-sites-menu aui-overlaycontext-hidden" id="<portlet:namespace />mySitesContainer">
-					<div class="aui-menu-content">
-						<liferay-ui:my-sites />
-					</div>
-				</div>
-			</li>
+			<aui:nav-item href="<%= backURL %>" iconClass="aui-icon-arrow-left" id="backLink" label='<%= LanguageUtil.format(pageContext, "back-to-x", HtmlUtil.escape(refererGroupDescriptiveName), false) %>' />
 		</c:if>
 
-		<li class="aui-toolbar-separator">
-			<span></span>
-		</li>
+		<c:if test="<%= !group.isControlPanel() && (!group.hasStagingGroup() || group.isStagingGroup()) && (GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.ADD_LAYOUT) || hasLayoutUpdatePermission || (layoutTypePortlet.isCustomizable() && layoutTypePortlet.isCustomizedView() && hasLayoutCustomizePermission)) %>">
+			<aui:nav-item dropdown="<%= true %>" iconClass="aui-icon-plus" id="addContent" label="add">
+				<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_LAYOUT) && !group.isLayoutPrototype() %>">
+					<aui:nav-item anchorId="addPage" label="page" />
+				</c:if>
 
-		<li class="user-avatar <%= themeDisplay.isImpersonated() ? "impersonating-user has-submenu" : "" %>" id="<portlet:namespace />userAvatar">
-			<span class="user-links <%= themeDisplay.isImpersonated() ? "menu-button": "" %>">
+				<c:if test="<%= !themeDisplay.isStateMaximized() && layout.isTypePortlet() && !layout.isLayoutPrototypeLinkActive() %>">
+					<portlet:renderURL var="addContentURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+						<portlet:param name="struts_action" value="/dockbar/add_panel" />
+						<portlet:param name="viewEntries" value="<%= Boolean.TRUE.toString() %>" />
+					</portlet:renderURL>
+
+					<aui:nav-item anchorId="addPanel" href="<%= addContentURL %>" label="content-and-applications" />
+				</c:if>
+			</aui:nav-item>
+		</c:if>
+
+		<c:if test="<%= !group.isControlPanel() && (themeDisplay.isShowLayoutTemplatesIcon() || themeDisplay.isShowManageSiteIcon() || themeDisplay.isShowPageSettingsIcon()) %>">
+			<aui:nav-item dropdown="<%= true %>" iconClass="aui-icon-cog" id="manageContent" label="manage">
 
 				<%
-				String useDialog = StringPool.BLANK;
+				String useDialogFullDialog = StringPool.BLANK;
 
-				if (!group.isControlPanel() && PropsValues.DOCKBAR_ADMINISTRATIVE_LINKS_SHOW_IN_POP_UP) {
-					useDialog = StringPool.SPACE + "use-dialog";
+				if (PropsValues.DOCKBAR_ADMINISTRATIVE_LINKS_SHOW_IN_POP_UP) {
+					useDialogFullDialog = " use-dialog full-dialog";
 				}
-
-				String controlPanelCategory = StringPool.BLANK;
-
-				if (!group.isControlPanel()) {
-					controlPanelCategory = PortletCategoryKeys.MY;
-				}
-
-				String myAccountURL = themeDisplay.getURLMyAccount().toString();
-
-				myAccountURL = HttpUtil.setParameter(myAccountURL, "controlPanelCategory", controlPanelCategory);
 				%>
 
-				<liferay-util:buffer var="userName">
-					<img alt="<liferay-ui:message key="manage-my-account" />" src="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>" />
-
-					<span class="user-full-name">
-						<%= HtmlUtil.escape(user.getFullName()) %>
-					</span>
-				</liferay-util:buffer>
-
-				<c:choose>
-					<c:when test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.VIEW_CONTROL_PANEL) %>">
-						<aui:a cssClass='<%= "user-portrait" + useDialog %>' href="<%= myAccountURL %>" title="manage-my-account">
-							<%= userName %>
-						</aui:a>
-					</c:when>
-					<c:otherwise>
-						<span class="user-portrait">
-							<%= userName %>
-						</span>
-					</c:otherwise>
-				</c:choose>
-
-				<c:if test="<%= themeDisplay.isShowSignOutIcon() %>">
-					<span class="sign-out">(<aui:a href="<%= themeDisplay.getURLSignOut() %>" label="sign-out" />)</span>
+				<c:if test="<%= themeDisplay.isShowPageSettingsIcon() %>">
+					<aui:nav-item cssClass='<%= "first manage-page" + useDialogFullDialog %>' href='<%= themeDisplay.getURLPageSettings().toString() + "#details" %>' label="page" title="manage-page" />
 				</c:if>
-			</span>
 
-			<c:if test="<%= themeDisplay.isImpersonated() %>">
-				<div class="aui-menu impersonation-menu aui-overlaycontext-hidden" id="<portlet:namespace />userOptionsContainer">
-					<div class="aui-menu-content">
-						<div class="notice-message aui-alert aui-alert-info">
-							<c:choose>
-								<c:when test="<%= themeDisplay.isSignedIn() %>">
-									<%= LanguageUtil.format(pageContext, "you-are-impersonating-x", new Object[] {HtmlUtil.escape(user.getFullName())}) %>
-								</c:when>
-								<c:otherwise>
-									<liferay-ui:message key="you-are-impersonating-the-guest-user" />
-								</c:otherwise>
-							</c:choose>
-						</div>
+				<c:if test="<%= themeDisplay.isShowLayoutTemplatesIcon() %>">
+					<aui:nav-item cssClass='<%= "page-layout" + useDialogFullDialog %>' href='<%= themeDisplay.getURLPageSettings().toString() + "#layout" %>' label="page-layout" title="manage-page" />
+				</c:if>
 
-						<ul>
-							<li>
-								<aui:a href="<%= PortalUtil.getLayoutURL(layout, themeDisplay, false) %>"><liferay-ui:message key="be-yourself-again" /> (<%= HtmlUtil.escape(realUser.getFullName()) %>)</aui:a>
-							</li>
+				<c:if test="<%= themeDisplay.isShowPageCustomizationIcon() && !themeDisplay.isStateMaximized() %>">
+					<aui:nav-item anchorCssClass='<%= themeDisplay.isFreeformLayout() ? "disabled" : StringPool.BLANK %>' anchorId="manageCustomization" cssClass="manage-page-customization" href='<%= themeDisplay.isFreeformLayout() ? null : "javascript:;" %>' label='<%= group.isLayoutPrototype() ? "page-modifications" : "page-customizations" %>' title='<%= themeDisplay.isFreeformLayout() ? "it-is-not-possible-to-specify-customization-settings-for-freeform-layouts" : null %>' />
+				</c:if>
 
-							<%
-							Locale realUserLocale = realUser.getLocale();
-							Locale userLocale = user.getLocale();
-							%>
+				<c:if test="<%= themeDisplay.isShowManageSiteIcon() %>">
+					<aui:nav-item cssClass='<%= "settings" + useDialogFullDialog %>' href="<%= themeDisplay.getURLManageSite() %>" label="site" title="manage-site" />
+				</c:if>
+			</aui:nav-item>
 
-							<c:if test="<%= !realUserLocale.equals(userLocale) %>">
-
-								<%
-								String doAsUserLanguageId = null;
-								String changeLanguageMessage = null;
-
-								if (locale.getLanguage().equals(realUserLocale.getLanguage()) && locale.getCountry().equals(realUserLocale.getCountry())) {
-									doAsUserLanguageId = userLocale.getLanguage() + "_" + userLocale.getCountry();
-									changeLanguageMessage = LanguageUtil.format(realUserLocale, "use-x's-preferred-language-(x)", new String[] {HtmlUtil.escape(user.getFullName()), userLocale.getDisplayLanguage(realUserLocale)});
-								}
-								else {
-									doAsUserLanguageId = realUserLocale.getLanguage() + "_" + realUserLocale.getCountry();
-									changeLanguageMessage = LanguageUtil.format(realUserLocale, "use-your-preferred-language-(x)", realUserLocale.getDisplayLanguage(realUserLocale));
-								}
-								%>
-
-								<li class="current-user-language">
-									<aui:a href='<%= HttpUtil.setParameter(PortalUtil.getCurrentURL(request), "doAsUserLanguageId", doAsUserLanguageId) %>'><%= changeLanguageMessage %></aui:a>
-								</li>
-							</c:if>
-						</ul>
-					</div>
+			<c:if test="<%= themeDisplay.isShowPageCustomizationIcon() %>">
+				<div class="aui-hide layout-customizable-controls" id="<portlet:namespace />layout-customizable-controls">
+					<span title='<liferay-ui:message key="customizable-help" />'>
+						<aui:input cssClass="layout-customizable-checkbox" helpMessage='<%= group.isLayoutPrototype() ? "modifiable-help" : "customizable-help" %>' id="TypeSettingsProperties--[COLUMN_ID]-customizable--" label='<%= (group.isLayoutSetPrototype() || group.isLayoutPrototype()) ? "modifiable" : "customizable" %>' name="TypeSettingsProperties--[COLUMN_ID]-customizable--" type="checkbox" useNamespace="<%= false %>" />
+					</span>
 				</div>
 			</c:if>
-		</li>
-	</ul>
 
-	<div class="dockbar-messages" id="<portlet:namespace />dockbarMessages">
-		<div class="aui-header"></div>
+			<aui:nav-item cssClass="aui-divider-vertical"></aui:nav-item>
 
-		<div class="aui-body"></div>
+			<c:if test="<%= !group.isControlPanel() && hasLayoutUpdatePermission || (layoutTypePortlet.isCustomizable() && layoutTypePortlet.isCustomizedView() && hasLayoutCustomizePermission) %>">
+				<liferay-util:buffer var="editControlsLabel">
+					<i class="controls-state-icon <%= toggleControlsState.equals("visible") ? "aui-icon-ok" : "aui-icon-remove" %>"></i>
 
-		<div class="aui-footer"></div>
-	</div>
+					<liferay-ui:message key="edit-controls" />
+				</liferay-util:buffer>
 
-	<%
-	List<LayoutPrototype> layoutPrototypes = LayoutPrototypeServiceUtil.search(company.getCompanyId(), Boolean.TRUE, null);
-	%>
+				<aui:nav-item cssClass="toggle-controls" id="toggleControls" label="<%= editControlsLabel %>" />
+			</c:if>
+		</c:if>
+	</aui:nav>
 
-	<c:if test="<%= !layoutPrototypes.isEmpty() %>">
-		<div class="aui-html-template" id="layoutPrototypeTemplate">
-			<ul>
+	<aui:nav cssClass="aui-pull-right">
+		<c:if test="<%= user.hasMySites() %>">
+			<li class="aui-dropdown my-sites" id="mySites">
+				<a class="aui-dropdown-toggle" href="javascript:;">
+					<liferay-ui:message key="go-to" />
+
+					<b class="aui-caret"></b>
+				</a>
+
+				<liferay-ui:my-sites cssClass="aui-dropdown-menu my-sites-menu" />
+
+				<aui:script use="aui-base">
+					A.one('#mySites').on(
+						'click',
+						function(event) {
+							event.currentTarget.toggleClass('aui-open');
+						}
+					);
+				</aui:script>
+			</li>
+		</c:if>
+
+		<aui:nav-item cssClass="aui-divider-vertical"></aui:nav-item>
+
+		<%
+		String useDialog = StringPool.BLANK;
+
+		if (!group.isControlPanel() && PropsValues.DOCKBAR_ADMINISTRATIVE_LINKS_SHOW_IN_POP_UP) {
+			useDialog = StringPool.SPACE + "use-dialog";
+		}
+
+		String controlPanelCategory = StringPool.BLANK;
+
+		if (!group.isControlPanel()) {
+			controlPanelCategory = PortletCategoryKeys.MY;
+		}
+
+		String myAccountURL = themeDisplay.getURLMyAccount().toString();
+
+		myAccountURL = HttpUtil.setParameter(myAccountURL, "controlPanelCategory", controlPanelCategory);
+		%>
+
+		<liferay-util:buffer var="userName">
+			<c:if test="<%= themeDisplay.isImpersonated() %>">
+				<b class="alert-icon aui-icon-warning-sign"></b>
+			</c:if>
+
+			<img alt="<liferay-ui:message key="manage-my-account" />" src="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>" />
+
+			<span class="user-full-name">
+				<%= HtmlUtil.escape(user.getFullName()) %>
+			</span>
+		</liferay-util:buffer>
+
+		<aui:nav-item anchorCssClass='<%= themeDisplay.isImpersonated() ? "" : useDialog %>' cssClass='<%= themeDisplay.isImpersonated() ? "user-avatar impersonating-user" : "user-avatar" %>' dropdown="<%= themeDisplay.isImpersonated() %>" href='<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.VIEW_CONTROL_PANEL) ? myAccountURL : "javascript:;" %>' id="userAvatar" label="<%= userName %>" title="manage-my-account">
+			<c:if test="<%= themeDisplay.isImpersonated() %>">
 
 				<%
-				for (LayoutPrototype layoutPrototype : layoutPrototypes) {
-				%>
+				String impersonatingUserLabel = "you-are-impersonating-the-guest-user";
 
-					<li>
-						<a href="javascript:;">
-							<label>
-								<input name="template" type="radio" value="<%= layoutPrototype.getLayoutPrototypeId() %>" /> <%= HtmlUtil.escape(layoutPrototype.getName(user.getLanguageId())) %>
-							</label>
-						</a>
-					</li>
-
-				<%
+				if (themeDisplay.isSignedIn()) {
+					impersonatingUserLabel = LanguageUtil.format(pageContext, "you-are-impersonating-x", new Object[] {HtmlUtil.escape(user.getFullName())});
 				}
 				%>
 
-			</ul>
-		</div>
-	</c:if>
+				<div class="aui-alert aui-alert-info"><%= impersonatingUserLabel %></div>
+
+				<liferay-util:buffer var="leaveImpersonationLabel">
+					<liferay-ui:message key="be-yourself-again" /> (<%= HtmlUtil.escape(realUser.getFullName()) %>)
+				</liferay-util:buffer>
+
+				<aui:nav-item href="<%= PortalUtil.getLayoutURL(layout, themeDisplay, false) %>" label="<%= leaveImpersonationLabel %>" />
+
+				<%
+				Locale realUserLocale = realUser.getLocale();
+				Locale userLocale = user.getLocale();
+				%>
+
+				<c:if test="<%= !realUserLocale.equals(userLocale) %>">
+
+					<%
+					String doAsUserLanguageId = null;
+					String changeLanguageMessage = null;
+
+					if (locale.getLanguage().equals(realUserLocale.getLanguage()) && locale.getCountry().equals(realUserLocale.getCountry())) {
+						doAsUserLanguageId = userLocale.getLanguage() + "_" + userLocale.getCountry();
+						changeLanguageMessage = LanguageUtil.format(realUserLocale, "use-x's-preferred-language-(x)", new String[] {HtmlUtil.escape(user.getFullName()), userLocale.getDisplayLanguage(realUserLocale)});
+					}
+					else {
+						doAsUserLanguageId = realUserLocale.getLanguage() + "_" + realUserLocale.getCountry();
+						changeLanguageMessage = LanguageUtil.format(realUserLocale, "use-your-preferred-language-(x)", realUserLocale.getDisplayLanguage(realUserLocale));
+					}
+					%>
+
+					<aui:nav-item cssClass="current-user-language" href='<%= HttpUtil.setParameter(PortalUtil.getCurrentURL(request), "doAsUserLanguageId", doAsUserLanguageId) %>' label="<%= changeLanguageMessage %>" />
+				</c:if>
+			</c:if>
+		</aui:nav-item>
+
+		<c:if test="<%= themeDisplay.isShowSignOutIcon() && !themeDisplay.isImpersonated() %>">
+			<aui:nav-item cssClass="sign-out" href="<%= themeDisplay.getURLSignOut() %>" label="sign-out" />
+		</c:if>
+	</aui:nav>
+</aui:nav-bar>
+
+<div class="dockbar-messages" id="<portlet:namespace />dockbarMessages">
+	<div class="aui-header"></div>
+
+	<div class="aui-body"></div>
+
+	<div class="aui-footer"></div>
 </div>
+
+<%
+List<LayoutPrototype> layoutPrototypes = LayoutPrototypeServiceUtil.search(company.getCompanyId(), Boolean.TRUE, null);
+%>
+
+<c:if test="<%= !layoutPrototypes.isEmpty() %>">
+	<div class="aui-html-template" id="layoutPrototypeTemplate">
+		<ul>
+
+			<%
+			for (LayoutPrototype layoutPrototype : layoutPrototypes) {
+			%>
+
+				<li>
+					<a href="javascript:;">
+						<label>
+							<input name="template" type="radio" value="<%= layoutPrototype.getLayoutPrototypeId() %>" /> <%= HtmlUtil.escape(layoutPrototype.getName(user.getLanguageId())) %>
+						</label>
+					</a>
+				</li>
+
+			<%
+			}
+			%>
+
+		</ul>
+	</div>
+</c:if>
 
 <c:if test="<%= (layoutSet != null) && layoutSet.isLayoutSetPrototypeLinkActive() && SitesUtil.isLayoutModifiedSinceLastMerge(layout) && LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), layout, ActionKeys.UPDATE) %>">
 	<div class="page-customization-bar">
@@ -483,7 +429,7 @@ boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChec
 </c:if>
 
 <aui:script position="inline" use="liferay-dockbar">
-	Liferay.Dockbar.init();
+	Liferay.Dockbar.init('#<portlet:namespace />dockbar');
 
 	var customizableColumns = A.all('.portlet-column-content.customizable');
 
