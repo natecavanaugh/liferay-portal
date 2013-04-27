@@ -28,8 +28,6 @@ if (Validator.isNotNull(anchorId)) {
 	anchorId = portletResponse.getNamespace() + anchorId;
 }
 
-String anchorCssClass = StringPool.BLANK;
-
 if (dropdown) {
 	cssClass += " aui-dropdown";
 	anchorCssClass += " aui-dropdown-toggle";
