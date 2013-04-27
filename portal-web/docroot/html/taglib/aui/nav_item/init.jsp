@@ -32,6 +32,7 @@ if ((dynamicAttributes != null) && !dynamicAttributes.isEmpty()) {
 	_options.putAll(dynamicAttributes);
 }
 
+java.lang.String anchorCssClass = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav-item:anchorCssClass"));
 java.lang.String anchorId = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav-item:anchorId"));
 java.lang.String cssClass = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav-item:cssClass"));
 boolean dropdown = GetterUtil.getBoolean(String.valueOf(request.getAttribute("aui:nav-item:dropdown")));
@@ -40,7 +41,9 @@ java.lang.String iconClass = GetterUtil.getString((java.lang.String)request.getA
 java.lang.String id = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav-item:id"));
 java.lang.String label = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav-item:label"));
 boolean selected = GetterUtil.getBoolean(String.valueOf(request.getAttribute("aui:nav-item:selected")));
+java.lang.String title = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav-item:title"));
 
+_updateOptions(_options, "anchorCssClass", anchorCssClass);
 _updateOptions(_options, "anchorId", anchorId);
 _updateOptions(_options, "cssClass", cssClass);
 _updateOptions(_options, "dropdown", dropdown);
@@ -49,6 +52,7 @@ _updateOptions(_options, "iconClass", iconClass);
 _updateOptions(_options, "id", id);
 _updateOptions(_options, "label", label);
 _updateOptions(_options, "selected", selected);
+_updateOptions(_options, "title", title);
 %>
 
 <%@ include file="/html/taglib/aui/nav_item/init-ext.jspf" %>

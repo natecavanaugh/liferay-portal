@@ -33,6 +33,10 @@ public class BaseNavItemTag extends com.liferay.taglib.util.IncludeTag {
 		return super.doStartTag();
 	}
 
+	public java.lang.String getAnchorCssClass() {
+		return _anchorCssClass;
+	}
+
 	public java.lang.String getAnchorId() {
 		return _anchorId;
 	}
@@ -63,6 +67,16 @@ public class BaseNavItemTag extends com.liferay.taglib.util.IncludeTag {
 
 	public boolean getSelected() {
 		return _selected;
+	}
+
+	public java.lang.String getTitle() {
+		return _title;
+	}
+
+	public void setAnchorCssClass(java.lang.String anchorCssClass) {
+		_anchorCssClass = anchorCssClass;
+
+		setScopedAttribute("anchorCssClass", anchorCssClass);
 	}
 
 	public void setAnchorId(java.lang.String anchorId) {
@@ -113,8 +127,15 @@ public class BaseNavItemTag extends com.liferay.taglib.util.IncludeTag {
 		setScopedAttribute("selected", selected);
 	}
 
+	public void setTitle(java.lang.String title) {
+		_title = title;
+
+		setScopedAttribute("title", title);
+	}
+
 	@Override
 	protected void cleanUp() {
+		_anchorCssClass = null;
 		_anchorId = null;
 		_cssClass = null;
 		_dropdown = false;
@@ -123,6 +144,7 @@ public class BaseNavItemTag extends com.liferay.taglib.util.IncludeTag {
 		_id = null;
 		_label = null;
 		_selected = false;
+		_title = null;
 	}
 
 	@Override
@@ -137,6 +159,7 @@ public class BaseNavItemTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
+		setNamespacedAttribute(request, "anchorCssClass", _anchorCssClass);
 		setNamespacedAttribute(request, "anchorId", _anchorId);
 		setNamespacedAttribute(request, "cssClass", _cssClass);
 		setNamespacedAttribute(request, "dropdown", _dropdown);
@@ -145,6 +168,7 @@ public class BaseNavItemTag extends com.liferay.taglib.util.IncludeTag {
 		setNamespacedAttribute(request, "id", _id);
 		setNamespacedAttribute(request, "label", _label);
 		setNamespacedAttribute(request, "selected", _selected);
+		setNamespacedAttribute(request, "title", _title);
 	}
 
 	protected static final String _ATTRIBUTE_NAMESPACE = "aui:nav-item:";
@@ -155,6 +179,7 @@ public class BaseNavItemTag extends com.liferay.taglib.util.IncludeTag {
 	private static final String _START_PAGE =
 		"/html/taglib/aui/nav_item/start.jsp";
 
+	private java.lang.String _anchorCssClass = null;
 	private java.lang.String _anchorId = null;
 	private java.lang.String _cssClass = null;
 	private boolean _dropdown = false;
@@ -163,5 +188,6 @@ public class BaseNavItemTag extends com.liferay.taglib.util.IncludeTag {
 	private java.lang.String _id = null;
 	private java.lang.String _label = null;
 	private boolean _selected = false;
+	private java.lang.String _title = null;
 
 }
