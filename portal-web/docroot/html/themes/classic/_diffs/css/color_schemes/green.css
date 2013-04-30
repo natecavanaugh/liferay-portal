@@ -3,10 +3,6 @@ body.green, .green .portlet {
 }
 
 .green {
-	.logo .current-site {
-		background-color: #AFBFA7;
-	}
-
 	.aui-icon {
 		background-image: url(@theme_image_path@/color_schemes/green/aui/icon_sprite.png);
 	}
@@ -42,15 +38,6 @@ body.green, .green .portlet {
 
 	.aui-menu-content li a {
 		color: #2F342C;
-	}
-
-	.my-sites-menu .current-site {
-		border-color: #42811D;
-
-		a {
-			background-color: #68BB30;
-			color: #FFF;
-		}
 	}
 
 	.aui-menu-content li a.aui-focus, .lfr-menu-expanded li a:focus  {

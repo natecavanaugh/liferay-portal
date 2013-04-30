@@ -3,10 +3,6 @@ body.orange, .orange .portlet {
 }
 
 .orange {
-	.logo .current-site {
-		background-color: #BFB8A7;
-	}
-
 	.aui-icon {
 		background-image: url(@theme_image_path@/color_schemes/orange/aui/icon_sprite.png);
 	}
@@ -38,15 +34,6 @@ body.orange, .orange .portlet {
 
 	.aui-menu-content li a {
 		color: #34322C;
-	}
-
-	.my-sites-menu .current-site {
-		border-color: #81641D;
-
-		a {
-			background-color: #BB8F30;
-			color: #FFF;
-		}
 	}
 
 	.aui-menu-content li a.aui-focus, .lfr-menu-expanded li a:focus {

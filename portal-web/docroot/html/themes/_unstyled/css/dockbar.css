@@ -172,17 +172,6 @@ html > .lfr-dockbar-pinned {
 	.control-panel a {
 	}
 
-	.current-site {
-		a {
-		}
-
-		.site-type {
-		}
-
-		a:hover .site-type, .current-site a:hover {
-		}
-	}
-
 	.site-name {
 	}
 

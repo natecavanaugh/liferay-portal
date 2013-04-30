@@ -1,16 +1,9 @@
 @import "compass";
 
 .dockbar {
-	.pin-dockbar {
-		padding: 6px 0 0 9px;
-
-		img {
-			background: url(../images/dockbar/pin.png) no-repeat 0 0;
-			height: 27px;
-			vertical-align: middle;
-			width: 27px;
-		}
-	}
+	left: 0;
+	right: 0;
+	top: 0;
 
 	.impersonating-user {
 		.alert-icon{
@@ -35,28 +28,16 @@
 			width: 100%;
 		}
 	}
-}
 
-.user-avatar img {
-	margin-top: -2px;
-	text-decoration: none;
-	vertical-align: middle;
-	width: 18px;
-}
-
-.lfr-dockbar-pinned {
-	.dockbar {
-		left: 0;
-		right: 0;
-		top: 0;
-	}
-
-	.pin-dockbar img {
-		background-image: url(../images/dockbar/unpin.png);
+	.user-avatar img {
+		margin-top: -2px;
+		text-decoration: none;
+		vertical-align: middle;
+		width: 18px;
 	}
 }
 
-html > .lfr-dockbar-pinned {
+body {
 	padding-top: 40px;
 }
 
