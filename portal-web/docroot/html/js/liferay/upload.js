@@ -7,6 +7,8 @@ AUI.add(
 
 		var formatSelectorNS = A.Node.formatSelectorNS;
 
+		var STRINGS = 'strings';
+
 		var STR_BLANK = '';
 
 		var STR_PARAM_FALLBACK = 'uploader=fallback';
@@ -17,7 +19,7 @@ AUI.add(
 			'<tpl for=".">',
 				'<tpl if="!values.error">',
 					'<li class="upload-file {[ values.temp ? "upload-complete pending-file selectable" : "" ]}" data-fileId="{id}" data-fileName="{name}" id="{id}">',
-						'<input class="{[ !values.temp ? "aui-helper-hidden" : "" ]} select-file" data-fileName="{name}" id="{id}checkbox" name="{$ns}selectUploadedFileCheckbox" type="checkbox" value="{name}" />',
+						'<input class="{[ !values.temp ? "aui-helper-hidden" : "" ]} select-file" data-fileName="{name}" id="{id}checkbox" name="{$ns}selectUploadedFileCheckbox" type="{[ this.multipleFiles ? "checkbox" : "hidden" ]}" value="{name}" />',
 						'<span class="file-title" title="{name}">{name}</span>',
 						'<span class="progress-bar">',
 							'<span class="progress" id="{id}progress"></span>',
@@ -56,13 +58,15 @@ AUI.add(
 			'<div class="pending-files-info portlet-msg-alert aui-helper-hidden">{[ this.pendingFileText ]}</div>',
 
 			'<div class="aui-helper-hidden float-container manage-upload-target" id="{$ns}manageUploadTarget">',
-				'<span class="aui-field aui-field-choice select-files aui-state-default">',
-					'<span class="aui-field-content">',
-						'<span class="aui-field-element">',
-							'<input class="select-all-files" id="{$ns}allRowIdsCheckbox" name="{$ns}allRowIdsCheckbox" type="checkbox" />',
+				'<tpl if="multipleFiles">',
+					'<span class="aui-field aui-field-choice select-files aui-state-default">',
+						'<span class="aui-field-content">',
+							'<span class="aui-field-element">',
+								'<input class="select-all-files" id="{$ns}allRowIdsCheckbox" name="{$ns}allRowIdsCheckbox" type="checkbox" />',
+							'</span>',
 						'</span>',
 					'</span>',
-				'</span>',
+				'</tpl>',
 
 				'<a href="javascript:;" class="lfr-button cancel-uploads aui-helper-hidden">{[ this.cancelUploadsText ]}</a>',
 				'<a href="javascript:;" class="lfr-button clear-uploads aui-helper-hidden">{[ this.clearRecentUploadsText ]}</a>',
@@ -120,8 +124,17 @@ AUI.add(
 						setter: A.one,
 						value: null
 					},
+					multipleFiles: {
+						value: true
+					},
 					render: {
 						value: true
+					},
+					strings: {
+						value: {
+							uploadsCompleteText: Liferay.Language.get('all-files-ready-to-be-saved'),
+							pendingFileText: Liferay.Language.get('these-files-have-been-previously-uploaded-but-not-actually-saved.-please-save-or-delete-them-before-they-are-removed')
+						}
 					},
 					tempFileURL: {
 						value: ''
@@ -168,9 +181,19 @@ AUI.add(
 
 							instance._cancelUploadsText = Liferay.Language.get('cancel-all-uploads');
 							instance._cancelFileText = Liferay.Language.get('cancel-upload');
+
+							if (instance.get('multipleFiles')) {
+								instance._selectFileText = Liferay.Language.get('select-files');
+								instance._dropFileText = Liferay.Language.get('drop-files-here-to-upload');
+
+							}
+							else {
+								instance._selectFileText = Liferay.Language.get('select-file');
+								instance._dropFileText = Liferay.Language.get('drop-file-here-to-upload');
+							}
+
 							instance._invalidFileNameText = Liferay.Language.get('please-enter-a-file-with-a-valid-file-name');
 							instance._invalidFileSizeText = Lang.sub(Liferay.Language.get('please-enter-a-file-with-a-valid-file-size-no-larger-than-x'), [maxFileSizeKB]);
-							instance._uploadsCompleteText = Liferay.Language.get('all-files-ready-to-be-saved');
 
 							instance._errorMessages = {
 								'490': Liferay.Language.get('please-enter-a-unique-document-name'),
@@ -199,7 +222,10 @@ AUI.add(
 					bindUI: function() {
 						var instance = this;
 
-						instance._allRowIdsCheckbox.on('click', instance._onAllRowIdsClick, instance);
+						if (instance._allRowIdsCheckbox) {
+							instance._allRowIdsCheckbox.on('click', instance._onAllRowIdsClick, instance);
+						}
+
 						instance._cancelButton.on('click', instance._cancelAllFiles, instance);
 						instance._clearUploadsButton.on('click', instance._clearUploads, instance);
 
@@ -342,7 +368,7 @@ AUI.add(
 
 							instance._fileListTPL.render(files, fileListContent);
 						}
-						else {
+						else if (instance._allRowIdsCheckbox) {
 							instance._allRowIdsCheckbox.attr('checked', true);
 						}
 					},
@@ -495,6 +521,8 @@ AUI.add(
 					_onAllUploadsComplete: function(event) {
 						var instance = this;
 
+						var strings = instance.get(STRINGS);
+
 						var uploader = instance._uploader;
 
 						instance._filesTotal = 0;
@@ -507,7 +535,7 @@ AUI.add(
 
 						instance._clearUploadsButton.toggle(!!instance._fileListContent.one('.file-saved,.upload-error'));
 
-						instance._updateList(0, instance._uploadsCompleteText);
+						instance._updateList(0, strings['uploadsCompleteText']);
 
 						Liferay.fire('allUploadsComplete');
 					},
@@ -624,11 +652,13 @@ AUI.add(
 					_onSelectFileClick: function(currentTarget) {
 						var instance = this;
 
-						Liferay.Util.checkAllBox(
-							instance._fileListSelector,
-							instance._selectUploadedFileCheckboxId,
-							instance._allRowIdsCheckboxSelector
-						);
+						if (instance.get('multipleFiles')) {
+							Liferay.Util.checkAllBox(
+								instance._fileListSelector,
+								instance._selectUploadedFileCheckboxId,
+								instance._allRowIdsCheckboxSelector
+							);
+						}
 
 						instance._markSelected(currentTarget);
 
@@ -712,7 +742,16 @@ AUI.add(
 
 						var position = filesTotal - filesQueued;
 
-						var currentListText = Lang.sub(Liferay.Language.get('uploading-file-x-of-x'), [position, filesTotal]);
+						var currentListText;
+
+						if (instance.get('multipleFiles')) {
+							currentListText = Lang.sub(Liferay.Language.get('uploading-file-x-of-x'), [position, filesTotal]);
+						}
+						else {
+							currentListText = Liferay.Language.get('uploading');
+
+							instance._fileListContent.all('.pending-file,.upload-error').remove(true);
+						}
 
 						var fileIdSelector = '#' + event.file.id;
 
@@ -740,17 +779,20 @@ AUI.add(
 					_renderControls: function() {
 						var instance = this;
 
+						var strings = instance.get(STRINGS);
+
 						var templateConfig = {
 							$ns: instance.NS,
 							cancelFileText: instance._cancelFileText,
 							cancelUploadsText: instance._cancelUploadsText,
 							clearRecentUploadsText: Liferay.Language.get('clear-documents-already-saved'),
 							deleteFileText: Liferay.Language.get('delete-file'),
-							dropFileText: Liferay.Language.get('drop-files-here-to-upload'),
+							dropFileText: instance._dropFileText,
+							multipleFiles: instance.get('multipleFiles'),
 							orText: Liferay.Language.get('or'),
-							pendingFileText: Liferay.Language.get('these-files-have-been-previously-uploaded-but-not-actually-saved.-please-save-or-delete-them-before-they-are-removed'),
-							selectFilesText: Liferay.Language.get('select-files'),
-							uploadsCompleteText: instance._uploadsCompleteText,
+							pendingFileText: strings['pendingFileText'],
+							selectFilesText: instance._selectFileText,
+							uploadsCompleteText: strings['uploadsCompleteText'],
 							uploaderType: UPLOADER_TYPE
 						};
 
@@ -763,7 +805,11 @@ AUI.add(
 						instance._fileListSelector = formatSelectorNS(NS, '#fileList');
 						instance._allRowIdsCheckboxSelector = formatSelectorNS(NS, '#allRowIdsCheckbox');
 
-						var uploadFragment = new A.Template(TPL_UPLOAD, templateConfig).render({});
+						var uploadFragment = new A.Template(TPL_UPLOAD, templateConfig).render(
+							{
+								multipleFiles: instance.get('multipleFiles')
+							}
+						);
 
 						instance._allRowIdsCheckbox = uploadFragment.one(instance._allRowIdsCheckboxSelector);
 
@@ -837,7 +883,7 @@ AUI.add(
 								boundingBox: instance._uploaderBoundingBox,
 								contentBox: instance._uploaderContentBox,
 								fileFieldName: 'file',
-								multipleFiles: true,
+								multipleFiles: instance.get('multipleFiles'),
 								on: {
 									render: function(event) {
 										instance.get('boundingBox').setContent(instance._uploadFragment);
@@ -875,7 +921,9 @@ AUI.add(
 						var hasUploadedFiles = !!fileListContent.one('.upload-complete');
 						var hasSavedFiles = !!fileListContent.one('.file-saved,.upload-error');
 
-						instance._allRowIdsCheckbox.toggle(hasUploadedFiles);
+						if (instance._allRowIdsCheckbox) {
+							instance._allRowIdsCheckbox.toggle(hasUploadedFiles);
+						}
 
 						instance._clearUploadsButton.toggle(hasSavedFiles);
 						instance._manageUploadTarget.toggle(hasUploadedFiles);
