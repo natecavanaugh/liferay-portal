@@ -20,7 +20,7 @@ $theme.include($body_top_include)
 	#dockbar()
 #end
 
-<div id="wrapper">
+<div class="aui-container-fluid" id="wrapper">
 	<header id="banner" role="banner">
 		<div id="heading">
 			<h1 class="site-title">
