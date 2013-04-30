@@ -14,10 +14,6 @@
  */
 --%>
 
-<%
-addPortletURLs = AssetUtil.getAddPortletURLs(liferayPortletRequest, liferayPortletResponse, classNameIds, classTypeIds, allAssetCategoryIds, allAssetTagNames);
-%>
-
 <c:if test="<%= !addPortletURLs.isEmpty() %>">
 
 	<%
@@ -101,7 +97,7 @@ addPortletURLs = AssetUtil.getAddPortletURLs(liferayPortletRequest, liferayPortl
 				<c:otherwise>
 					<liferay-ui:icon
 						message="<%= HtmlUtil.escape(message) %>"
-						src="<%= assetRendererFactory.getIconPath(renderRequest) %>"
+						src="<%= assetRendererFactory.getIconPath(liferayPortletRequest) %>"
 						url="<%= taglibEditURL %>"
 					/>
 				</c:otherwise>
