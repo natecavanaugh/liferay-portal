@@ -133,6 +133,41 @@
 			</attribute>
 		</attributes>
 	</component>
+	<component name="Col" bodyContent="true">
+		<attributes>
+			<attribute>
+				<name>cssClass</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
+				<name>id</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
+				<name>offset</name>
+				<inputType>int</inputType>
+				<outputType>int</outputType>
+			</attribute>
+			<attribute>
+				<name>offsetWidth</name>
+				<inputType>int</inputType>
+				<outputType>int</outputType>
+			</attribute>
+			<attribute>
+				<name>span</name>
+				<inputType>int</inputType>
+				<outputType>int</outputType>
+				<defaultValue>12</defaultValue>
+			</attribute>
+			<attribute>
+				<name>width</name>
+				<inputType>int</inputType>
+				<outputType>int</outputType>
+			</attribute>
+		</attributes>
+	</component>
 	<component name="Column" bodyContent="true">
 		<attributes>
 			<attribute>
