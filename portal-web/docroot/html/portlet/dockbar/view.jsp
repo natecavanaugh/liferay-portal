@@ -29,17 +29,10 @@ boolean hasLayoutCustomizePermission = LayoutPermissionUtil.contains(permissionC
 boolean hasLayoutUpdatePermission = LayoutPermissionUtil.contains(permissionChecker, layout, ActionKeys.UPDATE);
 
 String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "liferay_toggle_controls", ""));
-boolean isDockbarPinned = GetterUtil.getBoolean(SessionClicks.get(request, "liferay_dockbar_pinned", ""), false);
 %>
 
-<aui:nav-bar cssClass='<%= isDockbarPinned ? "dockbar aui-navbar-fixed-top" : "dockbar aui-navbar-static-top" %>' data-namespace="<%= renderResponse.getNamespace() %>" id="dockbar">
-
-	<a class="aui-brand pin-dockbar" href="javascript:;"><img alt='<liferay-ui:message key="pin-the-dockbar" />' src="<%= HtmlUtil.escape(themeDisplay.getPathThemeImages()) %>/spacer.png" /></a>
-
+<aui:nav-bar cssClass="aui-navbar-fixed-top dockbar" data-namespace="<%= renderResponse.getNamespace() %>" id="dockbar">
 	<aui:nav>
-
-		<aui:nav-item cssClass="aui-divider-vertical"></aui:nav-item>
-
 		<c:if test="<%= group.isControlPanel() %>">
 
 			<%

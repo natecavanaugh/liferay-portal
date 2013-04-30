@@ -198,7 +198,7 @@ AUI.add(
 
 				var cssClass = '';
 
-				if (instance.messageList.length == 1) {
+				if (instance.messageList.length === 1) {
 					cssClass = 'first';
 				}
 
@@ -303,29 +303,6 @@ AUI.add(
 
 				var dockBar = instance.dockBar;
 				var namespace = instance._namespace;
-
-				dockBar.one('.pin-dockbar').on(
-					EVENT_CLICK,
-					function(event) {
-						event.halt();
-
-						BODY.toggleClass('lfr-dockbar-pinned');
-
-						dockBar.toggleClass('aui-navbar-fixed-top');
-						dockBar.toggleClass('aui-navbar-static-top');
-
-						var pinned = BODY.hasClass('lfr-dockbar-pinned');
-
-						Liferay.Store('liferay_dockbar_pinned', pinned);
-
-						Liferay.fire(
-							'dockbar:pinned',
-							{
-								pinned: pinned
-							}
-						);
-					}
-				);
 
 				Liferay.Util.toggleControls(dockBar);
 
@@ -467,10 +444,10 @@ AUI.add(
 					}
 				}
 
-				var myAccount = A.one('#' + namespace + 'userAvatar');
+				var userAvatar = A.one('#' + namespace + 'userAvatar');
 
-				if (myAccount) {
-					myAccount.delegate(
+				if (userAvatar) {
+					userAvatar.delegate(
 						EVENT_CLICK,
 						function(event) {
 							event.preventDefault();
