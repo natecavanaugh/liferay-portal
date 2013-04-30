@@ -40,10 +40,6 @@
 			A.one('#<%= id %>').on(
 				'click',
 				function(event) {
-					if (<%= dropdown %>) {
-						event.preventDefault();
-					}
-
 					event.currentTarget.toggleClass('aui-open');
 				}
 			);
