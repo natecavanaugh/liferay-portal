@@ -60,14 +60,14 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 			</div>
 
 			<div class="lfr-journal-small-image-content aui-toggler-content-collapsed">
-				<aui:layout>
+				<aui:row>
 					<c:if test="<%= smallImage && (article != null) %>">
-						<aui:column>
+						<aui:col width="<%= 50 %>">
 							<img alt="<liferay-ui:message key="preview" />" class="lfr-journal-small-image-preview" src="<%= Validator.isNotNull(article.getSmallImageURL()) ? article.getSmallImageURL() : themeDisplay.getPathImage() + "/template?img_id=" + article.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(article.getSmallImageId()) %>" />
-						</aui:column>
+						</aui:col>
 					</c:if>
 
-					<aui:column>
+					<aui:col width="<%= (smallImage && (article != null)) ? 50 : 100 %>">
 						<aui:fieldset>
 							<aui:input cssClass="lfr-journal-small-image-type" inlineField="<%= true %>" label="small-image-url" name="type" type="radio" />
 
@@ -79,8 +79,8 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 
 							<aui:input cssClass="lfr-journal-small-image-value" inlineField="<%= true %>" label="" name="smallFile" type="file" />
 						</aui:fieldset>
-					</aui:column>
-				</aui:layout>
+					</aui:col>
+				</aui:row>
 			</div>
 		</div>
 

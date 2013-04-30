@@ -81,14 +81,14 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 <liferay-ui:trash-undo portletURL="<%= undoTrashURL %>" />
 
 <div id="<portlet:namespace />documentLibraryContainer">
-	<aui:layout cssClass="lfr-app-column-view">
-		<aui:column columnWidth="<%= 20 %>" cssClass="navigation-pane" first="<%= true %>">
+	<aui:row cssClass="lfr-app-column-view">
+		<aui:col cssClass="navigation-pane" width="<%= 20 %>">
 			<liferay-util:include page="/html/portlet/document_library/view_folders.jsp" />
 
 			<div class="folder-pagination"></div>
-		</aui:column>
+		</aui:col>
 
-		<aui:column columnWidth="<%= showFolderMenu ? 80 : 100 %>" cssClass="context-pane" last="<%= true %>">
+		<aui:col cssClass="context-pane" width="<%= showFolderMenu ? 80 : 100 %>">
 			<liferay-ui:app-view-toolbar
 				includeDisplayStyle="<%= true %>"
 				includeSelectAll="<%= true %>"
@@ -151,8 +151,8 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 
 				<div class="document-entries-pagination"></div>
 			</aui:form>
-		</aui:column>
-	</aui:layout>
+		</aui:col>
+	</aui:row>
 </div>
 
 <span id="<portlet:namespace />displayStyleButtonsContainer">

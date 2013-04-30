@@ -365,8 +365,3 @@
 #navigation li.selected a {
 	@include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.8));
 }
-
-.aui-combobox .aui-toolbar-first {
-	@include border-top-left-radius(0);
-	@include border-bottom-left-radius(0);
-}

@@ -30,9 +30,9 @@ AUI.add(
 
 		var CSS_CATEGORY_ITEM_CHECK = 'category-item-check';
 
-		var CSS_COLUMN_WIDTH_CATEGORY = 'aui-w40';
+		var CSS_COLUMN_WIDTH_CATEGORY = 'aui-span5';
 
-		var CSS_COLUMN_WIDTH_CATEGORY_FULL = 'aui-w75';
+		var CSS_COLUMN_WIDTH_CATEGORY_FULL = 'aui-span8';
 
 		var CSS_MESSAGE_RESPONSE = 'lfr-message-response';
 

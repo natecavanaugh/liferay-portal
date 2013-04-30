@@ -63,7 +63,7 @@
 					<aui:form action='<%= themeDisplay.getPathMain() + "/portal/setup_wizard" %>' method="post" name="fm" onSubmit="event.preventDefault();">
 						<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 
-						<aui:fieldset column="<%= true %>" cssClass="aui-w45" label="portal">
+						<aui:fieldset cssClass="aui-span6" label="portal">
 							<aui:input label="portal-name" name="companyName" suffix='<%= LanguageUtil.format(pageContext, "for-example-x", "Liferay") %>' value="<%= PropsValues.COMPANY_DEFAULT_NAME %>" />
 
 							<aui:select inlineField="<%= true %>" label="default-language" name="companyLocale">
@@ -87,7 +87,7 @@
 							<aui:button cssClass="change-language" name="changeLanguageButton" value="change" />
 						</aui:fieldset>
 
-						<aui:fieldset column="<%= true %>" cssClass="aui-column-last aui-w50" label="administrator-user">
+						<aui:fieldset cssClass="aui-column-last aui-span6" label="administrator-user">
 							<aui:input label="first-name" name="adminFirstName" value="<%= PropsValues.DEFAULT_ADMIN_FIRST_NAME %>" />
 
 							<aui:input label="last-name" name="adminLastName" value="<%= PropsValues.DEFAULT_ADMIN_LAST_NAME %>" />
@@ -98,7 +98,7 @@
 							</aui:input>
 						</aui:fieldset>
 
-						<aui:fieldset column="<%= true %>" cssClass="aui-w100" label="database">
+						<aui:fieldset cssClass="aui-span12" label="database">
 							<aui:input name="defaultDatabase" type="hidden" value="<%= defaultDatabase %>" />
 
 							<div id="defaultDatabaseOptions">

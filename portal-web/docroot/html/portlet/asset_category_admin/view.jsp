@@ -70,8 +70,8 @@
 	</div>
 
 	<div class="categories-admin-content-wrapper">
-		<aui:layout cssClass="categories-admin-content">
-			<aui:column columnWidth="25" cssClass="vocabulary-list-container">
+		<aui:row cssClass="categories-admin-content">
+			<aui:col cssClass="vocabulary-list-container" width="<%= 20 %>">
 				<div class="results-header">
 					<aui:input cssClass="select-vocabularies" inline="<%= true %>" label="" name="checkAllVocabularies" title='<%= LanguageUtil.get(pageContext, "check-all-vocabularies") %>' type="checkbox" />
 
@@ -83,9 +83,9 @@
 				<div class="vocabulary-list lfr-component"></div>
 
 				<div class="vocabularies-pagination"></div>
-			</aui:column>
+			</aui:col>
 
-			<aui:column columnWidth="75" cssClass="vocabulary-categories-container">
+			<aui:col cssClass="vocabulary-categories-container" width="<%= 60 %>">
 				<div class="results-header">
 					<aui:input cssClass="select-categories" inline="<%= true %>" label="" name="checkAllCategories" title='<%= LanguageUtil.get(pageContext, "check-all-categories") %>' type="checkbox" />
 
@@ -93,9 +93,9 @@
 				</div>
 
 				<div class="vocabulary-categories"></div>
-			</aui:column>
+			</aui:col>
 
-			<aui:column columnWidth="35" cssClass="aui-hide vocabulary-edit-category">
+			<aui:col cssClass="aui-hide vocabulary-edit-category" width="<%= 20 %>">
 				<div class="results-header">
 					<liferay-ui:message key="category-details" />
 
@@ -110,8 +110,8 @@
 				</div>
 
 				<div class="category-view"></div>
-			</aui:column>
-		</aui:layout>
+			</aui:col>
+		</aui:row>
 	</div>
 </div>
 

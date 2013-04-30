@@ -255,7 +255,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 					<br />
 				</c:if>
 
-				<aui:layout>
+				<aui:row>
 
 					<%
 					if (messages != null) {
@@ -311,15 +311,15 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 								<aui:input name='<%= "parentMessageId" + i %>' type="hidden" value="<%= message.getMessageId() %>" />
 							</div>
 
-							<aui:column cssClass="lfr-discussion-details">
+							<aui:col cssClass="lfr-discussion-details" width="<%= 50 %>">
 								<liferay-ui:user-display
 									displayStyle="<%= 2 %>"
 									userId="<%= message.getUserId() %>"
 									userName="<%= HtmlUtil.escape(message.getUserName()) %>"
 								/>
-							</aui:column>
+							</aui:col>
 
-							<aui:column cssClass="lfr-discussion-body">
+							<aui:col cssClass="lfr-discussion-body" width="<%= 50 %>">
 								<c:if test="<%= (message != null) && !message.isApproved() %>">
 									<aui:model-context bean="<%= message %>" model="<%= MBMessage.class %>" />
 
@@ -421,9 +421,9 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 										</ul>
 									</c:if>
 								</div>
-							</aui:column>
+							</aui:col>
 
-							<aui:layout cssClass="lfr-discussion-form-container">
+							<aui:row cssClass="lfr-discussion-form-container" fluid="<%= false %>">
 								<div class="lfr-discussion-form lfr-discussion-form-reply" id="<%= randomNamespace %>postReplyForm<%= i %>" style="display: none;">
 
 									<liferay-ui:user-display
@@ -475,7 +475,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 										</aui:button-row>
 									</div>
 								</c:if>
-							</aui:layout>
+							</aui:row>
 
 							<div class="lfr-discussion-posted-on">
 								<c:choose>
@@ -508,7 +508,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 					}
 					%>
 
-				</aui:layout>
+				</aui:row>
 
 				<c:if test="<%= (searchContainer != null) && (searchContainer.getTotal() > searchContainer.getDelta()) %>">
 					<liferay-ui:search-paginator searchContainer="<%= searchContainer %>" />

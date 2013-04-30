@@ -2,18 +2,6 @@
 	border: 1px solid transparent;
 	min-height: 31px;
 
-	.aui-fieldset .aui-field-content, .aui-field-row, .aui-button-holder, .aui-field-wrapper-content {
-		margin: 0;
-	}
-
-	.aui-field-choice .aui-field-element {
-		display: inline-block;
-	}
-
-	.aui-button-input {
-		padding: 4px;
-	}
-
 	.lfr-search-combobox {
 		float: right;
 		margin: -2px 0 0 2px;
@@ -38,7 +26,7 @@
 .lfr-header-row {
 	border-bottom-color: #7B7B7B;
 
-	.aui-buttonitem-content, .aui-button-input, .lfr-search-combobox {
+	.lfr-search-combobox {
 		border-color: #5F5F5F;
 	}
 }

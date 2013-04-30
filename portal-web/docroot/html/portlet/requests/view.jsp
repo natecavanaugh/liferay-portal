@@ -42,14 +42,14 @@ List<SocialRequest> requests = (List<SocialRequest>)request.getAttribute(WebKeys
 			SocialRequestFeedEntry requestFeedEntry = SocialRequestInterpreterLocalServiceUtil.interpret(socialRequest, themeDisplay);
 		%>
 
-			<aui:layout>
-				<aui:column>
+			<aui:row>
+				<aui:col width="<%= 50 %>">
 					<liferay-ui:user-display
 						displayStyle="<%= 2 %>"
 						userId="<%= socialRequest.getUserId() %>"
 					/>
-				</aui:column>
-				<aui:column>
+				</aui:col>
+				<aui:col width="<%= 50 %>">
 					<c:choose>
 						<c:when test="<%= requestFeedEntry == null %>">
 							<div class="aui-alert aui-alert-error">
@@ -100,8 +100,8 @@ List<SocialRequest> requests = (List<SocialRequest>)request.getAttribute(WebKeys
 							</liferay-ui:icon-list>
 						</c:otherwise>
 					</c:choose>
-				</aui:column>
-			</aui:layout>
+				</aui:col>
+			</aui:row>
 
 			<c:if test="<%= (i + 1) < requests.size() %>">
 				<div class="separator"><!-- --></div>

@@ -50,20 +50,20 @@ AUI.add(
 			'</div>' +
 		'</li>';
 
-		var TPL_TAG_MERGE_BODY = '<div class="aui-layout tags-admin-merge-tag">' +
-			'<div class="aui-layout-content">' +
-				'<div class="aui-column aui-w45">' +
+		var TPL_TAG_MERGE_BODY = '<div class="aui-container-fluid tags-admin-merge-tag">' +
+			'<div class="aui-row">' +
+				'<div class="aui-column aui-span6">' +
 					'<div class="selected-tags-container">' +
 						'<label for="{namespace}selectedTagsList">' + Liferay.Language.get('tags-to-be-merged') + ':</label>' +
 						'<select id="{namespace}selectedTagsList" class="selected-tags-list" multiple>' +
 						'</select>' +
 					'</div>' +
 				'</div>' +
-				'<div class="aui-column aui-w10" id="{namespace}sortSelect">' +
+				'<div class="aui-span1" id="{namespace}sortSelect">' +
 						'<button class="tag-move tag-move-up" id="{namespace}tagMoveUp"></button>' +
 						'<button class="tag-move tag-move-down" id="{namespace}tagMoveDown"></button>' +
 				'</div>' +
-				'<div class="aui-column aui-w45">' +
+				'<div class="aui-column aui-span6">' +
 					'<div class="target-tags-container">' +
 						'<label class="tags-label" for="{namespace}targetTagsList">' + Liferay.Language.get('target-tag') + ':</label>' +
 						'<select id="{namespace}targetTagsList" class="target-tags-list">' +
@@ -74,9 +74,9 @@ AUI.add(
 		'</div>';
 
 		var TPL_TAG_MERGE_FOOTER =
-			'<div class="aui-layout tags-admin-merge-tag">' +
-				'<div class="aui-layout-content">' +
-					'<div class="aui-column aui-w60">' +
+			'<div class="aui-container-fluid tags-admin-merge-tag">' +
+				'<div class="aui-row">' +
+					'<div class="aui-span7">' +
 						'<div class="tag-options">' +
 							'<input id="{namespace}mergeOnlySelectedTags" type="checkbox">' +
 							'<label class="tags-merge-label" for="{namespace}mergeOnlySelectedTags">' + Liferay.Language.get('merge-only-selected-tags') + '</label>' + '<br>' +
@@ -84,7 +84,7 @@ AUI.add(
 							'<label class="tags-merge-label" for="{namespace}overrideProperties">' + Liferay.Language.get('override-tags-properties') + '</label>' +
 						'</div>' +
 					'</div>' +
-					'<div class="aui-column aui-w40">' +
+					'<div class="aui-column aui-span5">' +
 						'<div id="{namespace}buttonsContainer"></div>' +
 					'</div>' +
 				'</div>' +

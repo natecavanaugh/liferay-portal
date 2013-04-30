@@ -71,8 +71,8 @@
 	</div>
 
 	<div class="tags-admin-content-wrapper">
-		<aui:layout cssClass="tags-admin-content">
-			<aui:column columnWidth="35" cssClass="tags-admin-list-container">
+		<aui:row cssClass="tags-admin-content">
+			<aui:col cssClass="tags-admin-list-container" width="<%= 35 %>">
 				<div class="results-header">
 					<liferay-ui:message key="tags" />
 				</div>
@@ -80,16 +80,16 @@
 				<div class="tags-admin-list lfr-component"></div>
 
 				<div class="tags-pagination"></div>
-			</aui:column>
+			</aui:col>
 
-			<aui:column columnWidth="65" cssClass="tags-admin-edit-tag">
+			<aui:col cssClass="tags-admin-edit-tag" width="<%= 65 %>">
 				<div class="results-header">
 					<liferay-ui:message key="tag-details" />
 				</div>
 
 				<div class="tag-view-container"></div>
-			</aui:column>
-		</aui:layout>
+			</aui:col>
+		</aui:row>
 	</div>
 </div>
 

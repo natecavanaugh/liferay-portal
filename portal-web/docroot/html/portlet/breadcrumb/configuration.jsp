@@ -20,8 +20,8 @@
 String redirect = ParamUtil.getString(request, "redirect");
 %>
 
-<aui:layout>
-	<aui:column columnWidth="50">
+<aui:row>
+	<aui:col width="<%= 50 %>">
 		<liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
 
 		<aui:form action="<%= configurationURL %>" method="post" name="fm">
@@ -29,32 +29,32 @@ String redirect = ParamUtil.getString(request, "redirect");
 			<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 
 			<aui:fieldset cssClass="checkBoxes">
-				<aui:column columnWidth="50">
+				<aui:col width="<%= 50 %>">
 					<aui:input label="show-current-site" name="preferences--showCurrentGroup--" type="checkbox" value="<%= showCurrentGroup %>" />
 					<aui:input label="show-current-application" name="preferences--showCurrentPortlet--" type="checkbox" value="<%= showCurrentPortlet %>" />
 					<aui:input label="show-guest-site" name="preferences--showGuestGroup--" type="checkbox" value="<%= showGuestGroup %>" />
-				</aui:column>
+				</aui:col>
 
-				<aui:column columnWidth="50">
+				<aui:col width="<%= 50 %>">
 					<aui:input label="show-page" name="preferences--showLayout--" type="checkbox" value="<%= showLayout %>" />
 					<aui:input label="show-parent-sites" name="preferences--showParentGroups--" type="checkbox" value="<%= showParentGroups %>" />
 					<aui:input label="show-application-breadcrumb" name="preferences--showPortletBreadcrumb--" type="checkbox" value="<%= showPortletBreadcrumb %>" />
-				</aui:column>
+				</aui:col>
 			</aui:fieldset>
 
 			<aui:button-row>
 				<aui:button type="submit" />
 			</aui:button-row>
 		</aui:form>
-	</aui:column>
-	<aui:column columnWidth="50">
+	</aui:col>
+	<aui:col width="<%= 50 %>">
 		<liferay-portlet:preview
 			portletName="<%= portletResource %>"
 			queryString="struts_action=/breadcrumb/view"
 			showBorders="<%= true %>"
 		/>
-	</aui:column>
-</aui:layout>
+	</aui:col>
+</aui:row>
 
 <aui:script use="aui-base">
 	var formNode = A.one('#<portlet:namespace />fm');

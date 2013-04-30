@@ -64,7 +64,7 @@ if (filterManageableOrganizations) {
 		int organizationsCount = OrganizationLocalServiceUtil.searchCount(company.getCompanyId(), (organization != null) ? organization.getOrganizationId() : OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID, null, null, null, null, organizationParams);
 		%>
 
-		<aui:layout>
+		<aui:row>
 			<c:choose>
 				<c:when test="<%= (organization != null) && (organization.getOrganizationId() != OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID) %>">
 
@@ -103,7 +103,7 @@ if (filterManageableOrganizations) {
 				</c:otherwise>
 			</c:choose>
 
-			<aui:column columnWidth="<%= (organization != null) ? 75 : 100 %>" cssClass="lfr-asset-column lfr-asset-column-details" first="<%= true %>">
+			<aui:col cssClass="lfr-asset-column lfr-asset-column-details" width="<%= (organization != null) ? 75 : 100 %>">
 				<liferay-ui:panel-container extended="<%= false %>" id="usersAdminOrganizationPanelContainer" persistState="<%= true %>">
 					<c:if test="<%= organization != null %>">
 
@@ -430,10 +430,10 @@ if (filterManageableOrganizations) {
 						</c:choose>
 					</c:if>
 				</liferay-ui:panel-container>
-			</aui:column>
+			</aui:col>
 
 			<c:if test="<%= organization != null %>">
-				<aui:column columnWidth="<%= 25 %>" cssClass="lfr-asset-column lfr-asset-column-actions" last="<%= true %>">
+				<aui:col cssClass="lfr-asset-column lfr-asset-column-actions" last="<%= true %>" width="<%= 25 %>">
 					<div class="lfr-asset-summary">
 						<img alt="<%= HtmlUtil.escape(organization.getName()) %>" class="avatar" src='<%= (organization != null) ? themeDisplay.getPathImage() + "/organization_logo?img_id=" + organization.getLogoId() + "&t=" + WebServerServletTokenUtil.getToken(organization.getLogoId()) : "" %>' />
 
@@ -449,14 +449,14 @@ if (filterManageableOrganizations) {
 					%>
 
 					<liferay-util:include page="/html/portlet/users_admin/organization_action.jsp" />
-				</aui:column>
+				</aui:col>
 
 				<%
 				UsersAdminUtil.addPortletBreadcrumbEntries(organization, request, renderResponse);
 				%>
 
 			</c:if>
-		</aui:layout>
+		</aui:row>
 	</c:when>
 	<c:otherwise>
 		<div class="aui-alert aui-alert-info">

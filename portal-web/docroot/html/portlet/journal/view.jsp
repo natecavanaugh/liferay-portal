@@ -61,14 +61,14 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 <liferay-ui:trash-undo portletURL="<%= undoTrashURL %>" />
 
 <div id="<portlet:namespace />journalContainer">
-	<aui:layout cssClass="lfr-app-column-view">
-		<aui:column columnWidth="<%= 20 %>" cssClass="navigation-pane" first="<%= true %>">
+	<aui:row cssClass="lfr-app-column-view">
+		<aui:col cssClass="navigation-pane" width="<%= 20 %>">
 			<liferay-util:include page="/html/portlet/journal/view_folders.jsp" />
 
 			<div class="folder-pagination"></div>
-		</aui:column>
+		</aui:col>
 
-		<aui:column columnWidth="80" cssClass="context-pane" last="<%= true %>">
+		<aui:col cssClass="context-pane" last="<%= true %>" width="<%= 80 %>">
 			<liferay-ui:app-view-toolbar
 				includeDisplayStyle="<%= true %>"
 				includeSelectAll="<%= true %>"
@@ -106,8 +106,8 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 
 				<div class="article-entries-pagination"></div>
 			</aui:form>
-		</aui:column>
-	</aui:layout>
+		</aui:col>
+	</aui:row>
 </div>
 
 <%

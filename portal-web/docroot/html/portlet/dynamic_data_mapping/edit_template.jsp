@@ -236,14 +236,14 @@ if (Validator.isNotNull(structureAvailableFields)) {
 							</div>
 
 							<div class="lfr-ddm-small-image-content aui-toggler-content-collapsed">
-								<aui:layout>
+								<aui:row>
 									<c:if test="<%= smallImage && (template != null) %>">
-										<aui:column>
+										<aui:col width="<%= 50 %>">
 											<img alt="<liferay-ui:message key="preview" />" class="lfr-ddm-small-image-preview" src="<%= Validator.isNotNull(template.getSmallImageURL()) ? template.getSmallImageURL() : themeDisplay.getPathImage() + "/template?img_id=" + template.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(template.getSmallImageId()) %>" />
-										</aui:column>
+										</aui:col>
 									</c:if>
 
-									<aui:column>
+									<aui:col width="<%= (smallImage && (template != null)) ? 50 : 100 %>">
 										<aui:fieldset>
 											<aui:input cssClass="lfr-ddm-small-image-type" inlineField="<%= true %>" label="small-image-url" name="type" type="radio" />
 
@@ -255,8 +255,8 @@ if (Validator.isNotNull(structureAvailableFields)) {
 
 											<aui:input cssClass="lfr-ddm-small-image-value" inlineField="<%= true %>"  label="" name="smallImageFile" type="file" />
 										</aui:fieldset>
-									</aui:column>
-								</aui:layout>
+									</aui:col>
+								</aui:row>
 							</div>
 						</div>
 					</c:otherwise>

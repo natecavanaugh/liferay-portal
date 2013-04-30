@@ -220,8 +220,8 @@ if (Validator.isNotNull(content)) {
 						<liferay-ui:message arguments='<%= new Object[] {"journal-save-structure-trigger", "#"} %>' key="click-here-to-save-it-now" />
 					</span>
 
-					<aui:layout>
-						<aui:column columnWidth="50" cssClass="article-structure">
+					<aui:row>
+						<aui:col cssClass="article-structure" width="<%= 50 %>">
 							<span class="article-structure-label"><liferay-ui:message key="structure" />:</span>
 
 							<aui:fieldset cssClass="article-structure-toolbar">
@@ -258,9 +258,9 @@ if (Validator.isNotNull(content)) {
 									</c:if>
 								</div>
 							</aui:fieldset>
-						</aui:column>
+						</aui:col>
 
-						<aui:column columnWidth="50" cssClass="article-template">
+						<aui:col cssClass="article-template" width="<%= 50 %>">
 							<span class="article-template-label"><liferay-ui:message key="template" />:</span>
 
 							<aui:fieldset cssClass="article-template-toolbar">
@@ -353,8 +353,8 @@ if (Validator.isNotNull(content)) {
 									</c:choose>
 								</div>
 							</aui:fieldset>
-						</aui:column>
-					</aui:layout>
+						</aui:col>
+					</aui:row>
 				</td>
 			</tr>
 		</c:if>

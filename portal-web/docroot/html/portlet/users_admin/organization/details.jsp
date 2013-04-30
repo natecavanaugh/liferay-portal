@@ -62,7 +62,7 @@ User selUser = (User)request.getAttribute("user.selUser");
 
 <h3><liferay-ui:message key="details" /></h3>
 
-<aui:fieldset column="<%= true %>" cssClass="aui-w50">
+<aui:fieldset cssClass="aui-span6">
 	<liferay-ui:error exception="<%= DuplicateOrganizationException.class %>" message="the-organization-name-is-already-taken" />
 	<liferay-ui:error exception="<%= OrganizationNameException.class %>" message="please-enter-a-valid-name" />
 
@@ -119,7 +119,7 @@ User selUser = (User)request.getAttribute("user.selUser");
 	</c:if>
 </aui:fieldset>
 
-<aui:fieldset column="<%= true %>" cssClass="aui-w50">
+<aui:fieldset cssClass="aui-span6">
 	<div>
 		<c:if test="<%= organization != null %>">
 

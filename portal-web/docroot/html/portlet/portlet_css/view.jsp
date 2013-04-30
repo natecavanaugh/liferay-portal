@@ -123,8 +123,8 @@ PortletURL portletURL = renderResponse.createRenderURL();
 				</aui:fieldset>
 
 				<aui:fieldset id="text-styles">
-					<aui:layout>
-						<aui:column columnWidth="30" first="<%= true %>">
+					<aui:row>
+						<aui:col width="<%= 33 %>">
 							<aui:select label="font" name="lfr-font-family" showEmptyOption="<%= true %>">
 								<aui:option label="Arial" />
 								<aui:option label="Georgia" />
@@ -170,9 +170,9 @@ PortletURL portletURL = renderResponse.createRenderURL();
 								<aui:option label="overline" />
 								<aui:option label="strikethrough" value="line-through" />
 							</aui:select>
-						</aui:column>
+						</aui:col>
 
-						<aui:column columnWidth="70" last="<%= true %>">
+						<aui:col last="<%= true %>" width="<%= 60 %>">
 							<aui:select label="word-spacing" name="lfr-font-space" showEmptyOption="<%= true %>">
 
 								<%
@@ -229,8 +229,8 @@ PortletURL portletURL = renderResponse.createRenderURL();
 								%>
 
 							</aui:select>
-						</aui:column>
-					</aui:layout>
+						</aui:col>
+					</aui:row>
 				</aui:fieldset>
 
 				<aui:fieldset id="background-styles">
@@ -238,8 +238,8 @@ PortletURL portletURL = renderResponse.createRenderURL();
 				</aui:fieldset>
 
 				<aui:fieldset id="border-styles">
-					<aui:layout>
-						<aui:column columnWidth="33" cssClass="lfr-border-width use-for-all-column" first="<%= true %>">
+					<aui:row>
+						<aui:col cssClass="lfr-border-width use-for-all-column" width="<%= 33 %>">
 							<aui:fieldset label="border-width">
 								<aui:input checked="checked" cssClass="lfr-use-for-all" label="same-for-all" name="lfr-use-for-all-width" type="checkbox" />
 
@@ -283,9 +283,9 @@ PortletURL portletURL = renderResponse.createRenderURL();
 									</aui:select>
 								</span>
 							</aui:fieldset>
-						</aui:column>
+						</aui:col>
 
-						<aui:column columnWidth="33" cssClass="lfr-border-style">
+						<aui:col cssClass="lfr-border-style" width="<%= 33 %>">
 							<aui:fieldset label="border-style">
 								<aui:input checked="checked" cssClass="lfr-use-for-all use-for-all-column" label="same-for-all" name="lfr-use-for-all-style" type="checkbox" />
 
@@ -337,9 +337,9 @@ PortletURL portletURL = renderResponse.createRenderURL();
 									<aui:option label="solid" />
 								</aui:select>
 							</aui:fieldset>
-						</aui:column>
+						</aui:col>
 
-						<aui:column columnWidth="33" cssClass="lfr-border-color" last="<%= true %>">
+						<aui:col cssClass="lfr-border-color" last="<%= true %>" width="<%= 33 %>">
 							<aui:fieldset label="border-color">
 								<aui:input checked="checked" cssClass="lfr-use-for-all use-for-all-column" label="same-for-all" name="lfr-use-for-all-color" type="checkbox" />
 
@@ -351,13 +351,13 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 								<aui:input label="left" name="lfr-border-color-left" />
 							</aui:fieldset>
-						</aui:column>
-					</aui:layout>
+						</aui:col>
+					</aui:row>
 				</aui:fieldset>
 
 				<aui:fieldset cssClass="spacing aui-fieldset" id="spacing-styles">
-					<aui:layout>
-						<aui:column columnWidth="50" cssClass="lfr-padding use-for-all-column" first="<%= true %>">
+					<aui:row>
+						<aui:col cssClass="lfr-padding use-for-all-column" width="<%= 50 %>">
 							<aui:fieldset label="padding">
 								<aui:input checked="checked" cssClass="lfr-use-for-all" label="same-for-all" name="lfr-use-for-all-padding" type="checkbox" />
 
@@ -401,9 +401,9 @@ PortletURL portletURL = renderResponse.createRenderURL();
 									</aui:select>
 								</span>
 							</aui:fieldset>
-						</aui:column>
+						</aui:col>
 
-						<aui:column columnWidth="50" cssClass="lfr-margin use-for-all-column" last="<%= true %>">
+						<aui:col cssClass="lfr-margin use-for-all-column" last="<%= true %>" width="<%= 50 %>">
 							<aui:fieldset label="margin">
 								<aui:input checked="checked" cssClass="lfr-use-for-all" label="same-for-all" name="lfr-use-for-all-margin" type="checkbox" />
 
@@ -447,8 +447,8 @@ PortletURL portletURL = renderResponse.createRenderURL();
 									</aui:select>
 								</span>
 							</aui:fieldset>
-						</aui:column>
-					</aui:layout>
+						</aui:col>
+					</aui:row>
 				</aui:fieldset>
 
 				<aui:fieldset id="css-styling">

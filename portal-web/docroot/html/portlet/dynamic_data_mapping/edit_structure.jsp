@@ -115,17 +115,17 @@ if (Validator.isNotNull(script)) {
 
 		<liferay-ui:panel-container cssClass="lfr-structure-entry-details-container" extended="<%= false %>" id="structureDetailsPanelContainer" persistState="<%= true %>">
 			<liferay-ui:panel collapsible="<%= true %>" extended="<%= false %>" id="structureDetailsSectionPanel" persistState="<%= true %>" title='<%= LanguageUtil.get(pageContext, "details") %>'>
-				<aui:layout cssClass="lfr-ddm-types-form-column">
+				<aui:row cssClass="lfr-ddm-types-form-column">
 					<c:choose>
 						<c:when test="<%= scopeClassNameId == 0 %>">
-							<aui:column first="<%= true %>">
+							<aui:col width="<%= 50 %>">
 								<aui:field-wrapper>
 									<aui:select disabled="<%= structure != null %>" label="type" name="scopeClassNameId">
 										<aui:option label="<%= ResourceActionsUtil.getModelResource(locale, DDLRecordSet.class.getName()) %>" value="<%= PortalUtil.getClassNameId(DDLRecordSet.class.getName()) %>" />
 										<aui:option label="<%= ResourceActionsUtil.getModelResource(locale, DLFileEntryMetadata.class.getName()) %>" value="<%= PortalUtil.getClassNameId(DLFileEntryMetadata.class.getName()) %>" />
 									</aui:select>
 								</aui:field-wrapper>
-							</aui:column>
+							</aui:col>
 						</c:when>
 						<c:otherwise>
 							<aui:input name="scopeClassNameId" type="hidden" value="<%= scopeClassNameId %>" />
@@ -134,7 +134,7 @@ if (Validator.isNotNull(script)) {
 
 					<c:choose>
 						<c:when test="<%= Validator.isNull(storageTypeValue) %>">
-							<aui:column>
+							<aui:col width="<%= 50 %>">
 								<aui:field-wrapper>
 									<aui:select disabled="<%= structure != null %>" name="storageType">
 
@@ -150,13 +150,13 @@ if (Validator.isNotNull(script)) {
 
 									</aui:select>
 								</aui:field-wrapper>
-							</aui:column>
+							</aui:col>
 						</c:when>
 						<c:otherwise>
 							<aui:input name="storageType" type="hidden" value="<%= storageTypeValue %>" />
 						</c:otherwise>
 					</c:choose>
-				</aui:layout>
+				</aui:row>
 
 				<aui:input name="description" />
 

@@ -97,9 +97,9 @@ SitesUtil.addPortletBreadcrumbEntries(group, pagesName, redirectURL, request, re
 	</c:otherwise>
 </c:choose>
 
-<aui:layout cssClass="manage-view lfr-app-column-view">
+<aui:row cssClass="manage-view lfr-app-column-view">
 	<c:if test="<%= !group.isLayoutPrototype() %>">
-		<aui:column columnWidth="25" cssClass="manage-sitemap">
+		<aui:col cssClass="manage-sitemap" width="<%= 25 %>">
 			<div class="lfr-header-row">
 				<div class="lfr-header-row-content">
 					<c:if test="<%= stagingGroup != null %>">
@@ -183,10 +183,10 @@ SitesUtil.addPortletBreadcrumbEntries(group, pagesName, redirectURL, request, re
 			<liferay-util:include page="/html/portlet/layouts_admin/tree_js.jsp">
 				<liferay-util:param name="treeId" value="layoutsTree" />
 			</liferay-util:include>
-		</aui:column>
+		</aui:col>
 	</c:if>
 
-	<aui:column columnWidth="<%= group.isLayoutPrototype() ? 100 : 75 %>" cssClass="manage-layout">
+	<aui:col cssClass="manage-layout" width="<%= group.isLayoutPrototype() ? 100 : 75 %>">
 		<div id="<portlet:namespace />layoutsContainer">
 			<c:choose>
 				<c:when test="<%= selPlid > 0 %>">
@@ -197,8 +197,8 @@ SitesUtil.addPortletBreadcrumbEntries(group, pagesName, redirectURL, request, re
 				</c:otherwise>
 			</c:choose>
 		</div>
-	</aui:column>
-</aui:layout>
+	</aui:col>
+</aui:row>
 
 <c:if test="<%= !group.isLayoutPrototype() %>">
 	<aui:script use="aui-io-plugin-deprecated">

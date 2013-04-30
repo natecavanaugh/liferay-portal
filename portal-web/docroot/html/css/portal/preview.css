@@ -46,19 +46,6 @@
 .lfr-preview-file-toolbar {
 	display: block;
 	@include opacity(0.5);
-
-	.aui-toolbar-item {
-		border-width: 0;
-		height: auto;
-		margin: 0;
-		width: auto;
-	}
-
-	.aui-buttonitem .aui-icon {
-		height: 30px;
-		margin: 0;
-		width: 30px;
-	}
 }
 
 .lfr-preview-file-image-current-column:hover .lfr-preview-file-toolbar {
@@ -203,10 +190,6 @@
 
 .lfr-preview-file-toolbar {
 	background: #333;
-
-	.aui-toolbar-item {
-		background: none;
-	}
 
 	.aui-icon-arrow-1-l {
 		background: url(@theme_image_path@/document_library/preview_left.png) no-repeat 0 50%;
