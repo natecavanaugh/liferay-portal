@@ -219,6 +219,26 @@
 			</attribute>
 		</attributes>
 	</component>
+	<component name="Container" bodyContent="true">
+		<attributes>
+			<attribute>
+				<name>cssClass</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
+				<name>fluid</name>
+				<inputType>boolean</inputType>
+				<outputType>boolean</outputType>
+				<defaultValue>true</defaultValue>
+			</attribute>
+			<attribute>
+				<name>id</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+		</attributes>
+	</component>
 	<component name="FieldWrapper" dynamicAttributes="false" bodyContent="true">
 		<attributes>
 			<attribute>
