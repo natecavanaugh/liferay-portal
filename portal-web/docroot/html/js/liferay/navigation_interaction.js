@@ -32,12 +32,12 @@ AUI.add(
 
 						var hostULId = '#' + navigation.guid();
 
-						instance._directLiChild = hostULId + '> li';
+						instance._directChildLi = hostULId + '> li';
 
 						instance._hostULId = hostULId;
 
 						Liferay.on(
-							['showNavigationMenu', 'hideNavigationMenu'],
+							['hideNavigationMenu', 'showNavigationMenu'],
 							function(event) {
 								var showMenu = event.type == 'showNavigationMenu';
 
@@ -53,8 +53,7 @@ AUI.add(
 						);
 
 						if (navigation) {
-							navigation.delegate('mouseenter', instance._onMouseToggle, '> li', instance);
-							navigation.delegate('mouseleave', instance._onMouseToggle, '> li', instance);
+							navigation.delegate(['mouseenter', 'mouseleave'], instance._onMouseToggle, '> li', instance);
 
 							navigation.delegate('keydown', instance._handleKeyDown, 'a', instance);
 						}
@@ -73,8 +72,7 @@ AUI.add(
 
 						var focusManager = host.focusManager;
 
-						focusManager.after('activeDescendantChange', instance._showMenu, instance);
-						focusManager.after('focusedChange', instance._showMenu, instance);
+						focusManager.after(['activeDescendantChange', 'focusedChange'], instance._showMenu, instance);
 
 						instance._focusManager = focusManager;
 					},
@@ -101,7 +99,7 @@ AUI.add(
 
 						var target = event.target;
 
-						var parent = target.ancestors(instance._directLiChild).item(0);
+						var parent = target.ancestors(instance._directChildLi).item(0);
 
 						var fallbackFirst = true;
 						var item;
@@ -191,7 +189,7 @@ AUI.add(
 								Liferay.fire('hideNavigationMenu', MAP_HOVER);
 							}
 
-							MAP_HOVER.menu = descendants.item(activeDescendant).ancestors(instance._directLiChild);
+							MAP_HOVER.menu = descendants.item(activeDescendant).ancestors(instance._directChildLi);
 
 							Liferay.fire('showNavigationMenu', MAP_HOVER);
 						}
