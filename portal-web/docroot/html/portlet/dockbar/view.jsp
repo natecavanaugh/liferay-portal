@@ -254,7 +254,7 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 				</c:when>
 				<c:otherwise>
 					<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.VIEW_CONTROL_PANEL) %>">
-						<aui:nav-item anchorCssClass='<%= themeDisplay.isImpersonated() ? "" : useDialog %>' href='<%= myAccountURL %>' label="my-account" title="manage-my-account" />
+						<aui:nav-item anchorCssClass='<%= themeDisplay.isImpersonated() ? "" : useDialog %>' href="<%= myAccountURL %>" label="my-account" title="manage-my-account" />
 					</c:if>
 
 					<c:if test="<%= themeDisplay.isShowSignOutIcon() %>">
