@@ -149,7 +149,7 @@ if (layout != null) {
 
 		if (navBlock) {
 			var handle = navBlock.on(
-				['mousemove', 'touchstart'],
+				'mousemove',
 				function() {
 					handle.detach();
 
