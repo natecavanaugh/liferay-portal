@@ -66,10 +66,6 @@ NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
 	<div class="taglib-page-iterator" id="<%= namespace + id %>">
 </c:if>
 
-<c:if test='<%= type.equals("approximate") || type.equals("more") || type.equals("regular") %>'>
-	<%@ include file="/html/taglib/ui/page_iterator/showing_x_results.jspf" %>
-</c:if>
-
 <c:if test='<%= type.equals("article") && (total > resultRowsSize) %>'>
 	<div class="search-results">
 		<liferay-ui:message key="pages" />:
@@ -126,239 +122,160 @@ NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
 </c:if>
 
 <c:if test="<%= (total > delta) || (total > PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES[0]) %>">
-	<div class="search-pages">
-		<c:if test='<%= type.equals("regular") %>'>
-			<c:if test="<%= PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES.length > 0 %>">
-				<div class="delta-selector">
-					<c:choose>
-						<c:when test="<%= !deltaConfigurable || themeDisplay.isFacebook() %>">
-							<liferay-ui:message key="items-per-page" />
-
-							<%= delta %>
-						</c:when>
-						<c:otherwise>
-							<aui:select changesContext="<%= true %>" id='<%= id + "_itemsPerPage" %>' inlineLabel="left" label="items-per-page" name="<%= deltaParam %>" onchange='<%= namespace + deltaParam + "updateDelta(this);" %>'>
-
-								<%
-								for (int curDelta : PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) {
-									if (curDelta > SearchContainer.MAX_DELTA) {
-										continue;
-									}
-								%>
-
-									<aui:option label="<%= curDelta %>" selected="<%= delta == curDelta %>" />
-
-								<%
-								}
-								%>
-
-							</aui:select>
-						</c:otherwise>
-					</c:choose>
-				</div>
-			</c:if>
-
-			<div class="page-selector">
-				<c:choose>
-					<c:when test="<%= themeDisplay.isFacebook() %>">
-						<liferay-ui:message key="page" />
-
-						<%= cur %>
-					</c:when>
-					<c:otherwise>
-
-						<%
-						String suffix = LanguageUtil.get(pageContext, "of") + StringPool.SPACE + numberFormat.format(pages);
-
-						if (type.equals("approximate") || type.equals("more")) {
-							suffix = StringPool.BLANK;
-						}
-						%>
-
-						<aui:select changesContext="<%= true %>" id='<%= id + "_page" %>' inlineLabel="left" name="page" onchange='<%= namespace + curParam + "updateCur(this);" %>' suffix="<%= suffix %>">
-
-							<%
-							int pagesIteratorMax = maxPages;
-							int pagesIteratorBegin = 1;
-							int pagesIteratorEnd = pages;
-
-							if (pages > pagesIteratorMax) {
-								pagesIteratorBegin = cur - pagesIteratorMax;
-								pagesIteratorEnd = cur + pagesIteratorMax;
-
-								if (pagesIteratorBegin < 1) {
-									pagesIteratorBegin = 1;
-								}
-
-								if (pagesIteratorEnd > pages) {
-									pagesIteratorEnd = pages;
-								}
-							}
-
-							for (int i = pagesIteratorBegin; i <= pagesIteratorEnd; i++) {
-							%>
-
-								<aui:option label="<%= i %>" selected="<%= (i == cur) %>" />
-
-							<%
-							}
-							%>
-
-						</aui:select>
-					</c:otherwise>
-				</c:choose>
-			</div>
-		</c:if>
-
-		<div class="page-links">
+	<div class="aui-clearfix lfr-pagination">
+		<ul class="aui-pager lfr-pagination-buttons">
 			<c:if test='<%= type.equals("approximate") || type.equals("more") || type.equals("regular") %>'>
-				<c:choose>
-					<c:when test="<%= cur != 1 %>">
-						<a class="first" href="<%= _getHREF(formName, curParam, 1, jsCall, url, urlAnchor) %>" target="<%= target %>">
-					</c:when>
-					<c:otherwise>
-						<span class="first">
-					</c:otherwise>
-				</c:choose>
-
-				<liferay-ui:message key="first" />
-
-				<c:choose>
-					<c:when test="<%= cur != 1 %>">
-						</a>
-					</c:when>
-					<c:otherwise>
-						</span>
-					</c:otherwise>
-				</c:choose>
-			</c:if>
-
-			<c:choose>
-				<c:when test="<%= cur != 1 %>">
-					<a class="previous" href="<%= _getHREF(formName, curParam, cur - 1, jsCall, url, urlAnchor) %>" target="<%= target %>">
-				</c:when>
-				<c:when test='<%= type.equals("approximate") || type.equals("more") || type.equals("regular") %>'>
-					<span class="previous">
-				</c:when>
-			</c:choose>
-
-			<c:if test='<%= (type.equals("approximate") || type.equals("more") || type.equals("regular") || cur != 1) %>'>
-				<liferay-ui:message key="previous" />
-			</c:if>
-
-			<c:choose>
-				<c:when test="<%= cur != 1 %>">
+				<li class="first <%= (cur != 1) ? "" : "aui-disabled" %>">
+					<a href="<%= (cur != 1) ? _getHREF(formName, curParam, 1, jsCall, url, urlAnchor) : "javascript:;" %>" target="<%= target %>">
+						&larr; <liferay-ui:message key="first" />
 					</a>
-				</c:when>
-				<c:when test='<%= type.equals("approximate") || type.equals("more") || type.equals("regular") %>'>
-					</span>
-				</c:when>
-			</c:choose>
-
-			<c:choose>
-				<c:when test="<%= cur != pages %>">
-					<a class="next" href="<%= _getHREF(formName, curParam, cur + 1, jsCall, url, urlAnchor) %>" target="<%= target %>">
-				</c:when>
-				<c:when test='<%= type.equals("approximate") || type.equals("more") || type.equals("regular") %>'>
-					<span class="next">
-				</c:when>
-			</c:choose>
-
-			<c:if test='<%= (type.equals("approximate") || type.equals("more") || type.equals("regular") || cur != pages) %>'>
-				<c:choose>
-					<c:when test='<%= type.equals("approximate") || type.equals("more") %>'>
-						<liferay-ui:message key="more" />
-					</c:when>
-					<c:otherwise>
-						<liferay-ui:message key="next" />
-					</c:otherwise>
-				</c:choose>
+				</li>
 			</c:if>
 
-			<c:choose>
-				<c:when test="<%= cur != pages %>">
-					</a>
-				</c:when>
-				<c:when test='<%= type.equals("approximate") || type.equals("more") || type.equals("regular") %>'>
-					</span>
-				</c:when>
-			</c:choose>
+			<li class="previous <%= (cur != 1) ? "" : "aui-disabled" %>">
+				<a href="<%= (cur != 1) ? _getHREF(formName, curParam, cur - 1, jsCall, url, urlAnchor) : "javascript:;" %>" target="<%= target %>">
+					<liferay-ui:message key="previous" />
+				</a>
+			</li>
+
+			<li class="next <%= (cur != pages) ? "" : "aui-disabled" %>">
+				<a href="<%= (cur != pages) ? _getHREF(formName, curParam, cur + 1, jsCall, url, urlAnchor) : "javascript:;" %>" target="<%= target %>">
+					<c:if test='<%= (type.equals("approximate") || type.equals("more") || type.equals("regular")) %>'>
+						<c:choose>
+							<c:when test='<%= type.equals("approximate") || type.equals("more") %>'>
+								<liferay-ui:message key="more" />
+							</c:when>
+							<c:otherwise>
+								<liferay-ui:message key="next" />
+							</c:otherwise>
+						</c:choose>
+					</c:if>
+				</a>
+			</li>
 
 			<c:if test='<%= type.equals("regular") %>'>
-				<c:choose>
-					<c:when test="<%= cur != pages %>">
-						<a class="last" href="<%= _getHREF(formName, curParam, pages, jsCall, url, urlAnchor) %>" target="<%= target %>">
-					</c:when>
-					<c:otherwise>
-						<span class="last">
-					</c:otherwise>
-				</c:choose>
-
-				<liferay-ui:message key="last" />
-
-				<c:choose>
-					<c:when test="<%= cur != pages %>">
-						</a>
-					</c:when>
-					<c:otherwise>
-						</span>
-					</c:otherwise>
-				</c:choose>
+				<li class="next <%= (cur != pages) ? "" : "aui-disabled" %>">
+					<a href="<%= (cur != pages) ? _getHREF(formName, curParam, pages, jsCall, url, urlAnchor) : "javascript:;" %>" target="<%= target %>">
+						<liferay-ui:message key="last" /> &rarr;
+					</a>
+				</li>
 			</c:if>
-		</div>
+		</ul>
+
+		<c:if test='<%= type.equals("regular") %>'>
+			<c:if test="<%= PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES.length > 0 %>">
+				<div class="lfr-pagination-config">
+					<div class="lfr-pagination-page-selector">
+						<c:choose>
+							<c:when test="<%= themeDisplay.isFacebook() %>">
+								<liferay-ui:message key="page" />
+
+								<%= cur %>
+							</c:when>
+							<c:otherwise>
+
+								<%
+								String suffix = LanguageUtil.get(pageContext, "of") + StringPool.SPACE + numberFormat.format(pages);
+
+								if (type.equals("approximate") || type.equals("more")) {
+									suffix = StringPool.BLANK;
+								}
+								%>
+
+								<liferay-ui:icon-menu
+									cssClass="current-page-menu"
+									direction="down"
+									icon=""
+									message='<%= LanguageUtil.get(pageContext, "page") + StringPool.SPACE + cur + StringPool.SPACE + suffix %>'
+									showWhenSingleIcon="true"
+								>
+
+									<%
+									int pagesIteratorMax = maxPages;
+									int pagesIteratorBegin = 1;
+									int pagesIteratorEnd = pages;
+
+									if (pages > pagesIteratorMax) {
+										pagesIteratorBegin = cur - pagesIteratorMax;
+										pagesIteratorEnd = cur + pagesIteratorMax;
+
+										if (pagesIteratorBegin < 1) {
+											pagesIteratorBegin = 1;
+										}
+
+										if (pagesIteratorEnd > pages) {
+											pagesIteratorEnd = pages;
+										}
+									}
+
+									for (int i = pagesIteratorBegin; i <= pagesIteratorEnd; i++) {
+									%>
+
+										<liferay-ui:icon
+											message="<%= String.valueOf(i) %>"
+											url='<%= url + namespace + curParam + "=" + i + urlAnchor %>'
+										/>
+
+									<%
+									}
+									%>
+
+								</liferay-ui:icon-menu>
+							</c:otherwise>
+						</c:choose>
+					</div>
+					<div class="lfr-pagination-delta-selector">
+						<c:choose>
+							<c:when test="<%= !deltaConfigurable || themeDisplay.isFacebook() %>">
+								&mdash;
+
+								<%= delta %>
+
+								<liferay-ui:message key="items-per-page" />
+							</c:when>
+							<c:otherwise>
+								<liferay-ui:icon-menu
+									direction="down"
+									icon=""
+									message='<%= delta + StringPool.SPACE + LanguageUtil.get(pageContext, "items-per-page") %>'
+									showWhenSingleIcon="true"
+								>
+
+									<%
+									for (int curDelta : PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) {
+										if (curDelta > SearchContainer.MAX_DELTA) {
+											continue;
+										}
+									%>
+
+										<liferay-ui:icon
+											cssClass='<%= (delta == curDelta) ? "aui-active" : "" %>'
+											message="<%= String.valueOf(curDelta) %>"
+											url='<%= deltaURL + "&" + namespace + deltaParam + "=" + curDelta + urlAnchor %>'
+										/>
+
+									<%
+									}
+									%>
+
+								</liferay-ui:icon-menu>
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</c:if>
+			</div>
+		</c:if>
 	</div>
+</c:if>
+
+<div class="separator"><!-- --></div>
+
+<c:if test='<%= type.equals("approximate") || type.equals("more") || type.equals("regular") %>'>
+	<%@ include file="/html/taglib/ui/page_iterator/showing_x_results.jspf" %>
 </c:if>
 
 <c:if test='<%= type.equals("approximate") || type.equals("more") || type.equals("regular") || (type.equals("article") && (total > resultRowsSize)) %>'>
 	</div>
-</c:if>
-
-<c:if test='<%= type.equals("approximate") || type.equals("more") || type.equals("regular") && !themeDisplay.isFacebook() %>'>
-	<aui:script>
-		Liferay.provide(
-			window,
-			'<%= namespace %><%= curParam %>updateCur',
-			function(box) {
-				var A = AUI();
-
-				var cur = A.one(box).val();
-
-				if (<%= Validator.isNotNull(url) %>) {
-					var href = "<%= url %><%= namespace %><%= curParam %>=" + cur + "<%= urlAnchor %>";
-
-					location.href = href;
-				}
-				else {
-					document.<%= formName %>.<%= curParam %>.value = cur;
-
-					<%= jsCall %>;
-				}
-			},
-			['aui-base']
-		);
-
-		Liferay.provide(
-			window,
-			'<%= namespace %><%= deltaParam %>updateDelta',
-			function(box) {
-				var A = AUI();
-
-				var delta = A.one(box).val();
-
-				if (<%= Validator.isNotNull(url) %>) {
-					var href = "<%= deltaURL %>&<%= namespace %><%= deltaParam %>=" + delta + "<%= urlAnchor %>";
-
-					location.href = href;
-				}
-				else {
-					document.<%= formName %>.<%= deltaParam %>.value = delta;
-
-					<%= jsCall %>;
-				}
-			},
-			['aui-base']
-		);
-	</aui:script>
 </c:if>
 
 <%!
