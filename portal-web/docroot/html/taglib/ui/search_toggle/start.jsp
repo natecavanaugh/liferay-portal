@@ -23,7 +23,7 @@
 <div class="taglib-search-toggle">
 	<div class="aui-form-search">
 		<div class="aui-input-append" id="<%= id %>simple">
-			<input class="aui-search-query aui-span2" id="<%= id + displayTerms.KEYWORDS %>" name="<%= displayTerms.KEYWORDS %>" placeholder="<liferay-ui:message key="keywords" />" type="text" value="<%= displayTerms.getKeywords() %>" />
+			<input class="aui-search-query aui-span9" id="<%= id + displayTerms.KEYWORDS %>" name="<%= displayTerms.KEYWORDS %>" placeholder="<liferay-ui:message key="keywords" />" type="text" value="<%= displayTerms.getKeywords() %>" />
 
 			<button class="aui-btn" type="submit">
 				<%= LanguageUtil.get(pageContext, buttonLabel, "search") %>
