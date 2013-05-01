@@ -12,7 +12,11 @@ AUI.add(
 		var NAME = 'liferaynavigationinteraction';
 
 		var hideMenu = function() {
-			Liferay.fire('hideNavigationMenu', MAP_HOVER);
+			if (MAP_HOVER.menu) {
+				Liferay.fire('hideNavigationMenu', MAP_HOVER);
+
+				MAP_HOVER = {};
+			}
 		};
 
 		var NavigationInteraction = A.Component.create(
@@ -179,19 +183,40 @@ AUI.add(
 
 						event.halt();
 
-						var focusManager = instance._focusManager;
+						var menuOld = MAP_HOVER.menu;
 
-						var activeDescendant = focusManager.get(ACTIVE_DESCENDANT);
-						var descendants = focusManager.get('descendants');
+						var newMenuIndex = event.newVal;
 
-						if (!(instance._lastShownMenu && (event.type.indexOf('focusedChange') !== -1))) {
-							if (MAP_HOVER.menu) {
-								Liferay.fire('hideNavigationMenu', MAP_HOVER);
+						var handleMenuToggle = (newMenuIndex || newMenuIndex === 0);
+
+						if (handleMenuToggle) {
+							var focusManager = instance._focusManager;
+
+							var activeDescendant = focusManager.get(ACTIVE_DESCENDANT);
+							var descendants = focusManager.get('descendants');
+
+							var menuLink = descendants.item(activeDescendant);
+
+							var menuNew = menuLink.ancestor(instance._directChildLi);
+
+							if (!(instance._lastShownMenu && (event.type.indexOf('focusedChange') !== -1))) {
+								var updateMenu = (menuOld && menuOld != menuNew);
+
+								if (updateMenu) {
+									Liferay.fire('hideNavigationMenu', MAP_HOVER);
+								}
+
+								if (!menuOld || updateMenu) {
+									MAP_HOVER.menu = menuNew;
+
+									Liferay.fire('showNavigationMenu', MAP_HOVER);
+								}
 							}
+						}
+						else if (menuOld) {
+							Liferay.fire('hideNavigationMenu', MAP_HOVER);
 
-							MAP_HOVER.menu = descendants.item(activeDescendant).ancestors(instance._directChildLi);
-
-							Liferay.fire('showNavigationMenu', MAP_HOVER);
+							MAP_HOVER = {};
 						}
 					}
 				}
