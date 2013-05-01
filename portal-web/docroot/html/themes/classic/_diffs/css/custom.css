@@ -137,6 +137,10 @@ hr, .separator {
 		margin: 0 1px;
 		padding: 3px 15px;
 		text-decoration: none;
+
+		.touch & {
+			padding: 10px 20px;
+		}
 	}
 
 	.yui3-dd-drop a {
