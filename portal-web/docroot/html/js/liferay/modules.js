@@ -77,6 +77,7 @@
 			'message': ['aui-base', 'liferay-store'],
 			'navigation': [],
 			'navigation-interaction': ['node-focusmanager', 'plugin'],
+			'navigation-interaction-touch': ['event-touch', 'liferay-navigation-interaction'],
 			'navigation-touch': ['event-touch', 'liferay-navigation'],
 			'notice': ['aui-base'],
 			'panel': ['aui-base', 'liferay-store'],
@@ -186,6 +187,16 @@
 				return !A.Object.owns(document.createElement('input'), 'placeholder');
 			},
 			trigger: 'liferay-form'
+		}
+	);
+
+	addPlugin(
+		{
+			name: 'liferay-navigation-interaction-touch',
+			test: function(A) {
+				return A.UA.touch;
+			},
+			trigger: 'liferay-navigation-interaction'
 		}
 	);
 
