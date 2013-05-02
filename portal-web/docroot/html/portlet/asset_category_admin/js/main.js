@@ -1788,6 +1788,7 @@ AUI.add(
 
 							if (selectNode) {
 								selectedVocabularyId = toInt(selectedVocabularyId);
+								var selectedVocabularyIndex;
 
 								selectNode.empty();
 
@@ -1800,6 +1801,8 @@ AUI.add(
 
 										if (item.vocabularyId == selectedVocabularyId) {
 											item[STR_SELECTED] = STR_SELECTED;
+
+											selectedVocabularyIndex = index;
 										}
 
 										buffer.push(
@@ -1816,6 +1819,8 @@ AUI.add(
 								);
 
 								selectNode.append(buffer.join(STR_EMPTY));
+
+								selectNode._node.selectedIndex = selectedVocabularyIndex;
 							}
 						}
 					},
