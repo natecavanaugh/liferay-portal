@@ -63,10 +63,10 @@ for (int i = 0; i < choices.size(); i++) {
 %>
 
 <tr class="<%= className %>" onMouseEnter="this.className = '<%= classHoverName %>';" onMouseLeave="this.className = '<%= className %>';" style="font-size: x-small;">
-	<td>
+	<td class="localized">
 		<%= percentFormat.format(votesPercent) %>
 	</td>
-	<td>
+	<td class="localized">
 		<%= numberFormat.format(choiceVotes) %>
 	</td>
 
