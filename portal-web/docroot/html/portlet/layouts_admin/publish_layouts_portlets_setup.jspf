@@ -1,0 +1,82 @@
+<%--
+/**
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+--%>
+
+<div>
+	<ul class="lfr-tree unstyled">
+		<li class="tree-item">
+			<aui:input label="setup" name="<%= PortletDataHandlerKeys.PORTLET_SETUP %>" type="checkbox" value="<%= true %>" />
+		</li>
+		<li class="tree-item">
+			<aui:input helpMessage="import-user-preferences-help" label="user-preferences" name="<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES %>" type="checkbox" value="<%= false %>" />
+		</li>
+		<li class="tree-item">
+			<ul id="<portlet:namespace />portletDataControls">
+				<li class="tree-item">
+					<aui:fieldset cssClass="portlet-data-section" label="applications">
+						<ul id="<portlet:namespace />portletDataList">
+
+						<%
+						Set<String> portletDataHandlerClasses = new HashSet<String>();
+
+						for (Portlet portlet : portletsList) {
+							String portletDataHandlerClass = portlet.getPortletDataHandlerClass();
+
+							if (!portletDataHandlerClasses.contains(portletDataHandlerClass)) {
+								portletDataHandlerClasses.add(portletDataHandlerClass);
+							}
+							else {
+								continue;
+							}
+
+							PortletDataHandler portletDataHandler = portlet.getPortletDataHandlerInstance();
+
+							try {
+								PortletDataHandlerControl[] controls = portletDataHandler.getExportControls();
+
+								if (controls != null) {
+									String rootPortletId = portlet.getRootPortletId();
+
+									boolean checked = GetterUtil.getBoolean(liveGroupTypeSettings.getProperty(StagingConstants.STAGED_PORTLET + portlet.getRootPortletId()), portletDataHandler.isPublishToLiveByDefault());
+						%>
+
+									<li class="tree-item">
+										<aui:input disabled="<%= !checked %>" label="<%= PortalUtil.getPortletTitle(portlet, application, locale) %>" name="<%= PortletDataHandlerKeys.PORTLET_SETUP + StringPool.UNDERLINE + rootPortletId %>" type="checkbox" value="<%= true %>" />
+									</li>
+
+						<%
+								}
+							}
+							catch (PortletDataException pde) {
+							%>
+
+								<li class="tree-item">
+									<div class="portlet-msg-error">
+										<%= PortalUtil.getPortletTitle(portlet, application, locale) %>: <%= LanguageUtil.get(pageContext, "error-initializing-import-controls") %>
+									</div>
+								</li>
+
+						<%
+							}
+						}
+						%>
+
+						</ul>
+					</aui:fieldset>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>
