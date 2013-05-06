@@ -441,8 +441,14 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 						</liferay-ui:panel>
 					</c:if>
 
-					<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= true %>" id="layoutsAdminExportPagesPortletsPanel" persistState="<%= true %>" title="applications">
-						<%@ include file="/html/portlet/layouts_admin/publish_layouts_portlets.jspf" %>
+					<%@ include file="/html/portlet/layouts_admin/publish_layouts_portlets.jspf" %>
+
+					<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= true %>" id="layoutsAdminExportPagesPortletsSetupPanel" persistState="<%= true %>" title="application-configuration">
+						<%@ include file="/html/portlet/layouts_admin/publish_layouts_portlets_setup.jspf" %>
+					</liferay-ui:panel>
+
+					<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= true %>" id="layoutsAdminExportPagesPortletsDataPanel" persistState="<%= true %>" title="content">
+						<%@ include file="/html/portlet/layouts_admin/publish_layouts_portlets_data.jspf" %>
 					</liferay-ui:panel>
 
 					<c:if test="<%= !selGroup.isCompany() %>">
