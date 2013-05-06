@@ -225,12 +225,8 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 		padding-top: 5px;
 	}
 
-	#<portlet:namespace />exportPagesFm .export-pages-panel-container {
-		margin: 1em 0;
-	}
-
-	#<portlet:namespace />exportPagesFm .export-pages-panel-container .lfr-panel-content{
-		padding: 1em;
+	#<portlet:namespace />exportPagesFm {
+		padding: 10px;
 	}
 
 	#<portlet:namespace />exportPagesFm .selected-pages-option .field-content {
@@ -434,41 +430,41 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 					</c:otherwise>
 				</c:choose>
 
-				<liferay-ui:panel-container cssClass="export-pages-panel-container" extended="<%= true %>" id="layoutsAdminExportPagesPanelContainer" persistState="<%= true %>">
+				<div class="export-dialog-tree">
 					<c:if test="<%= !selGroup.isCompany() %>">
-						<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="layoutsAdminExportPagesPagesPanel" persistState="<%= true %>" title="pages">
+						<aui:fieldset cssClass="options-group" label="pages">
 							<%@ include file="/html/portlet/layouts_admin/publish_layouts_select_pages.jspf" %>
-						</liferay-ui:panel>
+						</aui:fieldset>
 					</c:if>
 
 					<%@ include file="/html/portlet/layouts_admin/publish_layouts_portlets.jspf" %>
 
-					<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= true %>" id="layoutsAdminExportPagesPortletsSetupPanel" persistState="<%= true %>" title="application-configuration">
+					<aui:fieldset cssClass="options-group" label="application-configuration">
 						<%@ include file="/html/portlet/layouts_admin/publish_layouts_portlets_setup.jspf" %>
-					</liferay-ui:panel>
+					</aui:fieldset>
 
-					<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= true %>" id="layoutsAdminExportPagesPortletsDataPanel" persistState="<%= true %>" title="content">
+					<aui:fieldset cssClass="options-group" label="content">
 						<%@ include file="/html/portlet/layouts_admin/publish_layouts_portlets_data.jspf" %>
-					</liferay-ui:panel>
+					</aui:fieldset>
 
 					<c:if test="<%= !selGroup.isCompany() %>">
-						<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= true %>" id="layoutsAdminExportPagesOptionsPanel" persistState="<%= true %>" title="permissions">
+						<aui:fieldset cssClass="options-group" label="permissions">
 							<%@ include file="/html/portlet/layouts_admin/publish_layouts_permissions.jspf" %>
-						</liferay-ui:panel>
+						</aui:fieldset>
 					</c:if>
 
 					<c:if test="<%= !localPublishing %>">
-						<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= true %>" id="layoutsAdminExportPagesConnectionPanel" persistState="<%= true %>" title="remote-live-connection-settings">
+						<aui:fieldset cssClass="options-group" label="remote-live-connection-settings">
 							<%@ include file="/html/portlet/layouts_admin/publish_layouts_remote_options.jspf" %>
-						</liferay-ui:panel>
+						</aui:fieldset>
 					</c:if>
 
 					<c:if test="<%= schedule %>">
-						<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="layoutsAdminExportPagesSchedulePanel" persistState="<%= true %>" title="schedule">
+						<aui:fieldset cssClass="options-group" label="schedule">
 							<%@ include file="/html/portlet/layouts_admin/publish_layouts_scheduler.jspf" %>
-						</liferay-ui:panel>
+						</aui:fieldset>
 					</c:if>
-				</liferay-ui:panel-container>
+				</div>
 
 				<c:choose>
 					<c:when test="<%= schedule %>">
