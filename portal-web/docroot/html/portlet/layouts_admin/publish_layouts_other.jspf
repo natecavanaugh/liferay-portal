@@ -25,10 +25,6 @@
 				</li>
 			</ul>
 		</li>
-
-		<li class="tree-item">
-			<aui:input helpMessage="export-import-categories-help" label="categories" name="<%= PortletDataHandlerKeys.CATEGORIES %>" type="checkbox" value="<%= false %>" />
-		</li>
 	</ul>
 </div>
 
