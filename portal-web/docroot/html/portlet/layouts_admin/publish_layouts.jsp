@@ -21,7 +21,7 @@ String cmd = ParamUtil.getString(request, "cmd", "publish_to_live");
 
 String tabs1 = ParamUtil.getString(request, "tabs1", "public-pages");
 
-String pagesRedirect = ParamUtil.getString(request, "pagesRedirect");
+String closeRedirect = ParamUtil.getString(request, "closeRedirect");
 
 boolean selectPages = ParamUtil.getBoolean(request, "selectPages");
 boolean schedule = ParamUtil.getBoolean(request, "schedule");
@@ -170,7 +170,7 @@ if (selGroup.isStaged() && selGroup.isStagedRemotely()) {
 }
 
 portletURL.setParameter("struts_action", "/layouts_admin/edit_layouts");
-portletURL.setParameter("pagesRedirect", currentURL);
+portletURL.setParameter("closeRedirect", closeRedirect);
 portletURL.setParameter("groupId", String.valueOf(liveGroupId));
 portletURL.setParameter("privateLayout", String.valueOf(privateLayout));
 
@@ -178,7 +178,7 @@ PortletURL selectURL = renderResponse.createRenderURL();
 
 selectURL.setParameter("struts_action", "/layouts_admin/publish_layouts");
 selectURL.setParameter(Constants.CMD, cmd);
-selectURL.setParameter("pagesRedirect", pagesRedirect);
+selectURL.setParameter("closeRedirect", closeRedirect);
 selectURL.setParameter("groupId", String.valueOf(stagingGroupId));
 selectURL.setParameter("selPlid", String.valueOf(selPlid));
 selectURL.setParameter("privateLayout", String.valueOf(privateLayout));
@@ -313,7 +313,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 				<liferay-ui:message key="note-that-selecting-no-pages-from-tree-reverts-to-implicit-selection-of-all-pages" />
 			</div>
 
-			<div id="<portlet:namespace />pane" class="selected-pages">
+			<div class="selected-pages" id="<portlet:namespace />pane">
 				<liferay-util:include page="/html/portlet/layouts_admin/tree_js.jsp">
 					<liferay-util:param name="selectableTree" value="1" />
 					<liferay-util:param name="treeId" value="<%= treeKey %>" />

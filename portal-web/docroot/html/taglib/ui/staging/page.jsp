@@ -113,7 +113,7 @@ String publishScheduleMessage = LanguageUtil.get(pageContext, publishScheduleDia
 	<liferay-portlet:param name="struts_action" value="/layouts_admin/publish_layouts" />
 	<liferay-portlet:param name="<%= Constants.CMD %>" value='<%= (group.isCompany()) ? "publish_to_remote" : "publish_to_live" %>' />
 	<liferay-portlet:param name="tabs1" value='<%= (privateLayout) ? "private-pages" : "public-pages" %>' />
-	<liferay-portlet:param name="pagesRedirect" value="<%= currentURL %>" />
+	<liferay-portlet:param name="closeRedirect" value="<%= currentURL %>" />
 	<liferay-portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />
 	<liferay-portlet:param name="selPlid" value="<%= String.valueOf(selPlid) %>" />
 </liferay-portlet:renderURL>
