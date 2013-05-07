@@ -188,7 +188,7 @@ AUI.add(
 				'</a>' +
 			'</li>';
 
-		var TPL_VOCABULARY_OPTION = '<option {selected} value="{vocabularyId}">{titleCurrentValue}</option>';
+		var TPL_VOCABULARY_OPTION = '<option value="{vocabularyId}">{titleCurrentValue}</option>';
 
 		var TPL_CATEGORIES_TREE_CONTAINER = '<div class="categories-treeview-container" id="categoriesTreeContainer"></div>';
 
@@ -1788,20 +1788,17 @@ AUI.add(
 
 							if (selectNode) {
 								selectedVocabularyId = toInt(selectedVocabularyId);
-								var selectedVocabularyIndex;
 
 								selectNode.empty();
 
 								var buffer = [];
 
+								var selectedVocabularyIndex;
+
 								A.each(
 									vocabularies,
 									function(item, index, collection) {
-										item[STR_SELECTED] = STR_EMPTY;
-
-										if (item.vocabularyId == selectedVocabularyId) {
-											item[STR_SELECTED] = STR_SELECTED;
-
+										if (item.vocabularyId === selectedVocabularyId) {
 											selectedVocabularyIndex = index;
 										}
 
@@ -1820,7 +1817,7 @@ AUI.add(
 
 								selectNode.append(buffer.join(STR_EMPTY));
 
-								selectNode._node.selectedIndex = selectedVocabularyIndex;
+								selectNode.set('selectedIndex', selectedVocabularyIndex);
 							}
 						}
 					},
