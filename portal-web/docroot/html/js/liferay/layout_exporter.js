@@ -113,23 +113,20 @@
 			var url = options.url;
 			var title = options.title;
 
-			var dialog = Liferay.Util.Window.getWindow(
+			Liferay.Util.openWindow(
 				{
-					dialog: {
-						destroyOnHide: true
+					dialog:
+					{
+						align: Liferay.Util.Window.ALIGN_CENTER,
+						constrain: true,
+						modal: true,
+						width: 600
 					},
-					title: title
-				}
-			);
-
-			dialog.plug(
-				A.Plugin.IO,
-				{
+					title: title,
 					uri: url
 				}
 			);
-		},
-		['aui-io-plugin-deprecated', 'liferay-util-window']
+		}
 	);
 
 	Liferay.provide(

@@ -185,7 +185,7 @@ selectURL.setParameter("privateLayout", String.valueOf(privateLayout));
 selectURL.setParameter("layoutSetBranchId", String.valueOf(layoutSetBranchId));
 selectURL.setParameter("selectPages", String.valueOf(!selectPages));
 selectURL.setParameter("schedule", String.valueOf(schedule));
-selectURL.setWindowState(LiferayWindowState.EXCLUSIVE);
+selectURL.setWindowState(LiferayWindowState.POP_UP);
 
 request.setAttribute("edit_pages.jsp-groupId", new Long(stagingGroupId));
 request.setAttribute("edit_pages.jsp-selPlid", new Long(selPlid));
@@ -199,21 +199,16 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 %>
 
 <c:if test='<%= SessionMessages.contains(renderRequest, "requestProcessed") %>'>
-	<div class="alert alert-success">
 
-		<%
-		String successMessage = (String)SessionMessages.get(renderRequest, "requestProcessed");
-		%>
+	<%
+	String successMessage = (String)SessionMessages.get(renderRequest, "requestProcessed");
+	%>
 
-		<c:choose>
-			<c:when test='<%= Validator.isNotNull(successMessage) && !successMessage.equals("request_processed") %>'>
-				<%= HtmlUtil.escape(successMessage) %>
-			</c:when>
-			<c:otherwise>
-				<liferay-ui:message key="your-request-completed-successfully" />
-			</c:otherwise>
-		</c:choose>
-	</div>
+	<c:if test='<%= Validator.isNotNull(successMessage) && !successMessage.equals("request_processed") %>'>
+		<div class="alert alert-success">
+			<%= HtmlUtil.escape(successMessage) %>
+		</div>
+	</c:if>
 </c:if>
 
 <style type="text/css">
@@ -223,10 +218,6 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 
 	#<portlet:namespace />pane td.first {
 		padding-top: 5px;
-	}
-
-	#<portlet:namespace />exportPagesFm {
-		padding: 10px;
 	}
 
 	#<portlet:namespace />exportPagesFm .selected-pages-option .field-content {
@@ -250,7 +241,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 	}
 </style>
 
-<aui:form action='<%= portletURL.toString() + "&etag=0&strip=0" %>' method="post" name="exportPagesFm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "refreshDialog();" %>' >
+<aui:form action='<%= portletURL.toString() + "&etag=0&strip=0" %>' method="post" name="exportPagesFm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "publishPages();" %>' >
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= cmd %>" />
 	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
 	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
@@ -364,10 +355,10 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 			<aui:button-row>
 
 				<%
-				String taglibOnClick = "Liferay.Util.Window.refreshByChild('#" + renderResponse.getNamespace() + "exportPagesFm');";
+				String selectPagesURL = HttpUtil.setParameter(currentURL, "selectPages", false);
 				%>
 
-				<aui:button onClick="<%= taglibOnClick %>" value="select" />
+				<aui:button href="<%= selectPagesURL %>" value="select" />
 			</aui:button-row>
 		</c:when>
 		<c:otherwise>
@@ -486,79 +477,57 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 <aui:script>
 	Liferay.provide(
 		window,
-		'<portlet:namespace />refreshDialog',
+		'<portlet:namespace />publishPages',
 		function() {
-			var A = AUI();
-
 			if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-" + publishActionKey + "-these-pages") %>')) {
-				var dialog = Liferay.Util.Window.getByChild('#<portlet:namespace />exportPagesFm');
-
-				if (dialog) {
-					dialog.io.set('uri', '<%= portletURL.toString() + "&etag=0&strip=0" %>');
-
-					dialog.io.set(
-						'form',
-						{
-							id: '<portlet:namespace />exportPagesFm'
-						}
-					);
-
-					dialog.io.start();
-				}
+				submitForm(document.<portlet:namespace />exportPagesFm);
 			}
-		},
-		['liferay-util-window']
+		}
 	);
 </aui:script>
 
-<aui:script use="aui-base,aui-modal">
-	var dialog = Liferay.Util.Window.getByChild('#<portlet:namespace />exportPagesFm');
+<c:if test="<%= schedule %>">
+	<aui:script use="aui-base,aui-dialog">
+		var toolbarViewButton = A.one('#<portlet:namespace />exportPagesFm .view-button');
+		var toolbarAddButton = A.one('#<portlet:namespace />exportPagesFm .add-button');
+		var addEventButton = A.one('#<portlet:namespace />addButton');
 
-	if (dialog) {
-		dialog.io.set('uri', '<%= selectURL %>');
+		var allEvents = A.one('#<portlet:namespace />publishedEvents');
+		var publishOptions = A.one('#<portlet:namespace />publishOptions');
 
-		<c:if test="<%= schedule %>">
-			var toolbarViewButton = A.one('#<portlet:namespace />exportPagesFm .view-button');
-			var toolbarAddButton = A.one('#<portlet:namespace />exportPagesFm .add-button');
-			var addEventButton = A.one('#<portlet:namespace />addButton');
+		var viewEvents = function() {
+			toolbarAddButton.removeClass('current');
+			toolbarViewButton.addClass('current');
 
-			var allEvents = A.one('#<portlet:namespace />publishedEvents');
-			var publishOptions = A.one('#<portlet:namespace />publishOptions');
+			allEvents.show();
+			publishOptions.hide();
+		};
 
-			var viewEvents = function() {
-				toolbarAddButton.removeClass('current');
-				toolbarViewButton.addClass('current');
+		addEventButton.on(
+			'click',
+			function(event) {
+				<portlet:namespace />schedulePublishEvent();
 
-				allEvents.show();
-				publishOptions.hide();
-			};
+				viewEvents();
+			}
+		);
 
-			addEventButton.on(
-				'click',
-				function(event) {
-					<portlet:namespace />schedulePublishEvent();
+		toolbarAddButton.one('a').on(
+			'click',
+			function(event) {
+				toolbarAddButton.addClass('current');
+				toolbarViewButton.removeClass('current');
 
-					viewEvents();
-				}
-			);
+				allEvents.hide();
+				publishOptions.show();
+			}
+		);
 
-			toolbarAddButton.one('a').on(
-				'click',
-				function(event) {
-					toolbarAddButton.addClass('current');
-					toolbarViewButton.removeClass('current');
-
-					allEvents.hide();
-					publishOptions.show();
-				}
-			);
-
-			toolbarViewButton.one('a').on(
-				'click',
-				function(event) {
-					viewEvents();
-				}
-			);
-		</c:if>
-	}
-</aui:script>
+		toolbarViewButton.one('a').on(
+			'click',
+			function(event) {
+				viewEvents();
+			}
+		);
+	</aui:script>
+</c:if>
