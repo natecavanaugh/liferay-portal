@@ -165,7 +165,7 @@ scheduledPublishEventsURL.setParameter("destinationName", localPublishing ? Dest
 				}
 			);
 		},
-		['aui-io']
+		['aui-io-request', 'io-form']
 	);
 
 	<portlet:namespace />updateScheduledPublishEventsDiv();
