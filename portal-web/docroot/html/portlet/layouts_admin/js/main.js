@@ -37,6 +37,12 @@ AUI.add(
 					rangeDateRangeNode: defaultConfig,
 					rangeLastNode: defaultConfig,
 					rangeLastPublishNode: defaultConfig,
+					remoteAddressNode: defaultConfig,
+					remoteDeletePortletDataNode: defaultConfig,
+					remotePortNode: defaultConfig,
+					remotePathContextNode: defaultConfig,
+					remoteGroupIdNode: defaultConfig,
+					secureConnectionNode: defaultConfig,
 					themeNode: defaultConfig,
 					themeReferenceNode: defaultConfig,
 					userPreferencesNode: defaultConfig
@@ -74,6 +80,10 @@ AUI.add(
 
 						if (instance._rangeDialog) {
 							instance._rangeDialog.destroy();
+						}
+
+						if (instance._remoteDialog) {
+							instance._remoteDialog.destroy();
 						}
 					},
 
@@ -140,6 +150,19 @@ AUI.add(
 									var rangeDialog = instance._getRangeDialog();
 
 									rangeDialog.show();
+								}
+							);
+						}
+
+						var remoteLink = instance.byId('remoteLink');
+
+						if (remoteLink) {
+							remoteLink.on(
+								STR_CLICK,
+								function(event) {
+									var remoteDialog = instance._getRemoteDialog();
+
+									remoteDialog.show();
 								}
 							);
 						}
@@ -399,6 +422,71 @@ AUI.add(
 						return rangeDialog;
 					},
 
+					_getRemoteDialog: function() {
+						var instance = this;
+
+						var remoteDialog = instance._remoteDialog;
+
+						if (!remoteDialog) {
+							var remoteNode = instance.byId('remote');
+
+							remoteNode.show();
+
+							remoteDialog = Liferay.Util.Window.getWindow(
+								{
+									dialog: {
+										bodyContent: remoteNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function() {
+															instance._handleRemote();
+
+															remoteDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok')
+												},
+												{
+													on: {
+														click: function() {
+															remoteDialog.hide();
+														},
+														label: Liferay.Language.get('cancel')
+													}
+												}
+											]
+										},
+										width: 400
+									},
+									title: instance._dialogTitle
+								}
+							).render(instance.rootNode);
+
+							instance._remoteDialog = remoteDialog;
+						}
+
+						return remoteDialog;
+					},
+
+					_getValue: function(nodeName) {
+						var instance = this;
+
+						var value = STR_EMPTY;
+
+						var node = instance.get(nodeName);
+
+						if (node) {
+							value = node.val();
+						}
+
+						return value;
+					},
+
 					_handleContent: function(portletId) {
 						var instance = this;
 
@@ -563,6 +651,46 @@ AUI.add(
 						}
 
 						instance._refreshSelectedLabel('selectedRange', selectedRange);
+					},
+
+					_handleRemote: function() {
+						var instance = this;
+
+						var selectedRemote = [];
+
+						var remoteAddressValue = instance._getValue('remoteAddressNode');
+
+						if (remoteAddressValue !== STR_EMPTY) {
+							selectedRemote.push(remoteAddressValue);
+						}
+
+						var remotePortValue = instance._getValue('remotePortNode');
+
+						if (remotePortValue !== STR_EMPTY) {
+							selectedRemote.push(remotePortValue);
+						}
+
+						var remotePathContextValue = instance._getValue('remotePathContextNode');
+
+						if (remotePathContextValue !== STR_EMPTY) {
+							selectedRemote.push(remotePathContextValue);
+						}
+
+						var remoteGroupIdValue = instance._getValue('remoteGroupIdNode');
+
+						if (remoteGroupIdValue !== STR_EMPTY) {
+							selectedRemote.push(remoteGroupIdValue);
+						}
+
+						if (instance._isChecked('secureConnectionNode')) {
+							selectedRemote.push(Liferay.Language.get('use-a-secure-network-connection'));
+						}
+
+						if (instance._isChecked('remoteDeletePortletDataNode')) {
+							selectedRemote.push(Liferay.Language.get('delete-portlet-data-before-importing'));
+						}
+
+						instance._refreshSelectedLabel('selectedRemote', selectedRemote.join(', '));
 					},
 
 					_isChecked: function(nodeName) {
