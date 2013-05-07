@@ -80,7 +80,7 @@
 					</li>
 				</ul>
 
-				<aui:input helpMessage="choose-applications-help" id="chooseApplications" label="choose-applications" name="<%= PortletDataHandlerKeys.PORTLET_SETUP_ALL %>" type="radio" value="<%= false %>" />
+				<aui:input helpMessage="choose-applications-export-help" id="chooseApplications" label="choose-applications" name="<%= PortletDataHandlerKeys.PORTLET_SETUP_ALL %>" type="radio" value="<%= false %>" />
 
 				<c:if test="<%= !group.isLayoutPrototype() %>">
 					<ul class="hide" id="<portlet:namespace />selectApplications">
