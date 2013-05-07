@@ -211,36 +211,6 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 	</c:if>
 </c:if>
 
-<style type="text/css">
-	.tree-node-content .incomplete-layout {
-		color: #CCC;
-	}
-
-	#<portlet:namespace />pane td.first {
-		padding-top: 5px;
-	}
-
-	#<portlet:namespace />exportPagesFm .selected-pages-option .field-content {
-		display: inline;
-	}
-
-	#<portlet:namespace />exportPagesFm .layout-variation-name {
-		color: #999;
-	}
-
-	#<portlet:namespace />exportPagesFm .page-not-exportable {
-		color: #933;
-	}
-
-	#<portlet:namespace />exportPagesFm .portlet-data-section legend {
-		font-size: 110%;
-	}
-
-	#<portlet:namespace />exportPagesFm .portlet-data-section .portlet-type-data-section .legend {
-		border-width: 0;
-	}
-</style>
-
 <aui:form action='<%= portletURL.toString() + "&etag=0&strip=0" %>' method="post" name="exportPagesFm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "publishPages();" %>' >
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= cmd %>" />
 	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
@@ -343,7 +313,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 				<liferay-ui:message key="note-that-selecting-no-pages-from-tree-reverts-to-implicit-selection-of-all-pages" />
 			</div>
 
-			<div id="<portlet:namespace />pane">
+			<div id="<portlet:namespace />pane" class="selected-pages">
 				<liferay-util:include page="/html/portlet/layouts_admin/tree_js.jsp">
 					<liferay-util:param name="selectableTree" value="1" />
 					<liferay-util:param name="treeId" value="<%= treeKey %>" />
