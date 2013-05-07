@@ -409,7 +409,7 @@
 	}
 
 	.options-group {
-		margin-bottom: 1em;
+		margin-bottom: 1em !important;
 	}
 
 	.page-not-exportable {
