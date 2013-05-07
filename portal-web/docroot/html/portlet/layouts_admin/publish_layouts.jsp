@@ -484,6 +484,12 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 			rangeDateRangeNode: '#rangeDateRange',
 			rangeLastNode: '#rangeLast',
 			rangeLastPublishNode: '#rangeLastPublish',
+			remoteAddressNode: '#<portlet:namespace />remoteAddress',
+			remoteDeletePortletDataNode: '#remoteDeletePortletDataCheckbox',
+			remotePortNode: '#<portlet:namespace />remotePort',
+			remotePathContextNode: '#<portlet:namespace />remotePathContext',
+			remoteGroupIdNode: '#<portlet:namespace />remoteGroupId',
+			secureConnectionNode: '#secureConnectionCheckbox',
 			themeNode: '#<%= PortletDataHandlerKeys.THEME %>Checkbox',
 			themeReferenceNode: '#<%= PortletDataHandlerKeys.THEME_REFERENCE %>Checkbox',
 			userPreferencesNode: '#<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES %>Checkbox'
