@@ -25,6 +25,10 @@ AUI.add(
 					currentUserIdNode: defaultConfig,
 					deleteMissingLayoutsNode: defaultConfig,
 					deletePortletDataNode: defaultConfig,
+					form: {
+						setter: A.one,
+						value: null
+					},
 					layoutSetSettingsNode: defaultConfig,
 					logoNode: defaultConfig,
 					mirrorNode: defaultConfig,
@@ -76,7 +80,7 @@ AUI.add(
 					_bindUI: function() {
 						var instance = this;
 
-						instance.byId('fm1').delegate(
+						instance.get('form').delegate(
 							STR_CLICK,
 							function(event) {
 								var portletId = event.currentTarget.attr('data-portletid');

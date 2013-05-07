@@ -358,39 +358,6 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 					<aui:input label="title" name="description" type="text" />
 				</c:if>
 
-				<c:choose>
-					<c:when test="<%= layoutSetBranchId > 0 %>">
-						<aui:input name="layoutSetBranchId" type="hidden" value="<%= layoutSetBranchId %>" />
-					</c:when>
-					<c:otherwise>
-						<c:if test="<%= LayoutStagingUtil.isBranchingLayoutSet(selGroup, privateLayout) %>">
-
-							<%
-							List<LayoutSetBranch> layoutSetBranches = LayoutSetBranchLocalServiceUtil.getLayoutSetBranches(stagingGroup.getGroupId(), privateLayout);
-							%>
-
-							<aui:select label="site-pages-variation" name="layoutSetBranchId">
-
-								<%
-								for (LayoutSetBranch layoutSetBranch : layoutSetBranches) {
-									boolean selected = false;
-
-									if (layoutSetBranch.isMaster()) {
-										selected = true;
-									}
-								%>
-
-									<aui:option label="<%= HtmlUtil.escape(layoutSetBranch.getName()) %>" selected="<%= selected %>" value="<%= layoutSetBranch.getLayoutSetBranchId() %>" />
-
-								<%
-								}
-								%>
-
-							</aui:select>
-						</c:if>
-					</c:otherwise>
-				</c:choose>
-
 				<div class="export-dialog-tree">
 					<c:if test="<%= !selGroup.isCompany() %>">
 						<aui:fieldset cssClass="options-group" label="pages">
@@ -501,3 +468,18 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 		);
 	</aui:script>
 </c:if>
+
+<aui:script use="liferay-export-import">
+	new Liferay.ExportImport(
+		{
+			deleteMissingLayoutsNode: '#<%= PortletDataHandlerKeys.DELETE_MISSING_LAYOUTS %>Checkbox',
+			dialogTitle: '<%= UnicodeLanguageUtil.get(pageContext, "content-to-publish") %>',
+			form: document.<portlet:namespace />exportPagesFm,
+			layoutSetSettingsNode: '#<%= PortletDataHandlerKeys.LAYOUT_SET_SETTINGS %>Checkbox',
+			logoNode: '#<%= PortletDataHandlerKeys.LOGO %>Checkbox',
+			namespace: '<portlet:namespace />',
+			themeNode: '#<%= PortletDataHandlerKeys.THEME %>Checkbox',
+			themeReferenceNode: '#<%= PortletDataHandlerKeys.THEME_REFERENCE %>Checkbox'
+		}
+	);
+</aui:script>
