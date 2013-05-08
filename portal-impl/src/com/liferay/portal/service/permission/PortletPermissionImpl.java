@@ -422,6 +422,31 @@ public class PortletPermissionImpl implements PortletPermission {
 		return access;
 	}
 
+	public boolean hasAnyConfigurePermission(
+			PermissionChecker permissionChecker, long groupId, Layout layout,
+			String actionId)
+		throws PortalException, SystemException {
+
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
+
+		List<Portlet> portlets = layoutTypePortlet.getAllPortlets();
+
+		for (Portlet portlet: portlets) {
+			String portletId =
+				PortletConstants.getRootPortletId(portlet.getPortletId());
+
+			if (contains(
+					permissionChecker, groupId, null, portletId,
+					actionId)) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public boolean hasControlPanelAccessPermission(
 			PermissionChecker permissionChecker, long groupId,
 			Collection<Portlet> portlets)
