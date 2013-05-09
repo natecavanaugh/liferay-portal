@@ -447,6 +447,10 @@
 	}
 }
 
+.lfr-tree li {
+	list-style: none;
+}
+
 .lfr-tree-loading-icon {
 	margin: 0 auto;
 	padding-top: 5px;
