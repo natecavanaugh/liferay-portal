@@ -785,7 +785,12 @@ public class PortletContainerImpl implements PortletContainer {
 
 					bufferCacheServletResponse.setCharBuffer(null);
 
-					return;
+					requestDispatcher =
+						DirectRequestDispatcherFactoryUtil.getRequestDispatcher(
+							request, "/html/portal/portlet_not_rendered.jsp");
+
+					requestDispatcher.include(
+						request, bufferCacheServletResponse);
 				}
 			}
 
