@@ -58,10 +58,10 @@ for (int i = 0; i < choices.size(); i++) {
 
 <tbody class="table-data">
 <tr>
-	<td class="table-cell">
+	<td class="nobr table-cell">
 		<%= percentFormat.format(votesPercent) %>
 	</td>
-	<td class="table-cell">
+	<td class="nobr table-cell">
 		<%= numberFormat.format(choiceVotes) %>
 	</td>
 
