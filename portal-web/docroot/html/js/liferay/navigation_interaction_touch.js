@@ -1,9 +1,9 @@
 AUI.add(
 	'liferay-navigation-interaction-touch',
 	function(A) {
-		var NavigationInterProto = Liferay.NavigationInteraction.prototype;
+		var NavigationInteractionProto = Liferay.NavigationInteraction.prototype;
 
-		NavigationInterProto._initChildMenuHandlers = function(navigation) {
+		NavigationInteractionProto._initChildMenuHandlers = function(navigation) {
 			var instance = this;
 
 			if (navigation) {
@@ -11,9 +11,9 @@ AUI.add(
 			}
 		};
 
-		NavigationInterProto._initNodeFocusManager = A.Lang.emptyFn;
+		NavigationInteractionProto._initNodeFocusManager = A.Lang.emptyFn;
 
-		NavigationInterProto._onTouchClick = function(event) {
+		NavigationInteractionProto._onTouchClick = function(event) {
 			var instance = this;
 
 			var menuNew = event.currentTarget.ancestor(instance._directChildLi);
