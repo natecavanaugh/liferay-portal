@@ -38,7 +38,7 @@ if (scheduleCMD.equals("schedule_copy_from_live")) {
 }
 %>
 
-<ul class="lfr-tree lfr-component">
+<ul class="lfr-tree unstyled">
 	<li class="tree-item">
 		<aui:input name="jobName" type="hidden" />
 

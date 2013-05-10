@@ -58,7 +58,7 @@
 
 			<li>
 				<div class="hide" id="<portlet:namespace />range">
-					<ul class="lfr-tree lfr-component">
+					<ul class="lfr-tree unstyled">
 						<li class="tree-item">
 							<aui:fieldset cssClass="portlet-data-section" label="filter-to-publish-by-date">
 								<aui:input id="rangeAll" label="all" name="range" type="radio" value="all" />
@@ -200,7 +200,7 @@
 					%>
 
 						<div class="hide" id="<portlet:namespace />content_<%= portlet.getPortletId() %>">
-							<ul class="lfr-tree lfr-component">
+							<ul class="lfr-tree unstyled">
 								<li class="tree-item">
 									<aui:fieldset cssClass="portlet-type-data-section" label="<%= portletTitle %>">
 
