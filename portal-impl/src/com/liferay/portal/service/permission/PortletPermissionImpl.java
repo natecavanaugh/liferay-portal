@@ -422,7 +422,7 @@ public class PortletPermissionImpl implements PortletPermission {
 		return access;
 	}
 
-	public boolean hasAnyConfigurePermission(
+	public boolean hasAnyConfigurationPermission(
 			PermissionChecker permissionChecker, long groupId, Layout layout,
 			String actionId)
 		throws PortalException, SystemException {
@@ -430,15 +430,10 @@ public class PortletPermissionImpl implements PortletPermission {
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();
 
-		List<Portlet> portlets = layoutTypePortlet.getAllPortlets();
-
-		for (Portlet portlet: portlets) {
-			String portletId =
-				PortletConstants.getRootPortletId(portlet.getPortletId());
-
+		for (Portlet portlet : layoutTypePortlet.getAllPortlets()) {
 			if (contains(
-					permissionChecker, groupId, null, portletId,
-					actionId)) {
+					permissionChecker, groupId, null,
+					portlet.getRootPortletId(), actionId)) {
 
 				return true;
 			}
