@@ -85,6 +85,10 @@ AUI.add(
 						if (instance._remoteDialog) {
 							instance._remoteDialog.destroy();
 						}
+
+						if (instance._scheduledPublishingEventsDialog) {
+							instance._scheduledPublishingEventsDialog.destroy();
+						}
 					},
 
 					_bindUI: function() {
@@ -163,6 +167,19 @@ AUI.add(
 									var remoteDialog = instance._getRemoteDialog();
 
 									remoteDialog.show();
+								}
+							);
+						}
+
+						var scheduledPublishingEventsLink = instance.byId('scheduledPublishingEventsLink');
+
+						if (scheduledPublishingEventsLink) {
+							scheduledPublishingEventsLink.on(
+								STR_CLICK,
+								function(event) {
+									var scheduledPublishingEventsDialog = instance._getScheduledPublishingEventsDialog();
+
+									scheduledPublishingEventsDialog.show();
 								}
 							);
 						}
@@ -471,6 +488,47 @@ AUI.add(
 						}
 
 						return remoteDialog;
+					},
+
+					_getScheduledPublishingEventsDialog: function() {
+						var instance = this;
+
+						var scheduledPublishingEventsDialog = instance._scheduledPublishingEventsDialog;
+
+						if (!scheduledPublishingEventsDialog) {
+							var scheduledPublishingEventsNode = instance.byId('scheduledPublishingEvents');
+
+							scheduledPublishingEventsNode.show();
+
+							scheduledPublishingEventsDialog = Liferay.Util.Window.getWindow(
+								{
+									dialog: {
+										bodyContent: scheduledPublishingEventsNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function() {
+															scheduledPublishingEventsDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('close')
+												}
+											]
+										},
+										width: 400
+									},
+									title: Liferay.Language.get('scheduled-events')
+								}
+							).render(instance.rootNode);
+
+							instance._scheduledPublishingEventsDialog = scheduledPublishingEventsDialog;
+						}
+
+						return scheduledPublishingEventsDialog;
 					},
 
 					_getValue: function(nodeName) {
