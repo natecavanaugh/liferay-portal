@@ -432,6 +432,13 @@ public class PortletPermissionImpl implements PortletPermission {
 
 		for (Portlet portlet : layoutTypePortlet.getAllPortlets()) {
 			if (contains(
+					permissionChecker, groupId, layout,
+					portlet.getPortletId(), actionId)) {
+
+				return true;
+			}
+
+			if (contains(
 					permissionChecker, groupId, null,
 					portlet.getRootPortletId(), actionId)) {
 
