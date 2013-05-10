@@ -332,33 +332,16 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 			</aui:button-row>
 		</c:when>
 		<c:otherwise>
-			<c:if test="<%= schedule %>">
-				<aui:nav-bar>
-					<aui:nav>
-						<aui:nav-item label="view-all" />
-						<aui:nav-item label="add" />
-					</aui:nav>
-				</aui:nav-bar>
-
-				<div class="hide" id="<portlet:namespace />publishedEvents">
-					<liferay-ui:header
-						title="scheduled-events"
-					/>
-
-					<div id="<portlet:namespace />scheduledPublishEventsDiv"></div>
-				</div>
-			</c:if>
-
 			<div id="<portlet:namespace />publishOptions">
-				<c:if test="<%= schedule %>">
-					<liferay-ui:header
-						title="new-event"
-					/>
-
-					<aui:input label="title" name="description" type="text" />
-				</c:if>
-
 				<div class="export-dialog-tree">
+					<aui:input label="title" name="description" type="text" />
+
+					<c:if test="<%= schedule %>">
+						<aui:fieldset cssClass="options-group" label="schedule">
+							<%@ include file="/html/portlet/layouts_admin/publish_layouts_scheduler.jspf" %>
+						</aui:fieldset>
+					</c:if>
+
 					<c:if test="<%= !selGroup.isCompany() %>">
 						<aui:fieldset cssClass="options-group" label="pages">
 							<%@ include file="/html/portlet/layouts_admin/publish_layouts_select_pages.jspf" %>
@@ -386,18 +369,12 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 							<%@ include file="/html/portlet/layouts_admin/publish_layouts_remote_options.jspf" %>
 						</aui:fieldset>
 					</c:if>
-
-					<c:if test="<%= schedule %>">
-						<aui:fieldset cssClass="options-group" label="schedule">
-							<%@ include file="/html/portlet/layouts_admin/publish_layouts_scheduler.jspf" %>
-						</aui:fieldset>
-					</c:if>
 				</div>
 
 				<c:choose>
 					<c:when test="<%= schedule %>">
 						<aui:button-row>
-							<aui:button name="addButton" value="add-event" />
+							<aui:button name="addButton" onClick='<%= renderResponse.getNamespace() + "schedulePublishEvent();" %>' value="add-event" />
 						</aui:button-row>
 					</c:when>
 					<c:otherwise>
@@ -422,52 +399,6 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 		}
 	);
 </aui:script>
-
-<c:if test="<%= schedule %>">
-	<aui:script use="aui-base,aui-dialog">
-		var toolbarViewButton = A.one('#<portlet:namespace />exportPagesFm .view-button');
-		var toolbarAddButton = A.one('#<portlet:namespace />exportPagesFm .add-button');
-		var addEventButton = A.one('#<portlet:namespace />addButton');
-
-		var allEvents = A.one('#<portlet:namespace />publishedEvents');
-		var publishOptions = A.one('#<portlet:namespace />publishOptions');
-
-		var viewEvents = function() {
-			toolbarAddButton.removeClass('current');
-			toolbarViewButton.addClass('current');
-
-			allEvents.show();
-			publishOptions.hide();
-		};
-
-		addEventButton.on(
-			'click',
-			function(event) {
-				<portlet:namespace />schedulePublishEvent();
-
-				viewEvents();
-			}
-		);
-
-		toolbarAddButton.one('a').on(
-			'click',
-			function(event) {
-				toolbarAddButton.addClass('current');
-				toolbarViewButton.removeClass('current');
-
-				allEvents.hide();
-				publishOptions.show();
-			}
-		);
-
-		toolbarViewButton.one('a').on(
-			'click',
-			function(event) {
-				viewEvents();
-			}
-		);
-	</aui:script>
-</c:if>
 
 <aui:script use="liferay-export-import">
 	new Liferay.ExportImport(
