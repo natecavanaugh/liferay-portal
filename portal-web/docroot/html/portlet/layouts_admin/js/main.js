@@ -202,6 +202,7 @@ AUI.add(
 										centered: true,
 										height: 300,
 										modal: true,
+										render: instance.rootNode,
 										toolbars: {
 											footer: [
 												{
@@ -228,7 +229,7 @@ AUI.add(
 									},
 									title: instance._dialogTitle
 								}
-							).render(instance.rootNode);
+							);
 
 							contentNode.setData('contentDialog', contentDialog);
 						}
@@ -253,6 +254,7 @@ AUI.add(
 										centered: true,
 										height: 300,
 										modal: true,
+										render: instance.rootNode,
 										toolbars: {
 											footer: [
 												{
@@ -279,7 +281,7 @@ AUI.add(
 									},
 									title: Liferay.Language.get('application-configuration')
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._globalConfigurationDialog = globalConfigurationDialog;
 						}
@@ -304,6 +306,7 @@ AUI.add(
 										centered: true,
 										height: 300,
 										modal: true,
+										render: instance.rootNode,
 										toolbars: {
 											footer: [
 												{
@@ -330,7 +333,7 @@ AUI.add(
 									},
 									title: instance._dialogTitle
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._globalContentDialog = globalContentDialog;
 						}
@@ -354,6 +357,7 @@ AUI.add(
 										bodyContent: pagesNode,
 										height: 300,
 										modal: true,
+										render: instance.rootNode,
 										toolbars: {
 											footer: [
 												{
@@ -380,7 +384,7 @@ AUI.add(
 									},
 									title: Liferay.Language.get('pages')
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._pagesDialog = pagesDialog;
 						}
@@ -405,6 +409,7 @@ AUI.add(
 										centered: true,
 										height: 300,
 										modal: true,
+										render: instance.rootNode,
 										toolbars: {
 											footer: [
 												{
@@ -431,7 +436,7 @@ AUI.add(
 									},
 									title: instance._dialogTitle
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._rangeDialog = rangeDialog;
 						}
@@ -456,6 +461,7 @@ AUI.add(
 										centered: true,
 										height: 300,
 										modal: true,
+										render: instance.rootNode,
 										toolbars: {
 											footer: [
 												{
@@ -482,7 +488,7 @@ AUI.add(
 									},
 									title: instance._dialogTitle
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._remoteDialog = remoteDialog;
 						}
@@ -507,6 +513,7 @@ AUI.add(
 										centered: true,
 										height: 300,
 										modal: true,
+										render: instance.rootNode,
 										toolbars: {
 											footer: [
 												{
@@ -523,7 +530,7 @@ AUI.add(
 									},
 									title: Liferay.Language.get('scheduled-events')
 								}
-							).render(instance.rootNode);
+							);
 
 							instance._scheduledPublishingEventsDialog = scheduledPublishingEventsDialog;
 						}
