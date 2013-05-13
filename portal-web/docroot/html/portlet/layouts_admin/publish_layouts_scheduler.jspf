@@ -74,7 +74,7 @@ if (scheduleCMD.equals("schedule_copy_from_live")) {
 		'<portlet:namespace />unschedulePublishEvent',
 		function(jobName) {
 			if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-the-scheduled-event") %>')) {
-				document.<portlet:namespace />exportPagesFm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= unscheduleCMD %>';;
+				document.<portlet:namespace />exportPagesFm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= unscheduleCMD %>';
 				document.<portlet:namespace />exportPagesFm.<portlet:namespace />jobName.value = jobName;
 
 				submitForm(document.<portlet:namespace />exportPagesFm);

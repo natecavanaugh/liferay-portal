@@ -25,10 +25,7 @@ AUI.add(
 					currentUserIdNode: defaultConfig,
 					deleteMissingLayoutsNode: defaultConfig,
 					deletePortletDataNode: defaultConfig,
-					form: {
-						setter: A.one,
-						value: null
-					},
+					form: defaultConfig,
 					layoutSetSettingsNode: defaultConfig,
 					logoNode: defaultConfig,
 					mirrorNode: defaultConfig,
@@ -781,6 +778,9 @@ AUI.add(
 
 						if (Lang.isString(val)) {
 							val = instance.one(val);
+						}
+						else {
+							val = A.one(val);
 						}
 
 						return val;
