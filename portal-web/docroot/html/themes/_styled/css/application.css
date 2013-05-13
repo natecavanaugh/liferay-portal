@@ -351,6 +351,12 @@
 
 /* ---------- Tree View ---------- */
 
+.lfr-tree {
+	&, li {
+		list-style: none;
+	}
+}
+
 .tree-node-selected .tree-label {
 	background-color: transparent;
 	font-weight: bold;
