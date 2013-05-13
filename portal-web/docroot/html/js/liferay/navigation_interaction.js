@@ -135,6 +135,26 @@ AUI.add(
 						instance._handleKey(event, DIRECTION_RIGHT);
 					},
 
+					_handleShowNavigationMenu: function(menuNew, menuOld) {
+						var instance = this;
+
+						var mapHover = instance.MAP_HOVER;
+
+						if (!(instance._lastShownMenu && (event.type.indexOf('focusedChange') !== -1))) {
+							var updateMenu = (menuOld && (menuOld != menuNew));
+
+							if (updateMenu) {
+								Liferay.fire('hideNavigationMenu', mapHover);
+							}
+
+							if (!menuOld || updateMenu) {
+								mapHover.menu = menuNew;
+
+								Liferay.fire('showNavigationMenu', mapHover);
+							}
+						}
+					},
+
 					_hideMenu: function() {
 						var instance = this;
 
@@ -220,32 +240,12 @@ AUI.add(
 
 							var menuNew = menuLink.ancestor(instance._directChildLi);
 
-							instance._handleShowNavigationMenu(menuNew, menuOld)
+							instance._handleShowNavigationMenu(menuNew, menuOld);
 						}
 						else if (menuOld) {
 							Liferay.fire('hideNavigationMenu', mapHover);
 
 							instance.MAP_HOVER = {};
-						}
-					},
-
-					_handleShowNavigationMenu: function(menuNew, menuOld) {
-						var instance = this;
-
-						var mapHover = instance.MAP_HOVER;
-
-						if (!(instance._lastShownMenu && (event.type.indexOf('focusedChange') !== -1))) {
-							var updateMenu = (menuOld && (menuOld != menuNew));
-
-							if (updateMenu) {
-								Liferay.fire('hideNavigationMenu', mapHover);
-							}
-
-							if (!menuOld || updateMenu) {
-								mapHover.menu = menuNew;
-
-								Liferay.fire('showNavigationMenu', mapHover);
-							}
 						}
 					}
 				}

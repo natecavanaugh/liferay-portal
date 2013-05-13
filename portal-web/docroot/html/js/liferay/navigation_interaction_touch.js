@@ -1,29 +1,33 @@
 AUI.add(
 	'liferay-navigation-interaction-touch',
 	function(A) {
-		var NavigationInteractionProto = Liferay.NavigationInteraction.prototype;
+		A.mix(
+			Liferay.NavigationInteraction.prototype,
+			{
+				_initChildMenuHandlers: function(navigation) {
+					var instance = this;
 
-		NavigationInteractionProto._initChildMenuHandlers = function(navigation) {
-			var instance = this;
+					if (navigation) {
+						navigation.delegate('click', instance._onTouchClick, '> li > a', instance);
+					}
+				},
 
-			if (navigation) {
-				navigation.delegate('click', instance._onTouchClick, '> li > a', instance);
-			}
-		};
+				_initNodeFocusManager: A.Lang.emptyFn,
 
-		NavigationInteractionProto._initNodeFocusManager = A.Lang.emptyFn;
+				_onTouchClick: function(event) {
+					var instance = this;
 
-		NavigationInteractionProto._onTouchClick = function(event) {
-			var instance = this;
+					var menuNew = event.currentTarget.ancestor(instance._directChildLi);
 
-			var menuNew = event.currentTarget.ancestor(instance._directChildLi);
+					if (menuNew.one('.child-menu') && !menuNew.hasClass('hover')) {
+						event.preventDefault();
+					}
 
-			if (menuNew.one('.child-menu') && !menuNew.hasClass('hover')) {
-				event.preventDefault();
-			}
-
-			instance._handleShowNavigationMenu(menuNew, instance.MAP_HOVER.menu);
-		};
+					instance._handleShowNavigationMenu(menuNew, instance.MAP_HOVER.menu);
+				}
+			},
+			true
+		);
 	},
 	'',
 	{
