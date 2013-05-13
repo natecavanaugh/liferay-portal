@@ -75,7 +75,7 @@
 								yesterday.add(Calendar.DATE, -1);
 								%>
 
-								<ul class="hide date-range-options" id="<portlet:namespace />startEndDate">
+								<ul class="hide date-range-options unstyled" id="<portlet:namespace />startEndDate">
 									<li>
 										<aui:field-wrapper label="start-date">
 											<liferay-ui:input-date
