@@ -17,8 +17,8 @@
 <div class="export-dialog-tree">
 	<ul class="lfr-tree unstyled">
 		<c:if test="<%= supportsSetup %>">
-			<aui:fieldset cssClass="options-group" label="application">
-				<li class="tree-item">
+			<li class="tree-item">
+				<aui:fieldset cssClass="options-group" label="application">
 					<aui:input label="setup" name="<%= PortletDataHandlerKeys.PORTLET_SETUP %>" type="checkbox" value="<%= true %>" />
 
 					<ul id="<portlet:namespace />showChangeGlobalConfiguration">
@@ -40,22 +40,22 @@
 							<aui:input helpMessage="import-user-preferences-help" label="user-preferences" name="<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES %>" type="checkbox" value="<%= false %>" />
 						</aui:fieldset>
 					</div>
-				</li>
-			</aui:fieldset>
+				</aui:fieldset>
+			</li>
 		</c:if>
 
 		<c:if test="<%= supportsLAR %>">
-			<aui:fieldset cssClass="options-group" label="application">
+			<li class="tree-item">
 
 				<%
 				PortletDataHandler portletDataHandler = selPortlet.getPortletDataHandlerInstance();
 				%>
 
-				<li class="tree-item">
+				<aui:fieldset cssClass="options-group" label="application">
 					<aui:input label="content" name='<%= PortletDataHandlerKeys.PORTLET_DATA + "_" + selPortlet.getRootPortletId() %>' type="checkbox" value="<%= portletDataHandler.isPublishToLiveByDefault() %>" />
 
 					<div class="hide" id="<portlet:namespace />content_<%= selPortlet.getRootPortletId() %>">
-						<ul class="lfr-tree lfr-component">
+						<ul class="lfr-tree unstyled">
 
 							<%
 							String selectedContent = StringPool.BLANK;
@@ -115,7 +115,7 @@
 													<c:when test="<%= metadataControls.length > 1 %>">
 														<li class="tree-item">
 															<aui:fieldset cssClass="portlet-type-data-section" label="<%= metadataControls[i].getControlName() %>">
-																<ul id="<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA %>_<%= selPortlet.getRootPortletId() %>Controls">
+																<ul class="lfr-tree unstyled" id="<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA %>_<%= selPortlet.getRootPortletId() %>Controls">
 																	<liferay-util:include page="/html/portlet/layouts_admin/render_controls.jsp" />
 																</ul>
 															</aui:fieldset>
@@ -252,11 +252,11 @@
 					<aui:script>
 						Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + selPortlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeContent');
 					</aui:script>
-				</li>
-			</aui:fieldset>
+				</aui:fieldset>
+			</li>
 
-			<aui:fieldset cssClass="options-group" label="permissions">
-				<li class="tree-item">
+			<li class="tree-item">
+				<aui:fieldset cssClass="options-group" label="permissions">
 					<aui:input helpMessage="export-import-portlet-permissions-help" label="permissions" name="<%= PortletDataHandlerKeys.PERMISSIONS %>" type="checkbox" />
 
 					<ul id="<portlet:namespace />permissionsUl">
@@ -264,8 +264,8 @@
 							<aui:input label="permissions-assigned-to-roles" name="permissionsAssignedToRoles" type="checkbox" value="<%= true %>" />
 						</li>
 					</ul>
-				</li>
-			</aui:fieldset>
+				</aui:fieldset>
+			</li>
 		</c:if>
 	</ul>
 </div>
