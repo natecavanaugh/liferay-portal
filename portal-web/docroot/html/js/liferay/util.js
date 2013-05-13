@@ -1855,18 +1855,24 @@
 			if (radioButton) {
 				var checked = radioButton.get('checked');
 
+				var showBoxes;
+
 				if (Lang.isValue(showBoxIds)) {
 					if (Lang.isArray(showBoxIds)) {
 						showBoxIds = showBoxIds.join(',#');
 					}
 
-					A.all('#' + showBoxIds).toggle(checked);
+					showBoxes = A.all('#' + showBoxIds);
+
+					showBoxes.toggle(checked);
 				}
 
 				radioButton.on(
 					'change',
 					function() {
-						A.all('#' + showBoxIds).show();
+						if (showBoxes) {
+							showBoxes.show();
+						}
 
 						if (Lang.isValue(hideBoxIds)) {
 							if (Lang.isArray(hideBoxIds)) {
