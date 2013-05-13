@@ -1849,23 +1849,24 @@
 	Liferay.provide(
 		Util,
 		'toggleRadio',
-		function(radioId, showBoxId, hideBoxIds) {
+		function(radioId, showBoxIds, hideBoxIds) {
 			var radioButton = A.one('#' + radioId);
-			var showBox = A.one('#' + showBoxId);
 
 			if (radioButton) {
 				var checked = radioButton.get('checked');
 
-				if (showBox) {
-					showBox.toggle(checked);
+				if (Lang.isValue(showBoxIds)) {
+					if (Lang.isArray(showBoxIds)) {
+						showBoxIds = showBoxIds.join(',#');
+					}
+
+					A.all('#' + showBoxIds).toggle(checked);
 				}
 
 				radioButton.on(
 					'change',
 					function() {
-						if (showBox) {
-							showBox.show();
-						}
+						A.all('#' + showBoxIds).show();
 
 						if (Lang.isValue(hideBoxIds)) {
 							if (Lang.isArray(hideBoxIds)) {
