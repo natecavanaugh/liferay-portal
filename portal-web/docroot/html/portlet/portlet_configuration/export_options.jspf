@@ -135,7 +135,7 @@
 								yesterday.add(Calendar.DATE, -1);
 								%>
 
-								<ul class="hide date-range-options unstyled" id="<portlet:namespace />startEndDate">
+								<ul class="date-range-options hide unstyled" id="<portlet:namespace />startEndDate">
 									<li>
 										<aui:field-wrapper label="start-date">
 											<liferay-ui:input-date
@@ -213,7 +213,7 @@
 								data.put("portletid", selPortlet.getRootPortletId());
 								%>
 
-								<aui:a cssClass="modify-link content-link" data="<%= data %>" href="javascript:;" label="change" method="get" />
+								<aui:a cssClass="content-link modify-link" data="<%= data %>" href="javascript:;" label="change" method="get" />
 							</li>
 						</ul>
 

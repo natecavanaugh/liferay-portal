@@ -357,7 +357,7 @@
 										data.put("portletid", portlet.getPortletId());
 										%>
 
-										<aui:a cssClass="modify-link content-link" data="<%= data %>" href="javascript:;" label="change" method="get" />
+										<aui:a cssClass="content-link modify-link" data="<%= data %>" href="javascript:;" label="change" method="get" />
 									</li>
 								</ul>
 
