@@ -40,4 +40,5 @@ else if (displayStyle.equals("vertical")) {
 	data-layout="<%= facebookDisplayStyle %>"
 	data-send="false"
 	data-show_faces="true"
-></div>
+>
+</div>
