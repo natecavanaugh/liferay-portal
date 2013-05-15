@@ -41,7 +41,96 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 
 <liferay-ui:trash-undo portletURL="<%= undoTrashURL %>" />
 
-<liferay-util:include page="/html/portlet/message_boards_admin/top_links.jsp" />
+<aui:nav-bar>
+	<aui:nav>
+		<%
+		String label = "message-boards-home";
+
+		portletURL.setParameter("tabs1", label);
+		portletURL.setParameter("tag", StringPool.BLANK);
+		%>
+
+		<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+
+		<%
+		label = "recent-posts";
+
+		portletURL.setParameter("tabs1", label);
+		%>
+
+		<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+
+		<c:if test="<%= themeDisplay.isSignedIn() %>">
+
+			<%
+			label = "my-posts";
+
+			portletURL.setParameter("tabs1", label);
+			%>
+
+			<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+
+			<c:if test="<%= MBUtil.getEmailMessageAddedEnabled(preferences) || MBUtil.getEmailMessageUpdatedEnabled(preferences) %>">
+
+				<%
+				label = "my-subscriptions";
+
+				portletURL.setParameter("tabs1", label);
+				%>
+
+				<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+			</c:if>
+		</c:if>
+
+		<%
+		label = "statistics";
+
+		portletURL.setParameter("tabs1", label);
+		%>
+
+		<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+
+		<c:if test="<%= MBPermission.contains(permissionChecker, scopeGroupId, ActionKeys.BAN_USER) %>">
+
+			<%
+			label = "banned-users";
+
+			portletURL.setParameter("tabs1", label);
+			%>
+
+			<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+		</c:if>
+	</aui:nav>
+
+	<c:if test="<%= showSearch %>">
+		<liferay-portlet:renderURL varImpl="searchURL">
+			<portlet:param name="struts_action" value="/message_boards/search" />
+		</liferay-portlet:renderURL>
+
+		<div class="navbar-search pull-right">
+			<div class="form-search">
+				<aui:form action="<%= searchURL %>" method="get" name="searchFm">
+					<liferay-portlet:renderURLParams varImpl="searchURL" />
+					<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
+					<aui:input name="breadcrumbsCategoryId" type="hidden" value="<%= categoryId %>" />
+					<aui:input name="searchCategoryId" type="hidden" value="<%= categoryId %>" />
+
+					<div class="input-append">
+						<input class="search-query span9" id="<portlet:namespace/>keywords1" name="<portlet:namespace/>keywords" placeholder="<liferay-ui:message key="keywords" />" type="text" />
+
+						<aui:button primary="<%= false %>" type="submit" value="search" />
+					</div>
+				</aui:form>
+			</div>
+		</div>
+
+		<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) && !themeDisplay.isFacebook() %>">
+			<aui:script>
+				Liferay.Util.focusFormField(document.<portlet:namespace />searchFm.<portlet:namespace />keywords);
+			</aui:script>
+		</c:if>
+	</c:if>
+</aui:nav-bar>
 
 <c:choose>
 	<c:when test='<%= tabs1.equals("message-boards-home") %>'>
