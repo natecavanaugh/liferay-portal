@@ -21,7 +21,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("struts_action", "/journal/view_feeds");
 
-String searchContainerId = StringPool.BLANK;		 
+String searchContainerId = StringPool.BLANK;
 %>
 
 <aui:form action="<%= portletURL.toString() %>" method="post" name="fm">

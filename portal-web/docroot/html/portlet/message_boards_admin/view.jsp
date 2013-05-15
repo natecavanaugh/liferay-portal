@@ -183,6 +183,7 @@ String searchContainerThreadsId = StringPool.BLANK;
 							rowChecker="<%= new RowChecker(renderResponse) %>"
 							total="<%= categoriesCount %>"
 						>
+
 							<%
 								searchContainerCategoriesId = searchContainer.getId(request, renderResponse.getNamespace());
 							%>
@@ -231,6 +232,7 @@ String searchContainerThreadsId = StringPool.BLANK;
 						rowChecker="<%= new RowChecker(renderResponse) %>"
 						total="<%= MBThreadServiceUtil.getThreadsCount(scopeGroupId, categoryId, WorkflowConstants.STATUS_APPROVED) %>"
 					>
+
 						<%
 							searchContainerThreadsId = searchContainer.getId(request, renderResponse.getNamespace());
 						%>

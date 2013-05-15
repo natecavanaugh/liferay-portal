@@ -21,7 +21,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("struts_action", "/blogs_admin/view");
 
-String searchContainerId = StringPool.BLANK;		 
+String searchContainerId = StringPool.BLANK;
 %>
 
 <portlet:actionURL var="undoTrashURL">

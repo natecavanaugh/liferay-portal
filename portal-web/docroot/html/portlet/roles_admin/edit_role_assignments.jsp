@@ -97,6 +97,7 @@ String searchContainerId = StringPool.BLANK;
 
 			searchContainerId = searchContainer.getId(request, renderResponse.getNamespace());
 			%>
+
 		</c:when>
 		<c:when test='<%= tabs2.equals("sites") %>'>
 			<liferay-util:include page="/html/portlet/sites_admin/edit_role_assignments_sites.jsp" />
@@ -106,6 +107,7 @@ String searchContainerId = StringPool.BLANK;
 
 			searchContainerId = searchContainer.getId(request, renderResponse.getNamespace());
 			%>
+
 		</c:when>
 		<c:when test='<%= tabs2.equals("organizations") %>'>
 			<liferay-util:include page="/html/portlet/users_admin/edit_role_assignments_organizations.jsp" />
@@ -115,6 +117,7 @@ String searchContainerId = StringPool.BLANK;
 
 			searchContainerId = searchContainer.getId(request, renderResponse.getNamespace());
 			%>
+
 		</c:when>
 		<c:when test='<%= tabs2.equals("user-groups") %>'>
 			<liferay-util:include page="/html/portlet/users_admin/edit_role_assignments_user_groups.jsp" />
@@ -124,6 +127,7 @@ String searchContainerId = StringPool.BLANK;
 
 			searchContainerId = searchContainer.getId(request, renderResponse.getNamespace());
 			%>
+
 		</c:when>
 	</c:choose>
 </aui:form>
