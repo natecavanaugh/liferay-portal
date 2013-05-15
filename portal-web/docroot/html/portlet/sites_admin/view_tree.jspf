@@ -80,6 +80,8 @@ if ((group != null) && !group.isRoot()) {
 		>
 
 			<%
+			searchContainerId = searchContainer.getId(request, renderResponse.getNamespace());
+
 			if (groupId != 0) {
 				searchContainer.setEmptyResultsMessage(null);
 			}
@@ -123,7 +125,7 @@ if ((group != null) && !group.isRoot()) {
 			</c:if>
 
 			<c:if test="<%= !results.isEmpty() %>">
-				<aui:button onClick='<%= renderResponse.getNamespace() + "deleteSites();" %>' value="delete" />
+				<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteSites();" %>' value="delete" />
 			</c:if>
 
 			<liferay-ui:search-container-row

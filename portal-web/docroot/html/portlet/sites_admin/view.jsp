@@ -37,6 +37,8 @@ searchURL.setParameter("toolbarItem", "view-all-sites");
 pageContext.setAttribute("searchURL", searchURL);
 
 String searchURLString = searchURL.toString();
+
+String searchContainerId = StringPool.BLANK;
 %>
 
 <liferay-ui:success key="membershipRequestSent" message="your-request-was-sent-you-will-receive-a-reply-by-email" />
@@ -91,6 +93,27 @@ String searchURLString = searchURL.toString();
 	</c:choose>
 </aui:form>
 
+<aui:script use="liferay-util-list-fields">
+	function initDeleteButton() {
+		Liferay.Util.toggleDisabled(
+			A.one('#<portlet:namespace />delete'),
+			!Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds")
+		);
+	};
+
+	var searchContainer = A.one('#<portlet:namespace /><%= searchContainerId %>');
+
+	if (searchContainer) {
+		searchContainer.delegate(
+			'change',
+			initDeleteButton,
+			'input[type=checkbox]'
+		);
+	}
+
+	initDeleteButton();
+</aui:script>
+
 <aui:script>
 	function <portlet:namespace />doDeleteSite(id) {
 		var ids = id;
@@ -105,6 +128,7 @@ String searchURLString = searchURL.toString();
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.DELETE %>";
 		document.<portlet:namespace />fm.<portlet:namespace />redirect.value = document.<portlet:namespace />fm.<portlet:namespace />sitesRedirect.value;
 		document.<portlet:namespace />fm.<portlet:namespace />deleteGroupIds.value = siteIds;
+
 		submitForm(document.<portlet:namespace />fm, "<portlet:actionURL><portlet:param name="struts_action" value="/sites_admin/edit_site" /></portlet:actionURL>");
 	}
 
@@ -112,13 +136,7 @@ String searchURLString = searchURL.toString();
 		window,
 		'<portlet:namespace />deleteSites',
 		function() {
-			var siteIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
-
-			if (!siteIds) {
-				return;
-			}
-
-			<portlet:namespace />doDeleteSite(siteIds);
+			<portlet:namespace />doDeleteSite(Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds"));
 		},
 		['liferay-util-list-fields']
 	);

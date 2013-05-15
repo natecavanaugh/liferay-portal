@@ -56,13 +56,13 @@ public class PortletCategoryKeys {
 	public static final String SITES = "sites";
 
 	public static final String USERS = "users";
-	
+
 	private static final String _SITE_ADMINISTRATION_CONFIGURATION =
 		"site_administration.configuration";
-	
+
 	private static final String _SITE_ADMINISTRATION_CONTENT =
 		"site_administration.content";
-	
+
 	private static final String _SITE_ADMINISTRATION_MAIN =
 		"site_administration.main";
 

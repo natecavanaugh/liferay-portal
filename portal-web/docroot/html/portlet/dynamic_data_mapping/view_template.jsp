@@ -48,6 +48,8 @@ if (layout != null) {
 }
 
 String title = ddmDisplay.getViewTemplatesTitle(structure, controlPanel, locale);
+
+String searchContainerId = StringPool.BLANK;
 %>
 
 <liferay-ui:error exception="<%= RequiredTemplateException.class %>">
@@ -95,6 +97,10 @@ String title = ddmDisplay.getViewTemplatesTitle(structure, controlPanel, locale)
 			<liferay-util:param name="classNameId" value="<%= String.valueOf(classNameId) %>" />
 			<liferay-util:param name="classPK" value="<%= String.valueOf(classPK) %>" />
 		</liferay-util:include>
+
+		<%
+			searchContainerId = searchContainer.getId(request, renderResponse.getNamespace());
+		%>
 
 		<liferay-ui:search-container-results>
 			<%@ include file="/html/portlet/dynamic_data_mapping/template_search_results.jspf" %>
@@ -219,7 +225,7 @@ String title = ddmDisplay.getViewTemplatesTitle(structure, controlPanel, locale)
 
 		<c:if test="<%= total > 0 %>">
 			<aui:button-row>
-				<aui:button cssClass="delete-templates-button" onClick='<%= renderResponse.getNamespace() + "deleteTemplates();" %>' value="delete" />
+				<aui:button cssClass="delete-templates-button" disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteTemplates();" %>' value="delete" />
 			</aui:button-row>
 
 			<div class="separator"><!-- --></div>
@@ -228,6 +234,27 @@ String title = ddmDisplay.getViewTemplatesTitle(structure, controlPanel, locale)
 		<liferay-ui:search-iterator />
 	</liferay-ui:search-container>
 </aui:form>
+
+<aui:script use="liferay-util-list-fields">
+	function initDeleteButton() {
+		Liferay.Util.toggleDisabled(
+			A.one('#<portlet:namespace />delete'),
+			!Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds")
+		);
+	};
+
+	var searchContainer = A.one('#<portlet:namespace /><%= searchContainerId %>');
+
+	if (searchContainer) {
+		searchContainer.delegate(
+			'change',
+			initDeleteButton,
+			'input[type=checkbox]'
+		);
+	}
+
+	initDeleteButton();
+</aui:script>
 
 <aui:script>
 	function <portlet:namespace />copyTemplate(uri) {
@@ -255,28 +282,4 @@ String title = ddmDisplay.getViewTemplatesTitle(structure, controlPanel, locale)
 		},
 		['liferay-util-list-fields']
 	);
-</aui:script>
-
-<aui:script use="aui-base">
-	var buttons = A.all('.delete-templates-button');
-
-	if (buttons.size()) {
-		var toggleDisabled = A.bind('toggleDisabled', Liferay.Util, ':button');
-
-		var resultsGrid = A.one('.searchcontainer-content');
-
-		if (resultsGrid) {
-			resultsGrid.delegate(
-				'click',
-				function(event) {
-					var disabled = (resultsGrid.one(':checked') == null);
-
-					toggleDisabled(disabled);
-				},
-				':checkbox'
-			);
-		}
-
-		toggleDisabled(true);
-	}
 </aui:script>
