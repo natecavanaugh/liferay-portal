@@ -252,6 +252,10 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 
 			<liferay-ui:panel collapsible="<%= true %>" cssClass="threads-panel" extended="<%= true %>" id="messageBoardsThreadsPanel" persistState="<%= true %>" title="threads">
 				<aui:form action="<%= portletURL.toString() %>" method="get" name="fm1">
+					<%
+					portletURL.setParameter("tabs1", ParamUtil.getString(request, "tabs1"));
+					%> 
+
 					<aui:input name="<%= Constants.CMD %>" type="hidden" />
 					<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
 					<aui:input name="threadIds" type="hidden" />
@@ -446,6 +450,10 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 		</c:if>
 
 		<aui:form action="<%= portletURL.toString() %>" method="get" name="fm1">
+			<%
+			portletURL.setParameter("tabs1", ParamUtil.getString(request, "tabs1"));
+			%>
+
 			<aui:input name="<%= Constants.CMD %>" type="hidden" />
 			<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
 			<aui:input name="threadIds" type="hidden" />
