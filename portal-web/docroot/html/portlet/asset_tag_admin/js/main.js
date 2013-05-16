@@ -141,9 +141,9 @@ AUI.add(
 
 								instance._removeStagedTagItem(tagItem);
 
-								instance._checkTags(tagItem, false);
+								instance._checkTag(tagItem, false);
 							},
-							'.tag-item-close'
+							'.close'
 						);
 
 						instance._tagsList.on(EVENT_CLICK, instance._onTagsListClick, instance);
@@ -333,12 +333,12 @@ AUI.add(
 
 						selectedTags.each(
 							function(item, index, collection) {
-								instance._checkTags(item, true);
+								instance._checkTag(item, true);
 							}
 						);
 					},
 
-					_checkTags: function(node, checked) {
+					_checkTag: function(node, checked) {
 						var instance = this;
 
 						var tagId = instance._getTagId(node);
@@ -528,8 +528,6 @@ AUI.add(
 						else {
 							alert(Liferay.Language.get('there-are-no-selected-tags'));
 						}
-
-						instance._hideStagedTagsList();
 					},
 
 					_deleteTag: function(tagId, callback) {
@@ -550,12 +548,10 @@ AUI.add(
 						);
 					},
 
-					_displayTagData: function(tagId) {
+					_displayTagData: function() {
 						var instance = this;
 
-						tagId = tagId || instance._selectedTagId;
-
-						if (tagId) {
+						if (instance._selectedTagId) {
 							var tagURL = instance._createURL(ACTION_VIEW, LIFECYCLE_RENDER);
 
 							var ioDetails = instance._getIOTagDetails();
@@ -578,7 +574,9 @@ AUI.add(
 							function(result) {
 								loadingMask.hide();
 
-								instance._prepareTags(result.tags, callback);
+								var tags = result.tags || [];
+
+								instance._prepareTags(tags, callback);
 
 								instance._checkStagedTags();
 							}
@@ -969,14 +967,6 @@ AUI.add(
 						);
 					},
 
-					_hideStagedTagsList: function () {
-						var instance = this;
-
-						instance._stagedTagsList.empty();
-
-						instance._stagedTagsWrapper.hide();
-					},
-
 					_initializeTagPanelAdd: function(callback) {
 						var instance = this;
 
@@ -1130,6 +1120,10 @@ AUI.add(
 									node.remove();
 
 									instance._selectTag(toTagId);
+
+									var fromTag = instance._getStagedTag(fromTagId);
+
+									instance._removeStagedTagItem(fromTag);
 								}
 							);
 						}
@@ -1192,8 +1186,6 @@ AUI.add(
 					},
 
 					_mergeTags: function(fromIds, toId, overrideProperties, callback) {
-						var instance = this;
-
 						Liferay.Service(
 							'/assettag/merge-tags',
 							{
@@ -1203,13 +1195,9 @@ AUI.add(
 							},
 							callback
 						);
-
-						instance._hideStagedTagsList();
 					},
 
 					_mergeTag: function(fromId, toId, callback) {
-						var instance = this;
-
 						Liferay.Service(
 							'/assettag/merge-tags',
 							{
@@ -1219,12 +1207,6 @@ AUI.add(
 							},
 							callback
 						);
-
-						var fromTag = instance._getTagCheck(fromId);
-
-						if (fromTag.attr('checked')) {
-							instance._removeStagedTagItem(fromTag);
-						}
 					},
 
 					_onDeleteTag: function(event) {
@@ -1524,6 +1506,10 @@ AUI.add(
 							instance._sendMessage(MESSAGE_TYPE_SUCCESS, Liferay.Language.get('your-request-processed-successfully'));
 
 							instance._hidePanels();
+
+							instance._stagedTagsList.empty();
+							instance._stagedTagsWrapper.hide();
+
 							instance._loadData();
 						}
 						else {
@@ -1724,9 +1710,9 @@ AUI.add(
 
 						var tagName = instance._getTagName(tagItem.ancestor('li'));
 
-						var tagHTML = '<li data-tagId="' + tagId +'" data-tag="' + tagName + '">' +
+						var tagHTML = '<li class="" data-tagId="' + tagId +'" data-tag="' + tagName + '">' +
 							'<span>' + tagName + '</span>' +
-							'<i class="icon-remove tag-item-close"></i>' +
+							'<button class="close" type="button">x</button>' +
 						'</li>';
 
 						var selectedTag = A.Node.create(tagHTML);

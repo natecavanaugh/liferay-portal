@@ -157,11 +157,17 @@
 				border: 1px solid #CAD8F3;
 				display: inline;
 				float: left;
-				margin: 0 5px 4px 0;
-				padding: 2px 8px 2px 11px;
+				margin: 0 8px 8px 0;
+				padding: 5px;
 
-				.tag-item-close {
-					margin-left: 4px;
+				span {
+					padding: 0 4px 0 8px;
+				}
+
+				.close {
+					font-size: 14px;
+					line-height: 18px;
+					padding: 0 8px 0 4px;
 				}
 			}
 		}
@@ -240,8 +246,6 @@
 
 /* ---------- Extras ---------- */
 
-.portlet-asset-tag-admin .tag-staging-area {
-	li, .tag-item-close {
-		@include border-radius(12px);
-	}
+.portlet-asset-tag-admin .tag-staging-area li {
+	@include border-radius(6px);
 }
