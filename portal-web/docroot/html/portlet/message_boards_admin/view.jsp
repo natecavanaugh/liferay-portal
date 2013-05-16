@@ -60,28 +60,6 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 
 		<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
 
-		<c:if test="<%= themeDisplay.isSignedIn() %>">
-
-			<%
-			label = "my-posts";
-
-			portletURL.setParameter("tabs1", label);
-			%>
-
-			<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
-
-			<c:if test="<%= MBUtil.getEmailMessageAddedEnabled(preferences) || MBUtil.getEmailMessageUpdatedEnabled(preferences) %>">
-
-				<%
-				label = "my-subscriptions";
-
-				portletURL.setParameter("tabs1", label);
-				%>
-
-				<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
-			</c:if>
-		</c:if>
-
 		<%
 		label = "statistics";
 
@@ -134,18 +112,6 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 
 <c:choose>
 	<c:when test='<%= tabs1.equals("message-boards-home") %>'>
-		<liferay-portlet:renderURL varImpl="searchURL">
-			<portlet:param name="struts_action" value="/message_boards/search" />
-		</liferay-portlet:renderURL>
-
-		<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) && !themeDisplay.isFacebook() %>">
-			<aui:script>
-				Liferay.Util.focusFormField(document.<portlet:namespace />searchFm.<portlet:namespace />keywords);
-			</aui:script>
-		</c:if>
-
-		<br />
-
 		<%
 		boolean showAddCategoryButton = MBCategoryPermission.contains(permissionChecker, scopeGroupId, categoryId, ActionKeys.ADD_CATEGORY);
 		boolean showAddMessageButton = MBCategoryPermission.contains(permissionChecker, scopeGroupId, categoryId, ActionKeys.ADD_MESSAGE);
