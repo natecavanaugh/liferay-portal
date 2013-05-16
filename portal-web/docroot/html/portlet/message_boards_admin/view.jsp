@@ -51,7 +51,9 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 
 		<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) && !themeDisplay.isFacebook() %>">
 			<aui:script>
-				Liferay.Util.focusFormField(document.<portlet:namespace />searchFm.<portlet:namespace />keywords);
+				if (document.<portlet:namespace />searchFm) {
+					Liferay.Util.focusFormField(document.<portlet:namespace />searchFm.<portlet:namespace />keywords);
+				}
 			</aui:script>
 		</c:if>
 
