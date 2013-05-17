@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/message_boards/init.jsp" %>
 
 <%
-String tabs1 = ParamUtil.getString(request, "tabs1", "message-boards-home");
+String topLink = ParamUtil.getString(request, "topLink", "message-boards-home");
 
 MBCategory category = (MBCategory)request.getAttribute(WebKeys.MESSAGE_BOARDS_CATEGORY);
 
@@ -28,7 +28,7 @@ MBCategoryDisplay categoryDisplay = new MBCategoryDisplayImpl(scopeGroupId, cate
 PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("struts_action", "/message_boards/view");
-portletURL.setParameter("tabs1", tabs1);
+portletURL.setParameter("topLink", topLink);
 portletURL.setParameter("mbCategoryId", String.valueOf(categoryId));
 
 request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
@@ -46,37 +46,37 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 		<%
 		String label = "message-boards-home";
 
-		portletURL.setParameter("tabs1", label);
+		portletURL.setParameter("topLink", label);
 		portletURL.setParameter("tag", StringPool.BLANK);
 		%>
 
-		<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+		<aui:nav-item cssClass='<%= topLink.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= topLink.equals(label) %>" />
 
 		<%
 		label = "recent-posts";
 
-		portletURL.setParameter("tabs1", label);
+		portletURL.setParameter("topLink", label);
 		%>
 
-		<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+		<aui:nav-item cssClass='<%= topLink.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= topLink.equals(label) %>" />
 
 		<%
 		label = "statistics";
 
-		portletURL.setParameter("tabs1", label);
+		portletURL.setParameter("topLink", label);
 		%>
 
-		<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+		<aui:nav-item cssClass='<%= topLink.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= topLink.equals(label) %>" />
 
 		<c:if test="<%= MBPermission.contains(permissionChecker, scopeGroupId, ActionKeys.BAN_USER) %>">
 
 			<%
 			label = "banned-users";
 
-			portletURL.setParameter("tabs1", label);
+			portletURL.setParameter("topLink", label);
 			%>
 
-			<aui:nav-item cssClass='<%= tabs1.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= tabs1.equals(label) %>" />
+			<aui:nav-item cssClass='<%= topLink.equals(label) ? "active" : StringPool.BLANK %>' href="<%= portletURL.toString() %>" label="<%= label %>" selected="<%= topLink.equals(label) %>" />
 		</c:if>
 	</aui:nav>
 
@@ -111,7 +111,7 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 </aui:nav-bar>
 
 <c:choose>
-	<c:when test='<%= tabs1.equals("message-boards-home") %>'>
+	<c:when test='<%= topLink.equals("message-boards-home") %>'>
 		<%
 		boolean showAddCategoryButton = MBCategoryPermission.contains(permissionChecker, scopeGroupId, categoryId, ActionKeys.ADD_CATEGORY);
 		boolean showAddMessageButton = MBCategoryPermission.contains(permissionChecker, scopeGroupId, categoryId, ActionKeys.ADD_MESSAGE);
@@ -253,7 +253,7 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 			<liferay-ui:panel collapsible="<%= true %>" cssClass="threads-panel" extended="<%= true %>" id="messageBoardsThreadsPanel" persistState="<%= true %>" title="threads">
 				<aui:form action="<%= portletURL.toString() %>" method="get" name="fm1">
 					<%
-					portletURL.setParameter("tabs1", ParamUtil.getString(request, "tabs1"));
+					portletURL.setParameter("topLink", ParamUtil.getString(request, "topLink"));
 					%> 
 
 					<aui:input name="<%= Constants.CMD %>" type="hidden" />
@@ -433,7 +433,7 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 		%>
 
 	</c:when>
-	<c:when test='<%= tabs1.equals("recent-posts") %>'>
+	<c:when test='<%= topLink.equals("recent-posts") %>'>
 
 		<%
 		long groupThreadsUserId = ParamUtil.getLong(request, "groupThreadsUserId");
@@ -451,7 +451,7 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 
 		<aui:form action="<%= portletURL.toString() %>" method="get" name="fm1">
 			<%
-			portletURL.setParameter("tabs1", ParamUtil.getString(request, "tabs1"));
+			portletURL.setParameter("topLink", ParamUtil.getString(request, "topLink"));
 			%>
 
 			<aui:input name="<%= Constants.CMD %>" type="hidden" />
@@ -606,12 +606,12 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 		</aui:form>
 
 		<%
-		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(tabs1, StringPool.UNDERLINE, StringPool.DASH)), request);
-		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(tabs1, TextFormatter.O)), portletURL.toString());
+		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(topLink, StringPool.UNDERLINE, StringPool.DASH)), request);
+		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(topLink, TextFormatter.O)), portletURL.toString());
 		%>
 
 	</c:when>
-	<c:when test='<%= tabs1.equals("statistics") %>'>
+	<c:when test='<%= topLink.equals("statistics") %>'>
 		<liferay-ui:panel-container cssClass="statistics-panel" extended="<%= false %>" id="messageBoardsStatisticsPanelContainer" persistState="<%= true %>">
 			<liferay-ui:panel collapsible="<%= true %>" cssClass="statistics-panel-content" extended="<%= true %>" id="messageBoardsGeneralStatisticsPanel" persistState="<%= true %>" title="general">
 				<dl>
@@ -662,12 +662,12 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 		</liferay-ui:panel-container>
 
 		<%
-		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(tabs1, StringPool.UNDERLINE, StringPool.DASH)), request);
-		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(tabs1, TextFormatter.O)), portletURL.toString());
+		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(topLink, StringPool.UNDERLINE, StringPool.DASH)), request);
+		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(topLink, TextFormatter.O)), portletURL.toString());
 		%>
 
 	</c:when>
-	<c:when test='<%= tabs1.equals("banned-users") %>'>
+	<c:when test='<%= topLink.equals("banned-users") %>'>
 		<liferay-ui:search-container
 			emptyResultsMessage="there-are-no-banned-users"
 			headerNames="banned-user,banned-by,ban-date"
@@ -715,8 +715,8 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 		</liferay-ui:search-container>
 
 		<%
-		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(tabs1, StringPool.UNDERLINE, StringPool.DASH)), request);
-		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(tabs1, TextFormatter.O)), portletURL.toString());
+		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(topLink, StringPool.UNDERLINE, StringPool.DASH)), request);
+		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(topLink, TextFormatter.O)), portletURL.toString());
 		%>
 
 	</c:when>
