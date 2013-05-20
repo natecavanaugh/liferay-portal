@@ -550,11 +550,8 @@ AUI.add(
 
 						var uploadsCompleteText;
 
-						if (instance._fileListContent.one('.upload-file.upload-complete')) {
+						if (instance._fileListContent.one('.upload-file.upload-complete') && instance.get('multipleFiles')) {
 							uploadsCompleteText = strings.uploadsCompleteText;
-						}
-						else {
-							uploadsCompleteText = strings.fileCannotBeSavedText;
 						}
 
 						instance._updateList(0, uploadsCompleteText);
@@ -941,7 +938,10 @@ AUI.add(
 
 						var infoTitle = instance._listInfo.one('h4');
 
-						if (infoTitle) {
+						if (!instance.get('multipleFiles')) {
+							infoTitle.html('');
+						}
+						else if (infoTitle) {
 							var listText = message || Lang.sub(strings.xFilesReadyText, [listLength]);
 
 							infoTitle.html(listText);
