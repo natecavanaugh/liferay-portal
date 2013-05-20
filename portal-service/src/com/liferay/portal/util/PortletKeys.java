@@ -37,6 +37,8 @@ public class PortletKeys {
 
 	public static final String ASSET_PUBLISHER = "101";
 
+	public static final String BACKGROUND_TASK = "189";
+
 	public static final String BLOGS = "33";
 
 	public static final String BLOGS_ADMIN = "161";
@@ -119,8 +121,6 @@ public class PortletKeys {
 	public static final String MESSAGE_BOARDS = "19";
 
 	public static final String MESSAGE_BOARDS_ADMIN = "162";
-
-	public static final String MOBILE_DEVICE_GLOBAL_ADMIN = "177";
 
 	public static final String MOBILE_DEVICE_SITE_ADMIN = "178";
 

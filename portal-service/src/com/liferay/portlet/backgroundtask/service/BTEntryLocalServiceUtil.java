@@ -253,6 +253,75 @@ public class BTEntryLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static com.liferay.portlet.backgroundtask.model.BTEntry addEntry(
+		long userId, long groupId, java.lang.String name,
+		java.lang.String[] servletContextNames,
+		java.lang.Class<?> taskExecutorClass,
+		java.util.Map<java.lang.String, java.io.Serializable> taskContextMap,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addEntry(userId, groupId, name, servletContextNames,
+			taskExecutorClass, taskContextMap, serviceContext);
+	}
+
+	public static void addEntryAttachment(long userId, long entryId,
+		java.lang.String fileName, java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().addEntryAttachment(userId, entryId, fileName, file);
+	}
+
+	public static void addEntryAttachment(long userId, long entryId,
+		java.lang.String fileName, java.io.InputStream inputStream)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().addEntryAttachment(userId, entryId, fileName, inputStream);
+	}
+
+	public static com.liferay.portlet.backgroundtask.model.BTEntry deleteEntry(
+		com.liferay.portlet.backgroundtask.model.BTEntry entry)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().deleteEntry(entry);
+	}
+
+	public static com.liferay.portlet.backgroundtask.model.BTEntry fetchEntry(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchEntry(entryId);
+	}
+
+	public static java.util.List<com.liferay.portlet.backgroundtask.model.BTEntry> getEntries(
+		long groupId, java.lang.String taskExecutorClassName)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getEntries(groupId, taskExecutorClassName);
+	}
+
+	public static java.util.List<com.liferay.portlet.backgroundtask.model.BTEntry> getEntries(
+		long groupId, java.lang.String taskExecutorClassName, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getEntries(groupId, taskExecutorClassName, status);
+	}
+
+	public static com.liferay.portlet.backgroundtask.model.BTEntry getEntry(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getEntry(entryId);
+	}
+
+	public static com.liferay.portlet.backgroundtask.model.BTEntry updateEntry(
+		long entryId,
+		java.util.Map<java.lang.String, java.io.Serializable> taskContextMap,
+		int status, com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateEntry(entryId, taskContextMap, status, serviceContext);
+	}
+
 	public static BTEntryLocalService getService() {
 		if (_service == null) {
 			_service = (BTEntryLocalService)PortalBeanLocatorUtil.locate(BTEntryLocalService.class.getName());
