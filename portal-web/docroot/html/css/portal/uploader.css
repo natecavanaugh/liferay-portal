@@ -290,7 +290,7 @@
 		font-weight: normal;
 	}
 
-	.upload-error {
+	.multiple-files .upload-error {
 		background-color: #FDD;
 		background-image: url(@theme_image_path@/messages/error.png);
 		border-color: #900;
@@ -299,6 +299,14 @@
 
 		.error-message {
 			display: block;
+		}
+	}
+
+	.single-file .upload-error {
+		list-style: none;
+
+		.upload-error-message {
+			margin-bottom: 0.5em;
 		}
 	}
 
