@@ -58,6 +58,9 @@ boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout");
 						metadataExplanationContainer: '#<portlet:namespace />metadataExplanationContainer',
 						multipleFiles: false,
 						namespace: '<portlet:namespace />',
+						'strings.fileCannotBeSavedText': '<liferay-ui:message key="the-file-x-cannot-be-imported" />',
+						'strings.pendingFileText': '<liferay-ui:message key="this-file-was-previously-uploaded-but-not-actually-imported" />',
+						'strings.uploadsCompleteText': '<liferay-ui:message key="the-file-is-ready-to-be-imported" />',
 						tempFileURL: {
 							method: Liferay.Service.bind('/layout/get-temp-file-entry-names'),
 							params: {
@@ -68,10 +71,6 @@ boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout");
 						uploadFile: '<liferay-portlet:actionURL doAsUserId="<%= user.getUserId() %>"><portlet:param name="struts_action" value="/layouts_admin/import_layouts" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD_TEMP %>" /><portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" /><portlet:param name="privateLayout" value="<%= String.valueOf(privateLayout) %>" /></liferay-portlet:actionURL>&ticketKey=<%= ticket.getKey() %><liferay-ui:input-permissions-params modelName="<%= Group.class.getName() %>" />'
 					}
 				);
-
-				liferayUpload.set('strings.fileCannotBeSavedText', '<liferay-ui:message key="the-file-cannot-be-imported" />');
-				liferayUpload.set('strings.pendingFileText', '<liferay-ui:message key="this-file-was-previously-uploaded-but-not-actually-imported" />');
-				liferayUpload.set('strings.uploadsCompleteText', '<liferay-ui:message key="the-file-is-ready-to-be-imported" />');
 
 				var continueButton = A.one('#<portlet:namespace />continueButton');
 
