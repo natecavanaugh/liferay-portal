@@ -172,8 +172,6 @@ if (Validator.isNotNull(historyKey)) {
 </div>
 
 <aui:script use="aui-event-input,aui-tabview,aui-url,history,io-form">
-	var formNode = A.one('#<portlet:namespace /><%= formName %>');
-
 	var tabview = new A.TabView(
 		{
 			srcNode: '#<portlet:namespace />tabs',
@@ -181,7 +179,29 @@ if (Validator.isNotNull(historyKey)) {
 		}
 	).render();
 
-	var history = new A.HistoryHash();
+	revealSection();
+
+	var dialog = Liferay.Util.getWindow();
+
+	var dialogVisibleChangeHandle = dialog.on('visibleChange', onDialogVisibleChange);
+
+	dialog.once('destroy', dialogVisibleChangeHandle.detach, dialog);
+
+	function onDialogVisibleChange(event) {
+		if (event.newVal) {
+			revealSection();
+		}
+	}
+
+	function revealSection() {
+		var currentLocationHash = A.HistoryHash.getHash();
+
+		if (currentLocationHash) {
+			var sectionId = '<portlet:namespace />' + currentLocationHash;
+
+			selectSection(sectionId);
+		}
+	}
 
 	function selectTabBySectionId(sectionId) {
 		var instance = this;
@@ -194,6 +214,16 @@ if (Validator.isNotNull(historyKey)) {
 			tabview.selectChild(tabIndex);
 		}
 	};
+
+	function selectSection(sectionId) {
+		Liferay.fire('formNavigator:reveal' + sectionId);
+
+		var history = new A.HistoryHash();
+
+		history.addValue('<portlet:namespace />tab', sectionId);
+
+		updateRedirectForSectionId(sectionId);
+	}
 
 	function updateSectionStatus() {
 		var tabNode = tabview.get('selection').get('boundingBox');
@@ -232,17 +262,13 @@ if (Validator.isNotNull(historyKey)) {
 	tabview.after(
 		'selectionChange',
 		function(event) {
-			var tab = event.newVal
+			var tab = event.newVal;
 
 			var boundingBox = tab.get('boundingBox');
 
 			var sectionId = boundingBox.getData('sectionId');
 
-			Liferay.fire('formNavigator:reveal' + sectionId);
-
-			history.addValue('<portlet:namespace />tab', sectionId);
-
-			updateRedirectForSectionId(sectionId);
+			selectSection(sectionId);
 		}
 	);
 
@@ -261,6 +287,8 @@ if (Validator.isNotNull(historyKey)) {
 			}
 		}
 	);
+
+	var formNode = A.one('#<portlet:namespace /><%= formName %>');
 
 	if (formNode) {
 		formNode.all('.modify-link').on('click', updateSectionStatus);
