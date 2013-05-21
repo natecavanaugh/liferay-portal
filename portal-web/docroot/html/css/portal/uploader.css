@@ -11,7 +11,7 @@
 	margin-bottom: 1em;
 
 	.upload-target {
-		border: 2px solid transparent;
+		border: 3px dashed transparent;
 		margin-bottom: 1em;
 		min-height: 30px;
 		padding: 30px 0;
@@ -21,6 +21,10 @@
 		h4 span {
 			display: block;
 			margin: 5px 0;
+		}
+
+		.or-text {
+			font-size: 0.8em;
 		}
 	}
 
@@ -197,13 +201,14 @@
 
 .lfr-upload-container {
 	.upload-target {
-		background-color: #EBEBEB;
 		border-color: #DDD;
-		font-weight: bold;
-		text-shadow: 1px 1px #FFF;
 
 		h4 span {
 			text-transform: lowercase;
+		}
+
+		.drop-file-text {
+			font-weight: normal;
 		}
 	}
 
@@ -228,15 +233,8 @@
 		}
 	}
 
-	.upload-file {
+	.multiple-files .upload-file {
 		background: url(@theme_image_path@/file_system/small/jpg.png) no-repeat 5px 50%;
-		border-color: #CCC;
-		font-weight: bold;
-		text-shadow: 1px 1px #FFF;
-
-		.file-title {
-			font-weight: bold;
-		}
 
 		&.upload-complete {
 			background-position: 22px 50%;
@@ -247,11 +245,24 @@
 			}
 
 			&.file-saved {
-				background-color: #B4DDAD;
 				background-image: url(@theme_image_path@/common/check.png);
-				font-weight: bold;
-				@include opacity(0.6);
 			}
+		}
+	}
+
+	.upload-file {
+		border-color: #CCC;
+		font-weight: bold;
+		text-shadow: 1px 1px #FFF;
+
+		.file-title {
+			font-weight: bold;
+		}
+
+		&.upload-complete.file-saved {
+			background-color: #B4DDAD;
+			font-weight: bold;
+			@include opacity(0.6);
 		}
 	}
 

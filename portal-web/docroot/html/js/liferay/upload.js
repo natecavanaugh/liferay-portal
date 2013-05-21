@@ -69,7 +69,7 @@ AUI.add(
 			'<div class="upload-target" id="{$ns}uploader">',
 				'<div class="drag-drop-area" id="{$ns}uploaderContent">',
 					'<tpl if="this.uploaderType == \'html5\'">',
-						'<h4 class="drop-file-text">{[ this.dropFileText ]}<span>{[ this.strings.orText ]}</span></h4>',
+						'<h4 class="drop-file-text">{[ this.dropFileText ]}<span class="or-text">{[ this.strings.orText ]}</span></h4>',
 					'</tpl>',
 					'<button class="btn" id="{$ns}selectFilesButton" type="button">{[ this.selectFilesText ]}</button>',
 				'</div>',
