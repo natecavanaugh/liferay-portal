@@ -22,8 +22,6 @@ boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout");
 %>
 
 <aui:form cssClass="lfr-export-dialog" method="post" name="fm1">
-	<liferay-ui:message key="import-a-lar-file-to-overwrite-the-selected-data" />
-
 	<c:choose>
 		<c:when test="<%= (layout.getGroupId() == groupId) && (layout.isPrivateLayout() == privateLayout) %>">
 			<liferay-ui:message key="import-from-within-the-target-site-can-cause-conflicts" />
@@ -58,6 +56,7 @@ boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout");
 						metadataExplanationContainer: '#<portlet:namespace />metadataExplanationContainer',
 						multipleFiles: false,
 						namespace: '<portlet:namespace />',
+						'strings.dropFileText': '<liferay-ui:message key="drop-a-lar-file-here-to-import" />',
 						'strings.fileCannotBeSavedText': '<liferay-ui:message key="the-file-x-cannot-be-imported" />',
 						'strings.pendingFileText': '<liferay-ui:message key="this-file-was-previously-uploaded-but-not-actually-imported" />',
 						'strings.uploadsCompleteText': '<liferay-ui:message key="the-file-is-ready-to-be-imported" />',
