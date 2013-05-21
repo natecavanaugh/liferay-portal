@@ -355,7 +355,8 @@ if (feed != null) {
 				classPK: <%= (ddmStructure != null) ? ddmStructure.getPrimaryKey(): 0 %>,
 				ddmResource: '<%= ddmResource %>',
 				dialog: {
-					destroyOnHide: true
+					destroyOnHide: true,
+					zIndex: Liferay.zIndex.WINDOW + 2
 				},
 				eventName: '<portlet:namespace />selectStructure',
 				groupId: <%= groupId %>,
