@@ -41,7 +41,7 @@ String portletNameSpace = PortalUtil.getPortletNamespace(portletResource);
 
 	<liferay-ui:panel-container extended="<%= true %>" id="documentLibrarySettingsPanelContainer" persistState="<%= true %>">
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="documentLibraryDisplay" persistState="<%= true %>" title="display-settings">
-			<aui:input label="show-actions" name="preferences--showActions--" type="checkbox" value="<%= showActions %>" />
+			<aui:input id="showActions" label="show-actions" name="preferences--showActions--" type="checkbox" value="<%= showActions %>" />
 
 			<aui:input label="show-folder-menu" name="preferences--showFolderMenu--" type="checkbox" value="<%= showFolderMenu %>" />
 
@@ -203,6 +203,42 @@ String portletNameSpace = PortalUtil.getPortletNamespace(portletResource);
 			);
 		}
 	);
+
+	A.one('#<portlet:namespace />showActionsCheckbox').after(
+		'change',
+		function(event) {
+			var showActionsInput = A.one('#<portlet:namespace />showActions');
+
+			var currentFolderColumns = A.one('#<portlet:namespace />currentFolderColumns');
+
+			var currentFileEntryColumns = A.one('#<portlet:namespace />currentFileEntryColumns');
+
+			var optionAction = '<option value="action">' + Liferay.Language.get('action') + '</option>';
+
+			if (showActionsInput.val() === 'false') {
+				currentFileEntryColumns.appendChild(optionAction);
+
+				currentFolderColumns.appendChild(optionAction);
+			}
+			else {
+				var availableFileEntryColumns = A.one('#<portlet:namespace />availableFileEntryColumns');
+
+				var availableFolderColumns = A.one('#<portlet:namespace />availableFolderColumns');
+
+				A.Array.each(
+					[currentFolderColumns, currentFileEntryColumns, availableFileEntryColumns, availableFolderColumns],
+					function(item, index) {
+						var actionsNode = item.one('option[value="action"]');
+
+						if (actionsNode) {
+							actionsNode.remove();
+						}
+					}
+				);
+			}
+		}
+	);
+
 </aui:script>
 
 <aui:script>
