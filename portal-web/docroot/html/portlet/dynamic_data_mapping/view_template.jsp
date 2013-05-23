@@ -223,7 +223,7 @@ String searchContainerId = StringPool.BLANK;
 
 		<c:if test="<%= total > 0 %>">
 			<aui:button-row>
-				<aui:button cssClass="delete-templates-button" disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteTemplates();" %>' value="delete" />
+				<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteTemplates();" %>' value="delete" />
 			</aui:button-row>
 
 			<div class="separator"><!-- --></div>
@@ -233,8 +233,8 @@ String searchContainerId = StringPool.BLANK;
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script use="liferay-util-list-fields">
-	Liferay.Util.updateButtonDisabledValue(
+<aui:script use="aui-base,liferay-util-list-fields">
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />delete'),
 		A.one('#<portlet:namespace /><%= searchContainerId %>'),
 		document.<portlet:namespace />fm,
@@ -258,10 +258,12 @@ String searchContainerId = StringPool.BLANK;
 		window,
 		'<portlet:namespace />deleteTemplates',
 		function() {
-			if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") %>')) {
+			var deleteTemplateIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+
+			if (deleteTemplateIds && confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") %>')) {
 				document.<portlet:namespace />fm.method = "post";
 				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.DELETE %>";
-				document.<portlet:namespace />fm.<portlet:namespace />deleteTemplateIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+				document.<portlet:namespace />fm.<portlet:namespace />deleteTemplateIds.value = deleteTemplateIds;
 
 				submitForm(document.<portlet:namespace />fm, "<portlet:actionURL><portlet:param name="struts_action" value="/dynamic_data_mapping/edit_template" /></portlet:actionURL>");
 			}

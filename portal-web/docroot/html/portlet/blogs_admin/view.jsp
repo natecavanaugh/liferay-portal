@@ -21,7 +21,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("struts_action", "/blogs_admin/view");
 
-String searchContainerId = StringPool.BLANK;		 
+String searchContainerId = StringPool.BLANK;
 %>
 
 <portlet:actionURL var="undoTrashURL">
@@ -98,8 +98,8 @@ String searchContainerId = StringPool.BLANK;
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script use="liferay-util-list-fields">
-	Liferay.Util.updateButtonDisabledValue(
+<aui:script use="aui-base,liferay-util-list-fields">
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />delete'),
 		A.one('#<portlet:namespace /><%= searchContainerId %>'),
 		document.<portlet:namespace />fm,
@@ -112,10 +112,12 @@ String searchContainerId = StringPool.BLANK;
 		window,
 		'<portlet:namespace />deleteEntries',
 		function() {
-			if (<%= TrashUtil.isTrashEnabled(scopeGroupId) %> || confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-the-selected-entries") %>')) {
+			var deleteEntryIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+
+			if (deleteEntryIds && <%= TrashUtil.isTrashEnabled(scopeGroupId) %> || confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-the-selected-entries") %>')) {
 				document.<portlet:namespace />fm.method = "post";
 				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= TrashUtil.isTrashEnabled(scopeGroupId) ? Constants.MOVE_TO_TRASH :Constants.DELETE %>";
-				document.<portlet:namespace />fm.<portlet:namespace />deleteEntryIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+				document.<portlet:namespace />fm.<portlet:namespace />deleteEntryIds.value = deleteEntryIds;
 
 				submitForm(document.<portlet:namespace />fm, "<portlet:actionURL><portlet:param name="struts_action" value="/blogs_admin/edit_entry" /></portlet:actionURL>");
 			}

@@ -159,22 +159,27 @@ String searchContainerId = StringPool.BLANK;
 			<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
 		</aui:form>
 
-		<aui:script use="liferay-util-list-fields">
+		<aui:script use="aui-base,liferay-util-list-fields">
+			var allRowsIds = "<portlet:namespace />allRowIds";
+			var form = document.<portlet:namespace />fm;
+
+			var searchContainer = A.one('#<portlet:namespace /><%= searchContainerId %>');
+
 			<c:if test="<%= JournalArticlePermission.contains(permissionChecker, article, ActionKeys.DELETE) %>">
-				Liferay.Util.updateButtonDisabledValue(
+				Liferay.Util.updateSearchContainerButton(
 					A.one('#<portlet:namespace />delete'),
-					A.one('#<portlet:namespace /><%= searchContainerId %>'),
-					document.<portlet:namespace />fm,
-					"<portlet:namespace />allRowIds"
+					searchContainer,
+					form,
+					allRowsIds
 				);
 			</c:if>
 
 			<c:if test="<%= JournalArticlePermission.contains(permissionChecker, article, ActionKeys.EXPIRE) %>">
-				Liferay.Util.updateButtonDisabledValue(
+				Liferay.Util.updateSearchContainerButton(
 					A.one('#<portlet:namespace />expire'),
-					A.one('#<portlet:namespace /><%= searchContainerId %>'),
-					document.<portlet:namespace />fm,
-					"<portlet:namespace />allRowIds"
+					searchContainer,
+					form,
+					allRowsIds
 				);
 			</c:if>
 		</aui:script>
@@ -185,11 +190,13 @@ String searchContainerId = StringPool.BLANK;
 					window,
 					'<portlet:namespace />deleteArticles',
 					function() {
-						if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-the-selected-version") %>')) {
+						var articleIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+
+						if (articleIds && confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-the-selected-version") %>')) {
 							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.DELETE %>";
 							document.<portlet:namespace />fm.<portlet:namespace />groupId.value = "<%= scopeGroupId %>";
 							document.<portlet:namespace />fm.<portlet:namespace />articleId.value = "";
-							document.<portlet:namespace />fm.<portlet:namespace />articleIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+							document.<portlet:namespace />fm.<portlet:namespace />articleIds.value = articleIds;
 
 							submitForm(document.<portlet:namespace />fm, "<portlet:actionURL><portlet:param name="struts_action" value="/journal/edit_article" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:actionURL>");
 						}
@@ -203,11 +210,13 @@ String searchContainerId = StringPool.BLANK;
 					window,
 					'<portlet:namespace />expireArticles',
 					function() {
-						if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-expire-the-selected-version") %>')) {
+						var expireArticleIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+
+						if (expireArticleIds && confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-expire-the-selected-version") %>')) {
 							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.EXPIRE %>";
 							document.<portlet:namespace />fm.<portlet:namespace />groupId.value = "<%= scopeGroupId %>";
 							document.<portlet:namespace />fm.<portlet:namespace />articleId.value = "";
-							document.<portlet:namespace />fm.<portlet:namespace />expireArticleIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+							document.<portlet:namespace />fm.<portlet:namespace />expireArticleIds.value = expireArticleIds;
 
 							submitForm(document.<portlet:namespace />fm, "<portlet:actionURL><portlet:param name="struts_action" value="/journal/edit_article" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:actionURL>");
 						}

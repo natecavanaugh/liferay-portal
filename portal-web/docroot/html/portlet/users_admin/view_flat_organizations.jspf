@@ -112,8 +112,8 @@ String searchContainerOrganizationId = StringPool.BLANK;
 	</c:otherwise>
 </c:choose>
 
-<aui:script use="liferay-util-list-fields">
-	Liferay.Util.updateButtonDisabledValue(
+<aui:script use="aui-base,liferay-util-list-fields">
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />delete'),
 		A.one('#<portlet:namespace /><%= searchContainerOrganizationId %>'),
 		document.<portlet:namespace />fm,
