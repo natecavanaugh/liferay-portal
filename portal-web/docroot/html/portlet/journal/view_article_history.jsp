@@ -159,22 +159,27 @@ String searchContainerId = StringPool.BLANK;
 			<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
 		</aui:form>
 
-		<aui:script use="liferay-util-list-fields">
+		<aui:script use="aui-base,liferay-util-list-fields">
+			var allRowsIds = "<portlet:namespace />allRowIds";
+			var form = document.<portlet:namespace />fm;
+
+			var searchContainer = A.one('#<portlet:namespace /><%= searchContainerId %>');
+
 			<c:if test="<%= JournalArticlePermission.contains(permissionChecker, article, ActionKeys.DELETE) %>">
-				Liferay.Util.updateButtonDisabledValue(
+				Liferay.Util.updateSearchContainerButton(
 					A.one('#<portlet:namespace />delete'),
-					A.one('#<portlet:namespace /><%= searchContainerId %>'),
-					document.<portlet:namespace />fm,
-					"<portlet:namespace />allRowIds"
+					searchContainer,
+					form,
+					allRowsIds
 				);
 			</c:if>
 
 			<c:if test="<%= JournalArticlePermission.contains(permissionChecker, article, ActionKeys.EXPIRE) %>">
-				Liferay.Util.updateButtonDisabledValue(
+				Liferay.Util.updateSearchContainerButton(
 					A.one('#<portlet:namespace />expire'),
-					A.one('#<portlet:namespace /><%= searchContainerId %>'),
-					document.<portlet:namespace />fm,
-					"<portlet:namespace />allRowIds"
+					searchContainer,
+					form,
+					allRowsIds
 				);
 			</c:if>
 		</aui:script>

@@ -123,8 +123,8 @@ String searchContainerId = StringPool.BLANK;
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script use="liferay-util-list-fields">
-	Liferay.Util.updateButtonDisabledValue(
+<aui:script use="aui-base,liferay-util-list-fields">
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />updateAssociations'),
 		A.one('#<portlet:namespace /><%= searchContainerId %>'),
 		document.<portlet:namespace />fm,

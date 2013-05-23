@@ -1920,24 +1920,6 @@
 
 	Liferay.provide(
 		Util,
-		'updateButtonDisabledValue',
-		function(button, searchContainer, form, selectAllCheckbox) {
-			if (searchContainer) {
-				searchContainer.delegate(
-					'change',
-					function() {
-						Liferay.Util.toggleDisabled(button, !Liferay.Util.listCheckedExcept(form, selectAllCheckbox));
-					},
-					'input[type=checkbox]'
-				);
-			}
-
-		},
-		['aui-base', 'liferay-util-list-fields']
-	);
-
-	Liferay.provide(
-		Util,
 		'updateCheckboxValue',
 		function(checkbox) {
 			checkbox = A.one(checkbox);
@@ -1955,6 +1937,24 @@
 			}
 		},
 		['aui-base']
+	);
+
+	Liferay.provide(
+		Util,
+		'updateSearchContainerButton',
+		function(button, searchContainer, form, selectAllCheckbox) {
+			if (searchContainer) {
+				searchContainer.delegate(
+					'change',
+					function() {
+						Liferay.Util.toggleDisabled(button, !Liferay.Util.listCheckedExcept(form, selectAllCheckbox));
+					},
+					'input[type=checkbox]'
+				);
+			}
+
+		},
+		['aui-base', 'liferay-util-list-fields']
 	);
 
 	Liferay.provide(

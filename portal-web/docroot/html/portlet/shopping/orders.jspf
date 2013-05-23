@@ -113,7 +113,7 @@ String searchContainerId = StringPool.BLANK;
 	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
 </aui:form>
 
-<aui:script use="liferay-util-list-fields">
+<aui:script use="aui-base,liferay-util-list-fields">
 	Liferay.Util.utilandy(
 		A.one('#<portlet:namespace />delete'),
 		A.one('#<portlet:namespace /><%= searchContainerId %>'),

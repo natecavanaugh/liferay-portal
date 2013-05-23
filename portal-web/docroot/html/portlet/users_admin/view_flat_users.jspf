@@ -268,18 +268,23 @@ String searchContainerUserId = StringPool.BLANK;
 	<liferay-ui:search-iterator />
 </liferay-ui:search-container>
 
-<aui:script use="liferay-util-list-fields">
-	Liferay.Util.updateButtonDisabledValue(
+<aui:script use="aui-base,liferay-util-list-fields">
+	var allRowIds = "<portlet:namespace />allRowIds";
+	var form = document.<portlet:namespace />fm;
+
+	var searchContainer = A.one('#<portlet:namespace /><%= searchContainerUserId %>');
+
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />deactivate'),
-		A.one('#<portlet:namespace /><%= searchContainerUserId %>'),
-		document.<portlet:namespace />fm,
-		"<portlet:namespace />allRowIds"
+		searchContainer,
+		form,
+		allRowIds
 	);
 
-	Liferay.Util.updateButtonDisabledValue(
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />restore'),
-		A.one('#<portlet:namespace /><%= searchContainerUserId %>'),
-		document.<portlet:namespace />fm,
-		"<portlet:namespace />allRowIds"
+		searchContainer,
+		form,
+		allRowIds
 	);
 </aui:script>

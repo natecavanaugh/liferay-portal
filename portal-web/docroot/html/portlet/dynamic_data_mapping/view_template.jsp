@@ -223,7 +223,7 @@ String searchContainerId = StringPool.BLANK;
 
 		<c:if test="<%= total > 0 %>">
 			<aui:button-row>
-				<aui:button cssClass="delete-templates-button" disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteTemplates();" %>' value="delete" />
+				<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteTemplates();" %>' value="delete" />
 			</aui:button-row>
 
 			<div class="separator"><!-- --></div>
@@ -233,8 +233,8 @@ String searchContainerId = StringPool.BLANK;
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script use="liferay-util-list-fields">
-	Liferay.Util.updateButtonDisabledValue(
+<aui:script use="aui-base,liferay-util-list-fields">
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />delete'),
 		A.one('#<portlet:namespace /><%= searchContainerId %>'),
 		document.<portlet:namespace />fm,

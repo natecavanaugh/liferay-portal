@@ -737,33 +737,38 @@ String searchContainerThreadsId = StringPool.BLANK;
 	</c:when>
 </c:choose>
 
-<aui:script use="liferay-util-list-fields">
-	Liferay.Util.updateButtonDisabledValue(
+<aui:script use="aui-base,liferay-util-list-fields">
+	var allRowsIds = "<portlet:namespace />allRowIds";
+	var form = document.<portlet:namespace />fm1;
+
+	var seachContainerThread = A.one('#<portlet:namespace /><%= searchContainerThreadsId %>');
+
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />deleteCategory'),
 		A.one('#<portlet:namespace /><%= searchContainerCategoriesId %>'),
 		document.<portlet:namespace />fm,
-		"<portlet:namespace />allRowIds"
+		allRowsIds
 	);
 
-	Liferay.Util.updateButtonDisabledValue(
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />delete'),
-		A.one('#<portlet:namespace /><%= searchContainerThreadsId %>'),
-		document.<portlet:namespace />fm1,
-		"<portlet:namespace />allRowIds"
+		seachContainerThread,
+		form,
+		allRowsIds
 	);
 
-	Liferay.Util.updateButtonDisabledValue(
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />lockThread'),
-		A.one('#<portlet:namespace /><%= searchContainerThreadsId %>'),
-		document.<portlet:namespace />fm1,
-		"<portlet:namespace />allRowIds"
+		seachContainerThread,
+		form,
+		allRowsIds
 	);
 
-	Liferay.Util.updateButtonDisabledValue(
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />unlockThread'),
-		A.one('#<portlet:namespace /><%= searchContainerThreadsId %>'),
-		document.<portlet:namespace />fm1,
-		"<portlet:namespace />allRowIds"
+		seachContainerThread,
+		form,
+		allRowsIds
 	);
 </aui:script>
 

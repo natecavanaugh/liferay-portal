@@ -21,7 +21,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("struts_action", "/journal/view_feeds");
 
-String searchContainerId = StringPool.BLANK;		 
+String searchContainerId = StringPool.BLANK;
 %>
 
 <aui:form action="<%= portletURL.toString() %>" method="post" name="fm">
@@ -104,8 +104,8 @@ String searchContainerId = StringPool.BLANK;
 	<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
 </aui:form>
 
-<aui:script use="liferay-util-list-fields">
-	Liferay.Util.updateButtonDisabledValue(
+<aui:script use="aui-base,liferay-util-list-fields">
+	Liferay.Util.updateSearchContainerButton(
 		A.one('#<portlet:namespace />delete'),
 		A.one('#<portlet:namespace /><%= searchContainerId %>'),
 		document.<portlet:namespace />fm,
