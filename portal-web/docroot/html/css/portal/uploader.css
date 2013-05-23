@@ -7,7 +7,6 @@
 }
 
 .lfr-upload-container {
-	padding-right: 1em;
 	margin-bottom: 1em;
 
 	.upload-target {
@@ -111,11 +110,24 @@
 
 	.upload-error {
 		@include opacity(1);
+
 		padding-left: 25px;
 	}
 
 	.upload-complete .cancel-button, .delete-button, .upload-complete.file-saved .delete-button, .upload-complete.upload-error .delete-button {
 		display: none;
+	}
+
+	.multiple-files .upload-error .error-message {
+		display: block;
+	}
+
+	.single-file .upload-error {
+		list-style: none;
+
+		.upload-error-message {
+			margin-bottom: 0.5em;
+		}
 	}
 
 	.upload-complete {
@@ -162,11 +174,11 @@
 }
 
 .select-files {
-	border: 1px solid transparent;
 	float: left;
 	line-height: 0;
 	margin-right: 2px;
 	padding: 0;
+	padding-left: 5px;
 }
 
 .lfr-upload-movie {
@@ -262,6 +274,7 @@
 		&.upload-complete.file-saved {
 			background-color: #B4DDAD;
 			font-weight: bold;
+
 			@include opacity(0.6);
 		}
 	}
@@ -307,18 +320,6 @@
 		border-color: #900;
 		color: #900;
 		font-weight: normal;
-
-		.error-message {
-			display: block;
-		}
-	}
-
-	.single-file .upload-error {
-		list-style: none;
-
-		.upload-error-message {
-			margin-bottom: 0.5em;
-		}
 	}
 
 	.upload-complete {
@@ -345,8 +346,4 @@
 	background-color: #DDEDDE;
 	border-color: #7D7;
 	border-style: dashed;
-}
-
-.select-files {
-	border-color: #F0F1F2 #B2B2B2 #949494 #F0F1F1;
 }

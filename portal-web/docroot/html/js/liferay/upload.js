@@ -71,7 +71,9 @@ AUI.add(
 					'<tpl if="this.uploaderType == \'html5\'">',
 						'<h4 class="drop-file-text">{[ this.dropFileText ]}<span class="or-text">{[ this.strings.orText ]}</span></h4>',
 					'</tpl>',
-					'<button class="btn" id="{$ns}selectFilesButton" type="button">{[ this.selectFilesText ]}</button>',
+					'<span class="select-files-container" id="{$ns}selectFilesButton">',
+						'<button class="btn" type="button">{[ this.selectFilesText ]}</button>',
+					'</span>',
 				'</div>',
 			'</div>',
 
