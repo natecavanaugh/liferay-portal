@@ -104,8 +104,8 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 			</aui:nav-item>
 		</c:if>
 
-		<c:if test="<%= !group.isControlPanel() && (themeDisplay.isShowLayoutTemplatesIcon() || themeDisplay.isShowSiteAdministrationIcon() || themeDisplay.isShowPageSettingsIcon()) %>">
-			<aui:nav-item anchorCssClass="manage-content-link" dropdown="<%= true %>" iconClass="icon-cog" id="manageContent" label="manage">
+		<c:if test="<%= !group.isControlPanel() && (themeDisplay.isShowLayoutTemplatesIcon() || themeDisplay.isShowPageSettingsIcon()) %>">
+			<aui:nav-item anchorCssClass="manage-content-link" dropdown="<%= true %>" iconClass="icon-edit" id="manageContent" label="edit">
 
 				<%
 				String useDialogFullDialog = StringPool.BLANK;
@@ -125,10 +125,6 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 
 				<c:if test="<%= themeDisplay.isShowPageCustomizationIcon() && !themeDisplay.isStateMaximized() %>">
 					<aui:nav-item anchorCssClass='<%= themeDisplay.isFreeformLayout() ? "disabled" : StringPool.BLANK %>' anchorId="manageCustomization" cssClass="manage-page-customization" href='<%= themeDisplay.isFreeformLayout() ? null : "javascript:;" %>' label='<%= group.isLayoutPrototype() ? "page-modifications" : "page-customizations" %>' title='<%= themeDisplay.isFreeformLayout() ? "it-is-not-possible-to-specify-customization-settings-for-freeform-layouts" : null %>' />
-				</c:if>
-
-				<c:if test="<%= themeDisplay.isShowSiteAdministrationIcon() %>">
-					<aui:nav-item cssClass="settings" href="<%= themeDisplay.getURLSiteAdministration() %>" label="site" title="manage-site" />
 				</c:if>
 			</aui:nav-item>
 
@@ -155,10 +151,58 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 	</aui:nav>
 
 	<aui:nav cssClass="pull-right">
+		<c:if test="<%= (themeDisplay.isShowControlPanelIcon() || themeDisplay.isShowSiteAdministrationIcon()) && (!layout.getGroup().isControlPanel() || Validator.equals(themeDisplay.getControlPanelCategory(), PortletCategoryKeys.CURRENT_SITE)) %>">
+			<li class="dropdown admin-links" id="adminLinks">
+				<a class="dropdown-toggle" href="javascript:;">
+					<liferay-ui:message key="admin" />
+
+					<b class="caret"></b>
+				</a>
+
+				<ul class="dropdown-menu">
+					<c:if test="<%= themeDisplay.isShowSiteAdministrationIcon() %>">
+						<li>
+							<a href="<%= themeDisplay.getURLSiteAdministration() %>">
+								<i class="icon-cog"></i>
+
+								<span class="administration-name">
+									<liferay-ui:message key="site-administration" />
+								</span>
+							</a>
+						</li>
+					</c:if>
+
+					<c:if test="<%= themeDisplay.isShowControlPanelIcon() %>">
+						<li>
+							<a href="<%= themeDisplay.getURLControlPanel() %>">
+								<i class="icon-wrench"></i>
+
+								<span class="administration-name">
+									<liferay-ui:message key="control-panel" />
+								</span>
+							</a>
+						</li>
+					</c:if>
+				</ul>
+
+				<aui:script use="aui-base">
+					A.one('#adminLinks').on(
+						'click',
+						function(event) {
+							event.currentTarget.toggleClass('open');
+						}
+					);
+				</aui:script>
+			</li>
+
+			<aui:nav-item cssClass="divider-vertical"></aui:nav-item>
+
+		</c:if>
+
 		<c:if test="<%= user.hasMySites() %>">
 			<li class="dropdown my-sites" id="mySites">
 				<a class="dropdown-toggle" href="javascript:;">
-					<liferay-ui:message key="go-to" />
+					<liferay-ui:message key="my-sites" />
 
 					<b class="caret"></b>
 				</a>
