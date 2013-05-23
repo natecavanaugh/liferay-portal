@@ -26,6 +26,8 @@ String referringPortletResource = ParamUtil.getString(request, "referringPortlet
 String orderByCol = ParamUtil.getString(request, "orderByCol");
 
 JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_ARTICLE);
+
+String searchContainerId = StringPool.BLANK;
 %>
 
 <c:choose>
@@ -86,16 +88,18 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 			List<JournalArticle> results = JournalArticleServiceUtil.getArticlesByArticleId(searchTerms.getGroupId(), searchTerms.getArticleId(), searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
 
 			searchContainer.setResults(results);
+
+			searchContainerId = searchContainer.getId(request, renderResponse.getNamespace());
 			%>
 
 			<c:if test="<%= !results.isEmpty() %>">
 				<aui:button-row>
 					<c:if test="<%= JournalArticlePermission.contains(permissionChecker, article, ActionKeys.EXPIRE) %>">
-						<aui:button onClick='<%= renderResponse.getNamespace() + "expireArticles();" %>' value="expire" />
+						<aui:button disabled="<%= true %>" name="expire" onClick='<%= renderResponse.getNamespace() + "expireArticles();" %>' value="expire" />
 					</c:if>
 
 					<c:if test="<%= JournalArticlePermission.contains(permissionChecker, article, ActionKeys.DELETE) %>">
-						<aui:button onClick='<%= renderResponse.getNamespace() + "deleteArticles();" %>' value="delete" />
+						<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteArticles();" %>' value="delete" />
 					</c:if>
 				</aui:button-row>
 			</c:if>
@@ -155,6 +159,31 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 			<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
 		</aui:form>
 
+		<aui:script use="aui-base,liferay-util-list-fields">
+			var allRowsIds = "<portlet:namespace />allRowIds";
+			var form = document.<portlet:namespace />fm;
+
+			var searchContainer = A.one('#<portlet:namespace /><%= searchContainerId %>');
+
+			<c:if test="<%= JournalArticlePermission.contains(permissionChecker, article, ActionKeys.DELETE) %>">
+				Liferay.Util.updateSearchContainerButton(
+					A.one('#<portlet:namespace />delete'),
+					searchContainer,
+					form,
+					allRowsIds
+				);
+			</c:if>
+
+			<c:if test="<%= JournalArticlePermission.contains(permissionChecker, article, ActionKeys.EXPIRE) %>">
+				Liferay.Util.updateSearchContainerButton(
+					A.one('#<portlet:namespace />expire'),
+					searchContainer,
+					form,
+					allRowsIds
+				);
+			</c:if>
+		</aui:script>
+
 		<aui:script>
 			<c:if test="<%= JournalArticlePermission.contains(permissionChecker, article, ActionKeys.DELETE) %>">
 				Liferay.provide(
@@ -166,6 +195,7 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 							document.<portlet:namespace />fm.<portlet:namespace />groupId.value = "<%= scopeGroupId %>";
 							document.<portlet:namespace />fm.<portlet:namespace />articleId.value = "";
 							document.<portlet:namespace />fm.<portlet:namespace />articleIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+
 							submitForm(document.<portlet:namespace />fm, "<portlet:actionURL><portlet:param name="struts_action" value="/journal/edit_article" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:actionURL>");
 						}
 					},
@@ -183,6 +213,7 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 							document.<portlet:namespace />fm.<portlet:namespace />groupId.value = "<%= scopeGroupId %>";
 							document.<portlet:namespace />fm.<portlet:namespace />articleId.value = "";
 							document.<portlet:namespace />fm.<portlet:namespace />expireArticleIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+
 							submitForm(document.<portlet:namespace />fm, "<portlet:actionURL><portlet:param name="struts_action" value="/journal/edit_article" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:actionURL>");
 						}
 					},
