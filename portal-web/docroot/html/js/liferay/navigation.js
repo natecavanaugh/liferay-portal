@@ -82,7 +82,7 @@ AUI.add(
 				NAME: 'navigation',
 
 				prototype: {
-					TPL_DELETE_BUTTON: '<span class="delete-tab hide">X</span>',
+					TPL_DELETE_BUTTON: '<i class="icon-remove-sign delete-tab hide"></i>',
 
 					initializer: function(config) {
 						var instance = this;
@@ -92,7 +92,10 @@ AUI.add(
 						if (navBlock) {
 							instance._updateURL = themeDisplay.getPathMain() + '/layouts_admin/update_page?p_auth=' + Liferay.authToken;
 
-							var items = navBlock.all('> ul > li');
+							var navItemSelector = Liferay.Data.NAV_ITEM_SELECTOR || 'ul > li';
+
+							var items = navBlock.all(navItemSelector);
+
 							var layoutIds = instance.get('layoutIds');
 
 							var cssClassBuffer = [];
@@ -124,6 +127,8 @@ AUI.add(
 									}
 								}
 							);
+
+							instance._navItemSelector = navItemSelector;
 
 							instance._makeAddable();
 							instance._makeDeletable();
@@ -163,22 +168,23 @@ AUI.add(
 						var instance = this;
 
 						var actionNode = event.actionNode;
-						var comboBox = event.comboBox;
+						var toolbar = event.toolbar;
 						var field = event.field;
 						var listItem = event.listItem;
 
 						var navBlock = instance.get('navBlock');
 
 						if (actionNode) {
-							actionNode.show();
+							currentLink = actionNode.one('a');
+							currentLink.show();
 
-							field.resetValue();
+							field.val(instance.prevVal);
 						}
 						else {
 							listItem.remove(true);
 						}
 
-						comboBox.destroy();
+						toolbar.destroy();
 
 						if (!navBlock.one('li')) {
 							navBlock.hide();
@@ -241,7 +247,9 @@ AUI.add(
 						if (instance.get('isModifiable')) {
 							var navBlock = instance.get('navBlock');
 
-							var navItems = navBlock.all('> ul > li').filter(
+							var navItemSelector = instance._navItemSelector;
+
+							var navItems = navBlock.all(navItemSelector).filter(
 								function(item, index, collection) {
 									return !item.hasClass('selected');
 								}
@@ -256,18 +264,18 @@ AUI.add(
 							navBlock.delegate(
 								'keydown',
 								A.bind('_handleKeyDown', instance),
-								'> ul > li a'
+								navItemSelector
 							);
 
 							navBlock.delegate(
 								'mouseenter',
-								A.rbind('_toggleDeleteButton', instance, 'removeClass'),
+								A.rbind('_toggleDeleteButton', instance, 'show'),
 								'li'
 							);
 
 							navBlock.delegate(
 								'mouseleave',
-								A.rbind('_toggleDeleteButton', instance, 'addClass'),
+								A.rbind('_toggleDeleteButton', instance, 'hide'),
 								'li'
 							);
 
@@ -285,54 +293,51 @@ AUI.add(
 								var currentLink = currentItem.one('a');
 
 								if (currentLink) {
-									var currentSpan = currentLink.one('span');
-
-									if (currentSpan) {
-										currentLink.on(
-											'click',
-											function(event) {
-												if (event.shiftKey) {
-													event.halt();
-												}
-											}
-										);
-
-										currentLink.on(
-											'mouseenter',
-											function(event) {
-												if (!themeDisplay.isStateMaximized() || event.shiftKey) {
-													currentSpan.setStyle('cursor', 'text');
-												}
-											}
-										);
-
-										currentLink.on('mouseleave', A.bind('setStyle', currentSpan, 'cursor', 'pointer'));
-
-										currentSpan.on(
-											'click',
-											function(event) {
-												if (themeDisplay.isStateMaximized() && !event.shiftKey) {
-													return;
-												}
-
+									currentLink.on(
+										'click',
+										function(event) {
+											if (event.shiftKey) {
 												event.halt();
-
-												var textNode = event.currentTarget;
-
-												var actionNode = textNode.get('parentNode');
-												var currentText = textNode.text();
-
-												instance._createEditor(
-													currentItem,
-													{
-														actionNode: actionNode,
-														prevVal: currentText,
-														textNode: textNode
-													}
-												);
 											}
-										);
-									}
+										}
+									);
+
+									currentLink.on(
+										'mouseenter',
+										function(event) {
+											if (!themeDisplay.isStateMaximized() || event.shiftKey) {
+												currentLink.setStyle('cursor', 'text');
+											}
+										}
+									);
+
+									currentLink.on('mouseleave', A.bind('setStyle', currentLink, 'cursor', 'pointer'));
+
+									currentLink.on(
+										'click',
+										function(event) {
+											if (themeDisplay.isStateMaximized() && !event.shiftKey) {
+												return;
+											}
+
+											event.halt();
+
+											var textNode = event.currentTarget;
+
+											var actionNode = textNode.get('parentNode');
+											var currentText = textNode.text();
+
+											instance._createEditor(
+												currentItem,
+												{
+													actionNode: actionNode,
+													currentLink: currentLink,
+													prevVal: currentText,
+													textNode: textNode
+												}
+											);
+										}
+									);
 								}
 							}
 						}
@@ -349,9 +354,9 @@ AUI.add(
 								eventType = 'cancelPage';
 							}
 
-							var comboBox = listItem._comboBox;
+							var toolbar = listItem._toolbar;
 
-							comboBox.fire(eventType);
+							toolbar.fire(eventType);
 						}
 					},
 
@@ -361,7 +366,7 @@ AUI.add(
 						var deleteTab = event.currentTarget.one('.delete-tab');
 
 						if (deleteTab) {
-							deleteTab[action]('hide');
+							deleteTab[action](true);
 						}
 					},
 
@@ -377,26 +382,16 @@ AUI.add(
 			function(listItem, options) {
 				var instance = this;
 
-				var id = A.guid();
-
 				var prototypeTemplate = instance._prototypeMenuTemplate || '';
 
-				prototypeTemplate = prototypeTemplate.replace(/name=\"template\"/g, 'name="' + id + 'Template"');
-
 				var prevVal = options.prevVal;
+				instance.prevVal = prevVal;
 
 				if (options.actionNode) {
-					options.actionNode.hide();
+					options.currentLink.hide();
 				}
 
-				var docClick = A.getDoc().on(
-					'click',
-					function(event) {
-						docClick.detach();
-
-						instance.fire('cancelPage', options);
-					}
-				);
+				var docClick;
 
 				var relayEvent = function(event) {
 					docClick.detach();
@@ -410,117 +405,134 @@ AUI.add(
 
 				var icons = [
 					{
-						handler: function(event) {
-							comboBox.fire('savePage', options);
-						},
-						icon: 'check',
-						id: id + 'Save'
+						icon: 'icon-ok',
+						id: 'Save',
+						title: 'Save',
+						on: {
+							click: function(event) {
+								toolbar.fire('savePage', options);
+							}
+						}
 					}
 				];
 
 				if (prototypeTemplate && !prevVal) {
 					icons.unshift(
 						{
-							activeState: true,
-							handler: function(event) {
-								event.halt();
-
-								comboBox._optionsOverlay.toggle(this.StateInteraction.get('active'));
-							},
-							icon: 'gear',
-							id: id + 'Options'
+							icon: 'icon-cog',
+							id: 'Options',
+							title: 'Options',
 						}
 					);
 				}
 
-				var optionsOverlay = new A.OverlayBase(
-					{
-						bodyContent: prototypeTemplate,
-						align: {
-							node: listItem,
-							points: ['tl', 'bl']
-						},
-						on: {
-							visibleChange: function(event) {
-								var instance = this;
+				var optionsPopover = instance._popover;
 
-								if (event.newVal) {
-									if (!instance.get('rendered')) {
-										instance.set('align.node', comboBox.get('contentBox'));
+				if (!optionsPopover) {
+					optionsPopover = new A.Popover(
+						{
+							bodyContent: prototypeTemplate,
+							align: {
+								node: optionItem,
+								points: ['tc', 'bc']
+							},
+							on: {
+								visibleChange: function(event) {
+									var instance = this;
 
-										instance.render();
+									if (event.newVal) {
+										if (!instance.get('rendered')) {
+											instance.set('align.node', optionItem);
+											instance.setStdModContent(A.WidgetStdMod.BODY, prototypeTemplate);
+											instance.render();
+										}
 									}
 								}
-							}
-						},
-						zIndex: 200
-					}
-				);
+							},
+							zIndex: 200
+						}
+					);
+					instance._popover = optionsPopover;
+				}
 
-				var comboBox = new A.Combobox(
+				var toolbar = new A.Toolbar(
 					{
 						after: {
 							destroy: function(event) {
+								var instance = this;
 								instance.fire('stopEditing');
 							},
 							render: function(event) {
+								var instance = this;
+
+								docClick = A.getDoc().on('click',
+									function(event) {
+										docClick.detach();
+
+										instance.fire('cancelPage', options);
+									}
+								);
+
 								instance.fire('startEditing');
 							}
 						},
-						boundingBox: A.Node.create('<div />').prependTo(listItem),
-						field: {
-							value: prevVal
-						},
-						icons: icons,
+						boundingBox: A.Node.create('<div class="input-append" />').prependTo(listItem),
+						children: icons,
 						on: {
 							destroy: function(event) {
 								var instance = this;
 
-								if (optionsOverlay.get('rendered')) {
-									optionsOverlay.destroy();
+								if (optionsPopover.get('rendered')) {
+									optionsPopover.hide();
+
+									optionsPopover.setStdModContent(A.WidgetStdMod.BODY, '');
 								}
 							}
 						}
 					}
 				).render();
 
-				if (prototypeTemplate && instance._optionsOpen && !prevVal) {
-					var optionItem = comboBox.icons.item(id + 'Options');
+				var navInput = A.Node.create('<input type="text" class="span2">');
+				navInput.val(prevVal);
+				var toolbarBoundingBox = A.one(toolbar.get('boundingBox'));
+				toolbarBoundingBox.prepend(navInput);
 
-					optionItem.StateInteraction.set('active', true);
-					optionsOverlay.show();
+				if (prototypeTemplate && instance._optionsOpen && !prevVal) {
+					var optionItem = toolbar.item(1)._host;
+
+					optionItem.toggleClass('active', true);
+					optionsPopover.show();
 				}
 
-				var comboField = comboBox._field;
+				var toolbarField = toolbarBoundingBox.one('input');
 
-				var comboContentBox = comboBox.get('contentBox');
+				var toolbarContentBox = toolbar.get('contentBox');
 
-				var overlayBoundingBox = optionsOverlay.get('boundingBox');
-				var overlayContentBox = optionsOverlay.get('contentBox');
+				var popoverBoundingBox = optionsPopover.get('boundingBox');
+				var popoverContentBox = optionsPopover.get('contentBox');
 
 				options.listItem = listItem;
-				options.comboBox = comboBox;
-				options.field = comboField;
-				options.optionsOverlay = optionsOverlay;
+				options.toolbar = toolbar;
+				options.field = toolbarField;
+				options.optionsPopover = optionsPopover;
 
-				comboBox.on('savePage', relayEvent);
-				comboBox.on('cancelPage', relayEvent);
+				toolbar.on('savePage', relayEvent);
+				toolbar.on('cancelPage', relayEvent);
 
-				comboBox._optionsOverlay = optionsOverlay;
+				toolbar._optionsPopover = optionsPopover;
 
-				listItem._comboBox = comboBox;
+				listItem._toolbar = toolbar;
 
-				overlayBoundingBox.setStyle('minWidth', listItem.get('offsetWidth') + 'px');
-				overlayContentBox.addClass('lfr-menu-list lfr-page-templates');
+				popoverContentBox.addClass('lfr-menu-list lfr-page-templates');
 
-				comboContentBox.swallowEvent('click');
-				overlayContentBox.swallowEvent('click');
+				toolbarContentBox.swallowEvent('click');
+				popoverContentBox.swallowEvent('click');
 
-				Util.focusFormField(comboField.get('node'));
+				Util.focusFormField(toolbarField);
 
-				var realign = A.bind('fire', optionsOverlay, 'align');
+				var realign = A.bind('fire', optionsPopover, 'align');
 
-				optionsOverlay.on('visibleChange', realign);
+				optionsPopover.on('visibleChange', realign);
 
 				instance.on('stopEditing', realign);
 				instance.on('startEditing', realign);
@@ -529,7 +541,7 @@ AUI.add(
 					instance.fire('editPage');
 				}
 			},
-			['aui-form-combobox-deprecated', 'aui-overlay-deprecated'],
+			['aui-toolbar', 'aui-popover'],
 			true
 		);
 
@@ -642,7 +654,7 @@ AUI.add(
 				var instance = this;
 
 				var actionNode = event.actionNode;
-				var comboBox = event.comboBox;
+				var toolbar = event.toolbar;
 				var field = event.field;
 				var listItem = event.listItem;
 				var textNode = event.textNode;
@@ -650,13 +662,14 @@ AUI.add(
 				var pageTitle = field.get('value');
 
 				pageTitle = Lang.trim(pageTitle);
+				prevVal = textNode ? Lang.trim(textNode.text()) : '';
 
 				var data = null;
 				var onSuccess = null;
 
 				if (pageTitle) {
 					if (actionNode) {
-						if (field.isDirty()) {
+						if (!pageTitle || pageTitle != prevVal) {
 							data = {
 								cmd: 'name',
 								doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
@@ -672,13 +685,14 @@ AUI.add(
 								var doc = A.getDoc();
 
 								textNode.text(pageTitle);
-								actionNode.show();
+								currentLink = actionNode.one('a');
+								currentLink.show();
 
-								comboBox.destroy();
+								toolbar.destroy();
 
 								var oldTitle = doc.get('title');
 
-								var regex = new RegExp(field.get('prevVal'), 'g');
+								var regex = new RegExp(prevVal, 'g');
 
 								newTitle = oldTitle.replace(regex, pageTitle);
 
@@ -688,13 +702,15 @@ AUI.add(
 						else {
 							// The new name is the same as the old one
 
-							comboBox.fire('cancelPage');
+							toolbar.fire('cancelPage');
 						}
 					}
 					else {
-						var optionsOverlay = comboBox._optionsOverlay;
-						var selectedInput = optionsOverlay.get('contentBox').one('input:checked');
-						var layoutPrototypeId = selectedInput && selectedInput.val();
+						var popoverBoundingBox = toolbar._optionsPopover.get('boundingBox');
+						var selectedInput = popoverBoundingBox.one('input:checked');
+						if (selectedInput) {
+							var layoutPrototypeId = selectedInput.val();
+						}
 
 						data = {
 							cmd: 'add',
@@ -728,7 +744,7 @@ AUI.add(
 
 							listItem.append(newTab);
 
-							comboBox.destroy();
+							toolbar.destroy();
 
 							if (data.sortable) {
 								listItem.addClass('sortable-item lfr-nav-sortable');
@@ -815,6 +831,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-component']
+		requires: ['aui-component', 'transition']
 	}
 );
