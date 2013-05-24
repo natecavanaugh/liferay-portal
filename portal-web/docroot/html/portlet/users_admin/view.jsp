@@ -17,10 +17,7 @@
 <%@ include file="/html/portlet/users_admin/init.jsp" %>
 
 <%
-String toolbarItem = ParamUtil.getString(request, "toolbarItem", "browse");
-
 String viewUsersRedirect = ParamUtil.getString(request, "viewUsersRedirect");
-String backURL = ParamUtil.getString(request, "backURL", viewUsersRedirect);
 
 int status = ParamUtil.getInteger(request, "status", WorkflowConstants.STATUS_APPROVED);
 
@@ -40,60 +37,7 @@ pageContext.setAttribute("portletURL", portletURL);
 String portletURLString = portletURL.toString();
 %>
 
-<liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-activate-user-because-that-would-exceed-the-maximum-number-of-users-allowed" />
-<liferay-ui:error exception="<%= RequiredOrganizationException.class %>" message="you-cannot-delete-organizations-that-have-suborganizations-or-users" />
-<liferay-ui:error exception="<%= RequiredUserException.class %>" message="you-cannot-delete-or-deactivate-yourself" />
-
-<aui:form action="<%= portletURLString %>" method="get" name="fm">
-	<liferay-portlet:renderURLParams varImpl="portletURL" />
-	<aui:input name="<%= Constants.CMD %>" type="hidden" />
-	<aui:input name="toolbarItem" type="hidden" value="<%= toolbarItem %>" />
-	<aui:input name="redirect" type="hidden" value="<%= portletURLString %>" />
-
-	<%
-	long organizationGroupId = 0;
-
-	int inactiveUsersCount = 0;
-	int usersCount = 0;
-	%>
-
-	<c:if test="<%= portletName.equals(PortletKeys.USERS_ADMIN) %>">
-		<aui:nav-bar>
-			<liferay-util:include page="/html/portlet/users_admin/toolbar.jsp" />
-
-			<c:if test="<%= usersListView.equals(UserConstants.LIST_VIEW_FLAT_ORGANIZATIONS) || usersListView.equals(UserConstants.LIST_VIEW_FLAT_USERS) %>">
-				<portlet:renderURL var="headerBackURL">
-					<portlet:param name="struts_action" value="/users_admin/view_users" />
-				</portlet:renderURL>
-
-				<liferay-ui:header
-					backLabel="users-and-organizations-home"
-					backURL="<%= headerBackURL.toString() %>"
-					title='<%= usersListView.equals(UserConstants.LIST_VIEW_FLAT_ORGANIZATIONS) ? "organizations" : "users" %>'
-				/>
-			</c:if>
-
-			<aui:nav-bar-search cssClass="pull-right" file="/html/portlet/dynamic_data_lists/record_set_search.jsp" />
-		</aui:nav-bar>
-	</c:if>
-
-	<c:choose>
-		<c:when test="<%= usersListView.equals(UserConstants.LIST_VIEW_FLAT_ORGANIZATIONS) %>">
-			<%@ include file="/html/portlet/users_admin/view_flat_organizations.jspf" %>
-		</c:when>
-		<c:when test="<%= usersListView.equals(UserConstants.LIST_VIEW_FLAT_USERS) %>">
-
-			<%
-			boolean organizationContextView = false;
-			%>
-
-			<%@ include file="/html/portlet/users_admin/view_flat_users.jspf" %>
-		</c:when>
-		<c:otherwise>
-			<%@ include file="/html/portlet/users_admin/view_tree.jspf" %>
-		</c:otherwise>
-	</c:choose>
-</aui:form>
+<liferay-util:include page="/html/portlet/users_admin/content.jsp" />
 
 <aui:script>
 	function <portlet:namespace />deleteOrganization(organizationId) {
@@ -191,13 +135,10 @@ String portletURLString = portletURL.toString();
 		window,
 		'<portlet:namespace />deleteOrganizations',
 		function() {
-			var organizationIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
-
-			if (!organizationIds) {
-				return;
-			}
-
-			<portlet:namespace />doDeleteOrganization('<%= Organization.class.getName() %>', organizationIds);
+			<portlet:namespace />doDeleteOrganization(
+				'<%= Organization.class.getName() %>',
+				Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds")
+			);
 		},
 		['liferay-util-list-fields']
 	);
@@ -206,25 +147,8 @@ String portletURLString = portletURL.toString();
 		window,
 		'<portlet:namespace />deleteUsers',
 		function(cmd) {
-			var deleteUsers = true;
-
 			var deleteUserIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
-
-			if (!deleteUserIds) {
-				deleteUsers = false;
-			}
-			else if (cmd == "<%= Constants.DEACTIVATE %>") {
-				if (!confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-deactivate-the-selected-users") %>')) {
-					deleteUsers = false;
-				}
-			}
-			else if (cmd == "<%= Constants.DELETE %>") {
-				if (!confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-permanently-delete-the-selected-users") %>')) {
-					deleteUsers = false;
-				}
-			}
-
-			if (deleteUsers) {
+			if (deleteUserIds && ((cmd == "<%= Constants.DEACTIVATE %>") && confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-deactivate-the-selected-users") %>')) || ((cmd == "<%= Constants.DELETE %>") && confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-permanently-delete-the-selected-users") %>'))) {
 				document.<portlet:namespace />fm.method = "post";
 				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = cmd;
 				document.<portlet:namespace />fm.<portlet:namespace />redirect.value = document.<portlet:namespace />fm.<portlet:namespace />usersRedirect.value;
