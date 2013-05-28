@@ -190,8 +190,8 @@ AUI.add(
 						instance._folderPagination = folderPagination;
 
 						instance._eventHandles = [
-							Liferay.on('liferay-app-view-folders:dataRequest', instance._onDataRequest, instance),
-							Liferay.on('liferay-app-view-folders:afterDataRequest', instance._afterDataRequest, instance),
+							Liferay.on('liferayAppViewFolders:dataRequest', instance._onDataRequest, instance),
+							Liferay.on('liferayAppViewFolders:afterDataRequest', instance._afterDataRequest, instance),
 							instance.after('paginationDataChange', instance._afterPaginationDataChange, instance)
 						];
 					},

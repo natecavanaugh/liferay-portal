@@ -378,7 +378,7 @@ AUI.add(
 						var node = target.get(STR_NODE);
 
 						Liferay.fire(
-							'liferay-app-view-move:dragStart',
+							'liferayAppViewMove:dragStart',
 							{
 								node: node
 							}

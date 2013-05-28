@@ -296,7 +296,7 @@ AUI.add(
 						instance._lastDataRequest = data;
 
 						Liferay.fire(
-							'liferay-app-view-folders:afterDataRequest',
+							'liferayAppViewFolders:afterDataRequest',
 							{
 								data: data
 							}
@@ -376,7 +376,7 @@ AUI.add(
 						instance._processDefaultParams(event);
 
 						Liferay.fire(
-							'liferay-app-view-folders:dataRequest',
+							'liferayAppViewFolders:dataRequest',
 							{
 								requestParams: event.requestParams,
 								resetPagination: event.resetPagination,
@@ -582,7 +582,7 @@ AUI.add(
 
 							entriesContainer.setContent(entries);
 
-							Liferay.fire('liferay-app-view-folders:setEntries');
+							Liferay.fire('liferayAppViewFolders:setEntries');
 						}
 
 						var addButtonContainer = instance.byId('addButtonContainer');
