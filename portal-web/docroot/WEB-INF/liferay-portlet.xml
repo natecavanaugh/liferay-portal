@@ -1399,6 +1399,7 @@
 		<private-request-attributes>false</private-request-attributes>
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
+		<header-portlet-css>/html/portlet/admin/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/html/portlet/admin/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>portlet-admin</css-class-wrapper>
 	</portlet>
