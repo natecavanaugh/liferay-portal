@@ -193,7 +193,7 @@ AUI.add(
 				Liferay.on(instance.ns('dataRequest'), instance._onDataRequest, instance);
 
 				Liferay.after(
-					'liferay-app-view-folders:dataRequest',
+					'liferayAppViewFolders:dataRequest',
 					function(event) {
 						var requestParams = event.requestParams;
 

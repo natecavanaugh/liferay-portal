@@ -110,9 +110,9 @@ AUI.add(
 						instance._displayStyleCSSClass = instance.get('displayStyleCSSClass');
 
 						instance._eventHandles = [
-							Liferay.on('liferay-app-view-folders:dataRequest', instance._onDataRequest, instance),
+							Liferay.on('liferayAppViewFolders:dataRequest', instance._onDataRequest, instance),
 							Liferay.on(instance.ns('dataProcessed'), instance._updateSelectedEntriesStatus, instance),
-							Liferay.on('liferay-app-view-move:dragStart', instance._onDragStart, instance)
+							Liferay.on('liferayAppViewMove:dragStart', instance._onDragStart, instance)
 						];
 
 						instance._initHover();
