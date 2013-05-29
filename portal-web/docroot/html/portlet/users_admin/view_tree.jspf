@@ -55,6 +55,8 @@ if (filterManageableOrganizations) {
 		organizationParams.put("organizationsTree", organizations);
 	}
 }
+
+String searchContainerOrgId = StringPool.BLANK;
 %>
 
 <c:choose>
@@ -281,6 +283,8 @@ if (filterManageableOrganizations) {
 							>
 
 								<%
+								searchContainerOrgId = searchContainer.getId(request, renderResponse.getNamespace());
+
 								OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)searchContainer.getSearchTerms();
 
 								long parentOrganizationId = OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID;
@@ -304,7 +308,7 @@ if (filterManageableOrganizations) {
 										</liferay-ui:search-container-results>
 
 										<c:if test="<%= !results.isEmpty() %>">
-											<aui:button cssClass="delete-organizations" onClick='<%= renderResponse.getNamespace() + "deleteOrganizations();" %>' value="delete" />
+											<aui:button cssClass="delete-organizations" disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteOrganizations();" %>' value="delete" />
 										</c:if>
 									</c:when>
 									<c:otherwise>
@@ -330,7 +334,7 @@ if (filterManageableOrganizations) {
 											<c:if test="<%= !results.isEmpty() %>">
 												<div class="separator"><!-- --></div>
 
-												<aui:button onClick='<%= renderResponse.getNamespace() + "deleteOrganizations();" %>' value="delete" />
+												<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteOrganizations();" %>' value="delete" />
 											</c:if>
 										</liferay-ui:search-container-results>
 									</c:otherwise>
@@ -464,6 +468,10 @@ if (filterManageableOrganizations) {
 		</div>
 	</c:otherwise>
 </c:choose>
+
+<aui:script>
+	Liferay.Util.toggleSearchContainerButton('#<portlet:namespace />delete', '#<portlet:namespace /><%= searchContainerOrgId %>', document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
+</aui:script>
 
 <%!
 private Long[][] _filterSuborganizations(Long[][]leftAndRightOrganizationIds, Long[][]leftAndRightParentOrganizationIds) {
