@@ -1,4 +1,5 @@
 @import "compass";
+@import "../fonts/font-awesome/css/font-awesome.min.css";
 
 .aui {
 	#wrapper {
