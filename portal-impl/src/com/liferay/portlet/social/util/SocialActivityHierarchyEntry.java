@@ -19,12 +19,12 @@ import com.liferay.portal.util.PortalUtil;
 /**
  * @author Zsolt Berentey
  */
-public class SocialActivityHierarchy {
+public class SocialActivityHierarchyEntry {
 
-	public SocialActivityHierarchy() {
+	public SocialActivityHierarchyEntry() {
 	}
 
-	public SocialActivityHierarchy(long classNameId, long classPK) {
+	public SocialActivityHierarchyEntry(long classNameId, long classPK) {
 		_classNameId = classNameId;
 		_classPK = classPK;
 	}

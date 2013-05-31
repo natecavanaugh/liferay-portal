@@ -46,6 +46,7 @@ import com.liferay.portal.model.Image;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutBranch;
 import com.liferay.portal.model.LayoutConstants;
+import com.liferay.portal.model.LayoutFriendlyURL;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.LayoutRevision;
 import com.liferay.portal.model.LayoutSet;
@@ -54,6 +55,7 @@ import com.liferay.portal.model.LayoutTemplate;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.LayoutTypePortletConstants;
 import com.liferay.portal.service.ImageLocalServiceUtil;
+import com.liferay.portal.service.LayoutFriendlyURLLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
@@ -160,6 +162,8 @@ public class LayoutStagedModelDataHandler
 			return;
 		}
 
+		portletDataContext.setPlid(layout.getPlid());
+
 		long parentLayoutId = layout.getParentLayoutId();
 
 		if (parentLayoutId != LayoutConstants.DEFAULT_PARENT_LAYOUT_ID) {
@@ -178,7 +182,18 @@ public class LayoutStagedModelDataHandler
 			}
 		}
 
-		portletDataContext.setPlid(layout.getPlid());
+		List<LayoutFriendlyURL> layoutFriendlyURLs =
+			LayoutFriendlyURLLocalServiceUtil.getLayoutFriendlyURLs(
+				layout.getPlid());
+
+		for (LayoutFriendlyURL layoutFriendlyURL : layoutFriendlyURLs) {
+			StagedModelDataHandlerUtil.exportStagedModel(
+				portletDataContext, layoutFriendlyURL);
+
+			portletDataContext.addReferenceElement(
+				layout, layoutElement, layoutFriendlyURL,
+				PortletDataContext.REFERENCE_TYPE_DEPENDENCY, false);
+		}
 
 		if (layout.isIconImage()) {
 			exportLayoutIconImage(portletDataContext, layout, layoutElement);
@@ -384,6 +399,9 @@ public class LayoutStagedModelDataHandler
 			importedLayout = existingLayout;
 		}
 
+		portletDataContext.setPlid(importedLayout.getPlid());
+		portletDataContext.setOldPlid(layout.getPlid());
+
 		newLayoutsMap.put(oldLayoutId, importedLayout);
 
 		long parentLayoutId = layout.getParentLayoutId();
@@ -463,6 +481,18 @@ public class LayoutStagedModelDataHandler
 		importedLayout.setHidden(layout.isHidden());
 		importedLayout.setFriendlyURL(friendlyURL);
 
+		importLayoutFriendlyURLs(portletDataContext, layout);
+
+		importedLayout.setIconImage(false);
+
+		if (layout.isIconImage()) {
+			importLayoutIconImage(
+				portletDataContext, importedLayout, layoutElement);
+		}
+		else {
+			ImageLocalServiceUtil.deleteImage(importedLayout.getIconImageId());
+		}
+
 		boolean importThemeSettings = MapUtil.getBoolean(
 			portletDataContext.getParameterMap(),
 			PortletDataHandlerKeys.THEME_REFERENCE);
@@ -484,16 +514,6 @@ public class LayoutStagedModelDataHandler
 		importedLayout.setLayoutPrototypeLinkEnabled(
 			layout.isLayoutPrototypeLinkEnabled());
 
-		importedLayout.setIconImage(false);
-
-		if (layout.isIconImage()) {
-			importLayoutIconImage(
-				portletDataContext, importedLayout, layoutElement);
-		}
-		else {
-			ImageLocalServiceUtil.deleteImage(importedLayout.getIconImageId());
-		}
-
 		StagingUtil.updateLastImportSettings(
 			layoutElement, importedLayout, portletDataContext);
 
@@ -504,9 +524,6 @@ public class LayoutStagedModelDataHandler
 		List<Layout> newLayouts = portletDataContext.getNewLayouts();
 
 		newLayouts.add(importedLayout);
-
-		portletDataContext.setPlid(importedLayout.getPlid());
-		portletDataContext.setOldPlid(layout.getPlid());
 
 		portletDataContext.importClassedModel(
 			layout, importedLayout, LayoutPortletDataHandler.NAMESPACE);
@@ -749,6 +766,27 @@ public class LayoutStagedModelDataHandler
 		JournalContentSearchLocalServiceUtil.updateContentSearch(
 			portletDataContext.getScopeGroupId(), layout.isPrivateLayout(),
 			layout.getLayoutId(), StringPool.BLANK, articleId, true);
+	}
+
+	protected void importLayoutFriendlyURLs(
+			PortletDataContext portletDataContext, Layout layout)
+		throws Exception {
+
+		List<Element> layoutFriendlyURLElements =
+			portletDataContext.getReferenceDataElements(
+				layout, LayoutFriendlyURL.class);
+
+		for (Element layoutFriendlyURLElement : layoutFriendlyURLElements) {
+			String layoutFriendlyURLPath =
+				layoutFriendlyURLElement.attributeValue("path");
+
+			LayoutFriendlyURL layoutFriendlyURL =
+				(LayoutFriendlyURL)portletDataContext.getZipEntryAsObject(
+					layoutFriendlyURLPath);
+
+			StagedModelDataHandlerUtil.importStagedModel(
+				portletDataContext, layoutFriendlyURL);
+		}
 	}
 
 	protected void importLayoutIconImage(

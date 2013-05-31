@@ -145,7 +145,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		return _prefix;
 	}
 
-	public boolean getRequired() {
+	public java.lang.Boolean getRequired() {
 		return _required;
 	}
 
@@ -341,7 +341,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		setScopedAttribute("prefix", prefix);
 	}
 
-	public void setRequired(boolean required) {
+	public void setRequired(java.lang.Boolean required) {
 		_required = required;
 
 		setScopedAttribute("required", required);
@@ -413,7 +413,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 		_onClick = null;
 		_placeholder = null;
 		_prefix = null;
-		_required = false;
+		_required = null;
 		_showRequiredLabel = true;
 		_suffix = null;
 		_title = null;
@@ -499,7 +499,7 @@ public class BaseInputTag extends com.liferay.taglib.util.IncludeTag {
 	private java.lang.String _onClick = null;
 	private java.lang.String _placeholder = null;
 	private java.lang.String _prefix = null;
-	private boolean _required = false;
+	private java.lang.Boolean _required = null;
 	private boolean _showRequiredLabel = true;
 	private java.lang.String _suffix = null;
 	private java.lang.String _title = null;

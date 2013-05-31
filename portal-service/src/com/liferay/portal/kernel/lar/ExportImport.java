@@ -14,18 +14,31 @@
 
 package com.liferay.portal.kernel.lar;
 
+import com.liferay.portal.kernel.util.DateRange;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.model.StagedModel;
 
 import java.io.File;
 
+import java.util.Calendar;
 import java.util.Map;
+
+import javax.portlet.PortletRequest;
 
 /**
  * @author Zsolt Berentey
  */
 public interface ExportImport {
+
+	public Calendar getDate(
+		PortletRequest portletRequest, String paramPrefix,
+		boolean timeZoneSensitive);
+
+	public DateRange getDateRange(
+			PortletRequest portletRequest, long groupId, boolean privateLayout,
+			long plid, String portletId)
+		throws Exception;
 
 	public ManifestSummary getManifestSummary(
 			long userId, long groupId, Map<String, String[]> parameterMap,

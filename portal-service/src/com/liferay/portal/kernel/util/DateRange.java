@@ -14,16 +14,35 @@
 
 package com.liferay.portal.kernel.util;
 
-/**
- * @author Brian Wing Shun Chan
- */
-public class BreadcrumbsUtil {
+import java.util.Date;
 
-	public static String removeLastClass(String breadcrumbs) {
-		return StringUtil.replace(
-			breadcrumbs,
-			new String[] {"class=\"last\"", "class=\"first last\""},
-			new String[] {StringPool.BLANK, "class=\"first\""});
+/**
+ * @author Eduardo Garcia
+ */
+public class DateRange {
+
+	public DateRange(Date startDate, Date endDate) {
+		_startDate = startDate;
+		_endDate = endDate;
 	}
+
+	public Date getEndDate() {
+		return _endDate;
+	}
+
+	public Date getStartDate() {
+		return _startDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		_endDate = endDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		_startDate = startDate;
+	}
+
+	private Date _endDate;
+	private Date _startDate;
 
 }

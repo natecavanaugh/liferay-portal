@@ -792,7 +792,6 @@ public class Creole10Parser]]></replacevalue>
 
 		<replace file="${tstamp.value}/org/apache/struts/tiles/xmlDefinition/I18nFactorySet.java">
 			<replacefilter token="private XmlDefinitionsSet " value="protected XmlDefinitionsSet " />
-			<replacefilter token="com/ibm" value="com/liferay/ibm" />
 		</replace>
 
 		<antcall target="compile-java">

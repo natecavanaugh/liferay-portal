@@ -22,35 +22,35 @@ import java.util.Stack;
 /**
  * @author Zsolt Berentey
  */
-public class SocialActivityHierarchyThreadLocal {
+public class SocialActivityHierarchyEntryThreadLocal {
 
 	public static void clear() {
-		Stack<SocialActivityHierarchy> activityHierarchies =
-			_activityHierarchies.get();
+		Stack<SocialActivityHierarchyEntry> activityHierarchyEntries =
+			_activityHierarchyEntries.get();
 
-		activityHierarchies.clear();
+		activityHierarchyEntries.clear();
 	}
 
-	public static SocialActivityHierarchy peek() {
-		Stack<SocialActivityHierarchy> activityHierarchies =
-			_activityHierarchies.get();
+	public static SocialActivityHierarchyEntry peek() {
+		Stack<SocialActivityHierarchyEntry> activityHierarchyEntries =
+			_activityHierarchyEntries.get();
 
-		if (activityHierarchies.isEmpty()) {
+		if (activityHierarchyEntries.isEmpty()) {
 			return null;
 		}
 
-		return activityHierarchies.peek();
+		return activityHierarchyEntries.peek();
 	}
 
-	public static SocialActivityHierarchy pop() {
-		Stack<SocialActivityHierarchy> activityHierarchies =
-			_activityHierarchies.get();
+	public static SocialActivityHierarchyEntry pop() {
+		Stack<SocialActivityHierarchyEntry> activityHierarchyEntries =
+			_activityHierarchyEntries.get();
 
-		if (activityHierarchies.isEmpty()) {
+		if (activityHierarchyEntries.isEmpty()) {
 			return null;
 		}
 
-		return activityHierarchies.pop();
+		return activityHierarchyEntries.pop();
 	}
 
 	public static void push(Class<?> clazz, long classPK) {
@@ -60,11 +60,11 @@ public class SocialActivityHierarchyThreadLocal {
 	}
 
 	public static void push(long classNameId, long classPK) {
-		Stack<SocialActivityHierarchy> activityHierarchies =
-			_activityHierarchies.get();
+		Stack<SocialActivityHierarchyEntry> activityHierarchyEntries =
+			_activityHierarchyEntries.get();
 
-		activityHierarchies.push(
-			new SocialActivityHierarchy(classNameId, classPK));
+		activityHierarchyEntries.push(
+			new SocialActivityHierarchyEntry(classNameId, classPK));
 	}
 
 	public static void push(String className, long classPK) {
@@ -73,11 +73,11 @@ public class SocialActivityHierarchyThreadLocal {
 		push(classNameId, classPK);
 	}
 
-	private static ThreadLocal<Stack<SocialActivityHierarchy>>
-		_activityHierarchies =
-			new AutoResetThreadLocal<Stack<SocialActivityHierarchy>>(
-				SocialActivityHierarchyThreadLocal.class +
-					"._activityHierarchy",
-				new Stack<SocialActivityHierarchy>());
+	private static ThreadLocal<Stack<SocialActivityHierarchyEntry>>
+		_activityHierarchyEntries =
+			new AutoResetThreadLocal<Stack<SocialActivityHierarchyEntry>>(
+				SocialActivityHierarchyEntryThreadLocal.class +
+					"._activityHierarchyEntries",
+				new Stack<SocialActivityHierarchyEntry>());
 
 }
