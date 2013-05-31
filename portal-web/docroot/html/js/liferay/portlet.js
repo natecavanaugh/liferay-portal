@@ -679,8 +679,8 @@
 	Liferay.provide(
 		Portlet,
 		'loadCSSEditor',
-		function(portletId) {
-			Liferay.PortletCSS.init(portletId);
+		function(portletId, cssPortletURL) {
+			Liferay.PortletCSS.init(portletId, cssPortletURL);
 		},
 		['liferay-look-and-feel']
 	);
