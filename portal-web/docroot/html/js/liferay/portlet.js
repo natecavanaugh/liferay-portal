@@ -448,16 +448,7 @@
 							after: {
 								success: function() {
 									if (restore) {
-										var data = {
-											doAsUserId: doAsUserId,
-											p_l_id: plid,
-											p_p_id: portlet.portletId,
-											p_p_state: 'exclusive'
-										};
-
-										content.plug(A.Plugin.ParseContent);
-
-										content.load(themeDisplay.getPathMain() + '/portal/render_portlet?' + A.QueryString.stringify(data));
+										content.load(options.minimizeURL);
 									}
 								}
 							},
