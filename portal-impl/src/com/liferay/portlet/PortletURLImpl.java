@@ -400,6 +400,11 @@ public class PortletURLImpl
 	}
 
 	@Override
+	public boolean isRenderPortletURL() {
+		return _renderPortletURL;
+	}
+
+	@Override
 	public boolean isSecure() {
 		return _secure;
 	}
@@ -679,6 +684,13 @@ public class PortletURLImpl
 	}
 
 	@Override
+	public void setRenderPortletURL(boolean renderPortletURL) {
+		_renderPortletURL = renderPortletURL;
+
+		clearCache();
+	}
+
+	@Override
 	public void setResourceID(String resourceID) {
 		_resourceID = resourceID;
 	}
@@ -840,7 +852,7 @@ public class PortletURLImpl
 		}
 
 		try {
-			if (_layoutFriendlyURL == null) {
+			if ((_layoutFriendlyURL == null) && !_renderPortletURL) {
 				Layout layout = getLayout();
 
 				if (layout != null) {
@@ -871,7 +883,19 @@ public class PortletURLImpl
 			_log.error(e);
 		}
 
-		if (Validator.isNull(_layoutFriendlyURL)) {
+		if (_renderPortletURL) {
+			sb.append(portalURL);
+			sb.append(themeDisplay.getPathMain());
+			sb.append("/portal/render_portlet?");
+
+			addPortalAuthToken(sb, key);
+
+			sb.append("p_l_id");
+			sb.append(StringPool.EQUAL);
+			sb.append(processValue(key, _plid));
+			sb.append(StringPool.AMPERSAND);
+		}
+		else if (Validator.isNull(_layoutFriendlyURL)) {
 			sb.append(portalURL);
 			sb.append(themeDisplay.getPathMain());
 			sb.append("/portal/layout?");
@@ -1462,6 +1486,7 @@ public class PortletURLImpl
 	private long _refererPlid;
 	private Set<String> _removedParameterNames;
 	private Map<String, String[]> _removePublicRenderParameters;
+	private boolean _renderPortletURL;
 	private HttpServletRequest _request;
 	private Map<String, String> _reservedParameters;
 	private String _resourceID;
