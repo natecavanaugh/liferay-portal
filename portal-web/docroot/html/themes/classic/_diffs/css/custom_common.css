@@ -60,11 +60,6 @@
 					&:focus, &:hover {
 						color: #3EA9DB;
 					}
-
-					[class^="icon-"], [class*=" icon-"] {
-						background-image: url(../images/aui/glyphicons-halflings-white.png);
-						margin-top: 3px;
-					}
 				}
 
 				&.active > a {
