@@ -1538,7 +1538,7 @@
 			<name>required</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>boolean</type>
+			<type>java.lang.Boolean</type>
 		</attribute>
 		<attribute>
 			<name>showRequiredLabel</name>

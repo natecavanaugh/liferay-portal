@@ -555,8 +555,9 @@
 			</attribute>
 			<attribute>
 				<name>required</name>
-				<inputType>boolean</inputType>
-				<outputType>boolean</outputType>
+				<inputType>java.lang.Boolean</inputType>
+				<outputType>java.lang.Boolean</outputType>
+				<defaultValue>null</defaultValue>
 			</attribute>
 			<attribute>
 				<name>showRequiredLabel</name>
