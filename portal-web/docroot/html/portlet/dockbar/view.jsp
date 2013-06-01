@@ -32,7 +32,7 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 %>
 
 <aui:nav-bar cssClass="navbar-static-top dockbar" data-namespace="<%= renderResponse.getNamespace() %>" id="dockbar">
-	<aui:nav>
+	<aui:nav cssClass="nav-add-controls">
 		<c:if test="<%= group.isControlPanel() %>">
 
 			<%
@@ -127,6 +127,7 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 		</c:if>
 
 		<c:if test="<%= !group.isControlPanel() && (!group.hasStagingGroup() || group.isStagingGroup()) && (GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.ADD_LAYOUT) || hasLayoutUpdatePermission || (layoutTypePortlet.isCustomizable() && layoutTypePortlet.isCustomizedView() && hasLayoutCustomizePermission)) %>">
+
 			<portlet:renderURL var="addURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 				<portlet:param name="struts_action" value="/dockbar/add_panel" />
 				<portlet:param name="viewEntries" value="<%= Boolean.TRUE.toString() %>" />
@@ -136,7 +137,7 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 		</c:if>
 
 		<c:if test="<%= !group.isControlPanel() && (themeDisplay.isShowLayoutTemplatesIcon() || themeDisplay.isShowPageSettingsIcon()) %>">
-			<aui:nav-item anchorCssClass="manage-content-link" dropdown="<%= true %>" iconClass="icon-edit" id="manageContent" label="edit">
+			<aui:nav-item anchorCssClass="manage-content-link" dropdown="<%= true %>" iconClass="icon-edit" id="manageContent" label="">
 
 				<%
 				String useDialogFullDialog = StringPool.BLANK;
@@ -173,8 +174,6 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 		<c:if test="<%= !group.isControlPanel() && (!group.hasStagingGroup() || group.isStagingGroup()) && (hasLayoutUpdatePermission || (layoutTypePortlet.isCustomizable() && layoutTypePortlet.isCustomizedView() && hasLayoutCustomizePermission) || PortletPermissionUtil.hasConfigurationPermission(permissionChecker, themeDisplay.getSiteGroupId(), layout, ActionKeys.CONFIGURATION)) %>">
 			<liferay-util:buffer var="editControlsLabel">
 				<i class="controls-state-icon <%= toggleControlsState.equals("visible") ? "icon-ok" : "icon-remove" %>"></i>
-
-				<liferay-ui:message key="edit-controls" />
 			</liferay-util:buffer>
 
 			<aui:nav-item anchorCssClass="toggle-controls-link" cssClass="toggle-controls" id="toggleControls" label="<%= editControlsLabel %>" />
@@ -182,6 +181,120 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 	</aui:nav>
 
 	<%@ include file="/html/portlet/dockbar/view_user_panel.jspf" %>
+
+	<aui:nav cssClass="nav-account-controls pull-right">
+		<c:if test="<%= (themeDisplay.isShowControlPanelIcon() || themeDisplay.isShowSiteAdministrationIcon()) && (!layout.getGroup().isControlPanel() || Validator.equals(themeDisplay.getControlPanelCategory(), PortletCategoryKeys.CURRENT_SITE)) %>">
+			<aui:nav-item cssClass="admin-links" dropdown="<%= true %>" id="adminLinks" label="admin">
+				<c:if test="<%= themeDisplay.isShowSiteAdministrationIcon() %>">
+					<aui:nav-item href="<%= themeDisplay.getURLSiteAdministration() %>" iconClass="icon-cog" label="site-administration" />
+				</c:if>
+
+				<c:if test="<%= themeDisplay.isShowControlPanelIcon() %>">
+					<aui:nav-item href="<%= themeDisplay.getURLControlPanel() %>" iconClass="icon-wrench" label="control-panel" />
+				</c:if>
+			</aui:nav-item>
+
+			<aui:nav-item cssClass="divider-vertical"></aui:nav-item>
+		</c:if>
+
+		<c:if test="<%= user.hasMySites() %>">
+			<aui:nav-item cssClass="my-sites" dropdown="<%= true %>" id="mySites" label="my-sites" wrapDropDownMenu="<%= false %>">
+				<liferay-ui:my-sites cssClass="dropdown-menu my-sites-menu" />
+			</aui:nav-item>
+		</c:if>
+
+		<aui:nav-item cssClass="divider-vertical"></aui:nav-item>
+
+		<%
+		String useDialog = StringPool.BLANK;
+
+		if (PropsValues.DOCKBAR_ADMINISTRATIVE_LINKS_SHOW_IN_POP_UP) {
+			useDialog = StringPool.SPACE + "use-dialog";
+		}
+		%>
+
+		<liferay-util:buffer var="userName">
+			<c:if test="<%= themeDisplay.isImpersonated() %>">
+				<b class="alert-icon icon-warning-sign"></b>
+			</c:if>
+
+			<img alt="<liferay-ui:message key="manage-my-account" />" src="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>" />
+
+			<span class="user-full-name">
+				<%= HtmlUtil.escape(user.getFullName()) %>
+			</span>
+		</liferay-util:buffer>
+
+		<c:choose>
+			<c:when test="<%= themeDisplay.isSignedIn() %>">
+				<aui:nav-item anchorCssClass="user-avatar-link" cssClass='<%= themeDisplay.isImpersonated() ? "user-avatar impersonating-user" : "user-avatar" %>' dropdown="<%= true %>" id="userAvatar" label="<%= userName %>">
+					<c:choose>
+						<c:when test="<%= themeDisplay.isImpersonated() %>">
+
+							<%
+							String impersonatingUserLabel = "you-are-impersonating-the-guest-user";
+
+							if (themeDisplay.isSignedIn()) {
+								impersonatingUserLabel = LanguageUtil.format(pageContext, "you-are-impersonating-x", new Object[] {HtmlUtil.escape(user.getFullName())});
+							}
+							%>
+
+							<div class="alert alert-info"><%= impersonatingUserLabel %></div>
+
+							<liferay-util:buffer var="leaveImpersonationLabel">
+								<liferay-ui:message key="be-yourself-again" /> (<%= HtmlUtil.escape(realUser.getFullName()) %>)
+							</liferay-util:buffer>
+
+							<aui:nav-item href="<%= PortalUtil.getLayoutURL(layout, themeDisplay, false) %>" label="<%= leaveImpersonationLabel %>" />
+
+							<%
+							Locale realUserLocale = realUser.getLocale();
+							Locale userLocale = user.getLocale();
+							%>
+
+							<c:if test="<%= !realUserLocale.equals(userLocale) %>">
+
+								<%
+								String doAsUserLanguageId = null;
+								String changeLanguageMessage = null;
+
+								if (locale.getLanguage().equals(realUserLocale.getLanguage()) && locale.getCountry().equals(realUserLocale.getCountry())) {
+									doAsUserLanguageId = userLocale.getLanguage() + "_" + userLocale.getCountry();
+									changeLanguageMessage = LanguageUtil.format(realUserLocale, "use-x's-preferred-language-(x)", new String[] {HtmlUtil.escape(user.getFullName()), userLocale.getDisplayLanguage(realUserLocale)});
+								}
+								else {
+									doAsUserLanguageId = realUserLocale.getLanguage() + "_" + realUserLocale.getCountry();
+									changeLanguageMessage = LanguageUtil.format(realUserLocale, "use-your-preferred-language-(x)", realUserLocale.getDisplayLanguage(realUserLocale));
+								}
+								%>
+
+								<aui:nav-item cssClass="current-user-language" href='<%= HttpUtil.setParameter(PortalUtil.getCurrentURL(request), "doAsUserLanguageId", doAsUserLanguageId) %>' label="<%= changeLanguageMessage %>" />
+							</c:if>
+						</c:when>
+						<c:otherwise>
+							<c:if test="<%= Validator.isNotNull(themeDisplay.getURLMyAccount()) %>">
+
+								<%
+								String myAccountURL = themeDisplay.getURLMyAccount().toString();
+
+								myAccountURL = HttpUtil.setParameter(myAccountURL, "controlPanelCategory", PortletCategoryKeys.MY);
+								%>
+
+								<aui:nav-item anchorCssClass='<%= themeDisplay.isImpersonated() ? "" : useDialog %>' href="<%= myAccountURL %>" label="my-account" title="manage-my-account" />
+							</c:if>
+
+							<c:if test="<%= themeDisplay.isShowSignOutIcon() %>">
+								<aui:nav-item cssClass="sign-out" href="<%= themeDisplay.getURLSignOut() %>" label="sign-out" />
+							</c:if>
+						</c:otherwise>
+					</c:choose>
+				</aui:nav-item>
+			</c:when>
+			<c:otherwise>
+				<aui:nav-item cssClass="sign-in" href="<%= themeDisplay.getURLSignIn() %>" label="sign-in" />
+			</c:otherwise>
+		</c:choose>
+	</aui:nav>
 </aui:nav-bar>
 
 <div class="dockbar-messages" id="<portlet:namespace />dockbarMessages">

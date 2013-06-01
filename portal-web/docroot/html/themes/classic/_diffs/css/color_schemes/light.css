@@ -1,0 +1,42 @@
+@import "compass";
+
+body.light {
+	nav#navigation {
+		.navbar-inner {
+			border: 0;
+			@include box-shadow(none);
+
+			ul.nav {
+				li {
+					padding: 8px 0;
+				}
+
+				li.active {
+					> a {
+						background: #00CAFF;
+						color: #FFF;
+						@include border-radius(3px);
+						@include box-shadow(none);
+						@include text-shadow(none);
+					}
+				}
+			}
+		}
+	}
+
+	.breadcrumb {
+		background: transparent;
+	}
+
+	.portlet-content {
+		border: 0;
+	}
+
+	.portlet-title {
+		color: #29B23E;
+	}
+
+	.portlet-topper {
+		background: transparent;
+	}
+}

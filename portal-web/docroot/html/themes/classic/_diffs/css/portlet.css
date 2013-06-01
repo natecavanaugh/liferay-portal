@@ -719,5 +719,5 @@ body.portlet {
 /* ---------- Extras ---------- */
 
 .portlet-content, .portlet-minimized .portlet-content-container {
-	@include border-radius(0 0 4px 4px);
+	@include border-radius(0 0 3px 3px);
 }
