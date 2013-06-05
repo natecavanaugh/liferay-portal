@@ -19,6 +19,7 @@
 <%
 String randomNamespace = (String)request.getAttribute("liferay-ui:search-toggle:randomNamespace");
 
+boolean autoFocus = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:search-toggle:autoFocus"));
 String buttonLabel = (String)request.getAttribute("liferay-ui:search-toggle:buttonLabel");
 DisplayTerms displayTerms = (DisplayTerms)request.getAttribute("liferay-ui:search-toggle:displayTerms");
 String id = (String)request.getAttribute("liferay-ui:search-toggle:id");

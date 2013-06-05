@@ -143,8 +143,7 @@ public class InputDateTag extends IncludeTag {
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
 		request.setAttribute(
-			"liferay-ui:input-date:autoFocus",
-			String.valueOf(_autoFocus));
+			"liferay-ui:input-date:autoFocus", String.valueOf(_autoFocus));
 		request.setAttribute("liferay-ui:input-date:cssClass",_cssClass);
 		request.setAttribute(
 			"liferay-ui:input-date:dayNullable", String.valueOf(_dayNullable));

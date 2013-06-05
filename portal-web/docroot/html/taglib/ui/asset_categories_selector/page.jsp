@@ -19,6 +19,7 @@
 <%
 String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_asset_categories_selector_page") + StringPool.UNDERLINE;
 
+boolean autoFocus = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:asset-tags-selector:autoFocus"));
 String className = (String)request.getAttribute("liferay-ui:asset-categories-selector:className");
 long classPK = GetterUtil.getLong((String)request.getAttribute("liferay-ui:asset-categories-selector:classPK"));
 String hiddenInput = (String)request.getAttribute("liferay-ui:asset-categories-selector:hiddenInput");
@@ -116,6 +117,10 @@ if (Validator.isNotNull(className)) {
 					vocabularyIds: '<%= String.valueOf(vocabulary.getVocabularyId()) %>'
 				}
 			).render();
+
+			<c:if test="<%= autoFocus %>">
+				Liferay.Util.focusFormField('#<%= namespace + randomNamespace %>assetCategoriesSelector_<%= vocabulary.getVocabularyId() %>');
+			</c:if>
 		</aui:script>
 
 	<%
@@ -150,6 +155,10 @@ else {
 				vocabularyIds: '<%= ListUtil.toString(vocabularies, "vocabularyId") %>'
 			}
 		).render();
+
+		<c:if test="<%= autoFocus %>">
+			Liferay.Util.focusFormField('#<%= namespace + randomNamespace %>assetCategoriesSelector');
+		</c:if>
 	</aui:script>
 
 <%

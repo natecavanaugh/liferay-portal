@@ -24,6 +24,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class AssetCategoriesSelectorTag extends IncludeTag {
 
+	public void setAutoFocus(boolean autoFocus) {
+		_autoFocus = autoFocus;
+	}
+
 	public void setClassName(String className) {
 		_className = className;
 	}
@@ -40,21 +44,17 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 		_curCategoryIds= curCategoryIds;
 	}
 
-	public void setFocus(boolean focus) {
-		_focus = focus;
-	}
-
 	public void setHiddenInput(String hiddenInput) {
 		_hiddenInput = hiddenInput;
 	}
 
 	@Override
 	protected void cleanUp() {
+		_autoFocus = false;
 		_className = null;
 		_classPK = 0;
 		_contentCallback = null;
 		_curCategoryIds = null;
-		_focus = false;
 		_hiddenInput = "assetCategoryIds";
 	}
 
@@ -65,6 +65,8 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
+		request.setAttribute(
+			"liferay-ui:asset-categories-selector:autoFocus", String.valueOf(_autoFocus));
 		request.setAttribute(
 			"liferay-ui:asset-categories-selector:className", _className);
 		request.setAttribute(
@@ -77,20 +79,17 @@ public class AssetCategoriesSelectorTag extends IncludeTag {
 			"liferay-ui:asset-categories-selector:curCategoryIds",
 			_curCategoryIds);
 		request.setAttribute(
-			"liferay-ui:asset-categories-selector:focus",
-			String.valueOf(_focus));
-		request.setAttribute(
 			"liferay-ui:asset-categories-selector:hiddenInput", _hiddenInput);
 	}
 
 	private static final String _PAGE =
 		"/html/taglib/ui/asset_categories_selector/page.jsp";
 
+	private boolean _autoFocus;
 	private String _className;
 	private long _classPK;
 	private String _contentCallback;
 	private String _curCategoryIds;
-	private boolean _focus;
 	private String _hiddenInput = "assetCategoryIds";
 
 }
