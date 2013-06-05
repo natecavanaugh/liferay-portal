@@ -4,6 +4,14 @@
 .aui {
 	[class^="icon-"], [class*=" icon-"] {
 		background-image: none;
+		line-height: normal;
+	}
+
+	textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
+		border-color: rgba(0, 172, 255, 0.8);
+		outline: 0;
+		outline: thin dotted 9;
+		@include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
 	}
 
 	#wrapper {
@@ -53,6 +61,7 @@
 			background: #333;
 			border-bottom-color: #222;
 			border-bottom-width: 2px;
+			@include text-shadow(none);
 		}
 
 		.nav {
@@ -63,7 +72,7 @@
 					@include text-shadow(none);
 
 					&:focus, &:hover {
-						color: #3EA9DB;
+						color: #FFF;
 					}
 				}
 
@@ -71,7 +80,7 @@
 					color: #FFF;
 
 					&, &:hover, &:focus {
-						background: #111;
+						background: #005BA7;
 					}
 
 					&:focus, &:hover {
@@ -98,7 +107,6 @@
 					> .dropdown-toggle {
 						background-color: #3EA9DB;
 						color: #FFF;
-						text-shadow: 0 -1px #000;
 
 						@extend %dockbar-caret;
 					}
@@ -117,7 +125,6 @@
 
 						&:hover {
 							background: transparent;
-							@include text-shadow(none);
 						}
 					}
 
@@ -148,27 +155,71 @@
 			}
 		}
 
+		.nav-account-controls {
+			li ul {
+				li a {
+					&:hover {
+						text-decoration: underline;
+
+						i {
+							background-image: none;
+							text-decoration: none;
+						}
+					}
+				}
+			}
+		}
+
 		.divider-vertical {
 			border-left-color: #222;
 			border-right-color: #555;
+			display: none;
+		}
+	}
+
+	.navbar {
+		.icon-caret-down {
+			background: #27A7EB;
+			background: rgba(255, 255, 255, 0.2);
+			font-size: 14px;
+			height: auto;
+			margin-left: 5px;
+			padding: 1px 4px;
+			width: auto;
+			@include border-radius(50%);
 		}
 	}
 
 	/* ---------- Breadcrumbs ---------- */
 
 	.breadcrumb {
+		padding-bottom: 3px;
+
 		.only .divider {
 			display: none;
 		}
-	}
 
-	.breadcrumbs {
-		a {
-			display: block;
+		li {
+			span.divider {
+				background: url(../images/arrows/angle-arrow-right.png) no-repeat;
+				background-size: 30px;
+				display: inline-block;
+				height: 30px;
+				position: relative;
+				text-indent: -9000px;
+				top: -6px;
+				width: 22px;
+			}
 		}
 
-		.last {
-			background-image: none;
+		li.last {
+			a {
+				color: #676767;
+			}
+
+			span.divider {
+				display: none;
+			}
 		}
 	}
 

@@ -25,6 +25,51 @@
 			right: 0;
 			z-index: -1;
 		}
+
+		.navbar-inner {
+			background-color: #006dcc;
+			background-color: #067BEC;
+			background-image: -moz-linear-gradient(top, #00A0F0, #067BEC);
+			background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00A0F0), to(#067BEC));
+			background-image: -webkit-linear-gradient(top, #00A0F0, #067BEC);
+			background-image: -o-linear-gradient(top, #00A0F0, #067BEC);
+			background-image: linear-gradient(to bottom, #00A0F0, #067BEC);
+			background-repeat: repeat-x;
+			border-bottom: 0;
+			border-color: #067BEC #067BEC #002a80;
+			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff00A0F0', endColorstr='#ff067BEC', GradientType=0);
+			filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+			color: #ffffff;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+			ul.nav-add-controls {
+				margin: 8px 0 0;
+
+				>li a {
+					padding-bottom: 0;
+					padding-top: 0;
+
+					&:hover {
+						background: #008BE4;
+						@include border-radius(4px);
+					}
+				}
+
+				>li.active a {
+					border-radius: 4px;
+
+					&:hover {
+						background: #005BA7;
+						color: #FFF;
+					}
+				}
+
+				li {
+					margin-right: 5px;
+				}
+			}
+		}
 	}
 
 	.portlet-title, .portlet-content {
