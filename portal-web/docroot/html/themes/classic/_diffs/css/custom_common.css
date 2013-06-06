@@ -66,7 +66,7 @@
 	}
 
 	.portlet-borderless-container {
-		padding: 10px 13px;
+		padding: 10px 0px;
 	}
 
 	.portlet-options {
@@ -82,6 +82,25 @@
 					display: none;
 				}
 			}
+		}
+	}
+
+	/* Help Icon */
+
+	.taglib-icon-help {
+		background: url(../../control_panel/images/custom/taglib-icon-help.png) no-repeat 0 -15px;
+		display: inline-block;
+		height: 13px;
+		vertical-align: top;
+
+		&:hover {
+			background-position: 0 -1px;
+			cursor: pointer;
+		}
+
+		img {
+			opacity: 0;
+			vertical-align: top;
 		}
 	}
 

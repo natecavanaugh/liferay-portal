@@ -1,6 +1,9 @@
 @import "compass";
 @import url(../../classic/css/custom_common.css);
 
+$dockbarGradientStart: #0A85E4;
+$dockbarGradientEnd: #0A6BCA;
+
 .aui {
 	#banner, .lfr-ctrl-panel .user-greeting {
 		position: absolute;
@@ -11,37 +14,109 @@
 		padding-top: 1.5em;
 	}
 
-	.dockbar {
-		position: relative;
-
-		&:after {
-			background-color: #333;
-			bottom: -10px;
-			content: '';
-			display: block;
-			height: 10px;
-			left: 0;
-			position: absolute;
-			right: 0;
-			z-index: -1;
+	.button-holder, .control-panel-home-actions-category {
+		.btn {
+			@include box-shadow(0 1px 0 1px #AAA);
 		}
 
+		.btn-primary {
+			background: #00AEFF;
+			@include box-shadow(0 1px 0 1px #007CE9);
+		}
+	}
+
+	/* Control Panel Secondary Nav */
+
+	.control-panel-bar-secondary.nav-pills {
+		li {
+			margin-right: 20px;
+
+			a {
+				margin: 0;
+				padding: 10px 10px 11px;
+				@include border-radius(4px);
+
+				&:hover {
+					background: #E5F5FC;
+					color: #009AE5;
+				}
+			}
+		}
+
+		> .active > a {
+			background: #00ACFF;
+
+			&:hover {
+				background: #00ACFF;
+			}
+		}
+	}
+
+	/* Control Panel Home */
+
+	.control-panel-home-menu {
+		margin-top: 40px;
+
+		a {
+			color: #00ACFF;
+
+			&:active {
+				color: #009AE5;
+			}
+
+			&:hover {
+				color: #009AE5;
+				text-decoration: underline;
+			}
+		}
+
+		ul {
+			li {
+				list-style: none;
+				margin-bottom: 15px;
+
+				img.icon {
+					display: none;
+				}
+			}
+		}
+
+		.control-panel-bar-main {
+			font-size: 1.2em;
+			font-weight: bold;
+			margin-bottom: 5px;
+		}
+
+		.control-panel-bar-secondary {
+			margin-bottom: 5px;
+		}
+
+		.control-panel-home-actions {
+			margin-top: 100px;
+
+			.control-panel-home-actions-category {
+				color: #8D8D8D;
+				padding-top: 10px;
+			}
+		}
+
+		.control-panel-home-category-header {
+			border-bottom: 1px solid #D4D4D4;
+			color: #00ACFF;
+		}
+	}
+
+	/* Dockbar */
+
+	.dockbar {
+		border-top: 1px solid #00AEFF;
+		position: relative;
+
 		.navbar-inner {
-			background-color: #006dcc;
-			background-color: #067BEC;
-			background-image: -moz-linear-gradient(top, #00A0F0, #067BEC);
-			background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00A0F0), to(#067BEC));
-			background-image: -webkit-linear-gradient(top, #00A0F0, #067BEC);
-			background-image: -o-linear-gradient(top, #00A0F0, #067BEC);
-			background-image: linear-gradient(to bottom, #00A0F0, #067BEC);
-			background-repeat: repeat-x;
-			border-bottom: 0;
-			border-color: #067BEC #067BEC #002a80;
-			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff00A0F0', endColorstr='#ff067BEC', GradientType=0);
-			filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-			color: #ffffff;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+			background-color: $dockbarGradientEnd;
+			@include background-image(linear-gradient(top, $dockbarGradientStart 0%,$dockbarGradientEnd 100%));
+			@include filter-gradient($dockbarGradientStart, $dockbarGradientStart, vertical);
+			color: #FFF;
 
 			ul.nav-add-controls {
 				margin: 8px 0 0;
@@ -70,6 +145,15 @@
 				}
 			}
 		}
+	}
+
+	.lfr-control-panel-help-content.alert {
+		border-width: 1px 0;
+		margin-bottom: 1em;
+	}
+
+	.lfr-ctrl-panel {
+
 	}
 
 	.portlet-title, .portlet-content {
@@ -122,9 +206,17 @@
 		}
 	}
 
-	.panel-page-menu .portlet-borderless-container {
-		background: #222;
+	/* Panel Page Menu */
 
+	.control-panel-tools {
+		.search-panels {
+			.control-group {
+				margin: 0 10px 11px;
+			}
+		}
+	}
+
+	.panel-page-menu .portlet-borderless-container {
 		.accordion {
 			background: #FFF;
 			margin-bottom: 0;
@@ -135,8 +227,14 @@
 				margin-bottom: 0;
 
 				.accordion-inner {
-					padding-left: 0;
-					padding-right: 0;
+					padding: 3px 0;
+				}
+
+				.accordion-toggle {
+					font-size: 16px;
+					font-weight: normal;
+					padding: 0;
+					text-transform: capitalize;
 				}
 
 				.category-portlets {
@@ -146,26 +244,39 @@
 					li {
 						a {
 							display: block;
+							font-size: 14px;
 							padding: 3px 15px;
+							text-decoration: none;
 
 							&:focus, &:hover {
-								background-color: #F3F3F3;
+								background: #E5F5FC;
+								color: #009AE5;
 							}
 						}
 
 						&.selected-portlet {
-							background: #222;
-							color: #FFF;
-
 							a {
+								background: #60BFEF;
 								color: #FFF;
-
-								&:hover{
-									background: #222;
-									color: #3EA9DB;
-								}
 							}
 						}
+					}
+				}
+
+				.toggler-header {
+					background: #F2F2F2;
+					padding: 8px 10px;
+				}
+
+				.toggler-header-collapsed {
+					.accordion-toggle {
+						background: url(../images/custom/arrow_option_closed.png) no-repeat right center transparent;
+					}
+				}
+
+				.toggler-header-expanded {
+					.accordion-toggle {
+						background: url(../images/custom/arrow_option_open.png) no-repeat right center transparent;
 					}
 				}
 			}
@@ -188,34 +299,9 @@
 		}
 	}
 
-	.lfr-control-panel-help-content.alert {
-		border-width: 1px 0;
-		margin-bottom: 1em;
-	}
-
 	/* ---------- Extras ---------- */
 
-	.dockbar:after {
-		$stripe: transparent;
-		$stripe_alt: #C2B362;
-
-		background-image: linear-gradient(
-			45deg,
-			$stripe 25%,
-			$stripe_alt 25%,
-			$stripe_alt 50%,
-			$stripe 50%,
-			$stripe 75%,
-			$stripe_alt 75%
-		);
-
-		background-size: 35px 35px;
-	}
-
 	.panel-page-menu .portlet-borderless-container {
-		border-radius: 2px;
-		box-shadow: 0 0 3px #000 inset;
-
 		.accordion .accordion-group {
 			border-radius: 0;
 
@@ -232,41 +318,7 @@
 	}
 
 	.lfr-control-panel-help-content {
-		border-radius: 0;
-	}
-
-	.control-panel-bar-main {
-		font-size: 1.2em;
-		font-weight: bold;
-		margin-bottom: 5px;
-	}
-
-	.control-panel-bar-secondary {
-		margin-bottom: 5px;
-	}
-
-	.control-panel-home-actions {
-		margin-top: 100px;
-	}
-
-	.control-panel-home-actions .control-panel-home-actions-category {
-	    border-top: solid 1px #009ec3;
-		padding-top: 10px;
-	}
-
-    .control-panel-home-category-header {
-	    border-bottom: solid 1px #009ec3;
-	    color: #009ec3;
-	    margin-bottom: 30px;
-    }
-
-	.control-panel-home-menu {
-		margin-top: 40px;
-	}
-
-	.control-panel-home-menu li {
-		list-style: none;
-		margin-bottom: 15px;
+		@include border-radius(0);
 	}
 
 	.control-panel-site-selector .caret {
