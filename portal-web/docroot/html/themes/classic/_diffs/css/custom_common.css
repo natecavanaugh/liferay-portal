@@ -1,10 +1,37 @@
 @import "compass";
 @import "../fonts/font-awesome/css/font-awesome.min.css";
 
+/* overwrite aui deprecated css */
+.button-holder {
+	overflow: visible;
+}
+
 .aui {
 	[class^="icon-"], [class*=" icon-"] {
 		background-image: none;
 		line-height: normal;
+	}
+
+	a {
+		color: #009AE5;
+	}
+
+	body {
+		color: #555;
+	}
+
+	label {
+		color: #009AE5;
+	}
+
+	.radio input[type="radio"], .checkbox input[type="checkbox"] {
+		margin-left: -18px;
+	}
+
+	textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+		border: 1px solid #DDD;
+		@include border-radius(0);
+		@include box-shadow(none);
 	}
 
 	textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
@@ -12,6 +39,10 @@
 		outline: 0;
 		outline: thin dotted 9;
 		@include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
+	}
+
+	ul {
+		margin: 0 0 11px 0px;
 	}
 
 	#wrapper {
@@ -58,10 +89,7 @@
 
 	.dockbar {
 		.navbar-inner {
-			background: #333;
-			border-bottom-color: #222;
-			border-bottom-width: 2px;
-			@include text-shadow(none);
+			background: none;
 		}
 
 		.nav {
@@ -149,7 +177,8 @@
 				}
 
 				.user-avatar-link > img {
-					width: 30px;
+					border: 2px solid #5594E0;
+					width: 27px;
 					@include border-radius(50%);
 				}
 			}
