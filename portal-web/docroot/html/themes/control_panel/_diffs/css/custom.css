@@ -47,6 +47,7 @@ $dockbarGradientEnd: #0A6BCA;
 			background: #00ACFF;
 
 			&:hover {
+				color: #FFF;
 				background: #00ACFF;
 			}
 		}
@@ -118,30 +119,86 @@ $dockbarGradientEnd: #0A6BCA;
 			@include filter-gradient($dockbarGradientStart, $dockbarGradientStart, vertical);
 			color: #FFF;
 
-			ul.nav-add-controls {
-				margin: 8px 0 0;
-
-				>li a {
-					padding-bottom: 0;
-					padding-top: 0;
-
-					&:hover {
-						background: #008BE4;
+			ul.nav-account-controls {
+				li.open {
+					> .dropdown-toggle {
+						background: #005BA7;
+						padding: 2px 15px;
+						margin: 7px 0;
 						@include border-radius(4px);
 					}
 				}
+			}
 
-				>li.active a {
-					border-radius: 4px;
+			ul.nav-add-controls {
+				margin: 8px 0 0;
 
-					&:hover {
-						background: #005BA7;
-						color: #FFF;
+				> li {
+					&.active a {
+						border-radius: 4px;
+
+						&:hover {
+							background: #005BA7;
+							color: #FFF;
+						}
+					}
+
+					a {
+						padding-bottom: 0;
+						padding-top: 0;
+
+						&:hover {
+							background: #008BE4;
+							@include border-radius(4px);
+						}
 					}
 				}
 
 				li {
 					margin-right: 5px;
+
+					i {
+						text-indent: -9999px;
+						vertical-align: top;
+					}
+
+					/* Menu Icons */
+
+					.icon-arrow-left {
+						background: url(../images/custom/back_arrow_normal.png) no-repeat;
+						height: 21px;
+						width: 24px;
+					}
+
+					.icon-cog {
+						background: url(../images/custom/configuration_icons.png) no-repeat;
+						height: 26px;
+						width: 29px;
+					}
+
+					.icon-globe {
+						background: url(../images/custom/sites_icons.png) no-repeat;
+						height: 26px;
+						width: 29px;
+					}
+
+					.icon-list {
+						background: url(../images/custom/control_panel_icons.png) no-repeat;
+						height: 24px;
+						width: 24px;
+					}
+
+					.icon-th {
+						background: url(../images/custom/apps_icons.png) no-repeat;
+						height: 26px;
+						width: 29px;
+					}
+
+					.icon-user {
+						background: url(../images/custom/users_icons.png) no-repeat;
+						height: 26px;
+						width: 40px;
+					}
 				}
 			}
 		}
