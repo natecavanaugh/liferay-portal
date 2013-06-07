@@ -82,7 +82,7 @@ if (ddmStructureId > 0) {
 		<aui:input name="description" />
 
 		<aui:field-wrapper label="data-definition" required="<%= true %>">
-			<span id="<portlet:namespace />ddmStructureNameDisplay">
+			<span class="uneditable-input" id="<portlet:namespace />ddmStructureNameDisplay">
 				<%= ddmStructureName %>
 			</span>
 

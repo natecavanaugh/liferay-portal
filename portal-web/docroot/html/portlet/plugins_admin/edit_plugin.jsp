@@ -58,11 +58,15 @@ if (pluginType.equals(Plugin.TYPE_PORTLET)) {
 
 	<aui:fieldset>
 		<aui:field-wrapper label="module-id">
-			<%= HtmlUtil.escape(moduleId) %>
+			<span class="uneditable-input">
+				<%= HtmlUtil.escape(moduleId) %>
+			</span>
 		</aui:field-wrapper>
 
 		<aui:field-wrapper label="plugin-id">
-			<%= HtmlUtil.escape(pluginId) %>
+			<span class="uneditable-input">
+				<%= HtmlUtil.escape(pluginId) %>
+			</span>
 		</aui:field-wrapper>
 
 		<aui:input name="active" type="checkbox" value="<%= active %>" />

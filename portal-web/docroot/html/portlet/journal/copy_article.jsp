@@ -46,13 +46,17 @@ double version = ParamUtil.getDouble(request, "version");
 
 	<aui:fieldset>
 		<aui:field-wrapper label="id">
-			<%= HtmlUtil.escape(oldArticleId) %>
+			<span class="input-xlarge uneditable-input">
+				<%= HtmlUtil.escape(oldArticleId) %>
+			<span>
 		</aui:field-wrapper>
 
 		<aui:field-wrapper label="new-id">
 			<c:choose>
 				<c:when test="<%= PropsValues.JOURNAL_ARTICLE_FORCE_AUTOGENERATE_ID %>">
-					<liferay-ui:message key="autogenerate-id" />
+					<span class="input-medium uneditable-input">
+						<liferay-ui:message key="autogenerate-id" />
+					</span>
 
 					<aui:input name="newArticleId" type="hidden" />
 					<aui:input name="autoArticleId" type="hidden" value="<%= true %>" />

@@ -58,7 +58,7 @@ long orderId = BeanParamUtil.getLong(order, request, "orderId");
 		</c:otherwise>
 	</c:choose>
 
-	<table class="lfr-table">
+	<table class="lfr-table table">
 	<tr>
 		<td>
 			<liferay-ui:message key="order" /> #:
@@ -87,14 +87,14 @@ long orderId = BeanParamUtil.getLong(order, request, "orderId");
 
 	<br />
 
-	<table class="lfr-table">
+	<table class="lfr-table table">
 	<tr>
 		<td>
 			<strong><liferay-ui:message key="billing-address" /></strong>
 
 			<br /><br />
 
-			<table class="lfr-table">
+			<table class="lfr-table table">
 			<tr>
 				<td>
 					<liferay-ui:message key="first-name" />:
@@ -182,7 +182,7 @@ long orderId = BeanParamUtil.getLong(order, request, "orderId");
 
 			<br /><br />
 
-			<table class="lfr-table">
+			<table class="lfr-table table">
 			<tr>
 				<td>
 					<liferay-ui:message key="first-name" />:
@@ -313,7 +313,7 @@ long orderId = BeanParamUtil.getLong(order, request, "orderId");
 
 			<br /><br />
 
-			<table class="lfr-table">
+			<table class="lfr-table table">
 			<tr>
 				<td>
 					<liferay-ui:message key="full-name" />:
@@ -367,11 +367,11 @@ long orderId = BeanParamUtil.getLong(order, request, "orderId");
 	<c:if test="<%= Validator.isNotNull(order.getComments()) %>">
 		<strong><liferay-ui:message key="comments" /></strong>
 
-		<br /><br />
+		<div class="well">
 
 		<%= order.getComments() %>
 
-		<br /><br />
+		</div>
 	</c:if>
 
 	<%

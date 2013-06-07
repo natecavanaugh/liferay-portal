@@ -45,11 +45,13 @@ if (organizationId > 0) {
 
 		<div id="<portlet:namespace />usersSelectionOptions">
 			<aui:field-wrapper label="organization">
-				<span id="<portlet:namespace />organizationName"><%= HtmlUtil.escape(organizationName) %></span>
+				<div class="input-append">
+					<span id="<portlet:namespace />organizationName" class="uneditable-input"><%= HtmlUtil.escape(organizationName) %></span>
 
-				<aui:button name="selectOrganizationButton" value="select" />
+					<aui:button name="selectOrganizationButton" value="select" />
 
-				<aui:button disabled="<%= organizationId <= 0 %>" name="removeOrganizationButton" onClick='<%= renderResponse.getNamespace() + "removeOrganization();" %>' value="remove" />
+					<aui:button disabled="<%= organizationId <= 0 %>" name="removeOrganizationButton" onClick='<%= renderResponse.getNamespace() + "removeOrganization();" %>' value="remove" />
+				</div>
 			</aui:field-wrapper>
 		</div>
 
