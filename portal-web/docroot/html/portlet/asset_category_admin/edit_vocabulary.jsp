@@ -37,7 +37,7 @@ long vocabularyId = BeanParamUtil.getLong(vocabulary, request, "vocabularyId");
 	<aui:fieldset>
 		<div>
 			<div class="add-vocabulary-layer asset-category-layer">
-				<aui:input cssClass="vocabulary-name" label="name" name="title" />
+				<aui:input autoFocus="<%= true %>" cssClass="vocabulary-name" label="name" name="title" />
 
 				<aui:input name="description" />
 
@@ -80,7 +80,3 @@ long vocabularyId = BeanParamUtil.getLong(vocabulary, request, "vocabularyId");
 		</div>
 	</aui:fieldset>
 </aui:form>
-
-<aui:script>
-	Liferay.Util.focusFormField(document.<portlet:namespace /><%= randomNamespace %>fm.<portlet:namespace />title);
-</aui:script>

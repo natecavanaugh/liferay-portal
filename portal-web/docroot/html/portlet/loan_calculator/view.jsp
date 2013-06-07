@@ -48,7 +48,7 @@ NumberFormat percentFormat = NumberFormat.getPercentInstance(locale);
 		<liferay-ui:message key="loan-amount" />
 	</td>
 	<td>
-		<input name="<portlet:namespace />loanAmount" size="5" type="text" value="<%= integerFormat.format(loanAmount) %>" />
+		<input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="<portlet:namespace />loanAmount" size="5" type="text" value="<%= integerFormat.format(loanAmount) %>" />
 	</td>
 </tr>
 <tr>
@@ -98,12 +98,6 @@ NumberFormat percentFormat = NumberFormat.getPercentInstance(locale);
 <input type="submit" value="<liferay-ui:message key="calculate" />" />
 
 </form>
-
-<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />loanAmount);
-	</aui:script>
-</c:if>
 
 <aui:script use="aui-io-request,aui-parse-content">
 	var form = A.one('#<portlet:namespace />fm');

@@ -80,6 +80,7 @@ if (Validator.isNotNull(target)) {
 			modelVar="organization"
 		>
 			<liferay-ui:search-container-column-text
+				autoFocus="<%= true %>"
 				name="name"
 				orderable="<%= true %>"
 				property="name"
@@ -149,10 +150,6 @@ if (Validator.isNotNull(target)) {
 		<liferay-ui:search-iterator />
 	</liferay-ui:search-container>
 </aui:form>
-
-<aui:script>
-	Liferay.Util.focusFormField(document.<portlet:namespace />selectOrganizationFm.<portlet:namespace />name);
-</aui:script>
 
 <aui:script use="aui-base">
 	var Util = Liferay.Util;

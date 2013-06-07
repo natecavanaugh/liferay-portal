@@ -68,7 +68,7 @@ boolean deletePortrait = ParamUtil.getBoolean(request, "deletePortrait");
 				</aui:field-wrapper>
 			</c:when>
 			<c:otherwise>
-				<aui:input name="screenName" />
+				<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="screenName" />
 			</c:otherwise>
 		</c:choose>
 	</c:if>

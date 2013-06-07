@@ -20,15 +20,18 @@
 FeedSearch searchContainer = (FeedSearch)request.getAttribute("liferay-ui:search:searchContainer");
 
 FeedDisplayTerms displayTerms = (FeedDisplayTerms)searchContainer.getDisplayTerms();
+
+boolean autoFocus = (windowState.equals(WindowState.MAXIMIZED) || windowState.equals(LiferayWindowState.POP_UP));
 %>
 
 <liferay-ui:search-toggle
+	autoFocus="<%= autoFocus %>"
 	buttonLabel="search"
 	displayTerms="<%= displayTerms %>"
 	id="toggle_id_journal_feed_search"
 >
 	<aui:fieldset>
-		<aui:input label="id" name="<%= displayTerms.FEED_ID %>" size="20" type="text" value="<%= displayTerms.getFeedId() %>" />
+		<aui:input autoFocus="<%= autoFocus %>" label="id" name="<%= displayTerms.FEED_ID %>" size="20" type="text" value="<%= displayTerms.getFeedId() %>" />
 
 		<aui:input name="<%= displayTerms.NAME %>" size="20" type="text" value="<%= displayTerms.getName() %>" />
 
@@ -74,9 +77,4 @@ boolean showPermissionsButton = JournalPermission.contains(permissionChecker, sc
 			submitForm(document.<portlet:namespace />fm, url);
 		}
 	}
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) || windowState.equals(LiferayWindowState.POP_UP) %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%= displayTerms.FEED_ID %>);
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%= displayTerms.KEYWORDS %>);
-	</c:if>
 </aui:script>

@@ -77,6 +77,7 @@ portletURL.setParameter("eventName", eventName);
 			modelVar="userGroup"
 		>
 			<liferay-ui:search-container-column-text
+				autoFocus="<%= true %>"
 				name="name"
 				value="<%= HtmlUtil.escape(userGroup.getName()) %>"
 			/>
@@ -104,10 +105,6 @@ portletURL.setParameter("eventName", eventName);
 		<liferay-ui:search-iterator />
 	</liferay-ui:search-container>
 </aui:form>
-
-<aui:script>
-	Liferay.Util.focusFormField(document.<portlet:namespace />selectUserGroupFm.<portlet:namespace />name);
-</aui:script>
 
 <aui:script use="aui-base">
 	var Util = Liferay.Util;

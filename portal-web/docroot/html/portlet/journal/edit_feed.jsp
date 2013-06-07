@@ -100,6 +100,8 @@ if (feed != null) {
 	feedURL.setParameter("groupId", String.valueOf(groupId));
 	feedURL.setParameter("feedId", String.valueOf(feedId));
 }
+
+boolean autoFocus = windowState.equals(WindowState.MAXIMIZED);
 %>
 
 <portlet:actionURL var="editFeedURL">
@@ -138,7 +140,11 @@ if (feed != null) {
 						<aui:input name="autoFeedId" type="hidden" value="<%= true %>" />
 					</c:when>
 					<c:otherwise>
-						<aui:input cssClass="lfr-input-text-container" field="feedId" fieldParam="newFeedId" label="id" name="newFeedId" value="<%= newFeedId %>" />
+						<aui:input autoFocus="<%= autoFocus %>" cssClass="lfr-input-text-container" field="feedId" fieldParam="newFeedId" label="id" name="newFeedId" value="<%= newFeedId %>" />
+
+						<%
+						autoFocus = false;
+						%>
 
 						<aui:input label="autogenerate-id" name="autoFeedId" type="checkbox" />
 					</c:otherwise>
@@ -151,7 +157,7 @@ if (feed != null) {
 			</c:otherwise>
 		</c:choose>
 
-		<aui:input cssClass="lfr-input-text-container" name="name" />
+		<aui:input autoFocus="<%= autoFocus %>" cssClass="lfr-input-text-container" name="name" />
 
 		<aui:input cssClass="lfr-textarea-container" name="description" />
 
@@ -418,17 +424,6 @@ if (feed != null) {
 	}
 
 	Liferay.Util.disableToggleBoxes('<portlet:namespace />autoFeedIdCheckbox','<portlet:namespace />newFeedId', true);
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-		<c:choose>
-			<c:when test="<%= PropsValues.JOURNAL_FEED_FORCE_AUTOGENERATE_ID %>">
-				Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />name);
-			</c:when>
-			<c:otherwise>
-				Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%= (feed == null) ? "newFeedId" : "name" %>);
-			</c:otherwise>
-		</c:choose>
-	</c:if>
 </aui:script>
 
 <aui:script use="aui-base">

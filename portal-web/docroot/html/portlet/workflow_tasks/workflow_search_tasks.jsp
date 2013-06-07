@@ -18,16 +18,19 @@
 
 <%
 WorkflowTaskDisplayTerms displayTerms = new WorkflowTaskDisplayTerms(renderRequest);
+
+boolean windowMaximized = windowState.equals(WindowState.MAXIMIZED);
 %>
 
 <liferay-ui:search-toggle
+	autoFocus="<%= windowMaximized %>"
 	buttonLabel="search"
 	displayTerms="<%= displayTerms %>"
 	id="toggle_id_workflow_task_search"
 >
 
 	<aui:fieldset>
-		<aui:input label="task" name="<%= displayTerms.NAME %>" size="20" value="<%= displayTerms.getName() %>" />
+		<aui:input autoFocus="<%= windowMaximized %>" label="task" name="<%= displayTerms.NAME %>" size="20" value="<%= displayTerms.getName() %>" />
 
 		<aui:select name="<%= displayTerms.TYPE %>">
 
@@ -53,10 +56,3 @@ WorkflowTaskDisplayTerms displayTerms = new WorkflowTaskDisplayTerms(renderReque
 		</aui:select>
 	</aui:fieldset>
 </liferay-ui:search-toggle>
-
-<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) %>">
-	<aui:script>
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%= displayTerms.NAME %>);
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace /><%= displayTerms.KEYWORDS %>);
-	</aui:script>
-</c:if>

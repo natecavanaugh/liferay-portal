@@ -179,7 +179,7 @@ if (Validator.isNull(redirect)) {
 			<aui:workflow-status status="<%= message.getStatus() %>" />
 		</c:if>
 
-		<aui:input name="subject" value="<%= subject %>" />
+		<aui:input autoFocus="<%= (windowState.equals(WindowState.MAXIMIZED) && !themeDisplay.isFacebook()) %>" name="subject" value="<%= subject %>" />
 
 		<aui:field-wrapper label="body">
 			<c:choose>
@@ -554,10 +554,6 @@ if (Validator.isNull(redirect)) {
 			);
 		</c:otherwise>
 	</c:choose>
-
-	<c:if test="<%= windowState.equals(WindowState.MAXIMIZED) && !themeDisplay.isFacebook() %>">
-		Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />subject);
-	</c:if>
 </aui:script>
 
 <c:if test="<%= TrashUtil.isTrashEnabled(scopeGroupId) %>">
