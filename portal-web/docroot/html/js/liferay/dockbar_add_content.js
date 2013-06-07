@@ -33,7 +33,7 @@ AUI.add(
 			{
 				AUGMENTS: [Dockbar.AddContentDragDrop, Dockbar.AddContentPreview, Dockbar.AddContentSearch, Liferay.PortletBase],
 
-				EXTENDS: A.Base,
+				EXTENDS: Dockbar.AddBase,
 
 				NAME: 'addcontent',
 
@@ -43,25 +43,15 @@ AUI.add(
 
 						instance._config = config;
 
-						instance._addApplicationForm = instance.byId('addApplicationForm');
 						instance._addContentForm = instance.byId('addContentForm');
 						instance._addPanelContainer = instance.byId('addPanelContainer');
 						instance._closePanel = instance._addPanelContainer.one('#closePanel');
 						instance._entriesContainer = instance.byId('entriesContainer');
 						instance._numItems = instance.byId('numItems');
-						instance._searchContentInput = instance.byId('searchContentInput');
 						instance._styleButtonsList = instance.byId('styleButtons');
 						instance._styleButtons = instance._styleButtonsList.all(SELECTOR_BUTTON);
 
 						instance._bindUI();
-					},
-
-					_addApplication: function(event) {
-						var instance = this;
-
-						var portlet = event.currentTarget;
-
-						instance._addPortlet(portlet);
 					},
 
 					_addPortlet: function(portlet, options) {
@@ -131,9 +121,16 @@ AUI.add(
 
 						instance._closePanel.on(STR_CLICK, Dockbar.loadPanel, Dockbar);
 
-						instance._addPanelContainer.delegate(STR_CLICK, instance._addApplication, SELECTOR_ADD_CONTENT_ITEM, instance);
-
 						instance._styleButtonsList.delegate(STR_CLICK, instance._onChangeDisplayStyle, SELECTOR_BUTTON, instance);
+
+						Liferay.on(
+							'AddContent:addPortlet',
+							function(event) {
+								instance._addPortlet(event.node, event.options);
+							}
+						);
+
+						Liferay.on('AddContent:refreshContentList', instance._refreshContentList, instance);
 
 						Liferay.on('closePortlet', instance._onPortletClose, instance);
 
@@ -275,7 +272,7 @@ AUI.add(
 								data: {
 									delta: instance._numItems.val(),
 									displayStyle: displayStyle,
-									keywords: instance._searchContentInput.val(),
+									keywords: instance.get('inputNode').val(),
 									viewEntries: true,
 									viewPreview: false
 								}
@@ -290,6 +287,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-io-request', 'liferay-dockbar', 'liferay-dockbar-add-content-drag-drop', 'liferay-dockbar-add-content-preview', 'liferay-dockbar-add-content-search']
+		requires: ['aui-io-request', 'liferay-dockbar', 'liferay-dockbar-add-base', 'liferay-dockbar-add-content-drag-drop', 'liferay-dockbar-add-content-preview', 'liferay-dockbar-add-content-search']
 	}
 );

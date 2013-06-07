@@ -438,6 +438,10 @@
 			<forward name="portlet.calendar.error" path="portlet.calendar.error" />
 		</action>
 
+		<!-- Control Panel Home -->
+
+		<action path="/control_panel_home/view" forward="portlet.control_panel_home.view" />
+
 		<!-- Control Panel Menu -->
 
 		<action path="/control_panel_menu/view" forward="portlet.control_panel_menu.view" />
@@ -468,7 +472,14 @@
 
 		<!-- Dockbar -->
 
+		<action path="/dockbar/add_content_redirect" forward="portlet.dockbar.add_content_redirect" />
+
 		<action path="/dockbar/add_panel" forward="portlet.dockbar.add_panel" />
+
+		<action path="/dockbar/edit_layouts" type="com.liferay.portlet.grouppages.action.EditLayoutsAction">
+			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.dockbar.add_page" />
+			<forward name="portlet.layouts_admin.error" path="portlet.dockbar.add_page" />
+		</action>
 
 		<action path="/dockbar/view" type="com.liferay.portlet.dockbar.action.ViewAction">
 			<forward name="portlet.dockbar.view" path="portlet.dockbar.view" />
@@ -592,8 +603,6 @@
 			<forward name="portlet.dynamic_data_lists.edit_record" path="portlet.dynamic_data_lists.edit_record" />
 			<forward name="portlet.dynamic_data_lists.error" path="portlet.dynamic_data_lists.error" />
 		</action>
-
-		<action path="/dynamic_data_list_display/edit_record_file" type="com.liferay.portlet.dynamicdatalists.action.EditRecordFileAction" />
 
 		<action path="/dynamic_data_list_display/view" forward="portlet.dynamic_data_list_display.view" />
 

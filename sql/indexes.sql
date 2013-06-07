@@ -256,9 +256,6 @@ create index IX_A65A1F8B on DLFileRank (fileEntryId);
 create index IX_BAFB116E on DLFileRank (groupId, userId);
 create index IX_4E96195B on DLFileRank (groupId, userId, active_);
 create index IX_EED06670 on DLFileRank (userId);
-create index IX_B8BB7CBE on DLFileRank (uuid_);
-create index IX_B3D1C4AA on DLFileRank (uuid_, companyId);
-create unique index IX_6D776DAC on DLFileRank (uuid_, groupId);
 
 create index IX_B0051937 on DLFileShortcut (groupId, folderId);
 create index IX_348DC3B2 on DLFileShortcut (groupId, folderId, active_);
@@ -484,6 +481,7 @@ create index IX_72BBA8B7 on LayoutSet (layoutSetPrototypeUuid);
 
 create index IX_8FF5D6EA on LayoutSetBranch (groupId);
 create index IX_C4079FD3 on LayoutSetBranch (groupId, privateLayout);
+create index IX_CCF0DA29 on LayoutSetBranch (groupId, privateLayout, master);
 create unique index IX_5FF18552 on LayoutSetBranch (groupId, privateLayout, name);
 
 create index IX_55F63D98 on LayoutSetPrototype (companyId);
@@ -865,6 +863,10 @@ create index IX_786D171A on Subscription (companyId, classNameId, classPK);
 create unique index IX_2E1A92D4 on Subscription (companyId, userId, classNameId, classPK);
 create index IX_54243AFD on Subscription (userId);
 create index IX_E8F34171 on Subscription (userId, classNameId);
+
+create index IX_72D73D39 on SystemEvent (groupId);
+create index IX_7A2F0ECE on SystemEvent (groupId, classNameId, classPK);
+create index IX_FFCBB747 on SystemEvent (groupId, classNameId, classPK, type_);
 
 create index IX_AE6E9907 on Team (groupId);
 create unique index IX_143DC786 on Team (groupId, name);

@@ -392,16 +392,12 @@
 			INNER JOIN
 				ResourcePermission ON
 					(ResourcePermission.primKey = CAST_TEXT(Group_.groupId))
-			INNER JOIN
-				ResourceAction ON
-					(ResourceAction.name = ResourcePermission.name)
 			WHERE
 				(Group_.liveGroupId = 0) AND
 				(ResourcePermission.name = ?) AND
 				(ResourcePermission.scope = ?) AND
-				(ResourceAction.actionId = ?) AND
 				(ResourcePermission.roleId = ?) AND
-				(BITAND(CAST_LONG(ResourcePermission.actionIds), CAST_LONG(ResourceAction.bitwiseValue)) != 0)
+				(BITAND(CAST_LONG(ResourcePermission.actionIds), ?) != 0)
 		]]>
 	</sql>
 	<sql id="com.liferay.portal.service.persistence.GroupFinder.joinByRoleResourceTypePermissions">
@@ -410,12 +406,8 @@
 				ResourceTypePermission ON
 					(ResourceTypePermission.groupId = Group_.groupId) AND
 					(ResourceTypePermission.name = ?) AND
-					(ResourceTypePermission.roleId = ?)
-			INNER JOIN
-				ResourceAction ON
-					(ResourceAction.name = ResourceTypePermission.name) AND
-					(ResourceAction.actionId = ?) AND
-					(BITAND(CAST_LONG(ResourceTypePermission.actionIds), CAST_LONG(ResourceAction.bitwiseValue)) != 0)
+					(ResourceTypePermission.roleId = ?) AND
+					(BITAND(CAST_LONG(ResourceTypePermission.actionIds), ?) != 0)
 			WHERE
 				(Group_.liveGroupId = 0)
 		]]>
@@ -528,18 +520,6 @@
 					(PortletPreferences.portletId LIKE ?)
 				) AND
 				(PortletPreferences.preferences LIKE ?)
-		]]>
-	</sql>
-	<sql id="com.liferay.portal.service.persistence.LayoutSetBranchFinder.findByMaster">
-		<![CDATA[
-			SELECT
-				{LayoutSetBranch.*}
-			FROM
-				LayoutSetBranch
-			WHERE
-				(LayoutSetBranch.groupId = ?) AND
-				(LayoutSetBranch.privateLayout = ?) AND
-				(LayoutSetBranch.master = ?)
 		]]>
 	</sql>
 	<sql id="com.liferay.portal.service.persistence.LockFinder.findByC_K">
@@ -1405,7 +1385,7 @@
 				(Contact_.twitterSn != '')
 		]]>
 	</sql>
-    <sql id="com.liferay.portal.service.persistence.UserFinder.joinByNoOrganizations">
+	<sql id="com.liferay.portal.service.persistence.UserFinder.joinByNoOrganizations">
 		<![CDATA[
 			LEFT JOIN
 				Users_Orgs ON

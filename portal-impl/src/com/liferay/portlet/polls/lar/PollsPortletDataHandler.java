@@ -16,7 +16,6 @@ package com.liferay.portlet.polls.lar;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
-import com.liferay.portal.kernel.lar.ManifestSummary;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
@@ -44,6 +43,9 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "polls";
 
 	public PollsPortletDataHandler() {
+		setDeletionEventClassNames(
+			PollsChoice.class.getName(), PollsQuestion.class.getName(),
+			PollsVote.class.getName());
 		setDataLocalized(true);
 		setExportControls(
 			new PortletDataHandlerBoolean(
@@ -170,26 +172,20 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 			PortletDataContext portletDataContext)
 		throws Exception {
 
-		ManifestSummary manifestSummary =
-			portletDataContext.getManifestSummary();
-
 		ActionableDynamicQuery choiceActionableDynamicQuery =
 			new PollsChoiceExportActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			PollsChoice.class, choiceActionableDynamicQuery.performCount());
+		choiceActionableDynamicQuery.performCount();
 
 		ActionableDynamicQuery questionActionableDynamicQuery =
 			new PollsQuestionExportActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			PollsQuestion.class, questionActionableDynamicQuery.performCount());
+		questionActionableDynamicQuery.performCount();
 
 		ActionableDynamicQuery voteActionableDynamicQuery =
 			new PollsVoteExportActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			PollsVote.class, voteActionableDynamicQuery.performCount());
+		voteActionableDynamicQuery.performCount();
 	}
 
 }

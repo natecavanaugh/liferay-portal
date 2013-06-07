@@ -19,8 +19,8 @@ import com.liferay.portal.service.ServiceWrapper;
 /**
  * Provides a wrapper for {@link CalEventLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       CalEventLocalService
+ * @author Brian Wing Shun Chan
+ * @see CalEventLocalService
  * @generated
  */
 public class CalEventLocalServiceWrapper implements CalEventLocalService,
@@ -364,8 +364,7 @@ public class CalEventLocalServiceWrapper implements CalEventLocalService,
 
 	@Override
 	public void checkEvents()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.SystemException {
 		_calEventLocalService.checkEvents();
 	}
 

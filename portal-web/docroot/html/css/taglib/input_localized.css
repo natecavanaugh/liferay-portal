@@ -1,12 +1,29 @@
 @import "compass";
 
 .input-localized {
+	.input-localized-content {
+		margin-top: -5px;
+	}
+
+	.lfr-input-localized-flag {
+		@include opacity(0.4);
+	}
+
+	&.input-localized-focused .lfr-input-localized-flag {
+		@include opacity(1);
+	}
+
+	.palette-container {
+		margin-bottom: 12px;
+	}
+
 	.palette-item {
 		border-width: 0;
+		padding: 0;
 	}
 
 	.palette-item-inner {
-		height: 11px;
+		border: 1px solid #666;
 		width: 16px;
 
 		img {
@@ -18,15 +35,35 @@
 		border-color: transparent;
 	}
 
-	.lfr-input-localized-flag {
-		@include opacity(0.15);
+	.lfr-input-localized-state {
+		display: none;
+		height: 6px;
+		margin: 3px 5px;
+		width: 6px;
+		@include border-radius(3px);
 	}
 
-	.palette-item-selected .lfr-input-localized-flag, .palette-item-hover .lfr-input-localized-flag {
-		@include opacity(1);
+	.lfr-input-localized .lfr-input-localized-state {
+		background: #ddd;
+		display: block;
+		@include box-shadow(0 0 3px #ddd);
 	}
 
-	.palette-container {
-		margin-bottom: 12px;
+	.palette-item-selected .lfr-input-localized-state {
+		background: #27c1f2;
+		display: block;
+		@include box-shadow(0 0 3px #27c1f2);
+	}
+
+	.palette-item-inner {
+	    display: block;
+	    height: 16px;
+	    width: 16px;
+	}
+}
+
+.input-prepend, .input-append {
+	.input-localized .input-localized-content {
+		margin-top: 5px;
 	}
 }

@@ -219,8 +219,8 @@ AUI.add(
 						Liferay.Service(
 							'/ddlrecordset/update-min-display-rows',
 							{
-								recordSetId: recordsetId,
 								minDisplayRows: minDisplayRows,
+								recordSetId: recordsetId,
 								serviceContext: JSON.stringify(
 									{
 										scopeGroupId: themeDisplay.getScopeGroupId(),
@@ -378,10 +378,10 @@ AUI.add(
 					Liferay.Service(
 						'/ddlrecord/add-record',
 						{
-							groupId: themeDisplay.getScopeGroupId(),
-							recordSetId: recordsetId,
 							displayIndex: displayIndex,
 							fieldsMap: JSON.stringify(fieldsMap),
+							groupId: themeDisplay.getScopeGroupId(),
+							recordSetId: recordsetId,
 							serviceContext: JSON.stringify(
 								{
 									scopeGroupId: themeDisplay.getScopeGroupId(),
@@ -492,31 +492,6 @@ AUI.add(
 									}
 
 									return label;
-								};
-							}
-							else if (type === 'ddm-fileupload') {
-								item.formatter = function(obj) {
-									var data = obj.data;
-
-									var label = STR_EMPTY;
-									var value = data[name];
-
-									if (value !== STR_EMPTY) {
-										var fileData = SpreadSheet.Util.parseJSON(value);
-
-										if (fileData.classPK) {
-											label = fileData.name;
-										}
-									}
-
-									return label;
-								};
-
-								structureField = instance.findStructureFieldByAttribute(structure, 'name', name);
-
-								config.validator.rules[name] = {
-									acceptFiles: structureField.acceptFiles,
-									requiredFields: true
 								};
 							}
 							else if ((type === 'radio') || (type === 'select')) {
@@ -633,10 +608,10 @@ AUI.add(
 					Liferay.Service(
 						'/ddlrecord/update-record',
 						{
-							recordId: recordId,
 							displayIndex: displayIndex,
 							fieldsMap: JSON.stringify(fieldsMap),
 							mergeFields: merge,
+							recordId: recordId,
 							serviceContext: JSON.stringify(
 								{
 									scopeGroupId: themeDisplay.getScopeGroupId(),
@@ -660,8 +635,8 @@ AUI.add(
 				Liferay.Service(
 					'/dlapp/get-file-entry-by-uuid-and-group-id',
 					{
-						uuid: fileJSON.uuid,
-						groupId: fileJSON.groupId
+						groupId: fileJSON.groupId,
+						uuid: fileJSON.uuid
 					},
 					callback
 				);

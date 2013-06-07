@@ -142,6 +142,24 @@ if (showPrototypes && (group != null)) {
 		<aui:input name="active" value="<%= true %>" />
 	</c:if>
 
+	<c:if test="<%= (group != null) && !group.isCompany() %>">
+
+		<%
+		UnicodeProperties typeSettingsProperties = null;
+
+		if (liveGroup != null) {
+			typeSettingsProperties = liveGroup.getTypeSettingsProperties();
+		}
+		else {
+			typeSettingsProperties = group.getTypeSettingsProperties();
+		}
+
+		boolean directoryIndexingEnabled = PropertiesParamUtil.getBoolean(typeSettingsProperties, request, "directoryIndexingEnabled");
+		%>
+
+		<aui:input helpMessage='<%= LanguageUtil.format(pageContext, "directory-indexing-help", new Object[] {HtmlUtil.escape(group.getDescriptiveName(themeDisplay.getLocale())), themeDisplay.getPortalURL() + "/documents" + group.getFriendlyURL()}) %>' label="directory-indexing-enabled" name="TypeSettingsProperties--directoryIndexingEnabled--" type="checkbox" value="<%= directoryIndexingEnabled %>" />
+	</c:if>
+
 	<c:if test="<%= liveGroup != null %>">
 		<aui:field-wrapper label="site-id">
 			<%= liveGroup.getGroupId() %>
@@ -487,6 +505,8 @@ boolean hasUnlinkLayoutSetPrototypePermission = PortalPermissionUtil.contains(pe
 		message="select"
 		url="javascript:;"
 	/>
+
+	<br />
 
 	<portlet:renderURL var="groupSelectorURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="struts_action" value="/users_admin/select_site" />

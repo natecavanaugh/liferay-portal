@@ -32,13 +32,21 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.DateRange;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Time;
+import com.liferay.portal.kernel.util.TimeZoneUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
@@ -48,13 +56,20 @@ import com.liferay.portal.kernel.zip.ZipReader;
 import com.liferay.portal.kernel.zip.ZipReaderFactoryUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutSet;
+import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.LayoutSetLocalServiceUtil;
+import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portal.util.WebKeys;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
@@ -64,13 +79,21 @@ import com.liferay.portlet.journal.model.JournalArticle;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.StringReader;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
 import org.apache.xerces.parsers.SAXParser;
 
@@ -78,8 +101,119 @@ import org.xml.sax.InputSource;
 
 /**
  * @author Zsolt Berentey
+ * @author Levente Hudák
  */
 public class ExportImportImpl implements ExportImport {
+
+	@Override
+	public Calendar getDate(
+		PortletRequest portletRequest, String paramPrefix,
+		boolean timeZoneSensitive) {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		int dateMonth = ParamUtil.getInteger(
+			portletRequest, paramPrefix + "Month");
+		int dateDay = ParamUtil.getInteger(portletRequest, paramPrefix + "Day");
+		int dateYear = ParamUtil.getInteger(
+			portletRequest, paramPrefix + "Year");
+		int dateHour = ParamUtil.getInteger(
+			portletRequest, paramPrefix + "Hour");
+		int dateMinute = ParamUtil.getInteger(
+			portletRequest, paramPrefix + "Minute");
+		int dateAmPm = ParamUtil.getInteger(
+			portletRequest, paramPrefix + "AmPm");
+
+		if (dateAmPm == Calendar.PM) {
+			dateHour += 12;
+		}
+
+		Locale locale = null;
+		TimeZone timeZone = null;
+
+		if (timeZoneSensitive) {
+			locale = themeDisplay.getLocale();
+			timeZone = themeDisplay.getTimeZone();
+		}
+		else {
+			locale = LocaleUtil.getDefault();
+			timeZone = TimeZoneUtil.getTimeZone(StringPool.UTC);
+		}
+
+		Calendar calendar = CalendarFactoryUtil.getCalendar(timeZone, locale);
+
+		calendar.set(Calendar.MONTH, dateMonth);
+		calendar.set(Calendar.DATE, dateDay);
+		calendar.set(Calendar.YEAR, dateYear);
+		calendar.set(Calendar.HOUR_OF_DAY, dateHour);
+		calendar.set(Calendar.MINUTE, dateMinute);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		return calendar;
+	}
+
+	@Override
+	public DateRange getDateRange(
+			PortletRequest portletRequest, long groupId, boolean privateLayout,
+			long plid, String portletId)
+		throws Exception {
+
+		Date startDate = null;
+		Date endDate = null;
+
+		String range = ParamUtil.getString(portletRequest, "range");
+
+		if (range.equals("dateRange")) {
+			startDate = getDate(portletRequest, "startDate", true).getTime();
+
+			endDate = getDate(portletRequest, "endDate", true).getTime();
+		}
+		else if (range.equals("fromLastPublishDate")) {
+			if (Validator.isNotNull(portletId) && (plid > 0)) {
+				Layout layout = LayoutLocalServiceUtil.getLayout(plid);
+
+				PortletPreferences preferences =
+					PortletPreferencesFactoryUtil.getPortletSetup(
+						layout, portletId, StringPool.BLANK);
+
+				long lastPublishDate = GetterUtil.getLong(
+					preferences.getValue(
+						"last-publish-date", StringPool.BLANK));
+
+				if (lastPublishDate > 0) {
+					endDate = new Date();
+
+					startDate = new Date(lastPublishDate);
+				}
+			}
+			else {
+				LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(
+					groupId, privateLayout);
+
+				long lastPublishDate = GetterUtil.getLong(
+					layoutSet.getSettingsProperty("last-publish-date"));
+
+				if (lastPublishDate > 0) {
+					endDate = new Date();
+
+					startDate = new Date(lastPublishDate);
+				}
+			}
+		}
+		else if (range.equals("last")) {
+			int rangeLast = ParamUtil.getInteger(portletRequest, "last");
+
+			Date now = new Date();
+
+			startDate = new Date(now.getTime() - (rangeLast * Time.HOUR));
+
+			endDate = now;
+		}
+
+		return new DateRange(startDate, endDate);
+	}
 
 	@Override
 	public ManifestSummary getManifestSummary(
@@ -87,7 +221,7 @@ public class ExportImportImpl implements ExportImport {
 			File file)
 		throws Exception {
 
-		Group group = GroupLocalServiceUtil.getGroup(groupId);
+		final Group group = GroupLocalServiceUtil.getGroup(groupId);
 		String userIdStrategy = MapUtil.getString(
 			parameterMap, PortletDataHandlerKeys.USER_ID_STRATEGY);
 		ZipReader zipReader = ZipReaderFactoryUtil.getZipReader(file);
@@ -106,14 +240,54 @@ public class ExportImportImpl implements ExportImport {
 
 				@Override
 				public void processElement(Element element) {
-					String className = element.attributeValue("class-name");
-					long count = GetterUtil.getLong(element.getText());
+					String elementName = element.getName();
 
-					manifestSummary.addModelCount(className, count);
+					if (elementName.equals("header")) {
+						String exportDateString = element.attributeValue(
+							"export-date");
+
+						Date exportDate = GetterUtil.getDate(
+							exportDateString,
+							DateFormatFactoryUtil.getSimpleDateFormat(
+								Time.RFC822_FORMAT));
+
+						manifestSummary.setExportDate(exportDate);
+					}
+					else if (elementName.equals("portlet")) {
+						String portletId = element.attributeValue("portlet-id");
+
+						try {
+							Portlet portlet =
+								PortletLocalServiceUtil.getPortletById(
+									group.getCompanyId(), portletId);
+
+							if ((portlet.getPortletDataHandlerInstance() !=
+									null) &&
+								GetterUtil.getBoolean(
+									element.attributeValue("portlet-data"))) {
+
+								manifestSummary.addDataPortlet(portlet);
+							}
+
+							if (GetterUtil.getBoolean(
+									element.attributeValue("portlet-setup"))) {
+
+								manifestSummary.addSetupPortlet(portlet);
+							}
+						}
+						catch (SystemException se) {
+						}
+					}
+					else if (elementName.equals("staged-model")) {
+						String className = element.attributeValue("class-name");
+						long count = GetterUtil.getLong(element.getText());
+
+						manifestSummary.addModelCount(className, count);
+					}
 				}
 
 			},
-			new String[] {"staged-model"});
+			new String[] {"header", "portlet", "staged-model"});
 
 		saxParser.setContentHandler(elementHandler);
 
@@ -121,10 +295,55 @@ public class ExportImportImpl implements ExportImport {
 			"/manifest.xml");
 
 		if (is == null) {
-			throw new LARFileException("manifest.xml not found in the LAR");
+			throw new LARFileException("manifest.xml is not in the LAR");
 		}
 
-		saxParser.parse(new InputSource(is));
+		String manifestXMLContent = StringUtil.read(is);
+
+		saxParser.parse(new InputSource(new StringReader(manifestXMLContent)));
+
+		return manifestSummary;
+	}
+
+	@Override
+	public ManifestSummary getManifestSummary(
+			long userId, long groupId, Map<String, String[]> parameterMap,
+			FileEntry fileEntry)
+		throws Exception {
+
+		File file = DLFileEntryLocalServiceUtil.getFile(
+			userId, fileEntry.getFileEntryId(), fileEntry.getVersion(), false);
+		File newFile = null;
+		boolean rename = false;
+
+		ManifestSummary manifestSummary = null;
+
+		try {
+			String newFileName = StringUtil.replace(
+				file.getPath(), file.getName(), fileEntry.getTitle());
+
+			newFile = new File(newFileName);
+
+			rename = file.renameTo(newFile);
+
+			if (!rename) {
+				newFile = FileUtil.createTempFile(fileEntry.getExtension());
+
+				FileUtil.copyFile(file, newFile);
+			}
+
+			manifestSummary = getManifestSummary(
+				userId, groupId, parameterMap, newFile);
+
+		}
+		finally {
+			if (rename) {
+				newFile.renameTo(file);
+			}
+			else {
+				FileUtil.delete(newFile);
+			}
+		}
 
 		return manifestSummary;
 	}

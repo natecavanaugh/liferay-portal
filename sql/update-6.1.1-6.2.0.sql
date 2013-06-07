@@ -316,7 +316,6 @@ alter table DLFileEntry add classNameId LONG;
 alter table DLFileEntry add classPK LONG;
 alter table DLFileEntry add manualCheckInRequired BOOLEAN;
 
-alter table DLFileRank add uuid_ VARCHAR(75) null;
 alter table DLFileRank add active_ BOOLEAN;
 
 COMMIT_TRANSACTION;
@@ -391,6 +390,10 @@ create table LayoutFriendlyURL (
 	layoutFriendlyURLId LONG not null primary key,
 	groupId LONG,
 	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
 	plid LONG,
 	privateLayout BOOLEAN,
 	friendlyURL VARCHAR(255) null,
@@ -520,6 +523,19 @@ create table SocialActivitySet (
 	classPK LONG,
 	type_ INTEGER,
 	activityCount INTEGER
+);
+
+create table SystemEvent (
+	systemEventId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	classNameId LONG,
+	classPK LONG,
+	classUuid VARCHAR(75) null,
+	type_ INTEGER
 );
 
 create table TrashEntry (

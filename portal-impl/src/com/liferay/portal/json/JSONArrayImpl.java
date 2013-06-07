@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Writer;
 
@@ -37,6 +38,10 @@ public class JSONArrayImpl implements JSONArray {
 
 	public JSONArrayImpl(String json) throws JSONException {
 		try {
+			if (Validator.isNull(json)) {
+				json = _NULL_JSON;
+			}
+
 			_jsonArray = new org.json.JSONArray(json);
 		}
 		catch (Exception e) {
@@ -195,6 +200,8 @@ public class JSONArrayImpl implements JSONArray {
 			throw new JSONException(e);
 		}
 	}
+
+	private static final String _NULL_JSON = "[]";
 
 	private static Log _log = LogFactoryUtil.getLog(JSONArrayImpl.class);
 

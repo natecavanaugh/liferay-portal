@@ -248,7 +248,6 @@
 		<open-search-class>com.liferay.portlet.documentlibrary.util.DLOpenSearchImpl</open-search-class>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
 		<portlet-data-handler-class>com.liferay.portlet.documentlibrary.lar.DLPortletDataHandler</portlet-data-handler-class>
-		<staged-model-data-handler-class>com.liferay.portlet.documentlibrary.lar.DLFileRankStagedModelDataHandler</staged-model-data-handler-class>
 		<staged-model-data-handler-class>com.liferay.portlet.documentlibrary.lar.DLFileEntryTypeStagedModelDataHandler</staged-model-data-handler-class>
 		<staged-model-data-handler-class>com.liferay.portlet.documentlibrary.lar.DLFileShortcutStagedModelDataHandler</staged-model-data-handler-class>
 		<staged-model-data-handler-class>com.liferay.portlet.documentlibrary.lar.FileEntryStagedModelDataHandler</staged-model-data-handler-class>
@@ -869,6 +868,7 @@
 		<icon>/html/icons/default.png</icon>
 		<struts-path>layouts_admin</struts-path>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
+		<staged-model-data-handler-class>com.liferay.portlet.layoutsadmin.lar.LayoutFriendlyURLStagedModelDataHandler</staged-model-data-handler-class>
 		<staged-model-data-handler-class>com.liferay.portlet.layoutsadmin.lar.LayoutStagedModelDataHandler</staged-model-data-handler-class>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
 		<use-default-template>false</use-default-template>
@@ -1204,6 +1204,7 @@
 		<staged-model-data-handler-class>com.liferay.portlet.usersadmin.lar.EmailAddressStagedModelDataHandler</staged-model-data-handler-class>
 		<staged-model-data-handler-class>com.liferay.portlet.usersadmin.lar.OrganizationStagedModelDataHandler</staged-model-data-handler-class>
 		<staged-model-data-handler-class>com.liferay.portlet.usersadmin.lar.PhoneStagedModelDataHandler</staged-model-data-handler-class>
+		<staged-model-data-handler-class>com.liferay.portlet.usersadmin.lar.UserStagedModelDataHandler</staged-model-data-handler-class>
 		<staged-model-data-handler-class>com.liferay.portlet.usersadmin.lar.WebsiteStagedModelDataHandler</staged-model-data-handler-class>
 		<control-panel-entry-category>users</control-panel-entry-category>
 		<control-panel-entry-weight>1.0</control-panel-entry-weight>
@@ -1505,7 +1506,7 @@
 		<icon>/html/icons/layout_prototypes.png</icon>
 		<struts-path>layout_prototypes</struts-path>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
-		<staged-model-data-handler-class>com.liferay.portlet.layoutsadmin.lar.LayoutPrototypeStagedModelDataHandler</staged-model-data-handler-class>
+		<staged-model-data-handler-class>com.liferay.portlet.layoutprototypes.lar.LayoutPrototypeStagedModelDataHandler</staged-model-data-handler-class>
 		<control-panel-entry-category>sites</control-panel-entry-category>
 		<control-panel-entry-weight>3.0</control-panel-entry-weight>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
@@ -1552,7 +1553,7 @@
 		<icon>/html/icons/layout_set_prototypes.png</icon>
 		<struts-path>layout_set_prototypes</struts-path>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
-		<staged-model-data-handler-class>com.liferay.portlet.layoutsadmin.lar.LayoutSetPrototypeStagedModelDataHandler</staged-model-data-handler-class>
+		<staged-model-data-handler-class>com.liferay.portlet.layoutsetprototypes.lar.LayoutSetPrototypeStagedModelDataHandler</staged-model-data-handler-class>
 		<control-panel-entry-category>sites</control-panel-entry-category>
 		<control-panel-entry-weight>2.0</control-panel-entry-weight>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
@@ -2112,6 +2113,19 @@
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/directory/css/main.css</header-portlet-css>
 		<css-class-wrapper>portlet-directory</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>190</portlet-name>
+		<icon>/html/icons/default.png</icon>
+		<struts-path>control_panel_home</struts-path>
+		<use-default-template>false</use-default-template>
+		<show-portlet-access-denied>false</show-portlet-access-denied>
+		<show-portlet-inactive>false</show-portlet-inactive>
+		<private-request-attributes>false</private-request-attributes>
+		<private-session-attributes>false</private-session-attributes>
+		<render-weight>50</render-weight>
+		<add-default-resource>true</add-default-resource>
+		<system>true</system>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

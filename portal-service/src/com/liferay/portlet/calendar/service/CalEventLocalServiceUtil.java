@@ -349,8 +349,7 @@ public class CalEventLocalServiceUtil {
 	}
 
 	public static void checkEvents()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.SystemException {
 		getService().checkEvents();
 	}
 

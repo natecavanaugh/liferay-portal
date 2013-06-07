@@ -16,10 +16,8 @@ package com.liferay.portlet.messageboards.lar;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
-import com.liferay.portal.kernel.lar.ManifestSummary;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
-import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.util.PropsValues;
@@ -27,6 +25,7 @@ import com.liferay.portlet.messageboards.model.MBBan;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBCategoryConstants;
 import com.liferay.portlet.messageboards.model.MBMessage;
+import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.model.MBThreadFlag;
 import com.liferay.portlet.messageboards.service.MBBanLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBCategoryLocalServiceUtil;
@@ -52,6 +51,10 @@ public class MBPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "message_boards";
 
 	public MBPortletDataHandler() {
+		setDeletionEventClassNames(
+			MBBan.class.getName(), MBCategory.class.getName(),
+			MBMessage.class.getName(), MBThread.class.getName(),
+			MBThreadFlag.class.getName());
 		setExportControls(
 			new PortletDataHandlerBoolean(
 				NAMESPACE, "messages", true, false, null,
@@ -62,13 +65,6 @@ public class MBPortletDataHandler extends BasePortletDataHandler {
 			new PortletDataHandlerBoolean(
 				NAMESPACE, "user-bans", true, false, null,
 				MBBan.class.getName()));
-		setExportMetadataControls(
-			new PortletDataHandlerBoolean(
-				NAMESPACE, "message-board-messages", true,
-				new PortletDataHandlerControl[] {
-					new PortletDataHandlerBoolean(NAMESPACE, "ratings"),
-					new PortletDataHandlerBoolean(NAMESPACE, "tags")
-				}));
 		setImportControls(getExportControls());
 		setPublishToLiveByDefault(
 			PropsValues.MESSAGE_BOARDS_PUBLISH_TO_LIVE_BY_DEFAULT);
@@ -211,33 +207,25 @@ public class MBPortletDataHandler extends BasePortletDataHandler {
 			PortletDataContext portletDataContext)
 		throws Exception {
 
-		ManifestSummary manifestSummary =
-			portletDataContext.getManifestSummary();
-
 		ActionableDynamicQuery banActionableDynamicQuery =
 			new MBBanExportActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			MBBan.class, banActionableDynamicQuery.performCount());
+		banActionableDynamicQuery.performCount();
 
 		ActionableDynamicQuery categoryActionableDynamicQuery =
 			new MBCategoryExportActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			MBCategory.class, categoryActionableDynamicQuery.performCount());
+		categoryActionableDynamicQuery.performCount();
 
 		ActionableDynamicQuery messageActionableDynamicQuery =
 			new MBMessageExportActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			MBMessage.class, messageActionableDynamicQuery.performCount());
+		messageActionableDynamicQuery.performCount();
 
 		ActionableDynamicQuery threadFlagActionableDynamicQuery =
 			new MBThreadFlagExportActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			MBThreadFlag.class,
-			threadFlagActionableDynamicQuery.performCount());
+		threadFlagActionableDynamicQuery.performCount();
 	}
 
 }

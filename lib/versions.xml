@@ -755,7 +755,7 @@
 	</library>
 	<library>
 		<file-name>lib/development/selenium-java.jar</file-name>
-		<version>2.30.0</version>
+		<version>2.33.0</version>
 		<project-name>Selenium Client Drivers</project-name>
 		<project-url>http://seleniumhq.org</project-url>
 		<licenses>
@@ -763,10 +763,14 @@
 				<license-name>Apache License 2.0</license-name>
 			</license>
 		</licenses>
+		<comments>
+			See the Ant target "build-selenium-java-jar" in
+			portal-impl/build.xml.
+		</comments>
 	</library>
 	<library>
 		<file-name>lib/development/selenium-server.jar</file-name>
-		<version>2.30.0</version>
+		<version>2.33.0</version>
 		<project-name>Selenium Server</project-name>
 		<project-url>http://seleniumhq.org</project-url>
 		<licenses>
@@ -775,7 +779,8 @@
 			</license>
 		</licenses>
 		<comments>
-			See the Ant target "build-selenium-server" in portal-impl/build.xml.
+			See the Ant target "build-selenium-server-jar" in
+			portal-impl/build.xml.
 		</comments>
 	</library>
 	<library>
@@ -2276,7 +2281,7 @@
 			</license>
 		</licenses>
 		<comments>
-			See the Ant target "build-ruby-gems" in portal-impl/build.xml.
+			See the Ant target "build-ruby-gems-jar" in portal-impl/build.xml.
 		</comments>
 	</library>
 	<library>
@@ -2290,7 +2295,7 @@
 			</license>
 		</licenses>
 		<comments>
-			See the Ant target "build-json-java" in portal-impl/build.xml.
+			See the Ant target "build-json-java-jar" in portal-impl/build.xml.
 		</comments>
 	</library>
 	<library>
@@ -3202,9 +3207,6 @@
 				<license-name>Apache License 2.0</license-name>
 			</license>
 		</licenses>
-		<comments>
-			See the Ant target "build-struts" in portal-impl/build.xml.
-		</comments>
 	</library>
 	<library>
 		<file-name>lib/portal/stax.jar</file-name>
@@ -3260,6 +3262,9 @@
 				<license-name>Apache License 2.0</license-name>
 			</license>
 		</licenses>
+		<comments>
+			See the Ant target "build-struts-jar" in portal-impl/build.xml.
+		</comments>
 	</library>
 	<library>
 		<file-name>lib/portal/struts-el.jar</file-name>

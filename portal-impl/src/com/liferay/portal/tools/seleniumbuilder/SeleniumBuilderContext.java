@@ -856,17 +856,12 @@ public class SeleniumBuilderContext {
 		Set<String> pathLocatorKeys =
 			_seleniumBuilderFileUtil.getPathLocatorKeys(pathRootElement);
 
-		String partialKey1 = "";
-		String partialKey2 = "";
+		String[] partialKeys = {};
 
 		if (locatorKey.contains("${") && locatorKey.contains("}")) {
 			caseComparator = "partial";
 
-			int x = locatorKey.indexOf("${");
-			int y = locatorKey.indexOf("}");
-
-			partialKey1 = locatorKey.substring(0, x);
-			partialKey2 = locatorKey.substring(y + 1);
+			partialKeys = locatorKey.split("\\$\\{[^}]*?\\}");
 		}
 
 		for (String pathLocatorKey : pathLocatorKeys) {
@@ -886,11 +881,18 @@ public class SeleniumBuilderContext {
 
 					return true;
 				}
-				else if (caseComparator.equals("partial") &&
-						 pathLocatorKey.contains(partialKey1) &&
-						 pathLocatorKey.contains(partialKey2)) {
+				else if (caseComparator.equals("partial")) {
+					boolean containsAll = true;
 
-					return true;
+					for (String s : partialKeys) {
+						if (!pathLocatorKey.contains(s)) {
+							containsAll = false;
+						}
+					}
+
+					if (containsAll) {
+						return true;
+					}
 				}
 				else if (caseComparator.equals("startsWith") &&
 						 pathLocatorKey.startsWith(locatorKey)) {

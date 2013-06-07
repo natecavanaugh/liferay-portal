@@ -29,8 +29,8 @@ import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityConstants;
 import com.liferay.portlet.social.model.SocialActivityDefinition;
 import com.liferay.portlet.social.service.base.SocialActivityLocalServiceBaseImpl;
-import com.liferay.portlet.social.util.SocialActivityHierarchy;
-import com.liferay.portlet.social.util.SocialActivityHierarchyThreadLocal;
+import com.liferay.portlet.social.util.SocialActivityHierarchyEntry;
+import com.liferay.portlet.social.util.SocialActivityHierarchyEntryThreadLocal;
 
 import java.util.Date;
 import java.util.List;
@@ -129,12 +129,13 @@ public class SocialActivityLocalServiceImpl
 		activity.setClassNameId(classNameId);
 		activity.setClassPK(classPK);
 
-		SocialActivityHierarchy activityHierarchy =
-			SocialActivityHierarchyThreadLocal.peek();
+		SocialActivityHierarchyEntry activityHierarchyEntry =
+			SocialActivityHierarchyEntryThreadLocal.peek();
 
-		if (activityHierarchy != null) {
-			activity.setParentClassNameId(activityHierarchy.getClassNameId());
-			activity.setParentClassPK(activityHierarchy.getClassPK());
+		if (activityHierarchyEntry != null) {
+			activity.setParentClassNameId(
+				activityHierarchyEntry.getClassNameId());
+			activity.setParentClassPK(activityHierarchyEntry.getClassPK());
 		}
 
 		activity.setType(type);
@@ -158,10 +159,11 @@ public class SocialActivityLocalServiceImpl
 			mirrorActivity.setClassNameId(classNameId);
 			mirrorActivity.setClassPK(classPK);
 
-			if (activityHierarchy != null) {
+			if (activityHierarchyEntry != null) {
 				mirrorActivity.setParentClassNameId(
-					activityHierarchy.getClassNameId());
-				mirrorActivity.setParentClassPK(activityHierarchy.getClassPK());
+					activityHierarchyEntry.getClassNameId());
+				mirrorActivity.setParentClassPK(
+					activityHierarchyEntry.getClassPK());
 			}
 
 			mirrorActivity.setType(type);

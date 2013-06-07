@@ -121,10 +121,6 @@ request.setAttribute("control_panel.jsp-ppid", ppid);
 			scopeLayout = LayoutLocalServiceUtil.getLayout(curGroup.getClassPK());
 			curGroup = scopeLayout.getGroup();
 		}
-
-		if (Validator.isNotNull(categoryTitle) && !category.startsWith(PortletCategoryKeys.SITE_ADMINISTRATION)) {
-			PortalUtil.addPortletBreadcrumbEntry(request, categoryTitle, null);
-		}
 		%>
 
 		<div id="content-wrapper">
@@ -136,7 +132,7 @@ request.setAttribute("control_panel.jsp-ppid", ppid);
 				<div class="<%= panelBodyCssClass %>">
 					<c:choose>
 						<c:when test="<%= Validator.isNull(controlPanelCategory) %>">
-							<%@ include file="/html/portal/layout/view/control_panel_home.jspf" %>
+							<liferay-portlet:runtime portletName="<%= PropsValues.CONTROL_PANEL_HOME_PORTLET_ID %>" />
 						</c:when>
 						<c:when test="<%= ((portlet != null) && !portlet.getControlPanelEntryCategory().startsWith(PortletCategoryKeys.SITE_ADMINISTRATION)) %>">
 							<%@ include file="/html/portal/layout/view/panel_content.jspf" %>
@@ -144,7 +140,16 @@ request.setAttribute("control_panel.jsp-ppid", ppid);
 						<c:otherwise>
 							<aui:container cssClass="<%= panelCategory %>">
 								<aui:row>
-									<h1><%= curGroup.getDescriptiveName(themeDisplay.getLocale()) %></h1>
+
+									<%
+									String backURL = HttpUtil.setParameter(themeDisplay.getURLControlPanel(), "p_p_id", PortletKeys.SITES_ADMIN);
+									%>
+
+									<a class="control-panel-back-link icon-circle-arrow-left" href="<%= backURL %>">&nbsp;</a>
+
+									<h1>
+										<%= curGroup.getDescriptiveName(themeDisplay.getLocale()) %>
+									</h1>
 								</aui:row>
 								<aui:row>
 									<aui:col cssClass="panel-page-menu" width="<%= 25 %>">

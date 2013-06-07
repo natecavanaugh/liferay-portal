@@ -54,7 +54,6 @@
 	<bean id="com.liferay.portal.service.LayoutSetBranchLocalService" class="com.liferay.portal.service.impl.LayoutSetBranchLocalServiceImpl" />
 	<bean id="com.liferay.portal.service.LayoutSetBranchService" class="com.liferay.portal.service.impl.LayoutSetBranchServiceImpl" />
 	<bean id="com.liferay.portal.service.persistence.LayoutSetBranchPersistence" class="com.liferay.portal.service.persistence.LayoutSetBranchPersistenceImpl" parent="basePersistence" />
-	<bean id="com.liferay.portal.service.persistence.LayoutSetBranchFinder" class="com.liferay.portal.service.persistence.LayoutSetBranchFinderImpl" parent="basePersistence" />
 	<bean id="com.liferay.portal.service.LayoutSetPrototypeLocalService" class="com.liferay.portal.service.impl.LayoutSetPrototypeLocalServiceImpl" />
 	<bean id="com.liferay.portal.service.LayoutSetPrototypeService" class="com.liferay.portal.service.impl.LayoutSetPrototypeServiceImpl" />
 	<bean id="com.liferay.portal.service.persistence.LayoutSetPrototypePersistence" class="com.liferay.portal.service.persistence.LayoutSetPrototypePersistenceImpl" parent="basePersistence" />
@@ -139,6 +138,8 @@
 	<bean id="com.liferay.portal.service.persistence.ShardPersistence" class="com.liferay.portal.service.persistence.ShardPersistenceImpl" parent="basePersistence" />
 	<bean id="com.liferay.portal.service.SubscriptionLocalService" class="com.liferay.portal.service.impl.SubscriptionLocalServiceImpl" />
 	<bean id="com.liferay.portal.service.persistence.SubscriptionPersistence" class="com.liferay.portal.service.persistence.SubscriptionPersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.portal.service.SystemEventLocalService" class="com.liferay.portal.service.impl.SystemEventLocalServiceImpl" />
+	<bean id="com.liferay.portal.service.persistence.SystemEventPersistence" class="com.liferay.portal.service.persistence.SystemEventPersistenceImpl" parent="basePersistence" />
 	<bean id="com.liferay.portal.service.TeamLocalService" class="com.liferay.portal.service.impl.TeamLocalServiceImpl" />
 	<bean id="com.liferay.portal.service.TeamService" class="com.liferay.portal.service.impl.TeamServiceImpl" />
 	<bean id="com.liferay.portal.service.persistence.TeamPersistence" class="com.liferay.portal.service.persistence.TeamPersistenceImpl" parent="basePersistence" />
@@ -166,6 +167,7 @@
 	<bean id="com.liferay.portal.service.persistence.UserIdMapperPersistence" class="com.liferay.portal.service.persistence.UserIdMapperPersistenceImpl" parent="basePersistence" />
 	<bean id="com.liferay.portal.service.UserNotificationEventLocalService" class="com.liferay.portal.service.impl.UserNotificationEventLocalServiceImpl" />
 	<bean id="com.liferay.portal.service.persistence.UserNotificationEventPersistence" class="com.liferay.portal.service.persistence.UserNotificationEventPersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.portal.service.UserNotificationInterpreterLocalService" class="com.liferay.portal.service.impl.UserNotificationInterpreterLocalServiceImpl" />
 	<bean id="com.liferay.portal.service.UserTrackerLocalService" class="com.liferay.portal.service.impl.UserTrackerLocalServiceImpl" />
 	<bean id="com.liferay.portal.service.persistence.UserTrackerPersistence" class="com.liferay.portal.service.persistence.UserTrackerPersistenceImpl" parent="basePersistence" />
 	<bean id="com.liferay.portal.service.UserTrackerPathLocalService" class="com.liferay.portal.service.impl.UserTrackerPathLocalServiceImpl" />

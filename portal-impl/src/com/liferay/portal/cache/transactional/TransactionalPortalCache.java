@@ -17,7 +17,6 @@ package com.liferay.portal.cache.transactional;
 import com.liferay.portal.kernel.cache.CacheListener;
 import com.liferay.portal.kernel.cache.CacheListenerScope;
 import com.liferay.portal.kernel.cache.PortalCache;
-import com.liferay.portal.kernel.util.StringPool;
 
 import java.io.Serializable;
 
@@ -58,7 +57,7 @@ public class TransactionalPortalCache<K extends Serializable, V>
 		if (TransactionalPortalCacheHelper.isEnabled()) {
 			result = TransactionalPortalCacheHelper.get(_portalCache, key);
 
-			if (result == _nullHolder) {
+			if (result == NULL_HOLDER) {
 				return null;
 			}
 		}
@@ -80,7 +79,7 @@ public class TransactionalPortalCache<K extends Serializable, V>
 		if (TransactionalPortalCacheHelper.isEnabled()) {
 			if (value == null) {
 				TransactionalPortalCacheHelper.put(
-					_portalCache, key, (V)_nullHolder);
+					_portalCache, key, (V)NULL_HOLDER);
 			}
 			else {
 				TransactionalPortalCacheHelper.put(_portalCache, key, value);
@@ -96,7 +95,7 @@ public class TransactionalPortalCache<K extends Serializable, V>
 		if (TransactionalPortalCacheHelper.isEnabled()) {
 			if (value == null) {
 				TransactionalPortalCacheHelper.put(
-					_portalCache, key, (V)_nullHolder);
+					_portalCache, key, (V)NULL_HOLDER);
 			}
 			else {
 				TransactionalPortalCacheHelper.put(_portalCache, key, value);
@@ -123,10 +122,12 @@ public class TransactionalPortalCache<K extends Serializable, V>
 	@Override
 	public void remove(K key) {
 		if (TransactionalPortalCacheHelper.isEnabled()) {
-			TransactionalPortalCacheHelper.remove(_portalCache, key);
+			TransactionalPortalCacheHelper.put(
+				_portalCache, key, (V)NULL_HOLDER);
 		}
-
-		_portalCache.remove(key);
+		else {
+			_portalCache.remove(key);
+		}
 	}
 
 	@Override
@@ -134,8 +135,9 @@ public class TransactionalPortalCache<K extends Serializable, V>
 		if (TransactionalPortalCacheHelper.isEnabled()) {
 			TransactionalPortalCacheHelper.removeAll(_portalCache);
 		}
-
-		_portalCache.removeAll();
+		else {
+			_portalCache.removeAll();
+		}
 	}
 
 	@Override
@@ -148,7 +150,7 @@ public class TransactionalPortalCache<K extends Serializable, V>
 		_portalCache.unregisterCacheListeners();
 	}
 
-	private static Serializable _nullHolder = StringPool.BLANK;
+	protected static Serializable NULL_HOLDER = "NULL_HOLDER";
 
 	private PortalCache<K, V> _portalCache;
 

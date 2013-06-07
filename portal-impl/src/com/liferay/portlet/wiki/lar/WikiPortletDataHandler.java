@@ -20,11 +20,9 @@ import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
-import com.liferay.portal.kernel.lar.ManifestSummary;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataException;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
-import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Element;
@@ -55,20 +53,13 @@ public class WikiPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "wiki";
 
 	public WikiPortletDataHandler() {
+		setDeletionEventClassNames(
+			WikiNode.class.getName(), WikiPage.class.getName());
 		setExportControls(
 			new PortletDataHandlerBoolean(
 				NAMESPACE, "wiki-pages", true, false, null,
 				WikiPage.class.getName()),
 			new PortletDataHandlerBoolean(NAMESPACE, "embedded-assets"));
-		setExportMetadataControls(
-			new PortletDataHandlerBoolean(
-				NAMESPACE, "wiki-pages", true,
-				new PortletDataHandlerControl[] {
-					new PortletDataHandlerBoolean(NAMESPACE, "categories"),
-					new PortletDataHandlerBoolean(NAMESPACE, "comments"),
-					new PortletDataHandlerBoolean(NAMESPACE, "ratings"),
-					new PortletDataHandlerBoolean(NAMESPACE, "tags")
-				}));
 		setImportControls(getExportControls());
 	}
 
@@ -188,20 +179,15 @@ public class WikiPortletDataHandler extends BasePortletDataHandler {
 			PortletDataContext portletDataContext)
 		throws Exception {
 
-		ManifestSummary manifestSummary =
-			portletDataContext.getManifestSummary();
-
 		ActionableDynamicQuery nodeActionableDynamicQuery =
 			new WikiNodeExportActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			WikiNode.class, nodeActionableDynamicQuery.performCount());
+		nodeActionableDynamicQuery.performCount();
 
 		ActionableDynamicQuery pageExportActionableDynamicQuery =
 			getPageActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			WikiPage.class, pageExportActionableDynamicQuery.performCount());
+		pageExportActionableDynamicQuery.performCount();
 	}
 
 	protected ActionableDynamicQuery getPageActionableDynamicQuery(

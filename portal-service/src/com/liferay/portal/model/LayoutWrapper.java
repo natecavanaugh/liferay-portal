@@ -23,8 +23,8 @@ import java.util.Map;
  * This class is a wrapper for {@link Layout}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       Layout
+ * @author Brian Wing Shun Chan
+ * @see Layout
  * @generated
  */
 public class LayoutWrapper implements Layout, ModelWrapper<Layout> {
@@ -1747,6 +1747,11 @@ public class LayoutWrapper implements Layout, ModelWrapper<Layout> {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _layout.getCssText();
+	}
+
+	@Override
+	public java.lang.String getFriendlyURL(java.util.Locale locale) {
+		return _layout.getFriendlyURL(locale);
 	}
 
 	@Override
