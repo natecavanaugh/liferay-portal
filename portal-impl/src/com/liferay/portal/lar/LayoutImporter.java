@@ -367,10 +367,20 @@ public class LayoutImporter {
 			}
 
 			if (existingLayoutPrototype == null) {
+				List<Layout> layouts =
+					LayoutLocalServiceUtil.getLayoutsByLayoutPrototypeUuid(
+						layoutPrototype.getUuid());
+
 				layoutPrototype.setUuid(layoutPrototypeUuid);
 
 				LayoutPrototypeLocalServiceUtil.updateLayoutPrototype(
 					layoutPrototype);
+
+				for (Layout layout : layouts) {
+					layout.setLayoutPrototypeUuid(layoutPrototypeUuid);
+
+					LayoutLocalServiceUtil.updateLayout(layout);
+				}
 			}
 		}
 		else if (group.isLayoutSetPrototype() &&
@@ -452,10 +462,17 @@ public class LayoutImporter {
 				logoPath);
 
 			if ((iconBytes != null) && (iconBytes.length > 0)) {
-				File logo = FileUtil.createTempFile(iconBytes);
+				File logo = null;
 
-				LayoutSetLocalServiceUtil.updateLogo(
-					groupId, privateLayout, true, logo);
+				try {
+					logo = FileUtil.createTempFile(iconBytes);
+
+					LayoutSetLocalServiceUtil.updateLogo(
+						groupId, privateLayout, true, logo);
+				}
+				finally {
+					FileUtil.delete(logo);
+				}
 			}
 			else {
 				LayoutSetLocalServiceUtil.updateLogo(
@@ -501,10 +518,7 @@ public class LayoutImporter {
 			_permissionImporter.readPortletDataPermissions(portletDataContext);
 		}
 
-		if (importCategories || group.isCompany()) {
-			_portletImporter.readAssetCategories(portletDataContext);
-		}
-
+		_portletImporter.readAssetCategories(portletDataContext);
 		_portletImporter.readAssetTags(portletDataContext);
 		_portletImporter.readComments(portletDataContext);
 		_portletImporter.readExpandoTables(portletDataContext);

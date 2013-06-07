@@ -1620,16 +1620,26 @@
 
 			var eventName = config.eventName || config.id;
 
-			var selectionEvent = Liferay.on(eventName, callback);
+			var eventHandles = [];
+
+			eventHandles.push(Liferay.on(eventName, callback));
+
+			var detachSelectionOnHideFn = function(event) {
+				if (!event.newVal) {
+					(new A.EventHandle(eventHandles)).detach();
+				}
+			};
 
 			if (dialog) {
+				eventHandles.push(dialog.after('visibleChange', detachSelectionOnHideFn));
+
 				dialog.show();
 			}
 			else {
 				Util.openWindow(
 					config,
 					function(dialogWindow) {
-						dialogWindow.after('close', selectionEvent.detach, selectionEvent);
+						eventHandles.push(dialogWindow.after('visibleChange', detachSelectionOnHideFn));
 					}
 				);
 			}
@@ -1910,6 +1920,26 @@
 
 	Liferay.provide(
 		Util,
+		'toggleSearchContainerButton',
+		function(buttonId, searchContainerId, form, ignoreFieldName) {
+			var searchContainer = A.one(searchContainerId);
+
+			if (searchContainer) {
+				searchContainer.delegate(
+					'change',
+					function() {
+						Liferay.Util.toggleDisabled(buttonId, !Liferay.Util.listCheckedExcept(form, ignoreFieldName));
+					},
+					'input[type=checkbox]'
+				);
+			}
+
+		},
+		['aui-base', 'liferay-util-list-fields']
+	);
+
+	Liferay.provide(
+		Util,
 		'updateCheckboxValue',
 		function(checkbox) {
 			checkbox = A.one(checkbox);
@@ -1959,7 +1989,11 @@
 		Util,
 		'_openWindowProvider',
 		function(config, callback) {
-			Window.getWindow(config, callback);
+			var dialog = Window.getWindow(config);
+
+			if (Lang.isFunction(callback)) {
+				callback(dialog);
+			}
 		},
 		['liferay-util-window']
 	);

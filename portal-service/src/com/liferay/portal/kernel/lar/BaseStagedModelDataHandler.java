@@ -43,16 +43,12 @@ public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 			ManifestSummary manifestSummary =
 				portletDataContext.getManifestSummary();
 
-			manifestSummary.incrementModelCount(getClassName(stagedModel));
+			manifestSummary.incrementModelCount(
+				getManifestSummaryKey(stagedModel));
 		}
 		catch (Exception e) {
 			throw new PortletDataException(e);
 		}
-	}
-
-	@Override
-	public String getClassName(StagedModel stagedModel) {
-		return stagedModel.getModelClassName();
 	}
 
 	@Override
@@ -61,6 +57,15 @@ public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 	@Override
 	public String getDisplayName(T stagedModel) {
 		return stagedModel.getUuid();
+	}
+
+	@Override
+	public String getManifestSummaryKey(StagedModel stagedModel) {
+		if (stagedModel == null) {
+			return getClassNames()[0];
+		}
+
+		return stagedModel.getModelClassName();
 	}
 
 	@Override
@@ -80,7 +85,8 @@ public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 			ManifestSummary manifestSummary =
 				portletDataContext.getManifestSummary();
 
-			manifestSummary.incrementModelCount(getClassName(stagedModel));
+			manifestSummary.incrementModelCount(
+				getManifestSummaryKey(stagedModel));
 		}
 		catch (Exception e) {
 			throw new PortletDataException(e);
@@ -95,10 +101,12 @@ public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 
 		if (elementName.equals("missing-reference")) {
 			String uuid = referenceElement.attributeValue("uuid");
+			long companyId = GetterUtil.getLong(
+				referenceElement.attributeValue("company-id"));
 			long groupId = GetterUtil.getLong(
 				referenceElement.attributeValue("group-id"));
 
-			return validateMissingReference(uuid, groupId);
+			return validateMissingReference(uuid, companyId, groupId);
 		}
 
 		return true;
@@ -112,7 +120,9 @@ public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 			PortletDataContext portletDataContext, T stagedModel)
 		throws Exception;
 
-	protected boolean validateMissingReference(String uuid, long groupId) {
+	protected boolean validateMissingReference(
+		String uuid, long companyId, long groupId) {
+
 		return true;
 	}
 

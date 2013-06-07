@@ -78,6 +78,9 @@ public abstract class BasePortletDataHandler implements PortletDataHandler {
 		}
 
 		try {
+			portletDataContext.addDeletionEventClassNames(
+				getDeletionEventClassNames());
+
 			return doExportData(
 				portletDataContext, portletId, portletPreferences);
 		}
@@ -104,6 +107,11 @@ public abstract class BasePortletDataHandler implements PortletDataHandler {
 	}
 
 	@Override
+	public String[] getDeletionEventClassNames() {
+		return _deletionEventClassNames;
+	}
+
+	@Override
 	public PortletDataHandlerControl[] getExportControls() {
 		return _exportControls;
 	}
@@ -119,7 +127,8 @@ public abstract class BasePortletDataHandler implements PortletDataHandler {
 
 		for (PortletDataHandlerControl exportControl : getExportControls()) {
 			long modelCount = manifestSummary.getModelCount(
-				exportControl.getClassName());
+				exportControl.getClassName(),
+				exportControl.getReferrerClassName());
 
 			if (modelCount == -1) {
 				continue;
@@ -324,6 +333,12 @@ public abstract class BasePortletDataHandler implements PortletDataHandler {
 		_dataPortletPreferences = dataPortletPreferences;
 	}
 
+	protected void setDeletionEventClassNames(
+		String... deletionEventClassNames) {
+
+		_deletionEventClassNames = deletionEventClassNames;
+	}
+
 	protected void setExportControls(
 		PortletDataHandlerControl... exportControls) {
 
@@ -361,7 +376,8 @@ public abstract class BasePortletDataHandler implements PortletDataHandler {
 
 	private DataLevel _dataLevel = DataLevel.SITE;
 	private boolean _dataLocalized;
-	private String[] _dataPortletPreferences = new String[0];
+	private String[] _dataPortletPreferences = StringPool.EMPTY_ARRAY;
+	private String[] _deletionEventClassNames = StringPool.EMPTY_ARRAY;
 	private PortletDataHandlerControl[] _exportControls =
 		new PortletDataHandlerControl[0];
 	private PortletDataHandlerControl[] _exportMetadataControls =

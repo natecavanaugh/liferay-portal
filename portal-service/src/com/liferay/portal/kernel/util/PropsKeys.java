@@ -465,6 +465,8 @@ public interface PropsKeys {
 
 	public static final String CONTROL_PANEL_DEFAULT_ENTRY_CLASS = "control.panel.default.entry.class";
 
+	public static final String CONTROL_PANEL_HOME_PORTLET_ID = "control.panel.home.portlet.id";
+
 	public static final String CONTROL_PANEL_LAYOUT_FRIENDLY_URL = "control.panel.layout.friendly.url";
 
 	public static final String CONTROL_PANEL_LAYOUT_NAME = "control.panel.layout.name";
@@ -1417,6 +1419,8 @@ public interface PropsKeys {
 
 	public static final String LUCENE_ANALYZER_MAX_TOKENS = "lucene.analyzer.max.tokens";
 
+	public static final String LUCENE_BOOLEAN_QUERY_CLAUSE_MAX_SIZE = "lucene.boolean.query.clause.max.size";
+
 	public static final String LUCENE_BUFFER_SIZE = "lucene.buffer.size";
 
 	public static final String LUCENE_CLUSTER_INDEX_LOADING_SYNC_TIMEOUT = "lucene.cluster.index.loading.sync.timeout";
@@ -1436,6 +1440,10 @@ public interface PropsKeys {
 	public static final String LUCENE_MERGE_POLICY = "lucene.merge.policy";
 
 	public static final String LUCENE_REPLICATE_WRITE = "lucene.replicate.write";
+
+	public static final String LUCENE_SPELL_CHECKER_DICTIONARY = "lucene.spell.checker.dictionary";
+
+	public static final String LUCENE_SPELL_CHECKER_SUPPORTED_LOCALES = "lucene.spell.checker.supported.locales";
 
 	public static final String LUCENE_STORE_TYPE = "lucene.store.type";
 
@@ -1889,8 +1897,6 @@ public interface PropsKeys {
 
 	public static final String POP_SERVER_SUBDOMAIN = "pop.server.subdomain";
 
-	public static final String PORTAL_CTX = "portal.ctx";
-
 	public static final String PORTAL_IMPERSONATION_ENABLE = "portal.impersonation.enable";
 
 	public static final String PORTAL_INSTANCE_HTTP_PORT = "portal.instance.http.port";
@@ -2223,11 +2229,11 @@ public interface PropsKeys {
 
 	public static final String SOCIAL_ACTIVITY_CONTRIBUTION_LIMIT_VALUES = "social.activity.contribution.limit.values";
 
-	public static final String SOCIAL_ACTIVITY_COUNTER_LOCK_RETRY_DELAY = "social.activity.counter.lock.retry.delay";
-
-	public static final String SOCIAL_ACTIVITY_COUNTER_LOCK_TIMEOUT = "social.activity.counter.lock.timeout";
-
 	public static final String SOCIAL_ACTIVITY_COUNTER_PERIOD_LENGTH = "social.activity.counter.period.length";
+
+	public static final String SOCIAL_ACTIVITY_LOCK_RETRY_DELAY = "social.activity.lock.retry.delay";
+
+	public static final String SOCIAL_ACTIVITY_LOCK_TIMEOUT = "social.activity.lock.timeout";
 
 	public static final String SOCIAL_ACTIVITY_PARTICIPATION_INCREMENTS = "social.activity.participation.increments";
 

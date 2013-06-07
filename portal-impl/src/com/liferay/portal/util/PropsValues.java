@@ -378,6 +378,8 @@ public class PropsValues {
 
 	public static final String CONTROL_PANEL_DEFAULT_ENTRY_CLASS = PropsUtil.get(PropsKeys.CONTROL_PANEL_DEFAULT_ENTRY_CLASS);
 
+	public static final String CONTROL_PANEL_HOME_PORTLET_ID = PropsUtil.get(PropsKeys.CONTROL_PANEL_HOME_PORTLET_ID);
+
 	public static final String CONTROL_PANEL_LAYOUT_FRIENDLY_URL = PropsUtil.get(PropsKeys.CONTROL_PANEL_LAYOUT_FRIENDLY_URL);
 
 	public static final String CONTROL_PANEL_LAYOUT_NAME = PropsUtil.get(PropsKeys.CONTROL_PANEL_LAYOUT_NAME);
@@ -1028,6 +1030,8 @@ public class PropsValues {
 
 	public static final boolean LUCENE_REPLICATE_WRITE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.LUCENE_REPLICATE_WRITE));
 
+	public static final String[] LUCENE_SPELL_CHECKER_SUPPORTED_LOCALES = StringUtil.split(PropsUtil.get(PropsKeys.LUCENE_SPELL_CHECKER_SUPPORTED_LOCALES));
+
 	public static final String LUCENE_STORE_TYPE = PropsUtil.get(PropsKeys.LUCENE_STORE_TYPE);
 
 	public static final boolean LUCENE_STORE_TYPE_FILE_FORCE_MMAP = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.LUCENE_STORE_TYPE_FILE_FORCE_MMAP));
@@ -1386,8 +1390,6 @@ public class PropsValues {
 
 	public static final String POP_SERVER_SUBDOMAIN = PropsUtil.get(PropsKeys.POP_SERVER_SUBDOMAIN);
 
-	public static final String PORTAL_CTX = PropsUtil.get(PropsKeys.PORTAL_CTX);
-
 	public static final boolean PORTAL_IMPERSONATION_ENABLE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PORTAL_IMPERSONATION_ENABLE));
 
 	public static final int PORTAL_INSTANCE_HTTP_PORT = GetterUtil.getInteger(PropsUtil.get(PropsKeys.PORTAL_INSTANCE_HTTP_PORT));
@@ -1634,11 +1636,11 @@ public class PropsValues {
 
 	public static final int[] SOCIAL_ACTIVITY_CONTRIBUTION_LIMIT_VALUES = GetterUtil.getIntegerValues(PropsUtil.getArray(PropsKeys.SOCIAL_ACTIVITY_CONTRIBUTION_LIMIT_VALUES));
 
-	public static final long SOCIAL_ACTIVITY_COUNTER_LOCK_RETRY_DELAY = GetterUtil.getLong(PropsUtil.get(PropsKeys.SOCIAL_ACTIVITY_COUNTER_LOCK_RETRY_DELAY));
-
-	public static final long SOCIAL_ACTIVITY_COUNTER_LOCK_TIMEOUT = GetterUtil.getLong(PropsUtil.get(PropsKeys.SOCIAL_ACTIVITY_COUNTER_LOCK_TIMEOUT));
-
 	public static final String SOCIAL_ACTIVITY_COUNTER_PERIOD_LENGTH = PropsUtil.get(PropsKeys.SOCIAL_ACTIVITY_COUNTER_PERIOD_LENGTH);
+
+	public static final long SOCIAL_ACTIVITY_LOCK_RETRY_DELAY = GetterUtil.getLong(PropsUtil.get(PropsKeys.SOCIAL_ACTIVITY_LOCK_RETRY_DELAY));
+
+	public static final long SOCIAL_ACTIVITY_LOCK_TIMEOUT = GetterUtil.getLong(PropsUtil.get(PropsKeys.SOCIAL_ACTIVITY_LOCK_TIMEOUT));
 
 	public static final int[] SOCIAL_ACTIVITY_PARTICIPATION_INCREMENTS = GetterUtil.getIntegerValues(PropsUtil.getArray(PropsKeys.SOCIAL_ACTIVITY_PARTICIPATION_INCREMENTS));
 

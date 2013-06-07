@@ -539,6 +539,8 @@ public class PortalInstances {
 
 		LuceneHelperUtil.delete(companyId);
 
+		LuceneHelperUtil.shutdown(companyId);
+
 		WebAppPool.remove(companyId, WebKeys.PORTLET_CATEGORY);
 	}
 

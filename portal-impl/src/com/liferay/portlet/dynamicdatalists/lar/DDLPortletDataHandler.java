@@ -16,7 +16,6 @@ package com.liferay.portlet.dynamicdatalists.lar;
 
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
-import com.liferay.portal.kernel.lar.ManifestSummary;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
@@ -38,6 +37,7 @@ public class DDLPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "dynamic_data_lists";
 
 	public DDLPortletDataHandler() {
+		setDeletionEventClassNames(DDLRecordSet.class.getName());
 		setDataLocalized(true);
 		setExportControls(
 			new PortletDataHandlerBoolean(
@@ -119,14 +119,10 @@ public class DDLPortletDataHandler extends BasePortletDataHandler {
 			PortletDataContext portletDataContext)
 		throws Exception {
 
-		ManifestSummary manifestSummary =
-			portletDataContext.getManifestSummary();
-
 		ActionableDynamicQuery actionableDynamicQuery =
 			new DDLRecordSetExportActionableDynamicQuery(portletDataContext);
 
-		manifestSummary.addModelCount(
-			DDLRecordSet.class, actionableDynamicQuery.performCount());
+		actionableDynamicQuery.performCount();
 	}
 
 }

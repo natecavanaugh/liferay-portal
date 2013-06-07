@@ -298,8 +298,7 @@ public interface CalEventLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public void checkEvents()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public com.liferay.portlet.calendar.model.CalEvent deleteEvent(
 		com.liferay.portlet.calendar.model.CalEvent event)

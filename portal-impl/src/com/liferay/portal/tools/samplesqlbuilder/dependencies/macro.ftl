@@ -2,14 +2,26 @@
 
 <#macro insertAssetEntry
 	_entry
-	_currentIndex = -1
+	_categoryAndTag = false
 >
 	<#local assetEntry = dataFactory.newAssetEntry(_entry)>
 
 	insert into AssetEntry values (${assetEntry.entryId}, ${assetEntry.groupId}, ${assetEntry.companyId}, ${assetEntry.userId}, '${assetEntry.userName}', '${dataFactory.getDateString(assetEntry.createDate)}', '${dataFactory.getDateString(assetEntry.modifiedDate)}', ${assetEntry.classNameId}, ${assetEntry.classPK}, '${assetEntry.classUuid}', ${assetEntry.classTypeId}, ${assetEntry.visible?string}, '${dataFactory.getDateString(assetEntry.startDate)}', '${dataFactory.getDateString(assetEntry.endDate)}', '${dataFactory.getDateString(assetEntry.publishDate)}', '${dataFactory.getDateString(assetEntry.expirationDate)}', '${assetEntry.mimeType}', '${assetEntry.title}', '${assetEntry.description}', '${assetEntry.summary}', '${assetEntry.url}', '${assetEntry.layoutUuid}', ${assetEntry.height}, ${assetEntry.width}, ${assetEntry.priority}, ${assetEntry.viewCount});
 
-	<#if (maxAssetCategoryCount > 0) && (_currentIndex != -1)>
-		insert into AssetEntries_AssetCategories values (${assetEntry.entryId}, ${dataFactory.getAssetCategoryId(assetEntry.groupId, _currentIndex)});
+	<#if (maxAssetVocabularyCount > 0) && _categoryAndTag>
+		<#local assetCategoryIds = dataFactory.getAssetCategoryIds(assetEntry.groupId)>
+
+		<#list assetCategoryIds as assetCategoryId>
+			insert into AssetEntries_AssetCategories values (${assetCategoryId}, ${assetEntry.entryId});
+		</#list>
+	</#if>
+
+	<#if (maxAssetTagCount > 0) && _categoryAndTag>
+		<#local assetTagIds = dataFactory.getAssetTagIds(assetEntry.groupId)>
+
+		<#list assetTagIds as assetTagId>
+			insert into AssetEntries_AssetTags values (${assetEntry.entryId}, ${assetTagId});
+		</#list>
 	</#if>
 </#macro>
 
@@ -76,7 +88,6 @@
 
 					<@insertAssetEntry
 						_entry = dlFileEntry
-						_currentIndex = dlFolderCount * maxDLFileEntryCount + dlFileEntryCount
 					/>
 
 					<#local ddmStorageLinkId = counter.get()>
@@ -143,6 +154,10 @@
 	<@insertResourcePermissions
 		_entry = _layout
 	/>
+
+	<#local layoutFriendlyURL = dataFactory.newLayoutFriendlyURL(_layout)>
+
+	insert into LayoutFriendlyURL values ('${layoutFriendlyURL.uuid}', ${layoutFriendlyURL.layoutFriendlyURLId}, ${layoutFriendlyURL.groupId}, ${layoutFriendlyURL.companyId}, ${layoutFriendlyURL.userId}, '${layoutFriendlyURL.userName}', '${dataFactory.getDateString(layoutFriendlyURL.createDate)}', '${dataFactory.getDateString(layoutFriendlyURL.modifiedDate)}', ${layoutFriendlyURL.plid}, ${layoutFriendlyURL.privateLayout?string}, '${layoutFriendlyURL.friendlyURL}', '${layoutFriendlyURL.languageId}');
 </#macro>
 
 <#macro insertMBDiscussion
@@ -240,10 +255,10 @@
 	insert into Contact_ values (${contact.contactId}, ${contact.companyId}, ${contact.userId}, '${contact.userName}', '${dataFactory.getDateString(contact.createDate)}', '${dataFactory.getDateString(contact.modifiedDate)}', ${contact.classNameId}, ${contact.classPK}, ${contact.accountId}, ${contact.parentContactId}, '${contact.emailAddress}', '${contact.firstName}', '${contact.middleName}', '${contact.lastName}', ${contact.prefixId}, ${contact.suffixId}, ${contact.male?string}, '${dataFactory.getDateString(contact.birthday)}', '${contact.smsSn}', '${contact.aimSn}', '${contact.facebookSn}', '${contact.icqSn}', '${contact.jabberSn}', '${contact.msnSn}', '${contact.mySpaceSn}', '${contact.skypeSn}', '${contact.twitterSn}', '${contact.ymSn}', '${contact.employeeStatusId}', '${contact.employeeNumber}', '${contact.jobTitle}', '${contact.jobClass}', '${contact.hoursOfOperation}');
 
 	<#list _roleIds as roleId>
-		insert into Users_Roles values (${_user.userId}, ${roleId});
+		insert into Users_Roles values (${roleId}, ${_user.userId});
 	</#list>
 
 	<#list _groupIds as groupId>
-		insert into Users_Groups values (${_user.userId}, ${groupId});
+		insert into Users_Groups values (${groupId}, ${_user.userId});
 	</#list>
 </#macro>

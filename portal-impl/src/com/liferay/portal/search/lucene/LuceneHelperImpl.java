@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ObjectValuePair;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
@@ -50,6 +51,7 @@ import com.liferay.portal.search.lucene.highlight.QueryTermExtractor;
 import com.liferay.portal.security.auth.TransientTokenUtil;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.util.lucene.KeywordsUtil;
 
@@ -107,7 +109,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 	public void addDocument(long companyId, Document document)
 		throws IOException {
 
-		IndexAccessor indexAccessor = _getIndexAccessor(companyId);
+		IndexAccessor indexAccessor = getIndexAccessor(companyId);
 
 		indexAccessor.addDocument(document);
 	}
@@ -216,17 +218,22 @@ public class LuceneHelperImpl implements LuceneHelper {
 			QueryParser queryParser = new QueryParser(
 				getVersion(), field, analyzer);
 
-			Query query = null;
+			Query query = queryParser.parse(value);
 
 			try {
-				if (like) {
+				if (like && (query instanceof TermQuery)) {
 
 					// LUCENE-89
 
-					value = value.toLowerCase(queryParser.getLocale());
-				}
+					TermQuery termQuery = (TermQuery)query;
 
-				query = queryParser.parse(value);
+					Term term = termQuery.getTerm();
+
+					value = term.text();
+					value = value.toLowerCase(queryParser.getLocale());
+
+					query = new TermQuery(term.createTerm(value));
+				}
 			}
 			catch (Exception e) {
 				query = queryParser.parse(KeywordsUtil.escape(value));
@@ -287,8 +294,6 @@ public class LuceneHelperImpl implements LuceneHelper {
 			return;
 		}
 
-		indexAccessor.close();
-
 		indexAccessor.delete();
 	}
 
@@ -330,6 +335,57 @@ public class LuceneHelperImpl implements LuceneHelper {
 	@Override
 	public Analyzer getAnalyzer() {
 		return _analyzer;
+	}
+
+	@Override
+	public IndexAccessor getIndexAccessor(long companyId) {
+		IndexAccessor indexAccessor = _indexAccessors.get(companyId);
+
+		if (indexAccessor != null) {
+			return indexAccessor;
+		}
+
+		synchronized (this) {
+			indexAccessor = _indexAccessors.get(companyId);
+
+			if (indexAccessor == null) {
+				indexAccessor = new IndexAccessorImpl(companyId);
+
+				if (isLoadIndexFromClusterEnabled()) {
+					boolean clusterForwardMessage = GetterUtil.getBoolean(
+						MessageValuesThreadLocal.getValue(
+							ClusterLink.CLUSTER_FORWARD_MESSAGE));
+
+					if (clusterForwardMessage) {
+						if (_log.isInfoEnabled()) {
+							_log.info(
+								"Skip Luncene index files cluster loading " +
+									"since this is a manual reindex request");
+						}
+					}
+					else {
+						indexAccessor = new SynchronizedIndexAccessorImpl(
+							indexAccessor);
+
+						try {
+							_loadIndexFromCluster(
+								indexAccessor,
+								indexAccessor.getLastGeneration());
+						}
+						catch (Exception e) {
+							_log.error(
+								"Unable to load index for company " +
+									indexAccessor.getCompanyId(),
+								e);
+						}
+					}
+				}
+
+				_indexAccessors.put(companyId, indexAccessor);
+			}
+		}
+
+		return indexAccessor;
 	}
 
 	@Override
@@ -432,7 +488,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 	public IndexSearcher getSearcher(long companyId, boolean readOnly)
 		throws IOException {
 
-		IndexAccessor indexAccessor = _getIndexAccessor(companyId);
+		IndexAccessor indexAccessor = getIndexAccessor(companyId);
 
 		IndexReader indexReader = IndexReader.open(
 			indexAccessor.getLuceneDir(), readOnly);
@@ -588,6 +644,15 @@ public class LuceneHelperImpl implements LuceneHelper {
 	}
 
 	@Override
+	public void shutdown(long companyId) {
+		IndexAccessor indexAccessor = getIndexAccessor(companyId);
+
+		_indexAccessors.remove(indexAccessor);
+
+		indexAccessor.close();
+	}
+
+	@Override
 	public void startup(long companyId) {
 		if (!PropsValues.INDEX_ON_STARTUP) {
 			return;
@@ -622,7 +687,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 	public void updateDocument(long companyId, Term term, Document document)
 		throws IOException {
 
-		IndexAccessor indexAccessor = _getIndexAccessor(companyId);
+		IndexAccessor indexAccessor = getIndexAccessor(companyId);
 
 		indexAccessor.updateDocument(term, document);
 	}
@@ -641,6 +706,8 @@ public class LuceneHelperImpl implements LuceneHelper {
 			ClusterExecutorUtil.addClusterEventListener(
 				_loadIndexClusterEventListener);
 		}
+
+		BooleanQuery.setMaxClauseCount(_LUCENE_BOOLEAN_QUERY_CLAUSE_MAX_SIZE);
 	}
 
 	private ObjectValuePair<String, URL>
@@ -685,56 +752,6 @@ public class LuceneHelperImpl implements LuceneHelper {
 		catch (Exception e) {
 			throw new SystemException(e);
 		}
-	}
-
-	private IndexAccessor _getIndexAccessor(long companyId) {
-		IndexAccessor indexAccessor = _indexAccessors.get(companyId);
-
-		if (indexAccessor != null) {
-			return indexAccessor;
-		}
-
-		synchronized (this) {
-			indexAccessor = _indexAccessors.get(companyId);
-
-			if (indexAccessor == null) {
-				indexAccessor = new IndexAccessorImpl(companyId);
-
-				if (isLoadIndexFromClusterEnabled()) {
-					boolean clusterForwardMessage = GetterUtil.getBoolean(
-						MessageValuesThreadLocal.getValue(
-							ClusterLink.CLUSTER_FORWARD_MESSAGE));
-
-					if (clusterForwardMessage) {
-						if (_log.isInfoEnabled()) {
-							_log.info(
-								"Skip Luncene index files cluster loading " +
-									"since this is a manual reindex request");
-						}
-					}
-					else {
-						indexAccessor = new SynchronizedIndexAccessorImpl(
-							indexAccessor);
-
-						try {
-							_loadIndexFromCluster(
-								indexAccessor,
-								indexAccessor.getLastGeneration());
-						}
-						catch (Exception e) {
-							_log.error(
-								"Unable to load index for company " +
-									indexAccessor.getCompanyId(),
-								e);
-						}
-					}
-				}
-
-				_indexAccessors.put(companyId, indexAccessor);
-			}
-		}
-
-		return indexAccessor;
 	}
 
 	private void _includeIfUnique(
@@ -834,6 +851,11 @@ public class LuceneHelperImpl implements LuceneHelper {
 	}
 
 	private static final long _BOOTUP_CLUSTER_NODE_RESPONSE_TIMEOUT = 10000;
+
+	private static final int _LUCENE_BOOLEAN_QUERY_CLAUSE_MAX_SIZE =
+		GetterUtil.getInteger(
+			PropsUtil.get(PropsKeys.LUCENE_BOOLEAN_QUERY_CLAUSE_MAX_SIZE),
+			BooleanQuery.getMaxClauseCount());
 
 	private static final long _TRANSIENT_TOKEN_KEEP_ALIVE_TIME = 10000;
 

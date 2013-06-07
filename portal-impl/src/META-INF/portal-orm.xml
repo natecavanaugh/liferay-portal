@@ -372,6 +372,14 @@
 			</basic>
 			<basic name="groupId" />
 			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 			<basic name="plid" />
 			<basic name="privateLayout" />
 			<basic name="friendlyURL" />
@@ -379,6 +387,7 @@
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
 	<mapped-superclass class="com.liferay.portal.model.impl.LayoutPrototypeModelImpl">
@@ -1111,6 +1120,29 @@
 			<basic name="classNameId" />
 			<basic name="classPK" />
 			<basic name="frequency" />
+			<transient name="className" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="com.liferay.portal.model.impl.SystemEventModelImpl">
+		<attributes>
+			<id name="systemEventId" />
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="userName" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="classNameId" />
+			<basic name="classPK" />
+			<basic name="classUuid" />
+			<basic name="type">
+				<column name="TYPE_" />
+			</basic>
 			<transient name="className" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
@@ -2063,17 +2095,10 @@
 	<mapped-superclass class="com.liferay.portlet.documentlibrary.model.impl.DLFileRankModelImpl">
 		<attributes>
 			<id name="fileRankId" />
-			<basic name="uuid">
-				<column name="UUID_" />
-			</basic>
 			<basic name="groupId" />
 			<basic name="companyId" />
 			<basic name="userId" />
-			<basic name="userName" />
 			<basic name="createDate">
-				<temporal>TIMESTAMP</temporal>
-			</basic>
-			<basic name="modifiedDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
 			<basic name="fileEntryId" />
@@ -4216,6 +4241,10 @@
 	</entity>
 	<entity class="com.liferay.portal.model.impl.SubscriptionImpl" name="Subscription">
 		<table name="Subscription" />
+		<attributes />
+	</entity>
+	<entity class="com.liferay.portal.model.impl.SystemEventImpl" name="SystemEvent">
+		<table name="SystemEvent" />
 		<attributes />
 	</entity>
 	<entity class="com.liferay.portal.model.impl.TeamImpl" name="Team">

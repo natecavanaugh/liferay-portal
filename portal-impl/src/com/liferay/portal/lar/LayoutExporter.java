@@ -252,6 +252,8 @@ public class LayoutExporter {
 			parameterMap, PortletDataHandlerKeys.PERMISSIONS);
 		boolean exportPortletArchivedSetups = MapUtil.getBoolean(
 			parameterMap, PortletDataHandlerKeys.PORTLET_ARCHIVED_SETUPS);
+		boolean exportPortletDataAll = MapUtil.getBoolean(
+			parameterMap, PortletDataHandlerKeys.PORTLET_DATA_ALL);
 		boolean exportPortletUserPreferences = MapUtil.getBoolean(
 			parameterMap, PortletDataHandlerKeys.PORTLET_USER_PREFERENCES);
 		boolean exportTheme = MapUtil.getBoolean(
@@ -266,7 +268,6 @@ public class LayoutExporter {
 			parameterMap, PortletDataHandlerKeys.UPDATE_LAST_PUBLISH_DATE);
 
 		if (_log.isDebugEnabled()) {
-			_log.debug("Export categories " + exportCategories);
 			_log.debug("Export permissions " + exportPermissions);
 			_log.debug(
 				"Export portlet archived setups " +
@@ -570,13 +571,14 @@ public class LayoutExporter {
 
 		portletDataContext.setScopeGroupId(previousScopeGroupId);
 
-		if (exportCategories || group.isCompany()) {
-			exportAssetCategories(portletDataContext);
-		}
+		exportAssetCategories(
+			portletDataContext, exportPortletDataAll, exportCategories,
+			group.isCompany());
 
 		_portletExporter.exportAssetLinks(portletDataContext);
 		_portletExporter.exportAssetTags(portletDataContext);
 		_portletExporter.exportComments(portletDataContext);
+		_portletExporter.exportDeletions(portletDataContext);
 		_portletExporter.exportExpandoTables(portletDataContext);
 		_portletExporter.exportLocks(portletDataContext);
 
@@ -617,34 +619,44 @@ public class LayoutExporter {
 		}
 	}
 
-	protected void exportAssetCategories(PortletDataContext portletDataContext)
+	protected void exportAssetCategories(
+			PortletDataContext portletDataContext, boolean exportPortletDataAll,
+			boolean exportCategories, boolean companyGroup)
 		throws Exception {
 
 		Document document = SAXReaderUtil.createDocument();
 
 		Element rootElement = document.addElement("categories-hierarchy");
 
-		Element assetVocabulariesElement = rootElement.addElement(
-			"vocabularies");
+		if (exportPortletDataAll || exportCategories || companyGroup) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Export categories");
+			}
 
-		List<AssetVocabulary> assetVocabularies =
-			AssetVocabularyLocalServiceUtil.getGroupVocabularies(
-				portletDataContext.getGroupId());
+			Element assetVocabulariesElement = rootElement.addElement(
+				"vocabularies");
 
-		for (AssetVocabulary assetVocabulary : assetVocabularies) {
-			_portletExporter.exportAssetVocabulary(
-				portletDataContext, assetVocabulariesElement, assetVocabulary);
-		}
+			List<AssetVocabulary> assetVocabularies =
+				AssetVocabularyLocalServiceUtil.getGroupVocabularies(
+					portletDataContext.getGroupId());
 
-		Element categoriesElement = rootElement.addElement("categories");
+			for (AssetVocabulary assetVocabulary : assetVocabularies) {
+				_portletExporter.exportAssetVocabulary(
+					portletDataContext, assetVocabulariesElement,
+					assetVocabulary);
+			}
 
-		List<AssetCategory> assetCategories = AssetCategoryUtil.findByGroupId(
-			portletDataContext.getGroupId());
+			Element categoriesElement = rootElement.addElement("categories");
 
-		for (AssetCategory assetCategory : assetCategories) {
-			_portletExporter.exportAssetCategory(
-				portletDataContext, assetVocabulariesElement, categoriesElement,
-				assetCategory);
+			List<AssetCategory> assetCategories =
+				AssetCategoryUtil.findByGroupId(
+					portletDataContext.getGroupId());
+
+			for (AssetCategory assetCategory : assetCategories) {
+				_portletExporter.exportAssetCategory(
+					portletDataContext, assetVocabulariesElement,
+					categoriesElement, assetCategory);
+			}
 		}
 
 		_portletExporter.exportAssetCategories(portletDataContext, rootElement);

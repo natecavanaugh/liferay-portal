@@ -52,11 +52,11 @@ if (Validator.isNotNull(languageId)) {
 	mainLanguageId = languageId;
 }
 
-String mainLanguageValue = LocalizationUtil.getLocalization(xml, mainLanguageId, false);
-
 Locale mainLocale = LocaleUtil.fromLanguageId(mainLanguageId);
 
 String mainLanguageDir = LanguageUtil.get(mainLocale, "lang.dir");
+
+String mainLanguageValue = LocalizationUtil.getLocalization(xml, mainLanguageId, false);
 
 if (!ignoreRequestValue) {
 	mainLanguageValue = ParamUtil.getString(request, name + StringPool.UNDERLINE + mainLanguageId, mainLanguageValue);
@@ -71,11 +71,11 @@ String fieldSuffix = StringPool.BLANK;
 if ((locales.length > 1) && !Validator.isNull(languageId)) {
 	fieldSuffix = StringPool.UNDERLINE + mainLanguageId;
 }
+
+List<String> languageIds = new ArrayList<String>();
 %>
 
-<span class="liferay-input-localized" id="<portlet:namespace /><%= id %>BoundingBox">
-	<div id="<portlet:namespace /><%= id %>ContentBox"></div>
-
+<span class="input-localized liferay-input-localized" id="<portlet:namespace /><%= id %>BoundingBox">
 	<c:choose>
 		<c:when test='<%= type.equals("input") %>'>
 			<input class="language-value <%= cssClass %>" dir="<%= mainLanguageDir %>" <%= disabled ? "disabled=\"disabled\"" : "" %> id="<portlet:namespace /><%= HtmlUtil.escapeAttribute(id + fieldSuffix) %>" name="<portlet:namespace /><%= HtmlUtil.escapeAttribute(name + fieldSuffix) %>" type="text" value="<%= HtmlUtil.escapeAttribute(mainLanguageValue) %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %> />
@@ -94,8 +94,6 @@ if ((locales.length > 1) && !Validator.isNull(languageId)) {
 	<c:if test="<%= (locales.length > 1) && Validator.isNull(languageId) %>">
 
 		<%
-		List<String> languageIds = new ArrayList<String>();
-
 		languageIds.add(defaultLanguageId);
 
 		if (Validator.isNotNull(xml)) {
@@ -139,6 +137,42 @@ if ((locales.length > 1) && !Validator.isNull(languageId)) {
 		%>
 
 	</c:if>
+
+	<div class="input-localized-content" id="<portlet:namespace /><%= id %>ContentBox">
+		<table class="palette-container">
+			<tr class="palette-items-container">
+
+				<%
+				LinkedHashSet<String> uniqueLanguageIds = new LinkedHashSet<String>();
+
+				uniqueLanguageIds.add(defaultLanguageId);
+				uniqueLanguageIds.add(themeDisplay.getLanguageId());
+
+				for (int i = 0; i < locales.length; i++) {
+					String curLanguageId = LocaleUtil.toLanguageId(locales[i]);
+
+					uniqueLanguageIds.add(curLanguageId);
+				}
+
+				int index = 0;
+
+				for (String curLanguageId : uniqueLanguageIds) {
+				%>
+
+					<td class="palette-item" data-index="<%= index++ %>" data-value="<%= curLanguageId %>">
+						<a class="palette-item-inner" href="javascript:void(0);">
+							<img class="lfr-input-localized-flag" data-languageid="<%= curLanguageId %>" src="<%= themeDisplay.getPathThemeImages() %>/language/<%= curLanguageId %>.png" />
+							<div class="lfr-input-localized-state"></div>
+						</a>
+					</td>
+
+				<%
+				}
+				%>
+
+			</tr>
+		</table>
+	</div>
 </span>
 
 <c:if test="<%= Validator.isNotNull(maxLength) %>">
@@ -162,7 +196,8 @@ if ((locales.length > 1) && !Validator.isNull(languageId)) {
 				contentBox: '#<portlet:namespace /><%= id %>ContentBox',
 				inputNamespace: '<portlet:namespace /><%= id + StringPool.UNDERLINE %>',
 				inputPlaceholder: '#<portlet:namespace /><%= HtmlUtil.escapeJS(id + fieldSuffix) %>',
-				toggleSelection: false
+				toggleSelection: false,
+				translatedLanguages: '<%= StringUtil.merge(languageIds) %>'
 			}
 		);
 	</aui:script>

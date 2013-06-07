@@ -234,10 +234,28 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 			</liferay-ui:panel>
 
 			<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="assetPublisherQueryRulesPanelContainer" persistState="<%= true %>" title="filter[action]">
-				<liferay-ui:asset-tags-error />
-
 				<div id="<portlet:namespace />queryRules">
 					<aui:fieldset label="displayed-assets-must-match-these-rules">
+						<liferay-ui:asset-tags-error />
+
+						<%
+						DuplicateQueryRuleException dqre = null;
+						%>
+
+						<liferay-ui:error exception="<%= DuplicateQueryRuleException.class %>">
+
+							<%
+							dqre = (DuplicateQueryRuleException)errorException;
+
+							String name = dqre.getName();
+							%>
+
+							<liferay-util:buffer var="messageArgument">
+								<em>(<liferay-ui:message key='<%= dqre.isContains() ? "contains" : "does-not-contain" %>' /> - <liferay-ui:message key='<%= dqre.isAndOperator() ? "all" : "any" %>' /> - <liferay-ui:message key='<%= name.equals(("assetTags")) ? "tags" : "categories" %>' />)</em>
+							</liferay-util:buffer>
+
+							<liferay-ui:message arguments="<%= messageArgument %>" key="only-one-rule-with-the-combination-x-is-supported" translateArguments="<%= false %>" />
+						</liferay-ui:error>
 
 						<%
 						String queryLogicIndexesParam = ParamUtil.getString(request, "queryLogicIndexes");
@@ -276,9 +294,23 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 								request.setAttribute("configuration.jsp-categorizableGroupIds", _getCategorizableGroupIds(groupIds));
 								request.setAttribute("configuration.jsp-index", String.valueOf(index));
 								request.setAttribute("configuration.jsp-queryLogicIndex", String.valueOf(queryLogicIndex));
+
+								String cssClass = StringPool.BLANK;
+
+								if (dqre != null) {
+									boolean queryContains = PrefsParamUtil.getBoolean(preferences, request, "queryContains" + queryLogicIndex, true);
+									boolean queryAndOperator = PrefsParamUtil.getBoolean(preferences, request, "queryAndOperator" + queryLogicIndex);
+									String queryName = PrefsParamUtil.getString(preferences, request, "queryName" + queryLogicIndex, "assetTags");
+
+									String dqreQueryName = dqre.getName();
+
+									if ((dqre.isContains() == queryContains) && (dqre.isAndOperator() == queryAndOperator) && dqreQueryName.equals(queryName)) {
+										cssClass = "asset-query-rule-error";
+									}
+								}
 						%>
 
-								<div class="lfr-form-row">
+								<div class="lfr-form-row <%= cssClass %>">
 									<div class="row-fields">
 										<liferay-util:include page="/html/portlet/asset_publisher/edit_query_rule.jsp" />
 									</div>

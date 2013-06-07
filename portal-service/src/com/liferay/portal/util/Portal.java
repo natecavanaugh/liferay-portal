@@ -25,6 +25,8 @@ import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutFriendlyURLComposite;
+import com.liferay.portal.model.LayoutQueryStringComposite;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.ResourcePermission;
@@ -239,6 +241,11 @@ public interface Portal {
 	 * @return the generated key
 	 */
 	public String generateRandomKey(HttpServletRequest request, String input);
+
+	public LayoutQueryStringComposite getActualLayoutQueryStringComposite(
+			long groupId, boolean privateLayout, String friendlyURL,
+			Map<String, String[]> params, Map<String, Object> requestContext)
+		throws PortalException, SystemException;
 
 	public String getActualURL(
 			long groupId, boolean privateLayout, String mainPath,
@@ -646,6 +653,9 @@ public interface Portal {
 			ThemeDisplay themeDisplay)
 		throws PortalException, SystemException;
 
+	public Portlet getFirstMyAccountPortlet(ThemeDisplay themeDisplay)
+		throws SystemException;
+
 	public String getFirstPageLayoutTypes(PageContext pageContext);
 
 	public Portlet getFirstSiteAdministrationPortlet(ThemeDisplay themeDisplay)
@@ -701,10 +711,17 @@ public interface Portal {
 	public HttpServletResponse getHttpServletResponse(
 		PortletResponse portletResponse);
 
+	public String getI18nPathLanguageId(
+		Locale locale, String defaultI18nPathLanguageId);
+
 	public String getJournalArticleActualURL(
 			long groupId, boolean privateLayout, String mainPath,
 			String friendlyURL, Map<String, String[]> params,
 			Map<String, Object> requestContext)
+		throws PortalException, SystemException;
+
+	public Layout getJournalArticleLayout(
+			long groupId, boolean privateLayout, String friendlyURL)
 		throws PortalException, SystemException;
 
 	public String getJsSafePortletId(String portletId);
@@ -733,6 +750,11 @@ public interface Portal {
 
 	public String getLayoutFriendlyURL(
 			Layout layout, ThemeDisplay themeDisplay, Locale locale)
+		throws PortalException, SystemException;
+
+	public LayoutFriendlyURLComposite getLayoutFriendlyURLComposite(
+			long groupId, boolean privateLayout, String friendlyURL,
+			Map<String, String[]> params, Map<String, Object> requestContext)
 		throws PortalException, SystemException;
 
 	public String getLayoutFullURL(Layout layout, ThemeDisplay themeDisplay)
@@ -785,6 +807,10 @@ public interface Portal {
 		boolean initialize);
 
 	public Locale getLocale(RenderRequest renderRequest);
+
+	public String getLocalizedFriendlyURL(
+			HttpServletRequest request, Layout layout, Locale locale)
+		throws Exception;
 
 	public String getMailId(String mx, String popPortletPrefix, Object... ids);
 
@@ -861,13 +887,13 @@ public interface Portal {
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
-	 * com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil#getWhitelist()}
+	 * com.liferay.portal.kernel.portlet.PortletSecurityUtil#getWhitelist()}
 	 */
 	public Set<String> getPortletAddDefaultResourceCheckWhitelist();
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
-	 * com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil#getWhitelistActions()}
+	 * com.liferay.portal.kernel.portlet.PortletSecurityUtil#getWhitelistActions()}
 	 */
 	public Set<String> getPortletAddDefaultResourceCheckWhitelistActions();
 
@@ -1091,6 +1117,11 @@ public interface Portal {
 			Map<String, Object> requestContext)
 		throws PortalException, SystemException;
 
+	public LayoutFriendlyURLComposite getVirtualLayoutFriendlyURLComposite(
+			boolean privateLayout, String friendlyURL,
+			Map<String, String[]> params, Map<String, Object> requestContext)
+		throws PortalException, SystemException;
+
 	public String getWidgetURL(Portlet portlet, ThemeDisplay themeDisplay)
 		throws PortalException, SystemException;
 
@@ -1199,13 +1230,13 @@ public interface Portal {
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
-	 * com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil#resetWhitelist()}
+	 * com.liferay.portal.kernel.portlet.PortletSecurityUtil#resetWhitelist()}
 	 */
 	public Set<String> resetPortletAddDefaultResourceCheckWhitelist();
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
-	 * com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil#resetWhitelistActions()}
+	 * com.liferay.portal.kernel.portlet.PortletSecurityUtil#resetWhitelistActions()}
 	 */
 	public Set<String> resetPortletAddDefaultResourceCheckWhitelistActions();
 

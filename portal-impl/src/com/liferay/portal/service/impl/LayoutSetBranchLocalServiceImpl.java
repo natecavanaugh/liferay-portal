@@ -346,7 +346,8 @@ public class LayoutSetBranchLocalServiceImpl
 			long groupId, boolean privateLayout)
 		throws PortalException, SystemException {
 
-		return layoutSetBranchFinder.findByMaster(groupId, privateLayout);
+		return layoutSetBranchPersistence.findByG_P_M_First(
+			groupId, privateLayout, true, null);
 	}
 
 	/**
@@ -549,7 +550,8 @@ public class LayoutSetBranchLocalServiceImpl
 		if (master) {
 			try {
 				LayoutSetBranch masterLayoutSetBranch =
-					layoutSetBranchFinder.findByMaster(groupId, privateLayout);
+					layoutSetBranchPersistence.findByG_P_M_First(
+						groupId, privateLayout, true, null);
 
 				if (layoutSetBranchId !=
 						masterLayoutSetBranch.getLayoutSetBranchId()) {

@@ -23,7 +23,7 @@ import com.liferay.portal.test.SynchronousDestinationExecutionTestListener;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityConstants;
-import com.liferay.portlet.social.util.SocialActivityHierarchyThreadLocal;
+import com.liferay.portlet.social.util.SocialActivityHierarchyEntryThreadLocal;
 import com.liferay.portlet.social.util.SocialActivityTestUtil;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public class SocialActivityLocalServiceTest extends BaseSocialActivityTestCase {
 		AssetEntry parentAssetEntry = SocialActivityTestUtil.addAssetEntry(
 			_creatorUser, _group);
 
-		SocialActivityHierarchyThreadLocal.push(
+		SocialActivityHierarchyEntryThreadLocal.push(
 			parentAssetEntry.getClassNameId(), parentAssetEntry.getClassPK());
 
 		SocialActivityTestUtil.addActivity(

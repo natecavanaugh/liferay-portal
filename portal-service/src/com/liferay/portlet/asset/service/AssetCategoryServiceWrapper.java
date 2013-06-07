@@ -19,8 +19,8 @@ import com.liferay.portal.service.ServiceWrapper;
 /**
  * Provides a wrapper for {@link AssetCategoryService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       AssetCategoryService
+ * @author Brian Wing Shun Chan
+ * @see AssetCategoryService
  * @generated
  */
 public class AssetCategoryServiceWrapper implements AssetCategoryService,
@@ -71,6 +71,17 @@ public class AssetCategoryServiceWrapper implements AssetCategoryService,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _assetCategoryService.addCategory(title, vocabularyId,
 			serviceContext);
+	}
+
+	/**
+	* @deprecated As of 6.2.0, Replaced by {@link #deleteCategories(long[],
+	ServiceContext)}
+	*/
+	@Override
+	public void deleteCategories(long[] categoryIds)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_assetCategoryService.deleteCategories(categoryIds);
 	}
 
 	@Override

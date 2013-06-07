@@ -57,10 +57,11 @@ public class DocumentImpl implements Document {
 
 		String languageId = LocaleUtil.toLanguageId(locale);
 
-		String localizedName = name.concat(StringPool.UNDERLINE).concat(
-			languageId);
+		return getLocalizedName(languageId, name);
+	}
 
-		return localizedName;
+	public static String getLocalizedName(String languageId, String name) {
+		return name.concat(StringPool.UNDERLINE).concat(languageId);
 	}
 
 	public static String getSortableFieldName(String name) {

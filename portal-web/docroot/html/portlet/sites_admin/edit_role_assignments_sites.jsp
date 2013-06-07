@@ -41,6 +41,8 @@ PortletURL portletURL = (PortletURL)request.getAttribute("edit_role_assignments.
 >
 
 	<%
+	request.setAttribute("edit_role_assignments.jsp-searchContainer", searchContainer);
+
 	GroupSearchTerms searchTerms = (GroupSearchTerms)searchContainer.getSearchTerms();
 
 	LinkedHashMap<String, Object> groupParams = new LinkedHashMap<String, Object>();
@@ -62,26 +64,13 @@ PortletURL portletURL = (PortletURL)request.getAttribute("edit_role_assignments.
 		searchContainer="<%= searchContainer %>"
 	/>
 
-	<div>
-		<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_COMMUNITY) %>">
-			<aui:button onClick='<%= renderResponse.getNamespace() + "addGroup();" %>' value="add-site" />
-		</c:if>
-	</div>
-
-	<aui:script>
-		function <portlet:namespace />addGroup() {
-			document.<portlet:namespace />fm.method = 'post';
-			submitForm(document.<portlet:namespace />fm, '<portlet:renderURL><portlet:param name="struts_action" value="/sites_admin/edit_site" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>');
-		}
-	</aui:script>
-
 	<div class="separator"><!-- --></div>
 
 	<%
-	String taglibOnClick = renderResponse.getNamespace() + "updateRoleGroups('" + portletURL.toString() + StringPool.AMPERSAND + renderResponse.getNamespace() + "cur=" + cur + "');";
+	String taglibOnClick = renderResponse.getNamespace() + "updateRoles('" + portletURL.toString() + StringPool.AMPERSAND + renderResponse.getNamespace() + "cur=" + cur + "');";
 	%>
 
-	<aui:button onClick="<%= taglibOnClick %>" value="update-associations" />
+	<aui:button disabled="<%= true %>" name="updateAssociations" onClick="<%= taglibOnClick %>" value="update-associations" />
 
 	<br /><br />
 

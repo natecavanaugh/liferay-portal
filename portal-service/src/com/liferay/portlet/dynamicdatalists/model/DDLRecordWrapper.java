@@ -25,8 +25,8 @@ import java.util.Map;
  * This class is a wrapper for {@link DDLRecord}.
  * </p>
  *
- * @author    Brian Wing Shun Chan
- * @see       DDLRecord
+ * @author Brian Wing Shun Chan
+ * @see DDLRecord
  * @generated
  */
 public class DDLRecordWrapper implements DDLRecord, ModelWrapper<DDLRecord> {
@@ -632,6 +632,13 @@ public class DDLRecordWrapper implements DDLRecord, ModelWrapper<DDLRecord> {
 	public java.io.Serializable getFieldValue(java.lang.String fieldName)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _ddlRecord.getFieldValue(fieldName);
+	}
+
+	@Override
+	public java.util.List<java.io.Serializable> getFieldValues(
+		java.lang.String fieldName, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _ddlRecord.getFieldValues(fieldName, locale);
 	}
 
 	@Override

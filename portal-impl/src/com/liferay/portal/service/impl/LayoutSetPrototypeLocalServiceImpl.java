@@ -17,6 +17,7 @@ package com.liferay.portal.service.impl;
 import com.liferay.portal.RequiredLayoutSetPrototypeException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -101,10 +102,14 @@ public class LayoutSetPrototypeLocalServiceImpl
 			layoutSetPrototype.getName(LocaleUtil.getDefault()), null, 0,
 			friendlyURL, false, true, serviceContext);
 
-		layoutLocalService.addLayout(
-			userId, group.getGroupId(), true,
-			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "home", null, null,
-			LayoutConstants.TYPE_PORTLET, false, "/home", serviceContext);
+		if (GetterUtil.getBoolean(
+				serviceContext.getAttribute("addDefaultLayout"), true)) {
+
+			layoutLocalService.addLayout(
+				userId, group.getGroupId(), true,
+				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "home", null, null,
+				LayoutConstants.TYPE_PORTLET, false, "/home", serviceContext);
+		}
 
 		return layoutSetPrototype;
 	}

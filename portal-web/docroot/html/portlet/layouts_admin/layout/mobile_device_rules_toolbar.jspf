@@ -80,9 +80,9 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "add");
 			Liferay.Service(
 				'/mdrrulegroupinstance/add-rule-group-instance',
 				{
-					groupId: <%= groupId %>,
 					className: '<%= className %>',
 					classPK: <%= classPK %>,
+					groupId: <%= groupId %>,
 					ruleGroupId: ruleGroupId,
 					serviceContext: A.JSON.stringify(
 						{
@@ -100,7 +100,8 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "add");
 <aui:script use="aui-base">
 	var config = {
 		dialog: {
-			width: 820
+			width: 820,
+			zIndex: Liferay.zIndex.WINDOW + 2
 		}
 	};
 

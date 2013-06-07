@@ -45,7 +45,6 @@ import com.liferay.portlet.documentlibrary.NoSuchFileException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
-import com.liferay.portlet.documentlibrary.model.DLFileRank;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
@@ -55,7 +54,6 @@ import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUt
 import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryTypeUtil;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFileEntryUtil;
-import com.liferay.portlet.documentlibrary.service.persistence.DLFileRankUtil;
 import com.liferay.portlet.documentlibrary.util.DLProcessorRegistryUtil;
 import com.liferay.portlet.documentlibrary.util.DLProcessorThreadLocal;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
@@ -82,11 +80,6 @@ public class FileEntryStagedModelDataHandler
 	};
 
 	@Override
-	public String getClassName(StagedModel stagedModel) {
-		return FileEntry.class.getName();
-	}
-
-	@Override
 	public String[] getClassNames() {
 		return CLASS_NAMES;
 	}
@@ -94,6 +87,11 @@ public class FileEntryStagedModelDataHandler
 	@Override
 	public String getDisplayName(FileEntry fileEntry) {
 		return fileEntry.getTitle();
+	}
+
+	@Override
+	public String getManifestSummaryKey(StagedModel stagedModel) {
+		return FileEntry.class.getName();
 	}
 
 	@Override
@@ -205,22 +203,6 @@ public class FileEntryStagedModelDataHandler
 		}
 
 		if (portletDataContext.getBooleanParameter(
-				DLPortletDataHandler.NAMESPACE, "ranks")) {
-
-			List<DLFileRank> fileRanks = DLFileRankUtil.findByFileEntryId(
-				fileEntry.getFileEntryId());
-
-			for (DLFileRank fileRank : fileRanks) {
-				StagedModelDataHandlerUtil.exportStagedModel(
-					portletDataContext, fileRank);
-
-				portletDataContext.addReferenceElement(
-					fileEntry, fileEntryElement, fileRank,
-					PortletDataContext.REFERENCE_TYPE_EMBEDDED, false);
-			}
-		}
-
-		if (portletDataContext.getBooleanParameter(
 				DLPortletDataHandler.NAMESPACE, "previews-and-thumbnails")) {
 
 			DLProcessorRegistryUtil.exportGeneratedFiles(
@@ -285,22 +267,10 @@ public class FileEntryStagedModelDataHandler
 		long folderId = MapUtil.getLong(
 			folderIds, fileEntry.getFolderId(), fileEntry.getFolderId());
 
-		long[] assetCategoryIds = null;
-		String[] assetTagNames = null;
-
-		if (portletDataContext.getBooleanParameter(
-				DLPortletDataHandler.NAMESPACE, "categories")) {
-
-			assetCategoryIds = portletDataContext.getAssetCategoryIds(
-				DLFileEntry.class, fileEntry.getFileEntryId());
-		}
-
-		if (portletDataContext.getBooleanParameter(
-				DLPortletDataHandler.NAMESPACE, "tags")) {
-
-			assetTagNames = portletDataContext.getAssetTagNames(
-				DLFileEntry.class, fileEntry.getFileEntryId());
-		}
+		long[] assetCategoryIds = portletDataContext.getAssetCategoryIds(
+			DLFileEntry.class, fileEntry.getFileEntryId());
+		String[] assetTagNames = portletDataContext.getAssetTagNames(
+			DLFileEntry.class, fileEntry.getFileEntryId());
 
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
 			fileEntry, DLPortletDataHandler.NAMESPACE);
@@ -630,7 +600,9 @@ public class FileEntryStagedModelDataHandler
 	}
 
 	@Override
-	protected boolean validateMissingReference(String uuid, long groupId) {
+	protected boolean validateMissingReference(
+		String uuid, long companyId, long groupId) {
+
 		try {
 			DLFileEntry dlFileEntry = DLFileEntryUtil.fetchByUUID_G(
 				uuid, groupId);
