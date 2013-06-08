@@ -192,7 +192,7 @@ $dockbarGradientEnd: #0A6BCA;
 			line-height: 2.2;
 			margin: 0;
 
-			img.icon {
+			i, img.icon {
 				display: none;
 			}
 		}
@@ -203,6 +203,14 @@ $dockbarGradientEnd: #0A6BCA;
 			padding: 0;
 			right: 10px;
 			top: 50%;
+
+			a {
+				text-decoration: none;
+
+				i {
+					color: #FFF;
+				}
+			}
 		}
 	}
 

@@ -99,6 +99,7 @@
 		}
 
 		img {
+			margin-top: -2px;
 			opacity: 0;
 			vertical-align: top;
 		}
@@ -304,6 +305,8 @@
 			overflow: hidden;
 
 			.accordion-toggle {
+				padding: 8px 0;
+
 				&, &:hover {
 					text-decoration: none;
 				}

@@ -210,7 +210,15 @@ $dockbarGradientEnd: #0A6BCA;
 	}
 
 	.lfr-ctrl-panel {
-
+		.control-panel-back-link {
+			color: #D4D4D4;
+			float: left;
+			font-size: 50px;
+			height: auto;
+			margin-top: 7px;
+			text-decoration: none;
+			width: auto;
+		}
 	}
 
 	.portlet-title, .portlet-content {
@@ -283,15 +291,19 @@ $dockbarGradientEnd: #0A6BCA;
 				border-width: 1px 0 0;
 				margin-bottom: 0;
 
-				.accordion-inner {
-					padding: 3px 0;
+				.accordion-heading {
+					cursor: pointer;
+
+					.accordion-toggle {
+						font-size: 16px;
+						font-weight: normal;
+						padding: 0;
+						text-transform: capitalize;
+					}
 				}
 
-				.accordion-toggle {
-					font-size: 16px;
-					font-weight: normal;
-					padding: 0;
-					text-transform: capitalize;
+				.accordion-inner {
+					padding: 3px 0;
 				}
 
 				.category-portlets {
