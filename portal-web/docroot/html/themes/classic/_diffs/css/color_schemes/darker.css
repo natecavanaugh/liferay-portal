@@ -67,6 +67,9 @@ body.darker {
 		}
 	}
 
+	.lfr-header-row-content {
+		padding: 3px 0 0;
+	}
 	/* Portlet */
 
 	section.portlet {
@@ -113,6 +116,10 @@ body.darker {
 			background: transparent;
 			content: " ";
 		}
+	}
+
+	.portlet-asset-publisher .lfr-meta-actions {
+		margin-right: 0;
 	}
 
 	.portlet-content {
