@@ -39,6 +39,9 @@
 		<color-scheme id="05" name="Light">
 			<css-class>light</css-class>
 		</color-scheme>
+		<color-scheme id="06" name="Darker">
+			<css-class>darker</css-class>
+		</color-scheme>
 	</theme>
 	<theme id="control-panel" name="Control Panel">
 		<root-path>/html/themes/control_panel</root-path>

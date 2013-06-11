@@ -133,6 +133,7 @@ $dockbarGradientEnd: #0A6BCA;
 
 			.nav-account-controls {
 				left: auto;
+				padding: 0 5px;
 				position: fixed;
 				right: 3em;
 				z-index: 1000;
@@ -152,6 +153,20 @@ $dockbarGradientEnd: #0A6BCA;
 
 					.icon-caret-down {
 						display: none;
+					}
+
+					.icon-desktop {
+						font-size: 25px;
+						position: relative;
+						left: -6px;
+						top: -2px;
+					}
+
+					.icon-plus-sign {
+						font-size: 30px;
+						left: -5px;
+						position: relative;
+						top: -6px;
 					}
 				}
 			}
@@ -330,4 +345,5 @@ $dockbarGradientEnd: #0A6BCA;
 }
 
 @import url(color_schemes/dark.css);
+@import url(color_schemes/darker.css);
 @import url(color_schemes/light.css);

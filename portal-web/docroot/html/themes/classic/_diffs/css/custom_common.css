@@ -242,7 +242,7 @@
 	/* ---------- Breadcrumbs ---------- */
 
 	.breadcrumb {
-		padding-bottom: 3px;
+		padding: 8px 15px 8px 0;
 
 		.only .divider {
 			display: none;

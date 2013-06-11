@@ -1,18 +1,32 @@
 @import "compass";
 
-body.light {
+body.darker {
+	background: #363636;
+	color: #E3E3E3;
+	font-weight: lighter;
+
 	a {
+		color: #009CEB;
 		@include text-shadow(none);
+	}
+
+	nav#breadcrumbs {
+		padding-left: 10px;
 	}
 
 	nav#navigation {
 		.navbar-inner {
+			background: #2F2F2F;
 			border: 0;
 			@include box-shadow(none);
 
 			ul.nav {
 				> li {
 					margin-right: 5px;
+
+					a {
+						color: #E3E3E3;
+					}
 				}
 
 				li {
@@ -25,6 +39,10 @@ body.light {
 							@include border-radius(3px);
 							@include text-shadow(none);
 						}
+					}
+
+					a {
+						@include text-shadow(none);
 					}
 				}
 
@@ -43,11 +61,18 @@ body.light {
 
 	.breadcrumb {
 		background: transparent;
+
+		li a {
+			color: #E3E3E3;
+		}
 	}
 
 	/* Portlet */
 
 	section.portlet {
+		background: #363636;
+		margin-bottom: 50px;
+
 		.admin.portlet-topper-toolbar {
 			> div {
 				display: none;
@@ -95,7 +120,8 @@ body.light {
 	}
 
 	.portlet-title {
-		color: #29B23E;
+		color: #00CAFF;
+		font-weight: lighter;
 	}
 
 	.portlet-topper {
