@@ -5,6 +5,9 @@
 $dockbarGradientStart: #0A85E4;
 $dockbarGradientEnd: #0A6BCA;
 
+$dockbarOpenGradientStart: #00A0FF;
+$dockbarOpenGradientEnd: #048BDF;
+
 /* ---------- Base styles ---------- */
 
 .aui {
@@ -107,7 +110,13 @@ $dockbarGradientEnd: #0A6BCA;
 
 		.nav {
 			li.dropdown.open > .dropdown-toggle {
-				background: #0092E3;
+						margin: 0;
+						padding: 5px 15px;
+						background-color: $dockbarOpenGradientEnd;
+						@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
+						$experimental-support-for-svg: true;
+						@include background-image(linear-gradient(top, $dockbarOpenGradientStart 0%,$dockbarOpenGradientEnd 100%));
+						@include box-shadow(none);
 			}
 
 			> li > a {
