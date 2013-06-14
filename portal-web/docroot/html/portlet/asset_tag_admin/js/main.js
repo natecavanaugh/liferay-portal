@@ -1715,7 +1715,9 @@ AUI.add(
 
 						var tagHTML = '<li class="" data-tagId="' + tagId +'" data-tag="' + tagName + '">' +
 							'<span>' + tagName + '</span>' +
-							'<button class="close" type="button">x</button>' +
+							'<button class="close" type="button">' +
+								'<icon class="icon-remove" />' +
+							'</button>' +
 						'</li>';
 
 						var selectedTag = A.Node.create(tagHTML);
