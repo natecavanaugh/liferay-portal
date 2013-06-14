@@ -165,9 +165,12 @@
 				}
 
 				.close {
-					font-size: 14px;
 					line-height: 18px;
-					padding: 0 8px 0 4px;
+					padding: 0 4px;
+
+					icon {
+						margin-top: 4px;
+					}
 				}
 			}
 		}
