@@ -394,80 +394,89 @@ $dockbarOpenGradientEnd: #048BDF;
 		}
 	}
 
-	.panel-page-menu .portlet-borderless-container {
-		background: #FCFCFC;
-		border-right: 1px solid #D1D1D1;
-		padding: 5px 0;
-		@include box-shadow(3px 0px 2px -2px #F5F5F5);
+	.panel-page-menu {
 
-		.accordion {
-			background: #FFF;
-			margin-bottom: 0;
+		.portlet-static.portlet-static-end {
+			background: url(../images/custom/fade-border-d1d1d1.png) no-repeat right top #FCFCFC;
+			background-size: 5px;
+			padding-top: 15px;
+			@include box-shadow(3px 0px 2px -2px #F5F5F5);
+		}
 
-			.accordion-group {
+		.portlet-borderless-container {
+			background: #FCFCFC;
+			border-right: 1px solid #D1D1D1;
+			padding: 0px 0 0;
+
+			.accordion {
 				background: #FFF;
-				border: 1px solid #D1D1D1;
-				border-width: 1px 0 0;
 				margin-bottom: 0;
 
-				.accordion-heading {
-					cursor: pointer;
-
-					.accordion-toggle {
-						font-size: 16px;
-						font-weight: 300;
-						padding: 0;
-						text-transform: capitalize;
-					}
-				}
-
-				.accordion-inner {
-					background: #FCFCFC;
+				.accordion-group {
+					background: #FFF;
 					border: 1px solid #D1D1D1;
-					border-width: 1px 0 0 0;
-					padding: 6px 0 15px;
-				}
+					border-width: 1px 0 0;
+					margin-bottom: 0;
 
-				.category-portlets {
-					list-style: none;
-					margin: 0;
+					.accordion-heading {
+						cursor: pointer;
 
-					li {
-						a {
-							display: block;
-							font-size: 14px;
-							padding: 3px 15px;
-							text-decoration: none;
-
-							&:focus, &:hover {
-								background: #E5F5FC;
-								color: #009AE5;
-							}
+						.accordion-toggle {
+							font-size: 16px;
+							font-weight: 300;
+							padding: 0;
+							text-transform: capitalize;
 						}
+					}
 
-						&.selected-portlet {
+					.accordion-inner {
+						background: #FCFCFC;
+						border: 1px solid #D1D1D1;
+						border-width: 1px 0 0 0;
+						padding: 6px 0 15px;
+					}
+
+					.category-portlets {
+						list-style: none;
+						margin: 0;
+
+						li {
 							a {
-								background: #60BFEF;
-								color: #FFF;
+								display: block;
+								font-size: 14px;
+								padding: 3px 15px;
+								text-decoration: none;
+
+								&:focus, &:hover {
+									background: #E5F5FC;
+									color: #009AE5;
+								}
+							}
+
+							&.selected-portlet {
+								a {
+									background: #60BFEF;
+									color: #FFF;
+								}
 							}
 						}
 					}
-				}
 
-				.toggler-header {
-					background: #F2F2F2;
-					padding: 6px 10px;
-				}
-
-				.toggler-header-collapsed {
-					.accordion-toggle {
-						background: url(../images/custom/arrow_option_closed.png) no-repeat right center transparent;
+					.toggler-header {
+						background: #F2F2F2;
+						padding: 6px 10px;
 					}
-				}
 
-				.toggler-header-expanded {
-					.accordion-toggle {
-						background: url(../images/custom/arrow_option_open.png) no-repeat right center transparent;
+					.toggler-header-collapsed {
+						.accordion-toggle {
+							background: url(../images/custom/arrow_option_closed.png) no-repeat right center transparent;
+						}
+					}
+
+					.toggler-header-expanded {
+						.accordion-toggle {
+							background: url(../images/custom/arrow_option_open.png) no-repeat right center transparent;
+						}
 					}
 				}
 			}
@@ -495,6 +504,10 @@ $dockbarOpenGradientEnd: #048BDF;
 
 				.search-panels-input {
 					border-color: #CACACA;
+
+					&:focus {
+						border-color: rgba(0, 172, 255, 0.8);
+					}
 				}
 			}
 
@@ -518,51 +531,79 @@ $dockbarOpenGradientEnd: #048BDF;
 		.heading {
 			border-bottom: 1px solid #CFCFCF;
 			float: left;
-			margin-bottom: 3px;
-			padding: 17px 20px 10px;
+			padding: 17px 20px 5px;
+			position: relative;
+			z-index: 10;
 			@include box-shadow(0 3px 4px -3px #DFDFDF);
 
 			a:hover {
 				text-decoration: none;
 			}
 
-			.site-title {
-				background: url(../images/custom/arrow_option_open.png) no-repeat right center transparent;
-				color: #555;
-				display: inline;
-				font-size: 25px;
-				font-weight: 300;
-				padding-right: 30px;
-			}
+			#controlPanelSitesHeading {
+				.accordion-inner {
+					padding: 0 15px;
+				}
 
-			.control-panel-back-link {
-				color: #30C8EE;
-				float: left;
-				font-size: 20px;
-				height: auto;
-				margin-right: 5px;
-				text-decoration: none;
-				width: auto;
-			}
+				.accordion-toggle {
+					color: #555;
+					font-size: 25px;
+					font-weight: 300;
+					margin-bottom: 5px;
+					padding: 0 28px 0 12px;
+					text-transform: capitalize;
+				}
 
-			.visit-links {
-				font-size: 12px;
+				.control-panel-back-link {
+					color: #30C8EE;
+					float: left;
+					font-size: 20px;
+					height: auto;
+					margin-right: 5px;
+					text-decoration: none;
+					width: auto;
+				}
 
-				ul {
-					color: #8D8D8D;
-					list-style: none;
-					margin: 0;
+				.visit-links {
+					font-size: 12px;
 
-					li {
-						float: left;
-						margin-right: 5px;
+					ul {
+						color: #8D8D8D;
+						list-style: none;
+						margin: 0;
 
-						&.divider:before {
-							content: "/";
-							margin: 0 5px;
+						li {
+							float: left;
+							margin-right: 5px;
+
+							&.divider:before {
+								content: "/";
+								margin: 0 5px;
+							}
 						}
 					}
 				}
+			}
+
+			#controlPanelSitesHeadingContainer {
+				margin-bottom: 0;
+
+				.accordion-group.lfr-panel-extended {
+					.accordion-heading {
+						overflow: visible;
+
+						&.toggler-header-collapsed {
+							background: url(../images/custom/arrow_option_closed.png) no-repeat right center transparent;
+						}
+
+						&.toggler-header-expanded {
+							background: url(../images/custom/arrow_option_open.png) no-repeat right center transparent;
+						}
+					}
+				}
+			}
+
+			#controlPanelSitesHeadingContent {
 			}
 		}
 

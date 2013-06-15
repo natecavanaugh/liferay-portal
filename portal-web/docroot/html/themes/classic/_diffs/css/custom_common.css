@@ -316,6 +316,29 @@
 		border-width: 1px 0;
 	}
 
+	/* add class minimal to liferay-ui:panel-container to remove default accordion styles */
+
+	.accordion.minimal {
+		.accordion-group {
+			border: 0;
+
+			.accordion-heading {
+				&.toggler-header-collapsed {
+					background: none;
+				}
+
+				&.toggler-header-expanded {
+					background: none;
+				}
+			}
+		}
+
+		.accordion-inner {
+			border: 0;
+			overflow: auto;
+		}
+	}
+
 	.accordion-group {
 		border-width: 0;
 
@@ -373,7 +396,6 @@
 						color: #999;
 						font-size: 11px;
 						font-weight: bold;
-						text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 						text-transform: uppercase;
 
 						&:after, &:before {
@@ -422,13 +444,6 @@
 			background: #2AAAE6 !important;
 			color: #FFF;
 			text-shadow: -1px -1px rgba(0, 0, 0, 0.3);
-		}
-	}
-
-	.accordion-group.lfr-panel-extended .accordion-heading {
-		&.toggler-header-collapsed, &.toggler-header-expanded {
-			background-image: linear-gradient(#FFF, #F2F2F2);
-			border-radius: 2px;
 		}
 	}
 
