@@ -177,11 +177,28 @@ request.setAttribute("control_panel.jsp-ppid", ppid);
 									</h1>
 								</aui:row>
 								<aui:row>
-									<aui:col cssClass="panel-page-menu" width="<%= 25 %>">
-										<liferay-portlet:runtime portletName="160" />
-									</aui:col>
 
-									<aui:col cssClass="<%= panelBodyCssClass %>"  width="<%= 75 %>">
+									<%
+									Map<String, List<Portlet>> categoriesMap = PortalUtil.getSiteAdministrationCategoriesMap(request);
+
+									boolean singlePortlet = false;
+
+									if (categoriesMap.size() == 1) {
+										for (List<Portlet> categoryPortlets : categoriesMap.values()) {
+											if (categoryPortlets.size() == 1) {
+												singlePortlet = true;
+											}
+										}
+									}
+									%>
+
+									<c:if test="<%= !singlePortlet %>">
+										<aui:col cssClass="panel-page-menu" width="<%= 25 %>">
+											<liferay-portlet:runtime portletName="160" />
+										</aui:col>
+									</c:if>
+
+									<aui:col cssClass="<%= panelBodyCssClass %>"  width="<%= singlePortlet ? 100 : 75 %>">
 										<%@ include file="/html/portal/layout/view/panel_content.jspf" %>
 									</aui:col>
 								</aui:row>

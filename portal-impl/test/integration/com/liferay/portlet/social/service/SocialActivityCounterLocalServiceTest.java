@@ -47,8 +47,8 @@ public class SocialActivityCounterLocalServiceTest
 
 	@Before
 	@Override
-	public void beforeTest() throws Exception {
-		super.beforeTest();
+	public void setUp() throws Exception {
+		super.setUp();
 
 		SocialActivitySettingLocalServiceUtil.updateActivitySetting(
 			_group.getGroupId(), TEST_MODEL, true);
