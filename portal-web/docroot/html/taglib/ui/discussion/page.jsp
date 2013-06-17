@@ -425,7 +425,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 								</aui:col>
 							</aui:row>
 
-							<aui:row cssClass="lfr-discussion-form-container" fluid="<%= false %>">
+							<aui:row cssClass="lfr-discussion-form-container" fluid="<%= true %>">
 								<div class="lfr-discussion-form lfr-discussion-form-reply" id="<%= randomNamespace %>postReplyForm<%= i %>" style="display: none;">
 
 									<liferay-ui:user-display
