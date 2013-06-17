@@ -312,7 +312,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 							</div>
 
 							<aui:row fluid="<%= true %>">
-								<aui:col cssClass="lfr-discussion-details" span="3">
+								<aui:col cssClass="lfr-discussion-details" span="4">
 									<liferay-ui:user-display
 										displayStyle="<%= 2 %>"
 										userId="<%= message.getUserId() %>"
@@ -320,7 +320,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 									/>
 								</aui:col>
 
-								<aui:col cssClass="lfr-discussion-body" span="9">
+								<aui:col cssClass="lfr-discussion-body" span="8">
 									<c:if test="<%= (message != null) && !message.isApproved() %>">
 										<aui:model-context bean="<%= message %>" model="<%= MBMessage.class %>" />
 
@@ -541,7 +541,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 		}
 
 		function <%= randomNamespace %>deleteMessage(i) {
-			eval("var messageId = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>messageId" + i + ".value;");
+			eval('var messageId = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>messageId' + i + '.value;');
 
 			document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %><%= Constants.CMD %>.value = "<%= Constants.DELETE %>";
 			document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>messageId.value = messageId;
@@ -549,8 +549,8 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 		}
 
 		function <%= randomNamespace %>postReply(i) {
-			eval("var parentMessageId = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>parentMessageId" + i + ".value;");
-			eval("var body = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>postReplyBody" + i + ".value;");
+			eval('var parentMessageId = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>parentMessageId' + i + '.value;');
+			eval('var body = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>postReplyBody' + i + '.value;');
 
 			document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %><%= Constants.CMD %>.value = "<%= Constants.ADD %>";
 			document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>parentMessageId.value = parentMessageId;
@@ -594,8 +594,8 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 		}
 
 		function <%= randomNamespace %>updateMessage(i, pending) {
-			eval("var messageId = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>messageId" + i + ".value;");
-			eval("var body = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>editReplyBody" + i + ".value;");
+			eval('var messageId = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>messageId' + i + '.value;');
+			eval('var body = document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>editReplyBody' + i + '.value;');
 
 			if (pending) {
 				document["<%= namespace + HtmlUtil.escapeJS(formName) %>"].<%= namespace %>workflowAction.value = <%= WorkflowConstants.ACTION_SAVE_DRAFT %>;
