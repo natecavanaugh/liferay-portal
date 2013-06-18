@@ -88,6 +88,7 @@ if (PropsValues.PORTAL_JAAS_ENABLE && (jUserName != null)) {
 		session.removeAttribute("j_username");
 		session.removeAttribute("j_password");
 
+		PortalMessages.clear(request);
 		SessionMessages.clear(request);
 		SessionErrors.clear(request);
 		%>

@@ -43,17 +43,21 @@
 					refresh="<%= false %>"
 					value="<%= selectedTab %>"
 				>
-					<liferay-ui:section>
-						<liferay-util:include page="/html/portlet/dockbar/add_content.jsp" />
-					</liferay-ui:section>
+					<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_LAYOUT) && !group.isLayoutPrototype() %>">
+						<liferay-ui:section>
+							<liferay-util:include page="/html/portlet/dockbar/add_content.jsp" />
+						</liferay-ui:section>
+					</c:if>
 
-					<liferay-ui:section>
-						<liferay-util:include page="/html/portlet/dockbar/add_application.jsp" />
-					</liferay-ui:section>
+					<c:if test="<%= !themeDisplay.isStateMaximized() && layout.isTypePortlet() && !layout.isLayoutPrototypeLinkActive() %>">
+						<liferay-ui:section>
+							<liferay-util:include page="/html/portlet/dockbar/add_application.jsp" />
+						</liferay-ui:section>
 
-					<liferay-ui:section>
-						<liferay-util:include page="/html/portlet/dockbar/add_page.jsp" />
-					</liferay-ui:section>
+						<liferay-ui:section>
+							<liferay-util:include page="/html/portlet/dockbar/add_page.jsp" />
+						</liferay-ui:section>
+					</c:if>
 				</liferay-ui:tabs>
 			</div>
 		</c:if>
