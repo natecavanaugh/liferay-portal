@@ -58,7 +58,6 @@
 						<h3 class="tags-header"><%= LanguageUtil.get(pageContext, "selected") %></h3>
 
 						<div class="tag-staging-area">
-							<ul></ul>
 						</div>
 					</div>
 
@@ -89,7 +88,7 @@
 			baseActionURL: '<%= PortletURLFactoryUtil.create(request, portletDisplay.getId(), themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>',
 			baseRenderURL: '<%= PortletURLFactoryUtil.create(request, portletDisplay.getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>',
 			portletId: '<%= portletDisplay.getId() %>',
-			tagsPerPage: <%= SearchContainer.DEFAULT_DELTA %>
+			tagsPerPage: 4
 		}
 	);
 </aui:script>
