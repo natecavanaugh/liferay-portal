@@ -58,7 +58,6 @@
 						<h3 class="tags-header"><%= LanguageUtil.get(pageContext, "selected") %></h3>
 
 						<div class="tag-staging-area">
-							<ul></ul>
 						</div>
 					</div>
 
