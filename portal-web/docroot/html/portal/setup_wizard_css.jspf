@@ -27,7 +27,7 @@ body {
 
 #wrapper {
 	margin: auto;
-	max-width: 700px;
+	max-width: 960px;
 	min-width: 0;
 }
 
@@ -43,13 +43,22 @@ body {
 	visibility: hidden;
 }
 
+#banner .logo {
+	margin-right: 20px;
+}
+
 #banner .site-name {
 	background-image: url(<%= themeDisplay.getPathThemeImages() %>/common/configuration.png);
+	margin-left: 0;
 }
 
 #footer {
 	clear: both;
 	padding-top: 2em;
+}
+
+.aui button.btn {
+	vertical-align: super;
 }
 
 .connection-messages {
@@ -135,6 +144,7 @@ body {
 	font-style: normal;
 	font-weight: bold;
 	padding: 3px;
+	word-wrap: break-word;
 }
 
 .alert-block .lfr-inline-code {
@@ -144,4 +154,29 @@ body {
 
 .ie6 #wrapper {
 	width: 600px;
+}
+
+@media (max-width: 1023px) {
+	#banner .site-name {
+		font-size: 0.8em;
+	}
+}
+
+@media (max-width: 767px) {
+	.aui #wrapper {
+		padding: 1em 1.1em 0;
+	}
+
+	.alert {
+		margin-top: 11px;
+	}
+
+	#banner .site-name {
+		float: left;
+		font-size: 0.7em;
+	}
+
+	.logo {
+		float: left;
+	}
 }
