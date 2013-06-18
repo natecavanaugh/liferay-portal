@@ -115,11 +115,16 @@ AUI.add(
 						instance._container = A.one('.tags-admin-container');
 						instance._tagViewContainer = A.one('.tag-view-container');
 						instance._stagedTagsWrapper = A.one('.selected-tags-wrapper');
-						instance._stagedTagsList = instance._stagedTagsWrapper.one('.tag-staging-area ul');
 						instance._tagsList = A.one('.tags-admin-list');
+
+						instance._stagedTagsList = instance._stagedTagsWrapper.one('.tag-staging-area');
 
 						instance._tagsMessageContainer = Node.create(TPL_TAGS_MESSAGES);
 						instance._portletMessageContainer = Node.create(TPL_PORTLET_MESSAGES);
+
+						instance._stagedTagsList.append(Node.create('<ul />'));
+
+						instance._stagedTagsList = instance._stagedTagsList.one('ul');
 
 						instance._container.placeBefore(instance._portletMessageContainer);
 
@@ -130,9 +135,7 @@ AUI.add(
 							points: ['tc', 'tl']
 						};
 
-						var portletMessageContainer = instance._portletMessageContainer;
-
-						instance._hideMessageTask = A.debounce('hide', 7000, portletMessageContainer);
+						instance._hideMessageTask = A.debounce('hide', 7000, instance._portletMessageContainer);
 
 						instance._stagedTagsList.delegate(
 							EVENT_CLICK,
@@ -189,7 +192,6 @@ AUI.add(
 						instance.after('drag:enter', instance._afterDragEnter);
 						instance.after('drag:exit', instance._afterDragExit);
 						instance.after('drag:start', instance._afterDragStart);
-						window.instance = instance;
 					},
 
 					_afterDrag: function(event) {
@@ -212,10 +214,10 @@ AUI.add(
 					_afterDragEnter: function(event) {
 						var instance = this;
 
+						var dropNode = event.drop.get(NODE);
 						var target = event.target;
 						var proxyNode = target.get(DRAG_NODE);
 						var node = target.get(NODE);
-						var dropNode = event.drop.get(NODE);
 
 						var textDestNode = dropNode.one('a').html();
 						var textSrcNode = node.one('a').html();
@@ -238,8 +240,8 @@ AUI.add(
 
 						var drag = event.target;
 
-						var proxyNode = drag.get(DRAG_NODE);
 						var node = drag.get(NODE);
+						var proxyNode = drag.get(DRAG_NODE);
 
 						var clone = proxyNode.get('firstChild');
 
@@ -663,13 +665,13 @@ AUI.add(
 									autoLoad: false,
 									dataType: 'json',
 									on: {
+										failure: function(event, id, obj) {
+											instance._onTagUpdateFailure(obj);
+										},
 										success: function(event, id, obj) {
 											var response = this.get('responseData');
 
 											instance._onTagUpdateSuccess(response);
-										},
-										failure: function(event, id, obj) {
-											instance._onTagUpdateFailure(obj);
 										}
 									}
 								}
@@ -805,19 +807,20 @@ AUI.add(
 					_getTagsPaginationMap: function() {
 						var instance = this;
 
+						var namespace = instance._prefixedPortletId;
 						var paginationMap = instance._paginationMap;
 
 						if (!paginationMap) {
 							paginationMap = {
 								page: {
-									historyEntry: instance._prefixedPortletId + 'page',
 									defaultValue: 1,
-									formatter: Number
+									formatter: Number,
+									historyEntry: namespace + 'page'
 								},
 								tagsPerPage: {
-									historyEntry: instance._prefixedPortletId + 'tagsPerPage',
 									defaultValue: instance._config.tagsPerPage,
-									formatter: Number
+									formatter: Number,
+									historyEntry: namespace + 'tagsPerPage'
 								}
 							};
 
@@ -928,8 +931,6 @@ AUI.add(
 
 						var currentPage = 0;
 
-						var query = instance._tagsSearch.get('query');
-
 						if (!instance._restartSearch) {
 							currentPage = pagination.get('page');
 
@@ -948,10 +949,10 @@ AUI.add(
 						Liferay.Service(
 							'/assettag/get-json-group-tags',
 							{
+								end: end,
 								groupId: themeDisplay.getSiteGroupId(),
-								name: query,
-								start: start,
-								end: end
+								name: instance._tagsSearch.get('query'),
+								start: start
 							},
 							function(result) {
 								var total = result.total;
@@ -1152,14 +1153,13 @@ AUI.add(
 							selectedTagsNodes.each(
 								function(item, index, collection) {
 									var name = checkedItemsName[index];
-									var value = checkedItemsIds[index];
 
 									var listItem = Lang.sub(
 										TPL_TAG_MERGE_ITEM,
 										{
 											name: name,
 											title: name,
-											value: value
+											value: checkedItemsIds[index]
 										}
 									);
 
@@ -1193,8 +1193,8 @@ AUI.add(
 							'/assettag/merge-tags',
 							{
 								fromTagIds: fromIds,
-								toTagId: toId,
-								overrideProperties: overrideProperties
+								overrideProperties: overrideProperties,
+								toTagId: toId
 							},
 							callback
 						);
@@ -1205,8 +1205,8 @@ AUI.add(
 							'/assettag/merge-tags',
 							{
 								fromTagId: fromId,
-								toTagId: toId,
-								overrideProperties: true
+								overrideProperties: true,
+								toTagId: toId
 							},
 							callback
 						);
@@ -1325,9 +1325,8 @@ AUI.add(
 					_onTagMergeClick: function(event) {
 						var instance = this;
 
-						var selectedList = instance._selectedTagsList;
-
 						var namespace = instance._prefixedPortletId;
+						var selectedList = instance._selectedTagsList;
 
 						var mergeOnlySelected = A.one('#' + namespace + 'mergeOnlySelectedTags').get('checked');
 
@@ -1336,11 +1335,9 @@ AUI.add(
 						if (tags.size() > 0) {
 							var targetTag = instance._targetTagsList.one(':selected');
 
-							var targetTagName = targetTag.text();
-
 							var mergeText = Liferay.Language.get('are-you-sure-you-want-to-merge-the-chosen-tags-into-x');
 
-							mergeText = Lang.sub(mergeText, [targetTagName]);
+							mergeText = Lang.sub(mergeText, [targetTag.text()]);
 
 							if (confirm(mergeText)) {
 								var tagsIds = tags.val();
@@ -1562,12 +1559,9 @@ AUI.add(
 					_resetTagsProperties: function(event) {
 						var instance = this;
 
-						var contextPanel = event.currentTarget;
-						var boundingBox = contextPanel.get('boundingBox');
+						var boundingBox = event.currentTarget.get('boundingBox');
 
-						var namespace = instance._prefixedPortletId;
-
-						var propertiesTrigger = boundingBox.one('fieldset#' + namespace + 'tagProperties');
+						var propertiesTrigger = boundingBox.one('fieldset#' + instance._prefixedPortletId + 'tagProperties');
 
 						var autoFieldsInstance = propertiesTrigger.getData('autoFieldsInstance');
 
@@ -1587,6 +1581,7 @@ AUI.add(
 							}
 
 							instance._hideAllMessages();
+
 							instance._selectedTagName = tagName;
 							instance._selectedTagId = tagId;
 
@@ -1655,10 +1650,10 @@ AUI.add(
 							tagPanelAdd.plug(
 								A.Plugin.IO,
 								{
-									uri: tagURL.toString(),
 									after: {
 										success: afterSuccess
-									}
+									},
+									uri: tagURL.toString()
 								}
 							);
 						}
@@ -1720,9 +1715,7 @@ AUI.add(
 							'</button>' +
 						'</li>';
 
-						var selectedTag = A.Node.create(tagHTML);
-
-						instance._stagedTagsList.append(selectedTag);
+						instance._stagedTagsList.append(Node.create(tagHTML));
 
 						instance._stagedTagsWrapper.toggle(!!instance._getStagedTags().size());
 					},
@@ -1750,8 +1743,6 @@ AUI.add(
 
 						var targetTag = targetTagsList.get('options').item(selectetTargeTagIndex);
 
-						var targetTagId = targetTag.val();
-
 						var previousTagData = instance._previousTagData;
 
 						if (previousTagData) {
@@ -1772,7 +1763,7 @@ AUI.add(
 							previousTagData = null;
 						}
 
-						var selectedTag = selectedTagsList.one('[value=' + targetTagId + ']');
+						var selectedTag = selectedTagsList.one('[value=' + targetTag.val() + ']');
 
 						if (selectedTag) {
 							previousTagData = {
@@ -1827,6 +1818,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-button', 'aui-dialog-iframe-deprecated', 'aui-io-plugin-deprecated', 'aui-loading-mask-deprecated', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window', 'transition']
+		requires: ['aui-button', 'aui-dialog-iframe-deprecated', 'aui-io-plugin-deprecated', 'aui-loading-mask-deprecated', 'aui-pagination', 'aui-tree-view', 'autocomplete-base', 'dd', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window', 'transition']
 	}
 );
