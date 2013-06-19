@@ -17,7 +17,7 @@ $dockbarOpenGradientEnd: #048BDF;
 		outline: none;
 	}
 
-	select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+	input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], select, textarea, .uneditable-input {
 		color: #8D8D8D;
 		font-weight: lighter;
 		margin-bottom: 7px;
@@ -44,8 +44,6 @@ $dockbarOpenGradientEnd: #048BDF;
 
 	#wrapper {
 		padding: 1.1em 0 0;
-
-
 	}
 
 	.panel-manage-apps, .panel-manage-configuration, .panel-manage-sites, .panel-manage-users {
@@ -74,12 +72,10 @@ $dockbarOpenGradientEnd: #048BDF;
 	.button-holder, .control-panel-home-actions-category {
 		.btn {
 			margin-bottom: 0.5em;
-			@include box-shadow(0 1px 0 1px #AAA);
 		}
 
 		.btn-primary {
 			background: #00AEFF;
-			@include box-shadow(0 1px 0 1px #007CE9);
 		}
 	}
 
@@ -92,7 +88,6 @@ $dockbarOpenGradientEnd: #048BDF;
 			a {
 				margin: 0;
 				padding: 10px 10px 11px;
-				@include border-radius(4px);
 
 				&:hover {
 					background: #E5F5FC;
@@ -217,8 +212,6 @@ $dockbarOpenGradientEnd: #048BDF;
 
 		.navbar-inner {
 			background-color: $dockbarGradientEnd;
-			@include background-image(linear-gradient(top, $dockbarGradientStart 0%,$dockbarGradientEnd 100%));
-			@include filter-gradient($dockbarGradientStart, $dockbarGradientStart, vertical);
 			color: #FFF;
 
 			ul.nav-account-controls {
@@ -227,10 +220,6 @@ $dockbarOpenGradientEnd: #048BDF;
 						margin: 0;
 						padding: 5px 15px;
 						background-color: $dockbarOpenGradientEnd;
-						@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
-						$experimental-support-for-svg: true;
-						@include background-image(linear-gradient(top, $dockbarOpenGradientStart 0%,$dockbarOpenGradientEnd 100%));
-						@include box-shadow(none);
 					}
 				}
 			}
@@ -249,7 +238,6 @@ $dockbarOpenGradientEnd: #048BDF;
 					a {
 						&:hover {
 							background: #008BE4;
-							@include border-radius(4px);
 						}
 					}
 				}
@@ -318,7 +306,6 @@ $dockbarOpenGradientEnd: #048BDF;
 
 		> .active > a {
 			background: #60BFEF;
-			@include text-shadow(none);
 
 			&:hover {
 				background: #60BFEF;
@@ -339,7 +326,6 @@ $dockbarOpenGradientEnd: #048BDF;
 		color: #8D8D8D;
 		font-size: 25px;
 		font-weight: lighter;
-		margin-top: 0;
 	}
 
 	.panel-manage-frontpage {
@@ -400,7 +386,6 @@ $dockbarOpenGradientEnd: #048BDF;
 			background: url(../images/custom/fade-border-d1d1d1.png) no-repeat right top #FCFCFC;
 			background-size: 5px;
 			padding-top: 15px;
-			@include box-shadow(3px 0px 2px -2px #F5F5F5);
 		}
 
 		.portlet-borderless-container {
@@ -417,6 +402,12 @@ $dockbarOpenGradientEnd: #048BDF;
 					border: 1px solid #D1D1D1;
 					border-width: 1px 0 0;
 					margin-bottom: 0;
+
+					&:last-child {
+						.toggler-header-collapsed {
+							border-bottom: 1px solid #D1D1D1;
+						}
+					}
 
 					.accordion-heading {
 						cursor: pointer;
@@ -512,7 +503,7 @@ $dockbarOpenGradientEnd: #048BDF;
 			}
 
 			.overlay-on-input {
-				color: #D4d4d4;
+				color: #D4D4D4;
 				font-weight: 100;
 				margin-left: 20px;
 				margin-top: 8px;
@@ -534,7 +525,6 @@ $dockbarOpenGradientEnd: #048BDF;
 			padding: 17px 20px 5px;
 			position: relative;
 			z-index: 10;
-			@include box-shadow(0 3px 4px -3px #DFDFDF);
 
 			a:hover {
 				text-decoration: none;
@@ -608,11 +598,10 @@ $dockbarOpenGradientEnd: #048BDF;
 		}
 
 		.form-navigator.well {
-			background: transparent;
+			background: url(../images/custom/fade-border-left.png) no-repeat left;
+			background-size: 5px auto;
 			border: 1px solid #D1D1D1;
 			border-width: 0 0 0 1px;
-			@include border-radius(0);
-			@include box-shadow(-3px 0px 2px -2px #F5F5F5);
 
 			.nav-header {
 				background: #F3F3F3;
@@ -624,6 +613,11 @@ $dockbarOpenGradientEnd: #048BDF;
 	}
 
 	/* Control Panel General */
+
+	.control-panel-site-selector .caret {
+		border-width: 6px;
+		margin-top: 16px;
+	}
 
 	.lfr-ctrl-panel {
 		.lfr-meta-actions {
@@ -658,9 +652,81 @@ $dockbarOpenGradientEnd: #048BDF;
 		@include border-radius(0);
 	}
 
+<<<<<<< HEAD
 	.control-panel-site-selector .caret {
 		border-width: 6px;
 		margin-top: 5px;
 		vertical-align: middle;
+=======
+	.button-holder, .control-panel-home-actions-category {
+		.btn {
+			@include box-shadow(0 1px 0 1px #AAA);
+		}
+
+		.btn-primary {
+			@include box-shadow(0 1px 0 1px #007CE9);
+		}
+	}
+
+	.control-panel-bar-secondary.nav-pills {
+		li {
+			a {
+				@include border-radius(4px);
+			}
+		}
+	}
+
+	/* Dockbar */
+
+	.dockbar {
+		.navbar-inner {
+			@include background-image(linear-gradient(top, $dockbarGradientStart 0%,$dockbarGradientEnd 100%));
+			@include filter-gradient($dockbarGradientStart, $dockbarGradientStart, vertical);
+
+			ul.nav-account-controls {
+				li.open {
+					> .dropdown-toggle {
+						@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
+						$experimental-support-for-svg: true;
+						@include background-image(linear-gradient(top, $dockbarOpenGradientStart 0%,$dockbarOpenGradientEnd 100%));
+						@include box-shadow(none);
+					}
+				}
+			}
+
+			ul.nav-add-controls {
+				> li {
+					a {
+						&:hover {
+							@include border-radius(4px);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.nav-list {
+		> .active > a {
+			@include text-shadow(none);
+		}
+	}
+
+	.panel-page-menu {
+		.portlet-static.portlet-static-end {
+			@include box-shadow(3px 0px 2px -2px #F5F5F5);
+		}
+	}
+
+	.panel-manage-frontpage {
+		.heading {
+			@include box-shadow(0 3px 4px -3px #DFDFDF);
+		}
+
+		.form-navigator.well {
+			@include border-radius(0);
+			@include box-shadow(-3px 0px 2px -2px #F5F5F5);
+		}
+>>>>>>> basic styles for classic theme and control panel
 	}
 }

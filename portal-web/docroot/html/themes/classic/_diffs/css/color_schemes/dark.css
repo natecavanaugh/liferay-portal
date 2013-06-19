@@ -3,22 +3,34 @@
 body.dark {
 	nav#navigation {
 		.nav {
-			li.dropdown > .dropdown-toggle {
-				.caret {
-					border-bottom-color: #FFF;
-					border-top-color: #FFF;
-				}
-			}
+			li {
+				&.dropdown {
+					> .dropdown-toggle {
+						.caret {
+							border-bottom-color: #FFF;
+							border-top-color: #FFF;
+						}
+					}
 
-			li.dropdown.open > .dropdown-toggle {
-				background: #00ACFF;
+					&.open {
+						> .dropdown-toggle {
+							background: #00ACFF;
+						}
+					}
+				}
+
+				&.open {
+					> a {
+						background: #00CAFF;
+						color: #FFF;
+					}
+				}
 			}
 
 			li.dropdown.hover.open {
 				.dropdown-menu {
 					background: #00ACFF;
 					border: 0;
-					border-radius: 0;
 					margin: 0;
 				}
 
@@ -33,19 +45,15 @@ body.dark {
 
 			> .active > a {
 				background: #00ACFF;
-				@include box-shadow(none);
 			}
 		}
 
 		.navbar-inner {
 			background: #555;
 			border: 0;
-			@include box-shadow(none);
-			@include border-radius(0);
 
 			li a {
 				color: #FFF;
-				@include text-shadow(none);
 
 				&:hover {
 					background: #00ACFF;
@@ -56,10 +64,46 @@ body.dark {
 
 	.modify-pages .delete-tab {
 		color: #FFF;
-		@include text-shadow(none);
 
 		&:hover {
 			color: #B50303;
 		}
+	}
+
+	/* Extras */
+
+	nav#navigation {
+		.nav {
+			li {
+				&.open {
+					> a {
+						@include box-shadow(none);
+					}
+				}
+			}
+
+			li.dropdown.hover.open {
+				.dropdown-menu {
+					@include border-radius(0);
+				}
+			}
+
+			> .active > a {
+				@include box-shadow(none);
+			}
+		}
+
+		.navbar-inner {
+			@include box-shadow(none);
+			@include border-radius(0);
+
+			li a {
+				@include text-shadow(none);
+			}
+		}
+	}
+
+	.modify-pages .delete-tab {
+		@include text-shadow(none);
 	}
 }

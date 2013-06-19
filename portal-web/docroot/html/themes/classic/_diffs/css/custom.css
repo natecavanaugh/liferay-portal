@@ -38,7 +38,6 @@ $dockbarOpenGradientEnd: #048BDF;
 		margin: 15px 0 0 20px;
 		padding: 7px 17px 7px 40px;
 		position: relative;
-		text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
 	}
 
 	.page-template .site-title .site-name {
@@ -113,10 +112,6 @@ $dockbarOpenGradientEnd: #048BDF;
 						margin: 0;
 						padding: 5px 15px;
 						background-color: $dockbarOpenGradientEnd;
-						@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
-						$experimental-support-for-svg: true;
-						@include background-image(linear-gradient(top, $dockbarOpenGradientStart 0%,$dockbarOpenGradientEnd 100%));
-						@include box-shadow(none);
 			}
 
 			> li > a {
@@ -128,13 +123,9 @@ $dockbarOpenGradientEnd: #048BDF;
 			background-color: transparent;
 			border: 0;
 			color: #FFF;
-			@include box-shadow(none);
-			@include text-shadow(none);
 
 			.nav {
 				background-color: $dockbarGradientEnd;
-				@include filter-gradient($dockbarGradientStart, $dockbarGradientEnd, vertical);
-				@include background-image(linear-gradient(top,  $dockbarGradientStart 0%,$dockbarGradientStart 47%,$dockbarGradientEnd 100%));
 				color: #ffffff;
 				border-bottom: 0;
 				border-top: 2px solid #00AEFF;
@@ -145,7 +136,7 @@ $dockbarOpenGradientEnd: #048BDF;
 				padding: 0 5px;
 				position: fixed;
 				right: 3em;
-				z-index: 1000;
+				z-index: 999;
 			}
 
 			.nav-add-controls {
@@ -290,14 +281,11 @@ $dockbarOpenGradientEnd: #048BDF;
 		ul {
 			background: #414445;
 			background: rgba(0, 0, 0, 0.8);
-			border-top-left-radius: 0;
-			border-top-right-radius: 0;
 		}
 
 		.breadcrumb li {
 			a, span {
 				color: #FFF;
-				text-shadow: -1px -1px #000;
 			}
 		}
 	}
@@ -324,8 +312,8 @@ $dockbarOpenGradientEnd: #048BDF;
 	}
 
 	%portlet-action-bar-custom {
-		border-radius: 20px;
-		box-shadow: inset 0 1px 3px #000;
+		@include border-radius(20px);
+		@include box-shadow(inset 0 1px 3px #000);
 	}
 
 	.portlet-borderless-bar {
@@ -340,7 +328,7 @@ $dockbarOpenGradientEnd: #048BDF;
 
 	.portlet-nested-portlets .portlet-body {
 		.portlet, .portlet-borderless-container {
-			box-shadow: none;
+			@include box-shadow(none);
 		}
 	}
 
@@ -349,6 +337,44 @@ $dockbarOpenGradientEnd: #048BDF;
 
 		.lfr-configurator-visibility & {
 			background-image: linear-gradient(#BABABA, #7E7E7E);
+		}
+	}
+
+	.site-title .site-name {
+		@include text-shadow(1px 1px rgba(0, 0, 0, 0.5));
+	}
+
+	.dockbar {
+		.nav {
+			li.dropdown.open > .dropdown-toggle {
+						@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
+						$experimental-support-for-svg: true;
+						@include background-image(linear-gradient(top, $dockbarOpenGradientStart 0%,$dockbarOpenGradientEnd 100%));
+						@include box-shadow(none);
+			}
+		}
+
+		.navbar-inner {
+			@include box-shadow(none);
+			@include text-shadow(none);
+
+			> .nav {
+				@include filter-gradient($dockbarGradientStart, $dockbarGradientEnd, vertical);
+				@include background-image(linear-gradient(top,  $dockbarGradientStart 0%,$dockbarGradientStart 47%,$dockbarGradientEnd 100%));
+			}
+		}
+	}
+
+	.lfr-hudcrumbs {
+		ul {
+			@include border-top-left-radius(0);
+			@include border-top-right-radius(0);
+		}
+
+		.breadcrumb li {
+			a, span {
+				@include text-shadow(-1px -1px #000);
+			}
 		}
 	}
 }

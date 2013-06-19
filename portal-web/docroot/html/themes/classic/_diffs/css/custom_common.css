@@ -1,16 +1,11 @@
 @import "compass";
 @import "../fonts/font-awesome/css/font-awesome.min.css";
 
-/* overwrite aui deprecated css */
 .button-holder {
 	overflow: visible;
 }
 
 .aui {
-	::selection {
-		@include text-shadow(none);
-	}
-
 	[class^="icon-"], [class*=" icon-"] {
 		background-image: none;
 		line-height: normal;
@@ -26,36 +21,34 @@
 
 	/* forms, inputs, and labels */
 
+	input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], textarea, .uneditable-input {
+		border: 1px solid #DDD;
+
+		&:focus {
+			border-color: rgba(0, 172, 255, 0.8);
+			outline: thin dotted 9;
+		}
+	}
+
 	select:focus {
 		border: 1px solid rgba(0, 172, 255, 0.8);
 		outline: 5px auto rgba(82, 168, 236, 0.6);
 		outline-offset: -2px;
 	}
 
-	textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-		border: 1px solid #DDD;
-		@include border-radius(0);
-		@include box-shadow(none);
-
-		&:focus {
-			border-color: rgba(0, 172, 255, 0.8);
-			outline: 0;
-			outline: thin dotted 9;
-			@include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
-		}
+	ul {
+		margin: 0 0 11px 0px;
 	}
 
 	.control-group {
 		margin-bottom: 30px;
 	}
 
-	.radio input[type="radio"], .checkbox input[type="checkbox"] {
+	.checkbox input[type="checkbox"], .radio input[type="radio"] {
 		margin-left: -18px;
 	}
 
-	ul {
-		margin: 0 0 11px 0px;
-	}
+	/* Main */
 
 	#wrapper {
 		padding: 1em 3em 0;
@@ -129,7 +122,6 @@
 				> a {
 					color: #FFF;
 					line-height: 31px;
-					@include text-shadow(none);
 
 					&:focus, &:hover {
 						color: #FFF;
@@ -211,7 +203,6 @@
 				.user-avatar-link > img {
 					border: 2px solid #5594E0;
 					width: 27px;
-					@include border-radius(50%);
 				}
 			}
 		}
@@ -247,7 +238,6 @@
 			margin-left: 5px;
 			padding: 1px 4px;
 			width: auto;
-			@include border-radius(50%);
 		}
 
 		.nav {
@@ -255,7 +245,6 @@
 				background-color: #FFF;
 				color: #555555;
 				text-decoration: none;
-				@include box-shadow(inset 0 3px 8px rgba(0, 0, 0, 0.125));
 			}
 		}
 	}
@@ -316,7 +305,7 @@
 		border-width: 1px 0;
 	}
 
-	/* add class minimal to liferay-ui:panel-container to remove default accordion styles */
+	/* add class .minimal to liferay-ui:panel-container to remove default accordion styles */
 
 	.accordion.minimal {
 		.accordion-group {
@@ -413,8 +402,6 @@
 
 	body.yui3-skin-sam .yui3-widget-mask {
 		background-color: #FFF;
-
-		@include opacity(0.8);
 	}
 
 	&.ie .dockbar .navbar-inner {
@@ -443,7 +430,7 @@
 		::#{$prefix}selection {
 			background: #2AAAE6 !important;
 			color: #FFF;
-			text-shadow: -1px -1px rgba(0, 0, 0, 0.3);
+			@include text-shadow(-1px -1px rgba(0, 0, 0, 0.3));
 		}
 	}
 
@@ -454,8 +441,53 @@
 	.portlet-options {
 		&, &.open {
 			.dropdown-toggle {
-				box-shadow: none;
+				@include box-shadow(none);
 			}
 		}
+	}
+
+	::selection {
+		@include text-shadow(none);
+	}
+
+	input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="number"], input[type="password"], input[type="text"], input[type="time"], input[type="week"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], textarea, .uneditable-input {
+		@include border-radius(0);
+		@include box-shadow(none);
+
+		&:focus {
+			@include box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6));
+		}
+	}
+
+	.dockbar {
+		.nav {
+			> li {
+				> a {
+					@include text-shadow(none);
+				}
+			}
+
+			li.dropdown.user-avatar {
+				.user-avatar-link > img {
+					@include border-radius(50%);
+				}
+			}
+		}
+	}
+
+	.navbar {
+		.icon-caret-down {
+			@include border-radius(50%);
+		}
+
+		.nav {
+			> li.open > a {
+				@include box-shadow(inset 0 3px 8px rgba(0, 0, 0, 0.125));
+			}
+		}
+	}
+
+	body.yui3-skin-sam .yui3-widget-mask {
+		@include opacity(0.8);
 	}
 }
