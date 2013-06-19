@@ -282,6 +282,21 @@ public class AssetCategoryServiceSoap {
 		}
 	}
 
+	public static int getSubcategoriesCount(long groupId, long parentCategoryId)
+		throws RemoteException {
+		try {
+			int returnValue = AssetCategoryServiceUtil.getSubcategoriesCount(groupId,
+					parentCategoryId);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.liferay.portlet.asset.model.AssetCategorySoap[] getVocabularyCategories(
 		long vocabularyId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)

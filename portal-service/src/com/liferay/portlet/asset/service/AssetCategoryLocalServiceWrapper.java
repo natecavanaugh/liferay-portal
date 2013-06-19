@@ -676,6 +676,12 @@ public class AssetCategoryLocalServiceWrapper
 	}
 
 	@Override
+	public int getSubcategoriesCount(long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _assetCategoryLocalService.getSubcategoriesCount(parentCategoryId);
+	}
+
+	@Override
 	public java.util.List<java.lang.Long> getSubcategoryIds(
 		long parentCategoryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
