@@ -335,6 +335,14 @@ public class AssetCategoryLocalServiceImpl
 	}
 
 	@Override
+	public int getSubcategoriesCount(long parentCategoryId)
+		throws SystemException {
+
+		return assetCategoryPersistence.countByParentCategoryId(
+			parentCategoryId);
+	}
+
+	@Override
 	public List<Long> getSubcategoryIds(long parentCategoryId)
 		throws SystemException {
 
