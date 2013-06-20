@@ -147,26 +147,50 @@ $dockbarOpenGradientEnd: #048BDF;
 				z-index: 400;
 
 				> li {
-					background: #0DCFFF;
 					float: none;
 					margin: 10px;
 
-					.icon-caret-down {
-						display: none;
-					}
+					> a {
+						background: #0DCFFF;
+						font-size: 0;
 
-					.icon-desktop {
-						font-size: 25px;
-						position: relative;
-						left: -6px;
-						top: -2px;
-					}
+						&:hover {
+							background: #5BBAE8;
+						}
 
-					.icon-plus-sign {
-						font-size: 30px;
-						left: -5px;
-						position: relative;
-						top: -6px;
+						[class^="icon-"], [class^="icon-"], [class*=" icon-"] {
+							font-size: 25px;
+							position: relative;
+							vertical-align: middle;
+						}
+
+						.icon-caret-down {
+							display: none;
+						}
+
+						.icon-desktop {
+							left: -6px;
+						}
+
+						.icon-ok {
+							left: -5px;
+							top: -1px;
+						}
+
+						.icon-plus {
+							left: -2px;
+						}
+
+						.icon-plus-sign {
+							font-size: 30px;
+							left: -5px;
+							top: -4px;
+						}
+
+						.icon-remove {
+							left: -2px;
+							top: -2px;
+						}
 					}
 				}
 			}
@@ -176,6 +200,12 @@ $dockbarOpenGradientEnd: #048BDF;
 	/* ---------- Main navigation ---------- */
 
 	#navigation {
+		.add-page-editor {
+			input {
+				margin-top: 0;
+			}
+		}
+
 		.brand {
 			padding: 0;
 			padding-right: 20px;
@@ -369,7 +399,13 @@ $dockbarOpenGradientEnd: #048BDF;
 
 			.nav-add-controls {
 				> li {
-					@include border-radius(4px);
+					a {
+						@include border-radius(4px);
+					}
+
+					&.open a {
+						@include border-radius(4px 4px 0 0);
+					}
 				}
 			}
 		}

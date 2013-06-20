@@ -13,6 +13,8 @@ $dockbarOpenGradientEnd: #048BDF;
 		font-weight: lighter;
 	}
 
+	/* ---------- Forms, inputs, and labels ---------- */
+
 	input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], select, textarea, .uneditable-input {
 		color: #8D8D8D;
 		font-weight: lighter;
@@ -32,6 +34,14 @@ $dockbarOpenGradientEnd: #048BDF;
 	select {
 		background: transparent;
 	}
+
+	.form-search {
+		.control-group-inline {
+			margin: 0;
+		}
+	}
+
+	/* ---------- Main ---------- */
 
 	#banner, .lfr-ctrl-panel .user-greeting {
 		position: absolute;
@@ -537,7 +547,7 @@ $dockbarOpenGradientEnd: #048BDF;
 	/* Single site admin */
 
 	.panel-manage-frontpage {
-		#controlPanelSitesHeading {
+		#controlPanelSiteHeading {
 			border-bottom: 1px solid #CFCFCF;
 			float: left;
 			padding: 17px 20px 5px;
@@ -588,7 +598,7 @@ $dockbarOpenGradientEnd: #048BDF;
 				}
 			}
 
-			#controlPanelSitesHeading {
+			#controlPanelSiteHeading {
 				.accordion-inner {
 					padding: 0 15px;
 				}
@@ -597,7 +607,7 @@ $dockbarOpenGradientEnd: #048BDF;
 				}
 			}
 
-			#controlPanelSitesHeadingContainer {
+			#controlPanelSiteHeadingContainer {
 				margin-bottom: 0;
 
 				.accordion-group.lfr-panel-extended {
@@ -613,9 +623,6 @@ $dockbarOpenGradientEnd: #048BDF;
 						}
 					}
 				}
-			}
-
-			#controlPanelSitesHeadingContent {
 			}
 		}
 
@@ -774,7 +781,7 @@ $dockbarOpenGradientEnd: #048BDF;
 	}
 
 	.panel-manage-frontpage {
-		#controlPanelSitesHeading {
+		#controlPanelSiteHeading {
 			@include box-shadow(0 3px 4px -3px #DFDFDF);
 		}
 

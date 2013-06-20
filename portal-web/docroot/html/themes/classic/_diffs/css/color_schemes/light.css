@@ -111,7 +111,14 @@ body.light {
 
 				.portlet-options {
 					display: inline-block;
+					top: 2px;
 				}
+			}
+		}
+
+		&.controls-hidden {
+			section.portlet:hover {
+				border-color: transparent;
 			}
 		}
 	}
