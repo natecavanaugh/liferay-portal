@@ -13,10 +13,6 @@ $dockbarOpenGradientEnd: #048BDF;
 		font-weight: lighter;
 	}
 
-	a:focus {
-		outline: none;
-	}
-
 	input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], select, textarea, .uneditable-input {
 		color: #8D8D8D;
 		font-weight: lighter;
@@ -46,16 +42,16 @@ $dockbarOpenGradientEnd: #048BDF;
 		padding: 1.1em 0 0;
 	}
 
+	.container-fluid.panel-manage-frontpage {
+		padding: 0;
+	}
+
 	.panel-manage-apps, .panel-manage-configuration, .panel-manage-sites, .panel-manage-users {
 		padding: 0 3em;
 
 		.panel-page-application {
 			margin: 0;
 		}
-	}
-
-	.container-fluid.panel-manage-frontpage {
-		padding: 0;
 	}
 
 	.panel-manage-frontpage {
@@ -66,16 +62,38 @@ $dockbarOpenGradientEnd: #048BDF;
 	}
 
 	.btn {
-		margin-bottom: 7px;
+		background: #FCFCFC;
+		margin-bottom: 1px;
+
+		&:hover {
+			background: #F4F4F4;
+		}
 	}
 
-	.button-holder, .control-panel-home-actions-category {
+	.btn.btn-primary {
+		background: #00AEFF;
+
+		&:hover {
+			background: #009EE7;
+		}
+	}
+
+	.control-panel-home-actions-category {
 		.btn {
+			background: #F4F4F4;
 			margin-bottom: 0.5em;
+
+			&:hover {
+				background: #EAEAEA;
+			}
 		}
 
-		.btn-primary {
+		.btn.btn-primary {
 			background: #00AEFF;
+
+			&:hover {
+				background: #009EE7;
+			}
 		}
 	}
 
@@ -190,6 +208,11 @@ $dockbarOpenGradientEnd: #048BDF;
 			margin-bottom: 30px;
 			padding-left: 47px;
 		}
+	}
+
+	.input-localized .input-localized-content {
+		margin-top: 0;
+		margin-left: 6px;
 	}
 
 	/* Dockbar */
@@ -318,10 +341,6 @@ $dockbarOpenGradientEnd: #048BDF;
 		margin-bottom: 1em;
 	}
 
-	.portlet-title, .portlet-content {
-		padding: 0;
-	}
-
 	.portlet-title {
 		color: #8D8D8D;
 		font-size: 25px;
@@ -370,7 +389,7 @@ $dockbarOpenGradientEnd: #048BDF;
 		}
 	}
 
-	/* Panel Page Menu */
+	/* Panel Page Menu (Site Pages Side Navigation) */
 
 	.control-panel-tools {
 		.search-panels {
@@ -381,7 +400,6 @@ $dockbarOpenGradientEnd: #048BDF;
 	}
 
 	.panel-page-menu {
-
 		.portlet-static.portlet-static-end {
 			background: url(../images/custom/fade-border-d1d1d1.png) no-repeat right top #FCFCFC;
 			background-size: 5px;
@@ -516,10 +534,10 @@ $dockbarOpenGradientEnd: #048BDF;
 		}
 	}
 
-	/* Sites */
+	/* Single site admin */
 
 	.panel-manage-frontpage {
-		.heading {
+		#controlPanelSitesHeading {
 			border-bottom: 1px solid #CFCFCF;
 			float: left;
 			padding: 17px 20px 5px;
@@ -530,48 +548,52 @@ $dockbarOpenGradientEnd: #048BDF;
 				text-decoration: none;
 			}
 
+			.control-panel-back-link {
+				color: #30C8EE;
+				float: left;
+				font-size: 20px;
+				height: auto;
+				margin-right: 5px;
+				text-decoration: none;
+				width: auto;
+			}
+
+			.site-title {
+				color: #555;
+				font-size: 25px;
+				font-weight: 300;
+				margin-bottom: 5px;
+				padding: 0 28px 0 12px;
+				text-transform: capitalize;
+			}
+
+			.visit-links {
+				font-size: 12px;
+				padding: 0 15px;
+
+				ul {
+					color: #8D8D8D;
+					list-style: none;
+					margin: 0;
+
+					li {
+						float: left;
+						margin-right: 5px;
+
+						&.divider:before {
+							content: "/";
+							margin: 0 5px;
+						}
+					}
+				}
+			}
+
 			#controlPanelSitesHeading {
 				.accordion-inner {
 					padding: 0 15px;
 				}
 
 				.accordion-toggle {
-					color: #555;
-					font-size: 25px;
-					font-weight: 300;
-					margin-bottom: 5px;
-					padding: 0 28px 0 12px;
-					text-transform: capitalize;
-				}
-
-				.control-panel-back-link {
-					color: #30C8EE;
-					float: left;
-					font-size: 20px;
-					height: auto;
-					margin-right: 5px;
-					text-decoration: none;
-					width: auto;
-				}
-
-				.visit-links {
-					font-size: 12px;
-
-					ul {
-						color: #8D8D8D;
-						list-style: none;
-						margin: 0;
-
-						li {
-							float: left;
-							margin-right: 5px;
-
-							&.divider:before {
-								content: "/";
-								margin: 0 5px;
-							}
-						}
-					}
 				}
 			}
 
@@ -598,8 +620,7 @@ $dockbarOpenGradientEnd: #048BDF;
 		}
 
 		.form-navigator.well {
-			background: url(../images/custom/fade-border-left.png) no-repeat left;
-			background-size: 5px auto;
+			background: #FCFCFC;
 			border: 1px solid #D1D1D1;
 			border-width: 0 0 0 1px;
 
@@ -616,12 +637,42 @@ $dockbarOpenGradientEnd: #048BDF;
 
 	.control-panel-site-selector .caret {
 		border-width: 6px;
-		margin-top: 16px;
+		margin-top: 5px;
+		vertical-align: middle;
 	}
 
 	.lfr-ctrl-panel {
 		.lfr-meta-actions {
 			margin-right: 0;
+		}
+	}
+
+	/* ---------- My Account Popup ---------- */
+
+	button {
+		&.delete-logo, &.edit-logo {
+			color: #777;
+			background: #EEE;
+			@include box-shadow(0 2px 2px -1px #CBCBCB);
+		}
+	}
+
+	.datepicker-button-wrapper {
+		margin: 0 5px;
+
+		button {
+			background: #EEE;
+			border: 1px solid #DDD;
+			color: #777;
+			line-height: normal;
+			margin-top: 6px;
+			padding: 7px;
+			@include border-radius(4px);
+
+			&:hover {
+				background: #F4F4F4;
+				color: #333;
+			}
 		}
 	}
 
@@ -653,12 +704,16 @@ $dockbarOpenGradientEnd: #048BDF;
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	.control-panel-site-selector .caret {
 		border-width: 6px;
 		margin-top: 5px;
 		vertical-align: middle;
 =======
 	.button-holder, .control-panel-home-actions-category {
+=======
+	.control-panel-home-actions-category {
+>>>>>>> clean up input and input focus styles, also added menu icon for portlet options on top right corner
 		.btn {
 			@include box-shadow(0 1px 0 1px #AAA);
 		}
@@ -719,7 +774,7 @@ $dockbarOpenGradientEnd: #048BDF;
 	}
 
 	.panel-manage-frontpage {
-		.heading {
+		#controlPanelSitesHeading {
 			@include box-shadow(0 3px 4px -3px #DFDFDF);
 		}
 

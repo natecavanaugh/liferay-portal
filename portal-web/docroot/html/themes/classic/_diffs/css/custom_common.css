@@ -6,7 +6,7 @@
 }
 
 .aui {
-	[class^="icon-"], [class*=" icon-"] {
+	.nav-list > .active > a > [class^="icon-"], [class^="icon-"], [class*=" icon-"]{
 		background-image: none;
 		line-height: normal;
 	}
@@ -21,13 +21,30 @@
 
 	/* forms, inputs, and labels */
 
-	input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], textarea, .uneditable-input {
+	input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], select, textarea, .uneditable-input {
 		border: 1px solid #DDD;
+		margin-left: 6px;
+		margin-top: 6px;
 
 		&:focus {
 			border-color: rgba(0, 172, 255, 0.8);
 			outline: thin dotted 9;
 		}
+	}
+
+	input[type="submit"] {
+		margin-bottom: 11px;
+		margin-top: 6px;
+	}
+
+	input[type="text"] {
+		&.search-query {
+			margin-top: 0;
+		}
+	}
+
+	label {
+		margin-left: 6px;
 	}
 
 	select:focus {
@@ -42,10 +59,6 @@
 
 	.control-group {
 		margin-bottom: 30px;
-	}
-
-	.checkbox input[type="checkbox"], .radio input[type="radio"] {
-		margin-left: -18px;
 	}
 
 	/* Main */
@@ -252,20 +265,18 @@
 	/* ---------- Breadcrumbs ---------- */
 
 	.breadcrumb {
-		.only .divider {
-			display: none;
-		}
+		padding: 7px 15px 4px;
 
 		li {
 			span.divider {
 				background: url(../images/arrows/angle-arrow-right.png) no-repeat;
-				background-size: 30px;
+				background-size: 25px;
 				display: inline-block;
-				height: 30px;
+				height: 25px;
 				position: relative;
 				text-indent: -9000px;
-				top: -6px;
-				width: 22px;
+				top: -4px;
+				width: 16px;
 			}
 		}
 
@@ -277,6 +288,10 @@
 			span.divider {
 				display: none;
 			}
+		}
+
+		.only .divider {
+			display: none;
 		}
 	}
 

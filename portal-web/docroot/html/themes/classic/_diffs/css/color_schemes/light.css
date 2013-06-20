@@ -48,47 +48,6 @@ body.light {
 
 	/* Portlet */
 
-	section.portlet {
-		.admin.portlet-topper-toolbar {
-			> div {
-				display: none;
-			}
-
-			> span {
-				display: none;
-			}
-		}
-
-		.admin.portlet-topper-toolbar:before {
-			background: #00CBFF;
-			content: "•••";
-			padding: 4px 4px 5px;
-		}
-
-		.admin.portlet-topper-toolbar {
-			font-size: 0.5em;
-		}
-	}
-
-	section.portlet.active {
-		border: 1px solid #00CBFF;
-
-		.admin.portlet-topper-toolbar {
-			> div {
-				display: inline-block;
-			}
-
-			> span {
-				display: inline-block;
-			}
-		}
-
-		.portlet-topper-toolbar:before {
-			background: transparent;
-			content: " ";
-		}
-	}
-
 	.portlet-content {
 		border: 0;
 	}
@@ -113,6 +72,13 @@ body.light {
 
 			menu.portlet-topper-toolbar {
 				text-align: center;
+				background: #00CAFF;
+				height: 20px;
+				width: 20px;
+
+				&:after {
+					content: "•••";
+				}
 
 				.portlet-close, .portlet-maximize, .portlet-minimize, .portlet-options {
 					display: none;
@@ -125,8 +91,14 @@ body.light {
 
 			menu.portlet-topper-toolbar {
 				background: #00CAFF;
+				height: auto;
 				padding-left: 5px;
 				overflow: hidden;
+				width: auto;
+
+				&:after {
+					content: " ";
+				}
 
 				.portlet-close, .portlet-maximize, .portlet-minimize {
 					display: inline;
@@ -192,11 +164,17 @@ body.light {
 	}
 
 	&.signed-in {
-		section.portlet:hover {
-			@include border-radius(3px);
-
+		section.portlet {
 			menu.portlet-topper-toolbar {
-				@include border-radius(2px);
+				@include border-radius(3px);
+			}
+
+			&:hover {
+				@include border-radius(3px);
+
+				menu.portlet-topper-toolbar {
+					@include border-radius(2px);
+				}
 			}
 		}
 	}
