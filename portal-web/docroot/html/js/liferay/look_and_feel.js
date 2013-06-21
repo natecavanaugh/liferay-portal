@@ -155,16 +155,19 @@ AUI.add(
 							);
 
 							var cssPortletURI = themeDisplay.getPathMain() + '/portal/render_portlet';
-							var cssPortletData = {
-								p_l_id: themeDisplay.getPlid(),
-								p_p_id: 113,
-								p_p_state: EXCLUSIVE,
-								doAsUserId: themeDisplay.getDoAsUserIdEncoded()
-							};
+
+							var cssPortletData;
 
 							if (cssPortletURL) {
 								cssPortletURI = cssPortletURL;
-								cssPortletData = {};
+							}
+							else {
+								cssPortletData = {
+									doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
+									p_l_id: themeDisplay.getPlid(),
+									p_p_id: 113,
+									p_p_state: EXCLUSIVE
+								};
 							}
 
 							instance._currentPopup.plug(

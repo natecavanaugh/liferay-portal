@@ -447,17 +447,20 @@
 							after: {
 								success: function() {
 									if (restore) {
-										var data = {
-											doAsUserId: doAsUserId,
-											p_l_id: plid,
-											p_p_id: portlet.portletId,
-											p_p_state: 'exclusive'
-										};
+										var data;
+										
 										var uri = themeDisplay.getPathMain() + '/portal/render_portlet?';
 
 										if (options['minimizeURL']) {
 											uri = options.minimizeURL;
-											data = {};
+										}
+										else {
+											data = {
+												doAsUserId: doAsUserId,
+												p_l_id: plid,
+												p_p_id: portlet.portletId,
+												p_p_state: 'exclusive'
+											};
 										}
 
 										content.plug(A.Plugin.ParseContent);
