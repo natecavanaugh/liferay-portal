@@ -1,8 +1,17 @@
 @import "compass";
 
+$dockbarGradientStart: #2B97EC;
+$dockbarGradientEnd: #2D82D6;
+
+$dockbarOpenGradientStart: #2B97EC;
+$dockbarOpenGradientEnd: #2D82D6;
+
 body.dark {
+	background-color: #FFF;
+	color: #6C6C6C;
+
 	nav#navigation {
-		.nav {
+		ul.nav {
 			li {
 				&.dropdown {
 					> .dropdown-toggle {
@@ -11,17 +20,10 @@ body.dark {
 							border-top-color: #FFF;
 						}
 					}
-
-					&.open {
-						> .dropdown-toggle {
-							background: #00ACFF;
-						}
-					}
 				}
 
 				&.open {
 					> a {
-						background: #00CAFF;
 						color: #FFF;
 					}
 				}
@@ -32,6 +34,15 @@ body.dark {
 					background: #00ACFF;
 					border: 0;
 					margin: 0;
+
+					a {
+						color: #FFF;
+
+						&:hover {
+							background: none;
+							text-decoration: underline;
+						}
+					}
 				}
 
 				.dropdown-menu:after {
@@ -42,10 +53,6 @@ body.dark {
 					border: 0;
 				}
 			}
-
-			> .active > a {
-				background: #00ACFF;
-			}
 		}
 
 		.navbar-inner {
@@ -54,19 +61,22 @@ body.dark {
 
 			li a {
 				color: #FFF;
-
-				&:hover {
-					background: #00ACFF;
-				}
 			}
 		}
 	}
 
 	.modify-pages .delete-tab {
+		background: #555;
+		border: 2px solid #FFF;
 		color: #FFF;
+		font-size: 16px;
+		padding: 4px;
+		right: -10px;
+		top: 0;
+		z-index: 300;
 
 		&:hover {
-			color: #B50303;
+			@include box-shadow(0 1px 1px -1px #000);
 		}
 	}
 
@@ -75,8 +85,21 @@ body.dark {
 	nav#navigation {
 		.nav {
 			li {
+				&.dropdown {
+					&.open {
+						> .dropdown-toggle {
+							@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
+							$experimental-support-for-svg: true;
+							@include background-image(linear-gradient(top, $dockbarOpenGradientStart 0%,$dockbarOpenGradientEnd 100%));
+						}
+					}
+				}
+
 				&.open {
 					> a {
+						@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
+						$experimental-support-for-svg: true;
+						@include background-image(linear-gradient(top, $dockbarOpenGradientStart 0%,$dockbarOpenGradientEnd 100%));
 						@include box-shadow(none);
 					}
 				}
@@ -89,6 +112,8 @@ body.dark {
 			}
 
 			> .active > a {
+				@include filter-gradient($dockbarGradientStart, $dockbarGradientEnd, vertical);
+				@include background-image(linear-gradient(top,  $dockbarGradientStart 0%,$dockbarGradientStart 47%,$dockbarGradientEnd 100%));
 				@include box-shadow(none);
 			}
 		}
@@ -104,6 +129,7 @@ body.dark {
 	}
 
 	.modify-pages .delete-tab {
+		@include border-radius(50%);
 		@include text-shadow(none);
 	}
 }

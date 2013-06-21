@@ -18,6 +18,7 @@
 
 	body {
 		color: #555;
+		font-weight: lighter;
 	}
 
 	/* forms, inputs, and labels */
@@ -291,6 +292,23 @@
 		}
 	}
 
+	/* ---------- Nav#Navigation ---------- */
+
+	.modify-pages .delete-tab {
+		background: #555;
+		border: 2px solid #FFF;
+		color: #FFF;
+		font-size: 16px;
+		padding: 4px;
+		right: -10px;
+		top: 0;
+		z-index: 300;
+
+		&:hover {
+			@include box-shadow(0 1px 1px -1px #000)
+		}
+	}
+
 	/* ---------- Breadcrumbs ---------- */
 
 	.breadcrumb {
@@ -454,6 +472,17 @@
 			color: #FFF;
 			@include text-shadow(-1px -1px rgba(0, 0, 0, 0.3));
 		}
+	}
+
+	.breadcrumb {
+		> li {
+			@include text-shadow(none);
+		}
+	}
+
+	.modify-pages .delete-tab {
+		@include border-radius(50%);
+		@include text-shadow(none);
 	}
 
 	.nav-header {

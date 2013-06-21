@@ -42,6 +42,13 @@ body.light {
 		}
 	}
 
+	.modify-pages .delete-tab {
+		top: 10px;
+	}
+
+	/* ---------- Breadcrumbs ---------- */
+
+
 	.breadcrumb {
 		background: transparent;
 	}

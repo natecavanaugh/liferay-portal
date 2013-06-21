@@ -115,7 +115,7 @@ $dockbarOpenGradientEnd: #048BDF;
 			}
 
 			> li > a {
-				padding: 5px 15px 6px;
+				padding: 6px 15px 6px;
 			}
 		}
 
@@ -151,7 +151,7 @@ $dockbarOpenGradientEnd: #048BDF;
 					margin: 10px;
 
 					> a {
-						background: #0DCFFF;
+						background: #45CBF5;
 						font-size: 0;
 
 						&:hover {
@@ -192,6 +192,8 @@ $dockbarOpenGradientEnd: #048BDF;
 							top: -2px;
 						}
 					}
+
+
 				}
 			}
 		}
@@ -221,7 +223,7 @@ $dockbarOpenGradientEnd: #048BDF;
 	/* ---------- Portlet wrapper and icons ---------- */
 
 	.portlet-topper {
-		background: #00ACFF none repeat scroll 0 0;
+		background: #D3D3D3;
 		color: #FFF;
 		padding: 0;
 
@@ -357,6 +359,16 @@ $dockbarOpenGradientEnd: #048BDF;
 	.portlet-dynamic-data-list-display, .portlet-journal-content, .portlet-polls-display {
 		.lfr-icon-actions {
 			@extend %portlet-action-bar-custom;
+		}
+	}
+
+	.portlet-minimized {
+		.portlet-content {
+			border: 0;
+		}
+
+		.portlet-topper {
+			@include border-radius(3px);
 		}
 	}
 
