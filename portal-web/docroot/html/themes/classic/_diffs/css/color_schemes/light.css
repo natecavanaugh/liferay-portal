@@ -116,6 +116,24 @@ body.light {
 			}
 		}
 
+		section.portlet#portlet_new-password {
+			menu.portlet-topper-toolbar {
+				background: transparent;
+
+				&:after {
+					content: " ";
+				}
+			}
+
+			&:hover {
+				border: 2px solid transparent;
+
+				menu.portlet-topper-toolbar {
+					background: transparent;
+				}
+			}
+		}
+
 		&.controls-hidden {
 			section.portlet:hover {
 				border-color: transparent;

@@ -1,14 +1,16 @@
 @import "compass";
 
 body.darker {
+	background: #363636;
+	color: #E3E3E3;
+	font-weight: lighter;
+
 	a {
 		color: #009CEB;
 	}
 
-	#wrapper {
-		background: #363636;
+	legend {
 		color: #E3E3E3;
-		font-weight: lighter;
 	}
 
 	nav#breadcrumbs {
@@ -149,6 +151,24 @@ body.darker {
 
 				.portlet-options {
 					display: inline-block;
+				}
+			}
+		}
+
+		section.portlet#portlet_new-password {
+			menu.portlet-topper-toolbar {
+				background: transparent;
+
+				&:after {
+					content: " ";
+				}
+			}
+
+			&:hover {
+				border: 2px solid transparent;
+
+				menu.portlet-topper-toolbar {
+					background: transparent;
 				}
 			}
 		}
