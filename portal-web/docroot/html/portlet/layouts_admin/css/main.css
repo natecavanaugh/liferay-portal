@@ -311,6 +311,8 @@
 }
 
 .export-dialog-tree {
+	margin-bottom: 50px;
+
 	.comments-and-ratings {
 		margin-top: 1em;
 
@@ -323,6 +325,19 @@
 			margin-bottom: 0.2em;
 			padding-top: 1em;
 		}
+	}
+
+	.count-display {
+		background-color: #009ae5;
+		border-radius: 9px;
+		box-sizing: content-box;
+		color: #fff;
+		padding-left:10px;
+		padding-right:10px;
+		-moz-border-radius: 9px;
+		-moz-box-sizing: content-box;
+		-webkit-border-radius: 9px;
+		-webkit-box-sizing: content-box;
 	}
 
 	.file-selector {
@@ -350,17 +365,34 @@
 	}
 
 	.options-group {
-		margin-bottom: 1em;
+		margin-bottom: 40px;
+
+		.options {
+			background-color: #fafafa;
+			border-bottom: 1px solid #e4e4e4;
+			border-top: 1px solid #e4e4e4;
+			margin-bottom: 50px;
+		}
+
+		.select-options {
+			margin-left: 55px ;
+			margin-top: 20px;
+		}
 	}
 
 	.page-not-exportable {
 		color: #933;
 	}
 
+	.portlet-list {
+		margin-top: 20px;
+	}
+
 	.selected-labels {
 		color:#999;
-		float:left;
+		display: inline;
 		font-style: italic;
+		margin-left: 0.5em;
 		margin-right: 0.5em;
 	}
 
