@@ -447,16 +447,25 @@
 							after: {
 								success: function() {
 									if (restore) {
-										var data = {
-											doAsUserId: doAsUserId,
-											p_l_id: plid,
-											p_p_id: portlet.portletId,
-											p_p_state: 'exclusive'
-										};
+										var data;
+										
+										var uri = themeDisplay.getPathMain() + '/portal/render_portlet?';
+
+										if (options['minimizeURL']) {
+											uri = options.minimizeURL;
+										}
+										else {
+											data = {
+												doAsUserId: doAsUserId,
+												p_l_id: plid,
+												p_p_id: portlet.portletId,
+												p_p_state: 'exclusive'
+											};
+										}
 
 										content.plug(A.Plugin.ParseContent);
 
-										content.load(themeDisplay.getPathMain() + '/portal/render_portlet?' + A.QueryString.stringify(data));
+										content.load(uri + A.QueryString.stringify(data));
 									}
 								}
 							},
@@ -687,8 +696,8 @@
 	Liferay.provide(
 		Portlet,
 		'loadCSSEditor',
-		function(portletId) {
-			Liferay.PortletCSS.init(portletId);
+		function(portletId, cssPortletURL) {
+			Liferay.PortletCSS.init(portletId, cssPortletURL);
 		},
 		['liferay-look-and-feel']
 	);
