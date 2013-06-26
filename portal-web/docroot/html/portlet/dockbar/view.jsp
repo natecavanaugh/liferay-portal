@@ -32,7 +32,7 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 %>
 
 <aui:nav-bar cssClass="navbar-static-top dockbar" data-namespace="<%= renderResponse.getNamespace() %>" id="dockbar">
-	<aui:nav>
+	<aui:nav cssClass="nav-add-controls">
 		<c:if test="<%= group.isControlPanel() %>">
 
 			<%
