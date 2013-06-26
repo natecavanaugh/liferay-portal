@@ -50,26 +50,29 @@
 					</div>
 
 					<aui:nav cssClass="nav-list no-margin-nav-list" id="templateList">
-						<aui:nav-item cssClass="lfr-page-template" data-search="blank">
-							<div class="active lfr-page-template-title toggler-header toggler-header-collapsed" data-type="portlet">
-								<aui:input checked="<%= true %>" id="blank" label="blank" name="selectedPageTemplate" type="radio" />
-							</div>
+						<c:if test='<%= ArrayUtil.contains(PropsValues.LAYOUT_TYPES, "portlet") %>'>
+							<aui:nav-item cssClass="lfr-page-template" data-search="blank">
+								<div class="active lfr-page-template-title toggler-header toggler-header-expanded" data-type="portlet">
+									<aui:input checked="<%= true %>" id="blank" label="empty-layout" name="selectedPageTemplate" type="radio" />
+									<div class="lfr-page-template-description"><small><%= LanguageUtil.get(pageContext, "empty-layout-description" ) %></small></div>
+								</div>
 
-							<div class="lfr-page-template-options toggler-content toggler-content-collapsed">
+								<div class="lfr-page-template-options toggler-content toggler-content-expanded">
 
-								<%
-								String layoutTemplateId = PropsValues.DEFAULT_LAYOUT_TEMPLATE_ID;
+									<%
+									String layoutTemplateId = PropsValues.DEFAULT_LAYOUT_TEMPLATE_ID;
 
-								Theme selTheme = layout.getTheme();
+									Theme selTheme = layout.getTheme();
 
-								List<LayoutTemplate> layoutTemplates = LayoutTemplateLocalServiceUtil.getLayoutTemplates(selTheme.getThemeId());
+									List<LayoutTemplate> layoutTemplates = LayoutTemplateLocalServiceUtil.getLayoutTemplates(selTheme.getThemeId());
 
-								int columnsCount = 2;
-								%>
+									int columnsCount = 2;
+									%>
 
-								<%@ include file="/html/portlet/layouts_admin/layout/layout_templates.jspf" %>
-							</div>
-						</aui:nav-item>
+									<%@ include file="/html/portlet/layouts_admin/layout/layout_templates_list.jspf" %>
+								</div>
+							</aui:nav-item>
+						</c:if>
 
 						<%
 						List<LayoutPrototype> layoutPrototypes = LayoutPrototypeServiceUtil.search(company.getCompanyId(), Boolean.TRUE, null);
@@ -81,8 +84,7 @@
 							<aui:nav-item cssClass="lfr-page-template" data-search="<%= name %>">
 								<div class="lfr-page-template-title toggler-header toggler-header-collapsed" data-prototype-id="<%= layoutPrototype.getLayoutPrototypeId() %>">
 									<aui:input label="<%= name %>" name="selectedPageTemplate" type="radio" />
-
-									<%= HtmlUtil.escape(layoutPrototype.getDescription()) %>
+									<div class="lfr-page-template-description"><small><%= HtmlUtil.escape(layoutPrototype.getDescription()) %></small></div>
 								</div>
 
 								<div class="lfr-page-template-options toggler-content toggler-content-collapsed">
@@ -110,6 +112,7 @@
 							<aui:nav-item cssClass="lfr-page-template" data-search='<%= LanguageUtil.get(pageContext, "layout.types." + PropsValues.LAYOUT_TYPES[i]) %>'>
 								<div class="lfr-page-template-title toggler-header toggler-header-collapsed" data-type="<%= PropsValues.LAYOUT_TYPES[i] %>">
 									<aui:input label='<%= "layout.types." + PropsValues.LAYOUT_TYPES[i] %>' name="selectedPageTemplate" type="radio" />
+									<div class="lfr-page-template-description"><small><%= LanguageUtil.get(pageContext, "layout.types." + PropsValues.LAYOUT_TYPES[i] + ".description" ) %></small></div>
 								</div>
 
 								<div class="lfr-page-template-options toggler-content toggler-content-collapsed">
@@ -125,6 +128,7 @@
 							<aui:nav-item cssClass="lfr-page-template" data-search="portlet">
 								<div class="lfr-page-template-title toggler-header toggler-header-collapsed" data-type="portlet">
 									<aui:input label="copy-of-a-page" name="selectedPageTemplate" type="radio" />
+									<div class="lfr-page-template-description"><small><%= LanguageUtil.get(pageContext, "copy-of-a-page-description" ) %></small></div>
 								</div>
 
 								<div class="lfr-page-template-options toggler-content toggler-content-collapsed">
@@ -175,13 +179,15 @@ Layout addedLayout = (Layout)SessionMessages.get(renderRequest, portletDisplay.g
 	new Liferay.Dockbar.AddPage(
 		{
 			createPageMessage: '<%= LanguageUtil.get(pageContext, "loading") %>',
+			focusItem: A.one('#<portlet:namespace />name'),
 			inputNode: A.one('#<portlet:namespace />searchTemplates'),
 			namespace: '<portlet:namespace />',
 			nodeList: A.one('#<portlet:namespace />templateList'),
 			nodeSelector: '.lfr-page-template',
-			parentLayoutId: <%= layout.getParentLayoutId() %>
+			parentLayoutId: <%= layout.getParentLayoutId() %>,
+			selected: !A.one('#<portlet:namespace />addPageFm').ancestor().hasClass('hide')
 		}
 	);
 
-	A.one('#<portlet:namespace />name').focus();
+
 </aui:script>
