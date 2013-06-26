@@ -28,7 +28,7 @@
 				<liferay-ui:message key="<%= label %>" />
 
 				<c:if test="<%= dropdown %>">
-					<b class="caret"></b>
+					<b class="icon-caret-down"></b>
 				</c:if>
 		<c:if test="<%= Validator.isNotNull(href) %>">
 			</a>

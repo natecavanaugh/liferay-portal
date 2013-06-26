@@ -1,0 +1,135 @@
+@import "compass";
+
+$dockbarGradientStart: #2B97EC;
+$dockbarGradientEnd: #2D82D6;
+
+$dockbarOpenGradientStart: #2B97EC;
+$dockbarOpenGradientEnd: #2D82D6;
+
+body.dark {
+	background-color: #FFF;
+	color: #6C6C6C;
+
+	nav#navigation {
+		ul.nav {
+			li {
+				&.dropdown {
+					> .dropdown-toggle {
+						.caret {
+							border-bottom-color: #FFF;
+							border-top-color: #FFF;
+						}
+					}
+				}
+
+				&.open {
+					> a {
+						color: #FFF;
+					}
+				}
+			}
+
+			li.dropdown.hover.open {
+				.dropdown-menu {
+					background: #00ACFF;
+					border: 0;
+					margin: 0;
+
+					a {
+						color: #FFF;
+
+						&:hover {
+							background: none;
+							text-decoration: underline;
+						}
+					}
+				}
+
+				.dropdown-menu:after {
+					border: 0;
+				}
+
+				.dropdown-menu:before {
+					border: 0;
+				}
+			}
+		}
+
+		.navbar-inner {
+			background: #555;
+			border: 0;
+
+			li a {
+				color: #FFF;
+			}
+		}
+	}
+
+	.modify-pages .delete-tab {
+		background: #555;
+		border: 2px solid #FFF;
+		color: #FFF;
+		font-size: 16px;
+		padding: 4px;
+		right: -10px;
+		top: 0;
+		z-index: 300;
+
+		&:hover {
+			@include box-shadow(0 1px 1px -1px #000);
+		}
+	}
+
+	/* Extras */
+
+	nav#navigation {
+		.nav {
+			li {
+				&.dropdown {
+					&.open {
+						> .dropdown-toggle {
+							@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
+							$experimental-support-for-svg: true;
+							@include background-image(linear-gradient(top, $dockbarOpenGradientStart 0%,$dockbarOpenGradientEnd 100%));
+						}
+					}
+				}
+
+				&.open {
+					> a {
+						@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
+						$experimental-support-for-svg: true;
+						@include background-image(linear-gradient(top, $dockbarOpenGradientStart 0%,$dockbarOpenGradientEnd 100%));
+						@include box-shadow(none);
+					}
+				}
+			}
+
+			li.dropdown.hover.open {
+				.dropdown-menu {
+					@include border-radius(0);
+				}
+			}
+
+			> .active > a {
+				@include filter-gradient($dockbarGradientStart, $dockbarGradientEnd, vertical);
+				@include background-image(linear-gradient(top,  $dockbarGradientStart 0%,$dockbarGradientStart 47%,$dockbarGradientEnd 100%));
+				@include box-shadow(none);
+			}
+		}
+
+		.navbar-inner {
+			@include box-shadow(none);
+			@include border-radius(0);
+
+			li a {
+				@include text-shadow(none);
+			}
+		}
+	}
+
+	.modify-pages .delete-tab {
+		@include border-radius(50%);
+		@include text-shadow(none);
+	}
+}

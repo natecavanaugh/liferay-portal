@@ -1,0 +1,213 @@
+@import "compass";
+
+body.light {
+	nav#navigation {
+		.navbar-inner {
+			border: 0;
+
+			ul.nav {
+				> li {
+					margin-right: 5px;
+				}
+
+				li {
+					padding: 8px 0;
+
+					&.open {
+						> a {
+							background: #00CAFF;
+							color: #FFF;
+						}
+
+						> .dropdown-toggle {
+							background: #00CAFF;
+							color: #FFF;
+						}
+					}
+				}
+
+				li.active {
+					> a {
+						background: #00CAFF;
+						color: #FFF;
+					}
+				}
+
+				.dropdown-menu li {
+					> a:hover, a:focus {
+						background: #00CAFF;
+					}
+				}
+			}
+		}
+	}
+
+	.modify-pages .delete-tab {
+		top: 10px;
+	}
+
+	/* ---------- Breadcrumbs ---------- */
+
+
+	.breadcrumb {
+		background: transparent;
+	}
+
+	/* Portlet */
+
+	.portlet-content {
+		border: 0;
+	}
+
+	.portlet-title {
+		color: #29B23E;
+	}
+
+	.portlet-topper {
+		background: transparent;
+	}
+
+	/* Portlet hover styles */
+
+	.portlet-borderless-container {
+		background: transparent;
+	}
+
+	&.signed-in {
+		section.portlet {
+			border: 2px solid transparent;
+
+			menu.portlet-topper-toolbar {
+				text-align: center;
+				background: #00CAFF;
+				height: 20px;
+				width: 20px;
+
+				&:after {
+					content: "•••";
+				}
+
+				.portlet-close, .portlet-maximize, .portlet-minimize, .portlet-options {
+					display: none;
+				}
+			}
+		}
+
+		section.portlet:hover {
+			border: 2px solid #00CAFF;
+
+			menu.portlet-topper-toolbar {
+				background: #00CAFF;
+				height: auto;
+				padding-left: 5px;
+				overflow: hidden;
+				width: auto;
+
+				&:after {
+					content: " ";
+				}
+
+				.portlet-close, .portlet-maximize, .portlet-minimize {
+					display: inline;
+				}
+
+				.portlet-close a {
+					background: #FF8400;
+					padding: 3px 1px 5px 3px;
+				}
+
+				.portlet-options {
+					display: inline-block;
+					top: 2px;
+				}
+			}
+		}
+
+		section.portlet#portlet_new-password {
+			menu.portlet-topper-toolbar {
+				background: transparent;
+
+				&:after {
+					content: " ";
+				}
+			}
+
+			&:hover {
+				border: 2px solid transparent;
+
+				menu.portlet-topper-toolbar {
+					background: transparent;
+				}
+			}
+		}
+
+		&.controls-hidden {
+			section.portlet:hover {
+				border-color: transparent;
+			}
+		}
+	}
+
+	/* Extras */
+
+	a {
+		@include text-shadow(none);
+	}
+
+	nav#navigation {
+		.navbar-inner {
+			@include box-shadow(none);
+
+			ul.nav {
+				li {
+					&.open {
+						> a {
+							@include border-radius(3px);
+							@include box-shadow(none);
+							@include text-shadow(none);
+						}
+
+						> .dropdown-toggle {
+							@include border-radius(3px);
+							@include text-shadow(none);
+						}
+					}
+				}
+
+				li.active {
+					> a {
+						@include border-radius(3px);
+						@include box-shadow(none);
+						@include text-shadow(none);
+					}
+				}
+			}
+		}
+	}
+
+	section.portlet {
+		.admin.portlet-topper-toolbar:before {
+			@include border-radius(2px);
+		}
+	}
+
+	section.portlet.active {
+		@include border-radius(4px);
+	}
+
+	&.signed-in {
+		section.portlet {
+			menu.portlet-topper-toolbar {
+				@include border-radius(3px);
+			}
+
+			&:hover {
+				@include border-radius(3px);
+
+				menu.portlet-topper-toolbar {
+					@include border-radius(2px);
+				}
+			}
+		}
+	}
+}
