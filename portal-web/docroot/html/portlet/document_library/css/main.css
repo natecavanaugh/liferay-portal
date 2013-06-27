@@ -383,6 +383,10 @@
 		.categorization-panel {
 			clear: left;
 		}
+
+		.control-group {
+			overflow: auto;
+		}
 	}
 
 	.app-view-entry-taglib {
