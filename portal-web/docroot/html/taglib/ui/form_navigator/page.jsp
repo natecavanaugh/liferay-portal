@@ -26,6 +26,7 @@ String formName = GetterUtil.getString((String)request.getAttribute("liferay-ui:
 String htmlBottom = (String)request.getAttribute("liferay-ui:form-navigator:htmlBottom");
 String htmlTop = (String)request.getAttribute("liferay-ui:form-navigator:htmlTop");
 String jspPath = (String)request.getAttribute("liferay-ui:form-navigator:jspPath");
+boolean error = false;
 boolean showButtons = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:form-navigator:showButtons"));
 
 if (Validator.isNull(backURL)) {
@@ -111,6 +112,7 @@ if (Validator.isNotNull(historyKey)) {
 					<%
 					if (Validator.isNotNull(errorSection)) {
 						curSection = StringPool.BLANK;
+						error = true;
 					}
 
 					for (String section : sections) {
@@ -298,6 +300,10 @@ if (Validator.isNotNull(historyKey)) {
 		}
 
 		selectTabBySectionId(locationSectionId);
+	}
+
+	if (<%= error %>) {
+		Liferay.fire('formNavigator:reveal<portlet:namespace /><%= errorSection %>');
 	}
 </aui:script>
 
