@@ -98,6 +98,10 @@ public class WorkflowConstants {
 
 	public static final int STATUS_SCHEDULED = 7;
 
+	public static final int TYPE_ASSIGN = 10000;
+
+	public static final int TYPE_COMPLETE = 10001;
+
 	public static String toLabel(int status) {
 		if (status == STATUS_ANY) {
 			return LABEL_ANY;

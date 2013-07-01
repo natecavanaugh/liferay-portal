@@ -48,12 +48,20 @@ public interface LayoutPermission {
 			PermissionChecker permissionChecker, Layout layout, String actionId)
 		throws PortalException, SystemException;
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link #contains(PermissionChecker,
+	 *             Layout, boolean, String)}
+	 */
 	public boolean contains(
 			PermissionChecker permissionChecker, Layout layout,
 			String controlPanelCategory, boolean checkViewableGroup,
 			String actionId)
 		throws PortalException, SystemException;
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link #contains(PermissionChecker,
+	 *             Layout, String)}
+	 */
 	public boolean contains(
 			PermissionChecker permissionChecker, Layout layout,
 			String controlPanelCategory, String actionId)
@@ -64,6 +72,10 @@ public interface LayoutPermission {
 			boolean privateLayout, long layoutId, String actionId)
 		throws PortalException, SystemException;
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link #contains(PermissionChecker,
+	 *             long, boolean, long, String)}
+	 */
 	public boolean contains(
 			PermissionChecker permissionChecker, long groupId,
 			boolean privateLayout, long layoutId, String controlPanelCategory,
@@ -76,10 +88,29 @@ public interface LayoutPermission {
 
 	public boolean containsWithoutViewableGroup(
 			PermissionChecker permissionChecker, Layout layout,
+			boolean checkLayoutUpdateable, String actionId)
+		throws PortalException, SystemException;
+
+	public boolean containsWithoutViewableGroup(
+			PermissionChecker permissionChecker, Layout layout, String actionId)
+		throws PortalException, SystemException;
+
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 *             #containsWithoutViewableGroup(PermissionChecker, Layout,
+	 *             boolean, String)}
+	 */
+	public boolean containsWithoutViewableGroup(
+			PermissionChecker permissionChecker, Layout layout,
 			String controlPanelCategory, boolean checkLayoutUpdateable,
 			String actionId)
 		throws PortalException, SystemException;
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 *             #containsWithoutViewableGroup(PermissionChecker, Layout,
+	 *             String)}
+	 */
 	public boolean containsWithoutViewableGroup(
 			PermissionChecker permissionChecker, Layout layout,
 			String controlPanelCategory, String actionId)

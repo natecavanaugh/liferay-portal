@@ -15,16 +15,19 @@
 package com.liferay.portal.kernel.notifications;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.UserNotificationDelivery;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserNotificationDeliveryLocalServiceUtil;
 
 /**
  * @author Jonathan Lee
  */
-public abstract class BaseUserNotificationInterpreter
-	implements UserNotificationInterpreter {
+public abstract class BaseUserNotificationHandler
+	implements UserNotificationHandler {
 
 	@Override
 	public String getPortletId() {
@@ -53,6 +56,29 @@ public abstract class BaseUserNotificationInterpreter
 		catch (Exception e) {
 			throw new PortalException(e);
 		}
+	}
+
+	@Override
+	public boolean isDeliver(
+			long userId, long classNameId, int notificationType,
+			int deliveryType, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		UserNotificationDefinition userNotificationDefinition =
+			UserNotificationManagerUtil.fetchUserNotificationDefinition(
+				_portletId, classNameId, notificationType);
+
+		UserNotificationDeliveryType userNotificationDeliveryType =
+			userNotificationDefinition.getUserNotificationDeliveryType(
+				deliveryType);
+
+		UserNotificationDelivery userNotificationDelivery =
+			UserNotificationDeliveryLocalServiceUtil.
+				getUserNotificationDelivery(
+					userId, _portletId, classNameId, notificationType,
+					deliveryType, userNotificationDeliveryType.isDefault());
+
+		return userNotificationDelivery.isDeliver();
 	}
 
 	protected UserNotificationFeedEntry doInterpret(
