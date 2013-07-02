@@ -241,7 +241,9 @@ AUI.add(
 
 						instance.activateFlags();
 
-						var currentValue = input ? input.val() : event.currentTarget.val();
+						input = input || event.currentTarget;
+
+						var currentValue = input.val();
 
 						inputLanguage.val(currentValue);
 
