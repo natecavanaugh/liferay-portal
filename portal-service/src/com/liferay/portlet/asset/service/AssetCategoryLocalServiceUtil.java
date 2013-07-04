@@ -614,6 +614,11 @@ public class AssetCategoryLocalServiceUtil {
 		return getService().getEntryCategories(entryId);
 	}
 
+	public static int getSubcategoriesCount(long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getSubcategoriesCount(parentCategoryId);
+	}
+
 	public static java.util.List<java.lang.Long> getSubcategoryIds(
 		long parentCategoryId)
 		throws com.liferay.portal.kernel.exception.SystemException {

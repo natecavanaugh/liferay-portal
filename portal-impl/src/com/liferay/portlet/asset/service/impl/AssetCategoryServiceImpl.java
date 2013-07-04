@@ -256,6 +256,14 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 	}
 
 	@Override
+	public int getSubcategoriesCount(long groupId, long parentCategoryId)
+		throws SystemException {
+
+		return assetCategoryPersistence.filterCountByG_P(
+			groupId, parentCategoryId);
+	}
+
+	@Override
 	public List<AssetCategory> getVocabularyCategories(
 			long vocabularyId, int start, int end, OrderByComparator obc)
 		throws PortalException, SystemException {

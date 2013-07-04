@@ -180,6 +180,13 @@ public class AssetCategoryServiceWrapper implements AssetCategoryService,
 	}
 
 	@Override
+	public int getSubcategoriesCount(long groupId, long parentCategoryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _assetCategoryService.getSubcategoriesCount(groupId,
+			parentCategoryId);
+	}
+
+	@Override
 	public java.util.List<com.liferay.portlet.asset.model.AssetCategory> getVocabularyCategories(
 		long vocabularyId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
