@@ -68,7 +68,7 @@ public class UpdateLayoutAction extends JSONAction {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
-			if (cmd.equals("add")) {
+			if (cmd.equals(_ADD)) {
 				String[] array = addPage(themeDisplay, request, response);
 
 				jsonObject.put("deletable", Boolean.valueOf(array[2]));
@@ -77,28 +77,28 @@ public class UpdateLayoutAction extends JSONAction {
 				jsonObject.put("updateable", Boolean.valueOf(array[4]));
 				jsonObject.put("url", array[1]);
 			}
-			else if (cmd.equals("delete")) {
+			else if (cmd.equals(_DELETE)) {
 				SitesUtil.deleteLayout(request, response);
 			}
-			else if (cmd.equals("display_order")) {
+			else if (cmd.equals(_DISPLAY_ORDER)) {
 				updateDisplayOrder(request);
 			}
-			else if (cmd.equals("name")) {
+			else if (cmd.equals(_NAME)) {
 				updateName(request);
 			}
-			else if (cmd.equals("parent_layout_id")) {
+			else if (cmd.equals(_PARENT_LAYOUT_ID)) {
 				updateParentLayoutId(request);
 			}
-			else if (cmd.equals("priority")) {
+			else if (cmd.equals(_PRIORITY)) {
 				updatePriority(request);
 			}
 
 			jsonObject.put("status", HttpServletResponse.SC_OK);
 		}
 		catch (LayoutTypeException lte) {
-			jsonObject.put(
-				"message", getLayoutTypeExceptionMessage(themeDisplay, lte));
 			jsonObject.put("status", HttpServletResponse.SC_BAD_REQUEST);
+			jsonObject.put("message", 
+				getLayoutTypeExceptionMessage(themeDisplay, lte, cmd));
 		}
 
 		return jsonObject.toString();
@@ -116,7 +116,7 @@ public class UpdateLayoutAction extends JSONAction {
 		long groupId = ParamUtil.getLong(request, "groupId");
 		boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout");
 		long parentLayoutId = ParamUtil.getLong(request, "parentLayoutId");
-		String name = ParamUtil.getString(request, "name", "New Page");
+		String name = ParamUtil.getString(request, _NAME, "New Page");
 		String title = StringPool.BLANK;
 		String description = StringPool.BLANK;
 		String type = LayoutConstants.TYPE_PORTLET;
@@ -186,12 +186,31 @@ public class UpdateLayoutAction extends JSONAction {
 	}
 
 	protected String getLayoutTypeExceptionMessage(
-		ThemeDisplay themeDisplay, LayoutTypeException lte) {
+		ThemeDisplay themeDisplay, LayoutTypeException lte, String cmd) {
+
+		String layoutType = lte.getLayoutType();
+
+		if (!Validator.isNull(cmd)) {
+			if (cmd.equals(_DELETE) &&
+				(lte.getType() == LayoutTypeException.FIRST_LAYOUT)) {
+					return themeDisplay.translate(
+						"cannot-delete-this-page-because-next-page-cannot-be" +
+						"-first", "layout.types." + layoutType);
+			}
+
+			if ((cmd.equals(_PRIORITY) || cmd.equals(_DISPLAY_ORDER)) &&
+				(lte.getType() == LayoutTypeException.FIRST_LAYOUT)) {
+					return themeDisplay.translate(
+						"cannot-move-this-page-because-the-resulting-first-" +
+						"page-cannot-be-placed-first",
+						"layout.types." + layoutType);
+			}
+		}
 
 		if (lte.getType() == LayoutTypeException.FIRST_LAYOUT ) {
 			return themeDisplay.translate(
 				"the-first-page-cannot-be-of-type-x",
-				"layout.types." + lte.getLayoutType());
+				"layout.types." + layoutType);
 		}
 		else if (lte.getType() == LayoutTypeException.NOT_PARENTABLE) {
 			return themeDisplay.translate(
@@ -267,7 +286,7 @@ public class UpdateLayoutAction extends JSONAction {
 		long groupId = ParamUtil.getLong(request, "groupId");
 		boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout");
 		long layoutId = ParamUtil.getLong(request, "layoutId");
-		int priority = ParamUtil.getInteger(request, "priority");
+		int priority = ParamUtil.getInteger(request, _PRIORITY);
 
 		if (plid <= 0) {
 			LayoutServiceUtil.updatePriority(
@@ -277,5 +296,17 @@ public class UpdateLayoutAction extends JSONAction {
 			LayoutServiceUtil.updatePriority(plid, priority);
 		}
 	}
+
+	private static final String _ADD = "add";
+
+	private static final String _DELETE = "delete";
+
+	private static final String _DISPLAY_ORDER = "display_order";
+
+	private static final String _NAME = "name";
+
+	private static final String _PARENT_LAYOUT_ID = "parent_layout_id";
+
+	private static final String _PRIORITY = "priority";
 
 }
