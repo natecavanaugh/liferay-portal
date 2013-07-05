@@ -71,6 +71,8 @@ OrderByComparator orderByComparator = BackgroundTaskUtil.getBackgroundTaskOrderB
 			</strong>
 
 			<c:if test="<%= Validator.isNotNull(backgroundTask.getStatusMessage()) %>">
+				<a class="details-link toggler-header-collapsed" href="#"><liferay-ui:message key="details" /></a>
+
 				<div class="background-task-status-message toggler-content-collapsed">
 
 					<%
