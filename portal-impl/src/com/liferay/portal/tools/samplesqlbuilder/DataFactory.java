@@ -636,9 +636,9 @@ public class DataFactory {
 
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ");
 		sb.append("available-locales=\"en_US\" default-locale=\"en_US\">");
-		sb.append("<Name language-id=\"en_US\">");
+		sb.append("<name language-id=\"en_US\">");
 		sb.append(DLFileEntryTypeConstants.NAME_BASIC_DOCUMENT);
-		sb.append("</Name></root>");
+		sb.append("</name></root>");
 
 		_defaultDLFileEntryType.setName(sb.toString());
 
@@ -1049,9 +1049,9 @@ public class DataFactory {
 
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ");
 		sb.append("available-locales=\"en_US\" default-locale=\"en_US\">");
-		sb.append("<Name language-id=\"en_US\">Test DDL Record Set ");
+		sb.append("<name language-id=\"en_US\">Test DDL Record Set ");
 		sb.append(currentIndex);
-		sb.append("</Name></root>");
+		sb.append("</name></root>");
 
 		ddlRecordSet.setName(sb.toString());
 
@@ -2140,9 +2140,9 @@ public class DataFactory {
 
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><root ");
 		sb.append("available-locales=\"en_US\" default-locale=\"en_US\">");
-		sb.append("<Name language-id=\"en_US\">");
+		sb.append("<name language-id=\"en_US\">");
 		sb.append(structureKey);
-		sb.append("</Name></root>");
+		sb.append("</name></root>");
 
 		ddmStructure.setName(sb.toString());
 
