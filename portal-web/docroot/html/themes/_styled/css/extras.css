@@ -343,6 +343,12 @@ body:first-of-type {
 	@include border-top-right-radius(0);
 }
 
+.portlet-document-library-display .workflow-status .label {
+	@include border-bottom-left-radius(0);
+	@include border-top-left-radius(0);
+	@include border-top-right-radius(0);
+}
+
 .portlet-journal .entry-thumbnail .label {
 	@include border-bottom-left-radius(0);
 	@include border-top-left-radius(0);
