@@ -92,15 +92,15 @@ if (showLinkTitle) {
 				<c:if test="<%= locked %>">
 					<img alt="<liferay-ui:message key="locked" />" class="locked-icon img-polaroid" src="<%= themeDisplay.getPathThemeImages() %>/file_system/large/overlay_lock.png" />
 				</c:if>
+
+				<c:if test="<%= !folder && ((status != WorkflowConstants.STATUS_ANY) && (status != WorkflowConstants.STATUS_APPROVED)) %>">
+					<aui:workflow-status showIcon="<%= false %>" showLabel="<%= false %>" status="<%= status %>" />
+				</c:if>
 			</div>
 
 			<span class="entry-title">
 				<span class="entry-title-text">
 					<%= HtmlUtil.escape(shortTitle) %>
-
-					<c:if test="<%= !folder && ((status != WorkflowConstants.STATUS_ANY) && (status != WorkflowConstants.STATUS_APPROVED)) %>">
-						<aui:workflow-status showIcon="<%= false %>" showLabel="<%= false %>" status="<%= status %>" />
-					</c:if>
 				</span>
 
 				<span class="entry-result-icon"></span>
