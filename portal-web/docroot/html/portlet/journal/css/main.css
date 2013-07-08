@@ -420,6 +420,19 @@
 		}
 	}
 
+	.entry-thumbnail .taglib-workflow-status {
+		left: 6px;
+		margin: 0;
+		padding: 0;
+		position: absolute;
+		top: 4px;
+
+		.workflow-status {
+			margin: 0;
+			padding: 0;
+		}
+	}
+
 	.journal-article-instructions-container {
 		display: normal;
 	}
