@@ -485,7 +485,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 	Liferay.Util.toggleRadio('<portlet:namespace />rangeLast', '', ['<portlet:namespace />startEndDate']);
 </aui:script>
 
-<aui:script use="aui-toggler,liferay-export-import">
+<aui:script use="aui-toggler,liferay-export-import,liferay-store">
 	<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" var="publishProcessesURL">
 		<portlet:param name="struts_action" value="/layouts_admin/publish_layouts" />
 		<portlet:param name="closeRedirect" value="<%= closeRedirect %>" />
@@ -529,9 +529,25 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 			content: '.background-task-status-message',
 			expanded: false,
 			header: '.details-link',
+			on: {
+				'toggler:expandedChange': function(event) {
+					var header = event.target.get('header');
+
+					var persistId = header.getData('persist-id')
+
+					if (header.hasClass('toggler-header-collapsed')) {
+						persistId = 0;
+					}
+
+					var data = {
+						'publish-layout-task' : persistId
+					};
+
+					Liferay.Store(data);
+				}
+			},
 			transition: {
-			  duration: .5,
-			  easing: 'cubic-bezier'
+			  duration: .3
 			}
 		}
 	);

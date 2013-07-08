@@ -40,6 +40,10 @@ else {
 }
 
 OrderByComparator orderByComparator = BackgroundTaskUtil.getBackgroundTaskOrderByComparator(orderByCol, orderByType);
+
+String expandedBrackgroundTasks = GetterUtil.getString(SessionClicks.get(request, "publish-layout-task", null));
+
+long[] expandedBackgroundTasks = StringUtil.split(expandedBrackgroundTasks, 0L);
 %>
 
 <liferay-ui:search-container
@@ -71,9 +75,9 @@ OrderByComparator orderByComparator = BackgroundTaskUtil.getBackgroundTaskOrderB
 			</strong>
 
 			<c:if test="<%= Validator.isNotNull(backgroundTask.getStatusMessage()) %>">
-				<a class="details-link toggler-header-collapsed" href="#"><liferay-ui:message key="details" /></a>
+				<a class="details-link toggler-header-<%= ArrayUtil.contains(expandedBackgroundTasks, backgroundTask.getBackgroundTaskId()) ? "expanded" : "collapsed" %>" data-persist-id="<%= backgroundTask.getBackgroundTaskId() %>" href="#"><liferay-ui:message key="details" /></a>
 
-				<div class="background-task-status-message toggler-content-collapsed">
+				<div class="background-task-status-message toggler-content-<%= ArrayUtil.contains(expandedBackgroundTasks, backgroundTask.getBackgroundTaskId()) ? "expanded" : "collapsed" %>">
 
 					<%
 					JSONObject jsonObject = null;
