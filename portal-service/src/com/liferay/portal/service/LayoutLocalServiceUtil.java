@@ -1760,10 +1760,12 @@ public class LayoutLocalServiceUtil {
 	* @param priority the layout's new priority
 	* @return the updated layout
 	* @throws SystemException if a system exception occurred
+	* @throws PortalException
 	*/
 	public static com.liferay.portal.model.Layout updatePriority(
 		com.liferay.portal.model.Layout layout, int priority)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return getService().updatePriority(layout, priority);
 	}
 
