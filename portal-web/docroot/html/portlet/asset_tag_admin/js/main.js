@@ -38,6 +38,8 @@ AUI.add(
 
 		var NODE = 'node';
 
+		var SELECTOR_TAG_MESSAGES_EDIT = '#tagMessagesEdit';
+
 		var TPL_PORTLET_MESSAGES = '<div class="hide lfr-message-response" id="portletMessages" />';
 
 		var TPL_TAG_LIST_CONTAINER = '<ul class="nav nav-pills nav-stacked">';
@@ -145,7 +147,7 @@ AUI.add(
 							points: ['tc', 'tl']
 						};
 
-						instance._hideMessageTask = A.debounce('hide', 7000, instance._portletMessageContainer);
+						instance._hideMessageTask = A.debounce(instance._hideMessage, 7000);
 
 						instance._tagsList.on(EVENT_CLICK, instance._onTagsListClick, instance);
 						instance._tagsList.on('key', instance._onTagsListClick, 'up:13', instance);
@@ -1048,6 +1050,14 @@ AUI.add(
 						instance._container.all('.lfr-message-response').hide();
 					},
 
+					_hideMessage: function(container) {
+						var instance = this;
+
+						container = container || instance._portletMessageContainer;
+
+						container.hide();
+					},
+
 					_hidePanels: function() {
 						var instance = this;
 
@@ -1353,7 +1363,7 @@ AUI.add(
 					_onTagUpdateFailure: function(response) {
 						var instance = this;
 
-						instance._sendMessage(MESSAGE_TYPE_ERROR, Liferay.Language.get('your-request-failed-to-complete'));
+						instance._sendMessage(MESSAGE_TYPE_ERROR, Liferay.Language.get('your-request-failed-to-complete'), true, SELECTOR_TAG_MESSAGES_EDIT);
 					},
 
 					_onTagUpdateSuccess: function(response) {
@@ -1398,7 +1408,7 @@ AUI.add(
 								errorText = Liferay.Language.get('your-request-failed-to-complete');
 							}
 
-							instance._sendMessage(MESSAGE_TYPE_ERROR, errorText, autoHide);
+							instance._sendMessage(MESSAGE_TYPE_ERROR, errorText, autoHide, SELECTOR_TAG_MESSAGES_EDIT);
 						}
 					},
 
@@ -1577,10 +1587,10 @@ AUI.add(
 						return tag;
 					},
 
-					_sendMessage: function(type, message, autoHide) {
+					_sendMessage: function(type, message, autoHide, container) {
 						var instance = this;
 
-						var output = instance._portletMessageContainer;
+						var output = A.one(container || instance._portletMessageContainer);
 
 						output.removeClass('alert-error').removeClass('alert-success');
 						output.addClass('alert alert-' + type);
@@ -1589,7 +1599,7 @@ AUI.add(
 						output.show();
 
 						if (autoHide !== false) {
-							instance._hideMessageTask();
+							instance._hideMessageTask(output);
 						}
 					},
 
