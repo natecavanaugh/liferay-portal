@@ -334,7 +334,7 @@
 			file="docroot/html/js/editor/ckeditor_diffs/ckeditor.js.tmp"
 			tofile="docroot/html/js/editor/ckeditor_diffs/ckeditor.js"
 		/>
- 	</target>
+	</target>
 
 	<target name="build-ckeditor-plugins-bbcode">
 		<concat destfile="docroot/html/js/editor/ckeditor_diffs/plugins/bbcode/bbcode_parser.js">
@@ -825,10 +825,10 @@
 								var funcNum = (match && match.length) ? match[1] : '';
 
 								window.top.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
-						    }
-						    else {
-						 		alert(errorMessage);
-						    }
+							}
+							else {
+								alert(errorMessage);
+							}
 						]]>
 					</replacevalue>
 				</replace>
