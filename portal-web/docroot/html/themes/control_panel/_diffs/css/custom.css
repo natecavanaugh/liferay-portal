@@ -668,3 +668,11 @@ $dockbarOpenGradientStart: #00A0FF;
 		}
 	}
 }
+
+@media (max-width: 979px) {
+	.aui {
+		.navbar .btn-navbar {
+			display: none;
+		}
+	}
+}

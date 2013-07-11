@@ -267,6 +267,55 @@ AUI.add(
 					);
 				}
 
+				dockBar.delegate(
+					EVENT_CLICK,
+					function(event) {
+						var node = event.currentTarget.ancestor().one('.nav-account-controls');
+						var nodeAddControls = event.currentTarget.ancestor().one('.nav-add-controls');
+
+						var addControlsHeight = nodeAddControls ? nodeAddControls.get('offsetHeight') : null;
+
+						event.preventDefault();
+
+						if (node) {
+							node.setStyle('marginTop', addControlsHeight + 'px');
+
+							if (node.hasClass('open')) {
+								node.transition(
+									{
+										transform: {
+											delay: 0,
+											duration: 0.5,
+											value: 'translateY(-100%)'
+										}
+									},
+									function() {
+										node.removeClass('open');
+									}
+								);
+							}
+							else {
+								node.transition(
+									{
+										transform: {
+											delay: 0.1,
+											duration: 0.5,
+											value: 'translateY(0%)'
+										},
+
+										on: {
+											start: function() {
+												node.addClass('open');
+											}
+										}
+									}
+								);
+							}
+						}
+					},
+					'.btn-navbar'
+				);
+
 				var manageContent = A.one('#' + namespace + 'manageContent');
 
 				if (manageContent) {
