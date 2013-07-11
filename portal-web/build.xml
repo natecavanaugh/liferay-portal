@@ -5,7 +5,13 @@
 
 	<property name="war.file" value="${ant.project.name}" />
 
+	<!--
+	When upgrading CKEditor, make sure to delete
+	docroot/html/js/editor/ckeditor_diffs/ckeditor.js.
+	-->
+
 	<property name="ckeditor.file" value="ckeditor-4.0-stable.zip" />
+
 	<property name="fckeditor.file" value="FCKeditor_2.6.3.zip" />
 	<property name="font-awesome.file" value="font-awesome-3.2.1.zip" />
 	<property name="scayt.file" value="scayt_4.0.3.zip" />
@@ -225,7 +231,7 @@
 		<if>
 			<or>
 				<not>
-					<filesmatch file1="docroot/html/js/editor/ckeditor/ckeditor.js" file2="docroot/html/js/editor/ckeditor_diffs/ckeditor.js" />
+					<available file="docroot/html/js/editor/ckeditor_diffs/ckeditor.js" />
 				</not>
 				<not>
 					<uptodate
@@ -239,48 +245,43 @@
 
 				<unzip src="third-party/${ckeditor.file}" dest="docroot/html/js/editor" />
 
-				<delete
-					dir="docroot/html/js/editor/ckeditor/dev/builder/release"
-				/>
+				<if>
+					<not>
+						<available file="docroot/html/js/editor/ckeditor_diffs/ckeditor.js" />
+					</not>
+					<then>
+						<delete dir="docroot/html/js/editor/ckeditor/dev/builder/release" />
 
-				<replace file="docroot/html/js/editor/ckeditor/plugins/wysiwygarea/plugin.js">
-					<replacetoken><![CDATA[var data = fullPage]]></replacetoken>
-					<replacevalue>
-						<![CDATA[
-							if (!doc) {
-								return null;
-							}
+						<replace file="docroot/html/js/editor/ckeditor/plugins/wysiwygarea/plugin.js">
+							<replacetoken><![CDATA[var data = fullPage]]></replacetoken>
+							<replacevalue>
+								<![CDATA[
+									if (!doc) {
+										return null;
+									}
 
-							var data = fullPage
-						]]>
-					</replacevalue>
-				</replace>
+									var data = fullPage
+								]]>
+							</replacevalue>
+						</replace>
 
-				<property name="arg.line" value="" />
+						<property name="arg.line" value="" />
 
-				<java
-					classname="ckbuilder.ckbuilder"
-					classpathref="project.classpath"
-					dir="${basedir}/docroot/html/js/editor/ckeditor/dev/builder"
-					fork="true"
-					newenvironment="true"
-				>
-					<arg line="--build ../../" />
-					<arg line="release" />
-					<arg line="--version=&quot;4.0 STABLE&quot;" />
-					<arg line="--build-config ${basedir}/docroot/html/js/editor/ckeditor/dev/builder/build-config.js" />
-					<arg line="${arg.line}" />
-				</java>
-
-				<replace file="docroot/html/js/editor/ckeditor/dev/builder/release/ckeditor/skins/kama/editor.css">
-					<replacetoken><![CDATA[overflow:hidden}.cke_resizer{]]></replacetoken>
-					<replacevalue><![CDATA[overflow:hidden}.cke_top{white-space:normal}.cke_resizer{]]></replacevalue>
-				</replace>
-
-				<replace file="docroot/html/js/editor/ckeditor/dev/builder/release/ckeditor/skins/moono/editor.css">
-					<replacetoken><![CDATA[.cke_top{border-bottom:1px solid #b6b6b6;padding:6px 8px 2px;-moz-box-shadow:0 1px 0 #fff inset;]]></replacetoken>
-					<replacevalue><![CDATA[.cke_top{border-bottom:1px solid #b6b6b6;padding:6px 8px 2px;white-space:normal;-moz-box-shadow:0 1px 0 #fff inset;]]></replacevalue>
-				</replace>
+						<java
+							classname="ckbuilder.ckbuilder"
+							classpathref="project.classpath"
+							dir="${basedir}/docroot/html/js/editor/ckeditor/dev/builder"
+							fork="true"
+							newenvironment="true"
+						>
+							<arg line="--build ../../" />
+							<arg line="release" />
+							<arg line="--version=&quot;4.0 STABLE&quot;" />
+							<arg line="--build-config ${basedir}/docroot/html/js/editor/ckeditor/dev/builder/build-config.js" />
+							<arg line="${arg.line}" />
+						</java>
+					</then>
+				</if>
 
 				<move
 					file="docroot/html/js/editor/ckeditor/dev/builder/release/ckeditor"
@@ -288,9 +289,7 @@
 					tofile="docroot/html/js/editor/ckeditor.tmp"
 				/>
 
-				<delete
-					dir="docroot/html/js/editor/ckeditor"
-				/>
+				<delete dir="docroot/html/js/editor/ckeditor" />
 
 				<move
 					file="docroot/html/js/editor/ckeditor.tmp"
@@ -330,20 +329,13 @@
 	</target>
 
 	<target name="build-ckeditor-dev">
-		<move
-			failonerror="false"
-			file="docroot/html/js/editor/ckeditor_diffs/ckeditor.js"
-			tofile="docroot/html/js/editor/ckeditor_diffs/ckeditor.js.tmp"
-		/>
+		<delete file="docroot/html/js/editor/ckeditor_diffs/ckeditor.js" />
 
 		<antcall target="build-ckeditor">
 			<param name="arg.line" value="--leave-css-unminified --leave-js-unminified" />
 		</antcall>
 
-		<move
-			file="docroot/html/js/editor/ckeditor_diffs/ckeditor.js.tmp"
-			tofile="docroot/html/js/editor/ckeditor_diffs/ckeditor.js"
-		/>
+		<delete file="docroot/html/js/editor/ckeditor_diffs/ckeditor.js" />
  	</target>
 
 	<target name="build-ckeditor-plugins-bbcode">
