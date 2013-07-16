@@ -79,6 +79,11 @@ $dockbarOpenGradientStart: #0EA6F9;
 		margin-bottom: 6px;
 	}
 
+	.input-localized .input-localized-content {
+		margin-left: 6px;
+		margin-top: 0;
+	}
+
 	/* ---------- Dockbar ---------- */
 
 	.dockbar {
