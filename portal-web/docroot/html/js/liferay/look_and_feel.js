@@ -105,7 +105,7 @@ AUI.add(
 		var WORD_SPACING = 'wordSpacing';
 
 		var PortletCSS = {
-			init: function(portletId) {
+			init: function(portletId, cssPortletURL) {
 				var instance = this;
 
 				var curPortletBoundaryId = 'p_p_id_' + portletId + '_';
@@ -174,13 +174,7 @@ AUI.add(
 											},
 											autoLoad: false,
 											showLoading: false,
-											data: {
-												p_l_id: themeDisplay.getPlid(),
-												p_p_id: 113,
-												p_p_state: EXCLUSIVE,
-												doAsUserId: themeDisplay.getDoAsUserIdEncoded()
-											},
-											uri: themeDisplay.getPathMain() + '/portal/render_portlet'
+											uri: cssPortletURL
 										}
 									},
 									{
