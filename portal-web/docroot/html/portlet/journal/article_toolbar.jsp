@@ -46,21 +46,16 @@ if ((article != null) && article.isDraft()) {
 				label: '<%= UnicodeLanguageUtil.get(pageContext, "preview") %>',
 				on: {
 					click: function(event) {
-						var form = A.one('#<portlet:namespace />fm1');
+						event.domEvent.preventDefault();
 
-						var orginalFormAction = form.attr('action');
+						if (!confirm('<%= UnicodeLanguageUtil.get(pageContext, "this-article-has-changes-and-to-preview-the-content-you-have-to-save-the-article-as-draft") %>')) {
+								return false;
+						}
 
-						form.attr('target', '_blank');
+						form.one('#<portlet:namespace /><%= Constants.CMD %>').val('<%= Constants.UPDATE %>');
+						form.one('#<portlet:namespace />isPreview').val('<%= StringPool.TRUE %>');
 
-						form.one('#<portlet:namespace /><%= Constants.CMD %>').val('<%= Constants.PREVIEW %>');
-
-						<portlet:actionURL var="previewURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-							<portlet:param name="struts_action" value="/journal/preview_article_content" />
-						</portlet:actionURL>
-
-						submitForm(form, '<%= previewURL.toString() %>', false);
-
-						form.attr('action', orginalFormAction);
+						submitForm(form);
 					}
 				}
 			}
