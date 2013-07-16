@@ -1,45 +1,50 @@
 <nav class="$nav_css_class navbar site-navigation" id="navigation">
 	<div class="navbar-inner">
+		<button type="button" class="btn btn-navbar">
+			Navigation
+		</button>
 
-		<ul class="nav nav-collapse">
-			#foreach ($nav_item in $nav_items)
-					#set($nav_item_attr_selected="")
-					#set($nav_item_caret="")
-					#set($nav_item_css_class="lfr-nav-item")
-					#set($nav_item_link_css_class="")
+		<div class="nav-collapse">
+			<ul class="nav">
+				#foreach ($nav_item in $nav_items)
+						#set($nav_item_attr_selected="")
+						#set($nav_item_caret="")
+						#set($nav_item_css_class="lfr-nav-item")
+						#set($nav_item_link_css_class="")
 
-				#if ($nav_item.isSelected())
-					#set($nav_item_attr_selected="aria-selected='true'")
-					#set($nav_item_css_class="$nav_item_css_class selected active")
-				#end
-
-				#if ($nav_item.hasChildren())
-					#set($nav_item_caret='<b class="icon-caret-down"></b>')
-					#set($nav_item_css_class="$nav_item_css_class dropdown")
-					#set($nav_item_link_css_class="dropdown-toggle")
-				#end
-
-				<li class="$nav_item_css_class" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected>
-					<a class="$nav_item_link_css_class" href="$nav_item.getURL()" $nav_item.getTarget()>
-						<span>$nav_item.icon() $nav_item.getName() $nav_item_caret</span>
-					</a>
+					#if ($nav_item.isSelected())
+						#set($nav_item_attr_selected="aria-selected='true'")
+						#set($nav_item_css_class="$nav_item_css_class selected active")
+					#end
 
 					#if ($nav_item.hasChildren())
-						<ul class="dropdown-menu child-menu">
-							#foreach ($nav_child in $nav_item.getChildren())
-								#if ($nav_child.isSelected())
-									<li aria-selected="true" class="selected" id="layout_$nav_child.getLayoutId()">
-								#else
-									<li id="layout_$nav_child.getLayoutId()">
-								#end
-									<a href="$nav_child.getURL()" $nav_child.getTarget()>$nav_child.getName()</a>
-								</li>
-							#end
-						</ul>
+						#set($nav_item_caret='<b class="icon-caret-down"></b>')
+						#set($nav_item_css_class="$nav_item_css_class dropdown")
+						#set($nav_item_link_css_class="dropdown-toggle")
 					#end
-				</li>
-			#end
-		</ul>
+
+					<li class="$nav_item_css_class" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected>
+						<a class="$nav_item_link_css_class" href="$nav_item.getURL()" $nav_item.getTarget()>
+							<span>$nav_item.icon() $nav_item.getName() $nav_item_caret</span>
+						</a>
+
+						#if ($nav_item.hasChildren())
+							<ul class="dropdown-menu child-menu">
+								#foreach ($nav_child in $nav_item.getChildren())
+									#if ($nav_child.isSelected())
+										<li aria-selected="true" class="selected" id="layout_$nav_child.getLayoutId()">
+									#else
+										<li id="layout_$nav_child.getLayoutId()">
+									#end
+										<a href="$nav_child.getURL()" $nav_child.getTarget()>$nav_child.getName()</a>
+									</li>
+								#end
+							</ul>
+						#end
+					</li>
+				#end
+			</ul>
+		</div>
 	</div>
 </nav>
 

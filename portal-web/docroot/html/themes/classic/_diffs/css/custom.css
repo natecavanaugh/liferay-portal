@@ -44,7 +44,9 @@ $dockbarOpenGradientStart: #00A0FF;
 		}
 
 		.site-name {
+			color: #333;
 			display: inline-block;
+			line-height: 24px;
 		}
 	}
 
@@ -100,6 +102,7 @@ $dockbarOpenGradientStart: #00A0FF;
 			}
 
 			.nav-account-controls {
+				float: right;
 				left: auto;
 				margin-right: 0;
 				padding: 0 5px;
@@ -117,7 +120,7 @@ $dockbarOpenGradientStart: #00A0FF;
 				border-top-width: 0;
 				position: fixed;
 				top: 10%;
-				z-index: 350;
+				z-index: 1000;
 
 				> li {
 					float: none;
@@ -528,6 +531,209 @@ $dockbarOpenGradientStart: #00A0FF;
 			a, span {
 				@include text-shadow(-1px -1px #000);
 			}
+		}
+	}
+}
+
+@media (min-width: 980px) {
+	.aui {
+		.dockbar {
+			.navbar-inner {
+				.nav-account-controls {
+					-moz-transform: translateY(0px) !important;
+					-ms-transform: translateY(0px) !important;
+					-webkit-transform: translateY(0px) !important;
+					transform: translateY(0px) !important;
+				}
+
+				.nav-account-controls {
+					margin-top: 0 !important;
+				}
+			}
+		}
+
+		.lfr-has-add-content {
+			.nav-add-controls {
+				left: 350px;
+			}
+		}
+	}
+}
+
+@media (max-width: 979px) {
+	.aui {
+		body {
+			margin-top: 30px;
+			padding: 0;
+		}
+
+		#navigation {
+			position: relative;
+
+			.navbar-inner {
+				background: transparent;
+				padding: 0;
+
+				.btn-navbar {
+					color: #FFF;
+					background: #00ACFF;
+					margin-right: 0;
+					margin-bottom: 5px;
+					width: 100%;
+				}
+
+				.nav-collapse {
+					background: #555;
+					padding: 0 10px;
+					position: absolute;
+					top: 100%;
+					width: 100%;
+					z-index: 500;
+
+					.nav {
+						margin: 10px 0;
+						width: 100%;
+
+						> li {
+							width: 100%;
+
+							> a {
+								padding: 12px 15px;
+							}
+						}
+
+						.dropdown-menu {
+							background: #00AEFF;
+							border-radius: 4px;
+							width: 100%;
+						}
+					}
+				}
+			}
+		}
+
+		#wrapper {
+			padding: 1em 20px 0;
+		}
+
+		.dockbar {
+			position: absolute;
+			z-index: 375;
+
+			.navbar-inner {
+				padding: 0;
+
+				button.btn-navbar {
+					position: absolute;
+					right: 0;
+					z-index: 1004;
+				}
+
+				.nav li.dropdown.open > .dropdown-toggle {
+					background: none;
+				}
+
+				.nav-account-controls {
+					-moz-transform: translateY(-100%);
+					-ms-transform: translateY(-100%);
+					-webkit-transform: translateY(-100%);
+					border: 0;
+					margin: 0;
+					padding: 0;
+					position: absolute;
+					right: 0;
+					transform: translateY(-100%);
+					width: 100%;
+					z-index: 1002;
+
+					> li {
+						width: 100%;
+
+						> a {
+							padding: 9px 15px;
+						}
+
+						ul.dropdown-menu {
+							position: relative;
+							width: 100%;
+						}
+					}
+				}
+
+				.nav-add-controls {
+					background: #000;
+					margin: 0;
+					min-height: 40px;
+					position: absolute;
+					top: 0;
+					width: 100%;
+					z-index: 1003;
+
+					> li {
+						float: left;
+						margin: 0 10px;
+
+						a {
+							background: transparent;
+							color: transparent;
+
+							&:focus, &:hover {
+								background: transparent;
+							}
+
+							i {
+								color: #FFF;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.dropdown-menu > li > a {
+			padding: 12px 20px;
+		}
+
+		.lfr-add-panel {
+			top: 45px;
+			width: 250px;
+			z-index: 1001;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		.lfr-has-add-content #wrapper {
+			left: 320px;
+			position: relative;
+		}
+
+		.navbar-static-top {
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		/* Extras */
+
+		#navigation {
+			.nav {
+				> .active > a {
+					@include box-shadow(none);
+				}
+			}
+
+			.navbar-inner {
+				.btn-navbar {
+					@include text-shadow(none);
+				}
+
+				.nav-collapse {
+					@include border-radius(4px);
+					@include box-sizing(border-box);
+				}
+			}
+		}
+
+		.dropdown-menu {
+			@include box-shadow(none);
 		}
 	}
 }

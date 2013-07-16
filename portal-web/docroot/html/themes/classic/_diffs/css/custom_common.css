@@ -229,10 +229,6 @@
 							margin-right: 17px;
 						}
 					}
-
-					li.active > a {
-						background: transparent;
-					}
 				}
 
 				.dropdown-menu {
