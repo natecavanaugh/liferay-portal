@@ -16,6 +16,10 @@ AUI.add(
 
 		var CSS_ACTIVE_AREA = 'active-area';
 
+		var CSS_MESSAGE_ERROR = 'alert alert-error';
+
+		var CSS_MESSAGE_SUCCESS = 'alert alert-success';
+
 		var CSS_TAG_DIALOG = 'portlet-asset-tag-admin-dialog';
 
 		var DRAG_NODE = 'dragNode';
@@ -1591,9 +1595,10 @@ AUI.add(
 						var instance = this;
 
 						var output = A.one(container || instance._portletMessageContainer);
+						var typeClass = 'alert alert-' + type;
 
-						output.removeClass('alert-error').removeClass('alert-success');
-						output.addClass('alert alert-' + type);
+						output.removeClass(CSS_MESSAGE_ERROR).removeClass(CSS_MESSAGE_SUCCESS);
+						output.addClass(typeClass);
 						output.html(message);
 
 						output.show();
