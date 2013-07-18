@@ -40,15 +40,11 @@ long orderId = BeanParamUtil.getLong(order, request, "orderId");
 
 	<c:choose>
 		<c:when test="<%= windowState.equals(LiferayWindowState.POP_UP) %>">
-			<aui:a href="<%= themeDisplay.getURLHome() %>"><img alt="<liferay-ui:message key="logo" />" src="<%= themeDisplay.getCompanyLogo() %>" /></aui:a>
+			<h3 class="header-title">
+				<aui:a href="<%= themeDisplay.getURLHome() %>"><img alt="<liferay-ui:message key="logo" />" src="<%= themeDisplay.getCompanyLogo() %>" /></aui:a>
 
-			<br /><br />
-
-			<span style="font-size: small;">
-			<strong><liferay-ui:message key="invoice" /></strong>
-			</span>
-
-			<br /><br />
+				<liferay-ui:message key="invoice" />
+			</h3>
 		</c:when>
 		<c:otherwise>
 			<liferay-ui:header

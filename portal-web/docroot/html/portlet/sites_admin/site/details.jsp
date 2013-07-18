@@ -179,7 +179,7 @@ if ((liveGroup != null) && (liveGroup.getMembershipRestriction() == GroupConstan
 
 	<c:if test="<%= liveGroup != null %>">
 		<aui:field-wrapper label="site-id">
-			<span class="input-medium uneditable-input">
+			<span class="uneditable-input">
 				<%= liveGroup.getGroupId() %>
 			</span>
 		</aui:field-wrapper>

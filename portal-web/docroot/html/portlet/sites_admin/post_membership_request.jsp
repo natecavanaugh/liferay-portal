@@ -51,10 +51,11 @@ MembershipRequest membershipRequest = (MembershipRequest)request.getAttribute(We
 	<aui:model-context bean="<%= membershipRequest %>" model="<%= MembershipRequest.class %>" />
 
 	<c:if test="<%= Validator.isNotNull(group.getDescription()) %>">
-		<h4><liferay-ui:message key="description" /></h4>
-		<p>
-			<%= HtmlUtil.escape(group.getDescription()) %>
-		</p>
+		<aui:field-wrapper label="description">
+			<p>
+				<%= HtmlUtil.escape(group.getDescription()) %>
+			</p>
+		</aui:field-wrapper>
 	</c:if>
 
 	<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="comments" />
