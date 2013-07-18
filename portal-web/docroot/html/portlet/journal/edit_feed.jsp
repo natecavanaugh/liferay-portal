@@ -146,7 +146,9 @@ if (feed != null) {
 			</c:when>
 			<c:otherwise>
 				<aui:field-wrapper label="id">
-					<%= HtmlUtil.escape(feedId) %>
+					<span class="uneditable-input">
+						<%= HtmlUtil.escape(feedId) %>
+					</span>
 				</aui:field-wrapper>
 			</c:otherwise>
 		</c:choose>

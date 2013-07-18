@@ -128,9 +128,7 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 					<%
 					for (String trackback : StringUtil.split(entry.getTrackbacks())) {
 					%>
-
-						<%= HtmlUtil.escape(trackback) %><br />
-
+						<liferay-ui:input-resource url="<%= HtmlUtil.escape(trackback) %>"  /><br />
 					<%
 					}
 					%>

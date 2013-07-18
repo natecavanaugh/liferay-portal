@@ -131,7 +131,9 @@ if ((liveGroup != null) && (liveGroup.getMembershipRestriction() == GroupConstan
 		</c:when>
 		<c:when test="<%= (liveGroup != null) && liveGroup.isOrganization() %>">
 			<aui:field-wrapper helpMessage="the-name-of-this-site-cannot-be-edited-because-it-belongs-to-an-organization" label="name">
-				<%= HtmlUtil.escape(liveGroup.getDescriptiveName(locale)) %>
+				<span class="uneditable-input">
+					<%= HtmlUtil.escape(liveGroup.getDescriptiveName(locale)) %>
+				</span>
 			</aui:field-wrapper>
 		</c:when>
 		<c:otherwise>
@@ -177,7 +179,9 @@ if ((liveGroup != null) && (liveGroup.getMembershipRestriction() == GroupConstan
 
 	<c:if test="<%= liveGroup != null %>">
 		<aui:field-wrapper label="site-id">
-			<%= liveGroup.getGroupId() %>
+			<span class="uneditable-input">
+				<%= liveGroup.getGroupId() %>
+			</span>
 		</aui:field-wrapper>
 	</c:if>
 </aui:fieldset>
