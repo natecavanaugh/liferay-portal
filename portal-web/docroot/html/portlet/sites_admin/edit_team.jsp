@@ -61,7 +61,7 @@ if (group.isOrganization()) {
 	<aui:fieldset>
 		<c:if test="<%= team != null %>">
 			<aui:field-wrapper label="team-id">
-				<span class="input-small uneditable-input">
+				<span class="uneditable-input">
 					<%= team.getTeamId() %>
 				</span>
 			</aui:field-wrapper>
