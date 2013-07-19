@@ -52,6 +52,7 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.kernel.xml.XPath;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.User;
@@ -890,31 +891,30 @@ public class JournalUtil {
 			JournalArticle article, ThemeDisplay themeDisplay)
 		throws Exception {
 
-		long previewPlid = 0;
-
-		if (Validator.isNotNull(article.getLayoutUuid())) {
-			String articleLayoutUuid = article.getLayoutUuid();
-
-			Layout articleLayout =
+		if ((article != null) && Validator.isNotNull(article.getLayoutUuid())) {
+			Layout layout =
 				LayoutLocalServiceUtil.getLayoutByUuidAndCompanyId(
-					articleLayoutUuid, themeDisplay.getCompanyId());
+					article.getLayoutUuid(), themeDisplay.getCompanyId());
 
-			previewPlid = articleLayout.getPlid();
+			return layout.getPlid();
 		}
 		else {
-			List<Layout> groupLayouts = LayoutLocalServiceUtil.getLayouts(
-				themeDisplay.getScopeGroupId(), false);
+			Layout layout = LayoutLocalServiceUtil.fetchFirstLayout(
+				themeDisplay.getScopeGroupId(), false,
+				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
-			Layout articleLayout = groupLayouts.get(0);
+			if (layout == null) {
+				layout = LayoutLocalServiceUtil.fetchFirstLayout(
+					themeDisplay.getScopeGroupId(), true,
+					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
+			}
 
-			previewPlid = articleLayout.getPlid();
+			if (layout != null) {
+				return layout.getPlid();
+			}
+
+			return themeDisplay.getPlid();
 		}
-
-		if (previewPlid == 0) {
-			previewPlid = themeDisplay.getPlid();
-		}
-
-		return previewPlid;
 	}
 
 	public static Stack<JournalArticle> getRecentArticles(
