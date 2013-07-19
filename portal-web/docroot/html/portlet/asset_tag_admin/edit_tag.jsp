@@ -68,6 +68,8 @@ else {
 </portlet:actionURL>
 
 <aui:form action="<%= editTagURL %>" cssClass="update-tag-form" method="get" name='<%= randomNamespace + "fm" %>'>
+	<div class="hide lfr-message-response" id="tagMessagesEdit"></div>
+
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= tag == null ? Constants.ADD : Constants.UPDATE %>" />
 
 	<aui:model-context bean="<%= tag %>" model="<%= AssetTag.class %>" />
