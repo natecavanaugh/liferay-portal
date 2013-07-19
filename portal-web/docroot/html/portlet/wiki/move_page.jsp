@@ -55,7 +55,9 @@ String newTitle = ParamUtil.get(request, "newTitle", StringPool.BLANK);
 
 			<aui:fieldset>
 				<aui:field-wrapper label="current-title">
-					<%= wikiPage.getTitle() %>
+					<span class="uneditable-input">
+						<%= wikiPage.getTitle() %>
+					</span>
 				</aui:field-wrapper>
 
 				<aui:input name="newTitle" value="<%= newTitle %>" />
@@ -101,7 +103,9 @@ String newTitle = ParamUtil.get(request, "newTitle", StringPool.BLANK);
 
 			<aui:fieldset>
 				<aui:field-wrapper label="current-parent">
-					<%= parentText %>
+					<span class="uneditable-input">
+						<%= parentText %>
+					</span>
 				</aui:field-wrapper>
 
 				<%

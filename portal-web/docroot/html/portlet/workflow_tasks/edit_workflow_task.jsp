@@ -104,7 +104,9 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 					<aui:field-wrapper label="assigned-to">
 						<c:choose>
 							<c:when test="<%= workflowTask.isAssignedToSingleUser() %>">
-								<%= HtmlUtil.escape(PortalUtil.getUserName(workflowTask.getAssigneeUserId(), StringPool.BLANK)) %>
+								<span class="uneditable-input">
+									<%= HtmlUtil.escape(PortalUtil.getUserName(workflowTask.getAssigneeUserId(), StringPool.BLANK)) %>
+								</span>
 							</c:when>
 							<c:otherwise>
 								<liferay-ui:message key="nobody" />
@@ -148,7 +150,9 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 
 				<div class="lfr-asset-status">
 					<aui:field-wrapper label="state">
-						<%= LanguageUtil.get(pageContext, WorkflowInstanceLinkLocalServiceUtil.getState(companyId, groupId, className, classPK)) %>
+						<span class="uneditable-input">
+							<%= LanguageUtil.get(pageContext, WorkflowInstanceLinkLocalServiceUtil.getState(companyId, groupId, className, classPK)) %>
+						</span>
 					</aui:field-wrapper>
 				</div>
 			</aui:col>
@@ -156,13 +160,17 @@ request.setAttribute(WebKeys.WORKFLOW_ASSET_PREVIEW, Boolean.TRUE);
 			<aui:col>
 				<div class="lfr-asset-date">
 					<aui:field-wrapper label="create-date">
-						<%= dateFormatDateTime.format(workflowTask.getCreateDate()) %>
+						<span class="uneditable-input">
+							<%= dateFormatDateTime.format(workflowTask.getCreateDate()) %>
+						</span>
 					</aui:field-wrapper>
 				</div>
 
 				<div class="lfr-asset-due-date">
 					<aui:field-wrapper label="due-date">
-						<%= (workflowTask.getDueDate() == null) ? LanguageUtil.get(pageContext, "never") : dateFormatDateTime.format(workflowTask.getDueDate()) %>
+						<span class="uneditable-input">
+							<%= (workflowTask.getDueDate() == null) ? LanguageUtil.get(pageContext, "never") : dateFormatDateTime.format(workflowTask.getDueDate()) %>
+						</span>
 
 						<c:if test="<%= !workflowTask.isCompleted() %>">
 							<portlet:actionURL var="updateDueDateURL">

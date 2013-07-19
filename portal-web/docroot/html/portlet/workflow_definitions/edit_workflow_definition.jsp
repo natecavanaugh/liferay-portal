@@ -59,7 +59,9 @@ portletURL.setParameter("struts_action", "/workflow_definitions/view");
 	<aui:fieldset>
 		<c:if test="<%= workflowDefinition != null %>">
 			<aui:field-wrapper helpMessage="the-definition-name-is-defined-in-the-workflow-definition-file" label="name">
-				<%= name %>
+				<span class="uneditable-input">
+					<%= name %>
+				</span>
 			</aui:field-wrapper>
 		</c:if>
 

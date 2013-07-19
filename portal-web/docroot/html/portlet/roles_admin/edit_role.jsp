@@ -75,14 +75,18 @@ String subtype = BeanParamUtil.getString(role, request, "subtype");
 			</c:when>
 			<c:when test="<%= (role == null) %>">
 				<aui:field-wrapper label="type">
-					<%= LanguageUtil.get(pageContext, RoleConstants.getTypeLabel(type)) %>
+					<span class="uneditable-input">
+						<%= LanguageUtil.get(pageContext, RoleConstants.getTypeLabel(type)) %>
+					</span>
 				</aui:field-wrapper>
 
 				<aui:input name="type" type="hidden" value="<%= String.valueOf(type) %>" />
 			</c:when>
 			<c:otherwise>
 				<aui:field-wrapper label="type">
-					<%= LanguageUtil.get(pageContext, role.getTypeLabel()) %>
+					<span class="uneditable-input">
+						<%= LanguageUtil.get(pageContext, role.getTypeLabel()) %>
+					</span>
 				</aui:field-wrapper>
 			</c:otherwise>
 		</c:choose>

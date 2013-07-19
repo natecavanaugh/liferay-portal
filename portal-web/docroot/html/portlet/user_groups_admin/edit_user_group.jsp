@@ -64,7 +64,9 @@ long userGroupId = BeanParamUtil.getLong(userGroup, request, "userGroupId");
 	<aui:fieldset>
 		<c:if test="<%= userGroup != null %>">
 			<aui:field-wrapper label="old-name">
-				<%= HtmlUtil.escape(userGroup.getName()) %>
+				<span class="uneditable-input">
+					<%= HtmlUtil.escape(userGroup.getName()) %>
+				</span>
 			</aui:field-wrapper>
 		</c:if>
 
