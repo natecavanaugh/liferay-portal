@@ -886,6 +886,37 @@ public class JournalUtil {
 		return portletURL.toString();
 	}
 
+	public static long getPreviewPlid(
+			JournalArticle article, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		long previewPlid = 0;
+
+		if (Validator.isNotNull(article.getLayoutUuid())) {
+			String articleLayoutUuid = article.getLayoutUuid();
+
+			Layout articleLayout =
+				LayoutLocalServiceUtil.getLayoutByUuidAndCompanyId(
+					articleLayoutUuid, themeDisplay.getCompanyId());
+
+			previewPlid = articleLayout.getPlid();
+		}
+		else {
+			List<Layout> groupLayouts = LayoutLocalServiceUtil.getLayouts(
+				themeDisplay.getScopeGroupId(), false);
+
+			Layout articleLayout = groupLayouts.get(0);
+
+			previewPlid = articleLayout.getPlid();
+		}
+
+		if (previewPlid == 0) {
+			previewPlid = themeDisplay.getPlid();
+		}
+
+		return previewPlid;
+	}
+
 	public static Stack<JournalArticle> getRecentArticles(
 		PortletRequest portletRequest) {
 
