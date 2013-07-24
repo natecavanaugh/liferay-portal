@@ -509,6 +509,8 @@ AUI.add(
 					_showSelectPopup: function(event) {
 						var instance = this;
 
+						event.domEvent.preventDefault();
+
 						instance._showPopup(event);
 
 						instance._popup.titleNode.html(Liferay.Language.get('tags'));
