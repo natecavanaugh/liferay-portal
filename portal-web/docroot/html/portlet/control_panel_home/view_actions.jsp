@@ -21,101 +21,94 @@
 	<%
 	Map<String, List<Portlet>> categoriesMap = PortalUtil.getControlPanelCategoriesMap(request);
 
-	for (String category : categoriesMap.keySet()) {
+	String category = ParamUtil.getString(request, "category");
 	%>
 
-		<aui:col width="<%= 25 %>">
-			<div class="control-panel-home-actions-category">
+	<div class="control-panel-home-actions-category">
+		<c:choose>
+			<c:when test="<%= category.equals(PortletCategoryKeys.APPS) %>">
 				<c:choose>
-					<c:when test="<%= category.equals(PortletCategoryKeys.APPS) %>">
-						<c:choose>
-							<c:when test="<%= PortletLocalServiceUtil.hasPortlet(themeDisplay.getCompanyId(), PortletKeys.MARKETPLACE_APP_MANAGER) %>">
-								<liferay-portlet:renderURL portletName="<%= PortletKeys.MARKETPLACE_APP_MANAGER %>" var="appManagerURL">
-									<portlet:param name="redirect" value="<%= PortalUtil.getCurrentURL(request) %>" />
-								</liferay-portlet:renderURL>
-
-								<p>
-									<liferay-ui:message key="do-you-want-to-manage-the-installed-apps" />
-								</p>
-
-								<aui:button cssClass="btn-primary" href="<%= appManagerURL %>" id="controlPanelHomeActionManageApps" value="manage-apps" />
-							</c:when>
-							<c:otherwise>
-								<liferay-portlet:renderURL portletName="<%= PortletKeys.PLUGINS_ADMIN %>" var="pluginsAdminURL">
-									<portlet:param name="redirect" value="<%= PortalUtil.getCurrentURL(request) %>" />
-								</liferay-portlet:renderURL>
-
-								<p>
-									<liferay-ui:message key="do-you-want-to-manage-the-installed-apps" />
-								</p>
-
-								<aui:button cssClass="btn-primary" href="<%= pluginsAdminURL %>" id="controlPanelHomeActionManageApps" value="manage-apps" />
-							</c:otherwise>
-						</c:choose>
-					</c:when>
-					<c:when test="<%= category.equals(PortletCategoryKeys.CONFIGURATION) %>">
-						<liferay-portlet:renderURL portletName="<%= PortletKeys.PORTAL_SETTINGS %>" var="editPortalSettingsURL">
+					<c:when test="<%= PortletLocalServiceUtil.hasPortlet(themeDisplay.getCompanyId(), PortletKeys.MARKETPLACE_APP_MANAGER) %>">
+						<liferay-portlet:renderURL portletName="<%= PortletKeys.MARKETPLACE_APP_MANAGER %>" var="appManagerURL">
 							<portlet:param name="redirect" value="<%= PortalUtil.getCurrentURL(request) %>" />
 						</liferay-portlet:renderURL>
 
 						<p>
-							<liferay-ui:message key="do-you-want-to-modify-any-settings-of-your-portal" />
+							<liferay-ui:message key="do-you-want-to-manage-the-installed-apps" />
 						</p>
 
-						<aui:button cssClass="btn-primary" href="<%= editPortalSettingsURL %>" id="controlPanelHomeActionPortalSettings" value="edit-portal-settings" />
+						<aui:button cssClass="btn-primary" href="<%= appManagerURL %>" id="controlPanelHomeActionManageApps" value="manage-apps" />
 					</c:when>
-					<c:when test="<%= category.equals(PortletCategoryKeys.SITES) %>">
+					<c:otherwise>
+						<liferay-portlet:renderURL portletName="<%= PortletKeys.PLUGINS_ADMIN %>" var="pluginsAdminURL">
+							<portlet:param name="redirect" value="<%= PortalUtil.getCurrentURL(request) %>" />
+						</liferay-portlet:renderURL>
 
-						<%
-						if (themeDisplay.getRefererPlid() > 0) {
-							Layout refererLayout = LayoutLocalServiceUtil.fetchLayout(themeDisplay.getRefererPlid());
+						<p>
+							<liferay-ui:message key="do-you-want-to-manage-the-installed-apps" />
+						</p>
 
-							if (refererLayout != null) {
-								Group refererGroup = refererLayout.getGroup();
+						<aui:button cssClass="btn-primary" href="<%= pluginsAdminURL %>" id="controlPanelHomeActionManageApps" value="manage-apps" />
+					</c:otherwise>
+				</c:choose>
+			</c:when>
+			<c:when test="<%= category.equals(PortletCategoryKeys.CONFIGURATION) %>">
+				<liferay-portlet:renderURL portletName="<%= PortletKeys.PORTAL_SETTINGS %>" var="editPortalSettingsURL">
+					<portlet:param name="redirect" value="<%= PortalUtil.getCurrentURL(request) %>" />
+				</liferay-portlet:renderURL>
 
-								ThemeDisplay siteThemeDisplay = (ThemeDisplay)themeDisplay.clone();
+				<p>
+					<liferay-ui:message key="do-you-want-to-modify-any-settings-of-your-portal" />
+				</p>
 
-								siteThemeDisplay.setScopeGroupId(refererGroup.getGroupId());
+				<aui:button cssClass="btn-primary" href="<%= editPortalSettingsURL %>" id="controlPanelHomeActionPortalSettings" value="edit-portal-settings" />
+			</c:when>
+			<c:when test="<%= category.equals(PortletCategoryKeys.SITES) %>">
 
-								String buttonLabel = LanguageUtil.format(pageContext, "manage-x", StringUtil.shorten(refererGroup.getDescriptiveName(locale), 35));
+				<%
+				if (themeDisplay.getRefererPlid() > 0) {
+					Layout refererLayout = LayoutLocalServiceUtil.fetchLayout(themeDisplay.getRefererPlid());
 
-								PortletURL siteAdministrationURL = PortalUtil.getSiteAdministrationURL(renderResponse, siteThemeDisplay);
-						%>
+					if (refererLayout != null) {
+						Group refererGroup = refererLayout.getGroup();
 
-								<c:if test="<%= siteAdministrationURL != null %>">
-									<p>
-										<liferay-ui:message key="you-can-manage-the-site-you-are-coming-from" />
-									</p>
+						ThemeDisplay siteThemeDisplay = (ThemeDisplay)themeDisplay.clone();
 
-									<aui:button cssClass="btn-primary" href="<%= siteAdministrationURL.toString() %>" id="controlPanelHomeActionManageSite" value="<%= buttonLabel %>" />
-								</c:if>
+						siteThemeDisplay.setScopeGroupId(refererGroup.getGroupId());
 
-						<%
-							}
-						}
-						%>
+						String buttonLabel = LanguageUtil.format(pageContext, "manage-x", StringUtil.shorten(refererGroup.getDescriptiveName(locale), 35));
 
-					</c:when>
-					<c:when test="<%= category.equals(PortletCategoryKeys.USERS) %>">
-						<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_USER) %>">
-							<liferay-portlet:renderURL portletName="<%= PortletKeys.USERS_ADMIN %>" var="addUserURL">
-								<portlet:param name="struts_action" value="/users_admin/edit_user" />
-								<portlet:param name="redirect" value="<%= PortalUtil.getCurrentURL(request) %>" />
-							</liferay-portlet:renderURL>
+						PortletURL siteAdministrationURL = PortalUtil.getSiteAdministrationURL(renderResponse, siteThemeDisplay);
+				%>
 
+						<c:if test="<%= siteAdministrationURL != null %>">
 							<p>
-								<liferay-ui:message key="do-you-want-to-create-a-user" />
+								<liferay-ui:message key="you-can-manage-the-site-you-are-coming-from" />
 							</p>
 
-							<aui:button cssClass="btn-primary" href="<%= addUserURL %>" id="controlPanelHomeActionAddUser" value="add-user" />
+							<aui:button cssClass="btn-primary" href="<%= siteAdministrationURL.toString() %>" id="controlPanelHomeActionManageSite" value="<%= buttonLabel %>" />
 						</c:if>
-					</c:when>
-				</c:choose>
-			</div>
-		</aui:col>
 
-	<%
-	}
-	%>
+				<%
+					}
+				}
+				%>
 
+			</c:when>
+			<c:when test="<%= category.equals(PortletCategoryKeys.USERS) %>">
+				<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_USER) %>">
+					<liferay-portlet:renderURL portletName="<%= PortletKeys.USERS_ADMIN %>" var="addUserURL">
+						<portlet:param name="struts_action" value="/users_admin/edit_user" />
+						<portlet:param name="redirect" value="<%= PortalUtil.getCurrentURL(request) %>" />
+					</liferay-portlet:renderURL>
+
+					<p>
+						<liferay-ui:message key="do-you-want-to-create-a-user" />
+					</p>
+
+					<aui:button cssClass="btn-primary" href="<%= addUserURL %>" id="controlPanelHomeActionAddUser" value="add-user" />
+				</c:if>
+			</c:when>
+		</c:choose>
+	</div>
 </div>

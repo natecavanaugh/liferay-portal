@@ -31,7 +31,7 @@
 			<aui:col width="<%= 25 %>">
 				<h3 class="control-panel-home-category-header" id='<%= "control-panel-home-category-header" + category %>'><%= title %></h3>
 
-					<ul class="unstyled">
+					<ul class="category-links unstyled">
 
 						<%
 						for (Portlet categoryPortlet : categoryPortlets) {
@@ -62,6 +62,10 @@
 						%>
 
 					</ul>
+
+					<liferay-util:include page="/html/portlet/control_panel_home/view_actions.jsp">
+						<liferay-util:param name="category" value="<%= category %>" />
+					</liferay-util:include>
 			 </aui:col>
 
 		<%
@@ -74,7 +78,5 @@
 			</div>
 		</c:if>
 	</aui:row>
-	<aui:row>
-		<liferay-util:include page="/html/portlet/control_panel_home/view_actions.jsp" />
-	</aui:row>
+
 </aui:container>

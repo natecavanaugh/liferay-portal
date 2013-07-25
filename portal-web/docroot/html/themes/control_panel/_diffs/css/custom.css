@@ -112,7 +112,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 			}
 		}
 
-		ul {
+		ul.category-links {
 			padding-left: 47px;
 
 			li {
@@ -139,13 +139,9 @@ $dockbarOpenGradientStart: #0EA6F9;
 			margin-bottom: 5px;
 		}
 
-		.control-panel-home-actions {
-			margin-top: 100px;
-
-			.control-panel-home-actions-category {
-				color: #8D8D8D;
-				padding-top: 10px;
-			}
+		.control-panel-home-actions-category {
+			color: #8D8D8D;
+			padding: 10px 0 0 47px;
 		}
 
 		/* ---------- Control Panel Home Category Header ---------- */
@@ -198,7 +194,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 			padding-right: 0;
 
 			.brand {
-				&, h1, a {
+				&, a {
 					color: #FFF;
 					font-weight: lighter;
 					text-shadow: none;
@@ -737,6 +733,65 @@ $dockbarOpenGradientStart: #0EA6F9;
 		.form-navigator.well {
 			@include border-radius(0);
 			@include box-shadow(-3px 0px 2px -2px #F5F5F5);
+		}
+	}
+
+	/* ---------- Media Queries ---------- */
+
+	@media (min-width: 1368px) {
+		.control-panel-home-menu {
+			ul.category-links {
+				min-height: 175px;
+			}
+
+			.control-panel-home-actions-category p {
+				min-height: 25px;
+			}
+		}
+	}
+
+	@media (max-width: 1367px) {
+		.control-panel-home-menu {
+			ul.category-links {
+				min-height: 175px;
+			}
+
+			.control-panel-home-actions-category p {
+				min-height: 45px;
+			}
+		}
+	}
+
+	@media (max-width: 979px) {
+		.control-panel-home-menu {
+			.control-panel-home-category-header {
+				font-size: 1.5em;
+			}
+
+			ul.category-links {
+				min-height: 200px;
+				padding-left: 10px;
+			}
+
+			.control-panel-home-actions-category {
+				padding-left: 10px;
+			}
+		}
+	}
+
+	@media (max-width: 767px) {
+		.control-panel-home-menu {
+			ul.category-links {
+				min-height: 0;
+			}
+
+			.control-panel-home-actions-category {
+				margin: 2em 0 5em;
+
+				p {
+					min-height: 0;
+				}
+			}
 		}
 	}
 }
