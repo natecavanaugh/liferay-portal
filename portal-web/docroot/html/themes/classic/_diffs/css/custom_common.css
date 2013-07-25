@@ -56,6 +56,10 @@
 		}
 	}
 
+	form fieldset.fieldset {
+		min-width: 100%;
+	}
+
 	form .accordion-heading .accordion-toggle {
 		padding-left: 0;
 	}
@@ -389,32 +393,17 @@
 
 	/* ---------- Form navigator ---------- */
 
-	@include respond-to(tablet) {
-		.taglib-form-navigator {
-			.form-navigator-content {
-				clear: both;
-				float: none;
-				width: 100%;
-			}
+	table#_15_journalArticleWrapper {
+		display: block;
 
-			.form-navigator.nav.well {
-				border-width: 1px 0 0;
+		> tbody {
+			display: block;
 
-				@include box-shadow(none);
+			> tr {
+				display: block;
 
-				clear: both;
-				float: none;
-				margin: 1em 0 0;
-				padding: 1em 0.5em;
-				width: 100%;
-
-				> li {
-					display: inline-block;
-
-					> a {
-						margin: 0;
-						padding: 0.1em 1em;
-					}
+				> td {
+					display: block;
 				}
 			}
 		}
@@ -622,5 +611,42 @@
 
 	body.yui3-skin-sam .yui3-widget-mask {
 		@include opacity(0.8);
+	}
+
+	/* ---------- Media Queries ---------- */
+
+	/* ---------- Tablet and Below ---------- */
+
+	@media (max-width: 979px) {
+		.taglib-form-navigator {
+			.form-navigator-content {
+				clear: both;
+				float: none;
+				width: 100%;
+			}
+
+			.nav.form-navigator.well {
+				@include box-shadow(none);
+				border-width: 1px 0 0;
+				clear: both;
+				float: none;
+				margin: 1em 0 0;
+				padding: 1em 0.5em;
+				width: 100%;
+
+				> li {
+					display: inline-block;
+
+					> a {
+						margin: 0;
+						padding: 0.1em 1em;
+					}
+				}
+			}
+
+			.nobr {
+				white-space: normal;
+			}
+		}
 	}
 }
