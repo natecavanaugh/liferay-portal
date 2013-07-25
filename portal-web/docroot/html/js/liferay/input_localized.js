@@ -74,7 +74,7 @@ AUI.add(
 						'</a>' +
 					'</td>',
 
-					bindUI: function() {
+					initializer: function() {
 						var instance = this;
 
 						var inputPlaceholder = instance.get(STR_INPUT_PLACEHOLDER);
@@ -379,7 +379,7 @@ AUI.add(
 				unregister: function(id) {
 					var instance = this;
 
-					InputLocalized._instances[id] = null;
+					delete InputLocalized._instances[id];
 				},
 
 				_onInputUserInteraction: function(event) {
