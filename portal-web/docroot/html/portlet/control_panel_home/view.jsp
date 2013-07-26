@@ -78,5 +78,4 @@
 			</div>
 		</c:if>
 	</aui:row>
-
 </aui:container>
