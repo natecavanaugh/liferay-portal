@@ -447,6 +447,8 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 		},
 		['aui-io']
 	);
+
+	Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />title);
 </aui:script>
 
 <aui:script use="aui-base">
@@ -458,7 +460,7 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 			function() {
 				<portlet:namespace />clearSaveDraftIntervalId();
 
-				location.href = '<%= HtmlUtil.escapeJS(PortalUtil.escapeRedirect(redirect)) %>#p_p_id<portlet:namespace />';
+				location.href = '<%= HtmlUtil.escapeJS(PortalUtil.escapeRedirect(redirect)) %>';
 			}
 		);
 	}
@@ -549,7 +551,3 @@ else {
 <%!
 public static final String EDITOR_WYSIWYG_IMPL_KEY = "editor.wysiwyg.portal-web.docroot.html.portlet.blogs.edit_entry.jsp";
 %>
-
-<aui:script use="aui-base">
-	Liferay.Util.focusFormField(A.one('label[for=<portlet:namespace />title]'));
-</aui:script>
