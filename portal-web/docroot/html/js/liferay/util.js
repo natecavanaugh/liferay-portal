@@ -1222,7 +1222,7 @@
 	Liferay.provide(
 		Util,
 		'focusFormField',
-		function(el, caretPosition) {
+		function(el) {
 			Util.addInputFocus();
 
 			var interacting = false;

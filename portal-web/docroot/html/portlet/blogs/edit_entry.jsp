@@ -447,6 +447,8 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 		},
 		['aui-io']
 	);
+
+	Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />title);
 </aui:script>
 
 <aui:script use="aui-base">
