@@ -672,7 +672,43 @@ AUI.add(
 						}
 					);
 
-					return str.replace(/\s/g, '_');
+					var toCompare = str.replace(/\s/g, '_');
+
+					var nodes = A.all('.form-builder-field-node:not(.form-builder-field-selected .form-builder-field-node)')._nodes;
+
+					var hash = {};
+
+					for (var i = 0; i < nodes.length; i++) {
+						hash[nodes[i].name] = true;
+					}
+
+					var justChanged = false;
+
+					do {
+						justChanged = false;
+
+						if (A.Object.hasKey(hash, toCompare)) {
+							justChanged = true;
+
+							if (isNaN(toCompare[toCompare.length - 1])) {
+								toCompare = toCompare + '_' + ++A.Env._uidx;
+							}
+							else {
+								var endNum = parseInt(toCompare.match(/(\d+)$/)[0], 10);
+
+								var stem = toCompare.substring(0, toCompare.length - endNum.toString().length);
+
+								if (stem[stem.length - 1] === '_') {
+									toCompare = stem + ++A.Env._uidx;
+								}
+								else {
+									toCompare = toCompare + '_' + ++A.Env._uidx;
+								}
+							}
+						}
+					} while (justChanged)
+
+					return toCompare;
 				}
 			}
 		);
