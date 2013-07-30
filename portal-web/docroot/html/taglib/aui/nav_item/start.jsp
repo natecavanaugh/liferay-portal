@@ -38,11 +38,16 @@
 	</c:if>
 
 	<c:if test="<%= dropdown %>">
-		<aui:script use="aui-base,event-outside">
+		<aui:script use="aui-base,event-outside,event-move">
+			var EVENT_CLICK = 'gesturemovestart';
+
+			A.Event.defineOutside('touchstart');
+
 			A.one('#<%= id %>').on(
-				'click',
+				EVENT_CLICK,
 				function(event) {
 					var currentTarget = event.currentTarget;
+					var EVENT_CLICKOUTSIDE = event._event.type + 'outside';
 
 					currentTarget.toggleClass('open');
 
@@ -52,7 +57,7 @@
 
 					if (menuOpen && !handle) {
 						handle = currentTarget.on(
-							'clickoutside',
+							EVENT_CLICKOUTSIDE,
 							function(event) {
 								Liferay.Data['<%= id %>Handle'] = null;
 
