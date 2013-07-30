@@ -26,3 +26,5 @@ $FontAwesomePath: "aui/font-awesome/font" !default;
 	line-height: $baseLineHeight;
 	margin: 0;
 }
+
+@import "responsive";

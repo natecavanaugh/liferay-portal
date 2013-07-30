@@ -1,15 +1,17 @@
 AUI.add(
 	'liferay-menu',
 	function(A) {
+		var Browser = Liferay.Browser;
+
 		var Lang = A.Lang;
 
 		var trim = Lang.trim;
 
+		var ARIA_ATTR_ROLE = 'role';
+
 		var ATTR_CLASS_NAME = 'className';
 
 		var AUTO = 'auto';
-
-		var ARIA_ATTR_ROLE = 'role';
 
 		var CSS_BTN_PRIMARY = 'btn-primary';
 
@@ -89,6 +91,26 @@ AUI.add(
 				'<input autocomplete="off" aria-autocomplete="list" aria-expanded="true" aria-labelledby="{searchLabeledBy}" aria-owns="{searchOwns}" class="lfr-menu-list-search" id="{searchId}" role="combobox" type="text">' +
 			'</div>';
 
+		var MenuOverlay = A.Component.create(
+			{
+				NAME: 'overlay',
+
+				AUGMENTS: [
+					A.WidgetCssClass,
+					A.WidgetPosition,
+					A.WidgetStdMod,
+					A.WidgetModality,
+					A.WidgetPositionAlign,
+					A.WidgetPositionConstrain,
+					A.WidgetStack
+				],
+
+				CSS_PREFIX: 'overlay',
+
+				EXTENDS: A.Widget
+			}
+		);
+
 		var Menu = function() {
 			var instance = this;
 
@@ -149,7 +171,7 @@ AUI.add(
 						mapAlignHorizontalTrigger = MAP_ALIGN_HORIZONTAL_TRIGGER_RTL;
 					}
 
-					if (cssClass.indexOf(AUTO) == -1) {
+					if (cssClass.indexOf(AUTO) === -1) {
 						var directionMatch = cssClass.match(REGEX_DIRECTION);
 
 						var direction = (directionMatch && directionMatch[1]) || AUTO;
@@ -173,24 +195,34 @@ AUI.add(
 				var overlay = instance._overlay;
 
 				if (!overlay) {
-					overlay = new A.OverlayBase(
-						{
-							align: {
-								node: trigger,
-								points: DEFAULT_ALIGN_POINTS
-							},
-							constrain: true,
-							hideClass: false,
-							preventOverlap: true,
-							zIndex: Liferay.zIndex.MENU
-						}
-					).render();
+					var config = {
+						align: {
+							node: trigger,
+							points: DEFAULT_ALIGN_POINTS
+						},
+						constrain: true,
+						hideClass: false,
+						preventOverlap: true,
+						zIndex: Liferay.zIndex.MENU
+					};
 
-					var boundingBox = overlay.get('boundingBox');
+					if (Browser.isMobile()) {
+						config = A.merge(
+							config,
+							{
+								align: null,
+								centered: true,
+								modal: true,
+								width: '90%'
+							}
+						);
+					}
+
+					overlay = new MenuOverlay(config).render();
 
 					instance._overlay = overlay;
 				}
-				else {
+				else if (!Browser.isMobile()) {
 					overlay.set('align.node', trigger);
 				}
 
@@ -238,7 +270,7 @@ AUI.add(
 
 					trigger.setData('menuHeight', menuHeight);
 
-					if (menuHeight != AUTO) {
+					if (menuHeight !== AUTO) {
 						listContainer.setStyle('maxHeight', menuHeight);
 					}
 				}
@@ -255,7 +287,7 @@ AUI.add(
 
 				var height = AUTO;
 
-				if (cssClass.indexOf('lfr-menu-expanded') == -1) {
+				if (cssClass.indexOf('lfr-menu-expanded') === -1) {
 					var params = REGEX_MAX_DISPLAY_ITEMS.exec(cssClass);
 
 					var maxDisplayItems = params && parseInt(params[1], 10);
@@ -287,15 +319,28 @@ AUI.add(
 
 					var overlay = instance._overlay;
 
-					var align = overlay.get('align');
-
-					align.points = instance._getAlignPoints(cssClass);
-
 					overlay.show();
 
-					overlay.set('align', align);
+					if (Browser.isMobile()) {
+						overlay.blur();
 
-					if (Liferay.Browser.isIe() && Liferay.Browser.getMajorVersion() <= 7) {
+						overlay.set('centered', true);
+					}
+					else {
+						var align = overlay.get('align');
+
+						align.points = instance._getAlignPoints(cssClass);
+
+						overlay.set('align', align);
+
+						var focusManager = overlay.bodyNode.focusManager;
+
+						if (focusManager) {
+							focusManager.focus(0);
+						}
+					}
+
+					if (Browser.isIe() && Browser.getMajorVersion() <= 7) {
 						var searchContainer = menu.one(SELECTOR_SEARCH_CONTAINER);
 
 						if (searchContainer) {
@@ -310,12 +355,6 @@ AUI.add(
 					}
 					else {
 						trigger.get(PARENT_NODE).addClass(CSS_OPEN);
-					}
-
-					var focusManager = overlay.bodyNode.focusManager;
-
-					if (focusManager) {
-						focusManager.focus(0);
 					}
 				}
 			},
@@ -370,6 +409,46 @@ AUI.add(
 			buffer.push(menuNode);
 
 			Menu._registerTask();
+		};
+
+		Menu._registerMenu = function(event) {
+			var instance = Menu._INSTANCE;
+
+			var handles = instance._handles;
+
+			var trigger = event.currentTarget;
+
+			var activeTrigger = instance._activeTrigger;
+
+			if (activeTrigger && (activeTrigger != trigger)) {
+				activeTrigger.removeClass(CSS_BTN_PRIMARY);
+
+				activeTrigger.get(PARENT_NODE).removeClass(CSS_OPEN);
+			}
+
+			if (!trigger.hasClass('disabled')) {
+				var menu = instance._getMenu(trigger);
+
+				instance._activeMenu = menu;
+				instance._activeTrigger = trigger;
+
+				if (!handles.length) {
+					handles.push(
+						A.getWin().on('resize', A.debounce(instance._positionActiveMenu, 200, instance)),
+						A.getDoc().on(EVENT_CLICK, instance._closeActiveMenu, instance)
+					);
+
+					var DDM = A.DD && A.DD.DDM;
+
+					if (DDM) {
+						handles.push(DDM.on('ddm:start', instance._closeActiveMenu, instance));
+					}
+				}
+
+				instance._positionActiveMenu();
+
+				event.halt();
+			}
 		};
 
 		Menu._registerTask = A.debounce(
@@ -527,55 +606,10 @@ AUI.add(
 			true
 		);
 
-		Liferay.provide(
-			Menu,
-			'_registerMenu',
-			function(event) {
-				var instance = Menu._INSTANCE;
-
-				var handles = instance._handles;
-
-				var trigger = event.currentTarget;
-
-				var activeTrigger = instance._activeTrigger;
-
-				if (activeTrigger && (activeTrigger != trigger)) {
-					activeTrigger.removeClass(CSS_BTN_PRIMARY);
-
-					activeTrigger.get(PARENT_NODE).removeClass(CSS_OPEN);
-				}
-
-				if (!trigger.hasClass('disabled')) {
-					var menu = instance._getMenu(trigger);
-
-					instance._activeMenu = menu;
-					instance._activeTrigger = trigger;
-
-					if (!handles.length) {
-						handles.push(
-							A.getWin().on('resize', A.debounce(instance._positionActiveMenu, 200, instance)),
-							A.getDoc().on(EVENT_CLICK, instance._closeActiveMenu, instance)
-						);
-
-						var DDM = A.DD && A.DD.DDM;
-
-						if (DDM) {
-							handles.push(DDM.on('ddm:start', instance._closeActiveMenu, instance));
-						}
-					}
-
-					instance._positionActiveMenu();
-
-					event.halt();
-				}
-			},
-			['aui-overlay-deprecated']
-		);
-
 		Liferay.Menu = Menu;
 	},
 	'',
 	{
-		requires: ['array-invoke', 'aui-debounce', 'aui-node', 'portal-available-languages']
+		requires: ['array-invoke', 'aui-debounce', 'aui-node', 'aui-widget-cssclass', 'portal-available-languages', 'widget', 'widget-modality', 'widget-position', 'widget-position-align', 'widget-position-constrain', 'widget-stack', 'widget-stdmod']
 	}
 );
