@@ -15,7 +15,7 @@ AUI.add(
 
 		var CSS_PREVIEW_CONTENT = 'lfr-has-device-preview';
 
-		var EVENT_CLICK = 'click';
+		var EVENT_CLICK = 'gesturemovestart';
 
 		var STR_ADD_PANEL = 'addPanel';
 
