@@ -1,4 +1,5 @@
 @import "compass";
+@import "mixins";
 
 @import url(../../classic/css/custom_common.css);
 
@@ -334,6 +335,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 
 		.article-toolbar {
+			height: 0;
 			line-height: 0;
 			margin: 0;
 		}
@@ -344,18 +346,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 
 		.taglib-header {
 			margin-bottom: 0;
-		}
-	}
-
-	.taglib-form-navigator {
-		ul.form-navigator.well {
-			float: right;
-			margin-left: 2.12766%;
-		}
-
-		.form-navigator-content {
-			float: left;
-			margin-left: 0;
 		}
 	}
 
@@ -788,25 +778,15 @@ $dockbarOpenGradientStart: #0EA6F9;
 
 	/* ---------- Media Queries ---------- */
 
-	@media (min-width: 1200px) {
+	/* ---------- Tablet and Below ---------- */
 
-		/* ---------- Form Navigator ---------- */
-
-		.taglib-form-navigator {
-			ul.form-navigator.well {
-				margin-left: 2.5641%;
-			}
-		}
-	}
-
-	@media (max-width: 979px) {
+	@include respond-to(tablet, phone) {
 
 		/* ---------- Form Navigator ---------- */
 
 		ul.form-navigator.well {
 			.button-holder {
 				bottom: 0;
-				margin-left: -7px;
 				position: absolute;
 			}
 		}
@@ -823,7 +803,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 
 		.tabbable-content.taglib-form-navigator {
-			padding-bottom: 35px;
+			padding-bottom: 50px;
 			position: relative;
 		}
 
@@ -834,7 +814,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
-	@media (max-width: 767px) {
+	@include respond-to(phone) {
 
 		/* ---------- Form Navigator ---------- */
 
