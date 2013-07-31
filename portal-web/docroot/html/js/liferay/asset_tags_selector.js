@@ -181,7 +181,7 @@ AUI.add(
 					addEntries: function() {
 						var instance = this;
 
-						instance._onAddEntryClick();
+						instance._addEntries();
 					},
 
 					syncUI: function() {
@@ -194,10 +194,34 @@ AUI.add(
 						A.each(curEntries, instance.add, instance);
 					},
 
+					_addEntries: function() {
+						var instance = this;
+
+						var text = Liferay.Util.escapeHTML(instance.inputNode.val());
+
+						if (text) {
+							if (text.indexOf(',') > -1) {
+								var items = text.split(',');
+
+								A.each(
+									items,
+									function(item, index, collection) {
+										instance.entries.add(item, {});
+									}
+								);
+							}
+							else {
+								instance.entries.add(text, {});
+							}
+						}
+
+						Liferay.Util.focusFormField(instance.inputNode);
+					},
+
 					_bindTagsSelector: function() {
 						var instance = this;
 
-						instance._submitFormListener = A.Do.before(instance._onAddEntryClick, window, 'submitForm', instance);
+						instance._submitFormListener = A.Do.before(instance._addEntries, window, 'submitForm', instance);
 
 						instance.get('boundingBox').on('keypress', instance._onKeyPress, instance);
 					},
@@ -370,33 +394,9 @@ AUI.add(
 					_onAddEntryClick: function(event) {
 						var instance = this;
 
-						if (event) {
-							var domEvent = event.domEvent;
+						event.domEvent.preventDefault();
 
-							if (domEvent) {
-								domEvent.preventDefault();
-							}
-						}
-
-						var text = Liferay.Util.escapeHTML(instance.inputNode.val());
-
-						if (text) {
-							if (text.indexOf(',') > -1) {
-								var items = text.split(',');
-
-								A.each(
-									items,
-									function(item, index, collection) {
-										instance.entries.add(item, {});
-									}
-								);
-							}
-							else {
-								instance.entries.add(text, {});
-							}
-						}
-
-						Liferay.Util.focusFormField(instance.inputNode);
+						instance._addEntries();
 					},
 
 					_onCheckboxClick: function(event) {
@@ -421,9 +421,9 @@ AUI.add(
 						var charCode = event.charCode;
 
 						if (charCode == '44') {
-							instance._onAddEntryClick();
-
 							event.preventDefault();
+
+							instance._addEntries();
 						}
 						else if (MAP_INVALID_CHARACTERS[String.fromCharCode(charCode)]) {
 							event.halt();
