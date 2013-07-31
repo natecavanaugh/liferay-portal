@@ -41,17 +41,17 @@ if (Validator.isNotNull(className) && (classPK > 0)) {
 <span <%= AUIUtil.buildData(data) %> class="aui-helper-hidden portlet-item"></span>
 
 <aui:script use="aui-base">
-	<c:if test="<%= Validator.isNotNull(className) && (classPK > 0) %>">
-		var Util = Liferay.Util;
+	var Util = Liferay.Util;
 
+	Util.getOpener().Liferay.fire('AddContent:refreshContentList');
+
+	<c:if test="<%= Validator.isNotNull(className) && (classPK > 0) %>">
 		Util.getOpener().Liferay.fire(
 			'AddContent:addPortlet',
 			{
 				node: A.one('.portlet-item')
 			}
 		);
-
-		Util.getOpener().Liferay.fire('AddContent:refreshContentList');
 	</c:if>
 
 	Liferay.fire(
