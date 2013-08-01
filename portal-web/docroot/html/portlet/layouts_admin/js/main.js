@@ -46,6 +46,7 @@ AUI.add(
 					setupNode: defaultConfig,
 					themeNode: defaultConfig,
 					themeReferenceNode: defaultConfig,
+					uncompletedProcessMessageNode: defaultConfig,
 					userPreferencesNode: defaultConfig
 				},
 
@@ -851,6 +852,11 @@ AUI.add(
 
 											if (processesNode.one(".background-task-status-in-progress")) {
 												renderInterval = RENDER_INTERVAL_IN_PROGRESS;
+
+												instance._updateUncompletedProcessMessage(true, processesNode.one(".uncompleted-process-message"));
+											}
+											else {
+												instance._updateUncompletedProcessMessage(false, processesNode.one(".uncompleted-process-message"));
 											}
 
 											A.later(renderInterval, instance, instance._renderProcesses);
@@ -1129,6 +1135,29 @@ AUI.add(
 						}
 
 						instance._setLabels('remoteLink', 'selectedRemote', selectedRemote.join(', '));
+					},
+
+					_updateUncompletedProcessMessage: function(isInProgress, content) {
+						var instance = this;
+
+						var uncompletedProcessMessageNode = instance.get('uncompletedProcessMessageNode');
+
+						if (!uncompletedProcessMessageNode) {
+							return;
+						}
+
+						content.show();
+
+						if (isInProgress) {
+							uncompletedProcessMessageNode.addClass('in-progress');
+
+							uncompletedProcessMessageNode.setContent(content);
+
+							uncompletedProcessMessageNode.show();
+						}
+						else if (uncompletedProcessMessageNode.hasClass('in-progress')) {
+							uncompletedProcessMessageNode.setContent(content);
+						}
 					}
 				}
 			}
