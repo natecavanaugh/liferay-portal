@@ -15,7 +15,7 @@ AUI.add(
 
 		var CSS_PREVIEW_CONTENT = 'lfr-has-device-preview';
 
-		var EVENT_CLICK = 'click';
+		var EVENT_CLICK = 'gesturemovestart';
 
 		var STR_ADD_PANEL = 'addPanel';
 
@@ -44,13 +44,12 @@ AUI.add(
 
 					Liferay.once('initDockbar', instance._init, instance);
 
-					var eventHandle = dockBar.on(
-						['focus', 'mousemove', 'touchstart'],
-						function(event) {
+					A.on(
+						'contentready', 
+						function() {
 							Liferay.fire('initDockbar');
-
-							eventHandle.detach();
-						}
+						}, 
+						containerId
 					);
 
 					BODY.addClass('dockbar-ready');
