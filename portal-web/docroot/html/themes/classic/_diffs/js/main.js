@@ -1,19 +1,17 @@
 AUI().ready(
-	'aui-io-request', 'aui-modal', 'liferay-hudcrumbs', 'liferay-navigation-interaction',
+	'aui-io-request', 'aui-modal', 'aui-parse-content', 'liferay-hudcrumbs', 'liferay-navigation-interaction', 'liferay-portlet-url',
 	function(A) {
 		var navigation = A.one('#navigation');
+		var signIn = A.one('li.sign-in a');
+		var siteBreadcrumbs = A.one('#breadcrumbs');
 
 		if (navigation) {
 			navigation.plug(Liferay.NavigationInteraction);
 		}
 
-		var siteBreadcrumbs = A.one('#breadcrumbs');
-
 		if (siteBreadcrumbs) {
 			siteBreadcrumbs.plug(A.Hudcrumbs);
 		}
-
-		var signIn = A.one('li.sign-in a');
 
 		if (signIn) {
 			signIn.on(
@@ -23,12 +21,16 @@ AUI().ready(
 
 					var signInURL = event.currentTarget.attr('href');
 
+					var modalSignInURL = Liferay.PortletURL.createURL(signInURL);
+
+					modalSignInURL.setWindowState('exclusive');
+
 					var redirectPage = function() {
 						A.config.win.location.href = signInURL;
 					};
 
 					A.io.request(
-						signInURL,
+						modalSignInURL.toString(),
 						{
 							on: {
 								failure: redirectPage,
@@ -38,23 +40,25 @@ AUI().ready(
 									var modal;
 
 									if (responseData) {
-										var renderData = A.Node.create(responseData).one('#portlet_58 .portlet-body');
+										modal = new A.Modal(
+											{
+												centered: true,
+												constrain: true,
+												headerContent: '<h3>' + Liferay.Language.get('sign-in') + '</h3>',
+												modal: true,
+												zIndex: 400
+											}
+										).render();
 
-										if (renderData) {
-											modal = new A.Modal(
-												{
-													bodyContent: renderData,
-													centered: true,
-													constrain: true,
-													headerContent: '<h3>' + Liferay.Language.get('sign-in') + '</h3>',
-													modal: true,
-													zIndex: 400
-												}
-											).render();
-										}
+										var bodyNode = modal.get('contentBox').one('.modal-body');
+
+										bodyNode.plug(A.Plugin.ParseContent);
+
+										bodyNode.setContent(responseData);
+
+										modal.align();
 									}
-
-									if (!modal) {
+									else {
 										redirectPage();
 									}
 								}
