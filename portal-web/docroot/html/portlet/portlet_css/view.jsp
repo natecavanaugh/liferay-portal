@@ -118,7 +118,7 @@ if (PropsValues.MOBILE_DEVICE_STYLING_WAP_ENABLED) {
 
 					</aui:select>
 
-					<aui:select label="show-borders" name="show-borders" showEmptyOption="<%= true %>">
+					<aui:select label="show-borders" name="show-borders">
 						<aui:option label="yes" value="true" />
 						<aui:option label="no" value="false" />
 					</aui:select>
