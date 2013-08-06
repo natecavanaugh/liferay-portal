@@ -19,7 +19,7 @@ MDRRuleGroup mdrRuleGroup = MDRRuleGroupLocalServiceUtil.fetchRuleGroup(mdrRuleG
 %>
 
 <liferay-ui:search-container-column-text
-	cssClass="mobile-device-family-action"
+	cssClass="mobile-device-rule"
 	href="<%= rowURL %>"
 	name="name"
 >
@@ -32,7 +32,7 @@ MDRRuleGroup mdrRuleGroup = MDRRuleGroupLocalServiceUtil.fetchRuleGroup(mdrRuleG
 </liferay-ui:search-container-column-text>
 
 <liferay-ui:search-container-column-text
-	cssClass="mobile-device-family-action"
+	cssClass="mobile-device-rule"
 	href="<%= rowURL %>"
 	name="actions"
 >
@@ -59,7 +59,7 @@ MDRRuleGroup mdrRuleGroup = MDRRuleGroupLocalServiceUtil.fetchRuleGroup(mdrRuleG
 
 <c:if test="<%= MDRRuleGroupInstanceServiceUtil.getRuleGroupInstancesCount(className, classPK) > 1 %>">
 	<liferay-ui:search-container-column-text
-		cssClass="mobile-device-family-action"
+		cssClass="mobile-device-rule"
 		href="<%= rowURL %>"
 		property="priority"
 	/>

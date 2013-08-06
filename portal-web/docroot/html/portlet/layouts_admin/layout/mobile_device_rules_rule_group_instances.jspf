@@ -59,9 +59,9 @@ boolean isExclusiveState = windowState.equals(LiferayWindowState.EXCLUSIVE);
 		window,
 		'<portlet:namespace />mobileDeviceActionHandler',
 		function(href) {
-			config.uri = href;
-
 			if (<%= isExclusiveState %>) {
+				config.uri = href;
+
 				Liferay.Util.openWindow(config);
 			}
 			else {
@@ -84,7 +84,7 @@ boolean isExclusiveState = windowState.equals(LiferayWindowState.EXCLUSIVE);
 
 				Liferay.Util.openWindow(config);
 			},
-			'.mobile-device-family-action a'
+			'.mobile-device-rule a'
 		);
 	</c:if>
 </aui:script>
