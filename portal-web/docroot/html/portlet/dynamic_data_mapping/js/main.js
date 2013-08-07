@@ -684,7 +684,7 @@ AUI.add(
 						}
 					);
 
-					while (A.Object.hasKey(hash, key)) {
+					if (hash[key]) {
 						key = key + '_' + A.Env._uidx++;
 					}
 
