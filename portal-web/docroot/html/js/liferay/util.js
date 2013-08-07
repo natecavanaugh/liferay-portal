@@ -1320,6 +1320,29 @@
 
 	Liferay.provide(
 		Util,
+		'openInDialog',
+		function(event) {
+			var currentTarget = A.one(event.currentTarget);
+
+			var config = currentTarget.getData();
+
+			if (!config.uri) {
+				config.uri = currentTarget.getData('href') || currentTarget.attr('href');
+			}
+
+			if (!config.title) {
+				config.title = currentTarget.attr('title');
+			}
+
+			Liferay.Util.openWindow(config);
+
+			event.preventDefault();
+		},
+		['aui-base', 'liferay-util-window']
+	);
+
+	Liferay.provide(
+		Util,
 		'openDDMPortlet',
 		function(config, callback) {
 			var instance = this;

@@ -43,7 +43,7 @@ showSearch = showSearch && !results.isEmpty();
 					windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 				/>
 
-				<aui:nav-item anchorCssClass="use-dialog" href="<%= permissionsURL %>" label="permissions" />
+				<aui:nav-item anchorCssClass="use-dialog" href="<%= permissionsURL %>" label="permissions" title="edit-permissions" />
 			</c:if>
 		</aui:nav>
 

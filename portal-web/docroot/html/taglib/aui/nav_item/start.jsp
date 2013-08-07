@@ -19,32 +19,15 @@
 <li class="<%= cssClass %><%= selected ? " active" : StringPool.BLANK %>" id="<%= id %>" <%= AUIUtil.buildData(data) %> <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>>
 	<c:if test="<%= Validator.isNotNull(iconClass) || Validator.isNotNull(label) %>">
 		<c:if test="<%= Validator.isNotNull(href) %>">
-			<a class="<%= anchorCssClass %>" <%= AUIUtil.buildData(anchorData) %> href="<%= href %>" id="<%= anchorId %>" title="<liferay-ui:message key="<%= title %>" />">
 
-			<c:if test='<%= anchorCssClass.contains("use-dialog") %>'>
-				<aui:script use="aui-base,liferay-util-window">
-					A.one('#<%= id %> > a').on(
-						'click',
-						function(event) {
-							var currentTarget = event.currentTarget;
+			<liferay-util:buffer var="onClickBuffer">
+				<c:if test='<%= anchorCssClass.contains("use-dialog") %>'>
+					onclick="Liferay.Util.openInDialog(event)"
+				</c:if>
+			</liferay-util:buffer>
 
-							var config = currentTarget.getData();
+			<a class="<%= anchorCssClass %>" <%= AUIUtil.buildData(anchorData) %> href="<%= href %>" id="<%= anchorId %>" <%= onClickBuffer %> title="<liferay-ui:message key="<%= title %>" />">
 
-							if (!config.uri) {
-								config.uri = currentTarget.getData('href') || currentTarget.attr('href');
-							}
-
-							if (!config.title) {
-								config.title = currentTarget.attr('title') || '<liferay-ui:message key="<%= label %>" />';
-							}
-
-							Liferay.Util.openWindow(config);
-
-							event.preventDefault();
-						}
-					);
-				</aui:script>
-			</c:if>
 		</c:if>
 				<c:if test="<%= Validator.isNotNull(iconClass) %>">
 					<i class="<%= iconClass %>"></i>
