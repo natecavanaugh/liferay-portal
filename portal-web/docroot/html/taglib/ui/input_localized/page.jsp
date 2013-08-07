@@ -280,6 +280,7 @@ List<String> languageIds = new ArrayList<String>();
 					editor: window.<portlet:namespace /><%= name + fieldSuffix %>,
 				</c:if>
 
+				inputName: '<portlet:namespace /><%= name + StringPool.UNDERLINE %>',
 				inputNamespace: '<portlet:namespace /><%= id + StringPool.UNDERLINE %>',
 				inputPlaceholder: '#<portlet:namespace /><%= HtmlUtil.escapeJS(id + fieldSuffix) %>',
 				items: availableLanguageIds,
