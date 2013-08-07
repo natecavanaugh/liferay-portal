@@ -20,6 +20,31 @@
 	<c:if test="<%= Validator.isNotNull(iconClass) || Validator.isNotNull(label) %>">
 		<c:if test="<%= Validator.isNotNull(href) %>">
 			<a class="<%= anchorCssClass %>" <%= AUIUtil.buildData(anchorData) %> href="<%= href %>" id="<%= anchorId %>" title="<liferay-ui:message key="<%= title %>" />">
+
+			<c:if test='<%= anchorCssClass.contains("use-dialog") %>'>
+				<aui:script use="aui-base,liferay-util-window">
+					A.one('#<%= id %> > a').on(
+						'click',
+						function(event) {
+							var currentTarget = event.currentTarget;
+
+							var config = currentTarget.getData();
+
+							if (!config.uri) {
+								config.uri = currentTarget.getData('href') || currentTarget.attr('href');
+							}
+
+							if (!config.title) {
+								config.title = currentTarget.attr('title') || '<liferay-ui:message key="<%= label %>" />';
+							}
+
+							Liferay.Util.openWindow(config);
+
+							event.preventDefault();
+						}
+					);
+				</aui:script>
+			</c:if>
 		</c:if>
 				<c:if test="<%= Validator.isNotNull(iconClass) %>">
 					<i class="<%= iconClass %>"></i>
