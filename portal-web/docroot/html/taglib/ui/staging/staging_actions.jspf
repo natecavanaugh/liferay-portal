@@ -75,7 +75,7 @@
 				</c:otherwise>
 			</c:choose>
 
-			<aui:nav-item anchorId='<%= layoutSetBranchId + "publishLink" %>' href="<%= publishRenderURL.toString() %>" label="<%= publishMessage %>" />
+			<aui:nav-item anchorId='<%= layoutSetBranchId + "publishLink" %>' cssClass="publish-link" href="<%= publishRenderURL.toString() %>" label="<%= publishMessage %>" />
 
 			<aui:script use="aui-base">
 				var publishLink = A.one('#<portlet:namespace /><%= layoutSetBranchId + "publishLink" %>');
