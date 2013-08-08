@@ -1320,6 +1320,29 @@
 
 	Liferay.provide(
 		Util,
+		'openInDialog',
+		function(event) {
+			var currentTarget = A.one(event.currentTarget);
+
+			var config = currentTarget.getData();
+
+			if (!config.uri) {
+				config.uri = currentTarget.getData('href') || currentTarget.attr('href');
+			}
+
+			if (!config.title) {
+				config.title = currentTarget.attr('title');
+			}
+
+			Liferay.Util.openWindow(config);
+
+			event.preventDefault();
+		},
+		['aui-base', 'liferay-util-window']
+	);
+
+	Liferay.provide(
+		Util,
 		'openDDMPortlet',
 		function(config, callback) {
 			var instance = this;
@@ -2138,7 +2161,7 @@
 		DROP_POSITION: 450,
 		DRAG_ITEM: 460,
 		TOOLTIP: 10000,
-		WINDOW: 1000,
+		WINDOW: 1200,
 		MENU: 5000
 	};
 })(AUI(), Liferay);

@@ -117,7 +117,7 @@
 				}
 				%>
 
-				<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
+				<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
 					<aui:validator name="required" />
 				</aui:input>
 

@@ -19,7 +19,15 @@
 <li class="<%= cssClass %><%= selected ? " active" : StringPool.BLANK %>" id="<%= id %>" <%= AUIUtil.buildData(data) %> <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>>
 	<c:if test="<%= Validator.isNotNull(iconClass) || Validator.isNotNull(label) %>">
 		<c:if test="<%= Validator.isNotNull(href) %>">
-			<a class="<%= anchorCssClass %>" <%= AUIUtil.buildData(anchorData) %> href="<%= href %>" id="<%= anchorId %>" title="<liferay-ui:message key="<%= title %>" />">
+
+			<liferay-util:buffer var="onClickBuffer">
+				<c:if test='<%= anchorCssClass.contains("use-dialog") %>'>
+					onclick="Liferay.Util.openInDialog(event)"
+				</c:if>
+			</liferay-util:buffer>
+
+			<a class="<%= anchorCssClass %>" <%= AUIUtil.buildData(anchorData) %> href="<%= href %>" id="<%= anchorId %>" <%= onClickBuffer %> title="<liferay-ui:message key="<%= title %>" />">
+
 		</c:if>
 				<c:if test="<%= Validator.isNotNull(iconClass) %>">
 					<i class="<%= iconClass %>"></i>

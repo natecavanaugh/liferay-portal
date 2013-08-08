@@ -14,11 +14,10 @@
 
 package com.liferay.portal.kernel.servlet;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 
-import javax.servlet.ServletConfig;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
 /**
@@ -29,15 +28,22 @@ import javax.servlet.http.HttpServlet;
  * @author Olaf Fricke
  * @author Brian Wing Shun Chan
  */
-public class PortalDelegateServlet extends HttpServlet {
+public class PortalDelegateServlet extends SecureServlet {
 
 	@Override
-	public void destroy() {
+	protected void doPortalDestroy() {
 		PortalDelegatorServlet.removeDelegate(_subContext);
+
+		servlet.destroy();
 	}
 
 	@Override
-	public void init(ServletConfig servletConfig) {
+	protected void doPortalInit() throws Exception {
+		ServletContext servletContext = servletConfig.getServletContext();
+
+		ClassLoader classLoader = (ClassLoader)servletContext.getAttribute(
+			PluginContextListener.PLUGIN_CLASS_LOADER);
+
 		String servletClass = servletConfig.getInitParameter("servlet-class");
 
 		_subContext = servletConfig.getInitParameter("sub-context");
@@ -46,26 +52,19 @@ public class PortalDelegateServlet extends HttpServlet {
 			_subContext = getServletName();
 		}
 
-		try {
-			Thread currentThread = Thread.currentThread();
+		servlet = (Servlet)InstanceFactory.newInstance(
+			classLoader, servletClass);
 
-			ClassLoader contextClassLoader =
-				currentThread.getContextClassLoader();
-
-			HttpServlet servlet = (HttpServlet)InstanceFactory.newInstance(
-				contextClassLoader, servletClass);
-
-			servlet.init(servletConfig);
-
-			PortalDelegatorServlet.addDelegate(_subContext, servlet);
+		if (!(servlet instanceof HttpServlet)) {
+			throw new IllegalArgumentException(
+				"servlet-class is not an instance of " +
+					HttpServlet.class.getName());
 		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
+
+		servlet.init(servletConfig);
+
+		PortalDelegatorServlet.addDelegate(_subContext, (HttpServlet)servlet);
 	}
-
-	private static Log _log = LogFactoryUtil.getLog(
-		PortalDelegateServlet.class);
 
 	private String _subContext;
 

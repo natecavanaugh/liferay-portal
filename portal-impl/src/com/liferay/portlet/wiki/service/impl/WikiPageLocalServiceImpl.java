@@ -161,12 +161,14 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		page.setVersion(version);
 		page.setMinorEdit(minorEdit);
 		page.setContent(content);
-		page.setStatus(WorkflowConstants.STATUS_DRAFT);
 		page.setSummary(summary);
 		page.setFormat(format);
 		page.setHead(head);
 		page.setParentTitle(parentTitle);
 		page.setRedirectTitle(redirectTitle);
+		page.setStatus(WorkflowConstants.STATUS_DRAFT);
+		page.setStatusByUserId(userId);
+		page.setStatusDate(serviceContext.getModifiedDate(now));
 		page.setExpandoBridgeAttributes(serviceContext);
 
 		wikiPagePersistence.update(page);
