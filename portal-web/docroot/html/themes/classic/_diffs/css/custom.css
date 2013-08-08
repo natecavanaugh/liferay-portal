@@ -1,4 +1,5 @@
 @import "compass";
+@import "compass/css3/user-interface";
 @import "mixins";
 
 @import url(custom_common.css);
@@ -401,16 +402,144 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
-	/* ---------- Staging ---------- */
+	/* ---------- Staging Bar ---------- */
 
-	.staging-tabview-list {
-		padding: 0 1em;
+	.layout-revision-details {
+		float: left;
+		margin-bottom: 10px;
+		width: 100%;
+
+		.layout-revision-toolbar.toolbar {
+			margin: 0;
+
+			.btn {
+				background: none;
+				border-width: 0;
+				color: #FFF;
+
+				@include box-shadow(none);
+
+				font-size: 11px;
+				margin: 0 5px 0 0;
+				padding: 0;
+
+				text-decoration: underline;
+				@include text-shadow(none);
+
+				&:hover {
+					text-decoration: none;
+				}
+			}
+		}
 	}
 
-	.staging-tabview-content {
-		margin: 0 5em
+	.navbar-inner .nav.staging-nav-items {
+		border-top-width: 0;
+		position: static;
+
+		li {
+			&.active {
+				> span {
+					display: block;
+					line-height: 31px;
+					padding: 6px 15px;
+				}
+
+				.dropdown-toggle {
+					background: transparent;
+				}
+			}
+
+			a {
+				padding: 6px 15px;
+			}
+
+			.page-variations {
+				clear: both;
+				margin-bottom: 10px;
+				text-decoration: underline;
+
+				&:hover {
+					text-decoration: none;
+				}
+
+				a {
+					padding: 6px 15px 6px 0;
+					text-decoration: none;
+				}
+			}
+		}
+
+		li.dropdown {
+			position: static;
+
+			.dropdown-menu li {
+				&.publish-link {
+					font-size: 16px;
+					padding: 10px 0 15px;
+					text-align: center;
+
+					a {
+						background-color: #00BE18;
+
+						@include border-radius(4px);
+
+						@include box-shadow(0px 3px 0px 0px #009212);
+
+						display: inline;
+
+						&:hover {
+							background-color: #02A517;
+						}
+					}
+				}
+
+				a:hover {
+					background-color: transparent;
+				}
+			}
+		}
 	}
 
+	.page-variation-label, .site-pages-variation-label {
+		font-weight: 300;
+	}
+
+	.page-variations-options, .site-pages-variation-options {
+		padding: 0 15px;
+	}
+
+	.site-pages-variation-options {
+		position: relative;
+
+		.icon-angle-right {
+			font-size: 30px;
+			position: absolute;
+			right: -14px;
+			top: 38px;
+		}
+	}
+
+	.staging-bar {
+		select {
+			width: 100%;
+		}
+
+		span.dropdown-toggle {
+			cursor: pointer;
+
+			@include user-select(none);
+		}
+
+		.dropdown-menu.site-variations {
+			font-size: 12px;
+			width: 100%;
+		}
+	}
+
+	.variations-content {
+		clear: both;
+	}
 
 	/* ---------- Footer ---------- */
 
