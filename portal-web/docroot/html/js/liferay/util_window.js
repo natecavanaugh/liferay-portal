@@ -76,11 +76,29 @@ AUI.add(
 
 					var modal = instance._getWindow(config);
 
+					var hasDevicePreview = A.getBody().hasClass('lfr-has-device-preview');
+
+					var iframeNode = null;
+
+					if (hasDevicePreview) {
+						var iframe = A.one('.lfr-device-preview iframe');
+
+						iframeNode = iframe.get('contentWindow').get('document').one('body');
+
+						if (iframeNode) {
+							modal.set('autoSizeNode', A.one('.lfr-device-content'));
+
+							if (config.render && config.render !== true) {
+								iframeNode = iframeNode.one(config.render.get('id')) || iframeNode;
+							}
+						}
+					}
+
 					instance._setWindowDefaultSizeIfNeeded(modal);
 
 					instance._bindDOMWinResizeIfNeeded();
 
-					modal.render();
+					modal.render(iframeNode);
 
 					return modal;
 				},
