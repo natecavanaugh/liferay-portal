@@ -4,12 +4,11 @@
 .aui {
 	body {
 		color: #555;
-		font-weight: lighter;
+		font-weight: 300;
 	}
 
 	a {
 		color: #009AE5;
-		font-weight: lighter;
 
 		&:hover {
 			color: #009AE5;
@@ -92,14 +91,14 @@
 		margin-left: 6px;
 	}
 
+	li {
+		line-height: 27px;
+	}
+
 	select:focus {
 		border: 1px solid rgba(0, 172, 255, 0.8);
 		outline: 5px auto rgba(82, 168, 236, 0.6);
 		outline-offset: -2px;
-	}
-
-	li {
-		line-height: 27px;
 	}
 
 	.form-search, .lfr-translation-manager-selector {
@@ -206,9 +205,28 @@
 	/* ---------- Dockbar ---------- */
 
 	.dockbar-split {
-		.dockbar .navbar-inner {
-			background: none;
-			visibility: hidden;
+		.dockbar {
+			.nav {
+				li.dropdown {
+					> .dropdown-toggle {
+						@extend %dockbar-caret;
+					}
+
+					&.open, &.active, &.open.active {
+						> .dropdown-toggle {
+							background-color: transparent;
+							color: #FFF;
+
+							@extend %dockbar-caret;
+						}
+					}
+				}
+			}
+
+			.navbar-inner {
+				background: none;
+				visibility: hidden;
+			}
 		}
 
 		&.dockbar-ready .dockbar .navbar-inner {
@@ -268,20 +286,22 @@
 					}
 				}
 
-				.dropdown-menu {
+				.dropdown-menu , .site-administration-menu {
 					background: #009AE5;
 					border-width: 0;
 					left: 0;
 					margin: 0;
 					right: auto;
 
-					li a {
+					> li > a {
 						color: #FFF;
 						font-size: 0.9em;
-						font-weight: lighter;
+						font-weight: 300;
 
 						&:hover {
 							background: #2FA4F5;
+
+							@include filter-gradient(#2FA4F5, #2FA4F5, vertical);
 						}
 
 						[class^="icon-"], [class*=" icon-"] {

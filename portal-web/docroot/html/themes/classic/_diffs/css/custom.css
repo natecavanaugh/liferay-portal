@@ -81,33 +81,64 @@ $dockbarOpenGradientStart: #0EA6F9;
 
 	/* ---------- Dockbar ---------- */
 
-	.dockbar-split .dockbar {
-		.navbar-inner {
-			.nav {
-				background-color: $dockbarGradientEnd;
-				border-top: 1px solid #00AEFF;
-
-				li.dropdown.open > .dropdown-toggle {
-					background-color: $dockbarOpenGradientStart;
-				}
+	.dockbar {
+		&.navbar {
+			.nav > li > a {
+				padding: 6px 15px;
 			}
 
-			.nav-add-controls {
-				background: transparent;
-				border-top-width: 0;
+			.staging-bar .staging-nav-items li.active > span {
+				padding: 6px 15px;
+				line-height: 31px;
+			}
+		}
 
-				> li {
-					> a {
-						background: #45CBF5;
-						line-height: inherit;
+		.staging-nav-items {
+			.site-variations {
+				color: #FFF;
 
-						&:hover {
-							background: #5BBAE8;
-						}
+				li a {
+					color: #FFF;
+					font-weight: 400;
+				}
 
-						&.toggle-controls-link {
-							background: #92F545;
-						}
+				.btn-link {
+					color: #FFF;
+					font-size: 12px;
+				}
+			}
+		}
+	}
+
+	.dockbar-split .dockbar .navbar-inner {
+		.nav {
+			background-color: $dockbarGradientEnd;
+
+			li.dropdown.open > .dropdown-toggle {
+				background-color: $dockbarOpenGradientStart;
+			}
+		}
+
+		.nav-account-controls {
+			border-top: 1px solid #00AEFF;
+		}
+
+		.nav-add-controls {
+			background: transparent;
+			border-top-width: 0;
+
+			> li {
+				> a {
+					background: #45CBF5;
+					line-height: inherit;
+					padding: 6px 8px;
+
+					&:hover {
+						background: #5BBAE8;
+					}
+
+					&.toggle-controls-link {
+						background: #92F545;
 					}
 				}
 			}
@@ -297,16 +328,49 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
-	/* ---------- Staging ---------- */
+	/* ---------- Staging Bar ---------- */
 
-	.staging-tabview-list {
-		padding: 0 1em;
+	.navbar-inner .nav.staging-nav-items {
+		border-top-width: 0;
+		position: static;
+
+		li {
+			&.active {
+				.dropdown-toggle {
+					background: transparent;
+				}
+			}
+
+			.page-variations {
+				clear: both;
+				margin-bottom: 10px;
+				text-decoration: underline;
+
+				&:hover {
+					text-decoration: none;
+				}
+
+				a {
+					padding: 6px 15px 6px 0;
+					text-decoration: none;
+				}
+			}
+		}
+
+		li.dropdown {
+			position: static;
+
+			.dropdown-menu li {
+				.publish-link-container a:hover {
+					background-color: #C4D72C;
+				}
+
+				a:hover {
+					background-color: transparent;
+				}
+			}
+		}
 	}
-
-	.staging-tabview-content {
-		margin: 0 5em
-	}
-
 
 	/* ---------- Footer ---------- */
 
@@ -442,9 +506,11 @@ $dockbarOpenGradientStart: #0EA6F9;
 		@include box-shadow(none);
 	}
 
-	.dockbar-split .dockbar {
+	.dockbar {
 		.navbar-inner {
+			@include background-image(linear-gradient($dockbarGradientStart 0%, $dockbarGradientStart 47%, $dockbarGradientEnd 100%));
 			@include box-shadow(none);
+			@include filter-gradient($dockbarGradientStart, $dockbarGradientEnd, vertical);
 			@include text-shadow(none);
 
 			.nav {
@@ -454,7 +520,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 				}
 			}
 
-			.nav-account-controls {
+			.nav-account-controls, .staging-nav-items {
 				@include background-image(linear-gradient($dockbarGradientStart 0%, $dockbarGradientStart 47%, $dockbarGradientEnd 100%));
 			}
 		}
