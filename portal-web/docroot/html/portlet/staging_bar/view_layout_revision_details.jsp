@@ -38,8 +38,10 @@ if (workflowEnabled) {
 }
 
 String taglibHelpMessage = null;
+String statusMessage = null;
 
 if (layoutRevision.isHead()) {
+	statusMessage = "ready-for-publication";
 	taglibHelpMessage = LanguageUtil.format(pageContext, "this-version-will-be-published-when-x-is-published-to-live", HtmlUtil.escape(layoutSetBranch.getName()));
 }
 else if (hasWorkflowTask) {
@@ -50,6 +52,8 @@ else {
 }
 %>
 
+<span class="layout-revision-toolbar" id="<portlet:namespace />layoutRevisionToolbar"></span>
+
 <div class="layout-actions">
 	<c:choose>
 		<c:when test="<%= layoutRevision.getStatus() == WorkflowConstants.STATUS_INCOMPLETE %>">
@@ -58,12 +62,12 @@ else {
 		<c:otherwise>
 			<aui:model-context bean="<%= layoutRevision %>" model="<%= LayoutRevision.class %>" />
 
-			<aui:workflow-status helpMessage="<%= taglibHelpMessage %>" status="<%= layoutRevision.getStatus() %>" statusMessage='<%= layoutRevision.isHead() ? "ready-for-publication" : null %>' version="<%= String.valueOf(layoutRevision.getLayoutRevisionId()) %>" />
+			<c:if test="<%= Validator.isNotNull(statusMessage) %>">
+				<liferay-ui:message key="<%= statusMessage %>" />
+			</c:if>
 		</c:otherwise>
 	</c:choose>
 </div>
-
-<span class="layout-revision-toolbar" id="<portlet:namespace />layoutRevisionToolbar"></span>
 
 <aui:script position="inline" use="liferay-staging-version">
 	var stagingBar = Liferay.StagingBar;

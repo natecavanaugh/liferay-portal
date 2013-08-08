@@ -1,4 +1,5 @@
 @import "compass";
+@import "compass/css3/user-interface";
 @import "mixins";
 
 @import url(custom_common.css);
@@ -403,14 +404,151 @@ $dockbarOpenGradientStart: #0EA6F9;
 
 	/* ---------- Staging ---------- */
 
+	.layout-revision-details {
+		float: left;
+		width: 100%;
+
+		.layout-actions {
+			float: right;
+			font-size: 11px;
+		}
+
+		.layout-revision-toolbar.toolbar {
+			margin: 0;
+
+			.btn {
+				background: none;
+				border-width: 0;
+				color: #FFF;
+
+				@include box-shadow(none);
+
+				font-size: 11px;
+				margin: 0 5px 0 0;
+				padding: 0;
+
+				@include text-shadow(none);
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
+	.navbar-inner .nav.staging-tabview-list {
+		border-top-width: 0;
+
+		li.dropdown .dropdown-menu li {
+			&.publish-link {
+				a {
+					background-color: #00BE18;
+
+					&:hover {
+						background-color: #02A517;
+					}
+				}
+			}
+
+			a:hover {
+				background-color: transparent;
+			}
+		}
+	}
+
+	.page-variations-options, .site-pages-variation-options {
+		padding: 0 15px;
+	}
+
+	.staging-bar {
+		position: relative;
+
+		li.publish-link {
+			padding: 10px 0 15px;
+			text-align: center;
+
+			a {
+				@include border-radius(4px);
+
+				@include box-shadow(0px 3px 0px 0px #009212);
+
+				display: inline;
+			}
+		}
+
+		select {
+			width: 100%;
+		}
+
+		span.dropdown-toggle {
+			cursor: pointer;
+
+			@include user-select(none);
+		}
+
+		.site-variations-nav-tabs {
+			position: absolute;
+
+			li {
+				width: 100%;
+			}
+		}
+
+		.staging-tabview-content {
+			display: block;
+			position: fixed;
+			top: 350px;
+			left: 0;
+			right: 0;
+		}
+	}
+
 	.staging-tabview-list {
-		padding: 0 1em;
-	}
+		&.nav > li {
+			> a, .navbar .nav > li > a {
+				padding: 6px 15px;
+			}
 
-	.staging-tabview-content {
-		margin: 0 5em
-	}
+			&.dropdown.active, &.dropdown.open {
+				> .dropdown-toggle {
+					background-color: transparent;
+				}
+			}
 
+			&.staging-link {
+				> span {
+					display: block;
+					float: none;
+					line-height: 31px;
+					padding: 6px 15px;
+				}
+			}
+		}
+
+		li {
+			a {
+				border-width: 0;
+				margin: 0;
+				padding: 6px 15px;
+			}
+
+			&.active {
+				> span {
+					display: block;
+					line-height: 31px;
+					padding: 6px 15px;
+				}
+			}
+
+			.manage-page-variations-tab, .manage-layout-set-branches-tab {
+				clear: both;
+
+				a {
+					padding: 6px 15px 6px 0;
+				}
+			}
+		}
+	}
 
 	/* ---------- Footer ---------- */
 
