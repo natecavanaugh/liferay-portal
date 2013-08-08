@@ -1,30 +1,29 @@
-<nav class="$nav_css_class" id="navigation">
-	<h1>
-		<span>#language ("navigation")</span>
-	</h1>
-
-	<ul>
+<nav class="$nav_css_class" id="navigation" role="navigation">
+	<ul role="menubar">
 		#foreach ($nav_item in $nav_items)
 			#if ($nav_item.isSelected())
-				<li aria-selected="true" class="selected" id="layout_$nav_item.getLayoutId()">
+				<li aria-selected="true" class="selected" id="layout_$nav_item.getLayoutId()" role="presentation">
 			#else
-				<li id="layout_$nav_item.getLayoutId()">
+				<li id="layout_$nav_item.getLayoutId()" role="presentation">
 			#end
-				<a href="$nav_item.getURL()" $nav_item.getTarget()><span>$nav_item.icon() $nav_item.getName()</span></a>
 
-				#if ($nav_item.hasChildren())
-					<ul class="child-menu">
-						#foreach ($nav_child in $nav_item.getChildren())
-							#if ($nav_child.isSelected())
-								<li aria-selected="true" class="selected" id="layout_$nav_child.getLayoutId()">
-							#else
-								<li id="layout_$nav_child.getLayoutId()">
-							#end
-								<a href="$nav_child.getURL()" $nav_child.getTarget()>$nav_child.getName()</a>
-							</li>
+			#if ($nav_item.hasChildren())
+				<a aria-haspopup="true" href="$nav_item.getURL()" $nav_item.getTarget() role="menuitem"><span>$nav_item.icon() $nav_item.getName()</span></a>
+
+				<ul class="child-menu" role="menu">
+					#foreach ($nav_child in $nav_item.getChildren())
+						#if ($nav_child.isSelected())
+							<li aria-selected="true" class="selected" id="layout_$nav_child.getLayoutId()" role="presentation">
+						#else
+							<li id="layout_$nav_child.getLayoutId()" role="presentation">
 						#end
-					</ul>
-				#end
+							<a href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
+						</li>
+					#end
+				</ul>
+			#else
+				<a aria-haspopup="false" href="$nav_item.getURL()" $nav_item.getTarget() role="menuitem"><span>$nav_item.icon() $nav_item.getName()</span></a>
+			#end
 			</li>
 		#end
 	</ul>
