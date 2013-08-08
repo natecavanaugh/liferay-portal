@@ -631,4 +631,8 @@
 	body.yui3-skin-sam .yui3-widget-mask {
 		@include opacity(0.8);
 	}
+
+	.control-group label, .field-container label {
+		margin-left: 0;
+	}
 }
