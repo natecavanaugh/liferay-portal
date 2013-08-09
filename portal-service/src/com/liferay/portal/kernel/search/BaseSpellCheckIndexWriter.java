@@ -17,15 +17,25 @@ package com.liferay.portal.kernel.search;
 import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.nio.charset.CharsetEncoderUtil;
+import com.liferay.portal.kernel.util.Base64;
+import com.liferay.portal.kernel.util.Digester;
+import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.util.PortletKeys;
 
 import java.io.InputStream;
 
 import java.net.URL;
+
+import java.nio.CharBuffer;
+import java.nio.charset.CharsetEncoder;
 
 /**
  * @author Michael C. Han
@@ -74,6 +84,56 @@ public abstract class BaseSpellCheckIndexWriter
 		}
 
 		return url;
+	}
+
+	protected String getUID(
+		long companyId, String languageId, String word, String... parameters) {
+
+		StringBundler uidSB = new StringBundler();
+
+		uidSB.append(String.valueOf(companyId));
+		uidSB.append(StringPool.UNDERLINE);
+		uidSB.append(PortletKeys.SEARCH);
+		uidSB.append(_PORTLET_SEPARATOR);
+
+		int length = 4;
+
+		if (parameters != null) {
+			length += parameters.length;
+		}
+
+		try {
+			CharsetEncoder charsetEncoder =
+				CharsetEncoderUtil.getCharsetEncoder(StringPool.UTF8);
+
+			StringBundler keySB = new StringBundler(length);
+
+			keySB.append(languageId);
+			keySB.append(StringPool.UNDERLINE);
+			keySB.append(word);
+			keySB.append(StringPool.UNDERLINE);
+
+			keySB.append(word.toLowerCase());
+
+			if (parameters != null) {
+				for (String parameter : parameters) {
+					keySB.append(parameter);
+					keySB.append(StringPool.UNDERLINE);
+				}
+			}
+
+			String key = keySB.toString();
+
+			byte[] bytes = DigesterUtil.digestRaw(
+				Digester.MD5, charsetEncoder.encode(CharBuffer.wrap(key)));
+
+			uidSB.append(Base64.encode(bytes));
+		}
+		catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
+
+		return uidSB.toString();
 	}
 
 	protected void indexDictionary(long companyId, String languageId)
@@ -128,6 +188,10 @@ public abstract class BaseSpellCheckIndexWriter
 	protected abstract void indexDictionary(
 			long companyId, String languageId, InputStream inputStream)
 		throws Exception;
+
+	protected static final String DICTIONARY_TYPE = "dictionary";
+
+	private static final String _PORTLET_SEPARATOR = "_PORTLET_";
 
 	private static final String[] _SUPPORTED_LOCALES = StringUtil.split(
 		PropsUtil.get(PropsKeys.INDEX_SEARCH_SPELL_CHECKER_SUPPORTED_LOCALES));
