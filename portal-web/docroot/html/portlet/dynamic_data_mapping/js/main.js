@@ -672,7 +672,23 @@ AUI.add(
 						}
 					);
 
-					return str.replace(/\s/g, '_');
+					var key = str.replace(/\s/g, '_');
+
+					var formBuilderFields = A.all('.form-builder-field-node:not(.form-builder-field-selected .form-builder-field-node)');
+
+					var hash = {};
+
+					formBuilderFields.each(
+						function(item, index, collection) {
+							hash[item.attr('name')] = true;
+						}
+					);
+
+					if (hash[key]) {
+						key = key + '_' + A.Env._uidx++;
+					}
+
+					return key;
 				}
 			}
 		);
