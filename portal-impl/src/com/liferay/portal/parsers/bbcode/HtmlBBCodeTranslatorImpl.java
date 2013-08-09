@@ -249,7 +249,7 @@ public class HtmlBBCodeTranslatorImpl implements BBCodeTranslator {
 		for (int i = 0; i < lines.length; i++) {
 			String index = String.valueOf(i + 1);
 
-			sb.append("<span class=\"line-number\">");
+			sb.append("<span class=\"number\">");
 			sb.append(index);
 			sb.append("</span>");
 		}
