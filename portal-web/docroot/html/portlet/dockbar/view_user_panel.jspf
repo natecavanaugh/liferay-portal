@@ -15,6 +15,8 @@
 --%>
 
 <aui:nav cssClass="nav-account-controls">
+	<li class="bg" />
+
 	<%@ include file="/html/portlet/dockbar/view_admin_links.jspf" %>
 
 	<%@ include file="/html/portlet/dockbar/view_my_sites.jspf" %>

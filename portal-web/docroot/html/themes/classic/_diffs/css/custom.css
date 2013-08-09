@@ -107,6 +107,13 @@ $dockbarOpenGradientStart: #0EA6F9;
 				right: 5em;
 				z-index: 325;
 
+				.bg {
+					height: 100%;
+					margin-left: -5px;
+					position: absolute;
+					width: 100%;
+				}
+
 				> li > a {
 					padding: 6px 15px;
 				}
@@ -565,7 +572,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 				}
 			}
 
-			.nav-account-controls {
+			.nav-account-controls .bg {
 				@include background-image(linear-gradient($dockbarGradientStart 0%, $dockbarGradientStart 47%, $dockbarGradientEnd 100%));
 				@include filter-gradient($dockbarGradientStart, $dockbarGradientEnd, vertical);
 			}
