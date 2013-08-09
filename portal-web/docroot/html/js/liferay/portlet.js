@@ -508,7 +508,7 @@
 
 				if (canEditTitle) {
 					var handle = portlet.on(
-						['focus', 'mousedown', 'mousemove'],
+						['focus', 'gesturemovestart'],
 						function(event) {
 							Util.portletTitleEdit(
 								{
@@ -550,7 +550,7 @@
 				}
 			}
 		},
-		['aui-base', 'aui-timer']
+		['aui-base', 'aui-timer', 'event-move']
 	);
 
 	Liferay.provide(
