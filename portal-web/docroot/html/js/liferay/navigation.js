@@ -631,11 +631,11 @@ AUI.add(
 				var instance = this;
 
 				if (instance.get('isSortable')) {
-					var navBlock = instance.get('navBlock');
+					var navList = instance.get('navBlock').one('ul.nav');
 
 					var sortable = new A.Sortable(
 						{
-							container: navBlock,
+							container: navList,
 							moveType: 'move',
 							nodes: '.lfr-nav-sortable',
 							opacity: '.5',
