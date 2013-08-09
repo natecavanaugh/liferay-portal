@@ -1,6 +1,8 @@
 AUI.add(
 	'liferay-input-localized',
 	function(A) {
+		var Lang = A.Lang;
+
 		var AArray = A.Array;
 
 		var STR_INPUT_PLACEHOLDER = 'inputPlaceholder';
@@ -31,7 +33,13 @@ AUI.add(
 
 					editor: {},
 
-					inputNamespace: {},
+					inputName: {
+						validator: Lang.isString
+					},
+
+					inputNamespace: {
+						validator: Lang.isString
+					},
 
 					inputPlaceholder: {
 						setter: A.one
@@ -76,7 +84,7 @@ AUI.add(
 				prototype: {
 					BOUNDING_TEMPLATE: '<span />',
 
-					INPUT_HIDDEN_TEMPLATE: '<input id="{inputNamespace}{value}" name="{inputNamespace}{value}" type="hidden" value="" />',
+					INPUT_HIDDEN_TEMPLATE: '<input id="{inputNamespace}{value}" name="{inputName}{value}" type="hidden" value="" />',
 
 					ITEM_TEMPLATE: '<td class="palette-item {selectedClassName}" data-column={column} data-index={index} data-row={row} data-value="{value}">' +
 						'<a href="" class="palette-item-inner" onclick="return false;">' +
@@ -237,6 +245,7 @@ AUI.add(
 						var instance = this;
 
 						var boundingBox = instance.get('boundingBox');
+						var inputName = instance.get('inputName');
 						var inputNamespace = instance.get('inputNamespace');
 
 						var inputLanguage = boundingBox.one('#' + inputNamespace + languageId);
@@ -246,6 +255,7 @@ AUI.add(
 								A.Lang.sub(
 									instance.INPUT_HIDDEN_TEMPLATE,
 									{
+										inputName: inputName,
 										inputNamespace: inputNamespace,
 										value: languageId
 									}
