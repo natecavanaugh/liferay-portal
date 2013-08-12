@@ -19,7 +19,7 @@
 <li class="<%= cssClass %><%= selected ? " active" : StringPool.BLANK %>" id="<%= id %>" <%= AUIUtil.buildData(data) %> <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>>
 	<c:if test="<%= Validator.isNotNull(iconClass) || Validator.isNotNull(label) %>">
 		<c:if test="<%= Validator.isNotNull(href) %>">
-			<a class="<%= anchorCssClass %>" <%= AUIUtil.buildData(anchorData) %> href="<%= href %>" id="<%= anchorId %>" title="<liferay-ui:message key="<%= title %>" />">
+			<a class="<%= anchorCssClass %>" <%= AUIUtil.buildData(anchorData) %> href="<%= href %>" id="<%= anchorId %>" <%= useDialog ? "onClick=\"Liferay.Util.openInDialog(event, this);\"" : StringPool.BLANK %> title="<liferay-ui:message key="<%= title %>" />">
 		</c:if>
 				<c:if test="<%= Validator.isNotNull(iconClass) %>">
 					<i class="<%= iconClass %>"></i>
