@@ -21,7 +21,7 @@
 		<c:if test="<%= Validator.isNotNull(href) %>">
 
 			<liferay-util:buffer var="onClickBuffer">
-				<c:if test='<%= useDialog %>'>
+				<c:if test="<%= useDialog %>">
 					onclick="Liferay.Util.openInDialog(event, this);"
 				</c:if>
 			</liferay-util:buffer>
