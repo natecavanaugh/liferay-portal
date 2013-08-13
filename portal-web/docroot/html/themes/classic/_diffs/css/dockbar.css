@@ -1,0 +1,170 @@
+@import "compass";
+
+.dockbar {
+	left: 0;
+	right: 0;
+	top: 0;
+
+	.impersonating-user {
+		.alert-icon{
+			margin-right: 9px;
+		}
+
+		.alert-info {
+			@include border-radius(0);
+
+			border: none;
+			margin-bottom: 6px;
+		}
+	}
+
+	.navbar-inner {
+		padding-left: 20px;
+		padding-right: 20px;
+
+		.brand {
+			h1 {
+				display: inline-block;
+				font-size: inherit;
+				line-height: 1;
+				margin-bottom: 0;
+				margin-top: 0;
+			}
+		}
+
+		.container {
+			margin-left: 0;
+			margin-right: 0;
+			width: 100%;
+		}
+	}
+
+	.user-avatar img {
+		margin-top: -2px;
+		text-decoration: none;
+		vertical-align: middle;
+		width: 18px;
+	}
+}
+
+/* ---------- Add Content ---------- */
+
+.lfr-has-add-content {
+	padding-left: 350px;
+}
+
+.lfr-has-device-preview {
+	padding-left: 220px;
+}
+
+.lfr-has-edit-layout {
+	padding-left: 460px;
+}
+
+/* ---------- Menus ---------- */
+
+.my-sites-menu {
+	.site-type {
+		color: #FFF;
+		display: none;
+		float: right;
+		font-size: 0.8em;
+		font-weight: normal;
+		margin-right: 10px;
+		position: absolute;
+		right: 100%;
+	}
+
+	a:hover .site-type {
+		color: #FFFFFF;
+		display: inline-block;
+	}
+}
+
+.ie.rtl .dockbar .menu-button span {
+	background-position-x: -25px;
+}
+
+.ie7 {
+	.dockbar {
+		zoom: 1;
+	}
+
+	.my-sites-menu {
+		a {
+			overflow: visible;
+			text-align: left;
+		}
+
+		.site-name {
+			float: none;
+		}
+
+		.site-type {
+			float: none;
+		}
+	}
+}
+
+.ie6 {
+	.dockbar, .lfr-dockbar-pinned .dockbar {
+		height: 10px;
+		left: 0;
+		position: relative;
+		top: 0;
+	}
+
+	.dockbar .pin-dockbar {
+		display: none;
+	}
+
+	.my-sites-menu {
+		width: 200px;
+
+		a {
+			zoom: 1;
+		}
+	}
+
+	.menu-scroll {
+		height: 300px;
+		overflow-y: auto;
+	}
+}
+
+/* ---------- Customization Bar ---------- */
+
+.page-customization-bar {
+	background-color: #999;
+	color: #FFF;
+	font-size: 1.2em;
+	font-weight: bold;
+	min-height: 30px;
+	padding: 5px;
+}
+
+.controls-hidden .page-customization-bar {
+	display: none;
+}
+
+.page-customization-bar {
+	.customized-icon {
+		margin: 5px;
+		vertical-align: middle;
+	}
+
+	.page-customization-actions {
+		padding-left: 5em;
+	}
+
+	.page-customization-actions a {
+		color: #EEE;
+		font-size: 0.8em;
+		padding: 0 1em;
+	}
+
+	.reset-prototype {
+		display: inline;
+		padding-left: 1em;
+	}
+}
