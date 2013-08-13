@@ -182,6 +182,11 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
+	.input-localized .input-localized-content {
+		margin-left: 6px;
+		margin-top: 0;
+	}
+
 	/* ---------- Dockbar ---------- */
 
 	.dockbar {
@@ -421,7 +426,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 						background: #FCFCFC;
 						border: solid #D1D1D1;
 						border-width: 1px 0 0;
-						padding: 6px 0 15px;
+						padding: 6px 0;
 					}
 
 					.category-portlets {
@@ -626,6 +631,150 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
+	.panels-minimized {
+		.panel-page-menu {
+			width: 50px;
+
+			.accordion-group {
+				&.open {
+					.toggler-content {
+						border: 1px solid #DDD;
+						left: 49px;
+
+						&:before {
+							content: '';
+							height: 44px;
+							margin-left: 0px;
+							position: absolute;
+							width: 50px;
+						}
+
+						.accordion-inner {
+							border-top-width: 0;
+						}
+					}
+
+					.toggler-header {
+						background-color: #DDD;
+					}
+				}
+			}
+
+			.accordion-toggle {
+				position: relative;
+				text-indent: -9999px;
+			}
+
+			.control-panel-tools {
+				cursor: pointer;
+				padding-top: 16px;
+
+				&:hover {
+					background-color: #DDD;
+				}
+			}
+
+			.portlet-borderless-container {
+				padding: 0;
+
+				.accordion {
+					#panel-manage-site_administration\.configuration .toggler-header .accordion-toggle {
+						background: url(../images/custom/panel_icons_white_server_bg.png) no-repeat right !important;
+						right: 8px;
+					}
+
+					#panel-manage-site_administration\.content .toggler-header .accordion-toggle {
+						background: url(../images/custom/panel_icons_white_portal_bg.png) no-repeat right !important;
+						right: 4px;
+					}
+
+					#panel-manage-site_administration\.pages .toggler-header .accordion-toggle {
+						background: url(../images/custom/panel_icons_white_marketplace_bg.png) no-repeat right !important;
+						right: 4px;
+					}
+
+					#panel-manage-site_administration\.users .toggler-header .accordion-toggle {
+						background: url(../images/custom/panel_icons_white_marketplace_bg.png) no-repeat right !important;
+						right: 4px;
+					}
+
+					.accordion-group {
+						background: #FFF;
+						border: solid #D1D1D1;
+						border-width: 0;
+						margin-bottom: 0;
+
+						&:first-child {
+							border-top-width: 1px;
+						}
+
+						&:last-child {
+							.toggler-header-collapsed {
+								border-bottom-width: 1px;
+							}
+						}
+					}
+
+					.accordion-heading {
+						border-bottom: 1px solid #D1D1D1;
+						border-top-width: 0;
+
+						&:hover {
+							background-color: #DDD;
+						}
+					}
+
+					.toggler-header {
+						padding: 12px 10px;
+					}
+				}
+			}
+
+			.search-panels {
+				background: url(../images/custom/search_navigation_min_icon.png) no-repeat right;
+				padding: 14px 10px 14px;
+				right: 10px;
+				top: -7px;
+			}
+
+			.search-panels-bar {
+				display: none;
+			}
+
+			.toggler-content {
+				margin-top: -46px !important;
+				position: absolute;
+				left: -250px;
+				width: 225px;
+				z-index: 1;
+			}
+
+			.toggler-content-collapsed {
+				display: block;
+			}
+		}
+
+		.span9.panel-page-body {
+			width: 90%;
+		}
+	}
+
+	.animating {
+		.panel-page-menu {
+			.accordion-heading {
+				text-indent: -9999px;
+			}
+
+			.accordion-group {
+				border-width: 0;
+			}
+
+			.accordion-inner {
+				display: none;
+			}
+		}
+	}
+
 	/* ---------- Control Panel General ---------- */
 
 	.control-panel-site-selector .caret {
@@ -713,7 +862,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 
 		.accordion .accordion-group {
-			@include border-radius(0);
+			@inclucd border-radius(0);
 			@include box-shadow(-3px 0px 2px -2px #F5F5F5);
 
 			.accordion-heading {
