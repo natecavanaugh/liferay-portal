@@ -672,7 +672,19 @@ AUI.add(
 						}
 					);
 
-					return str.replace(/\s/g, '_');
+					var key = str.replace(/\s/g, '_');
+
+					var hasName = A.all('.form-builder-field-node').some(
+						function(item, index, collection) {
+							return ((item.attr('name') === key) && !item.ancestor('.form-builder-field').hasClass('form-builder-field-selected'));
+						}
+					);
+
+					if (hasName) {
+						key = key + '_' + A.Env._uidx++;
+					}
+
+					return key;
 				}
 			}
 		);
