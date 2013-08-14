@@ -405,16 +405,75 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
-	/* ---------- Staging ---------- */
+	/* ---------- Staging Bar ---------- */
 
-	.staging-tabview-list {
-		padding: 0 1em;
+	.navbar-inner .nav.staging-nav-items {
+		border-top-width: 0;
+		position: static;
+
+		li {
+			&.active {
+				> span {
+					display: block;
+					line-height: 31px;
+					padding: 6px 15px;
+				}
+
+				.dropdown-toggle {
+					background: transparent;
+				}
+			}
+
+			a {
+				padding: 6px 15px;
+			}
+
+			.page-variations {
+				clear: both;
+				margin-bottom: 10px;
+				text-decoration: underline;
+
+				&:hover {
+					text-decoration: none;
+				}
+
+				a {
+					padding: 6px 15px 6px 0;
+					text-decoration: none;
+				}
+			}
+		}
+
+		li.dropdown {
+			position: static;
+
+			.dropdown-menu li {
+				&.publish-link {
+					font-size: 16px;
+					padding: 10px 0 15px;
+					text-align: center;
+
+					a {
+						background-color: #00BE18;
+
+						@include border-radius(4px);
+
+						@include box-shadow(0px 3px 0px 0px #009212);
+
+						display: inline;
+
+						&:hover {
+							background-color: #02A517;
+						}
+					}
+				}
+
+				a:hover {
+					background-color: transparent;
+				}
+			}
+		}
 	}
-
-	.staging-tabview-content {
-		margin: 0 5em
-	}
-
 
 	/* ---------- Footer ---------- */
 

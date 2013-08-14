@@ -42,6 +42,7 @@ AUI.add(
 					if (!event.hideHistory) {
 						layoutRevisionToolbar.add(
 							{
+								cssClass: 'history',
 								icon: 'icon-time',
 								label: Liferay.Language.get('history'),
 								on: {
@@ -58,6 +59,7 @@ AUI.add(
 
 					StagingBar.redoButton = new A.Button(
 						{
+							cssClass: 'redo-button',
 							icon: 'icon-forward',
 							label: redoText,
 							on: {
@@ -69,6 +71,7 @@ AUI.add(
 
 					StagingBar.undoButton = new A.Button(
 						{
+							cssClass: 'undo-button',
 							icon: 'icon-backward',
 							label: undoText,
 							on: {
