@@ -183,10 +183,6 @@ searchContainer.setEmptyResultsMessage(emptyResultsMessage);
 
 				List<Team> teams = TeamLocalServiceUtil.getUserTeams(user2.getUserId(), group.getGroupId());
 
-				if (!userGroupRoles.isEmpty()) {
-					buffer.append(StringPool.COMMA_AND_SPACE);
-				}
-
 				for (int i = 0; i < teams.size(); i++) {
 					Team team = teams.get(i);
 
