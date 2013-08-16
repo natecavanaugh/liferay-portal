@@ -658,105 +658,11 @@ public class JournalArticleLocalServiceImpl
 	public void checkArticles() throws PortalException, SystemException {
 		Date now = new Date();
 
-		List<JournalArticle> articles =
-			journalArticleFinder.findByExpirationDate(
-				JournalArticleConstants.CLASSNAME_ID_DEFAULT,
-				new Date(now.getTime() + _JOURNAL_ARTICLE_CHECK_INTERVAL),
-				new QueryDefinition(WorkflowConstants.STATUS_APPROVED));
+		checkArticlesByExpirationDate(now);
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("Expiring " + articles.size() + " articles");
-		}
+		checkArticlesByReviewDate(now);
 
-		Set<Long> companyIds = new HashSet<Long>();
-
-		for (JournalArticle article : articles) {
-			if (PropsValues.JOURNAL_ARTICLE_EXPIRE_ALL_VERSIONS) {
-				List<JournalArticle> currentArticles =
-					journalArticlePersistence.findByG_A(
-						article.getGroupId(), article.getArticleId(),
-						QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-						new ArticleVersionComparator(true));
-
-				for (JournalArticle currentArticle : currentArticles) {
-					currentArticle.setExpirationDate(
-						article.getExpirationDate());
-					currentArticle.setStatus(WorkflowConstants.STATUS_EXPIRED);
-
-					journalArticlePersistence.update(currentArticle);
-				}
-			}
-			else {
-				article.setStatus(WorkflowConstants.STATUS_EXPIRED);
-
-				journalArticlePersistence.update(article);
-			}
-
-			updatePreviousApprovedArticle(article);
-
-			JournalContentUtil.clearCache(
-				article.getGroupId(), article.getArticleId(),
-				article.getTemplateId());
-
-			companyIds.add(article.getCompanyId());
-		}
-
-		for (long companyId : companyIds) {
-			CacheUtil.clearCache(companyId);
-		}
-
-		if (_previousCheckDate == null) {
-			_previousCheckDate = new Date(
-				now.getTime() - _JOURNAL_ARTICLE_CHECK_INTERVAL);
-		}
-
-		articles = journalArticleFinder.findByReviewDate(
-			JournalArticleConstants.CLASSNAME_ID_DEFAULT, now,
-			_previousCheckDate);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug(
-				"Sending review notifications for " + articles.size() +
-					" articles");
-		}
-
-		for (JournalArticle article : articles) {
-			String articleURL = StringPool.BLANK;
-
-			long ownerId = article.getGroupId();
-			int ownerType = PortletKeys.PREFS_OWNER_TYPE_GROUP;
-			long plid = PortletKeys.PREFS_PLID_SHARED;
-			String portletId = PortletKeys.JOURNAL;
-
-			PortletPreferences preferences =
-				portletPreferencesLocalService.getPreferences(
-					article.getCompanyId(), ownerId, ownerType, plid,
-					portletId);
-
-			sendEmail(
-				article, articleURL, preferences, "review",
-				new ServiceContext());
-		}
-
-		articles = journalArticlePersistence.findByLtD_S(
-			now, WorkflowConstants.STATUS_SCHEDULED);
-
-		for (JournalArticle article : articles) {
-			ServiceContext serviceContext = new ServiceContext();
-
-			serviceContext.setCommand(Constants.UPDATE);
-
-			String layoutFullURL = PortalUtil.getLayoutFullURL(
-				article.getGroupId(), PortletKeys.JOURNAL);
-
-			serviceContext.setLayoutFullURL(layoutFullURL);
-
-			serviceContext.setScopeGroupId(article.getGroupId());
-
-			updateStatus(
-				article.getUserId(), article, WorkflowConstants.STATUS_APPROVED,
-				null, new HashMap<String, Serializable>(), serviceContext);
-		}
+		checkArticlesByDisplayDate(now);
 
 		_previousCheckDate = now;
 	}
@@ -3430,9 +3336,6 @@ public class JournalArticleLocalServiceImpl
 
 		article = journalArticlePersistence.update(article);
 
-		socialActivityCounterLocalService.disableActivityCounters(
-			JournalFolder.class.getName(), article.getFolderId());
-
 		JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
 
 		extraDataJSONObject.put("title", article.getTitle());
@@ -3601,9 +3504,6 @@ public class JournalArticleLocalServiceImpl
 		updateStatus(
 			userId, article, trashEntry.getStatus(), null, workflowContext,
 			serviceContext);
-
-		socialActivityCounterLocalService.enableActivityCounters(
-			JournalFolder.class.getName(), article.getFolderId());
 
 		JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
 
@@ -5538,6 +5438,119 @@ public class JournalArticleLocalServiceImpl
 			article.setTemplateId(newDDMTemplateKey);
 
 			journalArticlePersistence.update(article);
+		}
+	}
+
+	protected void checkArticlesByDisplayDate(Date displayDate)
+		throws PortalException, SystemException {
+
+		List<JournalArticle> articles = journalArticlePersistence.findByLtD_S(
+			displayDate, WorkflowConstants.STATUS_SCHEDULED);
+
+		for (JournalArticle article : articles) {
+			ServiceContext serviceContext = new ServiceContext();
+
+			serviceContext.setCommand(Constants.UPDATE);
+
+			String layoutFullURL = PortalUtil.getLayoutFullURL(
+				article.getGroupId(), PortletKeys.JOURNAL);
+
+			serviceContext.setLayoutFullURL(layoutFullURL);
+
+			serviceContext.setScopeGroupId(article.getGroupId());
+
+			updateStatus(
+				article.getUserId(), article, WorkflowConstants.STATUS_APPROVED,
+				null, new HashMap<String, Serializable>(), serviceContext);
+		}
+	}
+
+	protected void checkArticlesByExpirationDate(Date expirationDate)
+		throws PortalException, SystemException {
+
+		List<JournalArticle> articles =
+			journalArticleFinder.findByExpirationDate(
+				JournalArticleConstants.CLASSNAME_ID_DEFAULT,
+				new Date(
+					expirationDate.getTime() + _JOURNAL_ARTICLE_CHECK_INTERVAL),
+				new QueryDefinition(WorkflowConstants.STATUS_APPROVED));
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Expiring " + articles.size() + " articles");
+		}
+
+		Set<Long> companyIds = new HashSet<Long>();
+
+		for (JournalArticle article : articles) {
+			if (PropsValues.JOURNAL_ARTICLE_EXPIRE_ALL_VERSIONS) {
+				List<JournalArticle> currentArticles =
+					journalArticlePersistence.findByG_A(
+						article.getGroupId(), article.getArticleId(),
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+						new ArticleVersionComparator(true));
+
+				for (JournalArticle currentArticle : currentArticles) {
+					currentArticle.setExpirationDate(
+						article.getExpirationDate());
+					currentArticle.setStatus(WorkflowConstants.STATUS_EXPIRED);
+
+					journalArticlePersistence.update(currentArticle);
+				}
+			}
+			else {
+				article.setStatus(WorkflowConstants.STATUS_EXPIRED);
+
+				journalArticlePersistence.update(article);
+			}
+
+			updatePreviousApprovedArticle(article);
+
+			JournalContentUtil.clearCache(
+				article.getGroupId(), article.getArticleId(),
+				article.getTemplateId());
+
+			companyIds.add(article.getCompanyId());
+		}
+
+		for (long companyId : companyIds) {
+			CacheUtil.clearCache(companyId);
+		}
+
+		if (_previousCheckDate == null) {
+			_previousCheckDate = new Date(
+				expirationDate.getTime() - _JOURNAL_ARTICLE_CHECK_INTERVAL);
+		}
+	}
+
+	protected void checkArticlesByReviewDate(Date reviewDate)
+		throws PortalException, SystemException {
+
+		List<JournalArticle> articles = journalArticleFinder.findByReviewDate(
+			JournalArticleConstants.CLASSNAME_ID_DEFAULT, reviewDate,
+			_previousCheckDate);
+
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+				"Sending review notifications for " + articles.size() +
+					" articles");
+		}
+
+		for (JournalArticle article : articles) {
+			String articleURL = StringPool.BLANK;
+
+			long ownerId = article.getGroupId();
+			int ownerType = PortletKeys.PREFS_OWNER_TYPE_GROUP;
+			long plid = PortletKeys.PREFS_PLID_SHARED;
+			String portletId = PortletKeys.JOURNAL;
+
+			PortletPreferences preferences =
+				portletPreferencesLocalService.getPreferences(
+					article.getCompanyId(), ownerId, ownerType, plid,
+					portletId);
+
+			sendEmail(
+				article, articleURL, preferences, "review",
+				new ServiceContext());
 		}
 	}
 
