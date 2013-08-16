@@ -117,7 +117,9 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 		</c:if>
 	</c:if>
 
-	<aui:nav ariaLabel='<%= LanguageUtil.get(pageContext, "layout-controls") %>' cssClass="nav-add-controls">
+	<%@ include file="/html/portlet/dockbar/view_user_panel.jspf" %>
+
+	<aui:nav ariaLabel='<%= LanguageUtil.get(pageContext, "layout-controls") %>' collapsible="<%= true %>" cssClass="nav-add-controls" icon="pencil" id="navAddControls" useNamespace="<%= false %>">
 		<c:if test="<%= group.isControlPanel() %>">
 
 			<%
@@ -199,7 +201,9 @@ String toggleControlsState = GetterUtil.getString(SessionClicks.get(request, "li
 		</c:if>
 	</aui:nav>
 
-	<%@ include file="/html/portlet/dockbar/view_user_panel.jspf" %>
+	<aui:nav collapsible="<%= true %>" cssClass="nav-navigation" icon="reorder" id="navNavigation" useNamespace="<%= false %>">
+		<aui:nav-item />
+	</aui:nav>
 </aui:nav-bar>
 
 <div class="dockbar-messages" id="<portlet:namespace />dockbarMessages">
