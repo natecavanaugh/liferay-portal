@@ -309,7 +309,7 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 					jspWriter.write("\">");
 
 					if (_showArrow && _direction.equals("left")) {
-						jspWriter.write("<i class=\"caret\"></i>&nbsp;");
+						jspWriter.write("<i class=\"icon-caret-left\"></i>&nbsp;");
 					}
 
 					if (Validator.isNotNull(_icon)) {
@@ -321,7 +321,9 @@ public class IconMenuTag extends BaseBodyTagSupport implements BodyTag {
 					jspWriter.write(message);
 
 					if (_showArrow && !_direction.equals("left")) {
-						jspWriter.write("&nbsp;<i class=\"caret\"></i>");
+						jspWriter.write("<i class=\"icon-caret-");
+						jspWriter.write(_direction);
+						jspWriter.write("\"></i>&nbsp;");
 					}
 
 					jspWriter.write("</a>");
