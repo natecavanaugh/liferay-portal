@@ -36,6 +36,10 @@ $dockbarGradientStart: #118ADE;
 		#navigation {
 			display: none;
 
+			&.open {
+				display: block;
+			}
+
 			.nav {
 				margin-top: 10px;
 			}
@@ -91,8 +95,8 @@ $dockbarGradientStart: #118ADE;
 						margin: 0;
 						position: relative;
 
-						&.toggle-controls {
-							visibility: visible;
+						&.toggle-controls a {
+							position: relative;
 						}
 
 						.page-preview-controls {
@@ -196,4 +200,4 @@ $dockbarGradientStart: #118ADE;
 			display: none;
 		}
 	}
-} 
+}
