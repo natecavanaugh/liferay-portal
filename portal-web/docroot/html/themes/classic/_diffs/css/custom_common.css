@@ -112,6 +112,40 @@
 		margin-top: 0;
 	}
 
+	.btn.disabled, .btn[disabled] {
+		background-color: #DDD;
+		color: #AAA;
+	}
+
+	.btn-danger.disabled, .btn-danger[disabled] {
+		background-color: #ED2C17;
+	}
+
+	.btn-info.disabled, .btn-info[disabled] {
+		background-color: #00BEEB;
+	}
+
+	.btn-inverse.disabled, .btn-inverse[disabled] {
+		background-color: #222;
+	}
+
+	.btn-primary.disabled, .btn-primary[disabled] {
+		background-color: #4A96E8;
+	}
+
+	.btn-success.disabled, .btn-success[disabled] {
+		background-color: #C4D72C;
+		color: #FFF;
+	}
+
+	.btn-warning.disabled, .btn-warning[disabled] {
+		background-color: #F49645;
+	}
+
+	.btn-danger.disabled, .btn-danger[disabled], .btn-info.disabled, .btn-info[disabled], .btn-inverse.disabled, .btn-inverse[disabled], .btn-primary.disabled, .btn-primary[disabled], .btn-warning.disabled, .btn-warning[disabled] {
+		color: #DDD;
+	}
+
 	.btn-link {
 		color: #555;
 		text-decoration: none;
