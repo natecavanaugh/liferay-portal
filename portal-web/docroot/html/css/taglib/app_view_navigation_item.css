@@ -1,4 +1,17 @@
+@import "compass";
+
 .navigation-pane {
+	.app-view-navigation-entry {
+		position: relative;
+
+		&.folder.error {
+			color: #34404F;
+			display: block;
+			padding: 6px 8px;
+			text-decoration: none;
+		}
+	}
+
 	.body-row {
 		height: 100%;
 		overflow: hidden;
@@ -15,36 +28,37 @@
 		.lfr-component {
 			margin-left: 0;
 		}
+	}
 
-		.app-view-navigation-entry {
-			position: relative;
+	.overlay.entry-action {
+		bottom: 0;
+		display: block;
+		overflow: hidden;
+		position: absolute;
+		right: -15px;
+		top: 0;
 
-			&.folder.error {
-				color: #34404F;
-				display: block;
-				padding: 6px 8px;
+		a {
+			color: #FFF;
+			display: block;
+			float: right;
+			font-size: 15px;
+			min-height: 15px;
+			text-align: center;
+			width: 20px;
+
+			&:hover {
 				text-decoration: none;
 			}
 
-			.overlay.entry-action {
-				bottom: 0;
-				display: block;
-				overflow: hidden;
-				position: absolute;
-				right: -15px;
-				top: 0;
+			[class^="icon-"], [class*="icon-"] {
+				vertical-align: middle;
+			}
+		}
 
-				a {
-					display: block;
-					float: right;
-					min-height: 15px;
-					text-align: center;
-					width: 20px;
-
-					.caret {
-						vertical-align: middle;
-					}
-				}
+		.btn-group.open {
+			.dropdown-toggle {
+				@include box-shadow(none);
 			}
 		}
 	}
