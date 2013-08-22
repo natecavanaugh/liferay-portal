@@ -3,15 +3,14 @@
 <project name="portal-web" basedir="." default="war" xmlns:antelope="antlib:ise.antelope.tasks">
 	<import file="../build-common-web.xml" />
 
-	<property name="war.file" value="${ant.project.name}" />
-
 	<!--
 	When upgrading CKEditor, make sure to delete
 	docroot/html/js/editor/ckeditor_diffs/ckeditor.js.
 	-->
 
-	<property name="ckeditor.file" value="ckeditor-4.0-stable.zip" />
+	<property name="war.file" value="${ant.project.name}" />
 
+	<property name="ckeditor.file" value="ckeditor-4.0-stable.zip" />
 	<property name="fckeditor.file" value="FCKeditor_2.6.3.zip" />
 	<property name="font-awesome.file" value="font-awesome-3.2.1.zip" />
 	<property name="scayt.file" value="scayt_4.0.3.zip" />
