@@ -46,4 +46,8 @@ String value = (String)request.getAttribute("liferay-ui:tabs:value");
 if (value == null) {
 	value = ParamUtil.getString(request, param, values[0]);
 }
+
+// CSS Class
+
+String cssClass = (String)request.getAttribute("liferay-ui:tabs:cssClass");
 %>

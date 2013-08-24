@@ -394,6 +394,33 @@
 		}
 	}
 
+	/* ---------- Navtabs/Pills ---------- */
+
+	.nav-pills {
+		li {
+			margin-right: 20px;
+			a {
+				font-size: 15px;
+				font-weight: normal;
+				margin: 0;
+				padding: 10px 10px 11px;
+
+				&:hover {
+					background: #E5F5FC;
+				}
+			}
+		}
+
+		> .active > a {
+			background: #009AE5;
+			color: #FFF;
+
+			&:hover {
+				background: #009AE5;
+			}
+		}
+	}
+
 	/* ---------- Form navigator ---------- */
 
 	@include respond-to(phone, tablet) {

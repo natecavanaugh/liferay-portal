@@ -60,9 +60,12 @@
 					if (stateMaximized) {
 						selectedTab = "page";
 					}
+
+					String cssClass = "nav-pills";
 					%>
 
 					<liferay-ui:tabs
+						cssClass="<%= cssClass %>"
 						names="<%= StringUtil.merge(tabs1Names) %>"
 						refresh="<%= false %>"
 						value="<%= selectedTab %>"
