@@ -50,13 +50,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
-	.panel-manage-frontpage {
-		.control-panel-bar-secondary {
-			margin-bottom: 1px;
-			margin-left: 20px;
-		}
-	}
-
 	.control-panel-home-actions-category .btn {
 		margin-bottom: 0.5em;
 	}
@@ -90,6 +83,17 @@ $dockbarOpenGradientStart: #0EA6F9;
 					background: #009AE5;
 				}
 			}
+		}
+	}
+
+	.dialog-iframe-popup .panel-manage-frontpage .control-panel-bar-secondary {
+		margin-left: 10px;
+	}
+
+	.panel-manage-frontpage {
+		.control-panel-bar-secondary {
+			margin-bottom: 1px;
+			margin-left: 20px;
 		}
 	}
 
