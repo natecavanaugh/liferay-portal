@@ -74,7 +74,7 @@ public class TabsTag extends IncludeTag {
 				_endPage = null;
 				_names = null;
 				_namesPos = 0;
-				_cssClass = null;
+				_cssClass = "nav-tabs";
 				_tabsValues = null;
 				_formName = StringPool.BLANK;
 				_param = "tabs1";
@@ -112,11 +112,6 @@ public class TabsTag extends IncludeTag {
 
 			request.setAttribute("liferay-ui:tabs:formName", _formName);
 			request.setAttribute("liferay-ui:tabs:param", _param);
-
-			if (_cssClass == null) {
-				_cssClass = "nav-tabs";
-			}
-
 			request.setAttribute("liferay-ui:tabs:cssClass", _cssClass);
 
 			if (_value == null) {
@@ -369,7 +364,7 @@ public class TabsTag extends IncludeTag {
 
 	private String _backLabel;
 	private String _backURL;
-	private String _cssClass;
+	private String _cssClass = "nav-tabs";
 	private String _endPage;
 	private String _formName;
 	private String[] _names;
