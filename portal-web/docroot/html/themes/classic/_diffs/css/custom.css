@@ -271,7 +271,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 	}
 
 	.portlet-asset-publisher .asset-content, .portlet-asset-publisher .asset-summary, .portlet-asset-publisher .asset-title, .portlet-asset-publisher .header-title, .portlet-asset-publisher li.title-list, .portlet-blogs .entry-body, .portlet-blogs .entry-title, .portlet-blogs .header-title, .portlet-journal-content .journal-content-article, .portlet-message-boards .header-title, .portlet-message-boards .thread-body {
-		@include hyphenation;
+		@include hyphens(auto);
 	}
 
 	.portlet-icons {
