@@ -37,7 +37,7 @@ if (selContact != null) {
 
 <h3><liferay-ui:message key="details" /></h3>
 
-<aui:fieldset cssClass="span6">
+<aui:fieldset>
 	<liferay-ui:success key="verificationEmailSent" message="your-email-verification-code-has-been-sent-and-the-new-email-address-will-be-applied-to-your-account-once-it-has-been-verified" />
 
 	<liferay-ui:error exception="<%= DuplicateUserScreenNameException.class %>" focusField="screenName" message="the-screen-name-you-requested-is-already-taken" />
@@ -122,7 +122,7 @@ if (selContact != null) {
 	<%@ include file="/html/portlet/users_admin/user/details_user_name.jspf" %>
 </aui:fieldset>
 
-<aui:fieldset cssClass="span5">
+<aui:fieldset>
 	<div>
 		<c:if test="<%= selUser != null %>">
 			<c:choose>
