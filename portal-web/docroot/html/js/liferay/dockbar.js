@@ -44,14 +44,19 @@ AUI.add(
 
 					Liferay.once('initDockbar', instance._init, instance);
 
-					var eventHandle = dockBar.on(
-						['focus', 'mousemove', 'touchstart'],
-						function(event) {
-							Liferay.fire('initDockbar');
+					if (Liferay.Browser.isMobile()) {
+						Liferay.fire('initDockbar');
+					}
+					else {
+						var eventHandle = dockBar.on(
+							['focus', 'mousemove'],
+							function(event) {
+								Liferay.fire('initDockbar');
 
-							eventHandle.detach();
-						}
-					);
+								eventHandle.detach();
+							}
+						);
+					}
 
 					BODY.addClass('dockbar-ready');
 				}
@@ -205,6 +210,20 @@ AUI.add(
 				Liferay.fire('initNavigation');
 
 				instance._registerPanels();
+
+				var btnNavigation = A.one('#navNavigationNavbarBtn');
+
+				var navigation = A.one('#navigation');
+
+				if (btnNavigation && navigation) {
+					btnNavigation.on(
+						EVENT_CLICK,
+						function(event) {
+							btnNavigation.toggleClass('open');
+							navigation.toggleClass('open');
+						}
+					);
+				}
 
 				Liferay.fire('dockbarLoaded');
 			},

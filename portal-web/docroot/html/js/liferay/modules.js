@@ -391,8 +391,18 @@ window.YUI_config = {
 				'liferay-menu': {
 					path: 'menu.js',
 					requires: [
+						'array-invoke',
 						'aui-debounce',
-						'aui-node'
+						'aui-node',
+						'aui-widget-cssclass',
+						'portal-available-languages',
+						'widget',
+						'widget-modality',
+						'widget-position',
+						'widget-position-align',
+						'widget-position-constrain',
+						'widget-stack',
+						'widget-stdmod'
 					]
 				},
 				'liferay-message': {
