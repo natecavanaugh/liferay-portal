@@ -2,11 +2,6 @@
 @import "mixins";
 
 .aui {
-	body {
-		color: #555;
-		font-weight: lighter;
-	}
-
 	a {
 		color: #009AE5;
 		font-weight: lighter;
@@ -20,41 +15,9 @@
 		}
 	}
 
-	.alert {
-		word-wrap: break-word;
-	}
-
-	.table {
-		font-size: 15px;
-		overflow: hidden;
-
-		td {
-			background-color: #F9F9F9;
-		}
-
-		thead th {
-			background-color: #F0EFEF;
-			font-size: 15px;
-			font-weight: normal;
-		}
-
-		.table-sort-liner a {
-			color: #555;
-			font-weight: normal;
-			text-decoration: underline;
-		}
-	}
-
-	.table-striped tbody > tr:nth-child(odd) {
-		> td, > th {
-			background-color: #FFF;
-		}
-	}
-
-	.table-hover tbody tr:hover {
-		> td, > th {
-			background-color: #EDF8FD;
-		}
+	body {
+		color: #555;
+		font-weight: lighter;
 	}
 
 	form fieldset.fieldset {
@@ -102,48 +65,12 @@
 		line-height: 27px;
 	}
 
-	.form-search, .lfr-translation-manager-selector {
-		.control-group-inline {
-			margin: 0;
-		}
-	}
-
-	.field-wrapper .btn {
-		margin-top: 0;
+	.alert {
+		word-wrap: break-word;
 	}
 
 	.btn.disabled, .btn[disabled] {
-		background-color: #DDD;
-		color: #AAA;
-	}
-
-	.btn-danger.disabled, .btn-danger[disabled] {
-		background-color: #ED2C17;
-	}
-
-	.btn-info.disabled, .btn-info[disabled] {
-		background-color: #00BEEB;
-	}
-
-	.btn-inverse.disabled, .btn-inverse[disabled] {
-		background-color: #222;
-	}
-
-	.btn-primary.disabled, .btn-primary[disabled] {
-		background-color: #4A96E8;
-	}
-
-	.btn-success.disabled, .btn-success[disabled] {
-		background-color: #C4D72C;
-		color: #FFF;
-	}
-
-	.btn-warning.disabled, .btn-warning[disabled] {
-		background-color: #F49645;
-	}
-
-	.btn-danger.disabled, .btn-danger[disabled], .btn-info.disabled, .btn-info[disabled], .btn-inverse.disabled, .btn-inverse[disabled], .btn-primary.disabled, .btn-primary[disabled], .btn-warning.disabled, .btn-warning[disabled] {
-		color: #DDD;
+		opacity: 0.4;
 	}
 
 	.btn-link {
@@ -166,12 +93,55 @@
 		margin-bottom: 30px;
 	}
 
-	.lfr-ddm-container .control-group {
-		margin-bottom: 15px;
+	.form-search, .lfr-translation-manager-selector {
+		.control-group-inline {
+			margin: 0;
+		}
+	}
+
+	.field-wrapper .btn {
+		margin-top: 0;
 	}
 
 	.input-append {
 		padding-right: 12px;
+	}
+
+	.lfr-ddm-container .control-group {
+		margin-bottom: 15px;
+	}
+
+	.table {
+		font-size: 15px;
+		overflow: hidden;
+
+		td {
+			background-color: #F9F9F9;
+		}
+
+		thead th {
+			background-color: #F0EFEF;
+			font-size: 15px;
+			font-weight: normal;
+		}
+
+		.table-sort-liner a {
+			color: #555;
+			font-weight: normal;
+			text-decoration: underline;
+		}
+	}
+
+	.table-striped tbody > tr:nth-child(odd) {
+		> td, > th {
+			background-color: #FFF;
+		}
+	}
+
+	.table-hover tbody tr:hover {
+		> td, > th {
+			background-color: #EDF8FD;
+		}
 	}
 
 	.tree-node-selected .tree-label {
