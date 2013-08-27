@@ -135,6 +135,10 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 
 		.nav {
+			> li > a {
+				padding: 4.5px 15px;
+			}
+
 			li {
 				&.dropdown {
 					> .dropdown-toggle {
@@ -180,6 +184,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 		.navbar-inner {
 			background: #555;
 			border-width: 0;
+			min-height: 36px;
 
 			li a {
 				color: #FFF;
