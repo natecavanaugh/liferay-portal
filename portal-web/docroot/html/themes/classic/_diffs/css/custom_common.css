@@ -132,6 +132,10 @@
 		margin-bottom: 30px;
 	}
 
+	.control-group label, .field-container label {
+		margin-left: 0;
+	}
+
 	.lfr-ddm-container .control-group {
 		margin-bottom: 15px;
 	}
