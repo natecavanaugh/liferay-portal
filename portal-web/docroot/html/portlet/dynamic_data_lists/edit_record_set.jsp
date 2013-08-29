@@ -85,7 +85,7 @@ if (ddmStructureId > 0) {
 			</span>
 
 			<liferay-ui:icon
-				cssClass="btn modify-link"
+				cssClass="btn"
 				iconClass="icon-search"
 				label="<%= true %>"
 				message="select"
