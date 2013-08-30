@@ -9,6 +9,12 @@ AUI.add(
 
 		var CSS_ACTIVE_SELECTOR = '.' + CSS_ACTIVE;
 
+		var CSS_ICON_DOWN = 'icon-chevron-sign-down';
+
+		var CSS_ICON_DOWN_SELECTOR = 'i.' + CSS_ICON_DOWN;
+
+		var CSS_ICON_RIGHT = 'icon-chevron-sign-right';
+
 		var DATA_PROTOTYPE_ID_PK = 'data-prototype-id';
 
 		var DATA_TYPE_PK = 'data-type';
@@ -37,7 +43,7 @@ AUI.add(
 
 		var AddPage = A.Component.create(
 			{
-				AUGMENTS: [Dockbar.AddPageSearch, Liferay.PortletBase],
+				AUGMENTS: [Liferay.PortletBase],
 
 				EXTENDS: Dockbar.AddBase,
 
@@ -183,12 +189,13 @@ AUI.add(
 
 						var nodeList = instance.get(STR_NODE_LIST);
 
+						var header = event.target.get('header');
+
 						if (event.newVal) {
 							if (nodeList) {
 								nodeList.all(CSS_ACTIVE_SELECTOR).removeClass(CSS_ACTIVE);
+								nodeList.all(CSS_ICON_DOWN_SELECTOR).removeClass(CSS_ICON_DOWN);
 							}
-
-							var header = event.target.get('header');
 
 							if (header) {
 								var selectedType = header.attr(DATA_TYPE_PK);
@@ -201,9 +208,16 @@ AUI.add(
 
 								header.addClass(CSS_ACTIVE);
 
+								header.one('i').replaceClass(CSS_ICON_RIGHT, CSS_ICON_DOWN);
+
 								instance.byId('addLayoutType').set(STR_VALUE, selectedType);
 
 								instance.byId('addLayoutPrototypeId').set(STR_VALUE, selectedPrototypeId);
+							}
+						}
+						else {
+							if (header) {
+								header.one('i').replaceClass(CSS_ICON_DOWN, CSS_ICON_RIGHT);
 							}
 						}
 					},
