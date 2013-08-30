@@ -61,6 +61,7 @@ public class TabsTag extends IncludeTag {
 			request.removeAttribute("liferay-ui:tabs:backURL");
 			request.removeAttribute("liferay-ui:tabs:refresh");
 			request.removeAttribute("liferay-ui:tabs:onClick");
+			request.removeAttribute("liferay-ui:tabs:style");
 
 			return EVAL_PAGE;
 		}
@@ -93,6 +94,7 @@ public class TabsTag extends IncludeTag {
 				_backURL = null;
 				_refresh = true;
 				_onClick = null;
+				_style = StringPool.BLANK;
 			}
 		}
 	}
@@ -192,6 +194,8 @@ public class TabsTag extends IncludeTag {
 				"liferay-ui:tabs:refresh", String.valueOf(_refresh));
 			request.setAttribute(
 				"liferay-ui:tabs:onClick", String.valueOf(_onClick));
+			request.setAttribute(
+				"liferay-ui:tabs:style", _style);
 
 			include(getStartPage());
 
@@ -277,6 +281,10 @@ public class TabsTag extends IncludeTag {
 
 	public void setStartPage(String startPage) {
 		_startPage = startPage;
+	}
+
+	public void setStyle(String style) {
+		_style = style;
 	}
 
 	public void setTabsValues(String tabsValues) {
@@ -366,6 +374,7 @@ public class TabsTag extends IncludeTag {
 	private PortletURL _portletURL;
 	private boolean _refresh = true;
 	private String _startPage;
+	private String _style = "tabs";
 	private String[] _tabsValues;
 	private String _url;
 	private String _url0;
