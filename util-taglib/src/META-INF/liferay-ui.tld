@@ -3743,6 +3743,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>style</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>tabsValues</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
