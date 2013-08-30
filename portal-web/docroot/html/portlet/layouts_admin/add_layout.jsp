@@ -82,20 +82,18 @@ String rootNodeName = liveGroup.getLayoutRootNodeName(privateLayout, locale);
 
 				<aui:input id="addLayoutHiddenCheckbox" label="hide-from-navigation-menu" name="hidden" />
 
-				<aui:fieldset cssClass="template-selector" label="templates">
-					<div class="btn-toolbar search-panel">
-						<aui:input cssClass="search-query span12" id="addLayoutSearchTemplates" label="" name="searchTemplates" placeholder="search" type="text"  />
-					</div>
-
+				<aui:fieldset cssClass="template-selector" label="type">
 					<aui:nav cssClass="nav-list" id="templateList">
 						<c:if test='<%= ArrayUtil.contains(PropsValues.LAYOUT_TYPES, "portlet") %>'>
-							<aui:nav-item cssClass="lfr-page-template" data-search="blank">
+							<aui:nav-item cssClass="lfr-page-template" data-search="<liferay-ui:message key='empty-page' />">
 								<div class="active lfr-page-template-title toggler-header toggler-header-expanded" data-type="portlet">
-									<aui:input checked="<%= true %>" id="addLayoutSelectedPageTemplateBlank" label="empty-layout" name="selectedPageTemplate" type="radio" />
+									<aui:input checked="<%= true %>" id="addLayoutSelectedPageTemplateBlank" label="empty-page" name="selectedPageTemplate" type="radio" />
 
 									<div class="lfr-page-template-description">
-										<small><%= LanguageUtil.get(pageContext, "empty-layout-description" ) %></small>
+										<small><%= LanguageUtil.get(pageContext, "empty-page-description" ) %></small>
 									</div>
+
+									<i class="panel-arrow icon-chevron-sign-down icon-chevron-sign-right"></i>
 								</div>
 
 								<div class="lfr-page-template-options toggler-content toggler-content-expanded">
@@ -128,6 +126,8 @@ String rootNodeName = liveGroup.getLayoutRootNodeName(privateLayout, locale);
 									<div class="lfr-page-template-description">
 										<small><%= HtmlUtil.escape(layoutPrototype.getDescription()) %></small>
 									</div>
+
+									<i class="panel-arrow icon-chevron-sign-right"></i>
 								</div>
 
 								<div class="lfr-page-template-options toggler-content toggler-content-collapsed">
@@ -159,6 +159,8 @@ String rootNodeName = liveGroup.getLayoutRootNodeName(privateLayout, locale);
 									<div class="lfr-page-template-description">
 										<small><%= LanguageUtil.get(pageContext, "layout.types." + PropsValues.LAYOUT_TYPES[i] + ".description" ) %></small>
 									</div>
+
+									<i class="panel-arrow icon-chevron-sign-right"></i>
 								</div>
 
 								<div class="lfr-page-template-options toggler-content toggler-content-collapsed">
@@ -178,6 +180,8 @@ String rootNodeName = liveGroup.getLayoutRootNodeName(privateLayout, locale);
 									<div class="lfr-page-template-description">
 										<small><%= LanguageUtil.get(pageContext, "copy-of-a-page-description" ) %></small>
 									</div>
+
+									<i class="panel-arrow icon-chevron-sign-right"></i>
 								</div>
 
 								<div class="lfr-page-template-options toggler-content toggler-content-collapsed">
@@ -232,7 +236,6 @@ String rootNodeName = liveGroup.getLayoutRootNodeName(privateLayout, locale);
 		{
 			createPageMessage: '<%= LanguageUtil.get(pageContext, "loading") %>',
 			focusItem: A.one('#<portlet:namespace />addLayoutName'),
-			inputNode: A.one('#<portlet:namespace />addLayoutSearchTemplates'),
 			namespace: '<portlet:namespace />',
 			nodeList: A.one('#<portlet:namespace />templateList'),
 			nodeSelector: '.lfr-page-template',
