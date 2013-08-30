@@ -54,7 +54,7 @@
 
 		.lfr-page-template .toggler-header {
 			&.active {
-				&.lfr-page-template-title label{
+				&.lfr-page-template-title label {
 					padding: 2px;
 				}
 			}
@@ -262,8 +262,29 @@
 			color: #999;
 		}
 
+
+		h1 {
+			color: #009AE5;
+			font-size: 26px;
+			line-height: 26px;
+		}
+
 		.lfr-add-page-toolbar {
 			background-color: #FFF;
+		}
+
+
+		lfr-content-item {
+			color: #3EA9DB;
+
+			&:hover {
+				background-color: #EEE;
+				color: #006076;
+			}
+
+			&.lfr-portlet-used {
+				color: #BBB;
+			}
 		}
 
 		.lfr-install-more {
@@ -276,6 +297,7 @@
 					&.lfr-page-template-title label{
 						background-color: #0DB5E7;
 						color: #FFFFFF;
+						padding: 2px;
 					}
 				}
 			}
