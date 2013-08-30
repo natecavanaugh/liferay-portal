@@ -41,11 +41,6 @@
 			padding-right: 0;
 		}
 
-		.radio input[type="radio"] {
-			margin-left: 6px;
-			margin-right: 6px;
-		}
-
 		.template-selector {
 			margin-top: 1.5em;
 
@@ -136,6 +131,11 @@
 					margin-left: 0;
 					margin-bottom: 5px;
 					padding: 2px;
+				}
+
+				.radio input {
+					margin-left: 6px;
+					margin-right: 6px;
 				}
 
 				&.toggler-header-collapsed {
