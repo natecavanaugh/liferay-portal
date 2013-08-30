@@ -277,11 +277,9 @@ portletURL.setParameter("tabs1", tabs1);
 		<aui:input name="deleteTrashEntryIds" type="hidden" />
 		<aui:input name="restoreTrashEntryIds" type="hidden" />
 
-		<aui:button-row>
-			<liferay-ui:search-form
-				page="/html/portlet/trash/entry_search.jsp"
-			/>
-		</aui:button-row>
+		<liferay-ui:search-form
+			page="/html/portlet/trash/entry_search.jsp"
+		/>
 	</aui:form>
 
 	<div class="separator"><!-- --></div>
