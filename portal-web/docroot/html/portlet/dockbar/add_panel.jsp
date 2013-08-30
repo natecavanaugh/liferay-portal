@@ -66,7 +66,7 @@
 					<liferay-ui:tabs
 						names="<%= StringUtil.merge(tabs1Names) %>"
 						refresh="<%= false %>"
-						style="pills"
+						style="tabs"
 						value="<%= selectedTab %>"
 					>
 						<c:if test="<%= hasAddContentAndApplicationsPermission %>">
