@@ -229,6 +229,12 @@
 	background-color: #FFF;
 
 	.add-content-menu {
+		h1 {
+			color: #009AE5;
+			font-size: 26px;
+			line-height: 26px;
+		}
+
 		.lfr-add-page-toolbar {
 			background-color: #FFF;
 		}
