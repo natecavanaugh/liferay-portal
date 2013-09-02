@@ -43,7 +43,6 @@
 				display: inline;
 
 				.search-query, .aui-field-select {
-					@include border-radius(15px);
 					margin-bottom: 0;
 				}
 			}
