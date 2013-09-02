@@ -215,10 +215,8 @@ AUI.add(
 								instance.byId('addLayoutPrototypeId').set(STR_VALUE, selectedPrototypeId);
 							}
 						}
-						else {
-							if (header) {
-								header.one('i').replaceClass(CSS_ICON_DOWN, CSS_ICON_RIGHT);
-							}
+						else if (header) {
+							header.one('i').replaceClass(CSS_ICON_DOWN, CSS_ICON_RIGHT);
 						}
 					},
 
