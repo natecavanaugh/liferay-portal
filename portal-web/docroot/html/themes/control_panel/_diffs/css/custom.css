@@ -57,6 +57,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 	/* ---------- Control Panel Secondary Nav ---------- */
 
 	.control-panel-bar-secondary {
+		margin-left: 10px;
 		padding-top: 1.1em;
 
 		&.nav-pills {
@@ -83,17 +84,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 					background: #009AE5;
 				}
 			}
-		}
-	}
-
-	.dialog-iframe-popup .panel-manage-frontpage .control-panel-bar-secondary {
-		margin-left: 10px;
-	}
-
-	.panel-manage-frontpage {
-		.control-panel-bar-secondary {
-			margin-bottom: 1px;
-			margin-left: 20px;
 		}
 	}
 
