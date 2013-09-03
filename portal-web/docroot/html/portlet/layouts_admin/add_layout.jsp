@@ -181,7 +181,9 @@ String rootNodeName = liveGroup.getLayoutRootNodeName(privateLayout, locale);
 								</div>
 
 								<div class="lfr-page-template-options toggler-content toggler-content-collapsed">
-									<liferay-util:include page="/html/portal/layout/edit/portlet.jsp" />
+									<liferay-util:include page="/html/portal/layout/edit/portlet_applications.jsp">
+										<liferay-util:param name="copyLayoutIdPrefix" value="addLayout" />
+									</liferay-util:include>
 								</div>
 							</aui:nav-item>
 						</c:if>
