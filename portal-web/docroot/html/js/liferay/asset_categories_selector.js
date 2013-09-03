@@ -98,6 +98,9 @@ AUI.add(
 						validator: Lang.isNumber,
 						value: -1
 					},
+					moreResultsLabel: {
+						value: Liferay.Language.get('load-more-results')
+					},
 					singleSelect: {
 						validator: Lang.isBoolean,
 						value: false
@@ -622,7 +625,7 @@ AUI.add(
 
 						if (maxEntries > 0) {
 							paginatorConfig.limit = maxEntries;
-							paginatorConfig.moreResultsLabel = Liferay.Language.get('load-more-results');
+							paginatorConfig.moreResultsLabel = instance.get('moreResultsLabel');
 							paginatorConfig.total = item.categoriesCount;
 						}
 						else {
