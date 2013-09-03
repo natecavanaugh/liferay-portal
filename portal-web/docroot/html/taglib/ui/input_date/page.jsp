@@ -86,7 +86,7 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 	Liferay.component(
 		'<%= namespace + name %>DatePicker',
 		function() {
-			return new A.DatePicker<%= BrowserSnifferUtil.isMobile(request) ? "Native" : StringPool.BLANK %>(
+			var datePicker = new A.DatePicker<%= BrowserSnifferUtil.isMobile(request) ? "Native" : StringPool.BLANK %>(
 				{
 					container: '#<%= randomNamespace %>displayDate',
 					mask: '<%= mask %>',
@@ -117,6 +117,12 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 					trigger: '#<%= namespace + name %>'
 				}
 			);
+
+			datePicker.getDate = function() {
+				return new Date(A.one('#<%= yearParamId %>').val(), A.one('#<%= monthParamId %>').val(), A.one('#<%= dayParamId %>').val());
+			};
+
+			return datePicker;
 		}
 	);
 
