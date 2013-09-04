@@ -31,6 +31,10 @@ if ((values == null) || (values.length < names.length)) {
 	values = names;
 }
 
+// CSS Class
+
+String cssClass = (String)request.getAttribute("liferay-ui:tabs:cssClass");
+
 // Form name
 
 String formName = (String)request.getAttribute("liferay-ui:tabs:formName");
@@ -46,8 +50,4 @@ String value = (String)request.getAttribute("liferay-ui:tabs:value");
 if (value == null) {
 	value = ParamUtil.getString(request, param, values[0]);
 }
-
-// CSS Class
-
-String cssClass = (String)request.getAttribute("liferay-ui:tabs:cssClass");
 %>
