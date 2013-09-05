@@ -168,9 +168,9 @@
 
 				&.toggler-header-collapsed {
 					.lfr-page-template-description {
-						padding-left: 26px;
 						height: 1.6em;
 						overflow: hidden;
+						padding-left: 26px;
 						text-overflow: ellipsis;
 						white-space: nowrap;
 						width: 285px;
@@ -186,9 +186,9 @@
 			}
 
 			.lfr-page-template-options {
+				border-bottom: solid 1px #EEE;
 				margin: 10px 10px 0 25px;
 				padding-bottom: 20px;
-				border-bottom: solid 1px #EEE;
 			}
 		}
 
@@ -358,7 +358,6 @@
 					&.lfr-page-template-title label {
 						background-color: #0DB5E7;
 						color: #FFFFFF;
-						padding: 2px;
 					}
 				}
 			}
