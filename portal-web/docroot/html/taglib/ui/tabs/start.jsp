@@ -23,6 +23,7 @@
 LiferayPortletURL portletURL = (LiferayPortletURL)request.getAttribute("liferay-ui:tabs:portletURL");
 
 String url = GetterUtil.getString((String)request.getAttribute("liferay-ui:tabs:url"));
+String style = GetterUtil.getString((String)request.getAttribute("liferay-ui:tabs:style"));
 String anchor = StringPool.BLANK;
 String separator = StringPool.AMPERSAND;
 
@@ -101,7 +102,7 @@ String onClick = GetterUtil.getString((String)request.getAttribute("liferay-ui:t
 		<c:otherwise>
 			<input name="<%= namespace %><%= param %>TabsScroll" type="hidden" />
 
-			<ul class="nav nav-tabs">
+			<ul class="nav nav-<%= style %>">
 		</c:otherwise>
 	</c:choose>
 
