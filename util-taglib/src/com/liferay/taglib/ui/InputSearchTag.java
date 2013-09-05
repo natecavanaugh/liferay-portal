@@ -111,10 +111,6 @@ public class InputSearchTag extends IncludeTag {
 
 		String title = _title;
 
-		if (Validator.isNull(title)) {
-			title = "";
-		}
-
 		request.setAttribute(
 			"liferay-ui:input-search:autoFocus", String.valueOf(_autoFocus));
 		request.setAttribute(
