@@ -442,6 +442,32 @@
 		}
 	}
 
+	/* ---------- General Navbar ---------- */
+
+	.app-view-taglib .lfr-header-row-content .select-all-entries {
+		left: 15px;
+		top: 14px;
+	}
+
+	.navbar {
+		.btn {
+			margin-top: 6px;
+		}
+
+		.btn-navbar {
+			padding: 10px;
+		}
+	}
+
+	.navbar .btn-group, .navbar-search {
+		margin-top: 8px;
+		margin-bottom: 8px;
+	}
+
+	.navbar-inner {
+		min-height: 47px;
+	}
+
 	/* ---------- Hidden Accessible ---------- */
 
 	#banner h2, #banner h3, .site-breadcrumbs h1, #skip-to-content {
