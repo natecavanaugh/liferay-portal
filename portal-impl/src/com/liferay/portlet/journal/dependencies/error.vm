@@ -2,7 +2,7 @@
 
 <div class="journal-template-error">
 	<span class="alert alert-error">
-		#language ("an-error-occurred-while-processing-the-template")
+		$language.get($locale, "an-error-occurred-while-processing-the-template")
 	</span>
 
 	<pre>$htmlUtil.escape($exception)</pre>
