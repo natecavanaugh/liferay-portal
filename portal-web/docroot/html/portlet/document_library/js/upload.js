@@ -1217,7 +1217,6 @@ AUI.add(
 						var errorMessage;
 
 						var size = item.get('size') || 0;
-
 						var type = item.get('type') || '';
 
 						if ((maxFileSize !== 0) && (size > maxFileSize)) {
