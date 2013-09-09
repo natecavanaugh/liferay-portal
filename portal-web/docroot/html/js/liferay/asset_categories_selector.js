@@ -58,6 +58,7 @@ AUI.add(
 		 *
 		 * Optional
 		 * maxEntries {Number}: The maximum number of entries that will be loaded. The default value is -1, which will load all categories.
+		 * moreResultsLabel {String}: The localized label for link "Load more results".
 		 * portalModelResource {boolean}: Whether the asset model is on the portal level.
 		 */
 
@@ -97,6 +98,9 @@ AUI.add(
 					maxEntries: {
 						validator: Lang.isNumber,
 						value: -1
+					},
+					moreResultsLabel: {
+						value: Liferay.Language.get('load-more-results')
 					},
 					singleSelect: {
 						validator: Lang.isBoolean,
@@ -622,7 +626,7 @@ AUI.add(
 
 						if (maxEntries > 0) {
 							paginatorConfig.limit = maxEntries;
-							paginatorConfig.moreResultsLabel = Liferay.Language.get('load-more-results');
+							paginatorConfig.moreResultsLabel = instance.get('moreResultsLabel');
 							paginatorConfig.total = item.categoriesCount;
 						}
 						else {
