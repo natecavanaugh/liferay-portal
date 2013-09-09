@@ -455,16 +455,28 @@ AUI.add(
 								};
 							}
 							else if (type === 'ddm-date') {
-								config.inputFormatter = function(value) {
-									var date = A.DataType.Date.parse(value);
+								config.inputFormatter = function(val) {
+									var values = [];
 
-									var dateValue = STR_EMPTY;
+									AArray.each(val, function(date, index) {
+										values.push(date.getTime());
+									});
 
-									if (date) {
-										dateValue = date.getTime();
-									}
+									return values;
+								};
 
-									return dateValue;
+								config.outputFormatter = function(val) {
+									var values = [];
+
+									AArray.each(val, function(timestamp) {
+										var date = new Date(Lang.toInt(timestamp));
+
+										date = DateMath.add(date, DateMath.MINUTES, date.getTimezoneOffset());
+
+										values.push(date);
+									});
+
+									return values;
 								};
 
 								item.formatter = function(obj) {
