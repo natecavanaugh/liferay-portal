@@ -100,6 +100,9 @@ AUI.add(
 						value: -1
 					},
 					moreResultsLabel: {
+						validator: function(value) {
+							return A.Lang.isString(value) && value.length;
+						},
 						value: Liferay.Language.get('load-more-results')
 					},
 					singleSelect: {
@@ -107,6 +110,9 @@ AUI.add(
 						value: false
 					},
 					title: {
+						validator: function(value) {
+							return A.Lang.isString(value) && value.length;
+						},
 						value: Liferay.Language.get('select-categories')
 					},
 					vocabularyIds: {
