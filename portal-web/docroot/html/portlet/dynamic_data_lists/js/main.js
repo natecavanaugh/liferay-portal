@@ -300,7 +300,8 @@ AUI.add(
 									data: data,
 									record: record,
 									recordsetId: recordsetId,
-									structure: structure
+									structure: structure,
+									zIndex: Liferay.zIndex.OVERLAY
 								}
 							);
 						}
