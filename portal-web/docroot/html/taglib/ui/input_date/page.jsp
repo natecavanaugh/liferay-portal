@@ -94,11 +94,11 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 						disabledChange: function (event) {
 							var instance = this;
 
-							var container = this.get('container');
+							var container = instance.get('container');
 
-							container.one('#<%= namespace + name %>').set('disabled', event.newVal);
 							container.one('#<%= dayParamId %>').set('disabled', event.newVal);
 							container.one('#<%= monthParamId %>').set('disabled', event.newVal);
+							container.one('#<%= namespace + name %>').set('disabled', event.newVal);
 							container.one('#<%= yearParamId %>').set('disabled', event.newVal);
 						},
 						selectionChange: function(event) {
