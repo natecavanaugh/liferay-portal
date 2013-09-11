@@ -86,11 +86,21 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 	Liferay.component(
 		'<%= namespace + name %>DatePicker',
 		function() {
-			return new A.DatePicker<%= BrowserSnifferUtil.isMobile(request) ? "Native" : StringPool.BLANK %>(
+			var datePicker = new A.DatePicker<%= BrowserSnifferUtil.isMobile(request) ? "Native" : StringPool.BLANK %>(
 				{
 					container: '#<%= randomNamespace %>displayDate',
 					mask: '<%= mask %>',
 					on: {
+						disabledChange: function(event) {
+							var instance = this;
+
+							var container = instance.get('container');
+
+							container.one('#<%= dayParamId %>').set('disabled', event.newVal);
+							container.one('#<%= monthParamId %>').set('disabled', event.newVal);
+							container.one('#<%= namespace + name %>').set('disabled', event.newVal);
+							container.one('#<%= yearParamId %>').set('disabled', event.newVal);
+						},
 						selectionChange: function(event) {
 							var date = event.newSelection[0];
 
@@ -107,6 +117,12 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 					trigger: '#<%= namespace + name %>'
 				}
 			);
+
+			datePicker.getDate = function() {
+				return new Date(A.one('#<%= yearParamId %>').val(), A.one('#<%= monthParamId %>').val(), A.one('#<%= dayParamId %>').val());
+			};
+
+			return datePicker;
 		}
 	);
 
