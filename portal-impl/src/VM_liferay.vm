@@ -77,10 +77,6 @@ img, .png {
 	$breadcrumb_tag.runTag()
 #end
 
-#macro (dockbar)
-	$theme.runtime("145")
-#end
-
 #macro (silently $foo)
 	#set ($foo = $foo)
 #end

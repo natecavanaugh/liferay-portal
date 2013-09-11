@@ -19,7 +19,7 @@
 $theme.include($body_top_include)
 
 #if ($is_signed_in)
-	#dockbar()
+	$theme.dockbar()
 #end
 
 <div class="container-fluid" id="wrapper">
