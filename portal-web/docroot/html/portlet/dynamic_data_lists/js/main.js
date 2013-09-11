@@ -459,9 +459,12 @@ AUI.add(
 								config.inputFormatter = function(val) {
 									var values = [];
 
-									AArray.each(val, function(date, index) {
-										values.push(date.getTime());
-									});
+									AArray.each(
+										val,
+										function(item, index, collection) {
+											values.push(item.getTime());
+										}
+									);
 
 									return values;
 								};
@@ -469,13 +472,16 @@ AUI.add(
 								config.outputFormatter = function(val) {
 									var values = [];
 
-									AArray.each(val, function(timestamp) {
-										var date = new Date(Lang.toInt(timestamp));
+									AArray.each(
+										val,
+										function(item, index, collection) {
+											var date = new Date(Lang.toInt(item));
 
-										date = DateMath.add(date, DateMath.MINUTES, date.getTimezoneOffset());
+											date = DateMath.add(date, DateMath.MINUTES, date.getTimezoneOffset());
 
-										values.push(date);
-									});
+											values.push(date);
+										}
+									);
 
 									return values;
 								};
