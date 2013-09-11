@@ -47,7 +47,7 @@ $theme.dockbar()
 	</header>
 
 	<div id="content">
-		<nav id="breadcrumbs">#breadcrumbs()</nav>
+		<nav id="breadcrumbs">$theme.breadcrumb()</nav>
 
 		#if ($selectable)
 			$theme.include($content_include)
