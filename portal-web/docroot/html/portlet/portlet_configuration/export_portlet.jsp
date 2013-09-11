@@ -384,8 +384,6 @@ portletURL.setParameter("tabs3", "current-and-previous");
 
 				<aui:button-row>
 					<aui:button type="submit" value="export" />
-
-					<aui:button href="<%= currentURL %>" type="cancel" />
 				</aui:button-row>
 			</div>
 		</aui:form>
