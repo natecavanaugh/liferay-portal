@@ -115,6 +115,10 @@ public class DummyVelocityTaglib implements VelocityTaglib {
 	}
 
 	@Override
+	public void breadcrumb(String type) throws Exception {
+	}
+
+	@Override
 	public void breadcrumb(
 			String displayStyle, boolean showGuestGroup,
 			boolean showParentGroups, boolean showLayout,
@@ -144,6 +148,10 @@ public class DummyVelocityTaglib implements VelocityTaglib {
 
 	@Override
 	public void doAsURL(long doAsUserId) throws Exception {
+	}
+
+	@Override
+	public void dockbar() throws Exception {
 	}
 
 	@Override

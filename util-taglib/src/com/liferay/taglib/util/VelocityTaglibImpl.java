@@ -26,6 +26,7 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.taglib.aui.ColumnTag;
 import com.liferay.taglib.aui.LayoutTag;
 import com.liferay.taglib.portlet.ActionURLTag;
@@ -260,6 +261,16 @@ public class VelocityTaglibImpl implements VelocityTaglib {
 	}
 
 	@Override
+	public void breadcrumb(String type) throws Exception {
+		if ((type != null) && type.equals(LayoutConstants.TYPE_CONTROL_PANEL)) {
+			breadcrumb(null, false, false, true, true);
+		}
+		else {
+			breadcrumb();
+		}
+	}
+
+	@Override
 	public void breadcrumb(
 			String displayStyle, boolean showGuestGroup,
 			boolean showParentGroups, boolean showLayout,
@@ -320,6 +331,11 @@ public class VelocityTaglibImpl implements VelocityTaglib {
 	@Override
 	public void doAsURL(long doAsUserId) throws Exception {
 		DoAsURLTag.doTag(doAsUserId, null, _pageContext);
+	}
+
+	@Override
+	public void dockbar() throws Exception {
+		runtime(PortletKeys.DOCKBAR);
 	}
 
 	@Override
