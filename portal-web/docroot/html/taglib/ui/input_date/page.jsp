@@ -91,7 +91,7 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 					container: '#<%= randomNamespace %>displayDate',
 					mask: '<%= mask %>',
 					on: {
-						disabledChange: function (event) {
+						disabledChange: function(event) {
 							var instance = this;
 
 							var container = instance.get('container');
