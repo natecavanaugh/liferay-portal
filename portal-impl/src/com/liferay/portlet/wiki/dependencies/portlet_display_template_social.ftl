@@ -22,11 +22,11 @@
 
 <div class="wiki-body">
 	<div class="wiki-info">
-		<span class="stats">${assetEntry.getViewCount()} <@liferay.language key="views" /></span> |
+		<span class="stats">${assetEntry.getViewCount()} ${liferayMacro.language("views")}</span> |
 
-		<span class="date"><@liferay.language key="last-modified" /> ${dateUtil.getDate(entry.getModifiedDate(), "dd MMM yyyy - HH:mm:ss", locale)}</span>
+		<span class="date">${liferayMacro.language("last-modified")} ${dateUtil.getDate(entry.getModifiedDate(), "dd MMM yyyy - HH:mm:ss", locale)}</span>
 
-		<span class="author"><@liferay.language key="by" /> ${htmlUtil.escape(portalUtil.getUserName(entry.getUserId(), entry.getUserName()))}</span>
+		<span class="author">${liferayMacro.language("by")} ${htmlUtil.escape(portalUtil.getUserName(entry.getUserId(), entry.getUserName()))}</span>
 	</div>
 
 	<div class="wiki-content">
@@ -87,21 +87,21 @@
 
 <#if (childPages?has_content)>
 	<div class="child-pages">
-		<h2><@liferay.language key="children-pages" /></h2>
+		<h2>${liferayMacro.language("children-pages")}</h2>
 
 		<table class="taglib-search-iterator">
 			<tr class="portlet-section-header results-header">
 				<th>
-					<@liferay.language key="page" />
+					${liferayMacro.language("page")}
 				</th>
 				<th>
-					<@liferay.language key="last-modified" />
+					${liferayMacro.language("last-modified")}
 				</th>
 				<th>
-					<@liferay.language key="ratings" />
+					${liferayMacro.language("ratings")}
 				</th>
 				<th>
-					<@liferay.language key="views" />
+					${liferayMacro.language("views")}
 				</th>
 			</tr>
 
@@ -120,7 +120,7 @@
 						<a href="${viewPageURL}">${childPage.getTitle()}</a>
 					</td>
 					<td>
-						<a href="${viewPageURL}">${dateUtil.getDate(childPage.getModifiedDate(),"dd MMM yyyy - HH:mm:ss", locale)} <@liferay.language key="by" /> ${htmlUtil.escape(portalUtil.getUserName(childPage.getUserId(), childPage.getUserName()))}</a>
+						<a href="${viewPageURL}">${dateUtil.getDate(childPage.getModifiedDate(),"dd MMM yyyy - HH:mm:ss", locale)} ${liferayMacro.language("by")} ${htmlUtil.escape(portalUtil.getUserName(childPage.getUserId(), childPage.getUserName()))}</a>
 					</td>
 					<td>
 						<@getRatings cssClass="child-ratings" entry=childPage />

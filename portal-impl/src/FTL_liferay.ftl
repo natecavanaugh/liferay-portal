@@ -55,11 +55,6 @@ LPS-30525.
 	</#if>
 </#macro>
 
-<#macro language
-	key
->
-${languageUtil.get(locale, key)}</#macro>
-
 <#macro date
 	format
 >
