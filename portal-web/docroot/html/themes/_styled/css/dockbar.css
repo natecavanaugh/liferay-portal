@@ -487,12 +487,9 @@ $editLayoutPanelWidth: 460px;
 	/* ---------- Customization Bar ---------- */
 
 	.page-customization-bar {
-		background-color: #999;
-		color: #FFF;
-		font-size: 1.2em;
-		font-weight: bold;
-		min-height: 30px;
-		padding: 5px;
+		margin: 4em 0 -3em;
+		padding-left: 5em;
+		padding-right: 5em;
 	}
 
 	.controls-hidden .page-customization-bar {
@@ -518,6 +515,26 @@ $editLayoutPanelWidth: 460px;
 		.reset-prototype {
 			display: inline;
 			padding-left: 1em;
+		}
+	}
+
+	@include respond-to(phone, tablet) {
+		.page-customization-bar {
+			margin: 5em 0 0;
+		}
+	}
+
+	@include respond-to(tablet) {
+		.page-customization-bar {
+			padding-left: 2em;
+			padding-right: 2em;
+		}
+	}
+
+	@include respond-to(phone) {
+		.page-customization-bar {
+			padding-left: 0.5em;
+			padding-right: 0.5em;
 		}
 	}
 }

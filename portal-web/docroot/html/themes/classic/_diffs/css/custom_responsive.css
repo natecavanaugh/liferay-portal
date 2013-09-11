@@ -190,6 +190,10 @@
 			}
 		}
 
+		.page-customization-bar {
+			margin-bottom: 4em;
+		}
+
 		.portlet-dockbar {
 			display: inline-block;
 			width: 100%;
