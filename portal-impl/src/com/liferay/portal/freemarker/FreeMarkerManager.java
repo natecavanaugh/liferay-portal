@@ -14,11 +14,15 @@
 
 package com.liferay.portal.freemarker;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
+import com.liferay.portal.kernel.template.TemplateMacro;
 import com.liferay.portal.kernel.template.TemplateResource;
+import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.template.BaseTemplateManager;
@@ -133,6 +137,21 @@ public class FreeMarkerManager extends BaseTemplateManager {
 				template, templateContextHelper.getRestrictedVariables());
 		}
 
+		try {
+			TemplateMacro templateMacro =
+				(TemplateMacro)InstanceFactory.newInstance(
+					PropsValues.FREEMARKER_ENGINE_TEMPLATE_MACRO);
+
+			templateMacro.setTemplate(template);
+
+			template.put(TemplateConstants.LIFERAY_MACRO, templateMacro);
+		}
+		catch (Exception e) {
+			_log.error(
+				"Unable to instantiate FreeMarker macro class :" +
+					PropsValues.FREEMARKER_ENGINE_TEMPLATE_MACRO);
+		}
+
 		return template;
 	}
 
@@ -145,6 +164,8 @@ public class FreeMarkerManager extends BaseTemplateManager {
 
 		return false;
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(FreeMarkerManager.class);
 
 	private Configuration _configuration;
 
