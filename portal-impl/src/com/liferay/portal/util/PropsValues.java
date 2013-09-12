@@ -744,6 +744,8 @@ public class PropsValues {
 
 	public static final String FREEMARKER_ENGINE_TEMPLATE_EXCEPTION_HANDLER = PropsUtil.get(PropsKeys.FREEMARKER_ENGINE_TEMPLATE_EXCEPTION_HANDLER);
 
+	public static final String FREEMARKER_ENGINE_TEMPLATE_MACRO = PropsUtil.get(PropsKeys.FREEMARKER_ENGINE_TEMPLATE_MACRO);
+
 	public static final String[] FREEMARKER_ENGINE_TEMPLATE_PARSERS = PropsUtil.getArray(PropsKeys.FREEMARKER_ENGINE_TEMPLATE_PARSERS);
 
 	public static final String[] GLOBAL_SHUTDOWN_EVENTS = PropsUtil.getArray(PropsKeys.GLOBAL_SHUTDOWN_EVENTS);
@@ -1929,6 +1931,8 @@ public class PropsValues {
 	public static final String[] VELOCITY_ENGINE_RESTRICTED_CLASSES = PropsUtil.getArray(PropsKeys.VELOCITY_ENGINE_RESTRICTED_CLASSES);
 
 	public static final String[] VELOCITY_ENGINE_RESTRICTED_PACKAGES = PropsUtil.getArray(PropsKeys.VELOCITY_ENGINE_RESTRICTED_PACKAGES);
+	
+	public static final String VELOCITY_ENGINE_TEMPLATE_MACRO = PropsUtil.get(PropsKeys.VELOCITY_ENGINE_TEMPLATE_MACRO);
 
 	public static final boolean VERIFY_DATABASE_TRANSACTIONS_DISABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.VERIFY_DATABASE_TRANSACTIONS_DISABLED));
 

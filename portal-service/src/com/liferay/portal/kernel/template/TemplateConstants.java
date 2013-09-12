@@ -36,6 +36,8 @@ public interface TemplateConstants {
 
 	public static final String LANG_TYPE_XSL = "xsl";
 
+	public static final String MACRO = "macro";
+
 	public static final String SERVLET_SEPARATOR = "_SERVLET_CONTEXT_";
 
 	public static final String TEMPLATE_ID = "template_id";
