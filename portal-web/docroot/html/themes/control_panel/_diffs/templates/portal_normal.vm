@@ -19,7 +19,7 @@
 $theme.include($body_top_include)
 
 #if (($control_panel_category != "my") || !$getterUtil.getBoolean($propsUtil.get("dockbar.administrative.links.show.in.pop.up")))
-	#dockbar()
+	$macro.dockbar()
 #end
 
 <div class="container-fluid" id="wrapper">
