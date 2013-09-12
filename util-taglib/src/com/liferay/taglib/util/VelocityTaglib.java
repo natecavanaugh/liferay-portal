@@ -93,6 +93,8 @@ public interface VelocityTaglib {
 
 	public void breadcrumb() throws Exception;
 
+	public void breadcrumb(String type) throws Exception;
+
 	public void breadcrumb(
 			String displayStyle, boolean showGuestGroup,
 			boolean showParentGroups, boolean showLayout,
@@ -116,6 +118,8 @@ public interface VelocityTaglib {
 		throws Exception;
 
 	public void doAsURL(long doAsUserId) throws Exception;
+
+	public void dockbar() throws Exception;
 
 	public void flags(
 			String className, long classPK, String contentTitle, boolean label,

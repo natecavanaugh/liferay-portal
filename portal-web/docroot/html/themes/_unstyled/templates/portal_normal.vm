@@ -2,7 +2,7 @@
 
 #parse ($init)
 
-<html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
+<html class="$root_css_class" dir="$liferayMacro.language("lang.dir")" lang="$w3c_language_id">
 
 <head>
 	<title>$the_title - $company_name</title>
@@ -14,24 +14,24 @@
 
 <body class="$css_class">
 
-<a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
+<a href="#main-content" id="skip-to-content">$liferayMacro.language("skip-to-content")</a>
 
 $theme.include($body_top_include)
 
 #if ($is_signed_in)
-	#dockbar()
+	$theme.dockbar()
 #end
 
 <div class="container-fluid" id="wrapper">
 	<header id="banner" role="banner">
 		<div id="heading">
 			<h1 class="site-title">
-				<a class="$logo_css_class" href="$site_default_url" title="#language ("go-to") $site_name">
+				<a class="$logo_css_class" href="$site_default_url" title="$liferayMacro.language("go-to") $site_name">
 					<img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width" />
 				</a>
 
 				#if ($show_site_name)
-					<span class="site-name" title="#language ("go-to") $site_name">
+					<span class="site-name" title="$liferayMacro.language("go-to") $site_name">
 						$site_name
 					</span>
 				#end
@@ -52,7 +52,7 @@ $theme.include($body_top_include)
 	</header>
 
 	<div id="content">
-		<nav id="breadcrumbs">#breadcrumbs()</nav>
+		<nav id="breadcrumbs">$theme.breadcrumb()</nav>
 
 		#if ($selectable)
 			$theme.include($content_include)
@@ -67,7 +67,7 @@ $theme.include($body_top_include)
 
 	<footer id="footer" role="contentinfo">
 		<p class="powered-by">
-			#language ("powered-by") <a href="http://www.liferay.com" rel="external">Liferay</a>
+			$liferayMacro.language("powered-by") <a href="http://www.liferay.com" rel="external">Liferay</a>
 		</p>
 	</footer>
 </div>

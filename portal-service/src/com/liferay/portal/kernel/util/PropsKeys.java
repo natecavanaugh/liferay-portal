@@ -883,6 +883,8 @@ public interface PropsKeys {
 
 	public static final String FREEMARKER_ENGINE_TEMPLATE_EXCEPTION_HANDLER = "freemarker.engine.template.exception.handler";
 
+	public static final String FREEMARKER_ENGINE_TEMPLATE_MACRO = "freemarker.engine.template.macro";
+
 	public static final String FREEMARKER_ENGINE_TEMPLATE_PARSERS = "freemarker.engine.template.parsers";
 
 	public static final String GLOBAL_SHUTDOWN_EVENTS = "global.shutdown.events";
@@ -2554,6 +2556,8 @@ public interface PropsKeys {
 	public static final String VELOCITY_ENGINE_RESTRICTED_CLASSES = "velocity.engine.restricted.classes";
 
 	public static final String VELOCITY_ENGINE_RESTRICTED_PACKAGES = "velocity.engine.restricted.packages";
+
+	public static final String VELOCITY_ENGINE_TEMPLATE_MACRO = "velocity.engine.template.macro";
 
 	public static final String VELOCITY_ENGINE_VELOCIMACRO_LIBRARY = "velocity.engine.velocimacro.library";
 

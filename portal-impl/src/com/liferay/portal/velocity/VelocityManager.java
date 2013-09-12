@@ -14,11 +14,15 @@
 
 package com.liferay.portal.velocity;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
+import com.liferay.portal.kernel.template.TemplateMacro;
 import com.liferay.portal.kernel.template.TemplateResource;
+import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.template.BaseTemplateManager;
@@ -164,6 +168,21 @@ public class VelocityManager extends BaseTemplateManager {
 				template, templateContextHelper.getRestrictedVariables());
 		}
 
+		try {
+			TemplateMacro templateMacro =
+				(TemplateMacro)InstanceFactory.newInstance(
+					PropsValues.VELOCITY_ENGINE_TEMPLATE_MACRO);
+
+			templateMacro.setTemplate(template);
+
+			template.put(TemplateConstants.LIFERAY_MACRO, templateMacro);
+		}
+		catch (Exception e) {
+			_log.error(
+				"Unable to instantiate Velocity macro class :" +
+					PropsValues.VELOCITY_ENGINE_TEMPLATE_MACRO);
+		}
+
 		return template;
 	}
 
@@ -178,6 +197,8 @@ public class VelocityManager extends BaseTemplateManager {
 
 		return velocityContext;
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(VelocityManager.class);
 
 	private VelocityEngine _velocityEngine;
 

@@ -16,7 +16,7 @@
 
 		<div class="entry-body">
 			<div class="entry-author">
-				<@liferay.language key="written-by" /> ${htmlUtil.escape(portalUtil.getUserName(entry.getUserId(), entry.getUserName()))}
+				${liferayMacro.language("written-by")} ${htmlUtil.escape(portalUtil.getUserName(entry.getUserId(), entry.getUserName()))}
 			</div>
 
 			<#assign summary = entry.getDescription() />
@@ -27,7 +27,7 @@
 
 			${stringUtil.shorten(htmlUtil.stripHtml(summary), 100)}
 
-			<a href="${viewURL}"><@liferay.language key="read-more" /> <span class="hide-accessible"><@liferay.language key="about"/>${htmlUtil.escape(entry.getTitle())}</span> &raquo;</a>
+			<a href="${viewURL}">${liferayMacro.language("read-more")} <span class="hide-accessible">${liferayMacro.language("about")}${htmlUtil.escape(entry.getTitle())}</span> &raquo;</a>
 		</div>
 
 		<div class="entry-footer">
