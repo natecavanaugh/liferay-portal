@@ -20,7 +20,7 @@
 
 #if ($portlet_display.isStateMax())
 	<p>
-		<a href="$portlet_back_url">#language ("back")</a>
+		<a href="$portlet_back_url">$macro.language("back")</a>
 	</p>
 #end
 

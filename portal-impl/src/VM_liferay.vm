@@ -14,9 +14,6 @@
 	#end
 #end
 
-#macro (language $lang_key)
-$languageUtil.get($locale, $lang_key)#end
-
 #macro (language_format $lang_key $objects)
 $languageUtil.format($locale, $lang_key, $objects.toArray())#end
 
