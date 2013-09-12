@@ -105,13 +105,3 @@ img, .png {
 }
 </#if>
 </#macro>
-
-<#macro breadcrumbs
-	control_panel = ""
->
-	<#if control_panel = "control_panel">
-		${theme.breadcrumb(0, false, false, true, true)}
-	<#else>
-		${theme.breadcrumb()}
-	</#if>
-</#macro>

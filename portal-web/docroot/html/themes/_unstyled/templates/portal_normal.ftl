@@ -52,7 +52,7 @@ ${theme.include(body_top_include)}
 	</header>
 
 	<div id="content">
-		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
+		<nav id="breadcrumbs">${theme.breadcrumb()}</nav>
 
 		<#if selectable>
 			${theme.include(content_include)}
