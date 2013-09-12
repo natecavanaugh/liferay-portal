@@ -19,7 +19,7 @@
 ${theme.include(body_top_include)}
 
 <#if is_signed_in>
-	<@liferay.dockbar />
+	${macro.dockbar()}
 </#if>
 
 <div class="container-fluid" id="wrapper">

@@ -115,7 +115,3 @@ img, .png {
 		${theme.breadcrumb()}
 	</#if>
 </#macro>
-
-<#macro dockbar>
-	${theme.runtime("145")}
-</#macro>
