@@ -2,7 +2,7 @@
 
 #parse ($init)
 
-<html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
+<html class="$root_css_class" dir="$macro.language("lang.dir")" lang="$w3c_language_id">
 
 <head>
 	<title>$the_title - $company_name</title>
@@ -14,12 +14,12 @@
 
 <body class="$css_class">
 
-<a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
+<a href="#main-content" id="skip-to-content">$macro.language("skip-to-content")</a>
 
 $theme.include($body_top_include)
 
 #if (($control_panel_category != "my") || !$getterUtil.getBoolean($propsUtil.get("dockbar.administrative.links.show.in.pop.up")))
-	#dockbar()
+	$macro.dockbar()
 #end
 
 <div class="container-fluid" id="wrapper">
@@ -28,8 +28,8 @@ $theme.include($body_top_include)
 			<header id="banner" role="banner">
 				<div id="heading">
 					<h1 class="company-title">
-						<a class="$logo_css_class" href="$control_panel_url" title="#language ("go-to") #language ("control-panel")">
-							<span>#language ("control-panel")</span>
+						<a class="$logo_css_class" href="$control_panel_url" title="$macro.language("go-to") $macro.language("control-panel")">
+							<span>$macro.language("control-panel")</span>
 						</a>
 					</h1>
 				</div>

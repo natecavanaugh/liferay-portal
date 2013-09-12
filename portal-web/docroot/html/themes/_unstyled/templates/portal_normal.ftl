@@ -2,7 +2,7 @@
 
 <#include init />
 
-<html class="${root_css_class}" dir="<@liferay.language key="lang.dir" />" lang="${w3c_language_id}">
+<html class="${root_css_class}" dir="${macro.language("lang.dir")} lang="${w3c_language_id}">
 
 <head>
 	<title>${the_title} - ${company_name}</title>
@@ -14,24 +14,24 @@
 
 <body class="${css_class}">
 
-<a href="#main-content" id="skip-to-content"><@liferay.language key="skip-to-content" /></a>
+<a href="#main-content" id="skip-to-content">${macro.language("skip-to-content")}</a>
 
 ${theme.include(body_top_include)}
 
 <#if is_signed_in>
-	<@liferay.dockbar />
+	${macro.dockbar()}
 </#if>
 
 <div class="container-fluid" id="wrapper">
 	<header id="banner" role="banner">
 		<div id="heading">
 			<h1 class="site-title">
-				<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language key="go-to" /> ${site_name}">
+				<a class="${logo_css_class}" href="${site_default_url}" title="${macro.language("go-to")} ${site_name}">
 					<img alt="${logo_description}" height="${site_logo_height}" src="${site_logo}" width="${site_logo_width}" />
 				</a>
 
 				<#if show_site_name>
-					<span class="site-name" title="<@liferay.language key="go-to" /> ${site_name}">
+					<span class="site-name" title="${macro.language("go-to")} ${site_name}">
 						${site_name}
 					</span>
 				</#if>
@@ -52,7 +52,7 @@ ${theme.include(body_top_include)}
 	</header>
 
 	<div id="content">
-		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
+		<nav id="breadcrumbs">${theme.breadcrumb()}</nav>
 
 		<#if selectable>
 			${theme.include(content_include)}
@@ -67,7 +67,7 @@ ${theme.include(body_top_include)}
 
 	<footer id="footer" role="contentinfo">
 		<p class="powered-by">
-			<@liferay.language key="powered-by" /> <a href="http://www.liferay.com" rel="external">Liferay</a>
+			${macro.language("powered-by")} <a href="http://www.liferay.com" rel="external">Liferay</a>
 		</p>
 	</footer>
 </div>

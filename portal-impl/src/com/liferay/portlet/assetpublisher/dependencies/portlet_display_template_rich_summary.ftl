@@ -40,7 +40,7 @@
 
 				${htmlUtil.escape(assetRenderer.getSummary(locale))}
 
-				<a href="${viewURL}"><@liferay.language key="read-more" /><span class="hide-accessible"><@liferay.language key="about" />${entryTitle}</span> &raquo;</a>
+				<a href="${viewURL}">${macro.language("read-more")}<span class="hide-accessible">${macro.language("about")}${entryTitle}</span> &raquo;</a>
 			</div>
 
 			<@getRatings />
@@ -114,7 +114,7 @@
 			<#assign dateFormat = "dd MMM yyyy - HH:mm:ss" />
 
 			<#if fieldName == "author">
-				<@liferay.language key="by" /> ${portalUtil.getUserName(assetRenderer.getUserId(), assetRenderer.getUserName())}
+				${macro.language("by")} ${portalUtil.getUserName(assetRenderer.getUserId(), assetRenderer.getUserName())}
 			<#elseif fieldName == "categories">
 				<@liferay_ui["asset-categories-summary"]
 					className=entry.getClassName()
@@ -142,7 +142,7 @@
 					image="history"
 				/>
 
-				${entry.getViewCount()} <@liferay.language key="views" />
+				${entry.getViewCount()} ${macro.language("views")}
 			</#if>
 		</span>
 	</#if>
