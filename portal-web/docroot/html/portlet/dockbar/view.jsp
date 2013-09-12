@@ -254,92 +254,98 @@ List<LayoutPrototype> layoutPrototypes = LayoutPrototypeServiceUtil.search(compa
 
 <c:if test="<%= (layoutSet != null) && layoutSet.isLayoutSetPrototypeLinkActive() && SitesUtil.isLayoutModifiedSinceLastMerge(layout) && hasLayoutUpdatePermission %>">
 	<div class="page-customization-bar">
-		<img alt="" class="customized-icon" src="<%= themeDisplay.getPathThemeImages() %>/common/edit.png" />
+		<div class="alert alert-warning">
+			<img alt="" class="customized-icon" src="<%= themeDisplay.getPathThemeImages() %>/common/edit.png" />
 
-		<liferay-ui:message key="this-page-has-been-changed-since-the-last-update-from-the-site-template" />
+			<liferay-ui:message key="this-page-has-been-changed-since-the-last-update-from-the-site-template" />
 
-		<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetPrototypeURL">
-			<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
-		</liferay-portlet:actionURL>
+			<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetPrototypeURL">
+				<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
+			</liferay-portlet:actionURL>
 
-		<aui:form action="<%= resetPrototypeURL %>" cssClass="reset-prototype" name="resetFm" portletNamespace="<%= PortalUtil.getPortletNamespace(PortletKeys.LAYOUTS_ADMIN) %>">
-			<aui:input name="<%= Constants.CMD %>" type="hidden" value="reset_prototype" />
-			<aui:input name="redirect" type="hidden" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
-			<aui:input name="groupId" type="hidden" value="<%= String.valueOf(themeDisplay.getSiteGroupId()) %>" />
+			<aui:form action="<%= resetPrototypeURL %>" cssClass="reset-prototype" name="resetFm" portletNamespace="<%= PortalUtil.getPortletNamespace(PortletKeys.LAYOUTS_ADMIN) %>">
+				<aui:input name="<%= Constants.CMD %>" type="hidden" value="reset_prototype" />
+				<aui:input name="redirect" type="hidden" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
+				<aui:input name="groupId" type="hidden" value="<%= String.valueOf(themeDisplay.getSiteGroupId()) %>" />
 
-			<aui:button name="submit" type="submit" value="reset" />
-		</aui:form>
+				<aui:button name="submit" type="submit" value="reset" />
+			</aui:form>
+		</div>
 	</div>
 </c:if>
 
 <c:if test="<%= (!SitesUtil.isLayoutUpdateable(layout) || (layout.isLayoutPrototypeLinkActive() && !group.hasStagingGroup())) && LayoutPermissionUtil.containsWithoutViewableGroup(themeDisplay.getPermissionChecker(), layout, false, ActionKeys.UPDATE) %>">
 	<div class="page-customization-bar">
-		<img alt="" class="customized-icon" src="<%= themeDisplay.getPathThemeImages() %>/common/site_icon.png" />
+		<div class="alert alert-warning">
+			<img alt="" class="customized-icon" src="<%= themeDisplay.getPathThemeImages() %>/common/site_icon.png" />
 
-		<c:choose>
-			<c:when test="<%= layout.isLayoutPrototypeLinkActive() && !group.hasStagingGroup() %>">
-				<liferay-ui:message key="this-page-is-linked-to-a-page-template" />
-			</c:when>
-			<c:when test="<%= layout instanceof VirtualLayout %>">
-				<liferay-ui:message key="this-page-belongs-to-a-user-group" />
-			</c:when>
-			<c:otherwise>
-				<liferay-ui:message key="this-page-is-linked-to-a-site-template-which-does-not-allow-modifications-to-it" />
-			</c:otherwise>
-		</c:choose>
+			<c:choose>
+				<c:when test="<%= layout.isLayoutPrototypeLinkActive() && !group.hasStagingGroup() %>">
+					<liferay-ui:message key="this-page-is-linked-to-a-page-template" />
+				</c:when>
+				<c:when test="<%= layout instanceof VirtualLayout %>">
+					<liferay-ui:message key="this-page-belongs-to-a-user-group" />
+				</c:when>
+				<c:otherwise>
+					<liferay-ui:message key="this-page-is-linked-to-a-site-template-which-does-not-allow-modifications-to-it" />
+				</c:otherwise>
+			</c:choose>
+		</div>
 	</div>
 </c:if>
 
 <c:if test="<%= !(group.isLayoutPrototype() || group.isLayoutSetPrototype() || group.isUserGroup()) && layoutTypePortlet.isCustomizable() && LayoutPermissionUtil.containsWithoutViewableGroup(permissionChecker, layout, false, ActionKeys.CUSTOMIZE) %>">
 	<div class="page-customization-bar">
-		<img alt="" class="customized-icon" src="<%= themeDisplay.getPathThemeImages() %>/common/guest_icon.png" />
+		<div class="alert alert-warning">
+			<img alt="" class="customized-icon" src="<%= themeDisplay.getPathThemeImages() %>/common/guest_icon.png" />
 
-		<c:choose>
-			<c:when test="<%= layoutTypePortlet.isCustomizedView() %>">
-				<liferay-ui:message key="you-can-customize-this-page" />
+			<c:choose>
+				<c:when test="<%= layoutTypePortlet.isCustomizedView() %>">
+					<liferay-ui:message key="you-can-customize-this-page" />
 
-				<liferay-ui:icon-help message="customizable-user-help" />
-			</c:when>
-			<c:otherwise>
-				<liferay-ui:message key="this-is-the-default-page-without-your-customizations" />
+					<liferay-ui:icon-help message="customizable-user-help" />
+				</c:when>
+				<c:otherwise>
+					<liferay-ui:message key="this-is-the-default-page-without-your-customizations" />
 
-				<c:if test="<%= hasLayoutUpdatePermission %>">
-					<liferay-ui:icon-help message="customizable-admin-help" />
-				</c:if>
-			</c:otherwise>
-		</c:choose>
+					<c:if test="<%= hasLayoutUpdatePermission %>">
+						<liferay-ui:icon-help message="customizable-admin-help" />
+					</c:if>
+				</c:otherwise>
+			</c:choose>
 
-		<span class="page-customization-actions">
-
-			<%
-			String taglibImage = "search";
-			String taglibMessage = "view-default-page";
-
-			if (!layoutTypePortlet.isCustomizedView()) {
-				taglibMessage = "view-my-customized-page";
-			}
-			else if (layoutTypePortlet.isDefaultUpdated()) {
-				taglibImage = "activate";
-				taglibMessage = "the-defaults-for-the-current-page-have-been-updated-click-here-to-see-them";
-			}
-			%>
-
-			<liferay-ui:icon cssClass='<%= layoutTypePortlet.isCustomizedView() ? StringPool.BLANK : "false" %>' id="toggleCustomizedView" image="<%= taglibImage %>" label="<%= true %>" message="<%= taglibMessage %>" url="javascript:;" />
-
-			<c:if test="<%= layoutTypePortlet.isCustomizedView() %>">
-				<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetCustomizationViewURL">
-					<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
-					<portlet:param name="groupId" value="<%= String.valueOf(themeDisplay.getSiteGroupId()) %>" />
-					<portlet:param name="<%= Constants.CMD %>" value="reset_customized_view" />
-				</liferay-portlet:actionURL>
+			<span class="page-customization-actions">
 
 				<%
-				String taglibURL = "javascript:if (confirm('" + UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-reset-your-customizations-to-default") + "')){submitForm(document.hrefFm, '" + HttpUtil.encodeURL(resetCustomizationViewURL) + "');}";
+				String taglibImage = "search";
+				String taglibMessage = "view-default-page";
+
+				if (!layoutTypePortlet.isCustomizedView()) {
+					taglibMessage = "view-my-customized-page";
+				}
+				else if (layoutTypePortlet.isDefaultUpdated()) {
+					taglibImage = "activate";
+					taglibMessage = "the-defaults-for-the-current-page-have-been-updated-click-here-to-see-them";
+				}
 				%>
 
-				<liferay-ui:icon image="../portlet/refresh" label="<%= true %>" message="reset-my-customizations" url="<%= taglibURL %>" />
-			</c:if>
-		</span>
+				<liferay-ui:icon cssClass='<%= layoutTypePortlet.isCustomizedView() ? StringPool.BLANK : "false" %>' id="toggleCustomizedView" image="<%= taglibImage %>" label="<%= true %>" message="<%= taglibMessage %>" url="javascript:;" />
+
+				<c:if test="<%= layoutTypePortlet.isCustomizedView() %>">
+					<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetCustomizationViewURL">
+						<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
+						<portlet:param name="groupId" value="<%= String.valueOf(themeDisplay.getSiteGroupId()) %>" />
+						<portlet:param name="<%= Constants.CMD %>" value="reset_customized_view" />
+					</liferay-portlet:actionURL>
+
+					<%
+					String taglibURL = "javascript:if (confirm('" + UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-reset-your-customizations-to-default") + "')){submitForm(document.hrefFm, '" + HttpUtil.encodeURL(resetCustomizationViewURL) + "');}";
+					%>
+
+					<liferay-ui:icon image="../portlet/refresh" label="<%= true %>" message="reset-my-customizations" url="<%= taglibURL %>" />
+				</c:if>
+			</span>
+		</div>
 	</div>
 
 	<aui:script>
