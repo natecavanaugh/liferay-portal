@@ -23,21 +23,22 @@
 	%>
 
 	<div class="taglib-social-bookmarks" id="<%= randomNamespace %>socialBookmarks">
-		<ul class="unstyled">
+		<liferay-ui:icon-menu icon="/html/themes/classic/images/common/share.png" message="share">
 
 			<%
 			for (int i = 0; i < typesArray.length; i++) {
-				String styleClass = "taglib-social-bookmark-" + typesArray[i];
 			%>
 
-				<li class="<%= styleClass %>">
-					<liferay-ui:social-bookmark contentId="<%= contentId %>" target="<%= target %>" title="<%= title %>" type="<%= typesArray[i] %>" url="<%= url %>" />
-				</li>
+				<liferay-ui:social-bookmark contentId="<%= contentId %>" target="<%= target %>" title="<%= title %>" type="<%= typesArray[i] %>" url="<%= url %>" />
 
 			<%
 			}
 			%>
 
-		</ul>
+		</liferay-ui:icon-menu>
 	</div>
+
+	<aui:script use="liferay-social-bookmarks">
+		new Liferay.SocialBookmarks();
+	</aui:script>
 </c:if>
