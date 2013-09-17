@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_flags_page") + StringPool.UNDERLINE;
+String randomNamespace = StringUtil.randomId() + StringPool.UNDERLINE;
 
 String className = (String)request.getAttribute("liferay-ui:flags:className");
 long classPK = GetterUtil.getLong((String)request.getAttribute("liferay-ui:flags:classPK"));
