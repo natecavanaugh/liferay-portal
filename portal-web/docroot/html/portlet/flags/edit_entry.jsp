@@ -107,15 +107,18 @@ long reportedUserId = ParamUtil.getLong(request, "reportedUserId");
 			dialog.setStdModContent('body', message);
 		};
 
-		var data = {};
-
-		data['<portlet:namespace />className'] = '<%= HtmlUtil.escape(className) %>';
-		data['<portlet:namespace />classPK'] = '<%= classPK %>';
-		data['<portlet:namespace />contentTitle'] = '<%= HtmlUtil.escape(contentTitle) %>';
-		data['<portlet:namespace />contentURL'] = '<%= HtmlUtil.escape(contentURL) %>';
-		data['<portlet:namespace />reason'] = reason;
-		data['<portlet:namespace />reportedUserId'] = '<%= reportedUserId %>';
-		data['<portlet:namespace />reporterEmailAddress'] = reporterEmailAddress;
+		var data = Liferay.Util.ns(
+			'<portlet:namespace />',
+			{
+				className: '<%= HtmlUtil.escape(className) %>',
+				classPK: '<%= classPK %>',
+				contentTitle: '<%= HtmlUtil.escape(contentTitle) %>',
+				contentURL: '<%= HtmlUtil.escape(contentURL) %>',
+				reason: reason,
+				reportedUserId: '<%= reportedUserId %>',
+				reporterEmailAddress: reporterEmailAddress
+			}
+		);
 
 		A.io.request(
 			'<liferay-portlet:actionURL portletName="<%= PortletKeys.FLAGS %>" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="struts_action" value="/flags/edit_entry" /></liferay-portlet:actionURL>',

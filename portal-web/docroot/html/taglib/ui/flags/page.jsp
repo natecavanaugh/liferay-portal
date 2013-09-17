@@ -59,17 +59,16 @@ long reportedUserId = GetterUtil.getLong((String)request.getAttribute("liferay-u
 								}
 							);
 
-							<%
-							String portletNamespace = PortalUtil.getPortletNamespace(PortletKeys.FLAGS);
-							%>
-
-							var data = {};
-
-							data['<%= portletNamespace %>className'] = '<%= className %>';
-							data['<%= portletNamespace %>classPK'] = '<%= classPK %>';
-							data['<%= portletNamespace %>contentTitle'] = '<%= HtmlUtil.escapeJS(contentTitle) %>';
-							data['<%= portletNamespace %>contentURL'] = '<%= HtmlUtil.escapeJS(PortalUtil.getPortalURL(request) + currentURL) %>';
-							data['<%= portletNamespace %>reportedUserId'] = '<%= reportedUserId %>';
+							var data = Liferay.Util.ns(
+								'<%= PortalUtil.getPortletNamespace(PortletKeys.FLAGS) %>',
+								{
+									className: '<%= className %>',
+									classPK: '<%= classPK %>',
+									contentTitle: '<%= HtmlUtil.escapeJS(contentTitle) %>',
+									contentURL: '<%= HtmlUtil.escapeJS(PortalUtil.getPortalURL(request) + currentURL) %>',
+									reportedUserId: '<%= reportedUserId %>'
+								}
+							);
 
 							popup.plug(
 								A.Plugin.IO, {
