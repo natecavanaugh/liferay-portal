@@ -1584,7 +1584,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 	/**
 	 * Updates the priority of the layout matching the group, layout ID and
-	 * privacy, setting the layout's priority based on the priorities of the the
+	 * privacy, setting the layout's priority based on the priorities of the
 	 * next and previous layouts.
 	 *
 	 * @param  groupId the primary key of the group
