@@ -108,7 +108,7 @@ ManifestSummary manifestSummary = portletDataContext.getManifestSummary();
 												firstDayOfWeek="<%= yesterday.getFirstDayOfWeek() - 1 %>"
 												monthParam="startDateMonth"
 												monthValue="<%= yesterday.get(Calendar.MONTH) %>"
-												name="startDate"
+												name="startDateInput"
 												yearParam="startDateYear"
 												yearValue="<%= yesterday.get(Calendar.YEAR) %>"
 											/>
@@ -125,7 +125,7 @@ ManifestSummary manifestSummary = portletDataContext.getManifestSummary();
 												hourValue="<%= yesterday.get(Calendar.HOUR) %>"
 												minuteParam='<%= "startDateMinute" %>'
 												minuteValue="<%= yesterday.get(Calendar.MINUTE) %>"
-												name="startTime"
+												name="startTimeInput"
 											/>
 										</aui:fieldset>
 									</li>
@@ -138,7 +138,7 @@ ManifestSummary manifestSummary = portletDataContext.getManifestSummary();
 												firstDayOfWeek="<%= today.getFirstDayOfWeek() - 1 %>"
 												monthParam="endDateMonth"
 												monthValue="<%= today.get(Calendar.MONTH) %>"
-												name="endDate"
+												name="endDateInput"
 												yearParam="endDateYear"
 												yearValue="<%= today.get(Calendar.YEAR) %>"
 											/>
@@ -155,7 +155,7 @@ ManifestSummary manifestSummary = portletDataContext.getManifestSummary();
 												hourValue="<%= today.get(Calendar.HOUR) %>"
 												minuteParam='<%= "endDateMinute" %>'
 												minuteValue="<%= today.get(Calendar.MINUTE) %>"
-												name="endTime"
+												name="endTimeInput"
 											/>
 										</aui:fieldset>
 									</li>
