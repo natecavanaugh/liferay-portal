@@ -81,7 +81,7 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 	<div class="date" id="<portlet:namespace /><%= facet.getFieldId() %>PlaceHolder"></div>
 </div>
 
-<aui:script use="aui-calendar-deprecated">
+<aui:script use="calendar,datatype-date-math">
 	var now = new Date();
 
 	var checkDateRange = function(event) {
@@ -177,7 +177,7 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 			firstDayOfWeek: <%= firstDayOfWeek %>,
 			locale: '<%= locale %>',
 			maxDate: now,
-			minDate: A.DataType.DateMath.subtract(now, A.DataType.DateMath.YEAR, 2),
+			minDate: A.Date.addYears(now, -2),
 			selectMultipleDates: true,
 			setValue: true,
 			showToday: true,
