@@ -81,7 +81,7 @@ public class ServiceManager implements ServiceManagerMBean {
 
 	@Override
 	public boolean isActive() {
-		return _serviceMonitorAdvice.isActive();
+		return ServiceMonitorAdvice.isActive();
 	}
 
 	@Override

@@ -14,7 +14,6 @@
 
 package com.liferay.portlet;
 
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSender;
 import com.liferay.portal.kernel.monitoring.RequestStatus;
 import com.liferay.portal.kernel.monitoring.statistics.DataSampleThreadLocal;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
@@ -87,12 +86,8 @@ public class MonitoringPortlet implements InvokerPortlet {
 	public MonitoringPortlet() {
 	}
 
-	public MonitoringPortlet(
-		InvokerPortlet invokerPortlet,
-		SingleDestinationMessageSender singleDestinationMessageSender) {
-
+	public MonitoringPortlet(InvokerPortlet invokerPortlet) {
 		_invokerPortlet = invokerPortlet;
-		_singleDestinationMessageSender = singleDestinationMessageSender;
 	}
 
 	@Override
@@ -193,8 +188,6 @@ public class MonitoringPortlet implements InvokerPortlet {
 		}
 		finally {
 			if (portletRequestDataSample != null) {
-				_singleDestinationMessageSender.send(portletRequestDataSample);
-
 				DataSampleThreadLocal.addDataSample(portletRequestDataSample);
 			}
 		}
@@ -227,8 +220,6 @@ public class MonitoringPortlet implements InvokerPortlet {
 		}
 		finally {
 			if (portletRequestDataSample != null) {
-				_singleDestinationMessageSender.send(portletRequestDataSample);
-
 				DataSampleThreadLocal.addDataSample(portletRequestDataSample);
 			}
 		}
@@ -263,8 +254,6 @@ public class MonitoringPortlet implements InvokerPortlet {
 		}
 		finally {
 			if (portletRequestDataSample != null) {
-				_singleDestinationMessageSender.send(portletRequestDataSample);
-
 				DataSampleThreadLocal.addDataSample(portletRequestDataSample);
 			}
 		}
@@ -298,8 +287,6 @@ public class MonitoringPortlet implements InvokerPortlet {
 		}
 		finally {
 			if (portletRequestDataSample != null) {
-				_singleDestinationMessageSender.send(portletRequestDataSample);
-
 				DataSampleThreadLocal.addDataSample(portletRequestDataSample);
 			}
 		}
@@ -312,12 +299,6 @@ public class MonitoringPortlet implements InvokerPortlet {
 	@Override
 	public void setPortletFilters() throws PortletException {
 		_invokerPortlet.setPortletFilters();
-	}
-
-	public void setSingleDestinationMessageSender(
-		SingleDestinationMessageSender singleDestinationMessageSender) {
-
-		_singleDestinationMessageSender = singleDestinationMessageSender;
 	}
 
 	private void _processException(
@@ -352,6 +333,5 @@ public class MonitoringPortlet implements InvokerPortlet {
 	private long _actionTimeout;
 	private InvokerPortlet _invokerPortlet;
 	private long _renderTimeout;
-	private SingleDestinationMessageSender _singleDestinationMessageSender;
 
 }

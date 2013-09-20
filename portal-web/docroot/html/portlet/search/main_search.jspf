@@ -15,16 +15,23 @@
 --%>
 
 <%
-SearchContainer mainSearchSearchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_DELTA, portletURL, null, LanguageUtil.format(pageContext, "no-results-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(keywords) + "</strong>"));
+SearchContainer mainSearchSearchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_DELTA, portletURL, null, null);
 
 SearchContext searchContext = SearchContextFactory.getInstance(request);
+
+mainSearchSearchContainer.setEmptyResultsMessage(LanguageUtil.format(pageContext, "no-results-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(searchContext.getKeywords()) + "</strong>"));
 
 searchContext.setAttribute("paginationType", "more");
 searchContext.setEnd(mainSearchSearchContainer.getEnd());
 
 QueryConfig queryConfig = new QueryConfig();
 
+queryConfig.setCollatedSpellCheckResultEnabled(collatedSpellCheckResultEnabled);
+queryConfig.setCollatedSpellCheckResultScoresThreshold(collatedSpellCheckResultDisplayThreshold);
 queryConfig.setHighlightEnabled(true);
+queryConfig.setQuerySuggestionEnabled(querySuggestionsEnabled);
+queryConfig.setQuerySuggestionScoresThreshold(querySuggestionsDisplayThreshold);
+queryConfig.setQuerySuggestionsMax(querySuggestionsMax);
 
 searchContext.setQueryConfig(queryConfig);
 
@@ -133,6 +140,8 @@ boolean showMenu = advancedConfiguration || displayScopeFacet || displayAssetTyp
 	</c:if>
 
 	<aui:col cssClass="result" first="<%= !showMenu %>" span="10">
+		<%@ include file="/html/portlet/search/main_search_suggest.jspf" %>
+
 		<liferay-ui:search-container
 			searchContainer="<%= mainSearchSearchContainer %>"
 			total="<%= hits.getLength() %>"

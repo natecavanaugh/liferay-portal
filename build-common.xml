@@ -548,6 +548,10 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		<echo message="${current.time}" />
 	</target>
 
+	<target name="print-properties">
+		<echoproperties />
+	</target>
+
 	<target name="report-test-coverage">
 		<if>
 			<equals arg1="${junit.code.coverage}" arg2="true" />

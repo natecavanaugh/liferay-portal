@@ -45,6 +45,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>LANGUAGE_SELECT</td>
+	<td>//select[@id='_166_language']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>DESCRIPTION_FIELD</td>
 	<td>//textarea[@id='_166_description']</td>
 	<td></td>
@@ -68,7 +73,7 @@
 <!--SCRIPT-->
 <tr>
 	<td>SCRIPT_CONTENT_FIELD</td>
-	<td>//div[@id='_166_richEditor']/textarea</td>
+	<td>//div[@id='_166_richEditor']/div/div[@class='ace_content']</td>
 	<td></td>
 </tr>
 <tr>

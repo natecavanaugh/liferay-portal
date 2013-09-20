@@ -1,0 +1,33 @@
+<definition>
+	<command name="assertClick">
+		<case locator-key1="SAVE_BUTTON">
+			<execute function="AssertClick#assertTextClickAtAndWait" />
+		</case>
+
+		<case locator-key1="SELECT_STRUCTURE">
+			<execute function="AssertClick#assertTextClickAtAndWait" />
+		</case>
+	</command>
+
+	<command name="assertTextEquals">
+		<case locator-key1="SCRIPT_CONTENT_FIELD">
+			<execute function="AssertTextEquals#assertPartialText" />
+		</case>
+
+		<case locator-key1="STRUCTURE">
+			<execute function="AssertTextEquals#assertPartialText" />
+		</case>
+	</command>
+
+	<command name="isElementNotPresent">
+		<case locator-key1="DESCRIPTION_FIELD">
+			<execute function="IsElementNotPresent#isNotVisible" />
+		</case>
+	</command>
+
+	<command name="type">
+		<case locator-key1="NAME_FIELD">
+			<execute function="Type#clickAtSendKeys" />
+		</case>
+	</command>
+</definition>
