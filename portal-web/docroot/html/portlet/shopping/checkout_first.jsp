@@ -338,13 +338,13 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 		%>
 
 			if ("<%= address.getAddressId() %>" == addressId) {
-				//document.getElementById("<portlet:namespace />" + type + "FirstName").value = "<%= user.getFirstName() %>";
-				//document.getElementById("<portlet:namespace />" + type + "LastName").value = "<%= user.getLastName() %>";
-				//document.getElementById("<portlet:namespace />" + type + "EmailAddress").value = "<%= user.getEmailAddress() %>";
-				document.getElementById("<portlet:namespace />" + type + "Street").value = "<%= address.getStreet1() %>";
-				document.getElementById("<portlet:namespace />" + type + "City").value = "<%= address.getCity() %>";
+				//document.getElementById('<portlet:namespace />' + type + 'FirstName').value = "<%= user.getFirstName() %>";
+				//document.getElementById('<portlet:namespace />' + type + 'LastName').value = "<%= user.getLastName() %>";
+				//document.getElementById('<portlet:namespace />' + type + 'EmailAddress').value = "<%= user.getEmailAddress() %>";
+				document.getElementById('<portlet:namespace />' + type + 'Street').value = "<%= address.getStreet1() %>";
+				document.getElementById('<portlet:namespace />' + type + 'City').value = "<%= address.getCity() %>";
 
-				var stateSel = document.getElementById("<portlet:namespace />" + type + "StateSel");
+				var stateSel = document.getElementById('<portlet:namespace />' + type + 'StateSel');
 				var stateSelValue = "<%= region.getRegionCode() %>";
 
 				for (var i = 0; i < stateSel.length; i++) {
@@ -355,8 +355,8 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 					}
 				}
 
-				document.getElementById("<portlet:namespace />" + type + "Zip").value = "<%= address.getZip() %>";
-				document.getElementById("<portlet:namespace />" + type + "Country").value = "<%= country.getName() %>";
+				document.getElementById('<portlet:namespace />' + type + 'Zip').value = "<%= address.getZip() %>";
+				document.getElementById('<portlet:namespace />' + type + 'Country').value = "<%= country.getName() %>";
 			}
 
 		<%

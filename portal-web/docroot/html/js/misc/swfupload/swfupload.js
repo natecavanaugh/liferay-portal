@@ -918,7 +918,7 @@ SWFUpload.Console.writeLine = function(message) {
 	var console, documentForm;
 
 	try {
-		console = document.getElementById("SWFUpload_Console");
+		console = document.getElementById('SWFUpload_Console');
 
 		if (!console) {
 			documentForm = document.createElement("form");

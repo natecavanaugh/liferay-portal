@@ -120,7 +120,7 @@ portletURL.setParameter("roleId", String.valueOf(role.getRoleId()));
 		document.<portlet:namespace />fm['<portlet:namespace />groupIds' + target].value = selectedGroupIds.join(',');
 		document.<portlet:namespace />fm['<portlet:namespace />groupNames' + target].value = selectedGroupNames.join('@@');
 
-		var nameEl = document.getElementById("<portlet:namespace />groupHTML" + target);
+		var nameEl = document.getElementById('<portlet:namespace />groupHTML' + target);
 
 		var groupsHTML = '';
 
