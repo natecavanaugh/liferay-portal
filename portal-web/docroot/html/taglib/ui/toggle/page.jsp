@@ -59,14 +59,14 @@ String defaultMessage = (String)request.getAttribute("liferay-ui:toggle:defaultM
 			if (state == "") {
 				<%= stateVar %> = "none";
 
-				document.getElementById("<%= id %>").style.display = "none";
+				document.getElementById('<%= id %>').style.display = "none";
 
 				<c:choose>
 					<c:when test="<%= Validator.isNotNull(showMessage) %>">
-						document.getElementById("<%= id %>_message").innerHTML = "<%= showMessage %>";
+						document.getElementById('<%= id %>_message').innerHTML = "<%= showMessage %>";
 					</c:when>
 					<c:otherwise>
-						document.getElementById("<%= id %>_image").src = "<%= showImage %>";
+						document.getElementById('<%= id %>_image').src = "<%= showImage %>";
 					</c:otherwise>
 				</c:choose>
 
@@ -85,14 +85,14 @@ String defaultMessage = (String)request.getAttribute("liferay-ui:toggle:defaultM
 			else {
 				<%= stateVar %> = "";
 
-				document.getElementById("<%= id %>").style.display = "";
+				document.getElementById('<%= id %>').style.display = "";
 
 				<c:choose>
 					<c:when test="<%= Validator.isNotNull(showMessage) %>">
-						document.getElementById("<%= id %>_message").innerHTML = "<%= hideMessage %>";
+						document.getElementById('<%= id %>_message').innerHTML = "<%= hideMessage %>";
 					</c:when>
 					<c:otherwise>
-						document.getElementById("<%= id %>_image").src = "<%= hideImage %>";
+						document.getElementById('<%= id %>_image').src = "<%= hideImage %>";
 					</c:otherwise>
 				</c:choose>
 
