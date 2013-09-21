@@ -66,12 +66,12 @@
 				if (node.innerHTML == "-") {
 					node.innerHTML = "+";
 
-					document.getElementById('collapse' + id).style.display = "none";
+					document.getElementById("collapse" + id).style.display = "none";
 				}
 				else if (node.innerHTML == "+") {
 					node.innerHTML = "-";
 
-					document.getElementById('collapse' + id).style.display = "block";
+					document.getElementById("collapse" + id).style.display = "block";
 				}
 			}
 		}
