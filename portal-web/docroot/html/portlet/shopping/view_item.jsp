@@ -221,7 +221,7 @@ ShoppingItem[] prevAndNext = ShoppingItemServiceUtil.getItemsPrevAndNext(item.ge
 
 <aui:script>
 	function <portlet:namespace />addToCart() {
-		document.<portlet:namespace />fm.<portlet:namespace />fields.value = "";
+		document.<portlet:namespace />fm.<portlet:namespace />fields.value = '';
 
 		<%
 		for (int i = 0; i < itemFields.length; i++) {
@@ -231,7 +231,7 @@ ShoppingItem[] prevAndNext = ShoppingItemServiceUtil.getItemsPrevAndNext(item.ge
 			String[] fieldValues = itemField.getValuesArray();
 		%>
 
-			if (document.<portlet:namespace />fm.<portlet:namespace />fieldName<%= fieldName %>.value == "") {
+			if (document.<portlet:namespace />fm.<portlet:namespace />fieldName<%= fieldName %>.value == '') {
 				alert("<%= UnicodeLanguageUtil.get(pageContext, "please-select-all-options") %>");
 
 				return;

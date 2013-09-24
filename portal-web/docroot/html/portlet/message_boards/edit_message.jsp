@@ -515,7 +515,7 @@ else {
 	function <portlet:namespace />selectCategory(categoryId, categoryName) {
 		document.<portlet:namespace />fm.<portlet:namespace />mbCategoryId.value = categoryId;
 
-		var nameEl = document.getElementById("<portlet:namespace />categoryName");
+		var nameEl = document.getElementById('<portlet:namespace />categoryName');
 
 		nameEl.href = "<portlet:renderURL><portlet:param name="struts_action" value="/message_boards/view" /></portlet:renderURL>&<portlet:namespace />mbCategoryId=" + categoryId;
 		nameEl.innerHTML = categoryName + "&nbsp;";
