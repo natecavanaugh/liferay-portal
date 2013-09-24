@@ -289,7 +289,7 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 																			firstDayOfWeek="<%= yesterday.getFirstDayOfWeek() - 1 %>"
 																			monthParam="startDateMonth"
 																			monthValue="<%= yesterday.get(Calendar.MONTH) %>"
-																			name="startDate"
+																			name="startDateInput"
 																			yearParam="startDateYear"
 																			yearValue="<%= yesterday.get(Calendar.YEAR) %>"
 																		/>
@@ -306,7 +306,7 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 																			hourValue="<%= yesterday.get(Calendar.HOUR) %>"
 																			minuteParam='<%= "startDateMinute" %>'
 																			minuteValue="<%= yesterday.get(Calendar.MINUTE) %>"
-																			name="startTime"
+																			name="startTimeInput"
 																		/>
 																	</aui:fieldset>
 																</li>
@@ -320,7 +320,7 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 																			firstDayOfWeek="<%= today.getFirstDayOfWeek() - 1 %>"
 																			monthParam="endDateMonth"
 																			monthValue="<%= today.get(Calendar.MONTH) %>"
-																			name="endDate"
+																			name="endDateInput"
 																			yearParam="endDateYear"
 																			yearValue="<%= today.get(Calendar.YEAR) %>"
 																		/>
@@ -337,7 +337,7 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 																			hourValue="<%= today.get(Calendar.HOUR) %>"
 																			minuteParam='<%= "endDateMinute" %>'
 																			minuteValue="<%= today.get(Calendar.MINUTE) %>"
-																			name="endTime"
+																			name="endTimeInput"
 																		/>
 																	</aui:fieldset>
 																</li>
