@@ -38,6 +38,8 @@ public interface ActionableDynamicQuery {
 
 	public void setGroupId(long groupId);
 
+	public void setGroupIdPropertyName(String groupIdPropertyName);
+
 	public void setInterval(int interval);
 
 	public void setPrimaryKeyPropertyName(String primaryKeyPropertyName);

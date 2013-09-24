@@ -149,7 +149,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>
@@ -179,7 +179,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>
@@ -339,7 +339,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 		</execute>
 
@@ -368,7 +368,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 		</execute>
 
@@ -522,7 +522,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>
@@ -552,7 +552,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>
@@ -624,7 +624,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>
@@ -654,7 +654,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>
@@ -801,7 +801,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -830,7 +830,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1022,7 +1022,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1063,7 +1063,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1095,6 +1095,8 @@
 	</command>
 
 	<command name="DeleteBlogsEntryNoGuestRole">
+		<var name="entryContent" value="Blogs Entry Content" />
+		<var name="entryTitle" value="Blogs Entry Title" />
 		<var name="pageName" value="Blogs Page" />
 		<var name="portletName" value="Blogs" />
 
@@ -1266,7 +1268,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1301,7 +1303,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1494,7 +1496,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1530,7 +1532,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1616,7 +1618,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1652,7 +1654,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1738,7 +1740,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1767,7 +1769,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -1897,7 +1899,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 		</execute>
 
@@ -1922,7 +1924,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 		</execute>
 
@@ -2069,7 +2071,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>
@@ -2096,7 +2098,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>
@@ -2177,7 +2179,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -2206,7 +2208,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogsEntry">
+		<execute macro="PermissionsInline#gotoBlogsEntryPG">
 			<var name="entryTitle" value="${entryTitle}" />
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
@@ -2355,7 +2357,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 		</execute>
 
@@ -2380,7 +2382,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 		</execute>
 
@@ -2527,7 +2529,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>
@@ -2554,7 +2556,7 @@
 			<var name="userLoginFullName" value="Test Test" />
 		</execute>
 
-		<execute macro="PermissionsInline#gotoBlogs">
+		<execute macro="PermissionsInline#gotoBlogsPG">
 			<var name="pageName" value="${pageName}" />
 			<var name="pageTypeSite" value="${pageTypeSite}" />
 		</execute>

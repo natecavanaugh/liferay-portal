@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.DateRange;
 import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
@@ -1069,6 +1070,16 @@ public class DLFileEntryLocalServiceImpl
 	}
 
 	@Override
+	public int getFileEntriesCount(
+			long groupId, DateRange dateRange, long repositoryId,
+			QueryDefinition queryDefinition)
+		throws SystemException {
+
+		return dlFileEntryFinder.countByG_M_R(
+			groupId, dateRange, repositoryId, queryDefinition);
+	}
+
+	@Override
 	public int getFileEntriesCount(long groupId, long folderId)
 		throws SystemException {
 
@@ -2063,7 +2074,7 @@ public class DLFileEntryLocalServiceImpl
 						ddmStructure.getStructureId(),
 						lastDLFileVersion.getFileVersionId());
 			}
-			catch (NoSuchFileEntryMetadataException nsfem) {
+			catch (NoSuchFileEntryMetadataException nsfeme) {
 				return false;
 			}
 

@@ -14,7 +14,6 @@
 
 package com.liferay.portal.kernel.resiliency.spi.remote;
 
-import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.test.CodeCoverageAssertor;
 
 import java.util.HashMap;
@@ -35,7 +34,7 @@ public class SystemPropertiesProcessCallableTest {
 		new CodeCoverageAssertor();
 
 	@Test
-	public void testSystemPropertiesProcessCallable() throws ProcessException {
+	public void testSystemPropertiesProcessCallable() {
 		Properties oldProperties = System.getProperties();
 
 		Properties newProperties = new Properties();

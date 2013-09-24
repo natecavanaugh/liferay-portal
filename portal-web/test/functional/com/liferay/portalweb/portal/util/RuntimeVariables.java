@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  * @author Brian Wing Shun Chan
  */
@@ -79,7 +77,10 @@ public class RuntimeVariables {
 
 				String result = "";
 
-				if (method.startsWith("increment")) {
+				if (method.startsWith("getFirstNumber")) {
+					result = operandValue.replaceFirst("\\D*(\\d*).*", "$1");
+				}
+				else if (method.startsWith("increment")) {
 					int i = GetterUtil.getInteger(operandValue) + 1;
 
 					result = String.valueOf(i);
@@ -118,7 +119,7 @@ public class RuntimeVariables {
 		varValue = varValue.replace("\\{", "{");
 		varValue = varValue.replace("\\}", "}");
 
-		return StringEscapeUtils.escapeJava(varValue);
+		return varValue;
 	}
 
 	public static String getValue(String key) {

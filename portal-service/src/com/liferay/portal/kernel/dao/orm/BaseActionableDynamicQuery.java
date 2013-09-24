@@ -151,6 +151,11 @@ public abstract class BaseActionableDynamicQuery
 	}
 
 	@Override
+	public void setGroupIdPropertyName(String groupIdPropertyName) {
+		_groupIdPropertyName = groupIdPropertyName;
+	}
+
+	@Override
 	public void setInterval(int interval) {
 		_interval = interval;
 	}
@@ -171,7 +176,8 @@ public abstract class BaseActionableDynamicQuery
 		}
 
 		if (_groupId > 0) {
-			Property property = PropertyFactoryUtil.forName("groupId");
+			Property property = PropertyFactoryUtil.forName(
+				_groupIdPropertyName);
 
 			dynamicQuery.add(property.eq(_groupId));
 		}
@@ -215,6 +221,7 @@ public abstract class BaseActionableDynamicQuery
 	private Method _dynamicQueryCountMethod;
 	private Method _dynamicQueryMethod;
 	private long _groupId;
+	private String _groupIdPropertyName = "groupId";
 	private int _interval = Indexer.DEFAULT_INTERVAL;
 	private String _primaryKeyPropertyName;
 

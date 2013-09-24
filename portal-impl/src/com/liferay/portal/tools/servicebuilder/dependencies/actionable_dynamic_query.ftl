@@ -27,9 +27,17 @@ public abstract class ${entity.name}ActionableDynamicQuery
 		<#if entity.hasPrimitivePK()>
 			setPrimaryKeyPropertyName("${entity.PKVarName}");
 		<#else>
-			<#assign pkColumn = entity.getPKList()?first>
+			<#assign pkList = entity.getPKList()>
+
+			<#assign pkColumn = pkList?first>
 
 			setPrimaryKeyPropertyName("primaryKey.${pkColumn.name}");
+
+			<#list entity.getPKList() as pkColumn>
+				<#if pkColumn.name == "groupId">
+					setGroupIdPropertyName("primaryKey.groupId");
+				</#if>
+			</#list>
 		</#if>
 	}
 

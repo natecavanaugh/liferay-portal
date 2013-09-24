@@ -15,7 +15,6 @@
 package com.liferay.portal.kernel.resiliency.spi.remote;
 
 import com.liferay.portal.kernel.process.ProcessCallable;
-import com.liferay.portal.kernel.process.ProcessException;
 
 import java.io.Serializable;
 
@@ -34,7 +33,7 @@ public class SystemPropertiesProcessCallable
 	}
 
 	@Override
-	public Serializable call() throws ProcessException {
+	public Serializable call() {
 		Properties systemProperties = System.getProperties();
 
 		systemProperties.putAll(_propertiesMap);

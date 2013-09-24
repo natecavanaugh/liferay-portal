@@ -1,4 +1,6 @@
 <definition>
+	<execute test-suite="CPCustomfieldsP5" />
+
 	<execute test-suite="CPPortalSettingsP5" />
 
 	<execute test-suite="CPRolesCPBlogsP5" />
@@ -12,6 +14,8 @@
 	<execute test-suite="CPRolesCPWikiP5" />
 
 	<execute test-suite="CPRolesPGBlogsP5" />
+
+	<execute test-suite="CPRolesPGPageP5" />
 
 	<execute test-suite="CPUsergroupsP5" />
 

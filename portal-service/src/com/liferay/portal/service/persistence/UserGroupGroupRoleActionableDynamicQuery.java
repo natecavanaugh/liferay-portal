@@ -33,5 +33,7 @@ public abstract class UserGroupGroupRoleActionableDynamicQuery
 		setClassLoader(PortalClassLoaderUtil.getClassLoader());
 
 		setPrimaryKeyPropertyName("primaryKey.userGroupId");
+
+		setGroupIdPropertyName("primaryKey.groupId");
 	}
 }

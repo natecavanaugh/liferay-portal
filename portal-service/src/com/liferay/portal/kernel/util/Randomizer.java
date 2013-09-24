@@ -22,6 +22,7 @@ import java.util.Set;
 
 /**
  * @author Brian Wing Shun Chan
+ * @deprecated As of 6.2.0
  */
 public class Randomizer extends Random {
 

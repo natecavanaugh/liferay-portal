@@ -211,7 +211,14 @@ public class GetterUtil {
 				return defaultValue;
 			}
 
-			return new BigDecimal((String)value);
+			try {
+				String valueString = (String)value;
+
+				return new BigDecimal(valueString.trim());
+			}
+			catch (NumberFormatException nfe) {
+				return defaultValue;
+			}
 		}
 
 		Class<?> clazz = value.getClass();
