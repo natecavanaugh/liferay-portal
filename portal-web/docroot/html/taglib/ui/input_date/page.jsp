@@ -83,6 +83,23 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 </span>
 
 <aui:script use='<%= "aui-datepicker" + (BrowserSnifferUtil.isMobile(request) ? "-native" : StringPool.BLANK) %>'>
+	A.Intl.add(
+		'calendar-base',
+		'<%= locale %>',
+		{
+			first_weekday: <%= firstDayOfWeek %>,
+			very_short_weekdays: [
+				'<liferay-ui:message key="sunday-abbreviation" />',
+				'<liferay-ui:message key="monday-abbreviation" />',
+				'<liferay-ui:message key="tuesday-abbreviation" />',
+				'<liferay-ui:message key="wednesday-abbreviation" />',
+				'<liferay-ui:message key="thursday-abbreviation" />',
+				'<liferay-ui:message key="friday-abbreviation" />',
+				'<liferay-ui:message key="saturday-abbreviation" />'
+			]
+		}
+	);
+
 	Liferay.component(
 		'<%= namespace + name %>DatePicker',
 		function() {

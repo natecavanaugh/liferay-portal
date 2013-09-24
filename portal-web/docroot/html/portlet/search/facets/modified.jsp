@@ -318,7 +318,16 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 					next: '<liferay-ui:message key="next" />',
 					none: '<liferay-ui:message key="none" />',
 					previous: '<liferay-ui:message key="previous" />',
-					today: '<liferay-ui:message key="today" />'
+					today: '<liferay-ui:message key="today" />',
+					very_short_weekdays: [
+						'<liferay-ui:message key="sunday-abbreviation" />',
+						'<liferay-ui:message key="monday-abbreviation" />',
+						'<liferay-ui:message key="tuesday-abbreviation" />',
+						'<liferay-ui:message key="wednesday-abbreviation" />',
+						'<liferay-ui:message key="thursday-abbreviation" />',
+						'<liferay-ui:message key="friday-abbreviation" />',
+						'<liferay-ui:message key="saturday-abbreviation" />'
+					]
 				}
 			},
 			trigger: '#<portlet:namespace /><%= facet.getFieldId() %>from'
@@ -354,7 +363,16 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 					next: '<liferay-ui:message key="next" />',
 					none: '<liferay-ui:message key="none" />',
 					previous: '<liferay-ui:message key="previous" />',
-					today: '<liferay-ui:message key="today" />'
+					today: '<liferay-ui:message key="today" />',
+					very_short_weekdays: [
+						'<liferay-ui:message key="sunday-abbreviation" />',
+						'<liferay-ui:message key="monday-abbreviation" />',
+						'<liferay-ui:message key="tuesday-abbreviation" />',
+						'<liferay-ui:message key="wednesday-abbreviation" />',
+						'<liferay-ui:message key="thursday-abbreviation" />',
+						'<liferay-ui:message key="friday-abbreviation" />',
+						'<liferay-ui:message key="saturday-abbreviation" />'
+					]
 				}
 			},
 			trigger: '#<portlet:namespace /><%= facet.getFieldId() %>to'
