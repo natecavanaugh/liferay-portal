@@ -251,21 +251,32 @@ catch (NoSuchArticleException nsae) {
 	<aui:fieldset>
 		<aui:input name="preferences--showAvailableLocales--" type="checkbox" value="<%= showAvailableLocales %>" />
 
-		<aui:field-wrapper helpMessage='<%= !openOfficeServerEnabled ? "enabling-openoffice-integration-provides-document-conversion-functionality" : StringPool.BLANK %>' label="enable-conversion-to">
+		<br />
 
-			<%
-			for (String conversion : conversions) {
-			%>
+		<c:choose>
+			<c:when test="<%= !openOfficeServerEnabled %>">
+				<aui:field-wrapper helpMessage="enabling-openoffice-integration-provides-document-conversion-functionality" label="enable-openoffice-conversion" />
+			</c:when>
+			<c:otherwise>
 
-				<aui:field-wrapper inlineField="<%= true %>" inlineLabel="left" label="<%= StringUtil.toUpperCase(conversion) %>">
-					<input <%= ArrayUtil.contains(extensions, conversion) ? "checked": "" %> <%= !openOfficeServerEnabled ? "disabled" : "" %> name="<portlet:namespace />extensions" type="checkbox" value="<%= conversion %>" />
-				</aui:field-wrapper>
+				<%
+				for (String conversion : conversions) {
+				%>
 
-			<%
-			}
-			%>
+					<label class="checkbox">
+						<input <%= ArrayUtil.contains(extensions, conversion) ? "checked": "" %> name="<portlet:namespace />extensions" type="checkbox" value="<%= conversion %>" />
 
-		</aui:field-wrapper>
+						<liferay-ui:message key="convert-to" /> .<%= conversion %>
+					</label>
+
+				<%
+				}
+				%>
+
+				<br />
+
+			</c:otherwise>
+		</c:choose>
 
 		<aui:input name="preferences--enablePrint--" type="checkbox" value="<%= enablePrint %>" />
 
