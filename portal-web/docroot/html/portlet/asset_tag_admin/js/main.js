@@ -462,6 +462,10 @@ AUI.add(
 
 						var searchInput = A.one('#' + instance._prefixedPortletId + 'tagsAdminSearchInput');
 
+						if (!('placeholder' in document.createElement('input'))) {
+							searchInput.attr('value', '');
+						}
+
 						var tagsSearch = new TagsSearch(
 							{
 								inputNode: searchInput,
