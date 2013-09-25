@@ -136,7 +136,7 @@ public class EditGroupAction extends PortletAction {
 
 					redirect = siteAdministrationURL.toString();
 
-					hideDefaultSuccessMessage(portletConfig, actionRequest);
+					hideDefaultSuccessMessage(actionRequest);
 				}
 				else {
 					String oldFriendlyURL = (String)returnValue[1];

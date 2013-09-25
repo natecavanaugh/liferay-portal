@@ -16,7 +16,6 @@ package com.liferay.taglib.aui;
 
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.taglib.aui.base.BaseNavBarSearchTag;
 import com.liferay.util.PwdGenerator;

@@ -79,12 +79,12 @@ public class PublishLayoutsAction extends EditLayoutsAction {
 					StagingUtil.copyFromLive(actionRequest);
 				}
 				else if (cmd.equals("publish_to_live")) {
-					hideDefaultSuccessMessage(portletConfig, actionRequest);
+					hideDefaultSuccessMessage(actionRequest);
 
 					StagingUtil.publishToLive(actionRequest);
 				}
 				else if (cmd.equals("publish_to_remote")) {
-					hideDefaultSuccessMessage(portletConfig, actionRequest);
+					hideDefaultSuccessMessage(actionRequest);
 
 					StagingUtil.publishToRemote(actionRequest);
 				}
