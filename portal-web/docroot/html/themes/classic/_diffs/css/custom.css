@@ -131,8 +131,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 			top: 9px;
 
 			a {
-				margin-left: -4px;
-				margin-top: -1px;
+				margin-top: -4px;
 
 				&:hover {
 					color: #FFF;
@@ -188,10 +187,11 @@ $dockbarOpenGradientStart: #0EA6F9;
 
 		.page-customization-bar {
 			background-color: #6DA4E4;
-
-			@include background-image(linear-gradient(#70B2EF, #6DA4E4));
-
 			line-height: 20px;
+
+			.btn:hover {
+				background: transparent;
+			}
 		}
 
 		.page-customization-bar-text {
@@ -596,6 +596,14 @@ $dockbarOpenGradientStart: #0EA6F9;
 			a, span {
 				@include text-shadow(-1px -1px #000);
 			}
+		}
+	}
+
+	/* ---------- IE8 ---------- */
+
+	&.ie8 {
+		.dockbar-split .dockbar .navbar-inner .info-button a {
+			margin-top: -2px;
 		}
 	}
 }
