@@ -48,19 +48,21 @@ AUI.add(
 						['focus', 'mousemove', 'touchstart'],
 						function(event) {
 							var target = event.target;
-							var eventType = event.type;
+							var type = event.type;
 
 							Liferay.fire('initDockbar');
 
 							eventHandle.detach();
 
-							if (eventType === 'focus') {
+							if (type === 'focus') {
 								if (target.ancestor('.nav-add-controls')) {
 									instance.refocus(target);
 								}
 
-								if (target.ancestor('.nav-account-controls')) {
-									instance.refocus(target.ancestor('.nav-account-controls').one('li a'));
+								var navAccountControlsAncestor = target.ancestor('.nav-account-controls');
+
+								if (navAccountControlsAncestor) {
+									instance.refocus(navAccountControlsAncestor.one('li a'));
 								}
 							}
 						}
@@ -259,8 +261,10 @@ AUI.add(
 				instance._registerPanels();
 
 				var btnNavigation = A.oneNS(namespace, '#navSiteNavigationNavbarBtn');
+
 				var navAccountControls = dockBar.one('.nav-account-controls');
 				var navAddControls = dockBar.one('.nav-add-controls');
+
 				var navigation = A.one(Liferay.Data.NAV_SELECTOR);
 
 				if (btnNavigation && navigation) {
@@ -298,12 +302,12 @@ AUI.add(
 					}
 				);
 
-				var navAccountControlsFM = navAccountControls.focusManager;
-				var navAddControlsFM = navAddControls.focusManager;
+				var navAccountControlsFocusManager = navAccountControls.focusManager;
+				var navAddControlsFocusManager = navAddControls.focusManager;
 
 				// reset focus to first element
 
-				navAccountControlsFM.after(
+				navAccountControlsFocusManager.after(
 					'focusedChange',
 					function (event) {
 						if (!event.newVal) {
@@ -312,7 +316,7 @@ AUI.add(
 					}
 				);
 
-				navAddControls.focusManager.after(
+				navAddControlsFocusManager.after(
 					'focusedChange',
 					function (event) {
 						if (!event.newVal) {
@@ -327,7 +331,9 @@ AUI.add(
 					'key',
 					function(event) {
 						var currentTarget = event.currentTarget;
+
 						var dropdown = currentTarget.ancestor('li.dropdown');
+
 						var previousElement = dropdown.previous('li.dropdown');
 
 						event.preventDefault();
@@ -336,11 +342,15 @@ AUI.add(
 
 						if (previousElement) {
 							previousElement.addClass('open');
-							navAccountControlsFM.focus(currentTarget);
+
+							navAccountControlsFocusManager.focus(currentTarget);
 						}
 						else {
-							navAccountControls.one('li.dropdown:last-of-type').addClass('open');
-							navAccountControlsFM.focus(navAccountControls.one('li.dropdown:last-of-type a ul li:last-of-type a'));
+							var lastDropDown = navAccountControls.one('li.dropdown:last-of-type');
+
+							lastDropDown.addClass('open');
+
+							navAccountControlsFocusManager.focus(lastDropDown.one('a ul li:last-of-type a'));
 						}
 					},
 					'down:38',
@@ -380,16 +390,14 @@ AUI.add(
 					'key',
 					function(event) {
 						var currentTarget = event.currentTarget;
+
 						var nextElement = currentTarget.ancestor('li.dropdown').next('.dropdown');
 
 						navAccountControls.all('li.dropdown').removeClass('open');
 
-						if (nextElement) {
-							navAccountControlsFM.focus(nextElement.one('a'));
-						}
-						else {
-							navAccountControlsFM.focus(navAccountControls.one('li a'));
-						}
+						var focusElement = nextElement ? nextElement.one('a') : navAccountControls.one('li a');
+
+						navAccountControlsFocusManager.focus(focusElement);
 					},
 					'down:39',
 					'li a'
@@ -399,16 +407,14 @@ AUI.add(
 					'key',
 					function(event) {
 						var currentTarget = event.currentTarget;
+
 						var previousElement = currentTarget.ancestor('li.dropdown').previous('.dropdown');
 
 						navAccountControls.all('li.dropdown').removeClass('open');
 
-						if (previousElement) {
-							navAccountControlsFM.focus(previousElement.one('a'));
-						}
-						else {
-							navAccountControlsFM.focus(navAccountControls.one('> li:last-of-type a'));
-						}
+						var focusElement = previousElement ? previousElement.one('a') : navAccountControls.one('> li:last-of-type a');
+
+						navAccountControlsFocusManager.focus(focusElement);
 					},
 					'down:37',
 					'li a'
