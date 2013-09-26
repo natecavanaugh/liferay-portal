@@ -118,7 +118,6 @@ if (bodyContent != null) {
 					['gesturemovestart', 'key'],
 					function(event) {
 						var currentTarget = event.currentTarget;
-						var eventType = event._event.type;
 
 						currentTarget.once(
 							['gesturemoveend', 'key'],
