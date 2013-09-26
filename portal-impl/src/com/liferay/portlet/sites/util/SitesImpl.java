@@ -326,9 +326,8 @@ public class SitesImpl implements Sites {
 	public void copyPortletPermissions(Layout targetLayout, Layout sourceLayout)
 		throws Exception {
 
-		long companyId = targetLayout.getCompanyId();
-
-		List<Role> roles = RoleLocalServiceUtil.getRoles(companyId);
+		List<Role> roles = RoleLocalServiceUtil.getGroupRelatedRoles(
+			targetLayout.getGroupId());
 
 		LayoutTypePortlet sourceLayoutTypePortlet =
 			(LayoutTypePortlet)sourceLayout.getLayoutType();
@@ -361,13 +360,14 @@ public class SitesImpl implements Sites {
 				List<String> actions =
 					ResourcePermissionLocalServiceUtil.
 						getAvailableResourcePermissionActionIds(
-							companyId, resourceName,
+							targetLayout.getCompanyId(), resourceName,
 							ResourceConstants.SCOPE_INDIVIDUAL,
 							sourceResourcePrimKey, role.getRoleId(), actionIds);
 
 				ResourcePermissionLocalServiceUtil.setResourcePermissions(
-					companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
-					targetResourcePrimKey, role.getRoleId(),
+					targetLayout.getCompanyId(), resourceName,
+					ResourceConstants.SCOPE_INDIVIDUAL, targetResourcePrimKey,
+					role.getRoleId(),
 					actions.toArray(new String[actions.size()]));
 			}
 		}

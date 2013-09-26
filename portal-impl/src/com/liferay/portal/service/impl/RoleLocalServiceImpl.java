@@ -598,6 +598,32 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 	}
 
 	@Override
+	public List<Role> getGroupRelatedRoles(long groupId)
+		throws PortalException, SystemException {
+
+		List<Role> roles = new ArrayList<Role>();
+
+		Group group = groupLocalService.getGroup(groupId);
+
+		int[] types = RoleConstants.TYPES_REGULAR;
+
+		if (group.isOrganization()) {
+			types = RoleConstants.TYPES_ORGANIZATION_AND_REGULAR;
+		}
+		else if (group.isLayout() || group.isLayoutSetPrototype() ||
+				 group.isSite()) {
+
+			types = RoleConstants.TYPES_REGULAR_AND_SITE;
+		}
+
+		roles.addAll(getRoles(group.getCompanyId(), types));
+
+		roles.addAll(getTeamRoles(groupId));
+
+		return roles;
+	}
+
+	@Override
 	public List<Role> getResourceBlockRoles(
 			long resourceBlockId, String className, String actionId)
 		throws SystemException {

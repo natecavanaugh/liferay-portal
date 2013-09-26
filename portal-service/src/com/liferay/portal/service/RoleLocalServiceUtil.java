@@ -754,6 +754,13 @@ public class RoleLocalServiceUtil {
 		return getService().getDefaultGroupRole(groupId);
 	}
 
+	public static java.util.List<com.liferay.portal.model.Role> getGroupRelatedRoles(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getGroupRelatedRoles(groupId);
+	}
+
 	public static java.util.List<com.liferay.portal.model.Role> getResourceBlockRoles(
 		long resourceBlockId, java.lang.String className,
 		java.lang.String actionId)
