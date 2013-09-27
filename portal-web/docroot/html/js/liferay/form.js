@@ -62,6 +62,8 @@ AUI.add(
 
 				EXTENDS: A.Base,
 
+				NAME: 'liferayform',
+
 				prototype: {
 					initializer: function() {
 						var instance = this;
