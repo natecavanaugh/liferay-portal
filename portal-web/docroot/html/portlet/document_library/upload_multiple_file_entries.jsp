@@ -1,3 +1,5 @@
+<%@ page
+	import="com.liferay.portlet.documentlibrary.action.EditFileEntryAction" %>
 <%--
 /**
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
@@ -138,7 +140,7 @@ long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");
 									for (var i = 0; i < jsonArray.length; i++) {
 										var item = jsonArray[i];
 
-										var checkBox = A.one('input[data-fileName="' + item.fileName + '"]');
+										var checkBox = A.one('input[data-fileName="' + item.originalFileName + '"]');
 
 										var li = checkBox.ancestor();
 
@@ -152,7 +154,20 @@ long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");
 										if (item.added) {
 											cssClass = 'file-saved';
 
-											childHTML = '<span class="success-message"><%= UnicodeLanguageUtil.get(pageContext, "successfully-saved") %></span>';
+											var originalFileName = item.originalFileName;
+
+											var pos = originalFileName.indexOf('<%= EditFileEntryAction.TEMP_RANDOM_SUFFIX %>');
+
+											if (pos != -1) {
+												originalFileName = originalFileName.substr(0, pos);
+											}
+
+											if (originalFileName === item.fileName) {
+												childHTML = '<span class="success-message"><%= UnicodeLanguageUtil.get(pageContext, "successfully-saved") %></span>';
+											}
+											else {
+												childHTML = '<span class="success-message"><%= UnicodeLanguageUtil.get(pageContext, "successfully-saved") %> (' + item.fileName + ')</span>';
+											}
 										}
 										else {
 											cssClass = 'upload-error';
