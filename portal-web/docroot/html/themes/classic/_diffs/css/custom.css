@@ -127,6 +127,18 @@ $dockbarOpenGradientStart: #0EA6F9;
 	}
 
 	.dockbar-split .dockbar .navbar-inner {
+		.info-button {
+			top: 9px;
+
+			a {
+				margin-top: -4px;
+
+				&:hover {
+					color: #FFF;
+				}
+			}
+		}
+
 		.nav {
 			background-color: $dockbarGradientEnd;
 		}
@@ -171,6 +183,19 @@ $dockbarOpenGradientStart: #0EA6F9;
 					}
 				}
 			}
+		}
+
+		.page-customization-bar {
+			background-color: #6DA4E4;
+			line-height: 20px;
+
+			.btn:hover {
+				background: transparent;
+			}
+		}
+
+		.page-customization-bar-text {
+			height: 43px;
 		}
 	}
 
@@ -571,6 +596,14 @@ $dockbarOpenGradientStart: #0EA6F9;
 			a, span {
 				@include text-shadow(-1px -1px #000);
 			}
+		}
+	}
+
+	/* ---------- IE8 ---------- */
+
+	&.ie8 {
+		.dockbar-split .dockbar .navbar-inner .info-button a {
+			margin-top: -2px;
 		}
 	}
 }
