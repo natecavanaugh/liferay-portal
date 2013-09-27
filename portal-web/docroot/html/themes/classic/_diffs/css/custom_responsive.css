@@ -242,8 +242,9 @@
 								@include respond-to(phone) {
 									display: inline-block;
 									font-size: 24px;
-									line-height: 31px;
+									line-height: 20px;
 									margin-left: 10px;
+									padding: 12px 15px;
 
 									> .nav-item-icon {
 										margin-top: 3px;
