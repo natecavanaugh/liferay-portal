@@ -357,7 +357,7 @@
 		}
 
 		.icon-caret-down {
-			background: #27A7EB;
+			background: inherit;
 			background: rgba(255, 255, 255, 0.2);
 			font-size: 14px;
 			height: auto;
