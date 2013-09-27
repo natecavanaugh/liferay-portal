@@ -555,6 +555,13 @@
 							'plugin'
 						]
 					},
+					'liferay-social-bookmarks': {
+						path: 'social_bookmarks.js',
+						requires: [
+							'aui-component',
+							'aui-node'
+						]
+					},
 					'liferay-staging': {
 						path: 'staging.js',
 						requires: [
