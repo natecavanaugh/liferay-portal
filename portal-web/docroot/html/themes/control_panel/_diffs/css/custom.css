@@ -51,13 +51,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
-	.panel-manage-frontpage {
-		.control-panel-bar-secondary {
-			margin-bottom: 1px;
-			margin-left: 20px;
-		}
-	}
-
 	.control-panel-home-actions-category .btn {
 		margin-bottom: 0.5em;
 	}
@@ -187,6 +180,10 @@ $dockbarOpenGradientStart: #0EA6F9;
 		#control-panel-home-category-headerusers a {
 			background-image: url(../images/custom/home_users.png);
 		}
+	}
+
+	.dialog-iframe-popup .panel-manage-frontpage .control-panel-bar-secondary {
+		margin-left: 10px;
 	}
 
 	/* ---------- Dockbar ---------- */
@@ -571,6 +568,11 @@ $dockbarOpenGradientStart: #0EA6F9;
 					}
 				}
 			}
+		}
+
+		.control-panel-bar-secondary {
+			margin-bottom: 1px;
+			margin-left: 20px;
 		}
 
 		.form-navigator.well {
