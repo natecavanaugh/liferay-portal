@@ -182,10 +182,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
-	.dialog-iframe-popup .panel-manage-frontpage .control-panel-bar-secondary {
-		margin-left: 10px;
-	}
-
 	/* ---------- Dockbar ---------- */
 
 	.dockbar {
@@ -570,11 +566,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 					}
 				}
 			}
-		}
-
-		.control-panel-bar-secondary {
-			margin-bottom: 1px;
-			margin-left: 20px;
 		}
 
 		.form-navigator.well {
