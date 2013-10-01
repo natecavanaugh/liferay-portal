@@ -152,15 +152,6 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 	}
 
 	@Override
-	public TrashEntry getTrashEntry(long classPK)
-		throws PortalException, SystemException {
-
-		DLFileEntry dlFileEntry = getDLFileEntry(classPK);
-
-		return dlFileEntry.getTrashEntry();
-	}
-
-	@Override
 	public ContainerModel getTrashContainer(long classPK)
 		throws PortalException, SystemException {
 
@@ -172,6 +163,15 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 		catch (InvalidRepositoryException ire) {
 			return null;
 		}
+	}
+
+	@Override
+	public TrashEntry getTrashEntry(long classPK)
+		throws PortalException, SystemException {
+
+		DLFileEntry dlFileEntry = getDLFileEntry(classPK);
+
+		return dlFileEntry.getTrashEntry();
 	}
 
 	@Override

@@ -115,15 +115,6 @@ public class DLFileShortcutTrashHandler extends DLBaseTrashHandler {
 	}
 
 	@Override
-	public TrashEntry getTrashEntry(long classPK)
-		throws PortalException, SystemException {
-
-		DLFileShortcut fileShortcut = getDLFileShortcut(classPK);
-
-		return fileShortcut.getTrashEntry();
-	}
-
-	@Override
 	public ContainerModel getTrashContainer(long classPK)
 		throws PortalException, SystemException {
 
@@ -131,6 +122,15 @@ public class DLFileShortcutTrashHandler extends DLBaseTrashHandler {
 			DLFileShortcutLocalServiceUtil.getDLFileShortcut(classPK);
 
 		return dlFileShortcut.getTrashContainer();
+	}
+
+	@Override
+	public TrashEntry getTrashEntry(long classPK)
+		throws PortalException, SystemException {
+
+		DLFileShortcut fileShortcut = getDLFileShortcut(classPK);
+
+		return fileShortcut.getTrashEntry();
 	}
 
 	@Override
