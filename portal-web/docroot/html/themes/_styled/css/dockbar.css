@@ -144,20 +144,18 @@ $editLayoutPanelWidth: 460px;
 						}
 
 						&.staging-toggle {
-							background-color: #0ECD27;
-
 							> a {
-								&, &:hover {
-									background-color: transparent;
+								background-color: #2496E5;
+								padding-bottom: 4px;
+								padding-top: 4px;
+
+								&:hover {
+									background-color: #2FA4F5;
 								}
 							}
 
 							span.nav-item-label {
 								padding: 5px 10px;
-							}
-
-							&.active span.nav-item-label {
-								background-color: #080;
 							}
 						}
 					}
@@ -267,6 +265,8 @@ $editLayoutPanelWidth: 460px;
 		}
 
 		.staging-controls {
+			margin-right: 50px;
+
 			select {
 				width: 100%;
 			}
