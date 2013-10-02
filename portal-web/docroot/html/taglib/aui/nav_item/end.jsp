@@ -48,7 +48,7 @@ if (bodyContent != null) {
 				</c:if>
 			</c:if>
 					<c:if test="<%= Validator.isNotNull(iconClass) %>">
-						<i class="<%= iconClass %>"></i>
+						<i class="nav-item-icon <%= iconClass %>"></i>
 					</c:if>
 
 					<span class="nav-item-label">

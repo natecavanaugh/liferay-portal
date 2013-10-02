@@ -242,82 +242,152 @@ $dockbarOpenGradientStart: #0EA6F9;
 			.nav-account-controls {
 				float: right;
 
-				li.open > .dropdown-toggle {
-					margin: 0;
-					padding: 5px 15px;
-					background-color: $dockbarOpenGradientEnd;
+				> li {
+					> a > .nav-item-icon {
+						display: none;
+
+						@include respond-to(phone) {
+							display: inline-block;
+						}
+					}
+
+					&.open > .dropdown-toggle {
+						margin: 0;
+						padding: 5px 15px;
+						background-color: $dockbarOpenGradientEnd;
+
+						@include respond-to(phone) {
+							margin: 5px 0 5px 10px;
+							padding: 12px 15px;
+						}
+					}
 				}
 			}
+
 			.nav-add-controls {
-				letter-spacing: 1px;
-
 				> li {
-					&.active a {
-						border-radius: 4px;
-
-						&:hover {
-							background: #0066B3;
-							color: #FFF;
+					@include respond-to(phone) {
+						&.open ul.dropdown-menu {
+							display: block;
 						}
 					}
 
-					a:hover {
-						background: #0993DD;
+					> a {
+						display: none;
 					}
 				}
 
-				li {
-					margin-right: 5px;
+				ul.dropdown-menu {
+					background: transparent;
+					display: inline-block;
+					letter-spacing: 1px;
+					padding: 0;
+					position: static;
 
+					@include respond-to(phone) {
+						background: #009AE5;
+						display: none;
+						position: absolute;
+					}
 
-					/* ---------- Menu icons ---------- */
+					> li {
+						display: inline-block;
 
-					&.control-panel-apps, &.control-panel-configuration, &.control-panel-sites, &.control-panel-users {
-						[class^="icon-"], [class*=" icon-"] {
-							&:before {
-								content: '';
+						@include respond-to(phone) {
+							display: block;
+						}
+
+						&.active > a {
+							background: #0066B3;
+							color: #FFF;
+
+							@include border-radius(4px);
+
+							@include respond-to(phone) {
+								@include border-radius(0);
 							}
+						}
+
+						> a {
+							font-size: 14px;
+							line-height: 31px;
+							margin: 3px 0;
+							padding: 2px 15px;
+
+							@include respond-to(phone) {
+								font-size: 16px;
+								margin: 0;
+								line-height: 32px;
+								padding: 9px 15px;
+							}
+
+							> .nav-item-icon {
+								margin-right: 0;
+								margin-top: 3px;
+							}
+						}
+
+						a:hover {
+							background: #0993DD;
 						}
 					}
 
-					.icon-cog, .icon-globe, .icon-list, .icon-th, .icon-user, .icon-arrow-left {
-						background: none no-repeat 50%;
-						height: 21px;
-						width: 24px;
-						vertical-align: top;
-					}
+					li {
+						margin-right: 5px;
 
-					.icon-cog, .icon-globe, .icon-th, .icon-user {
-						height: 26px;
-						width: 29px;
-					}
+						@include respond-to(phone) {
+							margin-right: 0;
+						}
 
-					.icon-arrow-left {
-						background-image: url(../images/custom/dockbar_back.png);
-						margin-top: 4px;
-					}
+						/* ---------- Menu icons ---------- */
 
-					.icon-cog {
-						background-image: url(../images/custom/dockbar_configuration.png);
-					}
+						&.control-panel-apps, &.control-panel-configuration, &.control-panel-sites, &.control-panel-users {
+							[class^="icon-"], [class*=" icon-"] {
+								&:before {
+									content: '';
+								}
+							}
+						}
 
-					.icon-globe {
-						background-image: url(../images/custom/dockbar_sites.png);
-					}
+						.icon-cog, .icon-globe, .icon-list, .icon-th, .icon-user, .icon-arrow-left {
+							background: none no-repeat 50%;
+							height: 21px;
+							width: 24px;
+							vertical-align: top;
+						}
 
-					.icon-list {
-						background-image: url(../images/custom/dockbar_home.png);
-						height: 24px;
-						margin-top: 3px;
-					}
+						.icon-cog, .icon-globe, .icon-th, .icon-user {
+							height: 26px;
+							width: 29px;
+						}
 
-					.icon-th {
-						background-image: url(../images/custom/dockbar_apps.png);
-					}
+						.icon-arrow-left {
+							background-image: url(../images/custom/dockbar_back.png);
+							margin-top: 4px;
+						}
 
-					.icon-user {
-						background-image: url(../images/custom/dockbar_users.png);
-						width: 40px;
+						.icon-cog {
+							background-image: url(../images/custom/dockbar_configuration.png);
+						}
+
+						.icon-globe {
+							background-image: url(../images/custom/dockbar_sites.png);
+						}
+
+						.icon-list {
+							background-image: url(../images/custom/dockbar_home.png);
+							height: 24px;
+							margin-top: 3px;
+						}
+
+						.icon-th {
+							background-image: url(../images/custom/dockbar_apps.png);
+						}
+
+						.icon-user {
+							background-image: url(../images/custom/dockbar_users.png);
+							width: 40px;
+						}
 					}
 				}
 			}
@@ -716,8 +786,16 @@ $dockbarOpenGradientStart: #0EA6F9;
 			}
 
 			ul.nav-add-controls {
-				> li a:hover {
-					@include border-radius(4px);
+				> li {
+					@include respond-to(phone) {
+						&.open > a {
+							@include box-shadow(none);
+						}
+					}
+
+					a:hover {
+						@include border-radius(4px);
+					}
 				}
 			}
 		}
