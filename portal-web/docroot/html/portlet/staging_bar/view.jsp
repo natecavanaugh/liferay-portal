@@ -82,7 +82,7 @@ if (layout != null) {
 	PortletURL portletURL = renderResponse.createRenderURL();
 	%>
 
-	<aui:nav collapsible="<%= false %>" cssClass="staging-bar" id="stagingBar">
+	<aui:nav collapsible="<%= false %>" cssClass="nav-pills staging-bar" id="stagingBar">
 		<c:if test="<%= (liveGroup != null) && layout.isPrivateLayout() ? (liveGroup.getPrivateLayoutsPageCount() > 0) : (liveGroup.getPublicLayoutsPageCount() > 0) %>">
 			<c:choose>
 				<c:when test="<%= group.isStagingGroup() || group.isStagedRemotely() %>">

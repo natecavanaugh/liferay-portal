@@ -199,9 +199,9 @@ else {
 			%>
 
 			<liferay-ui:icon
-				cssClass="submit-link"
+				cssClass="label label-submit"
 				id="submitLink"
-				image="../aui/check"
+				image="../aui/ok"
 				label="<%= true %>"
 				message="<%= label %>"
 				url="<%= taglibURL %>"
