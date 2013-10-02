@@ -85,14 +85,10 @@ $dockbarOpenGradientStart: #0EA6F9;
 									color: #FFF;
 								}
 							}
-
-							&:hover {
-								background-color: #2FA4F5;
-							}
 						}
 
-						&.site-variations .dropdown-menu {
-							background-color: #026ED2;
+						&.staging-toggle .dropdown-menu {
+							background-color: #51B5FA;
 						}
 					}
 				}
@@ -110,7 +106,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 
 		.staging-bar {
-			.site-variations {
+			.staging-toggle {
 				color: #FFF;
 
 				li a {
@@ -550,7 +546,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 					}
 
 					> .staging-link.dropdown-toggle {
-						@include background-image(linear-gradient(#0279E1, #0264CC));
+						@include background-image(linear-gradient(#51B5FA, #51B5FA));
 					}
 				}
 			}
