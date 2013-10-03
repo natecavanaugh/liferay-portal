@@ -62,7 +62,7 @@ if (Validator.isNull(displayStyle)) {
 				%>
 
 					<aui:field-wrapper inlineLabel="right" label="<%= type %>">
-						<aui:input checked="<%= ArrayUtil.contains(socialBookmarksTypesArray, type) %>" name="preferences--socialBookmarksTypes--" type="checkbox" value="<%= type %>" />
+						<aui:input checked="<%= ArrayUtil.contains(socialBookmarksTypesArray, type) %>" name="<portlet:namespace />preferences--socialBookmarksTypes--" type="checkbox" value="<%= type %>" />
 					</aui:field-wrapper>
 
 				<%
