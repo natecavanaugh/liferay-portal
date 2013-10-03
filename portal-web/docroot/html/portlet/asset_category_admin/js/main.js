@@ -620,13 +620,25 @@ AUI.add(
 					_createLiveSearch: function() {
 						var instance = this;
 
+						var searchInput = instance._searchInput;
+
+						var formPlaceholders = !!Liferay.Form.Placeholders;
+
+						if (formPlaceholders) {
+							searchInput.val('');
+						}
+
 						var liveSearch = new LiveSearch(
 							{
-								inputNode: instance._searchInput,
+								inputNode: searchInput,
 								minQueryLength: 0,
 								queryDelay: 300
 							}
 						);
+
+						if (formPlaceholders) {
+							Liferay.Form.Placeholders.addPlaceholder(searchInput);
+						}
 
 						liveSearch.after(STR_QUERY, instance._processSearch, instance);
 
@@ -2692,7 +2704,7 @@ AUI.add(
 
 							vocabularyPanelAdd._syncUIPosAlign();
 
-							var afterSuccess = A.bind('_initializeVocabularyPanelAdd', instance);
+							var afterSuccess = A.bind('_initializeVocabularyPanelAdd', instance, instance._focusVocabularyPanelAdd);
 
 							vocabularyPanelAdd.plug(
 								A.Plugin.IO,
@@ -2988,6 +3000,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog-iframe-deprecated', 'aui-io-plugin-deprecated', 'aui-live-search-deprecated', 'aui-modal', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'escape', 'json', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
+		requires: ['aui-dialog-iframe-deprecated', 'aui-io-plugin-deprecated', 'aui-live-search-deprecated', 'aui-modal', 'aui-pagination', 'autocomplete-base', 'aui-tree-view', 'dd', 'escape', 'json', 'liferay-form', 'liferay-history-manager', 'liferay-portlet-url', 'liferay-util-window']
 	}
 );
