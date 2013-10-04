@@ -51,13 +51,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
-	.panel-manage-frontpage {
-		.control-panel-bar-secondary {
-			margin-bottom: 1px;
-			margin-left: 20px;
-		}
-	}
-
 	.control-panel-home-actions-category .btn {
 		margin-bottom: 0.5em;
 	}
@@ -99,7 +92,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
-	/* ---------- Control panel home ---------- */
+	/* ---------- Control Panel Home ---------- */
 
 	.control-panel-home-menu {
 		margin-top: 40px;
