@@ -119,6 +119,16 @@
 				&.open a {
 					@include border-radius(4px 4px 0 0);
 				}
+
+				> ul {
+					@include box-shadow(none);
+				}
+			}
+		}
+
+		@include respond-to(phone) {
+			.nav-collapse > .nav > li > a {
+				@include border-radius(4px);
 			}
 		}
 	}

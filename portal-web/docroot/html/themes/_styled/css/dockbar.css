@@ -170,88 +170,125 @@ $editLayoutPanelWidth: 460px;
 					position: fixed;
 					right: 5em;
 					z-index: 325;
+
+					> li > a > .nav-item-icon {
+						display: none;
+
+						@include respond-to(phone) {
+							display: inline-block;
+						}
+					}
 				}
 
 				.nav-add-controls {
-					background: transparent;
-					position: fixed;
-					top: 10%;
-					z-index: 350;
-
-					> li {
-						float: none;
-						margin: 10px;
-						position: relative;
-
-						&.toggle-controls a {
-							clip: rect(0 0 0 0);
-							position: absolute;
-
-							&:focus {
-								clip: rect(auto auto auto auto);
-								position: static;
-							}
-						}
-
-						&.page-preview-controls {
-							@include respond-to(phone) {
-								display: none;
-							}
-
-							@include respond-to(tablet) {
-								display: none;
-							}
-						}
-
-						> a {
-							background: #333;
-							color: #FFF;
-							padding: 6px 8px;
-							text-align: center;
-
-							&:hover {
-								background: #555;
-							}
-
-							[class^="icon-"], [class^="icon-"], [class*=" icon-"] {
-								font-size: 25px;
-								position: relative;
-								vertical-align: middle;
-							}
-
-							&.toggle-controls-link {
-								background: #92F545;
-
-								[class^="icon-"], [class^="icon-"], [class*=" icon-"] {
-									color: #000;
-								}
-							}
-
-							.nav-item-label {
-								background: #333;
-								display: none;
-								left: 100%;
-								margin-left: 0.5em;
-								margin-top: -1em;
-								padding: 0 20px;
-								position: absolute;
-								top: 50%;
-								white-space: nowrap;
-							}
-
-							&:hover .nav-item-label {
-								display: block;
-							}
-
-							.icon-caret-down {
-								display: none;
-							}
+					@include respond-to(phone) {
+						.open ul.dropdown-menu {
+							display: block;
 						}
 					}
 
-					&:hover > li.toggle-controls a {
-						clip: rect(auto auto auto auto);
-						position: static;
+					> li > a {
+						display: none;
+					}
+
+					ul.dropdown-menu {
+						background: transparent;
+						display: block;
+						min-width: 0;
+						position: fixed;
+						top: 10%;
+						z-index: 350;
+
+						@include respond-to(phone) {
+							display: none;
+							top: auto;
+						}
+
+						> li {
+							float: none;
+							margin: 10px;
+							position: relative;
+
+							&.toggle-controls a {
+								clip: rect(0 0 0 0);
+								position: absolute;
+
+								&:focus {
+									clip: rect(auto auto auto auto);
+									position: static;
+								}
+							}
+
+							&.page-preview-controls {
+								@include respond-to(phone) {
+									display: none;
+								}
+
+								@include respond-to(tablet) {
+									display: none;
+								}
+							}
+
+							> a {
+								background: #333;
+								color: #FFF;
+								padding: 6px 8px;
+								text-align: center;
+
+								&:hover {
+									background: #555;
+								}
+
+								[class^="icon-"], [class^="icon-"], [class*=" icon-"] {
+									font-size: 25px;
+									margin-right: 0;
+									position: relative;
+									vertical-align: middle;
+								}
+
+								&.toggle-controls-link {
+									background: #92F545;
+
+									[class^="icon-"], [class^="icon-"], [class*=" icon-"] {
+										color: #000;
+									}
+								}
+
+								.nav-item-label {
+									background: #333;
+									display: none;
+									left: 100%;
+									margin-left: 0.5em;
+									margin-top: -1em;
+									padding: 0 20px;
+									position: absolute;
+									top: 50%;
+									white-space: nowrap;
+
+									@include respond-to(phone, tablet) {
+										display: inline-block;
+										position: relative;
+									}
+								}
+
+								&:hover .nav-item-label {
+									display: block;
+
+									@include respond-to(phone, tablet) {
+										display: inline-block;
+									}
+								}
+
+								.icon-caret-down {
+									display: none;
+								}
+							}
+						}
+
+						&:hover > li.toggle-controls a {
+							clip: rect(auto auto auto auto);
+							position: static;
+						}
 					}
 				}
 			}
@@ -299,7 +336,7 @@ $editLayoutPanelWidth: 460px;
 			}
 		}
 
-		&.controls-hidden .dockbar .navbar-inner .nav-add-controls > li.toggle-controls > .toggle-controls-link {
+		&.controls-hidden .dockbar .navbar-inner .nav-add-controls li.toggle-controls > .toggle-controls-link {
 			background: #F5AF45;
 		}
 
@@ -317,7 +354,7 @@ $editLayoutPanelWidth: 460px;
 	}
 
 	.touch .dockbar-split, .controls-hidden.dockbar-split {
-		.dockbar .navbar-inner .nav-add-controls > li.toggle-controls > .toggle-controls-link {
+		.dockbar .navbar-inner .nav-add-controls ul.dropdown-menu > li.toggle-controls > .toggle-controls-link {
 			clip: rect(auto auto auto auto);
 			position: static;
 		}
