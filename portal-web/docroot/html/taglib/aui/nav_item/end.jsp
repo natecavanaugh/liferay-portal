@@ -64,68 +64,62 @@ if (bodyContent != null) {
 		</c:if>
 
 		<c:if test="<%= dropdown %>">
-
 			<aui:script use="aui-base,event-move,event-outside,liferay-store">
-				A.Event.defineOutside('MSPointerUp');
 				A.Event.defineOutside('touchend');
 
 				var container = A.one('#<%= id %>');
 
-				var openMenu = function(event) {
-					var eventOutside = event._event.type + 'outside';
-
-					container.toggleClass('open');
-
-					var menuOpen = container.hasClass('open');
-
-					<c:choose>
-						<c:when test="<%= !toggle %>">
-							var handle = Liferay.Data['<%= id %>Handle'];
-
-								if (menuOpen && !handle) {
-									handle = currentTarget.on(
-										eventOutside,
-										function(event) {
-											if (!event.target.ancestor('#<%= id %>')) {
-												Liferay.Data['<%= id %>Handle'] = null;
-
-												handle.detach();
-
-												container.removeClass('open');
-											}
-										}
-									);
-								}
-								else if (handle) {
-									handle.detach();
-
-									handle = null;
-								}
-
-							Liferay.Data['<%= id %>Handle'] = handle;
-						</c:when>
-						<c:otherwise>
-							var data = {};
-
-							data['<%= id %>'] = menuOpen ? 'open' : 'closed';
-
-							Liferay.Store(data);
-						</c:otherwise>
-					</c:choose>
-				};
-
 				container.one('a').on(
-					['gesturemovestart', 'key'],
+					'gesturemovestart',
 					function(event) {
 						var currentTarget = event.currentTarget;
 
 						currentTarget.once(
-							['gesturemoveend', 'key'],
-							openMenu,
-							'up:13'
+							'gesturemoveend',
+							function(event) {
+								var eventOutside = event._event.type + 'outside';
+
+								container.toggleClass('open');
+
+								var menuOpen = container.hasClass('open');
+
+								<c:choose>
+									<c:when test="<%= !toggle %>">
+										var handle = Liferay.Data['<%= id %>Handle'];
+
+											if (menuOpen && !handle) {
+												handle = currentTarget.on(
+													eventOutside,
+													function(event) {
+														if (!event.target.ancestor('#<%= id %>')) {
+															Liferay.Data['<%= id %>Handle'] = null;
+
+															handle.detach();
+
+															container.removeClass('open');
+														}
+													}
+												);
+											}
+											else if (handle) {
+												handle.detach();
+
+												handle = null;
+											}
+
+										Liferay.Data['<%= id %>Handle'] = handle;
+									</c:when>
+									<c:otherwise>
+										var data = {};
+
+										data['<%= id %>'] = menuOpen ? 'open' : 'closed';
+
+										Liferay.Store(data);
+									</c:otherwise>
+								</c:choose>
+							}
 						);
-					},
-					'down:13'
+					}
 				);
 			</aui:script>
 
