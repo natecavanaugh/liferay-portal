@@ -157,6 +157,10 @@ $dockbarOpenGradientStart: #0EA6F9;
 				> li {
 					background-color: $dockbarGradientStart;
 
+					@include respond-to(phone, tablet) {
+						background: transparent;
+					}
+
 					@include background-image(linear-gradient($dockbarGradientStart 0%, $dockbarGradientStart 47%, $dockbarGradientEnd 100%));
 				}
 			}
@@ -170,9 +174,15 @@ $dockbarOpenGradientStart: #0EA6F9;
 				}
 			}
 
-			.nav-add-controls {
+			.nav-add-controls ul.dropdown-menu {
 				background: transparent;
 				border-top-width: 0;
+				overflow: visible;
+
+				@include respond-to(phone) {
+					background: #009AE5;
+					padding: 0;
+				}
 
 				&.nav-add-controls-notice {
 					top: 70px;
@@ -192,8 +202,16 @@ $dockbarOpenGradientStart: #0EA6F9;
 							background: transparent;
 						}
 
+						@include respond-to(phone) {
+							padding: 9px 15px;
+						}
+
 						&:hover {
 							background: #5BBAE8;
+
+							@include respond-to(phone) {
+								background: #2FA4F5;
+							}
 						}
 
 						&.toggle-controls-link {
