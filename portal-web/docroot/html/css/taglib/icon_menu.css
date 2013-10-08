@@ -38,6 +38,10 @@
 	}
 }
 
+.lfr-icon-menu .lfr-icon-menu-text {
+	display: none;
+}
+
 @include respond-to(phone) {
 	.table-cell.last .lfr-icon-menu .dropdown-toggle {
 		text-align: center;
