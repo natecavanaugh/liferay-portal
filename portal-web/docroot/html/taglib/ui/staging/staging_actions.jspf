@@ -16,9 +16,11 @@
 
 <c:choose>
 	<c:when test="<%= group.isCompany() && GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.PUBLISH_STAGING) %>">
-		<li class="publish-link-container">
-			<aui:a href="<%= publishRenderURL.toString() %>" id='<%= groupId + "publishGlobalLink" %>' label="<%= publishDialogTitle %>" />
-		</li>
+		<liferay-ui:icon
+			id='<%= groupId + "publishGlobalLink" %>'
+			message="<%= publishDialogTitle %>"
+			url="<%= publishRenderURL.toString() %>"
+		/>
 
 		<aui:script use="aui-base">
 			var publishGlobalLink = A.one('#<portlet:namespace /><%= groupId + "publishGlobalLink" %>');
@@ -83,9 +85,13 @@
 
 			<c:choose>
 				<c:when test="<%= groupType.isControlPanel() %>">
-					<li class="publish-link-container">
-						<aui:a cssClass="publish-link" href="<%= publishRenderURL.toString() %>" id='<%= layoutSetBranchId + "publishLink" %>' label="<%= publishMessage %>" />
-					</li>
+					<liferay-ui:icon-menu showExpanded="<%= true %>" showWhenSingleIcon="<%= true %>">
+						<liferay-ui:icon
+							id='<%= layoutSetBranchId + "publishLink" %>'
+							message="<%= publishMessage %>"
+							url="<%= publishRenderURL.toString() %>"
+						/>
+					</liferay-ui:icon-menu>
 				</c:when>
 				<c:otherwise>
 					<div class="publish-link-container">
@@ -128,12 +134,12 @@
 			<c:choose>
 				<c:when test="<%= groupType.isControlPanel() %>">
 					<li class="publish-link-container">
-						<aui:a cssClass="manage-layout-set-branches" href="<%= layoutSetBranchesURL %>" id="manageLayoutSetBranches" label="manage-site-pages-variations" />
+						<aui:a cssClass="manage-layout-set-branches" href="<%= layoutSetBranchesURL %>" id="manageLayoutSetBranches" label="manage-site-pages-variations" />b
 					</li>
 				</c:when>
 				<c:otherwise>
 					<div class="publish-link-container">
-						<aui:a cssClass="manage-layout-set-branches" href="<%= layoutSetBranchesURL %>" id="manageLayoutSetBranches" label="manage-site-pages-variations" />
+						<aui:a cssClass="manage-layout-set-branches" href="<%= layoutSetBranchesURL %>" id="manageLayoutSetBranches" label="manage-site-pages-variations" />c
 					</div>
 				</c:otherwise>
 			</c:choose>
