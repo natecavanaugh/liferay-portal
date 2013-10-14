@@ -6,10 +6,15 @@
 
 	.add-content-menu .lfr-add-page-toolbar {
 		bottom: 0;
-		margin-left: -10px;
-		padding: 10px;
-		position: fixed;
-		width: 330px;
+		margin-top: 0;
+		position: relative;
+		width: 100%;
+
+		@include respond-to(phone) {
+			.pull-right {
+				float: none;
+			}
+		}
 	}
 
 	.lfr-page-template-description {
@@ -302,7 +307,6 @@
 		.lfr-add-page-toolbar {
 			background-color: #FFF;
 		}
-
 
 		lfr-content-item {
 			color: #3EA9DB;
