@@ -4,6 +4,8 @@
 <service-builder package-path="com.liferay.portal.words">
 	<namespace>Words</namespace>
 	<entity name="Words" local-service="true" remote-service="true">
+
 		<!-- Words has no database table -->
+
 	</entity>
 </service-builder>

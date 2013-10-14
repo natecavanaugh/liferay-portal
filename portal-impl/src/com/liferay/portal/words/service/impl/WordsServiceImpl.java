@@ -78,7 +78,9 @@ public class WordsServiceImpl extends WordsServiceBaseImpl {
 	}
 
 	private static final String _DATA = "data";
+
 	private static final String _OUTCOME = "outcome";
+
 	private static final String _SUCCESS = "success";
 
 }
