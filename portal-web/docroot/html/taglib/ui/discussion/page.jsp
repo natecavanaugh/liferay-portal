@@ -788,7 +788,6 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 					var tooltip = this;
 
 					tooltip.set('cssClass', 'tooltip-help tooltip-discussion');
-					tooltip.set('zIndex', 999);
 
 					var node = tooltip.get('trigger');
 
