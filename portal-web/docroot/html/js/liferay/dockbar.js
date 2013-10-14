@@ -300,9 +300,11 @@ AUI.add(
 						stagingBar.all('> li').addClass(CSS_DOCKBAR_ITEM);
 					}
 
-					navAccountControls.all('> li > a').each(function() {
-						this.ancestor().addClass(CSS_DOCKBAR_ITEM);
-					});
+					navAccountControls.all('> li > a').each(
+						function(item, index, collection) {
+							item.ancestor().addClass(CSS_DOCKBAR_ITEM);
+						}
+					);
 				}
 
 				if (splitMode) {
@@ -325,9 +327,11 @@ AUI.add(
 
 						navAddControls.focusManager.after(
 							'focusedChange',
-							function (event) {
+							function(event) {
+								var instance = this;
+
 								if (!event.newVal) {
-									this.set('activeDescendant', 0);
+									instance.set('activeDescendant', 0);
 								}
 							}
 						);
@@ -336,9 +340,11 @@ AUI.add(
 				else {
 					if (navAddControls) {
 						if (brand) {
-							brand.all('a').each(function() {
-								this.ancestor().addClass(CSS_DOCKBAR_ITEM);
-							});
+							brand.all('a').each(
+								function(item, index, collection) {
+									item.ancestor().addClass(CSS_DOCKBAR_ITEM);
+								}
+							);
 						}
 
 						navAddControls.all('> li').addClass(CSS_DOCKBAR_ITEM);
@@ -351,8 +357,10 @@ AUI.add(
 					var navAccountControlsAncestor = target.ancestor(SELECTOR_NAV_ACCOUNT_CONTROLS);
 
 					if (navAccountControlsAncestor) {
-						navAccountControlsAncestor.one('li a').blur();
-						navAccountControlsAncestor.one('li a').focus();
+						var navLink = navAccountControlsAncestor.one('li a');
+
+						navLink.blur();
+						navLink.focus();
 					}
 					else {
 						target.blur();
