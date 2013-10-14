@@ -501,7 +501,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 										sb.append("<a class=\"lfr-discussion-parent-message-user-link\" data-title=\"");
 										sb.append(HtmlUtil.escape(buffer));
 										sb.append("\">");
-										sb.append(parentMessage.getUserName());
+										sb.append(HtmlUtil.escape(parentMessage.getUserName()));
 										sb.append("</a>");
 										%>
 
