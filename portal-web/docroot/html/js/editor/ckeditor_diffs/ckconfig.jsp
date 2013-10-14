@@ -45,7 +45,7 @@ if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_WEBSPELLCHECKER) {
 
 if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_LIFERAY) {
 	extraPluginsSb.append(",jqueryspellchecker");
-	if (spellcheckerPluginsSb.length() == 0) {
+	if (spellcheckerPluginsSb.length() != 0) {
 		spellcheckerPluginsSb.append(',');
 	}
 	spellcheckerPluginsSb.append("'jQuerySpellChecker'");
