@@ -1,153 +1,156 @@
-/*
- * jQuery Spellchecker - CKeditor Plugin - v0.2.4
- * https://github.com/badsyntax/jquery-spellchecker
- * Copyright (c) 2012 Richard Willis; Licensed MIT
- *
- * Note: This plugin was forked from jQuery SpellChecker v0.2.4 and converted
- * to AlloyUI for use in Liferay. The name was left in place to make its
- * origins more clear.
- */
-var baseJscPluginPath = themeDisplay.getPathJavaScript() +
-    '/editor/ckeditor/plugins/jqueryspellchecker';
-var A = AUI();
-var jscCssPath = baseJscPluginPath + '/css/jquery.spellchecker.css';
-CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl(jscCssPath));
-CKEDITOR.config.contentsCss = [CKEDITOR.config.contentsCss, jscCssPath];
+(function() {
+	var A = AUI();
 
-CKEDITOR.plugins.add('jqueryspellchecker', {
+	var baseJscPluginPath = themeDisplay.getPathJavaScript() +
+		'/editor/ckeditor/plugins/jqueryspellchecker';
 
-  config: {
-    lang: 'en',
-    parser: 'html',
-    webservice: {
-      path: '/webservices/php/SpellChecker.php',
-      // pspell is the stock php spellchecker
-      // test is an inline json test driver for testing purposes.
-      // liferay is the spell checker backed by Liferay's set of dictionaries
-      // driver: 'pspell'
-      // driver: 'test'
-      driver: 'liferay'
-    },
-    suggestBox: {
-      position: 'below',
-      appendTo: 'body'
-    }
-  },
+	var jscCssPath = baseJscPluginPath + '/css/jquery.spellchecker.css';
 
-  init: function( editor ) {
+	CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl(jscCssPath));
 
-    var t = this;
-    var pluginName = 'jqueryspellchecker';
+	CKEDITOR.config.contentsCss = [CKEDITOR.config.contentsCss, jscCssPath];
 
-    var path = t.path;
-    var dependency = [CKEDITOR.getUrl(path + 'js/jquery.spellchecker.js')];
+	CKEDITOR.plugins.add(
+		'jqueryspellchecker',
+		{
+			config: {
+				lang: 'en',
+				parser: 'html',
+				suggestBox: {
+					position: 'below',
+					appendTo: 'body'
+				},
+				webservice: {
+					driver: 'liferay',
+					path: '/webservices/php/SpellChecker.php'
+				}
+			},
 
-    CKEDITOR.scriptLoader.load(dependency);
+			create: function() {
+				this.editor.setReadOnly(true);
+				this.editor.commands.jqueryspellchecker.toggleState();
+				this.editorWindow = this.editor.document.getWindow().$;
 
-    this.config.suggestBox.position = this.positionSuggestBox();
-    
-    editor.addCommand(pluginName, {
-      canUndo: false,
-      readOnly: 1,
-      exec: function() {
-        t.toggle(editor);
-      }
-    });
+				this.createSpellchecker();
+				this.spellchecker.check();
 
-    editor.ui.addButton('jQuerySpellChecker', {
-      label: 'SpellCheck',
-      icon: baseJscPluginPath + '/assets/spellchecker.png',
-      command: pluginName,
-      toolbar: 'spellchecker,10'
-    });
+				A.one(this.editorWindow).on(
+					'scroll.spellchecker',
+					A.bind(
+						function scroll() {
+							if (this.spellchecker.suggestBox) {
+								this.spellchecker.suggestBox.close();
+							}
+						},
+						this
+					)
+				);
+			},
 
-    editor.on('saveSnapshot', function() {
-      t.destroy();
-    });
-  },
+			createSpellchecker: function() {
+				var instance = this;
 
-  create: function() {
+				instance.config.getText = function() {
+					var node = A.Node.create('<div />');
+					var text = instance.editor.getData();
 
-    this.editor.setReadOnly(true);
-    this.editor.commands.jqueryspellchecker.toggleState();
-      // Note: $ is not for jQuery, it is for the element in the window object
-      this.editorWindow = this.editor.document.getWindow().$;
+					return node.append(text).attr('textContent');
+				};
 
-    this.createSpellchecker();
-    this.spellchecker.check();
+				instance.spellchecker = new A.SpellChecker(
+					instance.editor.document.$.body,
+					this.config
+				);
 
-    AUI().one(this.editorWindow)
-    .on('scroll.spellchecker', A.bind(function scroll(){
-      if (this.spellchecker.suggestBox) {
-        this.spellchecker.suggestBox.close();
-      }
-    }, this));
-  },
+				instance.spellchecker.on(
+					'check.success',
+					function() {
+						alert('There are no incorrectly spelled words.');
+						instance.destroy();
+					}
+				);
+			},
 
-  destroy: function() {
-    if (!this.spellchecker) 
-      return;
-    this.spellchecker.destroy();
-    this.spellchecker = null;
-    this.editor.setReadOnly(false);
-    this.editor.commands.jqueryspellchecker.toggleState();
-  },
+			destroy: function() {
+				if (!this.spellchecker) {
+					return;
+				}
 
-  toggle: function(editor) {
-    this.editor = editor;
-    if (!this.spellchecker) {
-      this.create();
-    } else {
-      this.destroy();
-    }
-  },
+				this.spellchecker.destroy();
+				this.spellchecker = null;
+				this.editor.setReadOnly(false);
+				this.editor.commands.jqueryspellchecker.toggleState();
+			},
 
-  createSpellchecker: function() {
-    var t = this;
+			init: function( editor ) {
+				var instance = this;
+				var pluginName = 'jqueryspellchecker';
 
-    t.config.getText = function() {
-        var text = t.editor.getData();
-        return A.Node.create('<div />').append(text).attr('textContent');
-    };
+				var path = instance.path;
+				var dependency = [CKEDITOR.getUrl(path + 'js/jquery.spellchecker.js')];
 
-    t.spellchecker = new window.AUI.SpellChecker(t.editor.document.$.body,
-        this.config);
+				CKEDITOR.scriptLoader.load(dependency);
 
-    t.spellchecker.on('check.success', function() {
-      alert('There are no incorrectly spelled words.');
-      t.destroy();
-    });
-  },
+				this.config.suggestBox.position = this.positionSuggestBox();
 
-  positionSuggestBox: function() {
+				editor.addCommand(
+					pluginName,
+					{
+						canUndo: false,
+						readOnly: 1,
+						exec: function() {
+							instance.toggle(editor);
+						}
+					}
+				);
 
-    var t = this;
+				editor.ui.addButton(
+					'jQuerySpellChecker',
+					{
+						label: 'SpellCheck',
+						icon: baseJscPluginPath + '/assets/spellchecker.png',
+						command: pluginName,
+						toolbar: 'spellchecker,10'
+					}
+				);
 
-    return function() {
+				editor.on('saveSnapshot', function() {
+					instance.destroy();
+				});
+			},
 
-      var ed = t.editor;
-      // var word = (this.wordElement.data('firstElement') || this.wordElement)[0];
-      var word = this.wordElement;
+			positionSuggestBox: function() {
+				var instance = this;
 
-      var container = AUI().one(ed.container.$);
+				return function() {
 
-      var p1 = container.one('iframe').getXY();
-      var p2 = container.getXY();
-      var p3 = AUI().one(word).getXY();
+					var ed = instance.editor;
+					var word = this.wordElement;
 
-      // var left = p3.left + p2.left;
-      var left = p3[0] + p2[0];
-      // var top = p3.top + p2.top + (p1.top - p2.top) + word.offsetHeight;
-      var top = p3[1] + p2[1] + (p1[1] - p2[1]) + word.innerHeight();
+					var container = AUI().one(ed.container.$);
 
-      // top -= AUI().one(t.editorWindow).scrollTop();
+					var p1 = container.one('iframe').getXY();
+					var p2 = container.getXY();
+					var p3 = AUI().one(word).getXY();
 
-      /*this.container.css({
-        top: top, 
-        left: left  
-      });*/
-      this.container.setStyle('top', top);
-      this.container.setStyle('left', left);
-    };
-  }
-});
+					var left = p3[0] + p2[0];
+					var top = p3[1] + p2[1] + (p1[1] - p2[1]) + word.innerHeight();
+
+					this.container.setStyle('top', top);
+					this.container.setStyle('left', left);
+				};
+			},
+
+			toggle: function(editor) {
+				this.editor = editor;
+
+				if (!this.spellchecker) {
+					this.create();
+				}
+				else {
+					this.destroy();
+				}
+			}
+		}
+	);
+})();
