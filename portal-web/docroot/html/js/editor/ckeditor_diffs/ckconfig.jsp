@@ -39,16 +39,19 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 StringBundler extraPluginsSb = new StringBundler("ajaxsave,media,restore,scayt,wsc");
 StringBundler spellcheckerPluginsSb = new StringBundler();
+
 if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_WEBSPELLCHECKER) {
 	spellcheckerPluginsSb.append("'SpellChecker', 'Scayt'");
 }
 
 if (PropsValues.EDITOR_WYSIWYG_SPELLCHECKER_LIFERAY) {
-	extraPluginsSb.append(",jqueryspellchecker");
+	extraPluginsSb.append(",liferayspellchecker");
+
 	if (spellcheckerPluginsSb.length() != 0) {
 		spellcheckerPluginsSb.append(',');
 	}
-	spellcheckerPluginsSb.append("'jQuerySpellChecker'");
+
+	spellcheckerPluginsSb.append("'LiferaySpellChecker'");
 }
 
 String extraPlugins = extraPluginsSb.toString();

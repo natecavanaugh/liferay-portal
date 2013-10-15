@@ -2,16 +2,16 @@
 	var A = AUI();
 
 	var baseJscPluginPath = themeDisplay.getPathJavaScript() +
-		'/editor/ckeditor/plugins/jqueryspellchecker';
+		'/editor/ckeditor/plugins/liferayspellchecker';
 
-	var jscCssPath = baseJscPluginPath + '/css/jquery.spellchecker.css';
+	var jscCssPath = baseJscPluginPath + '/css/liferay.spellchecker.css';
 
 	CKEDITOR.document.appendStyleSheet(CKEDITOR.getUrl(jscCssPath));
 
 	CKEDITOR.config.contentsCss = [CKEDITOR.config.contentsCss, jscCssPath];
 
 	CKEDITOR.plugins.add(
-		'jqueryspellchecker',
+		'liferayspellchecker',
 		{
 			config: {
 				lang: 'en',
@@ -21,14 +21,13 @@
 					appendTo: 'body'
 				},
 				webservice: {
-					driver: 'liferay',
-					path: '/webservices/php/SpellChecker.php'
+					driver: 'liferay'
 				}
 			},
 
 			create: function() {
 				this.editor.setReadOnly(true);
-				this.editor.commands.jqueryspellchecker.toggleState();
+				this.editor.commands.liferayspellchecker.toggleState();
 				this.editorWindow = this.editor.document.getWindow().$;
 
 				this.createSpellchecker();
@@ -79,15 +78,15 @@
 				this.spellchecker.destroy();
 				this.spellchecker = null;
 				this.editor.setReadOnly(false);
-				this.editor.commands.jqueryspellchecker.toggleState();
+				this.editor.commands.liferayspellchecker.toggleState();
 			},
 
 			init: function( editor ) {
 				var instance = this;
-				var pluginName = 'jqueryspellchecker';
+				var pluginName = 'liferayspellchecker';
 
 				var path = instance.path;
-				var dependency = [CKEDITOR.getUrl(path + 'js/jquery.spellchecker.js')];
+				var dependency = [CKEDITOR.getUrl(path + 'js/liferay.spellchecker.js')];
 
 				CKEDITOR.scriptLoader.load(dependency);
 
@@ -105,7 +104,7 @@
 				);
 
 				editor.ui.addButton(
-					'jQuerySpellChecker',
+					'LiferaySpellChecker',
 					{
 						label: 'SpellCheck',
 						icon: baseJscPluginPath + '/assets/spellchecker.png',
@@ -127,11 +126,11 @@
 					var ed = instance.editor;
 					var word = this.wordElement;
 
-					var container = AUI().one(ed.container.$);
+					var container = A.one(ed.container.$);
 
 					var p1 = container.one('iframe').getXY();
 					var p2 = container.getXY();
-					var p3 = AUI().one(word).getXY();
+					var p3 = A.one(word).getXY();
 
 					var left = p3[0] + p2[0];
 					var top = p3[1] + p2[1] + (p1[1] - p2[1]) + word.innerHeight();

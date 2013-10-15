@@ -110,7 +110,7 @@
 			}
 			if (this._handlers[name]) {
 				var handler = this._handlers[name];
-                var isArray = (AUI().Array.test(handler) == 1);
+                var isArray = (A.Array.test(handler) == 1);
 
                 if (isArray) {
                     A.each(
@@ -280,7 +280,7 @@
 
 		this.config = config;
 		this.parser = parser;
-		this.spellCheckerElement = this.element = AUI().one(element);
+		this.spellCheckerElement = this.element = A.one(element);
 
 		this.bindEvents();
 	};
@@ -386,7 +386,7 @@
 	SuggestBox.prototype.createBox = function() {
 		var local = this.config.local;
 
-		this.container = AUI().Node.create(
+		this.container = A.Node.create(
 			[
 				'<div class="' + pluginName + '-suggestbox">',
 					'<div class="footer">',
@@ -398,14 +398,14 @@
 			].join('')
 		).appendTo(this.body);
 
-		this.words = AUI().Node.create(
+		this.words = A.Node.create(
 			[
 				'<div class="words">',
 				'</div>'
 			].join('')
 		).prependTo(this.container);
 
-		this.loadingMsg = AUI().Node.create(
+		this.loadingMsg = A.Node.create(
 			[
 				'<div class="loading">',
 				this.config.local.loading,
@@ -439,7 +439,7 @@
 	};
 
 	SuggestBox.prototype.showSuggestedWords = function(getWords, word, wordElement) {
-		this.wordElement = AUI().one(wordElement);
+		this.wordElement = A.one(wordElement);
 
 		getWords(
 			word,
@@ -788,7 +788,7 @@
 		var replaceElement;
 
 		return function(fill, i, word) {
-			var span = AUI().Node.create('<span />');
+			var span = A.Node.create('<span />');
 
 			span.addClass(pluginName + '-word-highlight');
 			span.text(fill);
@@ -811,11 +811,10 @@
 	};
 
 	var SpellChecker = function(elements, config) {
-
 		Events.call(this);
 
 		this.elements = elements;
-		this.config = AUI().aggregate(defaultConfig, config, true);
+		this.config = A.aggregate(defaultConfig, config, true);
 
 		this.setupWebService();
 		this.setupParser();
@@ -972,11 +971,11 @@
 	};
 
 	SpellChecker.prototype.onCheckFail = function(badWords) {
-		AUI().each(
+		A.each(
 			badWords,
 			function(words, i) {
 				if (words.length > 0) {
-					words = AUI().Array.unique(
+					words = A.Array.unique(
 						words,
 						function(a, b, index, array) {
 							return !!(a == b);

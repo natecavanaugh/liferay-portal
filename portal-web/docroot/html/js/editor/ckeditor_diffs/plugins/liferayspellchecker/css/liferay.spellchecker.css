@@ -1,10 +1,3 @@
-/*
- * jQuery Spellchecker - v0.2.4
- * https://github.com/badsyntax/jquery-spellchecker
- *
- * Copyright (c) 2012 Richard Willis
- * Licensed under the MIT license.
- */
 .spellchecker-suggestbox {
   position: absolute;
   display: none;
