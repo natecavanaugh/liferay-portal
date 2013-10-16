@@ -4,6 +4,15 @@
 .lfr-search-container {
 	margin-top: 1.5em;
 	overflow: auto;
+
+	@include respond-to(phone, tablet) {
+		overflow-scrolling: touch;
+		-webkit-overflow-scrolling: touch;
+
+		.searchcontainer-content .table {
+			max-width: none;
+		}
+	}
 }
 
 .taglib-search-iterator {
