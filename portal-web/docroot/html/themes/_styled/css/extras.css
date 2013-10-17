@@ -100,6 +100,10 @@
 	}
 }
 
+.dockbar .navbar-inner .nav-add-controls > li > ul.dropdown-menu {
+	@include box-shadow(none);
+}
+
 .dockbar-split .dockbar {
 	.navbar-inner {
 		.nav > li > a {
@@ -119,6 +123,16 @@
 				&.open a {
 					@include border-radius(4px 4px 0 0);
 				}
+
+				> ul {
+					@include box-shadow(none);
+				}
+			}
+		}
+
+		@include respond-to(phone) {
+			.nav-collapse > .nav > li > a {
+				@include border-radius(4px);
 			}
 		}
 	}
