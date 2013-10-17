@@ -74,15 +74,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 
 	.dockbar {
 		&.navbar {
-			.container .btn {
-				border-color: transparent;
-
-				&:hover, &:focus {
-					background-color: transparent;
-					text-decoration: underline;
-				}
-			}
-
 			.nav {
 				li {
 					&.dropdown {
@@ -94,21 +85,18 @@ $dockbarOpenGradientStart: #0EA6F9;
 									color: #FFF;
 								}
 							}
-
-							&:hover {
-								background-color: #2FA4F5;
-							}
 						}
 
-						&.site-variations .dropdown-menu {
-							background-color: #026ED2;
+						&.staging-toggle .dropdown-menu {
+							background-color: #55B8EC;
 						}
 					}
 				}
 
 				> li {
 					> a {
-						padding: 6px 15px;
+						margin: 0 5px 0 0;
+						padding: 6px 10px;
 
 						&:hover {
 							background-color: #2FA4F5;
@@ -131,17 +119,41 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 
 		.staging-bar {
-			.site-variations {
+			.staging-toggle {
 				color: #FFF;
 
 				li a {
 					color: #FFF;
-					font-weight: 400;
+					font-weight: 300;
+					text-decoration: none;
 				}
 
 				.btn-link {
 					color: #FFF;
 					font-size: 12px;
+				}
+			}
+		}
+
+		.page-customization-bar .btn {
+			border-color: transparent;
+
+			&:hover, &:focus {
+				background: transparent;
+				text-decoration: underline;
+			}
+		}
+
+		.navbar-inner {
+			background-color: $dockbarOpenGradientStart;
+
+			@include background-image(linear-gradient($dockbarGradientStart 0%, $dockbarGradientStart 47%, $dockbarGradientEnd 100%));
+
+			.nav {
+				> li {
+					background-color: $dockbarOpenGradientStart;
+
+					@include background-image(linear-gradient($dockbarGradientStart 0%, $dockbarGradientStart 47%, $dockbarGradientEnd 100%));
 				}
 			}
 		}
@@ -153,14 +165,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 
 		.navbar-inner {
-			.nav {
-				> li {
-					background-color: $dockbarGradientStart;
-
-					@include background-image(linear-gradient($dockbarGradientStart 0%, $dockbarGradientStart 47%, $dockbarGradientEnd 100%));
-				}
-			}
-
 			.nav-account-controls {
 				border-top: 1px solid #00AEFF;
 
@@ -211,10 +215,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 				background-color: #6DA4E4;
 				background-color: rgba(109, 168, 228, 0.9);
 				line-height: 20px;
-
-				.btn:hover {
-					background: transparent;
-				}
 			}
 
 			.page-customization-bar-text {
@@ -435,6 +435,36 @@ $dockbarOpenGradientStart: #0EA6F9;
 		}
 	}
 
+	.portlet-staging-bar {
+		.row-fluid .layout-revision-info {
+			.layout-revision-version {
+				label {
+					color: #B6DDF5;
+				}
+			}
+		}
+
+		.label-submit {
+			background-color: #469DE3;
+		}
+
+		.layout-branch-selector, .layout-set-branch-selector {
+			.icon-caret-down {
+				background-color: #469DE3;
+			}
+		}
+
+		.page-variations-options, .site-pages-variation-options {
+			.lfr-icon-menu {
+				background-color: #50AFE9;
+
+				.icon-globe, .icon-file {
+					background-color: #469DE3;
+				}
+			}
+		}
+	}
+
 	/* ---------- Footer ---------- */
 
 	#footer {
@@ -578,9 +608,12 @@ $dockbarOpenGradientStart: #0EA6F9;
 						@include background-image(linear-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd));
 						@include box-shadow(none);
 					}
+				}
 
+				li.dropdown.active {
 					> .staging-link.dropdown-toggle {
-						@include background-image(linear-gradient(#0279E1, #0264CC));
+						background-color: #55B8EC;
+						background-image: none;
 					}
 				}
 			}
