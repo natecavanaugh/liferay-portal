@@ -759,6 +759,11 @@ $dockbarOpenGradientStart: #0EA6F9;
 	}
 
 	.lfr-ctrl-panel {
+		li.publish-link-container a:before {
+			content: "";
+			padding-left: 0;
+		}
+
 		.lfr-meta-actions {
 			margin-right: 0;
 		}
