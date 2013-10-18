@@ -114,7 +114,11 @@ PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "att
 			</portlet:renderURL>
 
 			<div class="btn-toolbar">
-				<aui:button onClick='<%= "location.href = \'" + addAttachmentsURL + "\';" %>' value="add-attachments" />
+				<%
+					String taglibAddAttachmentsURL = "location.href = '" + addAttachmentsURL + "';";
+				%>
+
+				<aui:button onClick="<%= taglibAddAttachmentsURL %>" value="add-attachments" />
 			</div>
 		</c:otherwise>
 	</c:choose>

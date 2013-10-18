@@ -276,10 +276,18 @@ int screenshotsCount = ParamUtil.getInteger(request, "screenshotsCount", product
 			</table>
 
 			<div class="btn-toolbar">
-				<aui:button onClick="<portlet:namespace />addScreenShot();" value="add-screenshot" />
+				<%
+					String taglibAddScreenshotURL = renderResponse.getNamespace() + "addScreenShot();";
+				%>
+
+				<aui:button onClick="<%= taglibAddScreenshotURL %>" value="add-screenshot" />
 
 				<c:if test="<%= screenshotsCount > 0 %>">
-					<aui:button onClick="<portlet:namespace />removeScreenShot();" value="remove-screenshot" />
+					<%
+						String taglibRemoveScreenshot = renderResponse.getNamespace() + "removeScreenShot();";
+					%>
+
+					<aui:button onClick="<%= taglibRemoveScreenshot %>" value="remove-screenshot" />
 				</c:if>
 			</div>
 		</liferay-ui:panel>
@@ -289,7 +297,11 @@ int screenshotsCount = ParamUtil.getInteger(request, "screenshotsCount", product
 <div class="btn-toolbar">
 	<aui:button cssClass="btn-primary" type="submit" value="save" />
 
-	<aui:button onClick='<%= "location.href = \'" + HtmlUtil.escape(PortalUtil.escapeRedirect(redirect)) + "\';" %>' value="cancel" />
+	<%
+		String taglibCancelURL = "location.href = '" + HtmlUtil.escape(PortalUtil.escapeRedirect(redirect)) + "';";
+	%>
+
+	<aui:button onClick="<%= taglibCancelURL %>" value="cancel" />
 </div>
 </form>
 

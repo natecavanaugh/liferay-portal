@@ -267,7 +267,11 @@ portletURL.setParameter("tabs1", tabs1);
 		<c:if test="<%= showAddProductEntryButton && showPermissionsButton %>">
 			<div class="btn-toolbar">
 				<c:if test="<%= showAddProductEntryButton %>">
-					<aui:button onClick="<portlet:namespace />addProduct();" value="add-product" />
+					<%
+						String taglibAddProductURL = renderResponse.getNamespace() + "addProduct();";
+					%>
+
+					<aui:button onClick="<%= taglibAddProductURL %>" value="add-product" />
 				</c:if>
 
 				<c:if test="<%= showPermissionsButton %>">
@@ -278,7 +282,11 @@ portletURL.setParameter("tabs1", tabs1);
 						var="permissionsURL"
 					/>
 
-					<aui:button onClick='<%= "location.href = \'" + permissionsURL + "\';" %>' value="permissions" />
+					<%
+						String taglibPermissionsURL = "location.href = '" + permissionsURL + "';";
+					%>
+
+					<aui:button onClick="<%= taglibPermissionsURL %>" value="permissions" />
 				</c:if>
 			</div>
 		</c:if>
@@ -444,7 +452,11 @@ portletURL.setParameter("tabs1", tabs1);
 					<portlet:param name="redirect" value="<%= currentURL %>" />
 				</portlet:renderURL>
 
-				<aui:button onClick='<%= "location.href = \'" + addProductURL + "\';" %>' value="add-product" />
+				<%
+					String taglibAddProductURL = "location.href = '" + addProductURL + "';";
+				%>
+
+				<aui:button onClick="<%= taglibAddProductURL %>" value="add-product" />
 			</div>
 		</c:if>
 
@@ -531,7 +543,11 @@ portletURL.setParameter("tabs1", tabs1);
 						<portlet:param name="redirect" value="<%= currentURL %>" />
 					</portlet:renderURL>
 
-					<aui:button onClick='<%= "location.href = \'" + addFrameworkURL + "\';" %>' value="add-framework-version" />
+					<%
+						String taglibAddFrameworkURL = "location.href = '" + addFrameworkURL + "';";
+					%>
+
+					<aui:button onClick="<%= taglibAddFrameworkURL %>" value="add-framework-version" />
 				</c:if>
 
 				<c:if test="<%= showPermissionsButton %>">
@@ -542,7 +558,11 @@ portletURL.setParameter("tabs1", tabs1);
 						var="permissionsURL"
 					/>
 
-					<aui:button onClick='<%= "location.href = \'" + permissionsURL + "\';" %>' value="permissions" />
+					<%
+						String taglibPermissionsURL = "location.href = '" + permissionsURL + "';";
+					%>
+
+					<aui:button onClick="<%= taglibPermissionsURL %>" value="permissions" />
 				</c:if>
 			</div>
 		</c:if>
@@ -642,7 +662,11 @@ portletURL.setParameter("tabs1", tabs1);
 					<portlet:param name="redirect" value="<%= currentURL %>" />
 				</portlet:renderURL>
 
-				<aui:button onClick='<%= "location.href = \'" + addLicenseURL + "\';" %>' value="add-license" />
+				<%
+					String taglibAddLicenseURL = "location.href = '" + addLicenseURL + "';";
+				%>
+
+				<aui:button onClick="<%= taglibAddLicenseURL %>" value="add-license" />
 			</div>
 		</c:if>
 
