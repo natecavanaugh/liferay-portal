@@ -16,15 +16,28 @@
 
 <%@ include file="/html/portlet/dictionary/init.jsp" %>
 
-<form name="<portlet:namespace />fm" onSubmit="window.open(document.<portlet:namespace />fm.<portlet:namespace />type[document.<portlet:namespace />fm.<portlet:namespace />type.selectedIndex].value + encodeURIComponent(document.<portlet:namespace />fm.<portlet:namespace />word.value)); return false;">
+<aui:form name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "lookUp();" %>'>
+	<aui:fieldset>
+		<aui:field-wrapper>
+			<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" label="" name="word" />
 
-<input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="<portlet:namespace />word" size="30" type="text" />
+			<aui:select label="" name="type">
+				<option value="http://dictionary.reference.com/browse/" /><liferay-ui:message key="dictionary" /></option>
+				<option value="http://thesaurus.reference.com/browse/" /><liferay-ui:message key="thesaurus" /></option>
+			</aui:select>
 
-<select name="<portlet:namespace />type">
-	<option value="http://dictionary.reference.com/search?q="><liferay-ui:message key="dictionary" /></option>
-	<option value="http://thesaurus.reference.com/search?q="><liferay-ui:message key="thesaurus" /></option>
-</select>
+			<aui:button type="submit" value="find" />
+		</aui:field-wrapper>
+	</aui:fieldset>
+</aui:form>
 
-<input type="submit" value="<liferay-ui:message key="find" />" />
+<aui:script>
+	function <portlet:namespace />lookUp() {
+		var form = document.<portlet:namespace />fm;
 
-</form>
+		var type = form.<portlet:namespace />type.selectedIndex;
+		var word = form.<portlet:namespace />word.value;
+
+		window.open(form.<portlet:namespace />type[type].value + encodeURIComponent(word));
+	}
+</aui:script>
