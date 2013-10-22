@@ -77,7 +77,7 @@
 				</c:otherwise>
 			</c:choose>
 
-			<div class="publish-link-container">
+			<div class="publish-link-container span5">
 				<aui:a cssClass="btn btn-success publish-link" href="<%= publishRenderURL.toString() %>" id='<%= layoutSetBranchId + "publishLink" %>' label="<%= publishMessage %>" />
 			</div>
 
