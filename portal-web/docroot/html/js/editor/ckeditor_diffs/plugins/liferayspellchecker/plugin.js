@@ -17,8 +17,8 @@
 				lang: 'en',
 				parser: 'html',
 				suggestBox: {
-					position: 'below',
-					appendTo: 'body'
+					appendTo: 'body',
+					position: 'below'
 				},
 				webservice: {
 					driver: 'liferay'
@@ -37,8 +37,10 @@
 					'scroll.spellchecker',
 					A.bind(
 						function scroll() {
-							if (this.spellchecker.suggestBox) {
-								this.spellchecker.suggestBox.close();
+							var suggestBox = this.spellchecker.suggestBox;
+
+							if (suggestBox) {
+								suggestBox.close();
 							}
 						},
 						this
@@ -65,6 +67,7 @@
 					'check.success',
 					function() {
 						alert('There are no incorrectly spelled words.');
+
 						instance.destroy();
 					}
 				);
@@ -77,6 +80,7 @@
 
 				this.spellchecker.destroy();
 				this.spellchecker = null;
+
 				this.editor.setReadOnly(false);
 				this.editor.commands.liferayspellchecker.toggleState();
 			},
@@ -96,33 +100,35 @@
 					pluginName,
 					{
 						canUndo: false,
-						readOnly: 1,
 						exec: function() {
 							instance.toggle(editor);
-						}
+						},
+						readOnly: 1
 					}
 				);
 
 				editor.ui.addButton(
 					'LiferaySpellChecker',
 					{
-						label: 'SpellCheck',
-						icon: baseJscPluginPath + '/assets/spellchecker.png',
 						command: pluginName,
+						icon: baseJscPluginPath + '/assets/spellchecker.png',
+						label: 'SpellCheck',
 						toolbar: 'spellchecker,10'
 					}
 				);
 
-				editor.on('saveSnapshot', function() {
-					instance.destroy();
-				});
+				editor.on(
+					'saveSnapshot',
+					function() {
+						instance.destroy();
+					}
+				);
 			},
 
 			positionSuggestBox: function() {
 				var instance = this;
 
 				return function() {
-
 					var ed = instance.editor;
 					var word = this.wordElement;
 
