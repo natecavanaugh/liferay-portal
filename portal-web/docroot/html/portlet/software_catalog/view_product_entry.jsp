@@ -220,8 +220,6 @@ List productScreenshots = SCProductScreenshotLocalServiceUtil.getProductScreensh
 		%>
 
 	</div>
-
-	<br />
 </c:if>
 
 <liferay-ui:ratings
@@ -230,13 +228,20 @@ List productScreenshots = SCProductScreenshotLocalServiceUtil.getProductScreensh
 />
 
 <c:if test="<%= SCProductEntryPermission.contains(permissionChecker, productEntryId, ActionKeys.UPDATE) %>">
-	<br />
 
-	<input onClick="location.href = '<%= editProductEntryURL.toString() %>';" type="button" value="<liferay-ui:message key="edit-product" />" />
+	<div class="btn-toolbar">
+		<%
+			String taglibEditProductEntryURL = "location.href = '" + editProductEntryURL.toString() + "';";
+		%>
 
-	<input onClick="location.href = '<%= addProductVersionURL.toString() %>';" type="button" value="<liferay-ui:message key="add-product-version" />" />
+		<aui:button onClick="<%= taglibEditProductEntryURL %>" value="edit-product" />
 
-	<br /><br />
+		<%
+			String taglibAddProductVersionURL = "location.href = '" + addProductVersionURL.toString() + "';";
+		%>
+
+		<aui:button onClick="<%= taglibAddProductVersionURL %>" value="add-product-version" />
+	</div>
 </c:if>
 
 <liferay-ui:tabs
