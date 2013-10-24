@@ -22,8 +22,9 @@
 </portlet:renderURL>
 
 <div class="btn-toolbar">
+
 	<%
-		String taglibAddURL = "location.href = '" + addURL + "';";
+	String taglibAddURL = "location.href = '" + addURL + "';";
 	%>
 
 	<aui:button onClick="<%= taglibAddURL %>" value="add" />

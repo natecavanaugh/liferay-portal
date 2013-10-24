@@ -37,8 +37,9 @@ try {
 					</portlet:renderURL>
 
 					<div class="btn-toolbar">
+
 						<%
-							String taglibRemoveRedirectURL = "location.href = '" + removeRedirectURL + "';";
+						String taglibRemoveRedirectURL = "location.href = '" + removeRedirectURL + "';";
 						%>
 
 						<aui:button onClick="<%= taglibRemoveRedirectURL %>" value="remove-redirect" />

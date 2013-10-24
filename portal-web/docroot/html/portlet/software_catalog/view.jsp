@@ -267,6 +267,7 @@ portletURL.setParameter("tabs1", tabs1);
 		<c:if test="<%= showAddProductEntryButton && showPermissionsButton %>">
 			<div class="btn-toolbar">
 				<c:if test="<%= showAddProductEntryButton %>">
+
 					<%
 						String taglibAddProductURL = renderResponse.getNamespace() + "addProduct();";
 					%>
@@ -283,7 +284,7 @@ portletURL.setParameter("tabs1", tabs1);
 					/>
 
 					<%
-						String taglibPermissionsURL = "location.href = '" + permissionsURL + "';";
+					String taglibPermissionsURL = "location.href = '" + permissionsURL + "';";
 					%>
 
 					<aui:button onClick="<%= taglibPermissionsURL %>" value="permissions" />

@@ -230,14 +230,15 @@ List productScreenshots = SCProductScreenshotLocalServiceUtil.getProductScreensh
 <c:if test="<%= SCProductEntryPermission.contains(permissionChecker, productEntryId, ActionKeys.UPDATE) %>">
 
 	<div class="btn-toolbar">
+
 		<%
-			String taglibEditProductEntryURL = "location.href = '" + editProductEntryURL.toString() + "';";
+		String taglibEditProductEntryURL = "location.href = '" + editProductEntryURL.toString() + "';";
 		%>
 
 		<aui:button onClick="<%= taglibEditProductEntryURL %>" value="edit-product" />
 
 		<%
-			String taglibAddProductVersionURL = "location.href = '" + addProductVersionURL.toString() + "';";
+		String taglibAddProductVersionURL = "location.href = '" + addProductVersionURL.toString() + "';";
 		%>
 
 		<aui:button onClick="<%= taglibAddProductVersionURL %>" value="add-product-version" />

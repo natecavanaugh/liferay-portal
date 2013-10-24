@@ -87,7 +87,7 @@ long frameworkVersionId = BeanParamUtil.getLong(frameworkVersion, request, "fram
 	<aui:button cssClass="btn-primary" type="submit" value="save" />
 
 	<%
-		String taglibCancelURL = "location.href = '" + HtmlUtil.escape(PortalUtil.escapeRedirect(redirect)) + "';";
+	String taglibCancelURL = "location.href = '" + HtmlUtil.escape(PortalUtil.escapeRedirect(redirect)) + "';";
 	%>
 
 	<aui:button onClick="<%= taglibCancelURL %>" value="cancel" />

@@ -79,8 +79,9 @@
 					</div>
 
 					<div class="btn-toolbar">
+
 						<%
-							String taglibEditPageURL = "location.href = '" + editPageURL.toString() + "';";
+						String taglibEditPageURL = "location.href = '" + editPageURL.toString() + "';";
 						%>
 
 						<aui:button onClick="<%= taglibEditPageURL %>" value="edit-draft" />
@@ -99,17 +100,18 @@
 			</div>
 
 			<div class="btn-toolbar">
-				<%
-					String taglibSearchURL = "location.href = '" + searchURL.toString() + "';";
-				%>
-
-				<aui:button onClick='<%= taglibSearchURL %>' value='<%= LanguageUtil.format(pageContext, "search-for-x", HtmlUtil.escapeAttribute(title)) %>' />
 
 				<%
-					String taglibEditPageURL = "location.href = '" + editPageURL.toString() + "';";
+				String taglibSearchURL = "location.href = '" + searchURL.toString() + "';";
 				%>
 
-				<aui:button onClick='<%= taglibEditPageURL %>' value='<%= LanguageUtil.format(pageContext, "create-page-x", HtmlUtil.escapeAttribute(title)) %>' />
+				<aui:button onClick="<%= taglibSearchURL %>" value='<%= LanguageUtil.format(pageContext, "search-for-x", HtmlUtil.escapeAttribute(title)) %>' />
+
+				<%
+				String taglibEditPageURL = "location.href = '" + editPageURL.toString() + "';";
+				%>
+
+				<aui:button onClick="<%= taglibEditPageURL %>" value='<%= LanguageUtil.format(pageContext, "create-page-x", HtmlUtil.escapeAttribute(title)) %>' />
 			</div>
 		</c:otherwise>
 	</c:choose>

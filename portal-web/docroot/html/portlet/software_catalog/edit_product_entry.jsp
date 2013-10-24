@@ -276,15 +276,17 @@ int screenshotsCount = ParamUtil.getInteger(request, "screenshotsCount", product
 			</table>
 
 			<div class="btn-toolbar">
+
 				<%
-					String taglibAddScreenshotURL = renderResponse.getNamespace() + "addScreenShot();";
+				String taglibAddScreenshotURL = renderResponse.getNamespace() + "addScreenShot();";
 				%>
 
 				<aui:button onClick="<%= taglibAddScreenshotURL %>" value="add-screenshot" />
 
 				<c:if test="<%= screenshotsCount > 0 %>">
+
 					<%
-						String taglibRemoveScreenshot = renderResponse.getNamespace() + "removeScreenShot();";
+					String taglibRemoveScreenshot = renderResponse.getNamespace() + "removeScreenShot();";
 					%>
 
 					<aui:button onClick="<%= taglibRemoveScreenshot %>" value="remove-screenshot" />
@@ -298,7 +300,7 @@ int screenshotsCount = ParamUtil.getInteger(request, "screenshotsCount", product
 	<aui:button cssClass="btn-primary" type="submit" value="save" />
 
 	<%
-		String taglibCancelURL = "location.href = '" + HtmlUtil.escape(PortalUtil.escapeRedirect(redirect)) + "';";
+	String taglibCancelURL = "location.href = '" + HtmlUtil.escape(PortalUtil.escapeRedirect(redirect)) + "';";
 	%>
 
 	<aui:button onClick="<%= taglibCancelURL %>" value="cancel" />
