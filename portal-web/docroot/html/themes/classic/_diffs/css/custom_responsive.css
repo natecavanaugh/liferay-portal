@@ -13,6 +13,11 @@
 			bottom: 100%;
 			position: absolute;
 
+			@include respond-to(phone) {
+				margin-top: -2em;
+				position: relative;
+			}
+
 			.site-title {
 				font-size: 26px;
 
@@ -45,11 +50,48 @@
 			}
 		}
 
+		.dockbar .navbar-inner .container .nav-collapse .nav-add-controls ul.dropdown-menu {
+			@include respond-to(phone) {
+				background: #009AE5;
+				padding: 0;
+			}
+
+			> li > a {
+				@include respond-to(phone, tablet) {
+					background: transparent;
+				}
+
+				@include respond-to(phone) {
+					padding: 9px 15px;
+				}
+
+				&:hover {
+					@include respond-to(phone) {
+						background: #2FA4F5;
+					}
+				}
+
+				&.toggle-controls-link {
+					@include respond-to(phone, tablet) {
+						background: transparent;
+					}
+				}
+			}
+		}
+
 		.dockbar-split .dockbar, .dockbar {
 			float: right;
 			height: auto;
 			position: relative;
 			z-index: 400;
+
+			@include respond-to(phone) {
+				float: none;
+
+				#_145_navSiteNavigationNavbarBtn {
+					display: inline-block;
+				}
+			}
 
 			.info-items {
 				height: auto;
@@ -67,6 +109,10 @@
 					font-size: 24px;
 					padding: 12px 15px;
 
+					@include respond-to(phone) {
+						display: none;
+					}
+
 					&:hover {
 						background-color: #5BBAE8;
 					}
@@ -79,17 +125,32 @@
 				.nav-account-controls {
 					padding: 0 5px;
 
+					@include respond-to(phone) {
+						position: relative;
+
+						.dropdown-menu {
+							.nav-item-label {
+								display: inline;
+							}
+						}
+					}
+
 					.user-avatar-image {
 						display: none;
 					}
 				}
 
-				.nav-add-controls {
+				.nav-add-controls ul.dropdown-menu {
 					background: transparent;
 					border-top-width: 0;
 					position: static;
 					z-index: 350;
 					padding: 0 5px;
+
+					@include respond-to(phone) {
+						background: #009AE5;
+						padding: 0;
+					}
 
 					> li {
 						float: none;
@@ -130,16 +191,11 @@
 
 							.nav-item-label {
 								background: transparent;
-								display: inline;
 								left: 0;
 								margin-left: 0;
 								margin-top: 0;
 								padding: 0;
 								position: relative;
-							}
-
-							&:hover .nav-item-label {
-								display: inline;
 							}
 
 							.icon-caret-down {
@@ -151,6 +207,14 @@
 
 				.nav-collapse {
 					z-index: 400;
+
+					@include respond-to(phone) {
+						clear: none;
+						display: block;
+						height: auto;
+						overflow: visible;
+						position: static;
+					}
 
 					&.open {
 						overflow: visible;
@@ -166,11 +230,45 @@
 						right: 0;
 						z-index: 400;
 
+						@include respond-to(phone) {
+							background: transparent;
+							float: left;
+							min-width: 0;
+							padding: 0;
+							position: static;
+
+							.icon-caret-down {
+								display: none;
+							}
+
+							.nav-item-icon {
+								font-size: 26px;
+							}
+						}
+
 						> li {
+							@include respond-to(phone) {
+								float: left;
+								position: static;
+							}
+
 							&.dropdown {
-								.dropdown-menu li a {
-									font-size: 16px;
-									line-height: 32px;
+								.dropdown-menu {
+									@include respond-to(phone) {
+										left: 0;
+										position: absolute;
+										top: auto;
+										width: 100%;
+									}
+
+									li a {
+										font-size: 16px;
+										line-height: 32px;
+
+										@include respond-to(tablet) {
+											margin: 5px 0;
+										}
+									}
 								}
 
 								&.open {
@@ -186,8 +284,36 @@
 								margin: 5px 0;
 								padding: 6px 15px;
 
+								@include respond-to(phone) {
+									display: inline-block;
+									font-size: 24px;
+									line-height: 20px;
+									margin-left: 10px;
+									padding: 12px 15px;
+
+									> .nav-item-icon {
+										margin-top: 3px;
+									}
+
+									> .nav-item-label {
+										display: none;
+									}
+
+									&:hover > .nav-item-label {
+										display: none;
+									}
+								}
+
+								.nav-item-label {
+									display: inline;
+								}
+
 								&:focus, &:hover {
 									background-color: #5BBAE8;
+
+									.nav-item-label {
+										display: inline;
+									}
 								}
 							}
 						}

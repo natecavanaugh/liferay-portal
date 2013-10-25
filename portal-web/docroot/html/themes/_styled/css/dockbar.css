@@ -102,6 +102,89 @@ $editLayoutPanelWidth: 460px;
 
 				.nav-account-controls {
 					float: right;
+
+					> li > a > .nav-item-icon {
+						display: none;
+
+						@include respond-to(phone) {
+							display: inline-block;
+						}
+					}
+				}
+
+				.nav-add-controls, .nav-navigation {
+					> li > a {
+						display: none;
+					}
+
+					@include respond-to(phone) {
+						.open ul.dropdown-menu {
+							display: block;
+						}
+					}
+
+					ul.dropdown-menu {
+						background-color: transparent;
+						border: none;
+						display: inline-block;
+						letter-spacing: 1px;
+						padding: 0;
+						position: static;
+
+						@include respond-to(phone) {
+							display: none;
+							top: auto;
+						}
+
+						&:after {
+							border: none;
+						}
+
+						&:before {
+							border: none;
+						}
+
+						> li {
+							display: inline-block;
+
+							@include respond-to(phone, tablet) {
+								display: block;
+							}
+
+							&.page-preview-controls {
+								@include respond-to(phone) {
+									display: none;
+								}
+
+								@include respond-to(tablet) {
+									display: none;
+								}
+							}
+
+							> a {
+								font-size: 14px;
+								line-height: 31px;
+								margin: 0;
+								padding: 6px 15px;
+
+								> .nav-item-icon {
+									margin-right: 0;
+									margin-top: 3px;
+								}
+
+								@include respond-to(phone, tablet) {
+									.nav-item-label {
+										display: inline-block;
+										position: relative;
+									}
+
+									&:hover .nav-item-label {
+										display: inline-block;
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 
@@ -157,6 +240,10 @@ $editLayoutPanelWidth: 460px;
 			height: 0;
 			position: absolute;
 
+			@include respond-to(phone, tablet) {
+				height: auto;
+			}
+
 			.staging-controls {
 				.staging-bar {
 					li.dropdown .dropdown-menu {
@@ -195,6 +282,10 @@ $editLayoutPanelWidth: 460px;
 				border-width: 0;
 				padding: 0;
 				width: 0;
+
+				@include respond-to(phone, tablet) {
+					width: auto;
+				}
 
 				.nav {
 					border-bottom-width: 0;
@@ -263,13 +354,20 @@ $editLayoutPanelWidth: 460px;
 					z-index: 325;
 				}
 
-				.nav-add-controls {
+				.nav-add-controls ul.dropdown-menu {
 					background: transparent;
+					display: block;
+					min-width: 0;
 					position: fixed;
 					top: 10%;
 					z-index: 350;
 
+					@include respond-to(phone) {
+						display: none;
+					}
+
 					> li {
+						display: block;
 						float: none;
 						margin: 10px;
 						position: relative;
@@ -281,16 +379,6 @@ $editLayoutPanelWidth: 460px;
 							&:focus {
 								clip: rect(auto auto auto auto);
 								position: static;
-							}
-						}
-
-						&.page-preview-controls {
-							@include respond-to(phone) {
-								display: none;
-							}
-
-							@include respond-to(tablet) {
-								display: none;
 							}
 						}
 
@@ -306,6 +394,7 @@ $editLayoutPanelWidth: 460px;
 
 							[class^="icon-"], [class^="icon-"], [class*=" icon-"] {
 								font-size: 25px;
+								margin-right: 0;
 								position: relative;
 								vertical-align: middle;
 							}
@@ -328,10 +417,18 @@ $editLayoutPanelWidth: 460px;
 								position: absolute;
 								top: 50%;
 								white-space: nowrap;
+
+								@include respond-to(phone, tablet) {
+									display: inline-block;
+								}
 							}
 
 							&:hover .nav-item-label {
 								display: block;
+
+								@include respond-to(phone, tablet) {
+									display: inline-block;
+								}
 							}
 
 							.icon-caret-down {
@@ -393,7 +490,7 @@ $editLayoutPanelWidth: 460px;
 			margin: 10px 0;
 		}
 
-		&.controls-hidden .dockbar .navbar-inner .nav-add-controls > li.toggle-controls > .toggle-controls-link {
+		&.controls-hidden .dockbar .navbar-inner .nav-add-controls li.toggle-controls > .toggle-controls-link {
 			background: #F5AF45;
 		}
 
@@ -411,7 +508,7 @@ $editLayoutPanelWidth: 460px;
 	}
 
 	.touch .dockbar-split, .controls-hidden.dockbar-split {
-		.dockbar .navbar-inner .nav-add-controls > li.toggle-controls > .toggle-controls-link {
+		.dockbar .navbar-inner .nav-add-controls ul.dropdown-menu > li.toggle-controls > .toggle-controls-link {
 			clip: rect(auto auto auto auto);
 			position: static;
 		}
