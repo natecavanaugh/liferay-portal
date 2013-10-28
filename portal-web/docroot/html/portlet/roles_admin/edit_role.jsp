@@ -48,7 +48,7 @@ String subtype = BeanParamUtil.getString(role, request, "subtype");
 
 <portlet:renderURL var="editRoleRenderURL">
 	<portlet:param name="struts_action" value="/roles_admin/edit_role" />
-	<portlet:param name="backURL" value="<%= backURL %>" />
+	<portlet:param name="redirect" value="<%= redirect %>" />
 </portlet:renderURL>
 
 <aui:form action="<%= editRoleActionURL %>" method="post" name="fm">
