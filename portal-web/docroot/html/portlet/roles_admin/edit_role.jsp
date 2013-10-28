@@ -53,7 +53,7 @@ String subtype = BeanParamUtil.getString(role, request, "subtype");
 
 <aui:form action="<%= editRoleActionURL %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (role == null) ? Constants.ADD : Constants.UPDATE %>" />
-	<aui:input name="redirect" type="hidden" value="<%= (role == null) ? editRoleRenderURL : redirect %>" />
+	<aui:input name="redirect" type="hidden" value="<%= editRoleRenderURL %>" />
 	<aui:input name="roleId" type="hidden" value="<%= roleId %>" />
 
 	<liferay-ui:error exception="<%= DuplicateRoleException.class %>" message="please-enter-a-unique-name" />
