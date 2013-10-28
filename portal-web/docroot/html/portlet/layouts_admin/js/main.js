@@ -3,6 +3,8 @@ AUI.add(
 	function(A) {
 		var Lang = A.Lang;
 
+		var ADate = A.Date;
+
 		var FAILURE_TIMEOUT = 10000;
 
 		var REGEX_LAYOUT_ID = /plid_(\d+)/;
@@ -608,6 +610,8 @@ AUI.add(
 															event.domEvent.preventDefault();
 
 															var endsLater = true;
+															var isStartDateNotInFuture = true;
+															var isEndDateNotInFuture = true;
 
 															if (instance._isChecked('rangeDateRangeNode')) {
 																var startDatePicker = Liferay.component(instance.ns('startDateDatePicker'));
@@ -632,26 +636,41 @@ AUI.add(
 																endDate.setSeconds(0);
 																endDate.setMilliseconds(0);
 
-																endsLater = A.Date.isGreater(endDate, startDate);
+																var today = new Date();
+
+																endsLater = ADate.isGreater(endDate, startDate);
+																isStartDateNotInFuture = ADate.isGreaterOrEqual(today, startDate);
+																isEndDateNotInFuture = ADate.isGreaterOrEqual(today, endDate);
 															}
 
-															if (endsLater) {
+															if (endsLater && isStartDateNotInFuture && isEndDateNotInFuture) {
 																instance._reloadForm();
 
 																rangeDialog.hide();
 															}
 															else {
-																if (!instance._notice) {
-																	instance._notice = new Liferay.Notice(
-																		{
-																			closeText: false,
-																			content: Liferay.Language.get('end-date-must-be-greater-than-start-date') + '<button type="button" class="close">&times;</button>',
-																			timeout: 10000,
-																			toggleText: false,
-																			type: 'warning'
-																		}
-																	);
+																var message;
+
+																if (!endsLater) {
+																	message = Liferay.Language.get('end-date-must-be-greater-than-start-date');																	
 																}
+																else if (!isStartDateNotInFuture || !isEndDateNotInFuture) {
+																	message = Liferay.Language.get('selected-dates-can-not-be-in-the-future');
+																}
+
+																if (instance._notice) {
+																	instance._notice.remove();
+																}
+
+																instance._notice = new Liferay.Notice(
+																	{
+																		closeText: false,
+																		content: message + '<button type="button" class="close">&times;</button>',
+																		timeout: 10000,
+																		toggleText: false,
+																		type: 'warning'
+																	}
+																);
 
 																instance._notice.show();
 															}
