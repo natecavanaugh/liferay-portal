@@ -228,6 +228,12 @@
 	padding: 1px;
 }
 
+/* ---------- Nav ---------- */
+
+.navbar .nav li > a {
+	word-break: break-all;
+}
+
 /* ---------- Miscellaneous ---------- */
 
 .lfr-panel-container {

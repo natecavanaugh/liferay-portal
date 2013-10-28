@@ -16,7 +16,7 @@
 
 <c:choose>
 	<c:when test="<%= group.isCompany() && GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.PUBLISH_STAGING) %>">
-		<div class="publish-link-container">
+		<div class="<%= cssClass %> publish-link-container">
 			<aui:a href="<%= publishRenderURL.toString() %>" id='<%= groupId + "publishGlobalLink" %>' label="<%= publishDialogTitle %>" />
 		</div>
 
@@ -77,7 +77,7 @@
 				</c:otherwise>
 			</c:choose>
 
-			<div class="publish-link-container">
+			<div class="<%= cssClass %> publish-link-container">
 				<aui:a cssClass="btn btn-success publish-link" href="<%= publishRenderURL.toString() %>" id='<%= layoutSetBranchId + "publishLink" %>' label="<%= publishMessage %>" />
 			</div>
 
@@ -112,7 +112,7 @@
 				<portlet:param name="selPlid" value="<%= String.valueOf(selPlid) %>" />
 			</portlet:renderURL>
 
-			<div class="publish-link-container">
+			<div class="<%= cssClass %> publish-link-container">
 				<aui:a cssClass="manage-layout-set-branches" href="<%= layoutSetBranchesURL %>" id="manageLayoutSetBranches" label="manage-site-pages-variations" />
 			</div>
 
