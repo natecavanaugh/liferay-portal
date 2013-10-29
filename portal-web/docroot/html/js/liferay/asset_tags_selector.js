@@ -247,7 +247,7 @@ AUI.add(
 
 							bodyNode.html(STR_BLANK);
 
-							var searchForm = A.Node.create(A.Lang.sub(TPL_SEARCH_FORM, [Liferay.Language.get('search')]));
+							var searchForm = A.Node.create(Lang.sub(TPL_SEARCH_FORM, [Liferay.Language.get('search')]));
 
 							bodyNode.append(searchForm);
 
@@ -527,8 +527,6 @@ AUI.add(
 
 						var context = STR_BLANK;
 
-						var data = [];
-
 						if (contentCallback) {
 							context = contentCallback();
 
@@ -547,16 +545,23 @@ AUI.add(
 							function(response) {
 								var results = response.query.results;
 
+								var data = [];
+
 								if (results) {
 									var resultData = results.Result;
 
-									for (var i = 0; i < resultData.length; i++) {
-										data.push(
-											{
-												name: resultData[i]
-											}
-										);
+									if (!Lang.isArray(resultData)) {
+										resultData = [resultData];
 									}
+
+									data = AArray.map(
+										resultData,
+										function(item, index, collection) {
+											return {
+												name: item
+											};
+										}
+									);
 								}
 
 								instance._updateSelectList(AArray.unique(data));
