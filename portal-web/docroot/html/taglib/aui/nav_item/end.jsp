@@ -59,6 +59,7 @@ if (bodyContent != null) {
 		<c:if test="<%= dropdown %>">
 			<aui:script use="aui-base,event-move,event-outside,liferay-store">
 				A.Event.defineOutside('touchend');
+				A.Event.defineOutside('touchmove');
 
 				var container = A.one('#<%= id %>');
 
@@ -78,6 +79,8 @@ if (bodyContent != null) {
 									<c:when test="<%= !toggle %>">
 										var handle = Liferay.Data['<%= id %>Handle'];
 
+										var touchHandle = Liferay.Data['<%= id %>TouchHandle'];
+
 										if (menuOpen && !handle) {
 											var eventOutside = event._event.type;
 
@@ -85,18 +88,37 @@ if (bodyContent != null) {
 												eventOutside = 'mouseup';
 											}
 
+											var touchMove = false;
+
+											if ((eventOutside === 'touchend') && !touchHandle) {
+												touchHandle = currentTarget.on(
+													'touchmoveoutside',
+													function(event) {
+														touchMove = true;
+													}
+												);
+											}
+
 											eventOutside = eventOutside + 'outside';
 
 											handle = currentTarget.on(
 												eventOutside,
 												function(event) {
-													if (!event.target.ancestor('#<%= id %>')) {
+													if (!event.target.ancestor('#<%= id %>') && !touchMove) {
 														Liferay.Data['<%= id %>Handle'] = null;
 
 														handle.detach();
 
+														if (touchHandle) {
+															Liferay.Data['<%= id %>TouchHandle'] = null;
+
+															touchHandle.detach();
+														}
+
 														container.removeClass('open');
 													}
+
+													touchMove = false;
 												}
 											);
 										}
@@ -104,9 +126,17 @@ if (bodyContent != null) {
 											handle.detach();
 
 											handle = null;
+
+											if (touchHandle) {
+												touchHandle.detach();
+
+												touchHandle = null;
+											}
 										}
 
 										Liferay.Data['<%= id %>Handle'] = handle;
+
+										Liferay.Data['<%= id %>TouchHandle'] = touchHandle;
 									</c:when>
 									<c:otherwise>
 										var data = {};
