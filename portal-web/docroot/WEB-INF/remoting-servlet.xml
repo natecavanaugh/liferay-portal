@@ -1165,4 +1165,16 @@
 		<property name="service" ref="com.liferay.portlet.wiki.service.WikiPageService" />
 		<property name="serviceInterface" value="com.liferay.portlet.wiki.service.WikiPageService" />
 	</bean>
+	<bean name="/com_liferay_portal_words_service_spring_WordsService-burlap" class="org.springframework.remoting.caucho.BurlapServiceExporter">
+		<property name="service" ref="com.liferay.portal.words.service.WordsService" />
+		<property name="serviceInterface" value="com.liferay.portal.words.service.WordsService" />
+	</bean>
+	<bean name="/com_liferay_portal_words_service_spring_WordsService-hessian" class="org.springframework.remoting.caucho.HessianServiceExporter">
+		<property name="service" ref="com.liferay.portal.words.service.WordsService" />
+		<property name="serviceInterface" value="com.liferay.portal.words.service.WordsService" />
+	</bean>
+	<bean name="/com_liferay_portal_words_service_spring_WordsService-http" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+		<property name="service" ref="com.liferay.portal.words.service.WordsService" />
+		<property name="serviceInterface" value="com.liferay.portal.words.service.WordsService" />
+	</bean>
 </beans>
