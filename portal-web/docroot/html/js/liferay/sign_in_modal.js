@@ -48,6 +48,8 @@ AUI.add(
 								var form = Liferay.Form.get(formNode.attr('id'));
 
 								instance._formValidator = form.formValidator;
+
+								instance._isSignInForm = formNode.hasClass('sign-in-form');
 							}
 						}
 
@@ -65,7 +67,7 @@ AUI.add(
 
 						event.preventDefault();
 
-						if (instance._signInPortletBody) {
+						if (instance._signInPortletBody && instance._isSignInForm) {
 							instance._loadDOM();
 						}
 						else {
