@@ -59,6 +59,7 @@ if (bodyContent != null) {
 		<c:if test="<%= dropdown %>">
 			<aui:script use="aui-base,event-move,event-outside,liferay-store">
 				A.Event.defineOutside('touchend');
+				A.Event.defineOutside('touchmove');
 
 				var container = A.one('#<%= id %>');
 
@@ -85,23 +86,40 @@ if (bodyContent != null) {
 												eventOutside = 'mouseup';
 											}
 
+											var touchMove = false;
+
+											if (eventOutside === 'touchend') {
+												currentTarget.on(
+													'touchmoveoutside',
+													function(event) {
+														touchMove = true;
+													}
+												);
+											}
+
 											eventOutside = eventOutside + 'outside';
 
 											handle = currentTarget.on(
 												eventOutside,
 												function(event) {
-													if (!event.target.ancestor('#<%= id %>')) {
+													if (!event.target.ancestor('#<%= id %>') && !touchMove) {
 														Liferay.Data['<%= id %>Handle'] = null;
 
 														handle.detach();
 
+														currentTarget.detach('touchmoveoutside');
+
 														container.removeClass('open');
 													}
+
+													touchMove = false;
 												}
 											);
 										}
 										else if (handle) {
 											handle.detach();
+
+											currentTarget.detach('touchmoveoutside');
 
 											handle = null;
 										}
