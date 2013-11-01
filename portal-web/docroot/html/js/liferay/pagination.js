@@ -17,6 +17,8 @@ AUI.add(
 
 		var RESULTS = 'results';
 
+		var STR_SPACE = ' ';
+
 		var STRINGS = 'strings';
 
 		var Pagination = A.Component.create(
@@ -162,6 +164,8 @@ AUI.add(
 							}
 						);
 
+						instance._paginationContentNode = instance.get(BOUNDING_BOX).one('.pagination-content');
+
 						Liferay.Menu.register(deltaSelectorId);
 					},
 
@@ -302,6 +306,20 @@ AUI.add(
 						var result = instance._getResultsContent(page, itemsPerPage);
 
 						instance._searchResults.html(result);
+					},
+
+					_uiSetVisible: function(val) {
+						var instance = this;
+
+						var hideClass = instance.get('hideClass');
+
+						var hiddenClass = instance.getClassName('hidden');
+
+						if (hideClass !== false) {
+							hiddenClass += STR_SPACE + (hideClass || 'hide');
+						}
+
+						instance._paginationContentNode.toggleClass(hiddenClass, !val);
 					}
 				}
 			}
