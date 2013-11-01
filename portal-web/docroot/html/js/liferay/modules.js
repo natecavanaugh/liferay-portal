@@ -598,6 +598,13 @@
 							'liferay-staging'
 						]
 					},
+					'liferay-sticky-tooltips': {
+						path: 'sticky_tooltips.js',
+						requires: [
+							'aui-tooltip-delegate',
+							'plugin'
+						]
+					},
 					'liferay-store': {
 						path: 'store.js',
 						requires: [
