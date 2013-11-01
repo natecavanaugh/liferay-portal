@@ -319,7 +319,7 @@
 							<bean class="com.liferay.portal.scripting.python.PythonExecutor" />
 						</entry>
 						<entry key="ruby">
-							<bean class="com.liferay.portal.scripting.ruby.RubyExecutor" />
+							<bean class="com.liferay.portal.scripting.ruby.RubyExecutor" depends-on="com.liferay.portal.kernel.util.FileUtil" />
 						</entry>
 					</map>
 				</property>
