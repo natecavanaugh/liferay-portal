@@ -11,7 +11,7 @@ AUI.add(
 
 		var MOUSELEAVE = 'mouseleave';
 
-		var NAME = 'liferaystickytooltips';
+		var NAME = 'stickytooltips';
 
 		var STR_EMPTY = '';
 
@@ -44,7 +44,6 @@ AUI.add(
 						var cached = instance._cached;
 
 						var icon = instance.get(HOST);
-
 						var text = instance.get(TOOLTIPTEXT);
 
 						if (!cached) {
@@ -77,16 +76,21 @@ AUI.add(
 
 						var icon = instance.get(HOST);
 
-						var img = event.currentTarget;
+						var toolTipTimeout = setTimeout(
+							function() {
+								cached.set(TRIGGER, icon).hide();
 
-						var toolTipTimeout = setTimeout(function() {
-							cached.set(TRIGGER, icon).hide();
-							cached.detach(MOUSEENTER);
-						}, 25);
+								cached.detach(MOUSEENTER);
+							},
+							25
+						);
 
-						cached.on(MOUSEENTER, function(event) {
-							clearTimeout(toolTipTimeout);
-						});
+						cached.on(
+							MOUSEENTER,
+							function(event) {
+								clearTimeout(toolTipTimeout);
+							}
+						);
 					},
 
 					_handleToolTipMouseLeave: function(event) {
@@ -97,6 +101,7 @@ AUI.add(
 						var icon = instance.get(HOST);
 
 						cached.set(TRIGGER, icon).hide();
+
 						cached.detach(MOUSEENTER);
 					}
 				}
