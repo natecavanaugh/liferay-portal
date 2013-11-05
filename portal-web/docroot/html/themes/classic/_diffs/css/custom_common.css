@@ -147,10 +147,6 @@
 		}
 
 		@include respond-to(phone, tablet) {
-			.search-query {
-				height: 32px;
-			}
-
 			.btn {
 				padding: 5px 19px;
 			}
