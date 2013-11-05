@@ -113,14 +113,12 @@
 
 			obj = A.one(obj);
 
-			if (text == null) {
-				text = instance._getText(obj.guid());
-			}
+			var toolTipText = text || instance._getText(obj.guid());
 
 			obj.plug(
 				Liferay.StickyToolTips,
 				{
-					toolTipText: text
+					toolTipText: toolTipText
 				}
 			);
 		},
