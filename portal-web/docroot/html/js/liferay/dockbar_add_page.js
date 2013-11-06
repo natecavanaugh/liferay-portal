@@ -173,7 +173,7 @@ AUI.add(
 
 						instance._hiddenCheckbox.on('change', instance._updateNavigationProxy, instance);
 
-						instance._nameInput.on('valuechange', instance._updateNavigationProxy, instance);
+						instance._nameInput.on('input', instance._updateNavigationProxy, instance);
 
 						instance._togglerDelegate.on('toggler:expandedChange', instance._updateActivePage, instance);
 					},
@@ -266,6 +266,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-loading-mask-deprecated', 'aui-parse-content', 'aui-toggler-delegate', 'liferay-dockbar', 'liferay-dockbar-add-base', 'liferay-dockbar-add-page-search', 'liferay-portlet-base', 'liferay-toggler-key-filter']
+		requires: ['aui-event-input', 'aui-loading-mask-deprecated', 'aui-parse-content', 'aui-toggler-delegate', 'liferay-dockbar', 'liferay-dockbar-add-base', 'liferay-dockbar-add-page-search', 'liferay-portlet-base', 'liferay-toggler-key-filter']
 	}
 );
