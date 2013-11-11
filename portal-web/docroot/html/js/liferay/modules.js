@@ -196,6 +196,8 @@
 					'liferay-dockbar-add-page': {
 						path: 'dockbar_add_page.js',
 						requires: [
+							'aui-event-input',
+							'aui-loading-mask-deprecated',
 							'aui-parse-content',
 							'aui-toggler-delegate',
 							'liferay-dockbar',
