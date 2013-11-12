@@ -2,7 +2,6 @@ AUI.add(
 	'liferay-pagination',
 	function(A) {
 		var Lang = A.Lang;
-		test
 		var AArray = A.Array;
 		var ANode = A.Node;
 		var AObject = A.Object;
