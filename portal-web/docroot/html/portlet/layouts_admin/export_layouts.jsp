@@ -619,14 +619,14 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 			var isAllContentRadioChecked = A.one('#<portlet:namespace />allContent').attr('checked');
 
 			if (isAllContentRadioChecked) {
-				var selectedContents = A.one(<portlet:namespace />selectContents);
+				var selectedContents = A.one('#<portlet:namespace />selectContents');
 
-				var checkboxes = selectedContents.all(':checkbox:not(:checked)');
+				var uncheckedNode = selectedContents.all(':checkbox:not(:checked)');
 
-				checkboxes.attr('checked', true);
+				uncheckedNode.attr('checked', true);
 
 				A.each(
-					checkboxes,
+					uncheckedNode,
 					function(item, index, collection) {
 						Liferay.Util.updateCheckboxValue(item);
 					}
