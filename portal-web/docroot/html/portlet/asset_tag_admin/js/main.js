@@ -314,12 +314,6 @@ AUI.add(
 						instance._reloadData();
 					},
 
-					_bindCloseEvent: function(contextPanel) {
-						var instance = this;
-
-						contextPanel.get('boundingBox').on('key', contextPanel.hide, 'up:27', contextPanel);
-					},
-
 					_checkAllTags: function(event) {
 						var instance = this;
 
@@ -382,8 +376,6 @@ AUI.add(
 
 						tagPanelAdd.hide();
 
-						instance._bindCloseEvent(tagPanelAdd);
-
 						instance._tagPanelAdd = tagPanelAdd;
 
 						return tagPanelAdd;
@@ -404,8 +396,6 @@ AUI.add(
 
 						instance._tagPanelEdit.hide();
 
-						instance._bindCloseEvent(instance._tagPanelEdit);
-
 						instance._tagPanelEdit.after(
 							'visibleChange',
 							function(event) {
@@ -413,6 +403,12 @@ AUI.add(
 									var body = instance._tagPanelEdit.getStdModNode(A.WidgetStdMod.BODY);
 
 									body.empty();
+
+									var editTagMessagesNode = A.one('#' + instance._prefixedPortletId + 'editPanelTagMessages');
+
+									if (editTagMessagesNode) {
+										instance._hideMessage(editTagMessagesNode);
+									}
 								}
 							}
 						);
@@ -926,8 +922,6 @@ AUI.add(
 								'button'
 							);
 
-							instance._bindCloseEvent(tagPanelMerge);
-
 							var contentBox = tagPanelMerge.get('contentBox');
 
 							var targetTagsList = contentBox.one('#' + namespace + 'targetTagsList');
@@ -1029,6 +1023,12 @@ AUI.add(
 									}
 
 									instance._resetTagsProperties(event);
+
+									var addTagMessagesNode = A.one('#' + instance._prefixedPortletId + 'addPanelTagMessages');
+
+									if (addTagMessagesNode) {
+										instance._hideMessage(addTagMessagesNode);
+									}
 								}
 							}
 						);
