@@ -300,26 +300,31 @@ AUI.add(
 
 				instance._registerPanels();
 
-				var btnNavigation = A.oneNS(namespace, '#navSiteNavigationNavbarBtn');
+				dockBar.delegate(
+					EVENT_CLICK,
+					function(event) {
+						var currentTarget = event.currentTarget;
 
-				var navigation = A.one(Liferay.Data.NAV_SELECTOR);
+						var navItems = dockBar.all('.btn-navbar');
 
-				if (btnNavigation && navigation) {
-					dockBar.delegate(
-						EVENT_CLICK,
-						function(event) {
-							var isSiteNav = event.currentTarget.attr('data-navid') === (namespace + 'navSiteNavigation');
+						var btnNavigation = A.oneNS(namespace, '#navSiteNavigationNavbarBtn');
 
-							var open = btnNavigation.hasClass(STR_OPEN);
+						var navigation = A.one(Liferay.Data.NAV_SELECTOR);
 
-							if (isSiteNav || open) {
-								btnNavigation.toggleClass(STR_OPEN);
-								navigation.toggleClass(STR_OPEN);
+						navItems.removeClass(STR_OPEN);
+
+						currentTarget.addClass(STR_OPEN);
+
+						if (btnNavigation && navigation) {
+							navigation.removeClass(STR_OPEN);
+
+							if (currentTarget === btnNavigation) {
+								navigation.addClass(STR_OPEN);
 							}
-						},
-						'.btn-navbar'
-					);
-				}
+						}
+					},
+					'.btn-navbar'
+				);
 
 				Liferay.fire('dockbarLoaded');
 			},
@@ -397,7 +402,7 @@ AUI.add(
 					if (navAccountControlsAncestor) {
 						navLink = navAccountControlsAncestor.one('li a');
 					}
-
+					console.log(navLink);
 					navLink.blur();
 					navLink.focus();
 				}
