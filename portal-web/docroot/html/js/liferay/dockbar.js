@@ -27,6 +27,8 @@ AUI.add(
 
 		var STR_EDIT_LAYOUT_PANEL = 'editLayoutPanel';
 
+		var STR_OPEN = 'open';
+
 		var STR_PREVIEW_PANEL = 'previewPanel';
 
 		var TPL_ADD_CONTENT = '<div class="lfr-add-panel lfr-admin-panel" id="{0}" />';
@@ -298,19 +300,31 @@ AUI.add(
 
 				instance._registerPanels();
 
-				var btnNavigation = A.oneNS(namespace, '#navSiteNavigationNavbarBtn');
+				dockBar.delegate(
+					EVENT_CLICK,
+					function(event) {
+						var currentTarget = event.currentTarget;
 
-				var navigation = A.one(Liferay.Data.NAV_SELECTOR);
+						var navItems = dockBar.all('.btn-navbar');
 
-				if (btnNavigation && navigation) {
-					btnNavigation.on(
-						EVENT_CLICK,
-						function(event) {
-							btnNavigation.toggleClass('open');
-							navigation.toggleClass('open');
+						var btnNavigation = A.oneNS(namespace, '#navSiteNavigationNavbarBtn');
+
+						var navigation = A.one(Liferay.Data.NAV_SELECTOR);
+
+						navItems.removeClass(STR_OPEN);
+
+						currentTarget.addClass(STR_OPEN);
+
+						if (btnNavigation && navigation) {
+							navigation.removeClass(STR_OPEN);
+
+							if (currentTarget === btnNavigation) {
+								navigation.addClass(STR_OPEN);
+							}
 						}
-					);
-				}
+					},
+					'.btn-navbar'
+				);
 
 				Liferay.fire('dockbarLoaded');
 			},
@@ -388,7 +402,7 @@ AUI.add(
 					if (navAccountControlsAncestor) {
 						navLink = navAccountControlsAncestor.one('li a');
 					}
-
+					console.log(navLink);
 					navLink.blur();
 					navLink.focus();
 				}
