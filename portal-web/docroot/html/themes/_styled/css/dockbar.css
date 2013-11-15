@@ -129,14 +129,6 @@ $editLayoutPanelWidth: 460px;
 			top: 9px;
 		}
 
-		.info-items {
-			left: 0;
-			position: absolute;
-			top: 100%;
-			width: 100%;
-			z-index: 1;
-		}
-
 		.navbar-inner {
 			padding: 0 20px;
 
@@ -486,7 +478,6 @@ $editLayoutPanelWidth: 460px;
 			}
 
 			.info-items {
-				left: auto;
 				position: static;
 			}
 
@@ -679,12 +670,11 @@ $editLayoutPanelWidth: 460px;
 		}
 
 		.info-link-container {
-			width: 0;
+			position: relative;
 		}
 
 		.info-items {
 			height: 1px;
-			width: 715px;
 
 			a, .btn-link {
 				color: #FFF;
@@ -998,8 +988,8 @@ $editLayoutPanelWidth: 460px;
 	.info-button {
 		cursor: pointer;
 		display: inline-block;
-		position: relative;
-		right: $diamondSize;
+		position: absolute;
+		right: -$diamondSize;
 		z-index: 1;
 
 		a {
@@ -1026,7 +1016,7 @@ $editLayoutPanelWidth: 460px;
 		display: table;
 		font-size: 14px;
 		font-weight: 300;
-		padding: 0 15px;
+		padding: 0 15px 1px;
 		width: 100%;
 
 		.customized-icon {
@@ -1048,7 +1038,7 @@ $editLayoutPanelWidth: 460px;
 			display: table-cell;
 			text-align: center;
 			vertical-align: middle;
-			width: 25%;
+			width: 35%;
 
 			a {
 				color: #FFF;
@@ -1069,7 +1059,7 @@ $editLayoutPanelWidth: 460px;
 			display: table-cell;
 			height: 51px;
 			vertical-align: middle;
-			width: 75%;
+			width: 65%;
 		}
 
 		.page-customization-bar-container {
@@ -1081,9 +1071,41 @@ $editLayoutPanelWidth: 460px;
 		}
 	}
 
-	@media (max-width: 1140px) {
-		.dockbar-split .dockbar .info-items {
-			width: 515px;
+	.page-customization-bar-container {
+		top: -1px;
+		position: absolute;
+		right: 100%;
+		width: 515px;
+	}
+
+	.staging-ready .page-customization-bar-container {
+		width: 320px;
+	}
+
+	@media (min-width: 1400px) {
+		.page-customization-bar-container {
+			width: 815px;
+		}
+
+		.staging-ready .page-customization-bar-container {
+			width: 680px;
+		}
+	}
+
+	@media (min-width: 1152px) and (max-width: 1399px) {
+		.page-customization-bar-container {
+			width: 715px;
+		}
+
+		.staging-ready .page-customization-bar-container {
+			width: 475px;
+		}
+	}
+
+	.page-customization-bar-container {
+		@include respond-to(phone, tablet) {
+			position: static;
+			width: 100%;
 		}
 	}
 
