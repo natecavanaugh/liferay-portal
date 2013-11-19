@@ -111,31 +111,17 @@
 		function(obj, text) {
 			var instance = this;
 
-			var cached = instance._cached;
+			obj = A.one(obj);
 
-			if (!cached) {
-				cached = new A.Tooltip(
-					{
-						cssClass: 'tooltip-help',
-						opacity: 1,
-						visible: false,
-						zIndex: Liferay.zIndex.TOOLTIP
-					}
-				).render();
+			var toolTipText = text || instance._getText(obj.guid());
 
-				instance._cached = cached;
-			}
-
-			if (text == null) {
-				obj = A.one(obj);
-
-				text = instance._getText(obj.guid());
-			}
-
-			cached.set(BODY_CONTENT, text);
-
-			cached.set(TRIGGER, obj).show();
+			obj.plug(
+				Liferay.StickyToolTips,
+				{
+					toolTipText: toolTipText
+				}
+			);
 		},
-		['aui-tooltip-delegate']
+		['liferay-sticky-tooltips']
 	);
 })(AUI(), Liferay);
