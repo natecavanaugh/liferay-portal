@@ -112,8 +112,12 @@
 						constrain: true,
 						modal: true,
 						on: {
-							visibleChange: function() {
-								this.destroy();
+							visibleChange: function(event) {
+								var instance = this;
+
+								if (!event.newVal) {
+									instance.destroy();
+								}
 							}
 						}
 					},
