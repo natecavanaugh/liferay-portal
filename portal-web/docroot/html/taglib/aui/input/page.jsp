@@ -97,7 +97,7 @@
 			valueString = value.toString();
 		}
 
-		if (!ignoreRequestValue) {
+		if (!includeHiddenField || !ignoreRequestValue) {
 			valueString = ParamUtil.getString(request, name, valueString);
 		}
 
