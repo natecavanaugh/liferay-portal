@@ -478,6 +478,7 @@ $editLayoutPanelWidth: 460px;
 			}
 
 			.info-items {
+				left: auto;
 				position: static;
 			}
 
@@ -671,6 +672,7 @@ $editLayoutPanelWidth: 460px;
 
 		.info-link-container {
 			position: relative;
+			width: 0;
 		}
 
 		.info-items {
@@ -988,8 +990,8 @@ $editLayoutPanelWidth: 460px;
 	.info-button {
 		cursor: pointer;
 		display: inline-block;
-		position: absolute;
-		right: -$diamondSize;
+		position: relative;
+		right: $diamondSize;
 		z-index: 1;
 
 		a {
@@ -1016,7 +1018,7 @@ $editLayoutPanelWidth: 460px;
 		display: table;
 		font-size: 14px;
 		font-weight: 300;
-		padding: 0 15px 1px;
+		padding: 0 15px;
 		width: 100%;
 
 		.customized-icon {
@@ -1038,7 +1040,7 @@ $editLayoutPanelWidth: 460px;
 			display: table-cell;
 			text-align: center;
 			vertical-align: middle;
-			width: 35%;
+			width: 25%;
 
 			a {
 				color: #FFF;
@@ -1059,7 +1061,7 @@ $editLayoutPanelWidth: 460px;
 			display: table-cell;
 			height: 51px;
 			vertical-align: middle;
-			width: 65%;
+			width: 75%;
 		}
 
 		.page-customization-bar-container {
@@ -1075,10 +1077,6 @@ $editLayoutPanelWidth: 460px;
 		top: -1px;
 		position: absolute;
 		right: 100%;
-		width: 515px;
-	}
-
-	.staging-ready .page-customization-bar-container {
 		width: 320px;
 	}
 
