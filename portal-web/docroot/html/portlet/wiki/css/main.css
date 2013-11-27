@@ -1,5 +1,9 @@
+@import "compass";
+
 .portlet-wiki {
 	.wiki-body {
+		@include hyphenation;
+
 		ol ol {
 			list-style: decimal outside;
 		}
@@ -59,10 +63,6 @@
 
 	.page-tags {
 		color: #7d7d7d;
-	}
-
-	.portlet-body {
-		word-break: break-word;
 	}
 
 	.portlet-body h2 a.hashlink,

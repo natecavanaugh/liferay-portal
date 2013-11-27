@@ -1,3 +1,5 @@
+@import "compass";
+
 .portlet-blogs-aggregator {
 	.abstract {
 		clear: both;
@@ -49,11 +51,11 @@
 
 	.entry-title {
 		display: block;
+
+		@include ellipsis;
+
 		font-size: 1.2em;
 		margin-bottom: 0.2em;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
 	}
 
 	.search-container {
