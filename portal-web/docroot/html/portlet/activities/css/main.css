@@ -1,5 +1,7 @@
+@import "compass";
+
 .portlet-activities {
 	.activity-data {
-		word-break: break-word;
+		@include hyphenation;
 	}
 }

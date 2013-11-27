@@ -1,3 +1,5 @@
+@import "compass";
+
 .portlet-document-library-display {
 	.entry-title {
 		display: block;
@@ -8,7 +10,7 @@
 	}
 
 	.lfr-search-container .table-cell a {
-		word-break: break-word;
+		@include hyphenation;
 	}
 
 	.view-folders .repository-error {
