@@ -1,4 +1,24 @@
 /*!
+ *  Liferay changes to allow this script to be executed with Mozilla Rhino,
+ *  which uses Javascript 1.7.
+ *
+ *  See https://developer.mozilla.org/en-US/docs/Rhino/Overview
+ */
+
+var module = {
+	exports: {}
+};
+
+if (typeof String.prototype.trim !== 'function') {
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g, '');
+	}
+}
+
+function require() {}
+
+
+/*!
   * R2 - a CSS LTR ∞ RTL converter
   * Copyright Dustin Diaz 2012
   * https://github.com/ded/r2
