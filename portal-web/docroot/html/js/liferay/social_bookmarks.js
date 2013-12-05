@@ -27,10 +27,10 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
-						var menuList = instance.get('contentBox').one('.lfr-menu-list');
+						if (!Liferay.SocialBookmarks.linkHandle) {
+							var portletBody = instance.get('contentBox').ancestor('.portlet-body');
 
-						if (menuList) {
-							menuList.delegate(
+							portletBody.delegate(
 								'click',
 								function(event) {
 									event.preventDefault();
@@ -48,8 +48,10 @@ AUI.add(
 
 									WIN.getDOM().open(url, null, shareWindowFeatures.join()).focus();
 								},
-								'.social-bookmark .taglib-icon'
+								'.social-bookmark'
 							);
+
+							Liferay.SocialBookmarks.linkHandle = true;
 						}
 					}
 				}
