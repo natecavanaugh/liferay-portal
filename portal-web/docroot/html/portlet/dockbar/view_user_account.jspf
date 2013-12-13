@@ -19,7 +19,7 @@
 		<b class="alert-icon icon-warning-sign"></b>
 	</c:if>
 
-	<img alt="<liferay-ui:message key="my-account" />" class="user-avatar-image" src="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>" />
+	<div class="user-avatar-image" style="background-image: url('<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>')"></div>
 
 	<span class="user-full-name">
 		<%= HtmlUtil.escape(user.getFullName()) %>
