@@ -37,8 +37,6 @@
 					}
 					%>
 
-				</liferay-ui:icon-menu>
-
 				<aui:script use="liferay-social-bookmarks">
 					new Liferay.SocialBookmarks(
 						{
