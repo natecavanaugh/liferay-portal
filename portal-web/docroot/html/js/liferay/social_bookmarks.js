@@ -25,10 +25,10 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
-						var portletBody = instance.get('contentBox').ancestor('.portlet-body'),
-							id = portletBody._yuid;
+						var portletBody = instance.get('contentBox').ancestor('.portlet-body');
+						var id = portletBody.guid();
 
-						if (!Liferay.SocialBookmarks.linkHandle[id]) {
+						if (!SocialBookmarks.registered[id]) {
 							portletBody.delegate(
 								'click',
 								function(event) {
@@ -50,15 +50,16 @@ AUI.add(
 								'.social-bookmark a'
 							);
 
-							Liferay.SocialBookmarks.linkHandle[id] = true;
+							SocialBookmarks.registered[id] = true;
 						}
 					}
-				}
+				},
+
+				registered: {}
 			}
 		);
 
 		Liferay.SocialBookmarks = SocialBookmarks;
-		Liferay.SocialBookmarks.linkHandle = [];
 	},
 	'',
 	{
