@@ -1,8 +1,6 @@
 AUI.add(
 	'liferay-social-bookmarks',
 	function(A) {
-		var BODY = A.getBody();
-
 		var NAME = 'social-bookmarks';
 
 		var SHARE_WINDOW_HEIGHT = 436;
@@ -27,10 +25,11 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
-						var menuList = instance.get('contentBox').one('.lfr-menu-list');
+						var portletBody = instance.get('contentBox').ancestor('.portlet-body'),
+							id = portletBody._yuid;
 
-						if (menuList) {
-							menuList.delegate(
+						if (!Liferay.SocialBookmarks.linkHandle[id]) {
+							portletBody.delegate(
 								'click',
 								function(event) {
 									event.preventDefault();
@@ -48,8 +47,10 @@ AUI.add(
 
 									WIN.getDOM().open(url, null, shareWindowFeatures.join()).focus();
 								},
-								'.social-bookmark .taglib-icon'
+								'.social-bookmark a'
 							);
+
+							Liferay.SocialBookmarks.linkHandle[id] = true;
 						}
 					}
 				}
@@ -57,6 +58,7 @@ AUI.add(
 		);
 
 		Liferay.SocialBookmarks = SocialBookmarks;
+		Liferay.SocialBookmarks.linkHandle = [];
 	},
 	'',
 	{
