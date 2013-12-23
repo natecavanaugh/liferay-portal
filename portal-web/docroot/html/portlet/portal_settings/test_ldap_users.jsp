@@ -135,15 +135,17 @@ portletURL.setParameter("userMappingGroup", ParamUtil.getString(request, "userMa
 		<%
 		Attributes attributes = searchResult.getAttributes();
 
-		String screenName = StringUtil.toLowerCase(LDAPUtil.getAttributeString(attributes, userMappings.getProperty("screenName")));
-		String password = StringUtil.toLowerCase(LDAPUtil.getAttributeString(attributes, userMappings.getProperty("password")));
 		String emailAddress = LDAPUtil.getAttributeString(attributes, userMappings.getProperty("emailAddress"));
 		String firstName = LDAPUtil.getAttributeString(attributes, userMappings.getProperty("firstName"));
 		String lastName = LDAPUtil.getAttributeString(attributes, userMappings.getProperty("lastName"));
 		String jobTitle = LDAPUtil.getAttributeString(attributes, userMappings.getProperty("jobTitle"));
+
+		String password = StringUtil.toLowerCase(LDAPUtil.getAttributeString(attributes, userMappings.getProperty("password")));
+		String screenName = StringUtil.toLowerCase(LDAPUtil.getAttributeString(attributes, userMappings.getProperty("screenName")));
+
 		Attribute attribute = attributes.get(userMappings.getProperty("group"));
 
-		if (Validator.isNull(screenName) || Validator.isNull(password) || Validator.isNull(emailAddress) || Validator.isNull(firstName) || Validator.isNull(lastName)) {
+		if (Validator.isNull(emailAddress) || Validator.isNull(firstName) || Validator.isNull(lastName) || Validator.isNull(password) || Validator.isNull(screenName)) {
 			showMissingAttributeMessage = true;
 		}
 		%>
