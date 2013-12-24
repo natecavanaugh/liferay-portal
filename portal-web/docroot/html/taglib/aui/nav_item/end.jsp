@@ -78,7 +78,6 @@ if (bodyContent != null) {
 								<c:choose>
 									<c:when test="<%= !toggle %>">
 										var handle = Liferay.Data['<%= id %>Handle'];
-
 										var touchHandle = Liferay.Data['<%= id %>TouchHandle'];
 
 										if (menuOpen && !handle) {
@@ -135,7 +134,6 @@ if (bodyContent != null) {
 										}
 
 										Liferay.Data['<%= id %>Handle'] = handle;
-
 										Liferay.Data['<%= id %>TouchHandle'] = touchHandle;
 									</c:when>
 									<c:otherwise>
