@@ -121,13 +121,13 @@ body.portlet {
 	@extend %portlet-action-bar;
 }
 
-.portlet-content {
+.portlet-borderless, .portlet-content {
 	.lfr-icon-actions {
 		@extend %portlet-action-bar;
 	}
 }
 
-.portlet-content {
+.portlet-borderless, .portlet-content {
 	.lfr-icon-actions {
 		float: left;
 		margin: 1px 10px 1px 1px;

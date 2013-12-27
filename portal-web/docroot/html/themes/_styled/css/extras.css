@@ -358,7 +358,7 @@ body:first-of-type {
 		}
 	}
 
-	.portlet-content {
+	.portlet-borderless, .portlet-content {
 		&:hover {
 			.lfr-icon-actions {
 				@extend %portlet-action-bar-fx-hover;
