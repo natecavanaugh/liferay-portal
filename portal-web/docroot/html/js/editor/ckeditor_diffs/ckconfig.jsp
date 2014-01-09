@@ -22,6 +22,7 @@
 <%@ page import="com.liferay.portal.kernel.util.LocaleUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.xuggler.XugglerUtil" %>
+<%@ page import="com.liferay.portal.util.PortalUtil" %>
 
 <%@ page import="java.util.Locale" %>
 
@@ -77,7 +78,7 @@ CKEDITOR.config.contentsCss = '<%= HtmlUtil.escapeJS(cssPath) %>/main.css';
 <%
 Locale contentsLocale = LocaleUtil.fromLanguageId(contentsLanguageId);
 
-String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
+String contentsLanguageDir = PortalUtil.isRightToLeft(request) ? "rtl" : "ltr";
 %>
 
 CKEDITOR.config.contentsLangDirection = '<%= HtmlUtil.escapeJS(contentsLanguageDir) %>';
