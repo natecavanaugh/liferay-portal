@@ -45,8 +45,6 @@
 
 	var NEW_LINE = '\n';
 
-	var NEW_THREAD_URL = CKEDITOR.config.newThreadURL;
-
 	var REGEX_COLOR_RGB = /^rgb\s*\(\s*([01]?\d\d?|2[0-4]\d|25[0-5])\,\s*([01]?\d\d?|2[0-4]\d|25[0-5])\,\s*([01]?\d\d?|2[0-4]\d|25[0-5])\s*\)$/;
 
 	var REGEX_EM = /em$/i;
@@ -97,34 +95,19 @@
 
 	var TEMPLATE_IMAGE = '<img src="{image}">';
 
-	CKEDITOR.plugins.add(
-		'bbcode_data_processor',
-		{
-			requires: ['htmlwriter'],
+	var emoticonImages;
 
-			init: function(editor) {
-				editor.dataProcessor = new CKEDITOR.htmlDataProcessor(editor);
+	var emoticonPath;
 
-				editor.on(
-					'paste',
-					function(event) {
-						var data = event.data;
+	var emoticonSymbols;
 
-						var htmlData = data.dataValue;
+	var newThreadURL;
 
-						htmlData = CKEDITOR.htmlDataProcessor.prototype.toDataFormat(htmlData);
+	var BBCodeDataProcessor = function() {};
 
-						data.dataValue = htmlData;
-					},
-					editor.element.$
-				);
+	BBCodeDataProcessor.prototype = {
+		constructor: BBCodeDataProcessor,
 
-				editor.fire('customDataProcessorLoaded');
-			}
-		}
-	);
-
-	CKEDITOR.htmlDataProcessor.prototype = {
 		toDataFormat: function(html, fixForBody ) {
 			var instance = this;
 
@@ -144,14 +127,10 @@
 
 			data = instance._bbcodeConverter.convert(data);
 
-			var emoticonImages = CKEDITOR.config.smiley_images;
-			var emoticonSymbols = CKEDITOR.config.smiley_symbols;
-			var imagePath = CKEDITOR.config.smiley_path;
-
 			var length = emoticonSymbols.length;
 
 			for (var i = 0; i < length; i++) {
-				var image = TEMPLATE_IMAGE.replace('{image}', imagePath + emoticonImages[i]);
+				var image = TEMPLATE_IMAGE.replace('{image}', emoticonPath + emoticonImages[i]);
 
 				var escapedSymbol = emoticonSymbols[i].replace(REGEX_ESCAPE_REGEX, '\\$&');
 
@@ -253,10 +232,10 @@
 			if (imagePath) {
 				var image = imagePath.substring(imagePath.lastIndexOf('/') + 1);
 
-				var imageIndex = instance._getImageIndex(CKEDITOR.config.smiley_images, image);
+				var imageIndex = instance._getImageIndex(emoticonImages, image);
 
 				if (imageIndex >= 0) {
-					emoticonSymbol = CKEDITOR.config.smiley_symbols[imageIndex];
+					emoticonSymbol = emoticonSymbols[imageIndex];
 				}
 			}
 
@@ -535,8 +514,8 @@
 			if (hrefAttribute) {
 				var decodedLink = decodeURIComponent(hrefAttribute);
 
-				if (decodedLink.indexOf(NEW_THREAD_URL) >= 0) {
-					hrefAttribute = NEW_THREAD_URL;
+				if (decodedLink.indexOf(newThreadURL) >= 0) {
+					hrefAttribute = newThreadURL;
 				}
 
 				var linkHandler = MAP_LINK_HANDLERS[hrefAttribute.indexOf(STR_MAILTO)] || 'url';
@@ -838,4 +817,38 @@
 
 		_inPRE: false
 	};
+
+	CKEDITOR.plugins.add(
+		'bbcode_data_processor',
+		{
+			requires: ['htmlwriter'],
+
+			init: function(editor) {
+				var editorConfig = editor.config;
+
+				emoticonImages = editorConfig.smiley_images;
+				emoticonPath = editorConfig.smiley_path;
+				emoticonSymbols = editorConfig.smiley_symbols;
+				newThreadURL = editorConfig.newThreadURL;
+
+				editor.dataProcessor = new BBCodeDataProcessor(editor);
+
+				editor.on(
+					'paste',
+					function(event) {
+						var data = event.data;
+
+						var htmlData = data.dataValue;
+
+						htmlData = editor.dataProcessor.toDataFormat(htmlData);
+
+						data.dataValue = htmlData;
+					},
+					editor.element.$
+				);
+
+				editor.fire('customDataProcessorLoaded');
+			}
+		}
+	);
 })();
