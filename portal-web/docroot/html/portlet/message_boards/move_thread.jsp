@@ -134,9 +134,11 @@ PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, "mov
 					uri: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="struts_action" value="/message_boards/select_category" /><portlet:param name="mbCategoryId" value="<%= String.valueOf(category.getParentCategoryId()) %>" /></portlet:renderURL>'
 				},
 				function(event) {
+					var name = A.Lang.String.unescapeEntities(event.name);
+
 					document.<portlet:namespace />fm.<portlet:namespace />mbCategoryId.value = event.categoryid;
 
-					document.getElementById('<portlet:namespace />categoryName').value = event.name;
+					document.getElementById('<portlet:namespace />categoryName').value = name;
 				}
 			);
 		}
