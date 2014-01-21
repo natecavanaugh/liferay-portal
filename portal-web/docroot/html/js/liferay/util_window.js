@@ -41,6 +41,13 @@ AUI.add(
 			}
 		);
 
+		var RESIZE_HANDLES = {
+			ltr: 'br',
+			rtl: 'bl'
+		};
+
+		var DEFAULT_HANDLES = Liferay.Language.direction ? RESIZE_HANDLES[Liferay.Language.direction[themeDisplay.getLanguageId()]] : 'bl';
+
 		A.mix(
 			Window,
 			{
@@ -48,6 +55,9 @@ AUI.add(
 					centered: true,
 					modal: true,
 					headerContent: '&nbsp;',
+					resizable: {
+						handles: DEFAULT_HANDLES
+					},
 					visible: true,
 					zIndex: Liferay.zIndex.WINDOW
 				},
