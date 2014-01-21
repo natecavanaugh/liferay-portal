@@ -46,15 +46,15 @@ AUI.add(
 			rtl: 'bl'
 		};
 
-		var DEFAULT_HANDLES = Liferay.Language.direction ? RESIZE_HANDLES[Liferay.Language.direction[themeDisplay.getLanguageId()]] : 'bl';
+		var DEFAULT_HANDLES = Liferay.Language.direction ? RESIZE_HANDLES[Liferay.Language.direction[themeDisplay.getLanguageId()]] : 'br';
 
 		A.mix(
 			Window,
 			{
 				DEFAULTS: {
 					centered: true,
-					modal: true,
 					headerContent: '&nbsp;',
+					modal: true,
 					resizable: {
 						handles: DEFAULT_HANDLES
 					},
