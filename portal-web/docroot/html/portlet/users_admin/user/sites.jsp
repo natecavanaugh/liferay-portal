@@ -139,15 +139,45 @@ List<Group> inheritedSites = (List<Group>)request.getAttribute("user.inheritedSi
 
 		var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />groupsSearchContainer');
 
-		searchContainer.get('contentBox').delegate(
+		var searchContainerContentBox = searchContainer.get('contentBox');
+
+		searchContainerContentBox.delegate(
 			'click',
 			function(event) {
 				var link = event.currentTarget;
 				var tr = link.ancestor('tr');
 
-				searchContainer.deleteRow(tr, link.getAttribute('data-rowId'));
+				var rowId = link.getAttribute('data-rowId');
+
+				var selectGroup = Liferay.Util.getWindow('<portlet:namespace />selectGroup');
+
+				if (selectGroup != null) {
+					var selectButton = selectGroup.iframe.node.get('contentWindow.document').one('.selector-button[data-groupid="' + rowId + '"]');
+
+					selectButton.set('disabled', false);
+					selectButton.removeClass('disabled');
+				}
+
+				searchContainer.deleteRow(tr, rowId);
 			},
 			'.modify-link'
+		);
+
+		Liferay.on(
+			'<portlet:namespace />enableRemovedSites',
+			function(selectors) {
+				A.each(
+					selectors,
+					function(item, index, collection) {
+						var modifyLink = searchContainerContentBox.one('.modify-link[data-rowid="' + item.attr('data-groupid') + '"]');
+
+						if (modifyLink === null) {
+							item.set('disabled', false);
+							item.removeClass('disabled');
+						}
+					}
+				);
+			}
 		);
 	</aui:script>
 </c:if>
