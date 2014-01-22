@@ -252,6 +252,8 @@ AUI.add(
 						portraitPreviewImg.attr('src', previewURL);
 
 						portraitPreviewImg.removeClass('loading');
+
+						instance.fire('uploadComplete');
 					},
 
 					_onUploadStart: function(event, id, obj) {
