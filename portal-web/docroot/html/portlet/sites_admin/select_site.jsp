@@ -201,11 +201,12 @@ portletURL.setParameter("target", target);
 
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
-	var openerLifrayInstance = Util.getOpener().Liferay;
 
-	var disabledSelectors = A.all('.selector-button.disabled');
+	var openerLfrInstance = Util.getOpener().Liferay;
 
-	openerLifrayInstance.fire('<portlet:namespace />enableRemovedSites', disabledSelectors);
+	var disabledSelectors = A.all('.selector-button:disabled');
+
+	openerLfrInstance.fire('<portlet:namespace />enableRemovedSites', disabledSelectors);
 
 	A.one('#<portlet:namespace />selectGroupFm').delegate(
 		'click',
@@ -216,7 +217,7 @@ portletURL.setParameter("target", target);
 
 			var result = Util.getAttributes(currentTarget, 'data-');
 
-			openerLifrayInstance.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
+			openerLfrInstance.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
 			Util.getWindow().hide();
 		},
