@@ -149,7 +149,7 @@ List<Group> inheritedSites = (List<Group>)request.getAttribute("user.inheritedSi
 				var link = event.currentTarget;
 
 				var tr = link.ancestor('tr');
-				var rowId = link.getAttribute('data-rowId');
+				var rowId = link.attr('data-rowId');
 
 				var selectGroup = Util.getWindow('<portlet:namespace />selectGroup');
 

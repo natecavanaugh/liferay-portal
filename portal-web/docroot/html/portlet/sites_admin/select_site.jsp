@@ -202,22 +202,22 @@ portletURL.setParameter("target", target);
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
-	var openerLfrInstance = Util.getOpener().Liferay;
+	var openingLiferay = Util.getOpener().Liferay;
 
 	var disabledSelectors = A.all('.selector-button:disabled');
 
-	openerLfrInstance.fire('<portlet:namespace />enableRemovedSites', disabledSelectors);
+	openingLiferay.fire('<portlet:namespace />enableRemovedSites', disabledSelectors);
 
 	A.one('#<portlet:namespace />selectGroupFm').delegate(
 		'click',
 		function(event) {
 			var currentTarget = event.currentTarget;
 
-			currentTarget.set('disabled', true);
+			currentTarget.attr('disabled', true);
 
 			var result = Util.getAttributes(currentTarget, 'data-');
 
-			openerLfrInstance.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
+			openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
 			Util.getWindow().hide();
 		},
