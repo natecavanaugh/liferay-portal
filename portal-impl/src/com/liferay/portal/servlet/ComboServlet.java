@@ -370,7 +370,7 @@ public class ComboServlet extends HttpServlet {
 	private static final FileContentBag _EMPTY_FILE_CONTENT_BAG =
 		new FileContentBag(new byte[0], 0);
 
-	private static final String _JAVASCRIPT_DIR = "html/js";
+	private static final String _JAVASCRIPT_DIR = "html";
 
 	private static final String _JAVASCRIPT_MINIFIED_SUFFIX = "-min.js";
 
@@ -381,7 +381,8 @@ public class ComboServlet extends HttpServlet {
 	private PortalCache<String, FileContentBag> _fileContentBagPortalCache =
 		SingleVMPoolUtil.getCache(FileContentBag.class.getName());
 	private Set<String> _protectedParameters = SetUtil.fromArray(
-		new String[] {"b", "browserId", "minifierType", "languageId", "t"});
+		new String[] {
+			"b", "browserId", "minifierType", "languageId", "t", "themeId"});
 
 	private static class FileContentBag implements Serializable {
 
