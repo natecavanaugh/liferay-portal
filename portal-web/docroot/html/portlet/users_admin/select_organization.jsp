@@ -140,9 +140,21 @@ if (Validator.isNotNull(target)) {
 					data.put("name", organization.getName());
 					data.put("organizationid", organization.getOrganizationId());
 					data.put("type", LanguageUtil.get(pageContext, organization.getType()));
+
+					boolean disabled = false;
+
+					if (selUser != null) {
+						for (Organization curOrganization : selUser.getOrganizations()) {
+							if (curOrganization.getOrganizationId() == organization.getOrganizationId()) {
+								disabled = true;
+
+								break;
+							}
+						}
+					}
 					%>
 
-					<aui:button cssClass="selector-button" data="<%= data %>" value="choose" />
+					<aui:button cssClass="selector-button" data="<%= data %>" disabled="<%= disabled %>" value="choose" />
 				</c:if>
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>
@@ -154,12 +166,24 @@ if (Validator.isNotNull(target)) {
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
+	var openingLiferay = Util.getOpener().Liferay;
+
+	var disabledSelectors = A.all('.selector-button:disabled');
+
+	openingLiferay.fire('<portlet:namespace />enableRemovedOrganizations', disabledSelectors);
+
 	A.one('#<portlet:namespace />selectOrganizationFm').delegate(
 		'click',
 		function(event) {
-			var result = Util.getAttributes(event.currentTarget, 'data-');
+			var currentTarget = event.currentTarget;
 
-			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
+			if (<%= selUser != null %>) {
+				currentTarget.attr('disabled', true);
+			}
+
+			var result = Util.getAttributes(currentTarget, 'data-');
+
+			openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
 			Util.getWindow().hide();
 		},
