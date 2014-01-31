@@ -99,9 +99,19 @@ portletURL.setParameter("eventName", eventName);
 					data.put("roleid", role.getRoleId());
 					data.put("roletitle", role.getTitle(locale));
 					data.put("searchcontainername", "roles");
+
+					boolean disabled = false;
+
+					for (Role curRole : selUser.getRoles()) {
+						if (curRole.getRoleId() == role.getRoleId()) {
+							disabled = true;
+
+							break;
+						}
+					}
 					%>
 
-					<aui:button cssClass="selector-button" data="<%= data %>" value="choose" />
+					<aui:button cssClass="selector-button" data="<%= data %>" disabled="<%= disabled %>" value="choose" />
 				</c:if>
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>
@@ -113,12 +123,22 @@ portletURL.setParameter("eventName", eventName);
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
+	var openingLiferay = Util.getOpener().Liferay;
+
+	var disabledSelectors = A.all('.selector-button:disabled');
+
+	openingLiferay.fire('<portlet:namespace />enableRemovedRegularRoles', disabledSelectors);
+
 	A.one('#<portlet:namespace />selectRegularRoleFm').delegate(
 		'click',
 		function(event) {
-			var result = Util.getAttributes(event.currentTarget, 'data-');
+			var currentTarget = event.currentTarget;
 
-			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
+			currentTarget.attr('disabled', true);
+
+			var result = Util.getAttributes(currentTarget, 'data-');
+
+			openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
 			Util.getWindow().hide();
 		},

@@ -181,11 +181,13 @@ portletURL.setParameter("target", target);
 
 					boolean disabled = false;
 
-					for (Group curGroup : selUser.getGroups()) {
-						if (curGroup.getGroupId() == group.getGroupId()) {
-							disabled = true;
+					if (selUser != null) {
+						for (Group curGroup : selUser.getGroups()) {
+							if (curGroup.getGroupId() == group.getGroupId()) {
+								disabled = true;
 
-							break;
+								break;
+							}
 						}
 					}
 					%>
@@ -213,7 +215,9 @@ portletURL.setParameter("target", target);
 		function(event) {
 			var currentTarget = event.currentTarget;
 
-			currentTarget.attr('disabled', true);
+			if (<%= selUser != null %>) {
+				currentTarget.attr('disabled', true);
+			}
 
 			var result = Util.getAttributes(currentTarget, 'data-');
 

@@ -83,9 +83,25 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 				data.put("teamid", curTeam.getTeamId());
 				data.put("teamname", curTeam.getName());
 				data.put("teamsearchcontainername", "teams");
+
+				Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+				boolean disabled = false;
+
+				long[] defaultTeamIds = StringUtil.split(group.getTypeSettingsProperties().getProperty("defaultTeamIds"), 0L);
+
+				for (long defaultTeamId : defaultTeamIds) {
+					Team team = TeamLocalServiceUtil.getTeam(defaultTeamId);
+
+					if (team.getTeamId() == curTeam.getTeamId()) {
+						disabled = true;
+
+						break;
+					}
+				}
 				%>
 
-				<aui:button cssClass="selector-button" data="<%= data %>" value="choose" />
+				<aui:button cssClass="selector-button" data="<%= data %>" disabled="<%= disabled %>" value="choose" />
 			</liferay-ui:search-container-column-text>
 
 		</liferay-ui:search-container-row>
@@ -97,12 +113,22 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
+	var openingLiferay = Util.getOpener().Liferay;
+
+	var disabledSelectors = A.all('.selector-button:disabled');
+
+	openingLiferay.fire('<portlet:namespace />enableRemovedTeams', disabledSelectors);
+
 	A.one('#<portlet:namespace />selectTeamFm').delegate(
 		'click',
 		function(event) {
-			var result = Util.getAttributes(event.currentTarget, 'data-');
+			var currentTarget = event.currentTarget;
 
-			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
+			currentTarget.attr('disabled', true);
+
+			var result = Util.getAttributes(currentTarget, 'data-');
+
+			openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
 			Util.getWindow().hide();
 		},
