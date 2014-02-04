@@ -119,8 +119,9 @@ List<Organization> organizations = (List<Organization>)request.getAttribute("use
 		function(event) {
 			var link = event.currentTarget;
 
-			var tr = link.ancestor('tr');
 			var rowId = link.attr('data-rowId');
+
+			var tr = link.ancestor('tr');
 
 			var selectOrganization = Util.getWindow('<portlet:namespace />selectOrganization');
 

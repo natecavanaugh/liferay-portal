@@ -126,8 +126,9 @@ List<UserGroup> userGroups = (List<UserGroup>)request.getAttribute("user.userGro
 		function(event) {
 			var link = event.currentTarget;
 
-			var tr = link.ancestor('tr');
 			var rowId = link.attr('data-rowId');
+
+			var tr = link.ancestor('tr');
 
 			var selectUserGroup = Util.getWindow('<portlet:namespace />selectUserGroup');
 
