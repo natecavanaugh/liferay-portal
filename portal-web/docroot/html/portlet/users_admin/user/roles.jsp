@@ -570,8 +570,9 @@ for (Group group : allGroups) {
 		function(event) {
 			var link = event.currentTarget;
 
-			var tr = link.ancestor('tr');
 			var rowId = link.attr('data-rowId');
+
+			var tr = link.ancestor('tr');
 
 			var selectRegularRole = Util.getWindow('<portlet:namespace />selectRegularRole');
 
