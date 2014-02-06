@@ -210,21 +210,5 @@ portletURL.setParameter("target", target);
 
 	openingLiferay.fire('<portlet:namespace />enableRemovedSites', disabledSelectors);
 
-	A.one('#<portlet:namespace />selectGroupFm').delegate(
-		'click',
-		function(event) {
-			var currentTarget = event.currentTarget;
-
-			if (<%= selUser != null %>) {
-				currentTarget.attr('disabled', true);
-			}
-
-			var result = Util.getAttributes(currentTarget, 'data-');
-
-			openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
-
-			Util.getWindow().hide();
-		},
-		'.selector-button'
-	);
+	Util.selectEntityHandler('#<portlet:namespace />selectGroupFm', '<%= HtmlUtil.escapeJS(eventName) %>', <%= selUser != null %>);
 </aui:script>
