@@ -74,7 +74,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 	config.disableObjectResizing = true;
 
-	config.extraPlugins = 'creole,wikilink';
+	config.extraPlugins = 'a11yhelpbtn,creole,wikilink';
 
 	config.format_tags = 'p;h1;h2;h3;h4;h5;h6;pre';
 
@@ -133,7 +133,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 		['Table', '-', 'HorizontalRule', 'SpecialChar' ],
 		['Find','Replace','-','SelectAll','RemoveFormat'],
-		['Source']
+		['Source'],
+		['A11YBtn']
 	];
 
 	config.toolbar_phone = [
