@@ -67,7 +67,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['Image', 'Smiley', '-', 'TextColor', '-', 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
 		['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'Blockquote', '-', 'Code'],
 		'/',
-		['Font', 'FontSize', '-', 'Format', '-', 'Undo', 'Redo', '-', 'Source']
+		['Font', 'FontSize', '-', 'Format', '-', 'Undo', 'Redo', '-', 'Source'],
+		['A11YBtn']
 	];
 
 	config.toolbar_phone = [
@@ -94,7 +95,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 	config.enterMode = CKEDITOR.ENTER_BR;
 
-	config.extraPlugins = 'bbcode,wikilink';
+	config.extraPlugins = 'bbcode,wikilink,a11yhelpbtn';
 
 	config.filebrowserBrowseUrl = '';
 

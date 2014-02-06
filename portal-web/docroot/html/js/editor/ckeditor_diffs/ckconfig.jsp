@@ -83,7 +83,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 	config.entities = false;
 
-	config.extraPlugins = 'ajaxsave,media,restore,scayt,wsc';
+	config.extraPlugins = 'ajaxsave,media,restore,scayt,wsc,a11yhelpbtn';
 
 	config.height = 265;
 
@@ -108,6 +108,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['Undo', 'Redo'],
 		['SpellChecker', 'Scayt'],
 		['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'], ['Source', 'RemoveFormat'],
+		['A11YBtn']
 	];
 
 	config.toolbar_email = [
@@ -118,7 +119,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
 		['Source'],
 		['Link', 'Unlink'],
-		['Image']
+		['Image'],
+		['A11YBtn']
 	];
 
 	config.toolbar_liferay = [
@@ -142,6 +144,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		<c:if test="<%= !inlineEdit %>">
 			,['Source']
 		</c:if>
+
+		,['A11YBtn']
 	];
 
 	config.toolbar_liferayArticle = [
@@ -156,7 +160,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		'/',
 		['Source'],
 		['Link', 'Unlink', 'Anchor'],
-		['Image', 'Flash', <c:if test="<%= XugglerUtil.isEnabled() %>">'Audio', 'Video',</c:if> 'Table', '-', 'Smiley', 'SpecialChar', 'LiferayPageBreak']
+		['Image', 'Flash', <c:if test="<%= XugglerUtil.isEnabled() %>">'Audio', 'Video',</c:if> 'Table', '-', 'Smiley', 'SpecialChar', 'LiferayPageBreak'],
+		['A11YBtn']
 	];
 
 	config.toolbar_phone = [
