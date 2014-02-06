@@ -228,9 +228,36 @@ if (step == 1) {
 							data.put("roleid", role.getRoleId());
 							data.put("roletitle", role.getTitle(locale));
 							data.put("searchcontainername", "siteRoles");
+
+							boolean disabled = false;
+
+							if (selUser != null) {
+								List<UserGroupRole> userGroupRoles = UserGroupRoleLocalServiceUtil.getUserGroupRoles(selUser.getUserId());
+
+								for (UserGroupRole userGroupRole : userGroupRoles) {
+									if ((group.getGroupId() == userGroupRole.getGroupId()) && (userGroupRole.getRoleId() == role.getRoleId())) {
+										disabled = true;
+
+										break;
+									}
+								}
+							}
+							else {
+								long[] defaultSiteRoleIds = StringUtil.split(group.getTypeSettingsProperties().getProperty("defaultSiteRoleIds"), 0L);
+
+								for (long defaultSiteRoleId : defaultSiteRoleIds) {
+									Role curRole = RoleLocalServiceUtil.getRole(defaultSiteRoleId);
+
+									if (curRole.getRoleId() == role.getRoleId()) {
+										disabled = true;
+
+										break;
+									}
+								}
+							}
 							%>
 
-							<aui:button cssClass="selector-button" data="<%= data %>" value="choose" />
+							<aui:button cssClass="selector-button" data="<%= data %>" disabled="<%= disabled %>" value="choose" />
 						</c:if>
 					</liferay-ui:search-container-column-text>
 				</liferay-ui:search-container-row>
@@ -241,12 +268,22 @@ if (step == 1) {
 			<aui:script use="aui-base">
 				var Util = Liferay.Util;
 
+				var openingLiferay = Util.getOpener().Liferay;
+
+				var selectors = A.all('.selector-button');
+
+				openingLiferay.fire('<portlet:namespace />syncSiteRoles', selectors);
+
 				A.one('#<portlet:namespace />selectSiteRoleFm').delegate(
 					'click',
 					function(event) {
-						var result = Util.getAttributes(event.currentTarget, 'data-');
+						var currentTarget = event.currentTarget;
 
-						Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
+						currentTarget.attr('disabled', true);
+
+						var result = Util.getAttributes(currentTarget, 'data-');
+
+						openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
 						Util.getWindow().hide();
 					},
