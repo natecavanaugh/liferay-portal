@@ -129,19 +129,5 @@ portletURL.setParameter("eventName", eventName);
 
 	openingLiferay.fire('<portlet:namespace />enableRemovedRegularRoles', disabledSelectors);
 
-	A.one('#<portlet:namespace />selectRegularRoleFm').delegate(
-		'click',
-		function(event) {
-			var currentTarget = event.currentTarget;
-
-			currentTarget.attr('disabled', true);
-
-			var result = Util.getAttributes(currentTarget, 'data-');
-
-			openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
-
-			Util.getWindow().hide();
-		},
-		'.selector-button'
-	);
+	Util.selectEntityHandler('#<portlet:namespace />selectRegularRoleFm', '<%= HtmlUtil.escapeJS(eventName) %>');
 </aui:script>

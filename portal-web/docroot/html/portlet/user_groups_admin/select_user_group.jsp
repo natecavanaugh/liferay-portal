@@ -127,19 +127,5 @@ portletURL.setParameter("eventName", eventName);
 
 	openingLiferay.fire('<portlet:namespace />enableRemovedUserGroups', disabledSelectors);
 
-	A.one('#<portlet:namespace />selectUserGroupFm').delegate(
-		'click',
-		function(event) {
-			var currentTarget = event.currentTarget;
-
-			currentTarget.attr('disabled', true);
-
-			var result = Util.getAttributes(currentTarget, 'data-');
-
-			openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
-
-			Util.getWindow().hide();
-		},
-		'.selector-button'
-	);
+	Util.selectEntityHandler('#<portlet:namespace />selectUserGroupFm', '<%= HtmlUtil.escapeJS(eventName) %>');
 </aui:script>

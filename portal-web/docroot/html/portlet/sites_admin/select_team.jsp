@@ -119,19 +119,5 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 
 	openingLiferay.fire('<portlet:namespace />enableRemovedTeams', disabledSelectors);
 
-	A.one('#<portlet:namespace />selectTeamFm').delegate(
-		'click',
-		function(event) {
-			var currentTarget = event.currentTarget;
-
-			currentTarget.attr('disabled', true);
-
-			var result = Util.getAttributes(currentTarget, 'data-');
-
-			openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
-
-			Util.getWindow().hide();
-		},
-		'.selector-button'
-	);
+	Util.selectEntityHandler('#<portlet:namespace />selectTeamFm', '<%= HtmlUtil.escapeJS(eventName) %>');
 </aui:script>

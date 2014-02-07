@@ -274,21 +274,7 @@ if (step == 1) {
 
 				openingLiferay.fire('<portlet:namespace />syncSiteRoles', selectors);
 
-				A.one('#<portlet:namespace />selectSiteRoleFm').delegate(
-					'click',
-					function(event) {
-						var currentTarget = event.currentTarget;
-
-						currentTarget.attr('disabled', true);
-
-						var result = Util.getAttributes(currentTarget, 'data-');
-
-						openingLiferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
-
-						Util.getWindow().hide();
-					},
-					'.selector-button'
-				);
+				Util.selectEntityHandler('#<portlet:namespace />selectSiteRoleFm', '<%= HtmlUtil.escapeJS(eventName) %>');
 			</aui:script>
 		</c:when>
 	</c:choose>
