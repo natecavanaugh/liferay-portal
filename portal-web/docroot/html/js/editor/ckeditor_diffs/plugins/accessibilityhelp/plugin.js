@@ -7,7 +7,7 @@
 			init: function(editor) {
 				if (editor.ui.addButton) {
 					editor.ui.addButton(
-						'A11YBtn',
+						'Accessibilityhelp',
 						{
 							command: 'a11yHelp',
 							icon: themeDisplay.getPathJavaScript() + '/editor/ckeditor/plugins/accessibilityhelp/assets/accessibilityhelp.png',
@@ -21,10 +21,10 @@
 					function(event) {
 						var toolbarHTML = event.data.html;
 
-						var a11ybtnIndex = toolbarHTML.indexOf('cke_button__a11ybtn');
+						var AccessibilityIndex = toolbarHTML.indexOf('cke_button__accessibilityhelp');
 
-						if (a11ybtnIndex !== -1) {
-							var a11ToolbarIndex = toolbarHTML.lastIndexOf('class="cke_toolbar"', a11ybtnIndex);
+						if (AccessibilityIndex !== -1) {
+							var a11ToolbarIndex = toolbarHTML.lastIndexOf('class="cke_toolbar"', AccessibilityIndex);
 
 							var toolbarText = toolbarHTML.substr(a11ToolbarIndex).replace('class="cke_toolbar"', 'class="cke_toolbar cke_toolbar__accessibilityhelp"');
 

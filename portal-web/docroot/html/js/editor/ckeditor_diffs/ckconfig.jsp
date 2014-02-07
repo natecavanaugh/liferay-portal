@@ -108,7 +108,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['Undo', 'Redo'],
 		['SpellChecker', 'Scayt'],
 		['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'], ['Source', 'RemoveFormat'],
-		['A11YBtn']
+		['Accessibilityhelp']
 	];
 
 	config.toolbar_email = [
@@ -120,7 +120,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['Source'],
 		['Link', 'Unlink'],
 		['Image'],
-		['A11YBtn']
+		['Accessibilityhelp']
 	];
 
 	config.toolbar_liferay = [
@@ -145,7 +145,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 			,['Source']
 		</c:if>
 
-		,['A11YBtn']
+		,['Accessibilityhelp']
 	];
 
 	config.toolbar_liferayArticle = [
@@ -161,7 +161,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['Source'],
 		['Link', 'Unlink', 'Anchor'],
 		['Image', 'Flash', <c:if test="<%= XugglerUtil.isEnabled() %>">'Audio', 'Video',</c:if> 'Table', '-', 'Smiley', 'SpecialChar', 'LiferayPageBreak'],
-		['A11YBtn']
+		['Accessibilityhelp']
 	];
 
 	config.toolbar_phone = [

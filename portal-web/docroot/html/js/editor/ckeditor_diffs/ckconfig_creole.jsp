@@ -113,7 +113,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['Table', '-', 'HorizontalRule', 'SpecialChar' ],
 		['Find','Replace','-','SelectAll','RemoveFormat'],
 		['Source'],
-		['A11YBtn']
+		['Accessibilityhelp']
 	];
 
 	config.toolbar_phone = [

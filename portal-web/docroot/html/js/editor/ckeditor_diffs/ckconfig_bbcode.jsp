@@ -68,7 +68,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'Blockquote', '-', 'Code'],
 		'/',
 		['Font', 'FontSize', '-', 'Format', '-', 'Undo', 'Redo', '-', 'Source'],
-		['A11YBtn']
+		['Accessibilityhelp']
 	];
 
 	config.toolbar_phone = [
