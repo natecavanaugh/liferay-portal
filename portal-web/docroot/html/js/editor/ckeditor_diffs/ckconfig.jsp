@@ -83,7 +83,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 	config.entities = false;
 
-	config.extraPlugins = 'ajaxsave,media,restore,scayt,wsc,a11yhelpbtn';
+	config.extraPlugins = 'ajaxsave,media,restore,scayt,wsc,accessibilityhelp';
 
 	config.height = 265;
 

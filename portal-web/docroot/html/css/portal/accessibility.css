@@ -24,7 +24,7 @@ td.stretch {
 }
 
 .cke_toolbar {
-	&.cke_toolbar__a11yhelpbtn {
+	&.cke_toolbar__accessibilityhelp {
 		float: right;
 
 		.cke_toolgroup {

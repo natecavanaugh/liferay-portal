@@ -53,7 +53,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 	config.disableObjectResizing = true;
 
-	config.extraPlugins = 'creole,wikilink,a11yhelpbtn';
+	config.extraPlugins = 'creole,wikilink,accessibilityhelp';
 
 	config.format_tags = 'p;h1;h2;h3;h4;h5;h6;pre';
 

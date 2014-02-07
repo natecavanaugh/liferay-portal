@@ -95,7 +95,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 	config.enterMode = CKEDITOR.ENTER_BR;
 
-	config.extraPlugins = 'bbcode,wikilink,a11yhelpbtn';
+	config.extraPlugins = 'bbcode,wikilink,accessibilityhelp';
 
 	config.filebrowserBrowseUrl = '';
 
