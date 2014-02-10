@@ -16,15 +16,23 @@
 
 <%@ include file="/html/portlet/dictionary/init.jsp" %>
 
-<form name="<portlet:namespace />fm" onSubmit="window.open(document.<portlet:namespace />fm.<portlet:namespace />type[document.<portlet:namespace />fm.<portlet:namespace />type.selectedIndex].value + encodeURIComponent(document.<portlet:namespace />fm.<portlet:namespace />word.value)); return false;">
+<aui:nav-bar>
+	<aui:form method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "getDefinition();" %>'>
+		<aui:nav-bar-search>
+			<div class="form-search">
+				<liferay-ui:input-search name="word" autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" placeholder='<%= LanguageUtil.get(locale, "Word") %>' />
+			</div>
 
-<input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="<portlet:namespace />word" size="30" type="text" />
+			<aui:select label="" name="type">
+				<aui:option label="dictionary" value="http://dictionary.reference.com/search?q=" />
+				<aui:option label="thesaurus" value="http://thesaurus.reference.com/search?q=" />
+			</aui:select>
+		</aui:nav-bar-search>
+	</aui:form>
+</aui:nav-bar>
 
-<select name="<portlet:namespace />type">
-	<option value="http://dictionary.reference.com/search?q="><liferay-ui:message key="dictionary" /></option>
-	<option value="http://thesaurus.reference.com/search?q="><liferay-ui:message key="thesaurus" /></option>
-</select>
-
-<input type="submit" value="<liferay-ui:message key="find" />" />
-
-</form>
+<aui:script>
+	function <portlet:namespace />getDefinition() {
+		window.open(document.<portlet:namespace />fm.<portlet:namespace />type[document.<portlet:namespace />fm.<portlet:namespace />type.selectedIndex].value + encodeURIComponent(document.<portlet:namespace />fm.<portlet:namespace />word.value));
+	}
+</aui:script>
