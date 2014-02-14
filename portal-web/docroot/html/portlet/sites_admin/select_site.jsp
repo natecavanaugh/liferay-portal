@@ -178,9 +178,21 @@ portletURL.setParameter("target", target);
 					data.put("groupid", group.getGroupId());
 					data.put("grouptarget", target);
 					data.put("grouptype", LanguageUtil.get(pageContext, group.getTypeLabel()));
+
+					boolean disabled = false;
+
+					if (selUser != null) {
+						for (Group curGroup : selUser.getGroups()) {
+							if (curGroup.getGroupId() == group.getGroupId()) {
+								disabled = true;
+
+								break;
+							}
+						}
+					}
 					%>
 
-					<aui:button cssClass="selector-button" data="<%= data %>" value="choose" />
+					<aui:button cssClass="selector-button" data="<%= data %>" disabled="<%= disabled %>" value="choose" />
 				</c:if>
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>
@@ -192,15 +204,11 @@ portletURL.setParameter("target", target);
 <aui:script use="aui-base">
 	var Util = Liferay.Util;
 
-	A.one('#<portlet:namespace />selectGroupFm').delegate(
-		'click',
-		function(event) {
-			var result = Util.getAttributes(event.currentTarget, 'data-');
+	var openingLiferay = Util.getOpener().Liferay;
 
-			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
+	var disabledSelectors = A.all('.selector-button:disabled');
 
-			Util.getWindow().hide();
-		},
-		'.selector-button'
-	);
+	openingLiferay.fire('<portlet:namespace />enableRemovedSites', disabledSelectors);
+
+	Util.selectEntityHandler('#<portlet:namespace />selectGroupFm', '<%= HtmlUtil.escapeJS(eventName) %>', <%= selUser != null %>);
 </aui:script>
