@@ -61,6 +61,7 @@ import com.liferay.taglib.ui.JournalContentSearchTag;
 import com.liferay.taglib.ui.LanguageTag;
 import com.liferay.taglib.ui.MySitesTag;
 import com.liferay.taglib.ui.PngImageTag;
+import com.liferay.taglib.ui.QuickAccessTag;
 import com.liferay.taglib.ui.RatingsTag;
 import com.liferay.taglib.ui.SearchTag;
 import com.liferay.taglib.ui.SitesDirectoryTag;
@@ -453,6 +454,15 @@ public class VelocityTaglibImpl implements VelocityTaglib {
 		setUp(pngImageTag);
 
 		return pngImageTag;
+	}
+
+	@Override
+	public QuickAccessTag getQuickAccessTag() throws Exception {
+		QuickAccessTag quickAccessTag = new QuickAccessTag();
+
+		setUp(quickAccessTag);
+
+		return quickAccessTag;
 	}
 
 	@Override
@@ -955,6 +965,15 @@ public class VelocityTaglibImpl implements VelocityTaglib {
 		setUp(iconRefreshTag);
 
 		iconRefreshTag.runTag();
+	}
+
+	@Override
+	public void quickAccess() throws Exception {
+		QuickAccessTag quickAccessTag = new QuickAccessTag();
+
+		setUp(quickAccessTag);
+
+		quickAccessTag.runTag();
 	}
 
 	@Override
