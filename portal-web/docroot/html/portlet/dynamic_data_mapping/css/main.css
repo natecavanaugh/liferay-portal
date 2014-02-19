@@ -117,6 +117,10 @@
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;
+
+					span {
+						padding-right: 13px;
+					}
 				}
 			}
 		}
