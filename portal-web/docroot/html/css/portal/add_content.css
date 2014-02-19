@@ -110,6 +110,8 @@
 		}
 
 		.lfr-content-item {
+			padding-left: 10px;
+			padding-right: 10px;
 			position: relative;
 
 			.drag-content-item {
