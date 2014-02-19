@@ -211,6 +211,23 @@ $editLayoutPanelWidth: 460px;
 								}
 							}
 
+							&.user-avatar {
+								> .dropdown-menu {
+									left: auto;
+									right: 0;
+
+									&:after {
+										left: auto;
+										right: 11px;
+									}
+
+									&:before {
+										left: auto;
+										right: 10px;
+									}
+								}
+							}
+
 							@include respond-to(phone, tablet) {
 								> a {
 									display: inline-block;
