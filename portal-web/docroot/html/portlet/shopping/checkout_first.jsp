@@ -334,7 +334,7 @@ List addresses = AddressServiceUtil.getAddresses(Contact.class.getName(), contac
 			Country country = address.getCountry();
 		%>
 
-			if ("<%= address.getAddressId() %>" == addressId) {
+			if ('<%= address.getAddressId() %>' == addressId) {
 				document.getElementById('<portlet:namespace />' + type + "Street").value = '<%= HtmlUtil.escapeJS(address.getStreet1()) %>';
 				document.getElementById('<portlet:namespace />' + type + "City").value = '<%= HtmlUtil.escapeJS(address.getCity()) %>';
 
