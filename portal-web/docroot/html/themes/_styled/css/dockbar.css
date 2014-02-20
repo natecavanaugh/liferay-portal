@@ -134,6 +134,11 @@ $editLayoutPanelWidth: 460px;
 			top: 9px;
 		}
 
+		.info-link-container {
+			position: relative;
+			width: 0;
+		}
+
 		.navbar-inner {
 			padding: 0 20px;
 
@@ -227,6 +232,14 @@ $editLayoutPanelWidth: 460px;
 										right: 10px;
 									}
 								}
+							}
+
+							&.info-items {
+								background-color: transparent;
+								left: 0;
+								position: absolute;
+								top: 100%;
+								width: 100%;
 							}
 
 							@include respond-to(phone, tablet) {
@@ -673,12 +686,24 @@ $editLayoutPanelWidth: 460px;
 								color: #FFF;
 							}
 
+							&.info-items {
+								left: auto;
+								top: auto;
+							}
+
 							&.open > a {
 								color: #333;
 							}
 						}
 					}
 				}
+			}
+
+			.page-customization-bar-container {
+				top: -1px;
+				position: absolute;
+				right: 100%;
+				width: 320px;
 			}
 
 			.staging-nav-items {
@@ -689,11 +714,6 @@ $editLayoutPanelWidth: 460px;
 					line-height: 31px;
 				}
 			}
-		}
-
-		.info-link-container {
-			position: relative;
-			width: 0;
 		}
 
 		.info-items {
@@ -1081,7 +1101,7 @@ $editLayoutPanelWidth: 460px;
 
 		.page-customization-bar-text {
 			display: table-cell;
-			height: 51px;
+			padding: 12px 0;
 			vertical-align: middle;
 			width: 75%;
 		}
@@ -1095,37 +1115,49 @@ $editLayoutPanelWidth: 460px;
 		}
 	}
 
-	.page-customization-bar-container {
-		top: -1px;
-		position: absolute;
-		right: 100%;
-		width: 320px;
+	/* -------- Extras -------- */
+
+	.dockbar .navbar-inner .container .nav-collapse > .nav > li.info-items {
+		@include background-image(none);
 	}
 
-	@media (min-width: 1400px) {
-		.page-customization-bar-container {
-			width: 815px;
-		}
+	/* -------- Media Queries -------- */
 
-		.staging-ready .page-customization-bar-container {
-			width: 680px;
+	@media (min-width: 1400px) {
+		.dockbar-split .dockbar {
+			.page-customization-bar-container {
+				width: 815px;
+			}
+
+			.staging-ready .page-customization-bar-container {
+				width: 680px;
+			}
 		}
 	}
 
 	@media (min-width: 1152px) and (max-width: 1399px) {
-		.page-customization-bar-container {
-			width: 715px;
-		}
+		.dockbar-split .dockbar {
+			.page-customization-bar-container {
+				width: 715px;
+			}
 
-		.staging-ready .page-customization-bar-container {
-			width: 475px;
+			.staging-ready .page-customization-bar-container {
+				width: 475px;
+			}
 		}
 	}
 
-	.page-customization-bar-container {
-		@include respond-to(phone, tablet) {
-			position: static;
-			width: 100%;
+	@include respond-to(phone, tablet) {
+		.dockbar-split .dockbar {
+			.navbar-inner .container .nav-collapse > .nav > li.info-items {
+				left: 0;
+				top: 100%;
+			}
+
+			.page-customization-bar-container {
+				position: static;
+				width: 100%;
+			}
 		}
 	}
 
