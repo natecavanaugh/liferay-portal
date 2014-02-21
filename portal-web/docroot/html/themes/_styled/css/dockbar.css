@@ -213,16 +213,17 @@ $editLayoutPanelWidth: 460px;
 
 							&.user-avatar {
 								> .dropdown-menu {
-									left: auto;
 									right: 0;
 
-									&:after {
+									&, &:after, &:before {
 										left: auto;
+									}
+
+									&:after {
 										right: 11px;
 									}
 
 									&:before {
-										left: auto;
 										right: 10px;
 									}
 								}
