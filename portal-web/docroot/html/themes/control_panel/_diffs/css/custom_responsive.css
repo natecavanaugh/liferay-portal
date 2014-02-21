@@ -80,6 +80,10 @@
 				background-color: transparent;
 			}
 		}
+
+		.taglib-icon-help {
+			display: none;
+		}
 	}
 }
 
