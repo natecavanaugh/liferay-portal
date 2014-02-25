@@ -118,7 +118,7 @@
 					text-overflow: ellipsis;
 					white-space: nowrap;
 
-					span {
+					.palette-item {
 						padding-right: 13px;
 					}
 				}
