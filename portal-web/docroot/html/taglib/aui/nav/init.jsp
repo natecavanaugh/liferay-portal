@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2014 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -38,6 +38,7 @@ boolean collapsible = GetterUtil.getBoolean(String.valueOf(request.getAttribute(
 java.lang.String cssClass = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav:cssClass"));
 java.lang.String icon = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav:icon"));
 java.lang.String id = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav:id"));
+com.liferay.portal.kernel.dao.search.SearchContainer<?> searchContainer = (com.liferay.portal.kernel.dao.search.SearchContainer<?>)request.getAttribute("aui:nav:searchContainer");
 boolean useNamespace = GetterUtil.getBoolean(String.valueOf(request.getAttribute("aui:nav:useNamespace")), true);
 
 _updateOptions(_options, "ariaLabel", ariaLabel);
@@ -46,6 +47,7 @@ _updateOptions(_options, "collapsible", collapsible);
 _updateOptions(_options, "cssClass", cssClass);
 _updateOptions(_options, "icon", icon);
 _updateOptions(_options, "id", id);
+_updateOptions(_options, "searchContainer", searchContainer);
 _updateOptions(_options, "useNamespace", useNamespace);
 %>
 
