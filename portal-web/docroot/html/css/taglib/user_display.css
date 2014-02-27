@@ -1,3 +1,7 @@
+@import "compass";
+@import "compass/css3/user-interface";
+@import "mixins";
+
 .taglib-user-display {
 	padding: 0.5em;
 
@@ -17,6 +21,23 @@
 		}
 	}
 
+	&.display-style-3 {
+		padding: 0em;
+
+		.user-profile-image {
+			@include border-radius(50%);
+			@include box-shadow(0 0 0 2px #5594E0);
+
+			display: inline-block;
+			margin-top: -2px;
+			vertical-align: middle;
+		}
+
+		.user-name, .user-details{
+			display: none;
+		}
+	}
+
 	.user-details {
 		margin-top: 1em;
 	}
@@ -32,5 +53,11 @@
 	.user-name {
 		font-size: 1.1em;
 		font-weight: bold;
+	}
+
+	&.display-style-3 {
+		.user-profile-image {
+			background: #333 no-repeat center;
+		}
 	}
 }
