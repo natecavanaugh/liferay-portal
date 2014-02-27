@@ -1,4 +1,5 @@
 @import "compass";
+@import "variables";
 
 /* ---------- Logo ---------- */
 
@@ -96,7 +97,9 @@ body.html-editor {
 
 /* ---------- Miscellaneous ---------- */
 
-#skip-to-content {
-	clip: rect(0 0 0 0);
+.quick-access-nav {
 	position: absolute;
+	top: -$quickAccessNavOffset;
+	width: 100%;
+	z-index: 1000;
 }

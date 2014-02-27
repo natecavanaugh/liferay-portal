@@ -117,6 +117,12 @@ img, .png {
 </#if>
 </#macro>
 
+<#macro quickAcess
+	content_id
+>
+	${theme.quickAcess(content_id)}
+</#macro>
+
 <#macro breadcrumbs
 	control_panel = ""
 >
