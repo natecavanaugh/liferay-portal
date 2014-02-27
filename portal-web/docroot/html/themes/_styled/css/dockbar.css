@@ -1148,6 +1148,35 @@ $editLayoutPanelWidth: 460px;
 	}
 
 	@include respond-to(phone, tablet) {
+		.dockbar, .dockbar-split .dockbar {
+			.info-link-container {
+				padding: 0;
+				width: auto;
+
+				.diamond {
+					display: none;
+				}
+
+				.info-button {
+					right: auto;
+					top: auto;
+				}
+
+				.info-link {
+					color: #333;
+					display: block;
+					margin: 5px 0 0 5px;
+					padding: 12px 18px;
+					position: relative;
+
+					&:focus, &:hover {
+						background-color: #555;
+						text-decoration: none;
+					}
+				}
+			}
+		}
+
 		.dockbar-split .dockbar {
 			.navbar-inner .container .nav-collapse > .nav > li.info-items {
 				left: 0;

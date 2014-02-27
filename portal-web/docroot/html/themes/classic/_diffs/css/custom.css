@@ -155,6 +155,19 @@ $dockbarOpenGradientStart: #0EA6F9;
 	}
 
 	.dockbar, .dockbar-split .dockbar {
+		@include respond-to(phone, tablet) {
+			.info-link-container .info-link {
+				color: #FFF;
+				font-size: 26px;
+				margin-left: 0;
+				padding: 11px 18px 12px;
+
+				&:focus, &:hover {
+					background-color: #5BBAE8;
+				}
+			}
+		}
+
 		.navbar-inner {
 			background-color: $dockbarGradientStart;
 
