@@ -1,0 +1,40 @@
+@import "compass";
+@import "mixins";
+
+.portlet-dictionary {
+	.navbar {
+		&, .navbar-inner .navbar-search {
+			margin-bottom: 0;
+		}
+
+		.navbar-search {
+			width: 100%;
+
+			.input-append {
+				padding: 0 15px 0 0;
+			}
+
+			.form-search, select {
+				display: inline-block;
+				float: left;
+				margin: 0 0 8px 0;
+			}
+
+			select {
+				max-width: 100%;
+			}
+
+			@include respond-to(phone, tablet) {
+				width: auto;
+
+				select {
+					margin-bottom: 14px;
+				}
+
+				.form-search, select {
+					width: 100%;
+				}
+			}
+		}
+	}
+}
