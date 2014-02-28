@@ -1124,25 +1124,37 @@ $editLayoutPanelWidth: 460px;
 	/* -------- Media Queries -------- */
 
 	@media (min-width: 1400px) {
-		.dockbar-split .dockbar {
-			.page-customization-bar-container {
-				width: 815px;
+		.dockbar-split {
+			.dockbar .page-customization-bar-container {
+				width: 963px;
 			}
 
-			.staging-ready .page-customization-bar-container {
-				width: 680px;
+			&.staging-ready .page-customization-bar-container {
+				width: 722px;
 			}
 		}
 	}
 
 	@media (min-width: 1152px) and (max-width: 1399px) {
-		.dockbar-split .dockbar {
-			.page-customization-bar-container {
+		.dockbar-split {
+			.dockbar .page-customization-bar-container {
 				width: 715px;
 			}
 
-			.staging-ready .page-customization-bar-container {
+			&.staging-ready .page-customization-bar-container {
 				width: 475px;
+			}
+		}
+	}
+
+	@media (min-width: 980px) and (max-width: 1151px) {
+		.dockbar-split {
+			.dockbar .page-customization-bar-container {
+				width: 542px;
+			}
+
+			&.staging-ready .page-customization-bar-container {
+				width: 302px;
 			}
 		}
 	}
