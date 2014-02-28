@@ -1461,6 +1461,8 @@ public interface PropsKeys {
 
 	public static final String LOCK_LISTENERS = "lock.listeners";
 
+	public static final String LOG4J_CLEAN_UP = "log4j.clean.up";
+
 	public static final String LOG_SANITIZER_ENABLED = "log.sanitizer.enabled";
 
 	public static final String LOG_SANITIZER_ESCAPE_HTML_ENABLED = "log.sanitizer.escape.html.enabled";
@@ -1468,8 +1470,6 @@ public interface PropsKeys {
 	public static final String LOG_SANITIZER_REPLACEMENT_CHARACTER = "log.sanitizer.replacement.character";
 
 	public static final String LOG_SANITIZER_WHITELIST_CHARACTERS = "log.sanitizer.whitelist.characters";
-
-	public static final String LOG4J_CLEAN_UP = "log4j.clean.up";
 
 	public static final String LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD = "login.create.account.allow.custom.password";
 
