@@ -1,4 +1,5 @@
 @import "compass";
+@import "mixins";
 
 .portlet-document-library, .portlet-dynamic-data-mapping {
 	.diagram-builder-drop-container {
@@ -78,55 +79,60 @@
 	}
 
 	.lfr-template-editor-container {
-		.lfr-template-palette-container {
-			width: 275px;
+		.lfr-template-palette-container	.lfr-template-palette {
+			overflow: auto;
+			width: 100%;
 
-			.lfr-template-palette {
-				height: 372px;
-				overflow: auto;
-				width: 100%;
+			@include respond-to(phone) {
+				height: auto !important;
+				margin-bottom: 15px;
+			}
 
-				.palette-item-header {
-					font-weight: bold;
+			.palette-item-header {
+				font-weight: bold;
 
-					.palette-item-header-icon {
-						background: url() no-repeat 50%;
-						display: inline-block;
-						height: 10px;
-						width: 9px;
-					}
+				.palette-item-header-icon {
+					background: url() no-repeat 50%;
+					display: inline-block;
+					height: 10px;
+					width: 9px;
 				}
+			}
 
-				.toggler-header-collapsed .palette-item-header-icon {
-					background-image: url(@theme_image_path@/arrows/05_right.png);
-				}
+			.toggler-header-collapsed .palette-item-header-icon {
+				background-image: url(@theme_image_path@/arrows/05_right.png);
+			}
 
-				.toggler-header-expanded .palette-item-header-icon {
-					background-image: url(@theme_image_path@/arrows/05_down.png);
-					vertical-align: middle;
-				}
+			.toggler-header-expanded .palette-item-header-icon {
+				background-image: url(@theme_image_path@/arrows/05_down.png);
+				vertical-align: middle;
+			}
 
-				.palette-item-header {
-					cursor: pointer;
-					margin: 0.5em;
-				}
+			.palette-item-header {
+				cursor: pointer;
+				margin: 0.5em;
+			}
 
-				.palette-item-content .palette-item-container {
-					cursor: pointer;
-					line-height: 1.8em;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
+			.palette-item-content .palette-item-container {
+				cursor: pointer;
+				line-height: 1.8em;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 
-					.palette-item {
-						padding-right: 13px;
-					}
+				.palette-item {
+					padding-right: 13px;
 				}
 			}
 		}
 
 		.lfr-editor-container {
 			margin-left: 275px;
+
+			@include respond-to(phone) {
+				clear: left;
+				margin-left: 0;
+			}
 
 			.lfr-template-editor .lfr-rich-editor {
 				padding-left: 0.2em;

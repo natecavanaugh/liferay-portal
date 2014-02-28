@@ -297,7 +297,11 @@ if (Validator.isNotNull(scriptContent)) {
 		richEditor.set(STR_HEIGHT, info.offsetHeight);
 		richEditor.set('width', info.offsetWidth);
 
-		paletteDataContainer.setStyle(STR_HEIGHT, info.offsetHeight);
+		if (!Liferay.Util.isPhone()) {
+			var paletteSearchContainer = panelScriptContainer.one('#<portlet:namespace />paletteSearchContainer');
+
+			paletteDataContainer.setStyle(STR_HEIGHT, info.offsetHeight - paletteSearchContainer.height());
+		}
 	}
 
 	function setEditorContent(content) {
