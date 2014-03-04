@@ -79,49 +79,57 @@
 	}
 
 	.lfr-template-editor-container {
-		.lfr-template-palette-container	.lfr-template-palette {
-			overflow: auto;
-			width: 100%;
+		.lfr-template-palette-container {
+			width: 265px;
 
 			@include respond-to(phone) {
-				height: auto !important;
-				margin-bottom: 15px;
+				width: 100%;
 			}
 
-			.palette-item-header {
-				font-weight: bold;
+			.lfr-template-palette {
+				overflow: auto;
+				width: 100%;
 
-				.palette-item-header-icon {
-					background: url() no-repeat 50%;
-					display: inline-block;
-					height: 10px;
-					width: 9px;
+				@include respond-to(phone) {
+					height: auto !important;
+					margin-bottom: 15px;
 				}
-			}
 
-			.toggler-header-collapsed .palette-item-header-icon {
-				background-image: url(@theme_image_path@/arrows/05_right.png);
-			}
+				.palette-item-header {
+					font-weight: bold;
 
-			.toggler-header-expanded .palette-item-header-icon {
-				background-image: url(@theme_image_path@/arrows/05_down.png);
-				vertical-align: middle;
-			}
+					.palette-item-header-icon {
+						background: url() no-repeat 50%;
+						display: inline-block;
+						height: 10px;
+						width: 9px;
+					}
+				}
 
-			.palette-item-header {
-				cursor: pointer;
-				margin: 0.5em;
-			}
+				.toggler-header-collapsed .palette-item-header-icon {
+					background-image: url(@theme_image_path@/arrows/05_right.png);
+				}
 
-			.palette-item-content .palette-item-container {
-				cursor: pointer;
-				line-height: 1.8em;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
+				.toggler-header-expanded .palette-item-header-icon {
+					background-image: url(@theme_image_path@/arrows/05_down.png);
+					vertical-align: middle;
+				}
 
-				.palette-item {
-					padding-right: 13px;
+				.palette-item-header {
+					cursor: pointer;
+					margin: 0.5em;
+				}
+
+				.palette-item-content .palette-item-container {
+					cursor: pointer;
+					line-height: 1.8em;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+
+					.palette-item {
+						padding-right: 13px;
+					}
 				}
 			}
 		}
