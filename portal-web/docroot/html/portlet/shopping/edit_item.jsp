@@ -514,21 +514,21 @@ int priceId = ParamUtil.getInteger(request, "priceId", -1);
 
 <aui:script>
 	function <portlet:namespace />addField() {
-		document.<portlet:namespace />fm.scroll.value = "<portlet:namespace />fields";
+		document.<portlet:namespace />fm.scroll.value = '<portlet:namespace />fields';
 		document.<portlet:namespace />fm.<portlet:namespace />fieldsCount.value = <%= fieldsCount + 1 %>;
 
 		submitForm(document.<portlet:namespace />fm);
 	}
 
 	function <portlet:namespace />addPrice() {
-		document.<portlet:namespace />fm.scroll.value = "<portlet:namespace />prices";
+		document.<portlet:namespace />fm.scroll.value = '<portlet:namespace />prices';
 		document.<portlet:namespace />fm.<portlet:namespace />pricesCount.value = <%= pricesCount + 1 %>;
 
 		submitForm(document.<portlet:namespace />fm);
 	}
 
 	function <portlet:namespace />deleteField(i) {
-		document.<portlet:namespace />fm.scroll.value = "<portlet:namespace />fields";
+		document.<portlet:namespace />fm.scroll.value = '<portlet:namespace />fields';
 		document.<portlet:namespace />fm.<portlet:namespace />fieldsCount.value = <%= fieldsCount - 1 %>;
 		document.<portlet:namespace />fm.<portlet:namespace />fieldId.value = i;
 
@@ -540,7 +540,7 @@ int priceId = ParamUtil.getInteger(request, "priceId", -1);
 			alert("<%= UnicodeLanguageUtil.get(pageContext, "you-cannot-delete-or-deactivate-a-default-price") %>");
 		}
 		else if (document.<portlet:namespace />fm.<portlet:namespace />pricesCount.value > 1) {
-			document.<portlet:namespace />fm.scroll.value = "<portlet:namespace />prices";
+			document.<portlet:namespace />fm.scroll.value = '<portlet:namespace />prices';
 			document.<portlet:namespace />fm.<portlet:namespace />pricesCount.value = <%= pricesCount - 1 %>;
 			document.<portlet:namespace />fm.<portlet:namespace />priceId.value = i;
 
@@ -555,28 +555,28 @@ int priceId = ParamUtil.getInteger(request, "priceId", -1);
 		for (int i = 0; i < fieldsCount; i++) {
 		%>
 
-			itemQuantitiesURL += "&<portlet:namespace />n<%= i %>=" + encodeURIComponent(document.<portlet:namespace />fm.<portlet:namespace />fieldName<%= i %>.value);
-			itemQuantitiesURL += "&<portlet:namespace />v<%= i %>=" + encodeURIComponent(document.<portlet:namespace />fm.<portlet:namespace />fieldValues<%= i %>.value);
+			itemQuantitiesURL += '&<portlet:namespace />n<%= i %>=' + encodeURIComponent(document.<portlet:namespace />fm.<portlet:namespace />fieldName<%= i %>.value);
+			itemQuantitiesURL += '&<portlet:namespace />v<%= i %>=' + encodeURIComponent(document.<portlet:namespace />fm.<portlet:namespace />fieldValues<%= i %>.value);
 
 		<%
 		}
 		%>
 
-		var itemQuantitiesWindow = window.open(itemQuantitiesURL, "itemQuantities", "directories=no,height=400,location=no,menubar=no,resizable=no,scrollbars=yes,status=no,toolbar=no,width=300");
+		var itemQuantitiesWindow = window.open(itemQuantitiesURL, 'itemQuantities', 'directories=no,height=400,location=no,menubar=no,resizable=no,scrollbars=yes,status=no,toolbar=no,width=300');
 
-		void("");
+		void('');
 
 		itemQuantitiesWindow.focus();
 	}
 
 	function <portlet:namespace />removeCategory() {
-		document.<portlet:namespace />fm.<portlet:namespace />categoryId.value = "<%= ShoppingCategoryConstants.DEFAULT_PARENT_CATEGORY_ID %>";
+		document.<portlet:namespace />fm.<portlet:namespace />categoryId.value = '<%= ShoppingCategoryConstants.DEFAULT_PARENT_CATEGORY_ID %>';
 
 		document.getElementById('<portlet:namespace />categoryName').value = '';
 	}
 
 	function <portlet:namespace />saveItem() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (item == null) ? Constants.ADD : Constants.UPDATE %>";
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= (item == null) ? Constants.ADD : Constants.UPDATE %>';
 
 		submitForm(document.<portlet:namespace />fm);
 	}

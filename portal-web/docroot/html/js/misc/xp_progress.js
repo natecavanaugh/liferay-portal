@@ -49,10 +49,10 @@ bA.count=count;
 bA.action=action;
 bA.togglePause=togglePause;
 bA.showBar=function(){
-this.bar.style.visibility="visible";
+this.bar.style.visibility='visible';
 }
 bA.hideBar=function(){
-this.bar.style.visibility="hidden";
+this.bar.style.visibility='hidden';
 }
 bA.tid=setInterval('startBar('+N+')',speed);
 return bA;
