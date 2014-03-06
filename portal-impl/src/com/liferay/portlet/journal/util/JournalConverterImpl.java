@@ -711,17 +711,12 @@ public class JournalConverterImpl implements JournalConverter {
 		else if (DDMImpl.TYPE_DDM_IMAGE.equals(fieldType) &&
 				 Validator.isNotNull(fieldValue)) {
 
-			if (fieldValue.equals("delete")) {
-				dynamicContentElement.addCDATA(fieldValue);
-			}
-			else {
-				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-					fieldValue);
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+				fieldValue);
 
-				dynamicContentElement.addAttribute(
-					"alt", jsonObject.getString("alt"));
-				dynamicContentElement.addCDATA(jsonObject.getString("data"));
-			}
+			dynamicContentElement.addAttribute(
+				"alt", jsonObject.getString("alt"));
+			dynamicContentElement.addCDATA(jsonObject.getString("data"));
 		}
 		else if (DDMImpl.TYPE_DDM_LINK_TO_PAGE.equals(fieldType) &&
 				 Validator.isNotNull(fieldValue)) {
