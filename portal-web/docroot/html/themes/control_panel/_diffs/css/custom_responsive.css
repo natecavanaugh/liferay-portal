@@ -80,6 +80,18 @@
 				background-color: transparent;
 			}
 		}
+
+		ul.form-navigator.well {
+			.button-holder {
+				padding-bottom: 20px;
+				position: absolute;
+				top: 100%;
+			}
+		}
+
+		.tabbable-content.taglib-form-navigator {
+			position: relative;
+		}
 	}
 }
 
