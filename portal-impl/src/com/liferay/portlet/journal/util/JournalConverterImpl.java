@@ -134,7 +134,6 @@ public class JournalConverterImpl implements JournalConverter {
 					"dynamic-element");
 
 				dynamicElementElement.addAttribute("name", fieldName);
-				dynamicElementElement.addAttribute("index", String.valueOf(i));
 
 				updateContentDynamicElement(
 					dynamicElementElement, ddmStructure, ddmFields,
@@ -557,6 +556,10 @@ public class JournalConverterImpl implements JournalConverter {
 
 		dynamicElementElement.addAttribute("index-type", indexType);
 
+		int count = ddmFieldsCounter.get(fieldName);
+
+		dynamicElementElement.addAttribute("index", String.valueOf(count));
+
 		if (!ddmStructure.isFieldTransient(fieldName)) {
 			Field ddmField = ddmFields.get(fieldName);
 
@@ -566,8 +569,6 @@ public class JournalConverterImpl implements JournalConverter {
 
 				dynamicContentElement.addAttribute(
 					"language-id", LocaleUtil.toLanguageId(locale));
-
-				int count = ddmFieldsCounter.get(fieldName);
 
 				Serializable fieldValue = ddmField.getValue(locale, count);
 
