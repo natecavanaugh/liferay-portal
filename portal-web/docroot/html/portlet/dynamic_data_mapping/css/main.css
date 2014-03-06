@@ -1,4 +1,5 @@
 @import "compass";
+@import "mixins";
 
 .portlet-document-library, .portlet-dynamic-data-mapping {
 	.diagram-builder-drop-container {
@@ -79,12 +80,20 @@
 
 	.lfr-template-editor-container {
 		.lfr-template-palette-container {
-			width: 275px;
+			width: 265px;
+
+			@include respond-to(phone) {
+				width: 100%;
+			}
 
 			.lfr-template-palette {
-				height: 372px;
 				overflow: auto;
 				width: 100%;
+
+				@include respond-to(phone) {
+					height: auto !important;
+					margin-bottom: 15px;
+				}
 
 				.palette-item-header {
 					font-weight: bold;
@@ -127,6 +136,11 @@
 
 		.lfr-editor-container {
 			margin-left: 275px;
+
+			@include respond-to(phone) {
+				clear: left;
+				margin-left: 0;
+			}
 
 			.lfr-template-editor .lfr-rich-editor {
 				padding-left: 0.2em;
