@@ -1,17 +1,10 @@
 @import "compass";
-@import "mixins";
 
 .journal-article-component-list {
 	margin: 10px 0 0 0;
 }
 
 .portlet-journal {
-	@include respond-to(phone, tablet) {
-		.taglib-form-navigator.tabbable-content {
-			position: relative;
-		}
-	}
-
 	.add-article-selector {
 		display: inline-block;
 		vertical-align: top;
@@ -540,14 +533,6 @@
 	}
 
 	.form-navigator {
-		@include respond-to(phone, tablet) {
-			&.nav-list.well .button-holder {
-				padding-bottom: 20px;
-				position: absolute;
-				top: 100%;
-			}
-		}
-
 		.article-info {
 			font-weight: bold;
 			margin-bottom: 15px;
