@@ -93,9 +93,6 @@ AUI.add(
 					_selectFileEntry: function(url, uuid, groupId, title, version) {
 						var instance = this;
 
-						instance.selectedTitle = title;
-						instance.selectedURL = url;
-
 						instance.set(
 							'value',
 							JSON.stringify(
@@ -130,22 +127,14 @@ AUI.add(
 						var instance = this;
 
 						if (val) {
-							var selectedTitle = instance.selectedTitle;
-							var selectedURL = instance.selectedURL;
+							SpreadSheet.Util.getFileEntry(
+								val,
+								function(fileEntry) {
+									var url = SpreadSheet.Util.getFileEntryURL(fileEntry);
 
-							if (selectedTitle && selectedURL) {
-								instance._syncFileLabel(selectedTitle, selectedURL);
-							}
-							else {
-								SpreadSheet.Util.getFileEntry(
-									val,
-									function(fileEntry) {
-										var url = SpreadSheet.Util.getFileEntryURL(fileEntry);
-
-										instance._syncFileLabel(fileEntry.title, url);
-									}
-								);
-							}
+									instance._syncFileLabel(fileEntry.title, url);
+								}
+							);
 						}
 						else {
 							instance._syncFileLabel(STR_EMPTY, STR_EMPTY);
@@ -644,7 +633,14 @@ AUI.add(
 									return AArray.map(
 										val,
 										function(item, index, collection) {
-											var date = new Date(Lang.toInt(item));
+											var date;
+
+											if (Lang.trim(item) === STR_EMPTY) {
+												date = new Date();
+											}
+											else {
+												date = new Date(Lang.toInt(item));
+											}
 
 											date = DateMath.add(date, DateMath.MINUTES, date.getTimezoneOffset());
 
