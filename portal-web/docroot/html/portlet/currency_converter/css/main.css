@@ -1,9 +1,17 @@
+@import "mixins";
+
 .portlet-currency-converter {
 	.form {
 		overflow: auto;
 
 		input[type="text"] {
 			margin-bottom: 0;
+		}
+
+		@include respond-to(phone) {
+			.btn {
+				margin-bottom: 10px;
+			}
 		}
 	}
 }
