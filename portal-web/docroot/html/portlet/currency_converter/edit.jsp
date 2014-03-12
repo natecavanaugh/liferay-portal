@@ -25,18 +25,11 @@
 	<aui:input name="symbols" type="hidden" value="" />
 
 	<%
-
-	// Left list
-
 	List leftList = new ArrayList();
 
 	for (int i = 0; i < symbols.length; i++) {
 		leftList.add(new KeyValuePair(symbols[i], LanguageUtil.get(pageContext, "currency." + symbols[i])));
 	}
-
-	//leftList = ListUtil.sort(leftList, new KeyValuePairComparator(false, true));
-
-	// Right list
 
 	List rightList = new ArrayList();
 
@@ -63,8 +56,6 @@
 		rightList="<%= rightList %>"
 		rightTitle="available"
 	/>
-
-	<br />
 
 	<aui:button onClick='<%= renderResponse.getNamespace() + "saveCurrency();" %>' primary="<%= true %>" type="button" value="save" />
 </aui:form>
