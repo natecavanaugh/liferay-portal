@@ -1,9 +1,21 @@
 @import "mixins";
 
 .portlet-currency-converter {
-	.form {
-		overflow: auto;
+	.conversion-data .currency-data {
+		text-align: center;
 
+		.currency-header {
+			display: block;
+			font-weight: bold;
+		}
+	}
+
+	.conversion-graph .currency-graph {
+		border: 1px solid #DDD;
+		padding: 5px;
+	}
+
+	.form {
 		input[type="text"] {
 			margin-bottom: 0;
 		}
