@@ -166,7 +166,7 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 					var A = AUI();
 
 					if (document.<portlet:namespace />fm.<portlet:namespace />toGroupId.value != event.groupid) {
-						<portlet:namespace />selectFileEntry("", "");
+						<portlet:namespace />selectFileEntry('', '');
 					}
 
 					document.<portlet:namespace />fm.<portlet:namespace />toGroupId.value = event.groupid;
