@@ -203,6 +203,18 @@ public class Logger {
 
 		log("errorLog", sb.toString(), "errorLog");
 
+		WebElement webElement = _webDriver.findElement(By.id("pauseError"));
+
+		String webElementText = webElement.getText();
+
+		while (webElementText.equals("Disable Pause After Error")) {
+			webElement = _webDriver.findElement(By.id("pauseError"));
+
+			webElementText = webElement.getText();
+
+			Thread.sleep(1000);
+		}
+
 		sb = new StringBundler();
 
 		sb.append("Command failure \"");
@@ -381,7 +393,7 @@ public class Logger {
 			_liferaySelenium.getPrimaryTestSuiteName();
 
 		String htmlFileName =
-			_TEST_BASEDIR + "/test/functional-generated/" +
+			_TEST_BASE_DIR_NAME + "/test/functional-generated/" +
 				StringUtil.replace(primaryTestSuiteName, ".", "/") + ".html";
 
 		if (_loggerStarted) {
@@ -393,9 +405,9 @@ public class Logger {
 		}
 		else {
 			_webDriver.get(
-				"file:///" + _TEST_BASEDIR + "/test/functional/com/liferay/" +
-					"portalweb/portal/util/liferayselenium/dependencies/" +
-						"Logger.html");
+				"file:///" + _TEST_BASE_DIR_NAME + "/test/functional/com/" +
+					"liferay/portalweb/portal/util/liferayselenium/" +
+						"dependencies/Logger.html");
 		}
 
 		_loggerStarted = true;
@@ -411,7 +423,7 @@ public class Logger {
 					"outerHTML;");
 
 			String fileName =
-				_TEST_BASEDIR + "/test-results/functional/report.html";
+				_TEST_BASE_DIR_NAME + "/test-results/functional/report.html";
 
 			File file = new File(fileName);
 
@@ -631,7 +643,8 @@ public class Logger {
 		_javascriptExecutor.executeScript(sb.toString());
 	}
 
-	private static final String _TEST_BASEDIR = TestPropsValues.TEST_BASEDIR;
+	private static final String _TEST_BASE_DIR_NAME =
+		TestPropsValues.TEST_BASE_DIR_NAME;
 
 	private int _actionCount;
 	private int _actionStepCount = 1;

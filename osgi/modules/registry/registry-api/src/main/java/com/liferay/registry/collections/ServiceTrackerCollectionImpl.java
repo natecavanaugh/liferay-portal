@@ -32,7 +32,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -280,8 +279,8 @@ public class ServiceTrackerCollectionImpl<S> implements ServiceTrackerList<S> {
 	private final Class<S> _clazz;
 	private final Filter _filter;
 	private final Map<String, Object> _properties;
-	private final Map<S, ServiceRegistration<S>> _serviceRegistrations =
-		new ConcurrentHashMap<S, ServiceRegistration<S>>();
+	private final ServiceRegistrationMap<S> _serviceRegistrations =
+		new ServiceRegistrationMap<S>();
 	private final List<EntryWrapper> _services =
 		new CopyOnWriteArrayList<EntryWrapper>();
 	private final ServiceTracker<S, S> _serviceTracker;

@@ -332,6 +332,21 @@ public class MBDiscussionLocalServiceUtil {
 	}
 
 	public static com.liferay.portlet.messageboards.model.MBDiscussion addDiscussion(
+		long userId, long groupId, long classNameId, long classPK,
+		long threadId, com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addDiscussion(userId, groupId, classNameId, classPK,
+			threadId, serviceContext);
+	}
+
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link #addDiscussion(long, long,
+	long, long, long, ServiceContext)}
+	*/
+	@Deprecated
+	public static com.liferay.portlet.messageboards.model.MBDiscussion addDiscussion(
 		long userId, long classNameId, long classPK, long threadId,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -372,20 +387,6 @@ public class MBDiscussionLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getThreadDiscussion(threadId);
-	}
-
-	public static void subscribeDiscussion(long userId, long groupId,
-		java.lang.String className, long classPK)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().subscribeDiscussion(userId, groupId, className, classPK);
-	}
-
-	public static void unsubscribeDiscussion(long userId,
-		java.lang.String className, long classPK)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().unsubscribeDiscussion(userId, className, classPK);
 	}
 
 	public static MBDiscussionLocalService getService() {

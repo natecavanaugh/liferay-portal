@@ -146,7 +146,8 @@ public abstract class BaseCommandReceiver implements CommandReceiver {
 		try {
 			ServletFileUpload servletFileUpload = new LiferayFileUpload(
 				new LiferayFileItemFactory(
-					UploadServletRequestImpl.getTempDir()), request);
+					UploadServletRequestImpl.getTempDir()),
+				request);
 
 			servletFileUpload.setFileSizeMax(
 				PrefsPropsUtil.getLong(
@@ -246,6 +247,9 @@ public abstract class BaseCommandReceiver implements CommandReceiver {
 				}
 				else if (causeString.contains("SystemException")) {
 					returnValue = "209";
+				}
+				else if (causeString.contains("AssetCategoryException")) {
+					returnValue = "210";
 				}
 				else {
 					throw fcke;

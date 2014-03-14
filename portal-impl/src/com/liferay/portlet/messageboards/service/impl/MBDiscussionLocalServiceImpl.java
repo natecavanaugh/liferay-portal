@@ -31,12 +31,11 @@ public class MBDiscussionLocalServiceImpl
 
 	@Override
 	public MBDiscussion addDiscussion(
-			long userId, long classNameId, long classPK, long threadId,
-			ServiceContext serviceContext)
+			long userId, long groupId, long classNameId, long classPK,
+			long threadId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		User user = userPersistence.findByPrimaryKey(userId);
-		long groupId = serviceContext.getScopeGroupId();
 		Date now = new Date();
 
 		long discussionId = counterLocalService.increment();
@@ -57,6 +56,22 @@ public class MBDiscussionLocalServiceImpl
 		mbDiscussionPersistence.update(discussion);
 
 		return discussion;
+	}
+
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link #addDiscussion(long, long,
+	 *             long, long, long, ServiceContext)}
+	 */
+	@Deprecated
+	@Override
+	public MBDiscussion addDiscussion(
+			long userId, long classNameId, long classPK, long threadId,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		return addDiscussion(
+			userId, serviceContext.getScopeGroupId(), classNameId, classPK,
+			threadId, serviceContext);
 	}
 
 	@Override
@@ -96,23 +111,6 @@ public class MBDiscussionLocalServiceImpl
 		throws PortalException, SystemException {
 
 		return mbDiscussionPersistence.findByThreadId(threadId);
-	}
-
-	@Override
-	public void subscribeDiscussion(
-			long userId, long groupId, String className, long classPK)
-		throws PortalException, SystemException {
-
-		subscriptionLocalService.addSubscription(
-			userId, groupId, className, classPK);
-	}
-
-	@Override
-	public void unsubscribeDiscussion(
-			long userId, String className, long classPK)
-		throws PortalException, SystemException {
-
-		subscriptionLocalService.deleteSubscription(userId, className, classPK);
 	}
 
 }
