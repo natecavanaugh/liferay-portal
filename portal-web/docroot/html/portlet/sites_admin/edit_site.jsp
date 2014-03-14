@@ -212,7 +212,7 @@ String[][] categorySections = {mainSections, seoSections, advancedSections, misc
 
 <aui:script>
 	function <portlet:namespace />saveGroup() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (group == null) ? Constants.ADD : Constants.UPDATE %>";
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= (group == null) ? Constants.ADD : Constants.UPDATE %>';
 
 		var ok = true;
 

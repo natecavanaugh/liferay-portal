@@ -327,7 +327,7 @@ String emailFromAddress = ParamUtil.getString(request, "preferences--emailFromAd
 
 			<aui:script>
 				var prioritiesChanged = false;
-				var prioritiesLastLanguageId = "<%= currentLanguageId %>";
+				var prioritiesLastLanguageId = '<%= currentLanguageId %>';
 
 				function <portlet:namespace />onPrioritiesChanged() {
 					prioritiesChanged = true;

@@ -344,7 +344,7 @@ for (int i = 0 ; i < groupMappingArray.length ; i++) {
 			}
 		}
 
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= ldapServerId <= 0 ? Constants.ADD : Constants.UPDATE %>";
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= ldapServerId <= 0 ? Constants.ADD : Constants.UPDATE %>';
 
 		submitForm(document.<portlet:namespace />fm);
 	}

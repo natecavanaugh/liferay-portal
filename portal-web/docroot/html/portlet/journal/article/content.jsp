@@ -494,7 +494,7 @@ if (Validator.isNotNull(content)) {
 
 <aui:script>
 	function <portlet:namespace />initEditor() {
-		return "<%= UnicodeFormatter.toString(content) %>";
+		return '<%= UnicodeFormatter.toString(content) %>';
 	}
 
 	Liferay.provide(

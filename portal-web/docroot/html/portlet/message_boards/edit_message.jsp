@@ -512,7 +512,7 @@ else {
 	}
 
 	function <portlet:namespace />saveMessage(draft) {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (message == null) ? Constants.ADD : Constants.UPDATE %>";
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= (message == null) ? Constants.ADD : Constants.UPDATE %>';
 		document.<portlet:namespace />fm.<portlet:namespace />body.value = <portlet:namespace />getHTML();
 
 		if (!draft) {
@@ -528,8 +528,8 @@ else {
 
 		var nameEl = document.getElementById('<portlet:namespace />categoryName');
 
-		nameEl.href = "<portlet:renderURL><portlet:param name="struts_action" value="/message_boards/view" /></portlet:renderURL>&<portlet:namespace />mbCategoryId=" + categoryId;
-		nameEl.innerHTML = categoryName + "&nbsp;";
+		nameEl.href = '<portlet:renderURL><portlet:param name="struts_action" value="/message_boards/view" /></portlet:renderURL>&<portlet:namespace />mbCategoryId=' + categoryId;
+		nameEl.innerHTML = categoryName + '&nbsp;';
 	}
 
 	<c:choose>

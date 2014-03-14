@@ -215,7 +215,7 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 	}
 
 	function <portlet:namespace />saveFileShortcut() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (fileShortcut == null) ? Constants.ADD : Constants.UPDATE %>";
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= (fileShortcut == null) ? Constants.ADD : Constants.UPDATE %>';
 
 		submitForm(document.<portlet:namespace />fm);
 	}
