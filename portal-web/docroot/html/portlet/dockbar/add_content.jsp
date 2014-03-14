@@ -20,6 +20,12 @@
 int deltaDefault = GetterUtil.getInteger(SessionClicks.get(request, "liferay_addpanel_numitems", "10"));
 
 int delta = ParamUtil.getInteger(request, "delta", deltaDefault);
+
+String displayStyleDefault = GetterUtil.getString(SessionClicks.get(request, "liferay_addpanel_displaystyle", "descriptive"));
+
+String displayStyle = ParamUtil.getString(request, "displayStyle", displayStyleDefault);
+
+String[] displayViews = {"icon", "descriptive", "list"};
 %>
 
 <portlet:resourceURL var="updateContentListURL">
@@ -30,8 +36,7 @@ int delta = ParamUtil.getInteger(request, "delta", deltaDefault);
 <aui:form action="<%= updateContentListURL %>" name="addContentForm" onSubmit="event.preventDefault();">
 	<div class="row-fluid">
 		<div class="btn-toolbar">
-			<aui:input cssClass="input-small search-query" inlineField="<%= true %>" label="" name="searchContent" type="text" />
-
+			<aui:input cssClass="search-query" inlineField="<%= true %>" label="" name="searchContent" type="text" />
 
 			<aui:select cssClass="input-mini" inlineField="<%= true %>" label="" name="numItems">
 
@@ -52,6 +57,16 @@ int delta = ParamUtil.getInteger(request, "delta", deltaDefault);
 		</div>
 
 		<aui:nav-bar>
+			<aui:nav collapsible="<%= false %>" cssClass="display-style-buttons-container">
+				<aui:nav-item cssClass="display-style-buttons-container">
+					<liferay-ui:app-view-display-style
+						displayStyle="<%= displayStyle %>"
+						displayStyles="<%= displayViews %>"
+						eventName='<%= "AddContent:changeDisplayStyle" %>'
+					/>
+				</aui:nav-item>
+			</aui:nav>
+
 			<span class="add-content-button">
 
 				<%
@@ -71,20 +86,6 @@ int delta = ParamUtil.getInteger(request, "delta", deltaDefault);
 
 				<%@ include file="/html/portlet/asset_publisher/add_asset.jspf" %>
 			</span>
-
-			<%
-			String displayStyleDefault = GetterUtil.getString(SessionClicks.get(request, "liferay_addpanel_displaystyle", "descriptive"));
-
-			String displayStyle = ParamUtil.getString(request, "displayStyle", displayStyleDefault);
-			%>
-
-			<div class="btn-group" id="<portlet:namespace />styleButtons">
-				<aui:button cssClass='<%= displayStyle.equals("icon") ? "active" : StringPool.BLANK %>' data-style="icon" icon="icon-th-large" />
-
-				<aui:button cssClass='<%= displayStyle.equals("descriptive") ? "active" : StringPool.BLANK %>' data-style="descriptive" icon="icon-th-list" />
-
-				<aui:button cssClass='<%= displayStyle.equals("list") ? "active" : StringPool.BLANK %>' data-style="list" icon="icon-list" />
-			</div>
 		</aui:nav-bar>
 
 		<div id="<portlet:namespace />entriesContainer">
@@ -98,6 +99,7 @@ int delta = ParamUtil.getInteger(request, "delta", deltaDefault);
 
 	var addContent = new Liferay.Dockbar.AddContent(
 		{
+			displayStyle: '<%= displayStyle %>',
 			focusItem: searchContent,
 			inputNode: searchContent,
 			namespace: '<portlet:namespace />',
