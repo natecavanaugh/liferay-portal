@@ -32,19 +32,6 @@ int delta = ParamUtil.getInteger(request, "delta", deltaDefault);
 		<div class="btn-toolbar">
 			<aui:input cssClass="input-small search-query" inlineField="<%= true %>" label="" name="searchContent" type="text" />
 
-			<%
-			String displayStyleDefault = GetterUtil.getString(SessionClicks.get(request, "liferay_addpanel_displaystyle", "descriptive"));
-
-			String displayStyle = ParamUtil.getString(request, "displayStyle", displayStyleDefault);
-			%>
-
-			<div class="btn-group" id="<portlet:namespace />styleButtons">
-				<aui:button cssClass='<%= displayStyle.equals("icon") ? "active" : StringPool.BLANK %>' data-style="icon" icon="icon-th-large" />
-
-				<aui:button cssClass='<%= displayStyle.equals("descriptive") ? "active" : StringPool.BLANK %>' data-style="descriptive" icon="icon-th-list" />
-
-				<aui:button cssClass='<%= displayStyle.equals("list") ? "active" : StringPool.BLANK %>' data-style="list" icon="icon-list" />
-			</div>
 
 			<aui:select cssClass="input-mini" inlineField="<%= true %>" label="" name="numItems">
 
@@ -64,25 +51,41 @@ int delta = ParamUtil.getInteger(request, "delta", deltaDefault);
 			</aui:select>
 		</div>
 
-		<span class="add-content-button">
+		<aui:nav-bar>
+			<span class="add-content-button">
+
+				<%
+				long groupId = scopeGroupId;
+
+				long[] groupIds = new long[] {scopeGroupId};
+
+				boolean defaultAssetPublisher = false;
+
+				PortletURL redirectURL = liferayPortletResponse.createLiferayPortletURL(themeDisplay.getPlid(), portletDisplay.getId(), PortletRequest.RENDER_PHASE, false);
+
+				redirectURL.setParameter("struts_action", "/dockbar/add_content_redirect");
+				redirectURL.setWindowState(LiferayWindowState.POP_UP);
+
+				Map<String, PortletURL> addPortletURLs = AssetUtil.getAddPortletURLs(liferayPortletRequest, liferayPortletResponse, AssetRendererFactoryRegistryUtil.getClassNameIds(company.getCompanyId()), new long[0], new long[0], new String[0], redirectURL.toString());
+				%>
+
+				<%@ include file="/html/portlet/asset_publisher/add_asset.jspf" %>
+			</span>
 
 			<%
-			long groupId = scopeGroupId;
+			String displayStyleDefault = GetterUtil.getString(SessionClicks.get(request, "liferay_addpanel_displaystyle", "descriptive"));
 
-			long[] groupIds = new long[] {scopeGroupId};
-
-			boolean defaultAssetPublisher = false;
-
-			PortletURL redirectURL = liferayPortletResponse.createLiferayPortletURL(themeDisplay.getPlid(), portletDisplay.getId(), PortletRequest.RENDER_PHASE, false);
-
-			redirectURL.setParameter("struts_action", "/dockbar/add_content_redirect");
-			redirectURL.setWindowState(LiferayWindowState.POP_UP);
-
-			Map<String, PortletURL> addPortletURLs = AssetUtil.getAddPortletURLs(liferayPortletRequest, liferayPortletResponse, AssetRendererFactoryRegistryUtil.getClassNameIds(company.getCompanyId()), new long[0], new long[0], new String[0], redirectURL.toString());
+			String displayStyle = ParamUtil.getString(request, "displayStyle", displayStyleDefault);
 			%>
 
-			<%@ include file="/html/portlet/asset_publisher/add_asset.jspf" %>
-		</span>
+			<div class="btn-group" id="<portlet:namespace />styleButtons">
+				<aui:button cssClass='<%= displayStyle.equals("icon") ? "active" : StringPool.BLANK %>' data-style="icon" icon="icon-th-large" />
+
+				<aui:button cssClass='<%= displayStyle.equals("descriptive") ? "active" : StringPool.BLANK %>' data-style="descriptive" icon="icon-th-list" />
+
+				<aui:button cssClass='<%= displayStyle.equals("list") ? "active" : StringPool.BLANK %>' data-style="list" icon="icon-list" />
+			</div>
+		</aui:nav-bar>
 
 		<div id="<portlet:namespace />entriesContainer">
 			<liferay-util:include page="/html/portlet/dockbar/view_resources.jsp" />
