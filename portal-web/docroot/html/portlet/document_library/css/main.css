@@ -229,10 +229,53 @@
 
 	.lfr-header-row-content {
 		padding-left: 0;
+		padding-right: 0;
 		padding-top: 0;
 
+		.collapse.nav-collapse {
+			@include respond-to(phone, tablet) {
+				&.open {
+					height: auto;
+				}
+			}
+		}
+
 		.edit-toolbar {
-			margin: 0;
+			margin: 0 0 3px 0;
+
+			.btn {
+				margin-bottom: 3px;
+
+				@include respond-to(phone, tablet) {
+					@include border-radius(0);
+
+					display: block;
+					float: none;
+					margin-bottom: -1px;
+					margin-top: 0;
+					padding: 11px 19px;
+					width: 100%;
+
+					&:first-child {
+						@include border-radius(2px 2px 0 0);
+					}
+
+					&:last-child {
+						@include border-radius(0 0 2px 2px);
+						margin-bottom: 0;
+					}
+				}
+			}
+		}
+
+		.more-options {
+			display: none;
+
+			@include respond-to(phone, tablet) {
+				display: inline;
+				margin-bottom: 4px;
+				width: 100%;
+			}
 		}
 	}
 

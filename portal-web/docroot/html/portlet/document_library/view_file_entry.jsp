@@ -121,18 +121,126 @@ DLActionsDisplayContext dlActionsDisplayContext = new DLActionsDisplayContext(re
 <div class="view">
 	<c:if test="<%= showActions %>">
 		<liferay-ui:app-view-toolbar>
-			<aui:button-row cssClass="edit-toolbar" id='<%= renderResponse.getNamespace() + "fileEntryToolbar" %>' />
+			<aui:button cssClass="more-options" value="Options" />
+
+			<div class="collapse nav-collapse">
+				<aui:button-row cssClass="edit-toolbar" id='<%= renderResponse.getNamespace() + "fileEntryToolbar" %>'>
+					<c:if test="<%= dlActionsDisplayContext.isDownloadButtonVisible() %>">
+						<%
+							String taglibDownload = "location.href = '" + DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, StringPool.BLANK) + "';";
+						%>
+
+						<aui:button icon="icon-download" onClick="<%= taglibDownload %>" value="download" />
+					</c:if>
+
+					<c:if test="<%= dlActionsDisplayContext.isOpenInMsOfficeButtonVisible() %>">
+						<%
+							String taglibOpenInMsOffice = liferayPortletResponse.getNamespace() + "openDocument('" + DLUtil.getWebDavURL(themeDisplay, fileEntry.getFolder(), fileEntry, PropsValues.DL_FILE_ENTRY_OPEN_IN_MS_OFFICE_MANUAL_CHECK_IN_REQUIRED) + "');";
+						%>
+
+						<aui:button onClick="<%= taglibOpenInMsOffice %>" value="open-in-ms-office" />
+					</c:if>
+
+					<c:if test="<%= dlActionsDisplayContext.isEditButtonVisible() %>">
+						<portlet:renderURL var="editURL">
+							<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
+							<portlet:param name="redirect" value="<%= currentURL %>" />
+							<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+						</portlet:renderURL>
+
+						<%
+							String taglibEditURL = "location.href = '" + editURL.toString() + "';";
+						%>
+
+						<aui:button icon="icon-pencil" onClick="<%= taglibEditURL %>" value="edit" />
+					</c:if>
+
+					<c:if test="<%= dlActionsDisplayContext.isMoveButtonVisible() %>">
+						<portlet:renderURL var="moveURL">
+							<portlet:param name="struts_action" value="/document_library/move_file_entry" />
+							<portlet:param name="redirect" value="<%= redirect %>" />
+							<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+						</portlet:renderURL>
+
+						<%
+							String taglibMoveURL = "location.href = '" + moveURL.toString() + "';";
+						%>
+
+						<aui:button icon="icon-move" onClick="<%= taglibMoveURL %>" value="move" />
+					</c:if>
+
+					<c:if test="<%= dlActionsDisplayContext.isCheckoutDocumentButtonVisible() %>">
+						<%
+							String taglibCheckout = "document." + liferayPortletResponse.getNamespace() + "fm." + liferayPortletResponse.getNamespace() + Constants.CMD + ".value = '" + Constants.CHECKOUT + "';submitForm(document." + liferayPortletResponse.getNamespace() + "fm);";
+						%>
+
+						<aui:button icon="icon-lock" onClick="<%= taglibCheckout %>" value="checkout[document]" />
+					</c:if>
+
+					<c:if test="<%= dlActionsDisplayContext.isCancelCheckoutDocumentButtonVisible() %>">
+						<%
+							String taglibCancelCheckout = "document." + liferayPortletResponse.getNamespace() + "fm." + liferayPortletResponse.getNamespace() + Constants.CMD + ".value = '" + Constants.CANCEL_CHECKOUT + "';submitForm(document." + liferayPortletResponse.getNamespace() + "fm);";
+						%>
+
+						<aui:button icon="icon-undo" onClick="<%= taglibCancelCheckout %>" value="cancel-checkout[document]" />
+					</c:if>
+
+					<c:if test="<%= dlActionsDisplayContext.isCheckinButtonVisible() %>">
+						<%
+							String taglibCheckin = "document." + liferayPortletResponse.getNamespace() + "fm." + liferayPortletResponse.getNamespace() + Constants.CMD + ".value = '" + Constants.CHECKIN + "';submitForm(document." + liferayPortletResponse.getNamespace() + "fm);";
+						%>
+
+						<aui:button icon="icon-unlock" onClick="<%= taglibCheckin %>" value="checkin" />
+					</c:if>
+
+					<c:if test="<%= dlActionsDisplayContext.isPermissionsButtonVisible() %>">
+						<liferay-security:permissionsURL
+							modelResource="<%= DLFileEntryConstants.getClassName() %>"
+							modelResourceDescription="<%= fileEntry.getTitle() %>"
+							resourcePrimKey="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
+							var="permissionsURL"
+							windowState="<%= LiferayWindowState.POP_UP.toString() %>"
+						/>
+
+						<%
+							String taglibPermissions = "Liferay.Util.openWindow({title: '" + UnicodeLanguageUtil.get(pageContext, "permissions") + "',uri: '" + permissionsURL.toString() + "'});";
+						%>
+
+						<aui:button icon="icon-permissions" onClick="<%= taglibPermissions %>" value="permissions" />
+					</c:if>
+
+					<c:if test="<%= dlActionsDisplayContext.isMoveToTheRecycleBinButtonVisible() %>">
+						<portlet:renderURL var="viewFolderURL">
+							<portlet:param name="struts_action" value="/document_library/view" />
+							<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
+						</portlet:renderURL>
+
+						<%
+							String taglibMoveToTheRecycleBin = "document." + liferayPortletResponse.getNamespace() + "fm." + liferayPortletResponse.getNamespace() + Constants.CMD + ".value = '" + Constants.MOVE_TO_TRASH + "';document." + liferayPortletResponse.getNamespace() + "fm." + liferayPortletResponse.getNamespace() + "redirect.value = '" + viewFolderURL.toString() + "';submitForm(document." + liferayPortletResponse.getNamespace() + "fm);";
+						%>
+
+						<aui:button icon="icon-trash" onClick="<%= taglibMoveToTheRecycleBin %>" value="move-to-the-recycle-bin" />
+					</c:if>
+
+					<c:if test="<%= dlActionsDisplayContext.isDeleteButtonVisible() %>">
+						<portlet:renderURL var="viewFolderURL">
+							<portlet:param name="struts_action" value="/document_library/view" />
+							<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
+						</portlet:renderURL>
+
+						<%
+							String taglibDelete = "if (confirm('" + UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") + "')) {document." + liferayPortletResponse.getNamespace() + "fm." + liferayPortletResponse.getNamespace() + Constants.CMD + ".value = '" + Constants.DELETE + "';document." + liferayPortletResponse.getNamespace() + "fm." + liferayPortletResponse.getNamespace() + "redirect.value = '" + viewFolderURL.toString() + "';submitForm(document." + liferayPortletResponse.getNamespace() + "fm);";
+						%>
+
+						<aui:button icon="icon-delete" onClick="<%= taglibDelete %>" value="delete" />
+					</c:if>
+				</aui:button-row>
+			</div>
 		</liferay-ui:app-view-toolbar>
 	</c:if>
 
 	<aui:row>
 		<aui:col cssClass="lfr-asset-column-details" width="<%= 70 %>">
-			<c:if test="<%= showActions %>">
-				<liferay-ui:app-view-toolbar>
-					<aui:button-row cssClass="edit-toolbar" id='<%= renderResponse.getNamespace() + "fileEntryToolbar" %>' />
-				</liferay-ui:app-view-toolbar>
-			</c:if>
-
 			<div class="alert alert-error hide" id="<portlet:namespace />openMSOfficeError"></div>
 
 			<c:if test="<%= (fileEntry.getLock() != null) && DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) %>">
@@ -672,7 +780,7 @@ DLActionsDisplayContext dlActionsDisplayContext = new DLActionsDisplayContext(re
 	<%@ include file="/html/portlet/document_library/action/open_document_js.jspf" %>
 </c:if>
 
-<aui:script use="aui-base,aui-toolbar">
+<aui:script use="aui-base,aui-toolbar,event-tap">
 	var showURLFile = A.one('.show-url-file');
 	var showWebDavFile = A.one('.show-webdav-url-file');
 
@@ -699,206 +807,26 @@ DLActionsDisplayContext dlActionsDisplayContext = new DLActionsDisplayContext(re
 	}
 
 	<c:if test="<%= showActions %>">
-		var buttonRow = A.one('#<portlet:namespace />fileEntryToolbar');
+		var moreOptionsButton = A.one('.more-options');
 
-		var fileEntryButtonGroup = [];
+		if (moreOptionsButton) {
+			moreOptionsButton.on(
+				'tap',
+				function(event) {
+					var container = event.currentTarget.ancestor();
+					var btnHolder = container.one('.collapse');
 
-		<c:if test="<%= dlActionsDisplayContext.isDownloadButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-					icon: 'icon-download',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "download") %>',
-					on: {
-						click: function(event) {
-							location.href = '<%= DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, StringPool.BLANK) %>';
+					if (btnHolder) {
+						if (btnHolder.hasClass('open')) {
+							btnHolder.removeClass('open');
+						}
+						else {
+							btnHolder.addClass('open');
 						}
 					}
 				}
 			);
-		</c:if>
-
-		<c:if test="<%= dlActionsDisplayContext.isOpenInMsOfficeButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "open-in-ms-office") %>',
-					on: {
-						click: function(event) {
-							<portlet:namespace />openDocument('<%= DLUtil.getWebDavURL(themeDisplay, fileEntry.getFolder(), fileEntry, PropsValues.DL_FILE_ENTRY_OPEN_IN_MS_OFFICE_MANUAL_CHECK_IN_REQUIRED) %>');
-						}
-					}
-				}
-			);
-		</c:if>
-
-		<c:if test="<%= dlActionsDisplayContext.isEditButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-
-					<portlet:renderURL var="editURL">
-						<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
-						<portlet:param name="redirect" value="<%= currentURL %>" />
-						<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
-					</portlet:renderURL>
-
-					icon: 'icon-pencil',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "edit") %>',
-					on: {
-						click: function(event) {
-							location.href = '<%= editURL.toString() %>';
-						}
-					}
-				}
-			);
-		</c:if>
-
-		<c:if test="<%= dlActionsDisplayContext.isMoveButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-
-					<portlet:renderURL var="moveURL">
-						<portlet:param name="struts_action" value="/document_library/move_file_entry" />
-						<portlet:param name="redirect" value="<%= redirect %>" />
-						<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
-					</portlet:renderURL>
-
-					icon: 'icon-move',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "move") %>',
-					on: {
-						click: function(event) {
-							location.href = '<%= moveURL.toString() %>';
-						}
-					}
-				}
-			);
-		</c:if>
-
-		<c:if test="<%= dlActionsDisplayContext.isCheckoutDocumentButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-
-					icon: 'icon-lock',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "checkout[document]") %>',
-					on: {
-						click: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
-							submitForm(document.<portlet:namespace />fm);
-						}
-					}
-				}
-			);
-		</c:if>
-
-		<c:if test="<%= dlActionsDisplayContext.isCancelCheckoutDocumentButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-
-					icon: 'icon-undo',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel-checkout[document]") %>',
-					on: {
-						click: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CANCEL_CHECKOUT %>';
-							submitForm(document.<portlet:namespace />fm);
-						}
-					}
-				}
-			);
-		</c:if>
-
-		<c:if test="<%= dlActionsDisplayContext.isCheckinButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-
-					icon: 'icon-unlock',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "checkin") %>',
-					on: {
-						click: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKIN %>';
-							submitForm(document.<portlet:namespace />fm);
-						}
-					}
-				}
-			);
-		</c:if>
-
-		<c:if test="<%= dlActionsDisplayContext.isPermissionsButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-					<liferay-security:permissionsURL
-						modelResource="<%= DLFileEntryConstants.getClassName() %>"
-						modelResourceDescription="<%= fileEntry.getTitle() %>"
-						resourcePrimKey="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
-						var="permissionsURL"
-						windowState="<%= LiferayWindowState.POP_UP.toString() %>"
-					/>
-
-					icon: 'icon-permissions',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>',
-					on: {
-						click: function(event) {
-							Liferay.Util.openWindow(
-								{
-									title: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>',
-									uri: '<%= permissionsURL.toString() %>'
-								}
-							);
-						}
-					}
-				}
-			);
-		</c:if>
-
-		<c:if test="<%= dlActionsDisplayContext.isMoveToTheRecycleBinButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-					<portlet:renderURL var="viewFolderURL">
-						<portlet:param name="struts_action" value="/document_library/view" />
-						<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
-					</portlet:renderURL>
-
-					icon: 'icon-trash',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "move-to-the-recycle-bin") %>',
-					on: {
-						click: function(event) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.MOVE_TO_TRASH %>';
-							document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
-							submitForm(document.<portlet:namespace />fm);
-						}
-					}
-				}
-			);
-		</c:if>
-
-		<c:if test="<%= dlActionsDisplayContext.isDeleteButtonVisible() %>">
-			fileEntryButtonGroup.push(
-				{
-					<portlet:renderURL var="viewFolderURL">
-						<portlet:param name="struts_action" value="/document_library/view" />
-						<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
-					</portlet:renderURL>
-
-					icon: 'icon-delete',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "delete") %>',
-					on: {
-						click: function(event) {
-							if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") %>')) {
-								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
-								document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
-								submitForm(document.<portlet:namespace />fm);
-							}
-						}
-					}
-				}
-			);
-		</c:if>
-
-		var fileEntryToolbar = new A.Toolbar(
-			{
-				boundingBox: buttonRow,
-				children: [fileEntryButtonGroup]
-			}
-		).render();
-
-		buttonRow.setData('fileEntryToolbar', fileEntryToolbar);
+		}
 	</c:if>
 
 	<portlet:namespace />initRowsChecked();
