@@ -303,6 +303,17 @@ public interface MBDiscussionLocalService extends BaseLocalService,
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
 	public com.liferay.portlet.messageboards.model.MBDiscussion addDiscussion(
+		long userId, long groupId, long classNameId, long classPK,
+		long threadId, com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link #addDiscussion(long, long,
+	long, long, long, ServiceContext)}
+	*/
+	@Deprecated
+	public com.liferay.portlet.messageboards.model.MBDiscussion addDiscussion(
 		long userId, long classNameId, long classPK, long threadId,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -333,16 +344,6 @@ public interface MBDiscussionLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portlet.messageboards.model.MBDiscussion getThreadDiscussion(
 		long threadId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public void subscribeDiscussion(long userId, long groupId,
-		java.lang.String className, long classPK)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public void unsubscribeDiscussion(long userId, java.lang.String className,
-		long classPK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 }

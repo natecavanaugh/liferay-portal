@@ -12,23 +12,13 @@
  * details.
  */
 
-package com.liferay.portal.kernel.search;
-
-import java.util.List;
+package com.liferay.portlet.shopping.util;
 
 /**
- * @author Raymond Augé
+ * @author Eduardo Garcia
  */
-public interface IndexerRegistry {
+public class ShoppingConstants {
 
-	public Indexer getIndexer(String className);
-
-	public List<Indexer> getIndexers();
-
-	public Indexer nullSafeGetIndexer(String className);
-
-	public void register(String className, Indexer indexer);
-
-	public void unregister(String className);
+	public static final String SERVICE_NAME = "com.liferay.portlet.shopping";
 
 }

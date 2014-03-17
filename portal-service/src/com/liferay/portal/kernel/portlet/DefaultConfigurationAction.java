@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -288,6 +289,50 @@ public class DefaultConfigurationAction
 			selPortlet, servletContext);
 
 		return selPortletConfig;
+	}
+
+	protected void validateEmail(
+		ActionRequest actionRequest, String emailParam, boolean localized) {
+
+		boolean emailEnabled = GetterUtil.getBoolean(
+			getParameter(actionRequest, emailParam + "Enabled"));
+		String emailSubject = null;
+		String emailBody = null;
+
+		if (localized) {
+			emailSubject = getLocalizedParameter(
+				actionRequest, emailParam + "Subject");
+			emailBody = getLocalizedParameter(
+				actionRequest, emailParam + "Body");
+		}
+		else {
+			emailSubject = getParameter(actionRequest, emailParam + "Subject");
+			emailBody = getParameter(actionRequest, emailParam + "Body");
+		}
+
+		if (emailEnabled) {
+			if (Validator.isNull(emailSubject)) {
+				SessionErrors.add(actionRequest, emailParam + "Subject");
+			}
+			else if (Validator.isNull(emailBody)) {
+				SessionErrors.add(actionRequest, emailParam + "Body");
+			}
+		}
+	}
+
+	protected void validateEmailFrom(ActionRequest actionRequest) {
+		String emailFromName = getParameter(actionRequest, "emailFromName");
+		String emailFromAddress = getParameter(
+			actionRequest, "emailFromAddress");
+
+		if (Validator.isNull(emailFromName)) {
+			SessionErrors.add(actionRequest, "emailFromName");
+		}
+		else if (!Validator.isEmailAddress(emailFromAddress) &&
+				 !Validator.isVariableTerm(emailFromAddress)) {
+
+			SessionErrors.add(actionRequest, "emailFromAddress");
+		}
 	}
 
 }

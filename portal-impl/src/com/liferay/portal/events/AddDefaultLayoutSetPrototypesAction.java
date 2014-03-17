@@ -113,8 +113,7 @@ public class AddDefaultLayoutSetPrototypesAction
 
 		// Home layout
 
-		Layout layout = addLayout(
-			layoutSet, "layout-name-home", "/home", "2_columns_i");
+		Layout layout = addLayout(layoutSet, "home", "/home", "2_columns_i");
 
 		addPortletId(layout, PortletKeys.ACTIVITIES, "column-1");
 
@@ -154,8 +153,7 @@ public class AddDefaultLayoutSetPrototypesAction
 		// Documents layout
 
 		layout = addLayout(
-			layoutSet, "layout-name-documents-and-media", "/documents",
-			"1_column");
+			layoutSet, "documents-and-media", "/documents", "1_column");
 
 		portletId = addPortletId(
 			layout, PortletKeys.DOCUMENT_LIBRARY, "column-1");
@@ -185,8 +183,7 @@ public class AddDefaultLayoutSetPrototypesAction
 
 		// News layout
 
-		layout = addLayout(
-			layoutSet, "layout-name-news", "/news", "2_columns_iii");
+		layout = addLayout(layoutSet, "news", "/news", "2_columns_iii");
 
 		portletId = addPortletId(layout, PortletKeys.RSS, "column-1");
 
@@ -243,8 +240,7 @@ public class AddDefaultLayoutSetPrototypesAction
 
 		// Home layout
 
-		Layout layout = addLayout(
-			layoutSet, "layout-name-home", "/home", "2_columns_iii");
+		Layout layout = addLayout(layoutSet, "home", "/home", "2_columns_iii");
 
 		addPortletId(layout, PortletKeys.MESSAGE_BOARDS, "column-1");
 
@@ -280,8 +276,7 @@ public class AddDefaultLayoutSetPrototypesAction
 
 		// Wiki layout
 
-		layout = addLayout(
-			layoutSet, "layout-name-wiki", "/wiki", "2_columns_iii");
+		layout = addLayout(layoutSet, "wiki", "/wiki", "2_columns_iii");
 
 		addPortletId(layout, PortletKeys.WIKI, "column-1");
 		addPortletId(

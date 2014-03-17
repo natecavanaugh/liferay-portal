@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.messageboards.model;
+package com.liferay.portlet.messageboards.util;
 
 /**
  * @author Sergio González

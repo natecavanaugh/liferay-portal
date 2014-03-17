@@ -17,7 +17,8 @@ package com.liferay.portal.upgrade.v7_0_0;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.portlet.messageboards.model.MBConstants;
+import com.liferay.portlet.messageboards.util.MBConstants;
+import com.liferay.portlet.shopping.util.ShoppingConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class UpgradePortletSettings extends UpgradeProcess {
 
 	public UpgradePortletSettings() {
 		_serviceNames.put(PortletKeys.MESSAGE_BOARDS, MBConstants.SERVICE_NAME);
+		_serviceNames.put(PortletKeys.SHOPPING, ShoppingConstants.SERVICE_NAME);
 	}
 
 	@Override

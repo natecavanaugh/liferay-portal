@@ -25,17 +25,17 @@
 </tr>
 <tr>
 	<td>TITLE_1</td>
-	<td>xpath=(//h1[@class='portlet-title']/span[2])[1]</td>
+	<td>xpath=(//h1[@class='portlet-title']/span)[1]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>TITLE_2</td>
-	<td>xpath=(//h1[@class='portlet-title']/span[2])[2]</td>
+	<td>xpath=(//h1[@class='portlet-title']/span)[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>TITLE_3</td>
-	<td>xpath=(//h1[@class='portlet-title']/span[2])[3]</td>
+	<td>xpath=(//h1[@class='portlet-title']/span)[3]</td>
 	<td></td>
 </tr>
 <tr>
@@ -84,8 +84,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>INFO_MESSSAGE</td>
+	<td>INFO_MESSAGE</td>
 	<td>//div[contains(@class,'alert') and contains(@class,'alert-info')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>INFO_MESSAGE_LINK</td>
+	<td>//div[contains(@class,'alert') and contains(@class,'alert-info')]/a</td>
 	<td></td>
 </tr>
 <tr>
