@@ -15,6 +15,8 @@
 package com.liferay.portlet.portletconfiguration;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -117,6 +119,9 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 		super.serveResource(resourceRequest, resourceResponse);
 	}
 
+	private static Log _log = LogFactoryUtil.getLog(
+		PortletConfigurationPortlet.class);
+
 	private ThreadLocal<PortletRequest> _portletRequestThreadLocal =
 		new AutoResetThreadLocal<PortletRequest>("portletRequest");
 
@@ -154,8 +159,8 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 					super.getResourceBundle(locale),
 					portletConfig.getResourceBundle(locale));
 			}
-			catch (SystemException e) {
-				e.printStackTrace();
+			catch (SystemException se) {
+				_log.error(se, se);
 			}
 
 			return super.getResourceBundle(locale);
