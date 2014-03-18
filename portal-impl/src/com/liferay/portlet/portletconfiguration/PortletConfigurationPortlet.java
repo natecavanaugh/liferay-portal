@@ -138,14 +138,15 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 
 		@Override
 		public ResourceBundle getResourceBundle(Locale locale) {
-			PortletRequest portletRequest = _portletRequestThreadLocal.get();
-
-			String portletResource = ParamUtil.getString(
-				portletRequest, "portletResource");
-
-			long companyId = PortalUtil.getCompanyId(portletRequest);
-
 			try {
+				PortletRequest portletRequest =
+					_portletRequestThreadLocal.get();
+
+				String portletResource = ParamUtil.getString(
+					portletRequest, "portletResource");
+	
+				long companyId = PortalUtil.getCompanyId(portletRequest);
+
 				Portlet portlet = PortletLocalServiceUtil.getPortletById(
 					companyId, portletResource);
 
@@ -159,8 +160,8 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 					super.getResourceBundle(locale),
 					portletConfig.getResourceBundle(locale));
 			}
-			catch (SystemException se) {
-				_log.error(se, se);
+			catch (Exception e) {
+				_log.error(e, e);
 			}
 
 			return super.getResourceBundle(locale);
