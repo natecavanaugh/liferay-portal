@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet;
+package com.liferay.portlet.portletconfiguration;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
@@ -22,6 +22,9 @@ import com.liferay.portal.language.CompositeResourceBundle;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletConfigFactoryUtil;
+import com.liferay.portlet.PortletConfigImpl;
+import com.liferay.portlet.StrutsPortlet;
 
 import java.io.IOException;
 
@@ -45,7 +48,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Carlos Sierra Andrés
  */
-public class ConfigurationPortlet extends StrutsPortlet {
+public class PortletConfigurationPortlet extends StrutsPortlet {
 
 	@Override
 	public void init(PortletConfig portletConfig) throws PortletException {
