@@ -64,46 +64,6 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 		}
 	}
 
-	private class ConfigurationPortletPortletConfig extends PortletConfigImpl {
-		ConfigurationPortletPortletConfig(
-			PortletConfigImpl wrappedPortletConfig) {
-
-			super(
-				wrappedPortletConfig.getPortlet(),
-				wrappedPortletConfig.getPortletContext());
-		}
-
-		@Override
-		public ResourceBundle getResourceBundle(Locale locale) {
-			PortletRequest portletRequest = _portletRequestThreadLocal.get();
-
-			String portletResource = ParamUtil.getString(
-				portletRequest, "portletResource");
-
-			long companyId = PortalUtil.getCompanyId(portletRequest);
-
-			try {
-				Portlet portlet = PortletLocalServiceUtil.getPortletById(
-					companyId, portletResource);
-
-				HttpServletRequest httpServletRequest =
-					PortalUtil.getHttpServletRequest(portletRequest);
-
-				PortletConfig portletConfig = PortletConfigFactoryUtil.create(
-					portlet, httpServletRequest.getServletContext());
-
-				return new CompositeResourceBundle(
-					super.getResourceBundle(locale),
-					portletConfig.getResourceBundle(locale));
-			}
-			catch (SystemException e) {
-				e.printStackTrace();
-			}
-
-			return super.getResourceBundle(locale);
-		}
-	}
-
 	@Override
 	public void processAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
@@ -158,5 +118,45 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 
 	private ThreadLocal<PortletRequest> _portletRequestThreadLocal =
 		new AutoResetThreadLocal<PortletRequest>("portletRequest");
+
+	private class ConfigurationPortletPortletConfig extends PortletConfigImpl {
+		ConfigurationPortletPortletConfig(
+			PortletConfigImpl wrappedPortletConfig) {
+
+			super(
+				wrappedPortletConfig.getPortlet(),
+				wrappedPortletConfig.getPortletContext());
+		}
+
+		@Override
+		public ResourceBundle getResourceBundle(Locale locale) {
+			PortletRequest portletRequest = _portletRequestThreadLocal.get();
+
+			String portletResource = ParamUtil.getString(
+				portletRequest, "portletResource");
+
+			long companyId = PortalUtil.getCompanyId(portletRequest);
+
+			try {
+				Portlet portlet = PortletLocalServiceUtil.getPortletById(
+					companyId, portletResource);
+
+				HttpServletRequest httpServletRequest =
+					PortalUtil.getHttpServletRequest(portletRequest);
+
+				PortletConfig portletConfig = PortletConfigFactoryUtil.create(
+					portlet, httpServletRequest.getServletContext());
+
+				return new CompositeResourceBundle(
+					super.getResourceBundle(locale),
+					portletConfig.getResourceBundle(locale));
+			}
+			catch (SystemException e) {
+				e.printStackTrace();
+			}
+
+			return super.getResourceBundle(locale);
+		}
+	}
 
 }
