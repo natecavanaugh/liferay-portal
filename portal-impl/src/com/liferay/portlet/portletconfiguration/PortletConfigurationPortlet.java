@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.portletconfiguration;
 
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
@@ -142,11 +141,11 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 				PortletRequest portletRequest =
 					_portletRequestThreadLocal.get();
 
+				long companyId = PortalUtil.getCompanyId(portletRequest);
+	
 				String portletResource = ParamUtil.getString(
 					portletRequest, "portletResource");
 	
-				long companyId = PortalUtil.getCompanyId(portletRequest);
-
 				Portlet portlet = PortletLocalServiceUtil.getPortletById(
 					companyId, portletResource);
 
