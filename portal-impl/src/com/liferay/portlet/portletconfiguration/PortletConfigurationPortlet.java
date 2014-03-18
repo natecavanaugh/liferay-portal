@@ -64,7 +64,7 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 		}
 	}
 
-	class ConfigurationPortletPortletConfig extends PortletConfigImpl {
+	private class ConfigurationPortletPortletConfig extends PortletConfigImpl {
 		ConfigurationPortletPortletConfig(
 			PortletConfigImpl wrappedPortletConfig) {
 
