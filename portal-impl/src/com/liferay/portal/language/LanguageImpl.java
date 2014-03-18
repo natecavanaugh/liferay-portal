@@ -404,7 +404,7 @@ public class LanguageImpl implements Language {
 		PageContext pageContext, String key, String defaultValue) {
 
 		try {
-			ResourceBundle resourceBundle = _getResourceBundleFromPageContext(
+			ResourceBundle resourceBundle = _getResourceBundle(
 				pageContext);
 
 			return _get(resourceBundle, key, defaultValue);
@@ -890,9 +890,7 @@ public class LanguageImpl implements Language {
 		return _localesMap.get(languageCode);
 	}
 
-	private ResourceBundle _getResourceBundleFromPageContext(
-		PageContext pageContext) {
-
+	private ResourceBundle _getResourceBundle(PageContext pageContext) {
 		if (pageContext == null) {
 			return null;
 		}
