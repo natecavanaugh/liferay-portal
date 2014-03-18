@@ -53,11 +53,12 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 	@Override
 	public void init(PortletConfig portletConfig) throws PortletException {
 		if (portletConfig instanceof PortletConfigImpl) {
-			ConfigurationPortletPortletConfig confPortletConfig =
-				new ConfigurationPortletPortletConfig(
-					(PortletConfigImpl)portletConfig);
+			PortletConfigurationPortletPortletConfig
+				portletConfigurationPortletPortletConfig =
+					new PortletConfigurationPortletPortletConfig(
+						(PortletConfigImpl)portletConfig);
 
-			super.init(confPortletConfig);
+			super.init(portletConfigurationPortletPortletConfig);
 		}
 		else {
 			super.init(portletConfig);
@@ -119,13 +120,15 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 	private ThreadLocal<PortletRequest> _portletRequestThreadLocal =
 		new AutoResetThreadLocal<PortletRequest>("portletRequest");
 
-	private class ConfigurationPortletPortletConfig extends PortletConfigImpl {
-		ConfigurationPortletPortletConfig(
-			PortletConfigImpl wrappedPortletConfig) {
+	private class PortletConfigurationPortletPortletConfig
+		extends PortletConfigImpl {
+
+		private PortletConfigurationPortletPortletConfig(
+			PortletConfigImpl portletConfigImpl) {
 
 			super(
-				wrappedPortletConfig.getPortlet(),
-				wrappedPortletConfig.getPortletContext());
+				portletConfigImpl.getPortlet(),
+				portletConfigImpl.getPortletContext());
 		}
 
 		@Override
