@@ -122,7 +122,7 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 		PortletConfigurationPortlet.class);
 
 	private ThreadLocal<PortletRequest> _portletRequestThreadLocal =
-		new AutoResetThreadLocal<PortletRequest>("portletRequest");
+		new AutoResetThreadLocal<PortletRequest>("_portletRequestThreadLocal");
 
 	private class PortletConfigurationPortletPortletConfig
 		extends PortletConfigImpl {
