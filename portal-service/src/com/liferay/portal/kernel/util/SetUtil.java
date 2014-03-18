@@ -237,6 +237,7 @@ public class SetUtil {
 			public T nextElement() {
 				return iterator.next();
 			}
+
 		};
 	}
 
