@@ -23,9 +23,9 @@ import java.util.ResourceBundle;
 /**
  * @author Carlos Sierra Andrés
  */
-public class CompositeResourceBundle extends ResourceBundle {
+public class AggregateResourceBundle extends ResourceBundle {
 
-	public CompositeResourceBundle(ResourceBundle... resourceBundles) {
+	public AggregateResourceBundle(ResourceBundle... resourceBundles) {
 		_resourceBundles = resourceBundles;
 	}
 
@@ -60,7 +60,7 @@ public class CompositeResourceBundle extends ResourceBundle {
 		}
 
 		throw new MissingResourceException(
-			"Unable to find resource", CompositeResourceBundle.class.getName(),
+			"Unable to find resource", AggregateResourceBundle.class.getName(),
 			key);
 	}
 

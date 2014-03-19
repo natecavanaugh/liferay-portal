@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  * @author Carlos Sierra Andrés
  */
-public class CompositeResourceBundleTest {
+public class AggregateResourceBundleTest {
 
 	@Test
 	public void testGetKeyFromFirstBundle() {
@@ -34,14 +34,14 @@ public class CompositeResourceBundleTest {
 		ResourceBundle resourceBundleB = _createResourceBundle(
 			"keyB", "valueB");
 
-		CompositeResourceBundle compositeResourceBundle =
-			new CompositeResourceBundle(resourceBundleA, resourceBundleB);
+		AggregateResourceBundle aggregateResourceBundle =
+			new AggregateResourceBundle(resourceBundleA, resourceBundleB);
 
 		Assert.assertEquals(
-			"valueA", compositeResourceBundle.getString("keyA"));
+			"valueA", aggregateResourceBundle.getString("keyA"));
 		Assert.assertEquals(
 			SetUtil.fromArray(new String[] {"keyA", "keyB"}),
-			compositeResourceBundle.keySet());
+			aggregateResourceBundle.keySet());
 	}
 
 	@Test
@@ -51,11 +51,11 @@ public class CompositeResourceBundleTest {
 		ResourceBundle resourceBundleB = _createResourceBundle(
 			"keyB", "valueB");
 
-		CompositeResourceBundle compositeResourceBundle =
-			new CompositeResourceBundle(resourceBundleA, resourceBundleB);
+		AggregateResourceBundle aggregateResourceBundle =
+			new AggregateResourceBundle(resourceBundleA, resourceBundleB);
 
 		Assert.assertEquals(
-			"valueB", compositeResourceBundle.getString("keyB"));
+			"valueB", aggregateResourceBundle.getString("keyB"));
 	}
 
 	@Test
@@ -65,12 +65,12 @@ public class CompositeResourceBundleTest {
 		ResourceBundle resourceBundleB = _createResourceBundle(
 			"keyB", "valueB");
 
-		CompositeResourceBundle compositeResourceBundle =
-			new CompositeResourceBundle(resourceBundleA, resourceBundleB);
+		AggregateResourceBundle aggregateResourceBundle =
+			new AggregateResourceBundle(resourceBundleA, resourceBundleB);
 
 		Assert.assertEquals(
 			SetUtil.fromArray(new String[] {"keyA", "keyB"}),
-			compositeResourceBundle.keySet());
+			aggregateResourceBundle.keySet());
 	}
 
 	private ResourceBundle _createResourceBundle(

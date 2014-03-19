@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.language.CompositeResourceBundle;
+import com.liferay.portal.language.AggregateResourceBundle;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
@@ -155,7 +155,7 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 				PortletConfig portletConfig = PortletConfigFactoryUtil.create(
 					portlet, httpServletRequest.getServletContext());
 
-				return new CompositeResourceBundle(
+				return new AggregateResourceBundle(
 					super.getResourceBundle(locale),
 					portletConfig.getResourceBundle(locale));
 			}
