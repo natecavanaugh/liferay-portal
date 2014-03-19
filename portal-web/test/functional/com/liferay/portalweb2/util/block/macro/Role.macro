@@ -19,6 +19,21 @@
 		</if>
 
 		<execute action="CPRolesAddrole#type" locator-key1="NAME_FIELD" value1="${roleName}" />
+
+		<if>
+			<isset var="roleDescription" />
+			<then>
+				<execute action="CPRolesAddrole#type" locator-key1="DESCRIPTION_FIELD" value1="${roleDescription}" />
+			</then>
+		</if>
+
+		<if>
+			<isset var="roleTitle" />
+			<then>
+				<execute action="CPRolesAddrole#type" locator-key1="TITLE_FIELD" value1="${roleTitle}" />
+			</then>
+		</if>
+
 		<execute action="CPRolesAddrole#assertClick" locator-key1="SAVE_BUTTON" value1="Save" />
 
 		<execute action="CPRoles#assertTextEquals" locator-key1="SUCCESS_MESSAGE" value1="Your request completed successfully." />
@@ -326,6 +341,14 @@
 		<execute action="CPRolesEdit#assertTextEquals" locator-key1="NAME_FIELD" value1="${roleName}" />
 	</command>
 
+	<command name="viewNoXSSCP">
+		<var name="key_roleName" value="${roleName}" />
+
+		<execute action="CPRoles#assertAlertNotPresent" />
+		<execute action="CPRoles#assertTextEquals" locator-key1="ROLE_TABLE_TITLE" value1="${roleName}" />
+		<execute action="CPRoles#assertTextEquals" locator-key1="ROLE_TABLE_DESCRIPTION" value1="${roleDescription}" />
+	</command>
+
 	<command name="viewPermissionCP">
 		<if>
 			<equals arg1="${permissionNavigationValue}" arg2="General Permissions" />
@@ -353,5 +376,23 @@
 		<execute action="CPRolesDefinepermissions#assertTextEquals" locator-key1="PERMISSION_TABLE_PERMISSIONS" value1="${permissionNavigationValue}" />
 		<execute action="CPRolesDefinepermissions#assertTextEquals" locator-key1="PERMISSION_TABLE_PERMISSIONS" value1="${permissionDefinitionValue}" />
 		<execute action="CPRolesDefinepermissions#assertTextEquals" locator-key1="PERMISSION_TABLE_REMOVE" value1="Remove" />
+	</command>
+
+	<command name="viewPermissionPG">
+		<var name="key_roleName" value="${roleName?replace(' ', '-')}" />
+		<var name="key_roleName" value="${key_roleName?lowercase()}" />
+
+		<if>
+			<equals arg1="${permissionFlagged}" arg2="true" />
+			<then>
+				<execute action="Permissions#assertChecked" locator-key1="${permissionDefinitionKey}" />
+			</then>
+			<elseif>
+				<equals arg1="${permissionFlagged}" arg2="false" />
+				<then>
+					<execute action="Permissions#assertNotChecked" locator-key1="${permissionDefinitionKey}" />
+				</then>
+			</elseif>
+		</if>
 	</command>
 </definition>

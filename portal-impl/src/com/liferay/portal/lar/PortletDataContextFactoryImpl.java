@@ -60,8 +60,6 @@ public class PortletDataContextFactoryImpl
 		clonePortletDataContext.setManifestSummary(
 			(ManifestSummary)manifestSummary.clone());
 
-		clonePortletDataContext.setNewLayouts(
-			portletDataContext.getNewLayouts());
 		clonePortletDataContext.setParameterMap(
 			portletDataContext.getParameterMap());
 		clonePortletDataContext.setScopeGroupId(
@@ -148,10 +146,12 @@ public class PortletDataContextFactoryImpl
 		PortletDataContext portletDataContext = new PortletDataContextImpl();
 
 		try {
-			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+			Group companyGroup = GroupLocalServiceUtil.fetchCompanyGroup(
 				companyId);
 
-			portletDataContext.setCompanyGroupId(companyGroup.getGroupId());
+			if (companyGroup != null) {
+				portletDataContext.setCompanyGroupId(companyGroup.getGroupId());
+			}
 		}
 		catch (Exception e) {
 			if (!CompanyThreadLocal.isDeleteInProcess()) {
@@ -165,10 +165,12 @@ public class PortletDataContextFactoryImpl
 
 		try {
 			Group userPersonalSiteGroup =
-				GroupLocalServiceUtil.getUserPersonalSiteGroup(companyId);
+				GroupLocalServiceUtil.fetchUserPersonalSiteGroup(companyId);
 
-			portletDataContext.setUserPersonalSiteGroupId(
-				userPersonalSiteGroup.getGroupId());
+			if (userPersonalSiteGroup != null) {
+				portletDataContext.setUserPersonalSiteGroupId(
+					userPersonalSiteGroup.getGroupId());
+			}
 		}
 		catch (Exception e) {
 			if (!CompanyThreadLocal.isDeleteInProcess()) {

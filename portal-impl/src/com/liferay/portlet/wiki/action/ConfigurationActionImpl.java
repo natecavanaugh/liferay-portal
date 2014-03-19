@@ -16,7 +16,6 @@ package com.liferay.portlet.wiki.action;
 
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import javax.portlet.ActionRequest;
@@ -35,77 +34,18 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		throws Exception {
 
 		validateDisplaySettings(actionRequest);
+		validateEmail(actionRequest, "emailPageAdded", false);
+		validateEmail(actionRequest, "emailPageUpdated", false);
 		validateEmailFrom(actionRequest);
-		validateEmailPageAdded(actionRequest);
-		validateEmailPageUpdated(actionRequest);
 
 		super.processAction(portletConfig, actionRequest, actionResponse);
 	}
 
-	protected void validateDisplaySettings(ActionRequest actionRequest)
-		throws Exception {
-
+	protected void validateDisplaySettings(ActionRequest actionRequest) {
 		String visibleNodes = getParameter(actionRequest, "visibleNodes");
 
 		if (Validator.isNull(visibleNodes)) {
 			SessionErrors.add(actionRequest, "visibleNodesCount");
-		}
-	}
-
-	protected void validateEmailFrom(ActionRequest actionRequest)
-		throws Exception {
-
-		String emailFromName = getParameter(actionRequest, "emailFromName");
-		String emailFromAddress = getParameter(
-			actionRequest, "emailFromAddress");
-
-		if (Validator.isNull(emailFromName)) {
-			SessionErrors.add(actionRequest, "emailFromName");
-		}
-		else if (!Validator.isEmailAddress(emailFromAddress) &&
-				 !Validator.isVariableTerm(emailFromAddress)) {
-
-			SessionErrors.add(actionRequest, "emailFromAddress");
-		}
-	}
-
-	protected void validateEmailPageAdded(ActionRequest actionRequest)
-		throws Exception {
-
-		boolean emailPageAddedEnabled = GetterUtil.getBoolean(
-			getParameter(actionRequest, "emailPageAddedEnabled"));
-		String emailPageAddedSubject = getParameter(
-			actionRequest, "emailPageAddedSubject");
-		String emailPageAddedBody = getParameter(
-			actionRequest, "emailPageAddedBody");
-
-		if (emailPageAddedEnabled) {
-			if (Validator.isNull(emailPageAddedSubject)) {
-				SessionErrors.add(actionRequest, "emailPageAddedSubject");
-			}
-			else if (Validator.isNull(emailPageAddedBody)) {
-				SessionErrors.add(actionRequest, "emailPageAddedBody");
-			}
-		}
-	}
-
-	protected void validateEmailPageUpdated(ActionRequest actionRequest)
-		throws Exception {
-
-		boolean emailPageUpdatedEnabled = GetterUtil.getBoolean(
-			getParameter(actionRequest, "emailPageUpdatedEnabled"));
-		String emailPageUpdatedSubject = getParameter(
-			actionRequest, "emailPageUpdatedSubject");
-		String emailPageUpdatedBody = getParameter(
-			actionRequest, "emailPageUpdatedBody");
-
-		if (emailPageUpdatedEnabled) {
-			if (Validator.isNull(emailPageUpdatedSubject)) {
-				SessionErrors.add(actionRequest, "emailPageUpdatedSubject");
-			}
-			else if (Validator.isNull(emailPageUpdatedBody)) {
-				SessionErrors.add(actionRequest, "emailPageUpdatedBody");
-			}
 		}
 	}
 

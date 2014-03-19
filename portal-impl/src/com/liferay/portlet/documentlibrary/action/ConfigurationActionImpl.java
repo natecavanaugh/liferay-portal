@@ -19,21 +19,61 @@ import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.util.DLUtil;
+import com.liferay.util.ContentUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
 /**
  * @author Jorge Ferrer
  * @author Sergio González
  */
 public class ConfigurationActionImpl extends DefaultConfigurationAction {
+
+	@Override
+	public void postProcessPortletPreferences(
+			long companyId, PortletRequest portletRequest,
+			PortletPreferences portletPreferences)
+		throws Exception {
+
+		removeDefaultValue(
+			portletRequest, portletPreferences, "emailFromAddress",
+			DLUtil.getEmailFromAddress(portletPreferences, companyId));
+		removeDefaultValue(
+			portletRequest, portletPreferences, "emailFromName",
+			DLUtil.getEmailFromName(portletPreferences, companyId));
+
+		String languageId = LocaleUtil.toLanguageId(
+			LocaleUtil.getSiteDefault());
+
+		removeDefaultValue(
+			portletRequest, portletPreferences,
+			"emailFileEntryAddedBody_" + languageId,
+			ContentUtil.get(PropsValues.DL_EMAIL_FILE_ENTRY_ADDED_BODY));
+		removeDefaultValue(
+			portletRequest, portletPreferences,
+			"emailFileEntryAddedSubject_" + languageId,
+			ContentUtil.get(PropsValues.DL_EMAIL_FILE_ENTRY_ADDED_SUBJECT));
+		removeDefaultValue(
+			portletRequest, portletPreferences,
+			"emailFileEntryUpdatedBody_" + languageId,
+			ContentUtil.get(PropsValues.DL_EMAIL_FILE_ENTRY_UPDATED_BODY));
+		removeDefaultValue(
+			portletRequest, portletPreferences,
+			"emailFileEntryUpdatedSubject_" + languageId,
+			ContentUtil.get(PropsValues.DL_EMAIL_FILE_ENTRY_UPDATED_SUBJECT));
+	}
 
 	@Override
 	public void processAction(
@@ -45,8 +85,8 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 
 		if (Validator.isNotNull(cmd)) {
 			validateDisplayStyleViews(actionRequest);
-			validateEmailFileEntryAdded(actionRequest);
-			validateEmailFileEntryUpdated(actionRequest);
+			validateEmail(actionRequest, "emailFileEntryAdded", true);
+			validateEmail(actionRequest, "emailFileEntryUpdated", true);
 			validateEmailFrom(actionRequest);
 			validateRootFolder(actionRequest);
 		}
@@ -54,72 +94,12 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		super.processAction(portletConfig, actionRequest, actionResponse);
 	}
 
-	protected void validateDisplayStyleViews(ActionRequest actionRequest)
-		throws Exception {
-
+	protected void validateDisplayStyleViews(ActionRequest actionRequest) {
 		String displayViews = GetterUtil.getString(
 			getParameter(actionRequest, "displayViews"));
 
 		if (Validator.isNull(displayViews)) {
 			SessionErrors.add(actionRequest, "displayViewsInvalid");
-		}
-	}
-
-	protected void validateEmailFileEntryAdded(ActionRequest actionRequest)
-		throws Exception {
-
-		boolean emailFileEntryAddedEnabled = GetterUtil.getBoolean(
-			getParameter(actionRequest, "emailFileEntryAddedEnabled"));
-		String emailFileEntryAddedSubject = getLocalizedParameter(
-			actionRequest, "emailFileEntryAddedSubject");
-		String emailFileEntryAddedBody = getLocalizedParameter(
-			actionRequest, "emailFileEntryAddedBody");
-
-		if (emailFileEntryAddedEnabled) {
-			if (Validator.isNull(emailFileEntryAddedSubject)) {
-				SessionErrors.add(actionRequest, "emailFileEntryAddedSubject");
-			}
-			else if (Validator.isNull(emailFileEntryAddedBody)) {
-				SessionErrors.add(actionRequest, "emailFileEntryAddedBody");
-			}
-		}
-	}
-
-	protected void validateEmailFileEntryUpdated(ActionRequest actionRequest)
-		throws Exception {
-
-		boolean emailFileEntryUpdatedEnabled = GetterUtil.getBoolean(
-			getParameter(actionRequest, "emailFileEntryUpdatedEnabled"));
-		String emailFileEntryUpdatedSubject = getLocalizedParameter(
-			actionRequest, "emailFileEntryUpdatedSubject");
-		String emailFileEntryUpdatedBody = getLocalizedParameter(
-			actionRequest, "emailFileEntryUpdatedBody");
-
-		if (emailFileEntryUpdatedEnabled) {
-			if (Validator.isNull(emailFileEntryUpdatedSubject)) {
-				SessionErrors.add(
-					actionRequest, "emailFileEntryUpdatedSubject");
-			}
-			else if (Validator.isNull(emailFileEntryUpdatedBody)) {
-				SessionErrors.add(actionRequest, "emailFileEntryUpdatedBody");
-			}
-		}
-	}
-
-	protected void validateEmailFrom(ActionRequest actionRequest)
-		throws Exception {
-
-		String emailFromName = getParameter(actionRequest, "emailFromName");
-		String emailFromAddress = getParameter(
-			actionRequest, "emailFromAddress");
-
-		if (Validator.isNull(emailFromName)) {
-			SessionErrors.add(actionRequest, "emailFromName");
-		}
-		else if (!Validator.isEmailAddress(emailFromAddress) &&
-				 !Validator.isVariableTerm(emailFromAddress)) {
-
-			SessionErrors.add(actionRequest, "emailFromAddress");
 		}
 	}
 

@@ -61,12 +61,12 @@ public class EmailNotificationSettingsTag extends IncludeTag {
 		_fieldPrefix = fieldPrefix;
 	}
 
-	public void setHelpMessage(String helpMessage) {
-		_helpMessage = helpMessage;
+	public void setFieldPrefixSeparator(String fieldPrefixSeparator) {
+		_fieldPrefixSeparator = fieldPrefixSeparator;
 	}
 
-	public void setLanguageId(String languageId) {
-		_languageId = languageId;
+	public void setHelpMessage(String helpMessage) {
+		_helpMessage = helpMessage;
 	}
 
 	public void setShowEmailEnabled(boolean showEmailEnabled) {
@@ -86,8 +86,8 @@ public class EmailNotificationSettingsTag extends IncludeTag {
 		_emailParam = null;
 		_emailSubject = null;
 		_fieldPrefix = null;
+		_fieldPrefixSeparator = null;
 		_helpMessage = null;
-		_languageId = null;
 		_showEmailEnabled = true;
 		_showSubject = true;
 	}
@@ -112,6 +112,10 @@ public class EmailNotificationSettingsTag extends IncludeTag {
 			_fieldPrefix = "preferences";
 		}
 
+		if (Validator.isNull(_fieldPrefixSeparator)) {
+			_fieldPrefixSeparator = "--";
+		}
+
 		request.setAttribute(
 			"liferay-ui:email-notification-settings:bodyLabel", _bodyLabel);
 		request.setAttribute(
@@ -130,9 +134,10 @@ public class EmailNotificationSettingsTag extends IncludeTag {
 		request.setAttribute(
 			"liferay-ui:email-notification-settings:fieldPrefix", _fieldPrefix);
 		request.setAttribute(
-			"liferay-ui:email-notification-settings:helpMessage", _helpMessage);
+			"liferay-ui:email-notification-settings:fieldPrefixSeparator",
+			_fieldPrefixSeparator);
 		request.setAttribute(
-			"liferay-ui:email-notification-settings:languageId", _languageId);
+			"liferay-ui:email-notification-settings:helpMessage", _helpMessage);
 		request.setAttribute(
 			"liferay-ui:email-notification-settings:showEmailEnabled",
 			_showEmailEnabled);
@@ -152,8 +157,8 @@ public class EmailNotificationSettingsTag extends IncludeTag {
 	private String _emailParam;
 	private String _emailSubject;
 	private String _fieldPrefix;
+	private String _fieldPrefixSeparator;
 	private String _helpMessage;
-	private String _languageId;
 	private boolean _showEmailEnabled = true;
 	private boolean _showSubject = true;
 

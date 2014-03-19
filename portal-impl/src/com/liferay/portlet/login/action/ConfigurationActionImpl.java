@@ -15,18 +15,56 @@
 package com.liferay.portlet.login.action;
 
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
-import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.util.PropsValues;
+import com.liferay.portlet.login.util.LoginUtil;
+import com.liferay.util.ContentUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Julio Camarero
  */
 public class ConfigurationActionImpl extends DefaultConfigurationAction {
+
+	@Override
+	public void postProcessPortletPreferences(
+			long companyId, PortletRequest portletRequest,
+			PortletPreferences portletPreferences)
+		throws Exception {
+
+		removeDefaultValue(
+			portletRequest, portletPreferences, "emailFromAddress",
+			LoginUtil.getEmailFromName(portletPreferences, companyId));
+		removeDefaultValue(
+			portletRequest, portletPreferences, "emailFromName",
+			LoginUtil.getEmailFromName(portletPreferences, companyId));
+
+		String languageId = LocaleUtil.toLanguageId(
+			LocaleUtil.getSiteDefault());
+
+		removeDefaultValue(
+			portletRequest, portletPreferences,
+			"emailPasswordResetBody_" + languageId,
+			ContentUtil.get(PropsValues.ADMIN_EMAIL_PASSWORD_RESET_BODY));
+		removeDefaultValue(
+			portletRequest, portletPreferences,
+			"emailPasswordResetSubject_" + languageId,
+			ContentUtil.get(PropsValues.ADMIN_EMAIL_PASSWORD_RESET_SUBJECT));
+		removeDefaultValue(
+			portletRequest, portletPreferences,
+			"emailPasswordSentBody_" + languageId,
+			ContentUtil.get(PropsValues.ADMIN_EMAIL_PASSWORD_SENT_BODY));
+		removeDefaultValue(
+			portletRequest, portletPreferences,
+			"emailPasswordSentSubject_" + languageId,
+			ContentUtil.get(PropsValues.ADMIN_EMAIL_PASSWORD_SENT_SUBJECT));
+	}
 
 	@Override
 	public void processAction(
@@ -37,23 +75,6 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		validateEmailFrom(actionRequest);
 
 		super.processAction(portletConfig, actionRequest, actionResponse);
-	}
-
-	protected void validateEmailFrom(ActionRequest actionRequest)
-		throws Exception {
-
-		String emailFromName = getParameter(actionRequest, "emailFromName");
-		String emailFromAddress = getParameter(
-			actionRequest, "emailFromAddress");
-
-		if (Validator.isNull(emailFromName)) {
-			SessionErrors.add(actionRequest, "emailFromName");
-		}
-		else if (!Validator.isEmailAddress(emailFromAddress) &&
-				 !Validator.isVariableTerm(emailFromAddress)) {
-
-			SessionErrors.add(actionRequest, "emailFromAddress");
-		}
 	}
 
 }

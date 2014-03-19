@@ -19,6 +19,8 @@
 <%@ include file="/html/portlet/layouts_admin/init_attributes.jspf" %>
 
 <%
+String cmd = ParamUtil.getString(request, Constants.CMD);
+
 boolean incomplete = ParamUtil.getBoolean(request, "incomplete", true);
 
 String treeLoading = PortalUtil.generateRandomKey(request, "treeLoading");
@@ -64,6 +66,10 @@ if (!selectableTree) {
 	JSONArray checkedNodesJSONArray = JSONFactoryUtil.createJSONArray();
 
 	String checkedLayoutIds = SessionTreeJSClicks.getOpenNodes(request, treeId + "SelectedNode");
+
+	if (cmd.equals(Constants.UPDATE)) {
+		checkedLayoutIds = ParamUtil.getString(request, "selectedLayoutIds");
+	}
 
 	if (Validator.isNotNull(checkedLayoutIds)) {
 		for (long checkedLayoutId : StringUtil.split(checkedLayoutIds, 0L)) {
@@ -695,15 +701,6 @@ if (!selectableTree) {
 					},
 				</c:if>
 
-				'drop:hit': function(event) {
-					var dropNode = event.drop.get('node').get('parentNode');
-
-					var dropTreeNode = dropNode.getData('tree-node');
-
-					if (!dropTreeNode.get('draggable')) {
-						event.halt();
-					}
-				},
 				dropAppend: function(event) {
 					var tree = event.tree;
 

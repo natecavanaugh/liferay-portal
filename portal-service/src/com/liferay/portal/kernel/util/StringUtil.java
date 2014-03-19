@@ -386,6 +386,29 @@ public class StringUtil {
 		}
 	}
 
+	public static boolean equalsIgnoreBreakLine(String s1, String s2) {
+		if (s1 == s2) {
+			return true;
+		}
+
+		if ((s1 == null) || (s2 == null)) {
+			return false;
+		}
+
+		s1 = replace(
+			s1, new String[] {StringPool.RETURN_NEW_LINE, StringPool.NEW_LINE},
+			new String[] {StringPool.BLANK, StringPool.BLANK});
+		s2 = replace(
+			s2, new String[] {StringPool.RETURN_NEW_LINE, StringPool.NEW_LINE},
+			new String[] {StringPool.BLANK, StringPool.BLANK});
+
+		if (s1.length() != s2.length()) {
+			return false;
+		}
+
+		return s1.equals(s2);
+	}
+
 	/**
 	 * Returns <code>true</code> if the strings are equal, ignoring case.
 	 *
@@ -2690,8 +2713,8 @@ public class StringUtil {
 	public static StringBundler replaceToStringBundler(
 		String s, String begin, String end, Map<String, String> values) {
 
-		if ((s == null) || (begin == null) || (end == null) ||
-			(values == null) || (values.size() == 0)) {
+		if (Validator.isBlank(s) || Validator.isBlank(begin) ||
+			Validator.isBlank(end) || MapUtil.isEmpty(values)) {
 
 			return new StringBundler(s);
 		}
@@ -2732,8 +2755,8 @@ public class StringUtil {
 	public static StringBundler replaceWithStringBundler(
 		String s, String begin, String end, Map<String, StringBundler> values) {
 
-		if ((s == null) || (begin == null) || (end == null) ||
-			(values == null) || (values.size() == 0)) {
+		if (Validator.isBlank(s) || Validator.isBlank(begin) ||
+			Validator.isBlank(end) || MapUtil.isEmpty(values)) {
 
 			return new StringBundler(s);
 		}
@@ -3635,7 +3658,9 @@ public class StringUtil {
 	 *         <code>null</code>
 	 */
 	public static String stripBetween(String s, String begin, String end) {
-		if ((s == null) || (begin == null) || (end == null)) {
+		if (Validator.isBlank(s) || Validator.isBlank(begin) ||
+			Validator.isBlank(end)) {
+
 			return s;
 		}
 

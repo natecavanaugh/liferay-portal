@@ -23,6 +23,7 @@ import com.liferay.registry.ServiceReference;
 import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
+import com.liferay.registry.collections.StringServiceRegistrationMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -134,8 +135,8 @@ public class StrutsActionRegistryUtil {
 
 	private Map<String, Action> _actions =
 		new ConcurrentHashMap<String, Action>();
-	private Map<String, ServiceRegistration<?>> _serviceRegistrations =
-		new ConcurrentHashMap<String, ServiceRegistration<?>>();
+	private StringServiceRegistrationMap<?> _serviceRegistrations =
+		new StringServiceRegistrationMap<Object>();
 	private ServiceTracker<?, Action> _serviceTracker;
 
 	private class ActionServiceTrackerCustomizer

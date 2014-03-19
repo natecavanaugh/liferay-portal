@@ -15,11 +15,6 @@
 			<bean class="com.liferay.portal.events.StartupHelper" />
 		</property>
 	</bean>
-	<bean id="com.liferay.portal.kernel.atom.AtomCollectionAdapterRegistryUtil" class="com.liferay.portal.kernel.atom.AtomCollectionAdapterRegistryUtil">
-		<property name="atomCollectionAdapterRegistry">
-			<bean class="com.liferay.portal.atom.AtomCollectionAdapterRegistryImpl" />
-		</property>
-	</bean>
 	<bean id="com.liferay.portal.kernel.audit.AuditMessageFactoryUtil" class="com.liferay.portal.kernel.audit.AuditMessageFactoryUtil">
 		<property name="auditMessageFactory">
 			<bean class="com.liferay.portal.audit.AuditMessageFactoryImpl" />
@@ -191,10 +186,6 @@
 	<bean id="com.liferay.portal.kernel.lar.ExportImportHelperUtil" class="com.liferay.portal.kernel.lar.ExportImportHelperUtil">
 		<property name="exportImportHelper" ref="com.liferay.portal.kernel.lar.ExportImportHelper" />
 	</bean>
-	<bean id="com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistry" class="com.liferay.portal.lar.StagedModelDataHandlerRegistryImpl" />
-	<bean id="com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil" class="com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil">
-		<property name="stagedModelDataHandlerRegistry" ref="com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistry" />
-	</bean>
 	<bean id="com.liferay.portal.kernel.lock.LockListenerRegistryUtil" class="com.liferay.portal.kernel.lock.LockListenerRegistryUtil">
 		<property name="lockListenerRegistry">
 			<bean class="com.liferay.portal.util.LockListenerRegistryImpl" />
@@ -220,11 +211,6 @@
 	<bean id="com.liferay.portal.kernel.microsofttranslator.MicrosoftTranslatorFactoryUtil" class="com.liferay.portal.kernel.microsofttranslator.MicrosoftTranslatorFactoryUtil">
 		<property name="microsoftTranslatorFactory">
 			<bean class="com.liferay.portal.microsofttranslator.MicrosoftTranslatorFactoryImpl" />
-		</property>
-	</bean>
-	<bean id="com.liferay.portal.kernel.notifications.UserNotificationManagerUtil" class="com.liferay.portal.kernel.notifications.UserNotificationManagerUtil">
-		<property name="userNotificationManager">
-			<bean class="com.liferay.portal.notifications.UserNotificationManagerImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.oauth.OAuthFactoryUtil" class="com.liferay.portal.kernel.oauth.OAuthFactoryUtil">
@@ -293,11 +279,6 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="com.liferay.portal.kernel.search.IndexerRegistryUtil" class="com.liferay.portal.kernel.search.IndexerRegistryUtil">
-		<property name="indexerRegistry">
-			<bean class="com.liferay.portal.search.IndexerRegistryImpl" />
-		</property>
-	</bean>
 	<bean id="com.liferay.portal.kernel.servlet.BrowserSnifferUtil" class="com.liferay.portal.kernel.servlet.BrowserSnifferUtil">
 		<property name="browserSniffer">
 			<bean class="com.liferay.portal.servlet.BrowserSnifferImpl" />
@@ -320,11 +301,6 @@
 	</bean>
 	<bean id="com.liferay.portal.kernel.spring.util.SpringFactoryUtil" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil">
 		<property name="springFactory" ref="com.liferay.portal.kernel.spring.util.SpringFactory" />
-	</bean>
-	<bean id="com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil" class="com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil">
-		<property name="templateHandlerRegistry">
-			<bean class="com.liferay.portal.template.TemplateHandlerRegistryImpl" />
-		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.template.TemplateManagerUtil" class="com.liferay.portal.kernel.template.TemplateManagerUtil">
 		<property name="templateManagers">
@@ -378,11 +354,6 @@
 	<bean id="com.liferay.portal.kernel.transaction.TransactionCommitCallbackRegistryUtil" class="com.liferay.portal.kernel.transaction.TransactionCommitCallbackRegistryUtil">
 		<property name="transactionCallbackRegistry">
 			<bean class="com.liferay.portal.spring.transaction.TransactionCommitCallbackRegistryImpl" />
-		</property>
-	</bean>
-	<bean id="com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil" class="com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil">
-		<property name="trashHandlerRegistry">
-			<bean class="com.liferay.portal.trash.TrashHandlerRegistryImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.upgrade.util.UpgradeTableFactoryUtil" class="com.liferay.portal.kernel.upgrade.util.UpgradeTableFactoryUtil">
@@ -532,11 +503,6 @@
 	<bean id="com.liferay.portal.kernel.words.Words" class="com.liferay.portal.words.WordsImpl" />
 	<bean id="com.liferay.portal.kernel.words.WordsUtil" class="com.liferay.portal.kernel.words.WordsUtil">
 		<property name="words" ref="com.liferay.portal.kernel.words.Words" />
-	</bean>
-	<bean id="com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil" class="com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil">
-		<property name="workflowHandlerRegistry">
-			<bean class="com.liferay.portal.workflow.WorkflowHandlerRegistryImpl" />
-		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.workflow.permission.WorkflowPermissionUtil" class="com.liferay.portal.kernel.workflow.permission.WorkflowPermissionUtil">
 		<property name="workflowPermission">
@@ -837,11 +803,6 @@
 	<bean id="com.liferay.portlet.RestrictPortletContainerWrapper" class="com.liferay.portlet.RestrictPortletContainerWrapper" factory-method="createRestrictPortletContainerWrapper">
 		<constructor-arg name="portletContainer" ref="com.liferay.portlet.SecurityPortletContainerWrapper" />
 	</bean>
-	<bean id="com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil" class="com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil">
-		<property name="assetRendererFactoryRegistry">
-			<bean class="com.liferay.portal.asset.AssetRendererFactoryRegistryImpl" />
-		</property>
-	</bean>
 	<bean id="com.liferay.portlet.assetpublisher.util.AssetPublisher" class="com.liferay.portlet.assetpublisher.util.AssetPublisherImpl" />
 	<bean id="com.liferay.portlet.assetpublisher.util.AssetPublisherHelper" class="com.liferay.portlet.assetpublisher.util.AssetPublisherHelperImpl" />
 	<bean id="com.liferay.portlet.assetpublisher.util.AssetPublisherHelperUtil" class="com.liferay.portlet.assetpublisher.util.AssetPublisherHelperUtil">
@@ -927,11 +888,6 @@
 	<bean id="com.liferay.portlet.dynamicdatamapping.storage.query.ConditionFactoryUtil" class="com.liferay.portlet.dynamicdatamapping.storage.query.ConditionFactoryUtil">
 		<property name="conditionFactory">
 			<bean class="com.liferay.portlet.dynamicdatamapping.storage.query.ConditionFactoryImpl" />
-		</property>
-	</bean>
-		<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMDisplayRegistryUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMDisplayRegistryUtil">
-		<property name="DDMDisplayRegistry">
-			<bean class="com.liferay.portlet.dynamicdatamapping.util.DDMDisplayRegistryImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil">

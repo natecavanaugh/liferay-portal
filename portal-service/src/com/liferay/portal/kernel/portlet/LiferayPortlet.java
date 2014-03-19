@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -36,13 +35,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.MimeResponse;
-import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
@@ -358,28 +357,25 @@ public class LiferayPortlet extends GenericPortlet {
 	}
 
 	protected String translate(PortletRequest portletRequest, String key) {
-		PortletConfig portletConfig =
-			(PortletConfig)portletRequest.getAttribute(
-				JavaConstants.JAVAX_PORTLET_CONFIG);
-
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		return LanguageUtil.get(portletConfig, themeDisplay.getLocale(), key);
+		ResourceBundle resourceBundle = getResourceBundle(
+			themeDisplay.getLocale());
+
+		return LanguageUtil.get(resourceBundle, key);
 	}
 
 	protected String translate(
 		PortletRequest portletRequest, String key, Object... arguments) {
 
-		PortletConfig portletConfig =
-			(PortletConfig)portletRequest.getAttribute(
-				JavaConstants.JAVAX_PORTLET_CONFIG);
-
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		return LanguageUtil.format(
-			portletConfig, themeDisplay.getLocale(), key, arguments);
+		ResourceBundle resourceBundle = getResourceBundle(
+			themeDisplay.getLocale());
+
+		return LanguageUtil.format(resourceBundle, key, arguments);
 	}
 
 	protected void writeJSON(

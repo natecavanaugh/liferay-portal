@@ -18,9 +18,12 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -67,6 +70,12 @@ public class DefaultConfigurationAction
 
 		String languageId = ParamUtil.getString(portletRequest, "languageId");
 
+		return getLocalizedParameter(portletRequest, name, languageId);
+	}
+
+	public String getLocalizedParameter(
+		PortletRequest portletRequest, String name, String languageId) {
+
 		return getParameter(
 			portletRequest,
 			name.concat(StringPool.UNDERLINE).concat(languageId));
@@ -76,6 +85,12 @@ public class DefaultConfigurationAction
 		name = PREFERENCES_PREFIX.concat(name).concat(StringPool.DOUBLE_DASH);
 
 		return ParamUtil.getString(portletRequest, name);
+	}
+
+	public void postProcessPortletPreferences(
+			long companyId, PortletRequest portletRequest,
+			PortletPreferences portletPreferences)
+		throws Exception {
 	}
 
 	@Override
@@ -135,6 +150,9 @@ public class DefaultConfigurationAction
 					portletPreferences.setValues(name, values);
 				}
 			}
+
+			postProcessPortletPreferences(
+				themeDisplay.getCompanyId(), actionRequest, portletPreferences);
 		}
 		else {
 			String serviceName = ParamUtil.getString(
@@ -288,6 +306,68 @@ public class DefaultConfigurationAction
 			selPortlet, servletContext);
 
 		return selPortletConfig;
+	}
+
+	protected void removeDefaultValue(
+			PortletRequest portletRequest,
+			PortletPreferences portletPreferences, String key,
+			String defaultValue)
+		throws Exception {
+
+		String value = getParameter(portletRequest, key);
+
+		if (defaultValue.equals(value) ||
+			StringUtil.equalsIgnoreBreakLine(defaultValue, value)) {
+
+			portletPreferences.reset(key);
+		}
+	}
+
+	protected void validateEmail(
+		ActionRequest actionRequest, String emailParam, boolean localized) {
+
+		boolean emailEnabled = GetterUtil.getBoolean(
+			getParameter(actionRequest, emailParam + "Enabled"));
+		String emailSubject = null;
+		String emailBody = null;
+
+		if (localized) {
+			String languageId = LocaleUtil.toLanguageId(
+				LocaleUtil.getSiteDefault());
+
+			emailSubject = getLocalizedParameter(
+				actionRequest, emailParam + "Subject", languageId);
+			emailBody = getLocalizedParameter(
+				actionRequest, emailParam + "Body", languageId);
+		}
+		else {
+			emailSubject = getParameter(actionRequest, emailParam + "Subject");
+			emailBody = getParameter(actionRequest, emailParam + "Body");
+		}
+
+		if (emailEnabled) {
+			if (Validator.isNull(emailSubject)) {
+				SessionErrors.add(actionRequest, emailParam + "Subject");
+			}
+			else if (Validator.isNull(emailBody)) {
+				SessionErrors.add(actionRequest, emailParam + "Body");
+			}
+		}
+	}
+
+	protected void validateEmailFrom(ActionRequest actionRequest) {
+		String emailFromName = getParameter(actionRequest, "emailFromName");
+		String emailFromAddress = getParameter(
+			actionRequest, "emailFromAddress");
+
+		if (Validator.isNull(emailFromName)) {
+			SessionErrors.add(actionRequest, "emailFromName");
+		}
+		else if (!Validator.isEmailAddress(emailFromAddress) &&
+				 !Validator.isVariableTerm(emailFromAddress)) {
+
+			SessionErrors.add(actionRequest, "emailFromAddress");
+		}
 	}
 
 }

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OSDetector;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
@@ -63,16 +64,16 @@ public class LiferaySeleniumHelper {
 		String command = null;
 
 		if (!OSDetector.isWindows()) {
-			String projectDir = liferaySelenium.getProjectDir();
+			String projectDirName = liferaySelenium.getProjectDirName();
 
-			projectDir = StringUtil.replace(projectDir, "\\", "//");
+			projectDirName = StringUtil.replace(projectDirName, "\\", "//");
 
-			runtime.exec("/bin/bash cd " + projectDir);
+			runtime.exec("/bin/bash cd " + projectDirName);
 
 			command = "/bin/bash ant -f " + fileName + " " + target;
 		}
 		else {
-			runtime.exec("cmd /c cd " + liferaySelenium.getProjectDir());
+			runtime.exec("cmd /c cd " + liferaySelenium.getProjectDirName());
 
 			command = "cmd /c ant -f " + fileName + " " + target;
 		}
@@ -656,6 +657,27 @@ public class LiferaySeleniumHelper {
 			return true;
 		}
 
+		if (Validator.equals(
+				TestPropsValues.LIFERAY_PORTAL_BUNDLE, "6.2.10.1") ||
+			Validator.equals(
+				TestPropsValues.LIFERAY_PORTAL_BUNDLE, "6.2.10.2") ||
+			Validator.equals(
+				TestPropsValues.LIFERAY_PORTAL_BUNDLE, "6.2.10.3")) {
+
+			if (line.contains(
+					"com.liferay.portal.kernel.search.SearchException: " +
+						"java.nio.channels.ClosedByInterruptException")) {
+
+				return true;
+			}
+
+			if (line.contains(
+					"org.apache.lucene.store.AlreadyClosedException")) {
+
+				return true;
+			}
+		}
+
 		if (Validator.isNotNull(TestPropsValues.IGNORE_ERROR) &&
 			line.contains(TestPropsValues.IGNORE_ERROR)) {
 
@@ -720,7 +742,7 @@ public class LiferaySeleniumHelper {
 		_screenshotCount++;
 
 		File file = new File(
-			liferaySelenium.getProjectDir() + "portal-web/test-results/" +
+			liferaySelenium.getProjectDirName() + "portal-web/test-results/" +
 				"functional/screenshots/" + _screenshotCount + ".jpg");
 
 		file.mkdirs();
@@ -753,8 +775,8 @@ public class LiferaySeleniumHelper {
 		Screen screen = new Screen();
 
 		Match match = screen.exists(
-			liferaySelenium.getProjectDir() +
-			liferaySelenium.getSikuliImagesDir() + image);
+			liferaySelenium.getProjectDirName() +
+			liferaySelenium.getSikuliImagesDirName() + image);
 
 		liferaySelenium.pause("1000");
 
@@ -763,8 +785,8 @@ public class LiferaySeleniumHelper {
 		}
 
 		screen.click(
-			liferaySelenium.getProjectDir() +
-			liferaySelenium.getSikuliImagesDir() + image);
+			liferaySelenium.getProjectDirName() +
+			liferaySelenium.getSikuliImagesDirName() + image);
 	}
 
 	public static void sikuliType(
@@ -774,8 +796,8 @@ public class LiferaySeleniumHelper {
 		Screen screen = new Screen();
 
 		Match match = screen.exists(
-			liferaySelenium.getProjectDir() +
-			liferaySelenium.getSikuliImagesDir() + image);
+			liferaySelenium.getProjectDirName() +
+			liferaySelenium.getSikuliImagesDirName() + image);
 
 		liferaySelenium.pause("1000");
 
@@ -784,8 +806,8 @@ public class LiferaySeleniumHelper {
 		}
 
 		screen.click(
-			liferaySelenium.getProjectDir() +
-			liferaySelenium.getSikuliImagesDir() + image);
+			liferaySelenium.getProjectDirName() +
+			liferaySelenium.getSikuliImagesDirName() + image);
 
 		screen.type(value);
 	}
@@ -796,8 +818,8 @@ public class LiferaySeleniumHelper {
 
 		sikuliType(
 			liferaySelenium, image,
-			liferaySelenium.getProjectDir() +
-				liferaySelenium.getDependenciesDir() + value);
+			liferaySelenium.getProjectDirName() +
+				liferaySelenium.getDependenciesDirName() + value);
 	}
 
 	public static void sikuliUploadTempFile(
@@ -812,7 +834,7 @@ public class LiferaySeleniumHelper {
 
 		sikuliType(
 			liferaySelenium, image,
-			liferaySelenium.getOutputDir() + slash + value);
+			liferaySelenium.getOutputDirName() + slash + value);
 	}
 
 	public static void typeAceEditor(
@@ -847,15 +869,19 @@ public class LiferaySeleniumHelper {
 	public static void typeFrame(
 		LiferaySelenium liferaySelenium, String locator, String value) {
 
-		liferaySelenium.selectFrame(locator);
+		StringBundler sb = new StringBundler();
 
-		value = value.replace("\\", "\\\\");
-		value = HtmlUtil.escapeJS(value);
+		String titleAttibute = liferaySelenium.getAttribute(locator + "@title");
 
-		liferaySelenium.runScript(
-			"document.body.innerHTML = \"" + value + "\"");
+		int x = titleAttibute.indexOf(",");
 
-		liferaySelenium.selectFrame("relative=parent");
+		sb.append(titleAttibute.substring(x + 1));
+
+		sb.append(".setHTML(\"");
+		sb.append(HtmlUtil.escapeJS(value.replace("\\", "\\\\")));
+		sb.append("\")");
+
+		liferaySelenium.runScript(sb.toString());
 	}
 
 	public static void waitForElementNotPresent(

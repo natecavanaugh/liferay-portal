@@ -109,6 +109,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>STATUS_MESSAGE</td>
+	<td>//tr[1]/td</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ERROR_MESSAGE_EXPIRED_SESSION</td>
+	<td>//div[contains(@class,'popup-alert-warning')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>ERROR_MESSAGE_ALERT_INFO</td>
 	<td>//tr[contains(.,'This site is inactive. Please contact the administrator.')]/td[@align='center']</td>
 	<td></td>
@@ -163,7 +173,7 @@
 </tr>
 <tr>
 	<td>PAGE_TEMPLATE_1</td>
-	<td>xpath=(//li[contains(@class,'lfr-nav-updateable')])[1]/a</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-item')])[1]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -193,7 +203,7 @@
 </tr>
 <tr>
 	<td>PAGE_TEMPLATE_2</td>
-	<td>xpath=(//li[contains(@class,'lfr-nav-updateable')])[2]/a</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-item')])[2]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -208,7 +218,7 @@
 </tr>
 <tr>
 	<td>PAGE_TEMPLATE_3</td>
-	<td>xpath=(//li[contains(@class,'lfr-nav-updateable')])[3]/a</td>
+	<td>xpath=(//li[contains(@class,'lfr-nav-item')])[3]/a</td>
 	<td></td>
 </tr>
 <tr>
@@ -255,12 +265,12 @@
 <!--PAGE_COLUMN-->
 <tr>
 	<td>PAGE_COLUMN_1</td>
-	<td>//div[@id='content']//div[@id='column-1']</td>
+	<td>//div[@id='main-content']//div[@id='column-1']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>PAGE_COLUMN_2</td>
-	<td>//div[@id='content']//div[@id='column-2']</td>
+	<td>//div[@id='main-content']//div[@id='column-2']</td>
 	<td></td>
 </tr>
 <tr>
@@ -381,6 +391,11 @@
 <tr>
 	<td>SITE_ADMINISTRATION_USERS_SITE_MEMBERSHIPS</td>
 	<td>//ul[@class='category-portlets']/li[contains(.,'Site Memberships')]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SITE_ADMINISTRATION_USERS_SITE_TEAMS</td>
+	<td>//ul[@class='category-portlets']/li[contains(.,'Site Teams')]/a</td>
 	<td></td>
 </tr>
 </tbody>
