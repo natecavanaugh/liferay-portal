@@ -282,11 +282,12 @@ List<String> primaryKeys = new ArrayList<String>();
 				if (entries.size() == 1) {
 					columnClassName += " only";
 				}
-				else if (j == 0) {
-					columnClassName += " first";
-				}
 				else if ((j + 1) == entries.size()) {
 					columnClassName += " last";
+				}
+
+				if (normalizedHeaderName.equals("title")) {
+					columnClassName += " list-drag-handle";
 				}
 			%>
 

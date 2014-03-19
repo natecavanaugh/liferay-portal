@@ -14,13 +14,17 @@ AUI.add(
 
 		var SELECTOR_DRAGGABLE_NODES = '[data-draggable]';
 
+		var SELECTOR_LIST_DRAG_HANDLES = '.list-drag-handle';
+
 		var STR_BLANK = '';
 
 		var STR_DATA = 'data';
 
 		var STR_DELETE = 'delete';
 
-		var STR_DISPLAY_STYLE = 'displayStyleCSSClass';
+		var STR_DISPLAY_STYLE = 'displayStyle';
+
+		var STR_DISPLAY_STYLE_CLASS = 'displayStyleCSSClass';
 
 		var STR_DOT = '.';
 
@@ -44,6 +48,10 @@ AUI.add(
 			{
 				ATTRS: {
 					allRowIds: {
+						validator: Lang.isString
+					},
+
+					displayStyle: {
 						validator: Lang.isString
 					},
 
@@ -123,7 +131,8 @@ AUI.add(
 
 						var eventHandles = [
 							Liferay.on(instance._eventEditEntry, instance._editEntry, instance),
-							Liferay.after(instance.ns('dataRetrieveSuccess'), instance._initDropTargets, instance)
+							Liferay.after(instance.ns('dataRetrieveSuccess'), instance._initDropTargets, instance),
+							Liferay.on('liferay-app-view-folders:dataRequest', instance._onDataRequest, instance)
 						];
 
 						instance._eventHandles = eventHandles;
@@ -139,6 +148,25 @@ AUI.add(
 						A.Array.invoke(instance._eventHandles, 'detach');
 
 						instance._ddHandler.destroy();
+					},
+
+					_configureDragHandle: function(displayStyle) {
+						var instance = this;
+
+						var displayStyleCSSClass = STR_DOT + instance.get(STR_DISPLAY_STYLE_CLASS);
+
+						var addHandleString = displayStyleCSSClass;
+						var removeHandleString = SELECTOR_LIST_DRAG_HANDLES;
+
+						if (displayStyle === 'list') {
+							addHandleString = SELECTOR_LIST_DRAG_HANDLES;
+							removeHandleString = displayStyleCSSClass;
+						}
+
+						var dd = instance._ddHandler.dd;
+
+						dd.addHandle(addHandleString);
+						dd.removeHandle(removeHandleString);
 					},
 
 					_editEntry: function(event) {
@@ -240,6 +268,8 @@ AUI.add(
 						instance._initDropTargets();
 
 						instance._ddHandler = ddHandler;
+
+						instance._configureDragHandle(instance.get(STR_DISPLAY_STYLE));
 					},
 
 					_initDropTargets: function() {
@@ -278,6 +308,18 @@ AUI.add(
 						instance._processEntryAction(STR_MOVE_TO_TRASH, instance.get('editEntryUrl'));
 					},
 
+					_onDataRequest: function(event) {
+						var instance = this;
+
+						var requestParams = event.requestParams;
+
+						var displayStyle = requestParams[instance.ns(STR_DISPLAY_STYLE)];
+
+						instance._configureDragHandle(displayStyle);
+
+						instance.set(STR_DISPLAY_STYLE, displayStyle);
+					},
+
 					_onDragDropHit: function(event) {
 						var instance = this;
 
@@ -294,7 +336,7 @@ AUI.add(
 						var folderId = dropTarget.attr(DATA_FOLDER_ID);
 
 						if (folderId) {
-							var folderContainer = dropTarget.ancestor(STR_DOT + instance.get(STR_DISPLAY_STYLE));
+							var folderContainer = dropTarget.ancestor(STR_DOT + instance.get(STR_DISPLAY_STYLE_CLASS));
 
 							var selectedItems = instance._ddHandler.dd.get(STR_DATA).selectedItems;
 
@@ -310,7 +352,7 @@ AUI.add(
 						var dragNode = event.drag.get(STR_NODE);
 						var dropTarget = event.drop.get(STR_NODE);
 
-						dropTarget = dropTarget.ancestor(STR_DOT + instance.get(STR_DISPLAY_STYLE)) || dropTarget;
+						dropTarget = dropTarget.ancestor(STR_DOT + instance.get(STR_DISPLAY_STYLE_CLASS)) || dropTarget;
 
 						if (!dragNode.compareTo(dropTarget)) {
 							dropTarget.addClass(CSS_ACTIVE_AREA);
@@ -334,7 +376,7 @@ AUI.add(
 
 						var dropTarget = event.drop.get(STR_NODE);
 
-						dropTarget = dropTarget.ancestor(STR_DOT + instance.get(STR_DISPLAY_STYLE)) || dropTarget;
+						dropTarget = dropTarget.ancestor(STR_DOT + instance.get(STR_DISPLAY_STYLE_CLASS)) || dropTarget;
 
 						dropTarget.removeClass(CSS_ACTIVE_AREA);
 
@@ -370,7 +412,7 @@ AUI.add(
 							}
 						);
 
-						var selectedItems = instance._entriesContainer.all(STR_DOT + instance.get(STR_DISPLAY_STYLE) + '.selected');
+						var selectedItems = instance._entriesContainer.all(STR_DOT + instance.get(STR_DISPLAY_STYLE_CLASS) + '.selected');
 
 						var selectedItemsCount = selectedItems.size();
 
