@@ -53,7 +53,7 @@ public class EnumerationUtil {
 				throw new NoSuchElementException();
 			}
 
-			private int _index = 0;
+			private int _index;
 
 		};
 	}
