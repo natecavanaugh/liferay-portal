@@ -64,7 +64,7 @@ public class CompositeResourceBundle extends ResourceBundle {
 			key);
 	}
 
-	private ResourceBundle[] _resourceBundles;
 	private Enumeration<String>[] _enumerations;
+	private ResourceBundle[] _resourceBundles;
 
 }

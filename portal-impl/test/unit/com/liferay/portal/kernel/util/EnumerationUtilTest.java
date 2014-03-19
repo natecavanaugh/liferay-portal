@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.util;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -22,8 +23,6 @@ import java.util.NoSuchElementException;
 import org.junit.Test;
 
 import org.testng.Assert;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * @author Carlos Sierra Andrés

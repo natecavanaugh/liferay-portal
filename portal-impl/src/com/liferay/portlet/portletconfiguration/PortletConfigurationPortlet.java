@@ -142,10 +142,10 @@ public class PortletConfigurationPortlet extends StrutsPortlet {
 					_portletRequestThreadLocal.get();
 
 				long companyId = PortalUtil.getCompanyId(portletRequest);
-	
+
 				String portletResource = ParamUtil.getString(
 					portletRequest, "portletResource");
-	
+
 				Portlet portlet = PortletLocalServiceUtil.getPortletById(
 					companyId, portletResource);
 
