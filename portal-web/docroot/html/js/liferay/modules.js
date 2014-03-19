@@ -58,6 +58,17 @@
 					},
 					'liferay-app-view-move': {
 						path: 'app_view_move.js',
+						plugins: {
+							'liferay-app-view-move-touch': {
+								condition: {
+									name: 'liferay-app-view-move-touch',
+									test: function(A) {
+										return A.UA.touch;
+									},
+									trigger: 'liferay-app-view-move'
+								}
+							}
+						},
 						requires: [
 							'aui-base',
 							'dd-constrain',
@@ -68,6 +79,12 @@
 							'liferay-history-manager',
 							'liferay-portlet-base',
 							'liferay-util-list-fields'
+						]
+					},
+					'liferay-app-view-move-touch': {
+						path: 'app_view_move_touch.js',
+						requires: [
+							'aui-base'
 						]
 					},
 					'liferay-app-view-paginator': {
