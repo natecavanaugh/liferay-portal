@@ -89,6 +89,6 @@ public class CompositeResourceBundle extends ResourceBundle {
 	}
 
 	private ResourceBundle[] _delegateResourceBundles;
-	private Enumeration[] _enumerations;
+	private Enumeration<String>[] _enumerations;
 
 }
