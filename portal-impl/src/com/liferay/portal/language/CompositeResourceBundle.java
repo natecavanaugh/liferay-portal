@@ -25,17 +25,17 @@ import java.util.ResourceBundle;
  */
 public class CompositeResourceBundle extends ResourceBundle {
 
-	public CompositeResourceBundle(ResourceBundle ... delegateResourceBundles) {
-		_delegateResourceBundles = delegateResourceBundles;
+	public CompositeResourceBundle(ResourceBundle... resourceBundles) {
+		_resourceBundles = resourceBundles;
 	}
 
 	@Override
 	public Enumeration<String> getKeys() {
 		if (_enumerations == null) {
-			_enumerations = new Enumeration[_delegateResourceBundles.length];
+			_enumerations = new Enumeration[_resourceBundles.length];
 
-			for (int i = 0; i < _delegateResourceBundles.length; i++) {
-				_enumerations[i] = _delegateResourceBundles[i].getKeys();
+			for (int i = 0; i < _resourceBundles.length; i++) {
+				_enumerations[i] = _resourceBundles[i].getKeys();
 			}
 		}
 
@@ -44,13 +44,13 @@ public class CompositeResourceBundle extends ResourceBundle {
 
 	@Override
 	protected Object handleGetObject(String key) {
-		for (ResourceBundle delegateResourceBundle : _delegateResourceBundles) {
+		for (ResourceBundle resourceBundle : _resourceBundles) {
 			Object object = null;
 
 			try {
-				object = delegateResourceBundle.getObject(key);
+				object = resourceBundle.getObject(key);
 			}
-			catch (MissingResourceException e) {
+			catch (MissingResourceException mre) {
 				continue;
 			}
 
@@ -60,11 +60,11 @@ public class CompositeResourceBundle extends ResourceBundle {
 		}
 
 		throw new MissingResourceException(
-			"Could not find resource", CompositeResourceBundle.class.getName(),
+			"Unable to find resource", CompositeResourceBundle.class.getName(),
 			key);
 	}
 
-	private ResourceBundle[] _delegateResourceBundles;
+	private ResourceBundle[] _resourceBundles;
 	private Enumeration<String>[] _enumerations;
 
 }
