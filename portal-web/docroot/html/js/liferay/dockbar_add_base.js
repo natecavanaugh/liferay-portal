@@ -131,6 +131,9 @@ AUI.add(
 							if (!portletMetaData.instanceable) {
 								instance._disablePortletEntry(portletId);
 							}
+							else if (Liferay.Util.isPhone() || Liferay.Util.isTablet()) {
+							 	instance._instanceablePortletFeedback(portletId);
+							}
 
 							var beforePortletLoaded = null;
 							var placeHolder = A.Node.create(TPL_LOADING);
@@ -259,6 +262,33 @@ AUI.add(
 						var instance = this;
 
 						return instance._searchData;
+					},
+
+					_instanceablePortletFeedback: function (portletId) {
+						var instance = this;
+
+						var addedMessage = A.all('.added-message');
+
+						var portletNameNode = A.one('[data-portlet-id=' + portletId + ']');
+
+						var portletName = portletNameNode.getAttribute('data-title');
+
+						addedMessage.one('#portletName').setHTML(portletName);
+
+						addedMessage.show(
+							'fadeIn',
+							{
+								duration: .6
+							},
+							function() {
+								addedMessage.hide(
+									'fadeOut',
+									{
+										delay: 1.5
+									}
+								);
+							}
+						);
 					},
 
 					_showTab: function(event) {

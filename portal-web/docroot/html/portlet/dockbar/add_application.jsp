@@ -28,6 +28,10 @@ refererURL.setParameter("updateLayout", "true");
 	<aui:input name="<%= WebKeys.REFERER %>" type="hidden" value="<%= refererURL.toString() %>" />
 	<aui:input name="refresh" type="hidden" value="<%= true %>" />
 
+	<span class="added-message">
+		<span class="message alert-success"><img src="<%= themeDisplay.getPathThemeImages() %>/messages/success.png" /><liferay-ui:message key="added" /> <span id="portletName"></span></span>
+	</span>
+
 	<div class="row-fluid" id="<portlet:namespace />applicationList">
 		<c:if test="<%= layout.isTypePortlet() %>">
 			<div class="search-panel btn-toolbar">
