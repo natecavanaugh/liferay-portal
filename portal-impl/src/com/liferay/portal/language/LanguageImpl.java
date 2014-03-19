@@ -870,10 +870,10 @@ public class LanguageImpl implements Language {
 			ResourceBundle resourceBundle, String key, String defaultValue)
 		throws Exception {
 
-		String result = _get(resourceBundle, key);
+		String value = _get(resourceBundle, key);
 
-		if (result != null) {
-			return result;
+		if (value != null) {
+			return value;
 		}
 
 		return defaultValue;
