@@ -21,6 +21,12 @@
 		'<%= namespace + id %>',
 		function() {
 			if (!togglerDelegate) {
+				var sendData = function(data) {
+					Liferay.Store(data);
+
+					data = {};
+				};
+
 				togglerDelegate = new A.TogglerDelegate(
 					{
 						animated: true,
@@ -30,21 +36,25 @@
 						header: '.toggler-header',
 						on: {
 							'toggler:expandedChange': function(event) {
+								var data = {};
+
 								var header = event.target.get('header');
 
 								var persistId = header.getData('persist-id');
 
 								if (persistId && !event.silent) {
-									var data = {};
-
 									data[persistId] = event.newVal ? 'open' : 'closed';
-
-									Liferay.Store(data);
 								}
+
+								A.debounce(
+									sendData,
+									100,
+									data
+								);
 							}
 						},
 						transition: {
-							duration: .3
+							duration: 0.3
 						}
 					}
 				);
