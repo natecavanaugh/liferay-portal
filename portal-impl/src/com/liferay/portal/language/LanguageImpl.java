@@ -833,14 +833,12 @@ public class LanguageImpl implements Language {
 	}
 
 	private String _get(ResourceBundle resourceBundle, String key) {
-		if ((resourceBundle == null) || (key == null)) {
-			return null;
-		}
-
-		Locale locale = resourceBundle.getLocale();
-
 		if (PropsValues.TRANSLATIONS_DISABLED) {
 			return key;
+		}
+
+		if ((resourceBundle == null) || (key == null)) {
+			return null;
 		}
 
 		String value = ResourceBundleUtil.getString(resourceBundle, key);
@@ -849,7 +847,7 @@ public class LanguageImpl implements Language {
 			return LanguageResources.fixValue(value);
 		}
 
-		value = LanguageResources.getMessage(locale, key);
+		value = LanguageResources.getMessage(resourceBundle.getLocale(), key);
 
 		if (value == null) {
 			if ((key.length() > 0) &&
