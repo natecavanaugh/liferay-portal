@@ -21,16 +21,11 @@
 		'<%= namespace + id %>',
 		function() {
 			if (!togglerDelegate) {
-				var data = {};
+				var sendData = function(data) {
+					Liferay.Store(data);
 
-				var sendData = A.debounce(
-					function() {
-						Liferay.Store(data);
-
-						data = {};
-					},
-					100
-				);
+					data = {};
+				};
 
 				togglerDelegate = new A.TogglerDelegate(
 					{
@@ -41,6 +36,8 @@
 						header: '.toggler-header',
 						on: {
 							'toggler:expandedChange': function(event) {
+								var data = {};
+
 								var header = event.target.get('header');
 
 								var persistId = header.getData('persist-id');
@@ -49,7 +46,11 @@
 									data[persistId] = event.newVal ? 'open' : 'closed';
 								}
 
-								sendData();
+								A.debounce(
+									sendData,
+									100,
+									data
+								);
 							}
 						},
 						transition: {
