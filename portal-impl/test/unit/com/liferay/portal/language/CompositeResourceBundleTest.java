@@ -39,7 +39,6 @@ public class CompositeResourceBundleTest {
 
 		Assert.assertEquals(
 			"valueA", compositeResourceBundle.getString("keyA"));
-
 		Assert.assertEquals(
 			SetUtil.fromArray(new String[] {"keyA", "keyB"}),
 			compositeResourceBundle.keySet());
@@ -75,7 +74,7 @@ public class CompositeResourceBundleTest {
 	}
 
 	private ResourceBundle _createResourceBundle(
-		final String ... keysAndValues) {
+		final String... keysAndValues) {
 
 		if ((keysAndValues.length % 2) != 0) {
 			throw new RuntimeException(
@@ -90,11 +89,12 @@ public class CompositeResourceBundleTest {
 
 				for (int i = 0; i < contents.length; i++) {
 					contents[i] = new Object[] {
-						keysAndValues[i/2], keysAndValues[(i/2) + 1]};
+						keysAndValues[i / 2], keysAndValues[(i / 2) + 1]};
 				}
 
 				return contents;
 			}
+
 		};
 	}
 

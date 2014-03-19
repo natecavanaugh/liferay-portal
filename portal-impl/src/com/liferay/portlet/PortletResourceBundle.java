@@ -49,13 +49,13 @@ public class PortletResourceBundle extends ResourceBundle {
 
 	@Override
 	public Enumeration<String> getKeys() {
-		Enumeration<String> keysEnumeration = Collections.enumeration(_keys);
+		Enumeration<String> enumeration = Collections.enumeration(_keys);
 
 		if (parent == null) {
-			return keysEnumeration;
+			return enumeration;
 		}
 
-		return EnumerationUtil.compose(parent.getKeys(), keysEnumeration);
+		return EnumerationUtil.compose(parent.getKeys(), enumeration);
 	}
 
 	@Override
@@ -111,12 +111,13 @@ public class PortletResourceBundle extends ResourceBundle {
 		return null;
 	}
 
-	private static List<String> _keys = Arrays.asList(new String[] {
-		JavaConstants.JAVAX_PORTLET_TITLE,
-		JavaConstants.JAVAX_PORTLET_SHORT_TITLE,
-		JavaConstants.JAVAX_PORTLET_KEYWORDS,
-		JavaConstants.JAVAX_PORTLET_DESCRIPTION
-	});
+	private static List<String> _keys = Arrays.asList(
+		new String[] {
+			JavaConstants.JAVAX_PORTLET_DESCRIPTION,
+			JavaConstants.JAVAX_PORTLET_KEYWORDS,
+			JavaConstants.JAVAX_PORTLET_SHORT_TITLE,
+			JavaConstants.JAVAX_PORTLET_TITLE
+		});
 
 	private PortletInfo _portletInfo;
 

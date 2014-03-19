@@ -14,14 +14,16 @@
 
 package com.liferay.portal.kernel.util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.junit.Test;
 
 import org.testng.Assert;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * @author Carlos Sierra Andrés
@@ -30,58 +32,54 @@ public class EnumerationUtilTest {
 
 	@Test
 	public void testHasMoreElements() {
-		ArrayList<String> list1 = new ArrayList<String>() { {
-			add("1");
-			add("2");
-		}};
-		ArrayList<String> list2 = new ArrayList<String>() { {
-			add("3");
-		}};
+		Enumeration<String> enumeration1 = Collections.emptyEnumeration();
+		Enumeration<String> enumeration2 = Collections.emptyEnumeration();
 
-		Enumeration<String> empty = Collections.emptyEnumeration();
-		Enumeration<String> empty2 = Collections.emptyEnumeration();
+		List<String> list1 = Arrays.asList(new String[] {"1", "2"});
+		List<String> list2 = Arrays.asList(new String[] {"3"});
 
-		Enumeration composedEnumeration = EnumerationUtil.compose(
-			empty, Collections.enumeration(list1), empty, empty2,
-			Collections.enumeration(list2));
+		Enumeration<String> compositeEnumeration = EnumerationUtil.compose(
+			enumeration1, Collections.enumeration(list1), enumeration1,
+			enumeration2, Collections.enumeration(list2));
 
-		Assert.assertTrue(composedEnumeration.hasMoreElements());
-		composedEnumeration.nextElement();
-		Assert.assertTrue(composedEnumeration.hasMoreElements());
-		composedEnumeration.nextElement();
-		Assert.assertTrue(composedEnumeration.hasMoreElements());
-		composedEnumeration.nextElement();
-		Assert.assertFalse(composedEnumeration.hasMoreElements());
+		Assert.assertTrue(compositeEnumeration.hasMoreElements());
+
+		compositeEnumeration.nextElement();
+
+		Assert.assertTrue(compositeEnumeration.hasMoreElements());
+
+		compositeEnumeration.nextElement();
+
+		Assert.assertTrue(compositeEnumeration.hasMoreElements());
+
+		compositeEnumeration.nextElement();
+
+		Assert.assertFalse(compositeEnumeration.hasMoreElements());
 	}
 
 	@Test
 	public void testNextElement() {
-		ArrayList<String> list1 = new ArrayList<String>() { {
-			add("1");
-			add("2");
-		}};
-		ArrayList<String> list2 = new ArrayList<String>() { {
-			add("3");
-		}};
+		Enumeration<String> enumeration1 = Collections.emptyEnumeration();
+		Enumeration<String> enumeration2 = Collections.emptyEnumeration();
 
-		Enumeration<String> empty = Collections.emptyEnumeration();
-		Enumeration<String> empty2 = Collections.emptyEnumeration();
+		List<String> list1 = Arrays.asList(new String[] {"1", "2"});
+		List<String> list2 = Arrays.asList(new String[] {"3"});
 
-		Enumeration composedEnumeration = EnumerationUtil.compose(
-			empty, Collections.enumeration(list1), empty, empty2,
-			Collections.enumeration(list2));
+		Enumeration<String> compositeEnumeration = EnumerationUtil.compose(
+			enumeration1, Collections.enumeration(list1), enumeration1,
+			enumeration2, Collections.enumeration(list2));
 
-		Assert.assertEquals("1", composedEnumeration.nextElement());
-		Assert.assertEquals("2", composedEnumeration.nextElement());
-		Assert.assertEquals("3", composedEnumeration.nextElement());
+		Assert.assertEquals("1", compositeEnumeration.nextElement());
+		Assert.assertEquals("2", compositeEnumeration.nextElement());
+		Assert.assertEquals("3", compositeEnumeration.nextElement());
 	}
 
 	@Test(expected = NoSuchElementException.class)
 	public void testNextElementThrowsException() {
-		Enumeration composedEnumeration = EnumerationUtil.compose(
+		Enumeration<?> compositeEnumeration = EnumerationUtil.compose(
 			Collections.emptyEnumeration());
 
-		composedEnumeration.nextElement();
+		compositeEnumeration.nextElement();
 	}
 
 }

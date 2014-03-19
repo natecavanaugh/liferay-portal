@@ -23,16 +23,16 @@ import java.util.NoSuchElementException;
 public class EnumerationUtil {
 
 	public static <T> Enumeration<T> compose(
-		final Enumeration<T> ... enumerations) {
+		final Enumeration<T>... enumerations) {
 
 		return new Enumeration<T>() {
 
 			@Override
 			public boolean hasMoreElements() {
-				for (int i = _currentPos; i < enumerations.length; i++) {
-					_currentPos = i;
+				for (int i = _index; i < enumerations.length; i++) {
+					_index = i;
 
-					if (enumerations[_currentPos].hasMoreElements()) {
+					if (enumerations[_index].hasMoreElements()) {
 						return true;
 					}
 				}
@@ -42,18 +42,18 @@ public class EnumerationUtil {
 
 			@Override
 			public T nextElement() {
-				for (int i = _currentPos; i < enumerations.length; i++) {
-					_currentPos = i;
+				for (int i = _index; i < enumerations.length; i++) {
+					_index = i;
 
-					if (enumerations[_currentPos].hasMoreElements()) {
-						return enumerations[_currentPos].nextElement();
+					if (enumerations[_index].hasMoreElements()) {
+						return enumerations[_index].nextElement();
 					}
 				}
 
 				throw new NoSuchElementException();
 			}
 
-			private int _currentPos = 0;
+			private int _index = 0;
 
 		};
 	}
