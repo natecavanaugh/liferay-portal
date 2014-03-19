@@ -78,7 +78,7 @@ public class CompositeResourceBundleTest {
 
 		if ((keysAndValues.length % 2) != 0) {
 			throw new RuntimeException(
-				"You must provide values for all the keys");
+				"Keys and values length is not an even number");
 		}
 
 		return new ListResourceBundle() {
