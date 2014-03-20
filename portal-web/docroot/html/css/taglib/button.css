@@ -1,8 +1,16 @@
 @import "compass";
 @import "mixins";
 
-@include respond-to(phone, tablet) {
-	.aui {
+.aui {
+	.button-holder-btn.btn {
+		display: none;
+	}
+
+	.button-holder-collapse .btn {
+		margin-bottom: 3px;
+	}
+
+	@include respond-to(phone, tablet) {
 		.btn-group, .button-holder {
 			@include respond-to(phone) {
 				display: block;
@@ -51,6 +59,53 @@
 
 		.dropup .btn .caret {
 			border-bottom-width: 5px;
+		}
+
+		.button-holder-btn.btn {
+			display: inline-block;
+			margin-bottom: 10px;
+			width: 100%;
+
+			&.open {
+				background-color: #444;
+				background-image: none;
+				border-color: #444;
+
+				@include border-radius(2px 2px 0 0);
+
+				color: #EEE;
+				margin-bottom: 0;
+
+				@include text-shadow(none);
+			}
+		}
+
+		.button-holder-collapse {
+			overflow: hidden;
+			height: 0;
+
+			&.open {
+				height: auto;
+				margin: -1px 0 10px;
+				overflow: visible;
+			}
+
+			.btn {
+				@include border-radius(0);
+
+				display: block;
+				float: none;
+				margin-bottom: -1px;
+				margin-top: 0;
+				text-align: left;
+				width: 100%;
+
+				&:last-child {
+					@include border-radius(0 0 2px 2px);
+
+					margin-bottom: 0;
+				}
+			}
 		}
 
 		button.close, button.btn.close {
