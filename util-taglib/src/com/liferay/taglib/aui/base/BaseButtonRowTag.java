@@ -33,12 +33,32 @@ public class BaseButtonRowTag extends com.liferay.taglib.util.IncludeTag {
 		return super.doStartTag();
 	}
 
+	public java.lang.String getCollapseLabel() {
+		return _collapseLabel;
+	}
+
+	public boolean getCollapsible() {
+		return _collapsible;
+	}
+
 	public java.lang.String getCssClass() {
 		return _cssClass;
 	}
 
 	public java.lang.String getId() {
 		return _id;
+	}
+
+	public void setCollapseLabel(java.lang.String collapseLabel) {
+		_collapseLabel = collapseLabel;
+
+		setScopedAttribute("collapseLabel", collapseLabel);
+	}
+
+	public void setCollapsible(boolean collapsible) {
+		_collapsible = collapsible;
+
+		setScopedAttribute("collapsible", collapsible);
 	}
 
 	public void setCssClass(java.lang.String cssClass) {
@@ -55,6 +75,8 @@ public class BaseButtonRowTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	protected void cleanUp() {
+		_collapseLabel = "actions";
+		_collapsible = false;
 		_cssClass = null;
 		_id = null;
 	}
@@ -71,6 +93,8 @@ public class BaseButtonRowTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
+		setNamespacedAttribute(request, "collapseLabel", _collapseLabel);
+		setNamespacedAttribute(request, "collapsible", _collapsible);
 		setNamespacedAttribute(request, "cssClass", _cssClass);
 		setNamespacedAttribute(request, "id", _id);
 	}
@@ -83,6 +107,8 @@ public class BaseButtonRowTag extends com.liferay.taglib.util.IncludeTag {
 	private static final String _START_PAGE =
 		"/html/taglib/aui/button_row/start.jsp";
 
+	private java.lang.String _collapseLabel = "actions";
+	private boolean _collapsible = false;
 	private java.lang.String _cssClass = null;
 	private java.lang.String _id = null;
 

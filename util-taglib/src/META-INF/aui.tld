@@ -1032,6 +1032,18 @@
 		<tag-class>com.liferay.taglib.aui.ButtonRowTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
+			<name>collapseLabel</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<name>collapsible</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
+		</attribute>
+		<attribute>
 			<name>cssClass</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
