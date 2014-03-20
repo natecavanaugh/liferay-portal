@@ -158,7 +158,7 @@ AUI.add(
 						var addHandleString = displayStyleCSSClass;
 						var removeHandleString = SELECTOR_LIST_DRAG_HANDLES;
 
-						if (displayStyle === 'list') {
+						if (displayStyle == 'list') {
 							addHandleString = SELECTOR_LIST_DRAG_HANDLES;
 							removeHandleString = displayStyleCSSClass;
 						}
