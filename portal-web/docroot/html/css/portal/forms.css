@@ -15,9 +15,6 @@
 	.advanced-search {
 		.search-query {
 			padding-left: 40px;
-		}
-
-		input:focus {
 			z-index: 0;
 		}
 
