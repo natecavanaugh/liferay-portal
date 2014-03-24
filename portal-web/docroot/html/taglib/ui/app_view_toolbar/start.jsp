@@ -17,8 +17,10 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-boolean includeSelectAll = GetterUtil.getBoolean(request.getAttribute("liferay-ui:app_view_toolbar:includeSelectAll"));
 String searchJsp = (String)request.getAttribute("liferay-ui:app_view_toolbar:searchJsp");
+boolean includeSelectAll = GetterUtil.getBoolean(request.getAttribute("liferay-ui:app_view_toolbar:includeSelectAll"));
+
+String cssClass = "select-all-entries";
 %>
 
 <div class="app-view-taglib">
@@ -28,8 +30,12 @@ String searchJsp = (String)request.getAttribute("liferay-ui:app_view_toolbar:sea
 		</c:if>
 
 		<div>
-			<c:if test="<%= includeSelectAll %>">
-				<c:if test="<%= !user.isDefaultUser() %>">
-					<aui:input cssClass="select-all-entries" inline="<%= true %>" label="" name="<%= RowChecker.ALL_ROW_IDS %>" type="checkbox" />
-				</c:if>
+			<c:if test="<%= !includeSelectAll %>">
+				<%
+					cssClass += " hide";
+				%>
+			</c:if>
+
+			<c:if test="<%= !user.isDefaultUser() %>">
+				<aui:input cssClass="<%= cssClass %>" inline="<%= true %>" label="" name="<%= RowChecker.ALL_ROW_IDS %>" type="checkbox" />
 			</c:if>
