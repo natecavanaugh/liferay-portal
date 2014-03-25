@@ -296,6 +296,8 @@ $dockbarOpenGradientStart: #0EA6F9;
 			li {
 				&.dropdown {
 					> .dropdown-toggle {
+						padding-right: 0;
+
 						.caret {
 							border-bottom-color: #FFF;
 							border-top-color: #FFF;

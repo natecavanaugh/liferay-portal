@@ -5,6 +5,7 @@
 		#foreach ($nav_item in $nav_items)
 			#set ($nav_item_attr_has_popup="")
 			#set ($nav_item_attr_selected="")
+			#set ($nav_item_caret="")
 			#set ($nav_item_css_class = "")
 
 			#if ($nav_item.isSelected())
@@ -14,10 +15,11 @@
 
 			#if ($nav_item.hasChildren())
 				#set ($nav_item_attr_has_popup="aria-haspopup='true'")
+				#set ($nav_item_caret='<span class="lfr-nav-child-toggle"><i class="icon-caret-down"></i></span>')
 			#end
 
 			<li class="$nav_item_css_class" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected role="presentation">
-				<a aria-labelledby="layout_$nav_item.getLayoutId()" href="$nav_item.getURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.icon() $nav_item.getName()</span></a>
+				<a aria-labelledby="layout_$nav_item.getLayoutId()" href="$nav_item.getURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.icon() $nav_item.getName() $nav_item_caret</span></a>
 
 				#if ($nav_item.hasChildren())
 					<ul class="child-menu" role="menu">
