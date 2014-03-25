@@ -92,9 +92,22 @@
 		}
 	}
 
-	&.display-list.locked {
-		background: url(@theme_image_path@/common/lock.png) no-repeat 100% 50%;
-		padding-right: 20px;
+	&.display-list {
+		&.locked {
+			background: url(@theme_image_path@/common/lock.png) no-repeat 100% 50%;
+			padding-right: 20px;
+		}
+
+		@include respond-to(phone) {
+			.taglib-text {
+				display: inline-block;
+
+				@include ellipsis;
+
+				max-width: 100px;
+				vertical-align: middle;
+			}
+		}
 	}
 
 	.categories {

@@ -150,6 +150,7 @@ AUI.add(
 							]
 						};
 
+						moveConfig.displayStyle = displayStyle;
 						moveConfig.displayStyleCSSClass = displayStyleCSSClass;
 						moveConfig.draggableCSSClass = '.entry-link';
 						moveConfig.namespace = namespace;
