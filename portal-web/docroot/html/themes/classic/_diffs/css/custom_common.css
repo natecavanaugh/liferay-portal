@@ -32,7 +32,12 @@
 	}
 
 	.alert {
+		display: block;
 		word-wrap: break-word;
+
+		@include respond-to(desktop) {
+			display: inline;
+		}
 	}
 
 	.table {
