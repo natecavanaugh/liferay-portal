@@ -118,16 +118,37 @@ if (ratingsEntry != null) {
 							<div class="helper-clearfix rating-content thumbrating-content" id="<%= randomNamespace %>ratingThumbContent">
 								<liferay-util:whitespace-remover>
 									<div class="rating-label">
-										<c:choose>
-											<c:when test="<%= (ratingsStats.getTotalScore() == 0) %>">
-												0
-											</c:when>
-											<c:otherwise>
-												<%= (ratingsStats.getAverageScore() > 0) ? "+" : StringPool.BLANK %><%= (int)ratingsStats.getTotalScore()) %>
-											</c:otherwise>
-										</c:choose>
+										<%
+										StringBundler sb = new StringBundler();
 
-										(<%= ratingsStats.getTotalEntries() %> <liferay-ui:message key='<%= (ratingsStats.getTotalEntries() == 1) ? "vote" : "votes" %>' />)
+										if (ratingsStats.getTotalScore() == 0) {
+											sb.append("0");
+										}
+										else {
+											if (ratingsStats.getAverageScore() > 0) {
+												sb.append("+");
+											}
+
+											sb.append((int)ratingsStats.getTotalScore());
+										}
+
+										sb.append(" (");
+										sb.append(ratingsStats.getTotalEntries());
+										sb.append(" ");
+
+										if (ratingsStats.getTotalEntries() == 1) {
+											sb.append(LanguageUtil.get(pageContext, "vote"));
+										}
+										else {
+											sb.append(LanguageUtil.get(pageContext, "votes"));
+										}
+
+										sb.append(")");
+
+										String ratingLabel = sb.toString();
+										%>
+										
+										<%= ratingLabel %>
 									</div>
 
 									<c:choose>
