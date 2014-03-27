@@ -1,4 +1,5 @@
 @import "compass";
+@import "mixins";
 
 /* ---------- Portlet wrapper and icons ---------- */
 
@@ -201,9 +202,13 @@ body.portlet {
 	@include opacity(0.3);
 
 	padding: 2px 5px 1px;
-	position: absolute;
-	right: 0;
-	top: 0;
+
+	@include respond-to(desktop) {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
 	z-index: 200;
 
 	a {
@@ -217,10 +222,24 @@ body.portlet {
 	}
 
 	.portlet-actions {
-		display: none;
-		float: left;
-		margin-right: 10px;
-		overflow: hidden;
+		@include respond-to(phone, tablet) {
+			float: right;
+
+			.portlet-action, .portlet-options {
+				display: inline-block;
+			}
+
+			.portlet-close a {
+				margin-top: -3px;
+			}
+		}
+
+		@include respond-to(desktop) {
+			display: none;
+			float: left;
+			margin-right: 10px;
+			overflow: hidden;
+		}
 	}
 
 	.portlet-actions, .portlet-title-default {
@@ -288,11 +307,24 @@ body.portlet {
 	}
 }
 
+@include respond-to(phone, tablet) {
+	.portlet-borderless-container .portlet-title-default {
+		float: none;
+	}
+}
+
 .portlet-title-default {
 	display: inline-block;
 	float: right;
 	font-weight: bold;
 	text-transform: uppercase;
+
+	@include respond-to(phone, tablet) {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		width: 74%; /* http://cl.ly/image/152I182Y2W00 */
+	}
 }
 
 .portlet-draggable {
