@@ -11,6 +11,8 @@ AUI.add(
 
 		var Portlet = Liferay.Portlet;
 
+		var Util = Liferay.Util;
+
 		var PROXY_NODE_ITEM = Layout.PROXY_NODE_ITEM;
 
 		var CSS_LFR_PORTLET_USED = 'lfr-portlet-used';
@@ -131,8 +133,8 @@ AUI.add(
 							if (!portletMetaData.instanceable) {
 								instance._disablePortletEntry(portletId);
 							}
-							else if (Liferay.Util.isPhone() || Liferay.Util.isTablet()) {
-							 	instance._instanceablePortletFeedback(portletId);
+							else if (Util.isPhone() || Util.isTablet()) {
+								instance._instanceablePortletFeedback(portletId);
 							}
 
 							var beforePortletLoaded = null;
@@ -267,27 +269,23 @@ AUI.add(
 					_instanceablePortletFeedback: function (portletId) {
 						var instance = this;
 
-						var addedMessage = A.all('.added-message');
+						var addedMessage = A.one('#addedMessage');
+
+						var addedMessagePortlet = addedMessage.one('#portletName');
 
 						var portletNameNode = A.one('[data-portlet-id=' + portletId + ']');
 
-						var portletName = portletNameNode.getAttribute('data-title');
+						var portletName = portletNameNode.attr('data-title');
 
-						addedMessage.one('#portletName').setHTML(portletName);
+						addedMessagePortlet.setHTML(portletName);
 
-						addedMessage.show(
-							'fadeIn',
-							{
-								duration: .6
-							},
+						addedMessage.show(true);
+
+						setTimeout(
 							function() {
-								addedMessage.hide(
-									'fadeOut',
-									{
-										delay: 1.5
-									}
-								);
-							}
+								addedMessage.hide(true);
+							},
+							2500
 						);
 					},
 
@@ -442,6 +440,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-dockbar', 'liferay-layout']
+		requires: ['liferay-dockbar', 'liferay-layout', 'transition']
 	}
 );
