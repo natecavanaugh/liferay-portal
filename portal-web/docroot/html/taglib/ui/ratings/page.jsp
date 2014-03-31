@@ -118,6 +118,7 @@ if (ratingsEntry != null) {
 							<div class="helper-clearfix rating-content thumbrating-content" id="<%= randomNamespace %>ratingThumbContent">
 								<liferay-util:whitespace-remover>
 									<div class="rating-label">
+
 										<%
 										StringBundler sb = new StringBundler();
 
@@ -132,9 +133,10 @@ if (ratingsEntry != null) {
 											sb.append((int)ratingsStats.getTotalScore());
 										}
 
-										sb.append(" (");
+										sb.append(StringPool.SPACE);
+										sb.append(StringPool.OPEN_PARENTHESIS);
 										sb.append(ratingsStats.getTotalEntries());
-										sb.append(" ");
+										sb.append(StringPool.SPACE);
 
 										if (ratingsStats.getTotalEntries() == 1) {
 											sb.append(LanguageUtil.get(pageContext, "vote"));
@@ -143,11 +145,11 @@ if (ratingsEntry != null) {
 											sb.append(LanguageUtil.get(pageContext, "votes"));
 										}
 
-										sb.append(")");
+										sb.append(StringPool.CLOSE_PARENTHESIS);
 
 										String ratingLabel = sb.toString();
 										%>
-										
+
 										<%= ratingLabel %>
 									</div>
 
