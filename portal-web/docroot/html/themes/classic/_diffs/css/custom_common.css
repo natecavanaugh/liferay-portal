@@ -118,6 +118,7 @@
 
 	.field-wrapper .btn {
 		margin-top: 0;
+		margin-bottom: 7px;
 	}
 
 	.btn.disabled, .btn[disabled] {
