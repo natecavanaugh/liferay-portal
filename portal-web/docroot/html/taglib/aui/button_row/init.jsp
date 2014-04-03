@@ -19,6 +19,8 @@
 <%@ include file="/html/taglib/taglib-init.jsp" %>
 
 <%
+java.lang.String collapseLabel = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button-row:collapseLabel"), "actions");
+boolean collapsible = GetterUtil.getBoolean(String.valueOf(request.getAttribute("aui:button-row:collapsible")), false);
 java.lang.String cssClass = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button-row:cssClass"));
 java.lang.String id = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button-row:id"));
 Map<String, Object> dynamicAttributes = (Map<String, Object>)request.getAttribute("aui:button-row:dynamicAttributes");

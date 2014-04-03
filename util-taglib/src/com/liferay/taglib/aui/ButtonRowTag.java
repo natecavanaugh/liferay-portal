@@ -14,9 +14,11 @@
 
 package com.liferay.taglib.aui;
 
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.taglib.aui.base.BaseButtonRowTag;
 
-import javax.servlet.jsp.JspWriter;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Julio Camarero
@@ -31,14 +33,26 @@ public class ButtonRowTag extends BaseButtonRowTag {
 	}
 
 	@Override
-	protected int processEndTag() throws Exception {
-		JspWriter jspWriter = pageContext.getOut();
+	protected void setAttributes(HttpServletRequest request) {
+		super.setAttributes(request);
 
-		jspWriter.write("</div>");
+		if (Validator.isNull(getId())) {
+			setNamespacedAttribute(request, "id", _getRandomId());
+		}
+	}
 
-		return EVAL_PAGE;
+	private String _getRandomId() {
+		if (Validator.isNotNull(_randomId)) {
+			return _randomId;
+		}
+
+		_randomId = StringUtil.randomId();
+
+		return _randomId;
 	}
 
 	private static final boolean _CLEAN_UP_SET_ATTRIBUTES = true;
+
+	private String _randomId;
 
 }
