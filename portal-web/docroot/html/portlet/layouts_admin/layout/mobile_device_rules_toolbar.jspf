@@ -24,6 +24,15 @@
 	</div>
 </c:if>
 
+<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" var="viewRuleGroupInstancesURL">
+	<portlet:param name="struts_action" value="/layouts_admin/mobile_device_rules" />
+	<portlet:param name="<%= SearchContainer.DEFAULT_CUR_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_CUR_PARAM) %>" />
+	<portlet:param name="<%= SearchContainer.DEFAULT_DELTA_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_DELTA_PARAM) %>" />
+	<portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />
+	<portlet:param name="className" value="<%= className %>" />
+	<portlet:param name="classPK" value="<%= String.valueOf(classPK) %>" />
+</liferay-portlet:resourceURL>
+
 <liferay-portlet:renderURL portletName="<%= PortletKeys.MOBILE_DEVICE_SITE_ADMIN %>" varImpl="selectRuleGroupURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 	<portlet:param name="struts_action" value="/mobile_device_rules/select_rule_group" />
 	<portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />
@@ -39,15 +48,6 @@
 	<portlet:param name="classPK" value="<%= String.valueOf(classPK) %>" />
 	<portlet:param name="saveCallback" value='<%= liferayPortletResponse.getNamespace() + "saveRuleGroupsPriorities" %>' />
 </liferay-portlet:renderURL>
-
-<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" var="viewRuleGroupInstancesURL">
-	<portlet:param name="struts_action" value="/layouts_admin/mobile_device_rules" />
-	<portlet:param name="<%= SearchContainer.DEFAULT_CUR_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_CUR_PARAM) %>" />
-	<portlet:param name="<%= SearchContainer.DEFAULT_DELTA_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_DELTA_PARAM) %>" />
-	<portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />
-	<portlet:param name="className" value="<%= className %>" />
-	<portlet:param name="classPK" value="<%= String.valueOf(classPK) %>" />
-</liferay-portlet:resourceURL>
 
 <aui:script>
 	function <portlet:namespace />saveRuleGroupsPriorities(dialog) {
