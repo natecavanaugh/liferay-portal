@@ -41,6 +41,8 @@ MBThread thread = (MBThread)request.getAttribute("edit_message.jsp-thread");
 				<c:otherwise>
 					<liferay-ui:user-display
 						displayStyle="2"
+						height="60"
+						width="60"
 						userId="<%= message.getUserId() %>"
 						userName="<%= HtmlUtil.escape(message.getUserName()) %>"
 					>
