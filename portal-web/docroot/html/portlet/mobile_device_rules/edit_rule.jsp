@@ -123,16 +123,16 @@ Collection<String> ruleHandlerTypes = RuleGroupProcessorUtil.getRuleHandlerTypes
 	</aui:button-row>
 </aui:form>
 
+<portlet:resourceURL var="editorURL">
+	<portlet:param name="struts_action" value="/mobile_device_rules/edit_rule_editor" />
+</portlet:resourceURL>
+
 <aui:script use="aui-io">
 	var typeNode = A.one('#<portlet:namespace />type');
 	var typeSettings = A.one('#<portlet:namespace />typeSettings');
 
 	var loadTypeFields = function() {
 		A.io.request(
-			<portlet:resourceURL var="editorURL">
-				<portlet:param name="struts_action" value="/mobile_device_rules/edit_rule_editor" />
-			</portlet:resourceURL>
-
 			'<%= editorURL.toString() %>',
 			{
 				data: {
