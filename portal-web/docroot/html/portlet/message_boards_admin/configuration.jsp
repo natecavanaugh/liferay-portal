@@ -326,7 +326,7 @@ mbSettings = MBUtil.getMBSettings(themeDisplay.getSiteGroupId(), request);
 
 			<aui:script>
 				var prioritiesChanged = false;
-				var prioritiesLastLanguageId = "<%= currentLanguageId %>";
+				var prioritiesLastLanguageId = '<%= currentLanguageId %>';
 
 				function <portlet:namespace />onPrioritiesChanged() {
 					prioritiesChanged = true;

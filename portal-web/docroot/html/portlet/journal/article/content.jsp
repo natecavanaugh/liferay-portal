@@ -442,7 +442,7 @@ if (Validator.isNotNull(content)) {
 
 <aui:script>
 	function <portlet:namespace />initEditor() {
-		return "<%= UnicodeFormatter.toString(content) %>";
+		return '<%= UnicodeFormatter.toString(content) %>';
 	}
 
 	Liferay.provide(
@@ -565,7 +565,7 @@ if (Validator.isNotNull(content)) {
 				if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "selecting-a-new-structure-will-change-the-available-input-fields-and-available-templates") %>') && (document.<portlet:namespace />fm1.<portlet:namespace />ddmStructureId.value != event.ddmstructureid)) {
 					document.<portlet:namespace />fm1.<portlet:namespace />ddmStructureId.value = event.ddmstructureid;
 					document.<portlet:namespace />fm1.<portlet:namespace />structureId.value = event.ddmstructurekey;
-					document.<portlet:namespace />fm1.<portlet:namespace />templateId.value = "";
+					document.<portlet:namespace />fm1.<portlet:namespace />templateId.value = '';
 
 					submitForm(document.<portlet:namespace />fm1, null, false, false);
 				}
