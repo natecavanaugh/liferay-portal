@@ -6,8 +6,13 @@
 		display: none;
 	}
 
-	.button-holder-collapse .btn {
-		margin-bottom: 3px;
+	.button-holder-collapse .btn-group {
+		@include flexbox;
+
+		.btn {
+			@include ellipsis;
+			@include flex-shrink(1);
+		}
 	}
 
 	@include respond-to(phone, tablet) {
@@ -90,20 +95,30 @@
 				overflow: visible;
 			}
 
-			.btn {
-				@include border-radius(0);
-
+			.button-holder {
 				display: block;
-				float: none;
-				margin-bottom: -1px;
-				margin-top: 0;
-				text-align: left;
-				width: 100%;
 
-				&:last-child {
-					@include border-radius(0 0 2px 2px);
+				.btn {
+					@include border-radius(0);
 
-					margin-bottom: 0;
+					display: block;
+					float: none;
+					margin-bottom: -1px;
+					margin-top: 0;
+					text-align: left;
+					width: 100%;
+
+					&:last-child {
+						@include border-radius(0 0 2px 2px);
+
+						margin-bottom: 0;
+					}
+				}
+
+				&.btn-group .btn {
+					@include flex-shrink(0);
+
+					margin-left: 0;
 				}
 			}
 		}

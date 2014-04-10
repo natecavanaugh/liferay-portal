@@ -126,7 +126,7 @@ DLActionsDisplayContext dlActionsDisplayContext = new DLActionsDisplayContext(re
 		%>
 
 		<liferay-ui:app-view-toolbar>
-			<aui:button-row collapsible="<%= true %>" cssClass="edit-toolbar" id='<%= namespace + "fileEntryToolbar" %>'>
+			<aui:button-row collapsible="<%= true %>" cssClass="btn-group edit-toolbar" id='<%= namespace + "fileEntryToolbar" %>'>
 				<c:if test="<%= dlActionsDisplayContext.isDownloadButtonVisible() %>">
 					<aui:button href="<%= DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, StringPool.BLANK) %>" icon="icon-download" value="download" />
 				</c:if>
