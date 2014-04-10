@@ -56,8 +56,11 @@ for (int j = 0; j < folderColumns.length; j++) {
 				name="folder"
 			>
 
-				<a href="<%= rowURL %>">
-					<img alt='<%= LanguageUtil.get(pageContext, "folder") %>' class="label-icon" src="<%= themeDisplay.getPathThemeImages()  %>/common/folder.png" />
+				<%
+				AssetRendererFactory assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(BookmarksFolder.class.getName());
+				%>
+
+				<a class="<%= assetRendererFactory.getIconCssClass(curFolder.getFolderId()) %>" href="<%= rowURL %>">
 					<strong><%= curFolder.getName() %></strong>
 
 					<c:if test="<%= Validator.isNotNull(curFolder.getDescription()) %>">
