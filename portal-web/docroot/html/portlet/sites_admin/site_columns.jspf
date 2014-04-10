@@ -25,9 +25,9 @@
 	if (curGroup.isOrganization()) {
 		Organization organization = OrganizationLocalServiceUtil.getOrganization(curGroup.getOrganizationId());
 
-		buffer.append("<img class=\"site-icon\" alt=\"");
+		buffer.append("<img alt=\"");
 		buffer.append(LanguageUtil.format(pageContext, "belongs-to-an-organization-of-type-x", organization.getType()));
-		buffer.append("\" src=\"");
+		buffer.append("\" class=\"site-icon\" src=\"");
 		buffer.append(curGroup.getIconURL(themeDisplay));
 		buffer.append("\" title=\"");
 		buffer.append(LanguageUtil.format(pageContext, "belongs-to-an-organization-of-type-x", organization.getType()));
