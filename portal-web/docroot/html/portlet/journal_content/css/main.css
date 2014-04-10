@@ -64,6 +64,78 @@
 	}
 }
 
+.aui .portlet-journal-content {
+	.navbar {
+		display: inline-block;
+		margin-bottom: 0;
+		margin-top: 20px;
+
+		.nav > li > a {
+			color: #FFF;
+			padding: 0 10px;
+			text-shadow: 0 0;
+
+			&:hover {
+				color: #FFF;
+
+				.nav-item-label {
+					text-decoration: underline;
+				}
+			}
+
+			& .icon-caret-down {
+				display: none;
+			}
+
+			.nav-item-label {
+				display: none;
+				max-width: 0;
+			}
+
+		}
+
+		.nav li.dropdown.open > .dropdown-toggle {
+			background-color: transparent;
+			color: #FFF;
+		}
+
+		.navbar-inner {
+			background-color: #333;
+			background-image: none;
+			border-radius: 20px;
+			min-height: 0;
+			padding: 0;
+		}
+	}
+}
+
+.portlet-journal-content .portlet-content {
+	&:hover {
+		.navbar-inner {
+			@include single-transition(opacity, 0.5s, ease, 0s);
+
+			@include opacity(1);
+		}
+
+		.navbar .nav > li > a .nav-item-label {
+			@include single-transition(max-width, 0.3s, ease, 0s);
+
+			display: inline-block;
+			max-width: 200px;
+		}
+	}
+
+	.navbar-inner {
+		@include single-transition(opacity, 0.5s, ease, 0.15s);
+
+		@include opacity(0.5);
+	}
+
+	.navbar .nav > li > a .nav-item-label {
+		@include single-transition(max-width, 0.3s, ease-in, 0.2s);
+	}
+}
+
 .portlet-configuration {
 	.displaying-article-id.modified {
 		color: #4DCF0C;
@@ -75,14 +147,6 @@
 		.journal-content-article {
 			zoom: 1;
 		}
-
-		.lfr-icon-actions {
-			@include opacity(0.2);
-		}
-
-		&:hover .lfr-icon-actions {
-			@include opacity(1);
-		}
 	}
 }
 
@@ -90,10 +154,6 @@
 	.portlet-journal-content {
 		.icons-container {
 			height: 1%;
-		}
-
-		.lfr-icon-actions {
-			@include opacity(0.9);
 		}
 	}
 }
