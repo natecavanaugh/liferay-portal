@@ -102,13 +102,13 @@
 		@include respond-to(phone, tablet) {
 			margin-bottom: 3px;
 
-			table, thead, tbody, th, td, tr {
+			table, tbody, td, th, thead, tr {
 				display: block;
 			}
 
 			thead tr {
-				position: absolute;
 				left: -9999px;
+				position: absolute;
 				top: -9999px;
 			}
 
@@ -117,32 +117,41 @@
 			}
 
 			td {
-				border: none;
 				border-bottom: 1px solid #EEE;
 				position: relative;
+
+				&:before {
+					left: 6px;
+					padding-right: 10px;
+					position: absolute;
+					top: 6px;
+					white-space: nowrap;
+					width: 45%;
+				}
 			}
 
-			td:before {
-				padding-right: 10px;
-				position: absolute;
-				left: 6px;
-				top: 6px;
-				white-space: nowrap;
-				width: 45%;
+			.thread-bottom {
+				border-width: 0;
 			}
 
 			.taglib-user-display {
 				> a, .user-details {
 					display: inline-block;
+				}
 
+				> a {
+					margin-right: 1em;
 				}
 
 				.user-details {
-					margin: 0 1em;
+					margin: 0 1em 0 0;
+				}
+
+				.avatar {
+					float: left;
 				}
 
 				.user-name {
-					max-width: 60px;
 					text-align: left;
 				}
 			}
@@ -159,10 +168,6 @@
 	}
 
 	.thread-top {
-		@include respond-to(desktop) {
-			border-color: #CCC;
-		}
-
 		border-bottom: 1px solid #EEE;
 		padding: 3px 5px;
 	}
@@ -176,21 +181,21 @@
 		padding: 0 5px 0 10px;
 	}
 
-	td.user-info {
-		@include respond-to(desktop) {
+	@include respond-to(desktop) {
+		.thread-top {
+			border-color: #CCC;
+		}
+
+		td.user-info {
 			border-right: 1px solid #CCC;
 			width: 150px;
 		}
-	}
 
-	.subject {
-		@include respond-to(desktop) {
+		.subject {
 			float: left;
 		}
-	}
 
-	.edit-controls {
-		@include respond-to(desktop) {
+		.edit-controls {
 			float: right;
 
 			li {
@@ -304,8 +309,8 @@
 		width: 100%;
 	}
 
-	.thread-controls {
-		@include respond-to(desktop) {
+	@include respond-to(desktop) {
+		.thread-controls {
 			border: 1px solid #CCC;
 			margin-bottom: 5px;
 			padding: 3px 5px;
@@ -331,13 +336,12 @@
 
 	.message-container .thread-message-view, .thread-view {
 		border-collapse: collapse;
+		padding: 0;
+		width: 100%;
 
 		@include respond-to(desktop) {
 			min-width: 400px;
 		}
-
-		padding: 0;
-		width: 100%;
 	}
 
 	.thread-view-controls {
@@ -394,8 +398,8 @@
 		text-decoration: underline;
 	}
 
-	.taglib-flags {
-		@include respond-to(desktop) {
+	@include respond-to(desktop) {
+		.taglib-flags {
 			float: left;
 			margin-left: 20px;
 		}
