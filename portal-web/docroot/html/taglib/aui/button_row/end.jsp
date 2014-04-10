@@ -16,10 +16,18 @@
 
 <%@ include file="/html/taglib/aui/button_row/init.jsp" %>
 
+</div>
+
 <c:if test="<%= collapsible %>">
-	<aui:button cssClass="button-holder-btn" icon="icon-reorder" id='<%= id + "ToggleBtn" %>' value="<%= collapseLabel %>" />
+	</div>
 
-	<div class="button-holder-collapse" id="<%= id %>Collapse">
+	<aui:script use="aui-base,liferay-menu-toggle">
+		var toggleMenu = new Liferay.MenuToggle(
+			{
+				content: '#<%= id %>Collapse, #<%= id %>ToggleBtn',
+				toggleTouch: true,
+				trigger: '#<%= id %>ToggleBtn'
+			}
+		);
+	</aui:script>
 </c:if>
-
-<div class="button-holder <%= cssClass %>" <%= Validator.isNotNull(id) ? "id=\"" + id + '"' : StringPool.BLANK %> <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %>>
