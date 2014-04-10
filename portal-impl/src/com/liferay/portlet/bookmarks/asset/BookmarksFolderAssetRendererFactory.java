@@ -25,6 +25,7 @@ import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.BaseAssetRendererFactory;
 import com.liferay.portlet.bookmarks.model.BookmarksFolder;
 import com.liferay.portlet.bookmarks.service.BookmarksFolderLocalServiceUtil;
+import com.liferay.portlet.bookmarks.service.BookmarksFolderServiceUtil;
 import com.liferay.portlet.bookmarks.service.permission.BookmarksFolderPermission;
 
 import javax.portlet.PortletRequest;
@@ -62,6 +63,33 @@ public class BookmarksFolderAssetRendererFactory
 	@Override
 	public String getClassName() {
 		return BookmarksFolder.class.getName();
+	}
+
+	@Override
+	public String getIconCssClass() {
+		return "icon-folder-open";
+	}
+
+	@Override
+	public String getIconCssClass(long classPK)
+		throws PortalException, SystemException {
+
+		String iconCssClass = "icon-folder-close";
+
+		BookmarksFolder folder = BookmarksFolderLocalServiceUtil.getFolder(
+			classPK);
+
+		if (folder == null) {
+			return iconCssClass;
+		}
+
+		if (BookmarksFolderServiceUtil.getFoldersAndEntriesCount(
+				folder.getGroupId(), folder.getFolderId()) > 0) {
+
+			iconCssClass = "icon-folder-open";
+		}
+
+		return iconCssClass;
 	}
 
 	@Override

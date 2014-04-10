@@ -25,6 +25,7 @@ import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.BaseAssetRendererFactory;
 import com.liferay.portlet.journal.model.JournalFolder;
 import com.liferay.portlet.journal.service.JournalFolderLocalServiceUtil;
+import com.liferay.portlet.journal.service.JournalFolderServiceUtil;
 import com.liferay.portlet.journal.service.permission.JournalFolderPermission;
 
 import javax.portlet.PortletRequest;
@@ -61,6 +62,33 @@ public class JournalFolderAssetRendererFactory
 	@Override
 	public String getClassName() {
 		return JournalFolder.class.getName();
+	}
+
+	@Override
+	public String getIconCssClass() {
+		return "icon-folder-open";
+	}
+
+	@Override
+	public String getIconCssClass(long classPK)
+		throws PortalException, SystemException {
+
+		String iconCssClass = "icon-folder-close";
+
+		JournalFolder folder = JournalFolderLocalServiceUtil.fetchFolder(
+			classPK);
+
+		if (folder == null) {
+			return iconCssClass;
+		}
+
+		if (JournalFolderServiceUtil.getFoldersAndArticlesCount(
+				folder.getGroupId(), folder.getFolderId()) > 0) {
+
+			iconCssClass = "icon-folder-open";
+		}
+
+		return iconCssClass;
 	}
 
 	@Override
