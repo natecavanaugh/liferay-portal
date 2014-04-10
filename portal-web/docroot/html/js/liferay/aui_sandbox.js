@@ -1,5 +1,10 @@
 ;(function() {
-	var ALLOY = YUI();
+	var ALLOY = YUI().use(
+		'liferay-dependency',
+		'liferay-events',
+		'liferay-portlet',
+		'liferay-util'
+	);
 
 	if (ALLOY.html5shiv) {
 		ALLOY.html5shiv();

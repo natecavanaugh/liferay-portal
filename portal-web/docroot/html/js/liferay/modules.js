@@ -208,6 +208,10 @@
 						path: 'browser_selectors.js',
 						requires: ['yui-base']
 					},
+					'liferay-dependency': {
+						path: 'dependency.js',
+						requires: ['oop']
+					},
 					'liferay-ddm-repeatable-fields': {
 						path: 'ddm_repeatable_fields.js',
 						requires: [
@@ -348,6 +352,13 @@
 						path: 'dynamic_select.js',
 						requires: [
 							'aui-base'
+						]
+					},
+					'liferay-events': {
+						path: 'events.js',
+						requires: [
+							'attribute',
+							'oop'
 						]
 					},
 					'liferay-form': {
@@ -622,6 +633,14 @@
 							'liferay-node'
 						]
 					},
+					'liferay-portlet': {
+						path: 'portlet.js',
+						requires: [
+							'liferay-dependency',
+							'liferay-events',
+							'liferay-util'
+						]
+					},
 					'liferay-portlet-url': {
 						path: 'portlet_url.js',
 						requires: [
@@ -767,6 +786,13 @@
 							'liferay-portlet-base',
 							'liferay-storage-formatter',
 							'uploader'
+						]
+					},
+					'liferay-util': {
+						path: 'util.js',
+						requires: [
+							'aui-base-lang',
+							'liferay-dependency'
 						]
 					},
 					'liferay-util-list-fields': {
