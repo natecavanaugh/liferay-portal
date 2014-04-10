@@ -11,6 +11,8 @@ AUI.add(
 
 		var Portlet = Liferay.Portlet;
 
+		var Util = Liferay.Util;
+
 		var PROXY_NODE_ITEM = Layout.PROXY_NODE_ITEM;
 
 		var CSS_LFR_PORTLET_USED = 'lfr-portlet-used';
@@ -130,6 +132,9 @@ AUI.add(
 
 							if (!portletMetaData.instanceable) {
 								instance._disablePortletEntry(portletId);
+							}
+							else if (Util.isPhone() || Util.isTablet()) {
+								instance._instanceablePortletFeedback(portletId);
 							}
 
 							var beforePortletLoaded = null;
@@ -259,6 +264,33 @@ AUI.add(
 						var instance = this;
 
 						return instance._searchData;
+					},
+
+					_instanceablePortletFeedback: function (portletId) {
+						var instance = this;
+
+						var addedMessage = instance.byId('addedMessage');
+						var addedMessagePortlet = instance.byId('portletName');
+
+						var portletNameNode = A.one('[data-portlet-id=' + portletId + ']');
+
+						var portletName = portletNameNode.attr('data-title');
+
+						addedMessagePortlet.setHTML(portletName);
+
+						var fadeOut = setTimeout(
+							function() {
+								addedMessage.hide(true);
+							},
+							2000
+						);
+
+						addedMessage.show(
+							true,
+							function() {
+								fadeOut;
+							}
+						);
 					},
 
 					_showTab: function(event) {
@@ -412,6 +444,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-dockbar', 'liferay-layout']
+		requires: ['liferay-dockbar', 'liferay-layout', 'transition']
 	}
 );
