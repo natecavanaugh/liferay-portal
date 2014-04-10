@@ -26,7 +26,7 @@ for (int i = 0; i < results.size(); i++) {
 
 	StringBundler sb = new StringBundler(13);
 
-	sb.append("<img alt=\"\" align=\"left\" border=\"0\" src=\"");
+	sb.append("<img align=\"left\" alt=\"\" border=\"0\" src=\"");
 
 	DLFileShortcut fileShortcut = null;
 

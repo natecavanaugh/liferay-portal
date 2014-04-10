@@ -66,6 +66,7 @@ String ym = selContact.getYmSn();
 			</dt>
 			<dd>
 				<%= HtmlUtil.escape(skype) %>
+
 				<a href="callto://<%= HtmlUtil.escapeAttribute(skype) %>"><img alt="<liferay-ui:message key="call-this-user" />" class="instant-messenger-logo" src="http://mystatus.skype.com/smallicon/<%= HtmlUtil.escapeAttribute(skype) %>" /></a>
 			</dd>
 		</c:if>
@@ -85,6 +86,7 @@ String ym = selContact.getYmSn();
 			</dt>
 			<dd>
 				<%= HtmlUtil.escape(ym) %>
+
 				<img alt="" class="instant-messenger-logo" src="http://opi.yahoo.com/online?u=<%= HtmlUtil.escapeAttribute(ym) %>&m=g&t=0" />
 			</dd>
 		</c:if>
