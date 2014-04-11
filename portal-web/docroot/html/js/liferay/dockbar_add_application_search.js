@@ -47,9 +47,14 @@ AUI.add(
 			_bindUISearch: function() {
 				var instance = this;
 
-				instance._search.on('results', instance._updateList, instance);
+				var eventHandles = instance._eventHandles || [];
 
-				instance.get('inputNode').on('keydown', instance._onSearchInputKeyDown, instance);
+				instance._eventHandles = eventHandles.concat(
+					[
+						instance._search.on('results', instance._updateList, instance),
+						instance.get('inputNode').on('keydown', instance._onSearchInputKeyDown, instance)
+					]
+				);
 			},
 
 			_onSearchInputKeyDown: function(event) {
