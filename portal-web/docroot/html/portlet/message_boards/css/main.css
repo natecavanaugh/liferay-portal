@@ -2,14 +2,12 @@
 @import "mixins";
 
 .portlet-asset-publisher, .portlet-message-boards, .portlet-trash {
-	.category-buttons {
+	.category-buttons, .category-subscriptions {
 		clear: both;
 		margin-bottom: 1em;
 	}
 
 	.category-subscriptions {
-		clear: both;
-		margin-bottom: 1em;
 		overflow: hidden;
 	}
 
@@ -55,7 +53,7 @@
 			font-size: 1em;
 		}
 
-		ul {
+		ul, .deleted-input {
 			list-style: none;
 		}
 
@@ -64,7 +62,6 @@
 		}
 
 		.deleted-input {
-			list-style: none;
 			margin-left: -2em;
 			padding: 0;
 		}
@@ -134,11 +131,11 @@
 				border-width: 0;
 			}
 
-			.taglib-user-display {
-				> a, .user-details {
-					display: inline-block;
-				}
+			.edit-controls li, .taglib-ratings, .taglib-user-display > a, .taglib-user-display .user-details {
+				display: inline-block;
+			}
 
+			.taglib-user-display {
 				> a {
 					margin-right: 1em;
 				}
@@ -156,10 +153,6 @@
 				}
 			}
 
-			.edit-controls li, .taglib-ratings {
-				display: inline-block;
-			}
-
 			.thumbs {
 				float: none;
 				margin: 0;
@@ -167,13 +160,15 @@
 		}
 	}
 
-	.thread-top {
-		border-bottom: 1px solid #EEE;
+	.thread-bottom, .thread-top {
 		padding: 3px 5px;
 	}
 
+	.thread-top {
+		border-bottom: 1px solid #EEE;
+	}
+
 	.thread-bottom {
-		padding: 3px 5px;
 		vertical-align: bottom;
 	}
 
@@ -191,7 +186,7 @@
 			width: 150px;
 		}
 
-		.subject {
+		.edit-controls li, .subject {
 			float: left;
 		}
 
@@ -199,7 +194,6 @@
 			float: right;
 
 			li {
-				float: left;
 				margin-right: 10px;
 			}
 		}
@@ -231,11 +225,7 @@
 		margin-bottom: 1em;
 	}
 
-	.message-boards-panels {
-		border-width: 0;
-	}
-
-	.statistics-panel {
+	.message-boards-panels, .statistics-panel {
 		border-width: 0;
 	}
 
@@ -285,14 +275,16 @@
 		width: 48px;
 	}
 
+	.answered, .unanswered {
+		color: #FFF;
+	}
+
 	.answered {
 		background-color: #5BA018;
-		color: #FFF;
 	}
 
 	.unanswered {
 		background-color: #CF4937;
-		color: #FFF;
 	}
 
 	.count {
@@ -317,7 +309,7 @@
 		}
 	}
 
-	.thread-navigation {
+	.thread-navigation, .thread-priority {
 		float: left;
 	}
 
@@ -331,7 +323,6 @@
 
 	.thread-priority {
 		border-width: 0;
-		float: left;
 	}
 
 	.message-container .thread-message-view, .thread-view {
