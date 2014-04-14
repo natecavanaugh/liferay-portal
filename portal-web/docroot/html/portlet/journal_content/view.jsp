@@ -299,7 +299,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 %>
 
 <c:if test="<%= showIconsActions && !print && hasViewPermission %>">
-	<aui:nav-bar>
+	<aui:nav-bar cssClass="navbar-actions">
 		<aui:nav>
 
 			<%

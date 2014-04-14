@@ -117,6 +117,30 @@ body.portlet {
 	display: inline-block;
 }
 
+%portlet-action-navbar {
+	display: inline-block;
+	margin-bottom: 0;
+	margin-top: 20px;
+
+	.dropdown.open .dropdown-menu {
+		display: none;
+	}
+
+	.navbar-inner {
+		@include opacity(0.5);
+	}
+}
+
+%portlet-action-navbar-hover {
+	.navbar-inner {
+		@include opacity(1);
+
+		.dropdown.open .dropdown-menu {
+			display: block;
+		}
+	}
+}
+
 .portlet-borderless-bar {
 	@extend %portlet-action-bar;
 
@@ -130,6 +154,10 @@ body.portlet {
 .portlet-borderless-container, .portlet-content {
 	.lfr-icon-actions {
 		@extend %portlet-action-bar;
+	}
+
+	.navbar-actions {
+		@extend %portlet-action-navbar;
 	}
 }
 
@@ -184,6 +212,54 @@ body.portlet {
 
 		.lfr-icon-action-configuration a {
 			background-image: url(../images/common/configuration_white.png);
+		}
+	}
+
+	.navbar {
+		&.navbar-actions {
+			.navbar-inner {
+				background-color: #333;
+				background-image: none;
+				border-radius: 20px;
+				min-height: 0;
+				padding: 0 5px;
+			}
+
+			.nav {
+				height: 30px;
+				margin: 0;
+
+				> li > a {
+					color: #FFF;
+					padding: 0 10px;
+					text-shadow: 0 0;
+
+					.nav-item-icon {
+						vertical-align: top;
+					}
+
+					.nav-item-icon, .nav-item-label {
+						line-height: 30px;
+					}
+
+					&:hover, &:focus {
+						color: #FFF;
+
+						.nav-item-label {
+							text-decoration: underline;
+						}
+					}
+
+					& .icon-caret-down {
+						display: none;
+					}
+				}
+
+				.dropdown.open > .dropdown-toggle {
+					background-color: transparent;
+					color: #FFF;
+				}
+			}
 		}
 	}
 }
@@ -276,6 +352,10 @@ body.portlet {
 			.taglib-text {
 				@extend %portlet-action-bar-hover-text;
 			}
+		}
+
+		.navbar-actions {
+			@extend %portlet-action-navbar-hover;
 		}
 	}
 
@@ -741,9 +821,13 @@ body.portlet {
 		.lfr-icon-actions {
 			@include opacity(0.5);
 		}
+
+		.navbar-actions .navbar-inner {
+			@include opacity(0.5);
+		}
 	}
 
-	.portlet-borderless-container:hover .portlet-borderless-bar, .portlet-journal-content .lfr-icon-actions:hover {
+	.portlet-borderless-container:hover .portlet-borderless-bar, .portlet-content:hover .navbar-actions .navbar-inner {
 		@include opacity(1);
 	}
 

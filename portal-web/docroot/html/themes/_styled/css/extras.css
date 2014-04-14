@@ -393,10 +393,10 @@ body:first-of-type {
 
 	.portlet-borderless-container, .portlet-content {
 		&:hover {
-			.lfr-icon-actions {
+			.lfr-icon-actions, .navbar-actions .navbar-inner {
 				@extend %portlet-action-bar-fx-hover;
 
-				.lfr-icon-menu-text, .taglib-text {
+				.lfr-icon-menu-text, .taglib-text, .nav-item-label {
 					@extend %portlet-action-bar-fx-hover-text;
 
 					max-width: 200px;
@@ -404,10 +404,10 @@ body:first-of-type {
 			}
 		}
 
-		.lfr-icon-actions {
+		.lfr-icon-actions, .navbar-actions .navbar-inner {
 			@extend %portlet-action-bar-fx;
 
-			.lfr-icon-menu-text, .taglib-text {
+			.lfr-icon-menu-text, .taglib-text, .nav-item-label {
 				@extend %portlet-action-bar-fx-text;
 
 				@include respond-to(phone, tablet) {
