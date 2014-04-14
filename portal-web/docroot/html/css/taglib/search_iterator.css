@@ -6,6 +6,8 @@
 	overflow: auto;
 
 	@include respond-to(phone) {
+		overflow: visible;
+
 		.selector-button {
 			width: auto;
 		}

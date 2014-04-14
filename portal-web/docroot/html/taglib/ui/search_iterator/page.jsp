@@ -72,7 +72,7 @@ List<String> primaryKeys = new ArrayList<String>();
 	</c:if>
 
 	<div id="<%= namespace + id %>SearchContainer">
-		<table class="table table-bordered table-hover table-striped">
+		<table class="table table-bordered table-hover table-striped responsive-table-stacked">
 
 		<c:if test="<%= headerNames != null %>">
 			<thead class="table-columns">
@@ -290,7 +290,18 @@ List<String> primaryKeys = new ArrayList<String>();
 				}
 			%>
 
-				<td class="table-cell <%= columnClassName %>">
+			<%
+			String headerName = headerNames.get(j);
+
+			if (headerName.contains("hide-accessible") && columnClassName.contains("first")) {
+				headerName = "select";
+			}
+			else if (Validator.isNull(headerName) && columnClassName.contains("last")) {
+				headerName = "actions";
+			}
+			%>
+
+				<td class="table-cell <%= columnClassName %>" data-th="<%= LanguageUtil.get(pageContext, HtmlUtil.escape(headerName)) %>">
 
 					<%
 					entry.print(pageContext);

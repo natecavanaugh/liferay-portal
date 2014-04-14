@@ -79,6 +79,47 @@
 			float: none;
 		}
 	}
+
+	.responsive-table-stacked {
+		display: block;
+
+		tbody tr {
+			td {
+				overflow-x: auto;
+				padding-left: 8px;
+				text-align: left;
+
+				&:before {
+					content: attr(data-th)": ";
+					font-weight: bold;
+				}
+
+				&.table-cell.last .lfr-icon-menu .dropdown-toggle {
+					> img , .lfr-icon-menu-text {
+						display: inline;
+					}
+				}
+
+				.category-title {
+					display: inline;
+				}
+			}
+
+			&.lfr-template {
+				display: none;
+			}
+		}
+
+		thead tr {
+			left: -9999px;
+			position: absolute;
+			top: -9999px;
+		}
+
+		thead, tbody, tr, th, td, td:before {
+			display: block;
+		}
+	}
 }
 
 /* ---------- Text formatting ---------- */
