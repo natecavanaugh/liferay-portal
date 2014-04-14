@@ -1,14 +1,13 @@
 @import "compass";
+@import "mixins";
 
 .portlet-asset-publisher, .portlet-message-boards, .portlet-trash {
-	.category-buttons {
+	.category-buttons, .category-subscriptions {
 		clear: both;
 		margin-bottom: 1em;
 	}
 
 	.category-subscriptions {
-		clear: both;
-		margin-bottom: 1em;
 		overflow: hidden;
 	}
 
@@ -54,7 +53,7 @@
 			font-size: 1em;
 		}
 
-		ul {
+		ul, .deleted-input {
 			list-style: none;
 		}
 
@@ -63,7 +62,6 @@
 		}
 
 		.deleted-input {
-			list-style: none;
 			margin-left: -2em;
 			padding: 0;
 		}
@@ -74,31 +72,103 @@
 	}
 
 	.message-container {
-		border: 1px solid #CCC;
-		margin: 5px 0 0 0;
-		overflow: auto;
+		@include respond-to(desktop) {
+			border: 1px solid #CCC;
+			margin: 5px 0 0 0;
+			overflow: auto;
 
-		table {
-			border-collapse: collapse;
-			table-layout: fixed;
+			table {
+				border-collapse: collapse;
+				table-layout: fixed;
+			}
+
+			.lfr-code table {
+				table-layout: auto;
+			}
+
+			td {
+				border-width: 0;
+			}
+
+			.user-info {
+				border-right: 1px solid #CCC;
+				padding: 5px;
+			}
 		}
 
-		.lfr-code table {
-			table-layout: auto;
-		}
+		@include respond-to(phone, tablet) {
+			margin-bottom: 3px;
 
-		td {
-			border-width: 0;
+			table, tbody, td, th, thead, tr {
+				display: block;
+			}
+
+			thead tr {
+				left: -9999px;
+				position: absolute;
+				top: -9999px;
+			}
+
+			tbody {
+				border: 1px solid #CCC;
+			}
+
+			td {
+				border-bottom: 1px solid #EEE;
+				position: relative;
+
+				&:before {
+					left: 6px;
+					padding-right: 10px;
+					position: absolute;
+					top: 6px;
+					white-space: nowrap;
+					width: 45%;
+				}
+			}
+
+			.thread-bottom {
+				border-width: 0;
+			}
+
+			.edit-controls li, .taglib-ratings, .taglib-user-display > a, .taglib-user-display .user-details {
+				display: inline-block;
+			}
+
+			.taglib-user-display {
+				> a {
+					margin-right: 1em;
+				}
+
+				.user-details {
+					margin: 0 1em 0 0;
+				}
+
+				.avatar {
+					float: left;
+				}
+
+				.user-name {
+					text-align: left;
+				}
+			}
+
+			.thumbs {
+				float: none;
+				margin: 0;
+			}
 		}
+	}
+
+	.thread-bottom, .thread-top {
+		padding: 3px 5px;
 	}
 
 	.thread-top {
-		border-bottom: 1px solid #CCC;
-		padding: 3px 5px;
+		border-bottom: 1px solid #EEE;
 	}
 
 	.thread-bottom {
-		padding: 3px 5px;
 		vertical-align: bottom;
 	}
 
@@ -106,21 +176,26 @@
 		padding: 0 5px 0 10px;
 	}
 
-	td.user-info {
-		border-right: 1px solid #CCC;
-		width: 150px;
-	}
+	@include respond-to(desktop) {
+		.thread-top {
+			border-color: #CCC;
+		}
 
-	.subject {
-		float: left;
-	}
+		td.user-info {
+			border-right: 1px solid #CCC;
+			width: 150px;
+		}
 
-	.edit-controls {
-		float: right;
-
-		li {
+		.edit-controls li, .subject {
 			float: left;
-			margin-right: 10px;
+		}
+
+		.edit-controls {
+			float: right;
+
+			li {
+				margin-right: 10px;
+			}
 		}
 	}
 
@@ -150,11 +225,7 @@
 		margin-bottom: 1em;
 	}
 
-	.message-boards-panels {
-		border-width: 0;
-	}
-
-	.statistics-panel {
+	.message-boards-panels, .statistics-panel {
 		border-width: 0;
 	}
 
@@ -204,14 +275,16 @@
 		width: 48px;
 	}
 
+	.answered, .unanswered {
+		color: #FFF;
+	}
+
 	.answered {
 		background-color: #5BA018;
-		color: #FFF;
 	}
 
 	.unanswered {
 		background-color: #CF4937;
-		color: #FFF;
 	}
 
 	.count {
@@ -228,13 +301,15 @@
 		width: 100%;
 	}
 
-	.thread-controls {
-		border: 1px solid #CCC;
-		margin-bottom: 5px;
-		padding: 3px 5px;
+	@include respond-to(desktop) {
+		.thread-controls {
+			border: 1px solid #CCC;
+			margin-bottom: 5px;
+			padding: 3px 5px;
+		}
 	}
 
-	.thread-navigation {
+	.thread-navigation, .thread-priority {
 		float: left;
 	}
 
@@ -248,14 +323,16 @@
 
 	.thread-priority {
 		border-width: 0;
-		float: left;
 	}
 
 	.message-container .thread-message-view, .thread-view {
 		border-collapse: collapse;
-		min-width: 400px;
 		padding: 0;
 		width: 100%;
+
+		@include respond-to(desktop) {
+			min-width: 400px;
+		}
 	}
 
 	.thread-view-controls {
@@ -312,9 +389,11 @@
 		text-decoration: underline;
 	}
 
-	.taglib-flags {
-		float: left;
-		margin-left: 20px;
+	@include respond-to(desktop) {
+		.taglib-flags {
+			float: left;
+			margin-left: 20px;
+		}
 	}
 
 	.threads-panel {
