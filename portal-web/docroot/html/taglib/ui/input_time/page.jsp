@@ -126,7 +126,18 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 
 				var container = instance.get('container');
 
-				return A.Date.parse(container.one('#<%= dateParam %>').val());
+				var dateVal = container.one('#<%= dateParam %>').val();
+
+				var time = A.Date.parse(dateVal);
+
+				if (!time) {
+					var hours = container.one('#<%= hourParam %>').val();
+					var minutes = container.one('#<%= minuteParam %>').val();
+
+					time = A.Date.parse(A.Date.aggregates.T, hours + ":" + minutes + ":0");
+				}
+
+				return time;
 			};
 
 			return timePicker;
