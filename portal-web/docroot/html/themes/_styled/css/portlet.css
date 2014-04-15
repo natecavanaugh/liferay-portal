@@ -1,4 +1,5 @@
 @import "compass";
+@import "mixins";
 
 /* ---------- Portlet wrapper and icons ---------- */
 
@@ -122,21 +123,25 @@ body.portlet {
 	margin-bottom: 0;
 	margin-top: 20px;
 
-	.dropdown.open .dropdown-menu {
-		display: none;
-	}
+	@include respond-to(desktop) {
+		.dropdown.open .dropdown-menu {
+			display: none;
+		}
 
-	.navbar-inner {
-		@include opacity(0.5);
+		.navbar-inner {
+			@include opacity(0.5);
+		}
 	}
 }
 
 %portlet-action-navbar-hover {
 	.navbar-inner {
-		@include opacity(1);
+		@include respond-to(desktop) {
+			@include opacity(1);
 
-		.dropdown.open .dropdown-menu {
-			display: block;
+			.dropdown.open .dropdown-menu {
+				display: block;
+			}
 		}
 	}
 }
@@ -226,11 +231,11 @@ body.portlet {
 			}
 
 			.nav {
-				height: 30px;
 				margin: 0;
 
 				> li > a {
 					color: #FFF;
+					line-height: normal;
 					padding: 0 10px;
 					text-shadow: 0 0;
 
