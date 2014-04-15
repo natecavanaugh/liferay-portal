@@ -300,7 +300,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 
 <c:if test="<%= showIconsActions && !print && hasViewPermission %>">
 	<aui:nav-bar cssClass="navbar-actions">
-		<aui:nav>
+		<aui:nav collapsible="<%= false %>">
 
 			<%
 			PortletURL redirectURL = liferayPortletResponse.createRenderURL();
