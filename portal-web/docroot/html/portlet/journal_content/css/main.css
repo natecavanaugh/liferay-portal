@@ -75,14 +75,6 @@
 		.journal-content-article {
 			zoom: 1;
 		}
-
-		.lfr-icon-actions {
-			@include opacity(0.2);
-		}
-
-		&:hover .lfr-icon-actions {
-			@include opacity(1);
-		}
 	}
 }
 
@@ -90,10 +82,6 @@
 	.portlet-journal-content {
 		.icons-container {
 			height: 1%;
-		}
-
-		.lfr-icon-actions {
-			@include opacity(0.9);
 		}
 	}
 }

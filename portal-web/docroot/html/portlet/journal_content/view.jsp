@@ -288,7 +288,7 @@ catch (NoSuchArticleException nsae) {
 DDMTemplate ddmTemplate = null;
 
 if ((articleDisplay != null) && Validator.isNotNull(articleDisplay.getDDMTemplateKey())) {
-	ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(articleDisplay.getGroupId(), PortalUtil.getClassNameId(DDMStructure.class), articleDisplay.getDDMTemplateKey());
+	ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(articleDisplay.getGroupId(), PortalUtil.getClassNameId(DDMStructure.class), articleDisplay.getDDMTemplateKey(), true);
 }
 
 boolean showEditArticleIcon = (latestArticle != null) && JournalArticlePermission.contains(permissionChecker, latestArticle.getGroupId(), latestArticle.getArticleId(), ActionKeys.UPDATE);
@@ -299,8 +299,8 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 %>
 
 <c:if test="<%= showIconsActions && !print && hasViewPermission %>">
-	<div class="lfr-meta-actions icons-container">
-		<div class="lfr-icon-actions">
+	<aui:nav-bar cssClass="navbar-actions">
+		<aui:nav collapsible="<%= false %>">
 
 			<%
 			PortletURL redirectURL = liferayPortletResponse.createRenderURL();
@@ -325,12 +325,10 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 				String taglibEditArticleURL = "javascript:Liferay.Util.openWindow({id: '_" + HtmlUtil.escapeJS(portletDisplay.getId()) + "_editAsset', title: '" + HtmlUtil.escapeJS(HtmlUtil.escape(latestArticle.getTitle(locale))) + "', uri:'" + HtmlUtil.escapeJS(editArticleURL.toString()) + "'});";
 				%>
 
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-edit"
-					image="edit"
-					label="<%= true %>"
-					message="edit"
-					url="<%= taglibEditArticleURL %>"
+				<aui:nav-item
+					href="<%= taglibEditArticleURL %>"
+					iconCssClass="icon-edit"
+					label="edit"
 				/>
 			</c:if>
 
@@ -345,27 +343,26 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 				</liferay-portlet:renderURL>
 
 				<%
-				String taglibEditTemplateURL = "javascript:Liferay.Util.openWindow({id: '_" + HtmlUtil.escapeJS(portletDisplay.getId()) + "_editAsset', title: '" + HtmlUtil.escapeJS(HtmlUtil.escape(ddmTemplate.getName(locale))) + "', uri:'" + HtmlUtil.escapeJS(editTemplateURL.toString()) + "'});";
+				String taglibEditTemplateURL = "javascript:Liferay.Util.openWindow({id: '_" + HtmlUtil.escapeJS(portletDisplay.getId()) + "_editAsset', title: '" + LanguageUtil.get(locale, "edit-template") + "', uri:'" + HtmlUtil.escapeJS(editTemplateURL.toString()) + "'});";
 				%>
 
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-edit-template"
-					image="../file_system/small/xml"
-					label="<%= true %>"
-					message="edit-template"
-					url="<%= taglibEditTemplateURL %>"
+				<aui:nav-item
+					href="<%= taglibEditTemplateURL %>"
+					iconCssClass="icon-list-alt"
+					label="edit-template"
 				/>
 			</c:if>
 
 			<c:if test="<%= showSelectArticleIcon %>">
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-configuration"
-					image="configuration"
-					label="<%= true %>"
-					message="select-web-content"
-					method="get"
-					onClick="<%= portletDisplay.getURLConfigurationJS() %>"
-					url="<%= portletDisplay.getURLConfiguration() %>"
+
+				<%
+				String taglibSelectArticleURL = "javascript:Liferay.Util.openWindow({id: '_" + HtmlUtil.escapeJS(portletDisplay.getId()) + "_editAsset', title: '" + LanguageUtil.get(locale, "select-web-content") + "', uri:'" + HtmlUtil.escapeJS(portletDisplay.getURLConfiguration()) + "'});";
+				%>
+
+				<aui:nav-item
+					href="<%= taglibSelectArticleURL %>"
+					iconCssClass="icon-cog"
+					label="select-web-content"
 				/>
 			</c:if>
 
@@ -378,12 +375,10 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 					<portlet:param name="showHeader" value="<%= Boolean.FALSE.toString() %>" />
 				</liferay-portlet:renderURL>
 
-				<liferay-ui:icon-menu
-					cssClass="lfr-icon-action lfr-icon-action-add"
-					direction="down"
-					message="add"
-					showArrow="<%= false %>"
-					showWhenSingleIcon="<%= false %>"
+				<aui:nav-item
+					dropdown="<%= true %>"
+					iconCssClass="icon-plus"
+					label="add"
 				>
 
 					<%
@@ -393,28 +388,24 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 
 					for (DDMStructure ddmStructure : ddmStructures) {
 						addArticleURL.setParameter("ddmStructureId", String.valueOf(ddmStructure.getStructureId()));
+
+						String taglibAddArticleURL = "javascript:Liferay.Util.openWindow({id: '_" + HtmlUtil.escapeJS(portletDisplay.getId()) + "_editAsset', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(locale, "new-x", ddmStructure.getName(locale))) + "', uri:'" + HtmlUtil.escapeJS(addArticleURL.toString()) + "'});";
 					%>
 
-						<%
-						String taglibAddArticleURL = "javascript:Liferay.Util.openWindow({id: '_" + HtmlUtil.escapeJS(portletDisplay.getId()) + "_editAsset', title: '" + HtmlUtil.escapeJS(LanguageUtil.format(locale, "new-x", ddmStructure.getName(locale))) + "', uri:'" + HtmlUtil.escapeJS(addArticleURL.toString()) + "'});";
-						%>
-
-						<liferay-ui:icon
-							cssClass="lfr-icon-action lfr-icon-action-add"
-							label="<%= true %>"
-							message="<%= ddmStructure.getName(locale) %>"
-							src="<%= assetRendererFactory.getIconPath(renderRequest) %>"
-							url="<%= taglibAddArticleURL %>"
+						<aui:nav-item
+							href="<%= taglibAddArticleURL %>"
+							iconCssClass="<%= assetRendererFactory.getIconCssClass() %>"
+							label="<%= ddmStructure.getName(locale) %>"
 						/>
 
 					<%
 					}
 					%>
 
-				</liferay-ui:icon-menu>
+				</aui:nav-item>
 			</c:if>
-		</div>
-	</div>
+		</aui:nav>
+	</aui:nav-bar>
 </c:if>
 
 <c:if test="<%= (articleDisplay != null) && hasViewPermission %>">

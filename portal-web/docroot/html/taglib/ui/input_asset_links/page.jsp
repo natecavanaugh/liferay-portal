@@ -92,7 +92,15 @@ assetBrowserURL.setPortletMode(PortletMode.VIEW);
 assetBrowserURL.setWindowState(LiferayWindowState.POP_UP);
 %>
 
-<liferay-ui:icon-menu cssClass="select-existing-selector" icon='<%= themeDisplay.getPathThemeImages() + "/common/search.png" %>' id='<%= randomNamespace + "inputAssetLinks" %>' message="select" showWhenSingleIcon="<%= true %>">
+<aui:nav-bar>
+	<aui:nav>
+		<aui:nav-item
+			cssClass="select-existing-selector"
+			dropdown="<%= true %>"
+			iconCssClass="icon-search"
+			id='<%= randomNamespace + "inputAssetLinks" %>'
+			label="select"
+		>
 
 	<%
 	List <AssetRendererFactory> assetRendererFactories = ListUtil.sort(AssetRendererFactoryRegistryUtil.getAssetRendererFactories(company.getCompanyId()), new AssetRendererFactoryTypeNameComparator(locale));
@@ -128,13 +136,14 @@ assetBrowserURL.setWindowState(LiferayWindowState.POP_UP);
 				data.put("type", type);
 	%>
 
-				<liferay-ui:icon
+				<aui:nav-item
 					cssClass="asset-selector"
 					data="<%= data %>"
-					id="<%= FriendlyURLNormalizerUtil.normalize(type) %>"
-					message="<%= type %>"
-					src="<%= assetRendererFactory.getIconPath(portletRequest) %>"
-					url="javascript:;"
+					href="javascript:;"
+					iconCssClass="<%= assetRendererFactory.getIconCssClass() %>"
+					iconSrc="<%= assetRendererFactory.getIconPath(portletRequest) %>"
+					id="<%= groupId + FriendlyURLNormalizerUtil.normalize(type) %>"
+					label="<%= type %>"
 				/>
 
 	<%
@@ -153,13 +162,14 @@ assetBrowserURL.setWindowState(LiferayWindowState.POP_UP);
 					data.put("type", type);
 	%>
 
-					<liferay-ui:icon
+					<aui:nav-item
 						cssClass="asset-selector"
 						data="<%= data %>"
+						href="javascript:;"
+						iconCssClass="<%= assetRendererFactory.getIconCssClass() %>"
+						iconSrc="<%= assetRendererFactory.getIconPath(portletRequest) %>"
 						id="<%= groupId + FriendlyURLNormalizerUtil.normalize(type) %>"
-						message="<%= type %>"
-						src="<%= assetRendererFactory.getIconPath(portletRequest) %>"
-						url="javascript:;"
+						label="<%= type %>"
 					/>
 
 	<%
@@ -169,7 +179,9 @@ assetBrowserURL.setWindowState(LiferayWindowState.POP_UP);
 	}
 	%>
 
-</liferay-ui:icon-menu>
+		</aui:nav-item>
+	</aui:nav>
+</aui:nav-bar>
 
 <br />
 
@@ -269,7 +281,7 @@ assetBrowserURL.setWindowState(LiferayWindowState.POP_UP);
 				}
 			);
 		},
-		'.asset-selector a'
+		'.asset-selector'
 	);
 </aui:script>
 
