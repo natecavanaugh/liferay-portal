@@ -1005,8 +1005,7 @@ public class HookHotDeployListener
 		String packagePath = modelName.substring(0, pos);
 
 		String beanName =
-			packagePath + ".service.persistence.impl." + entityName +
-				"Persistence";
+			packagePath + ".service.persistence." + entityName + "Persistence";
 
 		try {
 			return (BasePersistence<?>)PortalBeanLocatorUtil.locate(beanName);
