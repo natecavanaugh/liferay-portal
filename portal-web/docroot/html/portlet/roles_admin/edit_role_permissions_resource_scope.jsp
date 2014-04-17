@@ -68,13 +68,6 @@ List groupNames = (List)objArray[8];
 	%>
 
 	<c:if test="<%= supportsFilterByGroup %>">
-		<portlet:renderURL var="selectCommunityURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-			<portlet:param name="struts_action" value="/roles_admin/select_site" />
-			<portlet:param name="includeCompany" value="<%= Boolean.TRUE.toString() %>" />
-			<portlet:param name="includeUserPersonalSite" value="<%= Boolean.TRUE.toString() %>" />
-			<portlet:param name="target" value="<%= target %>" />
-		</portlet:renderURL>
-
 		<liferay-ui:icon
 			id="<%= HtmlUtil.escapeAttribute(targetId) %>"
 			image="configuration"
@@ -87,6 +80,13 @@ List groupNames = (List)objArray[8];
 			A.one('#<portlet:namespace /><%= HtmlUtil.escapeJS(targetId) %>').on(
 				'click',
 				function(event) {
+					<portlet:renderURL var="selectCommunityURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+						<portlet:param name="struts_action" value="/roles_admin/select_site" />
+						<portlet:param name="includeCompany" value="<%= Boolean.TRUE.toString() %>" />
+						<portlet:param name="includeUserPersonalSite" value="<%= Boolean.TRUE.toString() %>" />
+						<portlet:param name="target" value="<%= target %>" />
+					</portlet:renderURL>
+
 					Liferay.Util.selectEntity(
 						{
 							dialog: {
