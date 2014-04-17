@@ -137,20 +137,16 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 	</aui:fieldset>
 </aui:form>
 
-<portlet:renderURL var="selectGroupURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-	<portlet:param name="struts_action" value="/document_library/select_group" />
-</portlet:renderURL>
-
-<portlet:renderURL var="selectFileEntryURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-	<portlet:param name="struts_action" value="/document_library/select_file_entry" />
-</portlet:renderURL>
-
 <aui:script use="aui-base,escape">
 	var selectToFileEntryButton = A.one('#<portlet:namespace />selectToFileEntryButton');
 
 	A.one('#<portlet:namespace />selectGroupButton').on(
 		'click',
 		function(event) {
+			<portlet:renderURL var="selectGroupURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+				<portlet:param name="struts_action" value="/document_library/select_group" />
+			</portlet:renderURL>
+
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
@@ -183,6 +179,10 @@ portletURL.setParameter("fileShortcutId", String.valueOf(fileShortcutId));
 	selectToFileEntryButton.on(
 		'click',
 		function(event) {
+			<portlet:renderURL var="selectFileEntryURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+				<portlet:param name="struts_action" value="/document_library/select_file_entry" />
+			</portlet:renderURL>
+
 			Liferay.Util.selectEntity(
 				{
 					dialog: {
