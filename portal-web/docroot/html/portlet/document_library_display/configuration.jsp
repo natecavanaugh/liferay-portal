@@ -183,13 +183,13 @@ catch (NoSuchFolderException nsfe) {
 </aui:form>
 
 <aui:script use="aui-base">
-	<liferay-portlet:renderURL portletName="<%= portletResource %>" var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-		<portlet:param name="struts_action" value='<%= strutsAction + "/select_folder" %>' />
-	</liferay-portlet:renderURL>
-
 	A.one('#<portlet:namespace />openFolderSelectorButton').on(
 		'click',
 		function(event) {
+			<liferay-portlet:renderURL portletName="<%= portletResource %>" var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+				<portlet:param name="struts_action" value='<%= strutsAction + "/select_folder" %>' />
+			</liferay-portlet:renderURL>
+
 			Liferay.Util.selectEntity(
 				{
 					dialog: {

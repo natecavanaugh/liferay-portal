@@ -271,13 +271,14 @@ DLActionsDisplayContext dlActionsDisplayContext = new DLActionsDisplayContext(re
 					<aui:button disabled="<%= folderId <= 0 %>" name="removeFolderButton" onClick="<%= taglibRemoveFolder %>" value="remove" />
 
 					<aui:script use="aui-base">
-						<liferay-portlet:renderURL var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-							<portlet:param name="struts_action" value='<%= "/document_library/select_folder" %>' />
-						</liferay-portlet:renderURL>
-
 						A.one('#<portlet:namespace />selectFolderButton').on(
 							'click',
 							function(event) {
+
+								<liferay-portlet:renderURL var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+									<portlet:param name="struts_action" value='<%= "/document_library/select_folder" %>' />
+								</liferay-portlet:renderURL>
+
 								Liferay.Util.selectEntity(
 									{
 										dialog: {

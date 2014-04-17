@@ -437,14 +437,14 @@ String iconMenuId = null;
 	var slideShow = A.one('.<%= randomNamespace %>-slide-show');
 
 	if (slideShow) {
-		<portlet:renderURL var="viewSlideShowURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-			<portlet:param name="struts_action" value="/image_gallery_display/view_slide_show" />
-			<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
-		</portlet:renderURL>
-
 		slideShow.on(
 			'click',
 			function(event) {
+				<portlet:renderURL var="viewSlideShowURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="struts_action" value="/image_gallery_display/view_slide_show" />
+					<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
+				</portlet:renderURL>
+
 				var slideShowWindow = window.open('<%= viewSlideShowURL %>', 'slideShow', 'directories=no,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no');
 
 				slideShowWindow.focus();
