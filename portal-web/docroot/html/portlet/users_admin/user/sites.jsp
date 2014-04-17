@@ -101,17 +101,17 @@ List<Group> inheritedSites = (List<Group>)request.getAttribute("user.inheritedSi
 		url="javascript:;"
 	/>
 
-	<portlet:renderURL var="groupSelectorURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-		<portlet:param name="struts_action" value="/users_admin/select_site" />
-		<portlet:param name="p_u_i_d" value="<%= String.valueOf(selUser.getUserId()) %>" />
-	</portlet:renderURL>
-
 	<aui:script use="liferay-search-container">
 		var Util = Liferay.Util;
 
 		A.one('#<portlet:namespace />selectSiteLink').on(
 			'click',
 			function(event) {
+				<portlet:renderURL var="groupSelectorURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="struts_action" value="/users_admin/select_site" />
+					<portlet:param name="p_u_i_d" value="<%= String.valueOf(selUser.getUserId()) %>" />
+				</portlet:renderURL>
+
 				Util.selectEntity(
 					{
 						dialog: {
