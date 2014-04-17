@@ -110,15 +110,15 @@ else {
 </aui:form>
 
 <aui:script>
-	<portlet:resourceURL var="siteURLLayoutsURL">
-		<portlet:param name="struts_action" value="/mobile_device_rules/site_url_layouts" />
-	</portlet:resourceURL>
-
 	Liferay.provide(
 		window,
 		'<portlet:namespace />changeDisplay',
 		function() {
 			var A = AUI();
+
+			<portlet:resourceURL var="siteURLLayoutsURL">
+				<portlet:param name="struts_action" value="/mobile_device_rules/site_url_layouts" />
+			</portlet:resourceURL>
 
 			A.io.request(
 				'<%= siteURLLayoutsURL.toString() %>',
@@ -142,16 +142,16 @@ else {
 		['aui-io']
 	);
 
-	<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" var="editorURL">
-		<portlet:param name="struts_action" value="/mobile_device_rules/edit_action_editor" />
-		<portlet:param name="ajax" value="true" />
-	</liferay-portlet:resourceURL>
-
 	Liferay.provide(
 		window,
 		'<portlet:namespace />changeType',
 		function() {
 			var A = AUI();
+
+			<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" var="editorURL">
+				<portlet:param name="struts_action" value="/mobile_device_rules/edit_action_editor" />
+				<portlet:param name="ajax" value="true" />
+			</liferay-portlet:resourceURL>
 
 			A.io.request(
 				'<%= editorURL.toString() %>',
