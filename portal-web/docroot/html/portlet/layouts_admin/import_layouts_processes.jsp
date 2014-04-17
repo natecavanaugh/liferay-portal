@@ -91,6 +91,7 @@ OrderByComparator orderByComparator = BackgroundTaskComparatorFactoryUtil.getBac
 
 		<liferay-ui:search-container-column-text>
 			<c:if test="<%= !backgroundTask.isInProgress() %>">
+
 				<%
 				Date completionDate = backgroundTask.getCompletionDate();
 				%>
