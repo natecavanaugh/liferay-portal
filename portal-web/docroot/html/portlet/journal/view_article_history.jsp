@@ -185,16 +185,16 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 			var compareButton = A.one('#<portlet:namespace />compare');
 
 			if (compareButton) {
-				<portlet:renderURL var="compareVersionURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-					<portlet:param name="struts_action" value="/journal/compare_versions" />
-					<portlet:param name="groupId" value="<%= String.valueOf(article.getGroupId()) %>" />
-					<portlet:param name="articleId" value="<%= article.getArticleId() %>" />
-				</portlet:renderURL>
-
 				compareButton.on(
 					'click',
 					function(event) {
 						event.preventDefault();
+
+						<portlet:renderURL var="compareVersionURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+							<portlet:param name="struts_action" value="/journal/compare_versions" />
+							<portlet:param name="groupId" value="<%= String.valueOf(article.getGroupId()) %>" />
+							<portlet:param name="articleId" value="<%= article.getArticleId() %>" />
+						</portlet:renderURL>
 
 						var uri = '<%= compareVersionURL %>';
 
