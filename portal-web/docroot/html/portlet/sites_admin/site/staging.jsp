@@ -80,19 +80,19 @@ BackgroundTask lastCompletedInitialPublicationBackgroundTask = BackgroundTaskLoc
 	<aui:script use="aui-base">
 		var publishProcessesLink = A.one('#<portlet:namespace />publishProcessesLink');
 
-		<liferay-portlet:renderURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="publishProcessesURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-			<portlet:param name="<%= Constants.CMD %>" value="view_processes" />
-			<portlet:param name="struts_action" value="/layouts_admin/publish_layouts" />
-			<portlet:param name="<%= SearchContainer.DEFAULT_CUR_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_CUR_PARAM) %>" />
-			<portlet:param name="<%= SearchContainer.DEFAULT_DELTA_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_DELTA_PARAM) %>" />
-			<portlet:param name="groupId" value="<%= String.valueOf(stagingGroupId) %>" />
-			<portlet:param name="liveGroupId" value="<%= String.valueOf(liveGroupId) %>" />
-			<portlet:param name="localPublishing" value="<%= String.valueOf(stagedLocally) %>" />
-		</liferay-portlet:renderURL>
-
 		publishProcessesLink.on(
 			'click',
 			function(event) {
+				<liferay-portlet:renderURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="publishProcessesURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="<%= Constants.CMD %>" value="view_processes" />
+					<portlet:param name="struts_action" value="/layouts_admin/publish_layouts" />
+					<portlet:param name="<%= SearchContainer.DEFAULT_CUR_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_CUR_PARAM) %>" />
+					<portlet:param name="<%= SearchContainer.DEFAULT_DELTA_PARAM %>" value="<%= ParamUtil.getString(request, SearchContainer.DEFAULT_DELTA_PARAM) %>" />
+					<portlet:param name="groupId" value="<%= String.valueOf(stagingGroupId) %>" />
+					<portlet:param name="liveGroupId" value="<%= String.valueOf(liveGroupId) %>" />
+					<portlet:param name="localPublishing" value="<%= String.valueOf(stagedLocally) %>" />
+				</liferay-portlet:renderURL>
+
 				Liferay.Util.openWindow(
 					{
 						id: 'publishProcesses',
