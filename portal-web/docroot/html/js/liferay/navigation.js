@@ -796,7 +796,15 @@ AUI.add(
 							onSuccess = function(event, id, obj) {
 								var doc = A.getDoc();
 
+								if (textNode.hasChildNodes()) {
+									var navChildToggle = textNode.one('.lfr-nav-child-toggle');
+								}
+
 								textNode.text(pageTitle);
+
+								if (navChildToggle) {
+									textNode.append(navChildToggle);
+								}
 
 								actionNode.show();
 
