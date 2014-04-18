@@ -797,7 +797,7 @@ AUI.add(
 								var doc = A.getDoc();
 
 								if (textNode.hasChildNodes()) {
-									var navChildToggle = textNode.all('.lfr-nav-child-toggle');
+									var navChildToggle = textNode.one('.lfr-nav-child-toggle');
 								}
 
 								textNode.text(pageTitle);
