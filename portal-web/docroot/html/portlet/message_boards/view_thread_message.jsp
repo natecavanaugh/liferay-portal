@@ -41,10 +41,8 @@ MBThread thread = (MBThread)request.getAttribute("edit_message.jsp-thread");
 				<c:otherwise>
 					<liferay-ui:user-display
 						displayStyle="2"
-						height="60"
 						userId="<%= message.getUserId() %>"
 						userName="<%= HtmlUtil.escape(message.getUserName()) %>"
-						width="60"
 					>
 
 						<%
@@ -129,7 +127,7 @@ MBThread thread = (MBThread)request.getAttribute("edit_message.jsp-thread");
 			</c:choose>
 		</td>
 		<td class="lfr-top">
-			<div class="thread-top float-container">
+			<div class="float-container thread-top">
 				<div class="subject">
 					<c:choose>
 						<c:when test="<%= showPermanentLink %>">
