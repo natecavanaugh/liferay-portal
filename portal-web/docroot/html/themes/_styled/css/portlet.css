@@ -166,8 +166,9 @@ body.portlet {
 	.navbar {
 		&.navbar-actions {
 			.navbar-inner {
-				background-color: #333;
+				background-color: #A9A9A9;
 				background-image: none;
+				border-color: #A9A9A9;
 				border-radius: 20px;
 				min-height: 0;
 				padding: 0 5px;
@@ -176,30 +177,29 @@ body.portlet {
 			.nav {
 				margin: 0;
 
-				> li > a {
-					color: #FFF;
-					line-height: normal;
-					padding: 0 10px;
-					text-shadow: 0 0;
+				> li {
+					line-height: 1;
 
-					.nav-item-icon {
-						vertical-align: top;
-					}
-
-					.nav-item-icon, .nav-item-label {
-						line-height: 30px;
-					}
-
-					&:hover, &:focus {
+					> a {
 						color: #FFF;
+						padding: 10px;
+						text-shadow: 0 0;
 
-						.nav-item-label {
-							text-decoration: underline;
+						.nav-item-icon {
+							vertical-align: top;
 						}
-					}
 
-					& .icon-caret-down {
-						display: none;
+						&:hover, &:focus {
+							color: #FFF;
+
+							.nav-item-label {
+								text-decoration: underline;
+							}
+						}
+
+						& .icon-caret-down {
+							display: none;
+						}
 					}
 				}
 
@@ -778,18 +778,14 @@ body.portlet {
 }
 
 .ie {
-	.portlet-borderless-bar {
+	.portlet-borderless-bar, .navbar-actions .navbar-inner {
 		@include opacity(0.5);
 	}
 
-	.portlet-content {
-		.navbar-actions .navbar-inner {
-			@include opacity(0.5);
+	.portlet-borderless-container:hover, .portlet-content:hover {
+		.portlet-borderless-bar, .navbar-actions .navbar-inner {
+			@include opacity(1);
 		}
-	}
-
-	.portlet-borderless-container:hover .portlet-borderless-bar, .portlet-content:hover .navbar-actions .navbar-inner {
-		@include opacity(1);
 	}
 
 	.taglib-calendar tr td.first a {
