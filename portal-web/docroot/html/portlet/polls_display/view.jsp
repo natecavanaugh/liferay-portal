@@ -120,8 +120,8 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 	redirectURL.setWindowState(LiferayWindowState.POP_UP);
 	%>
 
-	<div class="lfr-meta-actions icons-container">
-		<div class="lfr-icon-actions">
+	<aui:nav-bar cssClass="navbar-actions">
+		<aui:nav collapsible="<%= false %>">
 			<c:if test="<%= showEditPollIcon %>">
 				<liferay-portlet:renderURL doAsGroupId="<%= scopeGroupId %>" plid="<%= controlPanelPlid %>" portletName="<%= PortletKeys.POLLS %>" refererPlid="<%= plid %>" var="editQuestionURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 					<liferay-portlet:param name="struts_action" value="/polls/edit_question" />
@@ -135,24 +135,23 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 				String taglibEditQuestionURL = "javascript:Liferay.Util.openWindow({id: '" + liferayPortletResponse.getNamespace() + "editQuestion', title: '" + HtmlUtil.escapeJS(ResourceActionsUtil.getModelResource(locale, PollsQuestion.class.getName())) + "', uri:'" + HtmlUtil.escapeJS(editQuestionURL.toString()) + "'});";
 				%>
 
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-edit"
-					image="edit"
-					label="<%= true %>"
-					message="edit-question"
-					url="<%= taglibEditQuestionURL %>"
+				<aui:nav-item
+					href="<%= taglibEditQuestionURL %>"
+					iconCssClass="icon-cog"
+					label="edit-question"
 				/>
 			</c:if>
 
 			<c:if test="<%= hasConfigurationPermission %>">
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-configuration"
-					image="configuration"
-					label="<%= true %>"
-					message="select-poll"
-					method="get"
-					onClick="<%= portletDisplay.getURLConfigurationJS() %>"
-					url="<%= portletDisplay.getURLConfiguration() %>"
+
+				<%
+				String taglibConfigurationURL = "javascript:Liferay.Util.openWindow({id: '_" + HtmlUtil.escapeJS(portletDisplay.getId()) + "_editAsset', title: '" + LanguageUtil.get(locale, "select-poll") + "', uri:'" + HtmlUtil.escapeJS(portletDisplay.getURLConfiguration()) + "'});";
+				%>
+
+				<aui:nav-item
+					href="<%= taglibConfigurationURL %>"
+					iconCssClass="icon-cog"
+					label="select-poll"
 				/>
 			</c:if>
 
@@ -168,14 +167,12 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 				String taglibEditQuestionURL = "javascript:Liferay.Util.openWindow({id: '" + liferayPortletResponse.getNamespace() + "editQuestion', title: '" + HtmlUtil.escapeJS(LanguageUtil.get(pageContext, "new-poll")) + "', uri:'" + HtmlUtil.escapeJS(editQuestionURL.toString()) + "'});";
 				%>
 
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-add"
-					image="add_article"
-					label="<%= true %>"
-					message="add"
-					url="<%= taglibEditQuestionURL %>"
+				<aui:nav-item
+					href="<%= taglibEditQuestionURL %>"
+					iconCssClass="icon-plus"
+					label="add"
 				/>
 			</c:if>
-		</div>
-	</div>
+		</aui:nav>
+	</aui:nav-bar>
 </c:if>
