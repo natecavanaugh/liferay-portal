@@ -63,7 +63,7 @@ public class TextFormatter {
 
 	public static final int J = 9;
 
-	// formatId --> format-id, format-ID --> format-i-d
+	// formatId --> format-id, formatID --> format-i-d
 
 	public static final int K = 10;
 
