@@ -118,8 +118,6 @@ AUI.add(
 
 											portalLayout._syncPlaceholderUI();
 										}
-
-										event.halt();
 									}
 								}
 
