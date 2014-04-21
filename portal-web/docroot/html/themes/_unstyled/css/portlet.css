@@ -42,30 +42,8 @@ body.portlet {
 .portlet-nested-portlets .portlet-boundary {
 }
 
-.portlet-borderless-bar, .portlet-journal-content .lfr-icon-actions {
+.portlet-borderless-bar {
 	a {
-	}
-}
-
-.portlet-journal-content .lfr-icon-actions {
-	.taglib-text {
-	}
-
-	.lfr-icon-action a {
-		.icon {
-		}
-	}
-
-	.lfr-icon-action-add a {
-	}
-
-	.lfr-icon-action-edit a {
-	}
-
-	.lfr-icon-action-edit-template a {
-	}
-
-	.lfr-icon-action-configuration a {
 	}
 }
 
@@ -97,15 +75,12 @@ body.portlet {
 .lfr-configurator-visibility {
 	.portlet-borderless-bar {
 	}
-
-	&.portlet-journal-content .lfr-icon-actions {
-	}
 }
 
-.portlet-borderless-container:hover .portlet-borderless-bar, .portlet-journal-content:hover .lfr-icon-actions {
+.portlet-borderless-container:hover .portlet-borderless-bar {
 }
 
-.portlet-borderless-container:hover .portlet-borderless-bar .portlet-actions, .portlet-journal-content:hover .lfr-icon-actions .taglib-text {
+.portlet-borderless-container:hover .portlet-borderless-bar .portlet-actions {
 }
 
 .portlet-title-default {
@@ -373,10 +348,10 @@ body.portlet {
 }
 
 .ie {
-	.portlet-borderless-bar, .portlet-journal-content .lfr-icon-actions {
+	.portlet-borderless-bar {
 	}
 
-	.portlet-borderless-container:hover .portlet-borderless-bar, .portlet-journal-content .lfr-icon-actions:hover {
+	.portlet-borderless-container:hover .portlet-borderless-bar {
 	}
 
 	.taglib-calendar tr td.first a {
@@ -396,9 +371,6 @@ body.portlet {
 .ie6, .ie7 {
 	.portlet-journal-content {
 		.icons-container {
-		}
-
-		.lfr-icon-actions .taglib-text {
 		}
 	}
 

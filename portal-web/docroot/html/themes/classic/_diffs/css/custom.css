@@ -628,10 +628,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 		float: none;
 	}
 
-	.portlet-journal-content .lfr-icon-actions {
-		margin-bottom: 3px;
-	}
-
 	/* ---------- Extras ---------- */
 
 	#navigation {
@@ -743,12 +739,6 @@ $dockbarOpenGradientStart: #0EA6F9;
 
 	.portlet-content, .portlet-minimized .portlet-content-container {
 		@include border-radius(0 0 3px 3px);
-	}
-
-	.portlet-borderless-container, .portlet-content {
-		.lfr-icon-actions {
-			@extend %portlet-action-bar-custom;
-		}
 	}
 
 	.portlet-minimized {
