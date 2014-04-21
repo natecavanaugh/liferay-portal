@@ -137,7 +137,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 
 				<aui:nav-item
 					href="<%= taglibEditQuestionURL %>"
-					iconCssClass="icon-cog"
+					iconCssClass="icon-edit"
 					label="edit-question"
 				/>
 			</c:if>
@@ -150,7 +150,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 
 				<aui:nav-item
 					href="<%= taglibConfigurationURL %>"
-					iconCssClass="icon-cog"
+					iconCssClass="icon-search"
 					label="select-poll"
 				/>
 			</c:if>

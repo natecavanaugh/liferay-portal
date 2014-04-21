@@ -327,7 +327,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 
 				<aui:nav-item
 					href="<%= taglibEditArticleURL %>"
-					iconCssClass="icon-edit"
+					iconCssClass="icon-pencil"
 					label="edit"
 				/>
 			</c:if>
@@ -348,7 +348,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 
 				<aui:nav-item
 					href="<%= taglibEditTemplateURL %>"
-					iconCssClass="icon-list-alt"
+					iconCssClass="icon-edit"
 					label="edit-template"
 				/>
 			</c:if>
@@ -361,7 +361,7 @@ boolean showIconsActions = themeDisplay.isSignedIn() && !layout.isLayoutPrototyp
 
 				<aui:nav-item
 					href="<%= taglibSelectArticleURL %>"
-					iconCssClass="icon-cog"
+					iconCssClass="icon-search"
 					label="select-web-content"
 				/>
 			</c:if>

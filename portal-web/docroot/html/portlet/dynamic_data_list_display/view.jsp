@@ -109,7 +109,7 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 
 				<aui:nav-item
 					href="<%= addFormTemplateURL %>"
-					iconCssClass="icon-list-alt"
+					iconCssClass="icon-plus"
 					label="add-form-template"
 				/>
 
@@ -126,7 +126,7 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 
 				<aui:nav-item
 					href="<%= addDisplayTemplateURL %>"
-					iconCssClass="icon-list-alt"
+					iconCssClass="icon-plus"
 					label="add-display-template"
 				/>
 			</c:if>
@@ -144,7 +144,7 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 
 				<aui:nav-item
 					href="<%= editFormTemplateURL %>"
-					iconCssClass="icon-list-alt"
+					iconCssClass="icon-edit"
 					label="edit-form-template"
 				/>
 			</c:if>
@@ -160,7 +160,7 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 
 				<aui:nav-item
 					href="<%= editDisplayTemplateURL %>"
-					iconCssClass="icon-list-alt"
+					iconCssClass="icon-edit"
 					label="edit-display-template"
 				/>
 			</c:if>
@@ -173,7 +173,7 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 
 				<aui:nav-item
 					href="<%= taglibConfigurationURL %>"
-					iconCssClass="icon-cog"
+					iconCssClass="icon-search"
 					label="select-list"
 				/>
 			</c:if>
