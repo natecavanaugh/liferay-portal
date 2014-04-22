@@ -52,9 +52,9 @@ public class DirectURLMatcher extends CallbackMatcher {
 		@Override
 		public String foundMatch(MatchResult matchResult) {
 			String fileName = StringUtil.replace(
-				matchResult.group(1), "%5F", StringPool.UNDERLINE);
+				matchResult.group(1), "%5F", StringPool.UNDERSCORE);
 			String title = StringUtil.replace(
-				matchResult.group(2), "%5F", StringPool.UNDERLINE);
+				matchResult.group(2), "%5F", StringPool.UNDERSCORE);
 
 			if (Validator.isNull(title)) {
 				title = fileName;

@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_app_view_display_style") + StringPool.UNDERLINE;
+String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_app_view_display_style") + StringPool.UNDERSCORE;
 
 String displayStyle = (String)request.getAttribute("liferay-ui:app-view-display-style:displayStyle");
 String[] displayStyles = (String[])request.getAttribute("liferay-ui:app-view-display-style:displayStyles");

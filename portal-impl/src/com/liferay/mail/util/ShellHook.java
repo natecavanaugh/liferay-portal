@@ -130,7 +130,7 @@ public class ShellHook implements Hook {
 	protected void execute(String[] cmdLine) {
 		for (int i = 0; i < cmdLine.length; i++) {
 			if (cmdLine[i].trim().length() == 0) {
-				cmdLine[i] = StringPool.UNDERLINE;
+				cmdLine[i] = StringPool.UNDERSCORE;
 			}
 		}
 

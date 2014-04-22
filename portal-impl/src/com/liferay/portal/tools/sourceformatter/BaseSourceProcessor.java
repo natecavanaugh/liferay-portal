@@ -275,12 +275,12 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 					languageKey.endsWith(StringPool.DASH) ||
 					languageKey.endsWith(StringPool.OPEN_BRACKET) ||
 					languageKey.endsWith(StringPool.PERIOD) ||
-					languageKey.endsWith(StringPool.UNDERLINE) ||
+					languageKey.endsWith(StringPool.UNDERSCORE) ||
 					languageKey.startsWith(StringPool.DASH) ||
 					languageKey.startsWith(StringPool.OPEN_BRACKET) ||
 					languageKey.startsWith(StringPool.OPEN_CURLY_BRACE) ||
 					languageKey.startsWith(StringPool.PERIOD) ||
-					languageKey.startsWith(StringPool.UNDERLINE)) {
+					languageKey.startsWith(StringPool.UNDERSCORE)) {
 
 					continue;
 				}

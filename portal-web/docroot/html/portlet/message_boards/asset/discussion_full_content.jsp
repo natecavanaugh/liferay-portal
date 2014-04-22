@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/message_boards/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "discussion_full_content") + StringPool.UNDERLINE;
+String randomNamespace = PortalUtil.generateRandomKey(request, "discussion_full_content") + StringPool.UNDERSCORE;
 
 MBMessage message = (MBMessage)request.getAttribute(WebKeys.MESSAGE_BOARDS_MESSAGE);
 

@@ -279,7 +279,7 @@ if (!cmd.equals(Constants.ADD)) {
 											%>
 
 												<li class="tree-item">
-													<aui:input label="<%= portletTitle %>" name="<%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERLINE + portlet.getRootPortletId() %>" type="checkbox" value="<%= MapUtil.getBoolean(parameterMap, PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERLINE + portlet.getRootPortletId(), true) %>" />
+													<aui:input label="<%= portletTitle %>" name="<%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERSCORE + portlet.getRootPortletId() %>" type="checkbox" value="<%= MapUtil.getBoolean(parameterMap, PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERSCORE + portlet.getRootPortletId(), true) %>" />
 
 													<div class="hide" id="<portlet:namespace />configuration_<%= portlet.getRootPortletId() %>">
 														<ul class="lfr-tree unstyled">
@@ -317,7 +317,7 @@ if (!cmd.equals(Constants.ADD)) {
 													</ul>
 
 													<aui:script>
-														Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERLINE + portlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeConfiguration<%= StringPool.UNDERLINE + portlet.getRootPortletId() %>');
+														Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERSCORE + portlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeConfiguration<%= StringPool.UNDERSCORE + portlet.getRootPortletId() %>');
 													</aui:script>
 												</li>
 
@@ -520,7 +520,7 @@ if (!cmd.equals(Constants.ADD)) {
 																<span class="badge badge-warning deletions"><%= modelDeletionCount > 0 ? (modelDeletionCount + StringPool.SPACE + LanguageUtil.get(pageContext, "deletions")) : StringPool.BLANK %></span>
 															</liferay-util:buffer>
 
-															<aui:input checked="<%= MapUtil.getBoolean(parameterMap, PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + portlet.getPortletId(), portletDataHandler.isPublishToLiveByDefault()) %>" label="<%= portletTitle + badgeHTML %>" name="<%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + portlet.getPortletId() %>" type="checkbox" value="<%= MapUtil.getBoolean(parameterMap, PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + portlet.getPortletId(), portletDataHandler.isPublishToLiveByDefault()) %>" />
+															<aui:input checked="<%= MapUtil.getBoolean(parameterMap, PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERSCORE + portlet.getPortletId(), portletDataHandler.isPublishToLiveByDefault()) %>" label="<%= portletTitle + badgeHTML %>" name="<%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERSCORE + portlet.getPortletId() %>" type="checkbox" value="<%= MapUtil.getBoolean(parameterMap, PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERSCORE + portlet.getPortletId(), portletDataHandler.isPublishToLiveByDefault()) %>" />
 
 															<%
 															PortletDataHandlerControl[] exportControls = portletDataHandler.getExportControls();
@@ -602,7 +602,7 @@ if (!cmd.equals(Constants.ADD)) {
 																</ul>
 
 																<aui:script>
-																	Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + portlet.getPortletId() %>Checkbox', '<portlet:namespace />showChangeContent<%= StringPool.UNDERLINE + portlet.getPortletId() %>');
+																	Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERSCORE + portlet.getPortletId() %>Checkbox', '<portlet:namespace />showChangeContent<%= StringPool.UNDERSCORE + portlet.getPortletId() %>');
 																</aui:script>
 
 															<%

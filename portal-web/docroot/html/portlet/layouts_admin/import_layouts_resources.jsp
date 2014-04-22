@@ -234,7 +234,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 									%>
 
 										<li class="tree-item">
-											<aui:input label="<%= portletTitle %>" name="<%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERLINE + portlet.getRootPortletId() %>" type="checkbox" value="<%= true %>" />
+											<aui:input label="<%= portletTitle %>" name="<%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERSCORE + portlet.getRootPortletId() %>" type="checkbox" value="<%= true %>" />
 
 											<div class="hide" id="<portlet:namespace />configuration_<%= portlet.getRootPortletId() %>">
 												<ul class="lfr-tree unstyled">
@@ -271,7 +271,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 											</ul>
 
 											<aui:script>
-												Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERLINE + portlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeConfiguration<%= StringPool.UNDERLINE + portlet.getRootPortletId() %>');
+												Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERSCORE + portlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeConfiguration<%= StringPool.UNDERSCORE + portlet.getRootPortletId() %>');
 											</aui:script>
 										</li>
 
@@ -367,7 +367,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 														<span class="badge badge-warning deletions"><%= modelDeletionCount > 0 ? (modelDeletionCount + StringPool.SPACE + LanguageUtil.get(pageContext, "deletions")) : StringPool.BLANK %></span>
 													</liferay-util:buffer>
 
-													<aui:input checked="<%= true %>" label="<%= portletTitle + badgeHTML %>" name="<%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + portlet.getRootPortletId() %>" type="checkbox" />
+													<aui:input checked="<%= true %>" label="<%= portletTitle + badgeHTML %>" name="<%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERSCORE + portlet.getRootPortletId() %>" type="checkbox" />
 
 													<%
 													PortletDataHandlerControl[] importControls = portletDataHandler.getImportControls();
@@ -448,7 +448,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 														</ul>
 
 														<aui:script>
-															Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + portlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeContent<%= StringPool.UNDERLINE + portlet.getRootPortletId() %>');
+															Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERSCORE + portlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeContent<%= StringPool.UNDERSCORE + portlet.getRootPortletId() %>');
 														</aui:script>
 
 													<%

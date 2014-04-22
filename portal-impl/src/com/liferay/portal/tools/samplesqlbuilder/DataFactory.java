@@ -618,7 +618,7 @@ public class DataFactory {
 
 				sb.append("TestVocabulary_");
 				sb.append(i);
-				sb.append(StringPool.UNDERLINE);
+				sb.append(StringPool.UNDERSCORE);
 				sb.append(j);
 
 				AssetVocabularyModel assetVocabularyModel =
@@ -632,7 +632,7 @@ public class DataFactory {
 
 					sb.append("TestCategory_");
 					sb.append(assetVocabularyModel.getVocabularyId());
-					sb.append(StringPool.UNDERLINE);
+					sb.append(StringPool.UNDERSCORE);
 					sb.append(k);
 
 					AssetCategoryModel assetCategoryModel =
@@ -1524,7 +1524,7 @@ public class DataFactory {
 
 		sb.append("TestJournalArticle_");
 		sb.append(articleIndex);
-		sb.append(StringPool.UNDERLINE);
+		sb.append(StringPool.UNDERSCORE);
 		sb.append(versionIndex);
 
 		String urlTitle = sb.toString();
@@ -2119,7 +2119,7 @@ public class DataFactory {
 
 		String name = portletId;
 
-		int index = portletId.indexOf(StringPool.UNDERLINE);
+		int index = portletId.indexOf(StringPool.UNDERSCORE);
 
 		if (index > 0) {
 			name = portletId.substring(0, index);

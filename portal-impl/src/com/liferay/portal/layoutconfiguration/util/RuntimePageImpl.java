@@ -508,7 +508,7 @@ public class RuntimePageImpl implements RuntimePage {
 			layoutTemplateId = layoutTemplateId.substring(
 				pos + PortletConstants.INSTANCE_SEPARATOR.length() + 1);
 
-			pos = layoutTemplateId.indexOf(StringPool.UNDERLINE);
+			pos = layoutTemplateId.indexOf(StringPool.UNDERSCORE);
 
 			layoutTemplateId = layoutTemplateId.substring(pos + 1);
 		}

@@ -191,7 +191,7 @@ public class LanguageResources {
 				sb.append(name);
 
 				if (localeName.length() > 0) {
-					sb.append(StringPool.UNDERLINE);
+					sb.append(StringPool.UNDERSCORE);
 					sb.append(localeName);
 				}
 

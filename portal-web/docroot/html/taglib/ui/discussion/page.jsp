@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/ui/discussion/init.jsp" %>
 
 <%
-String randomNamespace = StringUtil.randomId() + StringPool.UNDERLINE;
+String randomNamespace = StringUtil.randomId() + StringPool.UNDERSCORE;
 
 boolean assetEntryVisible = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:discussion:assetEntryVisible"));
 String className = (String)request.getAttribute("liferay-ui:discussion:className");

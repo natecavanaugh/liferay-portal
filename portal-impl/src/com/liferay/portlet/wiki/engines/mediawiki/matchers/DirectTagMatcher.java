@@ -46,7 +46,7 @@ public class DirectTagMatcher extends CallbackMatcher {
 		public String foundMatch(MatchResult matchResult) {
 			String fileName = matchResult.group(1);
 
-			if (!fileName.contains(StringPool.UNDERLINE)) {
+			if (!fileName.contains(StringPool.UNDERSCORE)) {
 				return null;
 			}
 
@@ -61,7 +61,7 @@ public class DirectTagMatcher extends CallbackMatcher {
 					}
 
 					fileName = StringUtil.replace(
-						fileName, StringPool.UNDERLINE, "%5F");
+						fileName, StringPool.UNDERSCORE, "%5F");
 
 					return StringUtil.replace(
 						matchResult.group(0), matchResult.group(1), fileName);

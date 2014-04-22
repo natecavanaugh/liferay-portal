@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-String randomNamespace = StringUtil.randomId() + StringPool.UNDERLINE;
+String randomNamespace = StringUtil.randomId() + StringPool.UNDERSCORE;
 
 String allowFullScreen = (String)request.getAttribute("liferay-ui:flash:allowFullScreen");
 String allowScriptAccess = (String)request.getAttribute("liferay-ui:flash:allowScriptAccess");

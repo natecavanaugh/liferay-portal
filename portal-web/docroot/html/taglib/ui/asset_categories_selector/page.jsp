@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/ui/asset_categories_selector/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_asset_categories_selector_page") + StringPool.UNDERLINE;
+String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_asset_categories_selector_page") + StringPool.UNDERSCORE;
 
 String className = (String)request.getAttribute("liferay-ui:asset-categories-selector:className");
 long classPK = GetterUtil.getLong((String)request.getAttribute("liferay-ui:asset-categories-selector:classPK"));
@@ -49,7 +49,7 @@ if (Validator.isNotNull(className)) {
 			curCategoryNames = ListUtil.toString(categories, AssetCategory.NAME_ACCESSOR);
 		}
 
-		String curCategoryIdsParam = request.getParameter(hiddenInput + StringPool.UNDERLINE + vocabulary.getVocabularyId());
+		String curCategoryIdsParam = request.getParameter(hiddenInput + StringPool.UNDERSCORE + vocabulary.getVocabularyId());
 
 		if (Validator.isNotNull(curCategoryIdsParam)) {
 			curCategoryIds = curCategoryIdsParam;
@@ -78,7 +78,7 @@ if (Validator.isNotNull(className)) {
 			</label>
 
 			<div class="lfr-tags-selector-content" id="<%= namespace + randomNamespace %>assetCategoriesSelector_<%= vocabulary.getVocabularyId() %>">
-				<aui:input name="<%= hiddenInput + StringPool.UNDERLINE + vocabulary.getVocabularyId() %>" type="hidden" />
+				<aui:input name="<%= hiddenInput + StringPool.UNDERSCORE + vocabulary.getVocabularyId() %>" type="hidden" />
 			</div>
 		</span>
 
@@ -89,7 +89,7 @@ if (Validator.isNotNull(className)) {
 					contentBox: '#<%= namespace + randomNamespace %>assetCategoriesSelector_<%= vocabulary.getVocabularyId() %>',
 					curEntries: '<%= HtmlUtil.escapeJS(categoryIdsTitles[1]) %>',
 					curEntryIds: '<%= categoryIdsTitles[0] %>',
-					hiddenInput: '#<%= namespace + hiddenInput + StringPool.UNDERLINE + vocabulary.getVocabularyId() %>',
+					hiddenInput: '#<%= namespace + hiddenInput + StringPool.UNDERSCORE + vocabulary.getVocabularyId() %>',
 					instanceVar: '<%= namespace + randomNamespace %>',
 					labelNode: '#<%= namespace %>assetCategoriesLabel_<%= vocabulary.getVocabularyId() %>',
 					maxEntries: <%= maxEntries %>,

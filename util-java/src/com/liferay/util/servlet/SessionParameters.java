@@ -54,7 +54,7 @@ public class SessionParameters {
 
 		if (newParameter == null) {
 			newParameter =
-				StringUtil.randomString() + StringPool.UNDERLINE +
+				StringUtil.randomString() + StringPool.UNDERSCORE +
 					parameter;
 
 			parameters.put(parameter, newParameter);
@@ -78,7 +78,7 @@ public class SessionParameters {
 
 		if (newParameter == null) {
 			newParameter =
-				StringUtil.randomString() + StringPool.UNDERLINE +
+				StringUtil.randomString() + StringPool.UNDERSCORE +
 					parameter;
 
 			parameters.put(parameter, newParameter);

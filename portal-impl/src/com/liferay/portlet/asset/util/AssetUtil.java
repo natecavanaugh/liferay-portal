@@ -880,7 +880,7 @@ public class AssetUtil {
 
 			sortType = getSortType(fieldType);
 
-			sortField = sortField.concat(StringPool.UNDERLINE).concat(
+			sortField = sortField.concat(StringPool.UNDERSCORE).concat(
 				LocaleUtil.toLanguageId(locale));
 		}
 		else if (sortField.equals("modifiedDate")) {

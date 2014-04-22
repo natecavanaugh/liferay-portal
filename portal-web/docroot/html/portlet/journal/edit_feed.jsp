@@ -238,7 +238,7 @@ if (feed != null) {
 							Element el = (Element)node;
 
 							String elName = el.attributeValue("name");
-							String elType = StringUtil.replace(el.attributeValue("type"), StringPool.UNDERLINE, StringPool.DASH);
+							String elType = StringUtil.replace(el.attributeValue("type"), StringPool.UNDERSCORE, StringPool.DASH);
 
 							if (!elType.equals("boolean") && !elType.equals("list") && !elType.equals("multi-list")) {
 						%>

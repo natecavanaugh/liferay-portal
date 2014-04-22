@@ -192,7 +192,7 @@ public class StringPool {
 
 	public static final String TRUE = "true";
 
-	public static final String UNDERLINE = "_";
+	public static final String UNDERSCORE = "_";
 
 	public static final String UTC = "UTC";
 

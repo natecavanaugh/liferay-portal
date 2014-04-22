@@ -103,7 +103,7 @@ public class ViewAction extends PortletAction {
 				if (Validator.isNotNull(columnId)) {
 					columnIds.put(
 						columnId,
-						renderResponse.getNamespace() + StringPool.UNDERLINE +
+						renderResponse.getNamespace() + StringPool.UNDERSCORE +
 							columnId);
 				}
 			}

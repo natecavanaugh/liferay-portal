@@ -168,7 +168,7 @@ public class JournalArticleIndexer extends BaseIndexer {
 
 			String fieldName = StringUtil.replaceLast(
 				ddmStructureFieldNameParts[2],
-				StringPool.UNDERLINE.concat(
+				StringPool.UNDERSCORE.concat(
 					LocaleUtil.toLanguageId(searchContext.getLocale())),
 				StringPool.BLANK);
 
@@ -438,7 +438,7 @@ public class JournalArticleIndexer extends BaseIndexer {
 				document.get("defaultLanguageId"));
 		}
 
-		String prefix = Field.SNIPPET + StringPool.UNDERLINE;
+		String prefix = Field.SNIPPET + StringPool.UNDERSCORE;
 
 		String title = document.get(
 			snippetLocale, prefix + Field.TITLE, Field.TITLE);

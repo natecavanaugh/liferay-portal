@@ -252,7 +252,7 @@ List<String> primaryKeys = new ArrayList<String>();
 				row.addSearchEntry(0, textSearchEntry);
 			}
 
-			request.setAttribute("liferay-ui:search-container-row:rowId", id.concat(StringPool.UNDERLINE.concat(row.getRowId())));
+			request.setAttribute("liferay-ui:search-container-row:rowId", id.concat(StringPool.UNDERSCORE.concat(row.getRowId())));
 
 			Map<String, Object> data = row.getData();
 		%>

@@ -220,7 +220,7 @@ public class DLFileEntryIndexer extends BaseIndexer {
 
 			String fieldName = StringUtil.replaceLast(
 				ddmStructureFieldNameParts[2],
-				StringPool.UNDERLINE.concat(
+				StringPool.UNDERSCORE.concat(
 					LocaleUtil.toLanguageId(searchContext.getLocale())),
 				StringPool.BLANK);
 

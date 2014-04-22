@@ -39,12 +39,12 @@ public class TranslatorUtil {
 		String translationId, Map<String, String> languageIdsMap) {
 
 		try {
-			int pos = translationId.indexOf(StringPool.UNDERLINE);
+			int pos = translationId.indexOf(StringPool.UNDERSCORE);
 
 			String fromLanguageId = translationId.substring(0, pos);
 
 			if (!languageIdsMap.containsKey(fromLanguageId)) {
-				pos = translationId.indexOf(StringPool.UNDERLINE, pos + 1);
+				pos = translationId.indexOf(StringPool.UNDERSCORE, pos + 1);
 
 				fromLanguageId = translationId.substring(0, pos);
 

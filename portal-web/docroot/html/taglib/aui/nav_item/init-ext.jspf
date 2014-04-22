@@ -15,7 +15,7 @@
 --%>
 
 <%
-String randomNamespace = StringUtil.randomId() + StringPool.UNDERLINE;
+String randomNamespace = StringUtil.randomId() + StringPool.UNDERSCORE;
 
 if (Validator.isNull(id)) {
 	id = randomNamespace;

@@ -309,7 +309,7 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 		</c:if>
 
 		<%
-		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(topLink, StringPool.UNDERLINE, StringPool.DASH)), request);
+		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(topLink, StringPool.UNDERSCORE, StringPool.DASH)), request);
 		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(topLink, TextFormatter.O)), portletURL.toString());
 		%>
 
@@ -365,7 +365,7 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 		</liferay-ui:panel-container>
 
 		<%
-		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(topLink, StringPool.UNDERLINE, StringPool.DASH)), request);
+		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(topLink, StringPool.UNDERSCORE, StringPool.DASH)), request);
 		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(topLink, TextFormatter.O)), portletURL.toString());
 		%>
 
@@ -445,7 +445,7 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 		</liferay-ui:search-container>
 
 		<%
-		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(topLink, StringPool.UNDERLINE, StringPool.DASH)), request);
+		PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(topLink, StringPool.UNDERSCORE, StringPool.DASH)), request);
 		PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(topLink, TextFormatter.O)), portletURL.toString());
 		%>
 

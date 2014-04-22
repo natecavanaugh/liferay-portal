@@ -233,7 +233,7 @@ public class AdvancedFileSystemStore extends FileSystemStore {
 				repositoryDir + StringPool.SLASH + sb.toString() +
 					StringPool.SLASH + fileNameFragment + ext +
 						StringPool.SLASH + fileNameFragment +
-							StringPool.UNDERLINE + version + ext);
+							StringPool.UNDERSCORE + version + ext);
 		}
 		else {
 			File fileNameDir = getDirNameDir(companyId, repositoryId, fileName);
@@ -243,7 +243,7 @@ public class AdvancedFileSystemStore extends FileSystemStore {
 
 			return new File(
 				fileNameDir + StringPool.SLASH + fileNameFragment +
-					StringPool.UNDERLINE + version + ext);
+					StringPool.UNDERSCORE + version + ext);
 		}
 	}
 

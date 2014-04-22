@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/asset_category_admin/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "portlet_asset_category_admin_edit_category") + StringPool.UNDERLINE;
+String randomNamespace = PortalUtil.generateRandomKey(request, "portlet_asset_category_admin_edit_category") + StringPool.UNDERSCORE;
 
 AssetCategory category = (AssetCategory)request.getAttribute(WebKeys.ASSET_CATEGORY);
 

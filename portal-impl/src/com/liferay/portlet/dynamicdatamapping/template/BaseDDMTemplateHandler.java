@@ -109,7 +109,7 @@ public abstract class BaseDDMTemplateHandler extends BaseTemplateHandler {
 		List<String> fieldNames = ddmStructure.getRootFieldNames();
 
 		for (String fieldName : fieldNames) {
-			if (fieldName.startsWith(StringPool.UNDERLINE)) {
+			if (fieldName.startsWith(StringPool.UNDERSCORE)) {
 				continue;
 			}
 

@@ -448,11 +448,11 @@ public class ActionUtil {
 			for (int i = 0; i < values.size(); i++) {
 				StringBundler sb = new StringBundler(6);
 
-				sb.append(StringPool.UNDERLINE);
+				sb.append(StringPool.UNDERSCORE);
 				sb.append(field.getName());
-				sb.append(StringPool.UNDERLINE);
+				sb.append(StringPool.UNDERSCORE);
 				sb.append(i);
-				sb.append(StringPool.UNDERLINE);
+				sb.append(StringPool.UNDERSCORE);
 				sb.append(LanguageUtil.getLanguageId(locale));
 
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
