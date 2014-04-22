@@ -1532,7 +1532,7 @@ public class AssetPublisherImpl implements AssetPublisher {
 			WebKeys.THEME_DISPLAY);
 
 		String key =
-			AssetPublisherUtil.class + StringPool.UNDERLINE +
+			AssetPublisherUtil.class + StringPool.UNDERSCORE +
 				themeDisplay.getScopeGroupId();
 
 		Map<String, Long> recentFolderIds =

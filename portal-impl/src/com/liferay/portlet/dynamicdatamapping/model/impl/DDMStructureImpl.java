@@ -613,8 +613,8 @@ public class DDMStructureImpl extends DDMStructureBaseImpl {
 	}
 
 	private String _getPrivateAttributeKey(String attributeName) {
-		return StringPool.UNDERLINE.concat(attributeName).concat(
-			StringPool.UNDERLINE);
+		return StringPool.UNDERSCORE.concat(attributeName).concat(
+			StringPool.UNDERSCORE);
 	}
 
 	private Map<String, String> _getPrivateField(String privateFieldName) {

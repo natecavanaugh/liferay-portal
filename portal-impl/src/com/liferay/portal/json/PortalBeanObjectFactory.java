@@ -100,7 +100,7 @@ public class PortalBeanObjectFactory extends BeanObjectFactory {
 			for (Field declaredField : declaredFields) {
 				String fieldName = declaredField.getName();
 
-				if (fieldName.startsWith(StringPool.UNDERLINE)) {
+				if (fieldName.startsWith(StringPool.UNDERSCORE)) {
 					fieldName = fieldName.substring(1);
 				}
 

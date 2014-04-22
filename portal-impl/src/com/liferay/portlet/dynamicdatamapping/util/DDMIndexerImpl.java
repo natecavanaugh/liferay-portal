@@ -168,7 +168,7 @@ public class DDMIndexerImpl implements DDMIndexer {
 		sb.append(fieldName);
 
 		if (locale != null) {
-			sb.append(StringPool.UNDERLINE);
+			sb.append(StringPool.UNDERSCORE);
 			sb.append(LocaleUtil.toLanguageId(locale));
 		}
 

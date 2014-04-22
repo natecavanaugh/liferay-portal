@@ -186,7 +186,7 @@ public abstract class BaseSpellCheckIndexWriter
 		StringBundler uidSB = new StringBundler(5);
 
 		uidSB.append(String.valueOf(companyId));
-		uidSB.append(StringPool.UNDERLINE);
+		uidSB.append(StringPool.UNDERSCORE);
 		uidSB.append(PortletKeys.SEARCH);
 		uidSB.append(_PORTLET_SEPARATOR);
 
@@ -203,16 +203,16 @@ public abstract class BaseSpellCheckIndexWriter
 			StringBundler keySB = new StringBundler(length);
 
 			keySB.append(languageId);
-			keySB.append(StringPool.UNDERLINE);
+			keySB.append(StringPool.UNDERSCORE);
 			keySB.append(word);
-			keySB.append(StringPool.UNDERLINE);
+			keySB.append(StringPool.UNDERSCORE);
 
 			keySB.append(StringUtil.toLowerCase(word));
 
 			if (parameters != null) {
 				for (String parameter : parameters) {
 					keySB.append(parameter);
-					keySB.append(StringPool.UNDERLINE);
+					keySB.append(StringPool.UNDERSCORE);
 				}
 			}
 

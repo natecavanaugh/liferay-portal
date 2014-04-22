@@ -732,9 +732,9 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 			StringBundler sb = new StringBundler(5);
 
 			sb.append(ldapServerId);
-			sb.append(StringPool.UNDERLINE);
+			sb.append(StringPool.UNDERSCORE);
 			sb.append(companyId);
-			sb.append(StringPool.UNDERLINE);
+			sb.append(StringPool.UNDERSCORE);
 			sb.append(fullGroupDN);
 
 			userGroupIdKey = sb.toString();

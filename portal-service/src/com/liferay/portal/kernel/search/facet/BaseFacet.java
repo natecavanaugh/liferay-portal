@@ -59,7 +59,7 @@ public abstract class BaseFacet implements Facet {
 	@Override
 	public String getFieldId() {
 		return StringUtil.replace(
-			getFieldName(), StringPool.SLASH, StringPool.UNDERLINE);
+			getFieldName(), StringPool.SLASH, StringPool.UNDERSCORE);
 	}
 
 	@Override

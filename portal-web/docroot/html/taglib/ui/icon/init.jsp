@@ -72,7 +72,7 @@ if ((iconMenuIconCount != null) || (iconMenuSingleIcon != null)) {
 }
 
 if (message == null) {
-	message = StringUtil.replace(image, StringPool.UNDERLINE, StringPool.DASH);
+	message = StringUtil.replace(image, StringPool.UNDERSCORE, StringPool.DASH);
 	message = StringUtil.replace(message, "../aui/", StringPool.BLANK);
 }
 

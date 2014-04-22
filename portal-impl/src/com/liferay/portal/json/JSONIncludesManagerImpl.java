@@ -139,7 +139,7 @@ public class JSONIncludesManagerImpl implements JSONIncludesManager {
 
 				String name = field.getName();
 
-				if (name.startsWith(StringPool.UNDERLINE)) {
+				if (name.startsWith(StringPool.UNDERSCORE)) {
 					name = name.substring(1);
 				}
 

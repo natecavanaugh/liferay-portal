@@ -94,12 +94,12 @@ public class RSSUtil {
 	}
 
 	public static String getFeedType(String type, double version) {
-		return type + StringPool.UNDERLINE + version;
+		return type + StringPool.UNDERSCORE + version;
 	}
 
 	public static String getFeedTypeFormat(String feedType) {
 		if (Validator.isNotNull(feedType)) {
-			String[] parts = StringUtil.split(feedType, StringPool.UNDERLINE);
+			String[] parts = StringUtil.split(feedType, StringPool.UNDERSCORE);
 
 			if (parts.length == 2) {
 				return GetterUtil.getString(parts[0], FORMAT_DEFAULT);
@@ -126,7 +126,7 @@ public class RSSUtil {
 
 	public static double getFeedTypeVersion(String feedType) {
 		if (Validator.isNotNull(feedType)) {
-			String[] parts = StringUtil.split(feedType, StringPool.UNDERLINE);
+			String[] parts = StringUtil.split(feedType, StringPool.UNDERSCORE);
 
 			if (parts.length == 2) {
 				return GetterUtil.getDouble(parts[1], VERSION_DEFAULT);

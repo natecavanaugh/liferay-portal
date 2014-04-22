@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_input_localized") + StringPool.UNDERLINE;
+String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_input_localized") + StringPool.UNDERSCORE;
 
 boolean autoFocus = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-localized:autoFocus"));
 boolean autoSize = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-localized:autoSize"));
@@ -59,7 +59,7 @@ String mainLanguageDir = LanguageUtil.get(mainLocale, "lang.dir");
 String mainLanguageValue = LocalizationUtil.getLocalization(xml, mainLanguageId, false);
 
 if (!ignoreRequestValue) {
-	mainLanguageValue = ParamUtil.getString(request, name + StringPool.UNDERLINE + mainLanguageId, mainLanguageValue);
+	mainLanguageValue = ParamUtil.getString(request, name + StringPool.UNDERSCORE + mainLanguageId, mainLanguageValue);
 }
 
 if (Validator.isNull(mainLanguageValue)) {
@@ -77,7 +77,7 @@ if (Validator.isNotNull(fieldPrefix)) {
 String fieldSuffix = StringPool.BLANK;
 
 if (!Validator.isNull(languageId)) {
-	fieldSuffix = StringPool.UNDERLINE + mainLanguageId;
+	fieldSuffix = StringPool.UNDERSCORE + mainLanguageId;
 }
 
 List<String> languageIds = new ArrayList<String>();
@@ -179,7 +179,7 @@ if ((exception != null) && fieldName.equals(focusField)) {
 				languageValue = LocalizationUtil.getLocalization(xml, curLanguageId, false);
 			}
 
-			if (Validator.isNotNull(languageValue) || (!ignoreRequestValue && (request.getParameter(name + StringPool.UNDERLINE + curLanguageId) != null))) {
+			if (Validator.isNotNull(languageValue) || (!ignoreRequestValue && (request.getParameter(name + StringPool.UNDERSCORE + curLanguageId) != null))) {
 				languageIds.add(curLanguageId);
 			}
 		}
@@ -198,11 +198,11 @@ if ((exception != null) && fieldName.equals(focusField)) {
 			}
 
 			if (!ignoreRequestValue) {
-				languageValue = ParamUtil.getString(request, name + StringPool.UNDERLINE + curLanguageId, languageValue);
+				languageValue = ParamUtil.getString(request, name + StringPool.UNDERSCORE + curLanguageId, languageValue);
 			}
 		%>
 
-			<aui:input dir="<%= curLanguageDir %>" disabled="<%= disabled %>" id="<%= HtmlUtil.escapeAttribute(id + StringPool.UNDERLINE + curLanguageId) %>" name="<%= HtmlUtil.escapeAttribute(fieldNamePrefix + name + StringPool.UNDERLINE + curLanguageId + fieldNameSuffix) %>" type="hidden" value="<%= languageValue %>" />
+			<aui:input dir="<%= curLanguageDir %>" disabled="<%= disabled %>" id="<%= HtmlUtil.escapeAttribute(id + StringPool.UNDERSCORE + curLanguageId) %>" name="<%= HtmlUtil.escapeAttribute(fieldNamePrefix + name + StringPool.UNDERSCORE + curLanguageId + fieldNameSuffix) %>" type="hidden" value="<%= languageValue %>" />
 
 		<%
 		}

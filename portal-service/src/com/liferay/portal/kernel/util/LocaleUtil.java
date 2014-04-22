@@ -490,12 +490,12 @@ public class LocaleUtil {
 		sb.append(locale.getLanguage());
 
 		if (hasCountry) {
-			sb.append(StringPool.UNDERLINE);
+			sb.append(StringPool.UNDERSCORE);
 			sb.append(country);
 		}
 
 		if (hasVariant) {
-			sb.append(StringPool.UNDERLINE);
+			sb.append(StringPool.UNDERSCORE);
 			sb.append(variant);
 		}
 

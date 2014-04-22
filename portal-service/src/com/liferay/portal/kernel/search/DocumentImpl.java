@@ -67,7 +67,7 @@ public class DocumentImpl implements Document {
 	}
 
 	public static String getSortableFieldName(String name) {
-		return name.concat(StringPool.UNDERLINE).concat(_SORTABLE_FIELD_SUFFIX);
+		return name.concat(StringPool.UNDERSCORE).concat(_SORTABLE_FIELD_SUFFIX);
 	}
 
 	public static boolean isSortableTextField(String name) {

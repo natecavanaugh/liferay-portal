@@ -35,7 +35,7 @@ if (SCPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_FRAMEW
 	tabs1Values += ",framework_versions";
 }
 
-String tabs1Names = StringUtil.replace(tabs1Values, StringPool.UNDERLINE, StringPool.DASH);
+String tabs1Names = StringUtil.replace(tabs1Values, StringPool.UNDERSCORE, StringPool.DASH);
 
 String keywords = ParamUtil.getString(request, "keywords");
 String type = ParamUtil.getString(request, "type");
@@ -697,7 +697,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 <%
 if (!tabs1.equals("products")) {
-	PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(tabs1, StringPool.UNDERLINE, StringPool.DASH)), request);
+	PortalUtil.setPageSubtitle(LanguageUtil.get(pageContext, StringUtil.replace(tabs1, StringPool.UNDERSCORE, StringPool.DASH)), request);
 
 	PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(pageContext, TextFormatter.format(tabs1, TextFormatter.O)), portletURL.toString());
 }

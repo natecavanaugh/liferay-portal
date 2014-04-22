@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/asset_publisher/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "portlet_asset_publisher_edit_query_rule") + StringPool.UNDERLINE;
+String randomNamespace = PortalUtil.generateRandomKey(request, "portlet_asset_publisher_edit_query_rule") + StringPool.UNDERSCORE;
 
 long[] categorizableGroupIds = (long[])request.getAttribute("configuration.jsp-categorizableGroupIds");
 int index = ParamUtil.getInteger(request, "index", GetterUtil.getInteger((String)request.getAttribute("configuration.jsp-index")));

@@ -319,7 +319,7 @@ public class VerifyDocumentLibrary extends VerifyProcess {
 			String newTitle = title.replace(StringPool.SLASH, StringPool.BLANK);
 
 			newTitle = newTitle.replace(
-				StringPool.BACK_SLASH, StringPool.UNDERLINE);
+				StringPool.BACK_SLASH, StringPool.UNDERSCORE);
 
 			dlFileEntry.setTitle(newTitle);
 

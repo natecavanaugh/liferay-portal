@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/asset_tag_admin/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "portlet_asset_tad_admin_edit_tag") + StringPool.UNDERLINE;
+String randomNamespace = PortalUtil.generateRandomKey(request, "portlet_asset_tad_admin_edit_tag") + StringPool.UNDERSCORE;
 
 AssetTag tag = (AssetTag)request.getAttribute(WebKeys.ASSET_TAG);
 

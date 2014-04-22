@@ -329,7 +329,7 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 				AggregateFilter.class.getName());
 
 		cacheKeyGenerator.append(HttpUtil.getProtocol(request.isSecure()));
-		cacheKeyGenerator.append(StringPool.UNDERLINE);
+		cacheKeyGenerator.append(StringPool.UNDERSCORE);
 		cacheKeyGenerator.append(request.getRequestURI());
 
 		String queryString = request.getQueryString();
@@ -543,7 +543,7 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 	protected String sterilizeQueryString(String queryString) {
 		return StringUtil.replace(
 			queryString, new String[] {StringPool.SLASH, StringPool.BACK_SLASH},
-			new String[] {StringPool.UNDERLINE, StringPool.UNDERLINE});
+			new String[] {StringPool.UNDERSCORE, StringPool.UNDERSCORE});
 	}
 
 	private static final String _CSS_COMMENT_BEGIN = "/*";

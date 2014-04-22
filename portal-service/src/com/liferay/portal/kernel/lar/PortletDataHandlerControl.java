@@ -31,9 +31,9 @@ public class PortletDataHandlerControl {
 
 		StringBundler sb = new StringBundler(4);
 
-		sb.append(StringPool.UNDERLINE);
+		sb.append(StringPool.UNDERSCORE);
 		sb.append(namespace);
-		sb.append(StringPool.UNDERLINE);
+		sb.append(StringPool.UNDERSCORE);
 		sb.append(controlName);
 
 		return sb.toString();

@@ -72,7 +72,7 @@ portletURL.setParameter("tabs3", "current-and-previous");
 									<li class="tree-item">
 										<aui:input name="<%= PortletDataHandlerKeys.PORTLET_CONFIGURATION %>" type="hidden" value="<%= true %>" />
 
-										<aui:input label="configuration" name="<%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERLINE + selPortlet.getRootPortletId() %>" type="checkbox" value="<%= true %>" />
+										<aui:input label="configuration" name="<%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERSCORE + selPortlet.getRootPortletId() %>" type="checkbox" value="<%= true %>" />
 
 										<div class="hide" id="<portlet:namespace />configuration_<%= selPortlet.getRootPortletId() %>">
 											<ul class="lfr-tree unstyled">
@@ -108,7 +108,7 @@ portletURL.setParameter("tabs3", "current-and-previous");
 										</ul>
 
 										<aui:script>
-											Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERLINE + selPortlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeConfiguration<%= StringPool.UNDERLINE + selPortlet.getRootPortletId() %>');
+											Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERSCORE + selPortlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeConfiguration<%= StringPool.UNDERSCORE + selPortlet.getRootPortletId() %>');
 										</aui:script>
 									</li>
 								</ul>
@@ -268,7 +268,7 @@ portletURL.setParameter("tabs3", "current-and-previous");
 													<span class="badge badge-warning deletions"><%= modelDeletionCount > 0 ? (modelDeletionCount + StringPool.SPACE + LanguageUtil.get(pageContext, "deletions")) : StringPool.BLANK %></span>
 												</liferay-util:buffer>
 
-												<aui:input label='<%= LanguageUtil.get(pageContext, "content") + badgeHTML %>' name="<%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + selPortlet.getRootPortletId() %>" type="checkbox" value="<%= true %>" />
+												<aui:input label='<%= LanguageUtil.get(pageContext, "content") + badgeHTML %>' name="<%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERSCORE + selPortlet.getRootPortletId() %>" type="checkbox" value="<%= true %>" />
 
 												<%
 												PortletDataHandlerControl[] exportControls = portletDataHandler.getExportControls();
@@ -341,7 +341,7 @@ portletURL.setParameter("tabs3", "current-and-previous");
 													</ul>
 
 													<aui:script>
-														Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + selPortlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeContent<%= StringPool.UNDERLINE + selPortlet.getRootPortletId() %>');
+														Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERSCORE + selPortlet.getRootPortletId() %>Checkbox', '<portlet:namespace />showChangeContent<%= StringPool.UNDERSCORE + selPortlet.getRootPortletId() %>');
 													</aui:script>
 
 												<%

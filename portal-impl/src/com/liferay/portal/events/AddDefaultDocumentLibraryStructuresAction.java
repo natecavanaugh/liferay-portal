@@ -217,7 +217,7 @@ public class AddDefaultDocumentLibraryStructuresAction
 		Class<?> fieldClass = field.getDeclaringClass();
 
 		sb.append(fieldClass.getSimpleName());
-		sb.append(StringPool.UNDERLINE);
+		sb.append(StringPool.UNDERSCORE);
 		sb.append(field.getName());
 		sb.append("\" required=\"false\" showLabel=\"true\" type=\"text\">");
 		sb.append("<meta-data locale=\"");

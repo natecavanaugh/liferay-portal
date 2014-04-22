@@ -90,7 +90,7 @@ public class CMISParameterValueUtil {
 			else {
 				value = StringUtil.replace(
 					value,
-					new String[] {StringPool.APOSTROPHE, StringPool.UNDERLINE},
+					new String[] {StringPool.APOSTROPHE, StringPool.UNDERSCORE},
 					new String[] {"\\'", "\\_"});
 			}
 

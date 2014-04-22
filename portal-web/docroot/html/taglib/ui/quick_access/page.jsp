@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/ui/quick_access/init.jsp" %>
 
 <%
-String randomNamespace = StringUtil.randomId() + StringPool.UNDERLINE;
+String randomNamespace = StringUtil.randomId() + StringPool.UNDERSCORE;
 %>
 
 <c:if test="<%= ((quickAccessEntries != null) && !quickAccessEntries.isEmpty()) || Validator.isNotNull(contentId) %>">

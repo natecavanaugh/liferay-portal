@@ -118,9 +118,9 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		StringBundler sb = new StringBundler(5);
 
 		sb.append(StringUtil.toHexString(plid));
-		sb.append(StringPool.UNDERLINE);
+		sb.append(StringPool.UNDERSCORE);
 		sb.append(portletId);
-		sb.append(StringPool.UNDERLINE);
+		sb.append(StringPool.UNDERSCORE);
 		sb.append(languageId);
 
 		return sb.toString();

@@ -619,7 +619,7 @@ public class PortalImpl implements Portal {
 		if (Validator.isNotNull(portletDisplay.getId()) &&
 			!portletDisplay.isFocused()) {
 
-			name += StringPool.UNDERLINE + portletDisplay.getId();
+			name += StringPool.UNDERSCORE + portletDisplay.getId();
 		}
 
 		List<BreadcrumbEntry> breadcrumbEntries =
@@ -911,9 +911,9 @@ public class PortalImpl implements Portal {
 			StringBundler sb = new StringBundler(5);
 
 			sb.append(DeterminateKeyGenerator.generate(input));
-			sb.append(StringPool.UNDERLINE);
+			sb.append(StringPool.UNDERSCORE);
 			sb.append(request.getAttribute(WebKeys.RENDER_PORTLET_COLUMN_ID));
-			sb.append(StringPool.UNDERLINE);
+			sb.append(StringPool.UNDERSCORE);
 			sb.append(request.getAttribute(WebKeys.RENDER_PORTLET_COLUMN_POS));
 
 			return JS.getSafeName(sb.toString());
@@ -4280,7 +4280,7 @@ public class PortalImpl implements Portal {
 			!portletDisplay.isFocused()) {
 
 			name = name.concat(
-				StringPool.UNDERLINE.concat(portletDisplay.getId()));
+				StringPool.UNDERSCORE.concat(portletDisplay.getId()));
 		}
 
 		return (List<BreadcrumbEntry>)request.getAttribute(name);
@@ -4590,8 +4590,8 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public String getPortletNamespace(String portletId) {
-		return StringPool.UNDERLINE.concat(portletId).concat(
-			StringPool.UNDERLINE);
+		return StringPool.UNDERSCORE.concat(portletId).concat(
+			StringPool.UNDERSCORE);
 	}
 
 	@Override
@@ -5455,13 +5455,13 @@ public class PortalImpl implements Portal {
 						namespace.concat(uniqueElementId))) {
 
 				if (Validator.isNull(elementId) ||
-					elementId.endsWith(StringPool.UNDERLINE)) {
+					elementId.endsWith(StringPool.UNDERSCORE)) {
 
 					uniqueElementId = elementId.concat(String.valueOf(i));
 				}
 				else {
 					uniqueElementId =
-						elementId.concat(StringPool.UNDERLINE).concat(
+						elementId.concat(StringPool.UNDERSCORE).concat(
 							String.valueOf(i));
 				}
 
@@ -8046,7 +8046,7 @@ public class PortalImpl implements Portal {
 
 		int valueCount = 0;
 
-		String keyName = StringPool.UNDERLINE.concat(name);
+		String keyName = StringPool.UNDERSCORE.concat(name);
 
 		Map<String, String[]> parameterMap = request.getParameterMap();
 

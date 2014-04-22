@@ -26,8 +26,8 @@ ServiceContext#deriveDefaultPermissions(long, String).
 <%
 String uniqueNamespace = namespace + PortalUtil.getUniqueElementId(request, namespace, StringPool.BLANK);
 
-if (!uniqueNamespace.endsWith(StringPool.UNDERLINE)) {
-	uniqueNamespace = uniqueNamespace.concat(StringPool.UNDERLINE);
+if (!uniqueNamespace.endsWith(StringPool.UNDERSCORE)) {
+	uniqueNamespace = uniqueNamespace.concat(StringPool.UNDERSCORE);
 }
 
 String formName = namespace + request.getAttribute("liferay-ui:input-permissions:formName");
@@ -59,8 +59,8 @@ String modelName = (String)request.getAttribute("liferay-ui:input-permissions:mo
 		String groupPermissionsName = "groupPermissions";
 
 		if (!uniqueNamespace.equals(namespace)) {
-			guestPermissionsName = guestPermissionsName + StringPool.UNDERLINE + modelName;
-			groupPermissionsName = groupPermissionsName + StringPool.UNDERLINE + modelName;
+			guestPermissionsName = guestPermissionsName + StringPool.UNDERSCORE + modelName;
+			groupPermissionsName = groupPermissionsName + StringPool.UNDERSCORE + modelName;
 		}
 
 		List groupPermissions = ListUtil.fromArray(request.getParameterValues(groupPermissionsName));
@@ -201,7 +201,7 @@ String modelName = (String)request.getAttribute("liferay-ui:input-permissions:mo
 							checkboxFieldName = namespace + groupPermissionsName;
 						}
 
-						checkboxFieldId = checkboxFieldId + StringPool.UNDERLINE + action;
+						checkboxFieldId = checkboxFieldId + StringPool.UNDERSCORE + action;
 					%>
 
 						<td <%= (action.equals(ActionKeys.VIEW)) ? "class=\"hide-accessible\"" : "" %>>

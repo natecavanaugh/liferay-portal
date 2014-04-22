@@ -98,7 +98,7 @@ public class ModelHintsImpl implements ModelHints {
 
 	@Override
 	public String buildCustomValidatorName(String validatorName) {
-		return validatorName.concat(StringPool.UNDERLINE).concat(
+		return validatorName.concat(StringPool.UNDERSCORE).concat(
 			StringUtil.randomId());
 	}
 

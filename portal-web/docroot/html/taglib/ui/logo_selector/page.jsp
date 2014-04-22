@@ -17,7 +17,7 @@
 <%@ include file="/html/taglib/ui/logo_selector/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_logo_selector") + StringPool.UNDERLINE;
+String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_logo_selector") + StringPool.UNDERSCORE;
 
 String currentLogoURL = (String)request.getAttribute("liferay-ui:logo-selector:currentLogoURL");
 boolean defaultLogo = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:logo-selector:defaultLogo"));

@@ -31,7 +31,7 @@ public class PrivatePropertyAccessor extends DirectPropertyAccessor {
 	public Getter getGetter(Class clazz, String propertyName)
 		throws PropertyNotFoundException {
 
-		propertyName = StringPool.UNDERLINE.concat(propertyName);
+		propertyName = StringPool.UNDERSCORE.concat(propertyName);
 
 		return super.getGetter(clazz, propertyName);
 	}
@@ -40,7 +40,7 @@ public class PrivatePropertyAccessor extends DirectPropertyAccessor {
 	public Setter getSetter(Class clazz, String propertyName)
 		throws PropertyNotFoundException {
 
-		propertyName = StringPool.UNDERLINE.concat(propertyName);
+		propertyName = StringPool.UNDERSCORE.concat(propertyName);
 
 		return super.getSetter(clazz, propertyName);
 	}

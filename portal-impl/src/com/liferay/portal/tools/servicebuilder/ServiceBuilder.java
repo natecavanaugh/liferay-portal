@@ -2647,7 +2647,7 @@ public class ServiceBuilder {
 				serviceMapping = StringUtil.replaceLast(
 					serviceMapping, ".service.", ".service.spring.");
 				serviceMapping = StringUtil.replace(
-					serviceMapping, StringPool.PERIOD, StringPool.UNDERLINE);
+					serviceMapping, StringPool.PERIOD, StringPool.UNDERSCORE);
 
 				Map<String, Object> context = _getContext();
 
@@ -4317,11 +4317,11 @@ public class ServiceBuilder {
 			table = ejbName;
 
 			if (_badTableNames.contains(ejbName)) {
-				table += StringPool.UNDERLINE;
+				table += StringPool.UNDERSCORE;
 			}
 
 			if (_autoNamespaceTables) {
-				table = _portletShortName + StringPool.UNDERLINE + ejbName;
+				table = _portletShortName + StringPool.UNDERSCORE + ejbName;
 			}
 		}
 
@@ -4446,7 +4446,7 @@ public class ServiceBuilder {
 				columnDBName = columnName;
 
 				if (_badColumnNames.contains(columnName)) {
-					columnDBName += StringPool.UNDERLINE;
+					columnDBName += StringPool.UNDERSCORE;
 				}
 			}
 
@@ -4463,12 +4463,12 @@ public class ServiceBuilder {
 
 			if (Validator.isNotNull(mappingTable)) {
 				if (_badTableNames.contains(mappingTable)) {
-					mappingTable += StringPool.UNDERLINE;
+					mappingTable += StringPool.UNDERSCORE;
 				}
 
 				if (_autoNamespaceTables) {
 					mappingTable =
-						_portletShortName + StringPool.UNDERLINE + mappingTable;
+						_portletShortName + StringPool.UNDERSCORE + mappingTable;
 				}
 			}
 
@@ -4657,7 +4657,7 @@ public class ServiceBuilder {
 		String alias = TextFormatter.format(ejbName, TextFormatter.I);
 
 		if (_badAliasNames.contains(StringUtil.toLowerCase(alias))) {
-			alias += StringPool.UNDERLINE;
+			alias += StringPool.UNDERSCORE;
 		}
 
 		for (Element finderElement : finderElements) {

@@ -182,7 +182,7 @@ public class IconTag extends IncludeTag {
 			}
 
 			if (Validator.isNotNull(id) && Validator.isNotNull(message)) {
-				id = id.concat(StringPool.UNDERLINE).concat(
+				id = id.concat(StringPool.UNDERSCORE).concat(
 					FriendlyURLNormalizerUtil.normalize(message));
 
 				PortletResponse portletResponse =

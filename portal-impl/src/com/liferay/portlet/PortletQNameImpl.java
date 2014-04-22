@@ -70,7 +70,7 @@ public class PortletQNameImpl implements PortletQName {
 
 		sb.append(PUBLIC_RENDER_PARAMETER_NAMESPACE);
 		sb.append(qName.getNamespaceURI().hashCode());
-		sb.append(StringPool.UNDERLINE);
+		sb.append(StringPool.UNDERSCORE);
 		sb.append(qName.getLocalPart());
 
 		String publicRenderParameterName = sb.toString();
@@ -147,7 +147,7 @@ public class PortletQNameImpl implements PortletQName {
 
 		sb.append(REMOVE_PUBLIC_RENDER_PARAMETER_NAMESPACE);
 		sb.append(qName.getNamespaceURI().hashCode());
-		sb.append(StringPool.UNDERLINE);
+		sb.append(StringPool.UNDERSCORE);
 		sb.append(qName.getLocalPart());
 
 		String removePublicRenderParameterName = sb.toString();

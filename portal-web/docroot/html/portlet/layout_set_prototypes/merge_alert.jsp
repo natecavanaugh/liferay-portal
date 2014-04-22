@@ -30,7 +30,7 @@ int mergeFailCount = SitesUtil.getMergeFailCount(layoutSetPrototype);
 	<%
 	boolean merge = false;
 
-	String randomNamespace = PortalUtil.generateRandomKey(request, "portlet_layout_set_prototypes_merge_alert") + StringPool.UNDERLINE;
+	String randomNamespace = PortalUtil.generateRandomKey(request, "portlet_layout_set_prototypes_merge_alert") + StringPool.UNDERSCORE;
 
 	PortletURL portletURL = liferayPortletResponse.createActionURL();
 

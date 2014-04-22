@@ -629,7 +629,7 @@ public class LicenseUtil {
 
 		for (Map.Entry<String, Object> entry : attributes.entrySet()) {
 			request.setAttribute(
-				clusterNode.getClusterNodeId() + StringPool.UNDERLINE +
+				clusterNode.getClusterNodeId() + StringPool.UNDERSCORE +
 					entry.getKey(),
 				entry.getValue());
 		}

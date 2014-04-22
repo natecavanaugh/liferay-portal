@@ -170,7 +170,7 @@ public class FastDateFormatFactoryImpl implements FastDateFormatFactory {
 			sb.append(arguments[i]);
 
 			if ((i + 1) < arguments.length) {
-				sb.append(StringPool.UNDERLINE);
+				sb.append(StringPool.UNDERSCORE);
 			}
 		}
 

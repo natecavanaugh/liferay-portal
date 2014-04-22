@@ -17,7 +17,7 @@
 <%@ include file="/html/portlet/search/init.jsp" %>
 
 <%
-String randomNamespace = PortalUtil.generateRandomKey(request, _RANDOM_KEY_INPUT) + StringPool.UNDERLINE;
+String randomNamespace = PortalUtil.generateRandomKey(request, _RANDOM_KEY_INPUT) + StringPool.UNDERSCORE;
 
 Facet facet = (Facet)request.getAttribute("search.jsp-facet");
 

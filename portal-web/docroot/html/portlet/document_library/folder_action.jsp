@@ -20,13 +20,13 @@
 String randomNamespace = null;
 
 if (portletName.equals(PortletKeys.DOCUMENT_LIBRARY)) {
-	randomNamespace = PortalUtil.generateRandomKey(request, "portlet_document_library_folder_action") + StringPool.UNDERLINE;
+	randomNamespace = PortalUtil.generateRandomKey(request, "portlet_document_library_folder_action") + StringPool.UNDERSCORE;
 }
 else if (portletName.equals(PortletKeys.DOCUMENT_LIBRARY_DISPLAY)) {
-	randomNamespace = PortalUtil.generateRandomKey(request, "portlet_document_library_display_folder_action") + StringPool.UNDERLINE;
+	randomNamespace = PortalUtil.generateRandomKey(request, "portlet_document_library_display_folder_action") + StringPool.UNDERSCORE;
 }
 else {
-	randomNamespace = PortalUtil.generateRandomKey(request, "portlet_image_gallery_display_folder_action") + StringPool.UNDERLINE;
+	randomNamespace = PortalUtil.generateRandomKey(request, "portlet_image_gallery_display_folder_action") + StringPool.UNDERSCORE;
 }
 
 String redirect = currentURL;
