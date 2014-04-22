@@ -690,9 +690,25 @@
 	}
 }
 
+/* LPS-45287 */
+
 .ios.mobile {
-	.modal-content .dialog-iframe-bd {
-		-webkit-overflow-scrolling: touch;
-		overflow: auto;
+	.dialog-iframe-modal {
+		height: auto !important;
+		left: 7px !important;
+		position: absolute !important;
+		top: 10px !important;
+
+		&, .dialog-iframe-bd, .dialog-iframe-node {
+			height: auto !important;
+		}
+
+		.dialog-iframe-bd {
+			max-height: none !important;
+		}
+
+		.modal-content {
+			overflow: visible;
+		}
 	}
 }
