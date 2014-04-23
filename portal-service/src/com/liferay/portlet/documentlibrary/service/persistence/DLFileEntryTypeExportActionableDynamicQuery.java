@@ -31,6 +31,7 @@ import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class DLFileEntryTypeExportActionableDynamicQuery
 	extends DLFileEntryTypeActionableDynamicQuery {
 	public DLFileEntryTypeExportActionableDynamicQuery(

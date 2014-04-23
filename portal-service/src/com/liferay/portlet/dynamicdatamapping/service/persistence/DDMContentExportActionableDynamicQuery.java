@@ -31,6 +31,7 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMContent;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.dynamicdatamapping.service.DDMContentLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class DDMContentExportActionableDynamicQuery
 	extends DDMContentActionableDynamicQuery {
 	public DDMContentExportActionableDynamicQuery(

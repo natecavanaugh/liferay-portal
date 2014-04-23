@@ -33,6 +33,7 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class DDMTemplateExportActionableDynamicQuery
 	extends DDMTemplateActionableDynamicQuery {
 	public DDMTemplateExportActionableDynamicQuery(

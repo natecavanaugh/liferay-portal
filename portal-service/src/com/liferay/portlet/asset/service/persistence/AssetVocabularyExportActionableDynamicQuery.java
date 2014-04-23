@@ -31,6 +31,7 @@ import com.liferay.portlet.asset.model.AssetVocabulary;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.asset.service.AssetVocabularyLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class AssetVocabularyExportActionableDynamicQuery
 	extends AssetVocabularyActionableDynamicQuery {
 	public AssetVocabularyExportActionableDynamicQuery(

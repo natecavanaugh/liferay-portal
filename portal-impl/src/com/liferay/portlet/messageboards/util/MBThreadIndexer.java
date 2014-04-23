@@ -32,7 +32,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.security.permission.PermissionChecker;
-import com.liferay.portal.service.persistence.GroupActionableDynamicQuery;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.messageboards.NoSuchDiscussionException;
 import com.liferay.portlet.messageboards.model.MBCategory;
@@ -224,22 +224,24 @@ public class MBThreadIndexer extends BaseIndexer {
 		throws PortalException, SystemException {
 
 		ActionableDynamicQuery actionableDynamicQuery =
-			new GroupActionableDynamicQuery() {
-
-			@Override
-			protected void performAction(Object object)
-				throws PortalException, SystemException {
-
-				Group group = (Group)object;
-
-				reindexThreads(
-					companyId, group.getGroupId(),
-					MBCategoryConstants.DISCUSSION_CATEGORY_ID);
-			}
-
-		};
+			GroupLocalServiceUtil.getActionableDynamicQuery();
 
 		actionableDynamicQuery.setCompanyId(companyId);
+		actionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod() {
+
+				@Override
+				public void performAction(Object object)
+					throws PortalException, SystemException {
+
+					Group group = (Group)object;
+
+					reindexThreads(
+						companyId, group.getGroupId(),
+						MBCategoryConstants.DISCUSSION_CATEGORY_ID);
+				}
+
+			});
 
 		actionableDynamicQuery.performActions();
 	}
@@ -248,22 +250,24 @@ public class MBThreadIndexer extends BaseIndexer {
 		throws PortalException, SystemException {
 
 		ActionableDynamicQuery actionableDynamicQuery =
-			new GroupActionableDynamicQuery() {
-
-			@Override
-			protected void performAction(Object object)
-				throws PortalException, SystemException {
-
-				Group group = (Group)object;
-
-				reindexThreads(
-					companyId, group.getGroupId(),
-					MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
-			}
-
-		};
+			GroupLocalServiceUtil.getActionableDynamicQuery();
 
 		actionableDynamicQuery.setCompanyId(companyId);
+		actionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod() {
+
+				@Override
+				public void performAction(Object object)
+					throws PortalException, SystemException {
+
+					Group group = (Group)object;
+
+					reindexThreads(
+						companyId, group.getGroupId(),
+						MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID);
+				}
+
+			});
 
 		actionableDynamicQuery.performActions();
 	}

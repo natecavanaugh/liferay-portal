@@ -30,6 +30,7 @@ import com.liferay.portal.util.PortalUtil;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portal.service.PasswordPolicyLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class PasswordPolicyExportActionableDynamicQuery
 	extends PasswordPolicyActionableDynamicQuery {
 	public PasswordPolicyExportActionableDynamicQuery(

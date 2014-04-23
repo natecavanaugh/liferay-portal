@@ -241,7 +241,7 @@ public abstract class VirtualHostLocalServiceBaseImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.VirtualHostLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(VirtualHost.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -253,7 +253,7 @@ public abstract class VirtualHostLocalServiceBaseImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.VirtualHostLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(VirtualHost.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 

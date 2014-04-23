@@ -52,7 +52,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
-import com.liferay.portal.service.persistence.GroupActionableDynamicQuery;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PrefsPropsUtil;
@@ -658,27 +658,31 @@ public class DLFileEntryIndexer extends BaseIndexer {
 		throws PortalException, SystemException {
 
 		ActionableDynamicQuery actionableDynamicQuery =
-			new GroupActionableDynamicQuery() {
-
-			@Override
-			protected void performAction(Object object) throws PortalException {
-				Group group = (Group)object;
-
-				String portletId = PortletKeys.DOCUMENT_LIBRARY;
-				long groupId = group.getGroupId();
-				long folderId = groupId;
-
-				String[] newIds = {
-					String.valueOf(companyId), portletId,
-					String.valueOf(groupId), String.valueOf(folderId)
-				};
-
-				reindex(newIds);
-			}
-
-		};
+			GroupLocalServiceUtil.getActionableDynamicQuery();
 
 		actionableDynamicQuery.setCompanyId(companyId);
+		actionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod() {
+
+				@Override
+				public void performAction(Object object)
+					throws PortalException {
+
+					Group group = (Group)object;
+
+					String portletId = PortletKeys.DOCUMENT_LIBRARY;
+					long groupId = group.getGroupId();
+					long folderId = groupId;
+
+					String[] newIds = {
+						String.valueOf(companyId), portletId,
+						String.valueOf(groupId), String.valueOf(folderId)
+					};
+
+					reindex(newIds);
+				}
+
+			});
 
 		actionableDynamicQuery.performActions();
 	}

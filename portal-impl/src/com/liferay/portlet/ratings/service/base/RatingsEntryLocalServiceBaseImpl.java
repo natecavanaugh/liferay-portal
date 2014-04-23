@@ -276,7 +276,7 @@ public abstract class RatingsEntryLocalServiceBaseImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.ratings.service.RatingsEntryLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(RatingsEntry.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -288,7 +288,7 @@ public abstract class RatingsEntryLocalServiceBaseImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.ratings.service.RatingsEntryLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(RatingsEntry.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 

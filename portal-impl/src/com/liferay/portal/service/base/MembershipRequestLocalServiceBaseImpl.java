@@ -249,7 +249,7 @@ public abstract class MembershipRequestLocalServiceBaseImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.MembershipRequestLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(MembershipRequest.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -261,7 +261,7 @@ public abstract class MembershipRequestLocalServiceBaseImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.MembershipRequestLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(MembershipRequest.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 

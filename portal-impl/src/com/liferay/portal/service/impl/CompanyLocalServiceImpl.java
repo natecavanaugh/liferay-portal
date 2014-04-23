@@ -73,11 +73,7 @@ import com.liferay.portal.model.VirtualHost;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.base.CompanyLocalServiceBaseImpl;
 import com.liferay.portal.service.persistence.GroupActionableDynamicQuery;
-import com.liferay.portal.service.persistence.LayoutPrototypeActionableDynamicQuery;
-import com.liferay.portal.service.persistence.LayoutSetPrototypeActionableDynamicQuery;
 import com.liferay.portal.service.persistence.OrganizationActionableDynamicQuery;
-import com.liferay.portal.service.persistence.RoleActionableDynamicQuery;
-import com.liferay.portal.service.persistence.UserActionableDynamicQuery;
 import com.liferay.portal.util.Portal;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PortalUtil;
@@ -1297,43 +1293,47 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 		// Layout prototype
 
 		ActionableDynamicQuery layoutPrototypeActionableDynamicQuery =
-			new LayoutPrototypeActionableDynamicQuery() {
-
-			@Override
-			protected void performAction(Object object)
-				throws PortalException, SystemException {
-
-				LayoutPrototype layoutPrototype = (LayoutPrototype)object;
-
-				layoutPrototypeLocalService.deleteLayoutPrototype(
-					layoutPrototype);
-			}
-
-		};
+			layoutPrototypeLocalService.getActionableDynamicQuery();
 
 		layoutPrototypeActionableDynamicQuery.setCompanyId(companyId);
+		layoutPrototypeActionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod() {
+
+				@Override
+				public void performAction(Object object)
+					throws PortalException, SystemException {
+
+					LayoutPrototype layoutPrototype = (LayoutPrototype)object;
+
+					layoutPrototypeLocalService.deleteLayoutPrototype(
+						layoutPrototype);
+				}
+
+			});
 
 		layoutPrototypeActionableDynamicQuery.performActions();
 
 		// Layout set prototype
 
 		ActionableDynamicQuery layoutSetPrototypeActionableDynamicQuery =
-			new LayoutSetPrototypeActionableDynamicQuery() {
-
-			@Override
-			protected void performAction(Object object)
-				throws PortalException, SystemException {
-
-				LayoutSetPrototype layoutSetPrototype =
-					(LayoutSetPrototype)object;
-
-				layoutSetPrototypeLocalService.deleteLayoutSetPrototype(
-					layoutSetPrototype);
-			}
-
-		};
+			layoutSetPrototypeLocalService.getActionableDynamicQuery();
 
 		layoutSetPrototypeActionableDynamicQuery.setCompanyId(companyId);
+		layoutSetPrototypeActionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod() {
+
+				@Override
+				public void performAction(Object object)
+					throws PortalException, SystemException {
+
+					LayoutSetPrototype layoutSetPrototype =
+						(LayoutSetPrototype)object;
+
+					layoutSetPrototypeLocalService.deleteLayoutSetPrototype(
+						layoutSetPrototype);
+				}
+
+			});
 
 		layoutSetPrototypeActionableDynamicQuery.performActions();
 
@@ -1350,20 +1350,22 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 		// Roles
 
 		ActionableDynamicQuery roleActionableDynamicQuery =
-			new RoleActionableDynamicQuery() {
-
-			@Override
-			protected void performAction(Object object)
-				throws PortalException, SystemException {
-
-				Role role = (Role)object;
-
-				roleLocalService.deleteRole(role);
-			}
-
-		};
+			roleLocalService.getActionableDynamicQuery();
 
 		roleActionableDynamicQuery.setCompanyId(companyId);
+		roleActionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod() {
+
+				@Override
+				public void performAction(Object object)
+					throws PortalException, SystemException {
+
+					Role role = (Role)object;
+
+					roleLocalService.deleteRole(role);
+				}
+
+			});
 
 		roleActionableDynamicQuery.performActions();
 
@@ -1405,22 +1407,24 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 		// Users
 
 		ActionableDynamicQuery userActionableDynamicQuery =
-			new UserActionableDynamicQuery() {
-
-			@Override
-			protected void performAction(Object object)
-				throws PortalException, SystemException {
-
-				User user = (User)object;
-
-				if (!user.isDefaultUser()) {
-					userLocalService.deleteUser(user.getUserId());
-				}
-			}
-
-		};
+			userLocalService.getActionableDynamicQuery();
 
 		userActionableDynamicQuery.setCompanyId(companyId);
+		userActionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod() {
+
+				@Override
+				public void performAction(Object object)
+					throws PortalException, SystemException {
+
+					User user = (User)object;
+
+					if (!user.isDefaultUser()) {
+						userLocalService.deleteUser(user.getUserId());
+					}
+				}
+
+			});
 
 		userActionableDynamicQuery.performActions();
 

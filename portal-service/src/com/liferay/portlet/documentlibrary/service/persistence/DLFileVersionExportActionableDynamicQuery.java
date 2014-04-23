@@ -35,6 +35,7 @@ import com.liferay.portlet.documentlibrary.model.DLFileVersion;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class DLFileVersionExportActionableDynamicQuery
 	extends DLFileVersionActionableDynamicQuery {
 	public DLFileVersionExportActionableDynamicQuery(

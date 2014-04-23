@@ -31,6 +31,7 @@ import com.liferay.portlet.journal.model.JournalFeed;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.journal.service.JournalFeedLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class JournalFeedExportActionableDynamicQuery
 	extends JournalFeedActionableDynamicQuery {
 	public JournalFeedExportActionableDynamicQuery(

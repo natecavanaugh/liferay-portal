@@ -309,7 +309,7 @@ public abstract class MBMessageLocalServiceBaseImpl extends BaseLocalServiceImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(MBMessage.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -321,7 +321,7 @@ public abstract class MBMessageLocalServiceBaseImpl extends BaseLocalServiceImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(MBMessage.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 

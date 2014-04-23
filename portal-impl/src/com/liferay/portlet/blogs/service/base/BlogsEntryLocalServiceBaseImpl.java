@@ -303,7 +303,7 @@ public abstract class BlogsEntryLocalServiceBaseImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(BlogsEntry.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -315,7 +315,7 @@ public abstract class BlogsEntryLocalServiceBaseImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(BlogsEntry.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 

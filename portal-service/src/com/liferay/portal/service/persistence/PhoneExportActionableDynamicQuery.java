@@ -32,6 +32,7 @@ import com.liferay.portal.util.PortalUtil;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portal.service.PhoneLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class PhoneExportActionableDynamicQuery
 	extends PhoneActionableDynamicQuery {
 	public PhoneExportActionableDynamicQuery(

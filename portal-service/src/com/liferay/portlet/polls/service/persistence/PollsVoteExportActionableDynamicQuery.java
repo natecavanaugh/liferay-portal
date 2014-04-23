@@ -31,6 +31,7 @@ import com.liferay.portlet.polls.model.PollsVote;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.polls.service.PollsVoteLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class PollsVoteExportActionableDynamicQuery
 	extends PollsVoteActionableDynamicQuery {
 	public PollsVoteExportActionableDynamicQuery(

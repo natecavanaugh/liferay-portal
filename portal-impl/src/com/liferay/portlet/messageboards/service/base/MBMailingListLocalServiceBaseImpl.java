@@ -277,7 +277,7 @@ public abstract class MBMailingListLocalServiceBaseImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.messageboards.service.MBMailingListLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(MBMailingList.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -289,7 +289,7 @@ public abstract class MBMailingListLocalServiceBaseImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.messageboards.service.MBMailingListLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(MBMailingList.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 

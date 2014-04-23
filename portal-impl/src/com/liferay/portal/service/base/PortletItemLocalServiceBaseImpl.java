@@ -242,7 +242,7 @@ public abstract class PortletItemLocalServiceBaseImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.PortletItemLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(PortletItem.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -254,7 +254,7 @@ public abstract class PortletItemLocalServiceBaseImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.PortletItemLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(PortletItem.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 

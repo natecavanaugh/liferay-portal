@@ -283,7 +283,7 @@ public abstract class DDLRecordLocalServiceBaseImpl extends BaseLocalServiceImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.dynamicdatalists.service.DDLRecordLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(DDLRecord.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -295,7 +295,7 @@ public abstract class DDLRecordLocalServiceBaseImpl extends BaseLocalServiceImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portlet.dynamicdatalists.service.DDLRecordLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(DDLRecord.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 

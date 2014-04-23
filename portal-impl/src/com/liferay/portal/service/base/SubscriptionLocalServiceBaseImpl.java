@@ -250,7 +250,7 @@ public abstract class SubscriptionLocalServiceBaseImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.SubscriptionLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(Subscription.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -262,7 +262,7 @@ public abstract class SubscriptionLocalServiceBaseImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.SubscriptionLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(Subscription.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 

@@ -31,6 +31,7 @@ import com.liferay.portlet.messageboards.model.MBBan;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.messageboards.service.MBBanLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class MBBanExportActionableDynamicQuery
 	extends MBBanActionableDynamicQuery {
 	public MBBanExportActionableDynamicQuery(

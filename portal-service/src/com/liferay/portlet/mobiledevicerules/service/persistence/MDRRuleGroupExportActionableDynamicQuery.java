@@ -31,6 +31,7 @@ import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.mobiledevicerules.service.MDRRuleGroupLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class MDRRuleGroupExportActionableDynamicQuery
 	extends MDRRuleGroupActionableDynamicQuery {
 	public MDRRuleGroupExportActionableDynamicQuery(

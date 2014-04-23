@@ -35,6 +35,7 @@ import com.liferay.portlet.messageboards.model.MBMessage;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class MBMessageExportActionableDynamicQuery
 	extends MBMessageActionableDynamicQuery {
 	public MBMessageExportActionableDynamicQuery(

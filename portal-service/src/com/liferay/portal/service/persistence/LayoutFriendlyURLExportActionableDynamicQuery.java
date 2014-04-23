@@ -30,6 +30,7 @@ import com.liferay.portal.util.PortalUtil;
  * @deprecated As of 7.0.0, replaced by {@link com.liferay.portal.service.LayoutFriendlyURLLocalServiceUtil#getExportActionableDynamicQuery()}
  * @generated
  */
+@Deprecated
 public class LayoutFriendlyURLExportActionableDynamicQuery
 	extends LayoutFriendlyURLActionableDynamicQuery {
 	public LayoutFriendlyURLExportActionableDynamicQuery(

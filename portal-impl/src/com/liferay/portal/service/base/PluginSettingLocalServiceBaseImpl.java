@@ -243,7 +243,7 @@ public abstract class PluginSettingLocalServiceBaseImpl
 		throws SystemException {
 		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.PluginSettingLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(PluginSetting.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
@@ -255,7 +255,7 @@ public abstract class PluginSettingLocalServiceBaseImpl
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery)
 		throws SystemException {
-		actionableDynamicQuery.setBaseLocalService(com.liferay.portal.service.PluginSettingLocalServiceUtil.getService());
+		actionableDynamicQuery.setBaseLocalService(this);
 		actionableDynamicQuery.setClass(PluginSetting.class);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 
