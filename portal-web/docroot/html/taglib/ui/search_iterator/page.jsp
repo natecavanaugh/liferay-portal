@@ -289,17 +289,21 @@ List<String> primaryKeys = new ArrayList<String>();
 					columnClassName += " last";
 				}
 
-				String headerName = headerNames.get(j);
+				String headerName = StringPool.BLANK;
 
-				if (Validator.isNotNull(headerName) && !headerName.contains("hide-accessible")) {
-					headerName = headerName + StringPool.COLON;
-				}
-				else {
-					headerName = StringPool.BLANK;
+				if (headerNames != null) {
+					headerName = headerNames.get(j);
+
+					if (Validator.isNotNull(headerName) && !headerName.contains("hide-accessible")) {
+						headerName = LanguageUtil.get(pageContext, HtmlUtil.escape(headerName)) + StringPool.COLON;
+					}
+					else {
+						headerName = StringPool.BLANK;
+					}
 				}
 			%>
 
-				<td class="table-cell <%= columnClassName %>" data-th="<%= LanguageUtil.get(pageContext, HtmlUtil.escape(headerName)) %>">
+				<td class="table-cell <%= columnClassName %>" data-th="<%= headerName %>">
 
 					<%
 					entry.print(pageContext);
