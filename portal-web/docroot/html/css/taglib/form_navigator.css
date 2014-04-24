@@ -1,3 +1,6 @@
+@import "compass";
+@import "mixins";
+
 .taglib-form-navigator {
 	ul.form-navigator.well {
 		float: right;
@@ -7,11 +10,134 @@
 		display: none;
 	}
 
-	.form-navigator-content{
+	> .form-steps {
+		position: relative;
+
+		> ul.form-navigator.well {
+			background: transparent;
+			border: none;
+			clear: both;
+			float: none;
+			overflow: visible;
+			padding: 0;
+			width: 100%;
+
+			@include respond-to(phone, tablet) {
+				overflow: auto;
+				white-space: nowrap;
+			}
+
+			.tab {
+				display: inline-block;
+				overflow: visible;
+				position: relative;
+				text-align: center;
+				white-space: nowrap;
+				z-index: 50;
+
+				&.active {
+					@include opacity(1);
+
+					&:last-child .tab-label .tab-icon {
+						display: none;
+					}
+
+					.tab-label {
+						position: relative;
+
+						&:hover, &:focus {
+							background: transparent;
+						}
+
+						.message {
+							@include opacity(0.7);
+
+							color: #000;
+							display: inline-block;
+						}
+
+						.number {
+							@include opacity(1);
+
+							background: #60BFEF;
+							font-size: 18px;
+						}
+
+						.tab-icon {
+							color: #60BFEF;
+							display: inline-block;
+						}
+					}
+				}
+
+				&.section-error .tab-label .message {
+					color: #B50303;
+				}
+
+				.tab-label {
+					background: transparent;
+					display: block;
+					margin: 0 5px 0 -5px;
+					outline: 0;
+					padding: 0;
+
+					&:hover, &:focus {
+						text-decoration: none;
+
+						.number {
+							@include opacity(1);
+						}
+					}
+
+					.error-notice {
+						display: none;
+					}
+
+					.number {
+						@include opacity(0.6);
+
+						background: #CCC;
+						clear: both;
+						color: #FFF;
+						display: inline-block;
+						font-size: 14px;
+						font-weight: bold;
+						margin: 5px;
+						text-decoration: none;
+						width: 30px;
+					}
+
+					.message {
+						color: #000;
+						font-size: 12px;
+						margin-left: -5px;
+					}
+
+					.modified-notice {
+						display: none;
+					}
+
+					.tab-icon {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+
+	.form-navigator-content {
 		overflow: visible;
 
 		&[class*="span"] {
 			margin-left: 0;
+		}
+
+		.form-section {
+			display: none;
+
+			&.active {
+				display: block;
+			}
 		}
 	}
 
