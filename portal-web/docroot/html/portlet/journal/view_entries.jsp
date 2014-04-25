@@ -353,11 +353,13 @@ for (int i = 0; i < results.size(); i++) {
 						rowURL.setParameter("articleId", curArticle.getArticleId());
 
 						rowURL.setParameter("status", String.valueOf(status));
+
+						AssetRendererFactory assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(JournalArticle.class.getName());
 						%>
 
 						<liferay-ui:icon
 							cssClass="entry-display-style selectable"
-							image="../file_system/small/html"
+							iconCssClass="<%= assetRendererFactory.getIconCssClass() %>"
 							label="<%= true %>"
 							message="<%= curArticle.getTitle(locale) %>"
 							method="get"
@@ -475,12 +477,6 @@ for (int i = 0; i < results.size(); i++) {
 					<liferay-util:buffer var="folderTitle">
 
 						<%
-						String folderImage = "folder_empty";
-
-						if (JournalFolderServiceUtil.getFoldersAndArticlesCount(scopeGroupId, curFolder.getFolderId()) > 0) {
-							folderImage = "folder_full_document";
-						}
-
 						Map<String, Object> data = new HashMap<String, Object>();
 
 						data.put("folder", true);
@@ -492,11 +488,13 @@ for (int i = 0; i < results.size(); i++) {
 						rowURL.setParameter("redirect", currentURL);
 						rowURL.setParameter("groupId", String.valueOf(curFolder.getGroupId()));
 						rowURL.setParameter("folderId", String.valueOf(curFolder.getFolderId()));
+
+						AssetRendererFactory assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(JournalFolder.class.getName());
 						%>
 
 						<liferay-ui:icon
 							data="<%= data %>"
-							image="<%= folderImage %>"
+							iconCssClass="<%= assetRendererFactory.getIconCssClass(curFolder.getFolderId()) %>"
 							label="<%= true %>"
 							message="<%= curFolder.getName() %>"
 							method="get"

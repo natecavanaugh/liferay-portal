@@ -118,6 +118,34 @@ body.portlet {
 	display: inline-block;
 }
 
+%portlet-action-navbar {
+	display: inline-block;
+	margin-bottom: 0;
+	margin-top: 20px;
+
+	@include respond-to(desktop) {
+		.dropdown.open .dropdown-menu {
+			display: none;
+		}
+
+		.navbar-inner {
+			@include opacity(0.5);
+		}
+	}
+}
+
+%portlet-action-navbar-hover {
+	.navbar-inner {
+		@include respond-to(desktop) {
+			@include opacity(1);
+
+			.dropdown.open .dropdown-menu {
+				display: block;
+			}
+		}
+	}
+}
+
 .portlet-borderless-bar {
 	@extend %portlet-action-bar;
 
@@ -129,68 +157,57 @@ body.portlet {
 }
 
 .portlet-borderless-container, .portlet-content {
-	.lfr-icon-actions {
-		@extend %portlet-action-bar;
+	.navbar-actions {
+		@extend %portlet-action-navbar;
 	}
 }
 
 .portlet-borderless-container, .portlet-content {
-	.lfr-icon-actions {
-		float: left;
-		margin: 1px 10px 1px 1px;
+	.navbar {
+		&.navbar-actions {
+			.navbar-inner {
+				background-color: #A9A9A9;
+				background-image: none;
+				border-color: #A9A9A9;
+				border-radius: 20px;
+				min-height: 0;
+				padding: 0 5px;
+			}
 
-		@include opacity(0.5);
+			.nav {
+				margin: 0;
 
-		padding: 2px 7px;
+				> li {
+					line-height: 1;
 
-		.lfr-icon-menu-text, .taglib-text {
-			color: #FFF;
-			display: none;
-			font-weight: bold;
-			margin-right: 1em;
-			text-decoration: none;
-			vertical-align: middle;
-		}
+					> a {
+						color: #FFF;
+						padding: 10px;
+						text-shadow: 0 0;
 
-		.lfr-icon-action {
-			a {
-				background: url() no-repeat 0 50%;
-				display: inline-block;
-				margin-left: 5px;
-				vertical-align: top;
+						.nav-item-icon {
+							vertical-align: top;
+						}
 
-				&:hover {
-					text-decoration: none;
+						&:hover, &:focus {
+							color: #FFF;
 
-					span {
-						text-decoration: underline;
+							.nav-item-label {
+								text-decoration: underline;
+							}
+						}
+
+						& .icon-caret-down {
+							display: none;
+						}
 					}
 				}
 
-				img {
-					visibility: hidden;
+				.dropdown.open > .dropdown-toggle {
+					background-color: transparent;
+					color: #FFF;
 				}
 			}
-
-			&.lfr-icon-menu .btn.dropdown-toggle {
-				text-align: left;
-			}
-		}
-
-		.lfr-icon-action-add a {
-			background-image: url(../images/common/add_white.png);
-		}
-
-		.lfr-icon-action-edit a {
-			background-image: url(../images/common/edit_white.png);
-		}
-
-		.lfr-icon-action-edit-template a {
-			background-image: url(../images/common/edit_template_white.png);
-		}
-
-		.lfr-icon-action-configuration a {
-			background-image: url(../images/common/configuration_white.png);
 		}
 	}
 }
@@ -277,12 +294,6 @@ body.portlet {
 	.portlet-borderless-bar {
 		@include opacity(0.6);
 	}
-
-	.portlet-content {
-		.lfr-icon-actions {
-			@include opacity(1);
-		}
-	}
 }
 
 .portlet-borderless-container:hover .portlet-borderless-bar {
@@ -295,12 +306,8 @@ body.portlet {
 
 .portlet-borderless-container, .portlet-content {
 	&:hover {
-		.lfr-icon-actions {
-			@extend %portlet-action-bar-hover;
-
-			.taglib-text {
-				@extend %portlet-action-bar-hover-text;
-			}
+		.navbar-actions {
+			@extend %portlet-action-navbar-hover;
 		}
 	}
 
@@ -771,18 +778,14 @@ body.portlet {
 }
 
 .ie {
-	.portlet-borderless-bar {
+	.portlet-borderless-bar, .navbar-actions .navbar-inner {
 		@include opacity(0.5);
 	}
 
-	.portlet-content {
-		.lfr-icon-actions {
-			@include opacity(0.5);
+	.portlet-borderless-container:hover, .portlet-content:hover {
+		.portlet-borderless-bar, .navbar-actions .navbar-inner {
+			@include opacity(1);
 		}
-	}
-
-	.portlet-borderless-container:hover .portlet-borderless-bar, .portlet-journal-content .lfr-icon-actions:hover {
-		@include opacity(1);
 	}
 
 	.taglib-calendar tr td.first a {
@@ -794,10 +797,6 @@ body.portlet {
 	.portlet-content {
 		.icons-container {
 			overflow: visible;
-		}
-
-		.lfr-icon-actions .taglib-text {
-			display: inline-block;
 		}
 	}
 

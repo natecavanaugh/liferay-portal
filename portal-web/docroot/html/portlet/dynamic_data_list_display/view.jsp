@@ -92,8 +92,8 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 %>
 
 <c:if test="<%= themeDisplay.isSignedIn() && !layout.isLayoutPrototypeLinkActive() && (showAddListIcon || showAddTemplateIcon || showEditDisplayTemplateIcon || showEditFormTemplateIcon || hasConfigurationPermission ) %>">
-	<div class="lfr-meta-actions icons-container">
-		<div class="lfr-icon-actions">
+	<aui:nav-bar cssClass="navbar-actions">
+		<aui:nav collapsible="<%= false %>">
 			<c:if test="<%= showAddTemplateIcon %>">
 				<liferay-portlet:renderURL portletName="<%= PortletKeys.DYNAMIC_DATA_MAPPING %>" var="addFormTemplateURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
 					<portlet:param name="struts_action" value="/dynamic_data_mapping/edit_template" />
@@ -107,12 +107,10 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 					<portlet:param name="structureAvailableFields" value='<%= renderResponse.getNamespace() + "getAvailableFields" %>' />
 				</liferay-portlet:renderURL>
 
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-add"
-					image="add_template_form"
-					label="<%= true %>"
-					message="add-form-template"
-					url="<%= addFormTemplateURL %>"
+				<aui:nav-item
+					href="<%= addFormTemplateURL %>"
+					iconCssClass="icon-plus"
+					label="add-form-template"
 				/>
 
 				<liferay-portlet:renderURL portletName="<%= PortletKeys.DYNAMIC_DATA_MAPPING %>" var="addDisplayTemplateURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
@@ -126,12 +124,10 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 					<portlet:param name="type" value="<%= DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY %>" />
 				</liferay-portlet:renderURL>
 
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-add"
-					image="add_template_display"
-					label="<%= true %>"
-					message="add-display-template"
-					url="<%= addDisplayTemplateURL %>"
+				<aui:nav-item
+					href="<%= addDisplayTemplateURL %>"
+					iconCssClass="icon-plus"
+					label="add-display-template"
 				/>
 			</c:if>
 
@@ -146,12 +142,10 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 					<portlet:param name="structureAvailableFields" value='<%= renderResponse.getNamespace() + "getAvailableFields" %>' />
 				</liferay-portlet:renderURL>
 
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-edit-template"
-					image="../file_system/small/xml"
-					label="<%= true %>"
-					message="edit-form-template"
-					url="<%= editFormTemplateURL %>"
+				<aui:nav-item
+					href="<%= editFormTemplateURL %>"
+					iconCssClass="icon-edit"
+					label="edit-form-template"
 				/>
 			</c:if>
 
@@ -164,24 +158,23 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 					<portlet:param name="templateId" value="<%= String.valueOf(displayDDMTemplateId) %>" />
 				</liferay-portlet:renderURL>
 
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-edit-template"
-					image="../file_system/small/xml"
-					label="<%= true %>"
-					message="edit-display-template"
-					url="<%= editDisplayTemplateURL %>"
+				<aui:nav-item
+					href="<%= editDisplayTemplateURL %>"
+					iconCssClass="icon-edit"
+					label="edit-display-template"
 				/>
 			</c:if>
 
 			<c:if test="<%= hasConfigurationPermission %>">
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-configuration"
-					image="configuration"
-					label="<%= true %>"
-					message="select-list"
-					method="get"
-					onClick="<%= portletDisplay.getURLConfigurationJS() %>"
-					url="<%= portletDisplay.getURLConfiguration() %>"
+
+				<%
+				String taglibConfigurationURL = "javascript:Liferay.Util.openWindow({id: '_" + HtmlUtil.escapeJS(portletDisplay.getId()) + "_editAsset', title: '" + LanguageUtil.get(locale, "select-list") + "', uri:'" + HtmlUtil.escapeJS(portletDisplay.getURLConfiguration()) + "'});";
+				%>
+
+				<aui:nav-item
+					href="<%= taglibConfigurationURL %>"
+					iconCssClass="icon-search"
+					label="select-list"
 				/>
 			</c:if>
 
@@ -193,14 +186,12 @@ boolean showEditFormTemplateIcon = (formDDMTemplateId != 0) && DDMTemplatePermis
 					<portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" />
 				</liferay-portlet:renderURL>
 
-				<liferay-ui:icon
-					cssClass="lfr-icon-action lfr-icon-action-add"
-					image="add_article"
-					label="<%= true %>"
-					message="add-list"
-					url="<%= addListURL %>"
+				<aui:nav-item
+					href="<%= addListURL %>"
+					iconCssClass="icon-plus"
+					label="add-list"
 				/>
 			</c:if>
-		</div>
-	</div>
+		</aui:nav>
+	</aui:nav-bar>
 </c:if>

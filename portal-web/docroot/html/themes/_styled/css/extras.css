@@ -214,11 +214,6 @@ body > .lfr-menu-list ul, .active-area-proxy, .entry-display-style .entry-thumbn
 	@include border-radius(14px);
 }
 
-.portlet-journal-content .lfr-icon-actions .lfr-icon-action-add a {
-	@include box-shadow(none);
-	@include text-shadow(none);
-}
-
 .menu-content {
 	@include border-bottom-left-radius(4px);
 	@include border-bottom-right-radius(4px);
@@ -405,10 +400,10 @@ body:first-of-type {
 
 	.portlet-borderless-container, .portlet-content {
 		&:hover {
-			.lfr-icon-actions {
+			.navbar-actions .navbar-inner {
 				@extend %portlet-action-bar-fx-hover;
 
-				.lfr-icon-menu-text, .taglib-text {
+				.nav-item-label {
 					@extend %portlet-action-bar-fx-hover-text;
 
 					max-width: 200px;
@@ -416,10 +411,10 @@ body:first-of-type {
 			}
 		}
 
-		.lfr-icon-actions {
+		.navbar-actions .navbar-inner {
 			@extend %portlet-action-bar-fx;
 
-			.lfr-icon-menu-text, .taglib-text {
+			.nav-item-label {
 				@extend %portlet-action-bar-fx-text;
 
 				@include respond-to(phone, tablet) {

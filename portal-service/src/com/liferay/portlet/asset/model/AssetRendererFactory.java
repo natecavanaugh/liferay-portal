@@ -37,6 +37,8 @@ import javax.portlet.WindowState;
  */
 public interface AssetRendererFactory {
 
+	public static final int DEFAULT_CLASS_PK = 0;
+
 	public static final int TYPE_LATEST = 0;
 
 	public static final int TYPE_LATEST_APPROVED = 1;
@@ -73,6 +75,11 @@ public interface AssetRendererFactory {
 
 	public Map<Long, String> getClassTypes(long[] groupIds, Locale locale)
 		throws Exception;
+
+	public String getIconCssClass() throws PortalException, SystemException;
+
+	public String getIconCssClass(long classPK)
+		throws PortalException, SystemException;
 
 	public String getIconPath(PortletRequest portletRequest);
 
