@@ -406,15 +406,17 @@ public class TextFormatter {
 		StringBuilder sb = new StringBuilder(s.length() + s.length() / 2);
 
 		for (int i = 0; i < s.length() - 1; i++) {
-			char c1 = s.charAt(i);
-			char c2 = s.charAt(i + 1);
+			char c = s.charAt(i);
 
-			if (Character.isLowerCase(c1) && Character.isUpperCase(c2)) {
-				sb.append(c1);
-				sb.append(CharPool.DASH);
+			if (Character.isUpperCase(c)) {
+				sb.append(Character.toLowerCase(c));
 			}
 			else {
-				sb.append(Character.toLowerCase(c1));
+				sb.append(c);
+
+				if (Character.isUpperCase(s.charAt(i + 1))) {
+					sb.append(CharPool.DASH);
+				}
 			}
 		}
 
