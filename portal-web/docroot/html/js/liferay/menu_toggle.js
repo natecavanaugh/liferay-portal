@@ -2,8 +2,15 @@ AUI.add(
 	'liferay-menu-toggle',
 	function(A) {
 		var Lang = A.Lang;
+		var AArray = A.Array;
+		var AEvent = A.Event;
+		var Util = Liferay.Util;
+
+		var trim = Lang.trim;
 
 		var NAME = 'menutoggle';
+
+		var SELECTOR_NAV_ITEM_FILTER = '.nav-item-filter';
 
 		var MenuToggle = A.Component.create(
 			{
@@ -12,9 +19,21 @@ AUI.add(
 						validator: '_validateContent'
 					},
 
+					maxDisplayItems: {
+						validator: Lang.isNumber,
+						value: 10
+					},
+
 					open: {
 						validator: Lang.isBoolean,
 						value: false
+					},
+
+					strings: {
+						validator: Lang.isObject,
+						value: {
+							placeholder: 'Search'
+						}
 					},
 
 					toggle: {
@@ -50,10 +69,29 @@ AUI.add(
 
 						instance._content = A.all(instance.get('content'));
 
-						A.Event.defineOutside('touchend');
-						A.Event.defineOutside('touchstart');
+						AEvent.defineOutside('touchend');
+						AEvent.defineOutside('touchstart');
 
 						instance._bindUI();
+					},
+
+					_addMenuFilter: function() {
+						var instance = this;
+
+						if (!instance._menuFilter) {
+							var menu = instance._content.one('.dropdown-menu');
+
+							var menuItems = menu.all('li');
+
+							var itemsSize = menuItems.size();
+
+							if (itemsSize > instance.get('maxDisplayItems')) {
+								instance._createMenuFilter(menu, menuItems);
+							}
+						}
+						else {
+							instance._menuFilter.reset();
+						}
 					},
 
 					_bindUI: function() {
@@ -69,6 +107,43 @@ AUI.add(
 								}
 							);
 						}
+					},
+
+					_createMenuFilter: function(menu, menuItems) {
+						var instance = this;
+
+						instance._menuFilter = new Liferay.MenuFilter(
+							{
+								content: menu,
+
+								minQueryLength: 0,
+
+								resultTextLocator: 'name',
+
+								resultFilters: 'phraseMatch',
+
+								source: function() {
+									var results = [];
+
+									menuItems.each(
+										function(node) {
+											results.push(
+												{
+													name: trim(node.one('.nav-item-label').text()),
+													node: node
+												}
+											);
+										}
+									);
+
+									return results;
+								}(),
+
+								queryDelay: 0
+							}
+						);
+
+						return instance._menuFilter;
 					},
 
 					_getEventOutside: function(event) {
@@ -107,6 +182,10 @@ AUI.add(
 						instance._content.toggleClass('open', force);
 
 						instance.set('open', force);
+
+						if (force) {
+							instance._addMenuFilter();
+						}
 					},
 
 					_toggleMenu: function(event, target) {
@@ -152,7 +231,7 @@ AUI.add(
 						else {
 							var data = {};
 
-							data[handleId] = menuOpen ? 'open' : 'closed';
+							data[handleId] = open ? 'open' : 'closed';
 
 							Liferay.Store(data);
 						}
@@ -171,6 +250,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-node', 'event-move', 'event-outside', 'liferay-store']
+		requires: ['aui-node', 'event-move', 'event-outside', 'liferay-store', 'liferay-menu-filter']
 	}
 );
