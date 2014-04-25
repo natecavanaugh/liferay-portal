@@ -3,6 +3,8 @@ AUI.add(
 	function(A) {
 		var Util = Liferay.Util;
 
+		var SELECTOR_DIRECT_ANCHOR = ' > a';
+
 		var SELECTOR_DRAG_HANDLE = '.drag-handle';
 
 		var SELECTOR_LFR_NAV_SORTABLE = '.lfr-nav-sortable';
@@ -17,24 +19,29 @@ AUI.add(
 				_afterMakeSortable: function(sortable) {
 					var instance = this;
 
-					var navItems = instance.get('navBlock').all(instance._navItemSelector);
+					var navBlock = instance.get('navBlock');
+
+					var navItems = navBlock.all(instance._navItemSelector + SELECTOR_DIRECT_ANCHOR);
+
+					instance._createDragHandles(navItems);
+
+					navBlock.delegate(
+						'click',
+						function(event) {
+							if (event.target.ancestor('.drag-handle', true, SELECTOR_LFR_NAV_SORTABLE)) {
+								event.preventDefault();
+							}
+						},
+						SELECTOR_LFR_NAV_SORTABLE + SELECTOR_DIRECT_ANCHOR
+					);
 
 					var sortableDD = sortable.delegate.dd;
 
 					instance._sortableDD = sortableDD;
 
-					instance._createDragHandles(navItems);
-
 					afterMakeSortable.call(instance, sortable);
 
 					sortableDD.plug(A.Plugin.DDConstrained);
-
-					sortableDD.on(
-						['drag:drophit', 'drag:dropmiss'],
-						function(event) {
-							event.halt();
-						}
-					);
 
 					instance._toggleDragConfig(sortableDD);
 
