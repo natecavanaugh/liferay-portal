@@ -16,7 +16,7 @@
 				text-align: top;
 			}
 
-			.brand {
+			.navbar-brand {
 				line-height: 16px;
 				padding: 12px 0 0 0;
 
@@ -75,7 +75,7 @@
 				}
 			}
 
-			.btn-navbar {
+			.navbar-btn {
 				float: right;
 			}
 
