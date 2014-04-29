@@ -1,7 +1,8 @@
 ;(function(A, Liferay) {
 	var Util = Liferay.Util;
+	var AArray = A.Array;
 
-	var arrayIndexOf = A.Array.indexOf;
+	var arrayIndexOf = AArray.indexOf;
 
 	var STR_HEAD = 'head';
 
@@ -9,6 +10,8 @@
 
 	var Portlet = {
 		list: [],
+
+		readyCounter: 0,
 
 		isStatic: function(portletId) {
 			var instance = this;
@@ -155,6 +158,8 @@
 				if (onCompleteFn) {
 					onCompleteFn(portlet, portletId);
 				}
+
+				instance.list.push(portlet.portletId);
 
 				Liferay.fire(
 					'addPortlet',
@@ -373,6 +378,12 @@
 				options.portlet = portlet;
 				options.portletId = portlet.portletId;
 
+				var portletIndex = AArray.indexOf(instance.list, portlet.portletId);
+
+				if (portletIndex >= 0) {
+					instance.list.splice(portletIndex, 1);
+				}
+
 				Liferay.fire('closePortlet', options);
 			}
 			else {
@@ -529,21 +540,15 @@
 					}
 				);
 
-				var list = instance.list;
+				instance.readyCounter++;
 
-				var index = arrayIndexOf(list, portletId);
-
-				if (index > -1) {
-					list.splice(index, 1);
-
-					if (!list.length) {
-						Liferay.fire(
-							'allPortletsReady',
-							{
-								portletId: portletId
-							}
-						);
-					}
+				if (instance.readyCounter === instance.list.length) {
+					Liferay.fire(
+						'allPortletsReady',
+						{
+							portletId: portletId
+						}
+					);
 				}
 			}
 		},
