@@ -27,7 +27,7 @@ $editLayoutPanelWidth: 460px;
 				.navbar-inner {
 					padding: 0;
 
-					.nav-collapse {
+					.navbar-collapse {
 						height: auto;
 						overflow: visible;
 
@@ -104,7 +104,7 @@ $editLayoutPanelWidth: 460px;
 				padding: 0;
 			}
 
-			.brand h1 {
+			.navbar-brand h1 {
 				display: inline-block;
 				font-size: inherit;
 				line-height: 1;
@@ -116,7 +116,7 @@ $editLayoutPanelWidth: 460px;
 				}
 			}
 
-			.btn-navbar {
+			.navbar-btn {
 				float: left;
 				padding: 12px 15px;
 
@@ -130,7 +130,7 @@ $editLayoutPanelWidth: 460px;
 				margin-right: 0;
 				width: 100%;
 
-				.nav-collapse {
+				.navbar-collapse {
 					@include respond-to(phone, tablet) {
 						clear: none;
 						display: inline-block;
@@ -625,7 +625,7 @@ $editLayoutPanelWidth: 460px;
 					width: auto;
 				}
 
-				.container .nav-collapse {
+				.container .navbar-collapse {
 					z-index: 400;
 
 					&.open {
@@ -860,12 +860,12 @@ $editLayoutPanelWidth: 460px;
 		}
 	}
 
-	&.dialog-iframe-root-node .dockbar .navbar-inner .container .nav-collapse > .nav.nav-add-controls .dropdown-menu .page-preview-controls {
+	&.dialog-iframe-root-node .dockbar .navbar-inner .container .navbar-collapse > .nav.nav-add-controls .dropdown-menu .page-preview-controls {
 		display: none;
 	}
 
 	.touch .dockbar-split, .controls-hidden.dockbar-split {
-		.dockbar .navbar-inner .container .nav-collapse > .nav.nav-add-controls ul.dropdown-menu > li.toggle-controls > a.toggle-controls-link {
+		.dockbar .navbar-inner .container .navbar-collapse > .nav.nav-add-controls ul.dropdown-menu > li.toggle-controls > a.toggle-controls-link {
 			clip: rect(auto auto auto auto);
 			position: static;
 		}
@@ -1000,7 +1000,7 @@ $editLayoutPanelWidth: 460px;
 			}
 
 			&.lfr-edit-layout-panel {
-				.taglib-form-navigator .accordion {
+				.taglib-form-navigator .panel-group {
 					margin-bottom: 20px;
 				}
 
@@ -1219,7 +1219,7 @@ $editLayoutPanelWidth: 460px;
 
 	/* -------- Extras -------- */
 
-	.dockbar .navbar-inner .container .nav-collapse > .nav > li.info-items {
+	.dockbar .navbar-inner .container .navbar-collapse > .nav > li.info-items {
 		@include background-image(none);
 	}
 
@@ -1296,7 +1296,7 @@ $editLayoutPanelWidth: 460px;
 				background-color: #FFF;
 			}
 
-			.navbar-inner .container .nav-collapse > .nav > li.info-items {
+			.navbar-inner .container .navbar-collapse > .nav > li.info-items {
 				left: 0;
 				top: 100%;
 			}
@@ -1339,7 +1339,7 @@ $editLayoutPanelWidth: 460px;
 
 	/* LPS-42547 */
 
-	.dockbar .nav-collapse {
+	.dockbar .navbar-collapse {
 		-webkit-transform: none;
 	}
 }
