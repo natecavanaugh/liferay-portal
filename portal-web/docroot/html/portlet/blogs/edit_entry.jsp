@@ -451,6 +451,10 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 		},
 		['aui-io']
 	);
+
+	if (Liferay.Surface && Liferay.Surface.app) {
+		Liferay.once('surfaceScreenDeactivate', <portlet:namespace />clearSaveDraftIntervalId);
+	}
 </aui:script>
 
 <aui:script use="aui-base">
