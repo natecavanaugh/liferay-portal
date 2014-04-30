@@ -1,3 +1,9 @@
+/**
+ * Creates a Liferay Icon module and adds it to AUI
+ *
+ * @module liferay-icon
+ */
+
 AUI.add(
 	'liferay-icon',
 	function(A) {
@@ -28,7 +34,15 @@ AUI.add(
 					}
 				}
 			},
-
+			
+			/**
+         		 * Triggers when the mouse clicks the icon and forces
+			 * it to post if the icon is a link. 
+         		 *
+         		 * @method _forcePost
+         		 * @param event
+         		 * @protected
+         		 */
 			_forcePost: function(event) {
 				var instance = this;
 
@@ -36,7 +50,15 @@ AUI.add(
 
 				event.preventDefault();
 			},
-
+                         
+                       /**
+         		 * Triggers when the mouse hovers over top of the icon.
+         		 *
+         		 * @method _onMouseHover
+         		 * @param event
+			 * @param src
+         		 * @protected
+         		 */
 			_onMouseHover: function(event, src) {
 				var instance = this;
 
@@ -46,7 +68,14 @@ AUI.add(
 					img.attr('src', src);
 				}
 			},
-
+			
+			/**
+         		 * Triggers when the mouse hovers over top of the icon.
+         		 *
+         		 * @method _useDialog
+         		 * @param event
+         		 * @protected
+         		 */
 			_useDialog: function(event) {
 				Liferay.Util.openInDialog(event, event.currentTarget);
 			}
