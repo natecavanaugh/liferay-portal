@@ -123,7 +123,7 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 										<liferay-ui:icon
 											iconCssClass="icon-search"
 											label="<%= true %>"
-											linkCssClass="btn"
+											linkCssClass="btn btn-default"
 											message="select"
 											url='<%= "javascript:" + renderResponse.getNamespace() + "openDDMStructureSelector();" %>'
 										/>
@@ -157,7 +157,7 @@ String toLanguageId = (String)request.getAttribute("edit_article.jsp-toLanguageI
 									<liferay-ui:icon
 										iconCssClass="icon-search"
 										label="<%= true %>"
-										linkCssClass="btn"
+										linkCssClass="btn btn-default"
 										message="select"
 										url='<%= "javascript:" + renderResponse.getNamespace() + "openDDMTemplateSelector();" %>'
 									/>

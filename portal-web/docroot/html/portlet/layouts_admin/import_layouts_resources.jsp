@@ -192,7 +192,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 
 			<c:if test="<%= !setupPortlets.isEmpty() %>">
 				<aui:fieldset cssClass="options-group" label="application-configuration">
-					<ul class="lfr-tree unstyled">
+					<ul class="lfr-tree list-unstyled">
 						<li class="tree-item">
 							<aui:input checked="<%= true %>" helpMessage="all-applications-import-help" id="allApplications" label="all-applications" name="<%= PortletDataHandlerKeys.PORTLET_CONFIGURATION_ALL %>" type="radio" value="<%= true %>" />
 
@@ -237,10 +237,10 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 											<aui:input label="<%= portletTitle %>" name="<%= PortletDataHandlerKeys.PORTLET_CONFIGURATION + StringPool.UNDERLINE + portlet.getRootPortletId() %>" type="checkbox" value="<%= true %>" />
 
 											<div class="hide" id="<portlet:namespace />configuration_<%= portlet.getRootPortletId() %>">
-												<ul class="lfr-tree unstyled">
+												<ul class="lfr-tree list-unstyled">
 													<li class="tree-item">
 														<aui:fieldset cssClass="portlet-type-data-section" label="<%= portletTitle %>">
-															<ul class="lfr-tree unstyled">
+															<ul class="lfr-tree list-unstyled">
 
 																<%
 																request.setAttribute("render_controls.jsp-action", Constants.IMPORT);
@@ -292,7 +292,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 
 			<c:if test="<%= !dataPortlets.isEmpty() %>">
 				<aui:fieldset cssClass="options-group" label="content">
-					<ul class="lfr-tree unstyled">
+					<ul class="lfr-tree list-unstyled">
 						<li class="tree-item">
 							<aui:input checked="<%= true %>" helpMessage="all-content-import-help" id="allContent" label="all-content" name="<%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>" type="radio" value="<%= true %>" />
 
@@ -312,7 +312,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 								<aui:fieldset cssClass="portlet-data-section" label="all-content">
 									<aui:input label="delete-portlet-data-before-importing" name="<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>" type="checkbox" />
 
-									<ul class="unstyled" id="<portlet:namespace />showDeleteContentWarning">
+									<ul class="list-unstyled" id="<portlet:namespace />showDeleteContentWarning">
 										<li>
 											<div class="alert alert-block">
 												<liferay-ui:message key="delete-content-before-importing-warning" />
@@ -377,7 +377,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 													%>
 
 														<div class="hide" id="<portlet:namespace />content_<%= portlet.getRootPortletId() %>">
-															<ul class="lfr-tree unstyled">
+															<ul class="lfr-tree list-unstyled">
 																<li class="tree-item">
 																	<aui:fieldset cssClass="portlet-type-data-section" label="<%= portletTitle %>">
 
@@ -390,7 +390,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 																		%>
 
 																			<aui:field-wrapper label='<%= ArrayUtil.isNotEmpty(importMetadataControls) ? "content" : StringPool.BLANK %>'>
-																				<ul class="lfr-tree unstyled">
+																				<ul class="lfr-tree list-unstyled">
 																					<liferay-util:include page="/html/portlet/layouts_admin/render_controls.jsp" />
 																				</ul>
 																			</aui:field-wrapper>
@@ -416,7 +416,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 																				%>
 
 																				<aui:field-wrapper label="content-metadata">
-																					<ul class="lfr-tree unstyled">
+																					<ul class="lfr-tree list-unstyled">
 																						<liferay-util:include page="/html/portlet/layouts_admin/render_controls.jsp" />
 																					</ul>
 																				</aui:field-wrapper>
@@ -470,7 +470,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 										<aui:a cssClass="modify-link" href="javascript:;" id="contentOptionsLink" label="change" method="get" />
 
 										<div class="hide" id="<portlet:namespace />contentOptions">
-											<ul class="lfr-tree unstyled">
+											<ul class="lfr-tree list-unstyled">
 												<li class="tree-item">
 													<aui:input label="comments" name="<%= PortletDataHandlerKeys.COMMENTS %>" type="checkbox" value="<%= true %>" />
 
@@ -500,7 +500,7 @@ ManifestSummary manifestSummary = ExportImportHelperUtil.getManifestSummary(user
 			</c:if>
 
 			<aui:fieldset cssClass="options-group" label="permissions">
-				<ul class="lfr-tree unstyled">
+				<ul class="lfr-tree list-unstyled">
 					<li class="tree-item">
 						<aui:input label="permissions" name="<%= PortletDataHandlerKeys.PERMISSIONS %>" type="checkbox" />
 

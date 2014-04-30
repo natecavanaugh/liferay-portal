@@ -96,7 +96,7 @@ List<Group> inheritedSites = (List<Group>)request.getAttribute("user.inheritedSi
 		iconCssClass="icon-search"
 		id="selectSiteLink"
 		label="<%= true %>"
-		linkCssClass="btn"
+		linkCssClass="btn btn-default"
 		message="select"
 		url="javascript:;"
 	/>
