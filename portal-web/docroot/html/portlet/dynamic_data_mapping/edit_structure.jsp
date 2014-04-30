@@ -187,7 +187,7 @@ if (Validator.isNotNull(requestEditStructureURL)) {
 				<aui:field-wrapper label='<%= LanguageUtil.format(pageContext, "parent-x", ddmDisplay.getStructureName(locale), false) %>'>
 					<aui:input name="parentStructureId" type="hidden" value="<%= parentStructureId %>" />
 
-					<div class="input-append">
+					<div class="input-group">
 						<c:choose>
 							<c:when test="<%= (structure == null) || Validator.isNotNull(parentStructureId) %>">
 								<aui:input name="parentStructureName" type="resource" value="<%= parentStructureName %>" />

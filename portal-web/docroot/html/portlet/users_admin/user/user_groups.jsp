@@ -70,7 +70,7 @@ List<UserGroup> userGroups = (List<UserGroup>)request.getAttribute("user.userGro
 		iconCssClass="icon-search"
 		id="openUserGroupsLink"
 		label="<%= true %>"
-		linkCssClass="btn"
+		linkCssClass="btn btn-default"
 		message="select"
 		url="javascript:;"
 	/>

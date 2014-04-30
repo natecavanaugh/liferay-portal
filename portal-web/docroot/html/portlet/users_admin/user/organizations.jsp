@@ -100,7 +100,7 @@ List<Organization> organizations = (List<Organization>)request.getAttribute("use
 		iconCssClass="icon-search"
 		id="selectOrganizationLink"
 		label="<%= true %>"
-		linkCssClass="btn"
+		linkCssClass="btn btn-default"
 		message="select"
 		method="get"
 		url="javascript:;"

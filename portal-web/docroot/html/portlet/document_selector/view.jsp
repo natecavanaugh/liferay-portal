@@ -83,7 +83,7 @@ boolean showGroupsSelector = ParamUtil.getBoolean(request, "showGroupsSelector")
 	Group selectedGroup = GroupLocalServiceUtil.fetchGroup(groupId);
 	%>
 
-	<liferay-ui:icon-menu direction="down" extended="<%= false %>" icon="<%= StringPool.BLANK %>" message="<%= HtmlUtil.escape(selectedGroup.getDescriptiveName()) %>" showWhenSingleIcon="<%= true %>" triggerCssClass="btn">
+	<liferay-ui:icon-menu direction="down" extended="<%= false %>" icon="<%= StringPool.BLANK %>" message="<%= HtmlUtil.escape(selectedGroup.getDescriptiveName()) %>" showWhenSingleIcon="<%= true %>" triggerCssClass="btn btn-default">
 
 		<%
 		String refererPortletName = ParamUtil.getString(request, "refererPortletName");

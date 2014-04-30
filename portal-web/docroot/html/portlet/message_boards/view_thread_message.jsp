@@ -210,7 +210,7 @@ MBThread thread = (MBThread)request.getAttribute("edit_message.jsp-thread");
 					%>
 
 					<c:if test="<%= showAnswerFlag || hasReplyPermission %>">
-						<ul class="edit-controls unstyled">
+						<ul class="edit-controls list-unstyled">
 							<li class="<%= showAnswerFlag ? "" : "hide" %>" id="<portlet:namespace />addAnswerFlag_<%= message.getMessageId() %>">
 
 								<%
@@ -411,7 +411,7 @@ MBThread thread = (MBThread)request.getAttribute("edit_message.jsp-thread");
 					/>
 				</div>
 
-				<ul class="edit-controls unstyled">
+				<ul class="edit-controls list-unstyled">
 					<li>
 
 						<%
