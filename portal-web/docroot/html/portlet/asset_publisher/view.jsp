@@ -74,31 +74,30 @@ boolean hasAddPortletURLs = false;
 
 <c:if test="<%= assetPublisherDisplayContext.isShowAddContentButton() && (scopeGroup != null) && (!scopeGroup.hasStagingGroup() || scopeGroup.isStagingGroup()) && !portletName.equals(PortletKeys.HIGHEST_RATED_ASSETS) && !portletName.equals(PortletKeys.MOST_VIEWED_ASSETS) && !portletName.equals(PortletKeys.RELATED_ASSETS) %>">
 
-	<%
-	boolean defaultAssetPublisher = AssetUtil.isDefaultAssetPublisher(layout, portletDisplay.getId(), portletResource);
+	<aui:nav-bar>
+		<div class="lfr-meta-actions add-asset-selector">
+			<aui:nav>
 
-	long[] groupIds = assetPublisherDisplayContext.getGroupIds();
+				<%
+				boolean defaultAssetPublisher = AssetUtil.isDefaultAssetPublisher(layout, portletDisplay.getId(), portletResource);
 
-	for (long groupId : groupIds) {
-		Map<String, PortletURL> addPortletURLs = AssetUtil.getAddPortletURLs(liferayPortletRequest, liferayPortletResponse, groupId, assetPublisherDisplayContext.getClassNameIds(), assetPublisherDisplayContext.getClassTypeIds(), assetPublisherDisplayContext.getAllAssetCategoryIds(), assetPublisherDisplayContext.getAllAssetTagNames(), null);
+				long[] groupIds = assetPublisherDisplayContext.getGroupIds();
 
-		if ((addPortletURLs != null) && !addPortletURLs.isEmpty()) {
-			hasAddPortletURLs = true;
-		}
-	%>
+				for (long groupId : groupIds) {
+					Map<String, PortletURL> addPortletURLs = AssetUtil.getAddPortletURLs(liferayPortletRequest, liferayPortletResponse, groupId, assetPublisherDisplayContext.getClassNameIds(), assetPublisherDisplayContext.getClassTypeIds(), assetPublisherDisplayContext.getAllAssetCategoryIds(), assetPublisherDisplayContext.getAllAssetTagNames(), null);
 
-		<c:if test="<%= !addPortletURLs.isEmpty() %>">
-			<aui:nav-bar>
-				<div class="lfr-meta-actions add-asset-selector">
+					if ((addPortletURLs != null) && !addPortletURLs.isEmpty()) {
+						hasAddPortletURLs = true;
+					}
+				%>
 					<%@ include file="/html/portlet/asset_publisher/add_asset.jspf" %>
-				</div>
-			</aui:nav-bar>
-		</c:if>
+				<%
+				}
+				%>
 
-	<%
-	}
-	%>
-
+			</aui:nav>
+		</div>
+	</aui:nav-bar>
 </c:if>
 
 <div class="subscribe-action">
