@@ -38,7 +38,7 @@ else if (Validator.isNotNull(title)) {
 	title = LanguageUtil.get(pageContext, title);
 }
 
-String controlGroupCss = "control-group";
+String controlGroupCss = "form-group";
 
 if (inlineField) {
 	controlGroupCss = controlGroupCss.concat(" control-group-inline");
