@@ -73,7 +73,6 @@ boolean hasAddPortletURLs = false;
 %>
 
 <c:if test="<%= assetPublisherDisplayContext.isShowAddContentButton() && (scopeGroup != null) && (!scopeGroup.hasStagingGroup() || scopeGroup.isStagingGroup()) && !portletName.equals(PortletKeys.HIGHEST_RATED_ASSETS) && !portletName.equals(PortletKeys.MOST_VIEWED_ASSETS) && !portletName.equals(PortletKeys.RELATED_ASSETS) %>">
-
 	<aui:nav-bar>
 		<div class="lfr-meta-actions add-asset-selector">
 			<aui:nav>
@@ -90,7 +89,9 @@ boolean hasAddPortletURLs = false;
 						hasAddPortletURLs = true;
 					}
 				%>
+
 					<%@ include file="/html/portlet/asset_publisher/add_asset.jspf" %>
+
 				<%
 				}
 				%>
