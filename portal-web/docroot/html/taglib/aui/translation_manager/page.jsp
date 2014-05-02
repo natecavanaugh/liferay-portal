@@ -150,13 +150,6 @@
 							srcNode: '#<%= namespace + id %> .lfr-translation-manager-content'
 						}
 					).render();
-
-					translationManager.once(
-						'addAvailableLocale',
-						function(event) {
-							A.one(<portlet:namespace />translationsMessage).show();
-						}
-					);
 				}
 
 				return translationManager;
