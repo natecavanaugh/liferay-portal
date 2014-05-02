@@ -44,7 +44,8 @@
 						}
 					}
 				},
-				requires: ['datatype-date-format']
+				requires: ['datatype-date-format'],
+				root: PATH_JAVASCRIPT + '/liferay/lang/'
 			},
 
 			liferay: {
