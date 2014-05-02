@@ -298,11 +298,7 @@ if (translating) {
 			window,
 			'<portlet:namespace />postProcessTranslation',
 			function(languageId) {
-				var translationItem = A.one('.lfr-translation-manager-translation-item #<portlet:namespace />' + languageId);
-
-				if (translationItem) {
-					translationItem.ancestor('li').hide();
-				}
+				A.one('#<portlet:namespace />translationsMessage').show();
 			}
 		);
 	}
