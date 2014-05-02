@@ -1152,7 +1152,7 @@ AUI.add(
 						}
 						else {
 							message = Liferay.Language.get('your-settings-could-not-be-saved');
-							messageClass = 'alert alert-error';
+							messageClass = 'alert alert-danger';
 						}
 
 						var ajaxResponse = ajaxResponseMsg;
