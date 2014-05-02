@@ -1,13 +1,13 @@
 YUI.add(
 	'lang/calendar-base-lang',
-	function(Y) {
-		var availableLanguages = Y.Intl.getAvailableLangs('calendar-base');
+	function(A) {
+		var availableLanguages = A.Intl.getAvailableLangs('calendar-base');
 
-		if (Y.Array.lastIndexOf(availableLanguages, themeDisplay.getBCP47LanguageId()) === -1) {
-			Y.Intl.add(
+		if (A.Array.lastIndexOf(availableLanguages, themeDisplay.getBCP47LanguageId()) === -1) {
+			A.Intl.add(
 				'calendar-base', themeDisplay.getBCP47LanguageId(),
 				{
-					very_short_weekdays: Y.Intl.get('datatype-date-format').a
+					very_short_weekdays: A.Intl.get('datatype-date-format').a
 				}
 			);
 		}
