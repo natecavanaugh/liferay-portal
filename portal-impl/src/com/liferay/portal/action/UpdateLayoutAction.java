@@ -309,7 +309,7 @@ public class UpdateLayoutAction extends JSONAction {
 
 		String dataType = ParamUtil.getString(request, "dataType");
 
-		if (dataType.equals("json")) {
+		if (StringUtil.equalsIgnoreCase(dataType, "json")) {
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 			BufferCacheServletResponse bufferCacheServletResponse =
