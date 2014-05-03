@@ -355,19 +355,16 @@ AUI.add(
 					_onResize: function(event) {
 						var instance = this;
 
-						var eventInfo = event.info;
-						var target = event.target;
+						var height = instance._setHeight(event);
+						var width = instance._setWidth(event);
 
-						var offsetHeight = eventInfo.offsetHeight - target.totalHSurrounding;
-						var offsetWidth = eventInfo.offsetWidth - target.totalVSurrounding;
-
-						instance._updateSizeInputFields(offsetHeight, offsetWidth);
+						instance._updateSizeInputFields(height, width);
 
 						var info = Lang.sub(
 							TPL_DEVICE_SIZE_INFO,
 							{
-								height: offsetHeight,
-								width: offsetWidth
+								height: height,
+								width: width
 							}
 						);
 
@@ -377,15 +374,24 @@ AUI.add(
 					_onResizeEnd: function(event) {
 						var instance = this;
 
-						var eventInfo = event.info;
-						var target = event.target;
+						var height = instance._setHeight(event);
+						var width = instance._setWidth(event);
 
-						var offsetHeight = eventInfo.offsetHeight - target.totalHSurrounding;
-						var offsetWidth = eventInfo.offsetWidth - target.totalVSurrounding;
-
-						instance._updateSizeInputFields(offsetHeight, offsetWidth);
+						instance._updateSizeInputFields(height, width);
 
 						instance._sizeStatus.hide();
+					},
+
+					_setHeight: function(event) {
+						var instance = this;
+
+						return (event.info.offsetHeight - event.target.totalHSurrounding);
+					},
+
+					_setWidth: function(event) {
+						var instance = this;
+
+						return (event.info.offsetWidth - event.target.totalVSurrounding);
 					},
 
 					_onResizeStart: function(event) {
@@ -435,8 +441,6 @@ AUI.add(
 						var height = Lang.toInt(inputHeight);
 						var width = Lang.toInt(inputWidth);
 
-						var dialog = Liferay.Util.getWindow(instance._dialogId);
-
 						instance._openDeviceDialog(
 							{
 								height: height,
@@ -444,6 +448,14 @@ AUI.add(
 								width: width
 							}
 						);
+
+						instance._resizeIframe(height, width);
+					},
+
+					_resizeIframe: function(height, width) {
+						var instance = this;
+
+						var dialog = Liferay.Util.getWindow(instance._dialogId);
 
 						dialog.iframe.node.setStyles(
 							{
@@ -467,6 +479,8 @@ AUI.add(
 						if (inputWidth) {
 							inputWidth.val(offsetWidth);
 						}
+
+						instance._resizeIframe(offsetHeight, offsetWidth);
 					}
 				}
 			}
