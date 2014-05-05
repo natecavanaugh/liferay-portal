@@ -50,11 +50,11 @@
 				modules: {
 					'liferay-ajax-session': {
 						condition: {
-							trigger: 'aui-io-request'
+							trigger: 'liferay-session'
 						},
 						path: 'ajax_session.js',
 						requires: [
-							'aui-io-request',
+							'io-base',
 							'liferay-session'
 						]
 					},

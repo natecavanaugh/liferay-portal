@@ -3,35 +3,19 @@ AUI.add(
 	function(A) {
 		var Lang = A.Lang;
 
-		var IORequest = A.Component.create(
-			{
-				EXTENDS: A.IORequest,
+		A.on(
+			'io:complete',
+			function(transactionId, response, args) {
+				var session = Liferay.Session;
 
-				prototype: {
-					initializer: function() {
-						var instance = this;
-
-						if (Liferay.Session) {
-							instance.after('complete', instance._resetSessionInterval, instance);
-						}
-					},
-
-					_resetSessionInterval: function(event, id, obj, args) {
-						var instance = this;
-
-						if (!args || (args && (args.sessionExtend || !Lang.isBoolean(args.sessionExtend)))) {
-							Liferay.Session.resetInterval();
-						}
-					}
+				if (session && (!args || (args && (args.sessionExtend || !Lang.isBoolean(args.sessionExtend))))) {
+					session.resetInterval();
 				}
 			}
 		);
-
-		A._IORequest = A.IORequest;
-		A.IORequest = IORequest;
 	},
 	'',
 	{
-		requires: ['aui-io-request', 'liferay-session']
+		requires: ['io-base', 'liferay-session']
 	}
 );
