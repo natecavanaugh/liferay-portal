@@ -124,6 +124,8 @@ AUI.add(
 					modal._opener = openingWindow;
 					modal._refreshWindow = refreshWindow;
 
+					instance._unbindModalResizeEndHandler(modal);
+
 					modal.after(
 						'destroy',
 						function(event) {
@@ -403,6 +405,10 @@ AUI.add(
 							}
 						}
 					);
+				},
+
+				_unbindModalResizeEndHandler: function(modal) {
+					modal.detach('resize:end');
 				},
 
 				_unregister: function(modal) {
