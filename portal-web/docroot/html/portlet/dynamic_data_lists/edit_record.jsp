@@ -290,18 +290,19 @@ if (translating) {
 			document.<portlet:namespace />fm.<portlet:namespace />workflowAction.value = <%= WorkflowConstants.ACTION_PUBLISH %>;
 		}
 	}
-</aui:script>
 
-<aui:script use="aui-base">
-	if (<%= !translating %>) {
-		Liferay.provide(
-			window,
-			'<portlet:namespace />postProcessTranslation',
-			function(languageId) {
+	Liferay.provide(
+		window,
+		'<portlet:namespace />postProcessTranslation',
+		function(languageId) {
+			if (<%= !translating %>) {
+				var A = AUI();
+
 				A.one('#<portlet:namespace />translationsMessage').show();
 			}
-		);
-	}
+		},
+		['aui-base']
+	);
 </aui:script>
 
 <%
