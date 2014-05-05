@@ -79,6 +79,7 @@ AUI.add(
 
 				var surfaces = instance.getPortletBoundaryIds(instance.getAllowedPortletIds());
 
+				surfaces.push('bottomJs');
 				surfaces.push('breadcrumbs');
 
 				return surfaces;
