@@ -33,6 +33,21 @@
 				root: PATH_JAVASCRIPT + '/editor/'
 			},
 
+			lang: {
+				base: PATH_JAVASCRIPT + '/liferay/lang/',
+				combine: COMBINE,
+				modules: {
+					'lang/calendar-base-lang': {
+						path: 'calendar_base_lang.js',
+						condition: {
+							trigger: 'calendar-base'
+						}
+					}
+				},
+				requires: ['datatype-date-format'],
+				root: PATH_JAVASCRIPT + '/liferay/lang/'
+			},
+
 			liferay: {
 				base: PATH_JAVASCRIPT + '/liferay/',
 				combine: COMBINE,
