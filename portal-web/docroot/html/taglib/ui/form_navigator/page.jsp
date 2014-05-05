@@ -85,11 +85,13 @@ if (Validator.isNotNull(historyKey)) {
 
 			<div class="<%= wrapperCssClass %>" id="<portlet:namespace />tabs">
 				<liferay-util:buffer var="formNavigatorBottom">
-					<aui:button-row>
-						<aui:button primary="<%= true %>" type="submit" />
+					<c:if test="<%= showButtons %>">
+						<aui:button-row>
+							<aui:button primary="<%= true %>" type="submit" />
 
-						<aui:button href="<%= backURL %>" type="cancel" />
-					</aui:button-row>
+							<aui:button href="<%= backURL %>" type="cancel" />
+						</aui:button-row>
+					</c:if>
 
 					<%= Validator.isNotNull(htmlBottom) ? htmlBottom : StringPool.BLANK %>
 				</liferay-util:buffer>
@@ -191,14 +193,14 @@ if (Validator.isNotNull(historyKey)) {
 					}
 					%>
 
-					<c:if test='<%= showButtons && !displayStyle.equals("steps") %>'>
+					<c:if test='<%= !displayStyle.equals("steps") %>'>
 						<%= formNavigatorBottom %>
 					</c:if>
 				</ul>
 
 				<%= formSectionsBuffer %>
 
-				<c:if test='<%= showButtons && displayStyle.equals("steps") %>'>
+				<c:if test='<%= displayStyle.equals("steps") %>'>
 					<%= formNavigatorBottom %>
 				</c:if>
 			</div>
