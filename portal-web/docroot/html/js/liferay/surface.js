@@ -129,6 +129,8 @@ AUI.add(
 						var portlet = A.one('#' + value);
 
 						if (portlet) {
+							Liferay.Portlet.destroy(portlet);
+
 							portlet.portletProcessed = false;
 						}
 					}

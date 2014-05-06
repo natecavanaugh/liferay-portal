@@ -412,15 +412,6 @@ if (inlineEdit && (inlineEditSaveURL != null)) {
 				</c:if>
 
 				<c:if test="<%= Validator.isNotNull(onChangeMethod) %>">
-					if (Liferay.Surface && Liferay.Surface.app) {
-						Liferay.once(
-							'surfaceScreenDeactivate',
-							function() {
-								clearInterval(contentChangeHandle);
-							}
-						);
-					}
-
 					var contentChangeHandle = setInterval(
 						function() {
 							try {
@@ -431,6 +422,16 @@ if (inlineEdit && (inlineEditSaveURL != null)) {
 						},
 						300
 					);
+
+					var clearContentChangeHandle = function(event) {
+						if (event.portletId === '<%= portletId %>') {
+							clearInterval(contentChangeHandle);
+
+							Liferay.detach('destroyPortlet', clearContentChangeHandle);
+						}
+					};
+
+					Liferay.on('destroyPortlet', clearContentChangeHandle);
 				</c:if>
 
 				<c:if test="<%= Validator.isNotNull(onFocusMethod) %>">

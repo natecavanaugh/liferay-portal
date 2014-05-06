@@ -124,6 +124,17 @@
 			}
 		},
 
+		_mergeOptions: function(portlet, options) {
+			options = options || {};
+
+			options.plid = options.plid || themeDisplay.getPlid();
+			options.doAsUserId = options.doAsUserId || themeDisplay.getDoAsUserIdEncoded();
+			options.portlet = portlet;
+			options.portletId = portlet.portletId;
+
+			return options;
+		},
+
 		_staticPortlets: {}
 	};
 
@@ -371,18 +382,15 @@
 			portlet = A.one(portlet);
 
 			if (portlet && (skipConfirm || confirm(Liferay.Language.get('are-you-sure-you-want-to-remove-this-component')))) {
-				options = options || {};
-
-				options.plid = options.plid || themeDisplay.getPlid();
-				options.doAsUserId = options.doAsUserId || themeDisplay.getDoAsUserIdEncoded();
-				options.portlet = portlet;
-				options.portletId = portlet.portletId;
-
 				var portletIndex = AArray.indexOf(instance.list, portlet.portletId);
 
 				if (portletIndex >= 0) {
 					instance.list.splice(portletIndex, 1);
 				}
+
+				var options = Portlet._mergeOptions(portlet, options);
+
+				Liferay.fire('destroyPortlet', options);
 
 				Liferay.fire('closePortlet', options);
 			}
@@ -391,6 +399,19 @@
 			}
 		},
 		['aui-io-request']
+	);
+
+	Liferay.provide(
+		Portlet,
+		'destroy',
+		function(portlet, options) {
+			portlet = A.one(portlet);
+
+			if (portlet) {
+				Liferay.fire('destroyPortlet', Portlet._mergeOptions(portlet, options));
+			}
+		},
+		['aui-node-base']
 	);
 
 	Liferay.provide(

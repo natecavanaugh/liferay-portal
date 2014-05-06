@@ -167,15 +167,15 @@ String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolba
 			<%
 			if (Validator.isNotNull(onChangeMethod)) {
 			%>
+				var clearContentChangeHandle = function(event) {
+					if (event.portletId === '<%= portletId %>') {
+						clearInterval(contentChangeHandle);
 
-				if (Liferay.Surface && Liferay.Surface.app) {
-					Liferay.once(
-						'surfaceScreenDeactivate',
-						function() {
-							clearInterval(contentChangeHandle);
-						}
-					);
-				}
+						Liferay.detach('destroyPortlet', clearContentChangeHandle);
+					}
+				};
+
+				Liferay.on('destroyPortlet', clearContentChangeHandle);
 
 				var contentChangeHandle = setInterval(
 					function() {
