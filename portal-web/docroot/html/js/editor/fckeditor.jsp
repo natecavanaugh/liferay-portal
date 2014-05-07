@@ -167,6 +167,7 @@ String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolba
 			<%
 			if (Validator.isNotNull(onChangeMethod)) {
 			%>
+
 				var clearContentChangeHandle = function(event) {
 					if (event.portletId === '<%= portletId %>') {
 						clearInterval(contentChangeHandle);
