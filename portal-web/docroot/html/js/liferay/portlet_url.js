@@ -157,6 +157,19 @@ AUI.add(
 				return instance;
 			},
 
+			setParameters: function(parameters) {
+				var instance = this;
+
+				A.each(
+					parameters,
+					function(value, key) {
+						instance.setParameter(key, value);
+					}
+				);
+
+				return instance;
+			},
+
 			setPlid: function(plid) {
 				var instance = this;
 
