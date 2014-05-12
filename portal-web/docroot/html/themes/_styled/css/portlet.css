@@ -57,6 +57,29 @@ body.portlet {
 			font-size: 0;
 		}
 	}
+
+	.portlet-touch-drag-handle {
+		display: none;
+	}
+}
+
+.touch .portlet-topper {
+	.portlet-touch-drag-handle {
+		display: block;
+		height: 100%;
+		padding-left: 5px;
+		position: absolute;
+		width: 20px;
+
+		&::before {
+			position: absolute;
+			top: 25%;
+		}
+	}
+
+	.portlet-title {
+		padding-left: 25px;
+	}
 }
 
 .portlet-title {
