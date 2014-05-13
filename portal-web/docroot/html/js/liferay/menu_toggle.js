@@ -83,12 +83,14 @@ AUI.add(
 						if (!menuFilter) {
 							var menu = instance._content.one('.dropdown-menu');
 
-							var menuItems = menu.all('li');
+							if (menu) {
+								var menuItems = menu.all('li');
 
-							if (menuItems.size() > instance.get('maxDisplayItems')) {
-								menuFilter = instance._createMenuFilter(menu, menuItems);
+								if (menuItems.size() > instance.get('maxDisplayItems')) {
+									menuFilter = instance._createMenuFilter(menu, menuItems);
 
-								instance._inputFilterNode = menuFilter.get('inputNode');
+									instance._inputFilterNode = menuFilter.get('inputNode');
+								}
 							}
 						}
 						else {
@@ -106,6 +108,9 @@ AUI.add(
 									if ((event.type == 'gesturemovestart') || event.isKeyInSet('ENTER', 'SPACE')) {
 										instance._toggleMenu(event, event.currentTarget);
 									}
+								},
+								{
+									preventDefault: true
 								}
 							);
 						}
