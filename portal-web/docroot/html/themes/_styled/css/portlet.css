@@ -71,7 +71,7 @@ body.portlet {
 		position: absolute;
 		width: 20px;
 
-		&::before {
+		&:before {
 			position: absolute;
 			top: 25%;
 		}
