@@ -273,10 +273,9 @@ AUI.add(
 			},
 
 			updatePortletTouchDragHandles: function() {
-				var options = Layout.options;
-				var delegate = Layout.getLayoutHandler().delegate;
-				var drag = delegate.dd;
-				var newHandle = CSS_TOUCH_DRAG_HANDLE;
+				var layoutHandler = Layout.getLayoutHandler();
+				var drag = layoutHandler.delegate.dd;
+				var touchHandle = CSS_TOUCH_DRAG_HANDLE;
 
 				if (drag) {
 					A.Array.each(drag.get('handles'),
@@ -285,10 +284,10 @@ AUI.add(
 						}
 					);
 
-					drag.addHandle(newHandle);
+					drag.addHandle(touchHandle);
 				}
 
-				Layout.options.handles = [newHandle];
+				Layout.options.handles = [touchHandle];
 			},
 
 			updatePortletDropZones: function(portletBoundary) {
@@ -415,7 +414,7 @@ AUI.add(
 
 				Layout.updateEmptyColumnsInfo();
 
-				if(A.UA.touchEnabled) {
+				if (A.UA.touchEnabled) {
 					Layout.updatePortletTouchDragHandles();
 				}
 
