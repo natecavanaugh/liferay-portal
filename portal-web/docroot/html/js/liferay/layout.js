@@ -279,7 +279,7 @@ AUI.add(
 				var newHandle = CSS_TOUCH_DRAG_HANDLE;
 
 				if (drag) {
-					A.Object.each(drag._handles,
+					A.Array.each(drag.get('handles'),
 						function(handle) {
 							drag.removeHandle(handle);
 						}
