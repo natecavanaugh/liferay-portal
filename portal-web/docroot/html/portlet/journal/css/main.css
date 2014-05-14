@@ -388,6 +388,12 @@
 		right: 0;
 	}
 
+	.taglib-search-toggle-advanced .article-status {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
 	.entry-thumbnail .taglib-workflow-status {
 		left: 6px;
 		margin: 0;
