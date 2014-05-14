@@ -388,10 +388,18 @@
 		right: 0;
 	}
 
-	.taglib-search-toggle-advanced .article-status {
-		position: absolute;
-		right: 0;
-		top: 0;
+	.taglib-search-toggle-advanced {
+		.article-status {
+			position: absolute;
+		}
+
+		.input-text-wrapper {
+			margin-right: 30px;
+		}
+
+		.input-select-wrapper {
+			margin-right: 45px;
+		}
 	}
 
 	.entry-thumbnail .taglib-workflow-status {

@@ -38,7 +38,7 @@ ArticleDisplayTerms displayTerms = (ArticleDisplayTerms)searchContainer.getDispl
 	id="<%= renderResponse.getNamespace() %>"
 >
 	<c:if test="<%= portletName.equals(PortletKeys.JOURNAL) %>">
-		<aui:select inlineField="<%= true %>" name="<%= displayTerms.STATUS %>" value="<%= displayTerms.getStatus() %>" wrapperCssClass="article-status">
+		<aui:select cssClass="input-medium" inlineField="<%= true %>" name="<%= displayTerms.STATUS %>" value="<%= displayTerms.getStatus() %>" wrapperCssClass="article-status">
 			<aui:option label="<%= WorkflowConstants.getStatusLabel(WorkflowConstants.STATUS_ANY) %>" value="<%= WorkflowConstants.STATUS_ANY %>" />
 			<aui:option label="<%= WorkflowConstants.getStatusLabel(WorkflowConstants.STATUS_DRAFT) %>" value="<%= WorkflowConstants.STATUS_DRAFT %>" />
 
@@ -54,17 +54,17 @@ ArticleDisplayTerms displayTerms = (ArticleDisplayTerms)searchContainer.getDispl
 	</c:if>
 
 	<aui:fieldset>
-		<aui:input inlineField="<%= true %>" label="id" name="<%= displayTerms.ARTICLE_ID %>" size="20" value="<%= displayTerms.getArticleId() %>" />
+		<aui:input cssClass="input-medium" inlineField="<%= true %>" label="id" name="<%= displayTerms.ARTICLE_ID %>" size="20" value="<%= displayTerms.getArticleId() %>" />
 
-		<aui:input inlineField="<%= true %>" name="<%= displayTerms.TITLE %>" size="20" type="text" value="<%= displayTerms.getTitle() %>" />
+		<aui:input cssClass="input-medium" inlineField="<%= true %>" name="<%= displayTerms.TITLE %>" size="20" type="text" value="<%= displayTerms.getTitle() %>" />
 
-		<aui:input inlineField="<%= true %>" name="<%= displayTerms.DESCRIPTION %>" size="20" type="text" value="<%= displayTerms.getDescription() %>" />
+		<aui:input cssClass="input-medium" inlineField="<%= true %>" name="<%= displayTerms.DESCRIPTION %>" size="20" type="text" value="<%= displayTerms.getDescription() %>" />
 	</aui:fieldset>
 
 	<aui:fieldset>
-		<aui:input inlineField="<%= true %>" name="<%= displayTerms.CONTENT %>" size="20" type="text" value="<%= displayTerms.getContent() %>" />
+		<aui:input cssClass="input-medium" inlineField="<%= true %>" name="<%= displayTerms.CONTENT %>" size="20" type="text" value="<%= displayTerms.getContent() %>" />
 
-		<aui:select inlineField="<%= true %>" name="<%= displayTerms.TYPE %>">
+		<aui:select cssClass="input-medium" inlineField="<%= true %>" name="<%= displayTerms.TYPE %>">
 			<aui:option value=""></aui:option>
 
 			<%
