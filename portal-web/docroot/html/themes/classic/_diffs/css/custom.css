@@ -490,6 +490,25 @@ $dockbarOpenGradientStart: #0EA6F9;
 		padding-right: 80px;
 	}
 
+	&.touch .signed-in.controls-visible .portlet-topper {
+		.portlet-touch-drag-handle {
+			display: block;
+			height: 100%;
+			padding-left: 5px;
+			position: absolute;
+			width: 20px;
+
+			&:before {
+				position: absolute;
+				top: 25%;
+			}
+		}
+
+		.portlet-title {
+			padding-left: 25px;
+		}
+	}
+
 	.portlet-asset-publisher .asset-title, .portlet-asset-publisher .header-title, .portlet-asset-publisher li.title-list, .portlet-blogs .entry-title, .portlet-blogs .header-title, .portlet-message-boards .header-title {
 		@include hyphenation;
 	}
