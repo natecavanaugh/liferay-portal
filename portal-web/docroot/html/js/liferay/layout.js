@@ -5,6 +5,8 @@ AUI.add(
 
 		var CSS_DRAGGABLE = 'portlet-draggable';
 
+		var CSS_TOUCH_DRAG_HANDLE = '.portlet-touch-drag-handle';
+
 		var layoutModule = 'liferay-layout-column';
 
 		if (themeDisplay.isFreeformLayout()) {
@@ -270,6 +272,25 @@ AUI.add(
 				);
 			},
 
+			updatePortletTouchDragHandles: function() {
+				var layoutHandler = Layout.getLayoutHandler();
+
+				var drag = layoutHandler.delegate.dd;
+
+				if (drag) {
+					A.Array.each(
+						drag.get('handles'),
+						function(handle) {
+							drag.removeHandle(handle);
+						}
+					);
+
+					drag.addHandle(CSS_TOUCH_DRAG_HANDLE);
+				}
+
+				Layout.options.handles = [CSS_TOUCH_DRAG_HANDLE];
+			},
+
 			updatePortletDropZones: function(portletBoundary) {
 				var options = Layout.options;
 				var portletDropNodes = portletBoundary.all(options.dropNodes);
@@ -393,6 +414,10 @@ AUI.add(
 				Layout.bindDragDropListeners();
 
 				Layout.updateEmptyColumnsInfo();
+
+				if (A.UA.touchEnabled) {
+					Layout.updatePortletTouchDragHandles();
+				}
 
 				Liferay.after('closePortlet', Layout._afterPortletClose);
 				Liferay.on('closePortlet', Layout._onPortletClose);
