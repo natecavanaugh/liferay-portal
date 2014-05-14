@@ -274,20 +274,21 @@ AUI.add(
 
 			updatePortletTouchDragHandles: function() {
 				var layoutHandler = Layout.getLayoutHandler();
+
 				var drag = layoutHandler.delegate.dd;
-				var touchHandle = CSS_TOUCH_DRAG_HANDLE;
 
 				if (drag) {
-					A.Array.each(drag.get('handles'),
+					A.Array.each(
+						drag.get('handles'),
 						function(handle) {
 							drag.removeHandle(handle);
 						}
 					);
 
-					drag.addHandle(touchHandle);
+					drag.addHandle(CSS_TOUCH_DRAG_HANDLE);
 				}
 
-				Layout.options.handles = [touchHandle];
+				Layout.options.handles = [CSS_TOUCH_DRAG_HANDLE];
 			},
 
 			updatePortletDropZones: function(portletBoundary) {
