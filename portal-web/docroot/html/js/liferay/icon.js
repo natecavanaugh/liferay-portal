@@ -3,7 +3,7 @@ AUI.add(
 	function(A) {
 
 		/**
-		 * Creates a Liferay Icon module and adds it to AUI.
+		 * The Icon component.
 		 *
 		 * @module liferay-icon
 		 */
@@ -37,8 +37,8 @@ AUI.add(
 			},
 
 			/**
-			 * Triggers when the mouse clicks the icon and forces it to post if
-			 * the icon is a link.  
+			 * Triggers when a click is fired on the icon, if the icon is a
+			 * link.
 			 *
 			 * @method _forcePost
 			 * @param event
@@ -53,7 +53,7 @@ AUI.add(
 			},
 
 			/**
-			 * Triggers when the mouse hovers over top of the icon.
+			 * Triggers when the mouse hovers over the icon.
 			 *
 			 * @method _onMouseHover
 			 * @param event
@@ -71,7 +71,8 @@ AUI.add(
 			},
 
 			/**
-			 * Triggers when the mouse hovers over top of the icon.
+			 * Triggers when a click is fired on the icon, if the icon is
+			 * configured to use a dialog.
 			 *
 			 * @method _useDialog
 			 * @param event
