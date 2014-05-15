@@ -72,6 +72,27 @@
 	margin-bottom: 1.5em;
 }
 
+.touch .signed-in.controls-visible .portlet-boundary:not(.portlet-static) {
+	.portlet-topper {
+		.portlet-touch-drag-handle {
+			display: block;
+			height: 100%;
+			padding-left: 5px;
+			position: absolute;
+			width: 20px;
+
+			&:before {
+				position: absolute;
+				top: 25%;
+			}
+		}
+	}
+
+	.portlet-title {
+		padding-left: 25px;
+	}
+}
+
 .ie .float-container {
 	height: 1%;
 }

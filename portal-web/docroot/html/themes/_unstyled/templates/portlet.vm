@@ -6,10 +6,6 @@
 
 <section class="portlet" id="portlet_$portlet_id">
 	<header class="portlet-topper">
-		#if ($portletDisplay.isShowConfigurationIcon())
-			<i class="icon-move portlet-touch-drag-handle"></i>
-		#end
-
 		<h1 class="portlet-title">
 			<span class="portlet-title-text">$portlet_title</span>
 		</h1>
