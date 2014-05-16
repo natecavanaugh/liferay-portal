@@ -236,8 +236,8 @@ public class WikiUtil {
 			}
 
 			DiffVersion diffVersion = new DiffVersion(
-				page.getUserId(), page.getVersion(), page.getSummary(),
-				extraInfo);
+				page.getUserId(), page.getVersion(), page.getModifiedDate(),
+				page.getSummary(), extraInfo);
 
 			diffVersions.add(diffVersion);
 		}
