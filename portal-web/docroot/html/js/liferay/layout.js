@@ -5,6 +5,8 @@ AUI.add(
 
 		var CSS_DRAGGABLE = 'portlet-draggable';
 
+		var CSS_PORTLET_HAS_DRAG_HANDLE = 'portlet-has-drag-handle';
+
 		var CSS_TOUCH_DRAG_HANDLE = Liferay.Data.PORTLET_TOUCH_DRAG_HANDLE_SELECTOR || 'portlet-touch-drag-handle';
 
 		var CSS_TOUCH_DRAG_HANDLE_ICON = Liferay.Data.PORTLET_TOUCH_DRAG_HANDLE_ICON || 'icon-move';
@@ -34,9 +36,9 @@ AUI.add(
 				'</div>'
 			),
 
-			TOUCH_DRAG_HANDLE: '<i class="' + CSS_TOUCH_DRAG_HANDLE_ICON + ' ' + CSS_TOUCH_DRAG_HANDLE + '"></i>',
-
 			PORTLET_TOPPER: A.Node.create('<div class="portlet-topper"></div>'),
+
+			TOUCH_DRAG_HANDLE: '<i class="' + CSS_TOUCH_DRAG_HANDLE_ICON + ' ' + CSS_TOUCH_DRAG_HANDLE + '"></i>',
 
 			options: LAYOUT_CONFIG,
 
@@ -277,8 +279,8 @@ AUI.add(
 			},
 
 			updatePortletTouchDragHandles: function() {
-				var options = Layout.options;
 				var layoutHandler = Layout.getLayoutHandler();
+				var options = Layout.options;
 
 				var drag = layoutHandler.delegate.dd;
 
@@ -286,7 +288,7 @@ AUI.add(
 
 				A.all('.portlet').each(
 					function(item, index, collection) {
-						if (!item.hasClass('portlet-has-drag-handle')) {
+						if (!item.hasClass(CSS_PORTLET_HAS_DRAG_HANDLE)) {
 							var portletId = item.get('id');
 
 							var portletBoundary = item.ancestor('.portlet-boundary')
@@ -294,16 +296,15 @@ AUI.add(
 							if (portletBoundary) {
 								var isStatic = Liferay.Portlet.isStatic(portletId);
 
-								var portletTitle = null;
-
 								if (!isStatic && portletBoundary.hasClass(CSS_DRAGGABLE)) {
-									portletTitle = item.one('.portlet-title');
+									var portletTitle = item.one('.portlet-title');
 
 									item.insertBefore(
 										A.Node.create(Layout.TOUCH_DRAG_HANDLE),
-										portletTitle);
+										portletTitle
+									);
 
-									item.addClass('portlet-has-drag-handle');
+									item.addClass(CSS_PORTLET_HAS_DRAG_HANDLE);
 								}
 							}
 						}
