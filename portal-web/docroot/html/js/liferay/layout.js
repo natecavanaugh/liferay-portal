@@ -5,6 +5,12 @@ AUI.add(
 
 		var CSS_DRAGGABLE = 'portlet-draggable';
 
+		var CSS_PORTLET_HAS_DRAG_HANDLE = 'portlet-has-drag-handle';
+
+		var CSS_TOUCH_DRAG_HANDLE = Liferay.Data.PORTLET_TOUCH_DRAG_HANDLE_SELECTOR || 'portlet-touch-drag-handle';
+
+		var CSS_TOUCH_DRAG_HANDLE_ICON = Liferay.Data.PORTLET_TOUCH_DRAG_HANDLE_ICON || 'icon-move';
+
 		var layoutModule = 'liferay-layout-column';
 
 		if (themeDisplay.isFreeformLayout()) {
@@ -31,6 +37,8 @@ AUI.add(
 			),
 
 			PORTLET_TOPPER: A.Node.create('<div class="portlet-topper"></div>'),
+
+			TOUCH_DRAG_HANDLE: '<i class="' + CSS_TOUCH_DRAG_HANDLE_ICON + ' ' + CSS_TOUCH_DRAG_HANDLE + '"></i>',
 
 			options: LAYOUT_CONFIG,
 
@@ -270,6 +278,56 @@ AUI.add(
 				);
 			},
 
+			updatePortletTouchDragHandles: function() {
+				var layoutHandler = Layout.getLayoutHandler();
+				var options = Layout.options;
+
+				var drag = layoutHandler.delegate.dd;
+
+				var touchHandles = ['.' + CSS_TOUCH_DRAG_HANDLE, '.portlet-borderless-bar .portlet-title-default'];
+
+				A.all('.portlet').each(
+					function(item, index, collection) {
+						if (!item.hasClass(CSS_PORTLET_HAS_DRAG_HANDLE)) {
+							var portletId = item.get('id');
+
+							var portletBoundary = item.ancestor('.portlet-boundary')
+
+							if (portletBoundary) {
+								var isStatic = Liferay.Portlet.isStatic(portletId);
+
+								if (!isStatic && portletBoundary.hasClass(CSS_DRAGGABLE)) {
+									var portletTitle = item.one('.portlet-title');
+
+									item.insertBefore(
+										A.Node.create(Layout.TOUCH_DRAG_HANDLE),
+										portletTitle
+									);
+
+									item.addClass(CSS_PORTLET_HAS_DRAG_HANDLE);
+								}
+							}
+						}
+					}
+				);
+
+				A.Array.each(
+					options.handles,
+					function(handle) {
+						drag.removeHandle(handle);
+					}
+				);
+
+				A.Array.each(
+					touchHandles,
+					function(handle) {
+						drag.addHandle(handle);
+					}
+				);
+
+				Layout.options.handles = touchHandles;
+			},
+
 			updatePortletDropZones: function(portletBoundary) {
 				var options = Layout.options;
 				var portletDropNodes = portletBoundary.all(options.dropNodes);
@@ -393,6 +451,10 @@ AUI.add(
 				Layout.bindDragDropListeners();
 
 				Layout.updateEmptyColumnsInfo();
+
+				if (A.UA.touchEnabled) {
+					Layout.updatePortletTouchDragHandles();
+				}
 
 				Liferay.after('closePortlet', Layout._afterPortletClose);
 				Liferay.on('closePortlet', Layout._onPortletClose);
