@@ -116,38 +116,6 @@
 				</sequential>
 			</for>
 
-			<propertyselector
-				casesensitive="false"
-				delimiter="," match="sonatype.(.+)"
-				property="sonatype.property.list"
-				select="\1"
-			/>
-
-			<sortlist
-				delimiter=","
-				override="true"
-				property="sonatype.property.list"
-				value="${sonatype.property.list}"
-			/>
-
-			<for list="${sonatype.property.list}" param="sonatype.property">
-				<sequential>
-					<propertycopy
-						from="sonatype.@{sonatype.property}"
-						name="temp.sonatype"
-					/>
-
-					<echo
-						append="true"
-						file="${project.dir}/tools/sdk/build.${env.COMPUTERNAME}.properties"
-					>
-						sonatype.@{sonatype.property}=${temp.sonatype}
-					</echo>
-
-					<var name="temp.sonatype" unset="true" />
-				</sequential>
-			</for>
-
 			<echo
 				append="true"
 				file="${project.dir}/tools/sdk/build.${env.COMPUTERNAME}.properties"
