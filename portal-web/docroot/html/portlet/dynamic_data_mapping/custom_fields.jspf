@@ -14,12 +14,6 @@
  */
 --%>
 
-<%
-Calendar localeCal = CalendarFactoryUtil.getCalendar(timeZone, locale);
-
-int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
-%>
-
 <aui:script>
 	AUI.add(
 		'liferay-portlet-dynamic-data-mapping-custom-fields',
@@ -231,7 +225,6 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 							instance.datePicker = new A.DatePicker(
 								{
 									calendar: {
-										firstDayOfWeek: <%= firstDayOfWeek %>,
 										locale: '<%= locale %>',
 										strings: {
 											next: '<liferay-ui:message key="next" />',
