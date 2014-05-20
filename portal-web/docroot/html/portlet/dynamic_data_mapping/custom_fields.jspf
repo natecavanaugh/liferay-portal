@@ -28,15 +28,15 @@
 			var STR_BLANK = '';
 
 			var TPL_BUTTON = '<div class="field-labels-inline">' +
-								'<input type="button" value="<%= UnicodeLanguageUtil.get(pageContext, "select") %>" />' +
+								'<input type="button" value="' + A.Escape.html(Liferay.Language.get('select')) + '" />' +
 							'<div>';
 
 			var TPL_GEOLOCATION = '<div class="field-labels-inline">' +
-										'<input type="button" value="<%= UnicodeLanguageUtil.get(pageContext, "geolocate") %>" />' +
+										'<input type="button" value="' + A.Escape.html(Liferay.Language.get('geolocate')) + '" />' +
 									'<div>';
 
 			var TPL_LINK_TO_PAGE = '<div class="lfr-ddm-link-to-page">' +
-									'<a href="javascript:;"><%= UnicodeLanguageUtil.get(pageContext, "link") %></a>' +
+									'<a href="javascript:;">' + Liferay.Language.get('link') + '</a>' +
 								'</div>';
 
 			var TPL_PARAGRAPH = '<p></p>';
@@ -114,21 +114,21 @@
 				var type = instance.get('type');
 
 				var indexTypeOptions = {
-					'': '<liferay-ui:message key="no" />',
-					'keyword': '<liferay-ui:message key="yes" />'
+					'': Liferay.Language.get('no'),
+					'keyword': Liferay.Language.get('yes')
 				};
 
 				if ((type == 'ddm-text-html') || (type == 'text') || (type == 'textarea')) {
 					indexTypeOptions = {
-						'': '<liferay-ui:message key="not-indexable" />',
-						'keyword': '<liferay-ui:message key="indexable-keyword" />',
-						'text': '<liferay-ui:message key="indexable-text" />'
+						'': Liferay.Language.get('not-indexable'),
+						'keyword': Liferay.Language.get('indexable-keyword'),
+						'text': Liferay.Language.get('indexable-text')
 					};
 				}
 
 				var booleanOptions = {
-					'false': '<liferay-ui:message key="no" />',
-					'true': '<liferay-ui:message key="yes" />'
+					'false': Liferay.Language.get('no'),
+					'true': Liferay.Language.get('yes')
 				};
 
 				return model.concat(
@@ -143,7 +143,7 @@
 							formatter: function(val) {
 								return indexTypeOptions[val.data.value];
 							},
-							name: '<liferay-ui:message key="indexable" />'
+							name: Liferay.Language.get('indexable')
 						},
 						{
 							attributeName: 'localizable',
@@ -155,7 +155,7 @@
 							formatter: function(val) {
 								return booleanOptions[val.data.value];
 							},
-							name: '<liferay-ui:message key="localizable" />'
+							name: Liferay.Language.get('localizable')
 						},
 						{
 							attributeName: 'repeatable',
@@ -167,7 +167,7 @@
 							formatter: function(val) {
 								return booleanOptions[val.data.value];
 							},
-							name: '<liferay-ui:message key="repeatable" />'
+							name: Liferay.Language.get('repeatable')
 						}
 					]
 				);
@@ -208,7 +208,7 @@
 													dateFormat: '%m/%d/%Y'
 												}
 											),
-											name: '<%= UnicodeLanguageUtil.get(pageContext, "predefined-value") %>'
+											name: Liferay.Language.get('predefined-value')
 										};
 									}
 								}
@@ -225,12 +225,12 @@
 							instance.datePicker = new A.DatePicker(
 								{
 									calendar: {
-										locale: '<%= locale %>',
+										locale: Liferay.ThemeDisplay.getLanguageId(),
 										strings: {
-											next: '<liferay-ui:message key="next" />',
-											none: '<liferay-ui:message key="none" />',
-											previous: '<liferay-ui:message key="previous" />',
-											today: '<liferay-ui:message key="today" />'
+											next: Liferay.Language.get('next'),
+											none: Liferay.Language.get('none'),
+											previous: Liferay.Language.get('previous'),
+											today: Liferay.Language.get('today')
 										}
 									},
 									trigger: instance.get('templateNode')
@@ -302,7 +302,7 @@
 											var value = data.value;
 
 											if (value !== STR_BLANK) {
-												label = '(<%= UnicodeLanguageUtil.get(pageContext, "file") %>)';
+												label = '(' + Liferay.Language.get('file') + ')';
 											}
 
 											return label;
@@ -324,7 +324,7 @@
 						},
 
 						_uiSetValue: function() {
-							return '<%= UnicodeLanguageUtil.get(pageContext, "select") %>';
+							return Liferay.Language.get('select');
 						}
 
 					}
@@ -455,17 +455,17 @@
 								{
 									attributeName: 'type',
 									editor: false,
-									name: '<%= UnicodeLanguageUtil.get(pageContext, "type") %>'
+									name: Liferay.Language.get('type')
 								},
 								{
 									attributeName: 'label',
 									editor: new A.TextAreaCellEditor(),
-									name: '<%= UnicodeLanguageUtil.get(pageContext, "text") %>'
+									name: Liferay.Language.get('text')
 								},
 								{
 									attributeName: 'style',
 									editor: new A.TextAreaCellEditor(),
-									name: '<%= UnicodeLanguageUtil.get(pageContext, "style") %>'
+									name: Liferay.Language.get('style')
 								}
 							];
 						},
@@ -527,7 +527,7 @@
 								{
 									attributeName: 'style',
 									editor: new A.TextAreaCellEditor(),
-									name: '<%= UnicodeLanguageUtil.get(pageContext, "style") %>'
+									name: Liferay.Language.get('style')
 								}
 							);
 
