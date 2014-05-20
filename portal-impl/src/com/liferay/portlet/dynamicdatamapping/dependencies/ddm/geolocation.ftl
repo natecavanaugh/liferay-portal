@@ -3,6 +3,8 @@
 <#assign latitude = "">
 <#assign longitude = "">
 
+<#assign fieldRawValue = paramUtil.getString(request, "${namespacedFieldName}", fieldRawValue)>
+
 <#if (fieldRawValue != "")>
 	<#assign geolocationJSONObject = jsonFactoryUtil.createJSONObject(fieldRawValue)>
 
