@@ -600,17 +600,23 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 				}
 			);
 
-			FormBuilderTypes['ddm-date'] = DDMDateField;
-			FormBuilderTypes['ddm-decimal'] = DDMDecimalField;
-			FormBuilderTypes['ddm-documentlibrary'] = DDMDocumentLibraryField;
-			FormBuilderTypes['ddm-geolocation'] = DDMGeolocationField;
-			FormBuilderTypes['ddm-image'] = DDMImageField;
-			FormBuilderTypes['ddm-integer'] = DDMIntegerField;
-			FormBuilderTypes['ddm-link-to-page'] = DDMLinkToPageField;
-			FormBuilderTypes['ddm-number'] = DDMNumberField;
-			FormBuilderTypes['ddm-paragraph'] = DDMParagraphField;
-			FormBuilderTypes['ddm-separator'] = DDMSeparatorField;
-			FormBuilderTypes['ddm-text-html'] = DDMHTMLTextField;
+			var plugins = [
+				DDMDateField,
+				DDMDecimalField,
+				DDMDocumentLibraryField,
+				DDMGeolocationField,
+				DDMImageField,
+				DDMIntegerField,
+				DDMLinkToPageField,
+				DDMNumberField,
+				DDMParagraphField,
+				DDMSeparatorField,
+				DDMHTMLTextField
+			];
+
+			A.Array.forEach(plugins, function(plugin) {
+				FormBuilderTypes[plugin.NAME] = plugin;
+			});
 		},
 		'',
 		{
