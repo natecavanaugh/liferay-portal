@@ -1125,38 +1125,6 @@
 
 	Liferay.provide(
 		Util,
-		'moveItem',
-		function(fromBox, toBox, sort) {
-			fromBox = A.one(fromBox);
-			toBox = A.one(toBox);
-
-			var selectedIndex = fromBox.get('selectedIndex');
-
-			var selectedOption;
-
-			if (selectedIndex >= 0) {
-				var options = fromBox.all('option');
-
-				selectedOption = options.item(selectedIndex);
-
-				options.each(
-					function(item, index, collection) {
-						if (item.get('selected')) {
-							toBox.append(item);
-						}
-					}
-				);
-			}
-
-			if (selectedOption && selectedOption.text() !== '' && sort === true) {
-				Util.sortBox(toBox);
-			}
-		},
-		['aui-base']
-	);
-
-	Liferay.provide(
-		Util,
 		'openDDMPortlet',
 		function(config, callback) {
 			var instance = this;
@@ -1522,42 +1490,6 @@
 			}
 		},
 		['aui-base', 'liferay-node']
-	);
-
-	Liferay.provide(
-		Util,
-		'sortBox',
-		function(box) {
-			var newBox = [];
-
-			var options = box.all('option');
-
-			for (var i = 0; i < options.size(); i++) {
-				newBox[i] = [options.item(i).val(), options.item(i).text()];
-			}
-
-			newBox.sort(Util.sortByAscending);
-
-			var boxObj = A.one(box);
-
-			boxObj.all('option').remove(true);
-
-			A.each(
-				newBox,
-				function(item, index, collection) {
-					boxObj.append('<option value="' + item[0] + '">' + item[1] + '</option>');
-				}
-			);
-
-			if (Browser.isIe()) {
-				var currentWidth = boxObj.getStyle('width');
-
-				if (currentWidth == 'auto') {
-					boxObj.setStyle('width', 'auto');
-				}
-			}
-		},
-		['aui-base']
 	);
 
 	Liferay.provide(
