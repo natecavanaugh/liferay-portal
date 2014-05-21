@@ -1,5 +1,6 @@
 ;(function() {
 	var A = AUI();
+	var Lang = A.Lang;
 
 	var LiferayUtil = Liferay.Util;
 
@@ -15,6 +16,6 @@
 
 	var BBCodeUtil = Liferay.namespace('BBCodeUtil');
 
-	BBCodeUtil.escape = A.rbind('escapeHTML', LiferayUtil, true, entities);
-	BBCodeUtil.unescape = A.rbind('unescapeHTML', LiferayUtil, entities);
+	BBCodeUtil.escape = A.rbind('escapeHTML', Lang.String, true, entities);
+	BBCodeUtil.unescape = A.rbind('unescapeHTML', Lang.String, entities);
 }());

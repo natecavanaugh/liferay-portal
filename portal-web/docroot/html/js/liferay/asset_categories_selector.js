@@ -247,7 +247,7 @@ AUI.add(
 									},
 									checked: checked,
 									id: treeId,
-									label: Liferay.Util.escapeHTML(item.titleCurrentValue),
+									label: Lang.String.escapeHTML(item.titleCurrentValue),
 									leaf: !item.hasChildren,
 									paginator: instance._getPaginatorConfig(item),
 									type: type
@@ -448,7 +448,7 @@ AUI.add(
 
 						entry[matchKey] = entryMatchKey;
 
-						entry.value = A.Lang.String.unescapeHTML(entry.value);
+						entry.value = Lang.String.unescapeHTML(entry.value);
 
 						instance.entries.add(entry);
 					},
@@ -650,7 +650,7 @@ AUI.add(
 						var instance = this;
 
 						var popup = instance._popup;
-						var vocabularyTitle = Liferay.Util.escapeHTML(item.titleCurrentValue);
+						var vocabularyTitle = Lang.String.escapeHTML(item.titleCurrentValue);
 						var vocabularyId = item.vocabularyId;
 
 						if (item.groupId == themeDisplay.getCompanyGroupId()) {

@@ -201,7 +201,7 @@ AUI.add(
 					_addEntries: function() {
 						var instance = this;
 
-						var text = Liferay.Util.escapeHTML(instance.inputNode.val());
+						var text = Lang.String.escapeHTML(instance.inputNode.val());
 
 						if (text) {
 							if (text.indexOf(',') > -1) {
@@ -535,7 +535,7 @@ AUI.add(
 						}
 
 						context = Lang.String.stripTags(context);
-						context = Liferay.Util.escapeHTML(context);
+						context = Lang.String.escapeHTML(context);
 
 						var query = Lang.sub(TPL_SUGGESTIONS_QUERY, [context]);
 

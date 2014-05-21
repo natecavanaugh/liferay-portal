@@ -153,7 +153,7 @@ Group group = GroupLocalServiceUtil.fetchGroup(groupId);
 						var buffer = [];
 
 						if (A.instanceOf(node, A.TreeNode)) {
-							var labelText = Util.escapeHTML(node.get('labelEl').text());
+							var labelText = Lang.String.escapeHTML(node.get('labelEl').text());
 
 							buffer.push(labelText);
 
@@ -162,7 +162,7 @@ Group group = GroupLocalServiceUtil.fetchGroup(groupId);
 									var labelEl = treeNode.get('labelEl');
 
 									if (labelEl) {
-										labelText = Util.escapeHTML(labelEl.text());
+										labelText = Lang.String.escapeHTML(labelEl.text());
 
 										buffer.unshift(labelText);
 									}

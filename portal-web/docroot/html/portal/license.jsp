@@ -486,6 +486,7 @@ dateFormatDateTime.setTimeZone(timeZone);
 					'<%= clusterNode.getPortalPort() %>',
 					function(message) {
 						var A = AUI();
+						var Lang = A.Lang;
 
 						A.one('#node_<%= clusterNode.getClusterNodeId() %>_registerCheckbox').attr('disabled', false);
 
@@ -512,8 +513,8 @@ dateFormatDateTime.setTimeZone(timeZone);
 
 							addColumn(row, productEntryName);
 							addColumn(row, getLicenseState(message[i].licenseState));
-							addColumn(row, Liferay.Util.escapeHTML(message[i].owner));
-							addColumn(row, Liferay.Util.escapeHTML(message[i].description));
+							addColumn(row, Lang.String.escapeHTML(message[i].owner));
+							addColumn(row, Lang.String.escapeHTML(message[i].description));
 							addColumn(row, message[i].type);
 							addColumn(row, new Date(Number(message[i].startDate)).toLocaleDateString());
 							addColumn(row, new Date(Number(message[i].expirationDate)).toLocaleDateString());

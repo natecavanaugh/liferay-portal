@@ -125,7 +125,7 @@ AUI.add(
 						}
 
 						linkNode.setAttribute('href', url);
-						linkNode.setContent(Liferay.Util.escapeHTML(title));
+						linkNode.setContent(Lang.String.escapeHTML(title));
 					},
 
 					_uiSetValue: function(val) {
@@ -230,7 +230,7 @@ AUI.add(
 								var values = {
 									id: A.guid(),
 									label: index,
-									value: Liferay.Util.escapeHTML(JSON.stringify(item))
+									value: Lang.String.escapeHTML(JSON.stringify(item))
 								};
 
 								var optionsArray = publicOptions;

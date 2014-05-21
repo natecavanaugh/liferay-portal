@@ -322,7 +322,7 @@ AUI.add(
 
 							var itemTitle = Lang.trim(dropTarget.attr('data-title'));
 
-							proxyNode.html(Lang.sub(moveText, [selectedItemsCount, Liferay.Util.escapeHTML(itemTitle)]));
+							proxyNode.html(Lang.sub(moveText, [selectedItemsCount, A.Lang.String.escapeHTML(itemTitle)]));
 						}
 					},
 

@@ -966,7 +966,7 @@ AUI.add(
 
 											var auxItem = A.clone(item);
 
-											auxItem.titleCurrentValue = Util.escapeHTML(auxItem.titleCurrentValue);
+											auxItem.titleCurrentValue = Lang.String.escapeHTML(auxItem.titleCurrentValue);
 
 											buffer.push(Lang.sub(TPL_VOCABULARY_LIST, auxItem));
 										}
@@ -1125,7 +1125,7 @@ AUI.add(
 										formatter: A.bind('_formatJSONResult', instance),
 										url: themeDisplay.getPathMain() + '/asset/get_categories'
 									},
-									label: Liferay.Util.escapeHTML(item.titleCurrentValue),
+									label: Lang.String.escapeHTML(item.titleCurrentValue),
 									paginator: paginatorConfig,
 									type: 'check',
 									on: {
