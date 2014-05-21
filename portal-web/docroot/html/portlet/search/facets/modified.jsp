@@ -242,22 +242,28 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 			<portlet:namespace />dateFormat: function(val, fieldNode, ruleValue) {
 				var validDate = (REGEX_DATE.test(val) === true);
 
-				if (validDate) {
-					var dateValue = A.Date.parse(val);
+				var dateValue = null;
 
-					if (fieldNode === customRangeFrom) {
-						dateFrom = dateValue;
-					}
-					else if (fieldNode === customRangeTo) {
-						dateTo = dateValue;
-					}
+				if (validDate) {
+					dateValue = A.Date.parse(val);
+				}
+
+				if (fieldNode === customRangeFrom) {
+					dateFrom = dateValue;
+				}
+				else if (fieldNode === customRangeTo) {
+					dateTo = dateValue;
 				}
 
 				return validDate;
 			},
 
 			<portlet:namespace />dateRange: function(val, fieldNode, ruleValue) {
-				return A.Date.isGreaterOrEqual(dateTo, dateFrom);
+				if (dateTo && dateFrom) {
+					return A.Date.isGreaterOrEqual(dateTo, dateFrom);
+				}
+
+				return true;
 			}
 		},
 		true
@@ -269,15 +275,6 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 			fieldContainer: 'div',
 			on: {
 				errorField: function(event) {
-					var field = event.validator.field;
-
-					if (field === customRangeFrom) {
-						dateFrom = null;
-					}
-					else if (field === customRangeTo) {
-						dateTo = null;
-					}
-
 					Util.toggleDisabled(searchButton, true);
 				},
 				validField: function(event) {
@@ -303,6 +300,7 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 			after: {
 				'calendar:dateChange': function(e) {
 					customRangeValidator.validateField(customRangeFrom);
+					customRangeValidator.validateField(customRangeTo);
 				}
 			},
 			calendar: {
