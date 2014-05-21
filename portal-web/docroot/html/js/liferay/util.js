@@ -558,20 +558,6 @@
 			}
 		},
 
-		showCapsLock: function(event, span) {
-			var keyCode = event.keyCode ? event.keyCode : event.which;
-			var shiftKey = event.shiftKey ? event.shiftKey : ((keyCode == 16) ? true : false);
-
-			if (((keyCode >= 65 && keyCode <= 90) && !shiftKey) ||
-				((keyCode >= 97 && keyCode <= 122) && shiftKey)) {
-
-				document.getElementById(span).style.display = '';
-			}
-			else {
-				document.getElementById(span).style.display = 'none';
-			}
-		},
-
 		sortByAscending: function(a, b) {
 			a = a[1].toLowerCase();
 			b = b[1].toLowerCase();
