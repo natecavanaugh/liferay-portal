@@ -18,7 +18,7 @@
 						if (typeof extraParams == 'string') {
 							url += extraParams;
 						}
-						else if (Liferay.Util.isArray(extraParams)) {
+						else if (A.Lang.String.isArray(extraParams)) {
 							url += extraParams.join('/');
 						}
 					}

@@ -28,7 +28,7 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 			var FormBuilderTypes = A.FormBuilder.types;
 
 			var booleanParse = A.DataType.Boolean.parse;
-			var camelize = Liferay.Util.camelize;
+			var camelize = A.Lang.String.camelize;
 			var trim = A.Lang.trim;
 
 			var STR_BLANK = '';

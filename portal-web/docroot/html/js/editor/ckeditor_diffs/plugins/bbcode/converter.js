@@ -1,6 +1,5 @@
 ;(function() {
 	var BBCodeUtil = Liferay.BBCodeUtil;
-	var Util = Liferay.Util;
 
 	var Parser = Liferay.BBCodeParser;
 
@@ -177,7 +176,7 @@
 			instance._stack = [];
 		},
 
-		_escapeHTML: Util.escapeHTML,
+		_escapeHTML: A.Lang.String.escapeHTML,
 
 		_extractData: function(toTagName, consume) {
 			var instance = this;
