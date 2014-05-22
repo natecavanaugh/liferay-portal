@@ -87,7 +87,7 @@ int firstDayOfWeek = localeCal.getFirstDayOfWeek() - 1;
 				},
 
 				localizable: {
-					seter: booleanParse,
+					setter: booleanParse,
 					value: true
 				},
 
