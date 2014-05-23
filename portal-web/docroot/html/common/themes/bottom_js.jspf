@@ -185,48 +185,48 @@ if (layout != null) {
 	</c:if>
 </aui:script>
 
-<c:if test="<%= PropsValues.JAVASCRIPT_SINGLE_PAGE_APPLICATION_ENABLED %>">
+<div id="bottomJs">
+	<div id="bottomJs-default">
+		<c:if test="<%= PropsValues.JAVASCRIPT_SINGLE_PAGE_APPLICATION_ENABLED %>">
 
-	<aui:script use="liferay-surface-app">
-		if (Liferay.Surface) {
+			<aui:script use="liferay-surface-app">
+				if (Liferay.Surface) {
 
-			<%
-			List<Portlet> portletsList = PortletLocalServiceUtil.getPortlets(themeDisplay.getCompanyId());
+					<%
+					List<Portlet> portletsList = PortletLocalServiceUtil.getPortlets(themeDisplay.getCompanyId());
 
-			for (Portlet portlet : portletsList) {
-				if (portlet.isActive() && portlet.isReady() && !portlet.isUndeployedPortlet() && !portlet.isSinglePageApplication()) {
-			%>
+					for (Portlet portlet : portletsList) {
+						if (portlet.isActive() && portlet.isReady() && !portlet.isUndeployedPortlet() && !portlet.isSinglePageApplication()) {
+					%>
 
-					Liferay.Surface.blacklist['<%= portlet.getPortletId() %>'] = true;
+							Liferay.Surface.blacklist['<%= portlet.getPortletId() %>'] = true;
 
-			<%
+					<%
+						}
+					}
+					%>
+
 				}
-			}
-			%>
+			</aui:script>
 
-		}
-	</aui:script>
+			<script type="text/surface-data-channel">
 
-	<script type="text/surface-data-channel">
+					<%
+					String portletId = request.getParameter("p_p_id");
 
-			<%
-			String portletId = request.getParameter("p_p_id");
+					String lastPortletIdSession = (String)session.getAttribute(WebKeys.SINGLE_PAGE_APPLICATION_LAST_PORTLET_ID);
+					%>
 
-			String lastPortletIdSession = (String)session.getAttribute(WebKeys.SINGLE_PAGE_APPLICATION_LAST_PORTLET_ID);
-			%>
+						{
+							"clearScreensCache": <%= (Validator.isNotNull(portletId) && Validator.isNotNull(lastPortletIdSession) && !Validator.equals(portletId, lastPortletIdSession)) %>
+						}
 
-				{
-					"clearScreensCache": <%= (Validator.isNotNull(portletId) && Validator.isNotNull(lastPortletIdSession) && !Validator.equals(portletId, lastPortletIdSession)) %>
-				}
+					<%
+					session.setAttribute(WebKeys.SINGLE_PAGE_APPLICATION_LAST_PORTLET_ID, portletId);
+					%>
 
-			<%
-			session.setAttribute(WebKeys.SINGLE_PAGE_APPLICATION_LAST_PORTLET_ID, portletId);
-			%>
+			</script>
 
-	</script>
-
-	<div id="bottomJs">
-		<div id="bottomJs-default">
 			<script type="text/javascript">
 				// <![CDATA[
 
@@ -240,28 +240,28 @@ if (layout != null) {
 				// ]]>
 			</script>
 
-			<c:if test="<%= layout != null %>">
+			<div class="lfr-surface-loading-bar"></div>
+		</c:if>
 
-				<%-- User Inputted Layout and LayoutSet JavaScript --%>
+		<c:if test="<%= layout != null %>">
 
-				<%
-				LayoutSet layoutSet = themeDisplay.getLayoutSet();
+			<%-- User Inputted Layout and LayoutSet JavaScript --%>
 
-				UnicodeProperties layoutSetSettings = layoutSet.getSettingsProperties();
+			<%
+			LayoutSet layoutSet = themeDisplay.getLayoutSet();
 
-				UnicodeProperties layoutTypeSettings = layout.getTypeSettingsProperties();
-				%>
+			UnicodeProperties layoutSetSettings = layoutSet.getSettingsProperties();
 
-				<script type="text/javascript">
-					// <![CDATA[
-						<%= GetterUtil.getString(layoutSetSettings.getProperty("javascript")) %>
+			UnicodeProperties layoutTypeSettings = layout.getTypeSettingsProperties();
+			%>
 
-						<%= GetterUtil.getString(layoutTypeSettings.getProperty("javascript")) %>
-					// ]]>
-				</script>
-			</c:if>
-		</div>
+			<script type="text/javascript">
+				// <![CDATA[
+					<%= GetterUtil.getString(layoutSetSettings.getProperty("javascript")) %>
+
+					<%= GetterUtil.getString(layoutTypeSettings.getProperty("javascript")) %>
+				// ]]>
+			</script>
+		</c:if>
 	</div>
-
-	<div class="lfr-surface-loading-bar"></div>
-</c:if>
+</div>
