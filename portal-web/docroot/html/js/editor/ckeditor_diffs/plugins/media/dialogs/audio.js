@@ -64,9 +64,6 @@ CKEDITOR.dialog.add(
 		}
 
 		return {
-			minHeight: 200,
-			minWidth: 400,
-
 			contents: [
 				{
 					elements:
@@ -102,7 +99,15 @@ CKEDITOR.dialog.add(
 				}
 			],
 
-			title: Liferay.Language.get('audio-properties'),
+			minHeight: 200,
+
+			minWidth: 400,
+
+			onOk: function() {
+				var instance = this;
+
+				editor.plugins.media.onOkCallback(instance, editor, 'audio');
+			},
 
 			onShow: function() {
 				var instance = this;
@@ -110,11 +115,7 @@ CKEDITOR.dialog.add(
 				editor.plugins.media.onShowCallback(instance, editor, 'audio');
 			},
 
-			onOk: function() {
-				var instance = this;
-
-				editor.plugins.media.onOkCallback(instance, editor, 'audio');
-			}
+			title: Liferay.Language.get('audio-properties')
 		};
 	}
 );
