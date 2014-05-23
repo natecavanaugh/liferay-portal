@@ -25,14 +25,19 @@ String name = GetterUtil.getString((String)request.getAttribute("liferay-ui:inpu
 String placeholder = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-search:placeholder"));
 boolean showButton = GetterUtil.getBoolean(request.getAttribute("liferay-ui:input-search:showButton"));
 String title = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-search:title"));
+boolean useNamespace = GetterUtil.getBoolean(request.getAttribute("liferay-ui:input-search:useNamespace"), true);
 
 String value = ParamUtil.getString(request, name);
+
+if (!useNamespace) {
+	namespace = StringPool.BLANK;
+}
 %>
 
 <div class="<%= cssClass %>">
-	<label class="hide-accessible" for="<portlet:namespace /><%= id %>"><%= title %></label>
+	<label class="hide-accessible" for="<%= namespace + id %>"><%= title %></label>
 
-	<input class="search-query span9" id="<portlet:namespace /><%= id %>" name="<portlet:namespace /><%= name %>" placeholder="<%= placeholder %>" title="<%= title %>" type="text" value="<%= HtmlUtil.escapeAttribute(value) %>" />
+	<input class="search-query span9" id="<%= namespace + id %>" name="<%= namespace + name %>" placeholder="<%= placeholder %>" title="<%= title %>" type="text" value="<%= HtmlUtil.escapeAttribute(value) %>" />
 
 	<c:if test="<%= showButton %>">
 		<button class="btn" type="submit">
