@@ -37,11 +37,9 @@ AUI.add(
 		var InputMoveBoxes = A.Component.create(
 			{
 				ATTRS: {
-					leftReorder: {
-					},
+					leftReorder: {},
 
-					rightReorder: {
-					},
+					rightReorder: {},
 
 					strings: {
 						LEFT_MOVE_DOWN: '',
@@ -237,22 +235,22 @@ AUI.add(
 											{
 												cssClass: 'move-left',
 												icon: 'icon-circle-arrow-right',
-												title: strings.MOVE_LEFT,
 												on: {
 													click: function(event) {
 														event.domEvent.preventDefault();
 													}
-												}
+												},
+												title: strings.MOVE_LEFT
 											},
 											{
 												cssClass: 'move-right',
 												icon: 'icon-circle-arrow-left',
-												title: strings.MOVE_RIGHT,
 												on: {
 													click: function(event) {
 														event.domEvent.preventDefault();
 													}
-												}
+												},
+												title: strings.MOVE_RIGHT
 											}
 										]
 									]

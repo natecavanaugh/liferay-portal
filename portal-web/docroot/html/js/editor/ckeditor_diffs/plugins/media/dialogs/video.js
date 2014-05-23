@@ -116,9 +116,6 @@ CKEDITOR.dialog.add(
 		}
 
 		return {
-			minHeight: 200,
-			minWidth: 400,
-
 			contents: [
 				{
 					elements:
@@ -178,7 +175,15 @@ CKEDITOR.dialog.add(
 				}
 			],
 
-			title: Liferay.Language.get('video-properties'),
+			minHeight: 200,
+
+			minWidth: 400,
+
+			onOk: function() {
+				var instance = this;
+
+				editor.plugins.media.onOkCallback(instance, editor, 'video');
+			},
 
 			onShow: function() {
 				var instance = this;
@@ -186,11 +191,7 @@ CKEDITOR.dialog.add(
 				editor.plugins.media.onShowCallback(instance, editor, 'video');
 			},
 
-			onOk: function() {
-				var instance = this;
-
-				editor.plugins.media.onOkCallback(instance, editor, 'video');
-			}
+			title: Liferay.Language.get('video-properties')
 		};
 	}
 );

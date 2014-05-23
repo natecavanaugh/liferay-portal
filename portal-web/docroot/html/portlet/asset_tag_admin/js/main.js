@@ -1771,6 +1771,8 @@ AUI.add(
 						);
 					},
 
+					_tagsItemsSelector: '.tags-admin-list li',
+
 					_toggleStagedTagItem: function(tagItem) {
 						var instance = this;
 
@@ -1851,9 +1853,7 @@ AUI.add(
 						ioTag.set('uri', form.attr('action'));
 
 						ioTag.start();
-					},
-
-					_tagsItemsSelector: '.tags-admin-list li'
+					}
 				}
 			}
 		);

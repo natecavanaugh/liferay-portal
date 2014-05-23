@@ -302,8 +302,8 @@ AUI.add(
 							var cropRegion = {
 								height: region.height * scaleY,
 								x: region.x * scaleX,
-								y: region.y * scaleY,
-								width: region.width * scaleX
+								width: region.width * scaleX,
+								y: region.y * scaleY
 							};
 
 							instance._cropRegionNode.val(A.JSON.stringify(cropRegion));

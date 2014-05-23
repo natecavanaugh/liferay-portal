@@ -942,8 +942,6 @@ AUI.add(
 		Liferay.SpreadSheet = SpreadSheet;
 
 		var DDLUtil = {
-			previewDialog: null,
-
 			openPreviewDialog: function(content) {
 				var instance = this;
 
@@ -966,7 +964,9 @@ AUI.add(
 
 					previewDialog.set('bodyContent', content);
 				}
-			}
+			},
+
+			previewDialog: null
 		};
 
 		Liferay.DDLUtil = DDLUtil;

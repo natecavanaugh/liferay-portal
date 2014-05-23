@@ -402,6 +402,8 @@ AUI.add(
 						instance._updateManageUploadDisplay();
 					},
 
+					_filesTotal: 0,
+
 					_formatTempFiles: function(fileNames) {
 						var instance = this;
 
@@ -1153,9 +1155,7 @@ AUI.add(
 
 							warningContainer.hide();
 						}
-					},
-
-					_filesTotal: 0
+					}
 				}
 			}
 		);
