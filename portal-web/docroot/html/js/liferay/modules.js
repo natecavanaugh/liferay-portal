@@ -48,17 +48,6 @@
 				base: PATH_JAVASCRIPT + '/liferay/',
 				combine: COMBINE,
 				modules: {
-					'liferay-ajax-session': {
-						condition: {
-							trigger: 'liferay-session'
-						},
-						path: 'ajax_session.js',
-						requires: [
-							'io-base',
-							'liferay-session'
-						]
-					},
-
 					'liferay-app-view-folders': {
 						path: 'app_view_folders.js',
 						requires: [
