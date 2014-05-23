@@ -158,15 +158,15 @@
 						var keyCode = event.keyCode ? event.keyCode : event.which;
 						var shiftKey = event.shiftKey ? event.shiftKey : ((keyCode == 16) ? true : false);
 
-						var span = '<portlet:namespace />passwordCapsLockSpan';
+						var node = A.one('#<portlet:namespace />passwordCapsLockSpan');
 
 						if (((keyCode >= 65 && keyCode <= 90) && !shiftKey) ||
 							((keyCode >= 97 && keyCode <= 122) && shiftKey)) {
 
-							document.getElementById(span).style.display = '';
+							node.show();
 						}
 						else {
-							document.getElementById(span).style.display = 'none';
+							node.hide();
 						}
 					}
 				);

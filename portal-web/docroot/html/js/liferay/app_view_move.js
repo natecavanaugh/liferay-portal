@@ -1,10 +1,14 @@
 AUI.add(
 	'liferay-app-view-move',
 	function(A) {
-		var History = Liferay.HistoryManager;
 		var Lang = A.Lang;
 		var UA = A.UA;
-		var Util = Liferay.Util;
+
+		var History = Liferay.HistoryManager;
+
+		var isObject = Lang.isObject;
+		var isString = Lang.isString;
+		var sub = Lang.sub;
 
 		var CSS_ACTIVE_AREA = 'active-area';
 
@@ -38,66 +42,64 @@ AUI.add(
 
 		var STR_PORTLET_GROUP = 'portletGroup';
 
-		var TOUCH = UA.touch;
-
 		var AppViewMove = A.Component.create(
 			{
 				ATTRS: {
 					allRowIds: {
-						validator: Lang.isString
+						validator: isString
 					},
 
 					displayStyleCSSClass: {
-						validator: Lang.isString
+						validator: isString
 					},
 
 					draggableCSSClass: {
-						validator: Lang.isString
+						validator: isString
 					},
 
 					editEntryUrl: {
-						validator: Lang.isString
+						validator: isString
 					},
 
 					folderIdHashRegEx: {
 						setter: function(value) {
-							if (Lang.isString(value)) {
+							if (isString(value)) {
 								value = new RegExp(value);
 							}
 
 							return value;
 						},
 						validator: function(value) {
-							return (value instanceof RegExp || Lang.isString(value));
+							return (value instanceof RegExp || isString(value));
 						}
 					},
 
 					form: {
-						validator: Lang.isObject
+						validator: isObject
 					},
 
 					moveEntryRenderUrl: {
-						validator: Lang.isString
+						validator: isString
 					},
 
 					namespace: {
-						validator: Lang.isString
+						validator: isString
 					},
 
 					portletContainerId: {
-						validator: Lang.isString
+						validator: isString
 					},
 
 					portletGroup: {
-						validator: Lang.isString
+						validator: isString
 					},
 
 					processEntryIds: {
-						validator: Lang.isObject
+						validator: isObject
 					},
 
 					trashLinkId: {
-						validator: Lang.isString
+						validator: isString
 					},
 
 					updateable: {
@@ -322,7 +324,7 @@ AUI.add(
 
 							var itemTitle = Lang.trim(dropTarget.attr('data-title'));
 
-							proxyNode.html(Lang.sub(moveText, [selectedItemsCount, A.Lang.String.escapeHTML(itemTitle)]));
+							proxyNode.html(sub(moveText, [selectedItemsCount, Lang.String.escapeHTML(itemTitle)]));
 						}
 					},
 
@@ -341,7 +343,7 @@ AUI.add(
 
 						var moveText = instance._getMoveText(selectedItemsCount);
 
-						proxyNode.html(Lang.sub(moveText, [selectedItemsCount]));
+						proxyNode.html(sub(moveText, [selectedItemsCount]));
 					},
 
 					_onDragStart: function(event) {
@@ -373,7 +375,7 @@ AUI.add(
 
 						var moveText = instance._getMoveText(selectedItemsCount);
 
-						proxyNode.html(Lang.sub(moveText, [selectedItemsCount]));
+						proxyNode.html(sub(moveText, [selectedItemsCount]));
 
 						proxyNode.addClass(CSS_ACTIVE_AREA_PROXY);
 
@@ -415,7 +417,7 @@ AUI.add(
 						var checkBoxesIds = processEntryIds.checkBoxesIds;
 
 						for (var i = 0, checkBoxesIdsLength = checkBoxesIds.length; i < checkBoxesIdsLength; i++) {
-							var listEntryIds = Util.listCheckedExcept(form, allRowsIdCheckbox, checkBoxesIds[i]);
+							var listEntryIds = Liferay.Util.listCheckedExcept(form, allRowsIdCheckbox, checkBoxesIds[i]);
 
 							form.get(entryIds[i]).val(listEntryIds);
 						}

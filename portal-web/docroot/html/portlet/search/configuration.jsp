@@ -108,9 +108,11 @@
 </aui:form>
 
 <aui:script use="aui-base">
-	Liferay.Util.toggleRadio('<portlet:namespace />advanced', '<portlet:namespace />advancedConfiguration', '<portlet:namespace />basicConfiguration');
-	Liferay.Util.toggleRadio('<portlet:namespace />basic', '<portlet:namespace />basicConfiguration', '<portlet:namespace />advancedConfiguration');
-	Liferay.Util.toggleBoxes('<portlet:namespace />collatedSpellCheckResultEnabledCheckbox', '<portlet:namespace />collatedSpellCheckResultOptionsContainer');
-	Liferay.Util.toggleBoxes('<portlet:namespace />queryIndexingEnabledCheckbox', '<portlet:namespace />queryIndexingOptionsContainer');
-	Liferay.Util.toggleBoxes('<portlet:namespace />querySuggestionsEnabledCheckbox', '<portlet:namespace />querySuggestionsOptionsContainer');
+	var Util = Liferay.Util;
+
+	Util.toggleRadio('<portlet:namespace />advanced', '<portlet:namespace />advancedConfiguration', '<portlet:namespace />basicConfiguration');
+	Util.toggleRadio('<portlet:namespace />basic', '<portlet:namespace />basicConfiguration', '<portlet:namespace />advancedConfiguration');
+	Util.toggleBoxes('<portlet:namespace />collatedSpellCheckResultEnabledCheckbox', '<portlet:namespace />collatedSpellCheckResultOptionsContainer');
+	Util.toggleBoxes('<portlet:namespace />queryIndexingEnabledCheckbox', '<portlet:namespace />queryIndexingOptionsContainer');
+	Util.toggleBoxes('<portlet:namespace />querySuggestionsEnabledCheckbox', '<portlet:namespace />querySuggestionsOptionsContainer');
 </aui:script>

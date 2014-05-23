@@ -4,6 +4,7 @@ AUI.add(
 		var Lang = A.Lang;
 
 		var StagingBar = Liferay.StagingBar;
+		var UtilWindow = Liferay.Util.Window;
 
 		var MAP_TEXT_REVISION = {
 			redo: Liferay.Language.get('are-you-sure-you-want-to-redo-your-last-changes'),
@@ -73,7 +74,7 @@ AUI.add(
 					if (!branchDialog) {
 						var namespace = instance._namespace;
 
-						branchDialog = Liferay.Util.Window.getWindow(
+						branchDialog = UtilWindow.getWindow(
 							{
 								dialog: {
 									bodyContent: A.one('#' + namespace + 'addBranch').show()
@@ -94,7 +95,7 @@ AUI.add(
 					var mergeDialog = instance._mergeDialog;
 
 					if (!mergeDialog) {
-						mergeDialog = Liferay.Util.Window.getWindow(
+						mergeDialog = UtilWindow.getWindow(
 							{
 								title: Liferay.Language.get('merge')
 							}
@@ -131,7 +132,7 @@ AUI.add(
 				_getUpdateBranchDialog: function() {
 					var instance = this;
 
-					var	updateBranchDialog = Liferay.Util.Window.getWindow(
+					var	updateBranchDialog = UtilWindow.getWindow(
 						{
 							title: Liferay.Language.get('branch')
 						}

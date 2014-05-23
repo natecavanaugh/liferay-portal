@@ -3,13 +3,18 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 		var AObject = A.Object;
-		var HistoryManager = Liferay.HistoryManager;
 		var JSON = A.JSON;
 		var Lang = A.Lang;
 		var Node = A.Node;
+
+		var HistoryManager = Liferay.HistoryManager;
 		var Util = Liferay.Util;
 
+		var UtilWindow = Util.Window;
+
 		var owns = AObject.owns;
+
+		var LString = Lang.String;
 		var toInt = Lang.toInt;
 
 		var ACTION_ADD = 0;
@@ -583,7 +588,7 @@ AUI.add(
 					_createCategoryPanelAdd: function() {
 						var instance = this;
 
-						instance._categoryPanelAdd = Liferay.Util.Window.getWindow(
+						instance._categoryPanelAdd = UtilWindow.getWindow(
 							{
 								dialog: {
 									cssClass: CSS_ADMIN_DIALOG
@@ -638,7 +643,7 @@ AUI.add(
 					_createVocabularyPanelAdd: function() {
 						var instance = this;
 
-						instance._vocabularyPanelAdd = Liferay.Util.Window.getWindow(
+						instance._vocabularyPanelAdd = UtilWindow.getWindow(
 							{
 								dialog: {
 									cssClass: CSS_ADMIN_DIALOG
@@ -676,7 +681,7 @@ AUI.add(
 					_createPanelEdit: function(config) {
 						var instance = this;
 
-						instance._panelEdit = Liferay.Util.Window.getWindow(
+						instance._panelEdit = UtilWindow.getWindow(
 							{
 								dialog: {
 									align: instance._dialogAlignConfig,
@@ -712,7 +717,7 @@ AUI.add(
 						var panelPermissionsChange = instance._panelPermissionsChange;
 
 						if (!panelPermissionsChange) {
-							panelPermissionsChange = Util.Window.getWindow(
+							panelPermissionsChange = UtilWindow.getWindow(
 								{
 									dialog: {
 										align: instance._dialogAlignConfig,
@@ -966,7 +971,7 @@ AUI.add(
 
 											var auxItem = A.clone(item);
 
-											auxItem.titleCurrentValue = Lang.String.escapeHTML(auxItem.titleCurrentValue);
+											auxItem.titleCurrentValue = isString.escapeHTML(auxItem.titleCurrentValue);
 
 											buffer.push(Lang.sub(TPL_VOCABULARY_LIST, auxItem));
 										}
@@ -1125,7 +1130,7 @@ AUI.add(
 										formatter: A.bind('_formatJSONResult', instance),
 										url: themeDisplay.getPathMain() + '/asset/get_categories'
 									},
-									label: Lang.String.escapeHTML(item.titleCurrentValue),
+									label: isString.escapeHTML(item.titleCurrentValue),
 									paginator: paginatorConfig,
 									type: 'check',
 									on: {

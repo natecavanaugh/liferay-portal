@@ -3,7 +3,7 @@ AUI.add(
 	function(A) {
 		var Lang = A.Lang;
 
-		var Util = Liferay.Util;
+		var isValue = Lang.isValue;
 
 		var PortletURL = function(lifecycle, params, basePortletURL) {
 			var instance = this;
@@ -58,7 +58,7 @@ AUI.add(
 			A.each(
 				params,
 				function(item, index, collection) {
-					if (Lang.isValue(item)) {
+					if (isValue(item)) {
 						if (instance._isReservedParam(index)) {
 							instance.reservedParams[index] = item;
 						}
@@ -242,12 +242,12 @@ AUI.add(
 					portletId = resultURL.getParameter('p_p_id');
 				}
 
-				var namespacePrefix = Util.getPortletNamespace(portletId);
+				var namespacePrefix = Liferay.Util.getPortletNamespace(portletId);
 
 				A.each(
 					reservedParams,
 					function(item, index, collection) {
-						if (Lang.isValue(item)) {
+						if (isValue(item)) {
 							resultURL.setParameter(index, item);
 						}
 					}
@@ -256,7 +256,7 @@ AUI.add(
 				A.each(
 					instance.params,
 					function(item, index, collection) {
-						if (Lang.isValue(item)) {
+						if (isValue(item)) {
 							resultURL.setParameter(namespacePrefix + index, item);
 						}
 					}

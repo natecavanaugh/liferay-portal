@@ -1,12 +1,10 @@
 ;(function() {
 	var A = AUI();
 
-	var LiferayUtil = Liferay.Util;
-
-	var Lang = A.Lang;
+	var LString = A.Lang.String;
 
 	var entities = A.merge(
-		LiferayUtil.MAP_HTML_CHARS_ESCAPED,
+		Liferay.Util.MAP_HTML_CHARS_ESCAPED,
 		{
 			'[': '&#91;',
 			']': '&#93;',
@@ -17,8 +15,8 @@
 
 	var BBCodeUtil = Liferay.namespace('BBCodeUtil');
 
-	BBCodeUtil.escape = A.rbind('escapeHTML', Lang.String, true, entities);
-	BBCodeUtil.unescape = A.rbind('unescapeHTML', Lang.String, entities);
+	BBCodeUtil.escape = A.rbind('escapeHTML', LString, true, entities);
+	BBCodeUtil.unescape = A.rbind('unescapeHTML', LString, entities);
 }());;(function() {
 	var REGEX_BBCODE = /(?:\[((?:[a-z]|\*){1,16})(?:=([^\x00-\x1F"'\(\)<>\[\]]{1,2083}))?\])|(?:\[\/([a-z]{1,16})\])/ig;
 
