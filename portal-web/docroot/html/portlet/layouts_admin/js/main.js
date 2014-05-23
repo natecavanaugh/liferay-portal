@@ -863,41 +863,41 @@ AUI.add(
 
 							var portletURL = Liferay.PortletURL.createURL(redirectNode.val());
 
-							portletURL.setParameter("cmd", cmdNode.val());
+							portletURL.setParameter('cmd', cmdNode.val());
 
 							if (instance._exportLAR) {
-								portletURL.setParameter("struts_action", "/group_pages/edit_export_configuration");
-								portletURL.setParameter("tabs2", "new-export-process");
-								portletURL.setParameter("exportConfigurationButtons", "custom");
+								portletURL.setParameter('struts_action', '/group_pages/edit_export_configuration');
+								portletURL.setParameter('tabs2', 'new-export-process');
+								portletURL.setParameter('exportConfigurationButtons', 'custom');
 							}
 							else {
-								portletURL.setParameter("struts_action", "/layouts_admin/edit_publish_configuration");
-								portletURL.setParameter("tabs2", "new-publication-process");
-								portletURL.setParameter("publishConfigurationButtons", "custom");
+								portletURL.setParameter('struts_action', '/layouts_admin/edit_publish_configuration');
+								portletURL.setParameter('tabs2', 'new-publication-process');
+								portletURL.setParameter('publishConfigurationButtons', 'custom');
 							}
 
 							var groupIdNode = instance.byId('groupId');
 
 							if (groupIdNode) {
-								portletURL.setParameter("groupId", groupIdNode.val());
+								portletURL.setParameter('groupId', groupIdNode.val());
 							}
 
 							var liveGroupIdNode = instance.byId('liveGroupId');
 
 							if (liveGroupIdNode) {
-								portletURL.setParameter("liveGroupId", liveGroupIdNode.val());
+								portletURL.setParameter('liveGroupId', liveGroupIdNode.val());
 							}
 
 							var privateLayoutNode = instance.byId('privateLayout');
 
 							if (privateLayoutNode) {
-								portletURL.setParameter("privateLayout", privateLayoutNode.val());
+								portletURL.setParameter('privateLayout', privateLayoutNode.val());
 							}
 
 							var rootNodeNameNode = instance.byId('rootNodeName');
 
 							if (rootNodeNameNode) {
-								portletURL.setParameter("rootNodeName", rootNodeNameNode.val());
+								portletURL.setParameter('rootNodeName', rootNodeNameNode.val());
 							}
 
 							redirectNode.val(portletURL.toString());

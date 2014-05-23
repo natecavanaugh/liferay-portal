@@ -123,14 +123,14 @@
 
 			var token;
 
-			while((token = lexer.getNextToken())) {
+			while ((token = lexer.getNextToken())) {
 				instance._handleData(token, data);
 
 				if (token[1]) {
 					instance._handleTagStart(token);
 
 					if (token[1].toLowerCase() == STR_TAG_CODE) {
-						while((token = lexer.getNextToken()) && token[3] != STR_TAG_CODE);
+						while ((token = lexer.getNextToken()) && token[3] != STR_TAG_CODE);
 
 						instance._handleData(token, data);
 
@@ -466,7 +466,7 @@
 					result.push(token.value);
 				}
 
-			} while((token.type != TOKEN_TAG_END) && (token.value != toTagName));
+			} while ((token.type != TOKEN_TAG_END) && (token.value != toTagName));
 
 			if (consume) {
 				instance._tokenPointer = index - 1;
@@ -606,7 +606,7 @@
 							value = STR_BLANK;
 					}
 				}
-				else if(REGEX_LASTCHAR_NEWLINE.test(value)) {
+				else if (REGEX_LASTCHAR_NEWLINE.test(value)) {
 					nextToken = instance._parsedData[instance._tokenPointer + 1];
 
 					if (nextToken &&
