@@ -3,11 +3,10 @@ AUI.add(
 	function(A) {
 		var AObject = A.Object;
 		var JSON = A.JSON;
-		var Util = Liferay.Util;
 
 		var owns = AObject.owns;
 
-		var _browserKey = Util.randomInt();
+		var _browserKey = Liferay.Util.randomInt();
 		var _enabled = false;
 		var _supportsComet = false;
 		var _encryptedUserId = null;

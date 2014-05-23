@@ -24,17 +24,19 @@ CKEDITOR.dialog.add(
 			var videoWidth = videoNode.getAttribute('data-width');
 
 			if (id === 'poster') {
+				var Util = Liferay.Util;
+
 				videoNode.setAttribute('data-document-url', value);
 
-				videoUrl = Liferay.Util.addParams('videoPreview=1&type=mp4', value);
+				videoUrl = Util.addParams('videoPreview=1&type=mp4', value);
 
 				videoNode.setAttribute('data-video-url', videoUrl);
 
-				videoOgvUrl = Liferay.Util.addParams('videoPreview=1&type=ogv', value);
+				videoOgvUrl = Util.addParams('videoPreview=1&type=ogv', value);
 
 				videoNode.setAttribute('data-video-ogv-url', videoOgvUrl);
 
-				value = Liferay.Util.addParams('videoThumbnail=1', value);
+				value = Util.addParams('videoThumbnail=1', value);
 
 				videoNode.setAttribute('data-poster', value);
 

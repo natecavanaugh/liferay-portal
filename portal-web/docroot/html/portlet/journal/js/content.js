@@ -2,6 +2,9 @@ AUI.add(
 	'liferay-journal-content',
 	function(A) {
 		var Lang = A.Lang;
+		var Util = Liferay.Util;
+
+		var WIN = A.config.win;
 
 		var SELECTOR_AVAILABLE_TRANSLATIONS_LINKS = '#availableTranslationsLinks';
 
@@ -36,8 +39,6 @@ AUI.add(
 		var TPL_TRANSLATION = '<a class="journal-article-translation lfr-token" href="{uri}" id="{namespace}journal-article-translation-link-{languageId}">' +
 			'<img alt="" src="{pathThemeImages}/language/{languageId}.png" />{language}' +
 		'</a>';
-
-		var WIN = A.config.win;
 
 		var JournalContent = A.Component.create(
 			{
@@ -220,7 +221,7 @@ AUI.add(
 						if (confirm(strings.editStructure)) {
 							var urls = instance.get(STR_URLS);
 
-							Liferay.Util.openWindow(
+							Util.openWindow(
 								{
 									id: A.guid(),
 									refreshWindow: WIN,
@@ -239,7 +240,7 @@ AUI.add(
 						if (confirm(strings.editTemplate)) {
 							var urls = instance.get(STR_URLS);
 
-							Liferay.Util.openWindow(
+							Util.openWindow(
 								{
 									id: A.guid(),
 									title: strings.templates,
@@ -262,7 +263,7 @@ AUI.add(
 
 						var strings = instance.get(STR_STRINGS);
 
-						Liferay.Util.openDDMPortlet(
+						Util.openDDMPortlet(
 							{
 								basePortletURL: ddm.basePortletURL,
 								classPK: ddm.classPK,
@@ -301,7 +302,7 @@ AUI.add(
 
 						var strings = instance.get(STR_STRINGS);
 
-						Liferay.Util.openDDMPortlet(
+						Util.openDDMPortlet(
 							{
 								basePortletURL: ddm.basePortletURL,
 								classNameId: ddm.classNameId,
@@ -338,7 +339,7 @@ AUI.add(
 
 						var currentTarget = event.currentTarget;
 
-						Liferay.Util.openWindow(
+						Util.openWindow(
 							{
 								destroyOnHide: true,
 								id: instance.ns('journalArticleTranslationDialog'),

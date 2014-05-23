@@ -1,17 +1,17 @@
 ;(function(A, Liferay) {
 	A.use('aui-base-lang');
 
-	var Lang = A.Lang;
-
 	var AArray = A.Array;
 	var AObject = A.Object;
-	var AString = A.Lang.String;
+	var Lang = A.Lang;
+
 	var Browser = Liferay.Browser;
 
 	var isArray = Lang.isArray;
-	var arrayIndexOf = AArray.indexOf;
-	var prefix = AString.prefix;
-	var startsWith = AString.startsWith;
+	var isFunction = Lang.isFunction;
+	var isObject = Lang.isObject;
+	var isValue = Lang.isValue;
+	var LString = Lang.String;
 
 	var EVENT_CLICK = 'click';
 
@@ -183,7 +183,7 @@
 		addParams: function(params, url) {
 			A.use('querystring-stringify-simple');
 
-			if (Lang.isObject(params)) {
+			if (isObject(params)) {
 				params = A.QueryString.stringify(params);
 			}
 			else {
@@ -347,14 +347,14 @@
 			var result = null;
 
 			if (el) {
-				if (Lang.isFunction(el.getDOM)) {
+				if (isFunction(el.getDOM)) {
 					el = el.getDOM();
 				}
 
 				result = {};
 
 				var isGetterString = Lang.isString(attributeGetter);
-				var isGetterFn = Lang.isFunction(attributeGetter);
+				var isGetterFn = isFunction(attributeGetter);
 
 				var attrs = el.attributes;
 				var length = attrs.length;
@@ -614,13 +614,13 @@
 
 			var ns = instance._ns;
 
-			if (!Lang.isObject(obj)) {
+			if (!isObject(obj)) {
 				value = ns(namespace, obj);
 			}
 			else {
 				value = {};
 
-				A.Object.each(
+				AObject.each(
 					obj,
 					function(item, index) {
 						index = ns(namespace, index);
@@ -706,7 +706,7 @@
 		setSelectionRange: function(el, selectionStart, selectionEnd) {
 			var instance = this;
 
-			if (Lang.isFunction(el.getDOM)) {
+			if (isFunction(el.getDOM)) {
 				el = el.getDOM();
 			}
 
@@ -1002,8 +1002,8 @@
 			function(namespace, str) {
 				var value = str;
 
-				if (!Lang.isUndefined(str) && !startsWith(str, namespace)) {
-					value = prefix(namespace, str);
+				if (!Lang.isUndefined(str) && !LString.startsWith(str, namespace)) {
+					value = LString.prefix(namespace, str);
 				}
 
 				return value;
@@ -1144,7 +1144,7 @@
 
 			inputs.each(
 				function(item, index) {
-					if (!item.compareTo(allBox) && (arrayIndexOf(name, item.attr('name')) > -1)) {
+					if (!item.compareTo(allBox) && (AArray.indexOf(name, item.attr('name')) > -1)) {
 						totalBoxes++;
 
 						if (item.get(STR_CHECKED)) {
@@ -1553,13 +1553,13 @@
 
 					executor.EditDocument(webDavUrl);
 
-					if (Lang.isFunction(onSuccess)) {
+					if (isFunction(onSuccess)) {
 						onSuccess();
 					}
 
 				}
 				catch (exception) {
-					if (Lang.isFunction(onError)) {
+					if (isFunction(onError)) {
 						onError(exception);
 					}
 				}
@@ -1884,14 +1884,14 @@
 		function(folderData, namespace) {
 			A.byIdNS(namespace, folderData.idString).val(folderData.idValue);
 
-			var name = AString.unescapeEntities(folderData.nameValue);
+			var name = LString.unescapeEntities(folderData.nameValue);
 
 			A.byIdNS(namespace, folderData.nameString).val(name);
 
 			var button = A.byIdNS(namespace, 'removeFolderButton');
 
 			if (button) {
-				Liferay.Util.toggleDisabled(button, false);
+				Util.toggleDisabled(button, false);
 			}
 		},
 		['aui-base', 'liferay-node']
@@ -2081,8 +2081,8 @@
 
 				var showBoxes;
 
-				if (Lang.isValue(showBoxIds)) {
-					if (Lang.isArray(showBoxIds)) {
+				if (isValue(showBoxIds)) {
+					if (isArray(showBoxIds)) {
 						showBoxIds = showBoxIds.join(',#');
 					}
 
@@ -2098,8 +2098,8 @@
 							showBoxes.show();
 						}
 
-						if (Lang.isValue(hideBoxIds)) {
-							if (Lang.isArray(hideBoxIds)) {
+						if (isValue(hideBoxIds)) {
+							if (isArray(hideBoxIds)) {
 								hideBoxIds = hideBoxIds.join(',#');
 							}
 
@@ -2120,7 +2120,7 @@
 			var toggleBox = A.one('#' + toggleBoxId);
 
 			if (selectBox && toggleBox) {
-				var dynamicValue = Lang.isFunction(value);
+				var dynamicValue = isFunction(value);
 
 				var toggle = function() {
 					var currentValue = selectBox.val();
@@ -2200,7 +2200,7 @@
 		function(config, callback) {
 			var dialog = Window.getWindow(config);
 
-			if (Lang.isFunction(callback)) {
+			if (isFunction(callback)) {
 				callback(dialog);
 			}
 		},
@@ -2212,7 +2212,7 @@
 		function(event) {
 			var id = event.id;
 
-			var dialog = Liferay.Util.getTop().Liferay.Util.Window.getById(id);
+			var dialog = Util.getTop().Liferay.Util.Window.getById(id);
 
 			if (dialog && dialog.iframe) {
 				var dialogWindow = dialog.iframe.node.get('contentWindow').getDOM();

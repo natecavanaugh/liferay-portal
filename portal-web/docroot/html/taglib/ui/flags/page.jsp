@@ -53,7 +53,9 @@ if (!TrashUtil.isInTrash(className, classPK)) {
 					icon.on(
 						'click',
 						function() {
-							var popup = Liferay.Util.Window.getWindow(
+							var Util = Liferay.Util;
+
+							var popup = Util.Window.getWindow(
 								{
 									dialog: {
 										destroyOnHide: true,
@@ -64,7 +66,7 @@ if (!TrashUtil.isInTrash(className, classPK)) {
 								}
 							);
 
-							var data = Liferay.Util.ns(
+							var data = Util.ns(
 								'<%= PortalUtil.getPortletNamespace(PortletKeys.FLAGS) %>',
 								{
 									className: '<%= className %>',

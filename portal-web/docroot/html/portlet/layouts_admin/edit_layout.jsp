@@ -222,6 +222,10 @@ boolean showAddAction = ParamUtil.getBoolean(request, "showAddAction", true);
 					var content;
 					var popup;
 
+					var Util = Liferay.Util;
+
+					var UtilWindow = Util.Window;
+
 					var clickHandler = function(event) {
 						var target = event.target;
 
@@ -235,7 +239,7 @@ boolean showAddAction = ParamUtil.getBoolean(request, "showAddAction", true);
 							content = A.one('#<portlet:namespace />addLayout');
 
 							if (!popup) {
-								popup = Liferay.Util.Window.getWindow(
+								popup = UtilWindow.getWindow(
 									{
 										dialog: {
 											bodyContent: content.show(),
@@ -260,10 +264,10 @@ boolean showAddAction = ParamUtil.getBoolean(request, "showAddAction", true);
 								);
 							}
 
-							Liferay.Util.focusFormField(content.one('input:text'));
+							Util.focusFormField(content.one('input:text'));
 						}
 						else if (dataValue === 'permissions') {
-							Liferay.Util.openWindow(
+							Util.openWindow(
 								{
 									cache: false,
 									id: '<portlet:namespace /><%= HtmlUtil.escapeJS(selLayout.getFriendlyURL().substring(1)) %>_permissions',
@@ -287,7 +291,7 @@ boolean showAddAction = ParamUtil.getBoolean(request, "showAddAction", true);
 						else if (dataValue == 'copy-applications') {
 							content = A.one('#<portlet:namespace />copyPortletsFromPage');
 
-							popUp = Liferay.Util.Window.getWindow(
+							popUp = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: content.show()
