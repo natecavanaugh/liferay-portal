@@ -61,8 +61,6 @@
 	};
 
 	var Util = {
-		submitCountdown: 0,
-
 		actsAsAspect: function(object) {
 			object.yield = null;
 			object.rv = {};
@@ -166,7 +164,7 @@
 					var defaultType = 'text';
 
 					el.all('input').each(
-						function(item, index, collection) {
+						function(item, index) {
 							var type = item.get('type') || defaultType;
 
 							item.addClass(type);
@@ -478,22 +476,6 @@
 			return topWindow;
 		},
 
-		getWindow: function(id) {
-			if (!id) {
-				id = Util.getWindowName();
-			}
-
-			return Util.getTop().Liferay.Util.Window.getById(id);
-		},
-
-		getWindowName: function() {
-			return window.name || Window._name || '';
-		},
-
-		getWindowWidth: function() {
-			return (window.innerWidth > 0) ? window.innerWidth : screen.width;
-		},
-
 		getURLWithSessionId: function(url) {
 			if (!themeDisplay.isAddSessionIdToURL()) {
 				return url;
@@ -531,6 +513,22 @@
 			return url + sessionId;
 		},
 
+		getWindow: function(id) {
+			if (!id) {
+				id = Util.getWindowName();
+			}
+
+			return Util.getTop().Liferay.Util.Window.getById(id);
+		},
+
+		getWindowName: function() {
+			return window.name || Window._name || '';
+		},
+
+		getWindowWidth: function() {
+			return (window.innerWidth > 0) ? window.innerWidth : screen.width;
+		},
+
 		isArray: function(object) {
 			return !!(window.Array && object.constructor == window.Array);
 		},
@@ -566,7 +564,7 @@
 
 				A.Object.each(
 					obj,
-					function(item, index, collection) {
+					function(item, index) {
 						index = ns(namespace, index);
 
 						value[index] = item;
@@ -723,7 +721,9 @@
 						function() {
 							el.focus();
 							el.setSelectionRange(caretPos, caretPos);
-						}, 0);
+						},
+						0
+					);
 
 				}
 				else {
@@ -956,6 +956,8 @@
 			return entities[match];
 		},
 
+		submitCountdown: 0,
+
 		MAP_HTML_CHARS_ESCAPED: MAP_HTML_CHARS_ESCAPED
 	};
 
@@ -1087,7 +1089,7 @@
 			}
 
 			inputs.each(
-				function(item, index, collection) {
+				function(item, index) {
 					if (!item.compareTo(allBox) && (arrayIndexOf(name, item.attr('name')) > -1)) {
 						totalBoxes++;
 
@@ -1116,7 +1118,7 @@
 				var lis = flyout.all('li');
 
 				lis.each(
-					function(item, index, collection) {
+					function(item, index) {
 						var childUL = item.one('ul');
 
 						if (childUL) {
@@ -1370,7 +1372,7 @@
 				selectedOption = options.item(selectedIndex);
 
 				options.each(
-					function(item, index, collection) {
+					function(item, index) {
 						if (item.get('selected')) {
 							toBox.append(item);
 						}
@@ -1880,7 +1882,7 @@
 
 			A.each(
 				newBox,
-				function(item, index, collection) {
+				function(item, index) {
 					boxObj.append('<option value="' + item[0] + '">' + item[1] + '</option>');
 				}
 			);
@@ -2034,7 +2036,7 @@
 			}
 
 			button.each(
-				function(item, index, collection) {
+				function(item, index) {
 					item.attr('disabled', state);
 
 					item.toggleClass('disabled', state);
@@ -2168,8 +2170,8 @@
 				Liferay.fire(
 					'submitForm',
 					{
-						form: A.one(form),
 						action: action,
+						form: A.one(form),
 						singleSubmit: singleSubmit,
 						validate: validate !== false
 					}
