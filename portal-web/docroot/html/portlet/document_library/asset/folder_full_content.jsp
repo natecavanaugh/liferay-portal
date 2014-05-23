@@ -42,15 +42,23 @@ Folder folder = (Folder)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FOLDER);
 			</c:if>
 
 			<div class="lfr-asset-metadata">
-				<div class="lfr-asset-icon lfr-asset-date">
+				<div class="icon-calendar lfr-asset-icon">
 					<%= LanguageUtil.format(pageContext, "last-updated-x", dateFormatDateTime.format(folder.getModifiedDate()), false) %>
 				</div>
 
-				<div class="lfr-asset-icon lfr-asset-subfolders">
+				<%
+				AssetRendererFactory dlFolderAssetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(DLFolder.class.getName());
+				%>
+
+				<div class="<%= dlFolderAssetRendererFactory.getIconCssClass() %> lfr-asset-icon">
 					<%= foldersCount %> <liferay-ui:message key='<%= (foldersCount == 1) ? "subfolder" : "subfolders" %>' />
 				</div>
 
-				<div class="lfr-asset-icon lfr-asset-items last">
+				<%
+				AssetRendererFactory dlFileEntryAssetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(DLFileEntry.class.getName());
+				%>
+
+				<div class="<%= dlFileEntryAssetRendererFactory.getIconCssClass() %> last lfr-asset-icon">
 					<%= fileEntriesCount %> <liferay-ui:message key='<%= (fileEntriesCount == 1) ? "document" : "documents" %>' />
 				</div>
 			</div>

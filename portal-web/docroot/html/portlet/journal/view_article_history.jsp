@@ -179,8 +179,10 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 		</aui:form>
 
 		<aui:script use="aui-base">
-			Liferay.Util.toggleSearchContainerButton('#<portlet:namespace />delete', '#<portlet:namespace /><%= searchContainerReference.getId() %>SearchContainer', document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
-			Liferay.Util.toggleSearchContainerButton('#<portlet:namespace />expire', '#<portlet:namespace /><%= searchContainerReference.getId() %>SearchContainer', document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
+			var Util = Liferay.Util;
+
+			Util.toggleSearchContainerButton('#<portlet:namespace />delete', '#<portlet:namespace /><%= searchContainerReference.getId() %>SearchContainer', document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
+			Util.toggleSearchContainerButton('#<portlet:namespace />expire', '#<portlet:namespace /><%= searchContainerReference.getId() %>SearchContainer', document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 
 			var compareButton = A.one('#<portlet:namespace />compare');
 
@@ -203,14 +205,14 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 						var rowIdsSize = rowIds.size();
 
 						if (rowIdsSize == 1) {
-							uri = Liferay.Util.addParams('<portlet:namespace />sourceVersion=' + rowIds.item(0).val(), uri);
+							uri = Util.addParams('<portlet:namespace />sourceVersion=' + rowIds.item(0).val(), uri);
 						}
 						else if (rowIdsSize == 2) {
-							uri = Liferay.Util.addParams('<portlet:namespace />sourceVersion=' + rowIds.item(1).val(), uri);
-							uri = Liferay.Util.addParams('<portlet:namespace />targetVersion=' + rowIds.item(0).val(), uri);
+							uri = Util.addParams('<portlet:namespace />sourceVersion=' + rowIds.item(1).val(), uri);
+							uri = Util.addParams('<portlet:namespace />targetVersion=' + rowIds.item(0).val(), uri);
 						}
 
-						Liferay.Util.openWindow(
+						Util.openWindow(
 							{
 								dialog: {
 									width: 820
@@ -233,7 +235,7 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
 							document.<portlet:namespace />fm.<portlet:namespace />groupId.value = '<%= scopeGroupId %>';
 							document.<portlet:namespace />fm.<portlet:namespace />articleId.value = '';
-							document.<portlet:namespace />fm.<portlet:namespace />articleIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
+							document.<portlet:namespace />fm.<portlet:namespace />articleIds.value = Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 
 							submitForm(document.<portlet:namespace />fm, '<portlet:actionURL><portlet:param name="struts_action" value="/journal/edit_article" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:actionURL>');
 						}
@@ -251,7 +253,7 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.EXPIRE %>';
 							document.<portlet:namespace />fm.<portlet:namespace />groupId.value = '<%= scopeGroupId %>';
 							document.<portlet:namespace />fm.<portlet:namespace />articleId.value = '';
-							document.<portlet:namespace />fm.<portlet:namespace />expireArticleIds.value = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
+							document.<portlet:namespace />fm.<portlet:namespace />expireArticleIds.value = Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 
 							submitForm(document.<portlet:namespace />fm, '<portlet:actionURL><portlet:param name="struts_action" value="/journal/edit_article" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:actionURL>');
 						}

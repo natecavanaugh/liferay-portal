@@ -1,10 +1,10 @@
 ;(function() {
 	var A = AUI();
 
-	var LiferayUtil = Liferay.Util;
+	var LString = A.Lang.String;
 
 	var entities = A.merge(
-		LiferayUtil.MAP_HTML_CHARS_ESCAPED,
+		Liferay.Util.MAP_HTML_CHARS_ESCAPED,
 		{
 			'[': '&#91;',
 			']': '&#93;',
@@ -15,8 +15,8 @@
 
 	var BBCodeUtil = Liferay.namespace('BBCodeUtil');
 
-	BBCodeUtil.escape = A.rbind('escapeHTML', LiferayUtil, true, entities);
-	BBCodeUtil.unescape = A.rbind('unescapeHTML', LiferayUtil, entities);
+	BBCodeUtil.escape = A.rbind('escapeHTML', LString, true, entities);
+	BBCodeUtil.unescape = A.rbind('unescapeHTML', LString, entities);
 }());;(function() {
 	var REGEX_BBCODE = /(?:\[((?:[a-z]|\*){1,16})(?:=([^\x00-\x1F"'\(\)<>\[\]]{1,2083}))?\])|(?:\[\/([a-z]{1,16})\])/ig;
 
@@ -123,14 +123,14 @@
 
 			var token;
 
-			while((token = lexer.getNextToken())) {
+			while ((token = lexer.getNextToken())) {
 				instance._handleData(token, data);
 
 				if (token[1]) {
 					instance._handleTagStart(token);
 
 					if (token[1].toLowerCase() == STR_TAG_CODE) {
-						while((token = lexer.getNextToken()) && token[3] != STR_TAG_CODE);
+						while ((token = lexer.getNextToken()) && token[3] != STR_TAG_CODE);
 
 						instance._handleData(token, data);
 
@@ -272,7 +272,6 @@
 	Liferay.BBCodeParser = Parser;
 })();;(function() {
 	var BBCodeUtil = Liferay.BBCodeUtil;
-	var Util = Liferay.Util;
 
 	var Parser = Liferay.BBCodeParser;
 
@@ -449,7 +448,7 @@
 			instance._stack = [];
 		},
 
-		_escapeHTML: Util.escapeHTML,
+		_escapeHTML: A.Lang.String.escapeHTML,
 
 		_extractData: function(toTagName, consume) {
 			var instance = this;
@@ -467,7 +466,7 @@
 					result.push(token.value);
 				}
 
-			} while((token.type != TOKEN_TAG_END) && (token.value != toTagName));
+			} while ((token.type != TOKEN_TAG_END) && (token.value != toTagName));
 
 			if (consume) {
 				instance._tokenPointer = index - 1;
@@ -607,7 +606,7 @@
 							value = STR_BLANK;
 					}
 				}
-				else if(REGEX_LASTCHAR_NEWLINE.test(value)) {
+				else if (REGEX_LASTCHAR_NEWLINE.test(value)) {
 					nextToken = instance._parsedData[instance._tokenPointer + 1];
 
 					if (nextToken &&

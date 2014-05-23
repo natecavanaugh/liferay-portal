@@ -1,6 +1,5 @@
 ;(function() {
 	var BBCodeUtil = Liferay.BBCodeUtil;
-	var Util = Liferay.Util;
 
 	var Parser = Liferay.BBCodeParser;
 
@@ -177,7 +176,7 @@
 			instance._stack = [];
 		},
 
-		_escapeHTML: Util.escapeHTML,
+		_escapeHTML: A.Lang.String.escapeHTML,
 
 		_extractData: function(toTagName, consume) {
 			var instance = this;
@@ -195,7 +194,7 @@
 					result.push(token.value);
 				}
 
-			} while((token.type != TOKEN_TAG_END) && (token.value != toTagName));
+			} while ((token.type != TOKEN_TAG_END) && (token.value != toTagName));
 
 			if (consume) {
 				instance._tokenPointer = index - 1;
@@ -335,7 +334,7 @@
 							value = STR_BLANK;
 					}
 				}
-				else if(REGEX_LASTCHAR_NEWLINE.test(value)) {
+				else if (REGEX_LASTCHAR_NEWLINE.test(value)) {
 					nextToken = instance._parsedData[instance._tokenPointer + 1];
 
 					if (nextToken &&

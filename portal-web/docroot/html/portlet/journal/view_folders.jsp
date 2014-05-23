@@ -247,6 +247,8 @@ else {
 
 							dataView.put("browse-by", "structure");
 							dataView.put("structure-id", ddmStructure.getStructureKey());
+
+							AssetRendererFactory assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(JournalArticle.class.getName());
 						%>
 
 							<liferay-portlet:renderURL varImpl="viewDDMStructureArticlesURL">
@@ -264,7 +266,7 @@ else {
 								cssClass="folder structure"
 								dataView="<%= dataView %>"
 								entryTitle="<%= ddmStructure.getName(locale) %>"
-								iconImage="icon-th-large"
+								iconImage="<%= assetRendererFactory.getIconCssClass() %>"
 								selected="<%= structureId.equals(ddmStructure.getStructureKey()) %>"
 								viewURL="<%= viewDDMStructureArticlesURL.toString() %>"
 							/>

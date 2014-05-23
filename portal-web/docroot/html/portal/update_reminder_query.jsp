@@ -74,17 +74,19 @@ if (referer.equals(themeDisplay.getPathMain() + "/portal/update_reminder_query")
 		reminderQueryQuestion.on(
 			'change',
 			function(event) {
+				var Util = Liferay.Util;
+
 				if (this.val() == '<%= UsersAdmin.CUSTOM_QUESTION %>') {
 					<c:if test="<%= PropsValues.USERS_REMINDER_QUERIES_CUSTOM_QUESTION_ENABLED %>">
 						customQuestionContainer.show();
 
-						Liferay.Util.focusFormField('#reminderQueryCustomQuestion');
+						Util.focusFormField('#reminderQueryCustomQuestion');
 					</c:if>
 				}
 				else {
 					customQuestionContainer.hide();
 
-					Liferay.Util.focusFormField('#reminderQueryAnswer');
+					Util.focusFormField('#reminderQueryAnswer');
 				}
 			}
 		);

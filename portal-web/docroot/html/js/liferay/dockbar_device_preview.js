@@ -2,11 +2,17 @@ AUI.add(
 	'liferay-dockbar-device-preview',
 	function(A) {
 		var AObject = A.Object;
-		var Dockbar = Liferay.Dockbar;
 		var Lang = A.Lang;
+
+		var Dockbar = Liferay.Dockbar;
 		var Util = Liferay.Util;
 
+		var isNumber = Lang.isNumber;
+		var sub = Lang.sub;
+		var toInt = Lang.toInt;
+
 		var BODY = A.getBody();
+		var WIN = A.config.win;
 
 		var CSS_SELECTED = 'selected';
 
@@ -55,8 +61,6 @@ AUI.add(
 
 		var TPL_DEVICE_SIZE_STATUS = '<div class="lfr-device-size-status"><span class="lfr-device-size-status-content"></span></div>';
 
-		var WIN = A.config.win;
-
 		var DevicePreview = A.Component.create(
 			{
 				AUGMENTS: [Liferay.PortletBase],
@@ -87,7 +91,7 @@ AUI.add(
 
 						instance._closePanelButton = instance.byId('closePanelPreview');
 
-						instance._devicePreviewNode = A.Node.create(Lang.sub(TPL_DEVICE_PREVIEW));
+						instance._devicePreviewNode = A.Node.create(sub(TPL_DEVICE_PREVIEW));
 
 						BODY.append(instance._devicePreviewNode);
 
@@ -182,7 +186,7 @@ AUI.add(
 							dialogWidth = device.height;
 						}
 
-						if (!Lang.isNumber(dialogWidth)) {
+						if (!isNumber(dialogWidth)) {
 							var widthNode = A.one(dialogWidth);
 
 							if (widthNode) {
@@ -195,7 +199,7 @@ AUI.add(
 							}
 						}
 
-						if (!Lang.isNumber(dialogHeight)) {
+						if (!isNumber(dialogHeight)) {
 							var heightNode = A.one(dialogHeight);
 
 							if (heightNode) {
@@ -222,7 +226,7 @@ AUI.add(
 					_openDeviceDialog: function(device, rotation) {
 						var instance = this;
 
-						var dialog = Liferay.Util.getWindow(instance._dialogId);
+						var dialog = Util.getWindow(instance._dialogId);
 
 						var dialogAttrs = instance._normalizeDialogAttrs(device, rotation);
 
@@ -244,7 +248,7 @@ AUI.add(
 								width: width
 							};
 
-							Liferay.Util.openWindow(
+							Util.openWindow(
 								{
 									cache: false,
 									dialog: A.merge(DIALOG_DEFAULTS, dialogConfig),
@@ -380,7 +384,7 @@ AUI.add(
 							inputWidth.val(offsetWidth);
 						}
 
-						var info = Lang.sub(
+						var info = sub(
 							TPL_DEVICE_SIZE_INFO,
 							{
 								height: offsetHeight,
@@ -404,7 +408,7 @@ AUI.add(
 
 						var sizeStatusContent = instance._sizeStatusContent;
 
-						var dialog = Liferay.Util.getWindow(instance._dialogId);
+						var dialog = Util.getWindow(instance._dialogId);
 
 						if (!sizeStatus) {
 							sizeStatus = A.Node.create(TPL_DEVICE_SIZE_STATUS);
@@ -422,7 +426,7 @@ AUI.add(
 
 						sizeStatus.addClass(dialog.resize.get('activeHandle'));
 
-						var deviceSizeInfo = Lang.sub(
+						var deviceSizeInfo = sub(
 							TPL_DEVICE_SIZE_INFO,
 							{
 								height: dialog.get('height'),
@@ -441,10 +445,10 @@ AUI.add(
 						var inputHeight = instance.get(STR_INPUT_HEIGHT).val();
 						var inputWidth = instance.get(STR_INPUT_WIDTH).val();
 
-						var height = Lang.toInt(inputHeight);
-						var width = Lang.toInt(inputWidth);
+						var height = toInt(inputHeight);
+						var width = toInt(inputWidth);
 
-						var dialog = Liferay.Util.getWindow(instance._dialogId);
+						var dialog = Util.getWindow(instance._dialogId);
 
 						instance._openDeviceDialog(
 							{

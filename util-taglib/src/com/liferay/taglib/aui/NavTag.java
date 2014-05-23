@@ -17,6 +17,7 @@ package com.liferay.taglib.aui;
 import com.liferay.portal.kernel.dao.search.DisplayTerms;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -60,9 +61,14 @@ public class NavTag extends BaseNavTag implements BodyTag {
 			String cssClass = getCssClass();
 
 			if (Validator.isNotNull(cssClass)) {
-				sb.append(StringPool.SPACE);
-				sb.append(cssClass);
-				sb.append("-btn");
+				String[] cssClassParts = StringUtil.split(
+					cssClass, CharPool.SPACE);
+
+				for (int i = 0; i < cssClassParts.length; i++) {
+					sb.append(StringPool.SPACE);
+					sb.append(cssClassParts[i]);
+					sb.append("-btn");
+				}
 			}
 
 			if (_hasSearchResults()) {

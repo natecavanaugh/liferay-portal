@@ -48,7 +48,7 @@ public class RandomTestUtil {
 	public static boolean randomBoolean() throws Exception {
 		return _random.nextBoolean();
 	}
-	
+
 	public static byte[] randomBytes() throws Exception {
 		String string = randomString();
 

@@ -2,14 +2,15 @@ AUI.add(
 	'liferay-portlet-dynamic-data-lists',
 	function(A) {
 		var AArray = A.Array;
+		var JSON = A.JSON;
+		var Lang = A.Lang;
 
 		var DateMath = A.DataType.DateMath;
 
-		var Lang = A.Lang;
-
-		var EMPTY_FN = A.Lang.emptyFn;
-
-		var JSON = A.JSON;
+		var LString = Lang.String;
+		var emptyFn = Lang.emptyFn;
+		var isArray = Lang.isArray;
+		var isNumber = Lang.isNumber;
 
 		var STR_DASH = '-';
 
@@ -125,7 +126,7 @@ AUI.add(
 						}
 
 						linkNode.setAttribute('href', url);
-						linkNode.setContent(Liferay.Util.escapeHTML(title));
+						linkNode.setContent(LString.escapeHTML(title));
 					},
 
 					_uiSetValue: function(val) {
@@ -230,7 +231,7 @@ AUI.add(
 								var values = {
 									id: A.guid(),
 									label: index,
-									value: Liferay.Util.escapeHTML(JSON.stringify(item))
+									value: LString.escapeHTML(JSON.stringify(item))
 								};
 
 								var optionsArray = publicOptions;
@@ -311,12 +312,12 @@ AUI.add(
 					},
 
 					recordsetId: {
-						validator: Lang.isNumber,
+						validator: isNumber,
 						value: 0
 					},
 
 					structure: {
-						validator: Lang.isArray,
+						validator: isArray,
 						value: []
 					}
 				},
@@ -377,7 +378,7 @@ AUI.add(
 					updateMinDisplayRows: function(minDisplayRows, callback) {
 						var instance = this;
 
-						callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+						callback = (callback && A.bind(callback, instance)) || emptyFn;
 
 						var recordsetId = instance.get('recordsetId');
 
@@ -448,7 +449,7 @@ AUI.add(
 									value = JSON.stringify(value);
 								}
 								else if ((type === 'radio') || (type === 'select')) {
-									if (!Lang.isArray(value)) {
+									if (!isArray(value)) {
 										value = AArray(value);
 									}
 
@@ -582,7 +583,7 @@ AUI.add(
 				addRecord: function(recordsetId, displayIndex, fieldsMap, callback) {
 					var instance = this;
 
-					callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+					callback = (callback && A.bind(callback, instance)) || emptyFn;
 
 					Liferay.Service(
 						'/ddlrecord/add-record',
@@ -703,7 +704,7 @@ AUI.add(
 
 									var numberValue = STR_EMPTY;
 
-									if (Lang.isNumber(number)) {
+									if (isNumber(number)) {
 										numberValue = number;
 									}
 
@@ -715,7 +716,7 @@ AUI.add(
 
 									var value = A.DataType.Number.parse(data[name]);
 
-									if (!Lang.isNumber(value)) {
+									if (!isNumber(value)) {
 										value = STR_EMPTY;
 									}
 
@@ -867,7 +868,7 @@ AUI.add(
 				updateRecord: function(recordId, displayIndex, fieldsMap, merge, callback) {
 					var instance = this;
 
-					callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+					callback = (callback && A.bind(callback, instance)) || emptyFn;
 
 					Liferay.Service(
 						'/ddlrecord/update-record',

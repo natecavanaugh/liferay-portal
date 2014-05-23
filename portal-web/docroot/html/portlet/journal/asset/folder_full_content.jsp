@@ -42,15 +42,23 @@ JournalFolder folder = (JournalFolder)request.getAttribute(WebKeys.JOURNAL_FOLDE
 			</c:if>
 
 			<div class="lfr-asset-metadata">
-				<div class="lfr-asset-icon lfr-asset-date">
+				<div class="icon-calendar lfr-asset-icon">
 					<%= LanguageUtil.format(pageContext, "last-updated-x", dateFormatDateTime.format(folder.getModifiedDate()), false) %>
 				</div>
 
-				<div class="lfr-asset-icon lfr-asset-subfolders">
+				<%
+				AssetRendererFactory journalFolderAssetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(JournalFolder.class.getName());
+				%>
+
+				<div class="<%= journalFolderAssetRendererFactory.getIconCssClass() %> lfr-asset-icon">
 					<%= foldersCount %> <liferay-ui:message key='<%= (foldersCount == 1) ? "subfolder" : "subfolders" %>' />
 				</div>
 
-				<div class="lfr-asset-icon lfr-asset-items last">
+				<%
+				AssetRendererFactory journalArticleAssetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(JournalArticle.class.getName());
+				%>
+
+				<div class="<%= journalArticleAssetRendererFactory.getIconCssClass() %> last lfr-asset-icon">
 					<%= entriesCount %> <liferay-ui:message key='<%= (entriesCount == 1) ? "article" : "articles" %>' />
 				</div>
 			</div>

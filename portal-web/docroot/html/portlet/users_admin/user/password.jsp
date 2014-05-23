@@ -160,6 +160,8 @@ else {
 			reminderQueryQuestion.on(
 				'change',
 				function(event) {
+					var Util = Liferay.Util;
+
 					if (event.target.val() == '<%= UsersAdmin.CUSTOM_QUESTION %>') {
 						var reminderQueryCustomQuestion = A.one('#<portlet:namespace />reminderQueryCustomQuestion');
 
@@ -179,14 +181,14 @@ else {
 						}
 						%>
 
-						Liferay.Util.focusFormField(reminderQueryCustomQuestion);
+						Util.focusFormField(reminderQueryCustomQuestion);
 					}
 					else {
 						if (customQuestionDiv) {
 							customQuestionDiv.hide();
 						}
 
-						Liferay.Util.focusFormField(A.one('#<portlet:namespace />reminderQueryAnswer'));
+						Util.focusFormField(A.one('#<portlet:namespace />reminderQueryAnswer'));
 					}
 				}
 			);

@@ -171,15 +171,23 @@ DLActionsDisplayContext dlActionsDisplayContext = new DLActionsDisplayContext(re
 								</div>
 
 								<div class="lfr-asset-metadata">
-									<div class="lfr-asset-icon lfr-asset-date">
+									<div class="icon-calendar lfr-asset-icon">
 										<%= LanguageUtil.format(pageContext, "last-updated-x", dateFormatDate.format(folder.getModifiedDate()), false) %>
 									</div>
 
-									<div class="lfr-asset-icon lfr-asset-subfolders">
+									<%
+									AssetRendererFactory dlFolderAssetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(DLFolder.class.getName());
+									%>
+
+									<div class="<%= dlFolderAssetRendererFactory.getIconCssClass() %> lfr-asset-icon">
 										<%= foldersCount %> <liferay-ui:message key='<%= (foldersCount == 1) ? "subfolder" : "subfolders" %>' />
 									</div>
 
-									<div class="lfr-asset-icon lfr-asset-items last">
+									<%
+									AssetRendererFactory dlFileEntryAssetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(DLFileEntry.class.getName());
+									%>
+
+									<div class="<%= dlFileEntryAssetRendererFactory.getIconCssClass() %> last lfr-asset-icon">
 										<%= imagesCount %> <liferay-ui:message key='<%= (imagesCount == 1) ? "image" : "images" %>' />
 									</div>
 								</div>
