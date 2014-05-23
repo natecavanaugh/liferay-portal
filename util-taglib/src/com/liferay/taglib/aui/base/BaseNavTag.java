@@ -61,6 +61,10 @@ public class BaseNavTag extends com.liferay.taglib.util.IncludeTag {
 		return _searchContainer;
 	}
 
+	public java.lang.String getType() {
+		return _type;
+	}
+
 	public boolean getUseNamespace() {
 		return _useNamespace;
 	}
@@ -107,6 +111,12 @@ public class BaseNavTag extends com.liferay.taglib.util.IncludeTag {
 		setScopedAttribute("searchContainer", searchContainer);
 	}
 
+	public void setType(java.lang.String type) {
+		_type = type;
+
+		setScopedAttribute("type", type);
+	}
+
 	public void setUseNamespace(boolean useNamespace) {
 		_useNamespace = useNamespace;
 
@@ -122,6 +132,7 @@ public class BaseNavTag extends com.liferay.taglib.util.IncludeTag {
 		_icon = null;
 		_id = null;
 		_searchContainer = null;
+		_type = "navbar-nav";
 		_useNamespace = true;
 	}
 
@@ -139,6 +150,7 @@ public class BaseNavTag extends com.liferay.taglib.util.IncludeTag {
 		setNamespacedAttribute(request, "icon", _icon);
 		setNamespacedAttribute(request, "id", _id);
 		setNamespacedAttribute(request, "searchContainer", _searchContainer);
+		setNamespacedAttribute(request, "type", _type);
 		setNamespacedAttribute(request, "useNamespace", _useNamespace);
 	}
 
@@ -154,6 +166,7 @@ public class BaseNavTag extends com.liferay.taglib.util.IncludeTag {
 	private java.lang.String _icon = null;
 	private java.lang.String _id = null;
 	private com.liferay.portal.kernel.dao.search.SearchContainer<?> _searchContainer = null;
+	private java.lang.String _type = "navbar-nav";
 	private boolean _useNamespace = true;
 
 }

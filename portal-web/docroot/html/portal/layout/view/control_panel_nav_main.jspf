@@ -22,7 +22,7 @@
 	if (portlets.size() > 1) {
 	%>
 
-		<aui:nav cssClass="control-panel-bar-secondary nav-pills">
+		<aui:nav cssClass="control-panel-bar-secondary nav-pills" type="nav-pills">
 
 			<%
 			for (Portlet curPortlet : portlets) {

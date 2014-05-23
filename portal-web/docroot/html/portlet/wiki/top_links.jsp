@@ -66,7 +66,7 @@ if (categoryId > 0) {
 
 <c:if test="<%= !print %>">
 	<c:if test="<%= (nodes.size() > 1) && portletName.equals(PortletKeys.WIKI) %>">
-		<aui:nav cssClass="nav-tabs">
+		<aui:nav type="nav-tabs">
 
 			<%
 			for (int i = 0; i < nodes.size(); i++) {

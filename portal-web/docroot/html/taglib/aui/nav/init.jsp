@@ -26,6 +26,7 @@ java.lang.String cssClass = GetterUtil.getString((java.lang.String)request.getAt
 java.lang.String icon = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav:icon"));
 java.lang.String id = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav:id"));
 com.liferay.portal.kernel.dao.search.SearchContainer<?> searchContainer = (com.liferay.portal.kernel.dao.search.SearchContainer<?>)request.getAttribute("aui:nav:searchContainer");
+java.lang.String type = GetterUtil.getString((java.lang.String)request.getAttribute("aui:nav:type"));
 boolean useNamespace = GetterUtil.getBoolean(String.valueOf(request.getAttribute("aui:nav:useNamespace")), true);
 Map<String, Object> dynamicAttributes = (Map<String, Object>)request.getAttribute("aui:nav:dynamicAttributes");
 Map<String, Object> scopedAttributes = (Map<String, Object>)request.getAttribute("aui:nav:scopedAttributes");
