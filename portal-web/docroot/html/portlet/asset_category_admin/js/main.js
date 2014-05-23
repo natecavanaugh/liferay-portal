@@ -971,7 +971,7 @@ AUI.add(
 
 											var auxItem = A.clone(item);
 
-											auxItem.titleCurrentValue = isString.escapeHTML(auxItem.titleCurrentValue);
+											auxItem.titleCurrentValue = LString.escapeHTML(auxItem.titleCurrentValue);
 
 											buffer.push(Lang.sub(TPL_VOCABULARY_LIST, auxItem));
 										}
@@ -1130,7 +1130,7 @@ AUI.add(
 										formatter: A.bind('_formatJSONResult', instance),
 										url: themeDisplay.getPathMain() + '/asset/get_categories'
 									},
-									label: isString.escapeHTML(item.titleCurrentValue),
+									label: LString.escapeHTML(item.titleCurrentValue),
 									paginator: paginatorConfig,
 									type: 'check',
 									on: {
