@@ -1,11 +1,13 @@
 AUI.add(
 	'liferay-upload',
 	function(A) {
-		var Lang = A.Lang;
 		var AArray = A.Array;
-		var UploaderQueue = A.Uploader.Queue;
+		var Lang = A.Lang;
+
+		var Util = Liferay.Util;
 
 		var formatSelectorNS = A.Node.formatSelectorNS;
+		var UploaderQueue = A.Uploader.Queue;
 
 		var STATUS_CODE = Liferay.STATUS_CODE;
 
@@ -581,7 +583,7 @@ AUI.add(
 					_onAllRowIdsClick: function(event) {
 						var instance = this;
 
-						Liferay.Util.checkAll(
+						Util.checkAll(
 							instance._fileListSelector,
 							instance._selectUploadedFileCheckboxId,
 							instance._allRowIdsCheckboxSelector
@@ -751,7 +753,7 @@ AUI.add(
 						var instance = this;
 
 						if (instance.get('multipleFiles')) {
-							Liferay.Util.checkAllBox(
+							Util.checkAllBox(
 								instance._fileListSelector,
 								instance._selectUploadedFileCheckboxId,
 								instance._allRowIdsCheckboxSelector
@@ -1026,8 +1028,8 @@ AUI.add(
 								},
 								selectFilesButton: instance._selectFilesButton,
 								simLimit: 2,
-								swfURL: Liferay.Util.addParams(timestampParam, URL_SWF_UPLOADER),
-								uploadURL: Liferay.Util.addParams(timestampParam, instance.get('uploadFile'))
+								swfURL: Util.addParams(timestampParam, URL_SWF_UPLOADER),
+								uploadURL: Util.addParams(timestampParam, instance.get('uploadFile'))
 							}
 						).render();
 

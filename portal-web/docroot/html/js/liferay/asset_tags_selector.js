@@ -1,9 +1,13 @@
 AUI.add(
 	'liferay-asset-tags-selector',
 	function(A) {
+		var AArray = A.Array;
 		var Lang = A.Lang;
 
-		var AArray = A.Array;
+		var Util = Liferay.Util;
+
+		var isString = Lang.isString;
+		var LString = Lang.String;
 
 		var NAME = 'tagselector';
 
@@ -111,7 +115,7 @@ AUI.add(
 						setter: function(value) {
 							var instance = this;
 
-							if (Lang.isString(value)) {
+							if (isString(value)) {
 								value = value.split(',');
 							}
 
@@ -130,7 +134,7 @@ AUI.add(
 
 					groupIds: {
 						setter: '_setGroupIds',
-						validator: Lang.isString
+						validator: isString
 					},
 
 					guid: {
@@ -213,7 +217,7 @@ AUI.add(
 					_addEntries: function() {
 						var instance = this;
 
-						var text = Lang.String.escapeHTML(instance.inputNode.val());
+						var text = LString.escapeHTML(instance.inputNode.val());
 
 						if (text) {
 							if (text.indexOf(',') > -1) {
@@ -231,7 +235,7 @@ AUI.add(
 							}
 						}
 
-						Liferay.Util.focusFormField(instance.inputNode);
+						Util.focusFormField(instance.inputNode);
 					},
 
 					_bindTagsSelector: function() {
@@ -258,7 +262,7 @@ AUI.add(
 						var instance = this;
 
 						if (!instance._popup) {
-							var popup = Liferay.Util.Window.getWindow(
+							var popup = Util.Window.getWindow(
 								{
 									dialog: {
 										cssClass: CSS_POPUP,
@@ -546,8 +550,8 @@ AUI.add(
 							context = String(context);
 						}
 
-						context = Lang.String.stripTags(context);
-						context = Lang.String.escapeHTML(context);
+						context = LString.stripTags(context);
+						context = LString.escapeHTML(context);
 
 						var query = Lang.sub(TPL_SUGGESTIONS_QUERY, [context]);
 

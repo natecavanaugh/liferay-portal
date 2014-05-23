@@ -3,16 +3,21 @@ AUI.add(
 	function(A) {
 		var Lang = A.Lang;
 
+		var Util = Liferay.Util;
+
+		var isNumber = Lang.isNumber;
+		var isString = Lang.isString;
+
 		var LogoEditor = A.Component.create(
 			{
 				ATTRS: {
 					aspectRatio: {
-						validator: Lang.isNumber,
+						validator: isNumber,
 						value: null
 					},
 
 					maxFileSize: {
-						validator: Lang.isNumber
+						validator: isNumber
 					},
 
 					preserveRatio: {
@@ -20,12 +25,12 @@ AUI.add(
 					},
 
 					previewURL: {
-						validator: Lang.isString,
+						validator: isString,
 						value: null
 					},
 
 					uploadURL: {
-						validator: Lang.isString,
+						validator: isString,
 						value: null
 					}
 				},
@@ -116,8 +121,8 @@ AUI.add(
 							if (responseText.tempImageFileName) {
 								var previewURL = instance.get('previewURL');
 
-								previewURL = Liferay.Util.addParams(instance.get('namespace') + 'tempImageFileName=' + responseText.tempImageFileName, previewURL);
-								previewURL = Liferay.Util.addParams('t=' + Lang.now(), previewURL);
+								previewURL = Util.addParams(instance.get('namespace') + 'tempImageFileName=' + responseText.tempImageFileName, previewURL);
+								previewURL = Util.addParams('t=' + Lang.now(), previewURL);
 
 								portraitPreviewImg.attr('src', previewURL);
 
@@ -134,7 +139,7 @@ AUI.add(
 
 						instance._getMessageNode().remove();
 
-						Liferay.Util.toggleDisabled(instance._submitButton, true);
+						Util.toggleDisabled(instance._submitButton, true);
 					},
 
 					_getImgNaturalSize: function(img) {
@@ -276,7 +281,7 @@ AUI.add(
 
 							instance._setCropBackgroundSize(portraitPreviewImgWidth, portraitPreviewImgHeight);
 
-							Liferay.Util.toggleDisabled(instance._submitButton, false);
+							Util.toggleDisabled(instance._submitButton, false);
 						}
 					},
 

@@ -3,14 +3,16 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 		var Lang = A.Lang;
-		var LString = Lang.String;
+
 		var HistoryManager = Liferay.HistoryManager;
+		var Util = Liferay.Util;
+
 		var UploaderQueue = A.Uploader.Queue;
 
 		var sub = Lang.sub;
+		var LString = Lang.String;
 
 		var DOC = A.config.doc;
-
 		var UA = A.UA;
 
 		var CSS_ACTIVE_AREA = 'active-area';
@@ -1132,7 +1134,7 @@ AUI.add(
 				var link = node.one(selector);
 
 				if (link) {
-					link.attr('href', Liferay.Util.addParams(id, instance._viewFileEntryURL));
+					link.attr('href', Util.addParams(id, instance._viewFileEntryURL));
 				}
 			},
 

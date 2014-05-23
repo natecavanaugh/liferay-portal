@@ -787,7 +787,7 @@ String selectStyle = (String)request.getAttribute("configuration.jsp-selectStyle
 
 		var ddmStructureFieldMessage = A.one('#<portlet:namespace />' + className + 'ddmStructureFieldMessage');
 
-		ddmStructureFieldMessage.html(A.Lang.escapeHTML(message));
+		ddmStructureFieldMessage.html(A.Lang.String.escapeHTML(message));
 	}
 </aui:script>
 

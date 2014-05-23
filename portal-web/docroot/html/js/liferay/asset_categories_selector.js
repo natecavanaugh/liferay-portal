@@ -1,15 +1,16 @@
 AUI.add(
 	'liferay-asset-categories-selector',
 	function(A) {
+		var AObject = A.Object;
 		var Lang = A.Lang;
 
-		var AObject = A.Object;
+		var emptyFn = Lang.emptyFn;
+		var isString = Lang.isString;
+		var LString = Lang.String;
 
 		var BOUNDING_BOX = 'boundingBox';
 
 		var CSS_TAGS_LIST = 'lfr-categories-selector-list';
-
-		var EMPTY_FN = Lang.emptyFn;
 
 		var ID = 'id';
 
@@ -73,7 +74,7 @@ AUI.add(
 						setter: function(value) {
 							var instance = this;
 
-							if (Lang.isString(value)) {
+							if (isString(value)) {
 								value = value.split('_CATEGORY_');
 							}
 
@@ -86,7 +87,7 @@ AUI.add(
 						setter: function(value) {
 							var instance = this;
 
-							if (Lang.isString(value)) {
+							if (isString(value)) {
 								value = value.split(',');
 							}
 
@@ -126,7 +127,7 @@ AUI.add(
 						setter: function(value) {
 							var instance = this;
 
-							if (Lang.isString(value) && value) {
+							if (isString(value) && value) {
 								value = value.split(',');
 							}
 
@@ -139,7 +140,7 @@ AUI.add(
 						setter: function(value) {
 							var instance = this;
 
-							if (Lang.isString(value) && value) {
+							if (isString(value) && value) {
 								value = value.split(',');
 							}
 
@@ -203,7 +204,7 @@ AUI.add(
 						);
 					},
 
-					_afterTBLFocusedChange: EMPTY_FN,
+					_afterTBLFocusedChange: emptyFn,
 
 					_applyARIARoles: function() {
 						var instance = this;
@@ -218,7 +219,7 @@ AUI.add(
 						}
 					},
 
-					_bindTagsSelector: EMPTY_FN,
+					_bindTagsSelector: emptyFn,
 
 					_clearEntries: function() {
 						var instance = this;
@@ -255,7 +256,7 @@ AUI.add(
 									},
 									checked: checked,
 									id: treeId,
-									label: Lang.String.escapeHTML(item.titleCurrentValue),
+									label: LString.escapeHTML(item.titleCurrentValue),
 									leaf: !item.hasChildren,
 									paginator: instance._getPaginatorConfig(item),
 									type: type
@@ -422,10 +423,10 @@ AUI.add(
 					_isValidString: function(value) {
 						var instance = this;
 
-						return Lang.isString(value) && value.length;
+						return isString(value) && value.length;
 					},
 
-					_onBoundingBoxClick: EMPTY_FN,
+					_onBoundingBoxClick: emptyFn,
 
 					_onCheckboxCheck: function(event) {
 						var instance = this;
@@ -454,7 +455,7 @@ AUI.add(
 
 						entry[matchKey] = entryMatchKey;
 
-						entry.value = Lang.String.unescapeHTML(entry.value);
+						entry.value = LString.unescapeHTML(entry.value);
 
 						instance.entries.add(entry);
 					},
@@ -656,7 +657,7 @@ AUI.add(
 						var instance = this;
 
 						var popup = instance._popup;
-						var vocabularyTitle = Lang.String.escapeHTML(item.titleCurrentValue);
+						var vocabularyTitle = LString.escapeHTML(item.titleCurrentValue);
 						var vocabularyId = item.vocabularyId;
 
 						if (item.groupId == themeDisplay.getCompanyGroupId()) {

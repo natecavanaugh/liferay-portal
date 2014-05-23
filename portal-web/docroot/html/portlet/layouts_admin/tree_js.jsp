@@ -41,10 +41,10 @@ if (!selectableTree) {
 %>
 
 <aui:script use="<%= modules %>">
-	var Lang = A.Lang;
 	var AArray = A.Array;
+	var Lang = A.Lang;
 
-	var Util = Liferay.Util;
+	var LString = Lang.String;
 
 	var GET_LAYOUTS_URL = themeDisplay.getPathMain() + '/layouts_admin/get_layouts';
 
@@ -153,7 +153,7 @@ if (!selectableTree) {
 				}
 			);
 
-			return '<a class="' + className + '" data-uuid="' + Lang.String.escapeHTML(data.uuid) + '" href="' + href + '" id="' + Lang.String.escapeHTML(data.id) + '" title="' + data.title + '">' + data.label + '</a>';
+			return '<a class="' + className + '" data-uuid="' + LString.escapeHTML(data.uuid) + '" href="' + href + '" id="' + LString.escapeHTML(data.id) + '" title="' + data.title + '">' + data.label + '</a>';
 		},
 
 		extractGroupId: function(node) {
@@ -325,14 +325,14 @@ if (!selectableTree) {
 					var cssClass = '';
 					var title = '';
 
-					newNode.label = Lang.String.escapeHTML(node.name);
+					newNode.label = LString.escapeHTML(node.name);
 
 					if (node.layoutRevisionId) {
 						if (!node.layoutRevisionHead) {
 							title = '<%= UnicodeLanguageUtil.get(pageContext, "there-is-not-a-version-of-this-page-marked-as-ready-for-publication") %>';
 						}
 						else if (node.layoutBranchName) {
-							node.layoutBranchName = Lang.String.escapeHTML(node.layoutBranchName);
+							node.layoutBranchName = LString.escapeHTML(node.layoutBranchName);
 
 							newNode.label += Lang.sub(' <span class="layout-branch-name" title="<%= UnicodeLanguageUtil.get(pageContext, "this-is-the-page-variation-that-is-marked-as-ready-for-publication") %>">[{layoutBranchName}]</span>', node);
 						}
@@ -580,7 +580,7 @@ if (!selectableTree) {
 		<c:if test="<%= !checkContentDisplayPage %>">
 			rootLabel = TreeUtil.createLink(
 				{
-					label: Lang.String.escapeHTML(rootLabel),
+					label: LString.escapeHTML(rootLabel),
 					plid: TreeUtil.DEFAULT_PARENT_LAYOUT_ID
 				}
 			);

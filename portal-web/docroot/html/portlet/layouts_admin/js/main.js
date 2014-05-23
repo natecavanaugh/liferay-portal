@@ -1,9 +1,10 @@
 AUI.add(
 	'liferay-export-import',
 	function(A) {
+		var ADate = A.Date;
 		var Lang = A.Lang;
 
-		var ADate = A.Date;
+		var UtilWindow = Liferay.Util.Window;
 
 		var FAILURE_TIMEOUT = 10000;
 
@@ -252,7 +253,7 @@ AUI.add(
 						if (!configurationDialog) {
 							configurationNode.show();
 
-							configurationDialog = Liferay.Util.Window.getWindow(
+							configurationDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: configurationNode,
@@ -309,7 +310,7 @@ AUI.add(
 						if (!contentDialog) {
 							contentNode.show();
 
-							contentDialog = Liferay.Util.Window.getWindow(
+							contentDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: contentNode,
@@ -366,7 +367,7 @@ AUI.add(
 
 							contentOptionsNode.show();
 
-							contentOptionsDialog = Liferay.Util.Window.getWindow(
+							contentOptionsDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: contentOptionsNode,
@@ -423,7 +424,7 @@ AUI.add(
 
 							globalConfigurationNode.show();
 
-							globalConfigurationDialog = Liferay.Util.Window.getWindow(
+							globalConfigurationDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: globalConfigurationNode,
@@ -480,7 +481,7 @@ AUI.add(
 
 							globalContentNode.show();
 
-							globalContentDialog = Liferay.Util.Window.getWindow(
+							globalContentDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: globalContentNode,
@@ -537,7 +538,7 @@ AUI.add(
 
 							pagesNode.show();
 
-							pagesDialog = Liferay.Util.Window.getWindow(
+							pagesDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: pagesNode,
@@ -596,7 +597,7 @@ AUI.add(
 
 							rangeNode.show();
 
-							rangeDialog = Liferay.Util.Window.getWindow(
+							rangeDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: rangeNode,
@@ -716,7 +717,7 @@ AUI.add(
 
 							remoteNode.show();
 
-							remoteDialog = Liferay.Util.Window.getWindow(
+							remoteDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: remoteNode,
@@ -773,7 +774,7 @@ AUI.add(
 
 							scheduledPublishingEventsNode.show();
 
-							scheduledPublishingEventsDialog = Liferay.Util.Window.getWindow(
+							scheduledPublishingEventsDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: scheduledPublishingEventsNode,

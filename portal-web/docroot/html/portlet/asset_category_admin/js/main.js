@@ -3,13 +3,18 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 		var AObject = A.Object;
-		var HistoryManager = Liferay.HistoryManager;
 		var JSON = A.JSON;
 		var Lang = A.Lang;
 		var Node = A.Node;
+
+		var HistoryManager = Liferay.HistoryManager;
 		var Util = Liferay.Util;
 
+		var UtilWindow = Util.Window;
+
 		var owns = AObject.owns;
+
+		var LString = Lang.String;
 		var toInt = Lang.toInt;
 
 		var ACTION_ADD = 0;
@@ -638,7 +643,7 @@ AUI.add(
 					_createPanelEdit: function(config) {
 						var instance = this;
 
-						instance._panelEdit = Liferay.Util.Window.getWindow(
+						instance._panelEdit = UtilWindow.getWindow(
 							{
 								dialog: {
 									align: instance._dialogAlignConfig,
@@ -674,7 +679,7 @@ AUI.add(
 						var panelPermissionsChange = instance._panelPermissionsChange;
 
 						if (!panelPermissionsChange) {
-							panelPermissionsChange = Util.Window.getWindow(
+							panelPermissionsChange = UtilWindow.getWindow(
 								{
 									dialog: {
 										align: instance._dialogAlignConfig,
@@ -976,7 +981,7 @@ AUI.add(
 
 											var auxItem = A.clone(item);
 
-											auxItem.titleCurrentValue = Lang.String.escapeHTML(auxItem.titleCurrentValue);
+											auxItem.titleCurrentValue = LString.escapeHTML(auxItem.titleCurrentValue);
 
 											buffer.push(Lang.sub(TPL_VOCABULARY_LIST, auxItem));
 										}
@@ -1102,7 +1107,7 @@ AUI.add(
 										formatter: A.bind('_formatJSONResult', instance),
 										url: themeDisplay.getPathMain() + '/asset/get_categories'
 									},
-									label: Lang.String.escapeHTML(item.titleCurrentValue),
+									label: LString.escapeHTML(item.titleCurrentValue),
 									on: {
 										checkedChange: function(event) {
 											if (event.newVal) {
