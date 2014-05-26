@@ -14,7 +14,7 @@
  */
 --%>
 
-<div class="col-md-12">
+<div class="control-panel-bar-secondary">
 
 	<%
 	List<Portlet> portlets = PortalUtil.getControlPanelPortlets(controlPanelCategory, themeDisplay);
@@ -22,7 +22,7 @@
 	if (portlets.size() > 1) {
 	%>
 
-		<aui:nav cssClass="control-panel-bar-secondary nav-pills" type="nav-pills">
+		<aui:nav cssClass="nav-pills" type="nav-pills">
 
 			<%
 			for (Portlet curPortlet : portlets) {
