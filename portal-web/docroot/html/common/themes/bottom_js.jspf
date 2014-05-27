@@ -185,8 +185,8 @@ if (layout != null) {
 	</c:if>
 </aui:script>
 
-<div id="bottomJs">
-	<div id="bottomJs-default">
+<div id="bottomJS">
+	<div id="bottomJS-defaultScreen">
 		<c:if test="<%= PropsValues.JAVASCRIPT_SINGLE_PAGE_APPLICATION_ENABLED %>">
 
 			<aui:script use="liferay-surface-app">

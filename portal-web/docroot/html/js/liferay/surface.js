@@ -3,6 +3,8 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 
+		A.Surface.DEFAULT = 'defaultScreen';
+
 		var Surface = {
 			app: null,
 
@@ -79,7 +81,7 @@ AUI.add(
 
 				var surfaces = instance.getPortletBoundaryIds(instance.getAllowedPortletIds());
 
-				surfaces.push('bottomJs');
+				surfaces.push('bottomJS');
 				surfaces.push('breadcrumbs');
 
 				return surfaces;
