@@ -155,7 +155,19 @@
 				password.on(
 					'keypress',
 					function(event) {
-						Liferay.Util.showCapsLock(event, '<portlet:namespace />passwordCapsLockSpan');
+						var keyCode = event.keyCode ? event.keyCode : event.which;
+						var shiftKey = event.shiftKey ? event.shiftKey : ((keyCode == 16) ? true : false);
+
+						var node = A.one('#<portlet:namespace />passwordCapsLockSpan');
+
+						if (((keyCode >= 65 && keyCode <= 90) && !shiftKey) ||
+							((keyCode >= 97 && keyCode <= 122) && shiftKey)) {
+
+							node.show();
+						}
+						else {
+							node.hide();
+						}
 					}
 				);
 			}

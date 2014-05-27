@@ -20,13 +20,15 @@ CKEDITOR.dialog.add(
 			var audioUrl = audioNode.getAttribute('data-audio-url');
 
 			if (id === 'url') {
+				var Util = Liferay.Util;
+
 				audioNode.setAttribute('data-document-url', value);
 
-				audioUrl = Liferay.Util.addParams('audioPreview=1&type=mp3', value);
+				audioUrl = Util.addParams('audioPreview=1&type=mp3', value);
 
 				audioNode.setAttribute('data-audio-url', audioUrl);
 
-				audioOggUrl = Liferay.Util.addParams('audioPreview=1&type=ogg', value);
+				audioOggUrl = Util.addParams('audioPreview=1&type=ogg', value);
 
 				audioNode.setAttribute('data-audio-ogg-url', audioOggUrl);
 
@@ -62,9 +64,6 @@ CKEDITOR.dialog.add(
 		}
 
 		return {
-			minHeight: 200,
-			minWidth: 400,
-
 			contents: [
 				{
 					elements:
@@ -100,7 +99,15 @@ CKEDITOR.dialog.add(
 				}
 			],
 
-			title: Liferay.Language.get('audio-properties'),
+			minHeight: 200,
+
+			minWidth: 400,
+
+			onOk: function() {
+				var instance = this;
+
+				editor.plugins.media.onOkCallback(instance, editor, 'audio');
+			},
 
 			onShow: function() {
 				var instance = this;
@@ -108,11 +115,7 @@ CKEDITOR.dialog.add(
 				editor.plugins.media.onShowCallback(instance, editor, 'audio');
 			},
 
-			onOk: function() {
-				var instance = this;
-
-				editor.plugins.media.onOkCallback(instance, editor, 'audio');
-			}
+			title: Liferay.Language.get('audio-properties')
 		};
 	}
 );

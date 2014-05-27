@@ -1,9 +1,10 @@
 AUI.add(
 	'liferay-export-import',
 	function(A) {
+		var ADate = A.Date;
 		var Lang = A.Lang;
 
-		var ADate = A.Date;
+		var UtilWindow = Liferay.Util.Window;
 
 		var FAILURE_TIMEOUT = 10000;
 
@@ -44,9 +45,9 @@ AUI.add(
 					ratingsNode: defaultConfig,
 					remoteAddressNode: defaultConfig,
 					remoteDeletePortletDataNode: defaultConfig,
-					remotePortNode: defaultConfig,
-					remotePathContextNode: defaultConfig,
 					remoteGroupIdNode: defaultConfig,
+					remotePathContextNode: defaultConfig,
+					remotePortNode: defaultConfig,
 					secureConnectionNode: defaultConfig,
 					setupNode: defaultConfig,
 					themeReferenceNode: defaultConfig,
@@ -252,7 +253,7 @@ AUI.add(
 						if (!configurationDialog) {
 							configurationNode.show();
 
-							configurationDialog = Liferay.Util.Window.getWindow(
+							configurationDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: configurationNode,
@@ -263,6 +264,7 @@ AUI.add(
 										toolbars: {
 											footer: [
 												{
+													label: Liferay.Language.get('ok'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
@@ -272,18 +274,17 @@ AUI.add(
 															configurationDialog.hide();
 														}
 													},
-													label: Liferay.Language.get('ok'),
 													primary: true
 												},
 												{
+													label: Liferay.Language.get('cancel'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
 
 															configurationDialog.hide();
 														}
-													},
-													label: Liferay.Language.get('cancel')
+													}
 												}
 											]
 										},
@@ -309,7 +310,7 @@ AUI.add(
 						if (!contentDialog) {
 							contentNode.show();
 
-							contentDialog = Liferay.Util.Window.getWindow(
+							contentDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: contentNode,
@@ -320,6 +321,7 @@ AUI.add(
 										toolbars: {
 											footer: [
 												{
+													label: Liferay.Language.get('ok'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
@@ -329,18 +331,17 @@ AUI.add(
 															contentDialog.hide();
 														}
 													},
-													label: Liferay.Language.get('ok'),
 													primary: true
 												},
 												{
+													label: Liferay.Language.get('cancel'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
 
 															contentDialog.hide();
 														}
-													},
-													label: Liferay.Language.get('cancel')
+													}
 												}
 											]
 										},
@@ -366,7 +367,7 @@ AUI.add(
 
 							contentOptionsNode.show();
 
-							contentOptionsDialog = Liferay.Util.Window.getWindow(
+							contentOptionsDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: contentOptionsNode,
@@ -377,6 +378,7 @@ AUI.add(
 										toolbars: {
 											footer: [
 												{
+													label: Liferay.Language.get('ok'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
@@ -386,18 +388,17 @@ AUI.add(
 															contentOptionsDialog.hide();
 														}
 													},
-													label: Liferay.Language.get('ok'),
 													primary: true
 												},
 												{
+													label: Liferay.Language.get('cancel'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
 
 															contentOptionsDialog.hide();
 														}
-													},
-													label: Liferay.Language.get('cancel')
+													}
 												}
 											]
 										},
@@ -423,7 +424,7 @@ AUI.add(
 
 							globalConfigurationNode.show();
 
-							globalConfigurationDialog = Liferay.Util.Window.getWindow(
+							globalConfigurationDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: globalConfigurationNode,
@@ -434,6 +435,7 @@ AUI.add(
 										toolbars: {
 											footer: [
 												{
+													label: Liferay.Language.get('ok'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
@@ -443,18 +445,17 @@ AUI.add(
 															globalConfigurationDialog.hide();
 														}
 													},
-													label: Liferay.Language.get('ok'),
 													primary: true
 												},
 												{
+													label: Liferay.Language.get('cancel'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
 
 															globalConfigurationDialog.hide();
 														}
-													},
-													label: Liferay.Language.get('cancel')
+													}
 												}
 											]
 										},
@@ -480,7 +481,7 @@ AUI.add(
 
 							globalContentNode.show();
 
-							globalContentDialog = Liferay.Util.Window.getWindow(
+							globalContentDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: globalContentNode,
@@ -491,6 +492,7 @@ AUI.add(
 										toolbars: {
 											footer: [
 												{
+													label: Liferay.Language.get('ok'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
@@ -500,18 +502,17 @@ AUI.add(
 															globalContentDialog.hide();
 														}
 													},
-													label: Liferay.Language.get('ok'),
 													primary: true
 												},
 												{
+													label: Liferay.Language.get('cancel'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
 
 															globalContentDialog.hide();
 														}
-													},
-													label: Liferay.Language.get('cancel')
+													}
 												}
 											]
 										},
@@ -537,7 +538,7 @@ AUI.add(
 
 							pagesNode.show();
 
-							pagesDialog = Liferay.Util.Window.getWindow(
+							pagesDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: pagesNode,
@@ -548,6 +549,7 @@ AUI.add(
 										toolbars: {
 											footer: [
 												{
+													label: Liferay.Language.get('ok'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
@@ -559,18 +561,17 @@ AUI.add(
 															pagesDialog.hide();
 														}
 													},
-													label: Liferay.Language.get('ok'),
 													primary: true
 												},
 												{
+													label: Liferay.Language.get('cancel'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
 
 															pagesDialog.hide();
 														}
-													},
-													label: Liferay.Language.get('cancel')
+													}
 												}
 											]
 										},
@@ -596,7 +597,7 @@ AUI.add(
 
 							rangeNode.show();
 
-							rangeDialog = Liferay.Util.Window.getWindow(
+							rangeDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: rangeNode,
@@ -607,6 +608,7 @@ AUI.add(
 										toolbars: {
 											footer: [
 												{
+													label: Liferay.Language.get('ok'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
@@ -679,18 +681,17 @@ AUI.add(
 															}
 														}
 													},
-													label: Liferay.Language.get('ok'),
 													primary: true
 												},
 												{
+													label: Liferay.Language.get('cancel'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
 
 															rangeDialog.hide();
 														}
-													},
-													label: Liferay.Language.get('cancel')
+													}
 												}
 											]
 										},
@@ -716,7 +717,7 @@ AUI.add(
 
 							remoteNode.show();
 
-							remoteDialog = Liferay.Util.Window.getWindow(
+							remoteDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: remoteNode,
@@ -727,6 +728,7 @@ AUI.add(
 										toolbars: {
 											footer: [
 												{
+													label: Liferay.Language.get('ok'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
@@ -736,18 +738,17 @@ AUI.add(
 															remoteDialog.hide();
 														}
 													},
-													label: Liferay.Language.get('ok'),
 													primary: true
 												},
 												{
+													label: Liferay.Language.get('cancel'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
 
 															remoteDialog.hide();
 														}
-													},
-													label: Liferay.Language.get('cancel')
+													}
 												}
 											]
 										},
@@ -773,25 +774,25 @@ AUI.add(
 
 							scheduledPublishingEventsNode.show();
 
-							scheduledPublishingEventsDialog = Liferay.Util.Window.getWindow(
+							scheduledPublishingEventsDialog = UtilWindow.getWindow(
 								{
 									dialog: {
 										bodyContent: scheduledPublishingEventsNode,
-										height: 300,
 										centered: true,
+										height: 300,
 										modal: true,
 										render: instance.get('form'),
 										toolbars: {
 											footer: [
 												{
+													label: Liferay.Language.get('close'),
 													on: {
 														click: function(event) {
 															event.domEvent.preventDefault();
 
 															scheduledPublishingEventsDialog.hide();
 														}
-													},
-													label: Liferay.Language.get('close')
+													}
 												}
 											]
 										},
@@ -862,41 +863,41 @@ AUI.add(
 
 							var portletURL = Liferay.PortletURL.createURL(redirectNode.val());
 
-							portletURL.setParameter("cmd", cmdNode.val());
+							portletURL.setParameter('cmd', cmdNode.val());
 
 							if (instance._exportLAR) {
-								portletURL.setParameter("struts_action", "/group_pages/edit_export_configuration");
-								portletURL.setParameter("tabs2", "new-export-process");
-								portletURL.setParameter("exportConfigurationButtons", "custom");
+								portletURL.setParameter('struts_action', '/group_pages/edit_export_configuration');
+								portletURL.setParameter('tabs2', 'new-export-process');
+								portletURL.setParameter('exportConfigurationButtons', 'custom');
 							}
 							else {
-								portletURL.setParameter("struts_action", "/layouts_admin/edit_publish_configuration");
-								portletURL.setParameter("tabs2", "new-publication-process");
-								portletURL.setParameter("publishConfigurationButtons", "custom");
+								portletURL.setParameter('struts_action', '/layouts_admin/edit_publish_configuration');
+								portletURL.setParameter('tabs2', 'new-publication-process');
+								portletURL.setParameter('publishConfigurationButtons', 'custom');
 							}
 
 							var groupIdNode = instance.byId('groupId');
 
 							if (groupIdNode) {
-								portletURL.setParameter("groupId", groupIdNode.val());
+								portletURL.setParameter('groupId', groupIdNode.val());
 							}
 
 							var liveGroupIdNode = instance.byId('liveGroupId');
 
 							if (liveGroupIdNode) {
-								portletURL.setParameter("liveGroupId", liveGroupIdNode.val());
+								portletURL.setParameter('liveGroupId', liveGroupIdNode.val());
 							}
 
 							var privateLayoutNode = instance.byId('privateLayout');
 
 							if (privateLayoutNode) {
-								portletURL.setParameter("privateLayout", privateLayoutNode.val());
+								portletURL.setParameter('privateLayout', privateLayoutNode.val());
 							}
 
 							var rootNodeNameNode = instance.byId('rootNodeName');
 
 							if (rootNodeNameNode) {
-								portletURL.setParameter("rootNodeName", rootNodeNameNode.val());
+								portletURL.setParameter('rootNodeName', rootNodeNameNode.val());
 							}
 
 							redirectNode.val(portletURL.toString());

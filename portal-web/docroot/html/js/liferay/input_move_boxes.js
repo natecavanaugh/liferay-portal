@@ -37,11 +37,9 @@ AUI.add(
 		var InputMoveBoxes = A.Component.create(
 			{
 				ATTRS: {
-					leftReorder: {
-					},
+					leftReorder: {},
 
-					rightReorder: {
-					},
+					rightReorder: {},
 
 					strings: {
 						LEFT_MOVE_DOWN: '',
@@ -94,6 +92,37 @@ AUI.add(
 						instance._rightBox.on('focus', A.rbind('_onSelectFocus', instance, instance._leftBox));
 					},
 
+					sortBox: function(box) {
+						var newBox = [];
+
+						var options = box.all('option');
+
+						for (var i = 0; i < options.size(); i++) {
+							newBox[i] = [options.item(i).val(), options.item(i).text()];
+						}
+
+						newBox.sort(Util.sortByAscending);
+
+						var boxObj = A.one(box);
+
+						boxObj.all('option').remove(true);
+
+						A.each(
+							newBox,
+							function(item, index, collection) {
+								boxObj.append('<option value="' + item[0] + '">' + item[1] + '</option>');
+							}
+						);
+
+						if (Browser.isIe()) {
+							var currentWidth = boxObj.getStyle('width');
+
+							if (currentWidth == 'auto') {
+								boxObj.setStyle('width', 'auto');
+							}
+						}
+					},
+
 					_afterMoveClick: function(event) {
 						var instance = this;
 
@@ -137,7 +166,32 @@ AUI.add(
 					},
 
 					_moveItem: function(from, to, sort) {
-						Util.moveItem(from, to, sort);
+						var instance = this;
+
+						var fromBox = A.one(from);
+						var toBox = A.one(to);
+
+						var selectedIndex = fromBox.get('selectedIndex');
+
+						var selectedOption;
+
+						if (selectedIndex >= 0) {
+							var options = fromBox.all('option');
+
+							selectedOption = options.item(selectedIndex);
+
+							options.each(
+								function(item, index, collection) {
+									if (item.get('selected')) {
+										toBox.append(item);
+									}
+								}
+							);
+						}
+
+						if (selectedOption && selectedOption.text() !== '' && sort === true) {
+							instance.sortBox(toBox);
+						}
 
 						Liferay.fire(
 							NAME + ':moveItem',
@@ -181,22 +235,22 @@ AUI.add(
 											{
 												cssClass: 'move-left',
 												icon: 'icon-circle-arrow-right',
-												title: strings.MOVE_LEFT,
 												on: {
 													click: function(event) {
 														event.domEvent.preventDefault();
 													}
-												}
+												},
+												title: strings.MOVE_LEFT
 											},
 											{
 												cssClass: 'move-right',
 												icon: 'icon-circle-arrow-left',
-												title: strings.MOVE_RIGHT,
 												on: {
 													click: function(event) {
 														event.domEvent.preventDefault();
 													}
-												}
+												},
+												title: strings.MOVE_RIGHT
 											}
 										]
 									]

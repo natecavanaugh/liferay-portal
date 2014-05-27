@@ -2,11 +2,15 @@ AUI.add(
 	'liferay-tags-admin',
 	function(A) {
 		var AObject = A.Object;
-		var HistoryManager = Liferay.HistoryManager;
 		var Lang = A.Lang;
 		var Node = A.Node;
 
+		var HistoryManager = Liferay.HistoryManager;
+		var Util = Liferay.Util;
+
 		var owns = AObject.owns;
+
+		var UtilWindow = Util.Window;
 
 		var ACTION_ADD = 0;
 
@@ -358,13 +362,13 @@ AUI.add(
 							tagCheck.attr('checked', checked);
 						}
 
-						Liferay.Util.checkAllBox(instance._tagsList, 'tag-item-check', '#' + instance._prefixedPortletId + 'checkAllTagsCheckbox');
+						Util.checkAllBox(instance._tagsList, 'tag-item-check', '#' + instance._prefixedPortletId + 'checkAllTagsCheckbox');
 					},
 
 					_createTagPanelAdd: function() {
 						var instance = this;
 
-						var tagPanelAdd = Liferay.Util.Window.getWindow(
+						var tagPanelAdd = UtilWindow.getWindow(
 							{
 								dialog: {
 									align: instance._dialogAlignConfig,
@@ -384,7 +388,7 @@ AUI.add(
 					_createTagPanelEdit: function() {
 						var instance = this;
 
-						instance._tagPanelEdit = Liferay.Util.Window.getWindow(
+						instance._tagPanelEdit = UtilWindow.getWindow(
 							{
 								dialog: {
 									align: instance._dialogAlignConfig,
@@ -435,7 +439,7 @@ AUI.add(
 						var panelPermissionsChange = instance._panelPermissionsChange;
 
 						if (!panelPermissionsChange) {
-							panelPermissionsChange = Liferay.Util.Window.getWindow(
+							panelPermissionsChange = UtilWindow.getWindow(
 								{
 									dialog: {
 										align: instance._dialogAlignConfig,
@@ -612,7 +616,7 @@ AUI.add(
 
 						var inputTagAddNameNode = instance._tagFormAdd.one('.tag-name input');
 
-						Liferay.Util.focusFormField(inputTagAddNameNode);
+						Util.focusFormField(inputTagAddNameNode);
 					},
 
 					_focusTagPanelEdit: function() {
@@ -620,7 +624,7 @@ AUI.add(
 
 						var inputTagEditNameNode = instance._tagFormEdit.one('.tag-name input');
 
-						Liferay.Util.focusFormField(inputTagEditNameNode);
+						Util.focusFormField(inputTagEditNameNode);
 					},
 
 					_getDDHandler: function() {
@@ -805,7 +809,7 @@ AUI.add(
 							var panelBodyContent = Lang.sub(TPL_TAG_MERGE_BODY, tplValues);
 							var panelFooterContent = Lang.sub(TPL_TAG_MERGE_FOOTER, tplValues);
 
-							tagPanelMerge = Liferay.Util.Window.getWindow(
+							tagPanelMerge = UtilWindow.getWindow(
 								{
 									dialog: {
 										align: instance._dialogAlignConfig,
@@ -858,7 +862,7 @@ AUI.add(
 								function(event) {
 									var down = event.currentTarget.hasClass('tag-move-down');
 
-									Liferay.Util.reorder(instance._selectedTagsList, down);
+									Util.reorder(instance._selectedTagsList, down);
 								},
 								'button'
 							);
@@ -1108,7 +1112,7 @@ AUI.add(
 
 						var inputTagNameNode = tagFormEdit.one('.tag-name input');
 
-						Liferay.Util.focusFormField(inputTagNameNode);
+						Util.focusFormField(inputTagNameNode);
 					},
 
 					_loadData: function() {
@@ -1767,6 +1771,8 @@ AUI.add(
 						);
 					},
 
+					_tagsItemsSelector: '.tags-admin-list li',
+
 					_toggleStagedTagItem: function(tagItem) {
 						var instance = this;
 
@@ -1847,9 +1853,7 @@ AUI.add(
 						ioTag.set('uri', form.attr('action'));
 
 						ioTag.start();
-					},
-
-					_tagsItemsSelector: '.tags-admin-list li'
+					}
 				}
 			}
 		);
