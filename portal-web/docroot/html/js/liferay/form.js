@@ -69,6 +69,23 @@ AUI.add(
 
 				EXTENDS: A.Base,
 
+				attrBind: function(ns, fm) {
+					var form = document[ns + (fm || 'fm')], formNode = A.one(form);
+
+					return function(key, val) {
+						if (key) {
+							if(val) {
+								formNode.one('#' + ns + key).val(val);
+							}
+
+							return formNode.one('#' + ns + key).val();
+						}
+						else {
+							return formNode;
+						}
+					};
+				},
+
 				prototype: {
 					initializer: function() {
 						var instance = this;

@@ -448,7 +448,7 @@ for (int i = 0; i < results.size(); i++) {
 					}
 				}
 
-				submitForm(document.<portlet:namespace />fm);
+				submitForm(<portlet:namespace />fmform());
 			},
 			['aui-base', 'selector-css3']
 		);

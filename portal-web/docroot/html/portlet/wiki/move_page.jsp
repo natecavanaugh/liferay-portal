@@ -182,20 +182,20 @@ String newTitle = ParamUtil.get(request, "newTitle", StringPool.BLANK);
 
 <aui:script>
 	function <portlet:namespace />changeParent() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = 'changeParent';
+		<portlet:namespace />fmform('<%= Constants.CMD %>', 'changeParent');
 
-		submitForm(document.<portlet:namespace />fm);
+		submitForm(<portlet:namespace />fmform());
 	}
 
 	function <portlet:namespace />publishPage() {
-		document.<portlet:namespace />fm.<portlet:namespace />workflowAction.value = '<%= WorkflowConstants.ACTION_PUBLISH %>';
+		<portlet:namespace />fmform('workflowAction', '<%= WorkflowConstants.ACTION_PUBLISH %>');
 
 		<portlet:namespace />changeParent();
 	}
 
 	function <portlet:namespace />renamePage() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = 'rename';
+		<portlet:namespace />fmform('<%= Constants.CMD %>', '<%= WorkflowConstants.ACTION_PUBLISH %>');
 
-		submitForm(document.<portlet:namespace />fm);
+		submitForm(<portlet:namespace />fmform());
 	}
 </aui:script>

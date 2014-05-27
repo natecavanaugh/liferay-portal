@@ -65,6 +65,13 @@
 		}
 	);
 
+	Liferay.provide(
+		window,
+		'<%= namespace + name %>form',
+		Liferay.Form.attrBind('<%= namespace %>', '<%= name %>'));
+
+	<%= namespace + name%>form();
+
 	<c:if test="<%= Validator.isNotNull(onSubmit) %>">
 		A.all('#<%= namespace + name %> .input-container').removeAttribute('disabled');
 	</c:if>

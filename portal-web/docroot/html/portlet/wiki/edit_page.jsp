@@ -476,24 +476,24 @@ if (Validator.isNull(redirect)) {
 		}
 
 		if (window.<portlet:namespace />editor) {
-			document.<portlet:namespace />fm.<portlet:namespace />content.value = window.<portlet:namespace />editor.getHTML();
+			<portlet:namespace />fmform('content', window.<portlet:namespace />editor.getHTML());
 		}
 
-		submitForm(document.<portlet:namespace />fm, null, null, false);
+		submitForm(<portlet:namespace />fmform(), null, null, false);
 	}
 
 	function <portlet:namespace />discardDraftPage() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
+		<portlet:namespace />fmform('<%= Constants.CMD %>', '<%= Constants.DELETE %>');
 
-		submitForm(document.<portlet:namespace />fm);
+		submitForm(<portlet:namespace />fmform());
 	}
 
 	function <portlet:namespace />getSuggestionsContent() {
-		return document.<portlet:namespace />fm.<portlet:namespace />title.value + ' ' + window.<portlet:namespace />editor.getHTML();
+		return <portlet:namespace />fmform('title') + window.<portlet:namespace />editor.getHTML();
 	}
 
 	function <portlet:namespace />moveToTrashPage() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.MOVE_TO_TRASH %>';
+		<portlet:namespace />fmform('<%= Constants.CMD %>', '<%= Constants.MOVE_TO_TRASH %>');
 
 		<portlet:renderURL var="nodeURL">
 			<portlet:param name="struts_action" value="/wiki/view" />
@@ -501,36 +501,36 @@ if (Validator.isNull(redirect)) {
 			<portlet:param name="tag" value="<%= StringPool.BLANK %>" />
 		</portlet:renderURL>
 
-		document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= nodeURL.toString() %>';
+		<portlet:namespace />fmform('redirect', '<%= nodeURL.toString() %>')
 
-		submitForm(document.<portlet:namespace />fm);
+		submitForm(<portlet:namespace />fmform());
 	}
 
 	function <portlet:namespace />previewPage() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '';
-		document.<portlet:namespace />fm.<portlet:namespace />preview.value = 'true';
+		<portlet:namespace />fmform('<%= Constants.CMD %>', '');
+		<portlet:namespace />fmform('preview', 'true');
 
 		if (window.<portlet:namespace />editor) {
-			document.<portlet:namespace />fm.<portlet:namespace />content.value = window.<portlet:namespace />editor.getHTML();
+			<portlet:namespace />fmform('content', window.<portlet:namespace />editor.getHTML());
 		}
 
-		submitForm(document.<portlet:namespace />fm);
+		submitForm(<portlet:namespace />fmform());
 	}
 
 	function <portlet:namespace />publishPage() {
-		document.<portlet:namespace />fm.<portlet:namespace />workflowAction.value = '<%= WorkflowConstants.ACTION_PUBLISH %>';
+		<portlet:namespace />fmform('workflowAction', '<%= WorkflowConstants.ACTION_PUBLISH %>');
 
 		<portlet:namespace />savePage();
 	}
 
 	function <portlet:namespace />savePage() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= newPage ? Constants.ADD : Constants.UPDATE %>';
+		<portlet:namespace />fmform('<%= Constants.CMD %>', '<%= newPage ? Constants.ADD : Constants.UPDATE %>');
 
 		if (window.<portlet:namespace />editor) {
-			document.<portlet:namespace />fm.<portlet:namespace />content.value = window.<portlet:namespace />editor.getHTML();
+			<portlet:namespace />fmform('content', window.<portlet:namespace />editor.getHTML());
 		}
 
-		submitForm(document.<portlet:namespace />fm);
+		submitForm(<portlet:namespace />fmform());
 	}
 
 	window.<portlet:namespace />currentFormatIndex = document.<portlet:namespace />fm.<portlet:namespace />format.selectedIndex;

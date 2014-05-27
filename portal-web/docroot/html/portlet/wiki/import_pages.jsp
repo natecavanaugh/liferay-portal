@@ -92,6 +92,6 @@ portletURL.setParameter("nodeId", String.valueOf(nodeId));
 		<%= uploadProgressId %>.startProgress();
 		<%= importProgressId %>.startProgress();
 
-		submitForm(document.<portlet:namespace />fm);
+		submitForm(<portlet:namespace />fmform());
 	}
 </aui:script>

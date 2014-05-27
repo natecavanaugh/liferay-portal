@@ -209,11 +209,11 @@ Ticket ticket = TicketLocalServiceUtil.addTicket(user.getCompanyId(), User.class
 			selectedFileNameContainer.html(buffer.join(''));
 
 			A.io.request(
-				document.<portlet:namespace />fm2.action,
+				<portlet:namespace />fm2form().get('action'),
 				{
 					dataType: 'JSON',
 					form: {
-						id: document.<portlet:namespace />fm2
+						id: <portlet:namespace />fm2form()
 					},
 					after: {
 						success: function(event, id, obj) {
