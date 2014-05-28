@@ -1,7 +1,8 @@
 ;(function(A, Liferay) {
 	var Util = Liferay.Util;
+	var AArray = A.Array;
 
-	var arrayIndexOf = A.Array.indexOf;
+	var arrayIndexOf = AArray.indexOf;
 
 	var STR_HEAD = 'head';
 
@@ -9,6 +10,8 @@
 
 	var Portlet = {
 		list: [],
+
+		readyCounter: 0,
 
 		isStatic: function(portletId) {
 			var instance = this;
@@ -121,6 +124,17 @@
 			}
 		},
 
+		_mergeOptions: function(portlet, options) {
+			options = options || {};
+
+			options.plid = options.plid || themeDisplay.getPlid();
+			options.doAsUserId = options.doAsUserId || themeDisplay.getDoAsUserIdEncoded();
+			options.portlet = portlet;
+			options.portletId = portlet.portletId;
+
+			return options;
+		},
+
 		_staticPortlets: {}
 	};
 
@@ -155,6 +169,8 @@
 				if (onCompleteFn) {
 					onCompleteFn(portlet, portletId);
 				}
+
+				instance.list.push(portlet.portletId);
 
 				Liferay.fire(
 					'addPortlet',
@@ -366,12 +382,15 @@
 			portlet = A.one(portlet);
 
 			if (portlet && (skipConfirm || confirm(Liferay.Language.get('are-you-sure-you-want-to-remove-this-component')))) {
-				options = options || {};
+				var portletIndex = AArray.indexOf(instance.list, portlet.portletId);
 
-				options.plid = options.plid || themeDisplay.getPlid();
-				options.doAsUserId = options.doAsUserId || themeDisplay.getDoAsUserIdEncoded();
-				options.portlet = portlet;
-				options.portletId = portlet.portletId;
+				if (portletIndex >= 0) {
+					instance.list.splice(portletIndex, 1);
+				}
+
+				var options = Portlet._mergeOptions(portlet, options);
+
+				Liferay.fire('destroyPortlet', options);
 
 				Liferay.fire('closePortlet', options);
 			}
@@ -380,6 +399,19 @@
 			}
 		},
 		['aui-io-request']
+	);
+
+	Liferay.provide(
+		Portlet,
+		'destroy',
+		function(portlet, options) {
+			portlet = A.one(portlet);
+
+			if (portlet) {
+				Liferay.fire('destroyPortlet', Portlet._mergeOptions(portlet, options));
+			}
+		},
+		['aui-node-base']
 	);
 
 	Liferay.provide(
@@ -529,21 +561,15 @@
 					}
 				);
 
-				var list = instance.list;
+				instance.readyCounter++;
 
-				var index = arrayIndexOf(list, portletId);
-
-				if (index > -1) {
-					list.splice(index, 1);
-
-					if (!list.length) {
-						Liferay.fire(
-							'allPortletsReady',
-							{
-								portletId: portletId
-							}
-						);
-					}
+				if (instance.readyCounter === instance.list.length) {
+					Liferay.fire(
+						'allPortletsReady',
+						{
+							portletId: portletId
+						}
+					);
 				}
 			}
 		},
