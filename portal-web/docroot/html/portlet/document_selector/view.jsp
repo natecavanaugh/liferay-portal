@@ -99,7 +99,7 @@ portletURL.setParameter("showGroupsSelector", String.valueOf(showGroupsSelector)
 	%>
 
 	<aui:nav-bar>
-		<aui:nav>
+		<aui:nav cssClass="navbar-nav">
 			<aui:nav-item
 				dropdown="<%= true %>"
 				iconCssClass="icon-plus"

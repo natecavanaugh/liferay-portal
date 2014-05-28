@@ -58,7 +58,7 @@ if (filterManageableOrganizations) {
 			<aui:input name="deleteOrganizationIds" type="hidden" />
 
 			<c:if test="<%= usersListView.equals(UserConstants.LIST_VIEW_FLAT_ORGANIZATIONS) %>">
-				<aui:nav type="nav-tabs">
+				<aui:nav cssClass="nav-tabs">
 					<portlet:renderURL var="viewUsersTreeURL">
 						<portlet:param name="struts_action" value="/users_admin/view" />
 						<portlet:param name="toolbarItem" value="browse" />

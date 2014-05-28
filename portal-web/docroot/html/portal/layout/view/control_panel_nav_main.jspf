@@ -20,7 +20,7 @@
 	if (portlets.size() > 1) {
 	%>
 		<div class="control-panel-bar-secondary">
-			<aui:nav cssClass="nav-pills" type="nav-pills">
+			<aui:nav cssClass="nav-pills">
 
 				<%
 				for (Portlet curPortlet : portlets) {

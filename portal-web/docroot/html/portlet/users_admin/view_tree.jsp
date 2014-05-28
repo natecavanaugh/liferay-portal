@@ -61,7 +61,7 @@ if (organization != null) {
 %>
 
 <c:if test="<%= portletName.equals(PortletKeys.USERS_ADMIN) && usersListView.equals(UserConstants.LIST_VIEW_TREE) %>">
-	<aui:nav type="nav-tabs">
+	<aui:nav cssClass="nav-tabs">
 		<portlet:renderURL var="viewUsersTreeURL">
 			<portlet:param name="struts_action" value="/users_admin/view" />
 			<portlet:param name="toolbarItem" value="browse" />

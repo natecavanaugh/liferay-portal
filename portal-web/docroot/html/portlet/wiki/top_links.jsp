@@ -66,7 +66,7 @@ if (categoryId > 0) {
 
 <c:if test="<%= !print %>">
 	<c:if test="<%= (nodes.size() > 1) && portletName.equals(PortletKeys.WIKI) %>">
-		<aui:nav type="nav-tabs">
+		<aui:nav cssClass="nav-tabs">
 
 			<%
 			for (int i = 0; i < nodes.size(); i++) {
@@ -95,7 +95,7 @@ if (categoryId > 0) {
 	</c:if>
 
 	<aui:nav-bar>
-		<aui:nav>
+		<aui:nav cssClass="navbar-nav">
 
 			<%
 			PortletURL frontPageURL = PortletURLUtil.clone(portletURL, renderResponse);
