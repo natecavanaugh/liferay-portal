@@ -96,7 +96,7 @@
 				padding-left: 8px;
 				text-align: left;
 
-				&:before {
+				span:before {
 					content: attr(data-th);
 					font-weight: bold;
 				}

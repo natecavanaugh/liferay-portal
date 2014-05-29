@@ -136,7 +136,7 @@ List<String> primaryKeys = new ArrayList<String>();
 					}
 				%>
 
-					<th class="<%= cssClass %>" id="<%= namespace + id %>_col-<%= normalizedHeaderName %>"
+					<th class="<%= cssClass %>" id="<%= namespace + id %>_col-<%= normalizedHeaderName %>" role="label"
 
 						<%--
 
@@ -303,12 +303,14 @@ List<String> primaryKeys = new ArrayList<String>();
 				}
 			%>
 
-				<td class="table-cell <%= columnClassName %>" data-th="<%= headerName %>">
+				<td aria-labelledby="<%= namespace + id %>_col-<%= normalizedHeaderName %>" class="table-cell <%= columnClassName %>" tabindex="0">
+					<span data-th="<%= headerName %>" tabindex="-1">
 
-					<%
-					entry.print(pageContext);
-					%>
+						<%
+						entry.print(pageContext);
+						%>
 
+					</span>
 				</td>
 
 			<%
