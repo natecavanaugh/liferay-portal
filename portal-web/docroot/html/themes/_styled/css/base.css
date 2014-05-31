@@ -102,7 +102,7 @@
 				}
 
 				&.table-cell.last .lfr-icon-menu .dropdown-toggle {
-					> img , .lfr-icon-menu-text {
+					> img, .lfr-icon-menu-text {
 						display: inline;
 					}
 				}
