@@ -1,60 +1,229 @@
 .diff-version-comparator {
-	background: #EEE;
-	border-top: 1px solid #CCC;
-	margin: 15px 0 20px;
-	overflow: hidden;
-	padding: 5px;
+	.diff-version-head {
+		border-bottom: 1px solid #E5E5E5;
+		margin-bottom: 40px;
+		padding-bottom: 10px;
 
-	.central-info {
-		float: left;
+		.diff-selector-version {
+			font-size: inherit;
+			margin-bottom: 0;
+			margin-top: 0;
+			position: static;
+			vertical-align: baseline;
+
+			a {
+				text-decoration: none;
+
+				.lfr-icon-menu-icon {
+					display: none;
+				}
+
+				.lfr-icon-menu-text {
+					&:hover, &:focus {
+						text-decoration: underline;
+					}
+				}
+			}
+
+			.caret {
+				border-top-color: #FFF;
+				margin-top: -4px;
+			}
+		}
+
+		.diff-source-selector {
+			padding-right: 20px;
+
+			.diff-selector {
+				overflow: hidden;
+			}
+
+			.diff-selector-version-info {
+				margin-right: 16px;
+			}
+		}
+
+		.diff-target-selector {
+			border-left: 1px solid #E5E5E5;
+			padding-left: 40px;
+		}
+
+		.diff-source-selector, .diff-target-selector {
+			font-size: 20px;
+			font-weight: 200;
+			padding-bottom: 20px;
+
+			.diff-selector-version-info {
+				color: #8C8C8C;
+				font-size: 12px;
+			}
+		}
+	}
+
+	.search-container-column {
 		padding-left: 10px;
-		padding-right: 10px;
-		text-align: center;
-		width: 66%;
 
-		a.change-mode {
-			font-weight: bold;
+		.language-selector {
+			.control-group {
+				margin-bottom: 10px;
+
+				select {
+					font-size: 13px;
+				}
+			}
 		}
 
-		span.change-mode {
-			color: #999;
-			font-weight: bold;
+		.search-panels {
+			padding: 0;
+			position: relative;
+
+			.search-panels-bar {
+				.control-group {
+					margin-bottom: 10px;
+
+					.search-panels-input {
+						border-radius: 0;
+					}
+				}
+
+				.search-panel-icon {
+					background: url(@theme_image_path@/custom/search_panel_icon.png) no-repeat 0 50%;
+					color: #D4D4D4;
+					font-size: 0;
+					height: 18px;
+					margin-left: 8px;
+					margin-top: 6px;
+					position: absolute;
+					width: 27px;
+				}
+
+				input {
+					font-size: 14px;
+					padding-left: 40px;
+				}
+			}
+		}
+
+		.version-item {
+			border-bottom: 1px solid #E5E5E5;
+			cursor: pointer;
+			margin-top: 10px;
+			overflow: hidden;
+			padding: 10px;
+
+			&.last {
+				border-width: 0;
+			}
+
+			&.selected {
+				.version-title {
+					color: #555;
+				}
+
+				.version-info {
+					.user-info, .date-info {
+						color: #555;
+					}
+				}
+			}
+
+			.version-avatar {
+				padding-right: 5px;
+
+				.avatar {
+					width: 45px;
+				}
+			}
+
+			.version-title {
+				color: #009AE5;
+				display: block;
+				font-weight: 400;
+				margin-bottom: 5px;
+			}
+
+			.version-info {
+				margin-top: 14px;
+
+				.user-info {
+					color: #009AE5;
+					display: block;
+					font-size: 13px;
+					line-height: 13px;
+				}
+
+				.date-info {
+					color: #8C8C8C;
+					font-size: 10px;
+				}
+			}
 		}
 	}
 
-	.central-title {
-		font-weight: bold;
-		padding-right: 20px;
-	}
+	.diff-container-column {
+		background-color: #F1F1F1;
+		border: 1px solid #EBEBEB;
+		padding: 25px;
 
-	.central-username {
-		font-weight: bold;
-	}
+		.diff-container {
+			background-color: #FFF;
+			border: 1px solid #E5E5E5;
+			min-height: 400px;
+			padding: 25px 20px;
+			position: relative;
 
-	.next {
-		background-image: url(@theme_image_path@/arrows/paging_next.png);
-		background-position: 100% 0;
-		float: right;
-		padding-right: 15px;
-	}
+			.legend-info {
+				bottom: 0;
+				padding-bottom: 10px;
+				position: absolute;
 
-	.previous {
-		background-image: url(@theme_image_path@/arrows/paging_previous.png);
-		float: left;
-		padding-left: 15px;
-	}
+				.legend-item {
+					margin-right: 15px;
+				}
 
-	a, span {
-		background: url() no-repeat;
-	}
+				.add.icon-stop {
+					color: #CFC;
+				}
 
-	span {
-		&.next {
-			background-position: 100% 100%;
+				.delete.icon-stop {
+					color: #FDC6C6;
+				}
+			}
 		}
 
-		&.previous {
-			background-position: 0 100%;
+		.diff-version-filter {
+			background-color: #F9F9F9;
+			border: 1px solid #E5E5E5;
+			border-bottom-width: 0;
+			padding: 10px 15px;
+
+			.close-version-filter {
+				color: #CCC;
+				cursor: pointer;
+			}
+
+			.display-date {
+				color: #8C8C8C;
+				font-size: 10px;
+			}
+
+			.user-name {
+				color: #009AE5;
+				font-size: 13px;
+				margin-right: 5px;
+			}
+
+			.version {
+				color: #555;
+				font-weight: 400;
+			}
 		}
+	}
+
+	.diff-version-title {
+		color: #8C8C8C;
+		display: block;
+		font-size: 12px;
+		margin-bottom: 10px;
 	}
 }
