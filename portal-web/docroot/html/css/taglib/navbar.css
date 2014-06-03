@@ -2,22 +2,17 @@
 @import "mixins";
 
 .navbar .container {
-	.nav {
-		z-index: 1;
-	}
-
 	.nav-collapse .navbar-search-advanced {
 		float: none;
-		margin: 0;
+		margin: 0 -20px;
 		padding: 0;
 
 		.input-append {
 			float: right;
-			margin: 8px 0;
+			margin: 8px 12px 8px 0;
 
 			@include respond-to(phone, tablet) {
 				float: none;
-				margin: 10px 0;
 			}
 		}
 	}
