@@ -244,6 +244,10 @@
 		position: relative;
 	}
 
+	.navbar-inner .nav-display-style-buttons {
+		margin-left: 0;
+	}
+
 	.taglib-search-iterator-page-iterator-top, .taglib-search-iterator-page-iterator-bottom, .paginator-container {
 		clear: both;
 		padding: 5px;
