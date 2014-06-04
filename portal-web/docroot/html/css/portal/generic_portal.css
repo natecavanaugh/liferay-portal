@@ -171,6 +171,10 @@ img.icon {
 	}
 }
 
+.emphasized {
+	text-decoration: underline;
+}
+
 /* Skin */
 
 .definition-of-terms dt {
