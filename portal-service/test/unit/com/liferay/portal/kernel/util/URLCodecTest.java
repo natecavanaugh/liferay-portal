@@ -67,24 +67,24 @@ public class URLCodecTest {
 	public void testHandlingFourBytesUTFWithSurrogates() throws Exception {
 		StringBundler sb = new StringBundler(
 			_UNICODE_CATS_AND_DOGS.length * 4 * 2);
-	
+
 		int[] animalsInts = new int[_UNICODE_CATS_AND_DOGS.length];
-	
+
 		for (int i = 0; i < animalsInts.length; i++) {
 			animalsInts[i] = Integer.valueOf(_UNICODE_CATS_AND_DOGS[i], 16);
 		}
-	
+
 		String animalsString = new String(animalsInts, 0, animalsInts.length);
-	
+
 		byte[] animalsBytes = animalsString.getBytes(StringPool.UTF8);
-	
+
 		for (int i = 0; i < animalsBytes.length; i++) {
 			sb.append(StringPool.PERCENT);
 			sb.append(Integer.toHexString(0xFF & animalsBytes[i]));
 		}
-	
+
 		String escapedAnimalsString = sb.toString();
-	
+
 		Assert.assertEquals(
 			animalsString,
 			URLCodec.decodeURL(escapedAnimalsString, StringPool.UTF8));

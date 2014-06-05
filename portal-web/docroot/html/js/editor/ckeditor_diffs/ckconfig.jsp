@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ContentTypes" %>
@@ -103,7 +103,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 	config.entities = false;
 
-	config.extraPlugins = 'media,scayt,wsc';
+	config.extraPlugins = 'a11yhelpbtn,media,scayt,wsc';
 
 	<c:if test="<%= inlineEdit %>">
 		config.extraPlugins += ',ajaxsave,restore';
@@ -131,7 +131,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['Subscript', 'Superscript', 'SpecialChar'],
 		['Undo', 'Redo'],
 		['SpellChecker', 'Scayt'],
-		['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'], ['Source', 'RemoveFormat']
+		['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'], ['Source', 'RemoveFormat'],
+		['A11YBtn']
 	];
 
 	config.toolbar_email = [
@@ -142,7 +143,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'SelectAll', 'RemoveFormat'],
 		['Source'],
 		['Link', 'Unlink'],
-		['Image']
+		['Image'],
+		['A11YBtn']
 	];
 
 	config.toolbar_liferay = [
@@ -166,6 +168,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		<c:if test="<%= !inlineEdit %>">
 			,['Source']
 		</c:if>
+
+		,['A11YBtn']
 	];
 
 	config.toolbar_liferayArticle = [
@@ -180,7 +184,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 		'/',
 		['Source'],
 		['Link', 'Unlink', 'Anchor'],
-		['Image', 'Flash', <c:if test="<%= XugglerUtil.isEnabled() %>">'Audio', 'Video',</c:if> 'Table', '-', 'Smiley', 'SpecialChar', 'LiferayPageBreak']
+		['Image', 'Flash', <c:if test="<%= XugglerUtil.isEnabled() %>">'Audio', 'Video',</c:if> 'Table', '-', 'Smiley', 'SpecialChar', 'LiferayPageBreak'],
+		['A11YBtn']
 	];
 
 	config.toolbar_phone = [
