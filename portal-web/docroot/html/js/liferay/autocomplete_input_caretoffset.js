@@ -47,7 +47,7 @@ AUI.add(
 				}
 				else {
 					if (instance.get('caretAtTerm')) {
-						caretIndex = instance._getPrevTermIndex(value, caretIndex) + 1;
+						caretIndex = instance._getPrevTrigger(value, caretIndex).index + 1;
 					}
 
 					value = value.substring(0, caretIndex) + instance.TPL_CARET + value.substring(caretIndex + 1);
@@ -111,10 +111,10 @@ AUI.add(
 			}
 		};
 
-		A.Base.mix(Liferay.AutoCompleteInput, [AutcompleteInputCaretOffset]);
+		A.Base.mix(Liferay.AutoCompleteTextarea, [AutcompleteInputCaretOffset]);
 	},
 	'',
 	{
-		requires: ['liferay-autocomplete-input']
+		requires: ['liferay-autocomplete-textarea']
 	}
 );
