@@ -1450,28 +1450,32 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 		subscriptionSender.setClassPK(entry.getEntryId());
 		subscriptionSender.setClassName(entry.getModelClassName());
 		subscriptionSender.setCompanyId(entry.getCompanyId());
+
+		String entryContentTrimmed = StringUtil.shorten(
+			HtmlUtil.stripHtml(entry.getContent()), 500);
+
 		subscriptionSender.setContextAttribute(
-			"[$BLOGS_ENTRY_CONTENT$]",
-			StringUtil.shorten(
-				HtmlUtil.stripHtml(entry.getContent()), 500),
-			false);
+			"[$BLOGS_ENTRY_CONTENT$]", entryContentTrimmed, false);
+
+		String entrySiteName = GroupLocalServiceUtil.getGroupDescriptiveName(
+			entry.getGroupId(), serviceContext.getLocale());
+
+		String simpleCreateDate = Time.getSimpleDate(
+			entry.getCreateDate(), "yyyy/MM/dd");
 
 		User user = UserLocalServiceUtil.getUserById(entry.getUserId());
 
+		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+
 		subscriptionSender.setContextAttributes(
-			"[$BLOGS_ENTRY_CREATE_DATE$]",
-			Time.getSimpleDate(entry.getCreateDate(), "yyyy/MM/dd"),
+			"[$BLOGS_ENTRY_CREATE_DATE$]", simpleCreateDate,
 			"[$BLOGS_ENTRY_DESCRIPTION$]", entry.getDescription(),
-			"[$BLOGS_ENTRY_SITE_NAME$]",
-			GroupLocalServiceUtil.getGroupDescriptiveName(
-				entry.getGroupId(), serviceContext.getLocale()),
+			"[$BLOGS_ENTRY_SITE_NAME$]", entrySiteName,
 			"[$BLOGS_ENTRY_STATUS_BY_USER_NAME$]", entry.getStatusByUserName(),
 			"[$BLOGS_ENTRY_TITLE$]", entryTitle, "[$BLOGS_ENTRY_URL$]",
 			entryURL, "[$BLOGS_ENTRY_USER_PORTRAIT_URL$]",
-			user.getPortraitURL(serviceContext.getThemeDisplay()),
-			"[$BLOGS_ENTRY_USER_URL$]",
-			user.getDisplayURL(serviceContext.getThemeDisplay()));
-
+			user.getPortraitURL(themeDisplay),
+			"[$BLOGS_ENTRY_USER_URL$]", user.getDisplayURL(themeDisplay));
 		subscriptionSender.setContextUserPrefix("BLOGS_ENTRY");
 		subscriptionSender.setEntryTitle(entryTitle);
 		subscriptionSender.setEntryURL(entryURL);
