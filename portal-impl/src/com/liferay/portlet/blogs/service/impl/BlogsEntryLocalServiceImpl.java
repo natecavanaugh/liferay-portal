@@ -1452,7 +1452,8 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 		subscriptionSender.setCompanyId(entry.getCompanyId());
 		subscriptionSender.setContextAttribute(
 			"[$BLOGS_ENTRY_CONTENT$]",
-			StringUtil.shorten(HtmlUtil.stripHtml(entry.getContent()), 500),
+			StringUtil.shorten(
+				HtmlUtil.stripHtml(entry.getContent()), 500),
 			false);
 
 		User user = UserLocalServiceUtil.getUserById(entry.getUserId());
