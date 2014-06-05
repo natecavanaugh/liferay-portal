@@ -50,7 +50,9 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.Portal;
 import com.liferay.portal.util.PortalUtil;
@@ -1453,14 +1455,14 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			StringUtil.shorten(HtmlUtil.stripHtml(entry.getContent()), 500),
 			false);
 
-		User user = userPersistence.findByPrimaryKey(entry.getUserId());
+		User user = UserLocalServiceUtil.getUserById(entry.getUserId());
 
 		subscriptionSender.setContextAttributes(
 			"[$BLOGS_ENTRY_CREATE_DATE$]",
 			Time.getSimpleDate(entry.getCreateDate(), "yyyy/MM/dd"),
 			"[$BLOGS_ENTRY_DESCRIPTION$]", entry.getDescription(),
 			"[$BLOGS_ENTRY_SITE_NAME$]",
-			groupLocalService.getGroupDescriptiveName(
+			GroupLocalServiceUtil.getGroupDescriptiveName(
 				entry.getGroupId(), serviceContext.getLocale()),
 			"[$BLOGS_ENTRY_STATUS_BY_USER_NAME$]", entry.getStatusByUserName(),
 			"[$BLOGS_ENTRY_TITLE$]", entryTitle, "[$BLOGS_ENTRY_URL$]",
