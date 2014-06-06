@@ -351,6 +351,8 @@ AUI.add(
 			function(options) {
 				options = options || Layout.options;
 
+				options.handles = options.handles instanceof Array ? options.handles : [options.handles]
+
 				Layout.PROXY_NODE.append(Layout.PORTLET_TOPPER);
 
 				var layoutContainer = options.container;
