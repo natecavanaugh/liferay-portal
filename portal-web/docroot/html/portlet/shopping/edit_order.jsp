@@ -131,7 +131,7 @@ long orderId = BeanParamUtil.getLong(order, request, "orderId");
 						<aui:field-wrapper label="paypal-order">
 
 							<%
-							String payPalLinkOpen = "<a href=\"" + ShoppingUtil.getPayPalRedirectURL(shoppingSettings, order, ShoppingUtil.calculateTotal(order), ShoppingUtil.getPayPalReturnURL(renderResponse.createActionURL(), order), ShoppingUtil.getPayPalNotifyURL(themeDisplay)) + "\"><strong><span class ="emphasized">;
+							String payPalLinkOpen = "<a href=\"" + ShoppingUtil.getPayPalRedirectURL(shoppingSettings, order, ShoppingUtil.calculateTotal(order), ShoppingUtil.getPayPalReturnURL(renderResponse.createActionURL(), order), ShoppingUtil.getPayPalNotifyURL(themeDisplay)) + "\"><strong><span class="emphasized">;
 							String payPalLinkClose = "</span></strong></a>";
 							%>
 

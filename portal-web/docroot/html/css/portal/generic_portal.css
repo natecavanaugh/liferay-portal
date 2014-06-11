@@ -161,6 +161,10 @@ img.icon {
 	margin-left: 0.3em;
 }
 
+.emphasized {
+	text-decoration: underline;
+}
+
 .ie6 {
 	.popup-alert-notice, .popup-alert-warning {
 		bottom: auto;
@@ -169,10 +173,6 @@ img.icon {
 		right: auto;
 		top: expression( ( LFR_IGNORE_ME = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop ) + 'px' );
 	}
-}
-
-.emphasized {
-	text-decoration: underline;
 }
 
 /* Skin */
