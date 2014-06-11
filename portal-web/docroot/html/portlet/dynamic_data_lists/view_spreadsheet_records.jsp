@@ -147,6 +147,12 @@ DDMStructure ddmStructure = recordSet.getDDMStructure();
 			contentBox: '#<portlet:namespace />dataTableContent',
 			data: data,
 			editEvent: 'dblclick',
+			strings: {
+				asc: '<liferay-ui:message key="ascending" />',
+				desc: '<liferay-ui:message key="descending" />',
+				reverseSortBy: '<liferay-ui:message key="reverse-sort-by" /> {column}',
+				sortBy: '<liferay-ui:message key="sort-by" /> {column}'
+			},
 			plugins: [
 				{
 					fn: A.Plugin.DataTableHighlight,
