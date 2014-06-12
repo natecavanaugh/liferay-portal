@@ -93,7 +93,9 @@
 
 	var TAG_TD = 'td';
 
-	var TEMPLATE_IMAGE = '<img src="{image}">';
+	var tplImage = new CKEDITOR.template('<img src="{image}">');
+
+	var tplImageOpenTag = new CKEDITOR.template('[img={width}x{height}]');
 
 	var emoticonImages;
 	var emoticonPath;
@@ -127,7 +129,11 @@
 			var length = emoticonSymbols.length;
 
 			for (var i = 0; i < length; i++) {
-				var image = TEMPLATE_IMAGE.replace('{image}', emoticonPath + emoticonImages[i]);
+				var image = tplImage.output(
+					{
+						image: emoticonPath + emoticonImages[i]
+					}
+				);
 
 				var escapedSymbol = emoticonSymbols[i].replace(REGEX_ESCAPE_REGEX, '\\$&');
 
@@ -497,7 +503,24 @@
 			else {
 				var attrSrc = element.getAttribute('src');
 
-				listTagsIn.push('[img]');
+				var domElement = new CKEDITOR.dom.element(element);
+
+				var width = domElement.getStyle('width').replace('px', '') || 'auto';
+
+				var height = domElement.getStyle('height').replace('px', '') || 'auto';
+
+				var openTag = '[img]';
+
+				if (width !== 'auto' || height !== 'auto') {
+					openTag = tplImageOpenTag.output(
+						{
+							height: height,
+							width: width
+						}
+					);
+				}
+
+				listTagsIn.push(openTag);
 
 				listTagsIn.push(attrSrc);
 

@@ -273,6 +273,7 @@
 })();;(function() {
 	var BBCodeUtil = Liferay.BBCodeUtil;
 	var Util = Liferay.Util;
+	var CKTools = CKEDITOR.tools;
 
 	var Parser = Liferay.BBCodeParser;
 
@@ -391,6 +392,8 @@
 	var TOKEN_TAG_END = Parser.TOKEN_TAG_END;
 
 	var TOKEN_TAG_START = Parser.TOKEN_TAG_START;
+
+	var tplImage = new CKEDITOR.template('<img src="{imageSrc}" {imageSize} />');
 
 	var Converter = function(config) {
 		var instance = this;
@@ -532,7 +535,7 @@
 					hrefInput = STR_MAILTO + hrefInput;
 				}
 
-				href = CKEDITOR.tools.htmlEncodeAttr(hrefInput);
+				href = CKTools.htmlEncodeAttr(hrefInput);
 			}
 
 			instance._result.push(STR_TAG_ATTR_HREF_OPEN + href + STR_TAG_ATTR_CLOSE);
@@ -545,7 +548,7 @@
 
 			var fontName = token.attribute;
 
-			fontName = CKEDITOR.tools.htmlEncodeAttr(fontName);
+			fontName = CKTools.htmlEncodeAttr(fontName);
 
 			instance._result.push(STR_TAG_SPAN_STYLE_OPEN + 'font-family: ' + fontName + STR_TAG_ATTR_CLOSE);
 
@@ -560,10 +563,39 @@
 			var imageSrcInput = instance._extractData(STR_IMG, true);
 
 			if (REGEX_IMAGE_SRC.test(imageSrcInput)) {
-				imageSrc = CKEDITOR.tools.htmlEncodeAttr(imageSrcInput);
+				imageSrc = CKTools.htmlEncodeAttr(imageSrcInput);
 			}
 
-			instance._result.push('<img src="', imageSrc, STR_TAG_ATTR_CLOSE);
+			var imageSize = '';
+
+			if (token.attribute) {
+				var dimensions = token.attribute.split('x');
+
+				imageSize = 'style="';
+
+				var width = dimensions[0];
+
+				if (width && width !== 'auto') {
+					imageSize += 'width: ' + CKTools.htmlEncodeAttr(dimensions[0]) + 'px;';
+				}
+
+				var height = dimensions[1];
+
+				if (height && height !== 'auto') {
+					imageSize += 'height: ' + CKTools.htmlEncodeAttr(dimensions[1]) + 'px;';
+				}
+
+				imageSize += '"';
+			}
+
+			var result = tplImage.output(
+				{
+					imageSize: imageSize,
+					imageSrc: imageSrc
+				}
+			);
+
+			instance._result.push(result);
 		},
 
 		_handleList: function(token) {
@@ -759,7 +791,7 @@
 			var hrefInput = token.attribute || instance._extractData(STR_TAG_URL, false);
 
 			if (REGEX_URI.test(hrefInput)) {
-				href = CKEDITOR.tools.htmlEncodeAttr(hrefInput);
+				href = CKTools.htmlEncodeAttr(hrefInput);
 			}
 
 			instance._result.push(STR_TAG_ATTR_HREF_OPEN + href + STR_TAG_ATTR_CLOSE);
