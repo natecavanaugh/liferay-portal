@@ -1,3 +1,5 @@
+@import "mixins";
+
 .taglib-search-toggle-advanced-wrapper .taglib-search-toggle-advanced {
 	border: 1px solid transparent;
 	margin-top: 5px;
@@ -5,7 +7,8 @@
 
 .navbar .navbar-inner {
 	.taglib-search-toggle-advanced-wrapper {
-		margin: 0 -20px;
+		float: right;
+		width: 100%;
 
 		&, .toggler-content-wrapper {
 			clear: both;
@@ -20,6 +23,12 @@
 			border-width: 1px 0 0;
 			height: 100%;
 			margin-top: 0;
+		}
+	}
+
+	@include respond-to(phone, tablet) {
+		.taglib-search-toggle {
+			margin: 0 10px;
 		}
 	}
 }
