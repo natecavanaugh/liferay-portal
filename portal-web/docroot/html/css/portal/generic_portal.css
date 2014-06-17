@@ -130,6 +130,10 @@ img.icon {
 	}
 }
 
+.emphasis {
+	text-decoration: underline;
+}
+
 .lfr-token-list {
 	clear: both;
 	margin: 1em 0;

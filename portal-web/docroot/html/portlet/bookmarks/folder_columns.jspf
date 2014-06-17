@@ -80,7 +80,7 @@ for (int j = 0; j < folderColumns.length; j++) {
 
 					<c:if test="<%= !subfolders.isEmpty() %>">
 						<br />
-						<span style="text-decoration: underline;"><%= LanguageUtil.get(pageContext, "subfolders") %></span>:
+						<span class="emphasis"><%= LanguageUtil.get(pageContext, "subfolders") %></span>:
 
 						<%
 						int subfoldersCount = BookmarksFolderServiceUtil.getFoldersCount(scopeGroupId, curFolder.getFolderId());
