@@ -20,6 +20,7 @@
 boolean showListed = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:journal-content-search:showListed"));
 String targetPortletId = (String)request.getAttribute("liferay-ui:journal-content-search:targetPortletId");
 String type = (String)request.getAttribute("liferay-ui:journal-content-search:type");
+String randomId = StringUtil.randomId();
 
 PortletURL portletURL = null;
 
@@ -50,5 +51,5 @@ portletURL.setWindowState(WindowState.MAXIMIZED);
 <form action="<%= HtmlUtil.escape(portletURL.toString()) %>" class="form" method="post" name="<%= namespace %>fm" onSubmit="submitForm(this); return false;">
 
 <div class="form-search">
-	<liferay-ui:input-search name="keywords" placeholder='<%= LanguageUtil.get(locale, "keywords") %>' />
+	<liferay-ui:input-search id='<%= namespace + "keywords" + randomId %>' name='<%= namespace + "keywords" %>' placeholder='<%= LanguageUtil.get(locale, "keywords") %>' useNamespace="<%= false %>" />
 </div>
