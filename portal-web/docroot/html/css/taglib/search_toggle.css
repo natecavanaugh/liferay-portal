@@ -1,7 +1,7 @@
 .taglib-search-toggle .toggle-advanced {
 	margin-left: 10px;
-	position: absolute;
-	top: 8px;
+	position: relative;
+	top: -27px;
 }
 
 .taglib-search-toggle-advanced-wrapper {
