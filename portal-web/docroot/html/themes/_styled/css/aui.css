@@ -3,11 +3,10 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 @import "aui/alloy-font-awesome/scss/variables";
 @import "aui/alloy-font-awesome/scss/mixins-alloy";
 @import "aui/alloy-font-awesome/scss/path-alloy";
+@import "aui_variables";
+@import "aui/bootstrap";
 
 .aui {
-	@import "aui_variables";
-
-	@import "aui/bootstrap";
 	@import "aui_custom";
 	@import "liferay_custom";
 

@@ -203,10 +203,18 @@
 
 				<!-- CSS -->
 
-				<property name="alloy.bootstrap.lib.dir" value="${alloy.bootstrap.tmp.dir}/bootstrap-sass-${alloy.bootstrap.version}/vendor/assets/stylesheets/bootstrap" />
+				<property name="alloy.bootstrap.css.lib.dir" value="${alloy.bootstrap.tmp.dir}/bootstrap-sass-${alloy.bootstrap.version}/vendor/assets/stylesheets/bootstrap" />
 
 				<copy todir="${alloy.bootstrap.deploy}" overwrite="true" preservelastmodified="true">
-					<fileset dir="${alloy.bootstrap.lib.dir}/" />
+					<fileset dir="${alloy.bootstrap.css.lib.dir}/" />
+				</copy>
+
+				<!-- Glyphicon Fonts -->
+
+				<property name="alloy.bootstrap.fonts.lib.dir" value="${alloy.bootstrap.tmp.dir}/bootstrap-sass-${alloy.bootstrap.version}/vendor/assets/fonts/bootstrap" />
+
+				<copy todir="${alloy.bootstrap.deploy}" overwrite="true" preservelastmodified="true">
+					<fileset dir="${alloy.bootstrap.fonts.lib.dir}/" />
 				</copy>
 
 				<!-- Clean up -->
