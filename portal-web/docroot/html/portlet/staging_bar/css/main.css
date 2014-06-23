@@ -29,7 +29,6 @@
 		float: right;
 		line-height: 16px;
 		margin: 5px 0;
-		padding-left: 20px;
 
 		&.incomplete {
 			float: none;
@@ -111,12 +110,12 @@
 	.staging-toggle .variations-options {
 		position: relative;
 
-		@include respond-to (tablet) {
-			padding: 0;
-		}
-
 		@include respond-to(phone) {
 			padding: 0 10px;
+		}
+
+		@include respond-to(tablet) {
+			padding: 0;
 		}
 
 		.staging-variation-selector {
@@ -157,12 +156,12 @@
 			bottom: 5px;
 			position: absolute;
 
-			@include respond-to(tablet) {
-				bottom: 10px;
-			}
-
 			@include respond-to(phone) {
 				position: static;
+			}
+
+			@include respond-to(tablet) {
+				bottom: 10px;
 			}
 		}
 
