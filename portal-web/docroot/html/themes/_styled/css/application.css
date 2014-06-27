@@ -421,6 +421,10 @@
 		overflow: auto;
 	}
 
+	.modal-body.dialog-iframe-bd {
+		overflow: visible;
+	}
+
 	.modal-hidden {
 		display: none;
 	}
