@@ -89,7 +89,7 @@ Group group = GroupLocalServiceUtil.fetchGroup(groupId);
 
 					var Lang = A.Lang;
 
-					var Util = Liferay.Util;
+					var LString Lang.String;
 
 					var TPL_TAB_CONTENT = '<div id="<portlet:namespace />{tabId}">' +
 						'<div id="<portlet:namespace />{tabContentId}"></div>' +
@@ -148,7 +148,7 @@ Group group = GroupLocalServiceUtil.fetchGroup(groupId);
 						var buffer = [];
 
 						if (A.instanceOf(node, A.TreeNode)) {
-							var labelText = Util.escapeHTML(node.get('labelEl').text());
+							var labelText = LString.escapeHTML(node.get('labelEl').text());
 
 							buffer.push(labelText);
 
@@ -157,7 +157,7 @@ Group group = GroupLocalServiceUtil.fetchGroup(groupId);
 									var labelEl = treeNode.get('labelEl');
 
 									if (labelEl) {
-										labelText = Util.escapeHTML(labelEl.text());
+										labelText = LString.escapeHTML(labelEl.text());
 
 										buffer.unshift(labelText);
 									}

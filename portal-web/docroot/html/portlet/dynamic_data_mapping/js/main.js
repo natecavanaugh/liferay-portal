@@ -300,7 +300,7 @@ AUI.add(
 										{
 											name: name,
 											type: 'option',
-											value: Liferay.Util.escapeHTML(item.value)
+											value: Lang.String.escapeHTML(item.value)
 										}
 									);
 
