@@ -9,7 +9,7 @@ AUI.add(
 		var Lang = A.Lang;
 
 		var booleanParse = A.DataType.Boolean.parse;
-		var camelize = Liferay.Util.camelize;
+		var camelize = A.Lang.String.camelize;
 		var trim = A.Lang.trim;
 
 		var STR_BLANK = '';
