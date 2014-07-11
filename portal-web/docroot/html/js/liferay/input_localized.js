@@ -5,6 +5,10 @@ AUI.add(
 
 		var AArray = A.Array;
 
+		var AObject = A.Object;
+
+		var NS_DELIMITER_REGEXP = /_/g;
+
 		var SELECTOR_LANG_VALUE = '.language-value';
 
 		var STR_BLANK = '';
@@ -443,7 +447,8 @@ AUI.add(
 							var itemsError = instance.get(STR_ITEMS_ERROR);
 
 							return Lang.sub(
-								instance.ITEM_TEMPLATE, {
+								instance.ITEM_TEMPLATE,
+								{
 									column: column,
 									index: index,
 									row: row,
@@ -569,6 +574,33 @@ AUI.add(
 		);
 
 		Liferay.InputLocalized = InputLocalized;
+
+		Liferay.on(
+			'destroyPortlet',
+			function(event) {
+				AObject.each(
+					Liferay.InputLocalized._instances,
+					function(item, index, collection) {
+						var ns = item.get('namespace');
+
+						if (ns.replace(NS_DELIMITER_REGEXP, '') === event.portletId) {
+							item.destroy();
+						}
+					}
+				);
+
+				AObject.each(
+					Liferay.InputLocalized._registered,
+					function(item, index, collection) {
+						var ns = item.namespace;
+
+						if (ns.replace(NS_DELIMITER_REGEXP, '') === event.portletId) {
+							Liferay.InputLocalized.unregister(index);
+						}
+					}
+				);
+			}
+		);
 	},
 	'',
 	{
