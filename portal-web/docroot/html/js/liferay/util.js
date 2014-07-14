@@ -756,10 +756,6 @@
 			return 0;
 		},
 
-		startsWith: function(str, x) {
-			return (str.indexOf(x) === 0);
-		},
-
 		textareaTabs: function(event) {
 			var el = event.currentTarget.getDOM();
 			var pressedKey = event.keyCode;
