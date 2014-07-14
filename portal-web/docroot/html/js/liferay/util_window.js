@@ -59,15 +59,11 @@ AUI.add(
 					_getViewportRegion: function() {
 						var instance = this;
 
-						var viewportRegion = instance._viewportRegion;
-
-						if (!viewportRegion) {
-							viewportRegion = instance._posNode.get('viewportRegion');
-
-							instance._viewportRegion = viewportRegion;
+						if (!instance._viewportRegion) {
+							instance._viewportRegion = instance._posNode.get('viewportRegion');
 						}
 
-						return viewportRegion;
+						return instance._viewportRegion;
 					}
 				}
 			}
