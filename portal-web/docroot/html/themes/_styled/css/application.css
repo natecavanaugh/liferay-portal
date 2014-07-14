@@ -320,10 +320,6 @@
 .app-view-drop-active {
 	background-color: #00A2EA;
 	font-weight: bold;
-
-	.category-portlets & {
-		color: #FFF;
-	}
 }
 
 .basecelleditor [class~="form-validator-message"] {
@@ -665,7 +661,7 @@
 
 /* ---------- HTML editor ---------- */
 
-body.html-editor {
+.aui .html-editor.portlet {
 	background: #FFF;
 	color: #000;
 	line-height: 1;

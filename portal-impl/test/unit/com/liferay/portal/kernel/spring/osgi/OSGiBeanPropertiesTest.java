@@ -29,7 +29,7 @@ import org.junit.Test;
 public class OSGiBeanPropertiesTest {
 
 	@Before
-	public void setup() {
+	public void setUp() {
 		PropsUtil.setProps(new PropsImpl());
 	}
 

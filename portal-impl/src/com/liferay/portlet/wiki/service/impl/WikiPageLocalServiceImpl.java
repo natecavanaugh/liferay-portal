@@ -400,7 +400,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 	}
 
 	@Override
-	public void changeParent(
+	public WikiPage changeParent(
 			long userId, long nodeId, String title, String newParentTitle,
 			ServiceContext serviceContext)
 		throws PortalException {
@@ -427,7 +427,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 		populateServiceContext(serviceContext, page);
 
-		updatePage(
+		page = updatePage(
 			userId, nodeId, title, version, content, summary, minorEdit, format,
 			newParentTitle, redirectTitle, serviceContext);
 
@@ -441,6 +441,8 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 				wikiPagePersistence.update(oldPage);
 			}
 		}
+
+		return page;
 	}
 
 	@Override
@@ -834,8 +836,39 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 	public List<WikiPage> getChildren(
 		long nodeId, boolean head, String parentTitle) {
 
-		return wikiPagePersistence.findByN_H_P_S(
+		return getChildren(
 			nodeId, head, parentTitle, WorkflowConstants.STATUS_APPROVED);
+	}
+
+	@Override
+	public List<WikiPage> getChildren(
+		long nodeId, boolean head, String parentTitle, int status) {
+
+		return wikiPagePersistence.findByN_H_P_S(
+			nodeId, head, parentTitle, status);
+	}
+
+	@Override
+	public List<WikiPage> getChildren(
+		long nodeId, boolean head, String parentTitle, int start, int end) {
+
+		return wikiPagePersistence.findByN_H_P_S(
+			nodeId, head, parentTitle, WorkflowConstants.STATUS_APPROVED, start,
+			end);
+	}
+
+	@Override
+	public int getChildrenCount(long nodeId, boolean head, String parentTitle) {
+		return getChildrenCount(
+			nodeId, head, parentTitle, WorkflowConstants.STATUS_APPROVED);
+	}
+
+	@Override
+	public int getChildrenCount(
+		long nodeId, boolean head, String parentTitle, int status) {
+
+		return wikiPagePersistence.countByN_H_P_S(
+			nodeId, head, parentTitle, status);
 	}
 
 	@Override
@@ -1545,6 +1578,28 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 	}
 
 	@Override
+	public WikiPage movePageFromTrash(
+			long userId, long nodeId, String title, String newParentTitle,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		WikiPage page = getPage(nodeId, title);
+
+		if (page.isInTrashExplicitly()) {
+			restorePageFromTrash(userId, page);
+		}
+		else {
+			TrashEntry trashEntry = page.getTrashEntry();
+
+			restoreDependentFromTrash(page, trashEntry.getEntryId());
+		}
+
+		return changeParent(
+			userId, nodeId, TrashUtil.getOriginalTitle(page.getTitle()),
+			newParentTitle, serviceContext);
+	}
+
+	@Override
 	public WikiPage movePageToTrash(long userId, long nodeId, String title)
 		throws PortalException {
 
@@ -1691,6 +1746,14 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 		if (trashVersion != null) {
 			String originalTitle = TrashUtil.getOriginalTitle(page.getTitle());
+
+			WikiPageResource pageResource =
+				wikiPageResourcePersistence.findByPrimaryKey(
+					page.getResourcePrimKey());
+
+			pageResource.setTitle(originalTitle);
+
+			wikiPageResourcePersistence.update(pageResource);
 
 			page.setTitle(originalTitle);
 

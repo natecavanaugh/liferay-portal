@@ -721,7 +721,8 @@ public class BookmarksFolderModelImpl extends BaseModelImpl<BookmarksFolder>
 
 		TrashHandler trashHandler = getTrashHandler();
 
-		if (!Validator.isNull(trashHandler.getContainerModelClassName())) {
+		if (!Validator.isNull(trashHandler.getContainerModelClassName(
+						getPrimaryKey()))) {
 			ContainerModel containerModel = null;
 
 			try {
@@ -738,7 +739,8 @@ public class BookmarksFolderModelImpl extends BaseModelImpl<BookmarksFolder>
 					return trashedModel.getTrashEntry();
 				}
 
-				trashHandler = TrashHandlerRegistryUtil.getTrashHandler(trashHandler.getContainerModelClassName());
+				trashHandler = TrashHandlerRegistryUtil.getTrashHandler(trashHandler.getContainerModelClassName(
+							containerModel.getContainerModelId()));
 
 				if (trashHandler == null) {
 					return null;
@@ -776,7 +778,8 @@ public class BookmarksFolderModelImpl extends BaseModelImpl<BookmarksFolder>
 		TrashHandler trashHandler = getTrashHandler();
 
 		if ((trashHandler == null) ||
-				Validator.isNull(trashHandler.getContainerModelClassName())) {
+				Validator.isNull(trashHandler.getContainerModelClassName(
+						getPrimaryKey()))) {
 			return false;
 		}
 

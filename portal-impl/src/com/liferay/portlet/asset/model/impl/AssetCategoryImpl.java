@@ -52,7 +52,7 @@ public class AssetCategoryImpl extends AssetCategoryBaseImpl {
 	}
 
 	@Override
-	public AssetCategory getParentCategory() throws PortalException {
+	public AssetCategory getParentCategory() {
 		return AssetCategoryLocalServiceUtil.fetchCategory(
 			getParentCategoryId());
 	}
