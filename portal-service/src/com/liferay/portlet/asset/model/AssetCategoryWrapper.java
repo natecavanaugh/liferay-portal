@@ -347,8 +347,7 @@ public class AssetCategoryWrapper implements AssetCategory,
 	}
 
 	@Override
-	public com.liferay.portlet.asset.model.AssetCategory getParentCategory()
-		throws com.liferay.portal.kernel.exception.PortalException {
+	public com.liferay.portlet.asset.model.AssetCategory getParentCategory() {
 		return _assetCategory.getParentCategory();
 	}
 

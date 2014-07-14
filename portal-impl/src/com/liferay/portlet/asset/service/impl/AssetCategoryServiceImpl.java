@@ -288,9 +288,8 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 
 	@Override
 	public List<AssetCategory> getVocabularyCategories(
-			long groupId, long parentCategoryId, long vocabularyId, int start,
-			int end, OrderByComparator<AssetCategory> obc)
-		throws PortalException {
+		long groupId, long parentCategoryId, long vocabularyId, int start,
+		int end, OrderByComparator<AssetCategory> obc) {
 
 		return assetCategoryPersistence.filterFindByG_P_V(
 			groupId, parentCategoryId, vocabularyId, start, end, obc);

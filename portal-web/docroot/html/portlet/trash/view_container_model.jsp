@@ -18,9 +18,11 @@
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");
+String backURL = ParamUtil.getString(request, "backURL", redirect);
+
 String className = ParamUtil.getString(request, "className");
 long classPK = ParamUtil.getLong(request, "classPK");
-String eventName = ParamUtil.getString(request, "eventName", liferayPortletResponse.getNamespace() + "selectFolder");
+String eventName = ParamUtil.getString(request, "eventName", liferayPortletResponse.getNamespace() + "selectContainer");
 
 TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(className);
 
@@ -38,19 +40,21 @@ PortletURL containerURL = renderResponse.createRenderURL();
 
 containerURL.setParameter("struts_action", "/trash/view_container_model");
 containerURL.setParameter("redirect", redirect);
+containerURL.setParameter("backURL", currentURL);
 containerURL.setParameter("className", className);
 containerURL.setParameter("classPK", String.valueOf(classPK));
-containerURL.setParameter("containerModelClassName", trashHandler.getContainerModelClassName());
+containerURL.setParameter("containerModelClassName", trashHandler.getContainerModelClassName(classPK));
 
-TrashUtil.addContainerModelBreadcrumbEntries(request, trashHandler.getContainerModelClassName(), containerModelId, containerURL);
+TrashUtil.addContainerModelBreadcrumbEntries(request, trashHandler.getContainerModelClassName(classPK), containerModelId, containerURL);
 %>
 
 <div class="alert alert-block">
-	<liferay-ui:message arguments="<%= new Object[] {trashHandler.getContainerModelName(), HtmlUtil.escape(trashRenderer.getTitle(locale))} %>" key="the-original-x-does-not-exist-anymore" translateArguments="<%= false %>" />
+	<liferay-ui:message arguments="<%= new Object[] {LanguageUtil.get(request, trashHandler.getContainerModelName()), HtmlUtil.escape(trashRenderer.getTitle(locale))} %>" key="the-original-x-does-not-exist-anymore" translateArguments="<%= false %>" />
 </div>
 
-<aui:form method="post" name="selectFolderFm">
+<aui:form method="post" name="selectContainerFm">
 	<liferay-ui:header
+		backURL="<%= backURL %>"
 		showBackURL="<%= containerModel != null %>"
 		title='<%= LanguageUtil.format(request, "select-x", trashHandler.getContainerModelName()) %>'
 	/>
@@ -65,6 +69,7 @@ TrashUtil.addContainerModelBreadcrumbEntries(request, trashHandler.getContainerM
 		data.put("classname", className);
 		data.put("classpk", classPK);
 		data.put("containermodelid", containerModelId);
+		data.put("redirect", redirect);
 		%>
 
 		<aui:button cssClass="selector-button" data="<%= data %>" value='<%= LanguageUtil.format(request, "choose-this-x", trashHandler.getContainerModelName()) %>' />
@@ -133,6 +138,7 @@ TrashUtil.addContainerModelBreadcrumbEntries(request, trashHandler.getContainerM
 				data.put("classname", className);
 				data.put("classpk", classPK);
 				data.put("containermodelid", curContainerModel.getContainerModelId());
+				data.put("redirect", redirect);
 				%>
 
 				<aui:button cssClass="selector-button" data="<%= data %>" value="choose" />
@@ -144,5 +150,5 @@ TrashUtil.addContainerModelBreadcrumbEntries(request, trashHandler.getContainerM
 </aui:form>
 
 <aui:script use="aui-base">
-	Liferay.Util.selectEntityHandler('#<portlet:namespace />selectFolderFm', '<%= HtmlUtil.escapeJS(eventName) %>');
+	Liferay.Util.selectEntityHandler('#<portlet:namespace />selectContainerFm', '<%= HtmlUtil.escapeJS(eventName) %>');
 </aui:script>

@@ -154,6 +154,36 @@ public class PluginsEnvironmentBuilder {
 		sb.append("\t\t</attributes>\n\t</classpathentry>\n");
 	}
 
+	protected void addIvyCacheJar(
+		StringBundler sb, String ivyDirName, String dependencyName) {
+
+		String dirName = ivyDirName + "/cache/" + dependencyName + "/bundles";
+
+		if (!_fileUtil.exists(dirName)) {
+			dirName = ivyDirName + "/cache/" + dependencyName + "/jars";
+
+			if (!_fileUtil.exists(dirName)) {
+				throw new RuntimeException("Unable to find jars in " + dirName);
+			}
+		}
+
+		File dir = new File(dirName);
+
+		File[] files = dir.listFiles();
+
+		for (File file : files) {
+			if (!file.isFile()) {
+				continue;
+			}
+
+			addClasspathEntry(sb, dirName + "/" + file.getName());
+
+			return;
+		}
+
+		throw new RuntimeException("Unable to find jars in " + dirName);
+	}
+
 	protected List<String> getCommonJars() {
 		List<String> jars = new ArrayList<String>();
 
@@ -522,6 +552,34 @@ public class PluginsEnvironmentBuilder {
 			}
 			else {
 				addClasspathEntry(sb, "lib/" + jar);
+			}
+		}
+
+		File ivyXmlFile = new File(projectDirName, "ivy.xml");
+
+		if (ivyXmlFile.exists()) {
+			String content = _fileUtil.read(ivyXmlFile);
+
+			if (content.contains("arquillian-junit-container")) {
+				String ivyDirName = ".ivy";
+
+				for (int i = 0; i < 10; i++) {
+					if (_fileUtil.exists(ivyDirName)) {
+						break;
+					}
+
+					ivyDirName = "../" + ivyDirName;
+				}
+
+				addIvyCacheJar(
+					sb, ivyDirName,
+					"org.apache.felix/org.apache.felix.framework");
+				addIvyCacheJar(
+					sb, ivyDirName,
+					"org.jboss.arquillian.junit/arquillian-junit-core");
+				addIvyCacheJar(
+					sb, ivyDirName,
+					"org.jboss.arquillian.test/arquillian-test-api");
 			}
 		}
 
