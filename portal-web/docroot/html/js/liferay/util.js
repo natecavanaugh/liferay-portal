@@ -819,31 +819,6 @@
 			return value;
 		},
 
-		unescapeHTML: function(str, entities) {
-			var regex = REGEX_HTML_UNESCAPE;
-
-			var entitiesMap = MAP_HTML_CHARS_UNESCAPED;
-
-			if (entities) {
-				var entitiesValues = [];
-
-				entitiesMap = {};
-
-				AObject.each(
-					entities,
-					function(item, index) {
-						entitiesMap[item] = index;
-
-						entitiesValues.push(item);
-					}
-				);
-
-				regex = new RegExp(entitiesValues.join('|'), 'gi');
-			}
-
-			return str.replace(regex, A.bind('_unescapeHTML', Util, entitiesMap));
-		},
-
 		_defaultPreviewArticleFn: function(event) {
 			var instance = this;
 
@@ -1008,11 +983,7 @@
 
 				return value;
 			}
-		),
-
-		_unescapeHTML: function(entities, match) {
-			return entities[match];
-		}
+		)
 	};
 
 	Liferay.provide(
