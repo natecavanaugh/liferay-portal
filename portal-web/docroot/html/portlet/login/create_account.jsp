@@ -127,7 +127,7 @@ birthdayCalendar.set(Calendar.YEAR, 1970);
 				<aui:input model="<%= User.class %>" name="screenName" />
 			</c:if>
 
-			<aui:input autoFocus="<%= true %>" model="<%= User.class %>" name="emailAddress">
+			<aui:input model="<%= User.class %>" name="emailAddress">
 				<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.USERS_EMAIL_ADDRESS_REQUIRED) %>">
 					<aui:validator name="required" />
 				</c:if>
