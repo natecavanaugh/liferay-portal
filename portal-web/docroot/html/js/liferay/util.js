@@ -591,10 +591,6 @@
 			return !!(window.Array && object.constructor == window.Array);
 		},
 
-		isEditorPresent: function(editorImpl) {
-			return Liferay.EDITORS && Liferay.EDITORS[editorImpl];
-		},
-
 		isPhone: function() {
 			var instance = this;
 
