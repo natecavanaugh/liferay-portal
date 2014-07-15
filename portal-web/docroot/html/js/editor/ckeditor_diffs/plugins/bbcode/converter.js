@@ -57,10 +57,10 @@
 	var MAP_TOKENS_EXCLUDE_NEW_LINE = {
 		'*': 3,
 		li: 3,
-		tr: 3,
+		table: 2,
 		td: 3,
 		th: 3,
-		table: 2
+		tr: 3
 	};
 
 	var REGEX_COLOR = /^(:?aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|purple|red|silver|teal|white|yellow|#(?:[0-9a-f]{3})?[0-9a-f]{3})$/i;
@@ -198,8 +198,7 @@
 					result.push(token.value);
 				}
 
-			}
-			while ((token.type != TOKEN_TAG_END) && (token.value != toTagName));
+			} while ((token.type != TOKEN_TAG_END) && (token.value != toTagName));
 
 			if (consume) {
 				instance._tokenPointer = index - 1;

@@ -2,16 +2,18 @@ AUI.add(
 	'liferay-portlet-dynamic-data-lists',
 	function(A) {
 		var AArray = A.Array;
+		var JSON = A.JSON;
+		var Lang = A.Lang;
 
 		var DateMath = A.DataType.DateMath;
 
 		var FormBuilder = Liferay.FormBuilder;
 
-		var Lang = A.Lang;
-
-		var EMPTY_FN = A.Lang.emptyFn;
-
-		var JSON = A.JSON;
+		var LString = Lang.String;
+		var emptyFn = Lang.emptyFn;
+		var isArray = Lang.isArray;
+		var isNumber = Lang.isNumber;
+		var toInt = Lang.toInt;
 
 		var STR_EMPTY = '';
 
@@ -24,12 +26,12 @@ AUI.add(
 					},
 
 					recordsetId: {
-						validator: Lang.isNumber,
+						validator: isNumber,
 						value: 0
 					},
 
 					structure: {
-						validator: Lang.isArray,
+						validator: isArray,
 						value: []
 					}
 				},
@@ -92,7 +94,7 @@ AUI.add(
 					updateMinDisplayRows: function(minDisplayRows, callback) {
 						var instance = this;
 
-						callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+						callback = (callback && A.bind(callback, instance)) || emptyFn;
 
 						var recordsetId = instance.get('recordsetId');
 
@@ -163,7 +165,7 @@ AUI.add(
 									value = JSON.stringify(value);
 								}
 								else if ((type === 'radio') || (type === 'select')) {
-									if (!Lang.isArray(value)) {
+									if (!isArray(value)) {
 										value = AArray(value);
 									}
 
@@ -297,7 +299,7 @@ AUI.add(
 				addRecord: function(recordsetId, displayIndex, fieldsMap, callback) {
 					var instance = this;
 
-					callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+					callback = (callback && A.bind(callback, instance)) || emptyFn;
 
 					Liferay.Service(
 						'/ddlrecord/add-record',
@@ -385,7 +387,7 @@ AUI.add(
 									return AArray.map(
 										val,
 										function(item, index) {
-											var value = Lang.toInt(item) || Date.now();
+											var value = toInt(item) || Date.now();
 
 											var date = new Date(value);
 
@@ -402,7 +404,7 @@ AUI.add(
 									var value = data[name];
 
 									if (value !== STR_EMPTY) {
-										var date = new Date(Lang.toInt(value));
+										var date = new Date(toInt(value));
 
 										date = DateMath.add(date, DateMath.MINUTES, date.getTimezoneOffset());
 
@@ -418,7 +420,7 @@ AUI.add(
 
 									var numberValue = STR_EMPTY;
 
-									if (Lang.isNumber(number)) {
+									if (isNumber(number)) {
 										numberValue = number;
 									}
 
@@ -430,7 +432,7 @@ AUI.add(
 
 									var value = A.DataType.Number.parse(data[name]);
 
-									if (!Lang.isNumber(value)) {
+									if (!isNumber(value)) {
 										value = STR_EMPTY;
 									}
 
@@ -582,7 +584,7 @@ AUI.add(
 				updateRecord: function(recordId, displayIndex, fieldsMap, merge, callback) {
 					var instance = this;
 
-					callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+					callback = (callback && A.bind(callback, instance)) || emptyFn;
 
 					Liferay.Service(
 						'/ddlrecord/update-record',
@@ -608,8 +610,6 @@ AUI.add(
 		Liferay.SpreadSheet = SpreadSheet;
 
 		var DDLUtil = {
-			previewDialog: null,
-
 			openPreviewDialog: function(content) {
 				var instance = this;
 
@@ -632,7 +632,9 @@ AUI.add(
 
 					previewDialog.set('bodyContent', content);
 				}
-			}
+			},
+
+			previewDialog: null
 		};
 
 		Liferay.DDLUtil = DDLUtil;

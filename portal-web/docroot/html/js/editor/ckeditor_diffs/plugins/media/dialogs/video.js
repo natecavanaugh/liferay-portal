@@ -24,17 +24,19 @@ CKEDITOR.dialog.add(
 			var videoWidth = videoNode.getAttribute('data-width');
 
 			if (id === 'poster') {
+				var Util = Liferay.Util;
+
 				videoNode.setAttribute('data-document-url', value);
 
-				videoUrl = Liferay.Util.addParams('videoPreview=1&type=mp4', value);
+				videoUrl = Util.addParams('videoPreview=1&type=mp4', value);
 
 				videoNode.setAttribute('data-video-url', videoUrl);
 
-				videoOgvUrl = Liferay.Util.addParams('videoPreview=1&type=ogv', value);
+				videoOgvUrl = Util.addParams('videoPreview=1&type=ogv', value);
 
 				videoNode.setAttribute('data-video-ogv-url', videoOgvUrl);
 
-				value = Liferay.Util.addParams('videoThumbnail=1', value);
+				value = Util.addParams('videoThumbnail=1', value);
 
 				videoNode.setAttribute('data-poster', value);
 
@@ -114,9 +116,6 @@ CKEDITOR.dialog.add(
 		}
 
 		return {
-			minHeight: 200,
-			minWidth: 400,
-
 			contents: [
 				{
 					elements:
@@ -176,7 +175,15 @@ CKEDITOR.dialog.add(
 				}
 			],
 
-			title: Liferay.Language.get('video-properties'),
+			minHeight: 200,
+
+			minWidth: 400,
+
+			onOk: function() {
+				var instance = this;
+
+				editor.plugins.media.onOkCallback(instance, editor, 'video');
+			},
 
 			onShow: function() {
 				var instance = this;
@@ -184,11 +191,7 @@ CKEDITOR.dialog.add(
 				editor.plugins.media.onShowCallback(instance, editor, 'video');
 			},
 
-			onOk: function() {
-				var instance = this;
-
-				editor.plugins.media.onOkCallback(instance, editor, 'video');
-			}
+			title: Liferay.Language.get('video-properties')
 		};
 	}
 );

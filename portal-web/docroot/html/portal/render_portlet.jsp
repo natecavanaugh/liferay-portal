@@ -1026,7 +1026,9 @@ if (themeDisplay.isStatePopUp()) {
 %>
 
 		<aui:script use="aui-base">
-			var dialog = Liferay.Util.getWindow();
+			var Util = Liferay.Util;
+
+			var dialog = Util.getWindow();
 
 			var hideDialogSignature = '<portlet:namespace />hideRefreshDialog|*';
 
@@ -1036,7 +1038,7 @@ if (themeDisplay.isStatePopUp()) {
 				'<portlet:namespace />hideRefreshDialog|visibleChange',
 				function(event) {
 					if (!event.newVal && event.src !== 'hideLink') {
-						var refreshWindow = dialog._refreshWindow || Liferay.Util.getTop();
+						var refreshWindow = dialog._refreshWindow || Util.getTop();
 
 						var topA = refreshWindow.AUI();
 
@@ -1070,7 +1072,9 @@ if (themeDisplay.isStatePopUp()) {
 %>
 
 		<aui:script use="aui-base">
-			var dialog = Liferay.Util.getWindow();
+			var Util = Liferay.Util;
+
+			var dialog = Util.getWindow();
 
 			var hideDialogSignature = '<portlet:namespace />hideRefreshDialog|*';
 
@@ -1080,7 +1084,7 @@ if (themeDisplay.isStatePopUp()) {
 				'<portlet:namespace />hideRefreshDialog|visibleChange',
 				function(event) {
 					if (!event.newVal && event.src !== 'hideLink') {
-						var refreshWindow = dialog._refreshWindow || Liferay.Util.getTop();
+						var refreshWindow = dialog._refreshWindow || Util.getTop();
 
 						if (window.parent) {
 							var data = {

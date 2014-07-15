@@ -13,11 +13,11 @@ AUI.add(
 		var LOCALIZABLE_FIELD_ATTRS = ['label', 'predefinedValue', 'tip'];
 
 		var MAP_HIDDEN_FIELD_ATTRS = {
+			DEFAULT: ['readOnly'],
+
 			checkbox: ['readOnly', 'required'],
 
-			separator: ['readOnly', 'required', 'predefinedValue', 'indexType'],
-
-			DEFAULT: ['readOnly']
+			separator: ['readOnly', 'required', 'predefinedValue', 'indexType']
 		};
 
 		var STR_BLANK = '';
