@@ -37,6 +37,34 @@ AUI.add(
 				NAME: A.Modal.NAME,
 
 				prototype: {
+					_getRegion: function (node) {
+						var instance = this;
+
+						var nodeRegion;
+
+						if (!node) {
+							nodeRegion = instance._getViewportRegion();
+						}
+						else {
+							node = A.one(node);
+
+							if (node) {
+								nodeRegion = node.get('region');
+							}
+						}
+
+						return nodeRegion;
+					},
+
+					_getViewportRegion: function() {
+						var instance = this;
+
+						if (!instance._viewportRegion) {
+							instance._viewportRegion = instance._posNode.get('viewportRegion');
+						}
+
+						return instance._viewportRegion;
+					}
 				}
 			}
 		);
@@ -396,14 +424,18 @@ AUI.add(
 					}
 				},
 
-				_syncWindowsUI: function() {
+				_syncWindowsUI: function(event) {
 					var instance = this;
+
+					var currentTarget = event.currentTarget;
 
 					var modals = instance._map;
 
 					A.each(
 						modals,
 						function(modal) {
+							modal._viewportRegion = currentTarget.get('region');
+
 							if (modal.get('visible')) {
 								instance._setWindowDefaultSizeIfNeeded(modal);
 
