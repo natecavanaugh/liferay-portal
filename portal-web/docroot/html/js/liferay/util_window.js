@@ -127,6 +127,10 @@ AUI.add(
 					modal.after(
 						'destroy',
 						function(event) {
+							if (A.UA.ie == 9 && modal._opener.frameElement) {
+								instance._syncWindowsUI();
+							}
+
 							instance._unregister(modal);
 
 							modal = null;
@@ -365,6 +369,12 @@ AUI.add(
 
 					var autoSizeNode = modal.get('autoSizeNode');
 
+					var isIE9 = (A.UA.ie == 9);
+
+					if (isIE9) {
+						var widthInitial = modal.get('width');
+					}
+
 					if (modal.get('autoHeight')) {
 						var height;
 
@@ -392,7 +402,17 @@ AUI.add(
 
 						width *= modal.get('autoWidthRatio');
 
+						if (isIE9 && width == widthInitial) {
+							// LPS-47713 - IE9 hack to force media query re-evaluation.
+							modal.set('width', width + 1);
+						}
+
 						modal.set('width', width);
+					}
+					else if (isIE9) {
+						// LPS-47713 - IE9 hack to force media query re-evaluation.
+						modal.set('width', widthInitial + 1);
+						modal.set('width', widthInitial);
 					}
 				},
 
