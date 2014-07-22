@@ -402,15 +402,13 @@ AUI.add(
 
 						width *= modal.get('autoWidthRatio');
 
-						if (isIE9 && width == widthInitial) {
-							// LPS-47713 - IE9 hack to force media query re-evaluation.
+						if (isIE9 && (width == widthInitial)) {
 							modal.set('width', width + 1);
 						}
 
 						modal.set('width', width);
 					}
 					else if (isIE9) {
-						// LPS-47713 - IE9 hack to force media query re-evaluation.
 						modal.set('width', widthInitial + 1);
 						modal.set('width', widthInitial);
 					}
