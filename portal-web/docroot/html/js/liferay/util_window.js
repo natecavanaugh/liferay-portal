@@ -1,14 +1,14 @@
 AUI.add(
 	'liferay-util-window',
 	function(A) {
-		var Lang = A.Lang;
-
 		var DOM = A.DOM;
+		var Lang = A.Lang;
+		var UA = A.UA;
 
 		var Util = Liferay.Util;
 		var Window = Util.Window;
 
-		var useMediaQueryEvaluation = A.UA.ie == 9;
+		var useMediaQueryEvaluation = UA.ie == 9;
 
 		var LiferayModal = A.Component.create(
 			{
@@ -176,7 +176,7 @@ AUI.add(
 
 									iframeNode.focus();
 
-									if (A.UA.ios) {
+									if (UA.ios) {
 										iframeNode.attr('scrolling', 'no');
 									}
 								}
