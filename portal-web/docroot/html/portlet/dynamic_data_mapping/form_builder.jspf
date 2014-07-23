@@ -215,12 +215,12 @@ for (Locale availableLocale : LanguageUtil.getAvailableLocales(themeDisplay.getS
 						else if (Lang.isObject(responseData)) {
 							displayMessage(MESSAGE_FAILURE, responseData.exception);
 						}
-
-						getLoadingMask().toggle(false);
 					}
 				}
 			}
 		);
+
+		getLoadingMask().toggle(false);
 	};
 
 	var setEditorSize = function() {
