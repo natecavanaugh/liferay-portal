@@ -74,6 +74,10 @@ import com.liferay.portlet.wiki.workflow.WikiPageWorkflowHandler;
 public class PortalRegisterTestUtil {
 
 	protected static void registerAssetRendererFactories() {
+		if (_assetRendererFactoriesRegistered) {
+			return;
+		}
+
 		for (Class<?> clazz : _ASSET_RENDERER_FACTORY_CLASSES) {
 			try {
 				AssetRendererFactory assetRendererFactory =
@@ -91,9 +95,15 @@ public class PortalRegisterTestUtil {
 				ie.printStackTrace();
 			}
 		}
+
+		_assetRendererFactoriesRegistered = true;
 	}
 
 	protected static void registerIndexers() {
+		if (_indexersRegistered) {
+			return;
+		}
+
 		IndexerRegistryUtil.register(new AssetIndexer());
 		IndexerRegistryUtil.register(new BlogsIndexer());
 		IndexerRegistryUtil.register(new ContactIndexer());
@@ -110,9 +120,15 @@ public class PortalRegisterTestUtil {
 		IndexerRegistryUtil.register(new UserIndexer());
 		IndexerRegistryUtil.register(new WikiNodeIndexer());
 		IndexerRegistryUtil.register(new WikiPageIndexer());
+
+		_indexersRegistered = true;
 	}
 
 	protected static void registerTrashHandlers() {
+		if (_trashHandlersRegistered) {
+			return;
+		}
+
 		TrashHandlerRegistryUtil.register(new BlogsEntryTrashHandler());
 		TrashHandlerRegistryUtil.register(new DLFileEntryTrashHandler());
 		TrashHandlerRegistryUtil.register(new DLFileShortcutTrashHandler());
@@ -123,9 +139,15 @@ public class PortalRegisterTestUtil {
 		TrashHandlerRegistryUtil.register(new MBThreadTrashHandler());
 		TrashHandlerRegistryUtil.register(new WikiNodeTrashHandler());
 		TrashHandlerRegistryUtil.register(new WikiPageTrashHandler());
+
+		_trashHandlersRegistered = true;
 	}
 
 	protected static void registerWorkflowHandlers() {
+		if (_workflowHandlersRegistered) {
+			return;
+		}
+
 		WorkflowHandlerRegistryUtil.register(new BlogsEntryWorkflowHandler());
 		WorkflowHandlerRegistryUtil.register(new DDLRecordWorkflowHandler());
 		WorkflowHandlerRegistryUtil.register(new DLFileEntryWorkflowHandler());
@@ -135,6 +157,8 @@ public class PortalRegisterTestUtil {
 		WorkflowHandlerRegistryUtil.register(new MBMessageWorkflowHandler());
 		WorkflowHandlerRegistryUtil.register(new UserWorkflowHandler());
 		WorkflowHandlerRegistryUtil.register(new WikiPageWorkflowHandler());
+
+		_workflowHandlersRegistered = true;
 	}
 
 	private static final Class<?>[] _ASSET_RENDERER_FACTORY_CLASSES = {
@@ -152,5 +176,10 @@ public class PortalRegisterTestUtil {
 		MBMessageAssetRendererFactory.class, UserAssetRendererFactory.class,
 		WikiPageAssetRendererFactory.class
 	};
+
+	private static boolean _assetRendererFactoriesRegistered;
+	private static boolean _indexersRegistered;
+	private static boolean _trashHandlersRegistered;
+	private static boolean _workflowHandlersRegistered;
 
 }
