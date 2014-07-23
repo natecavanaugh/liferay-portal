@@ -8,6 +8,8 @@ AUI.add(
 		var Util = Liferay.Util;
 		var Window = Util.Window;
 
+		var useMediaQueryEvaluation = A.UA.ie == 9;
+
 		var LiferayModal = A.Component.create(
 			{
 				ATTRS: {
@@ -127,6 +129,12 @@ AUI.add(
 					modal.after(
 						'destroy',
 						function(event) {
+							var openerInFrame = !!modal._opener.frameElement;
+
+							if (useMediaQueryEvaluation && openerInFrame) {
+								instance._syncWindowsUI();
+							}
+
 							instance._unregister(modal);
 
 							modal = null;
@@ -188,6 +196,13 @@ AUI.add(
 						config.iframeId = config.id + instance.IFRAME_SUFFIX;
 					}
 				},
+
+				_forceMediaQueryEvaluation: useMediaQueryEvaluation ? function(modal, width) {
+					var instance = this;
+
+					modal.set('width', width + 1);
+					modal.set('width', width);
+				} : function() {},
 
 				_getDialogIframeConfig: function(config) {
 					var instance = this;
@@ -392,7 +407,23 @@ AUI.add(
 
 						width *= modal.get('autoWidthRatio');
 
-						modal.set('width', width);
+						var widthInitial = modal.get('width');
+
+						if (width != widthInitial) {
+							modal.set('width', width);
+						}
+						else {
+							instance._forceMediaQueryEvaluation(
+								modal,
+								widthInitial
+							);
+						}
+					}
+					else {
+						instance._forceMediaQueryEvaluation(
+							modal,
+							modal.get('width')
+						);
 					}
 				},
 
