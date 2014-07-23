@@ -564,12 +564,12 @@ AUI.add(
 					},
 
 					_setFields: function() {
-				        var instance = this;
+						var instance = this;
 
-				        LiferayFormBuilder.UNIQUE_FIELD_NAMES_MAP.clear();
+						LiferayFormBuilder.UNIQUE_FIELD_NAMES_MAP.clear();
 
-				        return LiferayFormBuilder.superclass._setFields.apply(instance, arguments);
-				    },
+						return LiferayFormBuilder.superclass._setFields.apply(instance, arguments);
+					},
 
 					_syncFieldOptionsLocaleUI: function(field, locale) {
 						var instance = this;
