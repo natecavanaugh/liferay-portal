@@ -87,9 +87,9 @@ AUI.add(
 							var dataStoreForm = instance._dataStore.ancestor('form');
 
 							if (dataStoreForm) {
-								var method = dataStoreForm.getAttribute('method');
+								var method = dataStoreForm.attr('method').toLowerCase();
 
-								if (method && 'get' == method.toLowerCase()) {
+								if (method && method == 'get') {
 									instance._dataStore = null;
 								}
 							}
