@@ -1,14 +1,21 @@
 AUI.add(
 	'liferay-util-window',
 	function(A) {
-		var DOM = A.DOM;
 		var Lang = A.Lang;
 		var UA = A.UA;
+		var DOM = A.DOM;
 
 		var Util = Liferay.Util;
 		var Window = Util.Window;
 
-		var useMediaQueryEvaluation = UA.ie == 9;
+		var isIE9 = (UA.ie == 9);
+
+		var setWidth = function(modal, width) {
+			if (isIE9) {
+				modal.set('width', width + 1);
+				modal.set('width', width);
+			}
+		}
 
 		var LiferayModal = A.Component.create(
 			{
@@ -131,7 +138,7 @@ AUI.add(
 						function(event) {
 							var openerInFrame = !!modal._opener.frameElement;
 
-							if (useMediaQueryEvaluation && openerInFrame) {
+							if (isIE9 && openerInFrame) {
 								instance._syncWindowsUI();
 							}
 
@@ -196,13 +203,6 @@ AUI.add(
 						config.iframeId = config.id + instance.IFRAME_SUFFIX;
 					}
 				},
-
-				_forceMediaQueryEvaluation: useMediaQueryEvaluation ? function(modal, width) {
-					var instance = this;
-
-					modal.set('width', width + 1);
-					modal.set('width', width);
-				} : function() {},
 
 				_getDialogIframeConfig: function(config) {
 					var instance = this;
@@ -413,17 +413,11 @@ AUI.add(
 							modal.set('width', width);
 						}
 						else {
-							instance._forceMediaQueryEvaluation(
-								modal,
-								widthInitial
-							);
+							setWidth(modal, widthInitial);
 						}
 					}
 					else {
-						instance._forceMediaQueryEvaluation(
-							modal,
-							modal.get('width')
-						);
+						setWidth(modal, modal.get('width'));
 					}
 				},
 
