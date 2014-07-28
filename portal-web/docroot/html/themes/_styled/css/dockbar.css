@@ -986,6 +986,11 @@ $editLayoutPanelWidth: 460px;
 		top: 0;
 		z-index: 1100;
 
+		.add-content-menu .content-link:active {
+			background-color: #488F06;
+			color: #F1FBD1;
+		}
+
 		@include respond-to(phone, tablet) {
 			margin: 0 0 0 -20px;
 			position: static;

@@ -88,7 +88,11 @@
 					</liferay-ui:tabs>
 
 					<span class="added-message hide" id="<portlet:namespace />addedMessage">
-						<span class="alert-success message"><liferay-ui:icon iconCssClass="icon-ok-sign" /> <span id="<portlet:namespace />portletName"></span> <liferay-ui:message key="added" /></span>
+						<span class="alert-success message">
+							<liferay-ui:icon iconCssClass="icon-ok-sign" /> <span id="<portlet:namespace />portletName"></span> <liferay-ui:message key="added" />
+
+							<span class="content-link" id="<portlet:namespace />contentLink"><liferay-ui:message key="skip-to-content" /></span>
+						</span>
 					</span>
 				</div>
 			</c:if>

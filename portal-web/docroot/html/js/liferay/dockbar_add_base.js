@@ -108,16 +108,9 @@ AUI.add(
 							}
 						}
 
-						var addedMessage = instance.byId('addedMessage');
+						instance._addedMessage = instance.byId('addedMessage');
 
-						instance._hideAddedMessageTask = A.debounce(
-							function() {
-								addedMessage.hide(true);
-							},
-							2000
-						);
-
-						instance._addedMessage = addedMessage;
+						instance._hideAddedMessageTask = A.debounce(A.bind('_hideAddedMessage', instance), 2000);
 
 						instance._eventHandles = [];
 
@@ -140,10 +133,6 @@ AUI.add(
 
 							if (!portletMetaData.instanceable) {
 								instance._disablePortletEntry(portletId);
-							}
-
-							if (Util.isPhone() || Util.isTablet()) {
-								instance._portletFeedback(portletId, portlet);
 							}
 
 							var beforePortletLoaded = null;
@@ -171,6 +160,19 @@ AUI.add(
 										dropColumn.append(placeHolder);
 									}
 								}
+							}
+
+							if (Util.isPhone() || Util.isTablet()) {
+								instance._lastAddedPortlet = placeHolder;
+
+								instance._portletFeedback(portletId, portlet);
+
+								Liferay.once(
+									'addPortlet',
+									function(event) {
+										instance._lastAddedPortlet = event.portlet;
+									}
+								);
 							}
 
 							Portlet.add(
@@ -271,6 +273,14 @@ AUI.add(
 						return instance._searchData;
 					},
 
+					_hideAddedMessage: function() {
+						var instance = this;
+
+						instance._addedMessage.hide(true);
+
+						instance._skipToContentHandle.detach();
+					},
+
 					_portletFeedback: function(portletId, portlet) {
 						var instance = this;
 
@@ -282,6 +292,16 @@ AUI.add(
 							var portletName = portletNameNode.attr('data-title');
 
 							addedMessagePortlet.setHTML(portletName);
+
+							var contentLink = instance._contentLink;
+
+							if (!contentLink) {
+								contentLink = instance.byId('contentLink');
+
+								instance._contentLink = contentLink;
+							}
+
+							instance._skipToContentHandle = contentLink.on('tap', A.bind('_skipToContent', instance));
 
 							instance._addedMessage.show(
 								true,
@@ -300,6 +320,37 @@ AUI.add(
 						if (focusItem && event.tabSection && event.tabSection.contains(focusItem)) {
 							focusItem.focus();
 						}
+					},
+
+					_skipToContent: function(event) {
+						var instance = this;
+
+						event.preventDefault();
+
+						var portletXY = instance._lastAddedPortlet.getXY();
+
+						var scrollAnim = instance._scrollAnim;
+
+						if (!scrollAnim) {
+							scrollAnim = new A.Anim(
+								{
+									duration: 0.3,
+									easing: 'easeOut',
+									node: 'win'
+								}
+							);
+
+							instance._scrollAnim = scrollAnim;
+						}
+
+						scrollAnim.set(
+							'to',
+							{
+								scroll: [portletXY[0], portletXY[1] - 40]
+							}
+						).run();
+
+						instance._hideAddedMessage();
 					}
 				}
 			}
@@ -443,6 +494,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-dockbar', 'liferay-layout', 'transition']
+		requires: ['anim', 'liferay-dockbar', 'liferay-layout', 'transition']
 	}
 );
