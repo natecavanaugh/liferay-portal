@@ -31,26 +31,24 @@
 			}
 		}
 
-		.btn-toolbar {
-			.form-group-inline {
-				display: inline;
+		.form-group-inline {
+			display: inline;
 
-				.search-query {
-					margin-bottom: 0;
-				}
-
-				@include respond-to(phone, tablet) {
-					.search-query {
-						width: 65%;
-					}
-				}
+			.search-query {
+				margin-bottom: 0;
 			}
 
-			.form-group-inline, .btn-group {
-				margin-right: 5px;
+			@include respond-to(phone, tablet) {
+				.search-query {
+					width: 65%;
+				}
 			}
 		}
 
+		.form-group-inline, .btn-group {
+			margin-right: 5px;
+		}
+		
 		.display-style-buttons-container {
 			.lfr-icon-menu {
 				.lfr-icon-menu-arrow {
