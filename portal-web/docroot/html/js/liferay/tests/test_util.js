@@ -2,7 +2,7 @@ AUI.add('liferay-util-tests', function(A) {
 	var suite = new A.Test.Suite('liferay-util');
 
 	suite.add(new A.Test.Case({
-		name: 'Dynamic Data Mapping tests',
+		name: 'Liferay.Util tests',
 
 		setUp: function () {
 			//
