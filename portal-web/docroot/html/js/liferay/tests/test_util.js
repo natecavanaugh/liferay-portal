@@ -15,14 +15,12 @@ AUI.add('liferay-util-tests', function(A) {
 		'Test Liferay.Util.camelize': function() {
 			A.Assert.areSame(
 				Liferay.Util.camelize('this-will-pass'),
-				'thisWillPass',
-				'Do not allow punctuation.'
+				'thisWillPass'
 			);
 
 			A.Assert.areNotSame(
 				Liferay.Util.camelize('this-will-fail'),
-				'thisWillfail',
-				'Do not allow punctuation.'
+				'thisWillfail'
 			);
 		}
 	}));
