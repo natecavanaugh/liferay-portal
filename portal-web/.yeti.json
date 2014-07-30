@@ -1,7 +1,7 @@
 {
     "basedir": "docroot/html",
     "glob": "docroot/html/**/js/tests/*.html",
-    "coverage": true,
+    "coverage": false,
     "coverageOptions": {
     	"coverage-report": "html",
     	"coverage-dir": "docroot/html/js/tests/coverage",
