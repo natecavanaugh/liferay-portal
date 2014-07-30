@@ -283,9 +283,6 @@ body > .lfr-menu-list ul, .active-area-proxy, .entry-display-style .entry-thumbn
 	}
 
 	.search-panel {
-		display: table;
-		width: 100%;
-		
 		.add-content-search .field-input {
 			@include border-radius(4px);
 		}

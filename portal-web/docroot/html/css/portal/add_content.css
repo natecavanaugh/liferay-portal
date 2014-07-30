@@ -31,24 +31,25 @@
 			}
 		}
 
-		.form-group-inline {
-			display: inline;
-
-			.search-query {
-				margin-bottom: 0;
+		.content-search {
+			.input-select-wrapper, .input-text-wrapper {
+				float: left;
 			}
 
-			@include respond-to(phone, tablet) {
-				.search-query {
-					width: 65%;
-				}
+			.input-select-wrapper {
+				padding-left: 15px;
+				width: 25%;
+			}
+
+			.input-text-wrapper {
+				width: 75%;
 			}
 		}
 
-		.form-group-inline, .btn-group {
-			margin-right: 5px;
+		.navbar {
+			clear: left;
 		}
-		
+
 		.display-style-buttons-container {
 			.lfr-icon-menu {
 				.lfr-icon-menu-arrow {
