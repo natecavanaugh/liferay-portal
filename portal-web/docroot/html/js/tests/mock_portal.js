@@ -32,4 +32,6 @@ Liferay.AUI.getFilter.and.returnValue('raw');
 
 Liferay.AUI.getJavaScriptRootPath.and.returnValue('../../../../js');
 
+Liferay.ThemeDisplay.getPathThemeImages.and.returnValue('../../../../themes/classic/images');
+
 themeDisplay = Liferay.ThemeDisplay;
