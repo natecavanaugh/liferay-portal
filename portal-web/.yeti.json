@@ -1,0 +1,10 @@
+{
+    "basedir": "docroot/html",
+    "glob": "docroot/html/**/js/tests/*.html",
+    "coverage": true,
+    "coverageOptions": {
+    	"coverage-report": "html",
+    	"coverage-dir": "docroot/html/js/tests/coverage",
+        "instrument-exclude": ["**/!(custom_fields|main).js"]
+    }
+}
