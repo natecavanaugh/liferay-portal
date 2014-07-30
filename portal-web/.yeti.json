@@ -1,6 +1,6 @@
 {
     "basedir": "docroot/html",
-    "glob": "docroot/html/**/js/tests/*.html",
+    "glob": "docroot/html/portlet/*/js/tests/*.html",
     "coverage": false,
     "coverageOptions": {
     	"coverage-report": "html",
