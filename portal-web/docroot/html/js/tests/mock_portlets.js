@@ -1,3 +1,7 @@
-Liferay.AUI.getJavaScriptRootPath.and.returnValue('../../../../js');
+Liferay.AUI.getJavaScriptRootPath = function() {
+	return '../../../../js';
+};
 
-Liferay.ThemeDisplay.getPathThemeImages.and.returnValue('../../../../themes/classic/images');
+Liferay.ThemeDisplay.getPathThemeImages = function() {
+	return '../../../../themes/classic/images';
+};

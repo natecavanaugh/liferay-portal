@@ -1,33 +1,24 @@
 Liferay = {
-	AUI: jasmine.createSpyObj(
-		'Liferay.AUI',
-		[
-			'getAvailableLangPath',
-			'getCombine',
-			'getComboPath',
-			'getFilter',
-			'getJavaScriptRootPath'
-		]
-	),
+	AUI: {
+		getAvailableLangPath: function() {},
+		getCombine: function() {},
+		getComboPath: function() {},
+		getFilter: function() {
+			return 'raw';
+		},
+		getJavaScriptRootPath: function() {}
+	},
 
-	Browser: jasmine.createSpyObj(
-		'Liferay.Browser',
-		[
-			'isIe'
-		]
-	),
+	Browser: {
+		isIe: function() {}
+	},
 
-	ThemeDisplay: jasmine.createSpyObj(
-		'themeDisplay',
-		[
-			'getBCP47LanguageId',
-			'getLanguageId',
-			'getPathContext',
-			'getPathThemeImages'
-		]
-	)
+	ThemeDisplay: {
+		getBCP47LanguageId: function() {},
+		getLanguageId: function() {},
+		getPathContext: function() {},
+		getPathThemeImages: function() {}
+	}
 };
-
-Liferay.AUI.getFilter.and.returnValue('raw');
 
 themeDisplay = Liferay.ThemeDisplay;

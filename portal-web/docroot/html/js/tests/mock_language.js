@@ -1,6 +1,3 @@
-Liferay.Language = jasmine.createSpyObj(
-	'Liferay.Language',
-	[
-		'get'
-	]
-);
+Liferay.Language.get = function(key) {
+	return key;
+};
