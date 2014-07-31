@@ -33,6 +33,10 @@ public class BaseColTag extends com.liferay.taglib.util.IncludeTag {
 		return super.doStartTag();
 	}
 
+	public java.lang.String getBreakpointSize() {
+		return _breakpointSize;
+	}
+
 	public java.lang.String getCssClass() {
 		return _cssClass;
 	}
@@ -55,6 +59,12 @@ public class BaseColTag extends com.liferay.taglib.util.IncludeTag {
 
 	public int getWidth() {
 		return _width;
+	}
+
+	public void setBreakpointSize(java.lang.String breakpointSize) {
+		_breakpointSize = breakpointSize;
+
+		setScopedAttribute("breakpointSize", breakpointSize);
 	}
 
 	public void setCssClass(java.lang.String cssClass) {
@@ -95,6 +105,7 @@ public class BaseColTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	protected void cleanUp() {
+		_breakpointSize = null;
 		_cssClass = null;
 		_id = null;
 		_offset = 0;
@@ -115,6 +126,7 @@ public class BaseColTag extends com.liferay.taglib.util.IncludeTag {
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
+		setNamespacedAttribute(request, "breakpointSize", _breakpointSize);
 		setNamespacedAttribute(request, "cssClass", _cssClass);
 		setNamespacedAttribute(request, "id", _id);
 		setNamespacedAttribute(request, "offset", _offset);
@@ -131,6 +143,7 @@ public class BaseColTag extends com.liferay.taglib.util.IncludeTag {
 	private static final String _START_PAGE =
 		"/html/taglib/aui/col/start.jsp";
 
+	private java.lang.String _breakpointSize = null;
 	private java.lang.String _cssClass = null;
 	private java.lang.String _id = null;
 	private int _offset = 0;
