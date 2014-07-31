@@ -30,6 +30,19 @@ if (offsetWidth > 0) {
 if (offset > 0) {
 	cssClass += " aui-offset" + offset;
 }
+
+if (breakpointSize.equals("extraSmall")) {
+	breakpointSize = "xs";
+}
+else if (breakpointSize.equals("small")) {
+	breakpointSize = "sm";
+}
+else if (breakpointSize.equals("large")) {
+	breakpointSize = "lg";
+}
+else {
+	breakpointSize = "md";
+}
 %>
 
 <%!
