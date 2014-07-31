@@ -328,7 +328,6 @@ AUI.add(
 						event.preventDefault();
 
 						var portletXY = instance._lastAddedPortlet.getXY();
-
 						var scrollAnim = instance._scrollAnim;
 
 						if (!scrollAnim) {
@@ -346,7 +345,7 @@ AUI.add(
 						scrollAnim.set(
 							'to',
 							{
-								scroll: [portletXY[0], portletXY[1] - 40]
+								scroll: [portletXY[0], (portletXY[1] - 40)]
 							}
 						).run();
 
