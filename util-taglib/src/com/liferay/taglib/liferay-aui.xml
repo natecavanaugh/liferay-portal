@@ -153,6 +153,11 @@
 	<component name="Col" bodyContent="true">
 		<attributes>
 			<attribute>
+				<name>breakpointSize</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
 				<name>cssClass</name>
 				<inputType>java.lang.String</inputType>
 				<outputType>java.lang.String</outputType>

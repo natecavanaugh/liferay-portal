@@ -19,6 +19,7 @@
 <%@ include file="/html/taglib/taglib-init.jsp" %>
 
 <%
+java.lang.String breakpointSize = GetterUtil.getString((java.lang.String)request.getAttribute("aui:col:breakpointSize"));
 java.lang.String cssClass = GetterUtil.getString((java.lang.String)request.getAttribute("aui:col:cssClass"));
 java.lang.String id = GetterUtil.getString((java.lang.String)request.getAttribute("aui:col:id"));
 int offset = GetterUtil.getInteger(String.valueOf(request.getAttribute("aui:col:offset")));
