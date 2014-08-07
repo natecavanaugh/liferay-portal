@@ -185,8 +185,10 @@ body.portlet {
 .portlet-borderless-bar {
 	font-size: 10px;
 
+	@include ellipsis;
 	@include opacity(0.3);
 
+	max-width: 93%;
 	padding: 2px 5px 1px;
 	position: absolute;
 	right: 0;
@@ -300,9 +302,12 @@ body.portlet {
 }
 
 .portlet-title-default {
+	@include ellipsis;
+
 	display: inline-block;
 	float: right;
 	font-weight: bold;
+	max-width: 93%;
 	text-transform: uppercase;
 
 	@include respond-to(phone, tablet) {
