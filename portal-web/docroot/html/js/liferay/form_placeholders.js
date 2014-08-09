@@ -118,17 +118,11 @@ AUI.add(
 						var placeholder = currentTarget.attr(STR_PLACEHOLDER);
 
 						if (placeholder) {
-							var instance = this;
-
-							var formNode = instance.host.formNode;
-
-							var currentTargetName = currentTarget.get('name');
-
 							if (event.type === STR_FOCUS) {
 								if (currentTarget.hasAttribute(STR_DATA_TYPE_PASSWORD_PLACEHOLDER)) {
-									formNode.one('input[name=' + currentTargetName + ']').hide();
+									currentTarget.hide();
 
-									var passwordField = formNode.one('input[name=' + currentTargetName.replace('_pass_placeholder', '') + ']');
+									var passwordField = currentTarget.next();
 
 									passwordField.show();
 
@@ -144,9 +138,9 @@ AUI.add(
 								var value = currentTarget.val();
 
 								if (!value) {
-									formNode.one('input[name=' + currentTargetName + ']').hide();
+									currentTarget.hide();
 
-									formNode.one('input[name=' + currentTargetName + '_pass_placeholder]').show();
+									currentTarget.previous().show();
 								}
 							}
 						}
