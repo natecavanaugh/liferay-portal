@@ -29,11 +29,24 @@ boolean urlIsNotNull = Validator.isNotNull(url);
 			<c:choose>
 				<c:when test="<%= Validator.isNotNull(src) %>">
 					<c:choose>
-						<c:when test="<%= Validator.isNotNull(id) %>">
-							<img id="<%= id %>" src="<%= src %>" <%= details %> />
+						<c:when test='<%= StringUtil.endsWith(src, "svg") %>'>
+							<%
+							String svgPath = theme.getImagesPath() + StringUtil.replace(src, themeDisplay.getPathThemeImages(), "");
+							%>
+
+							<span class="taglib-icon-img">
+								<jsp:include page="<%= svgPath %>" />
+							</span>
 						</c:when>
 						<c:otherwise>
-							<img src="<%= src %>" <%= details %> />
+							<c:choose>
+								<c:when test="<%= Validator.isNotNull(id) %>">
+									<img id="<%= id %>" src="<%= src %>" <%= details %> />
+								</c:when>
+								<c:otherwise>
+									<img src="<%= src %>" <%= details %> />
+								</c:otherwise>
+							</c:choose>
 						</c:otherwise>
 					</c:choose>
 				</c:when>
