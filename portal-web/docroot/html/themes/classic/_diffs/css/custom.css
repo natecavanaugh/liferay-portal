@@ -701,6 +701,16 @@ $dockbarOpenGradientStart: #0EA6F9;
 	.portlet-borderless-bar {
 		@extend %portlet-action-bar-custom;
 
+		.portlet-title-default {
+			@include border-bottom-right-radius(20px);
+			@include border-top-right-radius(20px);
+		}
+
+		.portlet-actions {
+			@include border-bottom-left-radius(20px);
+			@include border-top-left-radius(20px);
+		}
+
 		@include respond-to(phone, tablet) {
 			margin-bottom: 10px;
 		}
