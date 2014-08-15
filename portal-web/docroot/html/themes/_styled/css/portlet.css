@@ -53,15 +53,15 @@ body.portlet {
 		}
 
 		.portlet-options {
-			.lfr-icon-menu-text {
-				color: transparent;
-				font-size: 0;
-			}
-
 			&, &.open {
 				.dropdown-toggle {
 					@include box-shadow(none);
 				}
+			}
+
+			.lfr-icon-menu-text {
+				color: transparent;
+				font-size: 0;
 			}
 		}
 	}
