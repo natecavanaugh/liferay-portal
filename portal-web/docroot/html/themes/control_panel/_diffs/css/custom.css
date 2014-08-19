@@ -476,8 +476,12 @@ $dockbarOpenGradientStart: #0EA6F9;
 
 	.portlet-topper-toolbar {
 		position: absolute;
-		right: 13px;
+		right: 21px;
 		top: 20px;
+	}
+
+	.portlet-topper-titleless .portlet-topper-toolbar {
+		position: static;
 	}
 
 	.lfr-control-panel-help-content.alert {
