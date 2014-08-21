@@ -480,6 +480,10 @@ $dockbarOpenGradientStart: #0EA6F9;
 		top: 20px;
 	}
 
+	.portlet-topper-titleless .portlet-topper-toolbar {
+		position: static;
+	}
+
 	.lfr-control-panel-help-content.alert {
 		border-width: 1px 0;
 		margin-bottom: 1em;
