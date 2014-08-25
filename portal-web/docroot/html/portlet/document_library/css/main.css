@@ -478,38 +478,6 @@
 		padding: 4px;
 		position: relative;
 		vertical-align: middle;
-
-		.liferay-rating-vote {
-			display: none;
-			left: -1px;
-			padding: 4px;
-			position: absolute;
-			right: -1px;
-			top: -1px;
-		}
-
-		&:hover, &:hover .liferay-rating-vote {
-			background: #B0D3F6;
-			border: 1px solid #3F6F9F;
-		}
-
-		&:hover .liferay-rating-vote {
-			display: block;
-		}
-
-		.rating-content, .rating-label-element {
-			display: inline;
-		}
-
-		.rating-label-element {
-			color: #555;
-			font-size: 0.9em;
-			margin-left: 0.5em;
-		}
-
-		.liferay-rating-score {
-			padding-left: 0;
-		}
 	}
 }
 
