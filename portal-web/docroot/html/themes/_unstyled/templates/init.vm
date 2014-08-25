@@ -160,6 +160,7 @@
 
 ## ---------- Page ---------- ##
 
+#set ($page_title = $company_name)
 #set ($the_title = "")
 #set ($selectable = $theme_display.isTilesSelectable())
 #set ($is_maximized = $layoutTypePortlet.hasStateMax())
@@ -203,6 +204,12 @@
 	#end
 
 	#set ($site_name = $htmlUtil.escape($page_group.getDescriptiveName()))
+
+	#if ($site_name != $company_name)
+		#set ($page_title = $site_name + " - " + $company_name)
+	#end
+
+	#set ($page_title = $the_title + " - " + $page_title)
 
 	#set ($community_name = $site_name)
 
