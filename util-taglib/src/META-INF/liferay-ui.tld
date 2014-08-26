@@ -2983,6 +2983,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>hoverVoteAccessible</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>numberOfStars</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>

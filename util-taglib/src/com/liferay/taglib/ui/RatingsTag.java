@@ -37,6 +37,10 @@ public class RatingsTag extends IncludeTag {
 		_classPK = classPK;
 	}
 
+	public void setHoverVoteAccessible(boolean hoverVoteAccessible) {
+		_hoverVoteAccessible = hoverVoteAccessible;
+	}
+
 	public void setNumberOfStars(int numberOfStars) {
 		_numberOfStars = numberOfStars;
 	}
@@ -69,6 +73,7 @@ public class RatingsTag extends IncludeTag {
 	protected void cleanUp() {
 		_className = null;
 		_classPK = 0;
+		_hoverVoteAccessible = false;
 		_numberOfStars = _DEFAULT_NUMBER_OF_STARS;
 		_ratingsEntry = null;
 		_ratingsStats = null;
@@ -95,6 +100,8 @@ public class RatingsTag extends IncludeTag {
 		request.setAttribute(
 			"liferay-ui:ratings:classPK", String.valueOf(_classPK));
 		request.setAttribute(
+			"liferay-ui:ratings:hoverVoteAccessible", String.valueOf(_hoverVoteAccessible));
+		request.setAttribute(
 			"liferay-ui:ratings:numberOfStars", String.valueOf(_numberOfStars));
 		request.setAttribute("liferay-ui:ratings:ratingsEntry", _ratingsEntry);
 		request.setAttribute("liferay-ui:ratings:ratingsStats", _ratingsStats);
@@ -119,6 +126,7 @@ public class RatingsTag extends IncludeTag {
 
 	private String _className;
 	private long _classPK;
+	private boolean _hoverVoteAccessible = false;
 	private int _numberOfStars = _DEFAULT_NUMBER_OF_STARS;
 	private RatingsEntry _ratingsEntry;
 	private RatingsStats _ratingsStats;

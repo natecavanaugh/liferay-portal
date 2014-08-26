@@ -475,26 +475,32 @@
 		border: 1px solid transparent;
 		display: inline-block;
 		margin: 0 3px;
-		padding: 4px;
+		padding: 10px;
 		position: relative;
 		vertical-align: middle;
 
 		.liferay-rating-vote {
-			display: none;
 			left: -1px;
 			padding: 4px;
 			position: absolute;
 			right: -1px;
 			top: -1px;
+
+			> div {
+				background: #B0D3F6;
+				border: 1px solid #3F6F9F;
+
+				@include border-radius(4px);
+
+				padding: 4px;
+				position: inherit;
+			}
 		}
 
-		&:hover, &:hover .liferay-rating-vote {
-			background: #B0D3F6;
-			border: 1px solid #3F6F9F;
-		}
-
-		&:hover .liferay-rating-vote {
-			display: block;
+		&:hover .liferay-rating-vote .hide-accessible {
+			-webkit-transform: inherit;
+			clip: auto !important;
+			position: inherit !important;
 		}
 
 		.rating-content, .rating-label-element {

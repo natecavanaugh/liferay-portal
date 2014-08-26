@@ -255,12 +255,24 @@ AUI.add(
 				ATTRS: {
 					initialFocus: {
 						validator: Lang.isBoolean
+					},
+					hoverVoteAccessible: {
+						validator: Lang.isBoolean,
+						value: false
 					}
 				},
 
 				EXTENDS: Ratings,
 
 				prototype: {
+					_focusChangeHandler: function(event) {
+						var instance = this;
+
+						var contentBox = instance.ratings.get('contentBox');
+
+						contentBox.toggleClass('hide-accessible', !contentBox.contains(document.activeElement));
+					},
+
 					_itemSelect: function(event) {
 						var instance = this;
 
@@ -294,6 +306,10 @@ AUI.add(
 									srcNode: '#' + namespace + 'ratingStarContent'
 								}
 							).render();
+
+							if (instance.get('hoverVoteAccessible')) {
+								instance.ratings.on('focusedChange', instance._focusChangeHandler, instance);
+							}
 
 							if (instance.get(STR_INITIAL_FOCUS)) {
 								instance.ratings.get('elements').item(0).focus();
