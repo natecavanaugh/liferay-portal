@@ -211,6 +211,10 @@
 		}
 	}
 
+	.lfr-search-container {
+		clear: both;
+	}
+
 	.view-all-link {
 		color: #666;
 		font-weight: normal;
