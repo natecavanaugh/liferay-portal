@@ -13,6 +13,8 @@ AUI.add(
 
 		var SELECTOR_RATING_ELEMENT = '.rating-element';
 
+		var STR_HOVER_VOTE_ACCESSIBLE = 'hoverVoteAccessible';
+
 		var STR_INITIAL_FOCUS = 'initialFocus';
 
 		var STR_NAMESPACE = 'namespace';
@@ -253,12 +255,13 @@ AUI.add(
 		var StarRating = A.Component.create(
 			{
 				ATTRS: {
-					initialFocus: {
-						validator: Lang.isBoolean
-					},
 					hoverVoteAccessible: {
 						validator: Lang.isBoolean,
 						value: false
+					},
+
+					initialFocus: {
+						validator: Lang.isBoolean
 					}
 				},
 
@@ -270,7 +273,10 @@ AUI.add(
 
 						var contentBox = instance.ratings.get('contentBox');
 
-						contentBox.toggleClass('hide-accessible', !contentBox.contains(document.activeElement));
+						contentBox.toggleClass(
+							'hide-accessible',
+							!contentBox.contains(document.activeElement)
+						);
 					},
 
 					_itemSelect: function(event) {
@@ -307,7 +313,7 @@ AUI.add(
 								}
 							).render();
 
-							if (instance.get('hoverVoteAccessible')) {
+							if (instance.get(STR_HOVER_VOTE_ACCESSIBLE)) {
 								instance.ratings.on('focusedChange', instance._focusChangeHandler, instance);
 							}
 
