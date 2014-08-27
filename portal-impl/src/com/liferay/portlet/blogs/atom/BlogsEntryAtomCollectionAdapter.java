@@ -241,7 +241,8 @@ public class BlogsEntryAtomCollectionAdapter
 			ServiceContext serviceContext = new ServiceContext();
 
 			BlogsEntryServiceUtil.updateEntry(
-				blogsEntry.getEntryId(), title, summary, content,
+				blogsEntry.getEntryId(), title, blogsEntry.getSubtitle(),
+				summary, content, blogsEntry.getCoverImageId(),
 				displayDateMonth, displayDateDay, displayDateYear,
 				displayDateHour, displayDateMinute,
 				blogsEntry.getAllowPingbacks(), blogsEntry.isAllowTrackbacks(),

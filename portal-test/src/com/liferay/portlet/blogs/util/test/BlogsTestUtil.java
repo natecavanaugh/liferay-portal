@@ -212,10 +212,10 @@ public class BlogsTestUtil {
 
 			entry = BlogsEntryLocalServiceUtil.updateEntry(
 				entry.getUserId(), entry.getEntryId(), title,
-				entry.getDescription(), entry.getContent(), 1, 1, 2012, 12, 00,
-				true, true, new String[0], entry.getSmallImage(),
-				entry.getSmallImageURL(), StringPool.BLANK, null,
-				serviceContext);
+				entry.getSubtitle(), entry.getDescription(), entry.getContent(),
+				entry.getCoverImageId(), 1, 1, 2012, 12, 00, true, true,
+				new String[0], entry.getSmallImage(), entry.getSmallImageURL(),
+				StringPool.BLANK, null, serviceContext);
 
 			if (approved) {
 				return updateStatus(entry, serviceContext);
