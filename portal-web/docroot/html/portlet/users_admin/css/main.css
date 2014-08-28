@@ -211,8 +211,31 @@
 		}
 	}
 
-	.lfr-search-container {
-		clear: both;
+	.user-status-selector {
+		margin-top: 5px;
+
+		@media (min-width: 768px) {
+			float: right;
+			margin-top: 0;
+		}
+
+		.form-group {
+			margin-bottom: 0;
+		}
+
+		.input-select-wrapper {
+			width: 100%;
+
+			@media (min-width: 768px) {
+				width: auto;
+			}
+		}
+	}
+
+	.user-table button {
+		@media (min-width: 768px) {
+			float: left;
+		}
 	}
 
 	.view-all-link {
