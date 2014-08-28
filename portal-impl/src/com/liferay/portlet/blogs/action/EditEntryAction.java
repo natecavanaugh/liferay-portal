@@ -15,6 +15,8 @@
 package com.liferay.portlet.blogs.action;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.image.ImageBag;
+import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
@@ -26,14 +28,18 @@ import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.TempFileUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.TrashedModel;
+import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -57,8 +63,11 @@ import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portlet.blogs.service.BlogsEntryServiceUtil;
 import com.liferay.portlet.documentlibrary.FileSizeException;
+import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.trash.util.TrashUtil;
 
+import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.InputStream;
 
 import java.util.ArrayList;
@@ -460,6 +469,7 @@ public class EditEntryAction extends PortletAction {
 		throws Exception {
 
 		long entryId = ParamUtil.getLong(actionRequest, "entryId");
+
 		String title = ParamUtil.getString(actionRequest, "title");
 		String subtitle = ParamUtil.getString(actionRequest, "subtitle");
 		String description = ParamUtil.getString(actionRequest, "description");
@@ -528,7 +538,7 @@ public class EditEntryAction extends PortletAction {
 
 				// Add entry
 
-				FileEntry coverImage = ActionUtil.saveCoverImage(actionRequest);
+				FileEntry coverImage = addCoverImage(actionRequest);
 
 				if (coverImage != null) {
 					coverImageId = coverImage.getFileEntryId();
@@ -554,8 +564,7 @@ public class EditEntryAction extends PortletAction {
 				long oldCoverImageId = entry.getCoverImageId();
 
 				if (oldCoverImageId != coverImageId) {
-					FileEntry coverImage = ActionUtil.saveCoverImage(
-						actionRequest);
+					FileEntry coverImage = addCoverImage(actionRequest);
 
 					if (coverImage != null) {
 						coverImageId = coverImage.getFileEntryId();
@@ -588,4 +597,62 @@ public class EditEntryAction extends PortletAction {
 		return new Object[] {entry, oldUrlTitle};
 	}
 
+	public static FileEntry addCoverImage(ActionRequest actionRequest)
+		throws Exception {
+
+		long coverImageId = ParamUtil.getLong(actionRequest, "coverImageId");
+
+		if (coverImageId == 0) {
+			return null;
+		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		FileEntry fileEntry = PortletFileRepositoryUtil.getPortletFileEntry(
+			coverImageId);
+
+		String coverImageCropRegionJSON = ParamUtil.getString(
+			actionRequest, "coverImageCropRegion");
+
+		if (Validator.isNotNull(coverImageCropRegionJSON)) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+				coverImageCropRegionJSON);
+
+			int height = jsonObject.getInt("height");
+			int width = jsonObject.getInt("width");
+			int x = jsonObject.getInt("x");
+			int y = jsonObject.getInt("y");
+
+			if ((x > 0) || (y > 0) || (width > 0) || (height > 0)) {
+				ImageBag imageBag = ImageToolUtil.read(
+					fileEntry.getContentStream());
+
+				RenderedImage renderedImage = imageBag.getRenderedImage();
+
+				renderedImage = ImageToolUtil.crop(
+					renderedImage, height, width, x, y);
+
+				byte[] bytes = ImageToolUtil.getBytes(
+					renderedImage, imageBag.getType());
+
+				File file = FileUtil.createTempFile(bytes);
+
+				FileEntry resizedFileEntry =
+					PortletFileRepositoryUtil.addPortletFileEntry(
+						themeDisplay.getScopeGroupId(),
+						themeDisplay.getUserId(), "", 0, PortletKeys.BLOGS,
+						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, file,
+						fileEntry.getTitle() + "_resized",
+						MimeTypesUtil.getContentType(fileEntry.getTitle()),
+						true);
+
+				TempFileUtil.deleteTempFile(coverImageId);
+
+				return resizedFileEntry;
+			}
+		}
+
+		return fileEntry;
+	}
 }

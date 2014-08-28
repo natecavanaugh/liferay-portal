@@ -1,11 +1,15 @@
 AUI.add(
-	'liferay-blogs-cover-uploader',
+	'liferay-cover-image-uploader',
 	function(A) {
 		var Lang = A.Lang;
 
-		var STR_EMPTY = '';
+		var isString = Lang.isString;
+
+		var STR_BLANK = '';
 
 		var STR_FILE_ENTRY = 'fileEntry';
+
+		var STR_UPLOAD_IMAGE_URL = 'uploadImageURL';
 
 		var STR_CLICK = 'click';
 
@@ -13,15 +17,28 @@ AUI.add(
 
 		var STR_MOUSEOVER = 'mouseover';
 
-		var CoverUploader = A.Component.create(
+		var CoverImageUploader = A.Component.create(
 			{
 				ATTRS: {
 					fileEntry: {
 						validator: Lang.isObject,
 						value: {
 							id: 0,
-							url: STR_EMPTY
+							url: STR_BLANK
 						}
+					},
+
+					form: {
+						setter: function(node) {
+							var instance = this;
+
+							return instance.one(node);
+						}
+					},
+
+					uploadImageURL: {
+						validator: isString,
+						value: STR_BLANK
 					}
 				},
 
@@ -29,9 +46,9 @@ AUI.add(
 
 				EXTENDS: A.Base,
 
-				NAME: 'blogscoveruploader',
+				NAME: 'coverimageuploader',
 
-				NS: 'blogscoveruploader',
+				NS: 'coverimageuploader',
 
 				prototype: {
 					initializer: function(config) {
@@ -39,6 +56,7 @@ AUI.add(
 
 						instance._originalFileEntryId = instance.get(STR_FILE_ENTRY).id;
 						instance._originalFileEntryUrl = instance.get(STR_FILE_ENTRY).url;
+						instance._uploadImageURL = instance.get(STR_UPLOAD_IMAGE_URL);
 
 						instance._cancelImageButton = instance.one('#cancelImage');
 						instance._coverImageInput = instance.one('#coverImageFile');
@@ -80,9 +98,9 @@ AUI.add(
 						var instance = this;
 
 						instance._originalFileEntryId = 0;
-						instance._originalFileEntryUrl = STR_EMPTY;
+						instance._originalFileEntryUrl = STR_BLANK;
 
-						instance._updateImage(0, STR_EMPTY);
+						instance._updateImage(0, STR_BLANK);
 					},
 
 					_getCropRegion: function() {
@@ -184,16 +202,13 @@ AUI.add(
 							'coverImageUpdated',
 							{
 								cropRegion: cropRegion,
-								fileEntryId: fileEntryId,
-								fileEntryUrl: fileEntry.url
+								coverImageId: fileEntryId
 							}
 						);
 					},
 
 					_onFileEntryChange: function(event) {
 						var instance = this;
-
-						instance.one('#fileEntryId').val(event.newVal.id);
 
 						var newUrl = event.newVal.url;
 
@@ -244,14 +259,12 @@ AUI.add(
 					_uploadCoverImage: function() {
 						var instance = this;
 
-						var form = instance.one('#coverImageSelectorForm');
-
 						A.io.request(
-							form.get('action'),
+							instance._uploadImageURL,
 							{
 								dataType: 'JSON',
 								form: {
-									id: form,
+									id: instance.get('form'),
 									upload: true
 								},
 								on: {
@@ -259,7 +272,7 @@ AUI.add(
 										var responseData = A.JSON.parse(obj.responseText);
 
 										if (responseData.success) {
-											instance._updateImage(responseData.fileEntryId, responseData.fileEntryURL);
+											instance._updateImage(responseData.coverImageId, responseData.coverImageURL);
 										}
 									}
 								}
@@ -270,7 +283,7 @@ AUI.add(
 			}
 		);
 
-		Liferay.BlogsCoverUploader = CoverUploader;
+		Liferay.CoverImageUploader = CoverImageUploader;
 	},
 	'',
 	{

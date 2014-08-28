@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.blogs.action;
+package com.liferay.portal.action;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -20,42 +20,44 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
-import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.upload.UploadServletRequest;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.TempFileUtil;
 import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
-import com.liferay.portal.struts.PortletAction;
+import com.liferay.portal.struts.JSONAction;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 
-import java.io.IOException;
+import java.io.InputStream;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * @author Roberto Díaz
  * @author Sergio González
  */
-public class EditCoverAction extends PortletAction {
+public class EditCoverImageAction extends JSONAction {
 
 	@Override
-	public void processAction(
+	public String getJSON(
 			ActionMapping actionMapping, ActionForm actionForm,
-			PortletConfig portletConfig, ActionRequest actionRequest,
-			ActionResponse actionResponse)
+			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
-		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+		UploadServletRequest uploadPortletRequest =
+			PortalUtil.getUploadServletRequest(request);
 
-		UploadException uploadException =
-			(UploadException)actionRequest.getAttribute(
-				WebKeys.UPLOAD_EXCEPTION);
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		UploadException uploadException = (UploadException)request.getAttribute(
+			WebKeys.UPLOAD_EXCEPTION);
 
 		if (uploadException != null) {
 			if (uploadException.isExceededLiferayFileItemSizeLimit()) {
@@ -67,27 +69,29 @@ public class EditCoverAction extends PortletAction {
 
 			throw new PortalException(uploadException.getCause());
 		}
-		else if (cmd.equals(Constants.UPLOAD_IMAGE)) {
-			uploadImage(actionRequest, actionResponse);
-		}
-	}
-
-	protected void uploadImage(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws IOException {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
-			FileEntry fileEntry = ActionUtil.uploadCoverImage(
-				actionRequest, getClass());
+			String fileName = uploadPortletRequest.getFileName(
+				"coverImageFile");
+			InputStream inputStream = uploadPortletRequest.getFileAsStream(
+				"coverImageFile");
 
-			jsonObject.put("fileEntryId", fileEntry.getFileEntryId());
+			String tempImageFolderName = getClass().getName();
+
+			String uniqueTempFileName = TempFileUtil.getUniqueTempFileName(
+				themeDisplay.getScopeGroupId(), themeDisplay.getUserId(),
+				tempImageFolderName);
+
+			FileEntry fileEntry = TempFileUtil.addTempFile(
+				themeDisplay.getScopeGroupId(), themeDisplay.getUserId(),
+				uniqueTempFileName, tempImageFolderName, inputStream,
+				MimeTypesUtil.getContentType(fileName));
+
+			jsonObject.put("coverImageId", fileEntry.getFileEntryId());
 			jsonObject.put(
-				"fileEntryURL",
+				"coverImageURL",
 				PortletFileRepositoryUtil.getPortletFileEntryURL(
 					themeDisplay, fileEntry, StringPool.BLANK));
 			jsonObject.put("success", Boolean.TRUE);
@@ -96,7 +100,7 @@ public class EditCoverAction extends PortletAction {
 			jsonObject.put("success", Boolean.FALSE);
 		}
 
-		writeJSON(actionRequest, actionResponse, jsonObject);
+		return jsonObject.toString();
 	}
 
 }

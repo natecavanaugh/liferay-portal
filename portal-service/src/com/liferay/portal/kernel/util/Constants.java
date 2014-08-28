@@ -150,8 +150,6 @@ public interface Constants {
 
 	public static final String UPDATE_CONTENT = "update_content";
 
-	public static final String UPLOAD_IMAGE = "upload_image";
-
 	public static final String VALIDATE = "validate";
 
 	public static final String VIEW = "view";

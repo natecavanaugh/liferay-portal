@@ -209,6 +209,14 @@
 						path: 'browser_selectors.js',
 						requires: ['yui-base']
 					},
+					'liferay-cover-image-uploader': {
+						path: 'cover_image_uploader.js',
+						requires: [
+							'aui-io-request',
+							'dd-drag',
+							'liferay-portlet-base'
+						]
+					},
 					'liferay-ddm-repeatable-fields': {
 						path: 'ddm_repeatable_fields.js',
 						requires: [
