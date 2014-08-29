@@ -232,8 +232,8 @@
 		}
 	}
 
-	.user-table button {
-		@media (min-width: 768px) {
+	@media (min-width: 768px) {
+		.user-table button {
 			float: left;
 		}
 	}
