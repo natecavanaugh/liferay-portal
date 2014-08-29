@@ -211,6 +211,33 @@
 		}
 	}
 
+	.user-status-selector {
+		margin-top: 5px;
+
+		@media (min-width: 768px) {
+			float: right;
+			margin-top: 0;
+		}
+
+		.form-group {
+			margin-bottom: 0;
+		}
+
+		.input-select-wrapper {
+			width: 100%;
+
+			@media (min-width: 768px) {
+				width: auto;
+			}
+		}
+	}
+
+	@media (min-width: 768px) {
+		.user-table button {
+			float: left;
+		}
+	}
+
 	.view-all-link {
 		color: #666;
 		font-weight: normal;
