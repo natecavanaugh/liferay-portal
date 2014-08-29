@@ -4,6 +4,7 @@ import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.servlet.taglib.ui.CoverImage;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -57,6 +58,7 @@ public class BaseBlogsEntryTestCase {
 		String subtitle = StringPool.BLANK;
 		String description = "Description";
 		String content = "Content";
+		CoverImage coverImage = null;
 		int displayDateMonth = 1;
 		int displayDateDay = 1;
 		int displayDateYear = 2012;
@@ -71,7 +73,7 @@ public class BaseBlogsEntryTestCase {
 		InputStream smallImageInputStream = null;
 
 		BlogsEntry blogsEntry = BlogsEntryLocalServiceUtil.addEntry(
-			getUserId(), title, description, subtitle, content,
+			getUserId(), title, subtitle, description, content, coverImage,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
 			smallImage, smallImageURL, smallImageFileName,

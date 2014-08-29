@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.sanitizer.SanitizerException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.taglib.ui.CoverImage;
 import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -431,9 +432,10 @@ public class EditEntryAction extends PortletAction {
 
 		try {
 			BlogsEntryServiceUtil.updateEntry(
-				entryId, entry.getTitle(), entry.getDescription(), content,
-				displayDateMonth, displayDateDay, displayDateYear,
-				displayDateHour, displayDateMinute, entry.getAllowPingbacks(),
+				entryId, entry.getTitle(), entry.getDescription(),
+				entry.getSubtitle(), content, null, displayDateMonth,
+				displayDateDay, displayDateYear, displayDateHour,
+				displayDateMinute, entry.getAllowPingbacks(),
 				entry.getAllowTrackbacks(), null, entry.getSmallImage(),
 				entry.getSmallImageURL(), null, null, serviceContext);
 
@@ -461,6 +463,9 @@ public class EditEntryAction extends PortletAction {
 
 		String title = ParamUtil.getString(actionRequest, "title");
 		String subtitle = ParamUtil.getString(actionRequest, "subtitle");
+		long coverImageId = ParamUtil.getLong(actionRequest, "coverImageId");
+		String coverImageCropRegion = ParamUtil.getString(
+			actionRequest, "coverImageCropRegion");
 		String description = ParamUtil.getString(actionRequest, "description");
 		String content = ParamUtil.getString(actionRequest, "content");
 
@@ -521,16 +526,19 @@ public class EditEntryAction extends PortletAction {
 			entry = null;
 			oldUrlTitle = StringPool.BLANK;
 
+			CoverImage coverImage = new CoverImage(
+				coverImageId, coverImageCropRegion);
+
 			if (entryId <= 0) {
 
 				// Add entry
 
 				entry = BlogsEntryServiceUtil.addEntry(
-					title, subtitle, description, content, displayDateMonth,
-					displayDateDay, displayDateYear, displayDateHour,
-					displayDateMinute, allowPingbacks, allowTrackbacks,
-					trackbacks, smallImage, smallImageURL, smallImageFileName,
-					smallImageInputStream, serviceContext);
+					title, subtitle, description, content, coverImage,
+					displayDateMonth, displayDateDay, displayDateYear,
+					displayDateHour, displayDateMinute, allowPingbacks,
+					allowTrackbacks, trackbacks, smallImage, smallImageURL,
+					smallImageFileName, smallImageInputStream, serviceContext);
 
 				AssetPublisherUtil.addAndStoreSelection(
 					actionRequest, BlogsEntry.class.getName(),
@@ -545,7 +553,7 @@ public class EditEntryAction extends PortletAction {
 				String tempOldUrlTitle = entry.getUrlTitle();
 
 				entry = BlogsEntryServiceUtil.updateEntry(
-					entryId, title, subtitle, description, content,
+					entryId, title, subtitle, description, content, coverImage,
 					displayDateMonth, displayDateDay, displayDateYear,
 					displayDateHour, displayDateMinute, allowPingbacks,
 					allowTrackbacks, trackbacks, smallImage, smallImageURL,

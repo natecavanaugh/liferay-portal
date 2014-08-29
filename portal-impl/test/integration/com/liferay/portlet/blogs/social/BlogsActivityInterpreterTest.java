@@ -78,9 +78,10 @@ public class BlogsActivityInterpreterTest
 
 		BlogsEntryLocalServiceUtil.updateEntry(
 			_entry.getUserId(), _entry.getEntryId(), _entry.getTitle(),
-			_entry.getDescription(), _entry.getContent(), 1, 1, 2012, 12, 00,
-			true, true, new String[0], _entry.getSmallImage(),
-			_entry.getSmallImageURL(), StringPool.BLANK, null, serviceContext);
+			_entry.getDescription(), _entry.getSubtitle(), _entry.getContent(),
+			null, 1, 1, 2012, 12, 00, true, true, new String[0],
+			_entry.getSmallImage(), _entry.getSmallImageURL(), StringPool.BLANK,
+			null, serviceContext);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ package com.liferay.portlet.blogs.service.impl;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.servlet.taglib.ui.CoverImage;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -66,8 +67,8 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 
 	/**
 	 * @deprecated As of 7.0.0, replaced by {@link #addEntry(String, String,
-	 *             String, String, int, int, int, int, int, boolean, boolean,
-	 *             String[], boolean, String, String, InputStream,
+	 *             String, String, CoverImage, int, int, int, int, int, boolean,
+	 *             boolean, String[], boolean, String, String, InputStream,
 	 *             ServiceContext)}
 	 */
 	@Deprecated
@@ -82,21 +83,22 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 		throws PortalException {
 
 		return addEntry(
-			title, StringPool.BLANK, description, content, displayDateMonth,
-			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
-			allowPingbacks, allowTrackbacks, trackbacks, smallImage,
-			smallImageURL, smallImageFileName, smallImageInputStream,
-			serviceContext);
+			title, StringPool.BLANK, description, content, null,
+			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
+			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
+			smallImage, smallImageURL, smallImageFileName,
+			smallImageInputStream, serviceContext);
 	}
 
 	@Override
 	public BlogsEntry addEntry(
 			String title, String subtitle, String description, String content,
-			int displayDateMonth, int displayDateDay, int displayDateYear,
-			int displayDateHour, int displayDateMinute, boolean allowPingbacks,
-			boolean allowTrackbacks, String[] trackbacks, boolean smallImage,
-			String smallImageURL, String smallImageFileName,
-			InputStream smallImageInputStream, ServiceContext serviceContext)
+			CoverImage coverImage, int displayDateMonth, int displayDateDay,
+			int displayDateYear, int displayDateHour, int displayDateMinute,
+			boolean allowPingbacks, boolean allowTrackbacks,
+			String[] trackbacks, boolean smallImage, String smallImageURL,
+			String smallImageFileName, InputStream smallImageInputStream,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		BlogsPermission.check(
@@ -104,7 +106,7 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 			ActionKeys.ADD_ENTRY);
 
 		return blogsEntryLocalService.addEntry(
-			getUserId(), title, subtitle, description, content,
+			getUserId(), title, subtitle, description, content, coverImage,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
 			smallImage, smallImageURL, smallImageFileName,
@@ -423,6 +425,13 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 		blogsEntryLocalService.unsubscribe(getUserId(), groupId);
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link #updateEntry(
+	 *             long, String, String, String, String, CoverImage, int, int,
+	 *             int, int, int, boolean, boolean, String[], boolean, String,
+	 *             String, InputStream, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public BlogsEntry updateEntry(
 			long entryId, String title, String description, String content,
@@ -434,7 +443,7 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 		throws PortalException {
 
 		return updateEntry(
-			entryId, title, StringPool.BLANK, description, content,
+			entryId, title, StringPool.BLANK, description, content, null,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
 			smallImage, smallImageURL, smallImageFileName,
@@ -444,12 +453,12 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 	@Override
 	public BlogsEntry updateEntry(
 			long entryId, String title, String subtitle, String description,
-			String content, int displayDateMonth, int displayDateDay,
-			int displayDateYear, int displayDateHour, int displayDateMinute,
-			boolean allowPingbacks, boolean allowTrackbacks,
-			String[] trackbacks, boolean smallImage, String smallImageURL,
-			String smallImageFileName, InputStream smallImageInputStream,
-			ServiceContext serviceContext)
+			String content, CoverImage coverImage, int displayDateMonth,
+			int displayDateDay, int displayDateYear, int displayDateHour,
+			int displayDateMinute, boolean allowPingbacks,
+			boolean allowTrackbacks, String[] trackbacks, boolean smallImage,
+			String smallImageURL, String smallImageFileName,
+			InputStream smallImageInputStream, ServiceContext serviceContext)
 		throws PortalException {
 
 		BlogsEntryPermission.check(
@@ -457,9 +466,9 @@ public class BlogsEntryServiceImpl extends BlogsEntryServiceBaseImpl {
 
 		return blogsEntryLocalService.updateEntry(
 			getUserId(), entryId, title, subtitle, description, content,
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
-			smallImage, smallImageURL, smallImageFileName,
+			coverImage, displayDateMonth, displayDateDay, displayDateYear,
+			displayDateHour, displayDateMinute, allowPingbacks, allowTrackbacks,
+			trackbacks, smallImage, smallImageURL, smallImageFileName,
 			smallImageInputStream, serviceContext);
 	}
 

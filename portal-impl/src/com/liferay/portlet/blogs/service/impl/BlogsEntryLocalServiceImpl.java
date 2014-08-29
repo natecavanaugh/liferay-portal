@@ -23,10 +23,12 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationDefinition;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.servlet.taglib.ui.CoverImage;
 import com.liferay.portal.kernel.settings.LocalizedValuesMap;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -42,6 +44,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.TempFileUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -51,6 +54,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.Portal;
@@ -74,9 +78,11 @@ import com.liferay.portlet.blogs.social.BlogsActivityKeys;
 import com.liferay.portlet.blogs.util.BlogsUtil;
 import com.liferay.portlet.blogs.util.LinkbackProducerUtil;
 import com.liferay.portlet.blogs.util.comparator.EntryDisplayDateComparator;
+import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.social.model.SocialActivityConstants;
 import com.liferay.portlet.trash.model.TrashEntry;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -111,9 +117,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 
 	/**
 	 * @deprecated As of 7.0.0, replaced by {@link #addEntry(long, String,
-	 *             String, String, String, int, int, int, int, int, boolean,
-	 *             boolean, String[], boolean, String, String, InputStream,
-	 *             ServiceContext)}
+	 *             String, String, String, CoverImage, int, int, int, int, int,
+	 *             boolean, boolean, String[], boolean, String, String,
+	 *             InputStream, ServiceContext)}
 	 */
 	@Deprecated
 	@Override
@@ -127,7 +133,7 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 		throws PortalException {
 
 		return addEntry(
-			userId, title, StringPool.BLANK, description, content,
+			userId, title, StringPool.BLANK, description, content, null,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
 			smallImage, smallImageURL, smallImageFileName,
@@ -138,12 +144,12 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 	@Override
 	public BlogsEntry addEntry(
 			long userId, String title, String subtitle, String description,
-			String content, int displayDateMonth, int displayDateDay,
-			int displayDateYear, int displayDateHour, int displayDateMinute,
-			boolean allowPingbacks, boolean allowTrackbacks,
-			String[] trackbacks, boolean smallImage, String smallImageURL,
-			String smallImageFileName, InputStream smallImageInputStream,
-			ServiceContext serviceContext)
+			String content, CoverImage coverImage, int displayDateMonth,
+			int displayDateDay, int displayDateYear, int displayDateHour,
+			int displayDateMinute, boolean allowPingbacks,
+			boolean allowTrackbacks, String[] trackbacks, boolean smallImage,
+			String smallImageURL, String smallImageFileName,
+			InputStream smallImageInputStream, ServiceContext serviceContext)
 		throws PortalException {
 
 		// Entry
@@ -189,6 +195,22 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			getUniqueUrlTitle(entryId, title, null, serviceContext));
 		entry.setDescription(description);
 		entry.setContent(content);
+
+		long coverImageId = 0;
+
+		if ((coverImage != null) && (coverImage.getCoverImageId() != 0)) {
+			try {
+				coverImageId = addCoverImage(
+					userId, groupId, entryId, coverImage);
+			}
+			catch (Exception e) {
+				_log.error(
+					"Error while adding cover image for entry: " + entryId);
+			}
+		}
+
+		entry.setCoverImageId(coverImageId);
+
 		entry.setDisplayDate(displayDate);
 		entry.setAllowPingbacks(allowPingbacks);
 		entry.setAllowTrackbacks(allowTrackbacks);
@@ -1011,6 +1033,13 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			AssetLinkConstants.TYPE_RELATED);
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link #updateEntry(
+	 *             long, long, String, String, String, String, CoverImage, int,
+	 *             int, int, int, int, boolean, boolean, String[], boolean,
+	 *             String, String, InputStream, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public BlogsEntry updateEntry(
 			long userId, long entryId, String title, String description,
@@ -1024,9 +1053,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 
 		return updateEntry(
 			userId, entryId, title, StringPool.BLANK, description, content,
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
-			smallImage, smallImageURL, smallImageFileName,
+			null, displayDateMonth, displayDateDay, displayDateYear,
+			displayDateHour, displayDateMinute, allowPingbacks, allowTrackbacks,
+			trackbacks, smallImage, smallImageURL, smallImageFileName,
 			smallImageInputStream, serviceContext);
 	}
 
@@ -1034,9 +1063,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 	@Override
 	public BlogsEntry updateEntry(
 			long userId, long entryId, String title, String subtitle,
-			String description, String content, int displayDateMonth,
-			int displayDateDay, int displayDateYear, int displayDateHour,
-			int displayDateMinute, boolean allowPingbacks,
+			String description, String content, CoverImage coverImage,
+			int displayDateMonth, int displayDateDay, int displayDateYear,
+			int displayDateHour, int displayDateMinute, boolean allowPingbacks,
 			boolean allowTrackbacks, String[] trackbacks, boolean smallImage,
 			String smallImageURL, String smallImageFileName,
 			InputStream smallImageInputStream, ServiceContext serviceContext)
@@ -1072,6 +1101,35 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 		entry.setModifiedDate(serviceContext.getModifiedDate(null));
 		entry.setTitle(title);
 		entry.setSubtitle(subtitle);
+
+		long coverImageId = entry.getCoverImageId();
+
+		if (coverImage != null) {
+			if (coverImage.getCoverImageId() == 0) {
+				PortletFileRepositoryUtil.deletePortletFileEntry(
+					entry.getCoverImageId());
+
+				coverImageId = 0;
+			}
+			else if (coverImage.getCoverImageId() != entry.getCoverImageId()) {
+				if (entry.getCoverImageId() != 0) {
+					PortletFileRepositoryUtil.deletePortletFileEntry(
+						entry.getCoverImageId());
+				}
+
+				try {
+					coverImageId = addCoverImage(
+						userId, entry.getGroupId(), entryId, coverImage);
+				}
+				catch (Exception e) {
+					_log.error(
+						"Error while adding cover image for entry: " + entryId);
+				}
+			}
+		}
+
+		entry.setCoverImageId(coverImageId);
+
 		entry.setUrlTitle(
 			getUniqueUrlTitle(entryId, title, oldUrlTitle, serviceContext));
 		entry.setDescription(description);
@@ -1312,6 +1370,40 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 		}
 
 		return entry;
+	}
+
+	protected long addCoverImage(
+			long userId, long groupId, long entryId, CoverImage coverImage)
+		throws Exception {
+
+		long coverImageId = 0;
+
+		byte[] bytes = coverImage.getBytes();
+
+		if (bytes != null) {
+			File file = null;
+
+			try {
+				file = FileUtil.createTempFile(bytes);
+
+				FileEntry coverImageFileEntry =
+					PortletFileRepositoryUtil.addPortletFileEntry(
+						groupId, userId, BlogsEntry.class.getName(), entryId,
+						PortletKeys.BLOGS,
+						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, file,
+						"coverImage_" + entryId, coverImage.getMimeType(),
+						true);
+
+				coverImageId = coverImageFileEntry.getFileEntryId();
+
+				TempFileUtil.deleteTempFile(coverImage.getCoverImageId());
+			}
+			finally {
+				FileUtil.delete(file);
+			}
+		}
+
+		return coverImageId;
 	}
 
 	protected void addDiscussion(BlogsEntry entry, long userId, long groupId)

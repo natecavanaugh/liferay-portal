@@ -47,9 +47,9 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 
 	/**
 	* @deprecated As of 7.0.0, replaced by {@link #addEntry(long, String,
-	String, String, String, int, int, int, int, int, boolean,
-	boolean, String[], boolean, String, String, InputStream,
-	ServiceContext)}
+	String, String, String, CoverImage, int, int, int, int, int,
+	boolean, boolean, String[], boolean, String, String,
+	InputStream, ServiceContext)}
 	*/
 	@Deprecated
 	@Override
@@ -74,6 +74,7 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 	public com.liferay.portlet.blogs.model.BlogsEntry addEntry(long userId,
 		java.lang.String title, java.lang.String subtitle,
 		java.lang.String description, java.lang.String content,
+		com.liferay.portal.kernel.servlet.taglib.ui.CoverImage coverImage,
 		int displayDateMonth, int displayDateDay, int displayDateYear,
 		int displayDateHour, int displayDateMinute, boolean allowPingbacks,
 		boolean allowTrackbacks, java.lang.String[] trackbacks,
@@ -83,7 +84,7 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _blogsEntryLocalService.addEntry(userId, title, subtitle,
-			description, content, displayDateMonth, displayDateDay,
+			description, content, coverImage, displayDateMonth, displayDateDay,
 			displayDateYear, displayDateHour, displayDateMinute,
 			allowPingbacks, allowTrackbacks, trackbacks, smallImage,
 			smallImageURL, smallImageFileName, smallImageInputStream,
@@ -818,6 +819,13 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 		return _blogsEntryLocalService.updateBlogsEntry(blogsEntry);
 	}
 
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link #updateEntry(
+	long, long, String, String, String, String, CoverImage, int,
+	int, int, int, int, boolean, boolean, String[], boolean,
+	String, String, InputStream, ServiceContext)}
+	*/
+	@Deprecated
 	@Override
 	public com.liferay.portlet.blogs.model.BlogsEntry updateEntry(long userId,
 		long entryId, java.lang.String title, java.lang.String description,
@@ -841,6 +849,7 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 	public com.liferay.portlet.blogs.model.BlogsEntry updateEntry(long userId,
 		long entryId, java.lang.String title, java.lang.String subtitle,
 		java.lang.String description, java.lang.String content,
+		com.liferay.portal.kernel.servlet.taglib.ui.CoverImage coverImage,
 		int displayDateMonth, int displayDateDay, int displayDateYear,
 		int displayDateHour, int displayDateMinute, boolean allowPingbacks,
 		boolean allowTrackbacks, java.lang.String[] trackbacks,
@@ -850,11 +859,11 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _blogsEntryLocalService.updateEntry(userId, entryId, title,
-			subtitle, description, content, displayDateMonth, displayDateDay,
-			displayDateYear, displayDateHour, displayDateMinute,
-			allowPingbacks, allowTrackbacks, trackbacks, smallImage,
-			smallImageURL, smallImageFileName, smallImageInputStream,
-			serviceContext);
+			subtitle, description, content, coverImage, displayDateMonth,
+			displayDateDay, displayDateYear, displayDateHour,
+			displayDateMinute, allowPingbacks, allowTrackbacks, trackbacks,
+			smallImage, smallImageURL, smallImageFileName,
+			smallImageInputStream, serviceContext);
 	}
 
 	@Override

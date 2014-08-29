@@ -91,6 +91,8 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 	</c:if>
 
 	<aui:fieldset>
+		<liferay-ui:cover-image-uploader coverImageId="<%= (entry != null) ? entry.getCoverImageId() : 0 %>" />
+
 		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) || windowState.equals(LiferayWindowState.POP_UP) %>" name="title" />
 
 		<aui:input name="subtitle" />
