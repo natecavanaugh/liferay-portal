@@ -50,8 +50,8 @@ public interface BlogsEntryService extends BaseService {
 
 	/**
 	* @deprecated As of 7.0.0, replaced by {@link #addEntry(String, String,
-	String, String, int, int, int, int, int, boolean, boolean,
-	String[], boolean, String, String, InputStream,
+	String, String, CoverImage, int, int, int, int, int, boolean,
+	boolean, String[], boolean, String, String, InputStream,
 	ServiceContext)}
 	*/
 	@java.lang.Deprecated
@@ -69,6 +69,7 @@ public interface BlogsEntryService extends BaseService {
 	public com.liferay.portlet.blogs.model.BlogsEntry addEntry(
 		java.lang.String title, java.lang.String subtitle,
 		java.lang.String description, java.lang.String content,
+		com.liferay.portal.kernel.servlet.taglib.ui.CoverImage coverImage,
 		int displayDateMonth, int displayDateDay, int displayDateYear,
 		int displayDateHour, int displayDateMinute, boolean allowPingbacks,
 		boolean allowTrackbacks, java.lang.String[] trackbacks,
@@ -179,6 +180,13 @@ public interface BlogsEntryService extends BaseService {
 	public void unsubscribe(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link #updateEntry(
+	long, String, String, String, String, CoverImage, int, int,
+	int, int, int, boolean, boolean, String[], boolean, String,
+	String, InputStream, ServiceContext)}
+	*/
+	@java.lang.Deprecated
 	public com.liferay.portlet.blogs.model.BlogsEntry updateEntry(
 		long entryId, java.lang.String title, java.lang.String description,
 		java.lang.String content, int displayDateMonth, int displayDateDay,
@@ -193,6 +201,7 @@ public interface BlogsEntryService extends BaseService {
 	public com.liferay.portlet.blogs.model.BlogsEntry updateEntry(
 		long entryId, java.lang.String title, java.lang.String subtitle,
 		java.lang.String description, java.lang.String content,
+		com.liferay.portal.kernel.servlet.taglib.ui.CoverImage coverImage,
 		int displayDateMonth, int displayDateDay, int displayDateYear,
 		int displayDateHour, int displayDateMinute, boolean allowPingbacks,
 		boolean allowTrackbacks, java.lang.String[] trackbacks,
