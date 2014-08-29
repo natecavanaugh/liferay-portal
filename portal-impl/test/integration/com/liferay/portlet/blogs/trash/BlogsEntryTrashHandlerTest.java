@@ -15,6 +15,7 @@
 package com.liferay.portlet.blogs.trash;
 
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
+import com.liferay.portal.kernel.servlet.taglib.ui.CoverImage;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -183,6 +184,7 @@ public class BlogsEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 		String subtitle = StringPool.BLANK;
 		String description = "Description";
 		String content = "Content";
+		CoverImage coverImage = null;
 		int displayDateMonth = 1;
 		int displayDateDay = 1;
 		int displayDateYear = 2012;
@@ -202,7 +204,7 @@ public class BlogsEntryTrashHandlerTest extends BaseTrashHandlerTestCase {
 
 		BlogsEntry entry = BlogsEntryLocalServiceUtil.addEntry(
 			TestPropsValues.getUserId(), title, subtitle, description, content,
-			0, displayDateMonth, displayDateDay, displayDateYear,
+			coverImage, displayDateMonth, displayDateDay, displayDateYear,
 			displayDateHour, displayDateMinute, allowPingbacks, allowTrackbacks,
 			trackbacks, smallImage, smallImageURL, smallImageFileName,
 			smallImageInputStream, serviceContext);

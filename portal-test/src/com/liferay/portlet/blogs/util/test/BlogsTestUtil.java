@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.blogs.util.test;
 
+import com.liferay.portal.kernel.servlet.taglib.ui.CoverImage;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -119,6 +120,7 @@ public class BlogsTestUtil {
 			String subtitle = StringPool.BLANK;
 			String description = "Description";
 			String content = "Content";
+			CoverImage coverImage = null;
 			int displayDateMonth = 1;
 			int displayDateDay = 1;
 			int displayDateYear = 2012;
@@ -143,7 +145,7 @@ public class BlogsTestUtil {
 				WorkflowConstants.ACTION_SAVE_DRAFT);
 
 			BlogsEntry entry = BlogsEntryLocalServiceUtil.addEntry(
-				userId, title, subtitle, description, content, 0,
+				userId, title, subtitle, description, content, coverImage,
 				displayDateMonth, displayDateDay, displayDateYear,
 				displayDateHour, displayDateMinute, allowPingbacks,
 				allowTrackbacks, trackbacks, smallImage, smallImageURL,
@@ -213,8 +215,8 @@ public class BlogsTestUtil {
 			entry = BlogsEntryLocalServiceUtil.updateEntry(
 				entry.getUserId(), entry.getEntryId(), title,
 				entry.getSubtitle(), entry.getDescription(), entry.getContent(),
-				entry.getCoverImageId(), 1, 1, 2012, 12, 00, true, true,
-				new String[0], entry.getSmallImage(), entry.getSmallImageURL(),
+				null, 1, 1, 2012, 12, 00, true, true, new String[0],
+				entry.getSmallImage(), entry.getSmallImageURL(),
 				StringPool.BLANK, null, serviceContext);
 
 			if (approved) {

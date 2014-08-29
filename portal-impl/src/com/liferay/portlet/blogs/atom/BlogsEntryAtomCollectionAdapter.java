@@ -193,7 +193,7 @@ public class BlogsEntryAtomCollectionAdapter
 		serviceContext.setScopeGroupId(groupId);
 
 		return BlogsEntryServiceUtil.addEntry(
-			title, StringPool.BLANK, summary, content, 0, displayDateMonth,
+			title, StringPool.BLANK, summary, content, null, displayDateMonth,
 			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
 			allowPingbacks, allowTrackbacks, trackbacks, false, null, null,
 			null, serviceContext);
@@ -242,9 +242,8 @@ public class BlogsEntryAtomCollectionAdapter
 
 			BlogsEntryServiceUtil.updateEntry(
 				blogsEntry.getEntryId(), title, blogsEntry.getSubtitle(),
-				summary, content, blogsEntry.getCoverImageId(),
-				displayDateMonth, displayDateDay, displayDateYear,
-				displayDateHour, displayDateMinute,
+				summary, content, null, displayDateMonth, displayDateDay,
+				displayDateYear, displayDateHour, displayDateMinute,
 				blogsEntry.getAllowPingbacks(), blogsEntry.isAllowTrackbacks(),
 				trackbacks, blogsEntry.isSmallImage(),
 				blogsEntry.getSmallImageURL(), smallImageFileName,
