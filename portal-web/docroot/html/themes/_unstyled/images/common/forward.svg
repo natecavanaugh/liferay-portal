@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- License Agreement at http://iconmonstr.com/license/ -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" space="preserve"> <path id="arrow-12-icon" d="M462,256.001L248.006,108.072v71.138H50v153.58h198.006v71.138L462,256.001z"></path> </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
+    <path id="arrow-12-icon" d="M462 256L248.006 108.073v71.138H50v153.58h198.006v71.138L462 256z"/>
+</svg>

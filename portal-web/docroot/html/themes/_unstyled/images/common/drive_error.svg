@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- License Agreement at http://iconmonstr.com/license/ -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" space="preserve"> <path id="error-2-icon" d="M341.328,50H170.672L50,170.672v170.656L170.672,462h170.656L462,341.328V170.672L341.328,50z
-M256,398.999c-16.407,0-29.708-13.302-29.708-29.708c0-16.408,13.301-29.708,29.708-29.708s29.708,13.3,29.708,29.708
-C285.708,385.697,272.407,398.999,256,398.999z M275.5,308.791h-39l-20-184.999h79L275.5,308.791z"></path> </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
+    <path id="error-2-icon" d="M341.328 50H170.672L50 170.672v170.656L170.672 462h170.656L462 341.328V170.672L341.328 50zM256 399c-16.407 0-29.708-13.303-29.708-29.71s13.3-29.707 29.708-29.707 29.708 13.3 29.708 29.708c0 16.407-13.3 29.71-29.708 29.71zm19.5-90.21h-39l-20-184.998h79l-20 185z"/>
+</svg>

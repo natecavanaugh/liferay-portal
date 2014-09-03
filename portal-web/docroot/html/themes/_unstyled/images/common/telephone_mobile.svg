@@ -1,7 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- License Agreement at http://iconmonstr.com/license/ -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" space="preserve"> <path id="mobile-phone-2-icon" d="M321.245,50.098v44.82h-140.49c-13.808,0-25,11.193-25,25v316.984c0,13.807,11.192,25,25,25
-h150.49c13.807,0,25-11.193,25-25V50.098H321.245z M220.996,416.434H190v-24.5h30.996V416.434z M220.996,372.141H190v-24.5h30.996
-V372.141z M271.498,416.434h-30.996v-24.5h30.996V416.434z M271.498,372.141h-30.996v-24.5h30.996V372.141z M322,416.434h-30.996
-v-24.5H322V416.434z M322,372.141h-30.996v-24.5H322V372.141z M322,312.848H190v-167.5h132V312.848z"></path> </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
+    <path id="mobile-phone-2-icon" d="M321.245 50.098v44.82h-140.49c-13.808 0-25 11.193-25 25v316.984c0 13.807 11.192 25 25 25h150.49c13.807 0 25-11.193 25-25V50.098h-35zm-100.25 366.336H190v-24.5h30.996v24.5zm0-44.293H190v-24.5h30.996v24.5zm50.503 44.294h-30.996v-24.5h30.996v24.5zm0-44.293h-30.996v-24.5h30.996v24.5zM322 416.435h-30.996v-24.5H322v24.5zm0-44.293h-30.996v-24.5H322v24.5zm0-59.292H190v-167.5h132v167.5z"/>
+</svg>

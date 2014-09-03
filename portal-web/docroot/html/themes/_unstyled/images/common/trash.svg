@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- License Agreement at http://iconmonstr.com/license/ -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" space="preserve"> <path id="trash-can-9-icon" d="M145,462h222l39.334-313.921H105.666L145,462z M424.562,78.022v40.032H87.438V78.022h94.938
-c15.465,0,28-12.546,28-28.022h91.25c0,15.477,12.536,28.022,28,28.022H424.562z"></path> </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
+    <path id="trash-can-9-icon" d="M145 462h222l39.334-313.92H105.666L145 462zM424.562 78.022v40.032H87.438V78.022h94.938c15.465 0 28-12.546 28-28.022h91.25c0 15.477 12.536 28.022 28 28.022h94.936z"/>
+</svg>
