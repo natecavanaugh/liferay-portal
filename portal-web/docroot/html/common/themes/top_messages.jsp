@@ -59,28 +59,6 @@ if (Validator.isNotNull(jspPath) || Validator.isNotNull(message)) {
 		</c:choose>
 	</div>
 
-	<aui:script use="liferay-notice">
-		var portalMessageContainer = A.one('#portalMessageContainer');
-
-		var banner = new Liferay.Notice(
-			{
-				animationConfig:
-					{
-						duration: 2,
-						top: '0px'
-					},
-				closeText: false,
-				node: '#portalMessageContainer',
-				noticeClass: 'hide <%= cssClass %>',
-				timeout: <%= timeout %>,
-				toggleText: false,
-				useAnimation: <%= useAnimation %>
-			}
-		);
-
-		banner.show();
-	</aui:script>
-
 <%
 }
 %>
