@@ -416,6 +416,13 @@
 							'aui-base'
 						]
 					},
+					'liferay-image-selector': {
+						path: 'image-selector.js',
+						requires: [
+							'aui-base',
+							'liferay-portlet-base'
+						]
+					},
 					'liferay-inline-editor-base': {
 						path: 'inline_editor_base.js',
 						requires: [
