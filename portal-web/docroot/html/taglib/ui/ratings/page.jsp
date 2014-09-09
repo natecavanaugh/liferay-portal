@@ -21,6 +21,7 @@ String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_rating
 
 String className = (String)request.getAttribute("liferay-ui:ratings:className");
 long classPK = GetterUtil.getLong((String)request.getAttribute("liferay-ui:ratings:classPK"));
+boolean hoverVoteAccessible = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:ratings:hoverVoteAccessible"));
 int numberOfStars = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:ratings:numberOfStars"));
 RatingsEntry ratingsEntry = (RatingsEntry)request.getAttribute("liferay-ui:ratings:ratingsEntry");
 RatingsStats ratingsStats = (RatingsStats)request.getAttribute("liferay-ui:ratings:ratingsStats");
@@ -72,7 +73,7 @@ if (ratingsEntry != null) {
 				<c:choose>
 					<c:when test="<%= themeDisplay.isSignedIn() && !TrashUtil.isInTrash(className, classPK) %>">
 						<div class="liferay-rating-vote" id="<%= randomNamespace %>ratingStar">
-							<div id="<%= randomNamespace %>ratingStarContent">
+							<div id="<%= randomNamespace %>ratingStarContent" class="<%= hoverVoteAccessible ? "hide-accessible" : "" %>">
 								<div class="rating-label"><liferay-ui:message key="your-rating" /></div>
 
 								<liferay-util:whitespace-remover>
@@ -194,6 +195,7 @@ if (ratingsEntry != null) {
 					className: '<%= HtmlUtil.escapeJS(className) %>',
 					classPK: '<%= classPK %>',
 					containerId: '<%= randomNamespace %>ratingContainer',
+					hoverVoteAccessible: <%= hoverVoteAccessible %>,
 					namespace: '<%= randomNamespace %>',
 					round: <%= round %>,
 					size: <%= numberOfStars %>,

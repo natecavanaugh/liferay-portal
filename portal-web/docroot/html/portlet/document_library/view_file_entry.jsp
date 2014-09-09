@@ -207,6 +207,7 @@ DLFileVersionDisplayContext dlFileVersionDisplayContext = DLFileVersionDisplayCo
 								<liferay-ui:ratings
 									className="<%= DLFileEntryConstants.getClassName() %>"
 									classPK="<%= fileEntryId %>"
+									hoverVoteAccessible="<%= true %>"
 								/>
 							</span>
 						</c:if>
