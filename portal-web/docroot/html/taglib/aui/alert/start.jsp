@@ -14,4 +14,6 @@
  */
 --%>
 
-<%@ include file="init.jsp" %>
+<%@ include file="/html/taglib/aui/alert/init.jsp" %>
+
+<div class="alert alert-<%= type %> <%= cssClass %>" id="<%= id %>">
