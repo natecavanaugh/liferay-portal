@@ -14,8 +14,26 @@
  */
 --%>
 
-<%
-if (animated) {
-	cssClass += " hide";
-}
-%>
+<%@ include file="/html/taglib/aui/alert/init.jsp" %>
+
+</div>
+
+<aui:script use="aui-alert">
+	var alertNode = A.one('#<%= id %>');
+
+	new A.Alert(
+		{
+			animated: <%= animated %>,
+			closeable: <%= closeable %>,
+			cssClass: null,
+			destroyOnHide: <%= destroyOnHide %>,
+			duration: <%= duration %>,
+			render: true,
+			srcNode: alertNode
+		}
+	);
+
+	if (<%= animated %>) {
+		alertNode.show();
+	}
+</aui:script>
