@@ -1064,7 +1064,7 @@
 				}
 			);
 
-			if (!interacting && Util.inBrowserView(el)) {
+			if (!interacting && (Util.inBrowserView(el) || Util.isPhone())) {
 				A.one(el).focus();
 			}
 		},
