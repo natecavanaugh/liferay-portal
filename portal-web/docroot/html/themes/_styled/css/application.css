@@ -118,6 +118,7 @@
 
 .tooltip {
 	max-width: 200px;
+	-webkit-backface-visibility: hidden;
 }
 
 /* ---------- Tags ---------- */
