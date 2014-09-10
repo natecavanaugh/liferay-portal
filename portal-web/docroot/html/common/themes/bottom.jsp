@@ -40,6 +40,7 @@ List<Portlet> portlets = (List<Portlet>)request.getAttribute(WebKeys.LAYOUT_PORT
 
 <%
 ScriptTag.flushScriptData(pageContext);
+SvgTag.flushSvgData(pageContext);
 %>
 
 <%-- Raw Text --%>

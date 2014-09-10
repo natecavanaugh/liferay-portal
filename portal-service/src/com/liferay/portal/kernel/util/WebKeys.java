@@ -210,6 +210,8 @@ public interface WebKeys {
 
 	public static final String SPI_AGENT_RESPONSE = "SPI_AGENT_RESPONSE";
 
+	public static final String SVG_DATA = "LIFERAY_SHARED_SVG_DATA";
+
 	public static final String THEME = "THEME";
 
 	public static final String THEME_DISPLAY = "LIFERAY_SHARED_THEME_DISPLAY";
