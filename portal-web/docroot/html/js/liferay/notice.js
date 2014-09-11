@@ -47,7 +47,7 @@ AUI.add(
 			instance._closeText = options.closeText;
 			instance._node = options.node;
 			instance._noticeType = options.type || 'notice';
-			instance._noticeClass = 'alert-warning';
+			instance._noticeClass = 'alert-info';
 			instance._onClose = options.onClose;
 			instance._useCloseButton = true;
 
@@ -149,7 +149,7 @@ AUI.add(
 				}
 
 				if (instance._useCloseButton) {
-					var html =  '<button class="btn btn-default submit popup-alert-close">' +
+					var html = '<button class="btn btn-default submit popup-alert-close">' +
 									instance._closeText +
 								'</button>';
 
