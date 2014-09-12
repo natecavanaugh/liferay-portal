@@ -84,6 +84,8 @@
 			}
 
 			.lfr-page-layouts {
+				margin-left: 0;
+
 				.layout-template-entry {
 					margin-left: 10px;
 				}
@@ -181,11 +183,14 @@
 					margin-bottom: 5px;
 					margin-left: 0;
 					padding: 2px;
+
+					input[type="checkbox"], input[type="radio"] {
+						top: 5px;
+					}
 				}
 
-				.radio input {
-					margin-left: 6px;
-					margin-right: 6px;
+				.radio {
+					margin-left: 25px;
 				}
 
 				&.toggler-header-collapsed .lfr-page-template-description {
