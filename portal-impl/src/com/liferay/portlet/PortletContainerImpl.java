@@ -638,7 +638,7 @@ public class PortletContainerImpl implements PortletContainer {
 
 		String path = (String)request.getAttribute(WebKeys.RENDER_PATH);
 
-		if (path == null) {
+		if (path == null || themeDisplay.isIsolated()) {
 			path = "/html/portal/render_portlet.jsp";
 		}
 
