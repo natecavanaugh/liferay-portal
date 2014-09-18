@@ -57,6 +57,10 @@ public class BaseButtonTag extends com.liferay.taglib.util.IncludeTag {
 		return _iconAlign;
 	}
 
+	public java.lang.String getId() {
+		return _id;
+	}
+
 	public java.lang.String getName() {
 		return _name;
 	}
@@ -117,6 +121,12 @@ public class BaseButtonTag extends com.liferay.taglib.util.IncludeTag {
 		setScopedAttribute("iconAlign", iconAlign);
 	}
 
+	public void setId(java.lang.String id) {
+		_id = id;
+
+		setScopedAttribute("id", id);
+	}
+
 	public void setName(java.lang.String name) {
 		_name = name;
 
@@ -161,6 +171,7 @@ public class BaseButtonTag extends com.liferay.taglib.util.IncludeTag {
 		_href = null;
 		_icon = null;
 		_iconAlign = "left";
+		_id = null;
 		_name = null;
 		_onClick = null;
 		_primary = null;
@@ -187,6 +198,7 @@ public class BaseButtonTag extends com.liferay.taglib.util.IncludeTag {
 		setNamespacedAttribute(request, "href", _href);
 		setNamespacedAttribute(request, "icon", _icon);
 		setNamespacedAttribute(request, "iconAlign", _iconAlign);
+		setNamespacedAttribute(request, "id", _id);
 		setNamespacedAttribute(request, "name", _name);
 		setNamespacedAttribute(request, "onClick", _onClick);
 		setNamespacedAttribute(request, "primary", _primary);
@@ -209,6 +221,7 @@ public class BaseButtonTag extends com.liferay.taglib.util.IncludeTag {
 	private java.lang.String _href = null;
 	private java.lang.String _icon = null;
 	private java.lang.String _iconAlign = "left";
+	private java.lang.String _id = null;
 	private java.lang.String _name = null;
 	private java.lang.String _onClick = null;
 	private java.lang.Object _primary = null;

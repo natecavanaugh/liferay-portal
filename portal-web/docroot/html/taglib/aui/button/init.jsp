@@ -25,6 +25,7 @@ boolean disabled = GetterUtil.getBoolean(String.valueOf(request.getAttribute("au
 java.lang.String href = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:href"));
 java.lang.String icon = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:icon"));
 java.lang.String iconAlign = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:iconAlign"), "left");
+java.lang.String id = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:id"));
 java.lang.String name = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:name"));
 java.lang.String onClick = GetterUtil.getString((java.lang.String)request.getAttribute("aui:button:onClick"));
 java.lang.Object primary = (java.lang.Object)request.getAttribute("aui:button:primary");
