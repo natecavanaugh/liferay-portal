@@ -56,10 +56,15 @@ if (useDialog && Validator.isNotNull(escapedHREF)) {
 	}
 }
 
-String id = namespace + name;
+if (Validator.isNull(id)) {
+	id = namespace;
 
-if (Validator.isNull(name)) {
-	id = namespace + StringUtil.randomId();
+	if (Validator.isNotNull(name)) {
+		id += name;
+	}
+	else {
+		id += StringUtil.randomId();
+	}
 }
 
 if (primary == null) {
