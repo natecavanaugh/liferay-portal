@@ -146,6 +146,11 @@
 				<defaultValue>left</defaultValue>
 			</attribute>
 			<attribute>
+				<name>id</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+			</attribute>
+			<attribute>
 				<name>name</name>
 				<inputType>java.lang.String</inputType>
 				<outputType>java.lang.String</outputType>
