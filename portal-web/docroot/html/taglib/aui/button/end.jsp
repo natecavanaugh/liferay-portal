@@ -43,7 +43,6 @@
 				disabled
 			</c:if>
 
-			href="<%= escapedHREF %>"
 			id="<%= id %>"
 
 			<c:if test="<%= Validator.isNotNull(name) %>">
