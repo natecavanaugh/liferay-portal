@@ -228,9 +228,7 @@ AUI.add(
 												instance._oldSubtitle = subtitle;
 												instance._oldTitle = title;
 
-												var _this = this;
-
-												var message = _this.get('responseData');
+												var message = this.get('responseData');
 
 												if (message) {
 													instance.one('#entryId', form).val(message.entryId);
