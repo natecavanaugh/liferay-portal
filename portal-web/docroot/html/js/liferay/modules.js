@@ -541,6 +541,12 @@
 							'aui-tabview'
 						]
 					},
+					'liferay-map-base': {
+						path: 'map_base.js',
+						requires: [
+							'aui-base'
+						]
+					},
 					'liferay-menu': {
 						path: 'menu.js',
 						requires: [
