@@ -920,6 +920,22 @@ AUI.add(
 
 		FieldTypes.select = SelectField;
 
+		var Separator = A.Component.create(
+			{
+				EXTENDS: Field,
+
+				prototype: {
+					_afterEditingLocaleChange: function() {
+						this.syncLabelUI();
+					},
+					syncValueUI: Lang.emptyFn,
+					toJSON: undefined
+				}
+			}
+		);
+
+		FieldTypes['ddm-separator'] = Separator;
+
 		var Form = A.Component.create(
 			{
 				ATTRS: {
