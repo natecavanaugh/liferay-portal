@@ -31,6 +31,7 @@ String minuteParam = GetterUtil.getString((String)request.getAttribute("liferay-
 int minuteValue = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:input-time:minuteValue"));
 int minuteInterval = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:input-time:minuteInterval"));
 String name = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-time:name"));
+int timeZoneOffset = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:input-time:timeZoneOffset"));
 
 if (minuteInterval < 1) {
 	minuteInterval = 30;
@@ -47,6 +48,7 @@ String dateParamId = namespace + HtmlUtil.getAUICompatibleId(dateParam);
 String hourParamId = namespace + HtmlUtil.getAUICompatibleId(hourParam);
 String minuteParamId = namespace + HtmlUtil.getAUICompatibleId(minuteParam);
 String nameId = namespace + HtmlUtil.getAUICompatibleId(name);
+String timeZoneOffsetId = nameId + "_timeZoneOffset";
 
 Calendar calendar = CalendarFactoryUtil.getCalendar(1970, 0, 1, hourOfDayValue, minuteValue);
 
@@ -82,6 +84,7 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 	<input <%= disabled ? "disabled=\"disabled\"" : "" %> id="<%= minuteParamId %>" name="<%= namespace + HtmlUtil.escapeAttribute(minuteParam) %>" type="hidden" value="<%= minuteValue %>" />
 	<input <%= disabled ? "disabled=\"disabled\"" : "" %> id="<%= amPmParamId %>" name="<%= namespace + HtmlUtil.escapeAttribute(amPmParam) %>" type="hidden" value="<%= amPmValue %>" />
 	<input <%= disabled ? "disabled=\"disabled\"" : "" %> id="<%= dateParamId %>" name="<%= namespace + HtmlUtil.escapeAttribute(dateParam) %>" type="hidden" value="<%= dateValue %>" />
+	<input <%= disabled ? "disabled=\"disabled\"" : "" %> id="<%= timeZoneOffsetId %>" name="<%= timeZoneOffsetId %>" type="hidden" value="<%= timeZoneOffset %>" />
 </span>
 
 <aui:script use='<%= "aui-timepicker" + (BrowserSnifferUtil.isMobile(request) ? "-native" : StringPool.BLANK) %>'>
@@ -132,18 +135,27 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 
 				var container = instance.get('container');
 
-				var dateVal = container.one('#<%= dateParamId %>').val();
+				var hours = parseInt(container.one('#<%= hourParamId %>').val());
+				var minutes = container.one('#<%= minuteParamId %>').val();
+				var amPm = parseInt(container.one('#<%= amPmParamId %>').val());
 
-				var time = A.Date.parse(dateVal);
-
-				if (!time) {
-					var hours = container.one('#<%= hourParamId %>').val();
-					var minutes = container.one('#<%= minuteParamId %>').val();
-
-					time = A.Date.parse(A.Date.aggregates.T, hours + ':' + minutes + ':0');
+				if (amPm) {
+					hours += 12;
 				}
 
+				time = A.Date.parse(A.Date.aggregates.T, hours + ':' + minutes + ':0');
+
 				return time;
+			};
+
+			timePicker.getTimeZoneOffset = function() {
+				var instance = this;
+
+				var container = instance.get('container');
+
+				var timeZoneOffsetInput = container.one('#<%= timeZoneOffsetId %>');
+
+				return parseInt(timeZoneOffsetInput.val() * -1);
 			};
 
 			return timePicker;

@@ -1208,23 +1208,28 @@ AUI.add(
 
 							var startDate = startDatePicker.getDate();
 							var startTime = startTimePicker.getTime();
+							var startTimeTimeZoneOffset = startTimePicker.getTimeZoneOffset();
 
 							startDate.setHours(startTime.getHours());
 							startDate.setMinutes(startTime.getMinutes());
 							startDate.setSeconds(0);
 							startDate.setMilliseconds(0);
+							startDate = new Date(startDate.getTime() + startTimeTimeZoneOffset);
 
 							var endDate = endDatePicker.getDate();
 							var endTime = endTimePicker.getTime();
+							var endTimeTimeZoneOffset = endTimePicker.getTimeZoneOffset();
 
 							endDate.setHours(endTime.getHours());
 							endDate.setMinutes(endTime.getMinutes());
 							endDate.setSeconds(0);
 							endDate.setMilliseconds(0);
+							endDate = new Date(endDate.getTime() + endTimeTimeZoneOffset);
 
 							endsLater = ADate.isGreater(endDate, startDate);
 
 							var today = new Date();
+							today = new Date(today.getTime() + (today.getTimezoneOffset() * 60 * 1000));
 
 							endsInPast = ADate.isGreaterOrEqual(today, endDate);
 							startsInPast = ADate.isGreaterOrEqual(today, startDate);
