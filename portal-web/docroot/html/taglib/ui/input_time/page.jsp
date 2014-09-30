@@ -148,6 +148,16 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 				return time;
 			};
 
+			timePicker.getTimeZoneOffset = function() {
+				var instance = this;
+
+				var container = instance.get('container');
+
+				var timeZoneOffsetInput = container.one('#<%= timeZoneOffsetId %>');
+
+				return parseInt(timeZoneOffsetInput.val() * -1);
+			};
+
 			return timePicker;
 		}
 	);
