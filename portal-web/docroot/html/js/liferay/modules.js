@@ -547,6 +547,12 @@
 							'aui-base'
 						]
 					},
+					'liferay-map-google': {
+						path: 'map_google.js',
+						requires: [
+							'liferay-map-base'
+						]
+					},
 					'liferay-menu': {
 						path: 'menu.js',
 						requires: [
