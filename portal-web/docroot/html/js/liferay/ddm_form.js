@@ -133,7 +133,13 @@ AUI.add(
 					)
 				);
 
-				instance.addTarget(field);
+				field.addTarget(instance);
+
+				var translationManager = instance.get('translationManager');
+
+				if (translationManager) {
+					translationManager.addTarget(field);
+				}
 
 				return field;
 			},
@@ -312,6 +318,8 @@ AUI.add(
 
 						var currentTarget = event.currentTarget;
 
+						instance.ddmRepeatableButton = currentTarget;
+
 						if (currentTarget.hasClass('lfr-ddm-repeatable-add-button')) {
 							instance.repeat();
 						}
@@ -405,6 +413,13 @@ AUI.add(
 					remove: function() {
 						var instance = this;
 
+						instance.fire(
+							'remove',
+							{
+								field: instance
+							}
+						);
+
 						var container = instance.get('container');
 
 						container.remove(true);
@@ -442,6 +457,14 @@ AUI.add(
 								field.set('parent', parent);
 
 								field.renderUI();
+
+								instance.fire(
+									'repeat',
+									{
+										field: field,
+										originalField: instance
+									}
+								);
 							}
 						);
 					},
@@ -1331,6 +1354,42 @@ AUI.add(
 
 						if (instance.formNode) {
 							instance.formNode.on('submit', instance._onSubmitForm, instance);
+
+							Liferay.after('form:registered', instance._afterFormRegistered, instance);
+
+							instance.on(
+								['liferay-ddm-field:repeat', 'liferay-ddm-field:remove'],
+								function(event) {
+									var field = event.field;
+
+									if (instance.liferayForm) {
+										var validatorRules = instance.liferayForm.formValidator.get('rules');
+
+										if (event.type === 'liferay-ddm-field:repeat') {
+											var originalField = event.originalField;
+
+											var originalFieldInputName = originalField.getInputName();
+
+											validatorRules[field.getInputName()] = validatorRules[originalFieldInputName];
+										}
+										else if (event.type === 'liferay-ddm-field:remove') {
+											delete validatorRules[field.getInputName()];
+
+											instance.liferayForm.formValidator.resetField(field.getInputNode());
+										}
+
+										instance.liferayForm.formValidator.set('rules', validatorRules);
+									}
+								}
+							);
+						}
+					},
+
+					_afterFormRegistered: function(event) {
+						var instance = this;
+
+						if (event.formName === instance.formNode.attr('name')) {
+							instance.liferayForm = event.form;
 						}
 					},
 
