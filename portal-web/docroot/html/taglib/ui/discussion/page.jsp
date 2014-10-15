@@ -56,6 +56,8 @@ else {
 }
 
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
+
+String signInURL = themeDisplay.getURLSignIn();
 %>
 
 <div class="hide lfr-message-response" id="<portlet:namespace />discussion-status-messages"></div>
@@ -106,15 +108,34 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 						<c:otherwise>
 							<c:choose>
 								<c:when test="<%= messagesCount == 1 %>">
-									<liferay-ui:message key="no-comments-yet" /> <a href="<%= taglibPostReplyURL %>"><liferay-ui:message key="be-the-first" /></a>
+									<c:choose>
+										<c:when test="<%= themeDisplay.isSignedIn() %>">
+											<liferay-ui:message key="no-comments-yet" /> <a href="<%= taglibPostReplyURL %>"><liferay-ui:message key="be-the-first" /></a>
+										</c:when>
+										<c:otherwise>
+											<liferay-ui:message key="no-comments-yet" /> <a href="<%= signInURL %>"><liferay-ui:message key="please-sign-in-to-comment" /></a>
+										</c:otherwise>
+									</c:choose>
 								</c:when>
 								<c:otherwise>
-									<liferay-ui:icon
-										iconCssClass="icon-reply"
-										label="<%= true %>"
-										message="add-comment"
-										url="<%= taglibPostReplyURL %>"
-									/>
+									<c:choose>
+										<c:when test="<%= themeDisplay.isSignedIn() %>">
+											<liferay-ui:icon
+												iconCssClass="icon-reply"
+												label="<%= true %>"
+												message="add-comment"
+												url="<%= taglibPostReplyURL %>"
+											/>
+										</c:when>
+										<c:otherwise>
+											<liferay-ui:icon
+												iconCssClass="icon-reply"
+												label="<%= true %>"
+												message="please-sign-in-to-comment"
+												url="<%= signInURL %>"
+											/>
+										</c:otherwise>
+									</c:choose>
 								</c:otherwise>
 							</c:choose>
 						</c:otherwise>
@@ -350,12 +371,24 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 														String taglibPostReplyURL = "javascript:" + randomNamespace + "showForm('" + randomNamespace + "postReplyForm" + i + "', '" + namespace + randomNamespace + "postReplyBody" + i + "'); " + randomNamespace + "hideForm('" + randomNamespace + "editForm" + i + "', '" + namespace + randomNamespace + "editReplyBody" + i + "', '" + HtmlUtil.escapeJS(message.getBody()) + "');";
 														%>
 
-														<liferay-ui:icon
-															iconCssClass="icon-reply"
-															label="<%= true %>"
-															message="post-reply"
-															url="<%= taglibPostReplyURL %>"
-														/>
+														<c:choose>
+															<c:when test="<%= themeDisplay.isSignedIn() %>">
+																<liferay-ui:icon
+																	iconCssClass="icon-reply"
+																	label="<%= true %>"
+																	message="post-reply"
+																	url="<%= taglibPostReplyURL %>"
+																/>
+															</c:when>
+															<c:otherwise>
+																<liferay-ui:icon
+																	iconCssClass="icon-reply"
+																	label="<%= true %>"
+																	message="please-sign-in-to-reply"
+																	url="<%= signInURL %>"
+																/>
+															</c:otherwise>
+														</c:choose>
 													</li>
 												</c:if>
 
@@ -531,15 +564,6 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 		</aui:form>
 	</div>
 
-	<%
-	PortletURL loginURL = PortletURLFactoryUtil.create(request, PortletKeys.FAST_LOGIN, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
-
-	loginURL.setParameter("saveLastPath", Boolean.FALSE.toString());
-	loginURL.setParameter("struts_action", "/login/login");
-	loginURL.setPortletMode(PortletMode.VIEW);
-	loginURL.setWindowState(LiferayWindowState.POP_UP);
-	%>
-
 	<aui:script>
 		function <%= randomNamespace %>hideForm(rowId, textAreaId, textAreaValue) {
 			document.getElementById(rowId).style.display = 'none';
@@ -628,25 +652,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 				form.one('#<%= namespace %>parentMessageId').val(parentMessageId);
 				form.one('#<%= namespace %>body').val(body);
 
-				if (!themeDisplay.isSignedIn()) {
-					window.namespace = '<%= namespace %>';
-					window.randomNamespace = '<%= randomNamespace %>';
-
-					Liferay.Util.openWindow(
-						{
-							dialog: {
-								height: 460,
-								width: 770
-							},
-							id: '<%= namespace %>signInDialog',
-							title: '<%= UnicodeLanguageUtil.get(request, "sign-in") %>',
-							uri: '<%= loginURL.toString() %>'
-						}
-					);
-				}
-				else {
-					<portlet:namespace />sendMessage(form);
-				}
+				<portlet:namespace />sendMessage(form);
 			},
 			['aui-base']
 		);
