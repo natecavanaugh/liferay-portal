@@ -29,8 +29,6 @@ int mergeFailCount = SitesUtil.getMergeFailCount(layoutPrototype);
 	<%
 	boolean merge = false;
 
-	String randomNamespace = PortalUtil.generateRandomKey(request, "portlet_layout_prototypes_merge_alert") + StringPool.UNDERLINE;
-
 	PortletURL portletURL = liferayPortletResponse.createActionURL();
 
 	portletURL.setParameter("redirect", redirect);
@@ -54,13 +52,11 @@ int mergeFailCount = SitesUtil.getMergeFailCount(layoutPrototype);
 
 		<liferay-ui:message arguments="page-template" key='<%= merge ? "click-reset-and-propagate-to-reset-the-failure-count-and-propagate-changes-from-the-x" : "click-reset-to-reset-the-failure-count-and-reenable-propagation" %>' />
 
-		<aui:button id='<%= randomNamespace + "resetButton" %>' value='<%= merge ? "reset-and-propagate" : "reset" %>' />
+		<aui:button id="resetButton" value='<%= merge ? "reset-and-propagate" : "reset" %>' />
 	</span>
 
-	<aui:script use="aui-base">
-		var resetButton= A.one('#<%= randomNamespace %>resetButton');
-
-		resetButton.on(
+	<aui:script>
+		AUI.$('#<portlet:namespace />resetButton').on(
 			'click',
 			function(event) {
 				submitForm(document.hrefFm, '<%= portletURL.toString() %>');
