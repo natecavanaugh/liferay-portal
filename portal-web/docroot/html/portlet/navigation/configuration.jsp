@@ -73,7 +73,7 @@
 			</aui:fieldset>
 
 			<aui:fieldset column="<%= true %>">
-				<div id="<portlet:namespace />customDisplayOptions">
+				<div class="<%= displayStyle.equals("[custom]") ? "" : "hide" %>" id="<portlet:namespace />customDisplayOptions">
 					<aui:select label="header" name="preferences--headerType--" value="<%= headerType %>">
 						<aui:option label="none" />
 						<aui:option label="portlet-title" />
@@ -126,30 +126,29 @@
 	</aui:col>
 </aui:row>
 
-<aui:script use="aui-base">
-	var customDisplayOptions = A.one('#<portlet:namespace />customDisplayOptions');
-	var selectBulletStyle = A.one('#<portlet:namespace />bulletStyle');
-	var selectDisplayStyle = A.one('#<portlet:namespace />displayStyle');
-	var selectHeaderType = A.one('#<portlet:namespace />headerType');
-	var selectIncludedLayouts = A.one('#<portlet:namespace />includedLayouts');
-	var selectNestedChildren = A.one('#<portlet:namespace />nestedChildren');
-	var selectRootLayoutLevel = A.one('#<portlet:namespace />rootLayoutLevel');
-	var selectRootLayoutType = A.one('#<portlet:namespace />rootLayoutType');
+<aui:script sandbox="<%= true %>">
+	var form = $('#<portlet:namespace />fm');
 
-	var selects = A.all('#<portlet:namespace />fm select');
+	var customDisplayOptions = form.fm('customDisplayOptions');
+	var selectBulletStyle = form.fm('bulletStyle');
+	var selectDisplayStyle = form.fm('displayStyle');
+	var selectHeaderType = form.fm('headerType');
+	var selectIncludedLayouts = form.fm('includedLayouts');
+	var selectNestedChildren = form.fm('nestedChildren');
+	var selectRootLayoutLevel = form.fm('rootLayoutLevel');
+	var selectRootLayoutType = form.fm('rootLayoutType');
 
 	var curPortletBoundaryId = '#p_p_id_<%= HtmlUtil.escapeJS(portletResource) %>_';
 
-	var toggleCustomFields = function() {
-		if (customDisplayOptions) {
+	form.find('select').on(
+		'change',
+		function() {
 			var data = {};
 
-			var action = 'hide';
+			var hide = true;
 
-			var displayStyle = selectDisplayStyle.val();
-
-			if (displayStyle == '[custom]') {
-				action = 'show';
+			if (selectDisplayStyle.val() == '[custom]') {
+				hide = false;
 
 				data['_<%= HtmlUtil.escapeJS(portletResource) %>_headerType'] = selectHeaderType.val();
 				data['_<%= HtmlUtil.escapeJS(portletResource) %>_includedLayouts'] = selectIncludedLayouts.val();
@@ -158,7 +157,7 @@
 				data['_<%= HtmlUtil.escapeJS(portletResource) %>_rootLayoutType'] = selectRootLayoutType.val();
 			}
 
-			customDisplayOptions[action]();
+			customDisplayOptions.toggleClass('hide', hide);
 
 			data['_<%= HtmlUtil.escapeJS(portletResource) %>_bulletStyle'] = selectBulletStyle.val();
 			data['_<%= HtmlUtil.escapeJS(portletResource) %>_displayStyle'] = selectDisplayStyle.val();
@@ -166,9 +165,5 @@
 
 			Liferay.Portlet.refresh(curPortletBoundaryId, data);
 		}
-	}
-
-	selects.on('change', toggleCustomFields);
-
-	toggleCustomFields();
+	);
 </aui:script>
