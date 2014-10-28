@@ -609,7 +609,7 @@ public class UsersAdminImpl implements UsersAdmin {
 			return null;
 		}
 
-		return applyRequestPrimaryKeys(
+		return getRequestPrimaryKeys(
 			portletRequest, user.getGroupIds(), "addGroupIds",
 			"deleteGroupIds");
 	}
@@ -666,7 +666,7 @@ public class UsersAdminImpl implements UsersAdmin {
 			return null;
 		}
 
-		return applyRequestPrimaryKeys(
+		return getRequestPrimaryKeys(
 			portletRequest, user.getOrganizationIds(), "addOrganizationIds",
 			"deleteOrganizationIds");
 	}
@@ -870,7 +870,7 @@ public class UsersAdminImpl implements UsersAdmin {
 			return null;
 		}
 
-		return applyRequestPrimaryKeys(
+		return getRequestPrimaryKeys(
 			portletRequest, user.getRoleIds(), "addRoleIds", "deleteRoleIds");
 	}
 
@@ -912,7 +912,7 @@ public class UsersAdminImpl implements UsersAdmin {
 			return null;
 		}
 
-		return applyRequestPrimaryKeys(
+		return getRequestPrimaryKeys(
 			portletRequest, user.getUserGroupIds(), "addUserGroupIds",
 			"deleteUserGroupIds");
 	}
@@ -1472,11 +1472,11 @@ public class UsersAdminImpl implements UsersAdmin {
 		}
 	}
 
-	protected long[] applyRequestPrimaryKeys(
+	protected long[] getRequestPrimaryKeys(
 		PortletRequest portletRequest, long[] currentPKs, String addParam,
 		String deleteParam) {
 
-		Set<Long> groupIds = SetUtil.fromArray(currentPKs);
+		Set<Long> primaryKeys = SetUtil.fromArray(currentPKs);
 
 		long[] addPrimaryKeys = StringUtil.split(
 			ParamUtil.getString(portletRequest, addParam), 0L);
@@ -1484,14 +1484,14 @@ public class UsersAdminImpl implements UsersAdmin {
 			ParamUtil.getString(portletRequest, deleteParam), 0L);
 
 		for (long pk : addPrimaryKeys) {
-			groupIds.add(pk);
+			primaryKeys.add(pk);
 		}
 
 		for (long pk : deletePrimaryKeys) {
-			groupIds.remove(pk);
+			primaryKeys.remove(pk);
 		}
 
-		return ArrayUtil.toLongArray(groupIds);
+		return ArrayUtil.toLongArray(primaryKeys);
 	}
 
 	protected Set<UserGroupRole> getUserGroupRoles(
