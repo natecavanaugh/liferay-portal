@@ -161,6 +161,12 @@ public class UsersAdminUtil {
 			actionRequest, defaultEmailAddresses);
 	}
 
+	public static long[] getGroupIds(PortletRequest portletRequest)
+		throws PortalException {
+
+		return getUsersAdmin().getGroupIds(portletRequest);
+	}
+
 	public static OrderByComparator<Group> getGroupOrderByComparator(
 		String orderByCol, String orderByType) {
 
@@ -170,6 +176,12 @@ public class UsersAdminUtil {
 
 	public static Long[] getOrganizationIds(List<Organization> organizations) {
 		return getUsersAdmin().getOrganizationIds(organizations);
+	}
+
+	public static long[] getOrganizationIds(PortletRequest portletRequest)
+		throws PortalException {
+
+		return getUsersAdmin().getOrganizationIds(portletRequest);
 	}
 
 	public static OrderByComparator<Organization>
@@ -200,11 +212,23 @@ public class UsersAdminUtil {
 		return getUsersAdmin().getPhones(actionRequest, defaultPhones);
 	}
 
+	public static long[] getRoleIds(PortletRequest portletRequest)
+		throws PortalException {
+
+		return getUsersAdmin().getRoleIds(portletRequest);
+	}
+
 	public static OrderByComparator<Role> getRoleOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		return getUsersAdmin().getRoleOrderByComparator(
 			orderByCol, orderByType);
+	}
+
+	public static long[] getUserGroupIds(PortletRequest portletRequest)
+		throws PortalException {
+
+		return getUsersAdmin().getUserGroupIds(portletRequest);
 	}
 
 	public static OrderByComparator<UserGroup> getUserGroupOrderByComparator(
