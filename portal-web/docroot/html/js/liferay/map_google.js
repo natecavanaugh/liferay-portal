@@ -118,9 +118,7 @@ AUI.add(
 					}
 				},
 
-				AUGMENTS: [Liferay.MapGeojsonBase],
-
-				EXTENDS: A.Base,
+				EXTENDS: Liferay.MapGeojsonBase,
 
 				NAME: 'lfr-map-geojson-google',
 
@@ -175,9 +173,7 @@ AUI.add(
 
 		var GoogleMapMarker = A.Component.create(
 			{
-				AUGMENTS: [Liferay.MapMarkerBase],
-
-				EXTENDS: A.Base,
+				EXTENDS: Liferay.MapMarkerBase,
 
 				NAME: 'lfr-map-marker-google',
 
@@ -301,9 +297,7 @@ AUI.add(
 
 		var GoogleMap = A.Component.create(
 			{
-				AUGMENTS: [MapBase],
-
-				EXTENDS: A.Widget,
+				EXTENDS: MapBase,
 
 				NAME: 'lfr-map-google',
 

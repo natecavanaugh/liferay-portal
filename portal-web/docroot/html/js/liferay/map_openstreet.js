@@ -143,9 +143,7 @@ AUI.add(
 
 		var OpenStreetMapGeojson = A.Component.create(
 			{
-				AUGMENTS: [Liferay.MapGeojsonBase],
-
-				EXTENDS: A.Base,
+				EXTENDS: Liferay.MapGeojsonBase,
 
 				NAME: 'lfr-map-geojson-openstreet',
 
@@ -221,9 +219,7 @@ AUI.add(
 
 		var OpenStreetMapMarker = A.Component.create(
 			{
-				AUGMENTS: [Liferay.MapMarkerBase],
-
-				EXTENDS: A.Base,
+				EXTENDS: Liferay.MapMarkerBase,
 
 				NAME: 'lfr-map-marker-openstreet',
 
@@ -282,9 +278,7 @@ AUI.add(
 					}
 				},
 
-				AUGMENTS: [MapBase],
-
-				EXTENDS: A.Widget,
+				EXTENDS: MapBase,
 
 				NAME: 'lfr-map-openstreet',
 
