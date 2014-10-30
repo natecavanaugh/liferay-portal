@@ -481,11 +481,6 @@ public class EditArticleAction extends PortletAction {
 			uploadPortletRequest, "autoArticleId");
 		double version = ParamUtil.getDouble(uploadPortletRequest, "version");
 
-		String defaultLanguageId = ParamUtil.getString(
-			uploadPortletRequest, "defaultLanguageId");
-
-		Locale defaultLocale = LocaleUtil.fromLanguageId(defaultLanguageId);
-
 		Map<Locale, String> titleMap = LocalizationUtil.getLocalizationMap(
 			actionRequest, "title");
 		Map<Locale, String> descriptionMap =
@@ -501,6 +496,9 @@ public class EditArticleAction extends PortletAction {
 			PortalUtil.getSiteGroupId(groupId),
 			PortalUtil.getClassNameId(JournalArticle.class), ddmStructureKey,
 			true);
+
+		String defaultLanguageId = ParamUtil.getString(
+			uploadPortletRequest, "defaultLanguageId");
 
 		String languageId = defaultLanguageId;
 
