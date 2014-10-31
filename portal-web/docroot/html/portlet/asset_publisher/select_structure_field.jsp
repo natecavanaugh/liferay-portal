@@ -119,7 +119,7 @@ portletURL.setParameter("classTypeId", String.valueOf(classTypeId));
 				data.put("name", name);
 				%>
 
-				<aui:button cssClass="selector-button" data="<%= data %>" disabled="<%= name.equals(assetPublisherDisplayContext.getDDMStructureFieldName()) ? false : true %>" id='<%= renderResponse.getNamespace() + "applyButton" + name %>' value="apply" />
+				<aui:button cssClass="selector-button" data="<%= data %>" disabled="<%= name.equals(assetPublisherDisplayContext.getDDMStructureFieldName()) ? false : true %>" id='<%= "applyButton" + name %>' value="apply" />
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>
 
