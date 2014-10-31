@@ -61,28 +61,20 @@ String title = StringPool.BLANK;
 	</p>
 </c:if>
 
-<aui:script use="aui-base">
-	var feedsContainer = A.one('#<portlet:namespace />feedsContainer');
-
-	feedsContainer.delegate(
+<aui:script>
+	AUI.$('#<portlet:namespace />feedsContainer').on(
 		'click',
+		'.entry-expander',
 		function(event) {
-			var expander = event.currentTarget;
-			var feedContent = expander.get('parentNode').one('.feed-entry-content');
+			var expander = $(event.currentTarget);
+			var expanded = expander.hasClass('icon-collapse-alt');
+			var feedContent = expander.parent().find('.feed-entry-content');
 
-			if (feedContent) {
-				if (expander.hasClass('icon-collapse-alt')) {
-					expander.addClass('icon-expand-alt');
-					expander.removeClass('icon-collapse-alt');
-				}
-				else {
-					expander.addClass('icon-collapse-alt');
-					expander.removeClass('icon-expand-alt');
-				}
+			expander.toggleClass('icon-collapse-alt', !expanded);
 
-				feedContent.toggle();
-			}
-		},
-		'.entry-expander'
+			expander.toggleClass('icon-expand-alt', expanded);
+
+			feedContent.toggleClass('hide', expanded);
+		}
 	);
 </aui:script>
