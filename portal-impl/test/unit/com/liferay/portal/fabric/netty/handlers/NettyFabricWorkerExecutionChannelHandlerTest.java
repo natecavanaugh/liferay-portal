@@ -873,7 +873,7 @@ public class NettyFabricWorkerExecutionChannelHandlerTest {
 		}
 
 		@Override
-		public Serializable call() throws ProcessException {
+		public Serializable call() {
 			return null;
 		}
 

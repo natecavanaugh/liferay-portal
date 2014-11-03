@@ -56,6 +56,7 @@ import org.junit.runner.RunWith;
 public class StorageAdapterTest extends BaseDDMServiceTestCase {
 
 	@Before
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 
