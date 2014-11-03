@@ -140,7 +140,7 @@
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script use="aui-base,liferay-util-list-fields">
+<aui:script use="aui-base">
 	A.one('#<portlet:namespace /><%= searchContainerReference.getId() %>SearchContainer').delegate(
 		'click',
 		function() {
