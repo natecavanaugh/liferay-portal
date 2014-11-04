@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.dao.db.BaseDBProcess;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.ReleaseConstants;
 import com.liferay.portal.util.ClassLoaderUtil;
@@ -50,15 +51,25 @@ public abstract class VerifyProcess extends BaseDBProcess {
 	public static final int ONCE = 1;
 
 	public void verify() throws VerifyException {
+		long start = System.currentTimeMillis();
+
 		try {
 			if (_log.isInfoEnabled()) {
-				_log.info("Verifying " + getClass().getName());
+				_log.info("Verifying " + ClassUtil.getClassName(this));
 			}
 
 			doVerify();
 		}
 		catch (Exception e) {
 			throw new VerifyException(e);
+		}
+		finally {
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					"Completed verification process " +
+						ClassUtil.getClassName(this) + " in " +
+							(System.currentTimeMillis() - start) + "ms");
+			}
 		}
 	}
 

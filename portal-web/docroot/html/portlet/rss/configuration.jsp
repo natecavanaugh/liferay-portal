@@ -242,50 +242,65 @@ configurationRenderURL.setParameter("portletResource", portletResource);
 
 <aui:script>
 	function <portlet:namespace />removeSelectionForFooter() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = 'remove-footer-article';
+		var form = AUI.$(document.<portlet:namespace />fm);
 
-		submitForm(document.<portlet:namespace />fm, '<%= configurationActionURL.toString() %>');
+		form.fm('<%= Constants.CMD %>').val('remove-footer-article');
+
+		submitForm(form, '<%= configurationActionURL.toString() %>');
 	}
 
 	function <portlet:namespace />removeSelectionForHeader() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = 'remove-header-article';
+		var form = AUI.$(document.<portlet:namespace />fm);
 
-		submitForm(document.<portlet:namespace />fm, '<%= configurationActionURL.toString() %>');
-	}
+		form.fm('<%= Constants.CMD %>').val('remove-header-article');
 
-	function <portlet:namespace />selectAsset(articleGroupId, articleId, assetOrder) {
-		if (assetOrder == 1) {
-			document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = 'set-footer-article';
-		}
-		else {
-			document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = 'set-header-article';
-		}
-
-		document.<portlet:namespace />fm.<portlet:namespace />articleGroupId.value = articleGroupId;
-		document.<portlet:namespace />fm.<portlet:namespace />articleId.value = articleId;
-		document.<portlet:namespace />fm.<portlet:namespace />typeSelection.value = '';
-
-		submitForm(document.<portlet:namespace />fm, '<%= configurationActionURL.toString() %>');
+		submitForm(form, '<%= configurationActionURL.toString() %>');
 	}
 
 	function <portlet:namespace />saveSettings() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.UPDATE %>';
-		document.<portlet:namespace />fm.<portlet:namespace />typeSelection.value = '';
+		var form = AUI.$(document.<portlet:namespace />fm);
 
-		submitForm(document.<portlet:namespace />fm, '<%= configurationActionURL.toString() %>');
+		form.fm('<%= Constants.CMD %>').val('<%= Constants.UPDATE %>');
+		form.fm('typeSelection').val('');
+
+		submitForm(form, '<%= configurationActionURL.toString() %>');
 	}
 
-	function <portlet:namespace />selectionForHeader() {
-		document.<portlet:namespace />fm.<portlet:namespace />typeSelection.value = '<%= JournalArticle.class.getName() %>';
-		document.<portlet:namespace />fm.<portlet:namespace />assetOrder.value = 0;
+	function <portlet:namespace />selectAsset(articleGroupId, articleId, assetOrder) {
+		var form = AUI.$(document.<portlet:namespace />fm);
 
-		submitForm(document.<portlet:namespace />fm);
+		var cmd;
+
+		if (assetOrder == 1) {
+			cmd = 'set-footer-article';
+		}
+		else {
+			cmd = 'set-header-article';
+		}
+
+		form.fm('<%= Constants.CMD %>').val(cmd);
+		form.fm('articleGroupId').val(articleGroupId);
+		form.fm('articleId').val(articleId);
+		form.fm('typeSelection').val('');
+
+		submitForm(form, '<%= configurationActionURL.toString() %>');
 	}
 
 	function <portlet:namespace />selectionForFooter() {
-		document.<portlet:namespace />fm.<portlet:namespace />typeSelection.value = '<%= JournalArticle.class.getName() %>';
-		document.<portlet:namespace />fm.<portlet:namespace />assetOrder.value = 1;
+		var form = AUI.$(document.<portlet:namespace />fm);
 
-		submitForm(document.<portlet:namespace />fm);
+		form.fm('typeSelection').val('<%= JournalArticle.class.getName() %>');
+		form.fm('assetOrder').val(1);
+
+		submitForm(form);
+	}
+
+	function <portlet:namespace />selectionForHeader() {
+		var form = AUI.$(document.<portlet:namespace />fm);
+
+		form.fm('typeSelection').val('<%= JournalArticle.class.getName() %>');
+		form.fm('assetOrder').val(0);
+
+		submitForm(form);
 	}
 </aui:script>

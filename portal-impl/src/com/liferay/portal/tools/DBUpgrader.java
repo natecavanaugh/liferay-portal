@@ -75,8 +75,8 @@ public class DBUpgrader {
 			verify();
 
 			System.out.println(
-				"\nSuccessfully completed upgrade process in " +
-					(stopWatch.getTime() / Time.SECOND) + " seconds.");
+				"\nCompleted upgrade and verify processes in " +
+					(stopWatch.getTime() / Time.SECOND) + " seconds");
 
 			System.exit(0);
 		}
