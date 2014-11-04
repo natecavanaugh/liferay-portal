@@ -61,20 +61,19 @@ String title = StringPool.BLANK;
 	</p>
 </c:if>
 
-<aui:script>
-	AUI.$('#<portlet:namespace />feedsContainer').on(
+<aui:script sandbox="<%= true %>">
+	$('#<portlet:namespace />feedsContainer').on(
 		'click',
 		'.entry-expander',
 		function(event) {
 			var expander = $(event.currentTarget);
-			var expanded = expander.hasClass('icon-collapse-alt');
-			var feedContent = expander.parent().find('.feed-entry-content');
 
-			expander.toggleClass('icon-collapse-alt', !expanded);
+			expander.toggleClass('icon-collapse-alt');
+			expander.toggleClass('icon-expand-alt');
 
-			expander.toggleClass('icon-expand-alt', expanded);
+			var feedContent = expander.siblings('.feed-entry-content');
 
-			feedContent.toggleClass('hide', expanded);
+			feedContent.toggleClass('hide');
 		}
 	);
 </aui:script>

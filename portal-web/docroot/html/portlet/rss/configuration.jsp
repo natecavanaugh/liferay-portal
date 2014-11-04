@@ -257,23 +257,6 @@ configurationRenderURL.setParameter("portletResource", portletResource);
 		submitForm(form, '<%= configurationActionURL.toString() %>');
 	}
 
-	function <portlet:namespace />selectAsset(articleGroupId, articleId, assetOrder) {
-		var form = AUI.$(document.<portlet:namespace />fm);
-
-		if (assetOrder == 1) {
-			form.fm('<%= Constants.CMD %>').val('set-footer-article');
-		}
-		else {
-			form.fm('<%= Constants.CMD %>').val('set-header-article');
-		}
-
-		form.fm('articleGroupId').val(articleGroupId);
-		form.fm('articleId').val(articleId);
-		form.fm('typeSelection').val('');
-
-		submitForm(form, '<%= configurationActionURL.toString() %>');
-	}
-
 	function <portlet:namespace />saveSettings() {
 		var form = AUI.$(document.<portlet:namespace />fm);
 
@@ -283,13 +266,24 @@ configurationRenderURL.setParameter("portletResource", portletResource);
 		submitForm(form, '<%= configurationActionURL.toString() %>');
 	}
 
-	function <portlet:namespace />selectionForHeader() {
+	function <portlet:namespace />selectAsset(articleGroupId, articleId, assetOrder) {
 		var form = AUI.$(document.<portlet:namespace />fm);
 
-		form.fm('typeSelection').val('<%= JournalArticle.class.getName() %>');
-		form.fm('assetOrder').val(0);
+		var cmd;
 
-		submitForm(form);
+		if (assetOrder == 1) {
+			cmd = 'set-footer-article';
+		}
+		else {
+			cmd = 'set-header-article';
+		}
+
+		form.fm('<%= Constants.CMD %>').val(cmd);
+		form.fm('articleGroupId').val(articleGroupId);
+		form.fm('articleId').val(articleId);
+		form.fm('typeSelection').val('');
+
+		submitForm(form, '<%= configurationActionURL.toString() %>');
 	}
 
 	function <portlet:namespace />selectionForFooter() {
@@ -297,6 +291,15 @@ configurationRenderURL.setParameter("portletResource", portletResource);
 
 		form.fm('typeSelection').val('<%= JournalArticle.class.getName() %>');
 		form.fm('assetOrder').val(1);
+
+		submitForm(form);
+	}
+
+	function <portlet:namespace />selectionForHeader() {
+		var form = AUI.$(document.<portlet:namespace />fm);
+
+		form.fm('typeSelection').val('<%= JournalArticle.class.getName() %>');
+		form.fm('assetOrder').val(0);
 
 		submitForm(form);
 	}
