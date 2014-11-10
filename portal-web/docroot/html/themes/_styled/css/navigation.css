@@ -204,7 +204,7 @@
 }
 
 .nav-menu-style-arrows ul {
-	list-style-image: url(../images/arrows/04_right.png);
+	list-style-image: url(@theme_image_path@/arrows/04_right.png);
 }
 
 /* ---------- Page template selector ---------- */
@@ -226,7 +226,7 @@
 }
 
 .form-trigger {
-	background: #C4C4C4 url(../images/application/button_bg.png) repeat-x 0 0;
+	background: #C4C4C4 url(@theme_image_path@/application/button_bg.png) repeat-x 0 0;
 	border-left: 1px solid #BBB;
 	display: inline-block;
 	float: left;
@@ -241,24 +241,24 @@
 
 	&:focus, &:hover {
 		background-color: #83B0CA;
-		background-image: url(../images/application/button_bg_over.png);
+		background-image: url(@theme_image_path@/application/button_bg_over.png);
 	}
 }
 
 .trigger-selected {
 	background-color: #EBEBEB;
-	background-image: url(../images/application/button_bg_selected.png);
+	background-image: url(@theme_image_path@/application/button_bg_selected.png);
 
 	&:focus, &:hover {
 		background-color: #B7DEF4;
-		background-image: url(../images/application/button_bg_selected_over.png);
+		background-image: url(@theme_image_path@/application/button_bg_selected_over.png);
 	}
 }
 
 .options-trigger img {
-	background-image: url(../images/common/configuration.png);
+	background-image: url(@theme_image_path@/common/configuration.png);
 }
 
 .save-trigger img {
-	background-image: url(../images/common/check.png);
+	background-image: url(@theme_image_path@/common/check.png);
 }

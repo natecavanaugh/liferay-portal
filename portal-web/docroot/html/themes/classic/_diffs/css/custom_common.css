@@ -817,11 +817,11 @@ body.yui3-skin-sam .yui3-widget-mask {
 		background: none no-repeat 0 50%;
 
 		&.toggler-header-collapsed {
-			background-image: url(../images/arrows/05_right.png);
+			background-image: url(@theme_image_path@/arrows/05_right.png);
 		}
 
 		&.toggler-header-expanded {
-			background-image: url(../images/arrows/05_down.png);
+			background-image: url(@theme_image_path@/arrows/05_down.png);
 		}
 	}
 }
@@ -945,7 +945,7 @@ body.yui3-skin-sam .yui3-widget-mask {
 			@include user-select(none);
 
 			.panel-toggle {
-				background: transparent url(../images/arrows/13_right.png) no-repeat 100% -20px;
+				background: transparent url(@theme_image_path@/arrows/13_right.png) no-repeat 100% -20px;
 			}
 		}
 
