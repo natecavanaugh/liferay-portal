@@ -1089,51 +1089,30 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
-						var container = instance.get('container');
+						var map = Liferay.component(instance.getInputName());
 
-						container.one('.geolocate-button').on('click', instance.getGeolocation, instance);
+						map.on('positionChange', instance.onPositionChange, instance);
 					},
 
-					getGeolocation: function() {
+					onPositionChange: function(event) {
 						var instance = this;
 
 						var inputName = instance.getInputName();
 
-						var coordinatesNode = A.one('#' + inputName + 'Coordinates');
-						var coordinatesContainerNode = A.one('#' + inputName + 'CoordinatesContainer');
+						var location = event.newVal.location;
 
-						coordinatesContainerNode.show();
-
-						coordinatesNode.html(Liferay.Language.get('loading'));
-
-						Liferay.Util.getGeolocation(
-							function(latitude, longitude) {
-								instance.setValue(
-									AJSON.stringify(
-										{
-											latitude: latitude,
-											longitude: longitude
-										}
-									)
-								);
-							}
+						instance.setValue(
+							AJSON.stringify(
+								{
+									latitude: location.lat,
+									longitude: location.lng
+								}
+							)
 						);
-					},
 
-					setValue: function(value) {
-						var instance = this;
+						var locationNode = A.one('#' + inputName + 'Location');
 
-						if (Lang.isString(value) && value !== '') {
-							var inputNode = instance.getInputNode();
-
-							inputNode.val(value);
-
-							value = AJSON.parse(value);
-
-							var coordinatesNode = A.one('#' + instance.getInputName() + 'Coordinates');
-
-							coordinatesNode.html([value.latitude, value.longitude].join(', '));
-						}
+						locationNode.html(event.newVal.address);
 					}
 				}
 			}
