@@ -132,19 +132,19 @@ h3 {
 	}
 
 	#control-panel-home-category-headerapps a {
-		background-image: url(../images/custom/home_apps.png);
+		background-image: url(@theme_image_path@/custom/home_apps.png);
 	}
 
 	#control-panel-home-category-headerconfiguration a {
-		background-image: url(../images/custom/home_configuration.png);
+		background-image: url(@theme_image_path@/custom/home_configuration.png);
 	}
 
 	#control-panel-home-category-headersites a {
-		background-image: url(../images/custom/home_sites.png);
+		background-image: url(@theme_image_path@/custom/home_sites.png);
 	}
 
 	#control-panel-home-category-headerusers a {
-		background-image: url(../images/custom/home_users.png);
+		background-image: url(@theme_image_path@/custom/home_users.png);
 	}
 }
 
@@ -391,30 +391,30 @@ h3 {
 					}
 
 					.icon-arrow-left {
-						background-image: url(../images/custom/dockbar_back.png);
+						background-image: url(@theme_image_path@/custom/dockbar_back.png);
 						margin-top: 4px;
 					}
 
 					.icon-cog {
-						background-image: url(../images/custom/dockbar_configuration.png);
+						background-image: url(@theme_image_path@/custom/dockbar_configuration.png);
 					}
 
 					.icon-globe {
-						background-image: url(../images/custom/dockbar_sites.png);
+						background-image: url(@theme_image_path@/custom/dockbar_sites.png);
 					}
 
 					.icon-list {
-						background-image: url(../images/custom/dockbar_home.png);
+						background-image: url(@theme_image_path@/custom/dockbar_home.png);
 						height: 24px;
 						margin-top: 3px;
 					}
 
 					.icon-th {
-						background-image: url(../images/custom/dockbar_apps.png);
+						background-image: url(@theme_image_path@/custom/dockbar_apps.png);
 					}
 
 					.icon-user {
-						background-image: url(../images/custom/dockbar_users.png);
+						background-image: url(@theme_image_path@/custom/dockbar_users.png);
 						width: 40px;
 					}
 				}
@@ -512,7 +512,7 @@ h3 {
 	position: relative;
 
 	.minimize-panels a {
-		background: url(../images/custom/panel_close.png) no-repeat;
+		background: url(@theme_image_path@/custom/panel_close.png) no-repeat;
 		color: #FFF;
 		display: none;
 		font-size: 20px;
@@ -638,7 +638,7 @@ h3 {
 			}
 
 			.search-panel-icon {
-				background: url(../images/custom/search_panel_icon.png) no-repeat 0 50%;
+				background: url(@theme_image_path@/custom/search_panel_icon.png) no-repeat 0 50%;
 				color: #D4D4D4;
 				font-size: 0;
 				height: 18px;
@@ -708,7 +708,7 @@ h3 {
 		}
 
 		.minimize-panels a {
-			background-image: url(../images/custom/panel_open.png);
+			background-image: url(@theme_image_path@/custom/panel_open.png);
 		}
 
 		.portlet-borderless-container {

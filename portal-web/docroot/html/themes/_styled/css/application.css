@@ -48,7 +48,7 @@
 	}
 
 	&.not-intersecting .forbidden-action {
-		background: url(../images/application/forbidden_action.png) no-repeat;
+		background: url(@theme_image_path@/application/forbidden_action.png) no-repeat;
 		display: block;
 		height: 32px;
 		position: absolute;
@@ -239,7 +239,7 @@
 }
 
 .underlay-content {
-	background: #F4F3F3 url(../images/common/message_panel_shadow.png) repeat-x 0 0;
+	background: #F4F3F3 url(@theme_image_path@/common/message_panel_shadow.png) repeat-x 0 0;
 	border: 0 solid #AEAFB1;
 	border-width: 0 1px 1px;
 }
@@ -310,7 +310,7 @@
 }
 
 .panel-hd {
-	background: #C0C2C5 url(../images/application/panel_header_bg.png) repeat-x 0 0;
+	background: #C0C2C5 url(@theme_image_path@/application/panel_header_bg.png) repeat-x 0 0;
 	border: 1px solid;
 	border-color: #C8C9CA #AEB2B8 #AEB2B8 #C8C9CA;
 	padding-left: 10px;
@@ -393,7 +393,7 @@
 }
 
 .menu-content {
-	background: #CCC9C9 url(../images/application/menu_bg.png) repeat-x 0 0;
+	background: #CCC9C9 url(@theme_image_path@/application/menu_bg.png) repeat-x 0 0;
 	border: 1px solid;
 	border-color: #AEAFB1 #777879 #777879 #AEAFB1;
 	padding: 2px 0;
@@ -486,7 +486,7 @@
 }
 
 .loadingmask-message {
-	background: #D4D4D4 url(../images/portlet/header_bg.png) repeat-x 0 0;
+	background: #D4D4D4 url(@theme_image_path@/portlet/header_bg.png) repeat-x 0 0;
 }
 
 /* ---------- Tree view ---------- */
@@ -616,26 +616,26 @@
 }
 
 .paginator-current-page {
-	background: #0083BD url(../images/application/paginator_link_current_bg.png) 0 0 repeat-x;
+	background: #0083BD url(@theme_image_path@/application/paginator_link_current_bg.png) 0 0 repeat-x;
 	border-color: #38B6EF #006D9E #006D9E #46B4E6;
 	color: #FFF;
 	text-shadow: -1px -1px #003C57;
 }
 
 .paginator-first-link {
-	background-image: url(../images/arrows/paging_first.png);
+	background-image: url(@theme_image_path@/arrows/paging_first.png);
 }
 
 .paginator-prev-link {
-	background-image: url(../images/arrows/paging_previous.png);
+	background-image: url(@theme_image_path@/arrows/paging_previous.png);
 }
 
 .paginator-last-link {
-	background-image: url(../images/arrows/paging_last.png);
+	background-image: url(@theme_image_path@/arrows/paging_last.png);
 }
 
 .paginator-next-link {
-	background-image: url(../images/arrows/paging_next.png);
+	background-image: url(@theme_image_path@/arrows/paging_next.png);
 }
 
 .paginator-current-page-report, .paginator-total {
@@ -700,12 +700,12 @@
 	word-wrap: break-word;
 
 	blockquote {
-		background: #EEF0F2 url(../images/message_boards/quoteleft.png) no-repeat 5px 5px;
+		background: #EEF0F2 url(@theme_image_path@/message_boards/quoteleft.png) no-repeat 5px 5px;
 		border: 1px solid #777;
 		padding: 5px 45px;
 
 		&:after {
-			background: url(../images/message_boards/quoteright.png) no-repeat 50%;
+			background: url(@theme_image_path@/message_boards/quoteright.png) no-repeat 50%;
 			content: '';
 			display: block;
 			float: right;
@@ -740,7 +740,7 @@
 	position: relative;
 
 	&:after {
-		background: $edit-color url(../images/common/edit_white.png) no-repeat 50%;
+		background: $edit-color url(@theme_image_path@/common/edit_white.png) no-repeat 50%;
 		content: '';
 		display: block;
 		height: 20px;
