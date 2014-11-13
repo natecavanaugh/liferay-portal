@@ -114,6 +114,7 @@ portletURL.setParameter("classTypeId", String.valueOf(classTypeId));
 				<%
 				Map<String, Object> data = new HashMap<String, Object>();
 
+				data.put("fieldsnamespace", fieldsNamespace);
 				data.put("form", renderResponse.getNamespace() + name + "fieldForm");
 				data.put("label", label);
 				data.put("name", name);
@@ -141,7 +142,12 @@ portletURL.setParameter("classTypeId", String.valueOf(classTypeId));
 	var submitForm = function(applyButton) {
 		var result = Util.getAttributes(applyButton, 'data-');
 
+		var fieldsnamespace = result.fieldsnamespace;
 		var form = A.one('#' + result.form);
+
+		var ddmForm = Liferay.component('<portlet:namespace />' + fieldsnamespace + 'ddmForm');
+
+		ddmForm.updateDDMFormInputValue();
 
 		A.io.request(
 			form.attr('action'),
