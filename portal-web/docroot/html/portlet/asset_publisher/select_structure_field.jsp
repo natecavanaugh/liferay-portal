@@ -143,11 +143,12 @@ portletURL.setParameter("classTypeId", String.valueOf(classTypeId));
 		var result = Util.getAttributes(applyButton, 'data-');
 
 		var fieldsnamespace = result.fieldsnamespace;
-		var form = A.one('#' + result.form);
 
 		var ddmForm = Liferay.component('<portlet:namespace />' + fieldsnamespace + 'ddmForm');
 
 		ddmForm.updateDDMFormInputValue();
+
+		var form = A.one('#' + result.form);
 
 		A.io.request(
 			form.attr('action'),
