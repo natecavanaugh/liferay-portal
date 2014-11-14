@@ -36,6 +36,9 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 	/>
 </liferay-util:buffer>
 
+<aui:input name="addGroupIds" type="hidden" />
+<aui:input name="deleteGroupIds" type="hidden" />
+
 <h3><liferay-ui:message key="sites" /></h3>
 
 <liferay-ui:search-container
@@ -95,6 +98,13 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 	<aui:script use="liferay-search-container">
 		var Util = Liferay.Util;
 
+		var <portlet:namespace />addGroupIds = [];
+		var <portlet:namespace />deleteGroupIds = [];
+
+		var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />groupsSearchContainer');
+
+		var searchContainerContentBox = searchContainer.get('contentBox');
+
 		var handleOnSelect = A.one('#<portlet:namespace />selectSiteLink').on(
 			'click',
 			function(event) {
@@ -116,8 +126,6 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 						uri: '<%= groupSelectorURL.toString() %>'
 					},
 					function(event) {
-						var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />groupsSearchContainer');
-
 						var rowColumns = [];
 
 						rowColumns.push(event.groupdescriptivename);
@@ -126,14 +134,23 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 
 						searchContainer.addRow(rowColumns, event.groupid);
 						searchContainer.updateDataStore();
+
+						<portlet:namespace />addGroupIds.push(event.groupid);
+
+						for (var i = 0; i < <portlet:namespace />deleteGroupIds.length; i++) {
+							if (<portlet:namespace />deleteGroupIds[i] == event.groupid) {
+								<portlet:namespace />deleteGroupIds.splice(i, 1);
+
+								break;
+							}
+						}
+
+						document.<portlet:namespace />fm.<portlet:namespace />addGroupIds.value = <portlet:namespace />addGroupIds.join(',');
+						document.<portlet:namespace />fm.<portlet:namespace />deleteGroupIds.value = <portlet:namespace />deleteGroupIds.join(',');
 					}
 				);
 			}
 		);
-
-		var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />groupsSearchContainer');
-
-		var searchContainerContentBox = searchContainer.get('contentBox');
 
 		var handleOnModifyLink = searchContainerContentBox.delegate(
 			'click',
@@ -152,6 +169,19 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 				}
 
 				searchContainer.deleteRow(tr, rowId);
+
+				for (var i = 0; i < <portlet:namespace />addGroupIds.length; i++) {
+					if (<portlet:namespace />addGroupIds[i] == rowId) {
+						<portlet:namespace />addGroupIds.splice(i, 1);
+
+						break;
+					}
+				}
+
+				<portlet:namespace />deleteGroupIds.push(rowId);
+
+				document.<portlet:namespace />fm.<portlet:namespace />addGroupIds.value = <portlet:namespace />addGroupIds.join(',');
+				document.<portlet:namespace />fm.<portlet:namespace />deleteGroupIds.value = <portlet:namespace />deleteGroupIds.join(',');
 			},
 			'.modify-link'
 		);
