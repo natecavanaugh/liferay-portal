@@ -177,7 +177,7 @@ for (Portlet portlet : portlets) {
 	</liferay-ui:tabs>
 </c:if>
 
-<aui:script use="aui-base,liferay-util-list-fields">
+<aui:script use="aui-base">
 	Liferay.Util.toggleBoxes('<portlet:namespace />socialInteractionsSocialRelationTypesEnabled','<portlet:namespace />socialRelations');
 
 	Liferay.Util.toggleRadio('<portlet:namespace />socialInteractionsAnyUser', '', '<portlet:namespace />socialInteractionsUsersWrapper');

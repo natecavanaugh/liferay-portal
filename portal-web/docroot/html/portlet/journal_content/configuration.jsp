@@ -143,7 +143,7 @@ String ddmTemplateKey = journalContentDisplayContext.getDDMTemplateKey();
 	</aui:button-row>
 </aui:form>
 
-<aui:script use="aui-base,liferay-util-list-fields">
+<aui:script use="aui-base">
 	A.one('#<portlet:namespace />webContentSelector').on(
 		'click',
 		function(event) {
