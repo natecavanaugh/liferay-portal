@@ -93,6 +93,7 @@ for (Layout scopeGroupLayout : LayoutLocalServiceUtil.getScopeGroupLayouts(layou
 					localizeMessage="<%= false %>"
 					message="<%= HtmlUtil.escape(availableGroup.getDescriptiveName(locale)) %>"
 					method="post"
+					onClick='<%= renderResponse.getNamespace() + "fireScopeChange();" %>'
 					url="<%= setScopeURL %>"
 				/>
 
@@ -115,9 +116,16 @@ for (Layout scopeGroupLayout : LayoutLocalServiceUtil.getScopeGroupLayouts(layou
 					id="scopeCurLayout"
 					message='<%= HtmlUtil.escape(layout.getName(locale)) + " (" + LanguageUtil.get(request, "create-new") + ")" %>'
 					method="post"
+					onClick='<%= renderResponse.getNamespace() + "fireScopeChange();" %>'
 					url="<%= createNewScopeURL %>"
 				/>
 			</c:if>
 		</liferay-ui:icon-menu>
 	</aui:field-wrapper>
 </aui:fieldset>
+
+<aui:script>
+function <portlet:namespace />fireScopeChange() {
+	Liferay.Util.getTop().Liferay.fire('_<%= selPortlet.getRootPortletId() %>_scopeChange');
+}
+</aui:script>

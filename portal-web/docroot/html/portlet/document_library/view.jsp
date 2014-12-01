@@ -290,4 +290,11 @@ if (!defaultFolderView && (folder != null) && (portletName.equals(PortletKeys.DO
 	};
 
 	Liferay.on('destroyPortlet', clearDocumentLibraryHandles);
+
+	Liferay.on(
+		'<portlet:namespace />scopeChange',
+		function(event) {
+			documentLibrary.destroy();
+		}
+	);
 </aui:script>
