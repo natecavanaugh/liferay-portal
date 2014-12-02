@@ -48,7 +48,7 @@ $editLayoutPanelWidth: 460px;
 			}
 
 			> li {
-				&.active a {
+				&.active > a {
 					background-color: $navbar-default-link-active-bg;
 				}
 
