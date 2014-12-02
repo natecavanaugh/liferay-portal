@@ -86,6 +86,8 @@ public interface HttpHeaders {
 
 	public static final String X_PJAX = "X-PJAX";
 
+	public static final String X_PJAX_RESOURCES = "X-PJAX-RESOURCES";
+
 	public static final String X_REQUESTED_WITH = "X-Requested-With";
 
 	public static final String X_XSS_PROTECTION = "X-XSS-Protection";

@@ -54,7 +54,8 @@ public class OutputTag extends PositionTagSupport {
 					_outputKey, _webKey, getBodyContentAsStringBundler());
 			}
 			else {
-				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
+				HttpServletRequest request =
+					(HttpServletRequest)pageContext.getRequest();
 
 				String pjax = request.getHeader(HttpHeaders.X_PJAX);
 
@@ -80,10 +81,19 @@ public class OutputTag extends PositionTagSupport {
 	@Override
 	public int doStartTag() throws JspException {
 		try {
-			if (Validator.isNotNull(_outputKey)) {
-				OutputData outputData = _getOutputData(pageContext.getRequest());
+			HttpServletRequest request =
+				(HttpServletRequest)pageContext.getRequest();
 
-				if (!outputData.addOutputKey(_outputKey)) {
+			if (Validator.isNotNull(_outputKey)) {
+				OutputData outputData = _getOutputData(request);
+
+				String pjaxResources = request.getHeader(
+					HttpHeaders.X_PJAX_RESOURCES);
+
+				if (((pjaxResources != null) &&
+					 pjaxResources.contains(_outputKey)) ||
+					!outputData.addOutputKey(_outputKey)) {
+
 					_output = false;
 
 					return SKIP_BODY;
@@ -92,8 +102,6 @@ public class OutputTag extends PositionTagSupport {
 
 			if (isPositionInLine()) {
 				_output = false;
-
-				HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
 
 				if (Validator.isNotNull(_outputKey)) {
 					String pjax = request.getHeader(HttpHeaders.X_PJAX);

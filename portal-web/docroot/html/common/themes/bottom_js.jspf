@@ -217,6 +217,25 @@ if (layout != null) {
 					%>
 
 					Liferay.Surface.blacklist.surface['<%= PortletKeys.NESTED_PORTLETS %>'] = true;
+
+					<%
+					OutputData outputData = (OutputData)request.getAttribute(WebKeys.OUTPUT_DATA);
+
+					if (outputData != null) {
+						Set<String> outputKeys = outputData.getOutputKeys();
+
+						for (String outputKey : outputKeys) {
+					%>
+
+							if (A.Array.indexOf(Liferay.Surface.sharedResources, '<%= outputKey %>') === -1) {
+								Liferay.Surface.sharedResources.push('<%= outputKey %>');
+							}
+
+					<%
+						}
+					}
+					%>
+
 				}
 			</aui:script>
 
