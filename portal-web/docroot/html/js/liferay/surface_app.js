@@ -110,6 +110,21 @@ AUI.add(
 				);
 
 				Liferay.on(
+					'surfaceScreenFlip',
+					function(event) {
+						var head = A.one('head');
+
+						A.all('link[data-outputkey], script[data-outputkey]').each(
+							function(item, index, collection) {
+								item.removeAttribute('data-outputkey');
+
+								head.append(item);
+							}
+						);
+					}
+				);
+
+				Liferay.on(
 					'surfaceScreenLoad',
 					function(event) {
 						Surface.resetAllPortlets();

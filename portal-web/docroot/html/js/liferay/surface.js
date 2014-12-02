@@ -14,6 +14,8 @@ AUI.add(
 				surface: {}
 			},
 
+			sharedResources: [],
+
 			clearCache: function() {
 				var instance = this;
 
@@ -328,6 +330,26 @@ AUI.add(
 									dataChannel.remove();
 									instance.set('dataChannel', A.JSON.parse(dataChannel.get('text')));
 								}
+
+								var outputData = data.all('[data-outputkey]');
+
+								outputData.each(
+									function(item, index, collection) {
+										var outputKey = item.attr('data-outputkey');
+
+										if (AArray.indexOf(Liferay.Surface.sharedResources, outputKey) === -1) {
+											var node = A.Node.create(A.Lang.String.unescapeHTML(item.getHTML()));
+
+											node.all('script, link').setAttribute('data-outputkey', outputKey);
+
+											item.replace(node);
+
+											Liferay.Surface.sharedResources.push(outputKey);
+										}
+
+										item.remove();
+									}
+								);
 
 								Liferay.fire(
 									'surfaceScreenLoad',
