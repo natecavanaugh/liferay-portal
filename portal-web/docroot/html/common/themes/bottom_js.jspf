@@ -17,7 +17,6 @@
 <%@ include file="/html/portal/layout/view/portlet_js.jspf" %>
 
 <aui:script position="inline">
-
 	<%
 	String controlPanelCategory = ParamUtil.getString(request, "controlPanelCategory");
 	%>
@@ -86,6 +85,11 @@ if (layout != null) {
 					</c:otherwise>
 				</c:choose>
 
+				disabledDropContainerClass: 'portlet-dropzone-disabled',
+				dragNodes: '.portlet-boundary:not(.portlet-static)',
+				dropContainer: '.portlet-dropzone',
+				emptyColumnClass: 'empty',
+
 				<c:choose>
 					<c:when test="<%= BrowserSnifferUtil.isMobile(request) %>">
 						handles: Liferay.Data.PORTLET_TOUCH_DRAG_HANDLE_SELECTOR || ['.portlet-title-text'],
@@ -98,10 +102,6 @@ if (layout != null) {
 					</c:otherwise>
 				</c:choose>
 
-				disabledDropContainerClass: 'portlet-dropzone-disabled',
-				dragNodes: '.portlet-boundary:not(.portlet-static)',
-				dropContainer: '.portlet-dropzone',
-				emptyColumnClass: 'empty',
 				invalid: '.portlet-static',
 				nestedPortletId: '_<%= PortletKeys.NESTED_PORTLETS %>_INSTANCE',
 				portletBoundary: '.portlet-boundary'
@@ -240,7 +240,6 @@ if (layout != null) {
 			</aui:script>
 
 			<script type="text/surface-data-channel">
-
 				<%
 				String portletId = request.getParameter("p_p_id");
 
@@ -248,13 +247,12 @@ if (layout != null) {
 				%>
 
 					{
-						"clearScreensCache": <%= (Validator.isNotNull(portletId) && Validator.isNotNull(singlePageApplicationLastPortletId) && !Validator.equals(portletId, singlePageApplicationLastPortletId)) %>
+						'clearScreensCache': <%= (Validator.isNotNull(portletId) && Validator.isNotNull(singlePageApplicationLastPortletId) && !Validator.equals(portletId, singlePageApplicationLastPortletId)) %>
 					}
 
 				<%
 				session.setAttribute(WebKeys.SINGLE_PAGE_APPLICATION_LAST_PORTLET_ID, portletId);
 				%>
-
 			</script>
 
 			<script type="text/javascript">

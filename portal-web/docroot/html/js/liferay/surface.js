@@ -249,6 +249,20 @@ AUI.add(
 				NAME: 'baseScreen',
 
 				prototype: {
+					destructor: function() {
+						var instance = this;
+
+						Surface.EventScreen.superclass.destructor(instance, arguments);
+
+						Liferay.fire(
+							'surfaceScreenDestructor',
+							{
+								app: Surface.app,
+								screen: instance
+							}
+						);
+					},
+
 					activate: function() {
 						var instance = this;
 
@@ -277,20 +291,6 @@ AUI.add(
 						);
 
 						instance.set('dataChannel', {});
-					},
-
-					destructor: function() {
-						var instance = this;
-
-						Surface.EventScreen.superclass.destructor(instance, arguments);
-
-						Liferay.fire(
-							'surfaceScreenDestructor',
-							{
-								app: Surface.app,
-								screen: instance
-							}
-						);
 					},
 
 					flip: function() {
@@ -366,33 +366,36 @@ AUI.add(
 					},
 
 					loadContent: function(path) {
-						var instance = this,
-							promise;
+						var instance = this;
 
 						instance.abortRequest();
 
-						promise = new A.CancellablePromise(
+						var promise = new A.CancellablePromise(
 							function(resolve) {
-								instance._request = A.io(path, {
-									headers: {
-										'X-PJAX': 'true',
-										'X-PJAX-RESOURCES': Liferay.Surface.sharedResources.join(',')
-									},
-									method: instance.get('method'),
-									on: {
-										failure: function(id, response) {
-											promise.cancel(response.responseText);
+								instance._request = A.io(
+									path,
+									{
+										headers: {
+											'X-PJAX': 'true',
+											'X-PJAX-RESOURCES': Liferay.Surface.sharedResources.join(',')
 										},
-										success: function(id, response) {
-											var frag = A.Node.create('<div/>');
-											frag.append(response.responseText);
-											instance._setScreenTitleFromFragment(frag);
-											instance.addCache(frag);
-											resolve(frag);
-										}
-									},
-									timeout: instance.get('timeout')
-								});
+										method: instance.get('method'),
+										on: {
+											failure: function(id, response) {
+												promise.cancel(response.responseText);
+											},
+											success: function(id, response) {
+												var frag = A.Node.create('<div/>');
+
+												frag.append(response.responseText);
+												instance._setScreenTitleFromFragment(frag);
+												instance.addCache(frag);
+												resolve(frag);
+											}
+										},
+										timeout: instance.get('timeout')
+									}
+								);
 							},
 							function() {
 								instance.abortRequest();
