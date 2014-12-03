@@ -524,6 +524,8 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "roles"
 
 <c:if test="<%= !portletName.equals(PortletKeys.MY_ACCOUNT) %>">
 	<aui:script>
+		var A = AUI();
+
 		var addRoleIds = [];
 		var deleteRoleIds = [];
 
@@ -564,8 +566,6 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "roles"
 			window,
 			'<portlet:namespace />selectRole',
 			function(roleId, name, searchContainer, groupName, groupId, iconCssClass) {
-				var A = AUI();
-
 				var searchContainerName = '<portlet:namespace />' + searchContainer + 'SearchContainer';
 
 				searchContainer = Liferay.SearchContainer.get(searchContainerName);
