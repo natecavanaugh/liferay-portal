@@ -1,6 +1,8 @@
+Liferay.after = function(){};
 Liferay.on = function(){};
 Liferay.fire = function(){};
 Liferay.detach = function(){};
+Liferay.publish = function(){};
 
 ;(function(A, Liferay) {
 	var CLICK_EVENTS = {};

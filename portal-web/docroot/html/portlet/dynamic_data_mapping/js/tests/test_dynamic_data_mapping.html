@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dynamic Data Mapping Tests</title>
+
+	<script src="../../../../js/aui/aui/aui.js"></script>
+
+	<!-- Mock some global JavaScript variables defined in JSP files. E.g.:
+	Liferay and themeDisplay -->
+	<script src="../../../../js/tests/mock_base.js"></script>
+	<script src="../../../../js/tests/mock_portlets.js"></script>
+
+	<!-- Modules and a mock_modules to load mocked modules instead of the actual
+	ones -->
+	<script src="../../../../js/liferay/modules.js"></script>
+	<script src="../../../../js/tests/mock_modules.js"></script>
+
+	<script src="../../../../js/liferay/aui_sandbox.js"></script>
+
+	<script type="text/javascript">
+	// This is due to some wrong usages of A.use. We should discuss about that.
+
+	// This is needed because of util.js. Check that file out.
+	AUI().use('aui-base-lang');
+
+	// This is needed because of liferay.js. It uses oop methods even though
+	// they're not defined yet
+	AUI().use('oop');
+	</script>
+
+	<!-- Portlet files -->
+	<script src="../main.js"></script>
+	<script src="../custom_fields.js"></script>
+
+	<!-- Test file -->
+	<script src="test_dynamic_data_mapping.js"></script>
+
+	<meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+	<div id="logger"></div>
+
+	<script type="text/javascript">
+	AUI().use(
+		'liferay-portlet-dynamic-data-mapping-tests',
+		'test-console',
+		function(Y) {
+			(new Y.Test.Console()).render('#logger');
+
+			Y.Test.Runner.setName('liferay-dynamic-data-mapping');
+			Y.Test.Runner.run();
+		}
+	);
+	</script>
+</body>
+</html>

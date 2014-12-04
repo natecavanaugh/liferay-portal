@@ -2,6 +2,7 @@ Liferay = window.Liferay || {};
 
 (function(A, Liferay) {
 	var Lang = A.Lang;
+	var AArray = A.Array;
 
 	var owns = A.Object.owns;
 
@@ -52,7 +53,7 @@ Liferay = window.Liferay || {};
 			bind: function() {
 				var instance = this;
 
-				var args = A.Array(arguments, 0, true);
+				var args = AArray(arguments, 0, true);
 
 				args.unshift(Liferay.Service, Liferay);
 
@@ -69,7 +70,7 @@ Liferay = window.Liferay || {};
 				delete payload.io;
 
 				if (!(ioConfig.on && ioConfig.on.success)) {
-					var callbacks = A.Array.filter(args, Lang.isFunction);
+					var callbacks = AArray.filter(args, Lang.isFunction);
 
 					var callbackSuccess = callbacks[0];
 					var callbackException = callbacks[1];
@@ -184,7 +185,7 @@ Liferay = window.Liferay || {};
 		['aui-io-request']
 	);
 
-	A.each(
+	AArray.each(
 		['get', 'delete', 'post', 'put', 'update'],
 		function(item, index) {
 			var methodName = item;
