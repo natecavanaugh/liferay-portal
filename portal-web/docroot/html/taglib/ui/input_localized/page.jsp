@@ -155,6 +155,9 @@ if ((exception != null) && fieldName.equals(focusField)) {
 				</aui:script>
 			</c:if>
 		</c:when>
+		<c:when test='<%= type.equals("hidden") %>'>
+			<input aria-labeledby="<portlet:namespace /><%= id + HtmlUtil.getAUICompatibleId(fieldSuffix) %>_desc" class="language-value <%= cssClass %>" dir="<%= mainLanguageDir %>" id="<portlet:namespace /><%= id + HtmlUtil.getAUICompatibleId(fieldSuffix) %>" name="<portlet:namespace /><%= HtmlUtil.escapeAttribute(name + fieldSuffix) %>" type="hidden" value="<%= HtmlUtil.escapeAttribute(mainLanguageValue) %>" <%= InlineUtil.buildDynamicAttributes(dynamicAttributes) %> />
+		</c:when>
 	</c:choose>
 
 	<div class="hide-accessible" id="<portlet:namespace /><%= HtmlUtil.escapeAttribute(id + fieldSuffix) %>_desc"><%= defaultLocale.getDisplayName(LocaleUtil.fromLanguageId(LanguageUtil.getLanguageId(request))) %> <liferay-ui:message key="translation" /></div>
@@ -205,60 +208,61 @@ if ((exception != null) && fieldName.equals(focusField)) {
 		<%
 		}
 		%>
+		<c:if test='!type.equals("hidden")'>
+			<div class="input-localized-content" id="<portlet:namespace /><%= id %>ContentBox" role="menu">
+				<div class="palette-container">
+					<ul class="palette-items-container">
 
-		<div class="input-localized-content" id="<portlet:namespace /><%= id %>ContentBox" role="menu">
-			<div class="palette-container">
-				<ul class="palette-items-container">
+						<%
+						LinkedHashSet<String> uniqueLanguageIds = new LinkedHashSet<String>();
 
-					<%
-					LinkedHashSet<String> uniqueLanguageIds = new LinkedHashSet<String>();
+						uniqueLanguageIds.add(defaultLanguageId);
 
-					uniqueLanguageIds.add(defaultLanguageId);
+						for (int i = 0; i < availableLocales.length; i++) {
+							String curLanguageId = LocaleUtil.toLanguageId(availableLocales[i]);
 
-					for (int i = 0; i < availableLocales.length; i++) {
-						String curLanguageId = LocaleUtil.toLanguageId(availableLocales[i]);
-
-						uniqueLanguageIds.add(curLanguageId);
-					}
-
-					int index = 0;
-
-					for (String curLanguageId : uniqueLanguageIds) {
-						String itemCssClass = "palette-item";
-
-						Locale curLocale = LocaleUtil.fromLanguageId(curLanguageId);
-
-						if (errorLocales.contains(curLocale) || ((index == 0) && errorLocales.isEmpty())) {
-							itemCssClass += " palette-item-selected";
+							uniqueLanguageIds.add(curLanguageId);
 						}
 
-						if (defaultLanguageId.equals(curLanguageId)) {
-							itemCssClass += " lfr-input-localized-default";
+						int index = 0;
+
+						for (String curLanguageId : uniqueLanguageIds) {
+							String itemCssClass = "palette-item";
+
+							Locale curLocale = LocaleUtil.fromLanguageId(curLanguageId);
+
+							if (errorLocales.contains(curLocale) || ((index == 0) && errorLocales.isEmpty())) {
+								itemCssClass += " palette-item-selected";
+							}
+
+							if (defaultLanguageId.equals(curLanguageId)) {
+								itemCssClass += " lfr-input-localized-default";
+							}
+
+							if (languageIds.contains(curLanguageId)) {
+								itemCssClass += " lfr-input-localized";
+							}
+						%>
+
+							<li class="palette-item <%= itemCssClass %>" data-index="<%= index++ %>" data-value="<%= curLanguageId %>" role="menuitem" style="display: inline-block;">
+								<a class="palette-item-inner" href="javascript:void(0);">
+									<img alt="<%= HtmlUtil.escapeAttribute(curLocale.getDisplayName(LocaleUtil.fromLanguageId(LanguageUtil.getLanguageId(request)))) %> <liferay-ui:message key="translation" />" class="lfr-input-localized-flag" data-languageid="<%= curLanguageId %>" src="<%= themeDisplay.getPathThemeImages() %>/language/<%= curLanguageId %>.png" />
+									<div class='<%= errorLocales.contains(curLocale) ? "lfr-input-localized-state lfr-input-localized-state-error" : "lfr-input-localized-state" %>'></div>
+								</a>
+							</li>
+
+						<%
 						}
+						%>
 
-						if (languageIds.contains(curLanguageId)) {
-							itemCssClass += " lfr-input-localized";
-						}
-					%>
-
-						<li class="palette-item <%= itemCssClass %>" data-index="<%= index++ %>" data-value="<%= curLanguageId %>" role="menuitem" style="display: inline-block;">
-							<a class="palette-item-inner" href="javascript:void(0);">
-								<img alt="<%= HtmlUtil.escapeAttribute(curLocale.getDisplayName(LocaleUtil.fromLanguageId(LanguageUtil.getLanguageId(request)))) %> <liferay-ui:message key="translation" />" class="lfr-input-localized-flag" data-languageid="<%= curLanguageId %>" src="<%= themeDisplay.getPathThemeImages() %>/language/<%= curLanguageId %>.png" />
-								<div class='<%= errorLocales.contains(curLocale) ? "lfr-input-localized-state lfr-input-localized-state-error" : "lfr-input-localized-state" %>'></div>
-							</a>
-						</li>
-
-					<%
-					}
-					%>
-
-				</ul>
+					</ul>
+				</div>
 			</div>
-		</div>
+		</c:if>
 	</c:if>
 </span>
 
-<c:if test="<%= Validator.isNotNull(maxLength) %>">
+<c:if test='<%= Validator.isNotNull(maxLength) && !type.equals("hidden") %>'>
 	<aui:script use="aui-char-counter">
 		new A.CharCounter(
 			{

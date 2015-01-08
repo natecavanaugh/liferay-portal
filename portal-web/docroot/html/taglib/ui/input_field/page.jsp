@@ -34,8 +34,11 @@ boolean ignoreRequestValue = GetterUtil.getBoolean((String)request.getAttribute(
 String languageId = (String)request.getAttribute("liferay-ui:input-field:languageId");
 String model = (String)request.getAttribute("liferay-ui:input-field:model");
 String placeholder = (String)request.getAttribute("liferay-ui:input-field:placeholder");
+String type = (String)request.getAttribute("liferay-ui:input-field:type");
 
-String type = ModelHintsUtil.getType(model, field);
+if (Validator.isNull(type)) {
+	type = ModelHintsUtil.getType(model, field);
+}
 
 Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 
@@ -280,7 +283,7 @@ if (hints != null) {
 				</aui:script>
 			</c:if>
 		</c:when>
-		<c:when test='<%= type.equals("double") || type.equals("int") || type.equals("long") || type.equals("String") %>'>
+		<c:when test='<%= type.equals("double") || type.equals("int") || type.equals("long") || type.equals("String") || type.equals("hidden") %>'>
 
 			<%
 			String defaultString = GetterUtil.DEFAULT_STRING;
@@ -424,6 +427,27 @@ if (hints != null) {
 								name="<%= fieldParam %>"
 								toolbarSet="simple"
 							/>
+						</c:otherwise>
+					</c:choose>
+				</c:when>
+				<c:when test='<%= type.equals("hidden") %>'>
+					<c:choose>
+						<c:when test="<%= localized %>">
+							<liferay-ui:input-localized
+								availableLocales="<%= availableLocales %>"
+								defaultLanguageId="<%= defaultLanguageId %>"
+								formName="<%= formName %>"
+								id="<%= id %>"
+								ignoreRequestValue="<%= ignoreRequestValue %>"
+								languageId="<%= languageId %>"
+								name="<%= fieldParam %>"
+								type="hidden"
+								xml="<%= xml %>"
+							/>
+						</c:when>
+						<c:otherwise>
+							<input id="<%= namespace %><%= id %>" name="<%= namespace %><%= fieldParam %>" type="hidden" value="<%= autoEscape ? HtmlUtil.escape(value) : value %>" />
+
 						</c:otherwise>
 					</c:choose>
 				</c:when>
