@@ -93,6 +93,23 @@ boolean choiceField = checkboxField || radioField;
 			placeholder="<%= placeholder %>"
 		/>
 	</c:when>
+	<c:when test='<%= (model != null) && type.equals("hidden") %>'>
+		<liferay-ui:input-field
+			bean="<%= bean %>"
+			defaultLanguageId="<%= defaultLanguageId %>"
+			defaultValue="<%= value %>"
+			disabled="<%= disabled %>"
+			field="<%= field %>"
+			fieldParam="<%= fieldParam %>"
+			formName="<%= formName %>"
+			format='<%= (Format)dynamicAttributes.get("format") %>'
+			id="<%= id %>"
+			ignoreRequestValue="<%= ignoreRequestValue %>"
+			languageId="<%= languageId %>"
+			model="<%= model %>"
+			type="<%= type %>"
+		/>
+	</c:when>
 	<c:when test='<%= type.equals("checkbox") %>'>
 
 		<%

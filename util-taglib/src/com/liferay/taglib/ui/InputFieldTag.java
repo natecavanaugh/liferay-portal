@@ -94,6 +94,10 @@ public class InputFieldTag extends IncludeTag {
 		_placeholder = placeholder;
 	}
 
+	public void setType(String type) {
+		_type = type;
+	}
+
 	@Override
 	protected void cleanUp() {
 		_autoFocus = false;
@@ -113,6 +117,7 @@ public class InputFieldTag extends IncludeTag {
 		_languageId = null;
 		_model = null;
 		_placeholder = null;
+		_type = null;
 	}
 
 	@Override
@@ -161,6 +166,7 @@ public class InputFieldTag extends IncludeTag {
 		request.setAttribute("liferay-ui:input-field:model", _model.getName());
 		request.setAttribute(
 			"liferay-ui:input-field:placeholder", _placeholder);
+		request.setAttribute("liferay-ui:input-field:type", _type);
 	}
 
 	private static final String _PAGE = "/html/taglib/ui/input_field/page.jsp";
@@ -182,5 +188,6 @@ public class InputFieldTag extends IncludeTag {
 	private String _languageId;
 	private Class<?> _model;
 	private String _placeholder;
+	private String _type;
 
 }
