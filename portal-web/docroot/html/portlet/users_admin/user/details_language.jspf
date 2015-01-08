@@ -44,43 +44,48 @@
 
 	var userNameFields =$('#<portlet:namespace />user-name-fields');
 
-	select.on('change', function(event) {
-		_.forEach($('#<portlet:namespace />fm').formToArray(), function(field) {
-			if (userNameFields.find('#' + field.name).length) {
-				formData[field.name] = field.value;
-			}
-		});
-
-		userDetailsURL.setParameter('languageId', select.val());
-
-		$.ajax(
-			userDetailsURL.toString(),
-			{
-				beforeSend: function() {
-					userNameFields.before('<div id="loading-user-name-fields" class="loading-animation"></div>');
-
-					userNameFields.hide();
-				},
-				complete: function() {
-					var loadingDiv = $('#loading-user-name-fields');
-
-					if (loadingDiv) {
-						loadingDiv.remove();
+	select.on(
+		'change',
+		function(event) {
+			_.forEach(
+				$('#<portlet:namespace />fm').formToArray(),
+				function(field) {
+					if (userNameFields.find('#' + field.name).length) {
+						formData[field.name] = field.value;
 					}
+				}
+			);
 
-					userNameFields.show();
+			userDetailsURL.setParameter('languageId', select.val());
 
-					_.forIn(formData, function(value, key) {
-						userNameFields.find('#' + key).val(value);
-					});
-				},
-				success: function(responseData) {
-					var responseUserNameFields = $(responseData).find('#<portlet:namespace />user-name-fields').html();
+			$.ajax(
+				userDetailsURL.toString(),
+				{
+					beforeSend: function() {
+						userNameFields.before('<div class="loading-animation" id="loading-user-name-fields"></div>');
 
-					userNameFields.html(responseUserNameFields);
-				},
-				timeout: 5000
-			}
-		)
-	});
+						userNameFields.hide();
+					},
+					complete: function() {
+						$('#loading-user-name-fields').remove();
+
+						userNameFields.show();
+
+						_.forIn(
+							formData,
+							function(value, key) {
+								userNameFields.find('#' + key).val(value);
+							}
+						);
+					},
+					success: function(responseData) {
+						var responseUserNameFields = $(responseData).find('#<portlet:namespace />user-name-fields').html();
+
+						userNameFields.html(responseUserNameFields);
+					},
+					timeout: 5000
+				}
+			)
+		}
+	);
 </aui:script>
