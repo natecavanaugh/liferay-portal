@@ -310,7 +310,7 @@ public class LangBuilder {
 									"suffix";
 						}
 						else if (key.equals(
-							"lang.user.name.prefix.value.options")) {
+									"lang.user.name.prefix.value.options")) {
 
 							translatedText = "dr,mr,ms,mrs";
 						}
@@ -318,7 +318,7 @@ public class LangBuilder {
 							translatedText = "last-name";
 						}
 						else if (key.equals(
-							"lang.user.name.suffix.value.options")) {
+									"lang.user.name.suffix.value.options")) {
 
 							translatedText = "ii,iii,iv,jr,phd,sr";
 						}
@@ -375,12 +375,12 @@ public class LangBuilder {
 						}
 
 						if (key.equals("lang.user.name.prefix.value.options") &&
-							!hasPrefix) {
+								!hasPrefix) {
 							translatedText = "";
 						}
 						else if (
 							key.equals("lang.user.name.suffix.value.options") &&
-							!hasSuffix) {
+								!hasSuffix) {
 							translatedText = "";
 						}
 

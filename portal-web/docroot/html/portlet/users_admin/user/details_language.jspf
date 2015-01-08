@@ -21,6 +21,7 @@
 
 	for (Locale curLocale : locales) {
 	%>
+
 		<aui:option label="<%= curLocale.getDisplayName(curLocale) %>" lang="<%= LocaleUtil.toW3cLanguageId(curLocale) %>" selected="<%= (userLocale.getLanguage().equals(curLocale.getLanguage()) && userLocale.getCountry().equals(curLocale.getCountry())) %>" value="<%= LocaleUtil.toLanguageId(curLocale) %>" />
 
 	<%
@@ -34,7 +35,7 @@
 	<portlet:param name="p_u_i_d" value="<%= Validator.isNotNull(selUser) ? String.valueOf(selUser.getUserId()) : String.valueOf(0) %>" />
 </portlet:renderURL>
 
-<aui:script sandbox="<%= true %>" use='liferay-portlet-url'>
+<aui:script sandbox="<%= true %>" use="liferay-portlet-url">
 	var formData = {};
 
 	var select = $('#<portlet:namespace />languageId');
