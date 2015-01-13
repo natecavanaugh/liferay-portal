@@ -61,6 +61,8 @@ html {
 		span, a {
 			@include ellipsis;
 
+			display: block;
+
 			@include respond-to(desktop) {
 				max-width: 300px;
 			}
