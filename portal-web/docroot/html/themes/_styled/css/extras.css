@@ -380,24 +380,24 @@ body > .lfr-menu-list ul, .active-area-proxy, .entry-display-style .entry-thumbn
 }
 
 .lfr-surface-loading-bar {
-	@include translateX(100%);
+	@include transform(translateX(100%));
 }
 
 @include keyframes(shift-rightwards) {
 	0% {
-		@include translateX(-100%);
+		@include transform(translateX(-100%));
 	}
 
 	40% {
-		@include translateX(0%);
+		@include transform(translateX(0%));
 	}
 
 	60% {
-		@include translateX(0%);
+		@include transform(translateX(0%));
 	}
 
 	100% {
-		@include translateX(100%);
+		@include transform(translateX(100%));
 	}
 }
 
@@ -521,7 +521,7 @@ body:first-of-type {
 		background-color: #DDEDDE;
 		border-color: #7D7;
 
-		@include scale(1.1);
+		@include transform(scale(1.1));
 	}
 
 	75% {
