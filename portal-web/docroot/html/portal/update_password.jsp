@@ -49,48 +49,54 @@ PasswordPolicy passwordPolicy = user.getPasswordPolicy();
 				<liferay-ui:message key="please-set-a-new-password" />
 			</div>
 
-			<c:if test="<%= SessionErrors.contains(request, UserPasswordException.class.getName()) %>">
+			<c:if test="<%= SessionErrors.contains(request, UserPasswordException.MustBeLonger.class.getName()) %>">
 
 				<%
-				UserPasswordException upe = (UserPasswordException)SessionErrors.get(request, UserPasswordException.class.getName());
+					UserPasswordException.MustBeLonger upe = (UserPasswordException.MustBeLonger)SessionErrors.get(request, UserPasswordException.MustBeLonger.class.getName());
 				%>
 
 				<div class="alert alert-danger">
-					<c:if test="<%= upe.getType() == UserPasswordException.PASSWORD_ALREADY_USED %>">
-						<liferay-ui:message key="that-password-has-already-been-used-please-enter-in-a-different-password" />
-					</c:if>
+					<%= LanguageUtil.format(request, "that-password-is-too-short-please-make-sure-your-password-is-at-least-x-characters-long", String.valueOf(upe.minLength), false) %>
+				</div>
+			</c:if>
+			<c:if test="<%= SessionErrors.contains(request, UserPasswordException.MustComplyWithModelListeners.class.getName()) %>">
+				<div class="alert alert-danger">
+					<liferay-ui:message key="that-password-is-invalid-please-enter-in-a-different-password" />
+				</div>
+			</c:if>
+			<c:if test="<%= SessionErrors.contains(request, UserPasswordException.MustComplyWithRegex.class.getName()) %>">
 
-					<c:if test="<%= upe.getType() == UserPasswordException.PASSWORD_CONTAINS_TRIVIAL_WORDS %>">
-						<liferay-ui:message key="that-password-uses-common-words-please-enter-in-a-password-that-is-harder-to-guess-i-e-contains-a-mix-of-numbers-and-letters" />
-					</c:if>
+				<%
+					UserPasswordException.MustComplyWithRegex upe = (UserPasswordException.MustComplyWithRegex)SessionErrors.get(request, UserPasswordException.MustComplyWithRegex.class.getName());
+				%>
 
-					<c:if test="<%= upe.getType() == UserPasswordException.PASSWORD_INVALID %>">
-						<liferay-ui:message key="that-password-is-invalid-please-enter-in-a-different-password" />
-					</c:if>
-
-					<c:if test="<%= upe.getType() == UserPasswordException.PASSWORD_LENGTH %>">
-						<%= LanguageUtil.format(request, "that-password-is-too-short-or-too-long-please-make-sure-your-password-is-between-x-and-512-characters", String.valueOf(passwordPolicy.getMinLength()), false) %>
-					</c:if>
-
-					<c:if test="<%= upe.getType() == UserPasswordException.PASSWORD_NOT_CHANGEABLE %>">
-						<liferay-ui:message key="your-password-cannot-be-changed" />
-					</c:if>
-
-					<c:if test="<%= upe.getType() == UserPasswordException.PASSWORD_SAME_AS_CURRENT %>">
-						<liferay-ui:message key="your-new-password-cannot-be-the-same-as-your-old-password-please-enter-in-a-different-password" />
-					</c:if>
-
-					<c:if test="<%= upe.getType() == UserPasswordException.PASSWORD_TOO_TRIVIAL %>">
-						<liferay-ui:message key="that-password-is-too-trivial" />
-					</c:if>
-
-					<c:if test="<%= upe.getType() == UserPasswordException.PASSWORD_TOO_YOUNG %>">
-						<%= LanguageUtil.format(request, "you-cannot-change-your-password-yet-please-wait-at-least-x-before-changing-your-password-again", LanguageUtil.getTimeDescription(request, passwordPolicy.getMinAge() * 1000), false) %>
-					</c:if>
-
-					<c:if test="<%= upe.getType() == UserPasswordException.PASSWORDS_DO_NOT_MATCH %>">
-						<liferay-ui:message key="the-passwords-you-entered-do-not-match-each-other-please-re-enter-your-password" />
-					</c:if>
+				<div class="alert alert-danger">
+					<%= LanguageUtil.format(request, "that-password-does-not-comply-with-regex-x-please-enter-in-a-different-password", upe.regex, false) %>
+				</div>
+			</c:if>
+			<c:if test="<%= SessionErrors.contains(request, UserPasswordException.MustMatch.class.getName()) %>">
+				<div class="alert alert-danger">
+					<liferay-ui:message key="the-passwords-you-entered-do-not-match-each-other-please-re-enter-your-password" />
+				</div>
+			</c:if>
+			<c:if test="<%= SessionErrors.contains(request, UserPasswordException.MustNotBeEqualToCurrent.class.getName()) %>">
+				<div class="alert alert-danger">
+					<liferay-ui:message key="your-new-password-cannot-be-the-same-as-your-old-password-please-enter-in-a-different-password" />
+				</div>
+			</c:if>
+			<c:if test="<%= SessionErrors.contains(request, UserPasswordException.MustNotBeRecentlyUsed.class.getName()) %>">
+				<div class="alert alert-danger">
+					<liferay-ui:message key="that-password-has-already-been-used-please-enter-in-a-different-password" />
+				</div>
+			</c:if>
+			<c:if test="<%= SessionErrors.contains(request, UserPasswordException.MustNotBeTrivial.class.getName()) %>">
+				<div class="alert alert-danger">
+					<liferay-ui:message key="that-password-uses-common-words-please-enter-in-a-password-that-is-harder-to-guess-i-e-contains-a-mix-of-numbers-and-letters" />
+				</div>
+			</c:if>
+			<c:if test="<%= SessionErrors.contains(request, UserPasswordException.MustNotContainDictionaryWords.class.getName()) %>">
+				<div class="alert alert-danger">
+					<liferay-ui:message key="that-password-uses-common-dictionary-words-please-enter-in-a-different-password" />
 				</div>
 			</c:if>
 
