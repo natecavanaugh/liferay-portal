@@ -10,7 +10,7 @@
 	<property name="alloyeditor.version" value="0.2.5" />
 	<property name="ckeditor.file" value="ckeditor_4.4.5_liferay.zip" />
 	<property name="scayt.file" value="scayt_4.4.5.zip" />
-	<property name="tinymce.file" value="tinymce_3.5.6.zip" />
+	<property name="tinymce.file" value="tinymce_4.1.7.zip" />
 	<property name="vaadin.file" value="vaadin-6.8.12-liferay.zip" />
 	<property name="wsc.file" value="wsc_4.4.5.zip" />
 
@@ -806,7 +806,11 @@
 
 				<unzip src="third-party/${tinymce.file}" dest="docroot/html/js/editor" />
 
-				<move file="docroot/html/js/editor/tinymce/jscripts/tiny_mce" todir="docroot/html/js/editor" />
+				<move todir="docroot/html/js/editor/tiny_mce" preservelastmodified="true">
+					<fileset dir="docroot/html/js/editor/tinymce/js/tinymce">
+						<include name="*/**" />
+					</fileset>
+				</move>
 
 				<copy todir="docroot/html/js/editor/tiny_mce" overwrite="true" preservelastmodified="true">
 					<fileset dir="docroot/html/js/editor/tiny_mce_diffs" />
@@ -859,7 +863,7 @@
 		<delete dir="docroot/html/js/aui" />
 		<delete dir="docroot/html/js/editor/alloyeditor" />
 		<delete dir="docroot/html/js/editor/ckeditor" />
-		<delete dir="docroot/html/js/editor/tinymce" />
+		<delete dir="docroot/html/js/editor/tiny_mce" />
 		<delete dir="docroot/html/portal/aui" />
 		<delete dir="docroot/html/themes/_unstyled/images/aui/" />
 		<delete dir="docroot/html/themes/classic/color_schemes" />

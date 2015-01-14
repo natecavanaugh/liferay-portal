@@ -47,7 +47,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 		long javaScriptLastModified = ServletContextUtil.getLastModified(application, "/html/js/", true);
 		%>
 
-		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + themeDisplay.getPathJavaScript() + "/editor/tiny_mce/tiny_mce.js", javaScriptLastModified)) %>" type="text/javascript"></script>
+		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + themeDisplay.getPathJavaScript() + "/editor/tiny_mce/tinymce.min.js", javaScriptLastModified)) %>" type="text/javascript"></script>
 
 		<script type="text/javascript">
 			Liferay.namespace('EDITORS')['<%= editorImpl %>'] = true;
@@ -115,7 +115,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			}
 
 			<c:if test="<%= Validator.isNotNull(onInitMethod) %>">
-				window['<%= HtmlUtil.escapeJS(namespace + onInitMethod) %>']();
+				window['<%= HtmlUtil.escapeJS(onInitMethod) %>']();
 			</c:if>
 
 			window['<%= name %>'].instanceReady = true;
@@ -169,6 +169,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			init_instance_callback: window['<%= name %>'].initInstanceCallback,
 			invalid_elements: 'script',
 			language: '<%= HtmlUtil.escape(locale.getLanguage()) %>',
+			menubar: false,
 			mode: 'exact',
 
 			<%
@@ -181,18 +182,17 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			}
 			%>
 
-			plugins: 'table,advhr,advimage,advlink,iespell,preview,media,searchreplace,print,contextmenu',
+			plugins: [
+				'advlist autolink autosave link image lists charmap print preview hr anchor',
+				'searchreplace wordcount code fullscreen media',
+				'table contextmenu emoticons textcolor paste fullpage textcolor colorpicker textpattern'
+			],
 			relative_urls: false,
 			remove_script_host: false,
-			theme: 'advanced',
-			theme_advanced_buttons2_add: 'separator,media,advhr,separator,preview,print',
-			theme_advanced_buttons1_add_before: 'fontselect,fontsizeselect,forecolor,backcolor,separator',
-			theme_advanced_buttons2_add_before: 'cut,copy,paste,search,replace',
-			theme_advanced_buttons3_add_before: 'tablecontrols,separator',
-			theme_advanced_disable: 'formatselect,styleselect,help<c:if test="<%= !showSource %>">,code</c:if>',
-			theme_advanced_resize_horizontal: '<%= resizable %>',
-			theme_advanced_toolbar_align: 'left',
-			theme_advanced_toolbar_location: 'top'
+			toolbar1: 'fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+			toolbar2: 'cut copy paste searchreplace bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media <c:if test="<%= showSource %>">code</c:if>',
+			toolbar3: 'table | hr removeformat | subscript superscript | charmap emoticons | preview print fullscreen',
+			toolbar_items_size: 'small'
 		}
 	);
 </aui:script>
