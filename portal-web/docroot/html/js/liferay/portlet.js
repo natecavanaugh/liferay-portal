@@ -386,7 +386,7 @@
 					instance.list.splice(portletIndex, 1);
 				}
 
-				var options = Portlet._mergeOptions(portlet, options);
+				options = Portlet._mergeOptions(portlet, options);
 
 				Liferay.fire('destroyPortlet', options);
 
