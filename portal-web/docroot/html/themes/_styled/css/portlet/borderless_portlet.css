@@ -1,0 +1,176 @@
+@import "compass";
+@import "mixins";
+
+%portlet-action-bar-hover {
+	@include opacity(1);
+}
+
+%portlet-action-bar-hover-text {
+	display: inline-block;
+}
+
+/* ---------- Borderless portlet ---------- */
+
+.portlet-borderless-container {
+	min-height: 2.5em;
+	position: relative;
+}
+
+.portlet-borderless-bar {
+	background-color: #333;
+	font-size: 10px;
+	height: auto;
+
+	@include opacity(0.3);
+
+	overflow: auto;
+	padding: 0;
+	position: static;
+	right: 0;
+	top: 0;
+	width: 100%;
+	z-index: 200;
+
+	@include respond-to(desktop) {
+		background-color: transparent;
+		height: 0;
+		overflow: visible;
+		position: absolute;
+	}
+
+	a {
+		background: url() no-repeat 0 50%;
+		display: inline-block;
+		height: 20px;
+		margin-left: 5px;
+		text-indent: -9999px;
+		width: 16px;
+	}
+
+	.portlet-actions {
+		float: right;
+		overflow: hidden;
+		padding: 0 5px;
+
+		.portlet-action, .portlet-options {
+			display: inline-block;
+		}
+	}
+
+	.portlet-actions, .portlet-title-default {
+		background-color: transparent;
+		min-height: 20px;
+
+		@include respond-to(desktop) {
+			background-color: #333;
+		}
+	}
+
+	.portlet-action-separator {
+		display: none;
+	}
+
+	.portlet-back a {
+		color: #FFF;
+		height: auto;
+		text-indent: 0;
+		width: auto;
+	}
+
+	.portlet-close {
+		display: inline-block;
+		vertical-align: middle;
+
+		a {
+			background-image: url(../../images/portlet/close_borderless.png);
+		}
+	}
+
+	.portlet-options li.lfr-trigger strong a {
+		background-image: url(../../images/portlet/options_borderless.png);
+	}
+}
+
+.lfr-configurator-visibility {
+	.portlet-borderless-bar {
+		@include opacity(0.6);
+	}
+
+	.portlet-content {
+		.lfr-icon-actions {
+			@include opacity(1);
+		}
+	}
+}
+
+.portlet-borderless-container:hover .portlet-borderless-bar {
+	@extend %portlet-action-bar-hover;
+
+	.portlet-actions {
+		@extend %portlet-action-bar-hover-text;
+	}
+}
+
+.portlet-borderless-container, .portlet-content {
+	&:hover {
+		.lfr-icon-actions {
+			@extend %portlet-action-bar-hover;
+
+			.taglib-text {
+				@extend %portlet-action-bar-hover-text;
+			}
+		}
+	}
+
+	.icons-container {
+		clear: both;
+		height: auto;
+		margin-top: 1em;
+		overflow: hidden;
+		width: auto;
+	}
+}
+
+@include respond-to(desktop) {
+	.portlet-borderless-container .portlet-title-default {
+		float: right;
+	}
+}
+
+.portlet-title-default {
+	display: block;
+
+	@include ellipsis;
+
+	float: left;
+	font-weight: bold;
+	height: 0;
+	line-height: 19px;
+	max-width: 74%;
+	padding-right: 5px;
+	padding-top: 1px;
+	text-transform: uppercase;
+
+	@include respond-to(desktop) {
+		max-width: 50%;
+		padding: 0 10px;
+	}
+}
+
+.portlet-draggable {
+	.portlet-topper {
+		cursor: move;
+	}
+
+	.portlet-title-default {
+		background: url(../../images/portlet/draggable_borderless.png) no-repeat 5px 3px transparent;
+		cursor: move;
+		padding-left: 25px;
+
+		@include respond-to(desktop) {
+			background-color: #333;
+			background-position: 0 50%;
+			padding-left: 20px;
+		}
+	}
+}

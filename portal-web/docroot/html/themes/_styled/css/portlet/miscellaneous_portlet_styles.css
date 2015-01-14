@@ -1,0 +1,32 @@
+@import "compass";
+@import "mixins";
+
+/* ---------- Miscellaneous portlet styles ---------- */
+
+.restricted {
+	&, & td {
+		background: #FDD;
+		border-width: 0;
+	}
+
+	* {
+		color: #727C81;
+	}
+}
+
+.alt.restricted td {
+	background-color: #FFC0C0;
+}
+
+.hover.restricted td {
+	background-color: #D3BDC0;
+}
+
+.alt.restricted, .restricted {
+	td.first {
+		background-image: url(../../images/messages/error.png);
+		background-position: 5px 50%;
+		background-repeat: no-repeat;
+		padding-left: 28px;
+	}
+}

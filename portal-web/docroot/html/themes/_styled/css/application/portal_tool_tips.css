@@ -1,0 +1,8 @@
+@import "aui/alloy-font-awesome/scss/variables";
+@import "compass";
+
+/* ---------- Portal tool tips ---------- */
+
+.tooltip {
+	max-width: 200px;
+}

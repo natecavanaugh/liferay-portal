@@ -1,0 +1,71 @@
+@import "compass";
+@import "mixins";
+@import "aui/bootstrap/variables";
+@import "aui_variables";
+
+$addContentPanelWidth: 350px;
+$devicePreviewPanelWidth: 220px;
+$diamondSize: 12px;
+$editLayoutPanelWidth: 460px;
+
+@include respond-to(phone, tablet) {
+	#navigation {
+		border-width: 0;
+		display: none;
+		left: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+		z-index: 400;
+
+		&.open {
+			display: block;
+
+			li a {
+				font-size: 16px;
+				font-weight: 300;
+				line-height: 27px;
+				margin: 0;
+				max-width: none;
+				padding: 9px 15px;
+
+				b {
+					position: absolute;
+					right: 5px;
+				}
+			}
+		}
+
+		.nav {
+			margin: 0;
+		}
+
+		.navbar-nav {
+			background-color: $navbar-default-bg;
+
+			&, > li {
+				float: none;
+			}
+
+			> li {
+				&.active a {
+					background-color: $navbar-default-link-active-bg;
+				}
+
+				a {
+					color: $navbar-default-link-color;
+
+					&:focus, &:hover {
+						color: $navbar-default-link-hover-color;
+					}
+				}
+			}
+
+			.dropdown-menu > li > a {
+				&:focus, &:hover {
+					background-color: $nav-link-hover-bg;
+				}
+			}
+		}
+	}
+}

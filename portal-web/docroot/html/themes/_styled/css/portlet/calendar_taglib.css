@@ -1,0 +1,54 @@
+@import "compass";
+@import "mixins";
+
+/* ---------- Calendar taglib ---------- */
+
+.taglib-calendar {
+	tr {
+		&.portlet-section-header th, & td {
+			border-width: 0;
+		}
+
+		td {
+			a {
+				background-color: #F0F5F7;
+				border: 1px solid #FFF;
+				border-bottom-width: 0;
+				border-left-width: 0;
+				display: block;
+				height: 15px;
+				padding: 5px 0;
+
+				&:hover {
+					background-color: #727C81;
+					color: #FFF;
+				}
+			}
+
+			&.calendar-inactive {
+				background-color: #FFF;
+				color: #B5BFC4;
+			}
+		}
+
+		th {
+			border-bottom-color: #D7D7D7;
+		}
+	}
+
+	table td {
+		border-width: 0;
+	}
+
+	.calendar-current-day {
+		&, & a {
+			background-color: #FFF;
+		}
+
+		a {
+			border: 1px solid #727C81;
+			color: #369;
+			text-decoration: underline;
+		}
+	}
+}

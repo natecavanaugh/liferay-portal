@@ -1,0 +1,40 @@
+@import "aui/alloy-font-awesome/scss/variables";
+@import "compass";
+
+/* ---------- Modals ---------- */
+
+.dialog-iframe-popup {
+	> #main-content, > #wrapper {
+		bottom: 0;
+		left: 0;
+		overflow: auto;
+		padding: 20px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+.modal {
+	display: block;
+	margin: 0;
+	overflow: hidden;
+	position: fixed;
+}
+
+.modal-body {
+	overflow: auto;
+
+	&.dialog-iframe-bd {
+		overflow: hidden;
+	}
+}
+
+.modal-hidden {
+	display: none;
+}
+
+.modal-open .modal {
+	overflow: hidden;
+}

@@ -1,0 +1,128 @@
+@import "compass";
+@import "mixins";
+@import "aui/bootstrap/variables";
+@import "aui_variables";
+
+$addContentPanelWidth: 350px;
+$devicePreviewPanelWidth: 220px;
+$diamondSize: 12px;
+$editLayoutPanelWidth: 460px;
+
+/* -------- Extras -------- */
+
+.dockbar {
+	.container, .container-fluid {
+		> .nav > li.info-items {
+			@include background-image(none);
+		}
+	}
+
+	.nav-navigation {
+		.dropdown-menu {
+			@include box-shadow(none);
+		}
+	}
+}
+
+/* -------- Media queries -------- */
+
+@media (min-width: 1400px) {
+	.dockbar-split {
+		.dockbar .page-customization-bar-container {
+			width: 963px;
+		}
+
+		&.staging-ready .page-customization-bar-container {
+			width: 722px;
+		}
+	}
+}
+
+@media (min-width: 1152px) and (max-width: 1399px) {
+	.dockbar-split {
+		.dockbar .page-customization-bar-container {
+			width: 715px;
+		}
+
+		&.staging-ready .page-customization-bar-container {
+			width: 475px;
+		}
+	}
+}
+
+@media (min-width: 980px) and (max-width: 1151px) {
+	.dockbar-split {
+		.dockbar .page-customization-bar-container {
+			width: 542px;
+		}
+
+		&.staging-ready .page-customization-bar-container {
+			width: 302px;
+		}
+	}
+}
+
+@include respond-to(phone, tablet) {
+	.dockbar, .dockbar-split .dockbar {
+		.info-link-container {
+			padding: 0;
+			width: auto;
+
+			.diamond {
+				display: none;
+			}
+
+			.info-button {
+				right: auto;
+				top: auto;
+			}
+
+			.info-link {
+				color: #333;
+				display: block;
+				margin: 0 0 0 5px;
+				padding: 12px 18px;
+				position: relative;
+
+				&:focus, &:hover {
+					background-color: #555;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+
+	.dockbar-split .dockbar {
+		.info-link-container.open .info-button a {
+			background-color: #FFF;
+		}
+
+		.container, .container-fluid {
+			> .nav > li.info-items {
+				left: 0;
+				top: 100%;
+			}
+		}
+
+		.page-customization-bar-container {
+			position: static;
+			width: 100%;
+		}
+	}
+
+	.portlet-staging-bar .layout-revision-actions {
+		a.taglib-icon {
+			padding: 9px 15px;
+		}
+	}
+
+	.dockbar .staging-controls {
+		padding: 0;
+
+		.staging-bar li.dropdown .dropdown-menu {
+			background-color: $navbar-default-bg;
+			margin: 0;
+			padding: 10px;
+		}
+	}
+}
