@@ -1,4 +1,4 @@
-@import "compass";
+@import "bourbon";
 @import "mixins";
 
 @import url(../../classic/css/custom_common.css);
@@ -1019,7 +1019,7 @@ button {
 
 			@include background-image(linear-gradient(top, $dockbarOpenGradientStart, $dockbarOpenGradientEnd));
 			@include box-shadow(none);
-			@include filter-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
+			@include linear-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd, vertical);
 		}
 	}
 

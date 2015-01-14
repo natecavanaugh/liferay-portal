@@ -1,7 +1,6 @@
 @import "aui/alloy-font-awesome/scss/mixins-alloy";
 @import "aui/alloy-font-awesome/scss/variables";
-@import "compass";
-@import "compass/css3/user-interface";
+@import "bourbon";
 @import "mixins";
 
 @import url(custom_responsive.css);
@@ -397,7 +396,7 @@ select:focus {
 							background: #2FA4F5;
 							color: #FFF;
 
-							@include filter-gradient(#2FA4F5, #2FA4F5, vertical);
+							@include linear-gradient(#2FA4F5, #2FA4F5, vertical);
 						}
 
 						[class^="icon-"], [class*=" icon-"] {

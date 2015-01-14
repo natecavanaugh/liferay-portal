@@ -1,5 +1,5 @@
 @import "aui/alloy-font-awesome/scss/variables";
-@import "compass";
+@import "bourbon";
 
 /* ---------- Dragging/sorting indicators ---------- */
 
@@ -349,7 +349,7 @@
 	display: inline-block;
 	white-space: normal;
 
-	@include word-break(break-all);
+	@include word-wrap(break-all);
 }
 
 /* ---------- Menus ---------- */

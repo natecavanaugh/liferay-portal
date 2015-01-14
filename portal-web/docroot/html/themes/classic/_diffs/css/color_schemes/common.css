@@ -1,4 +1,4 @@
-@import "compass";
+@import "bourbon";
 
 .dark, .light {
 	#navigation {
@@ -215,7 +215,7 @@
 			@include border-radius(3px);
 
 			&:hover {
-				@include single-transition(border-color, 0.2s, ease-in);
+				@include animation(border-color, 0.2s, ease-in);
 			}
 		}
 	}

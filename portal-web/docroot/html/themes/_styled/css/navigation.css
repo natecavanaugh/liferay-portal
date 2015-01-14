@@ -1,4 +1,4 @@
-@import "compass";
+@import "bourbon";
 @import "mixins";
 
 /* ---------- Add/remove page ---------- */
@@ -160,6 +160,8 @@
 
 		.browse-folder, .nav-item-label {
 			@include ellipsis;
+
+			display: inline;
 		}
 
 		.overlay.entry-action {
