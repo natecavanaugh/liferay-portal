@@ -47,7 +47,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 		long javaScriptLastModified = ServletContextUtil.getLastModified(application, "/html/js/", true);
 		%>
 
-		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + themeDisplay.getPathJavaScript() + "/editor/tiny_mce/tiny_mce.js", javaScriptLastModified)) %>" type="text/javascript"></script>
+		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + themeDisplay.getPathJavaScript() + "/editor/tiny_mce/tinymce.min.js", javaScriptLastModified)) %>" type="text/javascript"></script>
 
 		<script type="text/javascript">
 			Liferay.namespace('EDITORS')['<%= editorImpl %>'] = true;
@@ -169,6 +169,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			init_instance_callback: window['<%= name %>'].initInstanceCallback,
 			invalid_elements: 'script',
 			language: '<%= HtmlUtil.escape(locale.getLanguage()) %>',
+			menubar: false,
 			mode: 'textareas',
 
 			<%
@@ -181,17 +182,11 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			}
 			%>
 
-			plugins: 'preview,print,contextmenu',
+			plugins: 'code contextmenu preview print',
 			relative_urls: false,
 			remove_script_host: false,
-			theme: 'advanced',
-			theme_advanced_buttons2: '',
-			theme_advanced_buttons3: '',
-			theme_advanced_buttons1_add: '<c:if test="<%= showSource %>">code,</c:if>preview,print',
-			theme_advanced_disable: 'formatselect,styleselect,help,strikethrough',
-			theme_advanced_resize_horizontal: '<%= resizable %>',
-			theme_advanced_toolbar_align: 'left',
-			theme_advanced_toolbar_location: 'top'
+			toolbar1: 'bold italic underline | alignleft aligncenter alignright alignjustify | <c:if test="<%= showSource %>"> code</c:if> preview print',
+			toolbar_items_size: 'small'
 		}
 	);
 </aui:script>
