@@ -173,7 +173,6 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 		{
 			content_css: '<%= HtmlUtil.escapeJS(themeDisplay.getPathThemeCss()) %>/aui.css,<%= HtmlUtil.escapeJS(themeDisplay.getPathThemeCss()) %>/main.css',
 			convert_urls: false,
-			elements: '<%= name %>',
 			extended_valid_elements: 'a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|usemap],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]',
 			file_browser_callback: window['<%= name %>'].fileBrowserCallback,
 			init_instance_callback: window['<%= name %>'].initInstanceCallback,
@@ -199,6 +198,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			],
 			relative_urls: false,
 			remove_script_host: false,
+			selector: '#<%= name %>',
 			toolbar1: 'fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
 			toolbar2: 'cut copy paste searchreplace bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media <c:if test="<%= showSource %>">code</c:if>',
 			toolbar3: 'table | hr removeformat | subscript superscript | charmap emoticons | preview print fullscreen',

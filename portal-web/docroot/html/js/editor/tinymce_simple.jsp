@@ -173,7 +173,6 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 		{
 			content_css: '<%= HtmlUtil.escapeJS(themeDisplay.getPathThemeCss()) %>/aui.css,<%= HtmlUtil.escapeJS(themeDisplay.getPathThemeCss()) %>/main.css',
 			convert_urls: false,
-			elements: '<%= name %>',
 			extended_valid_elements: 'a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|usemap],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]',
 			file_browser_callback: window['<%= name %>'].fileBrowserCallback,
 			init_instance_callback: window['<%= name %>'].initInstanceCallback,
@@ -195,6 +194,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			plugins: 'contextmenu preview print <c:if test="<%= showSource %>">code</c:if>',
 			relative_urls: false,
 			remove_script_host: false,
+			selector: '#<%= name %>',
 			toolbar1: 'bold italic underline | alignleft aligncenter alignright alignjustify | <c:if test="<%= showSource %>"> code</c:if> preview print',
 			toolbar_items_size: 'small'
 		}
