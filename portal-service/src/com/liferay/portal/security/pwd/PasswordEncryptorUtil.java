@@ -98,9 +98,7 @@ public class PasswordEncryptorUtil {
 			algorithm, plainTextPassword, encryptedPassword);
 	}
 
-	public static String getDefaultPasswordAlgorithmType()
-		throws PwdEncryptorException {
-
+	public static String getDefaultPasswordAlgorithmType() {
 		return _passwordEncryptor.getDefaultPasswordAlgorithmType();
 	}
 

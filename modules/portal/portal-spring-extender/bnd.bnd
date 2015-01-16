@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Portal Spring Extender
 Bundle-SymbolicName: com.liferay.portal.spring.extender
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1
 Export-Package: com.liferay.portal.spring.extender.loader
 Fragment-Host: org.eclipse.gemini.blueprint.extender
 Import-Package:\
@@ -67,8 +67,7 @@ Import-Package:\
 	org.springframework.transaction.config,\
 	org.springframework.web.servlet.config
 Include-Resource:\
-	classes,\
-	@${app.server.lib.portal.dir}/util-java.jar
+	classes
 Provide-Capability: liferay.extender;\
 	liferay.extender="spring.extender";\
 	version:Version="${plugin.full.version}"

@@ -309,25 +309,6 @@ public class PortalImpl implements Portal {
 
 	public PortalImpl() {
 
-		// Always allow do as user service tracker
-
-		ServiceTracker<AlwaysAllowDoAsUser, AlwaysAllowDoAsUser>
-			alwaysAllowDoAsUserServiceTracker = null;
-
-		try {
-			Registry registry = RegistryUtil.getRegistry();
-
-			alwaysAllowDoAsUserServiceTracker = registry.trackServices(
-				AlwaysAllowDoAsUser.class,
-				new AlwaysAllowDoAsUserServiceTrackerCustomizer());
-
-			alwaysAllowDoAsUserServiceTracker.open();
-		}
-		catch (NullPointerException npe) {
-		}
-
-		_alwaysAllowDoAsUserServiceTracker = alwaysAllowDoAsUserServiceTracker;
-
 		// Computer name
 
 		String computerName = System.getProperty("env.COMPUTERNAME");
@@ -544,6 +525,21 @@ public class PortalImpl implements Portal {
 		}
 		else {
 			_validPortalDomainCheckDisabled = false;
+		}
+
+		// Always allow do as user service tracker
+
+		try {
+			Registry registry = RegistryUtil.getRegistry();
+
+			ServiceTracker<AlwaysAllowDoAsUser, AlwaysAllowDoAsUser>
+				alwaysAllowDoAsUserServiceTracker = registry.trackServices(
+					AlwaysAllowDoAsUser.class,
+					new AlwaysAllowDoAsUserServiceTrackerCustomizer());
+
+			alwaysAllowDoAsUserServiceTracker.open();
+		}
+		catch (NullPointerException npe) {
 		}
 	}
 
@@ -8396,8 +8392,6 @@ public class PortalImpl implements Portal {
 	private String[] _allSystemSiteRoles;
 	private final List<AlwaysAllowDoAsUser> _alwaysAllowDoAsUsers =
 		new ArrayList<>();
-	private ServiceTracker<AlwaysAllowDoAsUser, AlwaysAllowDoAsUser>
-		_alwaysAllowDoAsUserServiceTracker;
 	private Pattern _bannedResourceIdPattern = Pattern.compile(
 		PropsValues.PORTLET_RESOURCE_ID_BANNED_PATHS_REGEXP,
 		Pattern.CASE_INSENSITIVE);

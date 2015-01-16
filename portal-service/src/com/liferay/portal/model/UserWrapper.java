@@ -743,6 +743,16 @@ public class UserWrapper implements User, ModelWrapper<User> {
 	}
 
 	/**
+	* Returns the user's full name.
+	*
+	* @return the user's full name
+	*/
+	@Override
+	public java.lang.String getFullName(boolean usePrefix, boolean useSuffix) {
+		return _user.getFullName(usePrefix, useSuffix);
+	}
+
+	/**
 	* Returns the grace login count of this user.
 	*
 	* @return the grace login count of this user
@@ -1068,6 +1078,11 @@ public class UserWrapper implements User, ModelWrapper<User> {
 		boolean includeAdministrative)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _user.getOrganizations(includeAdministrative);
+	}
+
+	@Override
+	public java.lang.String getOriginalEmailAddress() {
+		return _user.getOriginalEmailAddress();
 	}
 
 	/**

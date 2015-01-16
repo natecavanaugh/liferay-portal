@@ -12,23 +12,24 @@
  * details.
  */
 
-package com.liferay.portal.security.ldap;
+package com.liferay.portal.security.auth;
 
-import javax.naming.directory.Attributes;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Jorge Ferrer
  */
-public class DefaultAttributesTransformer implements AttributesTransformer {
+public class FullNameDefinition {
 
-	@Override
-	public Attributes transformGroup(Attributes attributes) {
-		return attributes;
+	public void addField(FullNameField field) {
+		_fields.add(field);
 	}
 
-	@Override
-	public Attributes transformUser(Attributes attributes) {
-		return attributes;
+	public List<FullNameField> getFields() {
+		return _fields;
 	}
+
+	private final List<FullNameField> _fields = new ArrayList<>();
 
 }

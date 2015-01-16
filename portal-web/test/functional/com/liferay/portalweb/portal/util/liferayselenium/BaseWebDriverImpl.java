@@ -787,11 +787,6 @@ public abstract class BaseWebDriverImpl
 	}
 
 	@Override
-	public void tap(String locator) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void typeAceEditor(String locator, String value) {
 		WebElement webElement = getWebElement(locator);
 

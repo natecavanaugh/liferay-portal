@@ -12,17 +12,28 @@
  * details.
  */
 
-package com.liferay.portal.security.ldap;
+package com.liferay.portal.ldap;
+
+import com.liferay.portal.security.ldap.AttributesTransformer;
+
+import javax.naming.directory.Attributes;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Brian Wing Shun Chan
  */
-public interface GroupConverterKeys {
+@Component(immediate = true, service = AttributesTransformer.class)
+public class DefaultAttributesTransformer implements AttributesTransformer {
 
-	public static final String DESCRIPTION = "description";
+	@Override
+	public Attributes transformGroup(Attributes attributes) {
+		return attributes;
+	}
 
-	public static final String GROUP_NAME = "groupName";
-
-	public static final String USER = "user";
+	@Override
+	public Attributes transformUser(Attributes attributes) {
+		return attributes;
+	}
 
 }

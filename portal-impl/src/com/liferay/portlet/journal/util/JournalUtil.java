@@ -1304,6 +1304,12 @@ public class JournalUtil {
 			Attribute availableLocalesAttribute = newRootElement.attribute(
 				"available-locales");
 
+			if (availableLocalesAttribute == null) {
+				availableLocalesAttribute =
+					(Attribute)newRootElement.addAttribute(
+						"available-locales", StringPool.BLANK);
+			}
+
 			String defaultImportLanguageId = LocaleUtil.toLanguageId(
 				defaultImportLocale);
 
@@ -1311,9 +1317,14 @@ public class JournalUtil {
 					availableLocalesAttribute.getValue(),
 					defaultImportLanguageId)) {
 
-				availableLocalesAttribute.setValue(
-					availableLocalesAttribute.getValue() + StringPool.COMMA +
-						defaultImportLanguageId);
+				if (Validator.isNull(availableLocalesAttribute.getValue())) {
+					availableLocalesAttribute.setValue(defaultImportLanguageId);
+				}
+				else {
+					availableLocalesAttribute.setValue(
+						availableLocalesAttribute.getValue() +
+							StringPool.COMMA + defaultImportLanguageId);
+				}
 
 				_mergeArticleContentUpdate(
 					oldDocument, newRootElement,
@@ -1324,6 +1335,11 @@ public class JournalUtil {
 
 			Attribute defaultLocaleAttribute = newRootElement.attribute(
 				"default-locale");
+
+			if (defaultLocaleAttribute == null) {
+				defaultLocaleAttribute = (Attribute)newRootElement.addAttribute(
+					"default-locale", StringPool.BLANK);
+			}
 
 			Locale defaultContentLocale = LocaleUtil.fromLanguageId(
 				defaultLocaleAttribute.getValue());

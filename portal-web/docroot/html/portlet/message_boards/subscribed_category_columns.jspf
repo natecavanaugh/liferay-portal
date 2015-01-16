@@ -70,17 +70,13 @@ private void _buildCategoryBreadcrumb(HttpServletRequest request, MBCategory cat
 			cssClass = "first";
 		}
 
-		sb.append("<li");
-		sb.append(" class=\"");
+		sb.append("<li class=\"");
 		sb.append(cssClass);
-		sb.append("\">");
-		sb.append("<a href=\"");
+		sb.append("\"><a href=\"");
 		sb.append(portletURL.toString());
 		sb.append("\">");
 		sb.append(HtmlUtil.escape(ancestorCategory.getName()));
-		sb.append("</a>");
-		sb.append("<span class=\"divider\">/</span>");
-		sb.append("</li>");
+		sb.append("</a></li>");
 	}
 
 	PortletURL portletURL = PortletURLFactoryUtil.create(request, PortletKeys.MESSAGE_BOARDS, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
