@@ -87,8 +87,13 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 		getHTML: function() {
 			var data;
 
-			if ((contents == null) && !window['<%= name %>'].instanceReady && window['<%= HtmlUtil.escape(namespace + initMethod) %>']) {
-				data = <%= HtmlUtil.escape(namespace + initMethod) %>();
+			if (!window['<%= name %>'].instanceReady) {
+				if (window['<%= HtmlUtil.escape(namespace + initMethod) %>']) {
+					data = <%= HtmlUtil.escape(namespace + initMethod) %>();
+				}
+				else {
+					data = '<%= contents != null ? contents: StringPool.BLANK %>';
+				}
 			}
 			else {
 				data = tinyMCE.editors['<%= name %>'].getContent();
@@ -155,7 +160,12 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 		%>
 
 		setHTML: function(value) {
-			tinyMCE.editors['<%= name %>'].setContent(value);
+			if (window['<%= name %>'].instanceReady) {
+				tinyMCE.editors['<%= name %>'].setContent(value);
+			}
+			else {
+				document.getElementById('<%= name %>').innerHTML = value;
+			}
 		}
 	};
 
