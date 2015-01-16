@@ -182,7 +182,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			}
 			%>
 
-			plugins: 'code contextmenu preview print',
+			plugins: 'contextmenu preview print <c:if test="<%= showSource %>">code</c:if>',
 			relative_urls: false,
 			remove_script_host: false,
 			toolbar1: 'bold italic underline | alignleft aligncenter alignright alignjustify | <c:if test="<%= showSource %>"> code</c:if> preview print',

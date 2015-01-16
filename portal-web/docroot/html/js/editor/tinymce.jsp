@@ -184,7 +184,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 
 			plugins: [
 				'advlist autolink autosave link image lists charmap print preview hr anchor',
-				'searchreplace wordcount code fullscreen media',
+				'searchreplace wordcount fullscreen media <c:if test="<%= showSource %>">code</c:if>',
 				'table contextmenu emoticons textcolor paste fullpage textcolor colorpicker textpattern'
 			],
 			relative_urls: false,
