@@ -199,7 +199,20 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			relative_urls: false,
 			remove_script_host: false,
 			selector: '#<%= name %>',
-			toolbar1: 'fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+			style_formats: [
+				{title: 'Normal', inline: 'p'},
+				{title: 'Heading 1', block: 'h1'},
+				{title: 'Heading 2', block: 'h2'},
+				{title: 'Heading 3', block: 'h3'},
+				{title: 'Heading 4', block: 'h4'},
+				{title: 'Preformatted Text', block: 'pre'},
+				{title: 'Cited Work', inline: 'cite'},
+				{title: 'Computer Code', inline: 'code'},
+				{title: 'Info Message', block: 'div', classes: 'portlet-msg-info'},
+				{title: 'Alert Message', block: 'div', classes: 'portlet-msg-alert'},
+				{title: 'Error Message', block: 'div', classes: 'portlet-msg-error'}
+			],
+			toolbar1: 'styleselect fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
 			toolbar2: 'cut copy paste searchreplace bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media <c:if test="<%= showSource %>">code</c:if>',
 			toolbar3: 'table | hr removeformat | subscript superscript | charmap emoticons | preview print fullscreen',
 			toolbar_items_size: 'small'
