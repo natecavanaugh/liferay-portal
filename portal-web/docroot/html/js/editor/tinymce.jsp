@@ -38,6 +38,7 @@ if (Validator.isNotNull(onInitMethod)) {
 boolean resizable = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-editor:resizable"));
 boolean showSource = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-editor:showSource"));
 boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-editor:skipEditorLoading"));
+String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolbarSet");
 %>
 
 <c:if test="<%= !skipEditorLoading %>">
@@ -169,6 +170,45 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 		}
 	};
 
+	var toolbars = {
+		email: {
+			toolbar1: 'fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+			toolbar2: 'cut copy paste bullist numlist | blockquote | undo redo | link unlink image <c:if test="<%= showSource %>">code</c:if> | hr removeformat  | preview print fullscreen',
+			toolbar3: ''
+		},
+		liferay: {
+			toolbar1: 'styleselect fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+			toolbar2: 'cut copy paste searchreplace bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media <c:if test="<%= showSource %>">code</c:if>',
+			toolbar3: 'table | hr removeformat | subscript superscript | charmap emoticons | preview print fullscreen'
+		},
+		phone: {
+			toolbar1: 'bold italic underline | bullist numlist',
+			toolbar2: 'link unlink image',
+			toolbar3: ''
+		},
+		simple: {
+			toolbar1: 'bold italic underline strikethrough | bullist numlist | table | link unlink image <c:if test="<%= showSource %>">code</c:if>',
+			toolbar2: '',
+			toolbar3: ''
+		},
+		tablet: {
+			toolbar1: 'styleselect fontselect fontsizeselect | bold italic underline strikethrough |  alignleft aligncenter alignright alignjustify',
+			toolbar2: 'bullist numlist | link unlink image <c:if test="<%= showSource %>">code</c:if>',
+			toolbar3: ''
+		}
+	};
+
+	var currentToolbarSet = '<%= TextFormatter.format(HtmlUtil.escapeJS(toolbarSet), TextFormatter.M) %>';
+
+	var Util = Liferay.Util;
+
+	if (Util.isPhone()) {
+		currentToolbarSet = 'phone';
+	}
+	else if (Util.isTablet()) {
+		currentToolbarSet = 'tablet';
+	}
+
 	tinyMCE.init(
 		{
 			content_css: '<%= HtmlUtil.escapeJS(themeDisplay.getPathThemeCss()) %>/aui.css,<%= HtmlUtil.escapeJS(themeDisplay.getPathThemeCss()) %>/main.css',
@@ -212,9 +252,9 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 				{title: 'Alert Message', block: 'div', classes: 'portlet-msg-alert'},
 				{title: 'Error Message', block: 'div', classes: 'portlet-msg-error'}
 			],
-			toolbar1: 'styleselect fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
-			toolbar2: 'cut copy paste searchreplace bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media <c:if test="<%= showSource %>">code</c:if>',
-			toolbar3: 'table | hr removeformat | subscript superscript | charmap emoticons | preview print fullscreen',
+			toolbar1: toolbars[currentToolbarSet].toolbar1,
+			toolbar2: toolbars[currentToolbarSet].toolbar2,
+			toolbar3: toolbars[currentToolbarSet].toolbar3,
 			toolbar_items_size: 'small'
 		}
 	);
