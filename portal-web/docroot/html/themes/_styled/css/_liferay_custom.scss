@@ -23,6 +23,12 @@
 	@extend .alert-danger;
 }
 
+/* ---------- Alert messages ---------- */
+
+.portlet-msg-alert {
+	@extend .alert-warning;
+}
+
 /* ---------- Success messages ---------- */
 
 .portlet-msg-success {
