@@ -849,13 +849,14 @@ Please set the property "jdk.6.home" in build.properties.
 			<then>
 				<copy todir="${app.server.portal.dir}" preservelastmodified="true">
 					<fileset dir="docroot">
+						<exclude name="**/*.js" />
+
 						<include name="**/*.css" />
 						<include name="**/*.dtd" />
 						<include name="**/*.ftl" />
 						<include name="**/*.gif" />
 						<include name="**/*.jar" />
 						<include name="**/*.jpg" />
-						<include name="**/*.js" />
 						<include name="**/*.jsp" />
 						<include name="**/*.jspf" />
 						<include name="**/*.png" />
@@ -866,6 +867,12 @@ Please set the property "jdk.6.home" in build.properties.
 						<include name="**/*.xml" />
 					</fileset>
 				</copy>
+
+				<ant-execute
+					ant.build.file="build-node.xml"
+					ant.dir="${project.dir}/tools/sdk"
+					ant.target="transpile-js-files" >
+				</ant-execute>
 			</then>
 		</if>
 	</target>
