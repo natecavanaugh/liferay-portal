@@ -1097,19 +1097,19 @@ $editLayoutPanelWidth: 460px;
 				color: #FFF !important;
 
 				&.approved {
-					background-color: #5cb85c;
+					background-color: #5CB85C;
 				}
 
 				&.draft {
-					background-color: #5bc0de;
+					background-color: #5BC0DE;
 				}
 
 				&.expired {
-					background-color: #d9534f;
+					background-color: #D9534F;
 				}
 
 				&.pending {
-					background-color: #f0ad4e;
+					background-color: #F0AD4E;
 				}
 			}
 		}
