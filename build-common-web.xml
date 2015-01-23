@@ -114,6 +114,8 @@
 								</fileset>
 							</copy>
 							<ant antfile="build-node.xml" dir="${project.dir}/tools/sdk" target="transpile-js-files">
+								<property name="transpiler.force" value="true" />
+								<property name="transpiler.input.dir" value="${basedir}/docroot" />
 								<property name="transpiler.output.dir" value="${war.file.dest}" />
 							</ant>
 						</then>
