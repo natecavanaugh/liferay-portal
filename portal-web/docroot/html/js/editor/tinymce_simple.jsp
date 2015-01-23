@@ -18,6 +18,11 @@
 
 <%
 String contents = (String)request.getAttribute("liferay-ui:input-editor:contents");
+String contentsLanguageId = (String)request.getAttribute("liferay-ui:input-editor:contentsLanguageId");
+Locale contentsLocale = LocaleUtil.fromLanguageId(contentsLanguageId);
+
+contentsLanguageId = LocaleUtil.toLanguageId(contentsLocale);
+
 String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-editor:cssClass"));
 String editorImpl = (String)request.getAttribute("liferay-ui:input-editor:editorImpl");
 String initMethod = (String)request.getAttribute("liferay-ui:input-editor:initMethod");
@@ -169,6 +174,13 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 		}
 	};
 
+	var tinyMCELanguage = {'ar_SA': 'ar', 'bg_BG': 'bg_BG', 'ca_ES': 'ca', 'cs_CZ': 'cs', 'de_DE': 'de', 'el_GR': 'el', 'en_AU': 'en_GB', 'en_GB': 'en_GB',
+		'en_US': 'en_GB', 'es_ES': 'es', 'et_EE': 'et', 'eu_ES': 'eu', 'fa_IR': 'fa', 'fi_FI': 'fi', 'fr_FR': 'fr_FR', 'gl_ES': 'gl', 'hr_HR': 'hr', 'hu_HU': 'hu_HU',
+		'in_ID': 'id', 'it_IT': 'it', 'iw_IL': 'he_IL', 'ja_JP': 'ja', 'ko_KR': 'ko_KR', 'lt_LT': 'lt', 'nb_NO': 'nb_NO', 'nl_NL': 'nl', 'pl_PL': 'pl', 'pt_BR': 'pt_BR',
+		'pt_PT': 'pt_PT', 'ro_RO': 'ro', 'ru_RU': 'ru', 'sk_SK': 'sk', 'sl_SI': 'sl_SI', 'sr_RS': 'sr', 'sv_SE': 'sv_SE', 'tr_TR': 'tr_TR', 'uk_UA': 'uk',
+		'vi_VN': 'vi', 'zh_CN': 'zh_CN', 'zh_TW': 'zh_TW'
+	};
+
 	tinyMCE.init(
 		{
 			content_css: '<%= HtmlUtil.escapeJS(themeDisplay.getPathThemeCss()) %>/aui.css,<%= HtmlUtil.escapeJS(themeDisplay.getPathThemeCss()) %>/main.css',
@@ -177,7 +189,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			file_browser_callback: window['<%= name %>'].fileBrowserCallback,
 			init_instance_callback: window['<%= name %>'].initInstanceCallback,
 			invalid_elements: 'script',
-			language: '<%= HtmlUtil.escape(locale.getLanguage()) %>',
+			language: tinyMCELanguage['<%= HtmlUtil.escape(contentsLanguageId) %>'] || tinyMCELanguage['en_US'],
 			menubar: false,
 			mode: 'textareas',
 
@@ -195,7 +207,7 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			relative_urls: false,
 			remove_script_host: false,
 			selector: '#<%= name %>',
-			toolbar1: 'bold italic underline | alignleft aligncenter alignright alignjustify | <c:if test="<%= showSource %>"> code</c:if> preview print',
+			toolbar: 'bold italic underline | alignleft aligncenter alignright alignjustify | <c:if test="<%= showSource %>"> code</c:if> preview print',
 			toolbar_items_size: 'small'
 		}
 	);
