@@ -867,12 +867,10 @@ Please set the property "jdk.6.home" in build.properties.
 						<include name="**/*.xml" />
 					</fileset>
 				</copy>
-
-				<ant-execute
-					ant.build.file="build-node.xml"
-					ant.dir="${project.dir}/tools/sdk"
-					ant.target="transpile-js-files" >
-				</ant-execute>
+				
+				<ant antfile="build-node.xml" dir="${project.dir}/tools/sdk" target="transpile-js-files">
+					<property name="transpiler.output.dir" value="${app.server.portal.dir}" />
+				</ant>
 			</then>
 		</if>
 	</target>
