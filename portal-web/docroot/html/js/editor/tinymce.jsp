@@ -176,31 +176,26 @@ String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolba
 	};
 
 	var toolbars = {
-		email: {
-			toolbar1: 'fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
-			toolbar2: 'cut copy paste bullist numlist | blockquote | undo redo | link unlink image <c:if test="<%= showSource %>">code</c:if> | hr removeformat  | preview print fullscreen',
-			toolbar3: ''
-		},
-		liferay: {
-			toolbar1: 'styleselect fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
-			toolbar2: 'cut copy paste searchreplace bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media <c:if test="<%= showSource %>">code</c:if>',
-			toolbar3: 'table | hr removeformat | subscript superscript | charmap emoticons | preview print fullscreen'
-		},
-		phone: {
-			toolbar1: 'bold italic underline | bullist numlist',
-			toolbar2: 'link unlink image',
-			toolbar3: ''
-		},
-		simple: {
-			toolbar1: 'bold italic underline strikethrough | bullist numlist | table | link unlink image <c:if test="<%= showSource %>">code</c:if>',
-			toolbar2: '',
-			toolbar3: ''
-		},
-		tablet: {
-			toolbar1: 'styleselect fontselect fontsizeselect | bold italic underline strikethrough |  alignleft aligncenter alignright alignjustify',
-			toolbar2: 'bullist numlist | link unlink image <c:if test="<%= showSource %>">code</c:if>',
-			toolbar3: ''
-		}
+		email: [
+			'fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+			'cut copy paste bullist numlist | blockquote | undo redo | link unlink image <c:if test="<%= showSource %>">code</c:if> | hr removeformat  | preview print fullscreen'
+		],
+		liferay: [
+			'styleselect fontselect fontsizeselect | forecolor backcolor | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+			'cut copy paste searchreplace bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media <c:if test="<%= showSource %>">code</c:if>',
+			'table | hr removeformat | subscript superscript | charmap emoticons | preview print fullscreen'
+		],
+		phone: [
+			'bold italic underline | bullist numlist',
+			'link unlink image'
+		],
+		simple: [
+			'bold italic underline strikethrough | bullist numlist | table | link unlink image <c:if test="<%= showSource %>">code</c:if>'
+		],
+		tablet: [
+			'styleselect fontselect fontsizeselect | bold italic underline strikethrough |  alignleft aligncenter alignright alignjustify',
+			'bullist numlist | link unlink image <c:if test="<%= showSource %>">code</c:if>'
+		]
 	};
 
 	var currentToolbarSet = '<%= TextFormatter.format(HtmlUtil.escapeJS(toolbarSet), TextFormatter.M) %>';
@@ -213,6 +208,8 @@ String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolba
 	else if (Util.isTablet()) {
 		currentToolbarSet = 'tablet';
 	}
+
+	var currentToolbar = toolbars[currentToolbarSet] || toolbars['liferay'];
 
 	var tinyMCELanguage = {'ar_SA': 'ar', 'bg_BG': 'bg_BG', 'ca_ES': 'ca', 'cs_CZ': 'cs', 'de_DE': 'de', 'el_GR': 'el', 'en_AU': 'en_GB', 'en_GB': 'en_GB',
 		'en_US': 'en_GB', 'es_ES': 'es', 'et_EE': 'et', 'eu_ES': 'eu', 'fa_IR': 'fa', 'fi_FI': 'fi', 'fr_FR': 'fr_FR', 'gl_ES': 'gl', 'hr_HR': 'hr', 'hu_HU': 'hu_HU',
@@ -229,7 +226,7 @@ String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolba
 			file_browser_callback: window['<%= name %>'].fileBrowserCallback,
 			init_instance_callback: window['<%= name %>'].initInstanceCallback,
 			invalid_elements: 'script',
-			language: tinyMCELanguage['<%= HtmlUtil.escape(contentsLanguageId) %>'],
+			language: tinyMCELanguage['<%= HtmlUtil.escape(contentsLanguageId) %>'] || tinyMCELanguage['en_US'],
 			menubar: false,
 			mode: 'exact',
 
@@ -264,9 +261,7 @@ String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolba
 				{title: 'Alert Message', block: 'div', classes: 'portlet-msg-alert'},
 				{title: 'Error Message', block: 'div', classes: 'portlet-msg-error'}
 			],
-			toolbar1: toolbars[currentToolbarSet].toolbar1,
-			toolbar2: toolbars[currentToolbarSet].toolbar2,
-			toolbar3: toolbars[currentToolbarSet].toolbar3,
+			toolbar: currentToolbar,
 			toolbar_items_size: 'small'
 		}
 	);
