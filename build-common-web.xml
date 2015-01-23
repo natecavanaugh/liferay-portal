@@ -113,6 +113,9 @@
 									<exclude name="/html/portlet/**/*.js" />
 								</fileset>
 							</copy>
+							<ant antfile="build-node.xml" dir="${project.dir}/tools/sdk" target="transpile-js-files">
+								<property name="transpiler.output.dir" value="${war.file.dest}" />
+							</ant>
 						</then>
 					</elseif>
 					<else>
