@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.servlet.taglib.ui.MenuItem;
 import java.util.List;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 
 /**
  * @author Sergio González
@@ -27,5 +28,8 @@ public interface PortletToolbarContributor {
 
 	public List<MenuItem> getContentAdditionMenuItems(
 		PortletRequest portletRequest);
+
+	public String getHTML(
+		PortletRequest portletRequest, PortletResponse portletResponse);
 
 }

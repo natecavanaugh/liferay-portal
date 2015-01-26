@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.portlet.toolbar.contributor.PortletToolbarContr
 import com.liferay.portal.kernel.portlet.toolbar.contributor.locator.PortletToolbarContributorLocator;
 import com.liferay.portal.kernel.servlet.taglib.ui.Menu;
 import com.liferay.portal.kernel.servlet.taglib.ui.MenuItem;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 
 /**
  * @author Sergio González
@@ -91,6 +94,41 @@ public class PortletToolbar {
 		menu.setShowWhenSingleIcon(true);
 
 		return menu;
+	}
+
+	public String getHTML(
+		String portletId, PortletRequest portletRequest,
+		PortletResponse portletResponse) {
+
+		String html = StringPool.BLANK;
+
+		for (PortletToolbarContributorLocator
+				portletToolbarContributorLocator :
+					_portletToolbarContributorLocators) {
+
+			List<PortletToolbarContributor> portletToolbarContributors =
+				portletToolbarContributorLocator.getPortletToolbarContributors(
+					portletId, portletRequest);
+
+			if (portletToolbarContributors == null) {
+				continue;
+			}
+
+			for (PortletToolbarContributor portletToolbarContributor :
+					portletToolbarContributors) {
+
+				String curHTML = portletToolbarContributor.getHTML(
+					portletRequest, portletResponse);
+
+				if (Validator.isNull(curHTML)) {
+					continue;
+				}
+
+				html = html.concat(StringPool.SPACE).concat(curHTML);
+			}
+		}
+
+		return html;
 	}
 
 	private static final List<PortletToolbarContributorLocator>

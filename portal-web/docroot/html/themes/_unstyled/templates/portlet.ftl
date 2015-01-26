@@ -15,6 +15,12 @@
 		</h1>
 
 		<#if renderRequest??>
+			<menu class="portlet-topper-toolbar custom-actions" id="portlet-topper-toolbar-custom-actions_${portlet_id}" type="toolbar">
+				${portlet_toolbar.getHTML(portlet_id, renderRequest, renderResponse)}
+			</menu>
+		</#if>
+
+		<#if renderRequest??>
 			<menu class="portlet-topper-toolbar add-content" id="portlet-topper-toolbar-add-content_${portlet_id}" type="toolbar">
 				<@liferay_ui["menu"] menu=portlet_toolbar.getContentAdditionMenu(portlet_id, renderRequest) />
 			</menu>
