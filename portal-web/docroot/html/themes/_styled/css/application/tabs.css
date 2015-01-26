@@ -1,0 +1,20 @@
+@import "bourbon";
+
+/* ---------- Tabs ---------- */
+
+.lfr-nav.nav-tabs {
+	margin-bottom: 20px;
+}
+
+.tab-active strong {
+	font-weight: normal;
+}
+
+.tab-back {
+	float: right;
+}
+
+.tab-back-content {
+	border-width: 0;
+	padding: 1px;
+}
