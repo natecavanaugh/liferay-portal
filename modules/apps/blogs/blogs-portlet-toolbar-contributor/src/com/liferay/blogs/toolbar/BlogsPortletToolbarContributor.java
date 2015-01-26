@@ -14,27 +14,42 @@
 
 package com.liferay.blogs.toolbar;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.toolbar.contributor.PortletToolbarContributor;
+import com.liferay.portal.kernel.portlet.toolbar.contributor.PortletToolbarContributorTemplateRenderer;
 import com.liferay.portal.kernel.servlet.taglib.ui.MenuItem;
 import com.liferay.portal.kernel.servlet.taglib.ui.URLMenuItem;
-import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.ResourcePermissionChecker;
+import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletURLFactoryUtil;
+import com.liferay.portlet.blogs.BlogsPortletInstanceSettings;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -68,9 +83,27 @@ public class BlogsPortletToolbarContributor
 
 	@Override
 	public String getHTML(
-		PortletRequest portletRequest, PortletResponse response) {
+			PortletRequest portletRequest, PortletResponse portletResponse)
+		throws PortalException {
 
-		return StringPool.BLANK;
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String script = _get(getClass(), "dependencies/blogs.ftl");
+
+		Map<String, Object> contextObjects = new HashMap<>();
+
+		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
+
+		BlogsPortletInstanceSettings blogsPortletInstanceSettings =
+			BlogsPortletInstanceSettings.getInstance(
+				themeDisplay.getLayout(), portletDisplay.getPortletName());
+
+		contextObjects.put(
+			"blogsPortletInstanceSettings", blogsPortletInstanceSettings);
+
+		return _portletToolbarContributorTemplateRenderer.render(
+			portletRequest, portletResponse, script, contextObjects);
 	}
 
 	protected URLMenuItem getAddEntryMenuItem(
@@ -97,6 +130,15 @@ public class BlogsPortletToolbarContributor
 		return urlMenuItem;
 	}
 
+	@Reference(target = "(template.language=ftl)", unbind = "-")
+	protected void setPortletToolbarContributorTemplateRenderer(
+		PortletToolbarContributorTemplateRenderer
+			portletToolbarContributorTemplateRenderer) {
+
+		_portletToolbarContributorTemplateRenderer =
+			portletToolbarContributorTemplateRenderer;
+	}
+
 	@Reference(
 		target = "(resource.name=com.liferay.portlet.blogs)", unbind = "-"
 	)
@@ -106,6 +148,37 @@ public class BlogsPortletToolbarContributor
 		_resourcePermissionChecker = resourcePermissionChecker;
 	}
 
+	private String _get(Class<?> clazz, String resource) {
+		InputStream inputStream = null;
+
+		Bundle bundle = FrameworkUtil.getBundle(clazz);
+
+		Package pkg = clazz.getPackage();
+
+		String packageName = pkg.getName();
+
+		String path = packageName.replaceAll("\\.", "/") + "/" + resource;
+
+		try {
+			URL url = bundle.getEntry(path);
+
+			inputStream = url.openStream();
+
+			return StringUtil.read(inputStream);
+		}
+		catch (IOException ioe) {
+			throw new SystemException(
+				"Unable to read " + path + " in bundle " +
+					bundle.getSymbolicName(),
+				ioe);
+		}
+		finally {
+			StreamUtil.cleanUp(inputStream);
+		}
+	}
+
+	private PortletToolbarContributorTemplateRenderer
+		_portletToolbarContributorTemplateRenderer;
 	private ResourcePermissionChecker _resourcePermissionChecker;
 
 }

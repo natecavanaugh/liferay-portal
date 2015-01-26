@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.portlet.toolbar;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.toolbar.contributor.PortletToolbarContributor;
 import com.liferay.portal.kernel.portlet.toolbar.contributor.locator.PortletToolbarContributorLocator;
 import com.liferay.portal.kernel.servlet.taglib.ui.Menu;
@@ -97,8 +98,9 @@ public class PortletToolbar {
 	}
 
 	public String getHTML(
-		String portletId, PortletRequest portletRequest,
-		PortletResponse portletResponse) {
+			String portletId, PortletRequest portletRequest,
+			PortletResponse portletResponse)
+		throws PortalException {
 
 		String html = StringPool.BLANK;
 
