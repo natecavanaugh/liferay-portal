@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.toolbar.contributor.PortletToolbarContributor;
 import com.liferay.portal.kernel.servlet.taglib.ui.MenuItem;
 import com.liferay.portal.kernel.servlet.taglib.ui.URLMenuItem;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.ResourcePermissionChecker;
@@ -31,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 
 import org.osgi.service.component.annotations.Component;
@@ -62,6 +64,13 @@ public class BlogsPortletToolbarContributor
 		menuItems.add(getAddEntryMenuItem(portletRequest, themeDisplay));
 
 		return menuItems;
+	}
+
+	@Override
+	public String getHTML(
+		PortletRequest portletRequest, PortletResponse response) {
+
+		return StringPool.BLANK;
 	}
 
 	protected URLMenuItem getAddEntryMenuItem(
