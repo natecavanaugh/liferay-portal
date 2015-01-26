@@ -867,10 +867,16 @@ Please set the property "jdk.6.home" in build.properties.
 						<include name="**/*.xml" />
 					</fileset>
 				</copy>
-				
+
 				<ant antfile="build-node.xml" dir="${project.dir}/tools/sdk" target="transpile-js-files">
 					<property name="transpiler.input.dir" value="${basedir}/docroot" />
 					<property name="transpiler.output.dir" value="${app.server.portal.dir}" />
+				</ant>
+
+				<ant antfile="build-node.xml" dir="${project.dir}/tools/sdk" target="generate-modules-config">
+					<property name="config.generator.input.dir" value="${app.server.portal.dir}/html/js/es6" />
+					<property name="config.generator.base.file" value="${basedir}/docroot/html/js/loader/config-base.js" />
+					<property name="config.generator.output.file" value="${app.server.portal.dir}/html/js/loader/config.js" />
 				</ant>
 			</then>
 		</if>
