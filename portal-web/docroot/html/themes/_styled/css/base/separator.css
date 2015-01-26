@@ -1,0 +1,7 @@
+@import "bourbon";
+
+/* ---------- Separator ---------- */
+
+.separator {
+	border-top: 1px dotted #BFBFBF;
+}

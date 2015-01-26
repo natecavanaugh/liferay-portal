@@ -1,0 +1,9 @@
+@import "bourbon";
+
+/* ---------- Update manager ---------- */
+
+.update-available {
+	margin-top: 10px;
+	padding: 2px;
+	text-align: left;
+}
