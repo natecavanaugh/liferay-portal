@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.blogs.toolbar.item;
+package com.liferay.blogs.toolbar;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.toolbar.contributor.PortletToolbarContributor;
