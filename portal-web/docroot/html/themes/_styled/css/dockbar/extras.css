@@ -1,0 +1,18 @@
+@import "bourbon";
+@import "mixins";
+
+/* -------- Extras -------- */
+
+.dockbar {
+	.container, .container-fluid {
+		> .nav > li.info-items {
+			@include background-image(none);
+		}
+	}
+
+	.nav-navigation {
+		.dropdown-menu {
+			box-shadow: none;
+		}
+	}
+}
