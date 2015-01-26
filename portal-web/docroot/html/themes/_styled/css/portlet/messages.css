@@ -1,0 +1,13 @@
+@import "bourbon";
+
+/* ---------- Messages ---------- */
+
+.portlet-msg {
+	background: #EEE none no-repeat 6px 50%;
+	border: 1px solid #555;
+	color: #34404F;
+	font-weight: bold;
+	margin: 2px auto 14px;
+	padding: 6px 6px 6px 30px;
+	text-align: left;
+}

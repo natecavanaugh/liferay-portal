@@ -1,0 +1,9 @@
+@import "bourbon";
+
+/* ---------- Add content dialog ---------- */
+
+.lfr-portlet-item {
+	&, & p a {
+		font-size: 1em;
+	}
+}
