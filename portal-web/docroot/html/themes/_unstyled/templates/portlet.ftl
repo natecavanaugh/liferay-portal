@@ -14,25 +14,27 @@
 			<span class="portlet-title-text">${portlet_title}</span>
 		</h1>
 
+		<div class="menu-wrapper">
+			<#if renderRequest??>
+				<menu class="portlet-topper-toolbar add-content" id="portlet-topper-toolbar-add-content_${portlet_id}" type="toolbar">
+					<@liferay_ui["menu"] menu=portlet_toolbar.getContentAdditionMenu(portlet_id, renderRequest) />
+				</menu>
+			</#if>
+
+			<menu class="portlet-topper-toolbar" id="portlet-topper-toolbar_${portlet_id}" type="toolbar">
+				<#if portlet_display.isShowBackIcon()>
+					<a href="${portlet_back_url}" class="portlet-icon-back"><@liferay.language key="return-to-full-page" /></a>
+				<#else>
+					${theme.portletIconOptions()}
+				</#if>
+			</menu>
+		</div>
+
 		<#if renderRequest??>
 			<menu class="portlet-topper-toolbar custom-actions" id="portlet-topper-toolbar-custom-actions_${portlet_id}" type="toolbar">
 				${portlet_toolbar.getHTML(portlet_id, renderRequest, renderResponse)}
 			</menu>
 		</#if>
-
-		<#if renderRequest??>
-			<menu class="portlet-topper-toolbar add-content" id="portlet-topper-toolbar-add-content_${portlet_id}" type="toolbar">
-				<@liferay_ui["menu"] menu=portlet_toolbar.getContentAdditionMenu(portlet_id, renderRequest) />
-			</menu>
-		</#if>
-
-		<menu class="portlet-topper-toolbar" id="portlet-topper-toolbar_${portlet_id}" type="toolbar">
-			<#if portlet_display.isShowBackIcon()>
-				<a href="${portlet_back_url}" class="portlet-icon-back"><@liferay.language key="return-to-full-page" /></a>
-			<#else>
-				${theme.portletIconOptions()}
-			</#if>
-		</menu>
 	</header>
 
 	<div class="portlet-content">

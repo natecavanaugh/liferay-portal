@@ -26,12 +26,15 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.ResourcePermissionChecker;
+import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.blogs.BlogsPortletInstanceSettings;
+import com.liferay.portlet.blogs.BlogsSettings;
+import com.liferay.portlet.blogs.model.BlogsEntry;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,6 +104,30 @@ public class BlogsPortletToolbarContributor
 
 		contextObjects.put(
 			"blogsPortletInstanceSettings", blogsPortletInstanceSettings);
+
+		boolean showSubscribeButton = false;
+
+		BlogsSettings blogsSettings = BlogsSettings.getInstance(
+			themeDisplay.getScopeGroupId());
+
+		if (_resourcePermissionChecker.checkResource(
+				themeDisplay.getPermissionChecker(),
+				themeDisplay.getScopeGroupId(), ActionKeys.SUBSCRIBE) &&
+			(blogsSettings.isEmailEntryAddedEnabled() ||
+			 blogsSettings.isEmailEntryUpdatedEnabled())) {
+
+			showSubscribeButton = true;
+
+			boolean isSubscribed = SubscriptionLocalServiceUtil.isSubscribed(
+				themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+				BlogsEntry.class.getName(), themeDisplay.getScopeGroupId());
+
+			contextObjects.put("isSubscribed", isSubscribed);
+		}
+
+		contextObjects.put("showSubscribeButton", showSubscribeButton);
+
+		contextObjects.put("currentURL", themeDisplay.getURLCurrent());
 
 		return _portletToolbarContributorTemplateRenderer.render(
 			portletRequest, portletResponse, script, contextObjects);

@@ -91,7 +91,7 @@ public class PortletToolbar {
 		menu.setMenuItems(contentAdditionMenuItems);
 
 		menu.setMessage("add");
-		menu.setShowArrow(false);
+		menu.setShowArrow(true);
 		menu.setShowWhenSingleIcon(true);
 
 		return menu;

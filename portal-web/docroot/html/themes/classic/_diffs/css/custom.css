@@ -511,7 +511,13 @@ html {
 	color: #FFF;
 	padding: 0;
 
+	.menu-wrapper {
+		display: inline;
+		position: relative;
+	}
+
 	.portlet-title {
+		display: inline;
 		font-size: 1em;
 		font-weight: normal;
 		line-height: 2.2;
@@ -526,17 +532,13 @@ html {
 		font-size: 0.8em;
 		margin: -10px 0 0;
 		padding: 0;
-		right: 10px;
 		top: 50%;
+		left: 20px;
 	}
 }
 
 .lfr-configurator-visibility .portlet-topper {
 	background-color: #A9A9A9;
-}
-
-.signed-in.controls-visible .portlet-title {
-	padding-right: 80px;
 }
 
 .portlet-asset-publisher .asset-title, .portlet-asset-publisher .header-title, .portlet-asset-publisher li.title-list, .portlet-blogs .entry-title, .portlet-blogs .header-title, .portlet-message-boards .header-title {
