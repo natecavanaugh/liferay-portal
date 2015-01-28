@@ -1092,6 +1092,26 @@ $editLayoutPanelWidth: 460px;
 					float: right;
 				}
 			}
+
+			.workflow-status .status{
+				color: #FFF;
+
+				&.approved {
+					background-color: $status-approved-text;
+				}
+
+				&.draft {
+					background-color: $status-draft-text;
+				}
+
+				&.expired {
+					background-color: $status-expired-text;
+				}
+
+				&.pending {
+					background-color: $status-pending-text;
+				}
+			}
 		}
 	}
 }
