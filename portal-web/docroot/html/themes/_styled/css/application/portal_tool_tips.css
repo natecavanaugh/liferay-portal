@@ -1,0 +1,7 @@
+@import "bourbon";
+
+/* ---------- Portal tool tips ---------- */
+
+.tooltip {
+	max-width: 200px;
+}

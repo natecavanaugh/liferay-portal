@@ -1,0 +1,77 @@
+@import "bourbon";
+
+/* ---------- Staging dockbar ---------- */
+
+.variation-selector {
+	display: block;
+	font-size: 1.2em;
+	font-weight: bold;
+	margin: 1em;
+}
+
+.layout-revision-container {
+	margin: 1em 0 0 1em;
+	padding: 0;
+
+	.current-version {
+		color: #41801D;
+		display: block;
+	}
+
+	.layout-variation-name {
+		color: #666;
+		font-size: 1.15em;
+		margin-bottom: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.taglib-workflow-status .workflow-status {
+		background: none;
+		padding-left: 0;
+
+		.workflow-status-ready-for-publication {
+			color: #41801D;
+			font-weight: bold;
+		}
+	}
+}
+
+.layout-revision-container-root {
+	margin: 0;
+}
+
+.staging-controls {
+	padding-left: 5px;
+	padding-right: 25px;
+
+	select {
+		width: 100%;
+	}
+
+	.staging-bar {
+		.dropdown-menu {
+			font-size: 13px;
+			position: absolute;
+			top: 100%;
+			width: 100%;
+
+			.btn-link {
+				float: left;
+				font-size: 11px;
+				margin: 0 5px 0 0;
+				padding: 0;
+				text-decoration: underline;
+
+				text-shadow: none;
+
+				&:hover {
+					text-decoration: none;
+				}
+
+				&.history {
+					float: right;
+				}
+			}
+		}
+	}
+}

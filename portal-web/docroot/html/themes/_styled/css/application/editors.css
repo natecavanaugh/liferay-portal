@@ -1,0 +1,286 @@
+@import "aui/alloy-font-awesome/scss/variables";
+@import "bourbon";
+
+/* ---------- CKEditor menu ---------- */
+
+.cke_dialog .cke_dialog_ui_input_text {
+	height: auto;
+}
+
+.cke_editable_inline a {
+	cursor: pointer;
+}
+
+.cke_panel.cke_combopanel {
+	width: 220px;
+}
+
+.cke_panel_block {
+	.cke_panel_grouptitle {
+		font-size: 20px;
+		line-height: 20px;
+		margin-top: 0;
+	}
+
+	.cke_panel_list {
+		margin-left: 0;
+
+		.cke_panel_listItem {
+			line-height: initial;
+
+			a:hover {
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+/* ---------- CKEditor table ---------- */
+
+.cke_show_border {
+	width: 500px;
+
+	td {
+		height: 15px;
+	}
+}
+
+/* ---------- HTML editor ---------- */
+
+.html-editor.portlet {
+	background: #FFF;
+	color: #000;
+	line-height: 1;
+	padding: 1em;
+}
+
+.html-editor.portlet-message-boards {
+	@include hyphens;
+
+	word-wrap: break-word;
+
+	blockquote {
+		background: #EEF0F2 url(../../images/message_boards/quoteleft.png) no-repeat 5px 5px;
+		border: 1px solid #777;
+		padding: 5px 45px;
+
+		&:after {
+			background: url(../../images/message_boards/quoteright.png) no-repeat 50%;
+			content: '';
+			display: block;
+			float: right;
+			height: 24px;
+			margin-right: -35px;
+			margin-top: -25px;
+			width: 31px;
+			z-index: 999;
+		}
+
+		cite {
+			display: block;
+			font-weight: bold;
+		}
+	}
+
+	pre {
+		background: #F9F9F9;
+		border: 1px solid #777;
+		padding: 0.5em;
+	}
+}
+
+/* ---------- Liferay source editor ---------- */
+
+.lfr-source-editor {
+	border: solid 0 transparent;
+	border-bottom-width: 2px;
+	padding-right: 30px;
+	position: relative;
+
+	.lfr-source-editor-toolbar {
+		padding: 0;
+		position: absolute;
+		right: 0;
+		text-align: center;
+		top: 0;
+		width: 30px;
+
+		li {
+			list-style-type: none;
+
+			.btn {
+				padding: 0 5px;
+			}
+		}
+	}
+}
+
+/* ---------- Alloy editor ---------- */
+
+.alloy-editor {
+	outline: 0;
+
+	a {
+		cursor: auto;
+	}
+}
+
+.alloy-editor-switch {
+	border: dashed 0 #DDD;
+	border-bottom-width: 1px;
+	position: relative;
+
+	&.show-source {
+		border-bottom-width: 2px;
+		border-style: solid;
+	}
+
+	.btn {
+		bottom: 0;
+		padding: 0 5px;
+		position: absolute;
+		right: 0;
+	}
+}
+
+.alloy-editor-container {
+	.lfr-source-editor {
+		display: none;
+	}
+
+	&.show-source {
+		.alloy-editor-placeholder {
+			display: none;
+		}
+
+		.lfr-source-editor {
+			display: block;
+		}
+	}
+}
+
+/* ---------- Inline editing ---------- */
+
+.lfr-editable {
+	$edit-color: #68BB30;
+	$edit-color-hover: darken(#68BB30, 10);
+
+	outline: 1px dashed $edit-color;
+	outline-offset: 2px;
+	position: relative;
+
+	&:after {
+		background: $edit-color url(../../images/common/edit_white.png) no-repeat 50%;
+		content: '';
+		display: block;
+		height: 20px;
+		position: absolute;
+		right: 5px;
+		top: 5px;
+		width: 30px;
+	}
+
+	&:focus {
+		&:after {
+			display: none;
+		}
+
+		&:hover {
+			background-color: transparent;
+		}
+	}
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.3);
+		outline-color: $edit-color-hover;
+
+		&:after {
+			background-color: $edit-color-hover;
+		}
+	}
+}
+
+.lfr-editable-notice-close {
+	margin-left: 1em;
+}
+
+.lfr-portlet-title-editable {
+	margin-top: 0;
+	z-index: 9999;
+
+	.lfr-portlet-title-editable-content {
+		padding: 0;
+
+		.field-input {
+			margin-bottom: 0;
+		}
+
+		.textfield-label {
+			display: none;
+		}
+
+		.btn-toolbar-content {
+			display: inline-block;
+		}
+
+		.btn-group {
+			margin-top: 0;
+		}
+
+		.btn {
+			display: inline-block;
+			float: none;
+			margin-top: 0;
+			width: auto;
+		}
+	}
+}
+
+.lfr-page-layouts .lfr-layout-template .layout-template-entry {
+	height: 25px;
+	width: 25px;
+}
+
+.yui3-color-picker-popover {
+	.palette-container {
+		border-collapse: separate;
+	}
+}
+
+.ie {
+	& input.cke_dialog_ui_input_text {
+		height: auto;
+	}
+
+	.proxy.not-intersecting .forbidden-action {
+		right: 2px;
+		top: 2px;
+	}
+}
+
+.ie7 {
+	.menu-content li {
+		z-index: 10;
+	}
+
+	.paginator-link {
+		color: transparent;
+		font-size: 0;
+		overflow: hidden;
+		text-indent: 0;
+		vertical-align: middle;
+	}
+
+	.paginator-page-link {
+		color: #1F1E1E;
+		font-size: 1em;
+		height: auto;
+		line-height: 1.4;
+		overflow: visible;
+		text-indent: 0;
+	}
+
+	.paginator-current-page {
+		color: #FFF;
+	}
+}

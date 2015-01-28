@@ -1,0 +1,15 @@
+@import "bourbon";
+
+/* ---------- Panel page ---------- */
+
+.lfr-panel-page {
+	width: 100%;
+
+	.portlet-title {
+		font-size: 13px;
+	}
+
+	.lfr-add-content h2 span {
+		background-color: #D3DADD;
+	}
+}

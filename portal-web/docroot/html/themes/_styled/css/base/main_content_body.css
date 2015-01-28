@@ -1,0 +1,7 @@
+@import "bourbon";
+
+/* ---------- Main content body ---------- */
+
+.portal-iframe #main-content {
+	width: 100%;
+}

@@ -1,0 +1,7 @@
+@import "bourbon";
+
+/* ---------- Text formatting ---------- */
+
+.important {
+	font-weight: bold;
+}
