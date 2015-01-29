@@ -444,7 +444,7 @@ public class SetupWizardUtil {
 				contact.getMySpaceSn(), contact.getSkypeSn(),
 				contact.getTwitterSn(), contact.getYmSn(),
 				contact.getJobTitle(), null, null, null, null, null,
-				new ServiceContext());
+				new ServiceContext(), user.getPreferredEditors());
 		}
 		else {
 			UserLocalServiceUtil.addDefaultAdminUser(

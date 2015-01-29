@@ -121,7 +121,8 @@ public class AdminUtil {
 			contact.isMale(), birthdayMonth, birthdayDay, birthdayYear, smsSn,
 			aimSn, facebookSn, icqSn, jabberSn, msnSn, mySpaceSn, skypeSn,
 			twitterSn, ymSn, contact.getJobTitle(), groupIds, organizationIds,
-			roleIds, userGroupRoles, userGroupIds, serviceContext);
+			roleIds, userGroupRoles, userGroupIds, serviceContext,
+			user.getPreferredEditors());
 	}
 
 }
