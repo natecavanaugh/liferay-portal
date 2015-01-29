@@ -3347,7 +3347,8 @@ public class UserLocalServiceWrapper implements UserLocalService,
 		long[] roleIds,
 		java.util.List<com.liferay.portal.model.UserGroupRole> userGroupRoles,
 		long[] userGroupIds,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _userLocalService.updateUser(userId, oldPassword, newPassword1,
 			newPassword2, passwordReset, reminderQueryQuestion,
@@ -3357,7 +3358,7 @@ public class UserLocalServiceWrapper implements UserLocalService,
 			birthdayYear, smsSn, aimSn, facebookSn, icqSn, jabberSn, msnSn,
 			mySpaceSn, skypeSn, twitterSn, ymSn, jobTitle, groupIds,
 			organizationIds, roleIds, userGroupRoles, userGroupIds,
-			serviceContext);
+			serviceContext, preferredEditors);
 	}
 
 	/**
@@ -3439,7 +3440,8 @@ public class UserLocalServiceWrapper implements UserLocalService,
 		long[] roleIds,
 		java.util.List<com.liferay.portal.model.UserGroupRole> userGroupRoles,
 		long[] userGroupIds,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _userLocalService.updateUser(userId, oldPassword, newPassword1,
 			newPassword2, passwordReset, reminderQueryQuestion,
@@ -3449,7 +3451,7 @@ public class UserLocalServiceWrapper implements UserLocalService,
 			male, birthdayMonth, birthdayDay, birthdayYear, smsSn, aimSn,
 			facebookSn, icqSn, jabberSn, msnSn, mySpaceSn, skypeSn, twitterSn,
 			ymSn, jobTitle, groupIds, organizationIds, roleIds, userGroupRoles,
-			userGroupIds, serviceContext);
+			userGroupIds, serviceContext, preferredEditors);
 	}
 
 	/**
