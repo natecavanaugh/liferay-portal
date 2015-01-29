@@ -69,7 +69,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
+import java.io.Serializable;
 
 /**
  * Provides the remote service for accessing, adding, authenticating, deleting,
@@ -1817,7 +1819,8 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			List<Address> addresses, List<EmailAddress> emailAddresses,
 			List<Phone> phones, List<Website> websites,
 			List<AnnouncementsDelivery> announcementsDelivers,
-			ServiceContext serviceContext)
+			ServiceContext serviceContext,
+			Map<String, Serializable> preferredEditors)
 		throws PortalException {
 
 		UserPermissionUtil.check(
@@ -2047,7 +2050,7 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			birthdayYear, smsSn, aimSn, facebookSn, icqSn, jabberSn, msnSn,
 			mySpaceSn, skypeSn, twitterSn, ymSn, jobTitle, groupIds,
 			organizationIds, roleIds, userGroupRoles, userGroupIds,
-			serviceContext);
+			serviceContext, preferredEditors);
 
 		if (!addGroupIds.isEmpty() || !removeGroupIds.isEmpty()) {
 			SiteMembershipPolicyUtil.propagateMembership(
@@ -2185,7 +2188,8 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			List<Address> addresses, List<EmailAddress> emailAddresses,
 			List<Phone> phones, List<Website> websites,
 			List<AnnouncementsDelivery> announcementsDelivers,
-			ServiceContext serviceContext)
+			ServiceContext serviceContext,
+			Map<String, Serializable> preferredEditors)
 		throws PortalException {
 
 		return updateUser(
@@ -2197,7 +2201,8 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			smsSn, aimSn, facebookSn, icqSn, jabberSn, msnSn, mySpaceSn,
 			skypeSn, twitterSn, ymSn, jobTitle, groupIds, organizationIds,
 			roleIds, userGroupRoles, userGroupIds, addresses, emailAddresses,
-			phones, websites, announcementsDelivers, serviceContext);
+			phones, websites, announcementsDelivers, serviceContext,
+			preferredEditors);
 	}
 
 	/**
@@ -2272,7 +2277,8 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			String twitterSn, String ymSn, String jobTitle, long[] groupIds,
 			long[] organizationIds, long[] roleIds,
 			List<UserGroupRole> userGroupRoles, long[] userGroupIds,
-			ServiceContext serviceContext)
+			ServiceContext serviceContext,
+			Map<String, Serializable> preferredEditors)
 		throws PortalException {
 
 		return updateUser(
@@ -2284,7 +2290,7 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			smsSn, aimSn, facebookSn, icqSn, jabberSn, msnSn, mySpaceSn,
 			skypeSn, twitterSn, ymSn, jobTitle, groupIds, organizationIds,
 			roleIds, userGroupRoles, userGroupIds, null, null, null, null, null,
-			serviceContext);
+			serviceContext, preferredEditors);
 	}
 
 	protected void checkAddUserPermission(
