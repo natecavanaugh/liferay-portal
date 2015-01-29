@@ -1040,6 +1040,7 @@
 		<field name="agreedToTermsOfUse" type="boolean" />
 		<field name="emailAddressVerified" type="boolean" />
 		<field name="status" type="int" />
+		<field name="preferredEditors" type="Map" />
 	</model>
 	<model name="com.liferay.portal.model.UserGroup">
 		<field name="mvccVersion" type="long" />

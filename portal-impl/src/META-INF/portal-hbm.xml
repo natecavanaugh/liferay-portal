@@ -1107,6 +1107,7 @@
 		<property name="agreedToTermsOfUse" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="emailAddressVerified" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="preferredEditors" type="com.liferay.portal.dao.orm.hibernate.MapType" />
 	</class>
 	<class name="com.liferay.portal.model.impl.UserGroupImpl" table="UserGroup" dynamic-update="true">
 		<cache usage="read-write" />

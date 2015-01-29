@@ -27,8 +27,10 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * The cache model class for representing User in entity cache.
@@ -79,7 +81,7 @@ public class UserCacheModel implements CacheModel<User>, Externalizable,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(83);
+		StringBundler sb = new StringBundler(85);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -163,6 +165,8 @@ public class UserCacheModel implements CacheModel<User>, Externalizable,
 		sb.append(emailAddressVerified);
 		sb.append(", status=");
 		sb.append(status);
+		sb.append(", preferredEditors=");
+		sb.append(preferredEditors);
 		sb.append("}");
 
 		return sb.toString();
@@ -371,6 +375,7 @@ public class UserCacheModel implements CacheModel<User>, Externalizable,
 		userImpl.setAgreedToTermsOfUse(agreedToTermsOfUse);
 		userImpl.setEmailAddressVerified(emailAddressVerified);
 		userImpl.setStatus(status);
+		userImpl.setPreferredEditors(preferredEditors);
 
 		userImpl.resetOriginalValues();
 
@@ -378,7 +383,8 @@ public class UserCacheModel implements CacheModel<User>, Externalizable,
 	}
 
 	@Override
-	public void readExternal(ObjectInput objectInput) throws IOException {
+	public void readExternal(ObjectInput objectInput)
+		throws ClassNotFoundException, IOException {
 		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 		userId = objectInput.readLong();
@@ -420,6 +426,7 @@ public class UserCacheModel implements CacheModel<User>, Externalizable,
 		agreedToTermsOfUse = objectInput.readBoolean();
 		emailAddressVerified = objectInput.readBoolean();
 		status = objectInput.readInt();
+		preferredEditors = (Map<String, Serializable>)objectInput.readObject();
 	}
 
 	@Override
@@ -582,6 +589,7 @@ public class UserCacheModel implements CacheModel<User>, Externalizable,
 		objectOutput.writeBoolean(agreedToTermsOfUse);
 		objectOutput.writeBoolean(emailAddressVerified);
 		objectOutput.writeInt(status);
+		objectOutput.writeObject(preferredEditors);
 	}
 
 	public long mvccVersion;
@@ -625,4 +633,5 @@ public class UserCacheModel implements CacheModel<User>, Externalizable,
 	public boolean agreedToTermsOfUse;
 	public boolean emailAddressVerified;
 	public int status;
+	public Map<String, Serializable> preferredEditors;
 }

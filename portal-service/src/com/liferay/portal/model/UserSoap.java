@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is used by SOAP remote services, specifically {@link com.liferay.portal.service.http.UserServiceSoap}.
@@ -75,6 +76,7 @@ public class UserSoap implements Serializable {
 		soapModel.setAgreedToTermsOfUse(model.getAgreedToTermsOfUse());
 		soapModel.setEmailAddressVerified(model.getEmailAddressVerified());
 		soapModel.setStatus(model.getStatus());
+		soapModel.setPreferredEditors(model.getPreferredEditors());
 
 		return soapModel;
 	}
@@ -479,6 +481,14 @@ public class UserSoap implements Serializable {
 		_status = status;
 	}
 
+	public Map<String, Serializable> getPreferredEditors() {
+		return _preferredEditors;
+	}
+
+	public void setPreferredEditors(Map<String, Serializable> preferredEditors) {
+		_preferredEditors = preferredEditors;
+	}
+
 	private long _mvccVersion;
 	private String _uuid;
 	private long _userId;
@@ -520,4 +530,5 @@ public class UserSoap implements Serializable {
 	private boolean _agreedToTermsOfUse;
 	private boolean _emailAddressVerified;
 	private int _status;
+	private Map<String, Serializable> _preferredEditors;
 }
