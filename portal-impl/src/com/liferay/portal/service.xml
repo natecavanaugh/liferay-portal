@@ -2691,6 +2691,7 @@
 		<column name="agreedToTermsOfUse" type="boolean" />
 		<column name="emailAddressVerified" type="boolean" />
 		<column name="status" type="int" />
+		<column name="preferredEditors" type="Map" />
 
 		<!-- Relationships -->
 
