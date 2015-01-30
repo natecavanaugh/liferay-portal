@@ -18,28 +18,51 @@
 
 <%
 Properties editorProperties = EditorUtil.getAvailableEditorProperties();
+
+List<String> editorPropertyStrings = new ArrayList(editorProperties.stringPropertyNames());
+
+ListUtil.sort(editorPropertyStrings);
 %>
 
-<h3><liferay-ui:message key="preferred-editor-settings" /></h3>
+<h3><liferay-ui:message key="preferred-editors" /></h3>
 
 <aui:fieldset>
 
 	<%
-	for (String property : editorProperties.stringPropertyNames()) {
-		if (!StringUtil.endsWith(property, ".available")) {
+	for (String property : editorPropertyStrings) {
+		if (StringUtil.endsWith(property, ".available")) {
 			continue;
 		}
 
-		String[] availableEditors = EditorUtil.getAvailableEditors(property);
+		StringBuilder labelStringBuilder = new StringBuilder();
 
-		property = property.replace(".available", "");
+		String[] oldStrings = { "editor.wysiwyg.", "portal-web.docroot.html.", ".jsp", StringPool.UNDERLINE };
+		String[] replacements = { StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.DASH };
+
+
+		List<String> langKeys = ListUtil.fromString(
+					StringUtil.replace(property, oldStrings, replacements),
+					StringPool.PERIOD);
+
+		if (langKeys.size() > 1) {
+			Collections.swap(langKeys, 0, 1);
+		}
+
+		for (String langKey : langKeys) {
+			labelStringBuilder.append(LanguageUtil.get(request, langKey));
+			labelStringBuilder.append(StringPool.SPACE);
+		}
+
+		labelStringBuilder.append(LanguageUtil.get(request, "editor"));
+
+		String[] availableEditors = EditorUtil.getAvailableEditors(property + ".available");
 
 		String selectedEditor = EditorUtil.getEditorValue(request, property, user);
 
 		String camelizedProperty = CamelCaseUtil.toCamelCase(property.replace("-", "").replace("_",""), CharPool.PERIOD);
 	%>
 
-		<aui:select label="<%= camelizedProperty %>" name="<%= camelizedProperty %>">
+		<aui:select label="<%= labelStringBuilder.toString() %>" name="<%= camelizedProperty %>">
 
 			<aui:option label="default" selected='<%= selectedEditor.equals("default") || selectedEditor == null %>' value="default" />
 
