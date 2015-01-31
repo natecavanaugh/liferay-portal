@@ -12,28 +12,19 @@
  * details.
  */
 
-package com.liferay.arquillian.extension.persistence.internal.descriptor;
+package com.liferay.portal.test.util;
 
-import com.liferay.arquillian.extension.internal.descriptor.SpringDescriptor;
-import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.util.PropsUtil;
-
-import java.util.List;
+import com.liferay.portal.test.randomizerbumpers.UniqueStringRandomizerBumper;
 
 /**
  * @author Cristina González
  */
-public class PersistenceTestSpringDescriptorImpl implements SpringDescriptor {
+public class UniqueStringRandomizerBumperExecutorImpl
+	implements UniqueStringRandomizerBumperExecutor {
 
 	@Override
-	public List<String> getConfigLocations() {
-		List<String> configLocations = ListUtil.fromArray(
-			PropsUtil.getArray(PropsKeys.SPRING_CONFIGS));
-
-		configLocations.remove("META-INF/model-listener-spring.xml");
-
-		return configLocations;
+	public void reset() {
+		UniqueStringRandomizerBumper.reset();
 	}
 
 }
