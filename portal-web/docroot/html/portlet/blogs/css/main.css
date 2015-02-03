@@ -180,7 +180,7 @@
 			font-size: 20px;
 
 			a {
-		    	color: #2B4259;
+				color: #2B4259;
 				font-weight: bold;
 			}
 		}
@@ -226,7 +226,7 @@
 			display: block;
 
 			.previous-entry {
-				border-right: 0;
+				border-right-width: 0;
 				padding-right: inherit;
 			}
 
