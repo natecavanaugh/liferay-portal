@@ -127,4 +127,12 @@ public class CamelCaseUtil {
 		return sb.toString();
 	}
 
+	public static String toCamelCase(String s, char[] delimiters) {
+		for (char delimiter : delimiters) {
+			s = toCamelCase(s, delimiter);
+		}
+
+		return s;
+	}
+
 }

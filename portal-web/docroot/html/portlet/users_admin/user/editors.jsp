@@ -59,7 +59,9 @@ ListUtil.sort(editorPropertyStrings);
 
 		String selectedEditor = EditorUtil.getEditorValue(request, property, user);
 
-		String camelizedProperty = CamelCaseUtil.toCamelCase(property.replace("-", "").replace("_",""), CharPool.PERIOD);
+		char[] delimiters = { CharPool.UNDERLINE, CharPool.DASH, CharPool.PERIOD };
+
+		String camelizedProperty = CamelCaseUtil.toCamelCase(property, delimiters);
 	%>
 
 		<aui:select label="<%= labelStringBuilder.toString() %>" name="<%= camelizedProperty %>">

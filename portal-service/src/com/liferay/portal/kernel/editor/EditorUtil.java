@@ -79,8 +79,7 @@ public class EditorUtil {
 
 		for (String property : editorProperties.stringPropertyNames()) {
 			if (StringUtil.endsWith(property, "jsp") || StringUtil.endsWith(property, "default")) {
-				property = property.replace("_", "").replace("-", "");
-				property = CamelCaseUtil.toCamelCase(property, CharPool.PERIOD);
+				property = CamelCaseUtil.toCamelCase(property, _DELIMITERS);
 			}
 
 			propMap.put(property, StringPool.BLANK);
@@ -98,7 +97,8 @@ public class EditorUtil {
 
 		if (Validator.isNotNull(editorImpl)) {
 			if (Validator.isNotNull(preferredEditors)) {
-				String camelizedEditorImpl = CamelCaseUtil.toCamelCase(editorImpl.replace("-", "").replace("_",""), CharPool.PERIOD);
+				String camelizedEditorImpl = CamelCaseUtil.toCamelCase(
+					editorImpl, _DELIMITERS);
 
 				editorPreference = GetterUtil.getString(preferredEditors.get(camelizedEditorImpl));
 			}
@@ -130,5 +130,11 @@ public class EditorUtil {
 
 	private static final String _EDITOR_WYSIWYG_DEFAULT = PropsUtil.get(
 		PropsKeys.EDITOR_WYSIWYG_DEFAULT);
+
+	private static final char[] _DELIMITERS = {
+		CharPool.UNDERLINE,
+		CharPool.DASH,
+		CharPool.PERIOD
+	};
 
 }
