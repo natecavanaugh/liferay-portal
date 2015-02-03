@@ -15,9 +15,8 @@
 package com.liferay.portal.kernel.portlet.toolbar.contributor;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.servlet.taglib.ui.MenuItem;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -25,13 +24,11 @@ import javax.portlet.PortletResponse;
 /**
  * @author Sergio González
  */
-public interface PortletToolbarContributor {
+public interface PortletToolbarContributorTemplateRenderer {
 
-	public List<MenuItem> getContentAdditionMenuItems(
-		PortletRequest portletRequest);
-
-	public String getHTML(
-			PortletRequest portletRequest, PortletResponse portletResponse)
+	public String render(
+			PortletRequest portletRequest, PortletResponse portletResponse,
+			String script, Map<String, Object> contextObjects)
 		throws PortalException;
 
 }
