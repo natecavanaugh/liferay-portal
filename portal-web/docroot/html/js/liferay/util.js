@@ -1005,38 +1005,6 @@
 
 	Liferay.provide(
 		Util,
-		'moveItem',
-		function(fromBox, toBox, sort) {
-			fromBox = A.one(fromBox);
-			toBox = A.one(toBox);
-
-			var selectedIndex = fromBox.get('selectedIndex');
-
-			var selectedOption;
-
-			if (selectedIndex >= 0) {
-				var options = fromBox.all('option');
-
-				selectedOption = options.item(selectedIndex);
-
-				options.each(
-					function(item, index) {
-						if (item.get('selected')) {
-							toBox.append(item);
-						}
-					}
-				);
-			}
-
-			if (selectedOption && selectedOption.text() !== '' && sort === true) {
-				Util.sortBox(toBox);
-			}
-		},
-		['aui-base']
-	);
-
-	Liferay.provide(
-		Util,
 		'openDDMPortlet',
 		function(config, callback) {
 			var instance = this;
