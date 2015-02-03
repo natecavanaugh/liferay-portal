@@ -15,6 +15,7 @@
 package com.liferay.portlet.usersadmin.util;
 
 import com.liferay.portal.kernel.configuration.Filter;
+import com.liferay.portal.kernel.editor.EditorUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.search.Document;
@@ -94,12 +95,16 @@ import com.liferay.portal.util.comparator.UserJobTitleComparator;
 import com.liferay.portal.util.comparator.UserLastNameComparator;
 import com.liferay.portal.util.comparator.UserScreenNameComparator;
 
+import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.ActionRequest;
@@ -533,6 +538,23 @@ public class UsersAdminImpl implements UsersAdmin {
 		}
 
 		return addresses;
+	}
+
+	@Override
+	public Map<String, Serializable> getPreferredEditors(ActionRequest actionRequest) {
+		Map<String, Serializable> preferredEditorsMap = EditorUtil.getEditorPropertiesMap();
+
+	    Iterator itr = preferredEditorsMap.entrySet().iterator();
+
+	    while (itr.hasNext()) {
+	        Map.Entry pair = (Map.Entry)itr.next();
+
+	        String key = GetterUtil.getString(pair.getKey());
+
+	        pair.setValue(ParamUtil.getString(actionRequest, key));
+	    }
+
+		return preferredEditorsMap;
 	}
 
 	@Override

@@ -15,9 +15,24 @@
 package com.liferay.portal.kernel.editor;
 
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.CamelCaseUtil;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+
+import com.liferay.portal.model.User;
+
+import java.io.Serializable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +40,21 @@ import javax.servlet.http.HttpServletRequest;
  * @author Julio Camarero
  */
 public class EditorUtil {
+
+	public static Properties getAvailableEditorProperties() {
+		return PropsUtil.getProperties("editor.wysiwyg", false);
+	}
+
+	public static String[] getAvailableEditors(String editorImpl) {
+		String[] availableEditors = StringUtil.split(
+			PropsUtil.get(editorImpl), CharPool.COMMA);
+
+		return availableEditors;
+	}
+
+	public static String getDefaultEditorValue(String editorImpl) {
+		return PropsUtil.get(editorImpl);
+	}
 
 	public static String getEditorMode(String langType) {
 		String editorMode = "php";
@@ -42,11 +72,43 @@ public class EditorUtil {
 		return editorMode;
 	}
 
+	public static Map<String, Serializable> getEditorPropertiesMap() {
+		Map<String, Serializable> propMap = new HashMap<>();
+
+		Properties editorProperties = getAvailableEditorProperties();
+
+		for (String property : editorProperties.stringPropertyNames()) {
+			if (StringUtil.endsWith(property, "jsp") || StringUtil.endsWith(property, "default")) {
+				property = property.replace("_", "").replace("-", "");
+				property = CamelCaseUtil.toCamelCase(property, CharPool.PERIOD);
+			}
+
+			propMap.put(property, StringPool.BLANK);
+		}
+
+		return propMap;
+	}
+
 	public static String getEditorValue(
-		HttpServletRequest request, String editorImpl) {
+		HttpServletRequest request, String editorImpl, User user) {
+
+		Map<String, Serializable> preferredEditors = user.getPreferredEditors();
+
+		String editorPreference = StringPool.BLANK;
 
 		if (Validator.isNotNull(editorImpl)) {
-			editorImpl = PropsUtil.get(editorImpl);
+			if (Validator.isNotNull(preferredEditors)) {
+				String camelizedEditorImpl = CamelCaseUtil.toCamelCase(editorImpl.replace("-", "").replace("_",""), CharPool.PERIOD);
+
+				editorPreference = GetterUtil.getString(preferredEditors.get(camelizedEditorImpl));
+			}
+
+			if (Validator.isNull(editorPreference)) {
+				editorImpl = PropsUtil.get(editorImpl);
+			}
+			else {
+				editorImpl = editorPreference;
+			}
 		}
 
 		if (!BrowserSnifferUtil.isRtf(request)) {
@@ -54,7 +116,13 @@ public class EditorUtil {
 		}
 
 		if (Validator.isNull(editorImpl)) {
-			editorImpl = _EDITOR_WYSIWYG_DEFAULT;
+			if (Validator.isNotNull(preferredEditors)) {
+				editorImpl = GetterUtil.getString(preferredEditors.get("editorWysiwygDefault"));
+			}
+
+			if (Validator.isNull(editorImpl)) {
+				editorImpl = _EDITOR_WYSIWYG_DEFAULT;
+			}
 		}
 
 		return editorImpl;

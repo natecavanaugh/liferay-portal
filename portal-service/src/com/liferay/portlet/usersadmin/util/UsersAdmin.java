@@ -43,8 +43,12 @@ import com.liferay.portal.service.CountryServiceUtil;
 import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 
+import java.io.Serializable;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletRequest;
@@ -242,6 +246,9 @@ public interface UsersAdmin {
 
 	public List<Address> getAddresses(
 		ActionRequest actionRequest, List<Address> defaultAddresses);
+
+	public Map<String, Serializable> getPreferredEditors(
+			ActionRequest actionRequest);
 
 	public List<EmailAddress> getEmailAddresses(ActionRequest actionRequest);
 

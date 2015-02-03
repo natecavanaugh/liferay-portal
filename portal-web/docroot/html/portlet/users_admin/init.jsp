@@ -16,7 +16,9 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ page import="com.liferay.portal.AddressCityException" %><%@
+<%@ page import="com.liferay.portal.kernel.util.CamelCaseUtil" %><%@
+page import="com.liferay.portal.kernel.editor.EditorUtil" %><%@
+page import="com.liferay.portal.AddressCityException" %><%@
 page import="com.liferay.portal.AddressStreetException" %><%@
 page import="com.liferay.portal.AddressZipException" %><%@
 page import="com.liferay.portal.CompanyMaxUsersException" %><%@

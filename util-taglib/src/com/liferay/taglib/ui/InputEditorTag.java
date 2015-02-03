@@ -15,8 +15,10 @@
 package com.liferay.taglib.ui;
 
 import com.liferay.portal.kernel.editor.EditorUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Portlet;
+import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.taglib.util.IncludeTag;
 
@@ -165,10 +167,12 @@ public class InputEditorTag extends IncludeTag {
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
-		if (_contentsLanguageId == null) {
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
+		User user = themeDisplay.getUser();
+
+		if (_contentsLanguageId == null) {
 			_contentsLanguageId = themeDisplay.getLanguageId();
 		}
 
@@ -180,7 +184,11 @@ public class InputEditorTag extends IncludeTag {
 			cssClasses += portlet.getCssClassWrapper();
 		}
 
-		String editorImpl = EditorUtil.getEditorValue(request, _editorImpl);
+		String editorImpl = EditorUtil.getEditorValue(request, _editorImpl, user);
+
+		if (editorImpl == "default" || Validator.isNull(editorImpl)) {
+			editorImpl = EditorUtil.getDefaultEditorValue(editorImpl);
+		}
 
 		_page = "/html/js/editor/" + editorImpl + ".jsp";
 
