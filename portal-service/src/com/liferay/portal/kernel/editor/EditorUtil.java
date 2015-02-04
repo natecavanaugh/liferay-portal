@@ -88,26 +88,37 @@ public class EditorUtil {
 		return propMap;
 	}
 
-	public static String getEditorValue(
+	public static String getUserEditorValue(
 		HttpServletRequest request, String editorImpl, User user) {
-
 		Map<String, Serializable> preferredEditors = user.getPreferredEditors();
 
-		String editorPreference = StringPool.BLANK;
-
-		if (Validator.isNotNull(editorImpl)) {
-			if (Validator.isNotNull(preferredEditors)) {
-				String camelizedEditorImpl = CamelCaseUtil.toCamelCase(
+		if (Validator.isNotNull(preferredEditors)) {
+			String camelizedEditorImpl = CamelCaseUtil.toCamelCase(
 					editorImpl, _DELIMITERS);
 
-				editorPreference = GetterUtil.getString(preferredEditors.get(camelizedEditorImpl));
-			}
+			String editorPreference = GetterUtil.getString(
+				preferredEditors.get(camelizedEditorImpl));
 
-			if (Validator.isNull(editorPreference)) {
-				editorImpl = PropsUtil.get(editorImpl);
-			}
-			else {
+			if (Validator.isNotNull(editorPreference)) {
 				editorImpl = editorPreference;
+			}
+		}
+
+		return editorImpl;
+	}
+
+	public static String getEditorValue(
+		HttpServletRequest request, String editorImpl, User user) {
+		String originalEditorImpl = editorImpl;
+
+		if (Validator.isNotNull(editorImpl)) {
+			editorImpl = getUserEditorValue(request, editorImpl, user);
+			String temp = PropsUtil.get(originalEditorImpl);
+
+			if (editorImpl.equals("default") ||
+				(editorImpl.equals(originalEditorImpl) &&
+				Validator.isNotNull(temp))) {
+					editorImpl = PropsUtil.get(originalEditorImpl);
 			}
 		}
 
@@ -116,13 +127,7 @@ public class EditorUtil {
 		}
 
 		if (Validator.isNull(editorImpl)) {
-			if (Validator.isNotNull(preferredEditors)) {
-				editorImpl = GetterUtil.getString(preferredEditors.get("editorWysiwygDefault"));
-			}
-
-			if (Validator.isNull(editorImpl)) {
-				editorImpl = _EDITOR_WYSIWYG_DEFAULT;
-			}
+			editorImpl = _EDITOR_WYSIWYG_DEFAULT;
 		}
 
 		return editorImpl;

@@ -57,7 +57,7 @@ ListUtil.sort(editorPropertyStrings);
 
 		String[] availableEditors = EditorUtil.getAvailableEditors(property + ".available");
 
-		String selectedEditor = EditorUtil.getEditorValue(request, property, user);
+		String selectedEditor = EditorUtil.getUserEditorValue(request, property, user);
 
 		char[] delimiters = { CharPool.UNDERLINE, CharPool.DASH, CharPool.PERIOD };
 

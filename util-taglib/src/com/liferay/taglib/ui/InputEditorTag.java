@@ -186,10 +186,6 @@ public class InputEditorTag extends IncludeTag {
 
 		String editorImpl = EditorUtil.getEditorValue(request, _editorImpl, user);
 
-		if (editorImpl == "default" || Validator.isNull(editorImpl)) {
-			editorImpl = EditorUtil.getDefaultEditorValue(editorImpl);
-		}
-
 		_page = "/html/js/editor/" + editorImpl + ".jsp";
 
 		request.setAttribute(
