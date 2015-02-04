@@ -45,7 +45,6 @@ import com.liferay.portal.service.RoleLocalServiceUtil;
 
 import java.io.Serializable;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -247,9 +246,6 @@ public interface UsersAdmin {
 	public List<Address> getAddresses(
 		ActionRequest actionRequest, List<Address> defaultAddresses);
 
-	public Map<String, Serializable> getPreferredEditors(
-			ActionRequest actionRequest);
-
 	public List<EmailAddress> getEmailAddresses(ActionRequest actionRequest);
 
 	public List<EmailAddress> getEmailAddresses(
@@ -278,6 +274,9 @@ public interface UsersAdmin {
 
 	public List<Phone> getPhones(
 		ActionRequest actionRequest, List<Phone> defaultPhones);
+
+	public Map<String, Serializable> getPreferredEditors(
+		ActionRequest actionRequest);
 
 	public long[] getRoleIds(PortletRequest portletRequest)
 		throws PortalException;

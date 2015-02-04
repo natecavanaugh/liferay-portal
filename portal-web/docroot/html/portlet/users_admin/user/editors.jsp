@@ -39,7 +39,6 @@ ListUtil.sort(editorPropertyStrings);
 		String[] oldStrings = { "editor.wysiwyg.", "portal-web.docroot.html.", ".jsp", StringPool.UNDERLINE };
 		String[] replacements = { StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.DASH };
 
-
 		List<String> langKeys = ListUtil.fromString(
 					StringUtil.replace(property, oldStrings, replacements),
 					StringPool.PERIOD);
@@ -81,6 +80,7 @@ ListUtil.sort(editorPropertyStrings);
 			<%
 			for (String editor : availableEditors) {
 			%>
+
 				<c:if test="<%= !editor.equals(systemDefaultEditor) %>">
 					<aui:option label="<%= editor %>" selected="<%= editor.equals(selectedEditor) %>" value="<%= editor %>" />
 				</c:if>
@@ -93,6 +93,6 @@ ListUtil.sort(editorPropertyStrings);
 
 	<%
 	}
-
 	%>
+
 </aui:fieldset>

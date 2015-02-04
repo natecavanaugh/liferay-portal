@@ -36,7 +36,6 @@ import com.liferay.portal.security.permission.PermissionChecker;
 
 import java.io.Serializable;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -154,12 +153,6 @@ public class UsersAdminUtil {
 		return getUsersAdmin().getAddresses(actionRequest, defaultAddresses);
 	}
 
-	public static Map<String, Serializable> getPreferredEditors(
-		ActionRequest actionRequest) {
-
-		return getUsersAdmin().getPreferredEditors(actionRequest);
-	}
-
 	public static List<EmailAddress> getEmailAddresses(
 		ActionRequest actionRequest) {
 
@@ -222,6 +215,12 @@ public class UsersAdminUtil {
 		ActionRequest actionRequest, List<Phone> defaultPhones) {
 
 		return getUsersAdmin().getPhones(actionRequest, defaultPhones);
+	}
+
+	public static Map<String, Serializable> getPreferredEditors(
+		ActionRequest actionRequest) {
+
+		return getUsersAdmin().getPreferredEditors(actionRequest);
 	}
 
 	public static long[] getRoleIds(PortletRequest portletRequest)

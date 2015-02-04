@@ -15,17 +15,14 @@
 package com.liferay.portal.kernel.editor;
 
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CamelCaseUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-
 import com.liferay.portal.model.User;
 
 import java.io.Serializable;
@@ -83,33 +80,14 @@ public class EditorUtil {
 
 				propMap.put(property, StringPool.BLANK);
 			}
-
 		}
 
 		return propMap;
 	}
 
-	public static String getUserEditorValue(
-		HttpServletRequest request, String editorImpl, User user) {
-		Map<String, Serializable> preferredEditors = user.getPreferredEditors();
-
-		if (Validator.isNotNull(preferredEditors)) {
-			String camelizedEditorImpl = CamelCaseUtil.toCamelCase(
-					editorImpl, _DELIMITERS);
-
-			String editorPreference = GetterUtil.getString(
-				preferredEditors.get(camelizedEditorImpl));
-
-			if (Validator.isNotNull(editorPreference)) {
-				editorImpl = editorPreference;
-			}
-		}
-
-		return editorImpl;
-	}
-
 	public static String getEditorValue(
 		HttpServletRequest request, String editorImpl, User user) {
+
 		String originalEditorImpl = editorImpl;
 
 		if (Validator.isNotNull(editorImpl)) {
@@ -118,7 +96,7 @@ public class EditorUtil {
 
 			if (editorImpl.equals("default") ||
 				(editorImpl.equals(originalEditorImpl) &&
-				Validator.isNotNull(temp))) {
+				 Validator.isNotNull(temp))) {
 					editorImpl = PropsUtil.get(originalEditorImpl);
 			}
 		}
@@ -134,13 +112,31 @@ public class EditorUtil {
 		return editorImpl;
 	}
 
-	private static final String _EDITOR_WYSIWYG_DEFAULT = PropsUtil.get(
-		PropsKeys.EDITOR_WYSIWYG_DEFAULT);
+	public static String getUserEditorValue(
+		HttpServletRequest request, String editorImpl, User user) {
+
+		Map<String, Serializable> preferredEditors = user.getPreferredEditors();
+
+		if (Validator.isNotNull(preferredEditors)) {
+			String camelizedEditorImpl = CamelCaseUtil.toCamelCase(
+				editorImpl, _DELIMITERS);
+
+			String editorPreference = GetterUtil.getString(
+				preferredEditors.get(camelizedEditorImpl));
+
+			if (Validator.isNotNull(editorPreference)) {
+				editorImpl = editorPreference;
+			}
+		}
+
+		return editorImpl;
+	}
 
 	private static final char[] _DELIMITERS = {
-		CharPool.UNDERLINE,
-		CharPool.DASH,
-		CharPool.PERIOD
+		CharPool.UNDERLINE, CharPool.DASH, CharPool.PERIOD
 	};
+
+	private static final String _EDITOR_WYSIWYG_DEFAULT = PropsUtil.get(
+		PropsKeys.EDITOR_WYSIWYG_DEFAULT);
 
 }

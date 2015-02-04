@@ -99,7 +99,6 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -541,23 +540,6 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	@Override
-	public Map<String, Serializable> getPreferredEditors(ActionRequest actionRequest) {
-		Map<String, Serializable> preferredEditorsMap = EditorUtil.getEditorPropertiesMap();
-
-	    Iterator itr = preferredEditorsMap.entrySet().iterator();
-
-	    while (itr.hasNext()) {
-	        Map.Entry pair = (Map.Entry)itr.next();
-
-	        String key = GetterUtil.getString(pair.getKey());
-
-	        pair.setValue(ParamUtil.getString(actionRequest, key));
-	    }
-
-		return preferredEditorsMap;
-	}
-
-	@Override
 	public List<EmailAddress> getEmailAddresses(ActionRequest actionRequest) {
 		return getEmailAddresses(
 			actionRequest, Collections.<EmailAddress>emptyList());
@@ -873,6 +855,26 @@ public class UsersAdminImpl implements UsersAdmin {
 		}
 
 		return phones;
+	}
+
+	@Override
+	public Map<String, Serializable> getPreferredEditors(
+		ActionRequest actionRequest) {
+
+		Map<String, Serializable> preferredEditorsMap =
+			EditorUtil.getEditorPropertiesMap();
+
+		Iterator itr = preferredEditorsMap.entrySet().iterator();
+
+		while (itr.hasNext()) {
+			Map.Entry pair = (Map.Entry)itr.next();
+
+			String key = GetterUtil.getString(pair.getKey());
+
+			pair.setValue(ParamUtil.getString(actionRequest, key));
+		}
+
+		return preferredEditorsMap;
 	}
 
 	@Override

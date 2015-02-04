@@ -16,9 +16,7 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ page import="com.liferay.portal.kernel.util.CamelCaseUtil" %><%@
-page import="com.liferay.portal.kernel.editor.EditorUtil" %><%@
-page import="com.liferay.portal.AddressCityException" %><%@
+<%@ page import="com.liferay.portal.AddressCityException" %><%@
 page import="com.liferay.portal.AddressStreetException" %><%@
 page import="com.liferay.portal.AddressZipException" %><%@
 page import="com.liferay.portal.CompanyMaxUsersException" %><%@
@@ -46,6 +44,7 @@ page import="com.liferay.portal.UserPasswordException" %><%@
 page import="com.liferay.portal.UserScreenNameException" %><%@
 page import="com.liferay.portal.UserSmsException" %><%@
 page import="com.liferay.portal.WebsiteURLException" %><%@
+page import="com.liferay.portal.kernel.editor.EditorUtil" %><%@
 page import="com.liferay.portal.kernel.util.CamelCaseUtil" %><%@
 page import="com.liferay.portal.security.auth.FullNameDefinition" %><%@
 page import="com.liferay.portal.security.auth.FullNameDefinitionFactory" %><%@

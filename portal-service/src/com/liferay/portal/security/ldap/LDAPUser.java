@@ -357,6 +357,7 @@ public class LDAPUser {
 
 	public void setPreferredEditors(
 		Map<String, Serializable> preferredEditors) {
+
 		_user.setPreferredEditors(preferredEditors);
 	}
 

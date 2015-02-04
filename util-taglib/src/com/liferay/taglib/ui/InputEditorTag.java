@@ -15,7 +15,6 @@
 package com.liferay.taglib.ui;
 
 import com.liferay.portal.kernel.editor.EditorUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
@@ -184,7 +183,8 @@ public class InputEditorTag extends IncludeTag {
 			cssClasses += portlet.getCssClassWrapper();
 		}
 
-		String editorImpl = EditorUtil.getEditorValue(request, _editorImpl, user);
+		String editorImpl = EditorUtil.getEditorValue(
+			request, _editorImpl, user);
 
 		_page = "/html/js/editor/" + editorImpl + ".jsp";
 
