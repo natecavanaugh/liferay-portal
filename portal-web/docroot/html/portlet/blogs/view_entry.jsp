@@ -82,42 +82,96 @@ request.setAttribute("view_entry_content.jsp-assetEntry", assetEntry);
 	BlogsEntry nextEntry = prevAndNext[2];
 	%>
 
-	<div class="entry-navigation">
-		<c:choose>
-			<c:when test="<%= previousEntry != null %>">
-				<portlet:renderURL var="previousEntryURL">
-					<portlet:param name="struts_action" value="/blogs/view_entry" />
-					<portlet:param name="redirect" value="<%= redirect %>" />
-					<portlet:param name="entryId" value="<%= String.valueOf(previousEntry.getEntryId()) %>" />
-				</portlet:renderURL>
+	<c:if test="<%= (previousEntry != null) || (nextEntry != null) %>">
+		<div class="container-fluid entry-navigation">
+			<div class="col-md-6 col-sm-6 previous-entry">
+				<c:if test="<%= previousEntry != null %>">
+					<h2><liferay-ui:message key="previous-entry" /></h2>
 
-				<aui:a cssClass="icon-circle-arrow-left" href="<%= previousEntryURL %>" label="previous" />
-			</c:when>
-			<c:otherwise>
-				<span class="icon-circle-arrow-left"><liferay-ui:message key="previous" /></span>
-			</c:otherwise>
-		</c:choose>
+					<portlet:renderURL var="previousEntryURL">
+						<portlet:param name="struts_action" value="/blogs/view_entry" />
+						<portlet:param name="redirect" value="<%= redirect %>" />
+						<portlet:param name="entryId" value="<%= String.valueOf(previousEntry.getEntryId()) %>" />
+					</portlet:renderURL>
 
-		<c:choose>
-			<c:when test="<%= nextEntry != null %>">
-				<portlet:renderURL var="nextEntryURL">
-					<portlet:param name="struts_action" value="/blogs/view_entry" />
-					<portlet:param name="redirect" value="<%= redirect %>" />
-					<portlet:param name="entryId" value="<%= String.valueOf(nextEntry.getEntryId()) %>" />
-				</portlet:renderURL>
+					<%
+					String smallImageURL = previousEntry.getSmallImageURL(themeDisplay);
+					%>
 
-				<aui:a cssClass="next" href="<%= nextEntryURL %>" label="next">
-					<i class="icon-circle-arrow-right"></i>
-				</aui:a>
-			</c:when>
-			<c:otherwise>
-				<span class="next">
-					<liferay-ui:message key="next" />
-					<i class="icon-circle-arrow-right"></i>
-				</span>
-			</c:otherwise>
-		</c:choose>
-	</div>
+					<c:if test="<%= Validator.isNotNull(smallImageURL) %>">
+						<div class="small-image-wrapper visible-lg-block visible-md-block" style="background-image: url(<%= HtmlUtil.escape(smallImageURL) %>)"></div>
+					</c:if>
+
+					<div class="entry-content-wrapper">
+						<h3><a href="<%= previousEntryURL %>"><%= previousEntry.getTitle() %></a></h3>
+
+						<c:choose>
+							<c:when test="<%= Validator.isNotNull(previousEntry.getSubtitle()) %>">
+								<p class="entry-subtitle visible-lg-block">
+									<%= StringUtil.shorten(previousEntry.getSubtitle(), 100) %>
+								</p>
+							</c:when>
+							<c:otherwise>
+								<p class="entry-content visible-lg-block">
+									<%= StringUtil.shorten(HtmlUtil.stripHtml(previousEntry.getContent()), 100) %>
+								</p>
+							</c:otherwise>
+						</c:choose>
+
+						<liferay-ui:user-display
+							userId="<%= previousEntry.getUserId() %>"
+							userName="<%= previousEntry.getUserName() %>"
+						>
+							<liferay-ui:message arguments="<%= LanguageUtil.getTimeDescription(request, System.currentTimeMillis() - previousEntry.getCreateDate().getTime(), true) %>" key="x-ago" translateArguments="<%= false %>" />
+						</liferay-ui:user-display>
+					</div>
+				</c:if>
+			</div>
+			<div class="col-md-6 col-sm-6 next-entry">
+				<c:if test="<%= nextEntry != null %>">
+					<h2><liferay-ui:message key="next-entry" /></h2>
+
+					<portlet:renderURL var="nextEntryURL">
+						<portlet:param name="struts_action" value="/blogs/view_entry" />
+						<portlet:param name="redirect" value="<%= redirect %>" />
+						<portlet:param name="entryId" value="<%= String.valueOf(nextEntry.getEntryId()) %>" />
+					</portlet:renderURL>
+
+					<%
+					String smallImageURL = nextEntry.getSmallImageURL(themeDisplay);
+					%>
+
+					<c:if test="<%= Validator.isNotNull(smallImageURL) %>">
+						<div class="small-image-wrapper visible-lg-block visible-md-block" style="background-image: url(<%= HtmlUtil.escape(smallImageURL) %>)"></div>
+					</c:if>
+
+					<div class="entry-content-wrapper">
+						<h3><a href="<%= nextEntryURL %>"><%= nextEntry.getTitle() %></a></h3>
+
+						<c:choose>
+							<c:when test="<%= Validator.isNotNull(nextEntry.getSubtitle()) %>">
+								<p class="entry-subtitle visible-lg-block">
+									<%= StringUtil.shorten(nextEntry.getSubtitle(), 100) %>
+								</p>
+							</c:when>
+							<c:otherwise>
+								<p class="entry-content visible-lg-block">
+									<%= StringUtil.shorten(HtmlUtil.stripHtml(nextEntry.getContent()), 100) %>
+								</p>
+							</c:otherwise>
+						</c:choose>
+
+						<liferay-ui:user-display
+							userId="<%= nextEntry.getUserId() %>"
+							userName="<%= nextEntry.getUserName() %>"
+						>
+							<liferay-ui:message arguments="<%= LanguageUtil.getTimeDescription(request, System.currentTimeMillis() - nextEntry.getCreateDate().getTime(), true) %>" key="x-ago" translateArguments="<%= false %>" />
+						</liferay-ui:user-display>
+					</div>
+				</c:if>
+			</div>
+		</div>
+	</c:if>
 </c:if>
 
 <c:if test="<%= blogsPortletInstanceSettings.isEnableComments() %>">

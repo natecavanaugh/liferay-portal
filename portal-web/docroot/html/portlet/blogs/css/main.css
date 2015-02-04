@@ -1,3 +1,5 @@
+@import "mixins";
+
 @import url(common_main.css);
 
 .portlet-blogs {
@@ -164,18 +166,74 @@
 	}
 
 	.entry-navigation {
-		background: #EEE;
-		border-top: 1px solid #B0B4BB;
-		margin: 15px 0 0;
-		overflow: hidden;
-		padding: 5px;
+		display: table;
+		margin: 40px 0;
+		width: 100%;
 
-		.previous {
-			float: left;
+		h2 {
+			color: #868896;
+			font-size: 20px;
+			font-weight: 400;
 		}
 
-		.next {
+		h3 {
+			font-size: 20px;
+
+			a {
+				color: #2B4259;
+				font-weight: bold;
+			}
+		}
+
+		.entry-subtitle {
+			font-size: 18px;
+			font-weight: 400;
+		}
+
+		.entry-content {
+			font-size: 16px;
+		}
+
+		.small-image-wrapper {
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
 			float: right;
+			height: 140px;
+			margin: 20px 0 0 60px;
+			width: 140px;
+		}
+
+		.previous-entry {
+			border-right: 1px solid #CCC;
+			padding-right: 5%;
+		}
+
+		.next-entry {
+			padding-left: 5%;
+		}
+
+		.previous-entry, .next-entry {
+			display: table-cell;
+			float: inherit;
+		}
+
+		.entry-content-wrapper {
+			overflow: hidden;
+		}
+
+		@include respond-to(phone) {
+			display: block;
+
+			.previous-entry {
+				border-right-width: 0;
+				padding-right: inherit;
+			}
+
+			.next-entry {
+				margin-top: 40px;
+				padding-left: inherit;
+			}
 		}
 	}
 
