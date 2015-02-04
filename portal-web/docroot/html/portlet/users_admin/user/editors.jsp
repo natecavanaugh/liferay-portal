@@ -55,6 +55,16 @@ ListUtil.sort(editorPropertyStrings);
 
 		labelStringBuilder.append(LanguageUtil.get(request, "editor"));
 
+		StringBuilder defaultOptionLabelStringBuilder = new StringBuilder();
+
+		String systemDefaultEditor = PropsUtil.get(property);
+
+		defaultOptionLabelStringBuilder.append(LanguageUtil.get(request, systemDefaultEditor));
+		defaultOptionLabelStringBuilder.append(StringPool.SPACE);
+		defaultOptionLabelStringBuilder.append(StringPool.OPEN_PARENTHESIS);
+		defaultOptionLabelStringBuilder.append(LanguageUtil.get(request, "system-default"));
+		defaultOptionLabelStringBuilder.append(StringPool.CLOSE_PARENTHESIS);
+
 		String[] availableEditors = EditorUtil.getAvailableEditors(property + ".available");
 
 		String selectedEditor = EditorUtil.getUserEditorValue(request, property, user);
@@ -66,13 +76,14 @@ ListUtil.sort(editorPropertyStrings);
 
 		<aui:select label="<%= labelStringBuilder.toString() %>" name="<%= camelizedProperty %>">
 
-			<aui:option label="default" selected='<%= selectedEditor.equals("default") || selectedEditor == null %>' value="default" />
+			<aui:option label="<%= defaultOptionLabelStringBuilder.toString() %>" selected='<%= selectedEditor.equals("default") || selectedEditor == null %>' value="default" />
 
 			<%
 			for (String editor : availableEditors) {
 			%>
-
-				<aui:option label="<%= editor %>" selected="<%= editor.equals(selectedEditor) %>" value="<%= editor %>" />
+				<c:if test="<%= !editor.equals(systemDefaultEditor) %>">
+					<aui:option label="<%= editor %>" selected="<%= editor.equals(selectedEditor) %>" value="<%= editor %>" />
+				</c:if>
 
 			<%
 			}
