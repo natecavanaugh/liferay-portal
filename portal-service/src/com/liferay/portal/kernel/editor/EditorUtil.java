@@ -78,11 +78,12 @@ public class EditorUtil {
 		Properties editorProperties = getAvailableEditorProperties();
 
 		for (String property : editorProperties.stringPropertyNames()) {
-			if (StringUtil.endsWith(property, "jsp") || StringUtil.endsWith(property, "default")) {
+			if (!StringUtil.endsWith(property, "available")) {
 				property = CamelCaseUtil.toCamelCase(property, _DELIMITERS);
+
+				propMap.put(property, StringPool.BLANK);
 			}
 
-			propMap.put(property, StringPool.BLANK);
 		}
 
 		return propMap;
