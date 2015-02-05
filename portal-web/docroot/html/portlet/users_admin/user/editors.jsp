@@ -17,11 +17,9 @@
 <%@ include file="/html/portlet/users_admin/init.jsp" %>
 
 <%
-Properties editorProperties = EditorUtil.getAvailableEditorProperties();
+List<String> editorProperties = new ArrayList(EditorUtil.getAvailableEditorProperties().stringPropertyNames());
 
-List<String> editorPropertyStrings = new ArrayList(editorProperties.stringPropertyNames());
-
-ListUtil.sort(editorPropertyStrings);
+ListUtil.sort(editorProperties);
 %>
 
 <h3><liferay-ui:message key="preferred-editors" /></h3>
@@ -29,19 +27,18 @@ ListUtil.sort(editorPropertyStrings);
 <aui:fieldset>
 
 	<%
-	for (String property : editorPropertyStrings) {
-		if (StringUtil.endsWith(property, ".available")) {
+	for (String editorProperty : editorProperties) {
+		if (StringUtil.endsWith(editorProperty, ".available")) {
 			continue;
 		}
 
+		String systemDefaultEditor = PropsUtil.get(editorProperty);
+		String selectedEditor = EditorUtil.getUserEditorValue(editorProperty, user);
+
 		StringBuilder labelStringBuilder = new StringBuilder();
+		StringBuilder defaultOptionLabelStringBuilder = new StringBuilder();
 
-		String[] oldStrings = { "editor.wysiwyg.", "portal-web.docroot.html.", ".jsp", StringPool.UNDERLINE };
-		String[] replacements = { StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.DASH };
-
-		List<String> langKeys = ListUtil.fromString(
-					StringUtil.replace(property, oldStrings, replacements),
-					StringPool.PERIOD);
+		List<String> langKeys = ListUtil.fromString(StringUtil.replace(editorProperty, _OLD_STRINGS, _REPLACEMENTS), StringPool.PERIOD);
 
 		if (langKeys.size() > 1) {
 			Collections.swap(langKeys, 0, 1);
@@ -54,31 +51,20 @@ ListUtil.sort(editorPropertyStrings);
 
 		labelStringBuilder.append(LanguageUtil.get(request, "editor"));
 
-		StringBuilder defaultOptionLabelStringBuilder = new StringBuilder();
-
-		String systemDefaultEditor = PropsUtil.get(property);
-
 		defaultOptionLabelStringBuilder.append(LanguageUtil.get(request, systemDefaultEditor));
 		defaultOptionLabelStringBuilder.append(StringPool.SPACE);
 		defaultOptionLabelStringBuilder.append(StringPool.OPEN_PARENTHESIS);
 		defaultOptionLabelStringBuilder.append(LanguageUtil.get(request, "system-default"));
 		defaultOptionLabelStringBuilder.append(StringPool.CLOSE_PARENTHESIS);
 
-		String[] availableEditors = EditorUtil.getAvailableEditors(property + ".available");
-
-		String selectedEditor = EditorUtil.getUserEditorValue(request, property, user);
-
-		char[] delimiters = { CharPool.UNDERLINE, CharPool.DASH, CharPool.PERIOD };
-
-		String camelizedProperty = CamelCaseUtil.toCamelCase(property, delimiters);
 	%>
 
-		<aui:select label="<%= labelStringBuilder.toString() %>" name="<%= camelizedProperty %>">
+		<aui:select label="<%= labelStringBuilder.toString() %>" name="<%= CamelCaseUtil.toCamelCase(editorProperty, _DELIMITERS) %>">
 
 			<aui:option label="<%= defaultOptionLabelStringBuilder.toString() %>" selected='<%= selectedEditor.equals("default") || selectedEditor == null %>' value="default" />
 
 			<%
-			for (String editor : availableEditors) {
+			for (String editor : EditorUtil.getAvailableEditors(editorProperty + ".available")) {
 			%>
 
 				<c:if test="<%= !editor.equals(systemDefaultEditor) %>">
@@ -96,3 +82,9 @@ ListUtil.sort(editorPropertyStrings);
 	%>
 
 </aui:fieldset>
+
+<%!
+private static final char[] _DELIMITERS = {CharPool.UNDERLINE, CharPool.DASH, CharPool.PERIOD};
+private static final String[] _OLD_STRINGS = {"editor.wysiwyg.", "portal-web.docroot.html.", ".jsp", StringPool.UNDERLINE};
+private static final String[] _REPLACEMENTS = {StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, StringPool.DASH};
+%>

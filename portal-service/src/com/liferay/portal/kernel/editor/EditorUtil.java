@@ -88,16 +88,14 @@ public class EditorUtil {
 	public static String getEditorValue(
 		HttpServletRequest request, String editorImpl, User user) {
 
-		String originalEditorImpl = editorImpl;
+		String editorPropsKey = editorImpl;
 
 		if (Validator.isNotNull(editorImpl)) {
-			editorImpl = getUserEditorValue(request, editorImpl, user);
-			String temp = PropsUtil.get(originalEditorImpl);
+			editorImpl = getUserEditorValue(editorImpl, user);
 
 			if (editorImpl.equals("default") ||
-				(editorImpl.equals(originalEditorImpl) &&
-				 Validator.isNotNull(temp))) {
-					editorImpl = PropsUtil.get(originalEditorImpl);
+				(editorImpl.equals(editorPropsKey))) {
+				editorImpl = PropsUtil.get(editorPropsKey);
 			}
 		}
 
@@ -112,20 +110,17 @@ public class EditorUtil {
 		return editorImpl;
 	}
 
-	public static String getUserEditorValue(
-		HttpServletRequest request, String editorImpl, User user) {
+	public static String getUserEditorValue(String editorImpl, User user) {
 
 		Map<String, Serializable> preferredEditors = user.getPreferredEditors();
 
 		if (Validator.isNotNull(preferredEditors)) {
-			String camelizedEditorImpl = CamelCaseUtil.toCamelCase(
-				editorImpl, _DELIMITERS);
+			String userPreference = GetterUtil.getString(
+				preferredEditors.get(
+					CamelCaseUtil.toCamelCase(editorImpl, _DELIMITERS)));
 
-			String editorPreference = GetterUtil.getString(
-				preferredEditors.get(camelizedEditorImpl));
-
-			if (Validator.isNotNull(editorPreference)) {
-				editorImpl = editorPreference;
+			if (Validator.isNotNull(userPreference)) {
+				editorImpl = userPreference;
 			}
 		}
 
