@@ -104,6 +104,13 @@ public class EditorUtil {
 		}
 
 		if (Validator.isNull(editorImpl)) {
+			editorImpl = getUserEditorValue(
+				PropsKeys.EDITOR_WYSIWYG_DEFAULT, user);
+		}
+
+		if (Validator.isNull(editorImpl) ||
+			editorImpl.equals("default")) {
+
 			editorImpl = _EDITOR_WYSIWYG_DEFAULT;
 		}
 
