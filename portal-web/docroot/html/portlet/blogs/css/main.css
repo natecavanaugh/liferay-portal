@@ -1,3 +1,6 @@
+@import "bourbon";
+@import "mixins";
+
 @import url(common_main.css);
 
 .portlet-blogs {
@@ -11,7 +14,7 @@
 
 	.edit-entry {
 		h3 {
-			color: #2B4256;
+			color: #2B4259;
 			font-size: 22px;
 			margin-top: 0;
 		}
@@ -44,7 +47,7 @@
 	}
 
 	.entry-abstract-wrapper {
-		color: #2B4256;
+		color: #2B4259;
 
 		.entry-abstract-options {
 			margin-top: 20px;
@@ -98,7 +101,7 @@
 	}
 
 	.alloy-editor-placeholder {
-		color: #2B4256;
+		color: #2B4259;
 		padding-left: 10px;
 
 		&:empty:not(:focus) {
@@ -164,18 +167,77 @@
 	}
 
 	.entry-navigation {
-		background: #EEE;
-		border-top: 1px solid #B0B4BB;
-		margin: 15px 0 0;
-		overflow: hidden;
-		padding: 5px;
+		margin: 40px 0;
+		width: 100%;
 
-		.previous {
-			float: left;
+		h2 {
+			color: #868896;
+			font-size: 20px;
+			font-weight: 400;
+
+			@include ellipsis;
 		}
 
-		.next {
+		h3 {
+			font-size: 20px;
+			margin-top: 0;
+
+			a {
+				color: #2B4259;
+				font-weight: bold;
+			}
+
+			@include ellipsis;
+		}
+
+		.entry-content {
+			font-size: 18px;
+			font-weight: 400;
+		}
+
+		.small-image-wrapper {
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
 			float: right;
+			height: 140px;
+			margin-left: 60px;
+			width: 140px;
+		}
+
+		.next-entry-wrapper {
+			padding-left: 30px;
+		}
+
+		.previous-entry-wrapper {
+			.previous-entry {
+				border-right: 1px solid #CCC;
+				padding-right: 60px;
+			}
+		}
+
+		.next-entry, .previous-entry {
+			margin-top: 5px;
+			padding-bottom: 10px;
+		}
+
+		.entry-content-wrapper {
+			overflow: hidden;
+		}
+
+		@include respond-to(phone) {
+			.next-entry-wrapper {
+				margin-top: 20px;
+				padding: 0;
+			}
+
+			.previous-entry-wrapper {
+					padding: 0;
+
+				.previous-entry {
+					border-right-width: 0;
+				}
+			}
 		}
 	}
 
