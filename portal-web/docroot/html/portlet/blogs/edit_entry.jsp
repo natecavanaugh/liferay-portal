@@ -396,7 +396,7 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 
 	function <portlet:namespace />OnDescriptionEditorInit() {
 		<c:if test="<%= !customAbstract %>">
-			document.getElementById('<portlet:namespace />description').setAttribute('contenteditable', false);
+			document.getElementById('<portlet:namespace />descriptionEditor').setAttribute('contenteditable', false);
 		</c:if>
 	}
 
