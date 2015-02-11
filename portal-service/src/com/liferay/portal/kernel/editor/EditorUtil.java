@@ -94,8 +94,8 @@ public class EditorUtil {
 			editorImpl = getUserEditorValue(editorImpl, user);
 
 			if (editorImpl.equals("default") ||
-				(editorImpl.equals(editorPropsKey))) {
-				editorImpl = PropsUtil.get(editorPropsKey);
+				editorImpl.equals(editorPropsKey)) {
+					editorImpl = PropsUtil.get(editorPropsKey);
 			}
 		}
 
@@ -108,9 +108,7 @@ public class EditorUtil {
 				PropsKeys.EDITOR_WYSIWYG_DEFAULT, user);
 		}
 
-		if (Validator.isNull(editorImpl) ||
-			editorImpl.equals("default")) {
-
+		if (Validator.isNull(editorImpl) || editorImpl.equals("default")) {
 			editorImpl = _EDITOR_WYSIWYG_DEFAULT;
 		}
 
@@ -118,7 +116,6 @@ public class EditorUtil {
 	}
 
 	public static String getUserEditorValue(String editorImpl, User user) {
-
 		Map<String, Serializable> preferredEditors = user.getPreferredEditors();
 
 		if (Validator.isNotNull(preferredEditors)) {

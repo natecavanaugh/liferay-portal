@@ -56,7 +56,6 @@ ListUtil.sort(editorProperties);
 		defaultOptionLabelStringBuilder.append(StringPool.OPEN_PARENTHESIS);
 		defaultOptionLabelStringBuilder.append(LanguageUtil.get(request, "system-default"));
 		defaultOptionLabelStringBuilder.append(StringPool.CLOSE_PARENTHESIS);
-
 	%>
 
 		<aui:select label="<%= labelStringBuilder.toString() %>" name="<%= CamelCaseUtil.toCamelCase(editorProperty, _DELIMITERS) %>">
