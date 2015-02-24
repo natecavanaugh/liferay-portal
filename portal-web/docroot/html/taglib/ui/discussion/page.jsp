@@ -285,6 +285,14 @@ int messagesCount = messages.size();
 				<%= randomNamespace %>showForm(formId);
 			}
 
+			function <%= randomNamespace %>hideDiscussionMessage(messageId) {
+				document.getElementById(messageId).style.display = 'none';
+			}
+
+			function <%= randomNamespace %>showDiscussionMessage(messageId) {
+				document.getElementById(messageId).style.display = 'block';
+			}
+
 			Liferay.provide(
 				window,
 				'<%= randomNamespace %>afterLogin',
