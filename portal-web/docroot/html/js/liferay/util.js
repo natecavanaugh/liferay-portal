@@ -1082,10 +1082,10 @@
 
 				var inputs = form.all('input[type=button], input[type=image], input[type=reset], input[type=submit]');
 
-				var disabledTrueCheckboxInputs = form.all('input[checked][disabled]');
+				var disabledTrueCheckboxes = form.all('input[checked][disabled]');
 
-				if (disabledTrueCheckboxInputs.get('nodes').length) {
-					disabledTrueCheckboxInputs.attr('disabled', '');
+				if (disabledTrueCheckboxes.get('nodes').length) {
+					disabledTrueCheckboxes.attr('disabled', '');
 				}
 
 				Util.disableFormButtons(inputs, form);
