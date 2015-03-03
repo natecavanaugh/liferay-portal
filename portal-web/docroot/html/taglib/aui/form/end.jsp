@@ -61,11 +61,16 @@
 				]
 			</c:if>
 
-			<c:if test="<%= Validator.isNotNull(onSubmit) %>">
 				, onSubmit: function(event) {
-					<%= onSubmit %>
+					<c:choose>
+						<c:when test="<%= Validator.isNotNull(onSubmit) %>">
+							<%= onSubmit %>
+						</c:when>
+						<c:otherwise>
+							submitForm(event.currentTarget);
+						</c:otherwise>
+					</c:choose>
 				}
-			</c:if>
 		}
 	);
 
