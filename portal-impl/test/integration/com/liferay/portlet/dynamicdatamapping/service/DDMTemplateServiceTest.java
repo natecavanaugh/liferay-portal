@@ -61,6 +61,7 @@ public class DDMTemplateServiceTest extends BaseDDMServiceTestCase {
 			SynchronousDestinationTestRule.INSTANCE);
 
 	@Before
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 
