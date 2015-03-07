@@ -1797,7 +1797,8 @@ public class UserServiceHttp {
 		java.util.List<com.liferay.portal.model.Phone> phones,
 		java.util.List<com.liferay.portal.model.Website> websites,
 		java.util.List<com.liferay.portlet.announcements.model.AnnouncementsDelivery> announcementsDelivers,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			MethodKey methodKey = new MethodKey(UserServiceUtil.class,
@@ -1814,7 +1815,7 @@ public class UserServiceHttp {
 					twitterSn, ymSn, jobTitle, groupIds, organizationIds,
 					roleIds, userGroupRoles, userGroupIds, addresses,
 					emailAddresses, phones, websites, announcementsDelivers,
-					serviceContext);
+					serviceContext, preferredEditors);
 
 			Object returnObj = null;
 
@@ -1863,7 +1864,8 @@ public class UserServiceHttp {
 		java.util.List<com.liferay.portal.model.Phone> phones,
 		java.util.List<com.liferay.portal.model.Website> websites,
 		java.util.List<com.liferay.portlet.announcements.model.AnnouncementsDelivery> announcementsDelivers,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			MethodKey methodKey = new MethodKey(UserServiceUtil.class,
@@ -1879,7 +1881,7 @@ public class UserServiceHttp {
 					msnSn, mySpaceSn, skypeSn, twitterSn, ymSn, jobTitle,
 					groupIds, organizationIds, roleIds, userGroupRoles,
 					userGroupIds, addresses, emailAddresses, phones, websites,
-					announcementsDelivers, serviceContext);
+					announcementsDelivers, serviceContext, preferredEditors);
 
 			Object returnObj = null;
 
@@ -1923,7 +1925,8 @@ public class UserServiceHttp {
 		long[] roleIds,
 		java.util.List<com.liferay.portal.model.UserGroupRole> userGroupRoles,
 		long[] userGroupIds,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			MethodKey methodKey = new MethodKey(UserServiceUtil.class,
@@ -1938,7 +1941,7 @@ public class UserServiceHttp {
 					birthdayYear, smsSn, aimSn, facebookSn, icqSn, jabberSn,
 					msnSn, mySpaceSn, skypeSn, twitterSn, ymSn, jobTitle,
 					groupIds, organizationIds, roleIds, userGroupRoles,
-					userGroupIds, serviceContext);
+					userGroupIds, serviceContext, preferredEditors);
 
 			Object returnObj = null;
 
@@ -2189,7 +2192,7 @@ public class UserServiceHttp {
 			java.util.List.class, long[].class, java.util.List.class,
 			java.util.List.class, java.util.List.class, java.util.List.class,
 			java.util.List.class,
-			com.liferay.portal.service.ServiceContext.class
+			com.liferay.portal.service.ServiceContext.class, java.util.Map.class
 		};
 	private static final Class<?>[] _updateUserParameterTypes54 = new Class[] {
 			long.class, java.lang.String.class, java.lang.String.class,
@@ -2209,7 +2212,7 @@ public class UserServiceHttp {
 			long[].class, long[].class, java.util.List.class, long[].class,
 			java.util.List.class, java.util.List.class, java.util.List.class,
 			java.util.List.class, java.util.List.class,
-			com.liferay.portal.service.ServiceContext.class
+			com.liferay.portal.service.ServiceContext.class, java.util.Map.class
 		};
 	private static final Class<?>[] _updateUserParameterTypes55 = new Class[] {
 			long.class, java.lang.String.class, java.lang.String.class,
@@ -2227,6 +2230,6 @@ public class UserServiceHttp {
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class, long[].class,
 			long[].class, long[].class, java.util.List.class, long[].class,
-			com.liferay.portal.service.ServiceContext.class
+			com.liferay.portal.service.ServiceContext.class, java.util.Map.class
 		};
 }

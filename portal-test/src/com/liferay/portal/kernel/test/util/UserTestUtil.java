@@ -34,9 +34,13 @@ import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
 
+import java.io.Serializable;
+
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Alberto Chaparro
@@ -334,6 +338,8 @@ public class UserTestUtil {
 
 		ServiceContext serviceContext = new ServiceContext();
 
+		Map<String, Serializable> preferredEditors = new HashMap<>();
+
 		return UserServiceUtil.updateUser(
 			user.getUserId(), oldPassword, newPassword1, newPassword2,
 			passwordReset, reminderQueryQuestion, reminderQueryAnswer,
@@ -342,7 +348,8 @@ public class UserTestUtil {
 			prefixId, suffixId, male, birthdayMonth, birthdayDay, birthdayYear,
 			smsSn, aimSn, facebookSn, icqSn, jabberSn, msnSn, mySpaceSn,
 			skypeSn, twitterSn, ymSn, jobTitle, groupIds, organizationIds,
-			roleIds, userGroupRoles, userGroupIds, serviceContext);
+			roleIds, userGroupRoles, userGroupIds, serviceContext,
+			preferredEditors);
 	}
 
 }

@@ -24,6 +24,7 @@ import com.liferay.portlet.expando.model.ExpandoBridge;
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * The base model interface for the User service. Represents a row in the &quot;User_&quot; database table, with each column mapped to a property of this class.
@@ -717,6 +718,20 @@ public interface UserModel extends BaseModel<User>, MVCCModel, StagedModel {
 	 * @param status the status of this user
 	 */
 	public void setStatus(int status);
+
+	/**
+	 * Returns the preferred editors of this user.
+	 *
+	 * @return the preferred editors of this user
+	 */
+	public Map<String, Serializable> getPreferredEditors();
+
+	/**
+	 * Sets the preferred editors of this user.
+	 *
+	 * @param preferredEditors the preferred editors of this user
+	 */
+	public void setPreferredEditors(Map<String, Serializable> preferredEditors);
 
 	@Override
 	public boolean isNew();

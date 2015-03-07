@@ -1354,7 +1354,8 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 			ldapUser.getTwitterSn(), ldapUser.getYmSn(), ldapUser.getJobTitle(),
 			ldapUser.getGroupIds(), ldapUser.getOrganizationIds(),
 			ldapUser.getRoleIds(), ldapUser.getUserGroupRoles(),
-			ldapUser.getUserGroupIds(), ldapUser.getServiceContext());
+			ldapUser.getUserGroupIds(), ldapUser.getServiceContext(),
+			ldapUser.getPreferredEditors());
 
 		if (ldapUserModifiedDate != null) {
 			user = UserLocalServiceUtil.updateModifiedDate(

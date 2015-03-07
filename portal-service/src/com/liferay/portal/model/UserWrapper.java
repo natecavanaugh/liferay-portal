@@ -19,6 +19,8 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.Serializable;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,6 +95,7 @@ public class UserWrapper implements User, ModelWrapper<User> {
 		attributes.put("agreedToTermsOfUse", getAgreedToTermsOfUse());
 		attributes.put("emailAddressVerified", getEmailAddressVerified());
 		attributes.put("status", getStatus());
+		attributes.put("preferredEditors", getPreferredEditors());
 
 		return attributes;
 	}
@@ -348,6 +351,13 @@ public class UserWrapper implements User, ModelWrapper<User> {
 
 		if (status != null) {
 			setStatus(status);
+		}
+
+		Map<String, Serializable> preferredEditors = (Map<String, Serializable>)attributes.get(
+				"preferredEditors");
+
+		if (preferredEditors != null) {
+			setPreferredEditors(preferredEditors);
 		}
 	}
 
@@ -1169,6 +1179,16 @@ public class UserWrapper implements User, ModelWrapper<User> {
 	}
 
 	/**
+	* Returns the preferred editors of this user.
+	*
+	* @return the preferred editors of this user
+	*/
+	@Override
+	public java.util.Map<java.lang.String, java.io.Serializable> getPreferredEditors() {
+		return _user.getPreferredEditors();
+	}
+
+	/**
 	* Returns the primary key of this user.
 	*
 	* @return the primary key of this user
@@ -1905,6 +1925,17 @@ public class UserWrapper implements User, ModelWrapper<User> {
 	@Override
 	public void setPortraitId(long portraitId) {
 		_user.setPortraitId(portraitId);
+	}
+
+	/**
+	* Sets the preferred editors of this user.
+	*
+	* @param preferredEditors the preferred editors of this user
+	*/
+	@Override
+	public void setPreferredEditors(
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors) {
+		_user.setPreferredEditors(preferredEditors);
 	}
 
 	/**

@@ -20,6 +20,8 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.service.ServiceContext;
 
+import java.io.Serializable;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -129,6 +131,10 @@ public class LDAPUser {
 
 	public long getPortraitId() {
 		return _user.getPortraitId();
+	}
+
+	public Map<String, Serializable> getPreferredEditors() {
+		return _user.getPreferredEditors();
 	}
 
 	public long getPrefixId() {
@@ -347,6 +353,12 @@ public class LDAPUser {
 
 	public void setPortraitBytes(byte[] portraitBytes) {
 		_portraitBytes = portraitBytes;
+	}
+
+	public void setPreferredEditors(
+		Map<String, Serializable> preferredEditors) {
+
+		_user.setPreferredEditors(preferredEditors);
 	}
 
 	public void setPrefixId(long prefixId) {

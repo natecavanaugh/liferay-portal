@@ -2711,7 +2711,8 @@ public interface UserLocalService extends BaseLocalService,
 		long[] roleIds,
 		java.util.List<com.liferay.portal.model.UserGroupRole> userGroupRoles,
 		long[] userGroupIds,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
@@ -2792,7 +2793,8 @@ public interface UserLocalService extends BaseLocalService,
 		long[] roleIds,
 		java.util.List<com.liferay.portal.model.UserGroupRole> userGroupRoles,
 		long[] userGroupIds,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**

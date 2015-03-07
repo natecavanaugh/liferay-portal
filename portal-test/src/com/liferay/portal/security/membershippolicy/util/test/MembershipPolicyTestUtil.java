@@ -207,6 +207,8 @@ public class MembershipPolicyTestUtil {
 
 		ServiceContext serviceContext = new ServiceContext();
 
+		Map<String, Serializable> preferredEditors = new HashMap<>();
+
 		UserServiceUtil.updateUser(
 			userId, oldPassword, newPassword1, newPassword2, passwordReset,
 			reminderQueryQuestion, reminderQueryAnswer, screenName,
@@ -216,7 +218,8 @@ public class MembershipPolicyTestUtil {
 			smsSn, aimSn, facebookSn, icqSn, jabberSn, msnSn, mySpaceSn,
 			skypeSn, twitterSn, ymSn, jobTitle, siteIds, organizationIds,
 			roleIds, userGroupRoles, userGroupIds, addresses, emailAddresses,
-			phones, websites, announcementsDelivers, serviceContext);
+			phones, websites, announcementsDelivers, serviceContext,
+			preferredEditors);
 	}
 
 	protected static Map<String, Serializable> addExpandoMap(Class<?> clazz)

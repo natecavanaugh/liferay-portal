@@ -49,6 +49,7 @@ import org.junit.Test;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -197,6 +198,8 @@ public class UserPersistenceTest {
 
 		newUser.setStatus(RandomTestUtil.nextInt());
 
+		newUser.setPreferredEditors(new HashMap<String, Serializable>());
+
 		_users.add(_persistence.update(newUser));
 
 		User existingUser = _persistence.findByPrimaryKey(newUser.getPrimaryKey());
@@ -273,6 +276,8 @@ public class UserPersistenceTest {
 		Assert.assertEquals(existingUser.getEmailAddressVerified(),
 			newUser.getEmailAddressVerified());
 		Assert.assertEquals(existingUser.getStatus(), newUser.getStatus());
+		Assert.assertEquals(existingUser.getPreferredEditors(),
+			newUser.getPreferredEditors());
 	}
 
 	@Test
@@ -550,7 +555,7 @@ public class UserPersistenceTest {
 			"lastLoginIP", true, "lastFailedLoginDate", true,
 			"failedLoginAttempts", true, "lockout", true, "lockoutDate", true,
 			"agreedToTermsOfUse", true, "emailAddressVerified", true, "status",
-			true);
+			true, "preferredEditors", true);
 	}
 
 	@Test
@@ -890,6 +895,8 @@ public class UserPersistenceTest {
 		user.setEmailAddressVerified(RandomTestUtil.randomBoolean());
 
 		user.setStatus(RandomTestUtil.nextInt());
+
+		user.setPreferredEditors(new HashMap<String, Serializable>());
 
 		_users.add(_persistence.update(user));
 

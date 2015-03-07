@@ -1298,7 +1298,8 @@ public class UserServiceWrapper implements UserService,
 		java.util.List<com.liferay.portal.model.Phone> phones,
 		java.util.List<com.liferay.portal.model.Website> websites,
 		java.util.List<com.liferay.portlet.announcements.model.AnnouncementsDelivery> announcementsDelivers,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _userService.updateUser(userId, oldPassword, newPassword1,
 			newPassword2, passwordReset, reminderQueryQuestion,
@@ -1309,7 +1310,7 @@ public class UserServiceWrapper implements UserService,
 			mySpaceSn, skypeSn, twitterSn, ymSn, jobTitle, groupIds,
 			organizationIds, roleIds, userGroupRoles, userGroupIds, addresses,
 			emailAddresses, phones, websites, announcementsDelivers,
-			serviceContext);
+			serviceContext, preferredEditors);
 	}
 
 	/**
@@ -1390,7 +1391,8 @@ public class UserServiceWrapper implements UserService,
 		long[] roleIds,
 		java.util.List<com.liferay.portal.model.UserGroupRole> userGroupRoles,
 		long[] userGroupIds,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _userService.updateUser(userId, oldPassword, newPassword1,
 			newPassword2, passwordReset, reminderQueryQuestion,
@@ -1400,7 +1402,7 @@ public class UserServiceWrapper implements UserService,
 			birthdayYear, smsSn, aimSn, facebookSn, icqSn, jabberSn, msnSn,
 			mySpaceSn, skypeSn, twitterSn, ymSn, jobTitle, groupIds,
 			organizationIds, roleIds, userGroupRoles, userGroupIds,
-			serviceContext);
+			serviceContext, preferredEditors);
 	}
 
 	/**
@@ -1494,7 +1496,8 @@ public class UserServiceWrapper implements UserService,
 		java.util.List<com.liferay.portal.model.Phone> phones,
 		java.util.List<com.liferay.portal.model.Website> websites,
 		java.util.List<com.liferay.portlet.announcements.model.AnnouncementsDelivery> announcementsDelivers,
-		com.liferay.portal.service.ServiceContext serviceContext)
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Map<java.lang.String, java.io.Serializable> preferredEditors)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _userService.updateUser(userId, oldPassword, newPassword1,
 			newPassword2, passwordReset, reminderQueryQuestion,
@@ -1505,7 +1508,7 @@ public class UserServiceWrapper implements UserService,
 			facebookSn, icqSn, jabberSn, msnSn, mySpaceSn, skypeSn, twitterSn,
 			ymSn, jobTitle, groupIds, organizationIds, roleIds, userGroupRoles,
 			userGroupIds, addresses, emailAddresses, phones, websites,
-			announcementsDelivers, serviceContext);
+			announcementsDelivers, serviceContext, preferredEditors);
 	}
 
 	/**
