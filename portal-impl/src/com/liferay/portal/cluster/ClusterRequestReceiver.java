@@ -39,9 +39,11 @@ import org.jgroups.View;
  * @author Michael C. Han
  * @author Tina Tian
  */
-public class ClusterRequestReceiver extends BaseReceiver {
+public class ClusterRequestReceiver extends JGroupsReceiver {
 
 	public ClusterRequestReceiver(ClusterExecutorImpl clusterExecutorImpl) {
+		super(clusterExecutorImpl.getExecutorService());
+
 		_clusterExecutorImpl = clusterExecutorImpl;
 	}
 

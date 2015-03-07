@@ -375,23 +375,23 @@ boolean weeklyPosSa = _getWeeklyDayPos(request, Calendar.SATURDAY, event, recurr
 	</aui:col>
 </aui:fieldset>
 
-<aui:script use="aui-base">
-	var tables = A.all('#<portlet:namespace />recurrenceTypeNeverTable, #<portlet:namespace />recurrenceTypeDailyTable, #<portlet:namespace />recurrenceTypeWeeklyTable, #<portlet:namespace />recurrenceTypeMonthlyTable, #<portlet:namespace />recurrenceTypeYearlyTable');
+<aui:script sandbox="<%= true %>">
+	var tables = $('#<portlet:namespace />recurrenceTypeDailyTable, #<portlet:namespace />recurrenceTypeMonthlyTable, #<portlet:namespace />recurrenceTypeNeverTable, #<portlet:namespace />recurrenceTypeWeeklyTable, #<portlet:namespace />recurrenceTypeYearlyTable');
 
-	A.one('#<portlet:namespace />eventsContainer').delegate(
+	$('#<portlet:namespace />eventsContainer').on(
 		'change',
+		'.field',
 		function(event) {
-			var currentTarget = event.currentTarget;
-
-			var tableId = currentTarget.attr('id') + 'Table';
+			var tableId = $(event.currentTarget).attr('id') + 'Table';
 
 			tables.each(
-				function(item, index, collection) {
-					item.toggle(item.attr('id') == tableId);
+				function(index, item) {
+					item = $(item);
+
+					item.toggleClass('hide', item.attr('id') != tableId);
 				}
 			);
-		},
-		'.field'
+		}
 	);
 </aui:script>
 
