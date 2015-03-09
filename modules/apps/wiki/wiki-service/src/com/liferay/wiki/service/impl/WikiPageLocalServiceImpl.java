@@ -2539,7 +2539,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		List<WikiPage> pages) {
 
 		List<ObjectValuePair<Long, Integer>> pageVersionStatusOVPs =
-			new ArrayList<ObjectValuePair<Long, Integer>>(pages.size());
+			new ArrayList<>(pages.size());
 
 		for (WikiPage page : pages) {
 			int status = page.getStatus();
@@ -3007,7 +3007,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 	}
 
 	protected void notifySubscribers(
-			long contextUserId, WikiPage page, String pageURL,
+			long creatorUserId, WikiPage page, String pageURL,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -3105,7 +3105,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 			"[$PAGE_SUMMARY$]", page.getSummary(), "[$PAGE_TITLE$]", pageTitle,
 			"[$PAGE_URL$]", pageURL);
 
-		subscriptionSender.setContextUserId(contextUserId);
+		subscriptionSender.setCreatorUserId(creatorUserId);
 		subscriptionSender.setContextUserPrefix("PAGE");
 		subscriptionSender.setEntryTitle(pageTitle);
 		subscriptionSender.setEntryURL(pageURL);

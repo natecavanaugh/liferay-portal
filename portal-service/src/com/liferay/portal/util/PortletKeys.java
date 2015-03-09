@@ -188,8 +188,6 @@ public class PortletKeys {
 
 	public static final String SITES_ADMIN = "134";
 
-	public static final String SITES_DIRECTORY = "184";
-
 	public static final String SOCIAL_ACTIVITY = "179";
 
 	public static final String SOFTWARE_CATALOG = "98";
@@ -197,8 +195,6 @@ public class PortletKeys {
 	public static final String STAGING_BAR = "170";
 
 	public static final String STOCKS = "12";
-
-	public static final String TAGS_COMPILER = "103";
 
 	public static final String TRANSLATOR = "26";
 

@@ -20,7 +20,10 @@ import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.test.rule.callback.BaseTestCallback;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.util.PortalLifecycle;
+import com.liferay.portal.kernel.util.PortalLifecycleUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.module.framework.ModuleFrameworkUtilAdapter;
 import com.liferay.portal.service.test.ServiceTestUtil;
 import com.liferay.portal.servlet.MainServlet;
 import com.liferay.portal.test.mock.AutoDeployMockServletContext;
@@ -55,14 +58,25 @@ public class MainServletTestCallback extends BaseTestCallback<Object, Object> {
 
 	@Override
 	public Object doBeforeClass(Description description) {
-		ServiceTestUtil.initServices();
-
-		ServiceTestUtil.initPermissions();
-
 		if (_mainServlet == null) {
-			MockServletContext mockServletContext =
+			final MockServletContext mockServletContext =
 				new AutoDeployMockServletContext(
 					new FileSystemResourceLoader());
+
+			PortalLifecycleUtil.register(
+				new PortalLifecycle() {
+
+					@Override
+					public void portalInit() {
+						ModuleFrameworkUtilAdapter.registerContext(
+							mockServletContext);
+					}
+
+					@Override
+					public void portalDestroy() {
+					}
+
+				});
 
 			ServletContextPool.put(StringPool.BLANK, mockServletContext);
 
@@ -78,7 +92,13 @@ public class MainServletTestCallback extends BaseTestCallback<Object, Object> {
 				throw new RuntimeException(
 					"The main servlet could not be initialized");
 			}
+
+			ServiceTestUtil.initStaticServices();
 		}
+
+		ServiceTestUtil.initServices();
+
+		ServiceTestUtil.initPermissions();
 
 		return null;
 	}

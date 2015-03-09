@@ -349,7 +349,7 @@ public class VerifyProperties extends VerifyProcess {
 		},
 		new String[] {
 			"asset.tags.navigation.display.templates.config",
-			"display.templates.config", "com.liferay.asset.tags.web"
+			"display.templates.config", "com.liferay.asset.tags.navigation.web"
 		},
 
 		// Bookmarks
@@ -523,6 +523,23 @@ public class VerifyProperties extends VerifyProcess {
 
 		// LDAP
 
+		new String[] {
+			"ldap.auth.enabled", "enabled",
+			"com.liferay.portal.authenticator.ldap"
+		},
+		new String[] {
+			"ldap.auth.method", "method",
+			"com.liferay.portal.authenticator.ldap"
+		},
+		new String[] {
+			"ldap.auth.password.encryption.algorithm",
+			"passwordEncryptionAlgorithm",
+			"com.liferay.portal.authenticator.ldap"
+		},
+		new String[] {
+			"ldap.auth.required", "required",
+			"com.liferay.portal.authenticator.ldap"
+		},
 		new String[] {
 			"ldap.export.enabled", "export.enabled", "com.liferay.portal.ldap"
 		},
@@ -1041,6 +1058,10 @@ public class VerifyProperties extends VerifyProcess {
 		new String[] {
 			"passwords.passwordpolicytoolkit.charset.uppercase",
 			"passwords.passwordpolicytoolkit.validator.charset.uppercase"
+		},
+		new String[] {
+			"permissions.inline.sql.resource.block.query.threshhold",
+			"permissions.inline.sql.resource.block.query.threshold"
 		},
 		new String[] {
 			"portal.instance.http.port", "portal.instance.http.socket.address"
