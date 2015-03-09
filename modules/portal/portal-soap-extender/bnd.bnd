@@ -12,7 +12,6 @@ Bundle-ClassPath:\
 	lib/cxf-tools-common.jar,\
 	lib/cxf-tools-validator.jar,\
 	lib/jaxb-impl.jar,\
-	lib/jaxws-api.jar,\
 	lib/stax2-api.jar,\
 	lib/woodstox-core-asl.jar,\
 	lib/wsdl4j.jar,\
@@ -50,11 +49,7 @@ Include-Resource:\
 	lib/=lib/cxf-tools-common.jar,\
 	lib/=lib/cxf-tools-validator.jar,\
 	lib/=lib/jaxb-impl.jar,\
-	lib/=lib/jaxws-api.jar,\
 	lib/=lib/stax2-api.jar,\
 	lib/=lib/woodstox-core-asl.jar,\
 	lib/=lib/wsdl4j.jar,\
-	lib/=lib/xmlschema-core.jar,\
-	@../../../lib/portal/bnd.jar!/aQute/bnd/annotation/metatype/*
-
--metatype: *
+	lib/=lib/xmlschema-core.jar

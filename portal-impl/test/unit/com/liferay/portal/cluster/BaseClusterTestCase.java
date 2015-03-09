@@ -14,6 +14,8 @@
 
 package com.liferay.portal.cluster;
 
+import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
+import com.liferay.portal.kernel.executor.PortalExecutorManager;
 import com.liferay.portal.kernel.test.CaptureHandler;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 
@@ -55,71 +57,6 @@ public class BaseClusterTestCase {
 	@After
 	public void tearDown() {
 		_clusterBaseCaptureHandler.close();
-	}
-
-	@Aspect
-	public static class BaseReceiverAdvice {
-
-		public static Object getJGroupsMessagePayload(
-				Receiver receiver, org.jgroups.Address sourceAddress)
-			throws InterruptedException {
-
-			_countDownLatch.await(10, TimeUnit.MINUTES);
-
-			List<org.jgroups.Message> jGroupsMessageList = _jGroupsMessages.get(
-				receiver);
-
-			if ((jGroupsMessageList == null) || jGroupsMessageList.isEmpty()) {
-				return null;
-			}
-
-			for (org.jgroups.Message jGroupsMessage : jGroupsMessageList) {
-				if (sourceAddress.equals(jGroupsMessage.getSrc())) {
-					return jGroupsMessage.getObject();
-				}
-			}
-
-			return null;
-		}
-
-		public static void reset(int expectedMessageNumber) {
-			_countDownLatch = new CountDownLatch(expectedMessageNumber);
-
-			_jGroupsMessages.clear();
-		}
-
-		@Around(
-			"execution(* com.liferay.portal.cluster.BaseReceiver." +
-				"doReceive(org.jgroups.Message))"
-		)
-		public void doReceive(ProceedingJoinPoint proceedingJoinPoint) {
-			Receiver receiver = (Receiver)proceedingJoinPoint.getThis();
-			org.jgroups.Message jGroupsMessage =
-				(org.jgroups.Message)proceedingJoinPoint.getArgs()[0];
-
-			List<org.jgroups.Message> jGroupsMessageList = _jGroupsMessages.get(
-				receiver);
-
-			if (jGroupsMessageList == null) {
-				jGroupsMessageList = new ArrayList<>();
-
-				List<org.jgroups.Message> previousJgroupsMessageList =
-					_jGroupsMessages.putIfAbsent(receiver, jGroupsMessageList);
-
-				if (previousJgroupsMessageList != null) {
-					jGroupsMessageList = previousJgroupsMessageList;
-				}
-			}
-
-			jGroupsMessageList.add(jGroupsMessage);
-
-			_countDownLatch.countDown();
-		}
-
-		private static CountDownLatch _countDownLatch;
-		private static final ConcurrentMap<Receiver, List<org.jgroups.Message>>
-			_jGroupsMessages = new ConcurrentHashMap<>();
-
 	}
 
 	@Aspect
@@ -194,6 +131,71 @@ public class BaseClusterTestCase {
 
 	}
 
+	@Aspect
+	public static class JGroupsReceiverAdvice {
+
+		public static Object getJGroupsMessagePayload(
+				Receiver receiver, org.jgroups.Address sourceAddress)
+			throws InterruptedException {
+
+			_countDownLatch.await(10, TimeUnit.MINUTES);
+
+			List<org.jgroups.Message> jGroupsMessages = _jGroupsMessages.get(
+				receiver);
+
+			if ((jGroupsMessages == null) || jGroupsMessages.isEmpty()) {
+				return null;
+			}
+
+			for (org.jgroups.Message jGroupsMessage : jGroupsMessages) {
+				if (sourceAddress.equals(jGroupsMessage.getSrc())) {
+					return jGroupsMessage.getObject();
+				}
+			}
+
+			return null;
+		}
+
+		public static void reset(int expectedMessageNumber) {
+			_countDownLatch = new CountDownLatch(expectedMessageNumber);
+
+			_jGroupsMessages.clear();
+		}
+
+		@Around(
+			"execution(* com.liferay.portal.cluster.JGroupsReceiver." +
+				"doReceive(org.jgroups.Message))"
+		)
+		public void doReceive(ProceedingJoinPoint proceedingJoinPoint) {
+			Receiver receiver = (Receiver)proceedingJoinPoint.getThis();
+
+			List<org.jgroups.Message> jGroupsMessages = _jGroupsMessages.get(
+				receiver);
+
+			if (jGroupsMessages == null) {
+				jGroupsMessages = new ArrayList<>();
+
+				List<org.jgroups.Message> previousJgroupsMessages =
+					_jGroupsMessages.putIfAbsent(receiver, jGroupsMessages);
+
+				if (previousJgroupsMessages != null) {
+					jGroupsMessages = previousJgroupsMessages;
+				}
+			}
+
+			Object[] args = proceedingJoinPoint.getArgs();
+
+			jGroupsMessages.add((org.jgroups.Message)args[0]);
+
+			_countDownLatch.countDown();
+		}
+
+		private static CountDownLatch _countDownLatch;
+		private static final ConcurrentMap<Receiver, List<org.jgroups.Message>>
+			_jGroupsMessages = new ConcurrentHashMap<>();
+
+	}
+
 	protected void assertLogger(
 		List<LogRecord> logRecords, String message, Class<?> exceptionClass) {
 
@@ -248,6 +250,47 @@ public class BaseClusterTestCase {
 		@Override
 		public void writeTo(DataOutput dataOutput) throws Exception {
 		}
+
+	}
+
+	protected class MockPortalExecutorManager implements PortalExecutorManager {
+
+		@Override
+		public ThreadPoolExecutor getPortalExecutor(String name) {
+			return _threadPoolExecutor;
+		}
+
+		@Override
+		public ThreadPoolExecutor getPortalExecutor(
+			String name, boolean createIfAbsent) {
+
+			return _threadPoolExecutor;
+		}
+
+		@Override
+		public ThreadPoolExecutor registerPortalExecutor(
+			String name, ThreadPoolExecutor threadPoolExecutor) {
+
+			return _threadPoolExecutor;
+		}
+
+		@Override
+		public void shutdown() {
+			shutdown(false);
+		}
+
+		@Override
+		public void shutdown(boolean interrupt) {
+			if (interrupt) {
+				_threadPoolExecutor.shutdownNow();
+			}
+			else {
+				_threadPoolExecutor.shutdown();
+			}
+		}
+
+		private final ThreadPoolExecutor _threadPoolExecutor =
+			new ThreadPoolExecutor(10, 10);
 
 	}
 

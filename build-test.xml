@@ -439,6 +439,34 @@
 		</sequential>
 	</macrodef>
 
+	<macrodef name="get-test-simple-class-name">
+		<sequential>
+			<fail message="Please set the property ${test.class}" unless="test.class" />
+
+			<var name="test.simple.class.name" unset="true" />
+
+			<script classpathref="project.classpath" language="beanshell">
+				<![CDATA[
+					String testClass = project.getProperty("test.class");
+
+					String testSimpleClassName = testClass;
+
+					if (testClass.contains("#")) {
+						int x = testClass.indexOf("#");
+
+						testSimpleClassName =  testClass.substring(0, x);
+					}
+
+					if (!testSimpleClassName.endsWith("TestCase")) {
+						testSimpleClassName = testSimpleClassName + "TestCase";
+					}
+
+					project.setProperty("test.simple.class.name", testSimpleClassName);
+				]]>
+			</script>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="get-testcase-property">
 		<attribute name="property.name" />
 
@@ -518,23 +546,14 @@
 
 	<macrodef name="get-testray-logs">
 		<sequential>
-			<if>
-				<isset property="jenkins.testray.results.dir" />
-				<then>
-					<antelope:stringutil property="job.name" string="${env.JOB_NAME}">
-						<antelope:replace regex="," replacement="_" />
-					</antelope:stringutil>
+			<antelope:stringutil property="job.name" string="${env.JOB_NAME}">
+				<antelope:replace regex="," replacement="_" />
+			</antelope:stringutil>
 
-					<property name="testray.logs.dir" value="${jenkins.testray.results.dir}/logs/${job.name}/builds/${env.TOP_LEVEL_BUILD_NUMBER}" />
+			<property name="testray.logs.dir" value="${job.name}/builds/${env.TOP_LEVEL_BUILD_NUMBER}" />
 
-					<property name="testray.logs.console" value="${testray.logs.dir}/console.txt" />
-					<property name="testray.logs.report" value="${testray.logs.dir}/report.html" />
-				</then>
-				<else>
-					<property name="testray.logs.console" value="" />
-					<property name="testray.logs.report" value="" />
-				</else>
-			</if>
+			<property name="testray.logs.console" value="${testray.logs.dir}/console.txt" />
+			<property name="testray.logs.report" value="${testray.logs.dir}/report.html" />
 		</sequential>
 	</macrodef>
 
@@ -594,34 +613,6 @@
 							break;
 						}
 					}
-				]]>
-			</script>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="get-test-simple-class-name">
-		<sequential>
-			<fail message="Please set the property ${test.class}" unless="test.class" />
-
-			<var name="test.simple.class.name" unset="true" />
-
-			<script classpathref="project.classpath" language="beanshell">
-				<![CDATA[
-					String testClass = project.getProperty("test.class");
-
-					String testSimpleClassName = testClass;
-
-					if (testClass.contains("#")) {
-						int x = testClass.indexOf("#");
-
-						testSimpleClassName =  testClass.substring(0, x);
-					}
-
-					if (!testSimpleClassName.endsWith("TestCase")) {
-						testSimpleClassName = testSimpleClassName + "TestCase";
-					}
-
-					project.setProperty("test.simple.class.name", testSimpleClassName);
 				]]>
 			</script>
 		</sequential>
@@ -1214,6 +1205,7 @@
 						</then>
 					</if>
 
+					<delete dir="${liferay.home}/data" />
 					<delete dir="${liferay.home}/osgi/state" />
 
 					<if>
@@ -1430,6 +1422,15 @@ create database lportal${database.index} character set utf8;</echo>
 								</not>
 							</or>
 							<then>
+								<get-testcase-property property.name="database.minimal.enabled" />
+
+								<if>
+									<equals arg1="${database.minimal.enabled}" arg2="true" />
+									<then>
+										<var name="database.create.suffix" value="-bare" />
+									</then>
+								</if>
+
 								<property name="sql.dir" value="sql\create${database.create.suffix}\" />
 								<property name="sql.file" value="create${database.create.suffix}-${database.type}.sql" />
 							</then>
@@ -4527,6 +4528,8 @@ if (ppstate.equals("normal")) {
 			</else>
 		</if>
 
+		<property name="test.class" value="${test.simple.class.name}#${test.method.name}" />
+
 		<if>
 			<isset property="jenkins.shared.user.content.dir" />
 			<then>
@@ -4582,15 +4585,6 @@ if (ppstate.equals("normal")) {
 				<if>
 					<available file="${jenkins.results.xml.file}" />
 					<then>
-						<if>
-							<not>
-								<isset property="test.class" />
-							</not>
-							<then>
-								<property name="test.class" value="${test.simple.class.name}#${test.method.name}" />
-							</then>
-						</if>
-
 						<copy
 							file="${jenkins.results.xml.file}"
 							tofile="${jenkins.shared.results.dir}/${env.BUILD_FLOW_JOB_NAME}/builds/${env.BUILD_FLOW_BUILD_NUMBER}/test-results/TEST-${env.BUILD_FLOW_JOB_NAME}_${env.BUILD_FLOW_BUILD_NUMBER}_${test.class}.xml"
@@ -4785,62 +4779,9 @@ if (ppstate.equals("normal")) {
 					<available file="${liferay.home}/logs" type="dir" />
 				</waitfor>
 
-				<for param="log.file">
-					<path>
-						<fileset dir="${liferay.home}/logs">
-							<include name="*.log" />
-						</fileset>
-					</path>
-					<sequential>
-						<var name="log.file" value="@{log.file}" />
-					</sequential>
-				</for>
-
-				<script classpathref="project.classpath" language="beanshell">
-					<![CDATA[
-						import com.liferay.portal.kernel.util.StringUtil;
-
-						import org.apache.commons.io.FileUtils;
-
-						Set requiredPluginNamesSet = new HashSet();
-
-						requiredPluginNamesSet.add("marketplace-portlet");
-
-						String[] pluginTypes = {"hook", "layouttpl", "portlet", "theme", "web"};
-
-						for (String pluginType : pluginTypes) {
-							String[] pluginNames = StringUtil.split(project.getProperty(pluginType + ".plugins.includes"), ',');
-
-							for (String pluginName : pluginNames) {
-								requiredPluginNamesSet.add(pluginName);
-							}
-						}
-
-						System.out.println("Ensuring the following plugins have been deployed:");
-						System.out.println(StringUtil.merge(requiredPluginNamesSet));
-
-						int i = 0;
-
-						for (String pluginName : requiredPluginNamesSet) {
-							String content = "";
-
-							while (i < 120 && !content.contains(pluginName + " is available for use")) {
-								try {
-									Thread.sleep(1000);
-
-									File file = new File(StringUtil.replace(project.getProperty("log.file"), "\\", "/"));
-
-									content = FileUtils.readFileToString(file);
-
-									i++;
-								}
-								catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						}
-					]]>
-				</script>
+				<antcall target="wait-for-plugins-deployment">
+					<param name="required.plugins.includes" value="marketplace-portlet" />
+				</antcall>
 			</then>
 		</if>
 
@@ -5209,6 +5150,8 @@ Please set "ie.driver.zip" in test.properties to point to "IEDriverServer_x64_2.
 
 		<ant dir="util-java" target="test-class-group" inheritAll="false" />
 
+		<antcall target="rebuild-database" inheritAll="false" />
+
 		<ant dir="modules" target="test-class-group" inheritAll="false" />
 	</target>
 
@@ -5236,5 +5179,92 @@ Please set "ie.driver.zip" in test.properties to point to "IEDriverServer_x64_2.
 		<ant dir="util-java" target="test-unit" inheritAll="false" />
 
 		<ant dir="modules" target="test-unit" inheritAll="false" />
+	</target>
+
+	<target name="wait-for-plugins-deployment">
+		<fail message="Please set the property ${test.class}" unless="test.class" />
+
+		<condition property="required.plugins.includes" value="">
+			<not>
+				<isset property="required.plugins.includes" />
+			</not>
+		</condition>
+
+		<if>
+			<not>
+				<available file="${liferay.home}/logs" type="dir" />
+			</not>
+			<then>
+				<fail message="${liferay.home}/logs is not available" />
+			</then>
+		</if>
+
+		<first id="first">
+			<fileset dir="${liferay.home}/logs" includes="*.log" />
+		</first>
+
+		<var name="log.file.path" value="${toString:first}" />
+
+		<get-testcase-property property.name="hook.plugins.includes" />
+		<get-testcase-property property.name="layouttpl.plugins.includes" />
+		<get-testcase-property property.name="portlet.plugins.includes" />
+		<get-testcase-property property.name="theme.plugins.includes" />
+		<get-testcase-property property.name="web.plugins.includes" />
+
+		<script classpathref="project.classpath" language="beanshell">
+			<![CDATA[
+				import com.liferay.portal.kernel.util.StringUtil;
+
+				import org.apache.commons.io.FileUtils;
+
+				Set requiredPluginNamesSet = new HashSet();
+
+				String[] pluginTypes = {"hook", "layouttpl", "portlet", "required", "theme", "web"};
+
+				for (String pluginType : pluginTypes) {
+					String[] pluginNames = StringUtil.split(project.getProperty(pluginType + ".plugins.includes"), ',');
+
+					for (String pluginName : pluginNames) {
+						requiredPluginNamesSet.add(pluginName);
+					}
+				}
+
+				System.out.println("Ensuring the following plugins have been deployed:");
+				System.out.println(StringUtil.merge(requiredPluginNamesSet));
+
+				String logFilePath = project.getProperty("log.file.path");
+
+				logFilePath = logFilePath.replaceAll("\\\\", "/");
+
+				int second = 0;
+
+				for (String pluginName : requiredPluginNamesSet) {
+					while (true) {
+						try {
+							File file = new File(logFilePath);
+
+							String content = FileUtils.readFileToString(file);
+
+							if (content.contains(pluginName + " is available for use") ||
+								content.contains(pluginName + " are available for use")) {
+
+								break;
+							}
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
+
+						if (second >= 120) {
+							break;
+						}
+
+						second++;
+
+						Thread.sleep(1000);
+					}
+				}
+			]]>
+		</script>
 	</target>
 </project>

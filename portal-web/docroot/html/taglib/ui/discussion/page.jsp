@@ -32,7 +32,7 @@ boolean ratingsEnabled = GetterUtil.getBoolean((String) request.getAttribute("li
 String redirect = (String)request.getAttribute("liferay-ui:discussion:redirect");
 long userId = GetterUtil.getLong((String)request.getAttribute("liferay-ui:discussion:userId"));
 
-MBMessageDisplay messageDisplay = MBMessageLocalServiceUtil.getDiscussionMessageDisplay(userId, scopeGroupId, className, classPK, WorkflowConstants.STATUS_ANY);
+MBMessageDisplay messageDisplay = MBMessageLocalServiceUtil.getDiscussionMessageDisplay(userId, scopeGroupId, className, classPK, WorkflowConstants.STATUS_ANY, new MessageThreadComparator());
 
 MBThread thread = messageDisplay.getThread();
 MBTreeWalker treeWalker = messageDisplay.getTreeWalker();
@@ -143,13 +143,12 @@ int messagesCount = messages.size();
 
 										JSONObject editorOptions = JSONFactoryUtil.createJSONObject();
 										editorOptions.put("textMode", Boolean.FALSE);
-										editorOptions.put("showSource", Boolean.FALSE);
 
 										dataTextEditor.put("editorConfig", editorConfig);
 										dataTextEditor.put("editorOptions", editorOptions);
 										%>
 
-										<liferay-ui:input-editor contents="" data="<%= dataTextEditor %>" editorImpl="<%= EDITOR_IMPL_KEY %>" name='<%= randomNamespace + "postReplyBody0" %>' onChangeMethod='<%= randomNamespace + "0OnChange" %>' placeholder="type-your-comment-here" />
+										<liferay-ui:input-editor contents="" data="<%= dataTextEditor %>" editorImpl="<%= EDITOR_IMPL_KEY %>" name='<%= randomNamespace + "postReplyBody0" %>' onChangeMethod='<%= randomNamespace + "0OnChange" %>' placeholder="type-your-comment-here" showSource="<%= false %>" />
 
 										<aui:input name="postReplyBody0" type="hidden" />
 
@@ -177,14 +176,12 @@ int messagesCount = messages.size();
 					<aui:row>
 
 						<%
-						messages = ListUtil.copy(messages);
-
-						messages.remove(0);
-
 						List<Long> classPKs = new ArrayList<Long>();
 
 						for (MBMessage curMessage : messages) {
-							classPKs.add(curMessage.getMessageId());
+							if (!curMessage.isRoot()) {
+								classPKs.add(curMessage.getMessageId());
+							}
 						}
 
 						List<RatingsEntry> ratingsEntries = RatingsEntryLocalServiceUtil.getEntries(themeDisplay.getUserId(), MBDiscussion.class.getName(), classPKs);
@@ -196,7 +193,7 @@ int messagesCount = messages.size();
 						int rootIndexPage = 0;
 						boolean moreCommentsPagination = false;
 
-						for (int j = range[0] - 1; j < range[1] - 1; j++) {
+						for (int j = range[0]; j < range[1]; j++) {
 							index = GetterUtil.getInteger(request.getAttribute("liferay-ui:discussion:index"), 1);
 
 							rootIndexPage = j;
