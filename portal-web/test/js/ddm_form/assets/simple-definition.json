@@ -1,0 +1,26 @@
+{
+    "defaultLanguageId": "en_US",
+    "availableLanguageIds": ["en_US"],
+    "fields": [{
+        "localizable": false,
+        "label": {
+            "en_US": "Text"
+        },
+        "type": "text",
+        "fieldNamespace": "",
+        "tip": {
+            "en_US": ""
+        },
+        "predefinedValue": {
+            "en_US": ""
+        },
+        "indexType": "keyword",
+        "dataType": "string",
+        "readOnly": false,
+        "showLabel": true,
+        "name": "Text",
+        "repeatable": false,
+        "required": false,
+        "multiple": false
+    }]
+}
