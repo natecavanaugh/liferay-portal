@@ -1,0 +1,35 @@
+{
+  "name": "liferay-portal-javascript-tests",
+  "version": "0.0.1",
+  "description": "Liferay Portal JavaScript Tests",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "karma": "^0.12.31",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-coverage": "^0.2.7",
+    "karma-firefox-launcher": "^0.1.4",
+    "karma-junit-reporter": "^0.2.2",
+    "karma-mocha": "^0.1.10",
+    "karma-safari-launcher": "^0.1.1",
+    "karma-sauce-launcher": "^0.2.10",
+    "karma-sinon": "^1.0.4",
+    "mocha": "^2.1.0",
+    "properties": "^1.2.1",
+    "sinon": "^1.12.2"
+  },
+  "scripts": {
+    "test": "node_modules/karma/bin/karma start --singleRun",
+    "watch": "node_modules/karma/bin/karma start --auto-watch --no-single-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liferay/liferay-portal.git"
+  },
+  "keywords": [
+    "liferay",
+    "portal"
+  ],
+  "license": "LGPL"
+}
