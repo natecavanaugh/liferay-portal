@@ -383,13 +383,15 @@ definePermissionsURL.setRefererPlid(plid);
 						%>
 
 						<c:choose>
-							<c:when test="<%= name.equals(RoleConstants.GUEST) && action.equals(ActionKeys.VIEW) %>">
-								<input id="<%= FriendlyURLNormalizerUtil.normalize(role.getName()) + actionSeparator + action %>" name="<%= renderResponse.getNamespace() + role.getRoleId() + actionSeparator + action %>" type="hidden" value="<%= true %>" />
+							<c:when test="<%= disabled %>">
+								<c:if test="<%= checked %>">
+									<input id="<%= FriendlyURLNormalizerUtil.normalize(role.getName()) + actionSeparator + action %>" name="<%= renderResponse.getNamespace() + role.getRoleId() + actionSeparator + action %>" type="hidden" value="true" />
+								</c:if>
 
-								<input checked="checked" disabled="disabled" id='<%= renderResponse.getNamespace() + "guestViewPlaceholder" %>' type="checkbox" />
+								<input <%= checked ? "checked" : StringPool.BLANK %> disabled id='<%= renderResponse.getNamespace() + "guestViewPlaceholder" %>' type="checkbox" />
 							</c:when>
 							<c:otherwise>
-								<input <%= checked ? "checked" : StringPool.BLANK %> class="<%= Validator.isNotNull(preselectedMsg) ? "lfr-checkbox-preselected" : StringPool.BLANK %>" data-message="<%= dataMessage %>" <%= disabled ? "disabled" : StringPool.BLANK %> id="<%= FriendlyURLNormalizerUtil.normalize(role.getName()) + actionSeparator + action %>" name="<%= renderResponse.getNamespace() + role.getRoleId() + actionSeparator + action %>" type="checkbox" />
+								<input <%= checked ? "checked" : StringPool.BLANK %> class="<%= Validator.isNotNull(preselectedMsg) ? "lfr-checkbox-preselected" : StringPool.BLANK %>" data-message="<%= dataMessage %>" id="<%= FriendlyURLNormalizerUtil.normalize(role.getName()) + actionSeparator + action %>" name="<%= renderResponse.getNamespace() + role.getRoleId() + actionSeparator + action %>" type="checkbox" />
 							</c:otherwise>
 						</c:choose>
 					</liferay-ui:search-container-column-text>
