@@ -1,39 +1,27 @@
 @import "aui/alloy-font-awesome/scss/variables";
 @import "bourbon";
 
-@import "application/drag_drop";
-@import "application/list_group";
-@import "application/tooltip";
-
-@import "application/tag_selector";
-
-@import "application/tag_list";
-
-@import "application/underlay";
-
-@import "application/tabs";
-
-@import "application/switch";
-
+@import "application/autocomplete";
 @import "application/color_picker";
 @import "application/dialog";
-@import "application/misc";
-@import "application/panel";
-
-@import "application/menu";
-@import "application/modal";
-
-@import "application/loading_mask";
-@import "application/tree";
-
-@import "application/autocomplete";
-@import "application/page_customization";
-@import "application/pagination";
-
+@import "application/drag_drop";
+@import "application/editable";
+@import "application/editor_alloy";
 @import "application/editor_ckeditor";
 @import "application/editor_html";
 @import "application/editor_lfr_source";
-
-@import "application/editor_alloy";
-
-@import "application/editable";
+@import "application/list_group";
+@import "application/loading_mask";
+@import "application/menu";
+@import "application/misc";
+@import "application/modal";
+@import "application/page_customization";
+@import "application/pagination";
+@import "application/panel";
+@import "application/switch";
+@import "application/tabs";
+@import "application/tag_list";
+@import "application/tag_selector";
+@import "application/tooltip";
+@import "application/tree";
+@import "application/underlay";
