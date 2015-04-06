@@ -282,6 +282,18 @@ AUI.add(
 						);
 					},
 
+					_addFieldValidation: function(newField, originalField) {
+						var instance = this;
+
+						instance.fire(
+							'repeat',
+							{
+								field: newField,
+								originalField: originalField
+							}
+						);
+					},
+
 					_afterDeleteAvailableLocale: function(event) {
 						var instance = this;
 
@@ -338,6 +350,17 @@ AUI.add(
 						}
 
 						event.stopPropagation();
+					},
+
+					_removeFieldValidation: function(field) {
+						var instance = this;
+
+						instance.fire(
+							'remove',
+							{
+								field: field
+							}
+						);
 					},
 
 					_valueLocalizationMap: function() {
@@ -437,12 +460,7 @@ AUI.add(
 
 						siblings.splice(index, 1);
 
-						instance.fire(
-							'remove',
-							{
-								field: instance
-							}
-						);
+						instance._removeFieldValidation(instance);
 
 						instance.destroy();
 
@@ -485,13 +503,7 @@ AUI.add(
 
 								field.renderUI();
 
-								instance.fire(
-									'repeat',
-									{
-										field: field,
-										originalField: instance
-									}
-								);
+								instance._addFieldValidation(field, instance);
 							}
 						);
 					},
