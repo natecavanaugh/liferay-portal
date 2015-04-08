@@ -69,44 +69,11 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 
 		// Resources
 
-		if (serviceContext.isAddGroupPermissions() ||
-			serviceContext.isAddGuestPermissions()) {
-
-			addSACPEntryResources(
-				sacpEntry, serviceContext.isAddGroupPermissions(),
-				serviceContext.isAddGuestPermissions());
-		}
-		else {
-			addSACPEntryResources(
-				sacpEntry, serviceContext.getGroupPermissions(),
-				serviceContext.getGuestPermissions());
-		}
+		resourceLocalService.addResources(
+			sacpEntry.getCompanyId(), 0, userId, SACPEntry.class.getName(),
+			sacpEntry.getSacpEntryId(), false, false, false);
 
 		return sacpEntry;
-	}
-
-	@Override
-	public void addSACPEntryResources(
-			SACPEntry sacpEntry, boolean addGroupPermissions,
-			boolean addGuestPermissions)
-		throws PortalException {
-
-		resourceLocalService.addResources(
-			sacpEntry.getCompanyId(), 0, sacpEntry.getUserId(),
-			SACPEntry.class.getName(), sacpEntry.getSacpEntryId(), false,
-			addGroupPermissions, addGuestPermissions);
-	}
-
-	@Override
-	public void addSACPEntryResources(
-			SACPEntry sacpEntry, String[] groupPermissions,
-			String[] guestPermissions)
-		throws PortalException {
-
-		resourceLocalService.addModelResources(
-			sacpEntry.getCompanyId(), 0, sacpEntry.getUserId(),
-			SACPEntry.class.getName(), sacpEntry.getSacpEntryId(),
-			groupPermissions, guestPermissions);
 	}
 
 	@Override
@@ -173,28 +140,7 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 
 		sacpEntry = sacpEntryPersistence.update(sacpEntry, serviceContext);
 
-		// Resources
-
-		if ((serviceContext.getGroupPermissions() != null) ||
-			(serviceContext.getGuestPermissions() != null)) {
-
-			updateSACPEntryResources(
-				sacpEntry, serviceContext.getGroupPermissions(),
-				serviceContext.getGuestPermissions());
-		}
-
 		return sacpEntry;
-	}
-
-	@Override
-	public void updateSACPEntryResources(
-			SACPEntry sacpEntry, String[] groupPermissions,
-			String[] guestPermissions)
-		throws PortalException {
-
-		resourceLocalService.updateResources(
-			sacpEntry.getCompanyId(), 0, SACPEntry.class.getName(),
-			sacpEntry.getSacpEntryId(), groupPermissions, guestPermissions);
 	}
 
 }
