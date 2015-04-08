@@ -56,24 +56,6 @@ public class SACPEntryLocalServiceWrapper implements SACPEntryLocalService,
 		return _sacpEntryLocalService.addSACPEntry(sacpEntry);
 	}
 
-	@Override
-	public void addSACPEntryResources(
-		com.liferay.service.access.control.profile.model.SACPEntry sacpEntry,
-		boolean addGroupPermissions, boolean addGuestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		_sacpEntryLocalService.addSACPEntryResources(sacpEntry,
-			addGroupPermissions, addGuestPermissions);
-	}
-
-	@Override
-	public void addSACPEntryResources(
-		com.liferay.service.access.control.profile.model.SACPEntry sacpEntry,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		_sacpEntryLocalService.addSACPEntryResources(sacpEntry,
-			groupPermissions, guestPermissions);
-	}
-
 	/**
 	* Creates a new s a c p entry with the primary key. Does not add the s a c p entry to the database.
 	*
@@ -371,15 +353,6 @@ public class SACPEntryLocalServiceWrapper implements SACPEntryLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _sacpEntryLocalService.updateSACPEntry(sacpEntryId,
 			allowedServices, name, titleMap, serviceContext);
-	}
-
-	@Override
-	public void updateSACPEntryResources(
-		com.liferay.service.access.control.profile.model.SACPEntry sacpEntry,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		_sacpEntryLocalService.updateSACPEntryResources(sacpEntry,
-			groupPermissions, guestPermissions);
 	}
 
 	/**

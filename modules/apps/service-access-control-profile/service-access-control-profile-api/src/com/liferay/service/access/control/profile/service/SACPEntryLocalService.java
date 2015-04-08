@@ -64,16 +64,6 @@ public interface SACPEntryLocalService extends BaseLocalService,
 	public com.liferay.service.access.control.profile.model.SACPEntry addSACPEntry(
 		com.liferay.service.access.control.profile.model.SACPEntry sacpEntry);
 
-	public void addSACPEntryResources(
-		com.liferay.service.access.control.profile.model.SACPEntry sacpEntry,
-		boolean addGroupPermissions, boolean addGuestPermissions)
-		throws PortalException;
-
-	public void addSACPEntryResources(
-		com.liferay.service.access.control.profile.model.SACPEntry sacpEntry,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
-		throws PortalException;
-
 	/**
 	* Creates a new s a c p entry with the primary key. Does not add the s a c p entry to the database.
 	*
@@ -297,10 +287,5 @@ public interface SACPEntryLocalService extends BaseLocalService,
 		java.lang.String name,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws PortalException;
-
-	public void updateSACPEntryResources(
-		com.liferay.service.access.control.profile.model.SACPEntry sacpEntry,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws PortalException;
 }
