@@ -608,22 +608,23 @@ AUI.add(
 					updateTranslationsDefaultValue: function() {
 						var instance = this;
 
+						var localizationMap = instance.get('localizationMap');
 						var parent = instance.get('parent');
 
 						var translationManager = parent.get('translationManager');
 
-						var localizationMap = instance.get('localizationMap');
+						if (translationManager) {
+							AArray.each(
+								translationManager.get('availableLocales'),
+								function(item, index) {
+									var value = localizationMap[item];
 
-						AArray.each(
-							translationManager.get('availableLocales'),
-							function(item, index) {
-								var value = localizationMap[item];
-
-								if (Lang.isUndefined(value)) {
-									localizationMap[item] = instance.getValue();
+									if (Lang.isUndefined(value)) {
+										localizationMap[item] = instance.getValue();
+									}
 								}
-							}
-						);
+							);
+						}
 					}
 				}
 			}
