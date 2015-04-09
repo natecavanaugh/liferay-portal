@@ -161,9 +161,12 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 			throw new DuplicateSACPEntryNameException();
 		}
 
+		Date now = new Date();
+
 		sacpEntry.setAllowedServices(allowedServices);
 		sacpEntry.setName(name);
 		sacpEntry.setTitleMap(titleMap);
+		sacpEntry.setModifiedDate(now);
 
 		sacpEntry = sacpEntryPersistence.update(sacpEntry, serviceContext);
 
