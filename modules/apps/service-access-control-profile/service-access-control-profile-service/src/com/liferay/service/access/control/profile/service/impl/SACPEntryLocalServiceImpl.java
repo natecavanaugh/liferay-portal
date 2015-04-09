@@ -17,11 +17,15 @@ package com.liferay.service.access.control.profile.service.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.service.access.control.profile.exception.DuplicateSACPEntryNameException;
+import com.liferay.service.access.control.profile.exception.SACPEntryNameException;
+import com.liferay.service.access.control.profile.exception.SACPEntryTitleException;
 import com.liferay.service.access.control.profile.model.SACPEntry;
 import com.liferay.service.access.control.profile.service.base.SACPEntryLocalServiceBaseImpl;
 
@@ -41,6 +45,12 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 			long companyId, long userId, String allowedServices, String name,
 			Map<Locale, String> titleMap, ServiceContext serviceContext)
 		throws PortalException {
+
+		if (name != null) {
+			name = name.trim();
+		}
+
+		validate(name, titleMap);
 
 		// Service access control profile entry
 
@@ -131,6 +141,12 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 
 		// Service access control profile entry
 
+		if (name != null) {
+			name = name.trim();
+		}
+
+		validate(name, titleMap);
+
 		SACPEntry sacpEntry = sacpEntryPersistence.findByPrimaryKey(
 			sacpEntryId);
 
@@ -141,6 +157,29 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 		sacpEntry = sacpEntryPersistence.update(sacpEntry, serviceContext);
 
 		return sacpEntry;
+	}
+
+	protected void validate(String name, Map<Locale, String> titleMap)
+		throws PortalException {
+
+		if (Validator.isNull(name) || (name.trim().length() == 0)) {
+			throw new SACPEntryNameException("SACPEntry name is required");
+		}
+
+		boolean titleExists = false;
+
+		if (titleMap != null) {
+			Locale defaultLocale = LocaleUtil.getDefault();
+			String defaultTitle = titleMap.get(defaultLocale);
+
+			if ((defaultTitle != null) && (defaultTitle.trim().length() > 0)) {
+				titleExists = true;
+			}
+		}
+
+		if (!titleExists) {
+			throw new SACPEntryTitleException("SACPEntry title is required");
+		}
 	}
 
 }
