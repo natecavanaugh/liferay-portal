@@ -40,6 +40,8 @@ if (sacpEntryId > 0) {
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 
 	<liferay-ui:error exception="<%= DuplicateSACPEntryNameException.class %>" message="please-enter-a-unique-service-access-control-profile-name" />
+	<liferay-ui:error exception="<%= SACPEntryNameException.class %>" message="service-access-control-profile-name-is-required" />
+	<liferay-ui:error exception="<%= SACPEntryTitleException.class %>" message="service-access-control-profile-title-is-required" />
 
 	<aui:model-context bean="<%= sacpEntry %>" model="<%= SACPEntry.class %>" />
 
