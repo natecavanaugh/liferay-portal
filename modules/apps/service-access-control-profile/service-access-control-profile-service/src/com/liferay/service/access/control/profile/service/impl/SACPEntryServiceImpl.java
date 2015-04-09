@@ -58,8 +58,7 @@ public class SACPEntryServiceImpl extends SACPEntryServiceBaseImpl {
 			SACPConstants.ACTION_ADD_SACP_ENTRY);
 
 		return sacpEntryLocalService.addSACPEntry(
-			companyId, getUserId(), allowedServices, name, titleMap,
-			serviceContext);
+			getUserId(), allowedServices, name, titleMap, serviceContext);
 	}
 
 	@Override

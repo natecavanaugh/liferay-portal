@@ -42,7 +42,7 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 
 	@Override
 	public SACPEntry addSACPEntry(
-			long companyId, long userId, String allowedServices, String name,
+			long userId, String allowedServices, String name,
 			Map<Locale, String> titleMap, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -54,11 +54,14 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 
 		// Service access control profile entry
 
+		User user = userLocalService.getUserById(userId);
+
+		long companyId = user.getCompanyId();
+
 		if (sacpEntryPersistence.fetchByC_N(companyId, name) != null) {
 			throw new DuplicateSACPEntryNameException();
 		}
 
-		User user = userLocalService.getUserById(userId);
 		Date now = new Date();
 
 		long sacpEntryId = counterLocalService.increment();
