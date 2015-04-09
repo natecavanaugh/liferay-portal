@@ -30,7 +30,7 @@
 		</finder>
 		<finder name="C_N" return-type="SACPEntry">
 			<finder-column name="companyId" />
-			<finder-column name="name" />
+			<finder-column name="name" case-sensitive="false" />
 		</finder>
 	</entity>
 	<exceptions>
