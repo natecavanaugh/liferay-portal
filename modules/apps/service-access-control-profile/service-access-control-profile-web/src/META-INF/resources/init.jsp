@@ -25,6 +25,7 @@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %><%@
 taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %>
 
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
+page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
