@@ -42,16 +42,6 @@ public class SACPEntryLocalServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.service.access.control.profile.service.impl.SACPEntryLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
-	public static com.liferay.service.access.control.profile.model.SACPEntry addSACPEntry(
-		long companyId, long userId, java.lang.String allowedServices,
-		java.lang.String name,
-		java.util.Map<java.util.Locale, java.lang.String> titleMap,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService()
-				   .addSACPEntry(companyId, userId, allowedServices, name,
-			titleMap, serviceContext);
-	}
 
 	/**
 	* Adds the s a c p entry to the database. Also notifies the appropriate model listeners.
@@ -62,6 +52,16 @@ public class SACPEntryLocalServiceUtil {
 	public static com.liferay.service.access.control.profile.model.SACPEntry addSACPEntry(
 		com.liferay.service.access.control.profile.model.SACPEntry sacpEntry) {
 		return getService().addSACPEntry(sacpEntry);
+	}
+
+	public static com.liferay.service.access.control.profile.model.SACPEntry addSACPEntry(
+		long userId, java.lang.String allowedServices, java.lang.String name,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addSACPEntry(userId, allowedServices, name, titleMap,
+			serviceContext);
 	}
 
 	/**

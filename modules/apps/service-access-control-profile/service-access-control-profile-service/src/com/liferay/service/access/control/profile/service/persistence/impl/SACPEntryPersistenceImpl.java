@@ -2934,7 +2934,7 @@ public class SACPEntryPersistenceImpl extends BasePersistenceImpl<SACPEntry>
 				qPos.add(companyId);
 
 				if (bindName) {
-					qPos.add(name);
+					qPos.add(StringUtil.toLowerCase(name));
 				}
 
 				List<SACPEntry> list = q.list();
@@ -3050,7 +3050,7 @@ public class SACPEntryPersistenceImpl extends BasePersistenceImpl<SACPEntry>
 				qPos.add(companyId);
 
 				if (bindName) {
-					qPos.add(name);
+					qPos.add(StringUtil.toLowerCase(name));
 				}
 
 				count = (Long)q.uniqueResult();
@@ -3072,7 +3072,7 @@ public class SACPEntryPersistenceImpl extends BasePersistenceImpl<SACPEntry>
 
 	private static final String _FINDER_COLUMN_C_N_COMPANYID_2 = "sacpEntry.companyId = ? AND ";
 	private static final String _FINDER_COLUMN_C_N_NAME_1 = "sacpEntry.name IS NULL";
-	private static final String _FINDER_COLUMN_C_N_NAME_2 = "sacpEntry.name = ?";
+	private static final String _FINDER_COLUMN_C_N_NAME_2 = "lower(sacpEntry.name) = ?";
 	private static final String _FINDER_COLUMN_C_N_NAME_3 = "(sacpEntry.name IS NULL OR sacpEntry.name = '')";
 
 	public SACPEntryPersistenceImpl() {
