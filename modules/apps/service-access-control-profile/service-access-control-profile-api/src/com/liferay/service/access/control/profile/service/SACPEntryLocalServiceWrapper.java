@@ -33,17 +33,6 @@ public class SACPEntryLocalServiceWrapper implements SACPEntryLocalService,
 		_sacpEntryLocalService = sacpEntryLocalService;
 	}
 
-	@Override
-	public com.liferay.service.access.control.profile.model.SACPEntry addSACPEntry(
-		long companyId, long userId, java.lang.String allowedServices,
-		java.lang.String name,
-		java.util.Map<java.util.Locale, java.lang.String> titleMap,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _sacpEntryLocalService.addSACPEntry(companyId, userId,
-			allowedServices, name, titleMap, serviceContext);
-	}
-
 	/**
 	* Adds the s a c p entry to the database. Also notifies the appropriate model listeners.
 	*
@@ -54,6 +43,16 @@ public class SACPEntryLocalServiceWrapper implements SACPEntryLocalService,
 	public com.liferay.service.access.control.profile.model.SACPEntry addSACPEntry(
 		com.liferay.service.access.control.profile.model.SACPEntry sacpEntry) {
 		return _sacpEntryLocalService.addSACPEntry(sacpEntry);
+	}
+
+	@Override
+	public com.liferay.service.access.control.profile.model.SACPEntry addSACPEntry(
+		long userId, java.lang.String allowedServices, java.lang.String name,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _sacpEntryLocalService.addSACPEntry(userId, allowedServices,
+			name, titleMap, serviceContext);
 	}
 
 	/**
