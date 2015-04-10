@@ -70,7 +70,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 		</portlet:renderURL>
 
 		<aui:button-row>
-			<aui:button href="<%= addSACPEntryURL %>" value="add-service-access-control-profile" />
+			<aui:button href="<%= addSACPEntryURL %>" value="add" />
 		</aui:button-row>
 	</c:if>
 
