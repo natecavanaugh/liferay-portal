@@ -35,5 +35,7 @@
 	</entity>
 	<exceptions>
 		<exception>DuplicateSACPEntryName</exception>
+		<exception>SACPEntryName</exception>
+		<exception>SACPEntryTitle</exception>
 	</exceptions>
 </service-builder>
