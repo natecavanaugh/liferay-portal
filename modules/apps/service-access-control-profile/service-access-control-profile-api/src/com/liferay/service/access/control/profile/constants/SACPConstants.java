@@ -24,4 +24,8 @@ public interface SACPConstants {
 	public static String PORTLET_ID =
 		"com_liferay_service_access_control_profile_web_portlet_SACPPortlet";
 
+	public static String SACP_ENTRY_NAME_ALLOWED_CHARACTERS =
+		"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
+			"#:@-./_";
+
 }

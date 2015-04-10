@@ -47,7 +47,24 @@ if (sacpEntryId > 0) {
 
 	<aui:input name="sacpEntryId" type="hidden" />
 
-	<aui:input name="name" required="<%= true %>" />
+	<aui:input name="name" required="<%= true %>">
+		<aui:validator errorMessage="this-field-is-required-and-must-contain-only-following-characters" name="custom">
+			function(val, fieldNode, ruleValue) {
+				var allowedCharacters = '<%= HtmlUtil.escapeJS(SACPConstants.SACP_ENTRY_NAME_ALLOWED_CHARACTERS) %>';
+
+				val = val.trim();
+
+				for (var i = 0; i < val.length; i++) {
+					var character = val.charAt(i);
+					if (allowedCharacters.indexOf(character) < 0) {
+						return false;
+					}
+				}
+
+				return val.length > 0;
+			}
+		</aui:validator>
+	</aui:input>
 
 	<aui:input name="title" required="<%= true %>" />
 
