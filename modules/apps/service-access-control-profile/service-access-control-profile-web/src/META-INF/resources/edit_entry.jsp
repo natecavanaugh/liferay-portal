@@ -54,14 +54,9 @@ if (sacpEntryId > 0) {
 
 				val = val.trim();
 
-				for (var i = 0; i < val.length; i++) {
-					var character = val.charAt(i);
-					if (allowedCharacters.indexOf(character) < 0) {
-						return false;
-					}
-				}
+				var regex = new RegExp('[^' + allowedCharacters + ']');
 
-				return val.length > 0;
+				return !regex.test(val);
 			}
 		</aui:validator>
 	</aui:input>

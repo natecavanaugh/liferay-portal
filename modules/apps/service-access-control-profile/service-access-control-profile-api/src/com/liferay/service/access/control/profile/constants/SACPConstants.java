@@ -26,6 +26,6 @@ public interface SACPConstants {
 
 	public static String SACP_ENTRY_NAME_ALLOWED_CHARACTERS =
 		"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
-			"#:@-./_";
+			"#:@./_-";
 
 }
