@@ -32,6 +32,9 @@ boolean defaultSACPEntry = false;
 if (sacpEntry != null) {
 	defaultSACPEntry = sacpEntry.isDefaultSACPEntry();
 }
+
+int[] allowedServiceSignaturesIndexes = new int[] {0};
+
 %>
 
 <liferay-ui:header
@@ -69,7 +72,97 @@ if (sacpEntry != null) {
 
 	<aui:input name="title" required="<%= true %>" />
 
-	<aui:input helpMessage="allowed-service-signatures-help" name="allowedServiceSignatures" />
+	<div id="<portlet:namespace />allowedServiceSignatures">
+
+		<%
+		for (int i = 0; i < allowedServiceSignaturesIndexes.length; i++) {
+			int allowedServiceIndex = allowedServiceSignaturesIndexes[i];
+
+			String packageName = ParamUtil.getString(request, "packageName" + allowedServiceIndex, "0");
+			String methodName = ParamUtil.getString(request, "methodName" + allowedServiceIndex, "All methods");
+		%>
+
+			<div class="lfr-form-row">
+				<div class="row-fields">
+					<aui:col md="6">
+						<aui:select id='<%= "packageName" + allowedServiceIndex %>' name="packageName"></aui:select>
+					</aui:col>
+					<aui:col md="6">
+						<aui:select id='<%= "methodName" + allowedServiceIndex %>' name="methodName"></aui:select>
+					</aui:col>
+				</div>
+			</div>
+
+			<aui:script use="liferay-dynamic-select">
+				new Liferay.DynamicSelect(
+					[
+						{
+							select: '<portlet:namespace />packageName<%= allowedServiceIndex %>',
+							selectData: getPackages,
+							selectDesc: 'name',
+							selectId: 'name',
+							selectSort: '<%= true %>',
+							selectVal: '<%= packageName %>'
+						},
+						{
+							select: '<portlet:namespace />methodName<%= allowedServiceIndex %>',
+							selectData: getMethods,
+							selectDesc: 'name',
+							selectId: 'name',
+							selectVal: '<%= methodName %>'
+						}
+					]
+				);
+			</aui:script>
+
+		<%
+		}
+		%>
+
+		<aui:input name="allowedServiceSignaturesIndexes" type="hidden" value="<%= StringUtil.merge(allowedServiceSignaturesIndexes) %>" />
+	</div>
+
+	<aui:script use="liferay-auto-fields,liferay-dynamic-select">
+		var allowedServiceSignatures = new Liferay.AutoFields(
+			{
+				contentBox: '#<portlet:namespace />allowedServiceSignatures',
+				fieldIndexes: '<portlet:namespace />allowedServiceSignaturesIndexes',
+				namespace: '<portlet:namespace />',
+				on: {
+					'clone': function(event) {
+						var row = event.row;
+						var guid = event.guid;
+
+						var dynamicSelects = row.one('select[data-componentType=dynamic_select]');
+
+						if (dynamicSelects) {
+							dynamicSelects.detach('change');
+						}
+
+						new Liferay.DynamicSelect(
+							[
+								{
+									select: '<portlet:namespace />packageName' + guid,
+									selectData: getPackages,
+									selectDesc: 'name',
+									selectId: 'name',
+									selectSort: '<%= true %>',
+									selectVal: '0'
+								},
+								{
+									select: '<portlet:namespace />methodName' + guid,
+									selectData: getMethods,
+									selectDesc: 'name',
+									selectId: 'name',
+									selectVal: 'All methods'
+								}
+							]
+						);
+					}
+				}
+			}
+		).render();
+	</aui:script>
 
 	<aui:script>
 		// DUMMY DATA GENERATORS
