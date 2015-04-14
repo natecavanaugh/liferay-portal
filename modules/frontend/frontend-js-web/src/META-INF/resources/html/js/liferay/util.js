@@ -250,25 +250,27 @@
 		},
 
 		focusFormField: function(el) {
-			var interacting = false;
+			if (el) {
+				var interacting = false;
 
-			var doc = $(document);
+				var doc = $(document);
 
-			doc.on(
-				'click.focusFormField',
-				function(event) {
-					interacting = true;
+				doc.on(
+					'click.focusFormField',
+					function(event) {
+						interacting = true;
 
-					doc.off('click.focusFormField');
+						doc.off('click.focusFormField');
+					}
+				);
+
+				el = Util.getDOM(el);
+
+				el = $(el);
+
+				if (!interacting && Util.inBrowserView(el)) {
+					el.focus();
 				}
-			);
-
-			el = Util.getDOM(el);
-
-			el = $(el);
-
-			if (!interacting && Util.inBrowserView(el)) {
-				el.focus();
 			}
 		},
 
