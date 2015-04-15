@@ -691,17 +691,17 @@
 
 			var cite = token.attribute;
 
-			var result = '<blockquote><div>';
+			var result = '<blockquote><p>';
 
 			if (cite && cite.length) {
 				cite = BBCodeUtil.escape(cite);
 
-				result = '<blockquote><div><cite>' + cite + '</cite>';
+				result = '<blockquote><p><cite>' + cite + '</cite>';
 			}
 
 			instance._result.push(result);
 
-			instance._stack.push('</div></blockquote>');
+			instance._stack.push('</p></blockquote>');
 		},
 
 		_handleSimpleTag: function(tagName) {
