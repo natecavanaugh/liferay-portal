@@ -1,93 +1,110 @@
 'use strict';
 
-var assert = chai.assert;
+var chai = require('chai');
 
-describe('DDM Form Test Suite', function() {
-    this.timeout(5000);
+describe(
+	'DDM Form Test Suite',
+	function() {
+		var assert = chai.assert;
 
-    before(function(done) {
-        var self = this;
+		this.timeout(5000);
 
-        AUI().use('aui-io-request', 'liferay-ddm-form', function(A) {
-            var getTestData = function(name) {
-                var definition, html;
+		before(
+			function(done) {
+				var instance = this;
 
-                A.io.request(
-                    '/base/test/js/ddm_form/assets/' + name + '-definition.json',
-                    {
-                        dataType: 'json',
-                        on: {
-                            success: function() {
-                                definition = this.get('responseData');
-                            }
-                        },
-                        sync: true
-                    }
-                );
+				AUI().use(
+					'aui-io-request',
+					'liferay-ddm-form',
+					function(A) {
+						var getTestData = function(name) {
+							var definition;
 
-                A.io.request(
-                    '/base/test/js/ddm_form/assets/' + name + '-definition.html',
-                    {
-                        on: {
-                            success: function() {
-                                html = this.get('responseData');
-                            }
-                        },
-                        sync: true
-                    }
-                );
+							var html;
 
-                return { definition: definition, html: html };
-            };
+							A.io.request(
+								'/base/test/js/ddm_form/assets/' + name + '-definition.json',
+								{
+									dataType: 'json',
+									on: {
+										success: function() {
+											definition = this.get('responseData');
+										}
+									},
+									sync: true
+								}
+							);
 
-            assert.ok(Liferay.DDM.Form);
+							A.io.request(
+								'/base/test/js/ddm_form/assets/' + name + '-definition.html',
+								{
+									on: {
+										success: function() {
+											html = this.get('responseData');
+										}
+									},
+									sync: true
+								}
+							);
 
-            var data = getTestData('simple');
+							return { definition: definition, html: html };
+						};
 
-            document.body.innerHTML = data.html;
+						assert.ok(Liferay.DDM.Form);
 
-            self.ddmForm = new Liferay.DDM.Form(
-                {
-                    container: '#ddmContainer',
-                    ddmFormValuesInput: '#_167_ddmFormValues',
-                    definition: data.definition,
-                    doAsGroupId: 20180,
-                    fieldsNamespace: '',
-                    mode: 'null',
-                    p_l_id: 20173,
-                    portletNamespace: '_167_',
-                    repeatable: true
-                }
-            );
+						var data = getTestData('simple');
 
-            assert.ok(self.ddmForm);
+						document.body.innerHTML = data.html;
 
-            done();
-        });
-    });
+						instance.ddmForm = new Liferay.DDM.Form(
+							{
+								container: '#ddmContainer',
+								ddmFormValuesInput: '#_167_ddmFormValues',
+								definition: data.definition,
+								doAsGroupId: 20180,
+								fieldsNamespace: '',
+								mode: 'null',
+								p_l_id: 20173,
+								portletNamespace: '_167_',
+								repeatable: true
+							}
+						);
 
-    it('should serialize a simple DDM Form with one unlocalizable text field', function(done) {
-        var self = this,
-            ddmForm = self.ddmForm;
+						assert.ok(instance.ddmForm);
 
-        var textField = ddmForm.get('fields')[0];
+						done();
+					}
+				);
+			}
+		);
 
-        assert.ok(textField);
+		it(
+			'should serialize a simple DDM Form with one unlocalizable text field',
+			function(done) {
+				var instance = this;
 
-        var textFieldInputNode = textField.getInputNode();
+				var ddmForm = instance.ddmForm;
 
-        assert.ok(textFieldInputNode);
+				var textField = ddmForm.get('fields')[0];
 
-        var value = 'simple text';
+				assert.ok(textField);
 
-        textFieldInputNode.attr('value', value);
+				var textFieldInputNode = textField.getInputNode();
 
-        var json = ddmForm.toJSON();
+				assert.ok(textFieldInputNode);
 
-        assert.ok(json);
+				var value = 'simple text';
 
-        assert.strictEqual(value, json.fieldValues[0].value);
+				textFieldInputNode.attr('value', value);
 
-        done();
-    });
-});
+				var json = ddmForm.toJSON();
+
+				assert.ok(json);
+
+				assert.strictEqual(value, json.fieldValues[0].value);
+
+				done();
+			}
+		);
+	}
+);
