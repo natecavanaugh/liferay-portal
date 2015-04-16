@@ -59,6 +59,9 @@ cobertura.ser
 /lib/development/ojdbc5.jar
 /lib/development/ojdbc6.jar
 
+/modules/frontend/*/test/coverage
+/modules/frontend/*/node_modules
+
 /nbproject/private
 
 /osgi/bootstrap/classes
@@ -143,8 +146,6 @@ cobertura.ser
 /portal-web/portal-web.war.asc
 /portal-web/ROOT.war
 /portal-web/test/functional-generated
-/portal-web/test/js/coverage
-/portal-web/test/js/node_modules
 /portal-web/test-ant-scripts
 /portal-web/test-classes
 /portal-web/test-output
