@@ -22,14 +22,11 @@ var Properties = {
 		properties.parse(
 			instance.preprocess(contents),
 			{
+				include: true,
 				path: false
 			},
 			function(error, obj) {
-				if (error) {
-					return console.error(error);
-				}
-
-				callback.call(instance, [obj]);
+				callback.call(instance, [obj, error]);
 			}
 		);
 	}

@@ -13,7 +13,10 @@ window.Liferay = {
 			return 'raw';
 		},
 		getJavaScriptRootPath: function() {
-			return '/base/docroot/html/js';
+			return '/base';
+		},
+		getStaticResourceURLParams: function() {
+			return '';
 		}
 	},
 
