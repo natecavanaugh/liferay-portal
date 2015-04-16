@@ -1,17 +1,15 @@
 'use strict';
 
+var properties = require('./test/properties.js');
+
 // Karma configuration
-
-var basePath = process.cwd() + '/../../';
-
-var jsPath = 'docroot/html/js/';
 
 var defaultConfig = {
 	// enable / disable watching file and executing tests whenever any file changes
 	autoWatch: false,
 
 	// base path that will be used to resolve all patterns (eg. files, exclude)
-	basePath: basePath,
+	basePath: './',
 
 	browsers: ['Chrome', 'Firefox', 'Safari'],
 
@@ -19,7 +17,7 @@ var defaultConfig = {
 	colors: true,
 
 	coverageReporter: {
-		dir: 'test/js/coverage'
+		dir: 'test/coverage'
 	},
 
 	// list of files to exclude
@@ -39,7 +37,7 @@ var defaultConfig = {
 	// preprocess matching files before serving them to the browser
 	// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 	preprocessors: {
-		'docroot/html/js/liferay/*.js': ['coverage']
+		'src/META-INF/resources/html/js/liferay/*.js': ['coverage']
 	},
 
 	// test results reporter to use
@@ -54,15 +52,11 @@ var defaultConfig = {
 
 // list of files / patterns to load in the browser
 defaultConfig.files = [
-	'test/js/mock_base.js'
+	'test/mock_base.js'
 ];
 
-var portalProperties = basePath + '../portal-impl/src/portal.properties';
-
-var properties = require('./properties.js');
-
 properties.read(
-	portalProperties,
+	'../../../portal-impl/src/portal.properties',
 	function(data) {
 		var props = data[0];
 
@@ -70,52 +64,61 @@ properties.read(
 
 		bareboneFiles.forEach(
 			function(file) {
+				var filePath = [file];
+
+				if ((file.indexOf('aui') === 0) || (file.indexOf('editor') === 0)) {
+					filePath.unshift('tmp');
+				}
+				else {
+					filePath.unshift('src/META-INF/resources/html/js');
+				}
+
 				defaultConfig.files.push(
 					{
 						included: true,
-						pattern: jsPath + file,
+						pattern: filePath.join('/'),
 						served: true
 					}
 				);
 
 				if (file === 'liferay/modules.js') {
-					defaultConfig.files.push('test/js/mock_modules.js');
+					defaultConfig.files.push('test/mock_modules.js');
 				}
 			}
 		);
 
 		defaultConfig.files = defaultConfig.files.concat(
 			[
-				'test/js/mock_available_languages.js',
-				'test/js/mock_language.js',
+				'test/mock_available_languages.js',
+				'test/mock_language.js',
 
 				{
 					included: false,
-					pattern: jsPath + 'aui/**/*.css',
+					pattern: 'tmp/aui/**/*.css',
 					served: true
 				},
 
 				{
 					included: false,
-					pattern: jsPath + 'aui/**/*.js',
+					pattern: 'tmp/aui/**/*.js',
 					served: true
 				},
 
 				{
 					included: false,
-					pattern: jsPath + 'liferay/*.js',
+					pattern: 'src/META-INF/resources/html/js/liferay/*.js',
 					served: true
 				},
 
 				{
 					included: false,
-					pattern: 'test/js/*/assets/*',
+					pattern: 'test/*/assets/*',
 					served: true
 				},
 
 				{
 					included: true,
-					pattern: 'test/js/*/*-test.js',
+					pattern: 'test/*/*-test.js',
 					served: true
 				}
 			]

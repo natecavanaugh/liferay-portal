@@ -1,5 +1,5 @@
 {
-  "name": "liferay-portal-javascript-tests",
+  "name": "liferay-frontend-web-tests",
   "version": "0.0.1",
   "description": "Liferay Portal JavaScript Tests",
   "dependencies": {},
