@@ -8,9 +8,11 @@
 	}
 }
 
-.taglib-diff-html div.diff-removed-image, div.diff-added-image {
-	height: 300px;
-	margin: 2px;
-	position: absolute;
-	width: 200px;
+.taglib-diff-html {
+	div.diff-removed-imagei, div.diff-added-image {
+		height: 300px;
+		margin: 2px;
+		position: absolute;
+		width: 200px;
+	}
 }
