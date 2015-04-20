@@ -14,20 +14,37 @@
 
 package com.liferay.service.access.control.profile.web.portlet;
 
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionMapping;
+import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManager;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.service.access.control.profile.service.SACPEntryLocalService;
 import com.liferay.service.access.control.profile.service.SACPEntryService;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import java.lang.reflect.Method;
+
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.Portlet;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -64,7 +81,70 @@ public class SACPPortlet extends MVCPortlet {
 
 		long sacpEntryId = ParamUtil.getLong(actionRequest, "sacpEntryId");
 
-		_sacpEntryLocalService.deleteSACPEntry(sacpEntryId);
+		_sacpEntryService.deleteSACPEntry(sacpEntryId);
+	}
+
+	public void getMethods(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws IOException {
+
+		String contextName = ParamUtil.get(
+			resourceRequest, "context", StringPool.BLANK);
+		String serviceClass = ParamUtil.get(
+			resourceRequest, "serviceClass", StringPool.BLANK);
+
+		Map<String, Set> jsonWebServiceClasses = getJsonWebServiceClasses(
+			contextName);
+
+		Set<JSONWebServiceActionMapping> jsonWebServiceActionMappings =
+			jsonWebServiceClasses.get(serviceClass);
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (JSONWebServiceActionMapping jsonWebServiceActionMapping :
+				jsonWebServiceActionMappings) {
+
+			Method method = jsonWebServiceActionMapping.getActionMethod();
+
+			jsonArray.put(method.getName());
+		}
+
+		PrintWriter writer = resourceResponse.getWriter();
+
+		writer.write(jsonArray.toString());
+	}
+
+	public void getServices(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws IOException {
+
+		Set<String> contextNames =
+			_jsonWebServiceActionsManager.getContextNames();
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (String contextName : contextNames) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+			jsonArray.put(jsonObject);
+
+			jsonObject.put("context", contextName);
+
+			JSONArray jsonArrayServices = JSONFactoryUtil.createJSONArray();
+
+			jsonObject.put("serviceClasses", jsonArrayServices);
+
+			Map<String, Set> jsonWebServiceClasses = getJsonWebServiceClasses(
+				contextName);
+
+			for (String className : jsonWebServiceClasses.keySet()) {
+				jsonArrayServices.put(className);
+			}
+		}
+
+		PrintWriter writer = resourceResponse.getWriter();
+
+		writer.write(jsonArray.toString());
 	}
 
 	public void updateSACPEntry(
@@ -82,7 +162,7 @@ public class SACPPortlet extends MVCPortlet {
 			actionRequest);
 
 		if (sacpEntryId > 0) {
-			_sacpEntryLocalService.updateSACPEntry(
+			_sacpEntryService.updateSACPEntry(
 				sacpEntryId, allowedServices, name, titleMap, serviceContext);
 		}
 		else {
@@ -92,11 +172,46 @@ public class SACPPortlet extends MVCPortlet {
 		}
 	}
 
-	@Reference(unbind = "-")
-	protected void setSACPEntryLocalService(
-		SACPEntryLocalService sacpEntryLocalService) {
+	protected Map<String, Set> getJsonWebServiceClasses(String contextName) {
+		Map<String, Set> jsonWebServiceClasses = new LinkedHashMap<>();
 
-		_sacpEntryLocalService = sacpEntryLocalService;
+		List<JSONWebServiceActionMapping> jsonWebServiceActionMappings =
+			_jsonWebServiceActionsManager.getJSONWebServiceActionMappings(
+				contextName);
+
+		for (JSONWebServiceActionMapping jsonWebServiceActionMapping :
+				jsonWebServiceActionMappings) {
+
+			Class<?> actionClass = jsonWebServiceActionMapping.getActionClass();
+
+			String className = actionClass.getName();
+
+			className = StringUtil.replace(className, ".impl.", ".");
+
+			if (className.endsWith("Impl")) {
+				className = className.substring(0, className.length() - 4);
+			}
+
+			Set<JSONWebServiceActionMapping> jsonWebServiceMappings =
+				jsonWebServiceClasses.get(className);
+
+			if (jsonWebServiceMappings == null) {
+				jsonWebServiceMappings = new LinkedHashSet<>();
+
+				jsonWebServiceClasses.put(className, jsonWebServiceMappings);
+			}
+
+			jsonWebServiceMappings.add(jsonWebServiceActionMapping);
+		}
+
+		return jsonWebServiceClasses;
+	}
+
+	@Reference(unbind = "-")
+	protected void setJSONWebServiceActionsManager(
+		JSONWebServiceActionsManager jsonWebServiceActionsManager) {
+
+		_jsonWebServiceActionsManager = jsonWebServiceActionsManager;
 	}
 
 	@Reference(unbind = "-")
@@ -104,7 +219,7 @@ public class SACPPortlet extends MVCPortlet {
 		_sacpEntryService = sacpEntryService;
 	}
 
-	private SACPEntryLocalService _sacpEntryLocalService;
+	private JSONWebServiceActionsManager _jsonWebServiceActionsManager;
 	private SACPEntryService _sacpEntryService;
 
 }
