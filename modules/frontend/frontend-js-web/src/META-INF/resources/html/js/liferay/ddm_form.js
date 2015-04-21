@@ -1424,6 +1424,8 @@ AUI.add(
 				NAME: 'liferay-ddm-form',
 
 				prototype: {
+					eventHandlers: [],
+
 					repeatableInstances: {},
 
 					initializer: function() {
@@ -1447,20 +1449,30 @@ AUI.add(
 						instance.formNode = container.ancestor('form', true);
 
 						if (instance.formNode) {
-							instance.formNode.on('submit', instance._onSubmitForm, instance);
-
-							Liferay.on('submitForm', instance._onLiferaySubmitForm, instance);
-
-							Liferay.after('form:registered', instance._afterFormRegistered, instance);
-
-							instance.after(
-								['liferay-ddm-field:repeat', 'liferay-ddm-field:remove'],
-								instance._afterUpdateRepeatableFields,
-								instance
+							instance.eventHandlers = instance.eventHandlers.concat(
+								[
+									instance.after('liferay-ddm-field:render', instance._afterRenderField, instance),
+									instance.after(
+										['liferay-ddm-field:repeat', 'liferay-ddm-field:remove'],
+										instance._afterUpdateRepeatableFields,
+										instance
+									),
+									instance.formNode.on('submit', instance._onSubmitForm, instance),
+									Liferay.after('form:registered', instance._afterFormRegistered, instance),
+									Liferay.on('submitForm', instance._onLiferaySubmitForm, instance)
+								]
 							);
-
-							instance.after('liferay-ddm-field:render', instance._afterRenderField, instance);
 						}
+					},
+
+					destructor: function() {
+						var instance = this;
+
+						AArray.invoke(instance.eventHandlers, 'detach');
+
+						instance.eventHandlers = null;
+
+						instance.formNode = null;
 					},
 
 					_afterFormRegistered: function(event) {
