@@ -22,6 +22,7 @@
 @import "application/tabs";
 @import "application/tag_list";
 @import "application/tag_selector";
+@import "application/toggle-card";
 @import "application/toggle-switch";
 @import "application/tooltip";
 @import "application/tree";
