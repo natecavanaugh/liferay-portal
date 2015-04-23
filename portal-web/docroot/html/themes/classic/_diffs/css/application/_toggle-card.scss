@@ -9,9 +9,9 @@ $toggle-card-border-radius: 2px;
 
 $toggle-card-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
 
+$toggle-card-icon-border-radius: 30px;
 $toggle-card-icon-height: 32px;
 $toggle-card-icon-width: 32px;
-$toggle-card-icon-border-radius: 30px;
 
 // toggle-card-off Card Styles
 $toggle-card-border: #DCE0E3;
@@ -35,13 +35,13 @@ $toggle-card-on-icon-border-width: 0;
 }
 
 .toggle-card-container {
-	display: table;
 	border: $toggle-card-border-width solid $toggle-card-border;
 	border-radius: $toggle-card-border-radius;
 	box-shadow: $toggle-card-box-shadow;
+	display: table;
+	height: $toggle-card-height;
 	padding: $toggle-card-padding-vertical $toggle-card-padding-horizontal;
 	text-align: center;
-	height: $toggle-card-height;
 	width: $toggle-card-width;
 }
 
@@ -53,8 +53,8 @@ $toggle-card-on-icon-border-width: 0;
 
 .toggle-card-icon {
 	border-radius: $toggle-card-icon-border-radius;
-	height: $toggle-card-icon-height;
 	font-size: 24px;
+	height: $toggle-card-icon-height;
 	margin: 0 auto;
 	width: $toggle-card-icon-width;
 

@@ -2,12 +2,11 @@
 
 // must all be same units--start
 $toggle-switch-button-width: 25px;
-$toggle-switch-bar-padding: 0px; // space between button and bar, can be negative value
+$toggle-switch-bar-padding: 0; // space between button and bar, can be negative value
 
 $toggle-switch-bar-width: 50px; // width of switch bar
 $toggle-switch-bar-height: ($toggle-switch-bar-padding * 2) + $toggle-switch-button-width;
 // must all be same units--end
-
 
 $toggle-switch-bar-border-radius: 3px;
 $toggle-switch-button-border-radius: 3px;
@@ -109,8 +108,8 @@ input.toggle-switch {
 	position: absolute;
 
 	@include color-toggle-switch-bar($toggle-switch-bar-bg, $toggle-switch-bar-border-color);
-	@include color-toggle-switch-button($toggle-switch-button-bg, $toggle-switch-button-border-color);
 	@include color-toggle-switch-bar-icon($toggle-switch-bar-icon-color);
+	@include color-toggle-switch-button($toggle-switch-button-bg, $toggle-switch-button-border-color);
 	@include color-toggle-switch-button-icon($toggle-switch-button-icon-color);
 
 	&:empty ~ .toggle-switch-bar {

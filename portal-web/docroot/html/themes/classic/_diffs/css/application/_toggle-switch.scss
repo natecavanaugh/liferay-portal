@@ -114,8 +114,8 @@ input.toggle-switch {
 	position: absolute;
 
 	@include color-toggle-switch-bar(#FFF, #D1D6D9, $toggle-switch-bar-bg, $toggle-switch-bar-border-color);
-	@include color-toggle-switch-button(#869CAD, #869CAD, $toggle-switch-button-bg, $toggle-switch-button-border-color);
 	@include color-toggle-switch-bar-icon(#869CAD, $toggle-switch-bar-icon-color);
+	@include color-toggle-switch-button(#869CAD, #869CAD, $toggle-switch-button-bg, $toggle-switch-button-border-color);
 	@include color-toggle-switch-button-icon(#FFF, $toggle-switch-bar-bg);
 
 	&:empty ~ .toggle-switch-bar {
