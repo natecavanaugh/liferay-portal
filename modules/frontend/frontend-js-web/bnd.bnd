@@ -80,6 +80,7 @@ Include-Resource:\
 	classes,\
 	META-INF/resources=src/META-INF/resources,\
 	META-INF/resources/html/js=tmp/META-INF/resources/html/js,\
+	META-INF/resources=classes/META-INF/resources/html/js/liferay/.js_cache,\
 	@../../../util-java/util-java.jar!/com/liferay/util/Encryptor.class,\
 	@../../../util-java/util-java.jar!/com/liferay/util/EncryptorException.class
 Web-ContextPath: /frontend-js-web

@@ -27,7 +27,7 @@ String portletId = portletDisplay.getId();
 </liferay-ui:ddm-template-renderer>
 
 <aui:script>
-	require('html/js/es6/main', function(main) {
+	require('html/js/liferay/address', function(main) {
 		main.log('Hello World!');
 
 		var portletBody = $('#p_p_id_<%= portletId %>_ .portlet-body');
