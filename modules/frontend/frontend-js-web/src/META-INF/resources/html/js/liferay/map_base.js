@@ -7,7 +7,9 @@ AUI.add(
 
 		var STR_CONTROLS = 'controls';
 
-		var TPL_HOME_BUTTON = '<button class="btn btn-default home-button"><i class="glyphicon glyphicon-screenshot"></i></button>';
+		var TPL_HOME_BUTTON = '<button class="btn btn-default home-button">' +
+				'<i class="glyphicon glyphicon-screenshot"></i>' +
+			'</button>';
 
 		var TPL_SEARCHBOX = '<div class="col-md-6 search-controls"><input class="search-input" placeholder="" type="text"></div>';
 
