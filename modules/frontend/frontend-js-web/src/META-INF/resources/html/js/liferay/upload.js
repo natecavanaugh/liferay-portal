@@ -9,9 +9,9 @@ AUI.add(
 
 		var STATUS_CODE = Liferay.STATUS_CODE;
 
-		var STRINGS = 'strings';
-
 		var STR_BLANK = '';
+
+		var STRINGS = 'strings';
 
 		var STR_PARAM_FALLBACK = 'uploader=fallback';
 
