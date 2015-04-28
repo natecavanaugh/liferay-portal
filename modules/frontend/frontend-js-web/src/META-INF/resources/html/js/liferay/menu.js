@@ -85,7 +85,7 @@ AUI.add(
 		var TPL_MENU = '<div class="open" />';
 
 		var TPL_SEARCH_BOX = '<div class="lfr-menu-list-search-container">' +
-				'<input autocomplete="off" aria-autocomplete="list" aria-expanded="true" aria-labelledby="{searchLabeledBy}" aria-owns="{searchOwns}" class="lfr-menu-list-search" id="{searchId}" role="combobox" type="text">' +
+				'<input autocomplete="off" aria-autocomplete="list" aria-expanded="true" aria-labelledby="{searchLabeledBy}" aria-owns="{searchOwns}" class="lfr-menu-list-search" id="{searchId}" role="combobox" type="text" />' +
 			'</div>';
 
 		var Menu = function() {

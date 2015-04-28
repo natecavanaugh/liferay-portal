@@ -11,7 +11,9 @@ AUI.add(
 				'<i class="glyphicon glyphicon-screenshot"></i>' +
 			'</button>';
 
-		var TPL_SEARCHBOX = '<div class="col-md-6 search-controls"><input class="search-input" placeholder="" type="text"></div>';
+		var TPL_SEARCHBOX = '<div class="col-md-6 search-controls">' +
+				'<input class="search-input" placeholder="" type="text" />' +
+			'</div>';
 
 		var GeojsonBase = function() {
 		};

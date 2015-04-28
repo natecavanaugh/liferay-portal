@@ -29,8 +29,8 @@ AUI.add(
 
 		var TPL_THEME_BUTTON = '<li data-action="{action}">' +
 				'<button type="button" class="btn btn-default btn-lg">' +
-					'<i class="{iconCssClass}"></i><' +
-				'/button>' +
+					'<i class="{iconCssClass}"></i>' +
+				'</button>' +
 			'</li>';
 
 		var TPL_TOOLBAR = '<ul class="{cssClass}">{buttons}</ul>';

@@ -17,17 +17,19 @@ AUI.add(
 		];
 
 		var TPL_ADD_BUTTON = '<button type="button" class="add-row btn-content btn btn-icon-only toolbar-first toolbar-item" title="">' +
-				'<span class="btn-icon icon icon-plus">' +
-			'</span></button>';
+				'<span class="btn-icon icon icon-plus"></span>' +
+			'</button>';
 
 		var TPL_DELETE_BUTTON = '<button type="button" class="delete-row btn-content btn btn-icon-only toolbar-last toolbar-item" title="">' +
 				'<span class="btn-icon icon icon-minus"></span>' +
 			'</button>';
 
-		var TPL_AUTOROW_CONTROLS = '<span class="lfr-autorow-controls toolbar toolbar-horizontal"><span class="toolbar-content">' +
-				TPL_ADD_BUTTON +
-				TPL_DELETE_BUTTON +
-			'</span></span>';
+		var TPL_AUTOROW_CONTROLS = '<span class="lfr-autorow-controls toolbar toolbar-horizontal">' +
+				'<span class="toolbar-content">' +
+					TPL_ADD_BUTTON +
+					TPL_DELETE_BUTTON +
+				'</span>' +
+			'</span>';
 
 		var TPL_LOADING = '<div class="' + CSS_ICON_LOADING + '"></div>';
 
