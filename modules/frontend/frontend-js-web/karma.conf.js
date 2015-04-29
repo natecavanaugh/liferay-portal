@@ -11,7 +11,7 @@ var defaultConfig = {
 	// base path that will be used to resolve all patterns (eg. files, exclude)
 	basePath: './',
 
-	browsers: ['Chrome', 'Firefox', 'Safari'],
+	browsers: ['Chrome'],
 
 	// enable / disable colors in the output (reporters and logs)
 	colors: true,
@@ -52,7 +52,17 @@ var defaultConfig = {
 
 // list of files / patterns to load in the browser
 defaultConfig.files = [
-	'test/mock_base.js'
+	'test/mock_base.js',
+	{
+		included: false,
+		pattern: 'test/mock_available_languages.js',
+		served: true
+	},
+	{
+		included: false,
+		pattern: 'test/mock_language.js',
+		served: true
+	}
 ];
 
 properties.read(
@@ -67,7 +77,7 @@ properties.read(
 				var filePath = [file];
 
 				if ((file.indexOf('aui') === 0) || (file.indexOf('editor') === 0)) {
-					filePath.unshift('tmp');
+					filePath.unshift('tmp/META-INF/resources/html/js');
 				}
 				else {
 					filePath.unshift('src/META-INF/resources/html/js');
@@ -89,18 +99,15 @@ properties.read(
 
 		defaultConfig.files = defaultConfig.files.concat(
 			[
-				'test/mock_available_languages.js',
-				'test/mock_language.js',
-
 				{
 					included: false,
-					pattern: 'tmp/aui/**/*.css',
+					pattern: 'tmp/META-INF/resources/html/js/aui/**/*.css',
 					served: true
 				},
 
 				{
 					included: false,
-					pattern: 'tmp/aui/**/*.js',
+					pattern: 'tmp/META-INF/resources/html/js/aui/**/*.js',
 					served: true
 				},
 
