@@ -502,7 +502,7 @@
 							'sortable'
 						]
 					},
-					'liferay-item-browser': {
+					'liferay-item-selector-browser': {
 						path: 'item_browser.js',
 						requires: [
 							'liferay-item-viewer',
