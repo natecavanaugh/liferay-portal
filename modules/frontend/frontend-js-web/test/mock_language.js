@@ -1,3 +1,1 @@
-Liferay.Language.get = function(key) {
-	return key;
-};
+Liferay.Language.get = sinon.stub().returnsArg(0);

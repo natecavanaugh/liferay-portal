@@ -1,47 +1,23 @@
 window.Liferay = {
 	AUI: {
-		getAvailableLangPath: function() {
-			return '';
-		},
-		getCombine: function() {
-			return false;
-		},
-		getComboPath: function() {
-			return '/';
-		},
-		getFilter: function() {
-			return 'raw';
-		},
-		getJavaScriptRootPath: function() {
-			return '/base';
-		},
-		getStaticResourceURLParams: function() {
-			return '';
-		}
+		getAvailableLangPath: sinon.stub().returns('mock_available_languages.js'),
+		getCombine: sinon.stub().returns(false),
+		getComboPath: sinon.stub().returns('/'),
+		getFilter: sinon.stub().returns('raw'),
+		getJavaScriptRootPath: sinon.stub().returns('/base'),
+		getStaticResourceURLParams: sinon.stub().returns('')
 	},
 
 	Browser: {
-		isIe: function() {
-			return false;
-		}
+		isIe: sinon.stub().returns(false)
 	},
 
 	ThemeDisplay: {
-		getBCP47LanguageId: function() {
-			return 'en_US';
-		},
-		getLanguageId: function() {
-			return 'en_US';
-		},
-		getPathContext: function() {
-			return '/base';
-		},
-		getPathThemeImages: function() {
-			return '../../themes/classic/images';
-		},
-		isAddSessionIdToURL: function() {
-			return false;
-		}
+		getBCP47LanguageId: sinon.stub().returns('en_US'),
+		getLanguageId: sinon.stub().returns('en_US'),
+		getPathContext: sinon.stub().returns('/base'),
+		getPathThemeImages: sinon.stub().returns('../../themes/classic/images'),
+		isAddSessionIdToURL: sinon.stub().returns(false)
 	}
 };
 
