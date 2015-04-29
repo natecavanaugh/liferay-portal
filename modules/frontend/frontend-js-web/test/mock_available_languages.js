@@ -1,11 +1,2 @@
-AUI.add(
-	'portal-available-languages',
-	function(A) {
-		Liferay.Language.available = {};
-		Liferay.Language.direction = {};
-	},
-	'',
-	{
-		requires: ['liferay-language']
-	}
-);
+Liferay.Language.available = sinon.stub().returns({});
+Liferay.Language.direction = sinon.stub().returns({});
