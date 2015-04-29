@@ -1449,7 +1449,6 @@ AUI.add(
 									instance
 								),
 								formNode.on('submit', instance._onSubmitForm, instance),
-								Liferay.after('form:registered', instance._afterFormRegistered, instance),
 								Liferay.on('submitForm', instance._onLiferaySubmitForm, instance)
 							);
 						}
@@ -1572,7 +1571,9 @@ AUI.add(
 							instance.liferayForm = liferayForm;
 						}
 						else {
-							Liferay.after('form:registered', instance._afterFormRegistered, instance);
+							instance.eventHandlers.push(
+								Liferay.after('form:registered', instance._afterFormRegistered, instance);
+							);
 						}
 					},
 
