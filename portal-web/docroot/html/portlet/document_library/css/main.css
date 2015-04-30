@@ -282,23 +282,19 @@
 			overflow: hidden;
 		}
 
-		.document-type .lfr-panel-content {
-			min-height: 35px;
+		.document-type {
+			.lfr-panel-content {
+				min-height: 35px;
+			}
+
+			.document-type-selector .btn {
+				white-space: normal;
+			}
 		}
 
 		.document-type-fields {
 			clear: left;
 			padding-top: 0.5em;
-		}
-
-		.document-type-selector .btn-group {
-			max-width: 100%;
-
-			a {
-				max-width: 100%;
-				overflow: hidden;
-				white-space: normal;
-			}
 		}
 
 		.categorization-panel {
