@@ -26,7 +26,6 @@
 		font: '_handleFont',
 		i: '_handleEm',
 		img: '_handleImage',
-		indent: '_handleIndent',
 		list: '_handleList',
 		s: '_handleStrikeThrough',
 		size: '_handleSize',
@@ -94,7 +93,7 @@
 
 	var REGEX_STRING_IS_NEW_LINE = /^\r?\n$/;
 
-	var REGEX_TAG_NAME = /^\/?(?:b|center|code|colou?r|email|i|img|indent|justify|left|pre|q|quote|right|\*|s|size|table|tr|th|td|li|list|font|u|url)$/i;
+	var REGEX_TAG_NAME = /^\/?(?:b|center|code|colou?r|email|i|img|justify|left|pre|q|quote|right|\*|s|size|table|tr|th|td|li|list|font|u|url)$/i;
 
 	var REGEX_URI = /^[-;\/\?:@&=\+\$,_\.!~\*'\(\)%0-9a-z#]{1,512}$|\${\S+}/i;
 
@@ -115,10 +114,6 @@
 	var STR_TAG_ATTR_CLOSE = '">';
 
 	var STR_TAG_ATTR_HREF_OPEN = '<a href="';
-
-	var STR_TAG_DIV_CLOSE = '</div>';
-
-	var STR_TAG_DIV_STYLE_OPEN = '<div style="';
 
 	var STR_TAG_END_CLOSE = '>';
 
@@ -222,6 +217,7 @@
 				if (token.type == TOKEN_DATA) {
 					result.push(token.value);
 				}
+
 			}
 			while ((token.type != TOKEN_TAG_END) && (token.value != toTagName));
 
@@ -371,16 +367,6 @@
 			}
 
 			return attrs;
-		},
-
-		_handleIndent: function(token) {
-			var instance = this;
-
-			var indent = token.attribute;
-
-			instance._result.push(STR_TAG_DIV_STYLE_OPEN, 'margin-left: ', indent, 'px;', STR_TAG_ATTR_CLOSE);
-
-			instance._stack.push(STR_TAG_DIV_CLOSE);
 		},
 
 		_handleList: function(token) {
