@@ -132,15 +132,15 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 
 				var container = instance.get('container');
 
-				var hours = parseInt(container.one('#<%= hourParamId %>').val());
+				var hours = parseInt(container.one('#<%= hourParamId %>', 10).val());
 				var minutes = container.one('#<%= minuteParamId %>').val();
-				var amPm = parseInt(container.one('#<%= amPmParamId %>').val());
+				var amPm = parseInt(container.one('#<%= amPmParamId %>', 10).val());
 
 				if (amPm) {
 					hours += 12;
 				}
 
-				time = A.Date.parse(A.Date.aggregates.T, hours + ':' + minutes + ':0');
+				var time = A.Date.parse(A.Date.aggregates.T, hours + ':' + minutes + ':0');
 
 				return time;
 			};
