@@ -510,6 +510,20 @@
 							'sortable'
 						]
 					},
+					'liferay-item-selector-browser': {
+						path: 'item_selector_browser.js',
+						requires: [
+							'liferay-item-viewer',
+							'liferay-portlet-base'
+						]
+					},
+					'liferay-item-viewer': {
+						path: 'item_viewer.js',
+						requires: [
+							'aui-component',
+							'aui-image-viewer'
+						]
+					},
 					'liferay-language': {
 						path: 'language.js'
 					},
