@@ -94,6 +94,21 @@ if (Validator.isNotNull(historyKey)) {
 					<%= Validator.isNotNull(htmlBottom) ? htmlBottom : StringPool.BLANK %>
 				</liferay-util:buffer>
 
+				<liferay-util:buffer var="formSectionsBuffer">
+
+					<%
+					String contentCssClass = "form-navigator-content";
+
+					if (!displayStyle.equals("steps")) {
+						contentCssClass += " col-md-8 col-md-pull-4";
+					}
+					%>
+
+					<div class="<%= contentCssClass %>">
+						<%@ include file="/html/taglib/ui/form_navigator/sections.jspf" %>
+					</div>
+				</liferay-util:buffer>
+
 				<%
 				String listGroupCssClass = "form-navigator list-group nav";
 
@@ -202,17 +217,7 @@ if (Validator.isNotNull(historyKey)) {
 					</c:if>
 				</ul>
 
-				<%
-				String contentCssClass = "form-navigator-content";
-
-				if (!displayStyle.equals("steps")) {
-					contentCssClass += " col-md-8 col-md-pull-4";
-				}
-				%>
-
-				<div class="<%= contentCssClass %>">
-					<%@ include file="/html/taglib/ui/form_navigator/sections.jspf" %>
-				</div>
+				<%= formSectionsBuffer %>
 
 				<c:if test='<%= displayStyle.equals("steps") %>'>
 					<%= formNavigatorBottom %>
