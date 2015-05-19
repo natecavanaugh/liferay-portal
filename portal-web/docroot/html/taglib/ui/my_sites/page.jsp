@@ -121,7 +121,7 @@ List<Group> mySiteGroups = user.getMySiteGroups(classNames, includeControlPanel,
 								%>
 
 								<li class="<%= (selectedSite && layout.isPublicLayout()) ? "active" : "public-site" %> <%= itemCssClass %>">
-									<a href="<%= HtmlUtil.escape(siteGroup.getDisplayURL(themeDisplay, false)) %>" onclick="Liferay.Util.forcePost(this); return false;">
+									<a href="<%= HtmlUtil.escape(siteGroup.getDisplayURL(themeDisplay, false)) %>" onclick="Liferay.Util.forcePost(this); return false;" role="menuitem">
 
 										<%
 										String siteName = StringPool.BLANK;
@@ -172,7 +172,7 @@ List<Group> mySiteGroups = user.getMySiteGroups(classNames, includeControlPanel,
 								%>
 
 								<li class="<%= (selectedSite && layout.isPrivateLayout()) ? "active" : "private-site" %> <%= itemCssClass %>">
-									<a href="<%= HtmlUtil.escape(siteGroup.getDisplayURL(themeDisplay, true)) %>" onclick="Liferay.Util.forcePost(this); return false;">
+									<a href="<%= HtmlUtil.escape(siteGroup.getDisplayURL(themeDisplay, true)) %>" onclick="Liferay.Util.forcePost(this); return false;" role="menuitem">
 
 										<%
 										String siteName = StringPool.BLANK;
@@ -297,6 +297,8 @@ List<Group> mySiteGroups = user.getMySiteGroups(classNames, includeControlPanel,
 													onclick="Liferay.Util.forcePost(this); return false;"
 												</c:if>
 
+												role="menuitem"
+
 												><liferay-ui:message key="public-pages" /> <span class="page-count">(<%= mySiteGroup.getPublicLayoutsPageCount() %>)</span></a>
 
 												<c:if test="<%= publicAddPageHREF != null %>">
@@ -316,6 +318,8 @@ List<Group> mySiteGroups = user.getMySiteGroups(classNames, includeControlPanel,
 												<c:if test="<%= mySiteGroup.getPrivateLayoutsPageCount() > 0 %>">
 													onclick="Liferay.Util.forcePost(this); return false;"
 												</c:if>
+
+												role="menuitem"
 
 												><liferay-ui:message key="private-pages" /> <span class="page-count">(<%= mySiteGroup.getPrivateLayoutsPageCount() %>)</span></a>
 
