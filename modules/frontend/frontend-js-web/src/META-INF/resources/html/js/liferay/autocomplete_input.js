@@ -93,8 +93,7 @@ AUI.add(
 
 				var tplResults = instance.get('tplResults');
 
-				return AArray.map(
-					results,
+				return results.map(
 					function(result) {
 						return Lang.sub(tplResults, result.raw);
 					}

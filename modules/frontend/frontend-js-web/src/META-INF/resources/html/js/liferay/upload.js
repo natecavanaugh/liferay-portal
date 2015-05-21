@@ -426,8 +426,7 @@ AUI.add(
 								metadataExplanationContainer.show();
 							}
 
-							var files = AArray.map(
-								fileNames,
+							var files = fileNames.map(
 								function(item, index) {
 									var title = item;
 
@@ -546,8 +545,7 @@ AUI.add(
 						var dragDropFiles = dataTransfer && AArray(dataTransfer.files);
 
 						if (dragDropFiles && (target === uploaderBoundingBox || uploaderBoundingBox.contains(target))) {
-							event.fileList = AArray.map(
-								dragDropFiles,
+							event.fileList = dragDropFiles.map(
 								function(item, index) {
 									return new A.FileHTML5(item);
 								}
