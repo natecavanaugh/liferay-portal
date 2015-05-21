@@ -199,12 +199,13 @@ Set<String> contextNames = JSONWebServiceActionsManagerUtil.getContextNames();
 				return results.filter(
 					function(item, index) {
 						var node = item.raw.node;
+
 						var guid = node.guid();
 
 						var text = cache[guid];
 
 						if (!text) {
-							text = (node.attr('data-metaData') + '/' + item.text);
+							text = node.attr('data-metaData') + '/' + item.text;
 							text = text.toLowerCase().replace(replaceRE, '');
 
 							cache[guid] = text;
@@ -266,6 +267,7 @@ Set<String> contextNames = JSONWebServiceActionsManagerUtil.getContextNames();
 						results,
 						function(item, index) {
 							var raw = item.raw;
+
 							var el = raw.el;
 							var node = raw.node;
 							var serviceNode = raw.serviceNode;
