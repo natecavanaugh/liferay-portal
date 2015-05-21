@@ -298,7 +298,7 @@ AUI.add(
 						return AArray.find(
 							instance.get('fields'),
 							function(item) {
-								return (item.get('name') === name);
+								return item.get('name') === name;
 							}
 						);
 					},
@@ -306,8 +306,8 @@ AUI.add(
 					getInputName: function() {
 						var instance = this;
 
-						var portletNamespace = instance.get('portletNamespace');
 						var fieldsNamespace = instance.get('fieldsNamespace');
+						var portletNamespace = instance.get('portletNamespace');
 
 						var prefix = [portletNamespace];
 
@@ -650,8 +650,8 @@ AUI.add(
 					_valueLocalizationMap: function() {
 						var instance = this;
 
-						var values = instance.get('values');
 						var instanceId = instance.get('instanceId');
+						var values = instance.get('values');
 
 						var fieldValue = instance.getFieldInfo(values, 'instanceId', instanceId);
 
@@ -1102,8 +1102,8 @@ AUI.add(
 
 						var imagePreviewURL = instance._getImagePreviewURL();
 
-						var previewLinkNode = A.one('#' + instance.getInputName() + 'PreviewContainer a');
 						var previewImageNode = A.one('#' + instance.getInputName() + 'PreviewContainer img');
+						var previewLinkNode = A.one('#' + instance.getInputName() + 'PreviewContainer a');
 
 						previewLinkNode.attr('href', imagePreviewURL);
 						previewImageNode.attr('src', imagePreviewURL);
@@ -1148,7 +1148,7 @@ AUI.add(
 
 						var parsedValue = instance.getParsedValue(value);
 
-						return (parsedValue.hasOwnProperty('data') && parsedValue.data !== '') || parsedValue.hasOwnProperty('uuid');
+						return parsedValue.hasOwnProperty('data') && parsedValue.data !== '' || parsedValue.hasOwnProperty('uuid');
 					},
 
 					setValue: function(value) {
@@ -1423,6 +1423,8 @@ AUI.add(
 
 						instance.eventHandlers = [];
 
+						instance._setLiferayForm();
+
 						instance.bindUI();
 						instance.renderUI();
 					},
@@ -1436,11 +1438,9 @@ AUI.add(
 					bindUI: function() {
 						var instance = this;
 
-						var container = instance.get('container');
+						var formNode = instance._getFormNode();
 
-						instance.formNode = container.ancestor('form', true);
-
-						if (instance.formNode) {
+						if (formNode) {
 							instance.eventHandlers.push(
 								instance.after('liferay-ddm-field:render', instance._afterRenderField, instance),
 								instance.after(
@@ -1448,8 +1448,7 @@ AUI.add(
 									instance._afterUpdateRepeatableFields,
 									instance
 								),
-								instance.formNode.on('submit', instance._onSubmitForm, instance),
-								Liferay.after('form:registered', instance._afterFormRegistered, instance),
+								formNode.on('submit', instance._onSubmitForm, instance),
 								Liferay.on('submitForm', instance._onLiferaySubmitForm, instance)
 							);
 						}
@@ -1461,14 +1460,14 @@ AUI.add(
 						AArray.invoke(instance.eventHandlers, 'detach');
 
 						instance.eventHandlers = null;
-
-						instance.formNode = null;
 					},
 
 					_afterFormRegistered: function(event) {
 						var instance = this;
 
-						if (event.formName === instance.formNode.attr('name')) {
+						var formNode = instance._getFormNode();
+
+						if (event.formName === formNode.attr('name')) {
 							instance.liferayForm = event.form;
 						}
 					},
@@ -1537,10 +1536,20 @@ AUI.add(
 						}
 					},
 
+					_getFormNode: function() {
+						var instance = this;
+
+						var container = instance.get('container');
+
+						return container.ancestor('form', true);
+					},
+
 					_onLiferaySubmitForm: function(event) {
 						var instance = this;
 
-						if (event.form.attr('name') === instance.formNode.attr('name')) {
+						var formNode = instance._getFormNode();
+
+						if (event.form.attr('name') === formNode.attr('name')) {
 							instance.updateDDMFormInputValue();
 						}
 					},
@@ -1549,6 +1558,23 @@ AUI.add(
 						var instance = this;
 
 						instance.updateDDMFormInputValue();
+					},
+
+					_setLiferayForm: function() {
+						var instance = this;
+
+						var formNode = instance._getFormNode();
+
+						var liferayForm = Liferay.Form.get(formNode.attr('name'));
+
+						if (liferayForm) {
+							instance.liferayForm = liferayForm;
+						}
+						else {
+							instance.eventHandlers.push(
+								Liferay.after('form:registered', instance._afterFormRegistered, instance)
+							);
+						}
 					},
 
 					_valueDisplayLocale: function() {
