@@ -55,7 +55,7 @@ for (long mergeTagId : mergeTagIds) {
 
 	<div class="merge-tags">
 		<span class="merge-tags-label">
-		   <liferay-ui:message key="tags-to-merge" />
+			<liferay-ui:message key="tags-to-merge" />
 		</span>
 
 		<liferay-ui:asset-tags-selector
@@ -103,8 +103,16 @@ for (long mergeTagId : mergeTagIds) {
 
 		var addedValue = item.value;
 
-		targetTag.append($('<option>', {value:addedValue, text:addedValue}));
-	}
+		targetTag.append(
+			$(
+				'<option>',
+				{
+					text: addedValue,
+					value: addedValue
+				}
+			)
+		);
+	};
 
 	window['<portlet:namespace />onRemoveTag'] = function(item) {
 		if (item.value === undefined) {
@@ -113,8 +121,8 @@ for (long mergeTagId : mergeTagIds) {
 
 		var removedValue = item.value;
 
-		AUI.$("#<portlet:namespace />targetTagName option[value='" + removedValue + "']").remove();
-	}
+		AUI.$('#<portlet:namespace />targetTagName option[value="' + removedValue + '"]').remove();
+	};
 
 	form.on(
 		'submit',
@@ -127,7 +135,9 @@ for (long mergeTagId : mergeTagIds) {
 
 			var tag = targetTag.one(':selected');
 
-			mergeText = A.Lang.sub(mergeText, [mergeTagNames.split(','), A.Lang.trim(tag.html())]);
+			tag = tag.html().trim();
+
+			mergeText = A.Lang.sub(mergeText, [mergeTagNames.split(','), tag]);
 
 			if (confirm(mergeText)) {
 				submitForm(form, form.attr('action'));

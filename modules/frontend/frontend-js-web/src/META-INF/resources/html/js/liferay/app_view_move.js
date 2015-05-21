@@ -76,7 +76,7 @@ AUI.add(
 							return value;
 						},
 						validator: function(value) {
-							return (value instanceof RegExp || Lang.isString(value));
+							return value instanceof RegExp || Lang.isString(value);
 						}
 					},
 
@@ -239,7 +239,7 @@ AUI.add(
 							ddHandler.on(
 								['drag:start', 'drag:end'],
 								function(event) {
-									trashLink.toggleClass('app-view-drop-active', (event.type == 'drag:start'));
+									trashLink.toggleClass('app-view-drop-active', event.type == 'drag:start');
 								}
 							);
 						}
@@ -331,7 +331,7 @@ AUI.add(
 
 							var moveText = instance._getMoveText(selectedItemsCount, true);
 
-							var itemTitle = Lang.trim(dropTarget.attr('data-title'));
+							var itemTitle = dropTarget.attr('data-title').trim();
 
 							proxyNode.html(Lang.sub(moveText, [selectedItemsCount, A.Lang.String.escapeHTML(itemTitle)]));
 						}

@@ -15,11 +15,10 @@ AUI.add(
 		var booleanParse = A.DataType.Boolean.parse;
 		var camelize = Lang.String.camelize;
 		var instanceOf = A.instanceOf;
+		var isNull = Lang.isNull;
 		var isObject = Lang.isObject;
 		var isUndefined = Lang.isUndefined;
-		var isNull = Lang.isNull;
 		var isValue = Lang.isValue;
-		var trim = Lang.trim;
 
 		var DEFAULTS_FORM_VALIDATOR = A.config.FormValidator;
 
@@ -90,7 +89,7 @@ AUI.add(
 
 					if (rule.length == 2) {
 						var key = camelize(rule[0]);
-						var value = trim(rule[1]);
+						var value = rule[1].trim();
 
 						node.setStyle(key, value);
 					}
@@ -381,10 +380,7 @@ AUI.add(
 									function(item, index) {
 										var curLayout = LiferayFormBuilderUtil.parseJSON(item.attr('value'));
 
-										if ((curLayout.groupId === selLayout.groupId) &&
-											(curLayout.layoutId === selLayout.layoutId) &&
-											(curLayout.privateLayout === selLayout.privateLayout)) {
-
+										if (curLayout.groupId === selLayout.groupId && curLayout.layoutId === selLayout.layoutId && curLayout.privateLayout === selLayout.privateLayout) {
 											item.set('selected', true);
 										}
 									}
@@ -800,7 +796,7 @@ AUI.add(
 				'keyword': Liferay.Language.get('yes')
 			};
 
-			if ((type == 'ddm-text-html') || (type == 'text') || (type == 'textarea')) {
+			if (type == 'ddm-text-html' || type == 'text' || type == 'textarea') {
 				indexTypeOptions = {
 					'': Liferay.Language.get('not-indexable'),
 					'keyword': Liferay.Language.get('indexable-keyword'),
