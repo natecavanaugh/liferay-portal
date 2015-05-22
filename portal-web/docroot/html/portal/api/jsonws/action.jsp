@@ -448,7 +448,7 @@ String signature = ParamUtil.getString(request, "signature");
 						'<%= jsonWebServiceActionMapping.getPath() %>',
 						formEl,
 						function(obj) {
-							serviceOutput.html(A.JSON.stringify(obj, null, 2));
+							serviceOutput.html(JSON.stringify(obj, null, 2));
 
 							output.removeClass('loading-results');
 

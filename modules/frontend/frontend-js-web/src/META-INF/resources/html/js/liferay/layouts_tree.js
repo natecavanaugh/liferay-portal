@@ -380,7 +380,7 @@ AUI.add(
 								var response;
 
 								try {
-									response = A.JSON.parse(xhr.responseText);
+									response = JSON.parse(xhr.responseText);
 
 									this.get('paginator').total = response.total;
 
@@ -533,7 +533,7 @@ AUI.add(
 								var response;
 
 								try {
-									response = A.JSON.parse(xhr.responseText);
+									response = JSON.parse(xhr.responseText);
 
 									if (response.status === Liferay.STATUS_CODE.BAD_REQUEST) {
 										instance._restoreNodePosition(response);

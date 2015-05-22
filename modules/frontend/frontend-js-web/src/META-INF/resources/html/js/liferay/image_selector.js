@@ -308,7 +308,7 @@ AUI.add(
 
 						var data = event.data;
 
-						data = A.JSON.parse(data);
+						data = JSON.parse(data);
 
 						if (data.success) {
 							instance.fire(

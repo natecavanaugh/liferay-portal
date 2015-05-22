@@ -2,7 +2,6 @@ AUI.add(
 	'liferay-poller',
 	function(A) {
 		var AObject = A.Object;
-		var AJSON = A.JSON;
 
 		var owns = AObject.owns;
 
@@ -84,7 +83,7 @@ AUI.add(
 		};
 
 		var _processResponse = function(id, obj) {
-			var response = AJSON.parse(obj.responseText);
+			var response = JSON.parse(obj.responseText);
 			var send = false;
 
 			if (A.Lang.isArray(response)) {
@@ -143,7 +142,7 @@ AUI.add(
 
 				AObject.each(_portlets, _updatePortletIdsMap);
 
-				var requestStr = AJSON.stringify([_metaData]);
+				var requestStr = JSON.stringify([_metaData]);
 
 				A.io(
 					_getReceiveUrl(),
@@ -180,7 +179,7 @@ AUI.add(
 
 				AObject.each(_portlets, _updatePortletIdsMap);
 
-				var requestStr = AJSON.stringify([_metaData].concat(data));
+				var requestStr = JSON.stringify([_metaData].concat(data));
 
 				A.io(
 					_getSendUrl(),

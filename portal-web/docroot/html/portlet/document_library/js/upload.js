@@ -936,7 +936,7 @@ AUI.add(
 						var message;
 
 						try {
-							responseData = A.JSON.parse(responseData);
+							responseData = JSON.parse(responseData);
 						}
 						catch (e) {
 						}
@@ -1091,7 +1091,7 @@ AUI.add(
 							else {
 								var displayStyleList = (displayStyle == STR_LIST);
 
-								var fileEntryId = A.JSON.parse(event.data).fileEntryId;
+								var fileEntryId = JSON.parse(event.data).fileEntryId;
 
 								if (!displayStyleList) {
 									instance._updateThumbnail(fileNode, file.name);

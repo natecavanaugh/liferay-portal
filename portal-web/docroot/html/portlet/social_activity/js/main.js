@@ -370,7 +370,7 @@ AUI.add(
 					_updateSocialActivitySettings: function(form) {
 						var instance = this;
 
-						instance._settingsInput.val(A.JSON.stringify(instance._getJsonSettings(instance.settingsDisplay)));
+						instance._settingsInput.val(JSON.stringify(instance._getJsonSettings(instance.settingsDisplay)));
 					}
 				}
 			}
