@@ -1,8 +1,8 @@
 AUI.add(
 	'liferay-upload',
 	function(A) {
-		var Lang = A.Lang;
 		var AArray = A.Array;
+		var Lang = A.Lang;
 		var UploaderQueue = A.Uploader.Queue;
 
 		var formatSelectorNS = A.Node.formatSelectorNS;
@@ -245,12 +245,9 @@ AUI.add(
 
 						var fallback = instance.get('fallback');
 
-						var useFallback = (location.hash.indexOf(STR_PARAM_FALLBACK) > -1) && fallback;
+						var useFallback = location.hash.indexOf(STR_PARAM_FALLBACK) > -1 && fallback;
 
-						if (useFallback ||
-							UPLOADER_TYPE == 'none' ||
-							(UPLOADER_TYPE == 'flash' && !A.SWFDetect.isFlashVersionAtLeast(10, 1))) {
-
+						if (useFallback || UPLOADER_TYPE == 'none' || (UPLOADER_TYPE == 'flash' && !A.SWFDetect.isFlashVersionAtLeast(10, 1))) {
 							if (fallback) {
 								fallback.show();
 							}
@@ -398,7 +395,7 @@ AUI.add(
 
 						instance._filesTotal = 0;
 
-						var cancelText = (instance.get('multipleFiles')) ? strings.cancelUploadsText : strings.cancelFileText;
+						var cancelText = instance.get('multipleFiles') ? strings.cancelUploadsText : strings.cancelFileText;
 
 						instance._updateList(0, cancelText);
 					},
@@ -480,7 +477,7 @@ AUI.add(
 								else if (name.length > 240) {
 									error = strings.invalidFileNameText;
 								}
-								else if (maxFileSize > 0 && (size > maxFileSize)) {
+								else if (maxFileSize > 0 && size > maxFileSize) {
 									error = instance._invalidFileSizeText;
 								}
 
@@ -928,14 +925,15 @@ AUI.add(
 					_renderControls: function() {
 						var instance = this;
 
+						var multipleFiles = instance.get('multipleFiles');
 						var strings = instance.get(STRINGS);
 
 						var templateConfig = {
 							$ns: instance.NS,
-							cancelUploadsText: (instance.get('multipleFiles')) ? strings.cancelUploadsText : strings.cancelFileText,
-							dropFileText: (instance.get('multipleFiles')) ? strings.dropFilesText : strings.dropFileText,
-							multipleFiles: instance.get('multipleFiles'),
-							selectFilesText: (instance.get('multipleFiles')) ? strings.selectFilesText : strings.selectFileText,
+							cancelUploadsText: multipleFiles ? strings.cancelUploadsText : strings.cancelFileText,
+							dropFileText: multipleFiles ? strings.dropFilesText : strings.dropFileText,
+							multipleFiles: multipleFiles,
+							selectFilesText: multipleFiles ? strings.selectFilesText : strings.selectFileText,
 							strings: strings,
 							uploaderType: UPLOADER_TYPE
 						};
@@ -951,7 +949,7 @@ AUI.add(
 
 						var uploadFragment = new A.Template(TPL_UPLOAD, templateConfig).render(
 							{
-								multipleFiles: instance.get('multipleFiles')
+								multipleFiles: multipleFiles
 							}
 						);
 
@@ -1067,8 +1065,8 @@ AUI.add(
 
 						var fileListContent = instance._fileListContent;
 
-						var hasUploadedFiles = !!fileListContent.one('.upload-complete');
 						var hasSavedFiles = !!fileListContent.one('.file-saved,.upload-error');
+						var hasUploadedFiles = !!fileListContent.one('.upload-complete');
 
 						if (instance._allRowIdsCheckbox) {
 							instance._allRowIdsCheckbox.toggle(hasUploadedFiles);
@@ -1102,7 +1100,7 @@ AUI.add(
 
 							var selectedFileName = STR_BLANK;
 
-							var hasSelectedFiles = (selectedFilesCount > 0);
+							var hasSelectedFiles = selectedFilesCount > 0;
 
 							if (hasSelectedFiles) {
 								selectedFileName = selectedFiles.item(0).ancestor().attr('data-title');
@@ -1135,7 +1133,7 @@ AUI.add(
 							}
 
 							if (metadataExplanationContainer) {
-								metadataExplanationContainer.toggle((!hasSelectedFiles) && (totalFilesCount > 0));
+								metadataExplanationContainer.toggle(!hasSelectedFiles && totalFilesCount > 0);
 							}
 						}
 					},
