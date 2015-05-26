@@ -451,6 +451,7 @@ AUI.add(
 						var instance = this;
 
 						var availableTranslationsLinksNode = instance._availableTranslationsLinksNode;
+
 						var availableTranslationsLinksItems = availableTranslationsLinksNode.all(STR_DOT + CSS_TRANSLATION);
 
 						var defaultLocaleTextNode = instance._defaultLocaleTextNode;

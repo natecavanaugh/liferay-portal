@@ -1480,6 +1480,7 @@
 				var iconHiddenClass = 'icon-eye-close';
 				var iconVisibleClass = 'icon-eye-open';
 				var visibleClass = 'controls-visible';
+
 				var currentClass = visibleClass;
 				var currentIconClass = iconVisibleClass;
 
