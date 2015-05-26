@@ -167,7 +167,7 @@ AUI.add(
 
 				var className = 'layout-tree ';
 
-				data.cssClass = data.cssClass ? (className + data.cssClass) : className;
+				data.cssClass = data.cssClass ? className + data.cssClass : className;
 
 				data.href = A.Lang.sub(
 					instance.get('layoutURL'),
@@ -226,9 +226,7 @@ AUI.add(
 				var nodeChildren = node.children;
 				var nodeType = node.type;
 
-				if ((nodeType === 'embedded') ||
-					(nodeType === 'link_to_layout') ||
-					(nodeType === 'url')) {
+				if (nodeType === 'embedded' || nodeType === 'link_to_layout' || nodeType === 'url') {
 
 					cssIcons = {
 						iconCollapsed: iconCssClassName,
@@ -242,7 +240,7 @@ AUI.add(
 					total = nodeChildren.total;
 				}
 
-				var expanded = (childLayouts.length > 0);
+				var expanded = childLayouts.length > 0;
 
 				var maxChildren = instance.get('maxChildren');
 
@@ -262,7 +260,7 @@ AUI.add(
 						start: Math.max(childLayouts.length - maxChildren, 0),
 						total: total
 					},
-					type: (total > 0) ? 'io' : 'node'
+					type: total > 0 ? 'io' : 'node'
 				};
 
 				if (nodeChildren && expanded) {
@@ -270,8 +268,8 @@ AUI.add(
 				}
 
 				var cssClass = STR_EMPTY;
-				var title = STR_EMPTY;
 				var name = LString.escapeHTML(node.name);
+				var title = STR_EMPTY;
 
 				if (node.layoutRevisionId) {
 					if (!node.layoutRevisionHead) {

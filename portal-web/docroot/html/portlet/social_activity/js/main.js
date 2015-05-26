@@ -540,7 +540,7 @@ AUI.add(
 							instance._toggleField(event, true);
 						}
 						else {
-							var collapsed = !(currentTarget.hasClass(CSS_SETTINGS_ICON_EXPANDED));
+							var collapsed = !currentTarget.hasClass(CSS_SETTINGS_ICON_EXPANDED);
 
 							instance._toggleLimitFields(currentTarget.ancestor(SELECTOR_SETTINGS_FIELD), collapsed);
 						}

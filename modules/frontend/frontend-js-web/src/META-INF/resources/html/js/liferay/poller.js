@@ -7,12 +7,12 @@ AUI.add(
 
 		var _browserKey = Liferay.Util.randomInt();
 		var _enabled = false;
-		var _supportsComet = false;
 		var _encryptedUserId = null;
+		var _supportsComet = false;
 
-		var _delays = [1, 2, 3, 4, 5, 7, 10];
-		var _delayIndex = 0;
 		var _delayAccessCount = 0;
+		var _delayIndex = 0;
+		var _delays = [1, 2, 3, 4, 5, 7, 10];
 
 		var _getEncryptedUserId = function() {
 			return _encryptedUserId;
@@ -304,7 +304,7 @@ AUI.add(
 			},
 
 			submitRequest: function(key, data, chunkId) {
-				if (!_frozen && (key in _portlets)) {
+				if (!_frozen && key in _portlets) {
 					for (var i in data) {
 						if (owns(data, i)) {
 							var content = data[i];

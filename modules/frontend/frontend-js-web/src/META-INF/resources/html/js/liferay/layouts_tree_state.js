@@ -99,7 +99,7 @@ AUI.add(
 
 						var target = event.target;
 
-						target.set('alwaysShowHitArea', (event.newVal.length > 0));
+						target.set('alwaysShowHitArea', event.newVal.length > 0);
 
 						target.eachChildren(A.bind(host.restoreSelectedNode, host));
 					},

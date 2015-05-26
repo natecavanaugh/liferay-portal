@@ -97,7 +97,7 @@ AUI.add(
 					updateMinDisplayRows: function(minDisplayRows, callback) {
 						var instance = this;
 
-						callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+						callback = callback && A.bind(callback, instance) || EMPTY_FN;
 
 						var recordsetId = instance.get('recordsetId');
 
@@ -137,7 +137,7 @@ AUI.add(
 
 						var scrollTo = scrollLeft;
 
-						if ((scrollLeft + scrollableWidth) < activeCellOffsetRight) {
+						if (scrollLeft + scrollableWidth < activeCellOffsetRight) {
 							scrollTo = activeCellOffsetRight - scrollableWidth;
 						}
 						else if (activeCellOffsetLeft < scrollLeft) {
@@ -167,7 +167,7 @@ AUI.add(
 
 									value = JSON.stringify(value);
 								}
-								else if ((type === 'radio') || (type === 'select')) {
+								else if (type === 'radio' || type === 'select') {
 									if (!isArray(value)) {
 										value = AArray(value);
 									}
@@ -314,7 +314,7 @@ AUI.add(
 				addRecord: function(recordsetId, displayIndex, fieldsMap, callback) {
 					var instance = this;
 
-					callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+					callback = callback && A.bind(callback, instance) || EMPTY_FN;
 
 					Liferay.Service(
 						'/ddlrecord/add-record',
@@ -433,7 +433,7 @@ AUI.add(
 									return value;
 								};
 							}
-							else if ((type === 'ddm-decimal') || (type === 'ddm-integer') || (type === 'ddm-number')) {
+							else if (type === 'ddm-decimal' || type === 'ddm-integer' || type === 'ddm-number') {
 								config.outputFormatter = function(value) {
 									var number = A.DataType.Number.parse(value);
 
@@ -494,7 +494,7 @@ AUI.add(
 									return label;
 								};
 							}
-							else if ((type === 'radio') || (type === 'select')) {
+							else if (type === 'radio' || type === 'select') {
 								structureField = instance.findStructureFieldByAttribute(structure, 'name', name);
 
 								var multiple = A.DataType.Boolean.parse(structureField.multiple);
@@ -564,7 +564,7 @@ AUI.add(
 						function(item, index) {
 							found = item;
 
-							return (found[attributeName] === attributeValue);
+							return found[attributeName] === attributeValue;
 						}
 					);
 
@@ -600,7 +600,7 @@ AUI.add(
 				updateRecord: function(recordId, displayIndex, fieldsMap, merge, callback) {
 					var instance = this;
 
-					callback = (callback && A.bind(callback, instance)) || EMPTY_FN;
+					callback = callback && A.bind(callback, instance) || EMPTY_FN;
 
 					Liferay.Service(
 						'/ddlrecord/update-record',
