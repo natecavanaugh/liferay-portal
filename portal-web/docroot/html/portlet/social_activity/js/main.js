@@ -370,7 +370,7 @@ AUI.add(
 					_updateSocialActivitySettings: function(form) {
 						var instance = this;
 
-						instance._settingsInput.val(A.JSON.stringify(instance._getJsonSettings(instance.settingsDisplay)));
+						instance._settingsInput.val(JSON.stringify(instance._getJsonSettings(instance.settingsDisplay)));
 					}
 				}
 			}
@@ -540,7 +540,7 @@ AUI.add(
 							instance._toggleField(event, true);
 						}
 						else {
-							var collapsed = !(currentTarget.hasClass(CSS_SETTINGS_ICON_EXPANDED));
+							var collapsed = !currentTarget.hasClass(CSS_SETTINGS_ICON_EXPANDED);
 
 							instance._toggleLimitFields(currentTarget.ancestor(SELECTOR_SETTINGS_FIELD), collapsed);
 						}
