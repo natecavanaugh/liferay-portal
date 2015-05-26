@@ -235,8 +235,8 @@ AUI.add(
 
 						var selectedLanguageId = instance.getSelectedLanguageId();
 
-						var inputLanguage = instance._getInputLanguage(selectedLanguageId);
 						var defaultInputLanguage = instance._getInputLanguage(defaultLanguageId);
+						var inputLanguage = instance._getInputLanguage(selectedLanguageId);
 
 						instance.activateFlags();
 

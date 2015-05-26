@@ -39,10 +39,10 @@ AUI.add(
 					_headerEventHandler: function(event) {
 						var instance = this;
 
-						var validAction = (event.type === instance._toggleEvent);
+						var validAction = event.type === instance._toggleEvent;
 
 						if (!validAction) {
-							validAction = (instance.get('filter').indexOf(event.keyCode) > -1);
+							validAction = instance.get('filter').indexOf(event.keyCode) > -1;
 						}
 
 						if (!validAction) {
