@@ -227,7 +227,6 @@ AUI.add(
 				var nodeType = node.type;
 
 				if (nodeType === 'embedded' || nodeType === 'link_to_layout' || nodeType === 'url') {
-
 					cssIcons = {
 						iconCollapsed: iconCssClassName,
 						iconExpanded: iconCssClassName,
@@ -268,8 +267,9 @@ AUI.add(
 				}
 
 				var cssClass = STR_EMPTY;
-				var name = LString.escapeHTML(node.name);
 				var title = STR_EMPTY;
+
+				var name = LString.escapeHTML(node.name);
 
 				if (node.layoutRevisionId) {
 					if (!node.layoutRevisionHead) {

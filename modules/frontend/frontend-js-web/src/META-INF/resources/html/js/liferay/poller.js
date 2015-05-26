@@ -40,13 +40,14 @@ AUI.add(
 		var _timerId = null;
 
 		var _url = themeDisplay.getPathContext() + '/poller';
+
 		var _receiveChannel = _url + '/receive';
 		var _sendChannel = _url + '/send';
 
 		var _closeCurlyBrace = '}';
-		var _escapedCloseCurlyBrace = '[$CLOSE_CURLY_BRACE$]';
-
 		var _openCurlyBrace = '{';
+
+		var _escapedCloseCurlyBrace = '[$CLOSE_CURLY_BRACE$]';
 		var _escapedOpenCurlyBrace = '[$OPEN_CURLY_BRACE$]';
 
 		var _cancelRequestTimer = function() {

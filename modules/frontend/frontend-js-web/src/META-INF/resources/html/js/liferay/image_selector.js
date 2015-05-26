@@ -310,15 +310,18 @@ AUI.add(
 
 						data = JSON.parse(data);
 
-						if (data.success) {
+						var image = data.image;
+						var success = data.success;
+
+						if (success) {
 							instance.fire(
 								STR_IMAGE_DATA,
 								{
-									imageData: data.image
+									imageData: image
 								}
 							);
 						}
-						else if (!data.success) {
+						else if (!success) {
 							instance.fire(
 								STR_ERROR_MESSAGE,
 								{
@@ -327,9 +330,9 @@ AUI.add(
 							);
 						}
 
-						var fireEvent = data.success ? STR_IMAGE_UPLOADED : STR_IMAGE_DELETED;
+						var fireEvent = success ? STR_IMAGE_UPLOADED : STR_IMAGE_DELETED;
 
-						var imageData = data.success ? data.image : null;
+						var imageData = success ? image : null;
 
 						Liferay.fire(
 							fireEvent,

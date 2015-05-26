@@ -2,6 +2,7 @@ AUI.add(
 	'liferay-store',
 	function(A) {
 		var Lang = A.Lang;
+
 		var isObject = Lang.isObject;
 
 		var TOKEN_SERIALIZE = 'serialize://';
