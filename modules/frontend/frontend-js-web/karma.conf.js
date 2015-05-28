@@ -27,6 +27,11 @@ var defaultConfig = {
 	// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
 	frameworks: ['chai', 'mocha', 'sinon'],
 
+    junitReporter: {
+      outputFile: 'test/junit/test-results.xml',
+      suite: ''
+    },
+
 	// level of logging
 	// possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
 	logLevel: 'info',
@@ -43,7 +48,7 @@ var defaultConfig = {
 	// test results reporter to use
 	// possible values: 'dots', 'progress'
 	// available reporters: https://npmjs.org/browse/keyword/karma-reporter
-	reporters: ['coverage', 'progress'],
+	reporters: ['coverage', 'progress', 'junit'],
 
 	// Continuous Integration mode
 	// if true, Karma captures browsers, runs the tests and exits
