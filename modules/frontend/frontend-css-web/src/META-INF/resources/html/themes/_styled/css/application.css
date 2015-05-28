@@ -7,6 +7,7 @@
 @import "application/variables_custom";
 
 @import "application/autocomplete";
+@import "application/card";
 @import "application/color_picker";
 @import "application/dialog";
 @import "application/drag_drop";
@@ -15,6 +16,7 @@
 @import "application/editor_ckeditor";
 @import "application/editor_html";
 @import "application/editor_lfr_source";
+@import "application/figures";
 @import "application/labels";
 @import "application/list_group";
 @import "application/list_group_deprecated";
