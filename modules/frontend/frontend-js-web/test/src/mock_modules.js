@@ -14,11 +14,11 @@ YUI_config.groups.liferay.root = groupsPath + '/liferay/';
 YUI_config.groups.misc.base = groupsPath + '/misc/';
 YUI_config.groups.misc.root = groupsPath + '/misc/';
 
-YUI_config.groups.portal.base = jsRootPath + '/test/';
-YUI_config.groups.portal.root = jsRootPath + '/test/';
+YUI_config.groups.portal.base = jsRootPath + '/test/src/';
+YUI_config.groups.portal.root = jsRootPath + '/test/src/';
 
 YUI_config.groups.mock = {
-	base: Liferay.AUI.getJavaScriptRootPath() + '/test/',
+	base: Liferay.AUI.getJavaScriptRootPath() + '/test/src/',
 	modules: {
 		'liferay-language-mock': {
 			condition: {

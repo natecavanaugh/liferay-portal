@@ -1,6 +1,6 @@
 'use strict';
 
-var properties = require('./test/properties.js');
+var properties = require('./test/src/properties.js');
 
 // Karma configuration
 
@@ -57,15 +57,15 @@ var defaultConfig = {
 
 // list of files / patterns to load in the browser
 defaultConfig.files = [
-	'test/mock_base.js',
+	'test/src/mock_base.js',
 	{
 		included: false,
-		pattern: 'test/mock_available_languages.js',
+		pattern: 'test/src/mock_available_languages.js',
 		served: true
 	},
 	{
 		included: false,
-		pattern: 'test/mock_language.js',
+		pattern: 'test/src/mock_language.js',
 		served: true
 	}
 ];
@@ -97,7 +97,7 @@ properties.read(
 				);
 
 				if (file === 'liferay/modules.js') {
-					defaultConfig.files.push('test/mock_modules.js');
+					defaultConfig.files.push('test/src/mock_modules.js');
 				}
 			}
 		);
@@ -124,13 +124,13 @@ properties.read(
 
 				{
 					included: false,
-					pattern: 'test/*/assets/*',
+					pattern: 'test/src/*/assets/*',
 					served: true
 				},
 
 				{
 					included: true,
-					pattern: 'test/*/*-test.js',
+					pattern: 'test/src/*/*-test.js',
 					served: true
 				}
 			]

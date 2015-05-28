@@ -23,7 +23,7 @@ describe(
 							var html;
 
 							A.io.request(
-								'/base/test/ddm_form/assets/' + name + '-definition.json',
+								'/base/test/src/ddm_form/assets/' + name + '-definition.json',
 								{
 									dataType: 'json',
 									on: {
@@ -36,7 +36,7 @@ describe(
 							);
 
 							A.io.request(
-								'/base/test/ddm_form/assets/' + name + '-definition.html',
+								'/base/test/src/ddm_form/assets/' + name + '-definition.html',
 								{
 									on: {
 										success: function() {
