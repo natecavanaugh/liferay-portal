@@ -152,18 +152,6 @@ public final class LoggerUtil {
 			return false;
 		}
 
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("var node = document.getElementById('");
-		sb.append(loggerElement.getID());
-		sb.append("');");
-
-		sb.append("if (node == null) {");
-		sb.append("return false;");
-		sb.append("}");
-
-		sb.append("return true;");
-
 		try {
 			return (boolean)_javascriptExecutor.executeScript(
 				"isWrittenToLogger(" + loggerElement.getID() + ");");
@@ -181,18 +169,6 @@ public final class LoggerUtil {
 			return;
 		}
 
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("var node = document.getElementById('");
-		sb.append(loggerElement.getID());
-		sb.append("');");
-
-		sb.append("node.setAttribute('");
-		sb.append(StringEscapeUtils.escapeEcmaScript(attributeName));
-		sb.append("', '");
-		sb.append(StringEscapeUtils.escapeEcmaScript(attributeValue));
-		sb.append("');");
-
 		String strAttributeName = StringEscapeUtils.escapeEcmaScript(
 			attributeName);
 		String strAttributeValue = StringEscapeUtils.escapeEcmaScript(
@@ -208,17 +184,6 @@ public final class LoggerUtil {
 			return;
 		}
 
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("var node = document.getElementById('");
-		sb.append(loggerElement.getID());
-		sb.append("');");
-
-		sb.append("node.setAttribute('class', '");
-		sb.append(
-			StringEscapeUtils.escapeEcmaScript(loggerElement.getClassName()));
-		sb.append("');");
-
 		String className = StringEscapeUtils.escapeEcmaScript(
 			loggerElement.getClassName());
 
@@ -231,16 +196,6 @@ public final class LoggerUtil {
 			return;
 		}
 
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("var node = document.getElementById('");
-		sb.append(loggerElement.getID());
-		sb.append("');");
-
-		sb.append("node.setAttribute('id', '");
-		sb.append(StringEscapeUtils.escapeEcmaScript(loggerElement.getID()));
-		sb.append("');");
-
 		String id = StringEscapeUtils.escapeEcmaScript(loggerElement.getID());
 
 		_javascriptExecutor.executeScript("setID(" + loggerElement.getID() +
@@ -251,28 +206,6 @@ public final class LoggerUtil {
 		if (!isLoggerStarted()) {
 			return;
 		}
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("var oldNode = document.getElementById('");
-		sb.append(loggerElement.getID());
-		sb.append("');");
-
-		sb.append("var newNode = document.createElement('");
-		sb.append(StringEscapeUtils.escapeEcmaScript(loggerElement.getName()));
-		sb.append("');");
-
-		sb.append("newNode.innerHTML = oldNode.innerHTML;");
-		sb.append(
-			"newNode.setAttribute('class', oldNode.getAttribute('class'));");
-		sb.append("newNode.setAttribute('id', oldNode.getAttribute('id'));");
-
-		sb.append(
-			"oldNode.parentNode.insertBefore(newNode, oldNode.nextSibling);");
-
-		sb.append("var parentNode = oldNode.parentNode;");
-
-		sb.append("parentNode.removeChild(oldNode);");
 
 		String name = StringEscapeUtils.escapeEcmaScript(
 			loggerElement.getName());
@@ -285,16 +218,6 @@ public final class LoggerUtil {
 		if (!isLoggerStarted()) {
 			return;
 		}
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("var node = document.getElementById('");
-		sb.append(loggerElement.getID());
-		sb.append("');");
-
-		sb.append("node.innerHTML = '");
-		sb.append(StringEscapeUtils.escapeEcmaScript(loggerElement.getText()));
-		sb.append("';");
 
 		String text = StringEscapeUtils.escapeEcmaScript(
 			loggerElement.getText());
@@ -327,6 +250,10 @@ public final class LoggerUtil {
 
 		FileUtil.write(_CURRENT_DIR + "/test-results/js/main.js", jsContent);
 
+		String jsComponent = _readResource("META-INF/resources/js/component.js");
+
+		FileUtil.write(_CURRENT_DIR + "/test-results/js/component.js", jsComponent);
+
 		String htmlContent = _readResource(
 			"META-INF/resources/html/index.html");
 
@@ -357,6 +284,11 @@ public final class LoggerUtil {
 
 			FileUtil.write(
 				_CURRENT_DIR + "/test-results/js/main.js", jsContent);
+
+			String jsComponent = _readResource("META-INF/resources/js/component.js");
+
+			FileUtil.write(
+				_CURRENT_DIR + "/test-results/js/component.js", jsComponent);
 		}
 
 		String htmlContent = _readResource(
@@ -383,6 +315,9 @@ public final class LoggerUtil {
 			htmlContent = StringUtil.replace(
 				htmlContent, "<script src=\"../js/main.js\"",
 				"<script src=\"" + sb.toString() + "/js/main.js\"");
+			htmlContent = StringUtil.replace(
+				htmlContent, "<script src=\"../js/component.js\"",
+				"<script src=\"" + sb.toString() + "/js/component.js\"");
 		}
 
 		FileUtil.write(_getHtmlFilePath(), htmlContent);
