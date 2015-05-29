@@ -1686,6 +1686,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-datatype', 'aui-image-viewer', 'aui-io-request', 'aui-parse-content', 'aui-set', 'aui-sortable-list', 'json', 'liferay-map-base', 'liferay-notice', 'liferay-portlet-url', 'liferay-translation-manager', 'uploader']
+		requires: ['aui-base', 'aui-datatype', 'aui-image-viewer', 'aui-io-request', 'aui-parse-content', 'aui-set', 'aui-sortable-list', 'json', 'liferay-form', 'liferay-map-base', 'liferay-notice', 'liferay-portlet-url', 'liferay-translation-manager', 'uploader']
 	}
 );
