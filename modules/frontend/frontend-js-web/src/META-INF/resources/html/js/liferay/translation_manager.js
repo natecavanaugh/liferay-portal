@@ -229,7 +229,7 @@ AUI.add(
 
 						var availableLocales = instance.get('availableLocales');
 
-						if (AArray.indexOf(availableLocales, locale) === -1) {
+						if (availableLocales.indexOf(locale) === -1) {
 							availableLocales.push(locale);
 
 							instance.set('availableLocales', availableLocales);
@@ -451,9 +451,10 @@ AUI.add(
 						var instance = this;
 
 						var availableTranslationsLinksNode = instance._availableTranslationsLinksNode;
-						var defaultLocaleTextNode = instance._defaultLocaleTextNode;
 
 						var availableTranslationsLinksItems = availableTranslationsLinksNode.all(STR_DOT + CSS_TRANSLATION);
+
+						var defaultLocaleTextNode = instance._defaultLocaleTextNode;
 
 						availableTranslationsLinksItems.removeClass(CSS_TRANSLATION_EDITING);
 						defaultLocaleTextNode.removeClass(CSS_TRANSLATION_EDITING);

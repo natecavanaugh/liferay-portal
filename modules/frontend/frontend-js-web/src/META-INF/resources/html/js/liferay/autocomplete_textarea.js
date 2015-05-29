@@ -70,7 +70,7 @@ AUI.add(
 				var triggers = instance._getTriggers();
 
 				for (var i = position; i >= 0; --i) {
-					var triggerIndex = AArray.indexOf(triggers, content.charAt(i));
+					var triggerIndex = triggers.indexOf(content.charAt(i));
 
 					if (triggerIndex >= 0) {
 						result = i;
@@ -107,7 +107,7 @@ AUI.add(
 
 								var res = regExp.exec(val);
 
-								if (res && ((res.index + res[1].length + item.length) === val.length) && (!result || val.length < result.length)) {
+								if (res && res.index + res[1].length + item.length === val.length && (!result || val.length < result.length)) {
 									result = val;
 								}
 							}
