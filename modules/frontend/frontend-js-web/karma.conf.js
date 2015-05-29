@@ -81,7 +81,7 @@ properties.read(
 			function(file) {
 				var filePath = [file];
 
-				if ((file.indexOf('aui') === 0) || (file.indexOf('editor') === 0)) {
+				if ((file.indexOf('aui') === 0) || (file.indexOf('bootstrap') === 0)) {
 					filePath.unshift('tmp/META-INF/resources/html/js');
 				}
 				else {

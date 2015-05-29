@@ -3,6 +3,7 @@ window.Liferay = {
 		getAvailableLangPath: sinon.stub().returns('mock_available_languages.js'),
 		getCombine: sinon.stub().returns(false),
 		getComboPath: sinon.stub().returns('/'),
+		getEditorsPath: sinon.stub().returns('../../../frontend-editors-web/src/META-INF/resources/html'),
 		getFilter: sinon.stub().returns('raw'),
 		getJavaScriptRootPath: sinon.stub().returns('/base'),
 		getStaticResourceURLParams: sinon.stub().returns('')
