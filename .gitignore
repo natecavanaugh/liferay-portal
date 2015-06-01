@@ -60,6 +60,7 @@ cobertura.ser
 /lib/development/ojdbc6.jar
 
 /modules/frontend/*/test/coverage
+/modules/frontend/*/test/junit
 /modules/frontend/*/node_modules
 
 /nbproject/private
