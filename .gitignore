@@ -59,6 +59,9 @@ cobertura.ser
 /lib/development/ojdbc5.jar
 /lib/development/ojdbc6.jar
 
+/modules/frontend/*/test/coverage
+/modules/frontend/*/node_modules
+
 /nbproject/private
 
 /osgi/bootstrap/classes
