@@ -118,7 +118,7 @@ AUI.add(
 				list.forEach(
 					function(item, index) {
 						var key = item[selectId];
-						var value = item[selectDesc];
+						var value = (selectId == 'countryId') ? Liferay.Language.get('country.' + item[selectDesc]) : item[selectDesc];
 
 						selectOptions.push('<option value="' + key + '">' + value + '</option>');
 					}
