@@ -674,7 +674,7 @@
 	Liferay.provide(
 		Portlet,
 		'openWindow',
-		function(portlet, portletId, url, namespacedId, windowTitle) {
+		function(portlet, portletId, url, namespacedId, windowTitle, windowSubtitle) {
 			var instance = this;
 
 			portlet = A.one(portlet);
@@ -691,6 +691,10 @@
 					else {
 						titleHtml = title.html() + ' - ' + titleHtml;
 					}
+				}
+
+				if (windowSubtitle && windowSubtitle !== '') {
+					titleHtml += '<span class="portlet-subtitle-text">' + windowSubtitle + '</id>';
 				}
 
 				Liferay.Util.openWindow(

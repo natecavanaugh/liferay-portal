@@ -2025,6 +2025,8 @@ public interface PropsKeys {
 
 	public static final String PORTLET_ADD_DEFAULT_RESOURCE_CHECK_WHITELIST_ACTIONS = "portlet.add.default.resource.check.whitelist.actions";
 
+	public static final String PORTLET_CONFIG_SHOW_PORTLET_ID = "portlet.config.show.portlet.id";
+
 	public static final String PORTLET_CONFIGS = "portlet.configs";
 
 	public static final String PORTLET_CONTAINER_RESTRICT = "portlet.container.restrict";
