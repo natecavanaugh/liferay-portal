@@ -4,40 +4,6 @@ $card-box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.9);
 $state-default-text: #868896;
 $text-color: #29353D;
 
-@mixin clearfix-hack() {
-	&:after {
-		clear: both;
-		content: "";
-		display: block;
-		font-size: 0;
-		height: 0;
-		visibility: hidden;
-	}
-}
-
-@mixin text-emphasis-variant($parent, $color) {
-  #{$parent} {
-    color: $color;
-  }
-  a#{$parent}:hover {
-    color: darken($color, 10%);
-  }
-}
-
-%equal-height-column-cell {
-	display: table-cell;
-	vertical-align: top;
-}
-
-%equal-height-column-row {
-	display: table-row;
-}
-
-%equal-height-columns {
-	display: table;
-	width: 100%;
-}
-
 .card, .card-horizontal {
 	margin-bottom: 20px;
 	position: relative;
