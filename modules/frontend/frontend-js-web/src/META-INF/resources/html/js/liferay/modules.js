@@ -533,6 +533,12 @@
 							'liferay-portlet-base'
 						]
 					},
+					'liferay-item-selector-dialog': {
+						path: 'item_selector_dialog.js',
+						requires: [
+							'aui-component'
+						]
+					},
 					'liferay-item-viewer': {
 						path: 'item_viewer.js',
 						requires: [
