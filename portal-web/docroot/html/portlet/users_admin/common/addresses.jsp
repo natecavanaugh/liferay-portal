@@ -101,7 +101,7 @@ else {
 					{
 						select: '<portlet:namespace />addressCountryId<%= addressesIndex %>',
 						selectData: Liferay.Address.getCountries,
-						selectDesc: 'nameCurrentValue',
+						selectDesc: 'name',
 						selectId: 'countryId',
 						selectSort: '<%= true %>',
 						selectVal: '<%= countryId %>'
@@ -135,8 +135,8 @@ else {
 					namespace: '<portlet:namespace />',
 					on: {
 						'clone': function(event) {
-							var row = event.row;
 							var guid = event.guid;
+							var row = event.row;
 
 							var dynamicSelects = row.one('select[data-componentType=dynamic_select]');
 

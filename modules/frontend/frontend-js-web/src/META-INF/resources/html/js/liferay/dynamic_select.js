@@ -84,13 +84,15 @@ AUI.add(
 
 				var array = instance.array;
 
-				if ((i + 1) < array.length) {
+				var index = i + 1;
+
+				if (index < array.length) {
 					var curSelect = A.one('#' + array[i].select);
-					var nextSelectData = array[i + 1].selectData;
+					var nextSelectData = array[index].selectData;
 
 					nextSelectData(
 						function(list) {
-							instance._updateSelect(i + 1, list);
+							instance._updateSelect(index, list);
 						},
 						curSelect && curSelect.val()
 					);
@@ -103,11 +105,12 @@ AUI.add(
 				var options = instance.array[i];
 
 				var select = A.one('#' + options.select);
-				var selectId = options.selectId;
+
 				var selectDesc = options.selectDesc;
+				var selectId = options.selectId;
+				var selectNullable = options.selectNullable || true;
 				var selectSort = options.selectSort;
 				var selectVal = options.selectVal;
-				var selectNullable = options.selectNullable || true;
 
 				var selectOptions = [];
 
@@ -118,7 +121,9 @@ AUI.add(
 				list.forEach(
 					function(item, index) {
 						var key = item[selectId];
-						var value = item[selectDesc];
+						var name = item[selectDesc];
+
+						var value = selectId == 'countryId' ? Liferay.Language.get('country.' + name) : name;
 
 						selectOptions.push('<option value="' + key + '">' + value + '</option>');
 					}
