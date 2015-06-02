@@ -84,20 +84,15 @@ AUI.add(
 						valueFn: function() {
 							var instance = this;
 
-							var items = instance.get(STR_ITEMS);
-
 							var itemsError = instance.get(STR_ITEMS_ERROR);
 
-							var selectedIndex;
+							var itemIndex = instance.get('defaultLanguageId');
 
 							if (itemsError.length) {
-								selectedIndex = AArray.indexOf(items, itemsError[0]);
-							}
-							else {
-								selectedIndex = AArray.indexOf(items, instance.get('defaultLanguageId'));
+								itemIndex = itemsError[0];
 							}
 
-							return selectedIndex;
+							return instance.get(STR_ITEMS).indexOf(itemIndex);
 						}
 					},
 
@@ -461,7 +456,7 @@ AUI.add(
 									index: index,
 									row: row,
 									selectedClassName: selected ? 'palette-item-selected' : STR_BLANK,
-									stateClass: AArray.indexOf(itemsError, item) >= 0 ? 'lfr-input-localized-state-error' : STR_BLANK,
+									stateClass: itemsError.indexOf(item) >= 0 ? 'lfr-input-localized-state-error' : STR_BLANK,
 									value: Lang.isObject(item) ? item.value : item
 								}
 							);
@@ -530,12 +525,12 @@ AUI.add(
 						if (languageId) {
 							var items = inputLocalized.get(STR_ITEMS);
 
-							var languageIndex = AArray.indexOf(items, languageId);
+							var languageIndex = items.indexOf(languageId);
 
 							if (languageIndex === -1) {
 								languageId = defaultLanguageId;
 
-								languageIndex = AArray.indexOf(items, languageId);
+								languageIndex = items.indexOf(languageId);
 							}
 
 							inputLocalized.set(STR_SELECTED, languageIndex);

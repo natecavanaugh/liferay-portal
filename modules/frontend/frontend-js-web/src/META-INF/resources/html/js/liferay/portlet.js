@@ -72,6 +72,7 @@
 			javascriptPaths = javascriptPaths.concat(response.footerJavaScriptPaths || []);
 
 			var body = A.getBody();
+			var head = A.one(STR_HEAD);
 
 			var head = A.one(STR_HEAD);
 
@@ -179,6 +180,7 @@
 			}
 
 			var currentColumnId = Util.getColumnId(container.attr('id'));
+			var portletPosition = 0;
 
 			var portletPosition = 0;
 
@@ -379,7 +381,7 @@
 			portlet = A.one(portlet);
 
 			if (portlet && (skipConfirm || confirm(Liferay.Language.get('are-you-sure-you-want-to-remove-this-component')))) {
-				var portletIndex = AArray.indexOf(instance.list, portlet.portletId);
+				var portletIndex = instance.list.indexOf(portlet.portletId);
 
 				if (portletIndex >= 0) {
 					instance.list.splice(portletIndex, 1);
