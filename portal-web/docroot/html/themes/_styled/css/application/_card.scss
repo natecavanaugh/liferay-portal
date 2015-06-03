@@ -166,10 +166,6 @@
 	}
 }
 
-@include text-emphasis-variant('.text-default', $state-default-text);
-
-@include text-emphasis-variant('.text-regular', $text-color);
-
 .link-group {
 	margin: 10px 0;
 
