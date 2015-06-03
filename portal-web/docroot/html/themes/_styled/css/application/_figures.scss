@@ -1,13 +1,13 @@
-@mixin color-figcaption ($bgColor: #000, $alpha: 0.5, $color: #FFF) {
+@mixin color-figcaption ($bgColor: $figcaption-bg-color, $alpha: 0.5, $color: $figcaption-color) {
 	background-color: $bgColor;
 	background-color: rgba($bgColor, $alpha);
 	color: $color;
 }
 
-@mixin style-figcaption($bgColor: #000, $alpha: 0.5, $color: #FFF) {
+@mixin style-figcaption($bgColor: $figcaption-bg-color, $alpha: 0.5, $color: $figcaption-color) {
 	@include color-figcaption($bgColor, $alpha, $color);
 
-	font-weight: 300;
+	font-weight: $figcaption-font-weight;
 	padding: 10px 15px;
 	position: absolute;
 	width: 100%;
@@ -47,56 +47,56 @@ figcaption, .figcaption {
 // -------------------------
 
 .figure-circle {
-	border-radius: 50%;
+	border-radius: $figure-circle-border-radius;
 }
 
 .figure-rounded {
-	border-radius: 10px;
+	border-radius: $figure-rounded-border-radius;
 }
 
 .figure-square {
-	border-radius: 0;
+	border-radius: $figure-square-border-radius;
 }
 
 // Figcaption helper classes
 // -------------------------
 
 .figcaption-xl {
-	font-size: 1.5em;
+	font-size: $figcaption-font-size-xl;
 }
 
 .figcaption-lg {
-	font-size: 1.25em;
+	font-size: $figcaption-font-size-lg;
 }
 
 .figcaption-sm {
-	font-size: 0.85em;
+	font-size: $figcaption-font-size-sm;
 }
 
 .figcaption-xs {
-	font-size: 0.7em;
+	font-size: $figcaption-font-size-xs;
 }
 
 .figcaption-danger {
-	@include color-figcaption($brand-danger, 0.7, #FFF);
+	@include color-figcaption($brand-danger, 0.7, $figcaption-color);
 }
 
 .figcaption-default {
-	@include color-figcaption($gray-light, 0.7, #FFF);
+	@include color-figcaption($gray-light, 0.7, $figcaption-color);
 }
 
 .figcaption-info {
-	@include color-figcaption($brand-info, 0.7, #FFF);
+	@include color-figcaption($brand-info, 0.7, $figcaption-color);
 }
 
 .figcaption-primary {
-	@include color-figcaption($brand-primary, 0.7, #FFF);
+	@include color-figcaption($brand-primary, 0.7, $figcaption-color);
 }
 
 .figcaption-success {
-	@include color-figcaption($brand-success, 0.7, #FFF);
+	@include color-figcaption($brand-success, 0.7, $figcaption-color);
 }
 
 .figcaption-warning {
-	@include color-figcaption($brand-warning, 0.7, #FFF);
+	@include color-figcaption($brand-warning, 0.7, $figcaption-color);
 }
