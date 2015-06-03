@@ -78,3 +78,24 @@ $toggle-switch-bar-icon-color: $input-color;
 $toggle-switch-button-bg: $input-bg;
 $toggle-switch-button-border-color: $input-group-addon-border-color;
 $toggle-switch-button-icon-color: $input-color;
+
+/* ---------- Cards ---------- */
+
+$card-border-radius: 20px;
+$card-box-shadow: 0 0 1px #AAA;
+$card-circle-border-radius: 20px;
+$card-rounded-border-radius: 5px;
+$card-square-border-radius: 0;
+
+$card-divider-border-top: 1px solid #DDD;
+$card-divider-margin: 10px;
+
+$card-row-padded-padding: 10px;
+
+$extend-cards-control-panel-background-color: #F8F8F8;
+$extend-cards-control-panel-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.3);
+$extend-cards-font-weight: 200;
+$extend-cards-label-background: rgb(120, 171, 240);
+$extend-cards-label-color: #FFF;
+$extend-cards-label-font-size: 10px;
+$extend-cards-max-width: 300px;
