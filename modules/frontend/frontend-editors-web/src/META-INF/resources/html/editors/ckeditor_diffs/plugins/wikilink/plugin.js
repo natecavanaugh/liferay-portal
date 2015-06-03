@@ -25,7 +25,7 @@ CKEDITOR.plugins.add(
 
 			CKEDITOR.dialog.add('link', instance.path + 'dialogs/link.js');
 
-			 editor.on(
+			editor.on(
 				'selectionChange',
 				function(event) {
 
@@ -142,12 +142,15 @@ CKEDITOR.unlinkCommand.prototype = {
 
 	exec: function(editor) {
 		var selection = editor.getSelection();
+
 		var bookmarks = selection.createBookmarks();
 		var ranges = selection.getRanges();
+
 		var length = ranges.length;
 
-		for (var i = 0 ; i < length; i++) {
+		for (var i = 0; i < length; i++) {
 			var rangeRoot = ranges[i].getCommonAncestor(true);
+
 			var element = rangeRoot.getAscendant('a', true);
 
 			if (!element) {
