@@ -81,7 +81,6 @@ $toggle-switch-button-icon-color: $input-color;
 
 /* ---------- Cards ---------- */
 
-$card-border-radius: 20px;
 $card-box-shadow: 0 0 1px #AAA;
 $card-circle-border-radius: 20px;
 $card-rounded-border-radius: 5px;
@@ -104,6 +103,7 @@ $extend-cards-max-width: 300px;
 
 $figcaption-bg-color: #000;
 $figcaption-color: #FFF;
+$figcaption-default-bg-color: $gray-light;
 $figcaption-font-size-lg: 1.25em;
 $figcaption-font-size-sm: 0.85em;
 $figcaption-font-size-xl: 1.5em;

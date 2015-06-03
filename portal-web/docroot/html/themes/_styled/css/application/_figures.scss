@@ -82,7 +82,7 @@ figcaption, .figcaption {
 }
 
 .figcaption-default {
-	@include color-figcaption($gray-light, 0.7, $figcaption-color);
+	@include color-figcaption($figcaption-default-bg-color, 0.7, $figcaption-color);
 }
 
 .figcaption-info {
