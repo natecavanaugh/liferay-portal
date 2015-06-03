@@ -1,0 +1,101 @@
+@mixin color-figcaption ($bgColor: $figcaption-bg-color, $alpha: 0.5, $color: $figcaption-color) {
+	background-color: $bgColor;
+	background-color: rgba($bgColor, $alpha);
+	color: $color;
+}
+
+@mixin style-figcaption($bgColor: $figcaption-bg-color, $alpha: 0.5, $color: $figcaption-color) {
+	@include color-figcaption($bgColor, $alpha, $color);
+
+	font-weight: $figcaption-font-weight;
+	padding: 10px 15px;
+	position: absolute;
+	width: 100%;
+}
+
+figure, .figure {
+	overflow: hidden;
+	position: relative;
+}
+
+figcaption, .figcaption {
+	padding: 5px 2px;
+}
+
+.figcaption-bottom {
+	@include style-figcaption();
+
+	bottom: 0;
+}
+
+.figcaption-full {
+	@include style-figcaption();
+
+	height: 100%;
+	top: 0;
+	width: 100%;
+}
+
+.figcaption-top {
+	@include style-figcaption();
+
+	top: 0;
+}
+
+// Figure helper classes
+// -------------------------
+
+.figure-circle {
+	border-radius: $figure-circle-border-radius;
+}
+
+.figure-rounded {
+	border-radius: $figure-rounded-border-radius;
+}
+
+.figure-square {
+	border-radius: $figure-square-border-radius;
+}
+
+// Figcaption helper classes
+// -------------------------
+
+.figcaption-xl {
+	font-size: $figcaption-font-size-xl;
+}
+
+.figcaption-lg {
+	font-size: $figcaption-font-size-lg;
+}
+
+.figcaption-sm {
+	font-size: $figcaption-font-size-sm;
+}
+
+.figcaption-xs {
+	font-size: $figcaption-font-size-xs;
+}
+
+.figcaption-danger {
+	@include color-figcaption($brand-danger, 0.7, $figcaption-color);
+}
+
+.figcaption-default {
+	@include color-figcaption($figcaption-default-bg-color, 0.7, $figcaption-color);
+}
+
+.figcaption-info {
+	@include color-figcaption($brand-info, 0.7, $figcaption-color);
+}
+
+.figcaption-primary {
+	@include color-figcaption($brand-primary, 0.7, $figcaption-color);
+}
+
+.figcaption-success {
+	@include color-figcaption($brand-success, 0.7, $figcaption-color);
+}
+
+.figcaption-warning {
+	@include color-figcaption($brand-warning, 0.7, $figcaption-color);
+}
