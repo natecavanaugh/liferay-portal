@@ -166,62 +166,6 @@
 	}
 }
 
-.extend-cards-page {
-	.card {
-		max-width: $extend-cards-max-width;
-	}
-
-	.card-label {
-		background: $extend-cards-label-background;
-		color: $extend-cards-label-color;
-		display: block;
-		float: left;
-		font-size: $extend-cards-label-font-size;
-		font-weight: $extend-cards-font-weight;
-		margin-bottom: 15px;
-		margin-left: 10px;
-		padding: 2px 10px;
-		text-transform: uppercase;
-	}
-
-	.card-section table {
-		font-weight: $extend-cards-font-weight;
-		margin: 15px 0;
-		width: 100%;
-
-		td {
-			padding: 10px;
-			text-align: right;
-
-			&:first-child {
-				text-align: left;
-			}
-		}
-	}
-
-	.control-panel {
-		.card-header {
-			background-color: $extend-cards-control-panel-background-color;
-
-			@include box-shadow($extend-cards-control-panel-box-shadow);
-
-			padding: 0;
-		}
-
-		.card-row {
-			background-color: $extend-cards-control-panel-background-color;
-
-			@include box-shadow($extend-cards-control-panel-box-shadow);
-
-			width: 100%;
-		}
-
-		.card-column {
-			padding: 10px 15px;
-		}
-	}
-}
-
 @include text-emphasis-variant('.text-default', $state-default-text);
 
 @include text-emphasis-variant('.text-regular', $text-color);
