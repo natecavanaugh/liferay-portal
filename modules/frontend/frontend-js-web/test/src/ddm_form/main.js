@@ -1,110 +1,83 @@
 'use strict';
 
-var chai = chai || {};
+(function() {
+	var getTestData = function(callback) {
+		$.when(
+			$.get('/base/test/src/ddm_form/assets/simple_definition.json'),
+			$.get('/base/test/src/ddm_form/assets/simple_definition.html')
+		).done(callback);
+	};
 
-describe(
-	'DDM Form Test Suite',
-	function() {
-		var assert = chai.assert;
+	describe(
+		'DDM Form Test Suite',
+		function() {
+			var assert = chai.assert;
 
-		this.timeout(5000);
+			before(
+				function(done) {
+					var instance = this;
 
-		before(
-			function(done) {
-				var instance = this;
+					AUI().use(
+						'liferay-ddm-form',
+						function(A) {
+							assert.ok(Liferay.DDM.Form);
 
-				AUI().use(
-					'aui-io-request',
-					'liferay-ddm-form',
-					function(A) {
-						var getTestData = function(name) {
-							var definition;
+							getTestData(
+								function(jsonResponse, htmlResponse) {
+									document.body.innerHTML = htmlResponse[0];
 
-							var html;
-
-							A.io.request(
-								'/base/test/src/ddm_form/assets/' + name + '_definition.json',
-								{
-									dataType: 'json',
-									on: {
-										success: function() {
-											definition = this.get('responseData');
+									instance.ddmForm = new Liferay.DDM.Form(
+										{
+											container: '#ddmContainer',
+											ddmFormValuesInput: '#_167_ddmFormValues',
+											definition: jsonResponse[0],
+											doAsGroupId: 20180,
+											fieldsNamespace: '',
+											mode: 'null',
+											p_l_id: 20173,
+											portletNamespace: '_167_',
+											repeatable: true
 										}
-									},
-									sync: true
+									);
+
+									assert.ok(instance.ddmForm);
+
+									done();
 								}
 							);
+						}
+					);
+				}
+			);
 
-							A.io.request(
-								'/base/test/src/ddm_form/assets/' + name + '_definition.html',
-								{
-									on: {
-										success: function() {
-											html = this.get('responseData');
-										}
-									},
-									sync: true
-								}
-							);
+			it(
+				'should serialize a simple DDM Form with one unlocalizable text field',
+				function(done) {
+					var instance = this;
 
-							return { definition: definition, html: html };
-						};
+					var ddmForm = instance.ddmForm;
 
-						assert.ok(Liferay.DDM.Form);
+					var textField = ddmForm.get('fields')[0];
 
-						var data = getTestData('simple');
+					assert.ok(textField);
 
-						document.body.innerHTML = data.html;
+					var textFieldInputNode = textField.getInputNode();
 
-						instance.ddmForm = new Liferay.DDM.Form(
-							{
-								container: '#ddmContainer',
-								ddmFormValuesInput: '#_167_ddmFormValues',
-								definition: data.definition,
-								doAsGroupId: 20180,
-								fieldsNamespace: '',
-								mode: 'null',
-								p_l_id: 20173,
-								portletNamespace: '_167_',
-								repeatable: true
-							}
-						);
+					assert.ok(textFieldInputNode);
 
-						assert.ok(instance.ddmForm);
+					var value = 'simple text';
 
-						done();
-					}
-				);
-			}
-		);
+					textFieldInputNode.attr('value', value);
 
-		it(
-			'should serialize a simple DDM Form with one unlocalizable text field',
-			function(done) {
-				var instance = this;
+					var json = ddmForm.toJSON();
 
-				var ddmForm = instance.ddmForm;
+					assert.ok(json);
 
-				var textField = ddmForm.get('fields')[0];
+					assert.strictEqual(value, json.fieldValues[0].value);
 
-				assert.ok(textField);
-
-				var textFieldInputNode = textField.getInputNode();
-
-				assert.ok(textFieldInputNode);
-
-				var value = 'simple text';
-
-				textFieldInputNode.attr('value', value);
-
-				var json = ddmForm.toJSON();
-
-				assert.ok(json);
-
-				assert.strictEqual(value, json.fieldValues[0].value);
-
-				done();
-			}
-		);
-	}
-);
+					done();
+				}
+			);
+		}
+	);
+})();
