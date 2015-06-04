@@ -212,4 +212,18 @@
 			working.dir="${basedir}"
 		/>
 	</target>
+
+	<target name="test-js-watch" depends="download-node">
+		<node-execute
+			command="npm"
+			command.args="install"
+			working.dir="${basedir}"
+		/>
+
+		<node-execute
+			command="npm"
+			command.args="run watch"
+			working.dir="${basedir}"
+		/>
+	</target>
 </project>
