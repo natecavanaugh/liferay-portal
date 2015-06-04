@@ -130,7 +130,7 @@ properties.read(
 
 				{
 					included: true,
-					pattern: 'test/src/*/*-test.js',
+					pattern: 'test/src/*/main.js',
 					served: true
 				}
 			]
