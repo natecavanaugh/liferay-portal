@@ -45,7 +45,7 @@
 				combine: COMBINE,
 				modules: {
 					'inline-editor-ckeditor': {
-						path: 'ckeditor/main.js'
+						path: 'ckeditor_diffs/main.js'
 					}
 				},
 				root: PATH_EDITORS + '/editors/'

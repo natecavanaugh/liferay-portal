@@ -2,6 +2,11 @@
 <!DOCTYPE project>
 
 <project>
+	<import file="../../../tools/sdk/build-common-osgi-plugin.xml" />
+	<import file="../../../tools/sdk/build-node.xml" />
+
+	<property name="auto.deploy.dir" value="${liferay.home}/osgi/modules" />
+
 	<property name="alloy.bootstrap.version" value="3.2.0-2" />
 	<property name="alloy.version" value="3.0.1" />
 	<property name="third.party.dir" value="../../../portal-web/third-party" />
@@ -191,6 +196,34 @@
 	<target name="jar" depends="build-common.compile,build-alloy-bootstrap,build-alloy">
 		<jar-macro
 			module.dir="${basedir}"
+		/>
+	</target>
+
+	<target name="test-js" depends="download-node">
+		<node-execute
+			command="npm"
+			command.args="install"
+			working.dir="${basedir}"
+		/>
+
+		<node-execute
+			command="npm"
+			command.args="test"
+			working.dir="${basedir}"
+		/>
+	</target>
+
+	<target name="watch-js" depends="download-node">
+		<node-execute
+			command="npm"
+			command.args="install"
+			working.dir="${basedir}"
+		/>
+
+		<node-execute
+			command="npm"
+			command.args="run watch"
+			working.dir="${basedir}"
 		/>
 	</target>
 </project>
