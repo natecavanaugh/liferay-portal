@@ -33,18 +33,33 @@
 			);
 
 			it(
-				'should add a space between number and suffix',
+				'should be configurable to add a space between number and suffix',
 				function(done) {
 					var instance = this;
 
-					instance.getStorageFormatter().set('addSpaceBeforeSuffix');
+					var formatter = instance.getStorageFormatter(
+						{
+							addSpaceBeforeSuffix: true
+						}
+					);
 
 					assert.equal(
-						instance.getStorageFormatter(
-							{
-								addSpaceBeforeSuffix: true
-							}
-						).formatStorage(1345678896),
+						formatter.formatStorage(0),
+						'0 KB'
+					);
+
+					assert.equal(
+						formatter.formatStorage(3562),
+						'3 KB'
+					);
+
+					assert.equal(
+						formatter.formatStorage(234123456),
+						'223.3 MB'
+					);
+
+					assert.equal(
+						formatter.formatStorage(1345678896),
 						'1.3 GB'
 					);
 
@@ -57,8 +72,6 @@
 				function(done) {
 					var instance = this;
 
-					instance.getStorageFormatter().set('addSpaceBeforeSuffix');
-
 					assert.equal(
 						instance.getStorageFormatter(
 							{
@@ -66,6 +79,66 @@
 							}
 						).formatStorage(1345678896),
 						'1,3GB'
+					);
+
+					done();
+				}
+			);
+
+			it(
+				'should format with configurable kilobyte suffix',
+				function(done) {
+					var instance = this;
+
+					var suffix = 'kib';
+
+					assert.equal(
+						instance.getStorageFormatter(
+							{
+								suffixKB: suffix
+							}
+						).formatStorage(3562),
+						'3' + suffix
+					);
+
+					done();
+				}
+			);
+
+			it(
+				'should format with configurable megabyte suffix',
+				function(done) {
+					var instance = this;
+
+					var suffix = 'mib';
+
+					assert.equal(
+						instance.getStorageFormatter(
+							{
+								suffixMB: suffix
+							}
+						).formatStorage(234123456),
+						'223.3' + suffix
+					);
+
+					done();
+				}
+			);
+
+			it(
+				'should format with configurable gigabyte suffix',
+				function(done) {
+					var instance = this;
+
+					var suffix = 'gib';
+
+					assert.equal(
+						instance.getStorageFormatter(
+							{
+								suffixGB: suffix
+							}
+						).formatStorage(1345678896),
+						'1.3' + suffix
 					);
 
 					done();
