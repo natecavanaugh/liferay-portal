@@ -213,7 +213,7 @@
 		/>
 	</target>
 
-	<target name="test-js-watch" depends="download-node">
+	<target name="watch-js" depends="download-node">
 		<node-execute
 			command="npm"
 			command.args="install"
