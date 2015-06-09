@@ -2,6 +2,7 @@ AUI.add(
 	'liferay-ddm-form-renderer',
 	function(A) {
 		var AArray = A.Array;
+		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
 		var Util = Liferay.DDM.Renderer.Util;
 
 		var Form = A.Component.create(
@@ -43,11 +44,35 @@ AUI.add(
 								srcNode: container.one('.lfr-ddm-form-pages'),
 								type: 'pills'
 							}
-						).render();
+						);
 
-						AArray.invoke(instance.get('fields'), 'render');
+						instance.renderUI();
+						instance.bindUI();
+					},
 
+					renderUI: function() {
+						var instance = this;
+
+						var container = instance.get('container');
+
+						var fields = instance.get('fields');
+
+						AArray.invoke(fields, 'render');
+
+						instance.tabView.render();
+					},
+
+					bindUI: function() {
+						var instance = this;
+
+						instance.after('definitionChange', instance._afterDefinitionChange);
 						instance.after('liferay-ddm-form-renderer-field:remove', A.bind(instance, instance._afterFieldRemove));
+					},
+
+					destructor: function() {
+						var instance = this;
+
+						AArray.invoke(instance.get('fields'), 'destroy');
 					},
 
 					getFieldNodes: function() {
@@ -56,6 +81,54 @@ AUI.add(
 						return instance.get('container').all('.lfr-ddm-form-field-container').filter(
 							function(item) {
 								return item.ancestors('.field-wrapper', false).size() === 0;
+							}
+						);
+					},
+
+					toJSON: function() {
+						var instance = this;
+
+						return {
+							fields: AArray.invoke(instance.get('fields'), 'toJSON')
+						};
+					},
+
+					_afterDefinitionChange: function(event) {
+						var instance = this;
+
+						AArray.invoke(instance.get('fields'), 'destroy');
+
+						instance.set('fields', instance._getDefinitionFields(event.newVal));
+
+						AArray.invoke(instance.get('fields'), 'render');
+					},
+
+					_getDefinitionFields: function(definition) {
+						var instance = this;
+
+						var portletNamespace = instance.get('portletNamespace');
+
+						return AArray.map(
+							definition.fields,
+							function(item) {
+								var fieldValue = Util.searchFieldData(instance.get('values'), 'name', item.name);
+
+								var fieldType = FieldTypes.get(item.type);
+
+								var fieldClassName = fieldType.get('className');
+
+								var fieldClass = Util.getFieldClass(fieldClassName);
+
+								return new fieldClass(
+									{
+										definition: item,
+										fieldType: item.type,
+										form: instance,
+										parent: instance,
+										portletNamespace: portletNamespace,
+										value: fieldValue.value
+									}
+								);
 							}
 						);
 					},
@@ -73,9 +146,13 @@ AUI.add(
 
 						var fieldDefinition = Util.searchFieldData(instance.get('definition'), 'name', name);
 
-						var FieldClass = Util.getFieldClass(fieldDefinition);
+						var fieldType = FieldTypes.get(fieldDefinition.type);
 
-						var field = new FieldClass(
+						var fieldClassName = fieldType.get('className');
+
+						var fieldClass = Util.getFieldClass(fieldClassName);
+
+						var field = new fieldClass(
 							{
 								container: node,
 								definition: fieldDefinition,
@@ -94,13 +171,22 @@ AUI.add(
 					_valueFields: function() {
 						var instance = this;
 
+						var fieldNodes = instance.getFieldNodes();
+
 						var fields = [];
 
-						instance.getFieldNodes().each(
-							function(item) {
-								fields.push(instance._getField(item));
-							}
-						);
+						if (fieldNodes.size() > 0) {
+							fieldNodes.each(
+								function(item) {
+									fields.push(instance._getField(item));
+								}
+							);
+						}
+						else {
+							var definition = instance.get('definition');
+
+							fields = instance._getDefinitionFields(definition);
+						}
 
 						return fields;
 					}
