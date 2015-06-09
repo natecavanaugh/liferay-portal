@@ -11,7 +11,7 @@ var defaultConfig = {
 	// base path that will be used to resolve all patterns (eg. files, exclude)
 	basePath: './',
 
-	browsers: ['Chrome'],
+	browsers: ['PhantomJS'],
 
 	// enable / disable colors in the output (reporters and logs)
 	colors: true,
