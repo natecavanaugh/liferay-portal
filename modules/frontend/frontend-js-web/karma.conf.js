@@ -17,7 +17,16 @@ var defaultConfig = {
 	colors: true,
 
 	coverageReporter: {
-		dir: 'test/coverage'
+		dir: 'test/coverage',
+		reporters: [
+			{
+				type: 'html'
+			},
+			{
+				type: 'json',
+				file: 'coverage.json'
+			}
+		]
 	},
 
 	// list of files to exclude
