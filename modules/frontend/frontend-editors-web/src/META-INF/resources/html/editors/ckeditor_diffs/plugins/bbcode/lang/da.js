@@ -1,3 +1,7 @@
-CKEDITOR.plugins.setLang('bbcode', 'da', {
-	code : 'Tilstand'
-});
+CKEDITOR.plugins.setLang(
+	'bbcode',
+	'da',
+	{
+		code: 'Tilstand'
+	}
+);

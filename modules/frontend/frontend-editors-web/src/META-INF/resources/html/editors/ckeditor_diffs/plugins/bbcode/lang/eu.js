@@ -1,3 +1,7 @@
-CKEDITOR.plugins.setLang('bbcode', 'eu', {
-	code : 'Kodea'
-});
+CKEDITOR.plugins.setLang(
+	'bbcode',
+	'eu',
+	{
+		code: 'Kodea'
+	}
+);

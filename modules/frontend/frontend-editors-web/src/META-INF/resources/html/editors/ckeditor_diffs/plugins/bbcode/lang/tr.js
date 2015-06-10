@@ -1,3 +1,7 @@
-CKEDITOR.plugins.setLang('bbcode', 'tr', {
-	code : 'Kod'
-});
+CKEDITOR.plugins.setLang(
+	'bbcode',
+	'tr',
+	{
+		code: 'Kod'
+	}
+);

@@ -1,3 +1,7 @@
-CKEDITOR.plugins.setLang('bbcode', 'vi', {
-	code : 'Mã'
-});
+CKEDITOR.plugins.setLang(
+	'bbcode',
+	'vi',
+	{
+		code: 'Mã'
+	}
+);

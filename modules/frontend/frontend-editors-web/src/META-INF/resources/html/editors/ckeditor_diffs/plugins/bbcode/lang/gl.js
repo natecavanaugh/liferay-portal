@@ -1,3 +1,7 @@
-CKEDITOR.plugins.setLang('bbcode', 'gl', {
-	code : 'Código'
-});
+CKEDITOR.plugins.setLang(
+	'bbcode',
+	'gl',
+	{
+		code: 'Código'
+	}
+);

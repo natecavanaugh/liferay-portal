@@ -1,3 +1,7 @@
-CKEDITOR.plugins.setLang('bbcode', 'zh', {
-	code : '代碼'
-});
+CKEDITOR.plugins.setLang(
+	'bbcode',
+	'zh',
+	{
+		code: '代碼'
+	}
+);

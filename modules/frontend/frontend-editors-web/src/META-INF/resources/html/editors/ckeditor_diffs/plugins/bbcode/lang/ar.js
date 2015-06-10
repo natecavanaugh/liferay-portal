@@ -1,3 +1,7 @@
-CKEDITOR.plugins.setLang('bbcode', 'ar', {
-	code : 'رمز'
-});
+CKEDITOR.plugins.setLang(
+	'bbcode',
+	'ar',
+	{
+		code: 'رمز'
+	}
+);

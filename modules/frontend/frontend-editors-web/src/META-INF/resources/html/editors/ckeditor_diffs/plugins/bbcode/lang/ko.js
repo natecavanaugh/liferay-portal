@@ -1,3 +1,7 @@
-CKEDITOR.plugins.setLang('bbcode', 'ko', {
-	code : '부호'
-});
+CKEDITOR.plugins.setLang(
+	'bbcode',
+	'ko',
+	{
+		code: '부호'
+	}
+);
