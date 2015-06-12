@@ -2,6 +2,7 @@
 	CKEDITOR.plugins.add(
 	'bbcode',
 		{
+			lang: 'ar,bg,ca,cs,da,el,en,es,et,eu,fa,fi,fr,gl,hi,hr,hu,it,ja,ko,lt,nb,pl,pt-br,ro,ru,sk,sl,sr,sr-latn,sv,tr,vi,zh,zh-cn',
 			init: function(editor) {
 				var instance = this;
 
@@ -32,7 +33,7 @@
 				editor.ui.addButton(
 					'Code',
 					{
-						click : function() {
+						click: function() {
 							editor.focus();
 							editor.fire('saveSnapshot');
 
@@ -54,7 +55,7 @@
 							);
 						},
 						icon: editor.config.imagesPath + 'code.png',
-						label: Liferay.Language.get('code')
+						label: editor.lang.bbcode.code
 					}
 				);
 			}
