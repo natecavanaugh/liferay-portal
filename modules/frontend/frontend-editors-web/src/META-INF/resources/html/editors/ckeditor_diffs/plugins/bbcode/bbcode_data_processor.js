@@ -584,7 +584,7 @@
 			}
 			else if (REGEX_LIST_LOWER_ROMAN.test(listStyleType)) {
 				listTagsIn.push('i]');
-			} 
+			}
 			else if (REGEX_LIST_UPPER_ALPHA.test(listStyleType)) {
 				listTagsIn.push('A]');
 			}
