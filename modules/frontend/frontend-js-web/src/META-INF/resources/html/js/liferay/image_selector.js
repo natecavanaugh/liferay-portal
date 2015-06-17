@@ -217,6 +217,8 @@ AUI.add(
 
 										if (selectedItem) {
 											instance._updateImageData(JSON.parse(selectedItem.value));
+
+											Liferay.fire(STR_IMAGE_UPLOADED);
 										}
 									}
 								},
