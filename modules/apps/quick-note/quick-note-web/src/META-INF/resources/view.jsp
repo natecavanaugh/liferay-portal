@@ -45,6 +45,22 @@
 	<div class="note-content" id="<portlet:namespace />note"><%= StringUtil.replace(HtmlUtil.escape(data), "&lt;br /&gt;", "<br />") %></div>
 </div>
 
+<script>
+	require(
+		'my-module/my-component.es',
+		function(log) {
+			log('Hello World!');
+
+			var portletBody = $("#p_p_id_${portletDisplay.getId()}_");
+
+			portletBody.before('<div><strong>Hello World from a ES6 module!</strong></div>');
+		},
+		function(error) {
+			console.error(error);
+		}
+	);
+</script>
+
 <c:if test="<%= portletDisplay.isShowConfigurationIcon() %>">
 	<aui:script use="aui-editable-deprecated,aui-io-request">
 		var quickNotePad = A.one('#<portlet:namespace />pad');

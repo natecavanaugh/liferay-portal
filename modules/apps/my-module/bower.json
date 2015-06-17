@@ -1,0 +1,10 @@
+{
+	"name": "my-module",
+	"version": "1.0.0",
+	"dependencies": {
+		"underscore": "~1.8.3"
+	},
+	"runtime": {
+		"liferay": "~1.0"
+	}
+}
