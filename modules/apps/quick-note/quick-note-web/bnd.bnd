@@ -4,3 +4,5 @@ Bundle-Version: 1.0.0
 Include-Resource:\
 	classes,\
 	META-INF/resources=src/META-INF/resources
+Require-Capability:\
+	osgi.webresource;filter:="(&(osgi.webresource=my-module)(version>=1.0.0)(!(version>=2.0.0)))"
