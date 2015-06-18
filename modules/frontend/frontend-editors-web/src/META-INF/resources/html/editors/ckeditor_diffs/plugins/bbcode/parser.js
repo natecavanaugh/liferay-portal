@@ -38,6 +38,8 @@
 		'url': 1
 	};
 
+	var REGEX_TAG_NAME = /^\/?(?:b|center|code|colou?r|email|i|img|justify|left|pre|q|quote|right|\*|s|size|table|tr|th|td|li|list|font|u|url)$/i;
+
 	var STR_TAG_CODE = 'code';
 
 	var Parser = function(config) {
@@ -210,6 +212,16 @@
 					value: tagName
 				}
 			);
+		},
+
+		_isValidTag: function(tagName) {
+			var valid = false;
+
+			if (tagName && tagName.length) {
+				valid = REGEX_TAG_NAME.test(tagName);
+			}
+
+			return valid;
 		},
 
 		_reset: function() {
