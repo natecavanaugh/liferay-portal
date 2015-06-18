@@ -124,7 +124,7 @@
 
 			var lastIndex = length;
 
-			if (token) {
+			if (token && instance._isValidTag(token[1] || token[3])) {
 				length = token.index;
 
 				lastIndex = instance._lexer.getLastIndex();
