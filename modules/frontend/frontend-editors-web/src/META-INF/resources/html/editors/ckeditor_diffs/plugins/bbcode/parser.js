@@ -2,7 +2,7 @@
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 	var isString = function(val) {
-		return (typeof val == 'string');
+		return typeof val == 'string';
 	};
 
 	var ELEMENTS_BLOCK = {
@@ -82,7 +82,7 @@
 
 			var token;
 
-			while ((token = lexer.getNextToken())) {
+			while (token = lexer.getNextToken()) {
 				instance._handleData(token, data);
 
 				if (token[1]) {
@@ -124,10 +124,14 @@
 
 			var lastIndex = length;
 
-			if (token && instance._isValidTag(token[1] || token[3])) {
-				length = token.index;
+			if (token) {
+				var tokenItem = token[1] || token[3];
 
-				lastIndex = instance._lexer.getLastIndex();
+				if (instance._isValidTag(tokenItem)) {
+					length = token.index;
+
+					lastIndex = instance._lexer.getLastIndex();
+				}
 			}
 
 			if (length > instance._dataPointer) {
@@ -152,8 +156,6 @@
 			var tagName;
 
 			if (token) {
-				var tagName;
-
 				if (isString(token)) {
 					tagName = token;
 				}
