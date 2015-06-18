@@ -78,3 +78,29 @@ $toggle-switch-bar-icon-color: $input-color;
 $toggle-switch-button-bg: $input-bg;
 $toggle-switch-button-border-color: $input-group-addon-border-color;
 $toggle-switch-button-icon-color: $input-color;
+
+/* ---------- Cards ---------- */
+
+$card-box-shadow: 0 0 1px #AAA;
+$card-circle-border-radius: 20px;
+$card-rounded-border-radius: 5px;
+$card-square-border-radius: 0;
+
+$card-divider-border-top: 1px solid #DDD;
+$card-divider-margin: 10px;
+
+$card-row-padded-padding: 10px;
+
+/* ---------- Figures ---------- */
+
+$figcaption-bg-color: #000;
+$figcaption-color: #FFF;
+$figcaption-default-bg-color: $gray-light;
+$figcaption-font-size-lg: 1.25em;
+$figcaption-font-size-sm: 0.85em;
+$figcaption-font-size-xl: 1.5em;
+$figcaption-font-size-xs: 0.7em;
+$figcaption-font-weight: 300;
+$figure-circle-border-radius: 50%;
+$figure-rounded-border-radius: 10px;
+$figure-square-border-radius: 0;

@@ -41,6 +41,10 @@
 	@include word-wrap(break-all);
 }
 
+/* ---------- State ---------- */
+
+@include text-emphasis-variant('.text-regular', $state-regular-text);
+
 /* ---------- Status ---------- */
 
 .entry-status {
