@@ -180,7 +180,7 @@
 
 			<basename file="${lexicon.zip.path}" property="lexicon.file" />
 
-			<property name="lexicon.assets.dir" value="${frontend.js.web.dir}/tmp/META-INF/resources/html/lexicon-assets" />
+			<property name="lexicon.assets.dir" value="${frontend.js.web.dir}/tmp/META-INF/resources/lexicon-assets" />
 
 			<if>
 				<not>
