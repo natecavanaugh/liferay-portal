@@ -1,8 +1,7 @@
 AUI.add(
 	'liferay-ddm-form-field-radio',
 	function(A) {
-		var AArray = A.Array;
-		var Lang = A.Lang;
+		var _ = AUI._;
 
 		var RadioField = A.Component.create(
 			{

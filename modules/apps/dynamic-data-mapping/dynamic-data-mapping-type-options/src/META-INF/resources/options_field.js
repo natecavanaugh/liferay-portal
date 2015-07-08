@@ -1,8 +1,7 @@
 AUI.add(
 	'liferay-ddm-form-field-options',
 	function(A) {
-		var AArray = A.Array;
-		var Lang = A.Lang;
+		var _ = AUI._;
 
 		var OptionsField = A.Component.create(
 			{
@@ -17,24 +16,6 @@ AUI.add(
 				NAME: 'liferay-ddm-form-field-options',
 
 				prototype: {
-					render: function() {
-						var instance = this;
-
-						OptionsField.superclass.render.apply(instance, arguments);
-
-						var container = instance.get('container');
-
-						instance.autoFields = new Liferay.AutoFields(
-							{
-								contentBox: container.one('.auto-fields'),
-								fieldIndexes: instance.getQualifiedName(),
-								namespace: instance.get('portletNamespace'),
-								sortable: true,
-								sortableHandle: '.ddm-options-row'
-							}
-						).render();
-					},
-
 					getContextValue: function() {
 						var instance = this;
 
@@ -66,6 +47,24 @@ AUI.add(
 						var instance = this;
 
 						return instance.serializeAutoFields();
+					},
+
+					render: function() {
+						var instance = this;
+
+						OptionsField.superclass.render.apply(instance, arguments);
+
+						var container = instance.get('container');
+
+						instance.autoFields = new Liferay.AutoFields(
+							{
+								contentBox: container.one('.auto-fields'),
+								fieldIndexes: instance.getQualifiedName(),
+								namespace: instance.get('portletNamespace'),
+								sortable: true,
+								sortableHandle: '.ddm-options-row'
+							}
+						).render();
 					},
 
 					serializeAutoFields: function() {

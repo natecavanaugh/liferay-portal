@@ -1,8 +1,7 @@
 AUI.add(
 	'liferay-ddm-form-field-select',
 	function(A) {
-		var AArray = A.Array;
-		var Lang = A.Lang;
+		var _ = AUI._;
 
 		var SelectField = A.Component.create(
 			{
@@ -13,7 +12,7 @@ AUI.add(
 
 					type: {
 						value: 'select'
-					},
+					}
 				},
 
 				EXTENDS: Liferay.DDM.Renderer.Field,
