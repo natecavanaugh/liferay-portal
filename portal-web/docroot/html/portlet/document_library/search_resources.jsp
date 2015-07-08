@@ -100,6 +100,7 @@ SearchContainer searchContainer = new SearchContainer(liferayPortletRequest, por
 
 			<portlet:renderURL var="closeSearchURL">
 				<portlet:param name="struts_action" value="/document_library/view" />
+				<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
 			</portlet:renderURL>
 
 			<liferay-ui:icon cssClass="close-search" iconCssClass="icon-remove" id="closeSearch" message="remove" url="<%= closeSearchURL %>" />
