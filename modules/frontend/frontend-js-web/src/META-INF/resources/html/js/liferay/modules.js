@@ -520,6 +520,13 @@
 							'aui-component'
 						]
 					},
+					'liferay-item-selector-uploader': {
+						path: 'item_selector_uploader.js',
+						requires: [
+							'aui-base',
+							'uploader'
+						]
+					},
 					'liferay-item-selector-url': {
 						path: 'item_selector_url.js',
 						requires: [
