@@ -1,11 +1,20 @@
 AUI.add(
 	'liferay-ddm-form-field-select',
 	function(A) {
-		var AArray = A.Array;
-		var Lang = A.Lang;
+		var _ = AUI._;
 
 		var SelectField = A.Component.create(
 			{
+				ATTRS: {
+					options: {
+						value: []
+					},
+
+					type: {
+						value: 'select'
+					}
+				},
+
 				EXTENDS: Liferay.DDM.Renderer.Field,
 
 				NAME: 'liferay-ddm-form-field-select',
@@ -14,11 +23,18 @@ AUI.add(
 					getOptions: function() {
 						var instance = this;
 
+						var value = instance.get('value');
+
+						if (instance.get('localizable')) {
+							value = value[instance.get('locale')];
+						}
+
 						return _.map(
-							instance.get('definition').options,
+							instance.get('options'),
 							function(item) {
 								return {
 									label: item.label[instance.get('locale')],
+									status: _.contains(value, item.value) ? 'selected' : '',
 									value: item.value
 								};
 							}
