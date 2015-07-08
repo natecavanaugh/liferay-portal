@@ -3,14 +3,14 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 
-		var FieldTypes = {
-			_fieldTypes: [],
+		var _fieldTypes = [];
 
+		var FieldTypes = {
 			get: function(type) {
 				var instance = this;
 
 				return AArray.find(
-					instance._fieldTypes,
+					_fieldTypes,
 					function(item, index) {
 						return item.get('name') === type;
 					}
@@ -20,13 +20,13 @@ AUI.add(
 			getAll: function() {
 				var instance = this;
 
-				return instance._fieldTypes;
+				return _fieldTypes;
 			},
 
 			register: function(fieldTypes) {
 				var instance = this;
 
-				instance._fieldTypes = AArray(fieldTypes).map(instance._getFieldType);
+				_fieldTypes = AArray(fieldTypes).map(instance._getFieldType);
 			},
 
 			_getFieldType: function(config) {
