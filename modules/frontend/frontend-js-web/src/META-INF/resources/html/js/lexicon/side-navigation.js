@@ -11,7 +11,7 @@
 				'resize',
 				debounce(
 					function(event) {
-						doc.trigger('screenChange.lexicon.sidenav', window.innerWidth);
+						doc.trigger('screenChange.lexicon.sidenav');
 					},
 					150
 				)
@@ -191,27 +191,29 @@
 		setEqualHeight: function(container) {
 			var instance = this;
 
-			var options = instance.options;
+			if (instance.options.equalHeight) {
+				var options = instance.options;
 
-			var content = options.content;
-			var navigation = options.navigation;
+				var content = options.content;
+				var navigation = options.navigation;
 
-			var type = instance.mobile ? options.typeMobile : options.type;
+				var type = instance.mobile ? options.typeMobile : options.type;
 
-			if (type !== 'fixed' && type !== 'fixed-push') {
-				container.each(function(index, node) {
-					node = $(node);
+				if (type !== 'fixed' && type !== 'fixed-push') {
+					container.each(function(index, node) {
+						node = $(node);
 
-					var contentNode = node.find(content).first();
-					var navNode = node.find(navigation).first();
-					var sideNavMenuNode = node.find('.sidenav-menu').first();
+						var contentNode = node.find(content).first();
+						var navNode = node.find(navigation).first();
+						var sideNavMenuNode = node.find('.sidenav-menu').first();
 
-					var tallest = Math.max(contentNode.outerHeight(), navNode.outerHeight());
+						var tallest = Math.max(contentNode.outerHeight(), navNode.outerHeight());
 
-					contentNode.css('min-height', tallest);
-					navNode.css('min-height', tallest);
-					sideNavMenuNode.css('min-height', tallest);
-				});
+						contentNode.css('min-height', tallest);
+						navNode.css('min-height', tallest);
+						sideNavMenuNode.css('min-height', tallest);
+					});
+				}
 			}
 		},
 
@@ -341,11 +343,10 @@
 
 			var breakpoint = toInt(instance.options.breakpoint);
 
-			doc.on('screenChange.lexicon.sidenav', function(event, winWidth) {
-				var desktop = winWidth >= breakpoint;
+			instance._setScreenSize();
 
-				instance.mobile = !desktop;
-				instance.desktop = desktop;
+			doc.on('screenChange.lexicon.sidenav', function(event, winWidth) {
+				instance._setScreenSize();
 
 				var type = desktop ? instance.options.type : instance.options.typeMobile;
 
@@ -462,7 +463,16 @@
 			}
 
 			options.width = width;
-		}
+		},
+
+		_setScreenSize: function() {
+			var instance = this;
+
+			var desktop = window.innerWidth >= toInt(instance.options.breakpoint);
+
+			instance.mobile = !desktop;
+			instance.desktop = desktop;
+		},
 	};
 
 	var old = $.fn.sideNavigation;
@@ -495,21 +505,23 @@
 
 	/**
 	 * Plugin options
-	 * @property {String|Number}  breakpoint  The window width that defines the desktop size
-	 * @property {String} 		  content 	  The class or ID of the content container
-	 * @property {String|Number}  gutter 	  The space between the sidenav-slider and the sidenav-content
-	 * @property {String} 		  navigation  The class or ID of the navigation container
-	 * @property {String} 		  position 	  The position of tge sidenav-slider. Possible values: left, right
-	 * @property {String} 		  toggler 	  The class or ID of the toggle button
-	 * @property {String} 		  type 		  The type of sidenav in desktop. Possible values: relative, fixed, fixed-push
-	 * @property {String} 		  typeMobile  The type of sidenav in mobile. Possible values: relative, fixed, fixed-push
-	 * @property {String|Number}  width 	  The width of the side navigation
+	 * @property {String|Number}  breakpoint  The window width that defines the desktop size.
+	 * @property {String}         content     The class or ID of the content container.
+	 * @property {String|Number}  gutter      The space between the sidenav-slider and the sidenav-content.
+	 * @property {String|Boolean} equalHeight The height of content and navigation should be equal.
+	 * @property {String}         navigation  The class or ID of the navigation container.
+	 * @property {String}         position    The position of the sidenav-slider. Possible values: left, right
+	 * @property {String}         toggler     The class or ID of the toggle button.
+	 * @property {String}         type        The type of sidenav in desktop. Possible values: relative, fixed, fixed-push
+	 * @property {String}         typeMobile  The type of sidenav in mobile. Possible values: relative, fixed, fixed-push
+	 * @property {String|Number}  width       The width of the side navigation.
 	 */
 
 	Plugin.defaults = {
 		breakpoint: 768,
 		content: '.sidenav-content',
 		gutter: '15px',
+		equalHeight: true,
 		navigation: '.sidenav-menu-slider',
 		position: 'left',
 		toggler: '.sidenav-toggler',
