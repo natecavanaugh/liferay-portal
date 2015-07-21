@@ -53,6 +53,14 @@ td {
 				border-width: 0;
 			}
 
+			&.line-numbers:before {
+				content: attr(data-line-number);
+				cursor: default;
+				display: block;
+				padding: 0 8px;
+				text-align: right;
+			}
+
 			&.line-numbers {
 				border-right-width: 1px;
 				text-align: right;
@@ -61,13 +69,6 @@ td {
 
 				vertical-align: top;
 				width: 1%;
-
-				.number {
-					cursor: default;
-					display: block;
-					padding: 0 8px;
-					text-align: right;
-				}
 			}
 		}
 	}
