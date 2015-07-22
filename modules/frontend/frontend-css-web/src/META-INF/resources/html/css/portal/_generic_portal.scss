@@ -53,22 +53,20 @@ td {
 				border-width: 0;
 			}
 
-			&.line-numbers:before {
-				content: attr(data-line-number);
-				cursor: default;
-				display: block;
-				padding: 0 8px;
-				text-align: right;
-			}
-
 			&.line-numbers {
 				border-right-width: 1px;
+				cursor: default;
+				padding: 0 8px;
 				text-align: right;
 
 				@include user-select(none);
 
 				vertical-align: top;
 				width: 1%;
+			}
+
+			&.line-numbers:before {
+				content: attr(data-line-number);
 			}
 		}
 	}
@@ -168,5 +166,11 @@ img.icon {
 		dt {
 			float: none;
 		}
+	}
+}
+
+.ie6, .ie7 {
+	.lfr-code table tr td.line-numbers {
+		display: none;
 	}
 }
