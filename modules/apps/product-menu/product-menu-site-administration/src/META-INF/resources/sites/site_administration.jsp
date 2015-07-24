@@ -17,7 +17,50 @@
 <%@ include file="/sites/init.jsp" %>
 
 <%
+PanelAppRegistry panelAppRegistry = (PanelAppRegistry)request.getAttribute(ApplicationListWebKeys.PANEL_APP_REGISTRY);
+PanelCategoryRegistry panelCategoryRegistry = (PanelCategoryRegistry)request.getAttribute(ApplicationListWebKeys.PANEL_CATEGORY_REGISTRY);
 PanelCategory panelCategory = (PanelCategory)request.getAttribute(ApplicationListWebKeys.PANEL_CATEGORY);
+
+String portletId = themeDisplay.getPpid();
+
+boolean containsPortlet = false;
+
+if (Validator.isNotNull(portletId)) {
+	PanelCategoryHelper panelCategoryHelper = new PanelCategoryHelper(panelAppRegistry, panelCategoryRegistry);
+
+	PanelCategory siteAdministrationPanelCategory = panelCategoryRegistry.getPanelCategory(PanelCategoryKeys.SITE_ADMINISTRATION);
+
+	containsPortlet = panelCategoryHelper.containsPortlet(portletId, siteAdministrationPanelCategory);
+}
+
+Group group = layout.getGroup();
+
+if (layout instanceof VirtualLayout) {
+	VirtualLayout virtualLayout = (VirtualLayout)layout;
+
+	Layout sourceLayout = virtualLayout.getSourceLayout();
+
+	group = sourceLayout.getGroup();
+}
+
+boolean showSiteSelector = ParamUtil.getBoolean(request, "showSiteSelector", group.isControlPanel() && !containsPortlet);
+
+if (showSiteSelector) {
+	panelCategory = panelCategoryRegistry.getPanelCategory(PanelCategoryKeys.SITES);
+}
 %>
+
+<c:if test="<%= !showSiteSelector %>">
+
+	<%
+	String selectSiteURL = HttpUtil.addParameter(currentURL, liferayPortletResponse.getNamespace() + "showSiteSelector", true);
+	%>
+
+	<div class="list-group">
+		<a class="icon-arrow-left list-group-heading" href="<%= selectSiteURL.toString() %>">
+			<%= themeDisplay.getScopeGroupName() %>
+		</a>
+	</div>
+</c:if>
 
 <liferay-application-list:panel panelCategory="<%= panelCategory %>" />
