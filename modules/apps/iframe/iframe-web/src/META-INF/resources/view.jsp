@@ -56,7 +56,7 @@
 			var baseSrc = '<%= HtmlUtil.escapeJS(iFrameDisplayContext.getIframeBaseSrc()) %>';
 			var iframeSrc = '<%= HtmlUtil.escapeJS(iFrameDisplayContext.getIframeSrc()) %>';
 
-			if ((url == iframeSrc) || (url == (iframeSrc + '/'))) {
+			if (url == iframeSrc || url == iframeSrc + '/') {
 			}
 			else if (A.Lang.String.startsWith(url, baseSrc)) {
 				url = url.substring(baseSrc.length);
@@ -70,7 +70,7 @@
 			return true;
 		}
 
-	 	Liferay.provide(
+		Liferay.provide(
 			window,
 			'<portlet:namespace />init',
 			function() {
@@ -93,7 +93,7 @@
 
 					var baseSrc = '<%= HtmlUtil.escapeJS(iFrameDisplayContext.getIframeBaseSrc()) %>';
 
-					if (!(/^https?\:\/\//.test(hash)) || !A.Lang.String.startsWith(hash, baseSrc)) {
+					if (!/^https?\:\/\//.test(hash) || !A.Lang.String.startsWith(hash, baseSrc)) {
 						src = '<%= HtmlUtil.escapeJS(iFrameDisplayContext.getIframeBaseSrc()) %>';
 					}
 
@@ -121,26 +121,26 @@
 
 				hashObj['<portlet:namespace />'] = url;
 
-				var maximize = A.one('#p_p_id<portlet:namespace /> .portlet-maximize-icon a');
-
 				hash = A.QueryString.stringify(hashObj);
 
+				var maximize = A.one('#p_p_id<portlet:namespace /> .portlet-maximize-icon a');
+
 				if (maximize) {
-					var href = maximize.attr('href');
+					var maximizeUrl = maximize.attr('href');
 
-					href = href.split('#')[0];
+					maximizeUrl = maximizeUrl.split('#')[0];
 
-					maximize.attr('href', href + '#' + hash);
+					maximize.attr('href', maximizeUrl + '#' + hash);
 				}
 
 				var restore = A.one('#p_p_id<portlet:namespace /> a.portlet-icon-back');
 
 				if (restore) {
-					var href = restore.attr('href');
+					var restoreUrl = restore.attr('href');
 
-					href = href.split('#')[0];
+					restoreUrl = restoreUrl.split('#')[0];
 
-					restore.attr('href', href + '#' + hash);
+					restore.attr('href', restoreUrl + '#' + hash);
 				}
 
 				// LPS-33951
