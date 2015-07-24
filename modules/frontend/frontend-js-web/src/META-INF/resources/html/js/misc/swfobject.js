@@ -164,7 +164,7 @@ deconcept.SWFObjectUtil.getPlayerVersion = function(){
 			try {
 				var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6");
 				PlayerVersion = new deconcept.PlayerVersion([6,0,21]);
-				axo.AllowScriptAccess = "always"; // error if player version < 6.0.47 (thanks to Michael Williams @ Adobe for this code)
+				axo.AllowScriptAccess = "sameDomain"; // error if player version < 6.0.47 (thanks to Michael Williams @ Adobe for this code)
 			} catch(e) {
 				if (PlayerVersion.major == 6) {
 					return PlayerVersion;

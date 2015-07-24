@@ -246,7 +246,7 @@ SWFUpload.prototype.getFlashHTML = function() {
 				'<param name="movie" value="', this.settings.flash_url, '" />',
 				'<param name="quality" value="high" />',
 				'<param name="menu" value="false" />',
-				'<param name="allowScriptAccess" value="always" />',
+				'<param name="allowScriptAccess" value="sameDomain" />',
 				'<param name="flashvars" value="' + this.getFlashVars() + '" />',
 				'</object>'].join("");
 };
