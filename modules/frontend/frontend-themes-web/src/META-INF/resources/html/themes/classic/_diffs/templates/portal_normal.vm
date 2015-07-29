@@ -19,15 +19,15 @@
 $theme.include($body_top_include)
 
 <div class="open sidenav-container" id="sidenavContainerId">
-    <div class="sidenav-menu-slider">
-        <div class="product-menu sidebar sidebar-inverse sidenav-menu">
+	<div class="sidenav-menu-slider">
+		<div class="product-menu sidebar sidebar-inverse sidenav-menu">
 			#if ($is_signed_in)
 				#product_menu()
 			#end
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <div class="sidenav-content">
+	<div class="sidenav-content">
 		<div id="wrapper">
 			<header class="container-fluid-1280" id="banner" role="banner">
 				<div class="row">
@@ -88,17 +88,19 @@ $theme.include($body_bottom_include)
 
 $theme.include($bottom_include)
 
-<script>
-	AUI.$('#sidenavContainerId').sideNavigation(
-		{
-			gutter: '0',
-			toggler: '#sidenavToggleId',
-			type: 'fixed-push',
-			typeMobile: 'fixed',
-			width: '320px'
-		}
-	);
-</script>
+#if ($is_signed_in)
+	<script>
+		AUI.$('#sidenavContainerId').sideNavigation(
+			{
+				gutter: '0',
+				toggler: '#sidenavToggleId',
+				type: 'fixed-push',
+				typeMobile: 'fixed',
+				width: '320px'
+			}
+		);
+	</script>
+#end
 
 </body>
 

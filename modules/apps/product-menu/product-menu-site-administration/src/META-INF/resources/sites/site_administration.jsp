@@ -21,11 +21,21 @@ PanelAppRegistry panelAppRegistry = (PanelAppRegistry)request.getAttribute(Appli
 PanelCategoryRegistry panelCategoryRegistry = (PanelCategoryRegistry)request.getAttribute(ApplicationListWebKeys.PANEL_CATEGORY_REGISTRY);
 PanelCategory panelCategory = (PanelCategory)request.getAttribute(ApplicationListWebKeys.PANEL_CATEGORY);
 
-PanelCategory parentPanelCategory = panelCategoryRegistry.getPanelCategory(PanelCategoryKeys.SITE_ADMINISTRATION);
+String portletId = themeDisplay.getPpid();
 
-PanelCategoryHelper panelCategoryHelper = new PanelCategoryHelper(panelAppRegistry, parentPanelCategory);
+boolean containsPortlet = false;
 
-panelCategoryHelper.containsPortlet(themeDisplay.getPpid());
+if (Validator.isNotNull(portletId)) {
+	for (PanelCategory curPanelCategory : panelCategoryRegistry.getChildPanelCategories(PanelCategoryKeys.SITE_ADMINISTRATION)) {
+		for (PanelApp panelApp : panelAppRegistry.getPanelApps(curPanelCategory)) {
+			if (portletId.equals(panelApp.getPortletId())) {
+				containsPortlet = true;
+
+				break;
+			}
+		}
+	}
+}
 
 Group group = layout.getGroup();
 
@@ -37,7 +47,7 @@ if (layout instanceof VirtualLayout) {
 	group = sourceLayout.getGroup();
 }
 
-boolean showSiteSelector = ParamUtil.getBoolean(request, "showSiteSelector", group.isControlPanel());
+boolean showSiteSelector = ParamUtil.getBoolean(request, "showSiteSelector", group.isControlPanel() && !containsPortlet);
 
 if (showSiteSelector) {
 	panelCategory = panelCategoryRegistry.getPanelCategory(PanelCategoryKeys.SITES);
@@ -45,9 +55,10 @@ if (showSiteSelector) {
 %>
 
 <c:if test="<%= !showSiteSelector %>">
-	<portlet:renderURL var="selectSiteURL">
-		<portlet:param name="showSiteSelector" value="<%= Boolean.TRUE.toString() %>" />
-	</portlet:renderURL>
+
+	<%
+	String selectSiteURL = HttpUtil.addParameter(currentURL, liferayPortletResponse.getNamespace() + "showSiteSelector", true);
+	%>
 
 	<aui:a cssClass="icon-arrow-left" href="<%= selectSiteURL.toString() %>" label="<%= themeDisplay.getScopeGroupName() %>" />
 </c:if>
