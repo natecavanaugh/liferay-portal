@@ -1,6 +1,12 @@
 AUI.add(
 	'liferay-message',
 	function(A) {
+
+		/**
+ 		 * The Message Component.
+ 		 *
+		 * @module liferay-message
+		 */
 		var Lang = A.Lang;
 
 		var EVENT_DATA_DISMISS_ALL = {
@@ -15,19 +21,58 @@ AUI.add(
 
 		var TPL_HIDE_NOTICES = '<button type="button" class="close">&#x00D7;</button>';
 
+		/**
+		 * A base class for `A.Message`.
+	   	 *
+		 * @class A.Message
+		 * @extends Base
+		 * @param {Object} config Object literal specifying
+		 * widget configuration properties.
+		 * @constructor
+		 */
 		var Message = A.Component.create(
 			{
+				/**
+				 * static property used to define the default attribute
+				 * configuration for the `A.Message`.
+				 *
+				 * @property ATTRS
+				 * @type Object 
+				 * @static
+				 */
 				ATTRS: {
+    
+					/**
+					 * Creates a close button to hide all notices. 
+					 *
+					 * @attribute closeButton
+					 * @type Object
+					 * @return A.Node.create(TPL_HIDE_NOTICES)
+					 */
 					closeButton: {
 						valueFn: function() {
 							return A.Node.create(TPL_HIDE_NOTICES);
 						}
 					},
 
+					/**
+					 * If true, the UI is rendered for the message.
+					 *
+					 * @attribute dismissble
+					 * @type Boolean
+					 * @default true
+					 */
 					dismissible: {
 						value: true
 					},
 
+					/**
+					 * Creates two links to hide all the notices for the message. 
+					 *
+					 * @attribute hideAllNotices
+					 * @type Object
+					 * @return A.Node.create('<a href="javascript:;"><small> …
+					 */
 					hideAllNotices: {
 						valueFn: function() {
 							var instance = this;
@@ -36,25 +81,65 @@ AUI.add(
 						}
 					},
 
+					/** If true, the UI is rendered for the message.
+					 * 
+					 *
+					 * @attribute persistenceCategory
+					 * @type String
+					 * @default ''
+					 */
 					persistenceCategory: {
 						value: ''
 					},
 
+					/**
+					 * if true, a sessionData Object is created for the message.
+					 *
+					 * @attribute persistent
+					 * @type Boolean
+					 * @default true
+					 */
 					persistent: {
 						value: true
 					},
 
+					/**
+					 * Trigger.
+					 *
+					 * @attribute trigger 
+					 */
 					trigger: {
 						setter: A.one
 					},
 
+					/**
+					 * Defines the type of message.
+					 *
+					 * @attribute type
+					 * @type String
+					 * @default 'info'
+					 */
 					type: {
 						value: 'info'
 					}
 				},
 
+				/**
+				 * The prefix for all CSS classes.
+				 *
+				 * @property CSS_PREFIX
+				 * @type String 
+				 * @static
+				 */
 				CSS_PREFIX: 'lfr-message',
 
+				/**
+				 * Object hash, defining how attribute values have to be parsed from markup.
+				 *
+				 * @property HTML_PARSER
+				 * @type Object 
+				 * @static
+				 */
 				HTML_PARSER: {
 					closeButton: '.close',
 					hideAllNotices: '.btn-link'
@@ -62,9 +147,24 @@ AUI.add(
 
 				NAME: NAME,
 
+				/**
+				 * Static property used to define the UI attributes.
+				 *
+				 * @property UI_ATTRS
+				 * @type ARRAY 
+				 * @static
+				 */
 				UI_ATTRS: ['dismissible', 'persistent', 'type'],
 
 				prototype: {
+
+					/**
+					 * Construction logic executed during `A.Message` instantiation.
+					 * Lifecycle.
+					 *
+					 * @method initializer
+					 * @protected
+					 */
 					initializer: function() {
 						var instance = this;
 
@@ -75,6 +175,12 @@ AUI.add(
 						instance._cssPersistent = instance.getClassName('persistent');
 					},
 
+					/**
+					 * Render the `A.Message` component instance. Lifecycle.
+					 *
+					 * @method renderUI
+					 * @protected
+					 */
 					renderUI: function() {
 						var instance = this;
 
@@ -105,6 +211,12 @@ AUI.add(
 						instance._dismissible = dismissible;
 					},
 
+					/**
+					 * Bind events on the UI. Lifecycle.
+					 *
+					 * @method bindUI
+					 * @protected
+					 */
 					bindUI: function() {
 						var instance = this;
 
@@ -131,6 +243,13 @@ AUI.add(
 						}
 					},
 
+				/**
+	         		 * Fires after 'visibleChange' attribute value change.
+	         		 * 
+	         		 * @method _afterVisibleChange
+	         		 * @param event
+	         		 * @protected
+	         		 */
 					_afterVisibleChange: function(event) {
 						var instance = this;
 
@@ -157,36 +276,85 @@ AUI.add(
 						}
 					},
 
+				/**
+	         		 * Triggers when the close button is clicked.
+	         		 * Hides the message.
+	         		 *
+	         		 * @method _onCloseButtonClick
+	         		 * @param event
+	         		 * @protected
+	         		 */
 					_onCloseButtonClick: function(event) {
 						var instance = this;
 
 						instance.hide();
 					},
 
+				/**
+	         		 * Triggers when hide all is clicked. 
+	         		 * Sets the visibility to false.
+	         		 *
+	         		 * @method _onHideAllClick
+	         		 * @param event
+	         		 * @protected
+	         		 */
 					_onHideAllClick: function(event) {
 						var instance = this;
 
 						instance.set('visible', false, EVENT_DATA_DISMISS_ALL);
 					},
 
+					
+				/**
+	         		 * Shows the message if CSS class  
+				 * 'dismissible' exists. 
+	         		 *
+	         		 * @method _onTriggerClick
+	         		 * @param event
+	         		 * @protected
+	         		 */
 					_onTriggerClick: function(event) {
 						var instance = this;
 
 						instance.show();
 					},
 
+				/**
+	         		 * Sets the UI boundingBox CSS class name to  
+				 * 'dismissible.' 
+	         		 *
+	         		 * @method _uiSetDismissible
+	         		 * @param value
+	         		 * @protected
+	         		 */
 					_uiSetDismissible: function(value) {
 						var instance = this;
 
 						instance._boundingBox.toggleClass(instance._cssDismissible, value);
 					},
 
+				/**
+	         		 * sets the UI boundingBox CSS class name to
+				 * 'persistent.' 
+	         		 *
+	         		 * @method _uiSetPersistent
+	         		 * @param value
+	         		 * @protected
+	         		 */
 					_uiSetPersistent: function(value) {
 						var instance = this;
 
 						instance._boundingBox.toggleClass(instance._cssPersistent, value);
 					},
 
+			        /**
+	         		 * Sets the CSS class for the content box
+				 * based on the type of message. 
+	         		 *
+	         		 * @method _uiSetType
+	         		 * @param value
+	         		 * @protected
+	         		 */
 					_uiSetType: function(value) {
 						var instance = this;
 
