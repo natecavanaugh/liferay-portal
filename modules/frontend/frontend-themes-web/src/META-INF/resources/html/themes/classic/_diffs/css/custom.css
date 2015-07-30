@@ -71,7 +71,7 @@ body {
 
 				a {
 					background-color: transparent;
-					border: none;
+					border-width: 0;
 					margin-top: 4px;
 
 					span {
