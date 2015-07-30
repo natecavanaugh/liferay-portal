@@ -1,8 +1,6 @@
 (function() {
 	var STR_BLANK = '';
 
-	var STR_COMMA = ',';
-
 	var STR_DASH = '-';
 
 	var STR_DOT = '.';
@@ -10,10 +8,6 @@
 	var STR_PLUS = '+';
 
 	var STR_SPACE = ' ';
-
-	var TPL_SPAN = '<span>';
-
-	var TPL_SPAN_CLOSE = '</span>';
 
 	AUI.add(
 		'liferay-calendar-simple-menu',
@@ -1001,114 +995,73 @@
 					YEARLY: 'YEARLY'
 				},
 
-				INTERVAL_LABELS: {
-					DAILY: Liferay.Language.get('days'),
-					MONTHLY: Liferay.Language.get('months'),
-					WEEKLY: Liferay.Language.get('weeks'),
-					YEARLY: Liferay.Language.get('years')
-				},
+				INTERVAL_UNITS: {},
 
-				MONTH_LABELS: [
-					Liferay.Language.get('january'),
-					Liferay.Language.get('february'),
-					Liferay.Language.get('march'),
-					Liferay.Language.get('april'),
-					Liferay.Language.get('may'),
-					Liferay.Language.get('june'),
-					Liferay.Language.get('july'),
-					Liferay.Language.get('august'),
-					Liferay.Language.get('september'),
-					Liferay.Language.get('october'),
-					Liferay.Language.get('november'),
-					Liferay.Language.get('december')
-				],
+				MONTH_LABELS: [],
 
-				POSITION_LABELS: {
-					'-1': Liferay.Language.get('last'),
-					'1': Liferay.Language.get('first'),
-					'2': Liferay.Language.get('second'),
-					'3': Liferay.Language.get('third'),
-					'4': Liferay.Language.get('fourth')
-				},
+				POSITION_LABELS: {},
 
-				WEEKDAY_LABELS: {
-					FR: Liferay.Language.get('weekday.FR'),
-					MO: Liferay.Language.get('weekday.MO'),
-					SA: Liferay.Language.get('weekday.SA'),
-					SU: Liferay.Language.get('weekday.SU'),
-					TH: Liferay.Language.get('weekday.TH'),
-					TU: Liferay.Language.get('weekday.TU'),
-					WE: Liferay.Language.get('weekday.WE')
-				},
+				RECURRENCE_SUMMARIES: {},
+
+				WEEKDAY_LABELS: {},
 
 				getSummary: function(recurrence) {
 					var instance = this;
 
-					var month = null;
-					var position = null;
-					var template = [];
-					var weekDay = null;
+					var key;
+					var mask;
+					var params = [];
+					var parts = [];
+					var summary;
 
 					if (recurrence.interval == 1) {
-						template.push(recurrence.frequency);
+						parts.push(A.Lang.String.toLowerCase(recurrence.frequency));
 					}
 					else {
-						template.push(Liferay.Language.get('every'), ' {interval} {intervalLabel}');
+						parts.push('every-x-' + instance.INTERVAL_UNITS[recurrence.frequency]);
+
+						params.push(recurrence.interval);
 					}
 
 					if (recurrence.positionalWeekday) {
 						if (recurrence.frequency == instance.FREQUENCY.MONTHLY) {
-							template.push(STR_SPACE, Liferay.Language.get('on'), ' {position} {weekDay}');
+							parts.push('on-x-x');
+
+							params.push(instance.POSITION_LABELS[recurrence.positionalWeekday.position]);
+							params.push(instance.WEEKDAY_LABELS[recurrence.positionalWeekday.weekday]);
 						}
 						else {
-							template.push(STR_SPACE, Liferay.Language.get('on-the'), ' {position} {weekDay} ', Liferay.Language.get('of'), ' {month}');
-						}
+							parts.push('on-x-x-of-x');
 
-						month = instance.MONTH_LABELS[recurrence.positionalWeekday.month];
-						position = instance.POSITION_LABELS[recurrence.positionalWeekday.position];
-						weekDay = instance.WEEKDAY_LABELS[recurrence.positionalWeekday.weekday];
+							params.push(instance.POSITION_LABELS[recurrence.positionalWeekday.position]);
+							params.push(instance.WEEKDAY_LABELS[recurrence.positionalWeekday.weekday]);
+							params.push(instance.MONTH_LABELS[recurrence.positionalWeekday.month]);
+						}
 					}
 					else if (recurrence.frequency == instance.FREQUENCY.WEEKLY && recurrence.weekdays.length > 0) {
-						template.push(STR_SPACE, TPL_SPAN, Liferay.Language.get('on'), TPL_SPAN_CLOSE, ' {weekDays}');
+						parts.push('on-x');
+
+						params.push(recurrence.weekdays.join(', '));
 					}
 
 					if (recurrence.count && recurrence.endValue === 'after') {
-						template.push(', {count} ', Liferay.Language.get('times'));
+						parts.push('x-times');
+
+						params.push(recurrence.count);
 					}
 					else if (recurrence.untilDate && recurrence.endValue === 'on') {
+						parts.push('until-x-x-x');
+
 						var untilDate = recurrence.untilDate;
 
-						template.push(
-							STR_COMMA,
-							STR_SPACE,
-							TPL_SPAN,
-							Liferay.Language.get('until'),
-							TPL_SPAN_CLOSE,
-							A.Lang.sub(
-								' {month} {date}, {year}',
-								{
-									date: untilDate.getDate(),
-									month: instance.MONTH_LABELS[untilDate.getMonth()],
-									year: untilDate.getFullYear()
-								}
-							)
-						);
+						params.push(instance.MONTH_LABELS[untilDate.getMonth()]);
+						params.push(untilDate.getDate());
+						params.push(untilDate.getFullYear());
 					}
 
-					var summary = A.Lang.sub(
-						template.join(STR_BLANK),
-						{
-							count: recurrence.count,
-							interval: recurrence.interval,
-							intervalLabel: instance.INTERVAL_LABELS[recurrence.frequency],
-							month: month,
-							position: position,
-							weekDay: weekDay,
-							weekDays: recurrence.weekdays.join(', ')
-						}
-					);
+					key = parts.join(STR_DASH);
 
-					return A.Lang.String.capitalize(summary);
+					return A.Lang.sub(instance.RECURRENCE_SUMMARIES[key], params);
 				},
 
 				openConfirmationPanel: function(actionName, onlyThisInstanceFn, allFollowingFn, allEventsInFn, cancelFn) {
@@ -1287,6 +1240,19 @@
 					queue.run();
 				},
 
+				showAlert: function(container, message) {
+					new A.Alert(
+						{
+							animated: true,
+							bodyContent: message,
+							closeable: true,
+							cssClass: 'alert-success',
+							destroyOnHide: true,
+							duration: 1
+						}
+					).render(container);
+				},
+
 				_queueableQuestionUpdateAllInvited: function(data) {
 					var instance = this;
 
@@ -1378,19 +1344,6 @@
 							}
 						);
 					}
-				},
-
-				showAlert: function(container, message) {
-					new A.Alert(
-						{
-							animated: true,
-							bodyContent: message,
-							closeable: true,
-							cssClass: 'alert-success',
-							destroyOnHide: true,
-							duration: 1
-						}
-					).render(container);
 				}
 			};
 		},
