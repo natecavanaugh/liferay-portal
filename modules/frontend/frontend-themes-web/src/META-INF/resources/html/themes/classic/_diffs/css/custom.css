@@ -59,8 +59,24 @@ body {
 				}
 			}
 
-			.input-select-wrapper, .field-wrapper {
+			.input-select-wrapper {
 				display: none;
+			}
+
+			.field-wrapper {
+				position: absolute;
+				right: 0;
+				top: 0;
+
+				a {
+					background-color: transparent;
+					border: none;
+					margin-top: 4px;
+
+					span {
+						display: none;
+					}
+				}
 			}
 		}
 
