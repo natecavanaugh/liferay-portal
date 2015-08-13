@@ -900,7 +900,7 @@ AUI.add(
 										}
 									}
 								},
-								url: instance.getDocumentLibraryURL()
+								url: instance.getDocumentLibrarySelectorURL()
 							}
 						);
 
@@ -913,14 +913,14 @@ AUI.add(
 						instance.uploader.openFileSelectDialog();
 					},
 
-					getDocumentLibraryURL: function() {
+					getDocumentLibraryURL: function(criteria) {
 						var instance = this;
 
 						var portletNamespace = instance.get('portletNamespace');
 
 						var portletURL = Liferay.PortletURL.createRenderURL();
 
-						portletURL.setParameter('criteria', 'com.liferay.item.selector.criteria.image.criterion.ImageItemSelectorCriterion');
+						portletURL.setParameter('criteria', criteria);
 						portletURL.setParameter('itemSelectedEventName', portletNamespace + 'selectDocumentLibrary');
 						portletURL.setParameter('repositoryId', instance.get('doAsGroupId'));
 
@@ -935,6 +935,12 @@ AUI.add(
 						portletURL.setWindowState('pop_up');
 
 						return portletURL.toString();
+					},
+
+					getDocumentLibrarySelectorURL: function() {
+						var instance = this;
+
+						return instance.getDocumentLibraryURL('com.liferay.item.selector.criteria.file.criterion.FileItemSelectorCriterion');
 					},
 
 					getParsedValue: function(value) {
@@ -1124,10 +1130,10 @@ AUI.add(
 						instance.viewer.show();
 					},
 
-					getDocumentLibraryURL: function() {
+					getDocumentLibrarySelectorURL: function() {
 						var instance = this;
 
-						return ImageField.superclass.getDocumentLibraryURL.apply(instance, arguments);
+						return instance.getDocumentLibraryURL('com.liferay.item.selector.criteria.image.criterion.ImageItemSelectorCriterion');
 					},
 
 					getValue: function() {
