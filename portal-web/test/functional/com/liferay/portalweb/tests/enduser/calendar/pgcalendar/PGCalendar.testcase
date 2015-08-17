@@ -361,7 +361,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-55805" name="AddCalendarEventRegularAndResourceWithStagingAndSchedulePublishToLive" priority="4">
+	<command name="AddCalendarEventRegularAndResourceWithStagingAndSchedulePublishToLive" priority="4">
 		<execute macro="Page#gotoCP">
 			<var name="portletName" value="Sites" />
 		</execute>
@@ -1499,7 +1499,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-53987" name="AddResourceCalendarToOtherCalendars" priority="4">
+	<command name="AddResourceCalendarToOtherCalendars" priority="4">
 		<var name="calendarResourceName" value="Calendar Resource Name" />
 		<var name="calendarType" value="Other Calendars" />
 
@@ -2790,7 +2790,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-53987" name="EditInviteEmailTemplateForCalendarResourceCalendar" priority="4">
+	<command name="EditInviteEmailTemplateForCalendarResourceCalendar" priority="4">
 		<var name="calendarResourceName" value="Calendar Resource Name" />
 		<var name="calendarType" value="Other Calendars" />
 
@@ -2960,7 +2960,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-53987" name="EditReminderEmailTemplateForCalendarResourceCalendar" priority="4">
+	<command name="EditReminderEmailTemplateForCalendarResourceCalendar" priority="4">
 		<var name="calendarResourceName" value="Calendar Resource Name" />
 		<var name="calendarType" value="Other Calendars" />
 
@@ -3537,19 +3537,22 @@
 		<execute macro="CalendarNavigator#gotoAddEvent" />
 
 		<execute macro="CalendarEvent#add">
-			<var name="addRSVPEnabled" value="true" />
 			<var name="eventTitle" value="Calendar Event Title" />
 			<var name="eventType" value="Regular" />
 			<var name="optionSet" value="true" />
+			<var name="optionSetValue" value="tag" />
 			<var name="pageName" value="Calendar Page" />
-			<var name="rsvp" value="Yes" />
-			<var name="rsvpYes" value="Yes" />
-			<var name="tag" value="true" />
-			<var name="tagText" value="tag1" />
+			<var name="specificOptionSetValue" value="tag1" />
 		</execute>
 
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Calendar Page" />
+		</execute>
+
+		<execute macro="CalendarEvent#addRSVP">
+			<var name="eventTitle" value="Calendar Event Title" />
+			<var name="eventType" value="Regular" />
+			<var name="rsvp" value="Yes" />
 		</execute>
 
 		<execute macro="CalendarEvent#view">
@@ -4229,7 +4232,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LRQA-16080" name="ViewDefaultDurationsViaScheduler" priority="4">
+	<command name="ViewDefaultDurationsViaScheduler" priority="4">
 		<for list="15,30,60,120" param="minutes">
 			<execute macro="Page#gotoPG">
 				<var name="pageName" value="${pageName}" />
@@ -4454,7 +4457,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-53987" name="ViewInvitedResourceAvailability" priority="4">
+	<command name="ViewInvitedResourceAvailability" priority="4">
 		<var name="calendarResourceName" value="Calendar Resource Name" />
 		<var name="eventNumber" value="2" />
 		<var name="eventTitle" value="Calendar Event All Day Title" />
