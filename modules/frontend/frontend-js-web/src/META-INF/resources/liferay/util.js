@@ -1199,24 +1199,6 @@
 					}
 				);
 			}
-
-			var rolesSearchContainer = iframeBody.one('#rolesSearchContainerSearchContainer');
-
-			if (rolesSearchContainer) {
-				eventHandles.push(
-					rolesSearchContainer.delegate(
-						EVENT_CLICK,
-						function(event) {
-							event.preventDefault();
-
-							detachEventHandles();
-
-							submitForm(document.hrefFm, event.currentTarget.attr('href'));
-						},
-						'a'
-					)
-				);
-			}
 		},
 		['aui-base']
 	);
