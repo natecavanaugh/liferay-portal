@@ -73,9 +73,26 @@ numberFormat.setMinimumIntegerDigits(2);
 
 			offset = sb.toString();
 		}
+
+		String curTimeZoneId = curTimeZone.getID();
+
+		String extraDisplayText = StringPool.BLANK;
+
+		if (curTimeZoneId.contains("Phoenix")) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(StringPool.SPACE);
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append(LanguageUtil.get(request, "phoenix"));
+			sb.append(StringPool.FORWARD_SLASH);
+			sb.append(LanguageUtil.get(request, "sonora"));
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+
+			extraDisplayText = sb.toString();
+		}
 	%>
 
-		<option <%= value.equals(curTimeZone.getID()) ? "selected" : "" %> value="<%= curTimeZone.getID() %>">(UTC<%= offset %>) <%= curTimeZone.getDisplayName(inDaylightTime, displayStyle, locale) %></option>
+		<option <%= value.equals(curTimeZone.getID()) ? "selected" : "" %> value="<%= curTimeZoneId %>">(UTC<%= offset %>) <%= curTimeZone.getDisplayName(inDaylightTime, displayStyle, locale) %><%= extraDisplayText %></option>
 
 	<%
 	}
