@@ -1178,27 +1178,18 @@
 
 				iframeBody.delegate(
 					EVENT_CLICK,
-					function() {
-						dialog.set('visible', false, SRC_HIDE_LINK);
+					function(event) {
+						dialog.set(
+							'visible',
+							false,
+							event.target.hasClass('lfr-hide-dialog') ? SRC_HIDE_LINK : null
+						);
 
 						detachEventHandles();
 					},
-					'.lfr-hide-dialog'
+					'.btn-cancel,.lfr-hide-dialog'
 				)
 			];
-
-			var cancelButton = iframeBody.one('.btn-cancel');
-
-			if (cancelButton) {
-				cancelButton.after(
-					EVENT_CLICK,
-					function() {
-						detachEventHandles();
-
-						dialog.hide();
-					}
-				);
-			}
 		},
 		['aui-base']
 	);
