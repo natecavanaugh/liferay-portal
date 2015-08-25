@@ -209,6 +209,7 @@ body {
 	> li > a {
 		font-size: 12px;
 		padding: 10px 0;
+
 		@include sm() {
 			padding: 0;
 		}
