@@ -146,6 +146,6 @@
 		<aui:workflow-status showIcon="<%= false %>" showLabel="<%= false %>" status="<%= status %>" view="lexicon" />
 
 		<c:if test="<%= locked %>">
-			<small class="text-default"><liferay-ui:message escapeAttribute="<%= true %>" key="locked" /></small>
+			<small class="text-default"><liferay-ui:message key="locked" /></small>
 		</c:if>
 	</c:if>
