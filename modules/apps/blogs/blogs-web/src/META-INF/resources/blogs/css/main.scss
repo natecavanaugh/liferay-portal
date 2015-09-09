@@ -254,6 +254,12 @@
 		text-align: right;
 	}
 
+	.taglib-asset-links .asset-links-list {
+		margin-left: 0;
+		margin-top: 5px;
+		padding-left: 0;
+	}
+
 	.taglib-page-iterator .lfr-pagination {
 		margin-top: 25px;
 	}
@@ -377,5 +383,9 @@
 
 	.separator {
 		border-color: transparent;
+	}
+
+	.taglib-asset-links h2.icon-link:before {
+		content: '';
 	}
 }
