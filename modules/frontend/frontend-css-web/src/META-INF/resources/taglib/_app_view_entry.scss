@@ -5,15 +5,15 @@
 	&.display-icon {
 		display: inline-block;
 		float: left;
-		height: 180px;
+		height: 230px;
 		margin: 5px;
 		padding: 10px 0;
 		position: relative;
 		vertical-align: top;
 		width: 200px;
 
-		@include respond-to(phone, tablet) {
-			height: 230px;
+		@include media-query(md) {
+			height: 180px;
 		}
 
 		.form-group {
@@ -32,9 +32,7 @@
 		}
 
 		.folder-action, .entry-action {
-			top: 14px;
-
-			@include respond-to(phone, tablet) {
+			@include media-query(null, $screen-sm-max) {
 				bottom: 8px;
 				right: 31px;
 				top: auto;
@@ -76,9 +74,9 @@
 			@include ellipsis;
 		}
 
-		@include respond-to(phone, tablet) {
-			.folder-action, .entry-action {
-				a {
+		.folder-action, .entry-action {
+			a {
+				@include media-query(null, $screen-sm-max) {
 					padding: 10px 12px;
 					width: auto;
 				}

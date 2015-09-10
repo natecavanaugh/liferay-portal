@@ -1,12 +1,6 @@
 @import "mixins";
 
 .app-view-taglib {
-	.form-search {
-		@include respond-to(phone, tablet) {
-			margin-top: 5px;
-		}
-	}
-
 	.lfr-header-row-content {
 		position: relative;
 
@@ -17,11 +11,11 @@
 		.select-all-entries {
 			left: 7px;
 			position: absolute;
-			top: 15px;
+			top: 17px;
 			z-index: 1;
 
-			@include respond-to(phone, tablet) {
-				top: 17px;
+			@include media-query(md) {
+				top: 15px;
 			}
 		}
 	}
@@ -29,17 +23,17 @@
 
 .navbar {
 	.nav-display-style-buttons {
-		float: right;
-		margin: 8px 0 8px 15px;
+		float: none;
+		margin: 7.5px -15px;
 
-		@include respond-to(phone) {
-			float: none;
-			margin: 7.5px -15px;
+		@include media-query(sm) {
+			float: right;
+			margin: 8px 0 8px 15px;
 		}
 
 		.display-style-buttons {
 			> .dropdown {
-				@include respond-to(phone) {
+				@include media-query(null, $screen-xs-max) {
 					> .dropdown-menu {
 						border-width: 0;
 						display: block;

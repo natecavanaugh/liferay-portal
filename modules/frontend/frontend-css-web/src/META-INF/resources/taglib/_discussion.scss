@@ -111,10 +111,10 @@
 
 				a {
 					clip: rect(0 0 0 0);
-					position: absolute;
+					position: static;
 
-					@include respond-to(phone, tablet) {
-						position: static;
+					@include media-query(md) {
+						position: absolute;
 					}
 				}
 			}

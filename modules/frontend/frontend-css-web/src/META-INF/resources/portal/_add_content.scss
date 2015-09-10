@@ -50,24 +50,6 @@
 			clear: left;
 		}
 
-		.display-style-buttons-container {
-			.lfr-icon-menu {
-				.lfr-icon-menu-arrow {
-					border-bottom-color: #333;
-					border-top-color: #333;
-				}
-
-				@include respond-to(phone, tablet) {
-					margin: 5px 0;
-
-					.dropdown-toggle {
-						font-size: 17.5px;
-						padding: 7px 10px;
-					}
-				}
-			}
-		}
-
 		.lfr-page-template .toggler-header {
 			&.active {
 				&.lfr-page-template-title label {
@@ -137,19 +119,19 @@
 			}
 
 			.add-content-item {
+				border: 1px solid;
 				cursor: pointer;
-				display: none;
+				display: inline;
+				line-height: 25px;
 				margin-right: 15px;
+				margin: 2px 8px;
+				padding: 0 9px;
 				position: absolute;
 				right: 0;
 				top: 0;
 
-				@include respond-to(phone, tablet) {
-					border: 1px solid;
-					display: inline;
-					line-height: 25px;
-					margin: 2px 8px;
-					padding: 0 9px;
+				@include media-query(md) {
+					display: none;
 				}
 			}
 
@@ -289,9 +271,11 @@
 			}
 		}
 
-		@include respond-to(phone) {
-			.lfr-drag-portlet-message {
-				display: none;
+		.lfr-drag-portlet-message {
+			display: none;
+
+			@include media-query(md) {
+				display: block;
 			}
 		}
 	}

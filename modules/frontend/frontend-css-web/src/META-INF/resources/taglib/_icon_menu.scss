@@ -22,7 +22,7 @@
 		float: none;
 		position: relative;
 
-		@include respond-to(phone, tablet) {
+		@include media-query(null, $screen-sm-max) {
 			> li > a {
 				font-size: 22px;
 				line-height: 40px;
@@ -48,7 +48,7 @@
 	}
 }
 
-@include respond-to(phone) {
+@include media-query(null, $screen-xs-max) {
 	.table-cell.last .lfr-icon-menu .dropdown-toggle {
 		text-align: center;
 

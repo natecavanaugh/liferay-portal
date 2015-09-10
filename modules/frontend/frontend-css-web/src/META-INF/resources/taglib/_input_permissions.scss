@@ -14,7 +14,7 @@
 	}
 }
 
-@include respond-to(phone, tablet) {
+@include media-query(null, $screen-sm-max) {
 	.permissions-table-container {
 		table {
 			tbody td {

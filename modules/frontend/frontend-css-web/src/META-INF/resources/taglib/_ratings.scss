@@ -29,9 +29,11 @@
 		.thumbrating {
 			height: 20px;
 
-			@include respond-to(phone, tablet) {
-				a {
-					font-size: 1.5em;
+			a {
+				font-size: 1.5em;
+
+				@include media-query(md) {
+					font-size: 1em;
 				}
 			}
 

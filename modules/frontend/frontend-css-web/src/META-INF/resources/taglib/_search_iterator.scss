@@ -5,7 +5,7 @@
 	margin-top: 1.5em;
 	overflow: auto;
 
-	@include respond-to(phone) {
+	@include media-query(null, $screen-xs-max) {
 		.selector-button {
 			width: auto;
 		}
@@ -46,16 +46,16 @@
 
 	.lfr-pagination-buttons {
 		float: right;
-		margin: 0;
+		margin-top: 20px;
+		width: 100%;
 
-		@include respond-to(phone, tablet) {
-			width: 100%;
+		@include media-query(md) {
+			margin-bottom: 0;
+			margin-top: 0;
+			width: auto;
+		}
 
-			@include respond-to(phone) {
-				float: none;
-				margin-top: 20px;
-			}
-
+		@include media-query(null, $screen-sm-max) {
 			> li {
 				display: inline-block;
 				float: left;
@@ -75,41 +75,43 @@
 	}
 
 	.lfr-pagination-config {
-		float: left;
+		float: none;
 		line-height: 46px;
 
-		@include respond-to(phone) {
-			float: none;
+		@include media-query(sm) {
+			float: left;
+		}
 
-			.current-page-menu {
-				display: block;
+		.current-page-menu {
+			display: block;
 
-				.btn {
-					display: block;
-				}
+			@include media-query(sm) {
+				display: inline-block
 			}
 		}
 
-		.lfr-pagination-delta-selector, .lfr-pagination-page-selector {
+		.lfr-pagination-page-selector {
 			display: inline;
 		}
 
 		.lfr-pagination-delta-selector {
-			float: none;
+			display: none;
 
-			@include respond-to(phone, tablet) {
-				display: none;
+			@include media-query(md) {
+				display: inline;
+				float: none;
 			}
 		}
 	}
 
 	.search-results {
+		display: none;
 		float: left;
 		line-height: 46px;
 		margin-left: 10px;
 
-		@include respond-to(phone, tablet) {
-			display: none;
+		@include media-query(md) {
+			display: inline;
 		}
 	}
 }

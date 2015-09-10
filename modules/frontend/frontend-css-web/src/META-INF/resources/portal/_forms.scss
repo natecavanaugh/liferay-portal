@@ -37,7 +37,7 @@
 		}
 	}
 
-	@include respond-to(phone, tablet) {
+	@include media-query(null, $screen-sm-max) {
 		width: 100%;
 
 		.btn {
@@ -72,15 +72,18 @@
 	.input-group-addon {
 		float: left;
 		margin-top: -1px;
-		padding: 9px;
+		padding: 8px;
 		white-space: normal;
 		width: auto;
 
 		@include word-wrap(break-all);
 
-		@include respond-to(phone, tablet) {
+		@include media-query(md) {
+			padding: 12px 9px;
+		}
+
+		@include media-query(null, $screen-sm-max) {
 			font-size: 18px;
-			padding: 8px;
 		}
 	}
 
@@ -177,13 +180,13 @@
 	}
 }
 
-@include respond-to(phone, tablet) {
-	#{$form_text_fields},
-	select,
-	.input-group .input-group-addon,
-	.navbar-search .search-query {
-		font-size: 18px;
-		height: auto;
-		line-height: normal;
-	}
-}
+// @include media-query(null, $screen-sm-max) {
+// 	#{$form_text_fields},
+// 	select,
+// 	.input-group .input-group-addon,
+// 	.navbar-search .search-query {
+// 		font-size: 18px;
+// 		height: auto;
+// 		line-height: normal;
+// 	}
+// }

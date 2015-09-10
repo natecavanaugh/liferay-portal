@@ -64,12 +64,12 @@
 }
 
 .lfr-preview-file-image-current {
-	max-height: 440px;
+	max-height: 65%;
 	max-width: 100%;
 	vertical-align: middle;
 
-	@include respond-to(phone) {
-		max-height: 65%;
+	@include media-query(sm) {
+		max-height: 440px;
 	}
 }
 
