@@ -746,6 +746,14 @@
 			}
 		},
 
+		rowCheckerCheckAllBox: function(ancestorTable, ancestorRow, checkboxesIds, checkboxAllIds, cssClass) {
+			Util.checkAllBox(ancestorTable, checkboxesIds, checkboxAllIds);
+
+			if (ancestorRow) {
+				ancestorRow.toggleClass(cssClass);
+			}
+		},
+
 		savePortletTitle: function(params) {
 			_.defaults(
 				params,
