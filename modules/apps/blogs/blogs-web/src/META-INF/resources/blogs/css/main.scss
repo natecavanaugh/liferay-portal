@@ -135,7 +135,7 @@
 				vertical-align: middle;
 			}
 
-			@include respond-to(phone, tablet) {
+			@include media-query(null, $screen-sm-max) {
 				clear: both;
 				display: block;
 

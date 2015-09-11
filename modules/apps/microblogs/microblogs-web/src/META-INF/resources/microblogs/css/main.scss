@@ -159,7 +159,11 @@ $microblogs-border-color: #EAEAEA;
 			font-size: 0.9em;
 
 			.action {
-				display: none;
+				display: inline-block;
+
+				@include media-query(md) {
+					display: none;
+				}
 			}
 
 			.action-container a {
@@ -287,7 +291,7 @@ $microblogs-border-color: #EAEAEA;
 			width: 100%;
 		}
 
-		@include respond-to(phone, tablet) {
+		@include media-query(null, $screen-sm-max) {
 			font-size: 18px;
 		}
 	}
@@ -326,19 +330,5 @@ $microblogs-border-color: #EAEAEA;
 
 	.taglib-page-iterator {
 		padding: 5px 25px;
-	}
-}
-
-/* ---------- Responsive ---------- */
-
-@include respond-to(phone, tablet) {
-	.microblogs-portlet .microblogs-entry .footer .action {
-		display: inline-block;
-	}
-}
-
-@include respond-to(phone) {
-	.microblogs-portlet .microblogs-post {
-		width: auto;
 	}
 }

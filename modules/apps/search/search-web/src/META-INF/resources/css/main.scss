@@ -265,7 +265,7 @@
 		}
 	}
 
-	@include respond-to(phone, tablet) {
+	@include media-query(null, $screen-sm-max) {
 		.search-button, .search-input, .search-select {
 			font-size: 17px;
 			height: 37px;

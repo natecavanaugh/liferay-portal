@@ -29,11 +29,6 @@
 		line-height: 16px;
 		padding-left: 5px;
 
-		@include respond-to(phone) {
-			float: none;
-			padding: 0 0 5px 10px;
-		}
-
 		&.incomplete {
 			float: none;
 			padding: 0 5px;
@@ -88,17 +83,17 @@
 		font-size: 17px;
 
 		[class^="icon-"] {
-			margin-left: 5px;
+			margin-left: -5px;
 
-			&.icon-time {
-				padding-left: 5px;
+			@include media-query(md) {
+				margin-left: 5px;
 			}
 
-			@include respond-to(phone, tablet) {
-				margin-left: -5px;
+			&.icon-time {
+				padding-left: 0;
 
-				&.icon-time {
-					padding-left: 0;
+				@include media-query(md) {
+					padding-left: 5px;
 				}
 			}
 		}
@@ -127,7 +122,7 @@
 
 		.staging-variation-selector {
 			display: block;
-			margin: 0 15px 0 0;
+			margin: 0 5px 0 0;
 
 			.icon-globe, .icon-file {
 				padding: 7px;
@@ -137,8 +132,8 @@
 				display: block;
 			}
 
-			@include respond-to(phone, tablet) {
-				margin-bottom: 5px;
+			@include media-query(md) {
+				margin-bottom: 15px;
 			}
 		}
 
@@ -173,16 +168,6 @@
 			&.branching-enabled {
 				bottom: 5px;
 				position: absolute;
-
-				@include respond-to(phone) {
-					bottom: 0;
-					display: inline-block;
-					position: static;
-				}
-
-				@include respond-to(tablet) {
-					bottom: inherit;
-				}
 			}
 
 			.publish-link {

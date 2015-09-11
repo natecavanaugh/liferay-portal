@@ -382,7 +382,7 @@
 		float: right;
 	}
 
-	@include respond-to(phone, tablet) {
+	@include media-query(null, $screen-sm-max) {
 		.message-container {
 			table, tbody, td, th, thead, tr {
 				display: block;

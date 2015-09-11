@@ -67,7 +67,7 @@
 				right: 5px;
 				top: 50%;
 
-				@include respond-to(phone) {
+				@include media-query(null, $screen-sm-max) {
 					.icon-remove {
 						font-size: 22px;
 					}
@@ -462,10 +462,10 @@
 
 	.taglib-discussion {
 		margin: 0 auto;
-		width: 90%;
+		width: auto;
 
-		@include respond-to(phone) {
-			width: auto;
+		@include media-query(sm) {
+			width: 90%;
 		}
 	}
 

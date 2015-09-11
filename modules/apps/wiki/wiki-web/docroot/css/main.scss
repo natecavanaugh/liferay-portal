@@ -7,7 +7,7 @@
 
 		overflow: auto;
 
-		@include respond-to(phone, tablet) {
+		@include media-query(null, $screen-sm-max) {
 			@include experimental(overflow-scrolling, touch);
 		}
 

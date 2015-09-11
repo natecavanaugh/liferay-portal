@@ -29,9 +29,13 @@
 		left: 0;
 		margin-bottom: 0.4em;
 		max-height: 45px;
-		position: absolute;
+		position: relative;
 		top: 0;
 		width: 45px;
+
+		@include media-query(sm) {
+			position: absolute;
+		}
 
 		.avatar {
 			display: block;
@@ -61,7 +65,13 @@
 		color: #999;
 		float: right;
 		font-size: 0.9em;
-		margin-left: 1em;
+		margin-top: 0.2em;
+		width: 100%;
+
+		@include media-query(sm) {
+			margin-left: 1em;
+			width: auto;
+		}
 	}
 
 	.entry-action {
@@ -75,6 +85,12 @@
 
 	.entry-block {
 		clear: both;
+
+		@include media-query(null, $screen-xs-max) {
+			float: left;
+			margin-left: 0;
+			width: 100%;
+		}
 	}
 
 	.entry-body {
@@ -273,25 +289,4 @@
 
 .social-office-announcements-portlet .announcement-collapsed .entry-footer-toolbar {
 	box-shadow: 0 -1px 15px -5px rgba(0, 0, 0, 0.8);
-}
-
-/* ---------- Responsive ---------- */
-
-@include respond-to(phone) {
-	.social-office-announcements-portlet {
-		.user-portrait {
-			position: relative;
-		}
-
-		.entry-time {
-			margin: 0.2em 0 0;
-			width: 100%;
-		}
-
-		.entry-block {
-			float: left;
-			margin-left: 0;
-			width: 100%;
-		}
-	}
 }

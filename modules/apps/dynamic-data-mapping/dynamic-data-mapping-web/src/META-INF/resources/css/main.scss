@@ -19,16 +19,10 @@
 
 	.form-builder {
 		.property-builder-drop-container, .tab-pane {
-			min-height: 500px;
+			min-height: 100px;
 
-			@include respond-to(phone) {
-				min-height: 100px;
-
-				.form-builder-field .btn {
-					display: inline;
-					margin-top: 0;
-					width: auto;
-				}
+			@include media-query(sm) {
+				min-height: 500px;
 			}
 		}
 	}
@@ -85,11 +79,20 @@
 
 	.lfr-template-editor-container {
 		.lfr-template-palette-container {
-			width: 265px;
+			width: 100%;
+
+			@include media-query(sm) {
+				width: 265px;
+			}
 
 			.lfr-template-palette {
 				overflow: auto;
 				width: 100%;
+
+				@include media-query(null, $screen-xs-max) {
+					height: auto !important;
+					margin-bottom: 15px;
+				}
 
 				.title-text {
 					font-weight: bold;
@@ -111,7 +114,15 @@
 		}
 
 		.lfr-editor-container {
-			margin-left: 275px;
+			margin-left: 0;
+
+			@include media-query(sm) {
+				margin-left: 275px;
+			}
+
+			@include media-query(null, $screen-xs-max) {
+				clear: left;
+			}
 
 			.lfr-template-editor .lfr-rich-editor {
 				padding-left: 0.2em;
@@ -120,24 +131,6 @@
 
 		.lfr-editor-container-full {
 			margin-left: 0;
-		}
-	}
-
-	@include respond-to(phone) {
-		.lfr-template-editor-container {
-			.lfr-template-palette-container {
-				width: 100%;
-
-				.lfr-template-palette {
-					height: auto !important;
-					margin-bottom: 15px;
-				}
-			}
-
-			.lfr-editor-container {
-				clear: left;
-				margin-left: 0;
-			}
 		}
 	}
 

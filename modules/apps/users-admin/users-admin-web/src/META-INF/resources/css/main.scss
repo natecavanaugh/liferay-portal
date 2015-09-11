@@ -39,13 +39,11 @@
 	}
 
 	.org-labor-entry {
-		float: left;
 		margin-right: 2%;
-		width: 12%;
 
-		@include respond-to(phone) {
-			float: none;
-			width: auto;
+		@include media-query(sm) {
+			float: left;
+			width: 12%;
 		}
 
 		> .form-group {
@@ -214,7 +212,7 @@
 	.user-status-selector {
 		margin-top: 5px;
 
-		@include respond-to(tablet, desktop) {
+		@include media-query(sm) {
 			float: right;
 			margin-top: 0;
 		}
@@ -226,13 +224,13 @@
 		.input-select-wrapper {
 			width: 100%;
 
-			@include respond-to(tablet, desktop) {
+			@include media-query(sm) {
 				width: auto;
 			}
 		}
 	}
 
-	@include respond-to(tablet, desktop) {
+	@include media-query(sm) {
 		.user-table button {
 			float: left;
 		}
