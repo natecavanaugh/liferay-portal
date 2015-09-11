@@ -8,6 +8,7 @@ AUI.add(
 
 		NestedFieldsSupport.ATTRS = {
 			fields: {
+				setter: '_setFields',
 				validator: Array.isArray,
 				value: []
 			}
@@ -18,11 +19,8 @@ AUI.add(
 				var instance = this;
 
 				instance._eventHandlers.push(
-					instance.after('containerChange', instance._afterContainerChange),
 					instance.after('fieldsChange', instance._afterFieldsChange)
 				);
-
-				instance._updateFieldsParent(instance.get('fields'));
 			},
 
 			destructor: function() {
@@ -43,7 +41,11 @@ AUI.add(
 				var queue = new A.Queue();
 
 				var addToQueue = function(item) {
-					queue.add(item);
+					item.getRepeatedSiblings().forEach(
+						function(field) {
+							queue.add(field);
+						}
+					);
 				};
 
 				instance.get('fields').forEach(addToQueue);
@@ -146,36 +148,27 @@ AUI.add(
 
 				if (index > -1) {
 					fields.splice(index, 1);
+
+					instance.set('fields', fields);
 				}
-
-				instance.set('fields', fields);
-			},
-
-			_afterContainerChange: function(event) {
-				var instance = this;
-
-				A.each(
-					instance.get('fields'),
-					function(item) {
-						event.newVal.append(item.get('container'));
-					}
-				);
 			},
 
 			_afterFieldsChange: function(event) {
 				var instance = this;
 
-				instance._updateFieldsParent(event.newVal);
+				instance.eachField(
+					function(field) {
+						field.render();
+					}
+				);
 			},
 
-			_updateFieldsParent: function(fields) {
+			_setFields: function(fields) {
 				var instance = this;
 
 				fields.forEach(
 					function(field) {
-						if (field.get('parent') !== instance) {
-							field.set('parent', instance);
-						}
+						field.set('parent', instance);
 					}
 				);
 			}
