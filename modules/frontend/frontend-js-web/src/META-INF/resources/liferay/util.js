@@ -86,6 +86,10 @@
 		},
 
 		checkAll: function(form, name, allBox, selectClassName) {
+			if (!form) {
+				return false;
+			}
+
 			form = Util.getDOM(form);
 			allBox = Util.getDOM(allBox);
 
@@ -118,6 +122,10 @@
 		},
 
 		checkAllBox: function(form, name, allBox) {
+			if (!form) {
+				return false;
+			}
+
 			form = Util.getDOM(form);
 			allBox = Util.getDOM(allBox);
 
