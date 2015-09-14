@@ -116,7 +116,7 @@ String iconMenuId = null;
 %>
 
 <liferay-util:buffer var="iconMenu">
-	<liferay-ui:icon-menu cssClass="list-unstyled" direction='<%= dlVisualizationHelper.isShowMinimalActionsButton() ? "down" : "left" %>' icon="<%= dlVisualizationHelper.isShowMinimalActionsButton() ? StringPool.BLANK : null %>" message='<%= dlVisualizationHelper.isShowMinimalActionsButton() ? StringPool.BLANK : "actions" %>' showExpanded="<%= view %>" showWhenSingleIcon="<%= showWhenSingleIcon %>">
+	<liferay-ui:icon-menu direction='<%= (row != null) ? "left-side" : "down" %>' icon="<%= dlVisualizationHelper.isShowMinimalActionsButton() ? StringPool.BLANK : null %>" markupView='<%= row != null ? "lexicon" : null %>' message='<%= dlVisualizationHelper.isShowMinimalActionsButton() ? StringPool.BLANK : "actions" %>' scroll="<%= row != null %>" showExpanded="<%= view %>" showWhenSingleIcon="<%= showWhenSingleIcon %>">
 
 		<%
 		boolean hasViewPermission = DLFolderPermission.contains(permissionChecker, scopeGroupId, folderId, ActionKeys.VIEW);
@@ -459,7 +459,7 @@ String iconMenuId = null;
 
 	</c:when>
 	<c:otherwise>
-		<span class="entry-action overlay">
+		<span class="<%= (row != null) ? StringPool.BLANK : "entry-action overlay" %>">
 
 			<%= iconMenu %>
 
@@ -490,7 +490,7 @@ String iconMenuId = null;
 </div>
 
 <aui:script use="uploader,liferay-util-window">
-	if (!A.UA.ios && (A.Uploader.TYPE != 'none')) {
+	if (!A.UA.ios && A.Uploader.TYPE != 'none') {
 		var uploadMultipleDocumentsIcon = A.all('.upload-multiple-documents:hidden');
 
 		uploadMultipleDocumentsIcon.show();
