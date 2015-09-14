@@ -122,7 +122,12 @@
 			allBox = Util.getDOM(allBox);
 
 			form = $(form);
-			allBox = $(allBox);
+
+			var allBoxNodes = $(allBox);
+
+			if (!allBoxNodes.length) {
+				allBoxNodes = $('input[name="' + allBox + '"]');
+			}
 
 			var totalBoxes = 0;
 			var totalOn = 0;
@@ -137,7 +142,7 @@
 				function(index, item) {
 					item = $(item);
 
-					if (!item.is(allBox) && _.indexOf(name, item.attr('name')) > -1) {
+					if (!item.is(allBoxNodes) && _.indexOf(name, item.attr('name')) > -1) {
 						totalBoxes++;
 
 						if (item.prop(STR_CHECKED)) {
@@ -147,7 +152,7 @@
 				}
 			);
 
-			allBox.prop(STR_CHECKED, totalBoxes == totalOn);
+			allBoxNodes.prop(STR_CHECKED, totalBoxes == totalOn);
 
 			return totalOn;
 		},
