@@ -74,12 +74,16 @@ AUI.add(
 
 						if (basicPreviewButton) {
 							eventHandles.push(basicPreviewButton.on(STR_CLICK, instance._previewArticle, instance));
+							basicPreviewButton.removeAttribute('disabled');
+							basicPreviewButton.removeClass('disabled');
 						}
 
 						var permissionsButton = instance.one('#articlePermissionsButton');
 
 						if (permissionsButton) {
 							eventHandles.push(permissionsButton.on(STR_CLICK, instance._viewArticlePermissions, instance));
+							permissionsButton.removeAttribute('disabled');
+							permissionsButton.removeClass('disabled');
 						}
 
 						var buttonRow = instance.one('.journal-article-button-row');
