@@ -122,7 +122,6 @@ AUI.add(
 							name = instance.ns(name);
 						}
 
-
 						return instance.one('[name=' + name + ']', currentForm);
 					},
 
@@ -300,8 +299,8 @@ AUI.add(
 
 						event.preventDefault();
 
-						var strings = instance.get(STR_STRINGS);
 						var article = instance.get(STR_ARTICLE);
+						var strings = instance.get(STR_STRINGS);
 
 						Liferay.Util.openWindow(
 							{
