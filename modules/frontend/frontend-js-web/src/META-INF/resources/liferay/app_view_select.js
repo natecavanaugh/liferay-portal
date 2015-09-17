@@ -238,7 +238,14 @@ AUI.add(
 					_toggleEntriesSelection: function(event) {
 						var instance = this;
 
-						var selectAllCheckbox = event.currentTarget;
+						var selectAllCheckbox;
+
+						if (event) {
+							selectAllCheckbox = event.currentTarget;
+						}
+						else {
+							selectAllCheckbox = instance._selectAllCheckbox;
+						}
 
 						for (var i = 0; i < instance._checkBoxesId.length; i++) {
 							Util.checkAll(
