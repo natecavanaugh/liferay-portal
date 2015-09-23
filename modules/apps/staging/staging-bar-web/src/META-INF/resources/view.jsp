@@ -83,7 +83,7 @@ if (layout != null) {
 					<c:if test="<%= stagingGroup != null %>">
 						<li class="active control-menu-nav-item">
 							<a class="control-menu-icon" id="stagingLink" value="staging">
-								<span class="icon-fb-radio icon-monospaced"></span>
+								<span class="icon-fb-radio icon-monospaced staging-toggle"></span>
 								<span class="control-menu-icon-label">
 									<liferay-ui:message key="staging" />
 								</span>
@@ -94,7 +94,7 @@ if (layout != null) {
 				<c:otherwise>
 					<li class="control-menu-nav-item">
 						<a class='control-menu-icon' href="<%= (layoutSetBranches != null) ? null : stagingFriendlyURL %>" value="staging">
-							<span class="icon-fb-radio icon-monospaced"></span>
+							<span class="icon-fb-radio icon-monospaced staging-toggle"></span>
 							<span class="control-menu-icon-label">
 								<liferay-ui:message key="staging" />
 							</span>
@@ -128,7 +128,7 @@ if (layout != null) {
 					<c:if test="<%= Validator.isNotNull(liveFriendlyURL) %>">
 						<li class="control-menu-nav-item">
 							<a class="control-menu-icon taglib-icon" href="<%= liveFriendlyURL %>" value="live">
-								<i class="icon-circle-blank icon-monospaced"></i>
+								<i class="icon-circle-blank icon-monospaced staging-toggle"></i>
 
 								<span class="hide-accessible taglib-text"></span>
 								<span class="control-menu-icon-label">
@@ -141,7 +141,7 @@ if (layout != null) {
 				<c:otherwise>
 					<li class="active control-menu-nav-item">
 						<a class="control-menu-icon taglib-icon" id="liveLink" value="live">
-							<i class="icon-circle-blank icon-monospaced"></i>
+							<i class="icon-circle-blank icon-monospaced staging-toggle"></i>
 
 							<span class="hide-accessible taglib-text"></span>
 

@@ -27,12 +27,6 @@
 		}
 
 		> .active {
-			.control-menu-icon .icon-monospaced {
-				background-color: $control-menu-level-2-nav-item-active-bg;
-				border-radius: $control-menu-level-2-nav-item-active-border-radius;
-				color: $control-menu-level-2-nav-item-active-color;
-			}
-
 			.control-menu-icon-label {
 				color: $control-menu-level-2-nav-item-active-label-color;
 			}
@@ -112,4 +106,17 @@
 .staging-live-group-name,
 .staging-live-help {
 	color: $control-menu-level-2-color;
+}
+
+.staging-toggle {
+	&, &:hover, &:focus {
+		color: $staging-toggle-color;
+	}
+}
+
+.active > .staging-toggle,
+.active > a .staging-toggle {
+	background-color: $staging-toggle-active-bg;
+	border-radius: $staging-toggle-active-border-radius;
+	color: $staging-toggle-active-color;
 }
