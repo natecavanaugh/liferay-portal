@@ -64,21 +64,21 @@ buildLexicon {
 	eachFile new StripPathSegmentsAction(1)
 
 	eachFile {
-		if (path in ["atlas.scss", "bootstrap.scss", "lexicon-base.scss"]) {
+		if (name in ["atlas.scss", "bootstrap.scss", "lexicon-base.scss"]) {
 			filter {
 				String line ->
 
 				if (line == "// INSERT CUSTOM EXTENSIONS") {
 					line = """\
-@import \"../../liferay_variables_custom\";
-@import \"../../liferay_variables\";
-@import \"../../aui_custom\";
-@import \"../../liferay_custom\";"""
+@import \"../../../liferay_variables_custom\";
+@import \"../../../liferay_variables\";
+@import \"../../../aui_custom\";
+@import \"../../../liferay_custom\";"""
 				}
 				else if (line == "// INSERT CUSTOM VARS") {
 					line = """\
-@import \"../../aui_variables\";
-@import \"../alloy-font-awesome/scss/font-awesome\";"""
+@import \"../../../aui_variables\";
+@import \"../fonts/alloy-font-awesome/scss/font-awesome\";"""
 				}
 
 				return line
@@ -87,19 +87,19 @@ buildLexicon {
 	}
 
 	eachFile {
-		if (path in ["atlas-variables.scss", "lexicon-base-variables.scss"]) {
+		if (name in ["atlas-variables.scss", "lexicon-base-variables.scss"]) {
 			filter {
 				String line ->
 
 				if (line == "// INSERT CUSTOM BASE VARS") {
 					line = """\
-@import \"../../aui_variables\";
-@import \"../alloy-font-awesome/scss/variables\";"""
+@import \"../../../aui_variables\";
+@import \"../fonts/alloy-font-awesome/scss/variables\";"""
 				}
 				else if (line == "// INSERT CUSTOM VARS") {
 					line = """\
-@import \"../../liferay_variables_custom\";
-@import \"../../liferay_variables\";"""
+@import \"../../../liferay_variables_custom\";
+@import \"../../../liferay_variables\";"""
 				}
 
 				return line
@@ -107,10 +107,11 @@ buildLexicon {
 		}
 	}
 
-	from zipTree(lexiconZipFile)
-	include "scss/**"
-	includeEmptyDirs = false
-	into lexiconDestinationDir
+	into (lexiconDestinationDir.name) {
+		from zipTree(lexiconZipFile)
+		includeEmptyDirs = false
+		destinationDir lexiconDestinationDir
+	}
 
 	onlyIf {
 		!FileUtil.isUpToDate(project, lexiconZipFile, lexiconDestinationDir)
