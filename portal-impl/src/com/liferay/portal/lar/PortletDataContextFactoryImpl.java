@@ -30,7 +30,9 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -62,6 +64,15 @@ public class PortletDataContextFactoryImpl
 
 		clonePortletDataContext.setNewLayouts(
 			portletDataContext.getNewLayouts());
+
+		Map<String, Map<?, ?>> newPrimaryKeysMaps =
+			portletDataContext.getNewPrimaryKeysMaps();
+
+		if ((newPrimaryKeysMaps != null) && !newPrimaryKeysMaps.isEmpty()) {
+			clonePortletDataContext.setNewPrimaryKeysMaps(
+				new HashMap<String, Map<?, ?>>(newPrimaryKeysMaps));
+		}
+
 		clonePortletDataContext.setParameterMap(
 			portletDataContext.getParameterMap());
 		clonePortletDataContext.setScopeGroupId(
@@ -118,18 +129,30 @@ public class PortletDataContextFactoryImpl
 
 	@Override
 	public PortletDataContext createPreparePortletDataContext(
-			ThemeDisplay themeDisplay, Date startDate, Date endDate)
+			long companyId, long groupId, Date startDate, Date endDate)
 		throws PortletDataException {
 
 		validateDateRange(startDate, endDate);
 
 		PortletDataContext portletDataContext = createPortletDataContext(
-			themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId());
+			companyId, groupId);
 
 		portletDataContext.setEndDate(endDate);
+		portletDataContext.setParameterMap(
+			Collections.<String, String[]>emptyMap());
 		portletDataContext.setStartDate(startDate);
 
 		return portletDataContext;
+	}
+
+	@Override
+	public PortletDataContext createPreparePortletDataContext(
+			ThemeDisplay themeDisplay, Date startDate, Date endDate)
+		throws PortletDataException {
+
+		return createPreparePortletDataContext(
+			themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(),
+			startDate, endDate);
 	}
 
 	protected PortletDataContext createPortletDataContext(

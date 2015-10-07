@@ -40,7 +40,7 @@ public class LayoutExportBackgroundTaskExecutor
 
 	public LayoutExportBackgroundTaskExecutor() {
 		setBackgroundTaskStatusMessageTranslator(
-			new ExportBackgroundTaskStatusMessageTranslator());
+			new LayoutExportImportBackgroundTaskStatusMessageTranslator());
 		setSerial(true);
 	}
 

@@ -19,6 +19,10 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
+if (Validator.isNull(redirect)) {
+	redirect = ParamUtil.getString(PortalUtil.getOriginalServletRequest(request), "redirect");
+}
+
 List results = (List)request.getAttribute("view.jsp-results");
 
 if (Validator.isNull(redirect) && results.isEmpty()) {
@@ -240,6 +244,11 @@ request.setAttribute("view.jsp-showIconLabel", true);
 
 	<c:if test="<%= show %>">
 		<div class="asset-metadata">
+
+			<%
+			request.setAttribute("asset_metadata.jspf-filterByMetadata", true);
+			%>
+
 			<%@ include file="/html/portlet/asset_publisher/asset_metadata.jspf" %>
 		</div>
 	</c:if>

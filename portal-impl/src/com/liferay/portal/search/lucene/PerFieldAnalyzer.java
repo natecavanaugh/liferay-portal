@@ -25,7 +25,7 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -83,7 +83,8 @@ public class PerFieldAnalyzer extends Analyzer implements Tokenizer {
 	}
 
 	@Override
-	public TokenStream reusableTokenStream(String fieldName, Reader reader)
+	public final TokenStream reusableTokenStream(
+			String fieldName, Reader reader)
 		throws IOException {
 
 		Analyzer analyzer = getAnalyzer(fieldName);
@@ -139,7 +140,7 @@ public class PerFieldAnalyzer extends Analyzer implements Tokenizer {
 	}
 
 	@Override
-	public TokenStream tokenStream(String fieldName, Reader reader) {
+	public final TokenStream tokenStream(String fieldName, Reader reader) {
 		Analyzer analyzer = getAnalyzer(fieldName);
 
 		return analyzer.tokenStream(fieldName, reader);
@@ -148,6 +149,7 @@ public class PerFieldAnalyzer extends Analyzer implements Tokenizer {
 	private static Log _log = LogFactoryUtil.getLog(PerFieldAnalyzer.class);
 
 	private Analyzer _analyzer;
-	private Map<String, Analyzer> _analyzers = new HashMap<String, Analyzer>();
+	private Map<String, Analyzer> _analyzers =
+		new LinkedHashMap<String, Analyzer>();
 
 }

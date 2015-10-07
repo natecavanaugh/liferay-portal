@@ -502,8 +502,6 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 			portlet = new PortletImpl(CompanyConstants.SYSTEM, portletId);
 
-			portlet.setTimestamp(System.currentTimeMillis());
-
 			PortletApp portletApp = _getPortletApp(StringPool.BLANK);
 
 			portlet.setPortletApp(portletApp);
@@ -1854,7 +1852,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	private void _readPortletXML(
 			String servletContextName, Map<String, Portlet> portletsPool,
 			PluginPackage pluginPackage, PortletApp portletApp,
-			Set<String> portletIds, long timestamp, Element portletElement)
+			Set<String> portletIds, Element portletElement)
 		throws PortletIdException {
 
 		String portletName = portletElement.elementText("portlet-name");
@@ -1890,8 +1888,6 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 			portletsPool.put(portletId, portletModel);
 		}
-
-		portletModel.setTimestamp(timestamp);
 
 		portletModel.setPluginPackage(pluginPackage);
 		portletModel.setPortletApp(portletApp);
@@ -2128,7 +2124,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			if (publicRenderParameter == null) {
 				_log.error(
 					"Supported public render parameter references " +
-						"unnknown identifier " + identifier);
+						"unknown identifier " + identifier);
 
 				continue;
 			}
@@ -2247,12 +2243,10 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 			}
 		}
 
-		long timestamp = ServletContextUtil.getLastModified(servletContext);
-
 		for (Element portletElement : rootElement.elements("portlet")) {
 			_readPortletXML(
 				servletContextName, portletsPool, pluginPackage, portletApp,
-				portletIds, timestamp, portletElement);
+				portletIds, portletElement);
 		}
 
 		for (Element filterElement : rootElement.elements("filter")) {
@@ -2298,7 +2292,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 				if (portletFilter == null) {
 					_log.error(
-						"Filter mapping references unnknown filter name " +
+						"Filter mapping references unknown filter name " +
 							filterName);
 
 					continue;
@@ -2310,7 +2304,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 				if (portletModels.size() == 0) {
 					_log.error(
 						"Filter mapping with filter name " + filterName +
-							" references unnknown portlet name " + portletName);
+							" references unknown portlet name " + portletName);
 				}
 
 				for (Portlet portletModel : portletModels) {

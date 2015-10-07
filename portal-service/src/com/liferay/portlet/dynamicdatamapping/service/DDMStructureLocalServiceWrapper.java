@@ -802,6 +802,13 @@ public class DDMStructureLocalServiceWrapper implements DDMStructureLocalService
 		_ddmStructureLocalService.deleteStructures(groupId);
 	}
 
+	@Override
+	public void deleteStructures(long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_ddmStructureLocalService.deleteStructures(groupId, classNameId);
+	}
+
 	/**
 	* Returns the structure with the ID.
 	*
@@ -1586,9 +1593,11 @@ public class DDMStructureLocalServiceWrapper implements DDMStructureLocalService
 	* @param metadataEntryValue the metadata entry's value
 	* @param serviceContext the service context to be applied. Can set the
 	structure's modification date.
-	* @throws PortalException if a matching structure could not be found, if
-	the XSD was not well-formed, or if a portal exception occurred
+	* @throws PortalException if a matching structure could not be found,
+	if the XSD was not well-formed, or if a portal exception
+	occurred
 	* @throws SystemException if a system exception occurred
+	* @deprecated As of 6.2.0, with no direct replacement
 	*/
 	@Override
 	public void updateXSDFieldMetadata(long structureId,

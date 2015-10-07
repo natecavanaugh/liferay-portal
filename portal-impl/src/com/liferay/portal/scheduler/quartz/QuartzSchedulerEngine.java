@@ -38,12 +38,12 @@ import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.TriggerFactoryUtil;
 import com.liferay.portal.kernel.scheduler.TriggerState;
 import com.liferay.portal.kernel.scheduler.TriggerType;
+import com.liferay.portal.kernel.scheduler.messaging.ReceiverKey;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerResponse;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ClassLoaderPool;
 import com.liferay.portal.kernel.util.ProxyUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.scheduler.job.MessageSenderJob;
 import com.liferay.portal.service.QuartzLocalService;
@@ -264,11 +264,11 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 			Set<JobKey> jobKeys = scheduler.getJobKeys(
 				GroupMatcher.jobGroupEquals(groupName));
 
+			scheduler.pauseJobs(GroupMatcher.jobGroupEquals(groupName));
+
 			for (JobKey jobKey : jobKeys) {
 				updateJobState(scheduler, jobKey, TriggerState.PAUSED, false);
 			}
-
-			scheduler.pauseJobs(GroupMatcher.jobGroupEquals(groupName));
 		}
 		catch (Exception e) {
 			throw new SchedulerException(
@@ -293,9 +293,9 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 
 			JobKey jobKey = new JobKey(jobName, groupName);
 
-			updateJobState(scheduler, jobKey, TriggerState.PAUSED, false);
-
 			scheduler.pauseJob(jobKey);
+
+			updateJobState(scheduler, jobKey, TriggerState.PAUSED, false);
 		}
 		catch (Exception e) {
 			throw new SchedulerException(
@@ -320,11 +320,11 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 			Set<JobKey> jobKeys = scheduler.getJobKeys(
 				GroupMatcher.jobGroupEquals(groupName));
 
+			scheduler.resumeJobs(GroupMatcher.jobGroupEquals(groupName));
+
 			for (JobKey jobKey : jobKeys) {
 				updateJobState(scheduler, jobKey, TriggerState.NORMAL, false);
 			}
-
-			scheduler.resumeJobs(GroupMatcher.jobGroupEquals(groupName));
 		}
 		catch (Exception e) {
 			throw new SchedulerException(
@@ -349,9 +349,9 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 
 			JobKey jobKey = new JobKey(jobName, groupName);
 
-			updateJobState(scheduler, jobKey, TriggerState.NORMAL, false);
-
 			scheduler.resumeJob(jobKey);
+
+			updateJobState(scheduler, jobKey, TriggerState.NORMAL, false);
 		}
 		catch (Exception e) {
 			throw new SchedulerException(
@@ -567,10 +567,6 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 		}
 
 		return argument;
-	}
-
-	protected String getFullName(String jobName, String groupName) {
-		return groupName.concat(StringPool.PERIOD).concat(jobName);
 	}
 
 	protected JobState getJobState(JobDataMap jobDataMap) {
@@ -839,9 +835,14 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 			String dbType = db.getType();
 
 			if (dbType.equals(DB.TYPE_SQLSERVER)) {
-				properties.setProperty(
-					"org.quartz.jobStore.lockHandler.class",
-					UpdateLockRowSemaphore.class.getName());
+				String lockHandlerClassName = properties.getProperty(
+					"org.quartz.jobStore.lockHandler.class");
+
+				if (Validator.isNull(lockHandlerClassName)) {
+					properties.setProperty(
+						"org.quartz.jobStore.lockHandler.class",
+						UpdateLockRowSemaphore.class.getName());
+				}
 			}
 
 			if (PropsValues.CLUSTER_LINK_ENABLED) {
@@ -950,7 +951,7 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 			MESSAGE_LISTENER_UUID,
 			schedulerEventListenerWrapper.getMessageListenerUUID());
 
-		message.put(RECEIVER_KEY, getFullName(jobName, groupName));
+		message.put(RECEIVER_KEY, new ReceiverKey(jobName, groupName));
 	}
 
 	protected void schedule(
@@ -962,6 +963,8 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 			JobBuilder jobBuilder = JobBuilder.newJob(MessageSenderJob.class);
 
 			jobBuilder.withIdentity(trigger.getJobKey());
+
+			jobBuilder.storeDurably();
 
 			JobDetail jobDetail = jobBuilder.build();
 
@@ -1021,6 +1024,10 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 
 		Destination destination = messageBus.getDestination(destinationName);
 
+		if (destination == null) {
+			return;
+		}
+
 		Set<MessageListener> messageListeners =
 			destination.getMessageListeners();
 
@@ -1067,12 +1074,6 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 		}
 
 		unregisterMessageListener(scheduler, jobKey);
-
-		if (scheduler == _memoryScheduler) {
-			scheduler.unscheduleJob(triggerKey);
-
-			return;
-		}
 
 		JobDataMap jobDataMap = jobDetail.getJobDataMap();
 
@@ -1123,12 +1124,12 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 				return;
 			}
 
-			updateJobState(scheduler, jobKey, TriggerState.NORMAL, true);
-
 			synchronized (this) {
 				scheduler.deleteJob(jobKey);
 				scheduler.scheduleJob(jobDetail, quartzTrigger);
 			}
+
+			updateJobState(scheduler, jobKey, TriggerState.NORMAL, true);
 		}
 	}
 
@@ -1138,6 +1139,10 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 		throws Exception {
 
 		JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+
+		if (jobDetail == null) {
+			return;
+		}
 
 		JobDataMap jobDataMap = jobDetail.getJobDataMap();
 

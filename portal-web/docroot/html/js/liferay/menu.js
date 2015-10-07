@@ -432,13 +432,15 @@ AUI.add(
 		Menu.register = function(id) {
 			var menuNode = document.getElementById(id);
 
-			if (!Menu._INSTANCE) {
-				new Menu();
+			if (menuNode) {
+				if (!Menu._INSTANCE) {
+					new Menu();
+				}
+
+				buffer.push(menuNode);
+
+				Menu._registerTask();
 			}
-
-			buffer.push(menuNode);
-
-			Menu._registerTask();
 		};
 
 		Menu._registerTask = A.debounce(
@@ -586,6 +588,10 @@ AUI.add(
 							if (focusManager) {
 								focusManager.refresh();
 							}
+
+							var visibleItems = listNode.all('li:not([hidden])');
+
+							listNode.toggle(!!visibleItems.size());
 						}
 					);
 
@@ -608,10 +614,17 @@ AUI.add(
 
 				var activeTrigger = instance._activeTrigger;
 
-				if (activeTrigger && (activeTrigger != trigger)) {
-					activeTrigger.removeClass(CSS_BTN_PRIMARY);
+				if (activeTrigger) {
+					if (activeTrigger != trigger) {
+						activeTrigger.removeClass(CSS_BTN_PRIMARY);
 
-					activeTrigger.get(PARENT_NODE).removeClass(CSS_OPEN);
+						activeTrigger.get(PARENT_NODE).removeClass(CSS_OPEN);
+					}
+					else {
+						instance._closeActiveMenu();
+
+						return;
+					}
 				}
 
 				if (!trigger.hasClass('disabled')) {

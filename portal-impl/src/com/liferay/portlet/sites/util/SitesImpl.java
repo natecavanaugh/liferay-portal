@@ -91,6 +91,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.LayoutSettings;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
@@ -123,6 +124,10 @@ import javax.servlet.http.HttpServletResponse;
  * @author Zsolt Berentey
  */
 public class SitesImpl implements Sites {
+
+	public static final boolean LAYOUT_SET_PROTOTYPE_PROPAGATE_LOGO =
+		GetterUtil.getBoolean(PropsUtil.get(
+			"layout.set.prototype.propagate.logo"));
 
 	@Override
 	public void addMergeFailFriendlyURLLayout(Layout layout)
@@ -516,7 +521,9 @@ public class SitesImpl implements Sites {
 
 		LayoutSet layoutSet = layout.getLayoutSet();
 
-		if (group.isGuest() && (layoutSet.getPageCount() == 1)) {
+		if (group.isGuest() && !layoutSet.isPrivateLayout() &&
+			(layoutSet.getPageCount() == 1)) {
+
 			throw new RequiredLayoutException(
 				RequiredLayoutException.AT_LEAST_ONE);
 		}
@@ -1167,12 +1174,14 @@ public class SitesImpl implements Sites {
 					layout.getCompanyId(), layoutSetPrototypeId);
 
 			Layout sourcePrototypeLayout =
-				LayoutLocalServiceUtil.getLayoutByUuidAndGroupId(
+				LayoutLocalServiceUtil.fetchLayoutByUuidAndGroupId(
 					sourcePrototypeLayoutUuid,
 					layoutSetPrototypeGroup.getGroupId(), true);
 
-			doMergeLayoutPrototypeLayout(
-				layoutSetPrototypeGroup, sourcePrototypeLayout);
+			if (sourcePrototypeLayout != null) {
+				doMergeLayoutPrototypeLayout(
+					layoutSetPrototypeGroup, sourcePrototypeLayout);
+			}
 		}
 
 		doMergeLayoutPrototypeLayout(group, layout);
@@ -1718,9 +1727,6 @@ public class SitesImpl implements Sites {
 					LAYOUTS_IMPORT_MODE_CREATED_FROM_PROTOTYPE
 			});
 		parameterMap.put(
-			PortletDataHandlerKeys.LOGO,
-			new String[] {Boolean.TRUE.toString()});
-		parameterMap.put(
 			PortletDataHandlerKeys.PERMISSIONS,
 			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
@@ -1747,6 +1753,9 @@ public class SitesImpl implements Sites {
 				PortletDataHandlerKeys.DATA_STRATEGY,
 				new String[] {PortletDataHandlerKeys.DATA_STRATEGY_MIRROR});
 			parameterMap.put(
+				PortletDataHandlerKeys.LOGO,
+				new String[] {Boolean.TRUE.toString()});
+			parameterMap.put(
 				PortletDataHandlerKeys.PORTLET_DATA,
 				new String[] {Boolean.TRUE.toString()});
 			parameterMap.put(
@@ -1754,6 +1763,17 @@ public class SitesImpl implements Sites {
 				new String[] {Boolean.TRUE.toString()});
 		}
 		else {
+			if (LAYOUT_SET_PROTOTYPE_PROPAGATE_LOGO) {
+				parameterMap.put(
+					PortletDataHandlerKeys.LOGO,
+					new String[] {Boolean.TRUE.toString()});
+			}
+			else {
+				parameterMap.put(
+					PortletDataHandlerKeys.LOGO,
+					new String[] {Boolean.FALSE.toString()});
+			}
+
 			parameterMap.put(
 				PortletDataHandlerKeys.PORTLET_DATA,
 				new String[] {Boolean.FALSE.toString()});
@@ -1786,7 +1806,7 @@ public class SitesImpl implements Sites {
 
 		File cacheFile = new File(sb.toString());
 
-		if (cacheFile.exists()) {
+		if (cacheFile.exists() && !importData) {
 			Date modifiedDate = layoutSetPrototype.getModifiedDate();
 
 			if (cacheFile.lastModified() >= modifiedDate.getTime()) {

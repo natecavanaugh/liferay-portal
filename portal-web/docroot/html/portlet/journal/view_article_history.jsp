@@ -127,17 +127,15 @@ JournalArticle article = (JournalArticle)request.getAttribute(WebKeys.JOURNAL_AR
 			for (int i = 0; i < results.size(); i++) {
 				JournalArticle articleVersion = results.get(i);
 
-				articleVersion = articleVersion.toEscapedModel();
-
 				ResultRow row = new ResultRow(articleVersion, articleVersion.getArticleId() + EditArticleAction.VERSION_SEPARATOR + articleVersion.getVersion(), i);
 
 				// Article id
 
-				row.addText(articleVersion.getArticleId());
+				row.addText(HtmlUtil.escape(articleVersion.getArticleId()));
 
 				// Title
 
-				row.addText(articleVersion.getTitle(locale));
+				row.addText(HtmlUtil.escape(articleVersion.getTitle(locale)));
 
 				// Version
 

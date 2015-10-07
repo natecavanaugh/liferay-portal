@@ -9,7 +9,13 @@
 <#assign cssClass = "">
 
 <#if fieldStructure.width??>
-	<#assign cssClass = "w" + fieldStructure.width>
+	<#if fieldStructure.width == "large">
+		<#assign cssClass = "input-xxlarge">
+	<#elseif fieldStructure.width == "medium">
+		<#assign cssClass = "input-xlarge">
+	<#elseif fieldStructure.width == "small">
+		<#assign cssClass = "input-large">
+	</#if>
 </#if>
 
 <#-- Repeatable -->
@@ -69,6 +75,14 @@
 
 	<#assign fieldValue = field.getRenderedValue(requestedLocale, valueIndex)>
 	<#assign fieldRawValue = field.getValue(requestedLocale, valueIndex)!>
+</#if>
+
+<#-- Disabled -->
+
+<#assign disabled = false>
+
+<#if fieldStructure.disabled?? && (fieldStructure.disabled == "true")>
+	<#assign disabled = true>
 </#if>
 
 <#-- Label -->
@@ -140,5 +154,5 @@
 </#function>
 
 <#function getFileJSONObject fieldValue>
-	<#return jsonFactoryUtil.createJSONObject(fieldValue)>>
+	<#return jsonFactoryUtil.createJSONObject(fieldValue)>
 </#function>

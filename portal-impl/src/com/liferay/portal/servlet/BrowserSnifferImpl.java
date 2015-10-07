@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.util.PropsValues;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -340,7 +341,9 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 	public boolean isWapXhtml(HttpServletRequest request) {
 		String accept = getAccept(request);
 
-		if (accept.contains("wap.xhtml")) {
+		if (PropsValues.MOBILE_DEVICE_STYLING_WAP_ENABLED &&
+			accept.contains("wap.xhtml")) {
+
 			return true;
 		}
 
@@ -513,7 +516,9 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 	}
 
 	protected boolean isIe(String userAgent) {
-		if (userAgent.contains("msie") && !userAgent.contains("opera")) {
+		if ((userAgent.contains("msie") || userAgent.contains("trident")) &&
+			!userAgent.contains("opera")) {
+
 			return true;
 		}
 

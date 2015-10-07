@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.search.Document;
+import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
@@ -33,6 +34,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -148,6 +150,40 @@ public class AssetUtil {
 		PortalUtil.addPortletBreadcrumbEntry(
 			request, assetCategory.getTitleCurrentValue(),
 			portletURL.toString());
+	}
+
+	public static String checkViewURL(
+		AssetEntry assetEntry, boolean viewInContext, String viewURL,
+		String currentURL, ThemeDisplay themeDisplay) {
+
+		return checkViewURL(
+			assetEntry, viewInContext, viewURL, currentURL, themeDisplay, true);
+	}
+
+	public static String checkViewURL(
+		AssetEntry assetEntry, boolean viewInContext, String viewURL,
+		String currentURL, ThemeDisplay themeDisplay,
+		boolean checkInheritRedirect) {
+
+		if (Validator.isNotNull(viewURL)) {
+			if (checkInheritRedirect) {
+				viewURL = HttpUtil.setParameter(
+					viewURL, "inheritRedirect", viewInContext);
+			}
+
+			String assetEntryLayoutUuid = assetEntry.getLayoutUuid();
+
+			Layout layout = themeDisplay.getLayout();
+
+			if (!viewInContext || (Validator.isNotNull(assetEntryLayoutUuid) &&
+				 !assetEntryLayoutUuid.equals(layout.getUuid()))) {
+
+				viewURL = HttpUtil.setParameter(
+					viewURL, "redirect", currentURL);
+			}
+		}
+
+		return viewURL;
 	}
 
 	public static long[] filterCategoryIds(
@@ -703,8 +739,8 @@ public class AssetUtil {
 			sortField = Field.MODIFIED_DATE;
 		}
 		else if (sortField.equals("title")) {
-			sortField = "localized_title_".concat(
-				LocaleUtil.toLanguageId(locale));
+			sortField = DocumentImpl.getSortableFieldName(
+				"localized_title_".concat(LocaleUtil.toLanguageId(locale)));
 		}
 
 		return SortFactoryUtil.getSort(
@@ -734,7 +770,7 @@ public class AssetUtil {
 			sortField.equals("ddm-date") ||
 			sortField.equals("modifiedDate")) {
 
-			sortType = Sort.STRING_TYPE;
+			sortType = Sort.LONG_TYPE;
 		}
 		else if (sortField.equals(Field.PRIORITY) ||
 				 sortField.equals(Field.RATINGS) ||

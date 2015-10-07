@@ -219,10 +219,24 @@ public class PortalLDAPUtil {
 			mappedGroupAttributeIds.add(groupMappings.getProperty("user"));
 		}
 
-		return _getAttributes(
+		Attributes attributes = _getAttributes(
 			ldapContext, fullDistinguishedName,
 			mappedGroupAttributeIds.toArray(
 				new String[mappedGroupAttributeIds.size()]));
+
+		if (_log.isDebugEnabled()) {
+			for (String attributeId : mappedGroupAttributeIds) {
+				Attribute attribute = attributes.get(attributeId);
+
+				if (attribute == null) {
+					continue;
+				}
+
+				_log.debug("LDAP group attribute " + attribute.toString());
+			}
+		}
+
+		return attributes;
 	}
 
 	public static byte[] getGroups(
@@ -298,13 +312,11 @@ public class PortalLDAPUtil {
 		long preferredLDAPServerId = LDAPSettingsUtil.getPreferredLDAPServerId(
 			companyId, screenName);
 
-		if (preferredLDAPServerId >= 0) {
-			if (hasUser(
-					preferredLDAPServerId, companyId, screenName,
-					emailAddress)) {
+		if ((preferredLDAPServerId >= 0) &&
+			hasUser(
+				preferredLDAPServerId, companyId, screenName, emailAddress)) {
 
-				return preferredLDAPServerId;
-			}
+			return preferredLDAPServerId;
 		}
 
 		long[] ldapServerIds = StringUtil.split(
@@ -436,6 +448,15 @@ public class PortalLDAPUtil {
 			String emailAddress)
 		throws Exception {
 
+		return getUser(
+			ldapServerId, companyId, screenName, emailAddress, false);
+	}
+
+	public static Binding getUser(
+			long ldapServerId, long companyId, String screenName,
+			String emailAddress, boolean checkOriginalEmail)
+		throws Exception {
+
 		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
 
 		LdapContext ldapContext = getContext(ldapServerId, companyId);
@@ -508,6 +529,19 @@ public class PortalLDAPUtil {
 				return enu.nextElement();
 			}
 
+			if (checkOriginalEmail) {
+				String originalEmailAddress =
+					LDAPUserTransactionThreadLocal.getOriginalEmailAddress();
+
+				if (Validator.isNotNull(originalEmailAddress) &&
+					!emailAddress.equals(originalEmailAddress)) {
+
+					return PortalLDAPUtil.getUser(
+						ldapServerId, companyId, screenName,
+						originalEmailAddress, false);
+				}
+			}
+
 			return null;
 		}
 		finally {
@@ -545,8 +579,22 @@ public class PortalLDAPUtil {
 		String[] mappedUserAttributeIds = ArrayUtil.toStringArray(
 			userMappings.values().toArray(new Object[userMappings.size()]));
 
-		return _getAttributes(
+		Attributes attributes = _getAttributes(
 			ldapContext, fullDistinguishedName, mappedUserAttributeIds);
+
+		if (_log.isDebugEnabled()) {
+			for (String attributeId : mappedUserAttributeIds) {
+				Attribute attribute = attributes.get(attributeId);
+
+				if (attribute == null) {
+					continue;
+				}
+
+				_log.debug("LDAP user attribute " + attribute.toString());
+			}
+		}
+
+		return attributes;
 	}
 
 	public static byte[] getUsers(

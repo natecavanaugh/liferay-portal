@@ -28,7 +28,7 @@ DDMStructure structure = null;
 long structureClassNameId = PortalUtil.getClassNameId(DDMStructure.class);
 
 if ((classPK > 0) && (structureClassNameId == classNameId)) {
-	structure = DDMStructureServiceUtil.getStructure(classPK);
+	structure = DDMStructureLocalServiceUtil.getStructure(classPK);
 }
 
 String title = ddmDisplay.getViewTemplatesTitle(structure, locale);
@@ -100,7 +100,7 @@ String title = ddmDisplay.getViewTemplatesTitle(structure, locale);
 
 					data.put("ddmtemplateid", template.getTemplateId());
 					data.put("ddmtemplatekey", template.getTemplateKey());
-					data.put("name", HtmlUtil.escapeAttribute(template.getName(locale)));
+					data.put("name", template.getName(locale));
 					%>
 
 					<aui:button cssClass="selector-button" data="<%= data %>" value="choose" />

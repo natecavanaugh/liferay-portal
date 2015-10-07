@@ -132,7 +132,7 @@
 
 .portlet-document-library, .portlet-dynamic-data-mapping {
 	.lfr-ddm-small-image-preview {
-		@include box-shadow(0 1px 3px #ccc);
+		@include box-shadow(0 1px 3px #CCC);
 	}
 }
 
@@ -168,7 +168,7 @@
 	@include border-radius(10px);
 }
 
-body > .lfr-menu-list ul, .active-area-proxy, .entry-display-style .entry-thumbnail, .lfr-api-results, .lfr-translation-manager, .lfr-translation-manager-translation, .lfr-upload-container .cancel-button .modify-pages .delete-tab, .portlet-image-gallery-display .image-thumbnail img, .rule-group-instance-container .rule-group-instance, .select-documents, .select-files, .taglib-ratings.stars:hover, .taglib-ratings.stars:hover .liferay-rating-vote, .tags-search-combobox .field-input-text {
+body > .lfr-menu-list ul, .active-area-proxy, .entry-display-style .entry-thumbnail, .lfr-api-results, .lfr-translation-manager, .lfr-translation-manager-translation, .lfr-upload-container .cancel-button .modify-pages .delete-tab, .portlet-image-gallery-display .image-thumbnail img, .rule-group-instance-container .rule-group-instance, .select-documents, .select-files, .taglib-ratings.stars:hover, .taglib-ratings.stars:hover .liferay-rating-vote > div, .taglib-ratings.stars .rating-focused > div, .tags-search-combobox .field-input-text {
 	@include border-radius(4px);
 }
 
@@ -189,9 +189,46 @@ body > .lfr-menu-list ul, .active-area-proxy, .entry-display-style .entry-thumbn
 	@include border-bottom-right-radius(4px);
 }
 
+.taglib-form-navigator > .form-steps > ul.form-navigator.well {
+	@include box-shadow(none);
+
+	.tab .tab-label {
+		&:hover, &:focus {
+			.number {
+				@include box-shadow(0 0 5px 0 #333);
+				@include transition-duration(0.25s);
+				@include transition-property(box-shadow);
+				@include transition-timing-function(ease-out);
+			}
+		}
+
+		.number {
+			@include border-radius(50%);
+		}
+	}
+}
+
 .underlay-content {
 	@include border-bottom-left-radius(8px);
 	@include border-bottom-right-radius(8px);
+}
+
+.input-localized {
+	.lfr-input-localized-state {
+		@include border-radius(3px);
+	}
+
+	.lfr-input-localized .lfr-input-localized-state {
+		@include box-shadow(0 0 3px #DDD);
+
+		&.lfr-input-localized-state-error {
+			@include box-shadow(0 0 3px #FF0047);
+		}
+	}
+
+	.palette-item-selected .lfr-input-localized-state {
+		@include box-shadow(0 0 3px #27C1F2);
+	}
 }
 
 .lfr-add-panel {
@@ -272,6 +309,7 @@ body > .lfr-menu-list ul, .active-area-proxy, .entry-display-style .entry-thumbn
 	from {
 		background-position: 40px 0;
 	}
+
 	to {
 		background-position: 0 0;
 	}
@@ -331,6 +369,14 @@ body:first-of-type {
 			@extend %portlet-action-bar-fx-text;
 
 			@extend %portlet-action-bar-fx-hover-text;
+
+			@include border-bottom-left-radius(20px);
+			@include border-top-left-radius(20px);
+		}
+
+		.portlet-title-default {
+			@include border-bottom-right-radius(20px);
+			@include border-top-right-radius(20px);
 		}
 	}
 
@@ -362,6 +408,10 @@ body:first-of-type {
 
 			.taglib-text {
 				@extend %portlet-action-bar-fx-text;
+
+				@include respond-to(phone, tablet) {
+					max-width: 200px;
+				}
 			}
 		}
 	}
@@ -383,16 +433,19 @@ body:first-of-type {
 		background-color: #EBEBEB;
 		border-color: #DDD;
 	}
+
 	50% {
 		background-color: #DDEDDE;
 		border-color: #7D7;
 
 		@include scale(1.1);
 	}
+
 	75% {
 		background-color: #DDEDDE;
 		border-color: #7D7;
 	}
+
 	100% {
 		background-color: #EBEBEB;
 		border-color: #DDD;

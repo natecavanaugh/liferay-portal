@@ -360,7 +360,7 @@
 
 				while (length--) {
 					var attr = attrs[length];
-					var name = attr.nodeName;
+					var name = attr.nodeName.toLowerCase();
 					var value = attr.nodeValue;
 
 					if (isGetterString) {
@@ -781,7 +781,7 @@
 			Liferay.Util.openWindow(
 				{
 					cache: false,
-					title: event.title,
+					title: Liferay.Util.escapeHTML(event.title),
 					uri: event.uri
 				}
 			);
@@ -1401,6 +1401,12 @@
 			ddmURL.setParameter('classPK', config.classPK);
 			ddmURL.setParameter('eventName', config.eventName);
 			ddmURL.setParameter('groupId', config.groupId);
+			ddmURL.setParameter('mode', config.mode);
+			ddmURL.setParameter('portletResourceNamespace', config.portletResourceNamespace);
+
+			if ('redirect' in config) {
+				ddmURL.setParameter('redirect', config.redirect);
+			}
 
 			if ('refererPortletName' in config) {
 				ddmURL.setParameter('refererPortletName', config.refererPortletName);
@@ -1411,6 +1417,10 @@
 			}
 
 			ddmURL.setParameter('scopeTitle', config.title);
+
+			if ('showBackURL' in config) {
+				ddmURL.setParameter('showBackURL', config.showBackURL);
+			}
 
 			if ('showGlobalScope' in config) {
 				ddmURL.setParameter('showGlobalScope', config.showGlobalScope);
@@ -1427,6 +1437,8 @@
 			if ('showToolbar' in config) {
 				ddmURL.setParameter('showToolbar', config.showToolbar);
 			}
+
+			ddmURL.setParameter('structureAvailableFields', config.structureAvailableFields);
 
 			if (config.struts_action) {
 				ddmURL.setParameter('struts_action', config.struts_action);
@@ -1779,7 +1791,9 @@
 		function(folderData, namespace) {
 			A.byIdNS(namespace, folderData.idString).val(folderData.idValue);
 
-			A.byIdNS(namespace, folderData.nameString).val(folderData.nameValue);
+			var name = AString.unescapeEntities(folderData.nameValue);
+
+			A.byIdNS(namespace, folderData.nameString).val(name);
 
 			var button = A.byIdNS(namespace, 'removeFolderButton');
 
@@ -1932,6 +1946,13 @@
 
 				docBody.addClass(currentClass);
 
+				Liferay.fire(
+					'toggleControls',
+					{
+						enabled: (Liferay._editControlsState === 'visible')
+					}
+				);
+
 				trigger.on(
 					EVENT_CLICK,
 					function(event) {
@@ -1944,6 +1965,14 @@
 						Liferay._editControlsState = (docBody.hasClass(visibleClass) ? 'visible' : 'hidden');
 
 						Liferay.Store('liferay_toggle_controls', Liferay._editControlsState);
+
+						Liferay.fire(
+							'toggleControls',
+							{
+								enabled: (Liferay._editControlsState === 'visible'),
+								src: 'ui'
+							}
+						);
 					}
 				);
 			}

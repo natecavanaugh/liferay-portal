@@ -14,6 +14,7 @@
 
 package com.liferay.taglib.aui;
 
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -106,7 +107,7 @@ public class AUIUtil {
 			sb.append("data-");
 			sb.append(dataKey);
 			sb.append("=\"");
-			sb.append(dataValue);
+			sb.append(HtmlUtil.escapeAttribute(dataValue));
 			sb.append("\" ");
 		}
 
@@ -139,7 +140,7 @@ public class AUIUtil {
 
 		if (showForLabel) {
 			sb.append("for=\"");
-			sb.append(forLabel);
+			sb.append(HtmlUtil.escapeAttribute(forLabel));
 			sb.append("\"");
 		}
 

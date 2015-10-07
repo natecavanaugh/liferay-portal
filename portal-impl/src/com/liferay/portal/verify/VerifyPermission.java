@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
@@ -35,7 +36,9 @@ import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.impl.ResourcePermissionLocalServiceImpl;
 import com.liferay.portal.util.PortalInstances;
+import com.liferay.portal.util.PortletKeys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,6 +58,16 @@ public class VerifyPermission extends VerifyProcess {
 
 				ResourceActionLocalServiceUtil.checkResourceActions(
 					modelName, actionIds, true);
+		}
+
+		List<String> portletNames = ResourceActionsUtil.getPortletNames();
+
+		for (String portletName : portletNames) {
+			List<String> actionIds =
+				ResourceActionsUtil.getPortletResourceActions(portletName);
+
+			ResourceActionLocalServiceUtil.checkResourceActions(
+				portletName, actionIds, true);
 		}
 	}
 
@@ -99,7 +112,30 @@ public class VerifyPermission extends VerifyProcess {
 		deleteDefaultPrivateLayoutPermissions();
 
 		checkPermissions();
+		fixDockbarPermissions();
 		fixOrganizationRolePermissions();
+	}
+
+	protected void fixDockbarPermissions() throws Exception {
+		long[] companyIds = PortalInstances.getCompanyIdsBySQL();
+
+		for (long companyId : companyIds) {
+			try {
+				Role role = RoleLocalServiceUtil.getRole(
+					companyId, RoleConstants.USER);
+
+				ResourcePermissionLocalServiceUtil.addResourcePermission(
+					companyId, PortletKeys.DOCKBAR,
+					ResourceConstants.SCOPE_COMPANY,
+					String.valueOf(role.getCompanyId()), role.getRoleId(),
+					ActionKeys.VIEW);
+			}
+			catch (Exception e) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(e, e);
+				}
+			}
+		}
 	}
 
 	protected void fixOrganizationRolePermissions() throws Exception {
@@ -139,32 +175,21 @@ public class VerifyPermission extends VerifyProcess {
 						resourcePermission.getRoleId());
 			}
 
-			long organizationActions = resourcePermission.getActionIds();
-			long groupActions = groupResourcePermission.getActionIds();
+			for (String actionId : _DEPRECATED_ORGANIZATION_ACTION_IDS) {
+				if (resourcePermission.hasActionId(actionId)) {
+					resourcePermission.removeResourceAction(actionId);
 
-			for (Object[] actionIdToMask : _ORGANIZATION_ACTION_IDS_TO_MASKS) {
-				long organizationActionMask = (Long)actionIdToMask[1];
-				long groupActionMask = (Long)actionIdToMask[2];
-
-				if ((organizationActions & organizationActionMask) ==
-						organizationActionMask) {
-
-					organizationActions =
-						organizationActions & (~organizationActionMask);
-					groupActions = groupActions | groupActionMask;
+					groupResourcePermission.addResourceAction(actionId);
 				}
 			}
 
 			try {
 				resourcePermission.resetOriginalValues();
 
-				resourcePermission.setActionIds(organizationActions);
-
 				ResourcePermissionLocalServiceUtil.updateResourcePermission(
 					resourcePermission);
 
 				groupResourcePermission.resetOriginalValues();
-				groupResourcePermission.setActionIds(groupActions);
 
 				ResourcePermissionLocalServiceUtil.updateResourcePermission(
 					groupResourcePermission);
@@ -195,18 +220,20 @@ public class VerifyPermission extends VerifyProcess {
 		return true;
 	}
 
-	private static final Object[][] _ORGANIZATION_ACTION_IDS_TO_MASKS =
-		new Object[][] {
-			new Object[] {"APPROVE_PROPOSAL", 2L, 0L},
-			new Object[] {ActionKeys.ASSIGN_MEMBERS, 4L, 4L},
-			new Object[] {"ASSIGN_REVIEWER", 8L, 0L},
-			new Object[] {ActionKeys.MANAGE_ARCHIVED_SETUPS, 128L, 128L},
-			new Object[] {ActionKeys.MANAGE_LAYOUTS, 256L, 256L},
-			new Object[] {ActionKeys.MANAGE_STAGING, 512L, 512L},
-			new Object[] {ActionKeys.MANAGE_TEAMS, 2048L, 1024L},
-			new Object[] {ActionKeys.PUBLISH_STAGING, 16384L, 4096L}
-		};
+	private static final List<String> _DEPRECATED_ORGANIZATION_ACTION_IDS =
+		new ArrayList<String>();
 
 	private static Log _log = LogFactoryUtil.getLog(VerifyPermission.class);
+
+	static {
+		_DEPRECATED_ORGANIZATION_ACTION_IDS.add(
+			ActionKeys.MANAGE_ARCHIVED_SETUPS);
+		_DEPRECATED_ORGANIZATION_ACTION_IDS.add(ActionKeys.MANAGE_LAYOUTS);
+		_DEPRECATED_ORGANIZATION_ACTION_IDS.add(ActionKeys.MANAGE_STAGING);
+		_DEPRECATED_ORGANIZATION_ACTION_IDS.add(ActionKeys.MANAGE_TEAMS);
+		_DEPRECATED_ORGANIZATION_ACTION_IDS.add(ActionKeys.PUBLISH_STAGING);
+		_DEPRECATED_ORGANIZATION_ACTION_IDS.add("APPROVE_PROPOSAL");
+		_DEPRECATED_ORGANIZATION_ACTION_IDS.add("ASSIGN_REVIEWER");
+	}
 
 }

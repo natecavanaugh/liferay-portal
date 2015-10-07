@@ -1,6 +1,5 @@
 .taglib-ratings {
 	&.stars {
-		overflow: hidden;
 		padding-top: 10px;
 
 		.liferay-rating-score {
@@ -31,6 +30,10 @@
 				padding: 0 5px;
 			}
 		}
+	}
+
+	.rating-element {
+		padding-right: 4px;
 	}
 
 	.rating-input-container .rating-input {

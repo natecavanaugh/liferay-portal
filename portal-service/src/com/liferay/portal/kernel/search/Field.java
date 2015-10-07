@@ -29,6 +29,8 @@ import java.util.Map;
  */
 public class Field implements Serializable {
 
+	public static final String ASSET_CATEGORY_ID = "assetCategoryId";
+
 	public static final String ASSET_CATEGORY_IDS = "assetCategoryIds";
 
 	/**
@@ -36,11 +38,17 @@ public class Field implements Serializable {
 	 */
 	public static final String ASSET_CATEGORY_NAMES = "assetCategoryNames";
 
+	public static final String ASSET_CATEGORY_TITLE = "assetCategoryTitle";
+
 	public static final String ASSET_CATEGORY_TITLES = "assetCategoryTitles";
 
 	public static final String ASSET_TAG_IDS = "assetTagIds";
 
 	public static final String ASSET_TAG_NAMES = "assetTagNames";
+
+	public static final String ASSET_VOCABULARY_ID = "assetVocabularyId";
+
+	public static final String ASSET_VOCABULARY_IDS = "assetVocabularyIds";
 
 	public static final String CATEGORY_ID = "categoryId";
 
@@ -242,6 +250,10 @@ public class Field implements Serializable {
 		return _numeric;
 	}
 
+	public boolean isSortable() {
+		return _sortable;
+	}
+
 	public boolean isTokenized() {
 		return _tokenized;
 	}
@@ -262,6 +274,10 @@ public class Field implements Serializable {
 		_numericClass = numericClass;
 	}
 
+	public void setSortable(boolean sortable) {
+		_sortable = sortable;
+	}
+
 	public void setTokenized(boolean tokenized) {
 		_tokenized = tokenized;
 	}
@@ -279,6 +295,7 @@ public class Field implements Serializable {
 	private String _name;
 	private boolean _numeric;
 	private Class<? extends Number> _numericClass;
+	private boolean _sortable;
 	private boolean _tokenized;
 	private String[] _values;
 

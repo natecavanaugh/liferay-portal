@@ -27,6 +27,7 @@ page import="com.liferay.portlet.asset.model.AssetTagProperty" %><%@
 page import="com.liferay.portlet.asset.service.AssetTagPropertyLocalServiceUtil" %><%@
 page import="com.liferay.portlet.assetpublisher.search.AssetDisplayTerms" %><%@
 page import="com.liferay.portlet.assetpublisher.search.AssetSearch" %><%@
+page import="com.liferay.portlet.assetpublisher.util.AssetPublisherHelperImpl" %><%@
 page import="com.liferay.portlet.assetpublisher.util.AssetPublisherHelperUtil" %><%@
 page import="com.liferay.portlet.assetpublisher.util.AssetPublisherUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.util.DDMImpl" %><%@
@@ -41,6 +42,7 @@ String portletResource = ParamUtil.getString(request, "portletResource");
 String selectionStyle = GetterUtil.getString(portletPreferences.getValue("selectionStyle", null), "dynamic");
 
 long[] groupIds = AssetPublisherUtil.getGroupIds(portletPreferences, scopeGroupId, layout);
+long[] siteGroupIds = _getSiteGroupIds(groupIds);
 
 long[] availableClassNameIds = AssetRendererFactoryRegistryUtil.getClassNameIds(company.getCompanyId());
 
@@ -75,13 +77,9 @@ Serializable ddmStructureFieldValue = null;
 boolean subtypeFieldsFilterEnabled = GetterUtil.getBoolean(portletPreferences.getValue("subtypeFieldsFilterEnabled", Boolean.FALSE.toString()));
 
 if (selectionStyle.equals("dynamic")) {
-	if (!ArrayUtil.contains(groupIds, scopeGroupId)) {
-		assetEntryQuery = AssetPublisherUtil.getAssetEntryQuery(portletPreferences, ArrayUtil.append(groupIds, scopeGroupId));
-	}
-	else {
-		assetEntryQuery = AssetPublisherUtil.getAssetEntryQuery(portletPreferences, groupIds);
-	}
+	assetEntryQuery = AssetPublisherUtil.getAssetEntryQuery(portletPreferences, siteGroupIds);
 
+	allAssetCategoryIds = AssetPublisherUtil.getAssetCategoryIds(portletPreferences);
 	allAssetTagNames = AssetPublisherUtil.getAssetTagNames(portletPreferences, scopeGroupId);
 
 	assetEntryQuery.setClassTypeIds(classTypeIds);
@@ -157,7 +155,7 @@ String assetTagName = ParamUtil.getString(request, "tag");
 if (Validator.isNotNull(assetTagName)) {
 	allAssetTagNames = new String[] {assetTagName};
 
-	long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(groupIds, allAssetTagNames);
+	long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(siteGroupIds, allAssetTagNames);
 
 	assetEntryQuery.setAnyTagIds(assetTagIds);
 
@@ -218,7 +216,7 @@ if (defaultAssetPublisherPortletId.equals(portletDisplay.getId()) || (Validator.
 	defaultAssetPublisher = true;
 }
 
-boolean enablePermissions = (!portletName.equals(PortletKeys.HIGHEST_RATED_ASSETS) && !portletName.equals(PortletKeys.MOST_VIEWED_ASSETS) && PropsValues.ASSET_PUBLISHER_SEARCH_WITH_INDEX) ? true : GetterUtil.getBoolean(portletPreferences.getValue("enablePermissions", null));
+boolean enablePermissions = _isEnablePermissions(portletName, portletPreferences);
 
 assetEntryQuery.setEnablePermissions(enablePermissions);
 
@@ -264,17 +262,100 @@ Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, timeZone);
 <%@ include file="/html/portlet/asset_publisher/init-ext.jsp" %>
 
 <%!
-private String _checkViewURL(AssetEntry assetEntry, boolean viewInContext, String viewURL, String currentURL, ThemeDisplay themeDisplay) {
-	if (Validator.isNotNull(viewURL)) {
-		Layout layout = themeDisplay.getLayout();
+private Set<Group> _getAncestorSiteGroups(long groupId, boolean checkContentSharingWithChildrenEnabled) throws PortalException, SystemException {
+	Set<Group> groups = new LinkedHashSet<Group>();
 
-		String assetEntryLayoutUuid = assetEntry.getLayoutUuid();
+	long siteGroupId = PortalUtil.getSiteGroupId(groupId);
 
-		if (!viewInContext || (Validator.isNotNull(assetEntryLayoutUuid) && !assetEntryLayoutUuid.equals(layout.getUuid()))) {
-			viewURL = HttpUtil.setParameter(viewURL, "redirect", currentURL);
+	Group siteGroup = GroupLocalServiceUtil.getGroup(siteGroupId);
+
+	for (Group group : siteGroup.getAncestors()) {
+		if (checkContentSharingWithChildrenEnabled && !SitesUtil.isContentSharingWithChildrenEnabled(group)) {
+			continue;
 		}
+
+		groups.add(group);
 	}
 
-	return viewURL;
+	if (!siteGroup.isCompany()) {
+		groups.add(GroupLocalServiceUtil.getCompanyGroup(siteGroup.getCompanyId()));
+	}
+
+	return groups;
+}
+
+private long[] _getCurrentAndAncestorSiteGroupIds(long[] groupIds, boolean checkContentSharingWithChildrenEnabled) throws PortalException, SystemException {
+	List<Group> groups = _getCurrentAndAncestorSiteGroups(groupIds, checkContentSharingWithChildrenEnabled);
+
+	long[] currentAndAncestorSiteGroupIds = new long[groups.size()];
+
+	for (int i = 0; i < groups.size(); i++) {
+		Group group = groups.get(i);
+
+		currentAndAncestorSiteGroupIds[i] = group.getGroupId();
+	}
+
+	return currentAndAncestorSiteGroupIds;
+}
+
+private List<Group> _getCurrentAndAncestorSiteGroups(long groupId, boolean checkContentSharingWithChildrenEnabled) throws PortalException, SystemException {
+	Set<Group> groups = new LinkedHashSet<Group>();
+
+	Group siteGroup = _getCurrentSiteGroup(groupId);
+
+	if (siteGroup != null) {
+		groups.add(siteGroup);
+	}
+
+	groups.addAll(_getAncestorSiteGroups(groupId, checkContentSharingWithChildrenEnabled));
+
+	return new ArrayList<Group>(groups);
+}
+
+private List<Group> _getCurrentAndAncestorSiteGroups(long[] groupIds, boolean checkContentSharingWithChildrenEnabled) throws PortalException, SystemException {
+	Set<Group> groups = new LinkedHashSet<Group>();
+
+	for (int i = 0; i < groupIds.length; i++) {
+		groups.addAll(_getCurrentAndAncestorSiteGroups(groupIds[i], checkContentSharingWithChildrenEnabled));
+	}
+
+	return new ArrayList<Group>(groups);
+}
+
+private Group _getCurrentSiteGroup(long groupId) throws PortalException, SystemException {
+	long siteGroupId = PortalUtil.getSiteGroupId(groupId);
+
+	Group siteGroup = GroupLocalServiceUtil.getGroup(siteGroupId);
+
+	if (!siteGroup.isLayoutPrototype()) {
+		return siteGroup;
+	}
+
+	return null;
+}
+
+private long[] _getSiteGroupIds(long[] groupIds) throws PortalException, SystemException {
+	Set<Long> siteGroupIds = new HashSet<Long>();
+
+	for (long groupId : groupIds) {
+		siteGroupIds.add(PortalUtil.getSiteGroupId(groupId));
+	}
+
+	return ArrayUtil.toLongArray(siteGroupIds);
+}
+
+private boolean _isEnablePermissions(String portletName, PortletPreferences portletPreferences) {
+	if (!portletName.equals(PortletKeys.HIGHEST_RATED_ASSETS) &&
+		!portletName.equals(PortletKeys.MOST_VIEWED_ASSETS) &&
+		PropsValues.ASSET_PUBLISHER_SEARCH_WITH_INDEX) {
+
+		return true;
+	}
+
+	if (!PropsValues.ASSET_PUBLISHER_PERMISSION_CHECKING_CONFIGURABLE) {
+		return true;
+	}
+
+	return GetterUtil.getBoolean(portletPreferences.getValue("enablePermissions", null));
 }
 %>

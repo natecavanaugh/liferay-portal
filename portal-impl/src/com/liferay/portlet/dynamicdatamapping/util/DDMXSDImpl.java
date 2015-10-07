@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -66,6 +67,7 @@ import java.io.Writer;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -115,48 +117,66 @@ public class DDMXSDImpl implements DDMXSD {
 		Map<String, Object> freeMarkerContext = getFreeMarkerContext(
 			pageContext, portletNamespace, namespace, element, locale);
 
+		if (fields != null) {
+			freeMarkerContext.put("fields", fields);
+		}
+
 		Map<String, Object> fieldStructure =
 			(Map<String, Object>)freeMarkerContext.get("fieldStructure");
 
 		int fieldRepetition = 1;
+		int offset = 0;
 
 		DDMFieldsCounter ddmFieldsCounter = getFieldsCounter(
 			pageContext, fields, portletNamespace, namespace);
 
 		String name = element.attributeValue("name");
 
-		if (fields != null) {
-			freeMarkerContext.put("fields", fields);
+		String fieldDisplayValue = getFieldsDisplayValue(pageContext, fields);
 
-			Field fieldsDisplayField = fields.get(DDMImpl.FIELDS_DISPLAY_NAME);
+		String[] fieldsDisplayValues = getFieldsDisplayValues(
+			fieldDisplayValue);
 
-			if ((fieldsDisplayField != null) && fields.contains(name)) {
-				String[] fieldsDisplayValues = DDMUtil.getFieldsDisplayValues(
-					fieldsDisplayField);
+		boolean fieldDisplayable = ArrayUtil.contains(
+			fieldsDisplayValues, name);
 
-				Map<String, Object> parentFieldStructure =
-					(Map<String, Object>)freeMarkerContext.get(
-						"parentFieldStructure");
+		if (fieldDisplayable) {
+			Map<String, Object> parentFieldStructure =
+				(Map<String, Object>)freeMarkerContext.get(
+					"parentFieldStructure");
 
-				String parentFieldName = (String)parentFieldStructure.get(
-					"name");
+			String parentFieldName = (String)parentFieldStructure.get("name");
 
-				int offset = ddmFieldsCounter.get(DDMImpl.FIELDS_DISPLAY_NAME);
+			offset = getFieldOffset(
+				fieldsDisplayValues, name, ddmFieldsCounter.get(name));
 
-				fieldRepetition = countFieldRepetition(
-					fieldsDisplayValues, parentFieldName, offset);
+			if (offset == fieldsDisplayValues.length) {
+				return StringPool.BLANK;
 			}
+
+			fieldRepetition = countFieldRepetition(
+				fieldsDisplayValues, parentFieldName, offset);
 		}
 
 		StringBundler sb = new StringBundler(fieldRepetition);
 
 		while (fieldRepetition > 0) {
-			fieldStructure.put("fieldNamespace", StringUtil.randomId());
+			offset = getFieldOffset(
+				fieldsDisplayValues, name, ddmFieldsCounter.get(name));
+
+			String fieldNamespace = StringUtil.randomId();
+
+			if (fieldDisplayable) {
+				fieldNamespace = getFieldNamespace(
+					fieldDisplayValue, ddmFieldsCounter, offset);
+			}
+
+			fieldStructure.put("fieldNamespace", fieldNamespace);
+
 			fieldStructure.put("valueIndex", ddmFieldsCounter.get(name));
 
-			if ((fields != null) && fields.contains(name)) {
+			if (fieldDisplayable) {
 				ddmFieldsCounter.incrementKey(name);
-				ddmFieldsCounter.incrementKey(DDMImpl.FIELDS_DISPLAY_NAME);
 			}
 
 			String childrenHTML = getHTML(
@@ -164,6 +184,13 @@ public class DDMXSDImpl implements DDMXSD {
 				readOnly, locale);
 
 			fieldStructure.put("children", childrenHTML);
+
+			boolean disabled = GetterUtil.getBoolean(
+				fieldStructure.get("disabled"), false);
+
+			if (disabled) {
+				readOnly = true;
+			}
 
 			sb.append(
 				processFTL(
@@ -615,15 +642,17 @@ public class DDMXSDImpl implements DDMXSD {
 		String defaultLanguageId = LocalizationUtil.getDefaultLanguageId(
 			document);
 
-		String languageId = LocaleUtil.toLanguageId(locale);
+		String editingLanguageId = LocaleUtil.toLanguageId(locale);
 
-		if (!ArrayUtil.contains(availableLanguageIds, languageId)) {
-			languageId = defaultLanguageId;
+		String structureLanguageId = editingLanguageId;
+
+		if (!ArrayUtil.contains(availableLanguageIds, editingLanguageId)) {
+			structureLanguageId = defaultLanguageId;
 		}
 
 		Element metadataElement =
 			(Element)dynamicElementElement.selectSingleNode(
-				"meta-data[@locale='" + languageId + "']");
+				"meta-data[@locale='" + structureLanguageId + "']");
 
 		fieldContext = new HashMap<String, Object>();
 
@@ -639,11 +668,55 @@ public class DDMXSDImpl implements DDMXSD {
 			fieldContext.put(attribute.getName(), attribute.getValue());
 		}
 
+		boolean localizable = GetterUtil.getBoolean(
+			dynamicElementElement.attributeValue("localizable"), true);
+
+		if (!localizable && !editingLanguageId.equals(defaultLanguageId)) {
+			fieldContext.put("disabled", Boolean.TRUE.toString());
+		}
+
 		fieldContext.put("fieldNamespace", StringUtil.randomId());
+
+		boolean checkRequired = GetterUtil.getBoolean(
+			pageContext.getAttribute("checkRequired"), true);
+
+		if (!checkRequired) {
+			fieldContext.put("required", Boolean.FALSE.toString());
+		}
 
 		fieldsContext.put(name, fieldContext);
 
 		return fieldContext;
+	}
+
+	protected int getFieldOffset(
+		String[] fieldsDisplayValues, String name, int index) {
+
+		int offset = 0;
+
+		for (; offset < fieldsDisplayValues.length; offset++) {
+			if (name.equals(fieldsDisplayValues[offset])) {
+				index--;
+
+				if (index < 0) {
+					break;
+				}
+			}
+		}
+
+		return offset;
+	}
+
+	protected String getFieldNamespace(
+		String fieldDisplayValue, DDMFieldsCounter ddmFieldsCounter,
+		int offset) {
+
+		String[] fieldsDisplayValues = StringUtil.split(fieldDisplayValue);
+
+		String fieldsDisplayValue = fieldsDisplayValues[offset];
+
+		return StringUtil.extractLast(
+			fieldsDisplayValue, DDMImpl.INSTANCE_SEPARATOR);
 	}
 
 	protected Map<String, Map<String, Object>> getFieldsContext(
@@ -681,6 +754,39 @@ public class DDMXSDImpl implements DDMXSD {
 		}
 
 		return ddmFieldsCounter;
+	}
+
+	protected String getFieldsDisplayValue(
+		PageContext pageContext, Fields fields) {
+
+		String defaultFieldsDisplayValue = null;
+
+		if (fields != null) {
+			Field fieldsDisplayField = fields.get(DDMImpl.FIELDS_DISPLAY_NAME);
+
+			if (fieldsDisplayField != null) {
+				defaultFieldsDisplayValue =
+					(String)fieldsDisplayField.getValue();
+			}
+		}
+
+		return ParamUtil.getString(
+			(HttpServletRequest)pageContext.getRequest(),
+			DDMImpl.FIELDS_DISPLAY_NAME, defaultFieldsDisplayValue);
+	}
+
+	protected String[] getFieldsDisplayValues(String fieldDisplayValue) {
+		List<String> fieldsDisplayValues = new ArrayList<String>();
+
+		for (String value : StringUtil.split(fieldDisplayValue)) {
+			String fieldName = StringUtil.extractFirst(
+				value, DDMImpl.INSTANCE_SEPARATOR);
+
+			fieldsDisplayValues.add(fieldName);
+		}
+
+		return fieldsDisplayValues.toArray(
+			new String[fieldsDisplayValues.size()]);
 	}
 
 	protected Map<String, Object> getFreeMarkerContext(

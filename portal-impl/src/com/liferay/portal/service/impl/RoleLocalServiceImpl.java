@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.spring.aop.Skip;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -422,6 +423,23 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 
 			checkSystemRole(companyId, name, descriptionMap, type);
 		}
+
+		// All users should be able to view all system roles
+
+		Role userRole = getRole(companyId, RoleConstants.USER);
+
+		String[] userViewableRoles = ArrayUtil.append(
+			systemRoles, systemOrganizationRoles, systemSiteRoles);
+
+		for (String roleName : userViewableRoles) {
+			Role role = getRole(companyId, roleName);
+
+			resourcePermissionLocalService.setResourcePermissions(
+				companyId, Role.class.getName(),
+				ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(role.getRoleId()), userRole.getRoleId(),
+				new String[] {ActionKeys.VIEW});
+		}
 	}
 
 	/**
@@ -622,6 +640,10 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 		List<Role> roles = new ArrayList<Role>();
 
 		Group group = groupLocalService.getGroup(groupId);
+
+		if (group.isStagingGroup()) {
+			group = group.getLiveGroup();
+		}
 
 		int[] types = RoleConstants.TYPES_REGULAR;
 
@@ -1644,7 +1666,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 			Role role = roleFinder.findByC_N(companyId, name);
 
 			if (role.getRoleId() != roleId) {
-				throw new DuplicateRoleException();
+				throw new DuplicateRoleException("{roleId=" + roleId + "}");
 			}
 		}
 		catch (NoSuchRoleException nsre) {

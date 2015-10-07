@@ -23,7 +23,9 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 JournalArticle article = null;
 
-String type = ParamUtil.getString(request, "type");
+String defaultType = "-1";
+
+String type = ParamUtil.getString(request, "type", defaultType);
 
 try {
 	if (Validator.isNotNull(articleId)) {
@@ -32,10 +34,17 @@ try {
 		article = article.toEscapedModel();
 
 		articleGroupId = article.getGroupId();
-		type = article.getType();
+
+		if (type.equals(defaultType)) {
+			type = article.getType();
+		}
+	}
+	else if (type.equals(defaultType)) {
+		type = StringPool.BLANK;
 	}
 }
 catch (NoSuchArticleException nsae) {
+	type = StringPool.BLANK;
 }
 %>
 
@@ -111,7 +120,7 @@ catch (NoSuchArticleException nsae) {
 						</liferay-portlet:renderURL>
 
 						<liferay-util:buffer var="linkContent">
-							<aui:a href="<%= editTemplateURL %>" id="tableIteratorObjName"><%= tableIteratorObj.getName() %></aui:a>
+							<aui:a href="<%= editTemplateURL %>" id="tableIteratorObjName"><%= HtmlUtil.escape(tableIteratorObj.getName(locale)) %></aui:a>
 						</liferay-util:buffer>
 
 						<aui:input checked="<%= templateChecked %>" label="<%= linkContent %>" name="overideTemplateId" onChange='<%= "if (this.checked) {document." + renderResponse.getNamespace() + "fm." + renderResponse.getNamespace() + "ddmTemplateKey.value = this.value;}" %>' type="radio" value="<%= tableIteratorObj.getTemplateKey() %>" />
@@ -119,7 +128,7 @@ catch (NoSuchArticleException nsae) {
 						<c:if test="<%= tableIteratorObj.isSmallImage() %>">
 							<br />
 
-							<img border="0" hspace="0" src="<%= Validator.isNotNull(tableIteratorObj.getSmallImageURL()) ? tableIteratorObj.getSmallImageURL() : themeDisplay.getPathImage() + "/journal/template?img_id=" + tableIteratorObj.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(tableIteratorObj.getSmallImageId()) %>" vspace="0" />
+							<img alt="" border="0" hspace="0" src="<%= Validator.isNotNull(tableIteratorObj.getSmallImageURL()) ? HtmlUtil.escapeHREF(tableIteratorObj.getSmallImageURL()) : themeDisplay.getPathImage() + "/journal/template?img_id=" + tableIteratorObj.getSmallImageId() + "&t=" + WebServerServletTokenUtil.getToken(tableIteratorObj.getSmallImageId()) %>" vspace="0" />
 						</c:if>
 					</liferay-ui:table-iterator>
 
@@ -143,12 +152,15 @@ catch (NoSuchArticleException nsae) {
 
 	ArticleSearch searchContainer = new ArticleSearch(dynamicRenderRequest, configurationRenderURL);
 
+	searchContainer.setEmptyResultsMessage("no-web-content-was-found-that-matched-the-specified-filters");
+
 	List<String> headerNames = searchContainer.getHeaderNames();
 
 	headerNames.clear();
 
 	headerNames.add("id");
 	headerNames.add("title");
+	headerNames.add("status");
 	headerNames.add("modified-date");
 	headerNames.add("display-date");
 	headerNames.add("author");
@@ -170,6 +182,8 @@ catch (NoSuchArticleException nsae) {
 	searchTerms.setFolderIds(new ArrayList<Long>());
 	searchTerms.setVersion(-1);
 
+	boolean includeScheduledArticles = true;
+
 	List<JournalArticle> results = null;
 	int total = 0;
 	%>
@@ -189,7 +203,7 @@ catch (NoSuchArticleException nsae) {
 		sb.append("javascript:");
 		sb.append(renderResponse.getNamespace());
 		sb.append("selectArticle('");
-		sb.append(HtmlUtil.escapeJS(String.valueOf(curArticle.getGroupId())));
+		sb.append(String.valueOf(curArticle.getGroupId()));
 		sb.append("','");
 		sb.append(HtmlUtil.escapeJS(curArticle.getArticleId()));
 		sb.append("','");
@@ -205,6 +219,10 @@ catch (NoSuchArticleException nsae) {
 		// Title
 
 		row.addText(HtmlUtil.escape(curArticle.getTitle(locale)), rowHREF);
+
+		// Status
+
+		row.addStatus(curArticle.getStatus(), curArticle.getStatusByUserId(), curArticle.getStatusDate());
 
 		// Modified date
 
@@ -301,7 +319,7 @@ catch (NoSuchArticleException nsae) {
 
 			var displayArticleId = A.one('.displaying-article-id');
 
-			displayArticleId.set('innerHTML', articleTitle + ' (<%= UnicodeLanguageUtil.get(pageContext, "modified") %>)');
+			displayArticleId.set('innerHTML', Liferay.Util.escapeHTML(articleTitle) + ' (<%= UnicodeLanguageUtil.get(pageContext, "modified") %>)');
 			displayArticleId.addClass('modified');
 		},
 		['aui-base']

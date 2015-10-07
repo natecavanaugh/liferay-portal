@@ -1,15 +1,13 @@
 <#include "../init.ftl">
 
-<@aui["field-wrapper"] data=data helpMessage=escape(fieldStructure.tip)>
-	<@aui.input cssClass=cssClass helpMessage=escape(fieldStructure.tip) label=escape(label) name=namespacedFieldName type="file">
+<@aui["field-wrapper"] data=data>
+	<@aui.input cssClass=cssClass helpMessage=escape(fieldStructure.tip) label=escape(label) name="${namespacedFieldName}" type="file">
 		<@aui.validator name="acceptFiles">'.gif,.jpeg,.jpg,.png'</@aui.validator>
 
 		<#if required && !(fields??)>
 			<@aui.validator name="required" />
 		</#if>
 	</@aui.input>
-
-	<@aui.input name="${namespacedFieldName}Delete" type="hidden" value="delete" />
 
 	<#if (fields??) && (fieldValue != "")>
 		[ <a href="javascript:;" id="${portletNamespace}${namespacedFieldName}ToggleImage" onClick="${portletNamespace}${namespacedFieldName}ToggleImage();">${languageUtil.get(locale, "show")}</a> ]
@@ -19,8 +17,10 @@
 				<a href="javascript:;" id="${portletNamespace}${namespacedFieldName}DeleteImage" onClick="${portletNamespace}${namespacedFieldName}ToggleDeleteImage();">${languageUtil.get(locale, "delete")}</a>
 			</#if>
 
-			<img id="${portletNamespace}${namespacedFieldName}Image" src="${fieldValue}" />
+			<img id="${portletNamespace}${namespacedFieldName}Image" src="${themeDisplay.getPathContext()}${fieldValue}" />
 		</div>
+
+		<@aui.input name="${namespacedFieldName}URL" type="hidden" value="${fieldValue}" />
 	</#if>
 
 	${fieldStructure.children}
@@ -55,23 +55,22 @@
 			var A = AUI();
 
 			var buttonText = '${languageUtil.get(locale, "cancel")}';
-			var name = '${portletNamespace}${namespacedFieldName}';
 
 			var disabled = true;
 
-			var imageInputNode = A.one('#${portletNamespace}${namespacedFieldName}');
+			var imageFileInputNode = A.one('#${portletNamespace}${namespacedFieldName}');
+			var imageURLInputNode = A.one('#${portletNamespace}${namespacedFieldName}URL');
 
-			if (imageInputNode.get('disabled')) {
+			if (imageFileInputNode.get('disabled')) {
 				buttonText = '${languageUtil.get(locale, "delete")}';
-				name = '${portletNamespace}${namespacedFieldName}Delete';
 
 				disabled = false;
 			}
 
 			A.one('#${portletNamespace}${namespacedFieldName}DeleteImage').setContent(buttonText);
-			A.one('#${portletNamespace}${namespacedFieldName}Delete').attr('name', name);
 
-			imageInputNode.attr('disabled', disabled);
+			imageFileInputNode.attr('disabled', disabled);
+			imageURLInputNode.attr('disabled', disabled);
 
 			A.one('#${portletNamespace}${namespacedFieldName}Image').toggle();
 		},

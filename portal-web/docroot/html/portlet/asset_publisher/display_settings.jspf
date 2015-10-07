@@ -55,9 +55,7 @@
 	<aui:select helpMessage="number-of-items-to-display-help" label="number-of-items-to-display" name="preferences--delta--">
 
 		<%
-		int[] deltas = {1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100};
-
-		for (int currentDelta: deltas) {
+		for (int currentDelta : PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) {
 		%>
 
 			<aui:option label="<%= currentDelta %>" selected="<%= (delta == currentDelta) %>" />
@@ -113,9 +111,14 @@
 
 	<aui:input name="preferences--enableFlags--" type="checkbox" value="<%= enableFlags %>" />
 
-	<c:if test="<%= rootPortletId.equals(PortletKeys.HIGHEST_RATED_ASSETS) || rootPortletId.equals(PortletKeys.MOST_VIEWED_ASSETS) || !PropsValues.ASSET_PUBLISHER_SEARCH_WITH_INDEX %>">
-		<aui:input name="preferences--enablePermissions--" type="checkbox" value="<%= enablePermissions %>" />
-	</c:if>
+	<c:choose>
+		<c:when test="<%= !(PropsValues.ASSET_PUBLISHER_PERMISSION_CHECKING_CONFIGURABLE && !PropsValues.ASSET_PUBLISHER_SEARCH_WITH_INDEX) %>">
+			<aui:input name="preferences--enablePermissions--" type="hidden" value="<%= enablePermissions %>" />
+		</c:when>
+		<c:otherwise>
+			<aui:input name="preferences--enablePermissions--" type="checkbox" value="<%= enablePermissions %>" />
+		</c:otherwise>
+	</c:choose>
 
 	<c:choose>
 		<c:when test="<%= rootPortletId.equals(PortletKeys.RELATED_ASSETS) %>">

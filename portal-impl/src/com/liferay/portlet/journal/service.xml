@@ -89,7 +89,7 @@
 		</finder>
 		<finder name="R_ST" return-type="Collection">
 			<finder-column name="resourcePrimKey" />
-			<finder-column name="status" />
+			<finder-column name="status" arrayable-operator="OR" />
 		</finder>
 		<finder name="G_U" return-type="Collection">
 			<finder-column name="groupId" />
@@ -134,6 +134,10 @@
 		<finder name="C_NotST" return-type="Collection">
 			<finder-column name="companyId" />
 			<finder-column name="status" comparator="!=" />
+		</finder>
+		<finder name="C_T" return-type="Collection">
+			<finder-column name="classNameId" />
+			<finder-column name="templateId" />
 		</finder>
 		<finder name="LtD_S" return-type="Collection">
 			<finder-column name="displayDate" comparator="&lt;" />

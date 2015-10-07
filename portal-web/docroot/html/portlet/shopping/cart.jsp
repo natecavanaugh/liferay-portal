@@ -32,22 +32,17 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 	var itemsInStock = true;
 
 	function <portlet:namespace />checkout() {
-		if (<%= ShoppingUtil.meetsMinOrder(shoppingPrefs, items) ? "true" : "false" %>) {
-			if (!itemsInStock) {
-				if (confirm("<%= UnicodeLanguageUtil.get(pageContext, "your-cart-has-items-that-are-out-of-stock") %>")) {
-					document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.CHECKOUT %>";
-					document.<portlet:namespace />fm.<portlet:namespace />redirect.value = "<portlet:actionURL><portlet:param name="struts_action" value="/shopping/checkout" /></portlet:actionURL>";
-					<portlet:namespace />updateCart();
-				}
-			}
-			else {
+		if (!itemsInStock) {
+			if (confirm("<%= UnicodeLanguageUtil.get(pageContext, "your-cart-has-items-that-are-out-of-stock") %>")) {
 				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.CHECKOUT %>";
 				document.<portlet:namespace />fm.<portlet:namespace />redirect.value = "<portlet:actionURL><portlet:param name="struts_action" value="/shopping/checkout" /></portlet:actionURL>";
 				<portlet:namespace />updateCart();
 			}
 		}
 		else {
-			alert("<%= UnicodeLanguageUtil.format(pageContext, "your-order-cannot-be-processed-because-it-falls-below-the-minimum-required-amount-of-x", currencyFormat.format(shoppingPrefs.getMinOrder()), false) %>");
+			document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.CHECKOUT %>";
+			document.<portlet:namespace />fm.<portlet:namespace />redirect.value = "<portlet:actionURL><portlet:param name="struts_action" value="/shopping/checkout" /></portlet:actionURL>";
+			<portlet:namespace />updateCart();
 		}
 	}
 
@@ -59,9 +54,10 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 	}
 
 	function <portlet:namespace />updateCart() {
-		var itemIds = "";
 		var count = 0;
 		var invalidSKUs = "";
+		var itemIds = "";
+		var subtotal = 0;
 
 		<%
 		int itemsCount= 0;
@@ -76,16 +72,18 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 
 			count = document.<portlet:namespace />fm.<portlet:namespace />item_<%= item.getItemId() %>_<%= itemsCount %>_count.value;
 
+			subtotal += <%= ShoppingUtil.calculateActualPrice(item, 1) %> * count;
+
 			if ((count == "") || isNaN(count) || (count < 0) || ((count > <%= maxQuantity %>) && (<%= maxQuantity %> > 0))) {
 				if (invalidSKUs != "") {
 					invalidSKUs += ", ";
 				}
 
-				invalidSKUs += "<%= item.getSku() %>";
+				invalidSKUs += "<%= HtmlUtil.escapeJS(item.getSku()) %>";
 			}
 
 			for (var i = 0; i < count; i++) {
-				itemIds += "<%= cartItem.getCartItemId() %>,";
+				itemIds += "<%= HtmlUtil.escapeJS(cartItem.getCartItemId()) %>,";
 			}
 
 			count = 0;
@@ -94,6 +92,17 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 			itemsCount++;
 		}
 		%>
+
+		if (document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value == '<%= Constants.CHECKOUT %>') {
+			if (subtotal < <%= shoppingPrefs.getMinOrder() %>) {
+				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.UPDATE %>'
+				document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= currentURL %>';
+
+				alert('<%= UnicodeLanguageUtil.format(pageContext, "your-order-cannot-be-processed-because-it-falls-below-the-minimum-required-amount-of-x", currencyFormat.format(shoppingPrefs.getMinOrder()), false) %>');
+
+				return;
+			}
+		}
 
 		document.<portlet:namespace />fm.<portlet:namespace />itemIds.value = itemIds;
 
@@ -145,7 +154,7 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 			ShoppingItem item = ShoppingItemServiceUtil.getItem(badItemIds[i]);
 		%>
 
-			<strong><%= item.getSku() %></strong><c:if test="<%= i + 1 < badItemIds.length %>">,</c:if>
+			<strong><%= HtmlUtil.escape(item.getSku()) %></strong><c:if test="<%= i + 1 < badItemIds.length %>">,</c:if>
 
 		<%
 		}
@@ -294,9 +303,9 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 			String fieldValue = fieldsArray[j].substring(pos + 1);
 
 			sb.append("<br />");
-			sb.append(fieldName);
+			sb.append(HtmlUtil.escape(fieldName));
 			sb.append(": ");
-			sb.append(fieldValue);
+			sb.append(HtmlUtil.escape(fieldValue));
 		}
 
 		if (itemPrices.length > 0) {
@@ -508,7 +517,7 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 	if (shoppingPrefs.usePayPal()) {
 	%>
 
-		<img alt="paypal" src="<%= themeDisplay.getPathThemeImages() %>/shopping/cc_paypal.png" />
+		<img alt="<liferay-ui:message key="paypal" />" src="<%= themeDisplay.getPathThemeImages() %>/shopping/cc_paypal.png" />
 
 		<br /><br />
 
@@ -518,7 +527,7 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 		for (int i = 0; i < ccTypes.length; i++) {
 	%>
 
-			<img alt="<%= ccTypes[i] %>" src="<%= themeDisplay.getPathThemeImages() %>/shopping/cc_<%= ccTypes[i] %>.png" />
+			<img alt="<%= HtmlUtil.escapeAttribute(ccTypes[i]) %>" src="<%= themeDisplay.getPathThemeImages() %>/shopping/cc_<%= HtmlUtil.escapeAttribute(ccTypes[i]) %>.png" />
 
 	<%
 		}

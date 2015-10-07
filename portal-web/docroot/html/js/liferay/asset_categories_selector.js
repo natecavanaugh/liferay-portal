@@ -3,6 +3,8 @@ AUI.add(
 	function(A) {
 		var Lang = A.Lang;
 
+		var LString = Lang.String;
+
 		var AObject = A.Object;
 
 		var BOUNDING_BOX = 'boundingBox';
@@ -28,10 +30,10 @@ AUI.add(
 		var TPL_CHECKED = ' checked="checked" ';
 
 		var TPL_INPUT =
-			'<label title="{name}">' +
-				'<span class="lfr-categories-selector-category-name" title="{name}">' +
-					'<input data-categoryId="{categoryId}" data-vocabularyid="{vocabularyId}" name="{inputName}" type="{type}" value="{name}" {checked} />' +
-					'{name}' +
+			'<label title="{titleCurrentValue}">' +
+				'<span class="lfr-categories-selector-category-name" title="{titleCurrentValue}">' +
+					'<input data-categoryId="{categoryId}" data-vocabularyid="{vocabularyId}" name="{inputName}" type="{type}" value="{titleCurrentValue}" {checked} />' +
+					'{titleCurrentValue}' +
 				'</span>' +
 				'<span class="lfr-categories-selector-search-results-path" title="{path}">{path}</span>' +
 			'</label>';
@@ -191,6 +193,8 @@ AUI.add(
 								};
 
 								entry[matchKey] = curEntries[index];
+
+								entry.value = LString.unescapeHTML(entry.value);
 
 								instance.entries.add(entry);
 							}
@@ -450,7 +454,7 @@ AUI.add(
 
 						entry[matchKey] = entryMatchKey;
 
-						entry.value = A.Lang.String.unescapeHTML(entry.value);
+						entry.value = LString.unescapeHTML(entry.value);
 
 						instance.entries.add(entry);
 					},
@@ -585,7 +589,7 @@ AUI.add(
 								'/assetcategory/search',
 								{
 									groupIds: vocabularyGroupIds,
-									name: Lang.sub(TPL_SEARCH_QUERY, [searchValue]),
+									title: Lang.sub(TPL_SEARCH_QUERY, [searchValue]),
 									vocabularyIds: vocabularyIds,
 									start: -1,
 									end: -1

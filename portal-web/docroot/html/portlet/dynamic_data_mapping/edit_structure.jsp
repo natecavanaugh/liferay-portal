@@ -66,6 +66,14 @@ if (Validator.isNotNull(script)) {
 	<portlet:param name="struts_action" value="/dynamic_data_mapping/edit_structure" />
 </portlet:actionURL>
 
+<%
+String requestEditStructureURL = ParamUtil.getString(request, "editStructureURL");
+
+if (Validator.isNotNull(requestEditStructureURL)) {
+	editStructureURL = requestEditStructureURL;
+}
+%>
+
 <aui:form action="<%= editStructureURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveStructure();" %>'>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (structure != null) ? Constants.UPDATE : Constants.ADD %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
@@ -115,7 +123,7 @@ if (Validator.isNotNull(script)) {
 
 	<aui:fieldset>
 		<aui:field-wrapper>
-			<c:if test="<%= (DDMStorageLinkLocalServiceUtil.getStructureStorageLinksCount(classPK) > 0) || (JournalArticleLocalServiceUtil.getStructureArticlesCount(groupId, structureKey) > 0) %>">
+			<c:if test="<%= (structure != null) && ((DDMStorageLinkLocalServiceUtil.getStructureStorageLinksCount(classPK) > 0) || (JournalArticleLocalServiceUtil.getStructureArticlesCount(groupId, structureKey) > 0)) %>">
 				<div class="alert alert-warning">
 					<liferay-ui:message key="there-are-content-references-to-this-structure.-you-may-lose-data-if-a-field-name-is-renamed-or-removed" />
 				</div>
@@ -173,6 +181,10 @@ if (Validator.isNotNull(script)) {
 						</c:otherwise>
 					</c:choose>
 				</aui:row>
+
+				<c:if test="<%= !PropsValues.DYNAMIC_DATA_MAPPING_STRUCTURE_FORCE_AUTOGENERATE_KEY %>">
+					<aui:input disabled="<%= (structure != null) ? true : false %>" label='<%= LanguageUtil.format(pageContext, "x-key", ddmDisplay.getStructureName(locale), false) %>' name="structureKey" />
+				</c:if>
 
 				<aui:input name="description" />
 
@@ -243,12 +255,15 @@ if (Validator.isNotNull(script)) {
 				title: '<%= HtmlUtil.escapeJS(scopeTitle) %>'
 			},
 			function(event) {
+				var A = AUI();
+
 				document.<portlet:namespace />fm.<portlet:namespace />parentStructureId.value = event.ddmstructureid;
 
 				var nameEl = document.getElementById('<portlet:namespace />parentStructureName');
 
 				nameEl.href = '<portlet:renderURL><portlet:param name="struts_action" value="/dynamic_data_mapping/edit_structure" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" /><portlet:param name="classNameId" value="<%= String.valueOf(classNameId) %>" /></portlet:renderURL>&<portlet:namespace />classPK=' + event.ddmstructureid;
-				nameEl.value = event.name;
+
+				nameEl.value = A.Lang.String.unescapeEntities(event.name);
 
 				document.getElementById('<portlet:namespace />removeParentStructureButton').disabled = false;
 			}

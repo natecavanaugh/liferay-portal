@@ -75,6 +75,9 @@ public interface ExportImportHelper {
 	public static final String TEMP_FOLDER_NAME =
 		ExportImportHelper.class.getName();
 
+	public void reindex(PortletDataContext portletDataContext, long userId)
+		throws PortalException, SystemException;
+
 	public Calendar getCalendar(
 		PortletRequest portletRequest, String paramPrefix,
 		boolean timeZoneSensitive);
@@ -109,6 +112,10 @@ public interface ExportImportHelper {
 			final PortletDataContext portletDataContext,
 			final StagedModelType stagedModelType)
 		throws PortalException, SystemException;
+
+	public String getSelectedLayoutsJSON(
+			long groupId, boolean privateLayout, String selectedNodes)
+		throws SystemException;
 
 	public FileEntry getTempFileEntry(
 			long groupId, long userId, String folderName)

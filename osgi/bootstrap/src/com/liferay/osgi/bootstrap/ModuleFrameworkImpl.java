@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
+import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.module.framework.ModuleFramework;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -585,26 +586,13 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		Jar jar = null;
 
 		try {
-			URLConnection urlConnection = url.openConnection();
-
-			String fileName = url.getFile();
-
-			if (urlConnection instanceof JarURLConnection) {
-				JarURLConnection jarURLConnection =
-					(JarURLConnection)urlConnection;
-
-				URL jarFileURL = jarURLConnection.getJarFileURL();
-
-				fileName = jarFileURL.getFile();
-			}
-
-			File file = new File(fileName);
+			File file = _getJarFile(url);
 
 			if (!file.exists() || !file.canRead()) {
 				return manifest;
 			}
 
-			fileName = file.getName();
+			String fileName = file.getName();
 
 			analyzer.setJar(new Jar(fileName, file));
 
@@ -662,6 +650,17 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 	}
 
+	/**
+	 * @see com.liferay.portal.kernel.util.HttpUtil#decodePath
+	 */
+	private String _decodePath(String path) {
+		path = StringUtil.replace(path, StringPool.SLASH, _TEMP_SLASH);
+		path = URLCodec.decodeURL(path, StringPool.UTF8, true);
+		path = StringUtil.replace(path, _TEMP_SLASH, StringPool.SLASH);
+
+		return path;
+	}
+
 	private String _getFelixFileInstallDir() {
 		return PropsValues.MODULE_FRAMEWORK_PORTAL_DIR + StringPool.COMMA +
 			StringUtil.merge(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS);
@@ -704,6 +703,56 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 
 		return interfaces;
+	}
+
+	private File _getJarFile(URL url) throws IOException {
+		URLConnection urlConnection = url.openConnection();
+
+		String fileName = url.getFile();
+
+		if (urlConnection instanceof JarURLConnection) {
+			JarURLConnection jarURLConnection = (JarURLConnection)urlConnection;
+
+			URL jarFileURL = jarURLConnection.getJarFileURL();
+
+			fileName = jarFileURL.getFile();
+		}
+		else if (Validator.equals(url.getProtocol(), "wsjar")) {
+
+			// WebSphere uses a custom wsjar protocol to represent JAR files
+
+			fileName = url.getFile();
+
+			String protocol = "file:/";
+
+			int index = fileName.indexOf(protocol);
+
+			if (index > -1) {
+				fileName = fileName.substring(protocol.length());
+			}
+
+			index = fileName.indexOf('!');
+
+			if (index > -1) {
+				fileName = fileName.substring(0, index);
+			}
+
+			fileName = _decodePath(fileName);
+		}
+		else if (Validator.equals(url.getProtocol(), "zip")) {
+
+			// Weblogic uses a custom zip protocol to represent JAR files
+
+			fileName = url.getFile();
+
+			int index = fileName.indexOf('!');
+
+			if (index > 0) {
+				fileName = fileName.substring(0, index);
+			}
+		}
+
+		return new File(fileName);
 	}
 
 	private String _getSystemPackagesExtra() {
@@ -903,6 +952,16 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 	}
 
+	private String _getLiferayLibPortalDir() {
+		String liferayLibPortalDir = PropsValues.LIFERAY_LIB_PORTAL_DIR;
+
+		if (liferayLibPortalDir.startsWith(StringPool.SLASH)) {
+			liferayLibPortalDir = liferayLibPortalDir.substring(1);
+		}
+
+		return liferayLibPortalDir;
+	}
+
 	private void _processURL(
 		StringBundler sb, URL url, String[] ignoredFragments) {
 
@@ -923,9 +982,9 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			Constants.BUNDLE_SYMBOLICNAME);
 
 		if (Validator.isNull(bundleSymbolicName)) {
-			String urlString = url.toString();
+			String urlString = _decodePath(url.toString());
 
-			if (urlString.contains(PropsValues.LIFERAY_LIB_PORTAL_DIR)) {
+			if (urlString.contains(_getLiferayLibPortalDir())) {
 				manifest = _calculateManifest(url, manifest);
 
 				attributes = manifest.getMainAttributes();
@@ -997,6 +1056,10 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 	private void _registerApplicationContext(
 		ApplicationContext applicationContext) {
 
+		if (_framework == null) {
+			return;
+		}
+
 		BundleContext bundleContext = _framework.getBundleContext();
 
 		for (String beanName : applicationContext.getBeanDefinitionNames()) {
@@ -1054,6 +1117,10 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 	}
 
 	private void _registerServletContext(ServletContext servletContext) {
+		if (_framework == null) {
+			return;
+		}
+
 		BundleContext bundleContext = _framework.getBundleContext();
 
 		Hashtable<String, Object> properties = new Hashtable<String, Object>();
@@ -1069,6 +1136,10 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 	}
 
 	private void _setupInitialBundles() throws Exception {
+		if (_framework == null) {
+			return;
+		}
+
 		FrameworkWiring frameworkWiring = _framework.adapt(
 			FrameworkWiring.class);
 
@@ -1089,6 +1160,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		frameworkWiring.refreshBundles(refreshBundles, frameworkListener);
 	}
+
+	private static final String _TEMP_SLASH = "_LIFERAY_TEMP_SLASH_";
 
 	private static Log _log = LogFactoryUtil.getLog(ModuleFrameworkImpl.class);
 

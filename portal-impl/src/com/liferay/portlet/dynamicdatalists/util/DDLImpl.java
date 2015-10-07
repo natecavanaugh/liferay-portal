@@ -28,19 +28,16 @@ import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.PortletConstants;
-import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
+import com.liferay.portal.service.LayoutServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.templateparser.Transformer;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.dynamicdatalists.NoSuchRecordException;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecord;
@@ -64,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.PortletPreferences;
@@ -131,6 +129,27 @@ public class DDLImpl implements DDL {
 
 				fieldValueJSONObject.put(
 					"title", getFileEntryTitle(uuid, groupId));
+
+				jsonObject.put(fieldName, fieldValueJSONObject.toString());
+			}
+			else if (fieldType.equals(DDMImpl.TYPE_DDM_LINK_TO_PAGE) &&
+					 Validator.isNotNull(fieldValue)) {
+
+				JSONObject fieldValueJSONObject =
+					JSONFactoryUtil.createJSONObject(
+						String.valueOf(fieldValue));
+
+				long groupId = fieldValueJSONObject.getLong("groupId");
+				boolean privateLayout = fieldValueJSONObject.getBoolean(
+					"privateLayout");
+				long layoutId = fieldValueJSONObject.getLong("layoutId");
+				Locale locale = LocaleThreadLocal.getThemeDisplayLocale();
+
+				String layoutName = getLayoutName(
+					groupId, privateLayout, layoutId,
+					LanguageUtil.getLanguageId(locale));
+
+				fieldValueJSONObject.put("name", layoutName);
 
 				jsonObject.put(fieldName, fieldValueJSONObject.toString());
 			}
@@ -319,30 +338,36 @@ public class DDLImpl implements DDL {
 		DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(
 			ddmTemplateId);
 
+		contextObjects.put(
+			TemplateConstants.CLASS_NAME_ID, ddmTemplate.getClassNameId());
+
 		return _transformer.transform(
 			themeDisplay, contextObjects, ddmTemplate.getScript(),
 			ddmTemplate.getLanguage());
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public boolean isEditable(
 			HttpServletRequest request, String portletId, long groupId)
 		throws Exception {
 
-		boolean defaultValue = ParamUtil.getBoolean(request, "editable", true);
-
-		return isEditable(portletId, groupId, defaultValue);
+		return true;
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	@Override
 	public boolean isEditable(
 			PortletPreferences preferences, String portletId, long groupId)
 		throws Exception {
 
-		boolean defaultValue = GetterUtil.getBoolean(
-			preferences.getValue("editable", null), true);
-
-		return isEditable(portletId, groupId, defaultValue);
+		return true;
 	}
 
 	@Override
@@ -352,17 +377,6 @@ public class DDLImpl implements DDL {
 		throws Exception {
 
 		DDLRecord record = DDLRecordLocalServiceUtil.fetchRecord(recordId);
-
-		PortletPreferences preferences =
-			PortletPreferencesLocalServiceUtil.getPreferences(
-				serviceContext.getPortletPreferencesIds());
-
-		if (!isEditable(
-				preferences, serviceContext.getPortletId(),
-				serviceContext.getScopeGroupId())) {
-
-			return record;
-		}
 
 		boolean majorVersion = ParamUtil.getBoolean(
 			serviceContext, "majorVersion");
@@ -433,23 +447,18 @@ public class DDLImpl implements DDL {
 		}
 	}
 
-	protected boolean isEditable(
-			String portletId, long groupId, boolean defaultValue)
-		throws Exception {
+	protected String getLayoutName(
+		long groupId, boolean privateLayout, long layoutId, String languageId) {
 
-		String rootPortletId = PortletConstants.getRootPortletId(portletId);
-
-		if (rootPortletId.equals(PortletKeys.DYNAMIC_DATA_LISTS)) {
-			return true;
+		try {
+			return LayoutServiceUtil.getLayoutName(
+				groupId, privateLayout, layoutId, languageId);
 		}
-
-		Group group = GroupLocalServiceUtil.fetchGroup(groupId);
-
-		if ((group == null) || group.isInStagingPortlet(portletId)) {
-			return false;
+		catch (Exception e) {
+			return LanguageUtil.format(
+				LocaleUtil.getSiteDefault(), "is-temporarily-unavailable",
+				"content");
 		}
-
-		return defaultValue;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(DDLImpl.class);

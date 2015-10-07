@@ -121,7 +121,7 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 				if (_log.isDebugEnabled()) {
 					_log.debug(
 						"Skipping LDAP import for company " + companyId +
-							"because another LDAP import is in process");
+							" because another LDAP import is in process");
 				}
 
 				return;
@@ -1249,17 +1249,10 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 			}
 		}
 
-		if (Validator.isNull(ldapUser.getScreenName())) {
-			ldapUser.setAutoScreenName(true);
-		}
+		if (Validator.isNull(ldapUser.getScreenName()) ||
+			ldapUser.isAutoScreenName()) {
 
-		if (ldapUser.isAutoScreenName()) {
-			ScreenNameGenerator screenNameGenerator =
-				ScreenNameGeneratorFactory.getInstance();
-
-			ldapUser.setScreenName(
-				screenNameGenerator.generate(
-					companyId, user.getUserId(), ldapUser.getEmailAddress()));
+			ldapUser.setScreenName(user.getScreenName());
 		}
 
 		Calendar birthdayCal = CalendarFactoryUtil.getCalendar();
@@ -1336,8 +1329,9 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 	private static final String _USER_PASSWORD_SCREEN_NAME = "screenName";
 
 	private static final String[] _USER_PROPERTY_NAMES = {
-		"comments", "firstName", "greeting", "jobTitle", "languageId",
-		"lastName", "middleName", "openId", "timeZoneId"
+		"comments", "emailAddress", "firstName", "greeting", "jobTitle",
+		"languageId", "lastName", "middleName", "openId", "portraitId",
+		"timeZoneId"
 	};
 
 	private static Log _log = LogFactoryUtil.getLog(

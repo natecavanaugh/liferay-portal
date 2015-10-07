@@ -328,6 +328,15 @@ public class ResourcePermissionLocalServiceImpl
 		}
 	}
 
+	@Override
+	public ResourcePermission fetchResourcePermission(
+			long companyId, String name, int scope, String primKey, long roleId)
+		throws SystemException {
+
+		return resourcePermissionPersistence.fetchByC_N_S_P_R(
+			companyId, name, scope, primKey, roleId);
+	}
+
 	/**
 	 * Returns the intersection of action IDs the role has permission at the
 	 * scope to perform on resources of the type.
@@ -621,6 +630,10 @@ public class ResourcePermissionLocalServiceImpl
 			List<Resource> resources, long[] roleIds, String actionId)
 		throws PortalException, SystemException {
 
+		if (roleIds.length == 0) {
+			return false;
+		}
+
 		// Iterate the list of resources in reverse order to test permissions
 		// from company scope to individual scope because it is more likely that
 		// a permission is assigned at a higher scope. Optimizing this method to
@@ -719,6 +732,10 @@ public class ResourcePermissionLocalServiceImpl
 			long[] roleIds, String actionId)
 		throws PortalException, SystemException {
 
+		if (roleIds.length == 0) {
+			return false;
+		}
+
 		ResourceAction resourceAction =
 			resourceActionLocalService.getResourceAction(name, actionId);
 
@@ -766,14 +783,18 @@ public class ResourcePermissionLocalServiceImpl
 			long[] roleIds, String actionId)
 		throws PortalException, SystemException {
 
+		boolean[] hasResourcePermissions = new boolean[roleIds.length];
+
+		if (roleIds.length == 0) {
+			return hasResourcePermissions;
+		}
+
 		ResourceAction resourceAction =
 			resourceActionLocalService.getResourceAction(name, actionId);
 
 		List<ResourcePermission> resourcePermissions =
 			resourcePermissionPersistence.findByC_N_S_P_R(
 				companyId, name, scope, primKey, roleIds);
-
-		boolean[] hasResourcePermissions = new boolean[roleIds.length];
 
 		if (resourcePermissions.isEmpty()) {
 			return hasResourcePermissions;

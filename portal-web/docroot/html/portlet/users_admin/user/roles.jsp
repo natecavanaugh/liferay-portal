@@ -24,12 +24,10 @@ Long[] organizationIds = UsersAdminUtil.getOrganizationIds(organizations);
 List<Role> roles = (List<Role>)request.getAttribute("user.roles");
 List<UserGroupRole> organizationRoles = (List<UserGroupRole>)request.getAttribute("user.organizationRoles");
 List<UserGroupRole> siteRoles = (List<UserGroupRole>)request.getAttribute("user.siteRoles");
-List<Group> allGroups = (List<Group>)request.getAttribute("user.allGroups");
+List<UserGroupGroupRole> inheritedSiteRoles = (List<UserGroupGroupRole>)request.getAttribute("user.inheritedSiteRoles");
+List<Group> roleGroups = (List<Group>)request.getAttribute("user.roleGroups");
 
-List<UserGroupRole> userGroupRoles = new ArrayList<UserGroupRole>();
-
-userGroupRoles.addAll(organizationRoles);
-userGroupRoles.addAll(siteRoles);
+currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "roles");
 %>
 
 <liferay-ui:error-marker key="errorSection" value="roles" />
@@ -44,18 +42,22 @@ userGroupRoles.addAll(siteRoles);
 	/>
 </liferay-util:buffer>
 
-<aui:input name="groupRolesRoleIds" type="hidden" value="<%= ListUtil.toString(userGroupRoles, UserGroupRole.ROLE_ID_ACCESSOR) %>" />
-<aui:input name="groupRolesGroupIds" type="hidden" value="<%= ListUtil.toString(userGroupRoles, UserGroupRole.GROUP_ID_ACCESSOR) %>" />
+<aui:input name="addGroupRolesGroupIds" type="hidden" />
+<aui:input name="addGroupRolesRoleIds" type="hidden" />
+<aui:input name="deleteGroupRolesGroupIds" type="hidden" />
+<aui:input name="deleteGroupRolesRoleIds" type="hidden" />
 
 <h3><liferay-ui:message key="regular-roles" /></h3>
 
 <liferay-ui:search-container
+	curParam="regularRolesCur"
 	headerNames="title,null"
 	id="rolesSearchContainer"
+	iteratorURL="<%= currentURLObj %>"
+	total="<%= roles.size() %>"
 >
 	<liferay-ui:search-container-results
-		results="<%= roles %>"
-		total="<%= roles.size() %>"
+		results="<%= roles.subList(searchContainer.getStart(), searchContainer.getResultEnd()) %>"
 	/>
 
 	<liferay-ui:search-container-row
@@ -78,7 +80,7 @@ userGroupRoles.addAll(siteRoles);
 		</c:if>
 	</liferay-ui:search-container-row>
 
-	<liferay-ui:search-iterator paginate="<%= false %>" />
+	<liferay-ui:search-iterator />
 </liferay-ui:search-container>
 
 <c:if test="<%= !portletName.equals(PortletKeys.MY_ACCOUNT) %>">
@@ -117,26 +119,21 @@ userGroupRoles.addAll(siteRoles);
 	</aui:script>
 </c:if>
 
-<h3><liferay-ui:message key="inherited-roles" /></h3>
+<h3><liferay-ui:message key="inherited-regular-roles" /></h3>
+
+<c:if test="<%= roleGroups.isEmpty() %>">
+	<liferay-ui:message key="this-user-does-not-have-any-inherited-regular-roles" />
+</c:if>
 
 <liferay-ui:search-container
+	curParam="inheritedRegularRolesCur"
 	headerNames="title,group"
 	id="inheritedRolesSearchContainer"
+	iteratorURL="<%= currentURLObj %>"
+	total="<%= roleGroups.size() %>"
 >
-
-	<%
-	List<Group> roleGroups = new ArrayList<Group>();
-
-	for (Group group : allGroups) {
-		if (RoleLocalServiceUtil.hasGroupRoles(group.getGroupId())) {
-			roleGroups.add(group);
-		}
-	}
-	%>
-
 	<liferay-ui:search-container-results
-		results="<%= roleGroups %>"
-		total="<%= roleGroups.size() %>"
+		results="<%= roleGroups.subList(searchContainer.getStart(), searchContainer.getResultEnd()) %>"
 	/>
 
 	<liferay-ui:search-container-row
@@ -164,7 +161,7 @@ userGroupRoles.addAll(siteRoles);
 		/>
 	</liferay-ui:search-container-row>
 
-	<liferay-ui:search-iterator paginate="<%= false %>" />
+	<liferay-ui:search-iterator />
 </liferay-ui:search-container>
 
 <h3><liferay-ui:message key="organization-roles" /></h3>
@@ -175,12 +172,14 @@ userGroupRoles.addAll(siteRoles);
 
 <c:if test="<%= !organizations.isEmpty() %>">
 	<liferay-ui:search-container
+		curParam="organizationRolesCur"
 		headerNames="title,organization,null"
 		id="organizationRolesSearchContainer"
+		iteratorURL="<%= currentURLObj %>"
+		total="<%= organizationRoles.size() %>"
 	>
 		<liferay-ui:search-container-results
-			results="<%= organizationRoles %>"
-			total="<%= organizationRoles.size() %>"
+			results="<%= organizationRoles.subList(searchContainer.getStart(), searchContainer.getResultEnd()) %>"
 		/>
 
 		<liferay-ui:search-container-row
@@ -223,7 +222,7 @@ userGroupRoles.addAll(siteRoles);
 			</c:if>
 		</liferay-ui:search-container-row>
 
-		<liferay-ui:search-iterator paginate="<%= false %>" />
+		<liferay-ui:search-iterator />
 	</liferay-ui:search-container>
 
 	<aui:script use="liferay-search-container">
@@ -235,8 +234,8 @@ userGroupRoles.addAll(siteRoles);
 				var link = event.currentTarget;
 				var tr = link.ancestor('tr');
 
+				var groupId = link.getAttribute('data-groupId');
 				var rowId = link.getAttribute('data-rowId');
-				var groupId =link.getAttribute('data-groupId');
 
 				searchContainer.deleteRow(tr, rowId);
 
@@ -289,12 +288,14 @@ userGroupRoles.addAll(siteRoles);
 	</c:when>
 	<c:otherwise>
 		<liferay-ui:search-container
+			curParam="siteRolesCur"
 			headerNames="title,site,null"
 			id="siteRolesSearchContainer"
+			iteratorURL="<%= currentURLObj %>"
+			total="<%= siteRoles.size() %>"
 		>
 			<liferay-ui:search-container-results
-				results="<%= siteRoles %>"
-				total="<%= siteRoles.size() %>"
+				results="<%= siteRoles.subList(searchContainer.getStart(), searchContainer.getResultEnd()) %>"
 			/>
 
 			<liferay-ui:search-container-row
@@ -337,7 +338,7 @@ userGroupRoles.addAll(siteRoles);
 				</c:if>
 			</liferay-ui:search-container-row>
 
-			<liferay-ui:search-iterator paginate="<%= false %>" />
+			<liferay-ui:search-iterator />
 		</liferay-ui:search-container>
 
 		<c:if test="<%= !portletName.equals(PortletKeys.MY_ACCOUNT) %>">
@@ -361,8 +362,8 @@ userGroupRoles.addAll(siteRoles);
 						var link = event.currentTarget;
 						var tr = link.ancestor('tr');
 
+						var groupId = link.getAttribute('data-groupId');
 						var rowId = link.getAttribute('data-rowId');
-						var groupId =link.getAttribute('data-groupId');
 
 						searchContainer.deleteRow(tr, rowId);
 
@@ -396,22 +397,76 @@ userGroupRoles.addAll(siteRoles);
 	</c:otherwise>
 </c:choose>
 
+<h3><liferay-ui:message key="inherited-site-roles" /></h3>
+
+<c:if test="<%= inheritedSiteRoles.isEmpty() %>">
+	<liferay-ui:message key="this-user-does-not-have-any-inherited-site-roles" />
+</c:if>
+
+<c:if test="<%= !inheritedSiteRoles.isEmpty() %>">
+	<liferay-ui:search-container
+		curParam="inheritedSiteRolesCur"
+		headerNames="title,site,user-group"
+		id="inheritedSiteRolesSearchContainer"
+		iteratorURL="<%= currentURLObj %>"
+		total="<%= inheritedSiteRoles.size() %>"
+	>
+		<liferay-ui:search-container-results
+			results="<%= inheritedSiteRoles.subList(searchContainer.getStart(), searchContainer.getResultEnd()) %>"
+		/>
+
+		<liferay-ui:search-container-row
+			className="com.liferay.portal.model.UserGroupGroupRole"
+			keyProperty="roleId"
+			modelVar="userGroupGroupRole"
+		>
+			<liferay-util:param name="className" value="<%= RolesAdminUtil.getCssClassName(userGroupGroupRole.getRole()) %>" />
+			<liferay-util:param name="classHoverName" value="<%= RolesAdminUtil.getCssClassName(userGroupGroupRole.getRole()) %>" />
+
+			<liferay-ui:search-container-column-text
+				name="title"
+				value="<%= HtmlUtil.escape(userGroupGroupRole.getRole().getTitle(locale)) %>"
+			/>
+
+			<liferay-ui:search-container-column-text
+				name="site"
+				value="<%= HtmlUtil.escape(userGroupGroupRole.getGroup().getDescriptiveName(locale)) %>"
+			/>
+
+			<liferay-ui:search-container-column-text
+				name="user-group"
+				value="<%= HtmlUtil.escape(userGroupGroupRole.getUserGroup().getName()) %>"
+			/>
+
+		</liferay-ui:search-container-row>
+
+		<liferay-ui:search-iterator />
+	</liferay-ui:search-container>
+</c:if>
+
 <aui:script>
-	var <portlet:namespace />groupRolesGroupIds = ['<%= ListUtil.toString(userGroupRoles, UserGroupRole.GROUP_ID_ACCESSOR, "', '") %>'];
-	var <portlet:namespace />groupRolesRoleIds = ['<%= ListUtil.toString(userGroupRoles, UserGroupRole.ROLE_ID_ACCESSOR, "', '") %>'];
+	var <portlet:namespace />addGroupRolesGroupIds = [];
+	var <portlet:namespace />addGroupRolesRoleIds = [];
+	var <portlet:namespace />deleteGroupRolesGroupIds = [];
+	var <portlet:namespace />deleteGroupRolesRoleIds = [];
 
 	function <portlet:namespace />deleteGroupRole(roleId, groupId) {
-		for (var i = 0; i < <portlet:namespace />groupRolesRoleIds.length; i++) {
-			if ((<portlet:namespace />groupRolesRoleIds[i] == roleId) && (<portlet:namespace />groupRolesGroupIds[i] == groupId)) {
-				<portlet:namespace />groupRolesGroupIds.splice(i, 1);
-				<portlet:namespace />groupRolesRoleIds.splice(i, 1);
+		for (var i = 0; i < <portlet:namespace />addGroupRolesRoleIds.length; i++) {
+			if ((<portlet:namespace />addGroupRolesGroupIds[i] == groupId) && (<portlet:namespace />addGroupRolesRoleIds[i] == roleId)) {
+				<portlet:namespace />addGroupRolesGroupIds.splice(i, 1);
+				<portlet:namespace />addGroupRolesRoleIds.splice(i, 1);
 
 				break;
 			}
 		}
 
-		document.<portlet:namespace />fm.<portlet:namespace />groupRolesGroupIds.value = <portlet:namespace />groupRolesGroupIds.join(',');
-		document.<portlet:namespace />fm.<portlet:namespace />groupRolesRoleIds.value = <portlet:namespace />groupRolesRoleIds.join(',');
+		<portlet:namespace />deleteGroupRolesGroupIds.push(groupId);
+		<portlet:namespace />deleteGroupRolesRoleIds.push(roleId);
+
+		document.<portlet:namespace />fm.<portlet:namespace />addGroupRolesGroupIds.value = <portlet:namespace />addGroupRolesGroupIds.join(',');
+		document.<portlet:namespace />fm.<portlet:namespace />addGroupRolesRoleIds.value = <portlet:namespace />addGroupRolesRoleIds.join(',');
+		document.<portlet:namespace />fm.<portlet:namespace />deleteGroupRolesGroupIds.value = <portlet:namespace />deleteGroupRolesGroupIds.join(',');
+		document.<portlet:namespace />fm.<portlet:namespace />deleteGroupRolesRoleIds.value = <portlet:namespace />deleteGroupRolesRoleIds.join(',');
 	}
 
 	Liferay.provide(
@@ -435,11 +490,22 @@ userGroupRoles.addAll(siteRoles);
 			if (groupId) {
 				rowColumns.push('<a class="modify-link" data-groupId="' + groupId + '" data-rowId="' + roleId + '" href="javascript:;"><%= UnicodeFormatter.toString(removeRoleIcon) %></a>');
 
-				<portlet:namespace />groupRolesRoleIds.push(roleId);
-				<portlet:namespace />groupRolesGroupIds.push(groupId);
+				<portlet:namespace />addGroupRolesGroupIds.push(groupId);
+				<portlet:namespace />addGroupRolesRoleIds.push(roleId);
 
-				document.<portlet:namespace />fm.<portlet:namespace />groupRolesRoleIds.value = <portlet:namespace />groupRolesRoleIds.join(',');
-				document.<portlet:namespace />fm.<portlet:namespace />groupRolesGroupIds.value = <portlet:namespace />groupRolesGroupIds.join(',');
+				for (var i = 0; i < <portlet:namespace />deleteGroupRolesRoleIds.length; i++) {
+					if ((<portlet:namespace />deleteGroupRolesGroupIds[i] == groupId) && (<portlet:namespace />deleteGroupRolesRoleIds[i] == roleId)) {
+						<portlet:namespace />deleteGroupRolesGroupIds.splice(i, 1);
+						<portlet:namespace />deleteGroupRolesRoleIds.splice(i, 1);
+
+						break;
+					}
+				}
+
+				document.<portlet:namespace />fm.<portlet:namespace />addGroupRolesGroupIds.value = <portlet:namespace />addGroupRolesGroupIds.join(',');
+				document.<portlet:namespace />fm.<portlet:namespace />addGroupRolesRoleIds.value = <portlet:namespace />addGroupRolesRoleIds.join(',');
+				document.<portlet:namespace />fm.<portlet:namespace />deleteGroupRolesGroupIds.value = <portlet:namespace />deleteGroupRolesGroupIds.join(',');
+				document.<portlet:namespace />fm.<portlet:namespace />deleteGroupRolesRoleIds.value = <portlet:namespace />deleteGroupRolesRoleIds.join(',');
 			}
 			else {
 				rowColumns.push('<a class="modify-link" data-rowId="' + roleId + '" href="javascript:;"><%= UnicodeFormatter.toString(removeRoleIcon) %></a>');

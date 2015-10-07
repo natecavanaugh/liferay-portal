@@ -121,6 +121,10 @@ public interface ChannelHubManager {
 			Collection<NotificationEvent> notificationEvents)
 		throws ChannelException;
 
+	public void storeNotificationEvent(
+			long companyId, long userId, NotificationEvent notificationEvent)
+		throws ChannelException;
+
 	public void unregisterChannelListener(
 			long companyId, long userId, ChannelListener channelListener)
 		throws ChannelException;

@@ -31,12 +31,16 @@ import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
+import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.InetAddressUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WeakValueConcurrentHashMap;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.util.PortalPortEventListener;
+import com.liferay.portal.util.PortalPortProtocolEventListener;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
@@ -66,7 +70,9 @@ import org.jgroups.JChannel;
  */
 @DoPrivileged
 public class ClusterExecutorImpl
-	extends ClusterBase implements ClusterExecutor, PortalPortEventListener {
+	extends ClusterBase
+	implements ClusterExecutor, PortalPortEventListener,
+			   PortalPortProtocolEventListener {
 
 	public static final String CLUSTER_EXECUTOR_CALLBACK_THREAD_POOL =
 		"CLUSTER_EXECUTOR_CALLBACK_THREAD_POOL";
@@ -90,6 +96,16 @@ public class ClusterExecutorImpl
 
 		if (PropsValues.LIVE_USERS_ENABLED) {
 			addClusterEventListener(new LiveUsersClusterEventListenerImpl());
+		}
+
+		_secure = StringUtil.equalsIgnoreCase(
+			Http.HTTPS, PropsValues.WEB_SERVER_PROTOCOL);
+
+		if (Validator.isNotNull(PropsValues.PORTAL_INSTANCE_HTTPS_PORT)) {
+			_port = PropsValues.PORTAL_INSTANCE_HTTPS_PORT;
+		}
+		else {
+			_port = PropsValues.PORTAL_INSTANCE_HTTP_PORT;
 		}
 
 		super.afterPropertiesSet();
@@ -254,7 +270,7 @@ public class ClusterExecutorImpl
 		_executorService = PortalExecutorManagerUtil.getPortalExecutor(
 			CLUSTER_EXECUTOR_CALLBACK_THREAD_POOL);
 
-		PortalUtil.addPortalPortEventListener(this);
+		PortalUtil.addPortalPortProtocolEventListener(this);
 
 		_localAddress = new AddressImpl(_controlJChannel.getAddress());
 
@@ -295,12 +311,39 @@ public class ClusterExecutorImpl
 		return _clusterNodeAddresses.containsKey(clusterNodeId);
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 *             #portalPortProtocolConfigured(int, Boolean)}
+	 */
 	@Override
 	public void portalPortConfigured(int port) {
-		if (!isEnabled() ||
-			(_localClusterNode.getPort() ==
-				PropsValues.PORTAL_INSTANCE_HTTP_PORT)) {
+		portalPortProtocolConfigured(port, null);
+	}
 
+	@Override
+	public void portalPortProtocolConfigured(int port, Boolean secure) {
+		if (!isEnabled()) {
+			return;
+		}
+
+		if (Validator.isNotNull(secure)) {
+			String portalProtocol = _localClusterNode.getPortalProtocol();
+
+			if (((secure && portalProtocol.equals(Http.HTTPS)) ||
+				 (!secure && portalProtocol.equals(Http.HTTP))) &&
+				(_localClusterNode.getPort() == _port)) {
+
+				return;
+			}
+
+			if (secure) {
+				_localClusterNode.setPortalProtocol(Http.HTTPS);
+			}
+			else {
+				_localClusterNode.setPortalProtocol(Http.HTTP);
+			}
+		}
+		else if (_localClusterNode.getPort() == _port) {
 			return;
 		}
 
@@ -416,12 +459,16 @@ public class ClusterExecutorImpl
 		ClusterNode localClusterNode = new ClusterNode(
 			PortalUUIDUtil.generate(), inetAddress);
 
-		if (PropsValues.PORTAL_INSTANCE_HTTP_PORT > 0) {
-			localClusterNode.setPort(PropsValues.PORTAL_INSTANCE_HTTP_PORT);
+		int port = _port;
+
+		if (port <= 0) {
+			port = PortalUtil.getPortalPort(_secure);
 		}
-		else {
-			localClusterNode.setPort(PortalUtil.getPortalPort(false));
-		}
+
+		localClusterNode.setPort(port);
+
+		localClusterNode.setPortalProtocol(
+			PropsValues.PORTAL_INSTANCE_PROTOCOL);
 
 		_localClusterNode = localClusterNode;
 	}
@@ -567,6 +614,8 @@ public class ClusterExecutorImpl
 		new ConcurrentHashMap<Address, ClusterNode>();
 	private Address _localAddress;
 	private ClusterNode _localClusterNode;
+	private int _port;
+	private boolean _secure;
 	private boolean _shortcutLocalMethod;
 
 	private class ClusterResponseCallbackJob implements Runnable {

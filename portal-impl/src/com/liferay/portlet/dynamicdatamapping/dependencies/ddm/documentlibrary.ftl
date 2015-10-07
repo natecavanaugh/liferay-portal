@@ -12,6 +12,8 @@
 	<#assign fieldRawValue = predefinedValue>
 </#if>
 
+<#assign fieldRawValue = paramUtil.getString(request, "${namespacedFieldName}", fieldRawValue)>
+
 <#assign fileEntryTitle = "">
 
 <#if (fieldRawValue != "")>
@@ -25,7 +27,7 @@
 </#if>
 
 <@aui["field-wrapper"] data=data>
-	<@aui.input inlineField=true label=escape(label) name="${namespacedFieldName}Title" readonly="readonly" type="text" value=fileEntryTitle>
+	<@aui.input helpMessage=escape(fieldStructure.tip) inlineField=true label=escape(label) name="${namespacedFieldName}Title" readonly="readonly" type="text" value=fileEntryTitle>
 		<#if required>
 			<@aui.validator name="required" />
 		</#if>
@@ -38,6 +40,8 @@
 	</@>
 
 	<@aui.input name=namespacedFieldName type="hidden" value=fieldRawValue />
+
+	${fieldStructure.children}
 </@>
 
 <@aui.script>
@@ -89,7 +93,6 @@
 			function(event) {
 				var portletURL = Liferay.PortletURL.createURL('${portletURLFactory.create(request, "166", themeDisplay.getPlid(), "RENDER_PHASE")}');
 
-				portletURL.setParameter('groupId', ${scopeGroupId?c});
 				portletURL.setParameter('struts_action', '/dynamic_data_mapping/select_document_library');
 
 				portletURL.setPlid(${controlPanelPlid?c});

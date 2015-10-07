@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.WebKeys;
 
 import java.lang.reflect.InvocationTargetException;
@@ -55,7 +56,7 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 			WebKeys.UPLOAD_EXCEPTION);
 
 		if (uploadException != null) {
-			return JSONFactoryUtil.serializeException(uploadException);
+			return JSONFactoryUtil.serializeThrowable(uploadException);
 		}
 
 		JSONWebServiceAction jsonWebServiceAction = null;
@@ -79,16 +80,24 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 				throw (SecurityException)throwable;
 			}
 
-			_log.error(throwable, throwable);
+			if (_log.isDebugEnabled()) {
+				_log.debug(getThrowableMessage(throwable), throwable);
+			}
+			else {
+				_log.error(getThrowableMessage(throwable));
+			}
 
 			return JSONFactoryUtil.serializeThrowable(throwable);
 		}
 		catch (Exception e) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(e, e);
+			if (_log.isDebugEnabled()) {
+				_log.debug(getThrowableMessage(e), e);
+			}
+			else {
+				_log.error(getThrowableMessage(e));
 			}
 
-			return JSONFactoryUtil.serializeException(e);
+			return JSONFactoryUtil.serializeThrowable(e);
 		}
 	}
 
@@ -152,6 +161,16 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 	@Override
 	protected String getReroutePath() {
 		return _REROUTE_PATH;
+	}
+
+	protected String getThrowableMessage(Throwable throwable) {
+		String message = throwable.getMessage();
+
+		if (Validator.isNotNull(message)) {
+			return message;
+		}
+
+		return throwable.toString();
 	}
 
 	private static final String _REROUTE_PATH = "/jsonws";

@@ -18,7 +18,8 @@
 
 <%@ page import="com.liferay.portlet.journal.NoSuchArticleException" %><%@
 page import="com.liferay.portlet.journal.service.permission.JournalArticlePermission" %><%@
-page import="com.liferay.portlet.journal.service.permission.JournalPermission" %>
+page import="com.liferay.portlet.journal.service.permission.JournalPermission" %><%@
+page import="com.liferay.portlet.journal.util.JournalUtil" %>
 
 <%
 String portletResource = ParamUtil.getString(request, "portletResource");
@@ -29,13 +30,8 @@ if (articleGroupId <= 0) {
 	articleGroupId = GetterUtil.getLong(portletPreferences.getValue("groupId", String.valueOf(scopeGroupId)));
 }
 
-String articleId = ParamUtil.getString(renderRequest, "articleId");
-String ddmTemplateKey = ParamUtil.getString(renderRequest, "ddmTemplateKey");
-
-if (Validator.isNull(articleId)) {
-	articleId = GetterUtil.getString(portletPreferences.getValue("articleId", StringPool.BLANK));
-	ddmTemplateKey = GetterUtil.getString(portletPreferences.getValue("ddmTemplateKey", StringPool.BLANK));
-}
+String articleId = PrefsParamUtil.getString(portletPreferences, renderRequest, "articleId");
+String ddmTemplateKey = PrefsParamUtil.getString(portletPreferences, renderRequest, "ddmTemplateKey");
 
 boolean showAvailableLocales = GetterUtil.getBoolean(portletPreferences.getValue("showAvailableLocales", StringPool.BLANK));
 String[] extensions = portletPreferences.getValues("extensions", null);

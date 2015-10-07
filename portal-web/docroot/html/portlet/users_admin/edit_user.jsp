@@ -131,13 +131,40 @@ else if (selUser != null) {
 	}
 }
 
+List<UserGroupGroupRole> inheritedSiteRoles = Collections.emptyList();
+
+if (selUser != null) {
+	inheritedSiteRoles = UserGroupGroupRoleLocalServiceUtil.getUserGroupGroupRolesByUser(selUser.getUserId());
+}
+
+List<Group> inheritedSites = GroupLocalServiceUtil.getUserGroupsRelatedGroups(userGroups);
+List<Group> organizationsRelatedGroups = Collections.emptyList();
+
+if (!organizations.isEmpty()) {
+	organizationsRelatedGroups = GroupLocalServiceUtil.getOrganizationsRelatedGroups(organizations);
+
+	for (Group group : organizationsRelatedGroups) {
+		if (!inheritedSites.contains(group)) {
+			inheritedSites.add(group);
+		}
+	}
+}
+
 List<Group> allGroups = new ArrayList<Group>();
 
 allGroups.addAll(groups);
+allGroups.addAll(inheritedSites);
+allGroups.addAll(organizationsRelatedGroups);
 allGroups.addAll(GroupLocalServiceUtil.getOrganizationsGroups(organizations));
-allGroups.addAll(GroupLocalServiceUtil.getOrganizationsRelatedGroups(organizations));
 allGroups.addAll(GroupLocalServiceUtil.getUserGroupsGroups(userGroups));
-allGroups.addAll(GroupLocalServiceUtil.getUserGroupsRelatedGroups(userGroups));
+
+List<Group> roleGroups = new ArrayList<Group>();
+
+for (Group group : allGroups) {
+	if (RoleLocalServiceUtil.hasGroupRoles(group.getGroupId())) {
+		roleGroups.add(group);
+	}
+}
 
 String[] mainSections = PropsValues.USERS_FORM_ADD_MAIN;
 String[] identificationSections = PropsValues.USERS_FORM_ADD_IDENTIFICATION;
@@ -210,12 +237,15 @@ if (selUser != null) {
 	request.setAttribute("user.selContact", selContact);
 	request.setAttribute("user.passwordPolicy", passwordPolicy);
 	request.setAttribute("user.groups", groups);
+	request.setAttribute("user.inheritedSites", inheritedSites);
 	request.setAttribute("user.organizations", organizations);
 	request.setAttribute("user.roles", roles);
 	request.setAttribute("user.organizationRoles", organizationRoles);
 	request.setAttribute("user.siteRoles", siteRoles);
+	request.setAttribute("user.inheritedSiteRoles", inheritedSiteRoles);
 	request.setAttribute("user.userGroups", userGroups);
 	request.setAttribute("user.allGroups", allGroups);
+	request.setAttribute("user.roleGroups", roleGroups);
 
 	request.setAttribute("addresses.className", Contact.class.getName());
 	request.setAttribute("emailAddresses.className", Contact.class.getName());

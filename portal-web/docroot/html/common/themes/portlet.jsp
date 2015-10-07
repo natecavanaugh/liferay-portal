@@ -119,7 +119,7 @@ boolean wsrp = ParamUtil.getBoolean(PortalUtil.getOriginalServletRequest(request
 		if (freeformPortlet) {
 			Properties freeformStyleProps = PropertiesUtil.load(portletSetup.getValue("portlet-freeform-styles", StringPool.BLANK));
 
-			containerStyles = "style=\"height: ".concat(GetterUtil.getString(freeformStyleProps.getProperty("height"), "300px")).concat("; overflow: auto;\"");
+			containerStyles = "style=\"height: ".concat(GetterUtil.getString(HtmlUtil.escapeAttribute(freeformStyleProps.getProperty("height")), "300px")).concat("; overflow: auto;\"");
 		}
 		else {
 			containerStyles = "style=\"\"";
@@ -155,7 +155,7 @@ boolean wsrp = ParamUtil.getBoolean(PortalUtil.getOriginalServletRequest(request
 					<c:if test="<%= showPortletActions || portletDisplay.isShowBackIcon() %>">
 						<div class="portlet-borderless-bar">
 							<c:if test="<%= showPortletActions %>">
-								<span class="portlet-title-default"><%= portletDisplay.getTitle() %></span>
+								<span class="portlet-title-default"><%= HtmlUtil.escape(portletDisplay.getTitle()) %></span>
 
 								<span class="portlet-actions">
 									<span class="portlet-action portlet-options">

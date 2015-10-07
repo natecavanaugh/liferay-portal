@@ -8,48 +8,6 @@
 	vertical-align: middle;
 }
 
-/* ---------- HTML editor ---------- */
-
-body.html-editor {
-	background: #FFF;
-	color: #000;
-}
-
-.html-editor.portlet-message-boards {
-	@include hyphenation;
-	word-wrap: break-word;
-
-	blockquote {
-		background: #EEF0F2 url(../images/message_boards/quoteleft.png) no-repeat 5px 5px;
-		border: 1px solid #777;
-		position: relative;
-		padding: 5px 45px;
-
-		&:after {
-			background: url(../images/message_boards/quoteright.png) no-repeat 50%;
-			bottom: 5px;
-			content: '';
-			display: block;
-			height: 24px;
-			position: absolute;
-			right: 5px;
-			width: 31px;
-			z-index: 999;
-		}
-
-		cite {
-			display: block;
-			font-weight: bold;
-		}
-	}
-
-	pre {
-		background: #F9F9F9;
-		border: 1px solid #777;
-		padding: 0.5em;
-	}
-}
-
 /* ---------- Text formatting ---------- */
 
 .important {
@@ -94,6 +52,10 @@ body.html-editor {
 }
 
 /* ---------- Miscellaneous ---------- */
+
+span.alert {
+	display: inline-block;
+}
 
 #skip-to-content {
 	clip: rect(0 0 0 0);

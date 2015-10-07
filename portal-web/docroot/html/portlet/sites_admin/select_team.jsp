@@ -66,12 +66,12 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 		>
 			<liferay-ui:search-container-column-text
 				name="name"
-				value="<%= curTeam.getName() %>"
+				value="<%= HtmlUtil.escape(curTeam.getName()) %>"
 			/>
 
 			<liferay-ui:search-container-column-text
 				name="description"
-				value="<%= curTeam.getDescription() %>"
+				value="<%= HtmlUtil.escape(curTeam.getDescription()) %>"
 			/>
 
 			<liferay-ui:search-container-column-text>
@@ -79,9 +79,9 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 				<%
 				Map<String, Object> data = new HashMap<String, Object>();
 
-				data.put("teamdescription", HtmlUtil.escape(curTeam.getDescription()));
+				data.put("teamdescription", curTeam.getDescription());
 				data.put("teamid", curTeam.getTeamId());
-				data.put("teamname", HtmlUtil.escape(curTeam.getName()));
+				data.put("teamname", curTeam.getName());
 				data.put("teamsearchcontainername", "teams");
 				%>
 

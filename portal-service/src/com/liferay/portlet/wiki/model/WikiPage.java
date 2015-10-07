@@ -38,6 +38,12 @@ public interface WikiPage extends WikiPageModel, PersistedModel {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public com.liferay.portlet.wiki.model.WikiPage fetchParentPage()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portlet.wiki.model.WikiPage fetchRedirectPage()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getAttachmentsFileEntries()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -68,17 +74,25 @@ public interface WikiPage extends WikiPageModel, PersistedModel {
 	public long getNodeAttachmentsFolderId()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public com.liferay.portlet.wiki.model.WikiPage getParentPage();
+	public com.liferay.portlet.wiki.model.WikiPage getParentPage()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
-	public java.util.List<com.liferay.portlet.wiki.model.WikiPage> getParentPages();
+	public java.util.List<com.liferay.portlet.wiki.model.WikiPage> getParentPages()
+		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public com.liferay.portlet.wiki.model.WikiPage getRedirectPage();
+	public com.liferay.portlet.wiki.model.WikiPage getRedirectPage()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public java.util.List<com.liferay.portlet.wiki.model.WikiPage> getViewableChildPages();
 
 	public com.liferay.portlet.wiki.model.WikiPage getViewableParentPage();
 
 	public java.util.List<com.liferay.portlet.wiki.model.WikiPage> getViewableParentPages();
+
+	public boolean isInTrashExplicitly()
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public void setAttachmentsFolderId(long attachmentsFolderId);
 }

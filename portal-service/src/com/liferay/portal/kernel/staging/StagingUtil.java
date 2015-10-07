@@ -21,12 +21,14 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.lar.MissingReference;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.portal.kernel.util.DateRange;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.workflow.WorkflowTask;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutRevision;
+import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
@@ -63,6 +65,13 @@ public class StagingUtil {
 		return getStaging().buildRemoteURL(typeSettingsProperties);
 	}
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link
+	 *             com.liferay.portal.service.StagingLocalServiceUtil#
+	 *             checkDefaultLayoutSetBranches(long, Group, boolean, boolean,
+	 *             boolean, ServiceContext))}
+	 */
+	@Deprecated
 	public static void checkDefaultLayoutSetBranches(
 			long userId, Group liveGroup, boolean branchingPublic,
 			boolean branchingPrivate, boolean remote,
@@ -506,12 +515,42 @@ public class StagingUtil {
 	}
 
 	public static void updateLastPublishDate(
+			long sourceGroupId, boolean privateLayout, DateRange dateRange,
+			Date lastPublishDate)
+		throws Exception {
+
+		getStaging().updateLastPublishDate(
+			sourceGroupId, privateLayout, dateRange, lastPublishDate);
+	}
+
+	public static Date getLastPublishDate(LayoutSet layoutSet)
+		throws PortalException {
+
+		return getStaging().getLastPublishDate(layoutSet);
+	}
+
+	public static Date getLastPublishDate(
+		PortletPreferences jxPortletPreferences) {
+
+		return getStaging().getLastPublishDate(jxPortletPreferences);
+	}
+
+	public static void updateLastPublishDate(
 			String portletId, PortletPreferences portletPreferences,
 			Date lastPublishDate)
 		throws Exception {
 
 		getStaging().updateLastPublishDate(
 			portletId, portletPreferences, lastPublishDate);
+	}
+
+	public static void updateLastPublishDate(
+			String portletId, PortletPreferences portletPreferences,
+			DateRange dateRange, Date lastPublishDate)
+		throws Exception {
+
+		getStaging().updateLastPublishDate(
+			portletId, portletPreferences, dateRange, lastPublishDate);
 	}
 
 	public static void updateStaging(

@@ -48,6 +48,13 @@ public class ExportImportHelperUtil {
 			portletRequest, paramPrefix, timeZoneSensitive);
 	}
 
+	public static void reindex(
+			PortletDataContext portletDataContext, long userId)
+		throws PortalException, SystemException {
+
+		getExportImportHelper().reindex(portletDataContext, userId);
+	}
+
 	public static DateRange getDateRange(
 			PortletRequest portletRequest, long groupId, boolean privateLayout,
 			long plid, String portletId, String defaultRange)
@@ -115,6 +122,14 @@ public class ExportImportHelperUtil {
 
 		return getExportImportHelper().getModelDeletionCount(
 			portletDataContext, stagedModelType);
+	}
+
+	public static String getSelectedLayoutsJSON(
+			long groupId, boolean privateLayout, String selectedNodes)
+		throws SystemException {
+
+		return getExportImportHelper().getSelectedLayoutsJSON(
+			groupId, privateLayout, selectedNodes);
 	}
 
 	public static FileEntry getTempFileEntry(

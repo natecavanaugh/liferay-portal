@@ -25,16 +25,8 @@ long repositoryId = GetterUtil.getLong((String)request.getAttribute("view.jsp-re
 
 List<DLFileEntryType> fileEntryTypes = Collections.emptyList();
 
-boolean inherited = true;
-
-if ((folder != null) && (folder.getModel() instanceof DLFolder)) {
-	DLFolder dlFolder = (DLFolder)folder.getModel();
-
-	inherited = !dlFolder.isOverrideFileEntryTypes();
-}
-
 if ((folder == null) || folder.isSupportsMetadata()) {
-	fileEntryTypes = DLFileEntryTypeServiceUtil.getFolderFileEntryTypes(PortalUtil.getSiteAndCompanyGroupIds(themeDisplay), folderId, inherited);
+	fileEntryTypes = DLFileEntryTypeServiceUtil.getFolderFileEntryTypes(PortalUtil.getSiteAndCompanyGroupIds(themeDisplay), folderId, true);
 }
 
 boolean hasAddDocumentPermission = DLFolderPermission.contains(permissionChecker, scopeGroupId, folderId, ActionKeys.ADD_DOCUMENT);
@@ -47,6 +39,7 @@ boolean hasAddDocumentPermission = DLFolderPermission.contains(permissionChecker
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="repositoryId" value="<%= String.valueOf(repositoryId) %>" />
 			<portlet:param name="parentFolderId" value="<%= String.valueOf(folderId) %>" />
+			<portlet:param name="ignoreRootFolder" value="<%= Boolean.TRUE.toString() %>" />
 		</portlet:renderURL>
 
 		<aui:nav-item href="<%= addFolderURL %>" iconCssClass="icon-folder-open" label='<%= (folder != null) ? "subfolder" : "folder" %>' />

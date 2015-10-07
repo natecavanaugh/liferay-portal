@@ -16,8 +16,8 @@ package com.liferay.portal.kernel.log;
 
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.SystemProperties;
 
 import java.util.ArrayList;
@@ -28,6 +28,21 @@ import java.util.List;
  * @author Raymond Augé
  */
 public class SanitizerLogWrapper extends LogWrapper {
+
+	public static Log allowCRLF(Log log) {
+		if (!(log instanceof SanitizerLogWrapper)) {
+			return log;
+		}
+
+		SanitizerLogWrapper sanitizerLogWrapper = (SanitizerLogWrapper)log;
+
+		sanitizerLogWrapper = new SanitizerLogWrapper(
+			sanitizerLogWrapper.getWrappedLog());
+
+		sanitizerLogWrapper._allowCRLF = true;
+
+		return sanitizerLogWrapper;
+	}
 
 	public static void init() {
 		if (!_LOG_SANITIZER_ENABLED) {
@@ -41,6 +56,10 @@ public class SanitizerLogWrapper extends LogWrapper {
 			SystemProperties.get(
 				PropsKeys.LOG_SANITIZER_REPLACEMENT_CHARACTER));
 
+		for (int i = 0; i < _whitelistCharacters.length; i++) {
+			_whitelistCharacters[i] = 1;
+		}
+
 		int[] whitelistCharacters = GetterUtil.getIntegerValues(
 			SystemProperties.getArray(
 				PropsKeys.LOG_SANITIZER_WHITELIST_CHARACTERS));
@@ -49,7 +68,7 @@ public class SanitizerLogWrapper extends LogWrapper {
 			if ((whitelistCharacter >= 0) &&
 				(whitelistCharacter < _whitelistCharacters.length)) {
 
-				_whitelistCharacters[whitelistCharacter] = 1;
+				_whitelistCharacters[whitelistCharacter] = 0;
 			}
 			else {
 				System.err.println(
@@ -175,26 +194,53 @@ public class SanitizerLogWrapper extends LogWrapper {
 		}
 
 		char[] chars = message.toCharArray();
+		boolean hasCRLF = false;
+		boolean hasLessThanCharacter = false;
 		boolean sanitized = false;
 
 		for (int i = 0; i < chars.length; i++) {
 			int c = chars[i];
 
+			if (_allowCRLF &&
+				((c == CharPool.NEW_LINE) || (c == CharPool.RETURN))) {
+
+				hasCRLF = true;
+
+				continue;
+			}
+
 			if ((c >= 0) && (c < _whitelistCharacters.length) &&
-				(_whitelistCharacters[c] == 0)) {
+				(_whitelistCharacters[c] != 0)) {
 
 				chars[i] = _LOG_SANITIZER_REPLACEMENT_CHARACTER;
 				sanitized = true;
 			}
+
+			if (c == CharPool.LESS_THAN) {
+				hasLessThanCharacter = true;
+			}
 		}
 
-		if (sanitized) {
+		boolean escapeHTML = false;
+
+		if (_LOG_SANITIZER_ESCAPE_HTML_ENABLED && hasLessThanCharacter) {
+			escapeHTML = true;
+		}
+
+		if (sanitized || escapeHTML || hasCRLF) {
 			String sanitizedMessage = new String(chars);
 
-			sanitizedMessage = sanitizedMessage.concat(_SANITIZED);
+			if (escapeHTML) {
+				sanitizedMessage = sanitizedMessage.replaceAll(
+					StringPool.LESS_THAN, _LESS_THAN_ESCAPED);
+			}
 
-			if (_LOG_SANITIZER_ESCAPE_HTML_ENABLED) {
-				return HtmlUtil.escape(sanitizedMessage);
+			if (sanitized) {
+				sanitizedMessage = sanitizedMessage.concat(_SANITIZED);
+			}
+
+			if (hasCRLF) {
+				sanitizedMessage = CRLF_WARNING.concat(sanitizedMessage);
 			}
 
 			return sanitizedMessage;
@@ -245,6 +291,12 @@ public class SanitizerLogWrapper extends LogWrapper {
 		return resultThrowable;
 	}
 
+	protected static final String CRLF_WARNING =
+		"SanitizerLogWrapper warning: Following message contains CRLF " +
+			"characters\n";
+
+	private static final String _LESS_THAN_ESCAPED = "&lt;";
+
 	private static final String _SANITIZED = " [Sanitized]";
 
 	private static boolean _LOG_SANITIZER_ENABLED = GetterUtil.getBoolean(
@@ -256,5 +308,7 @@ public class SanitizerLogWrapper extends LogWrapper {
 		CharPool.UNDERLINE;
 
 	private static int[] _whitelistCharacters = new int[128];
+
+	private boolean _allowCRLF;
 
 }

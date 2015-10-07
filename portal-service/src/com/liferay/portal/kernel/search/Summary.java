@@ -14,7 +14,10 @@
 
 package com.liferay.portal.kernel.search;
 
+import com.liferay.portal.kernel.util.LocaleThreadLocal;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Locale;
 
@@ -29,19 +32,23 @@ public class Summary {
 	public Summary(
 		Locale locale, String title, String content, PortletURL portletURL) {
 
+		_locale = locale;
 		_title = title;
 		_content = content;
-		_locale = locale;
 		_portletURL = portletURL;
 	}
 
 	public Summary(String title, String content, PortletURL portletURL) {
-		_title = title;
-		_content = content;
-		_portletURL = portletURL;
+		this(
+			LocaleThreadLocal.getThemeDisplayLocale(), title, content,
+			portletURL);
 	}
 
 	public String getContent() {
+		if (Validator.isNull(_content)) {
+			return StringPool.BLANK;
+		}
+
 		return _content;
 	}
 
@@ -58,6 +65,10 @@ public class Summary {
 	}
 
 	public String getTitle() {
+		if (Validator.isNull(_title)) {
+			return StringPool.BLANK;
+		}
+
 		return _title;
 	}
 

@@ -234,6 +234,14 @@ public class ChannelHubManagerUtil {
 			companyId, userId, notificationEvents);
 	}
 
+	public static void storeNotificationEvent(
+			long companyId, long userId, NotificationEvent notificationEvent)
+		throws ChannelException {
+
+		getChannelHubManager().storeNotificationEvent(
+			companyId, userId, notificationEvent);
+	}
+
 	public static void unregisterChannelListener(
 			long companyId, long userId, ChannelListener channelListener)
 		throws ChannelException {

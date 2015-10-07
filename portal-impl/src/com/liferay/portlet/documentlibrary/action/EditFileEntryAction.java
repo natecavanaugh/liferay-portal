@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.servlet.ServletResponseConstants;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
@@ -71,6 +72,7 @@ import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
 import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.portlet.documentlibrary.SourceFileNameException;
+import com.liferay.portlet.documentlibrary.antivirus.AntivirusScannerException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
@@ -139,7 +141,10 @@ public class EditFileEntryAction extends PortletAction {
 						WebKeys.UPLOAD_EXCEPTION);
 
 				if (uploadException != null) {
-					if (uploadException.isExceededSizeLimit()) {
+					if (uploadException.isExceededLiferayFileItemSizeLimit()) {
+						throw new LiferayFileItemException();
+					}
+					else if (uploadException.isExceededSizeLimit()) {
 						throw new FileSizeException(uploadException.getCause());
 					}
 
@@ -157,6 +162,8 @@ public class EditFileEntryAction extends PortletAction {
 			else if (cmd.equals(Constants.ADD_MULTIPLE)) {
 				addMultipleFileEntries(
 					portletConfig, actionRequest, actionResponse);
+
+				hideDefaultSuccessMessage(actionRequest);
 			}
 			else if (cmd.equals(Constants.ADD_TEMP)) {
 				addTempFileEntry(actionRequest, actionResponse);
@@ -313,7 +320,7 @@ public class EditFileEntryAction extends PortletAction {
 		List<KeyValuePair> invalidFileNameKVPs = new ArrayList<KeyValuePair>();
 
 		String[] selectedFileNames = ParamUtil.getParameterValues(
-			actionRequest, "selectedFileName");
+			actionRequest, "selectedFileName", new String[0], false);
 
 		for (String selectedFileName : selectedFileNames) {
 			addMultipleFileEntries(
@@ -378,16 +385,18 @@ public class EditFileEntryAction extends PortletAction {
 				selectedFileName, _TEMP_FOLDER_NAME);
 
 			String mimeType = tempFileEntry.getMimeType();
-			InputStream inputStream = tempFileEntry.getContentStream();
-			long size = tempFileEntry.getSize();
 
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(
-				DLFileEntry.class.getName(), actionRequest);
+			String extension = FileUtil.getExtension(selectedFileName);
 
-			int pos = selectedFileName.indexOf(TEMP_RANDOM_SUFFIX);
+			int pos = selectedFileName.lastIndexOf(TEMP_RANDOM_SUFFIX);
 
 			if (pos != -1) {
 				selectedFileName = selectedFileName.substring(0, pos);
+
+				if (Validator.isNotNull(extension)) {
+					selectedFileName =
+						selectedFileName + StringPool.PERIOD + extension;
+				}
 			}
 
 			while (true) {
@@ -401,8 +410,11 @@ public class EditFileEntryAction extends PortletAction {
 					sb.append(FileUtil.stripExtension(selectedFileName));
 					sb.append(StringPool.DASH);
 					sb.append(StringUtil.randomString());
-					sb.append(StringPool.PERIOD);
-					sb.append(FileUtil.getExtension(selectedFileName));
+
+					if (Validator.isNotNull(extension)) {
+						sb.append(StringPool.PERIOD);
+						sb.append(extension);
+					}
 
 					selectedFileName = sb.toString();
 				}
@@ -410,6 +422,12 @@ public class EditFileEntryAction extends PortletAction {
 					break;
 				}
 			}
+
+			InputStream inputStream = tempFileEntry.getContentStream();
+			long size = tempFileEntry.getSize();
+
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(
+				DLFileEntry.class.getName(), actionRequest);
 
 			FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
 				repositoryId, folderId, selectedFileName, mimeType,
@@ -457,8 +475,20 @@ public class EditFileEntryAction extends PortletAction {
 
 		String title = sourceFileName;
 
-		sourceFileName = sourceFileName.concat(
-			TEMP_RANDOM_SUFFIX).concat(StringUtil.randomString());
+		StringBundler sb = new StringBundler(5);
+
+		sb.append(FileUtil.stripExtension(sourceFileName));
+		sb.append(TEMP_RANDOM_SUFFIX);
+		sb.append(StringUtil.randomString());
+
+		String extension = FileUtil.getExtension(sourceFileName);
+
+		if (Validator.isNotNull(extension)) {
+			sb.append(StringPool.PERIOD);
+			sb.append(extension);
+		}
+
+		sourceFileName = sb.toString();
 
 		InputStream inputStream = null;
 
@@ -657,7 +687,12 @@ public class EditFileEntryAction extends PortletAction {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		if (e instanceof AssetCategoryException) {
+		if (e instanceof AntivirusScannerException) {
+			AntivirusScannerException ase = (AntivirusScannerException)e;
+
+			errorMessage = themeDisplay.translate(ase.getMessageKey());
+		}
+		else if (e instanceof AssetCategoryException) {
 			AssetCategoryException ace = (AssetCategoryException)e;
 
 			AssetVocabulary assetVocabulary = ace.getVocabulary();
@@ -793,8 +828,10 @@ public class EditFileEntryAction extends PortletAction {
 
 			SessionErrors.add(actionRequest, e.getClass(), e);
 		}
-		else if (e instanceof DuplicateFileException ||
+		else if (e instanceof AntivirusScannerException ||
+				 e instanceof DuplicateFileException ||
 				 e instanceof DuplicateFolderNameException ||
+				 e instanceof LiferayFileItemException ||
 				 e instanceof FileExtensionException ||
 				 e instanceof FileMimeTypeException ||
 				 e instanceof FileNameException ||
@@ -803,16 +840,38 @@ public class EditFileEntryAction extends PortletAction {
 				 e instanceof SourceFileNameException ||
 				 e instanceof StorageFieldRequiredException) {
 
-			if (!cmd.equals(Constants.ADD_DYNAMIC) &&
-				!cmd.equals(Constants.ADD_MULTIPLE) &&
-				!cmd.equals(Constants.ADD_TEMP)) {
+			if (Validator.isNull(cmd)) {
+				UploadException uploadException =
+					(UploadException)actionRequest.getAttribute(
+						WebKeys.UPLOAD_EXCEPTION);
+
+				if (uploadException != null) {
+					String uploadExceptionRedirect = ParamUtil.getString(
+						actionRequest, "uploadExceptionRedirect");
+
+					actionResponse.sendRedirect(uploadExceptionRedirect);
+				}
 
 				SessionErrors.add(actionRequest, e.getClass());
 
 				return;
 			}
+			else if (!cmd.equals(Constants.ADD_DYNAMIC) &&
+					 !cmd.equals(Constants.ADD_MULTIPLE) &&
+					 !cmd.equals(Constants.ADD_TEMP)) {
 
-			if (e instanceof DuplicateFileException ||
+				if (e instanceof AntivirusScannerException) {
+					SessionErrors.add(actionRequest, e.getClass(), e);
+				}
+				else {
+					SessionErrors.add(actionRequest, e.getClass());
+				}
+
+				return;
+			}
+
+			if (e instanceof AntivirusScannerException ||
+				e instanceof DuplicateFileException ||
 				e instanceof FileExtensionException ||
 				e instanceof FileNameException ||
 				e instanceof FileSizeException) {
@@ -829,6 +888,15 @@ public class EditFileEntryAction extends PortletAction {
 				ThemeDisplay themeDisplay =
 					(ThemeDisplay)actionRequest.getAttribute(
 						WebKeys.THEME_DISPLAY);
+
+				if (e instanceof AntivirusScannerException) {
+					AntivirusScannerException ase =
+						(AntivirusScannerException)e;
+
+					errorMessage = themeDisplay.translate(ase.getMessageKey());
+					errorType =
+						ServletResponseConstants.SC_FILE_ANTIVIRUS_EXCEPTION;
+				}
 
 				if (e instanceof DuplicateFileException) {
 					errorMessage = themeDisplay.translate(
@@ -877,7 +945,12 @@ public class EditFileEntryAction extends PortletAction {
 				writeJSON(actionRequest, actionResponse, jsonObject);
 			}
 
-			SessionErrors.add(actionRequest, e.getClass());
+			if (e instanceof AntivirusScannerException) {
+				SessionErrors.add(actionRequest, e.getClass(), e);
+			}
+			else {
+				SessionErrors.add(actionRequest, e.getClass());
+			}
 		}
 		else if (e instanceof DuplicateLockException ||
 				 e instanceof InvalidFileVersionException ||
@@ -978,7 +1051,7 @@ public class EditFileEntryAction extends PortletAction {
 			Folder folder = DLAppServiceUtil.getFolder(folderId);
 
 			if (folder.getGroupId() != themeDisplay.getScopeGroupId()) {
-				throw new NoSuchFolderException();
+				throw new NoSuchFolderException("{folderId=" + folderId + "}");
 			}
 		}
 
@@ -1075,10 +1148,13 @@ public class EditFileEntryAction extends PortletAction {
 				(UploadException)actionRequest.getAttribute(
 					WebKeys.UPLOAD_EXCEPTION);
 
-			if ((uploadException != null) &&
-				uploadException.isExceededSizeLimit()) {
-
-				throw new FileSizeException(uploadException.getCause());
+			if (uploadException != null) {
+				if (uploadException.isExceededLiferayFileItemSizeLimit()) {
+					throw new LiferayFileItemException();
+				}
+				else if (uploadException.isExceededSizeLimit()) {
+					throw new FileSizeException(uploadException.getCause());
+				}
 			}
 
 			throw e;

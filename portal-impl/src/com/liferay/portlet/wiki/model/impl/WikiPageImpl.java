@@ -28,6 +28,8 @@ import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
+import com.liferay.portlet.trash.model.TrashEntry;
+import com.liferay.portlet.trash.service.TrashEntryLocalServiceUtil;
 import com.liferay.portlet.wiki.model.WikiNode;
 import com.liferay.portlet.wiki.model.WikiPage;
 import com.liferay.portlet.wiki.service.WikiNodeLocalServiceUtil;
@@ -77,6 +79,26 @@ public class WikiPageImpl extends WikiPageBaseImpl {
 		_attachmentsFolderId = folder.getFolderId();
 
 		return folder;
+	}
+
+	@Override
+	public WikiPage fetchParentPage() throws SystemException {
+		if (Validator.isNull(getParentTitle())) {
+			return null;
+		}
+
+		return WikiPageLocalServiceUtil.fetchPage(
+			getNodeId(), getParentTitle());
+	}
+
+	@Override
+	public WikiPage fetchRedirectPage() throws SystemException {
+		if (Validator.isNull(getRedirectTitle())) {
+			return null;
+		}
+
+		return WikiPageLocalServiceUtil.fetchPage(
+			getNodeId(), getRedirectTitle());
 	}
 
 	@Override
@@ -230,27 +252,19 @@ public class WikiPageImpl extends WikiPageBaseImpl {
 	}
 
 	@Override
-	public WikiPage getParentPage() {
+	public WikiPage getParentPage() throws PortalException, SystemException {
 		if (Validator.isNull(getParentTitle())) {
 			return null;
 		}
 
-		try {
-			return WikiPageLocalServiceUtil.getPage(
-				getNodeId(), getParentTitle());
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			return null;
-		}
+		return WikiPageLocalServiceUtil.getPage(getNodeId(), getParentTitle());
 	}
 
 	@Override
-	public List<WikiPage> getParentPages() {
+	public List<WikiPage> getParentPages() throws SystemException {
 		List<WikiPage> parentPages = new ArrayList<WikiPage>();
 
-		WikiPage parentPage = getParentPage();
+		WikiPage parentPage = fetchParentPage();
 
 		if (parentPage != null) {
 			parentPages.addAll(parentPage.getParentPages());
@@ -261,20 +275,13 @@ public class WikiPageImpl extends WikiPageBaseImpl {
 	}
 
 	@Override
-	public WikiPage getRedirectPage() {
+	public WikiPage getRedirectPage() throws PortalException, SystemException {
 		if (Validator.isNull(getRedirectTitle())) {
 			return null;
 		}
 
-		try {
-			return WikiPageLocalServiceUtil.getPage(
-				getNodeId(), getRedirectTitle());
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			return null;
-		}
+		return WikiPageLocalServiceUtil.getPage(
+			getNodeId(), getRedirectTitle());
 	}
 
 	@Override
@@ -324,6 +331,22 @@ public class WikiPageImpl extends WikiPageBaseImpl {
 		}
 
 		return pages;
+	}
+
+	@Override
+	public boolean isInTrashExplicitly() throws SystemException {
+		if (!isInTrash()) {
+			return false;
+		}
+
+		TrashEntry trashEntry = TrashEntryLocalServiceUtil.fetchEntry(
+			getModelClassName(), getTrashEntryClassPK());
+
+		if (trashEntry != null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
