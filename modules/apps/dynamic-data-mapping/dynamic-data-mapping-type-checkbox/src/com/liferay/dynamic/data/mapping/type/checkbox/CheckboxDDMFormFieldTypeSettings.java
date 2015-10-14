@@ -33,9 +33,7 @@ public interface CheckboxDDMFormFieldTypeSettings
 	@Override
 	public LocalizedValue predefinedValue();
 
-	@DDMFormField(
-		visibilityExpression = "false"
-	)
+	@DDMFormField(visibilityExpression = "false")
 	public boolean repeatable();
 
 	@DDMFormField(
