@@ -34,6 +34,11 @@ public interface CheckboxDDMFormFieldTypeSettings
 	public LocalizedValue predefinedValue();
 
 	@DDMFormField(
+		visibilityExpression = "false"
+	)
+	public boolean repeatable();
+
+	@DDMFormField(
 		dataType = "boolean", label = "%show-as-a-switcher",
 		properties = {"setting.category=basic", "showAsSwitcher=true"},
 		type = "checkbox"
