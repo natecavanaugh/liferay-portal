@@ -8,15 +8,23 @@ LPS-30525.
 <#setting number_format = "computer">
 
 <#assign css_main_file = "" />
+<#assign is_signed_in = false />
 
 <#if themeDisplay??>
 	<#assign css_main_file = htmlUtil.escape(portalUtil.getStaticResourceURL(request, "${themeDisplay.getPathThemeCss()}/main.css")) />
+	<#assign is_signed_in = themeDisplay.isSignedIn() />
 </#if>
 
 <#assign js_main_file = "" />
 
 <#if themeDisplay??>
 	<#assign js_main_file = htmlUtil.escape(portalUtil.getStaticResourceURL(request, "${themeDisplay.getPathThemeJavaScript()}/main.js")) />
+</#if>
+
+<#assign is_setup_complete = false />
+
+<#if user??>
+	<#assign is_setup_complete = user.isSetupComplete() />
 </#if>
 
 <#function max x y>
