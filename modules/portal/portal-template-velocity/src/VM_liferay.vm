@@ -1,3 +1,15 @@
+#set ($is_setup_complete = false)
+
+#if ($user)
+	#set ($is_setup_complete = $user.isSetupComplete())
+#end
+
+#set ($is_signed_in = false)
+
+#if ($themeDisplay)
+	#set ($is_signed_in = $themeDisplay.isSignedIn())
+#end
+
 #macro (breadcrumbs $default_preferences)
 	$theme.runtime("com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry", $portletProviderAction.VIEW, "", $!default_preferences)
 #end
