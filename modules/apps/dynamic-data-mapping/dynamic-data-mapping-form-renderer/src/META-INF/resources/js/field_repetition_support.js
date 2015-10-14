@@ -93,19 +93,22 @@ AUI.add(
 				var type = instance.get('type');
 
 				var fieldClass = Util.getFieldClass(type);
+				var fieldType = Renderer.FieldTypes.get(type);
+				var settings = fieldType.get('settings');
 
-				var field = new fieldClass(
-					{
-						label: instance.get('label'),
-						name: instance.get('name'),
-						parent: parent,
-						portletNamespace: instance.get('portletNamespace'),
-						repeatable: instance.get('repeatable'),
-						repeatedIndex: instance.getRepeatedSiblings().length,
-						repetitions: repetitions,
-						type: type
-					}
-				).render();
+				var config = {};
+
+				settings.fields.forEach(function(settingField) {
+					config[settingField.name] = instance.get(settingField.name);
+				});
+
+				config.parent = parent;
+				config.portletNamespace = instance.get('portletNamespace');
+				config.repeatedIndex = instance.getRepeatedSiblings().length;
+				config.repetitions = repetitions;
+				config.type = type;
+
+				var field = new fieldClass(config).render();
 
 				var index = repetitions.indexOf(instance) + 1;
 
