@@ -57,7 +57,7 @@ AUI.add(
 				}
 			},
 
-			_afterValueChanged: function() {
+			syncVisibility: function() {
 				var instance = this;
 
 				var evaluator = instance.get('evaluator');
@@ -73,6 +73,12 @@ AUI.add(
 				instance.hideFeedback();
 
 				instance.processVisibilityEvaluation(event.result);
+			},
+
+			_afterValueChanged: function() {
+				var instance = this;
+
+				instance.syncVisibility();
 			},
 
 			_afterVisibleChange: function() {
