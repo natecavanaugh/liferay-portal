@@ -30,6 +30,11 @@ boolean hasUserGroupUpdatePermission = true;
 if (userGroup != null) {
 	hasUserGroupUpdatePermission = UserGroupPermissionUtil.contains(permissionChecker, userGroup.getUserGroupId(), ActionKeys.UPDATE);
 }
+
+portletDisplay.setShowBackIcon(true);
+portletDisplay.setURLBack(backURL);
+
+renderResponse.setTitle((userGroup == null) ? LanguageUtil.get(request, "new-user-group") : userGroup.getName());
 %>
 
 <portlet:actionURL name="editUserGroup" var="editUserGroupURL" />
@@ -37,12 +42,6 @@ if (userGroup != null) {
 <aui:form action="<%= editUserGroupURL %>" method="post" name="fm">
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="userGroupId" type="hidden" value="<%= userGroupId %>" />
-
-	<liferay-ui:header
-		backURL="<%= backURL %>"
-		localizeTitle="<%= (userGroup == null) %>"
-		title='<%= (userGroup == null) ? "new-user-group" : userGroup.getName() %>'
-	/>
 
 	<liferay-ui:error exception="<%= DuplicateUserGroupException.class %>" message="please-enter-a-unique-name" />
 	<liferay-ui:error exception="<%= RequiredUserGroupException.class %>" message="this-is-a-required-user-group" />
