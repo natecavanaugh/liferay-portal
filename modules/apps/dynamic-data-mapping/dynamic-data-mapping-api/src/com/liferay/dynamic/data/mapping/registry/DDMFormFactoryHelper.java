@@ -177,8 +177,8 @@ public class DDMFormFactoryHelper {
 		return StringPool.TRUE;
 	}
 
-	public Map<String, String> getProperties() {
-		Map<String, String> propertiesMap = new HashMap<>();
+	public Map<String, Object> getProperties() {
+		Map<String, Object> propertiesMap = new HashMap<>();
 
 		for (String property : _ddmFormField.properties()) {
 			String key = StringUtil.extractFirst(property, StringPool.EQUAL);
@@ -188,6 +188,30 @@ public class DDMFormFactoryHelper {
 		}
 
 		return propertiesMap;
+	}
+
+	public LocalizedValue getPropertyValue(Object value) {
+		LocalizedValue localizedValue = new LocalizedValue(_defaultLocale);
+
+		if (Validator.isNull(value)) {
+			return localizedValue;
+		}
+
+		String valueString = (String)value;
+
+		if (!isLocalizableKey(valueString)) {
+			localizedValue.addString(_defaultLocale, valueString);
+
+			return localizedValue;
+		}
+
+		String key = getKey(valueString);
+
+		for (Locale locale : _availableLocales) {
+			localizedValue.addString(locale, getLocalizedKey(locale, key));
+		}
+
+		return localizedValue;
 	}
 
 	public boolean isDDMFormFieldLocalizable(Method method) {

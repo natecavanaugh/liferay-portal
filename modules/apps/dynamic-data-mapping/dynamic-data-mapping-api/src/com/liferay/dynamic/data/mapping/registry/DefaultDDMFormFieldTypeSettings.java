@@ -41,9 +41,12 @@ public interface DefaultDDMFormFieldTypeSettings
 	public String indexType();
 
 	@DDMFormField(
-		label = "%label",
-		properties = {"setting.category=basic", "setting.weight=4"},
-		type = "text"
+		label = "%question",
+		properties = {
+			"placeholder=%type-here-your-question", "setting.category=basic",
+			"setting.weight=4"
+		},
+		tip = "%type-here-what-you-want-to-ask", type = "text"
 	)
 	public LocalizedValue label();
 
@@ -52,7 +55,7 @@ public interface DefaultDDMFormFieldTypeSettings
 
 	@DDMFormField(
 		label = "%predefined-value",
-		properties = {"setting.category=advanced", "setting.weight=0"},
+		properties = {"setting.category=advanced", "setting.weight=1"},
 		type = "text"
 	)
 	public LocalizedValue predefinedValue();
@@ -62,32 +65,44 @@ public interface DefaultDDMFormFieldTypeSettings
 
 	@DDMFormField(
 		label = "%repeatable",
-		properties = {"setting.category=advanced", "setting.weight=0", "showAsSwitcher=true"}
+		properties = {
+			"setting.category=advanced", "setting.weight=3",
+			"showAsSwitcher=true"
+		}
 	)
 	public boolean repeatable();
 
 	@DDMFormField(
 		label = "%required",
-		properties = {"setting.category=basic", "setting.weight=1", "showAsSwitcher=true" }
+		properties = {
+			"setting.category=basic", "setting.weight=1", "showAsSwitcher=true"
+		}
 	)
 	public boolean required();
 
 	@DDMFormField(
 		label = "%show-label",
-		properties = {"setting.category=advanced", "setting.weight=0", "showAsSwitcher=true"}
+		properties = {
+			"setting.category=advanced", "setting.weight=4",
+			"showAsSwitcher=true"
+		}
 	)
 	public boolean showLabel();
 
 	@DDMFormField(
-		label = "%tip",
-		properties = {"setting.category=basic", "setting.weight=2"},
+		label = "%help-text",
+		properties = {
+			"placeholder=%add-a-text-to-help-users-better-understand-what-you-want",
+			"setting.category=basic", "setting.weight=3"
+		},
+		tip = "%the-text-you-type-here-will-be-displayed-to-the-user-just-like-this-text",
 		type = "text"
 	)
 	public LocalizedValue tip();
 
 	@DDMFormField(
 		dataType = "ddm-validation", label = "%validation",
-		properties = {"setting.category=advanced", "setting.weight=0"},
+		properties = {"setting.category=advanced", "setting.weight=5"},
 		type = "validation"
 	)
 	public DDMFormFieldValidation validation();

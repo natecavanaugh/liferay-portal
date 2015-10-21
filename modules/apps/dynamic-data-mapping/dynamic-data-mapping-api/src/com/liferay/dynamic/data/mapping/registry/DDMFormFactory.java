@@ -16,6 +16,8 @@ package com.liferay.dynamic.data.mapping.registry;
 
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -76,10 +78,17 @@ public class DDMFormFactory {
 
 		DDMFormField ddmFormField = new DDMFormField(name, type);
 
-		Map<String, String> properties = ddmFormFactoryHelper.getProperties();
+		Map<String, Object> properties = ddmFormFactoryHelper.getProperties();
 
-		for (Map.Entry<String, String> entry : properties.entrySet()) {
-			ddmFormField.setProperty(entry.getKey(), entry.getValue());
+		for (Map.Entry<String, Object> entry : properties.entrySet()) {
+			String key = entry.getKey();
+			Object value = entry.getValue();
+
+			if (StringUtil.startsWith((String)value, CharPool.PERCENT)) {
+				value = ddmFormFactoryHelper.getPropertyValue(value);
+			}
+
+			ddmFormField.setProperty(key, value);
 		}
 
 		ddmFormField.setDataType(
