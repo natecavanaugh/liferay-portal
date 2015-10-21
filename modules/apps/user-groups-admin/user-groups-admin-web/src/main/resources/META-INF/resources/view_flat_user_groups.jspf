@@ -26,19 +26,6 @@ UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL)
 	<aui:input name="deleteUserGroupIds" type="hidden" />
 
 	<aui:nav-bar>
-		<aui:nav cssClass="navbar-nav" searchContainer="<%= userGroupSearch %>">
-			<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_USER_GROUP) %>">
-				<portlet:renderURL var="viewUserGroupsURL" />
-
-				<portlet:renderURL var="addUsergroupURL">
-					<portlet:param name="mvcPath" value="/edit_user_group.jsp" />
-					<portlet:param name="redirect" value="<%= viewUserGroupsURL %>" />
-				</portlet:renderURL>
-
-				<aui:nav-item href="<%= addUsergroupURL %>" iconCssClass="icon-plus" label="add" />
-			</c:if>
-		</aui:nav>
-
 		<aui:nav-bar-search>
 			<liferay-ui:user-group-search-form />
 		</aui:nav-bar-search>
@@ -106,3 +93,16 @@ UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL)
 
 	<liferay-ui:search-iterator />
 </liferay-ui:search-container>
+
+<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_USER_GROUP) %>">
+	<portlet:renderURL var="viewUserGroupsURL" />
+
+	<portlet:renderURL var="addUsergroupURL">
+		<portlet:param name="mvcPath" value="/edit_user_group.jsp" />
+		<portlet:param name="redirect" value="<%= viewUserGroupsURL %>" />
+	</portlet:renderURL>
+
+	<liferay-frontend:add-menu>
+		<liferay-frontend:add-menu-item title='<%= LanguageUtil.get(request, "add") %>' url="<%= addUsergroupURL.toString() %>" />
+	</liferay-frontend:add-menu>
+</c:if>
