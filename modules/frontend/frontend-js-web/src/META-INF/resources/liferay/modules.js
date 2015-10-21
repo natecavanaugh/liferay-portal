@@ -7,7 +7,7 @@
 
 	var INPUT_EL = document.createElement('input');
 
-	var PATH_EDITORS = LiferayAUI.getEditorsPath();
+	var PATH_EDITORS = LiferayAUI.getEditorCKEditorPath();
 
 	var PATH_JAVASCRIPT = LiferayAUI.getJavaScriptRootPath();
 

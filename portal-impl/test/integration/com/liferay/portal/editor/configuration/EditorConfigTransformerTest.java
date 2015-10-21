@@ -21,8 +21,6 @@ import com.liferay.portal.kernel.editor.configuration.EditorConfigurationFactory
 import com.liferay.portal.kernel.editor.configuration.EditorOptions;
 import com.liferay.portal.kernel.editor.configuration.EditorOptionsContributor;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.StringPool;
@@ -303,9 +301,6 @@ public class EditorConfigTransformerTest {
 	private static final String _PORTLET_NAME = "testPortletName";
 
 	private static final String _UNUSED_EDITOR_NAME = "testUnusedEditorName";
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		EditorConfigTransformerTest.class);
 
 	private static Collection<Long> _bundleIds;
 
