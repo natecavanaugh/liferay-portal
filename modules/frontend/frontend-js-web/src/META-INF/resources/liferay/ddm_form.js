@@ -158,8 +158,6 @@ AUI.add(
 				var instance = this;
 
 				var config = {
-					data: {
-					},
 					on: {
 						success: function(event, id, xhr) {
 							if (callback) {
