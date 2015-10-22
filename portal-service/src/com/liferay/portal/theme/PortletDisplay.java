@@ -242,7 +242,10 @@ public class PortletDisplay implements Serializable {
 	}
 
 	public String getPortletName() {
-		return _portletName;
+		String portletName = Validator.isNull(
+			_portletName) ? _title : _portletName;
+
+		return portletName;
 	}
 
 	public String getPortletResource() {
