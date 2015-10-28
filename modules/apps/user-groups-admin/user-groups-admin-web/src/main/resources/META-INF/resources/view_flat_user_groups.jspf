@@ -22,15 +22,6 @@ UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL)
 	rowChecker="<%= new UserGroupChecker(renderResponse) %>"
 	searchContainer="<%= userGroupSearch %>"
 >
-	<aui:input disabled="<%= true %>" name="userGroupsRedirect" type="hidden" value="<%= portletURL.toString() %>" />
-	<aui:input name="deleteUserGroupIds" type="hidden" />
-
-	<aui:nav-bar>
-		<aui:nav-bar-search>
-			<liferay-ui:input-search />
-		</aui:nav-bar-search>
-	</aui:nav-bar>
-
 	<%
 	UserGroupDisplayTerms searchTerms = (UserGroupDisplayTerms)searchContainer.getSearchTerms();
 

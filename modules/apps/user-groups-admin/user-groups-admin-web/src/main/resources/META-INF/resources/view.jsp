@@ -33,9 +33,22 @@ String portletURLString = portletURL.toString();
 
 <liferay-ui:error exception="<%= RequiredUserGroupException.class %>" message="you-cannot-delete-user-groups-that-have-users" />
 
+<aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
+	<aui:nav cssClass="navbar-nav">
+		<aui:nav-item cssClass="active" label="user-groups" />
+	</aui:nav>
+
+	<aui:nav-bar-search>
+		<aui:form action="<%= portletURLString %>" name="searchFm">
+			<liferay-ui:input-search markupView="lexicon" />
+		</aui:form>
+	</aui:nav-bar-search>
+</aui:nav-bar>
+
 <aui:form action="<%= portletURLString %>" method="get" name="fm">
 	<liferay-portlet:renderURLParams varImpl="portletURL" />
 	<aui:input name="redirect" type="hidden" value="<%= portletURLString %>" />
+	<aui:input name="deleteUserGroupIds" type="hidden" />
 
 	<%@ include file="/view_flat_user_groups.jspf" %>
 
@@ -108,7 +121,6 @@ String portletURLString = portletURL.toString();
 		var form = AUI.$(document.<portlet:namespace />fm);
 
 		form.attr('method', 'post');
-		form.fm('redirect').val(form.fm('userGroupsRedirect').val());
 		form.fm('deleteUserGroupIds').val(userGroupIds);
 
 		submitForm(form, '<portlet:actionURL name="deleteUserGroups" />');
