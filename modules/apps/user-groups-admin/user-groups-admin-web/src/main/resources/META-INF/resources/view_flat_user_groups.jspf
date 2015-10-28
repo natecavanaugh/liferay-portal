@@ -27,7 +27,7 @@ UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL)
 
 	<aui:nav-bar>
 		<aui:nav-bar-search>
-			<liferay-ui:user-group-search-form />
+			<liferay-ui:input-search />
 		</aui:nav-bar-search>
 	</aui:nav-bar>
 

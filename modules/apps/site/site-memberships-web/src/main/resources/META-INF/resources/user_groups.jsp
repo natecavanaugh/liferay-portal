@@ -60,7 +60,7 @@ userGroupSearch.setEmptyResultsMessage(emptyResultsMessage);
 	searchContainer="<%= userGroupSearch %>"
 >
 	<c:if test='<%= !tabs1.equals("summary") %>'>
-		<liferay-ui:user-group-search-form />
+		<liferay-ui:input-search />
 
 		<div class="separator"><!-- --></div>
 	</c:if>
