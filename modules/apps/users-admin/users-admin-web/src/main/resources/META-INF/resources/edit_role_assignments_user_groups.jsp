@@ -39,7 +39,7 @@ PortletURL portletURL = (PortletURL)request.getAttribute("edit_role_assignments.
 	rowChecker="<%= new UserGroupRoleChecker(renderResponse, role) %>"
 	searchContainer="<%= new UserGroupSearch(renderRequest, portletURL) %>"
 >
-	<liferay-ui:user-group-search-form />
+	<liferay-ui:input-search />
 
 	<%
 	UserGroupDisplayTerms searchTerms = (UserGroupDisplayTerms)searchContainer.getSearchTerms();
