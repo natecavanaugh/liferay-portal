@@ -64,14 +64,11 @@ PortletURL portletURL = (PortletURL)request.getAttribute("edit_roles.jsp-portlet
 	if (tabs1.equals("current")) {
 		userGroupParams.put("userGroupGroupRole", new Long[] {Long.valueOf(roleId), Long.valueOf(group.getGroupId())});
 	}
-
-	total = UserGroupLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), userGroupParams);
-
-	searchContainer.setTotal(total);
 	%>
 
-	<liferay-ui:search-container-results
-		results="<%= UserGroupLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), userGroupParams, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator()) %>"
+	<liferay-ui:user-group-search-container-results
+		searchTerms="<%= searchTerms %>"
+		userGroupParams="<%= userGroupParams %>"
 	/>
 
 	<liferay-ui:search-container-row
