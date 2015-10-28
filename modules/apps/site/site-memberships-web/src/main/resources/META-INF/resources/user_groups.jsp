@@ -75,28 +75,10 @@ userGroupSearch.setEmptyResultsMessage(emptyResultsMessage);
 	}
 	%>
 
-	<liferay-ui:search-container-results>
-
-		<%
-		if (searchTerms.isAdvancedSearch()) {
-			total = UserGroupLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getName(), searchTerms.getDescription(), userGroupParams, searchTerms.isAndOperator());
-
-			searchContainer.setTotal(total);
-
-			results = UserGroupLocalServiceUtil.search(company.getCompanyId(), searchTerms.getName(), searchTerms.getDescription(), userGroupParams, searchTerms.isAndOperator(), searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-		}
-		else {
-			total = UserGroupLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), userGroupParams);
-
-			searchContainer.setTotal(total);
-
-			results = UserGroupLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), userGroupParams, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-		}
-
-		searchContainer.setResults(results);
-		%>
-
-	</liferay-ui:search-container-results>
+	<liferay-ui:user-group-search-container-results
+		searchTerms="<%= searchTerms %>"
+		userGroupParams="<%= userGroupParams %>"
+	/>
 
 	<liferay-ui:search-container-row
 		className="com.liferay.portal.model.UserGroup"
