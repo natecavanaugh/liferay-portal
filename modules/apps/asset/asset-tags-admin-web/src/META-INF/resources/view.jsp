@@ -84,6 +84,7 @@ String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
 
 		<liferay-ui:search-container-row
 			className="com.liferay.portlet.asset.model.AssetTag"
+			cssClass="selectable"
 			keyProperty="tagId"
 			modelVar="tag"
 		>
