@@ -19,6 +19,7 @@
 <%
 String viewUserGroupsRedirect = ParamUtil.getString(request, "viewUserGroupsRedirect");
 String backURL = ParamUtil.getString(request, "backURL", viewUserGroupsRedirect);
+String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
 
 PortletURL portletURL = renderResponse.createRenderURL();
 
@@ -29,6 +30,8 @@ if (Validator.isNotNull(viewUserGroupsRedirect)) {
 pageContext.setAttribute("portletURL", portletURL);
 
 String portletURLString = portletURL.toString();
+
+UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL);
 %>
 
 <liferay-ui:error exception="<%= RequiredUserGroupException.class %>" message="you-cannot-delete-user-groups-that-have-users" />
@@ -45,6 +48,34 @@ String portletURLString = portletURL.toString();
 	</aui:nav-bar-search>
 </aui:nav-bar>
 
+<liferay-frontend:management-bar
+	checkBoxContainerId="userGroupsSearchContainer"
+	includeCheckBox="<%= true %>"
+>
+	<liferay-frontend:management-bar-buttons>
+		<liferay-frontend:management-bar-display-buttons
+			displayViews='<%= new String[] {"descriptive", "list"} %>'
+			portletURL="<%= portletURL %>"
+			selectedDisplayStyle="<%= displayStyle %>"
+		/>
+	</liferay-frontend:management-bar-buttons>
+
+	<liferay-frontend:management-bar-filters>
+		<liferay-frontend:management-bar-sort
+			orderByCol="<%= userGroupSearch.getOrderByCol() %>"
+			orderByType="<%= userGroupSearch.getOrderByType() %>"
+			orderColumns='<%= new String[] {"name"} %>'
+			portletURL="<%= portletURL %>"
+		/>
+	</liferay-frontend:management-bar-filters>
+
+	<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_USER_GROUP) %>">
+		<liferay-frontend:management-bar-action-buttons>
+			<aui:a cssClass="btn" href="javascript:;" iconCssClass="icon-trash" id="deleteUserGroups" />
+		</liferay-frontend:management-bar-action-buttons>
+	</c:if>
+</liferay-frontend:management-bar>
+
 <aui:form action="<%= portletURLString %>" method="get" name="fm">
 	<liferay-portlet:renderURLParams varImpl="portletURL" />
 	<aui:input name="redirect" type="hidden" value="<%= portletURLString %>" />
@@ -55,18 +86,15 @@ String portletURLString = portletURL.toString();
 </aui:form>
 
 <aui:script>
-	Liferay.Util.toggleSearchContainerButton('#<portlet:namespace />delete', '#<portlet:namespace /><%= searchContainerReference.getId() %>SearchContainer', document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
-
-	function <portlet:namespace />deleteUserGroup(userGroupId) {
-		<portlet:namespace />doDeleteUserGroup('<%= UserGroup.class.getName() %>', userGroupId);
-	}
-
-	function <portlet:namespace />deleteUserGroups() {
-		<portlet:namespace />doDeleteUserGroup(
-			'<%= UserGroup.class.getName() %>',
-			Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds')
-		);
-	}
+	$('#<portlet:namespace />deleteUserGroups').on(
+		'click',
+		function() {
+			<portlet:namespace />doDeleteUserGroup(
+				'<%= UserGroup.class.getName() %>',
+				Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds')
+			);
+		}
+	);
 
 	function <portlet:namespace />doDeleteUserGroup(className, ids) {
 		var status = <%= WorkflowConstants.STATUS_INACTIVE %>;
