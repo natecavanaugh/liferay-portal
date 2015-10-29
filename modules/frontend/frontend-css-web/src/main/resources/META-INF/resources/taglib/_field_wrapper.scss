@@ -1,10 +1,14 @@
-.field-wrapper .control-label {
+.field-wrapper span.control-label {
 	display: block;
 	font-size: 15px;
 	line-height: 20px;
 	margin-bottom: 5px;
 }
 
-.field-wrapper.form-inline .control-label {
+.field-wrapper.form-inline span.control-label {
 	display: inline-block;
+}
+
+.field-wrapper-html {
+	position: relative;
 }
