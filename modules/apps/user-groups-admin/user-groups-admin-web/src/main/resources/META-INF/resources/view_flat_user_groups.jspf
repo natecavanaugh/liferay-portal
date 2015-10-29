@@ -51,21 +51,11 @@
 		if (!UserGroupPermissionUtil.contains(permissionChecker, userGroup.getUserGroupId(), ActionKeys.VIEW)) {
 			rowURL = null;
 		}
+
+		int usersCount = UserLocalServiceUtil.getUserGroupUsersCount(userGroup.getUserGroupId(), WorkflowConstants.STATUS_APPROVED);
 		%>
 
-		<liferay-ui:search-container-column-text
-			href="<%= rowURL %>"
-			name="name"
-			orderable="<%= true %>"
-			property="name"
-		/>
-
-		<liferay-ui:search-container-column-text
-			href="<%= rowURL %>"
-			name="description"
-			orderable="<%= true %>"
-			property="description"
-		/>
+		<%@ include file="/search_columns.jspf" %>
 
 		<liferay-ui:search-container-column-jsp
 			align="right"
