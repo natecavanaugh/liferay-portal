@@ -14,14 +14,12 @@
  */
 --%>
 
-<%
-UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL);
-%>
-
 <liferay-ui:search-container
+	id="userGroups"
 	rowChecker="<%= new UserGroupChecker(renderResponse) %>"
 	searchContainer="<%= userGroupSearch %>"
 >
+
 	<%
 	UserGroupDisplayTerms searchTerms = (UserGroupDisplayTerms)searchContainer.getSearchTerms();
 
@@ -76,13 +74,7 @@ UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL)
 		/>
 	</liferay-ui:search-container-row>
 
-	<c:if test="<%= searchContainer.hasResults() && PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_USER_GROUP) %>">
-		<div class="separator"><!-- --></div>
-
-		<aui:button disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteUserGroups();" %>' value="delete" />
-	</c:if>
-
-	<liferay-ui:search-iterator markupView="lexicon" />
+	<liferay-ui:search-iterator displayStyle="<%= displayStyle %>" markupView="lexicon" />
 </liferay-ui:search-container>
 
 <c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_USER_GROUP) %>">
