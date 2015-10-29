@@ -148,10 +148,10 @@ refererURL.setParameter("updateLayout", "true");
 		<c:if test="<%= layout.isTypePortlet() %>">
 			<ul class="lfr-add-apps-legend list-unstyled">
 				<li>
-					<aui:icon image="stop" label="can-be-added-once" />
+					<aui:icon image="live" label="can-be-added-once" markupView="lexicon" />
 				</li>
 				<li>
-					<aui:icon image="th-large" label="can-be-added-several-times" />
+					<aui:icon image="grid" label="can-be-added-several-times" markupView="lexicon" />
 				</li>
 			</ul>
 
