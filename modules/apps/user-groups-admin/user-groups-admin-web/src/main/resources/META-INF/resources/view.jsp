@@ -76,7 +76,7 @@ UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL)
 	</c:if>
 </liferay-frontend:management-bar>
 
-<aui:form action="<%= portletURLString %>" method="get" name="fm">
+<aui:form action="<%= portletURLString %>" cssClass="container-fluid-1280" method="get" name="fm">
 	<liferay-portlet:renderURLParams varImpl="portletURL" />
 	<aui:input name="redirect" type="hidden" value="<%= portletURLString %>" />
 	<aui:input name="deleteUserGroupIds" type="hidden" />
