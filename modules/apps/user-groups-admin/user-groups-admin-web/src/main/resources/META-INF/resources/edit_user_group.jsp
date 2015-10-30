@@ -39,7 +39,7 @@ renderResponse.setTitle((userGroup == null) ? LanguageUtil.get(request, "new-use
 
 <portlet:actionURL name="editUserGroup" var="editUserGroupURL" />
 
-<aui:form action="<%= editUserGroupURL %>" method="post" name="fm">
+<aui:form action="<%= editUserGroupURL %>" cssClass="container-fluid-1280" method="post" name="fm">
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="userGroupId" type="hidden" value="<%= userGroupId %>" />
 
