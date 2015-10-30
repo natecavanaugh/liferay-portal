@@ -48,6 +48,18 @@ renderResponse.setTitle(userGroup.getName());
 	url="<%= portletURL.toString() %>"
 />
 
+<aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
+	<aui:nav cssClass="navbar-nav">
+		<aui:nav-item cssClass="active" label="users" />
+	</aui:nav>
+
+	<aui:nav-bar-search>
+		<aui:form action="<%= portletURL.toString() %>" name="searchFm">
+			<liferay-ui:input-search markupView="lexicon" />
+		</aui:form>
+	</aui:nav-bar-search>
+</aui:nav-bar>
+
 <aui:form action="<%= portletURL.toString() %>" cssClass="container-fluid-1280" method="post" name="fm">
 	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
 	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
@@ -62,8 +74,6 @@ renderResponse.setTitle(userGroup.getName());
 		searchContainer="<%= new UserSearch(renderRequest, portletURL) %>"
 		var="userSearchContainer"
 	>
-		<liferay-ui:user-search-form />
-
 		<%
 		UserSearchTerms searchTerms = (UserSearchTerms)userSearchContainer.getSearchTerms();
 
