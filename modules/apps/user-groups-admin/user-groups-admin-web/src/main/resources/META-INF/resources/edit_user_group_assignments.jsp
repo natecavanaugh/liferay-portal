@@ -25,6 +25,14 @@ long userGroupId = ParamUtil.getLong(request, "userGroupId");
 
 String displayStyle = ParamUtil.getString(request, "displayStyle");
 
+if (Validator.isNull(displayStyle)) {
+	displayStyle = portalPreferences.getValue(UserGroupsAdminPortletKeys.USER_GROUPS_ADMIN, "users-display-style", "list");
+}
+else {
+	portalPreferences.setValue(UserGroupsAdminPortletKeys.USER_GROUPS_ADMIN, "users-display-style", displayStyle);
+	request.setAttribute(WebKeys.SINGLE_PAGE_APPLICATION_CLEAR_CACHE, Boolean.TRUE);
+}
+
 UserGroup userGroup = UserGroupServiceUtil.fetchUserGroup(userGroupId);
 
 PortletURL portletURL = renderResponse.createRenderURL();
