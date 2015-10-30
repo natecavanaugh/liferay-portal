@@ -34,7 +34,8 @@
 						'liferay-ddm-form-renderer-expressions-evaluator': {
 							path: 'expressions_evaluator.js',
 							requires: [
-								'aui-request'
+								'aui-component',
+								'aui-io-request'
 							]
 						},
 						'liferay-ddm-form-renderer-feedback': {
