@@ -127,7 +127,10 @@ renderResponse.setTitle((userGroup == null) ? LanguageUtil.get(request, "new-use
 	%>
 
 	<c:if test="<%= (userGroupGroup != null) || !layoutSetPrototypes.isEmpty() %>">
-		<aui:fieldset helpMessage="user-group-site-help" label="user-group-site">
+		<aui:fieldset cssClass="text-muted">
+			<h5>
+				<liferay-ui:message key="the-site-of-a-user-group-cannot-be-accessed-directly-by-end-users" />
+			</h5>
 
 			<%
 			boolean hasUnlinkLayoutSetPrototypePermission = PortalPermissionUtil.contains(permissionChecker, ActionKeys.UNLINK_LAYOUT_SET_PROTOTYPE);
@@ -148,7 +151,7 @@ renderResponse.setTitle((userGroup == null) ? LanguageUtil.get(request, "new-use
 
 			<c:choose>
 				<c:when test="<%= ((userGroupGroup == null) || ((publicLayoutSetPrototype == null) && (userGroupGroup.getPublicLayoutsPageCount() == 0))) && !layoutSetPrototypes.isEmpty() %>">
-					<aui:select disabled="<%= !hasUpdateSitePermission || !hasUserGroupUpdatePermission %>" label="public-pages" name="publicLayoutSetPrototypeId">
+					<aui:select disabled="<%= !hasUpdateSitePermission || !hasUserGroupUpdatePermission %>" label="my-profile" name="publicLayoutSetPrototypeId">
 						<aui:option label="none" selected="<%= true %>" value="" />
 
 						<%
@@ -175,7 +178,7 @@ renderResponse.setTitle((userGroup == null) ? LanguageUtil.get(request, "new-use
 					</c:choose>
 				</c:when>
 				<c:otherwise>
-					<aui:field-wrapper label="public-pages">
+					<aui:field-wrapper label="my-profile">
 						<c:choose>
 							<c:when test="<%= userGroupGroup != null %>">
 								<c:choose>
@@ -212,7 +215,7 @@ renderResponse.setTitle((userGroup == null) ? LanguageUtil.get(request, "new-use
 
 			<c:choose>
 				<c:when test="<%= ((userGroup == null) || ((privateLayoutSetPrototype == null) && (userGroupGroup.getPrivateLayoutsPageCount() == 0))) && !layoutSetPrototypes.isEmpty() %>">
-					<aui:select disabled="<%= !hasUpdateSitePermission || !hasUserGroupUpdatePermission %>" label="private-pages" name="privateLayoutSetPrototypeId">
+					<aui:select disabled="<%= !hasUpdateSitePermission || !hasUserGroupUpdatePermission %>" label="my-dashboard" name="privateLayoutSetPrototypeId">
 						<aui:option label="none" selected="<%= true %>" value="" />
 
 						<%
@@ -239,7 +242,7 @@ renderResponse.setTitle((userGroup == null) ? LanguageUtil.get(request, "new-use
 					</c:choose>
 				</c:when>
 				<c:otherwise>
-					<aui:field-wrapper label="private-pages">
+					<aui:field-wrapper label="my-dashboard">
 						<c:choose>
 							<c:when test="<%= userGroupGroup != null %>">
 								<c:choose>
