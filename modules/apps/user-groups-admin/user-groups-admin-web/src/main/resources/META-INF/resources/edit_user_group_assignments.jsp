@@ -26,6 +26,8 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 long userGroupId = ParamUtil.getLong(request, "userGroupId");
 
+String displayStyle = ParamUtil.getString(request, "displayStyle");
+
 UserGroup userGroup = UserGroupServiceUtil.fetchUserGroup(userGroupId);
 
 PortletURL portletURL = renderResponse.createRenderURL();
@@ -40,6 +42,10 @@ portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(redirect);
 
 renderResponse.setTitle(userGroup.getName());
+
+PortletURL searchURL = PortletURLUtil.clone(portletURL, renderResponse);
+
+UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 %>
 
 <liferay-ui:tabs
@@ -60,6 +66,32 @@ renderResponse.setTitle(userGroup.getName());
 	</aui:nav-bar-search>
 </aui:nav-bar>
 
+<liferay-frontend:management-bar
+	checkBoxContainerId="usersSearchContainer"
+	includeCheckBox="<%= true %>"
+>
+	<liferay-frontend:management-bar-buttons>
+		<liferay-frontend:management-bar-display-buttons
+			displayViews='<%= new String[] {"icon", "descriptive", "list"} %>'
+			portletURL="<%= portletURL %>"
+			selectedDisplayStyle="<%= displayStyle %>"
+		/>
+	</liferay-frontend:management-bar-buttons>
+
+	<liferay-frontend:management-bar-filters>
+		<liferay-frontend:management-bar-sort
+			orderByCol="<%= userSearch.getOrderByCol() %>"
+			orderByType="<%= userSearch.getOrderByType() %>"
+			orderColumns='<%= new String[] {"first-name", "screen-name"} %>'
+			portletURL="<%= portletURL %>"
+		/>
+	</liferay-frontend:management-bar-filters>
+
+	<liferay-frontend:management-bar-action-buttons>
+		<aui:a cssClass="btn" href="javascript:;" iconCssClass="icon-trash" id="removeUsers" />
+	</liferay-frontend:management-bar-action-buttons>
+</liferay-frontend:management-bar>
+
 <aui:form action="<%= portletURL.toString() %>" cssClass="container-fluid-1280" method="post" name="fm">
 	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
 	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
@@ -70,8 +102,9 @@ renderResponse.setTitle(userGroup.getName());
 	<aui:input name="removeUserIds" type="hidden" />
 
 	<liferay-ui:search-container
+		id="users"
 		rowChecker="<%= new UserUserGroupChecker(renderResponse, userGroup) %>"
-		searchContainer="<%= new UserSearch(renderRequest, portletURL) %>"
+		searchContainer="<%= userSearch %>"
 		var="userSearchContainer"
 	>
 		<%
@@ -116,11 +149,23 @@ renderResponse.setTitle(userGroup.getName());
 
 		<aui:button onClick="<%= taglibOnClick %>" value="update-associations" />
 
-		<liferay-ui:search-iterator markupView="lexicon" />
+		<liferay-ui:search-iterator displayStyle="<%= displayStyle %>" markupView="lexicon" />
 	</liferay-ui:search-container>
 </aui:form>
 
 <aui:script>
+	$('#<portlet:namespace />removeUsers').on(
+		'click',
+		function() {
+			var form = AUI.$(document.<portlet:namespace />fm);
+
+			form.fm('redirect').val('<%= portletURL.toString() %>');
+			form.fm('removeUserIds').val(Liferay.Util.listCheckedExcept(form, '<portlet:namespace />allRowIds'));
+
+			submitForm(form, '<portlet:actionURL name="editUserGroupAssignments" />');
+		}
+	);
+
 	function <portlet:namespace />updateUserGroupUsers(assignmentsRedirect) {
 		var Util = Liferay.Util;
 
