@@ -18,9 +18,6 @@
 
 <%
 String tabs1 = ParamUtil.getString(request, "tabs1");
-String tabs2 = ParamUtil.getString(request, "tabs2", "current");
-
-int cur = ParamUtil.getInteger(request, SearchContainer.DEFAULT_CUR_PARAM);
 
 String redirect = ParamUtil.getString(request, "redirect");
 
@@ -34,7 +31,6 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("mvcPath", "/edit_user_group_assignments.jsp");
 portletURL.setParameter("tabs1", tabs1);
-portletURL.setParameter("tabs2", tabs2);
 portletURL.setParameter("redirect", redirect);
 portletURL.setParameter("userGroupId", String.valueOf(userGroup.getUserGroupId()));
 
@@ -47,12 +43,6 @@ PortletURL searchURL = PortletURLUtil.clone(portletURL, renderResponse);
 
 UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 %>
-
-<liferay-ui:tabs
-	names="current,available"
-	param="tabs2"
-	url="<%= portletURL.toString() %>"
-/>
 
 <aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
 	<aui:nav cssClass="navbar-nav">
@@ -94,7 +84,6 @@ UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 
 <aui:form action="<%= portletURL.toString() %>" cssClass="container-fluid-1280" method="post" name="fm">
 	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
-	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
 	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 	<aui:input name="assignmentsRedirect" type="hidden" />
 	<aui:input name="userGroupId" type="hidden" value="<%= userGroup.getUserGroupId() %>" />
@@ -107,6 +96,7 @@ UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 		searchContainer="<%= userSearch %>"
 		var="userSearchContainer"
 	>
+
 		<%
 		UserSearchTerms searchTerms = (UserSearchTerms)userSearchContainer.getSearchTerms();
 
@@ -116,9 +106,7 @@ UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 			userParams.put("usersOrgsTree", user.getOrganizations());
 		}
 
-		if (tabs2.equals("current")) {
-			userParams.put("usersUserGroups", Long.valueOf(userGroup.getUserGroupId()));
-		}
+		userParams.put("usersUserGroups", Long.valueOf(userGroup.getUserGroupId()));
 		%>
 
 		<liferay-ui:user-search-container-results userParams="<%= userParams %>" />
@@ -141,14 +129,6 @@ UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 			/>
 		</liferay-ui:search-container-row>
 
-		<div class="separator"><!-- --></div>
-
-		<%
-		String taglibOnClick = renderResponse.getNamespace() + "updateUserGroupUsers('" + portletURL.toString() + StringPool.AMPERSAND + renderResponse.getNamespace() + "cur=" + cur + "');";
-		%>
-
-		<aui:button onClick="<%= taglibOnClick %>" value="update-associations" />
-
 		<liferay-ui:search-iterator displayStyle="<%= displayStyle %>" markupView="lexicon" />
 	</liferay-ui:search-container>
 </aui:form>
@@ -165,18 +145,6 @@ UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 			submitForm(form, '<portlet:actionURL name="editUserGroupAssignments" />');
 		}
 	);
-
-	function <portlet:namespace />updateUserGroupUsers(assignmentsRedirect) {
-		var Util = Liferay.Util;
-
-		var form = AUI.$(document.<portlet:namespace />fm);
-
-		form.fm('assignmentsRedirect').val(assignmentsRedirect);
-		form.fm('addUserIds').val(Util.listCheckedExcept(form, '<portlet:namespace />allRowIds'));
-		form.fm('removeUserIds').val(Util.listUncheckedExcept(form, '<portlet:namespace />allRowIds'));
-
-		submitForm(form, '<portlet:actionURL name="editUserGroupAssignments" />');
-	}
 </aui:script>
 
 <%
