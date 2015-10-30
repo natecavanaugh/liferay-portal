@@ -19,7 +19,16 @@
 <%
 String viewUserGroupsRedirect = ParamUtil.getString(request, "viewUserGroupsRedirect");
 String backURL = ParamUtil.getString(request, "backURL", viewUserGroupsRedirect);
-String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
+String displayStyle = ParamUtil.getString(request, "displayStyle");
+
+if (Validator.isNull(displayStyle)) {
+	displayStyle = portalPreferences.getValue(UserGroupsAdminPortletKeys.USER_GROUPS_ADMIN, "display-style", "list");
+}
+else {
+	portalPreferences.setValue(UserGroupsAdminPortletKeys.USER_GROUPS_ADMIN, "display-style", displayStyle);
+
+	request.setAttribute(WebKeys.SINGLE_PAGE_APPLICATION_CLEAR_CACHE, Boolean.TRUE);
+}
 
 PortletURL portletURL = renderResponse.createRenderURL();
 
