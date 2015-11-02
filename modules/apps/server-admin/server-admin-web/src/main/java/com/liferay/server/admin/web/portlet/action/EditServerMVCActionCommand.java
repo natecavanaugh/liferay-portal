@@ -187,14 +187,7 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 			gc();
 		}
 		else if (cmd.equals("installXuggler")) {
-			try {
-				installXuggler(actionRequest, actionResponse);
-			}
-			catch (XugglerInstallException xie) {
-				SessionErrors.add(
-					actionRequest, XugglerInstallException.class.getName(),
-					xie);
-			}
+			installXuggler(actionRequest, actionResponse);
 		}
 		else if (cmd.equals("reindex")) {
 			reindex(actionRequest);
@@ -344,9 +337,15 @@ public class EditServerMVCActionCommand extends BaseMVCActionCommand {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		String jarName = ParamUtil.getString(actionRequest, "jarName");
+		try {
+			String jarName = ParamUtil.getString(actionRequest, "jarName");
 
-		XugglerUtil.installNativeLibraries(jarName);
+			XugglerUtil.installNativeLibraries(jarName);
+		}
+		catch (XugglerInstallException xie) {
+			SessionErrors.add(
+				actionRequest, XugglerInstallException.class.getName(), xie);
+		}
 	}
 
 	protected void reindex(ActionRequest actionRequest) throws Exception {
