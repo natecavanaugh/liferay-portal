@@ -1,7 +1,5 @@
 <#include "../init.ftl">
 
-<#assign cssClass = "feopwfkqwepfkqewf">
-
 <#if required>
 	<#assign label = label + " (" + languageUtil.get(requestedLocale, "required") + ")">
 </#if>
