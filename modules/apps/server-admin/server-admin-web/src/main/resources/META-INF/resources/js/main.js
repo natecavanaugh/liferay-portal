@@ -1,17 +1,9 @@
 AUI.add(
 	'liferay-admin',
 	function(A) {
-		var AObject = A.Object;
 		var Lang = A.Lang;
-		var Poller = Liferay.Poller;
 
 		var STR_CLICK = 'click';
-
-		var STR_PORTLET_MSG_ERROR = 'alert alert-danger';
-
-		var STR_PORTLET_MSG_SUCCESS = 'alert alert-success';
-
-		var WIN = A.config.win;
 
 		var Admin = A.Component.create(
 			{
@@ -58,25 +50,13 @@ AUI.add(
 							);
 						}
 
-						var installXugglerButton = instance.one('#installXugglerButton');
-
-						if (installXugglerButton) {
-							instance._eventHandles.push(
-								installXugglerButton.on(STR_CLICK, instance._installXuggler, instance)
-							);
-
-							instance._installXugglerButton = installXugglerButton;
-
-							instance._xugglerProgressInfo = instance.one('#xugglerProgressInfo');
-						}
+						instance._bindXuggler();
 					},
 
 					destructor: function() {
 						var instance = this;
 
 						A.Array.invoke(instance._eventHandles, 'detach');
-
-						Poller.removeListener(instance.ID);
 					},
 
 					_addInputsFromData: function(node) {
@@ -93,64 +73,65 @@ AUI.add(
 						}
 					},
 
-					_installXuggler: function(event) {
+					_bindXuggler: function() {
 						var instance = this;
 
-						var xugglerProgressInfo = instance._xugglerProgressInfo;
+						var installXugglerButton = instance.one('#installXugglerButton');
 
-						Liferay.Util.toggleDisabled(instance._installXugglerButton, true);
+						if (installXugglerButton) {
+							instance._eventHandles.push(
+								installXugglerButton.on(STR_CLICK, instance._installXuggler, instance)
+							);
+
+							instance._installXugglerButton = installXugglerButton;
+						}
+					},
+
+					_installXuggler: function(event) {
+						var instance = this;
 
 						var form = instance.get('form');
 
 						var currentTarget = event.currentTarget;
 
+						form.one('#' + instance.ns('redirect')).val(instance.get('redirectURL'));
+
 						instance._addInputsFromData(currentTarget);
 
-						var ioRequest = A.io.request(
-							instance.get('url'),
+						var loadingMask = new A.LoadingMask(
 							{
-								autoLoad: false,
-								dataType: 'JSON',
-								form: form.getDOM()
+								'strings.loading': Liferay.Language.get('xuggler-library-is-installed'),
+								target: A.one('#adminXugglerPanel')
 							}
 						);
 
-						ioRequest.on(['failure', 'success'], instance._onIOResponse, instance);
+						loadingMask.show();
 
-						WIN[instance.ns('xugglerProgressInfo')].startProgress();
+						A.io.request(
+							instance.get('url'),
+							{
+								after: {
+									success: function(event, id, obj) {
+										var responseData = this.get('responseData');
 
-						ioRequest.start();
-					},
+										var adminXugglerPanel = AUI.$(responseData).find('#adminXugglerPanel');
 
-					_onIOResponse: function(event) {
-						var instance = this;
+										var adminXugglerPanelHTML = adminXugglerPanel.html();
 
-						var responseData = event.currentTarget.get('responseData');
+										AUI.$('#adminXugglerPanel').html(adminXugglerPanelHTML);
+									},
+									complete: function() {
+										loadingMask.hide();
 
-						var progressBar = instance.one('#xugglerProgressInfoBar');
+										instance._bindXuggler();
+									}
+								},
 
-						progressBar.hide();
+								dataType: 'HTML',
 
-						WIN[instance.ns('xugglerProgressInfo')].fire('complete');
-
-						var xugglerProgressInfo = instance._xugglerProgressInfo;
-
-						var cssClass = STR_PORTLET_MSG_ERROR;
-
-						var message = '';
-
-						if (responseData.success) {
-							cssClass = STR_PORTLET_MSG_SUCCESS;
-
-							message = Liferay.Language.get('xuggler-has-been-installed-you-need-to-reboot-your-server-to-apply-changes');
-						}
-						else {
-							message = Liferay.Language.get('an-unexpected-error-occurred-while-installing-xuggler') + ': ' + responseData.exception;
-						}
-
-						xugglerProgressInfo.html(message);
-
-						xugglerProgressInfo.addClass(cssClass);
+								form: form.getDOM()
+							}
+						);
 					},
 
 					_submitForm: function(event) {
@@ -174,6 +155,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-poller', 'liferay-portlet-base']
+		requires: ['aui-loading-mask-deprecated', 'liferay-portlet-base']
 	}
 );
