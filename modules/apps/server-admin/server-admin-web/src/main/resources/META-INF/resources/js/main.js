@@ -23,7 +23,8 @@ AUI.add(
 						value: null
 					},
 
-					url: {
+					submitUrl: {
+						validator: Lang.isString,
 						value: null
 					}
 				},
@@ -35,10 +36,10 @@ AUI.add(
 				NAME: 'admin',
 
 				prototype: {
-					initializer: function(config) {
+					initializer: function() {
 						var instance = this;
 
-						instance.delegate(STR_CLICK, A.bind(instance._onSubmit, instance), instance.get('submitButtonSelector'));
+						A.one(instance.get('form')).delegate(STR_CLICK, A.bind(instance._onSubmit, instance), instance.get('submitButtonSelector'));
 					},
 
 					_addInputsFromData: function(data) {
@@ -46,14 +47,15 @@ AUI.add(
 
 						var form = instance.get('form');
 
-						for (var key in data) {
-							if (data.hasOwnProperty(key)) {
-								form.append('<input id="' + instance.ns(key) + '" name="' + instance.ns(key) + '" type="hidden" value="' + data[key] + '" />');
+						A.each(
+							data,
+							function(value, key, obj) {
+								form.append('<input id="' + instance.ns(key) + '" name="' + instance.ns(key) + '" type="hidden" value="' + value + '" />');
 							}
-						}
+						);
 					},
 
-					_installXuggler: function(event) {
+					_installXuggler: function() {
 						var instance = this;
 
 						var form = instance.get('form');
@@ -68,20 +70,18 @@ AUI.add(
 						loadingMask.show();
 
 						A.io.request(
-							instance.get('url'),
+							instance.get('submitUrl'),
 							{
-								after: {
+								on: {
+									complete: function() {
+										loadingMask.hide();
+									},
 									success: function(event, id, obj) {
 										var responseData = this.get('responseData');
 
-										var adminXugglerPanel = AUI.$(responseData).find('#adminXugglerPanel');
+										var newAdminXugglerPanelHTML = A.Node.create(responseData).one('#adminXugglerPanel').html();
 
-										var adminXugglerPanelHTML = adminXugglerPanel.html();
-
-										AUI.$('#adminXugglerPanel').html(adminXugglerPanelHTML);
-									},
-									complete: function() {
-										loadingMask.hide();
+										A.one('#adminXugglerPanel').html(newAdminXugglerPanelHTML);
 									}
 								},
 
@@ -95,23 +95,17 @@ AUI.add(
 					_onSubmit: function(event) {
 						var instance = this;
 
-						var currentTarget = event.currentTarget;
+						var data = event.currentTarget.getData();
 
-						var form = instance.get('form');
-
-						form.one('#' + instance.ns('redirect')).val(instance.get('redirectURL'));
-
-						var data = currentTarget.getData();
+						var cmd = data.cmd;
 
 						instance._addInputsFromData(data);
 
-						var cmd = data['cmd'];
-
 						if (!!cmd && cmd === 'installXuggler') {
-							instance._installXuggler(event);
+							instance._installXuggler();
 						}
 						else {
-							submitForm(form, instance.get('url'));
+							submitForm(instance.get('form'), instance.get('submitUrl'));
 						}
 
 					}
