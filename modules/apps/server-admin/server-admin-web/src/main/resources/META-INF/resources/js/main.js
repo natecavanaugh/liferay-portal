@@ -74,6 +74,8 @@ AUI.add(
 							{
 								on: {
 									complete: function() {
+										A.one('#' + instance.ns('cmd')).remove();
+
 										loadingMask.hide();
 									},
 									success: function(event, id, obj) {
