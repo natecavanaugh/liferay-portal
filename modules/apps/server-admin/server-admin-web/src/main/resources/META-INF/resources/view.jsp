@@ -34,7 +34,8 @@
 			<portlet:param name="mvcRenderCommandName" value="/server_admin/view" />
 			<portlet:param name="tabs1" value="<%= tabs1 %>" />
 			<portlet:param name="tabs2" value="<%= tabs2 %>" />
-			<portlet:param name="cur" value="<%= String.valueOf(cur) %>" />
+			<portlet:param name="<%= SearchContainer.DEFAULT_CUR_PARAM %>" value="<%= String.valueOf(cur) %>" />
+			<portlet:param name="<%= SearchContainer.DEFAULT_DELTA_PARAM %>" value="<%= String.valueOf(delta) %>" />
 		</portlet:renderURL>
 
 		<portlet:actionURL name="/server_admin/edit_server" var="editServerURL" />
@@ -58,14 +59,6 @@
 			</c:choose>
 		</aui:form>
 
-		<portlet:renderURL var="redirectURL">
-			<portlet:param name="mvcRenderCommandName" value="/server_admin/view" />
-			<portlet:param name="tabs1" value="<%= tabs1 %>" />
-			<portlet:param name="tabs2" value="<%= tabs2 %>" />
-			<portlet:param name="<%= SearchContainer.DEFAULT_CUR_PARAM %>" value="<%= String.valueOf(cur) %>" />
-			<portlet:param name="<%= SearchContainer.DEFAULT_DELTA_PARAM %>" value="<%= String.valueOf(delta) %>" />
-		</portlet:renderURL>
-
 		<aui:script use="liferay-admin">
 			new Liferay.Portlet.Admin(
 				{
@@ -73,7 +66,7 @@
 					namespace: '<portlet:namespace />',
 					redirectUrl: '<%= redirectURL %>',
 					submitButtonSelector: '.save-server-button',
-					url: '<%= editServerURL %>'
+					submitUrl: '<%= editServerURL %>'
 				}
 			);
 		</aui:script>
