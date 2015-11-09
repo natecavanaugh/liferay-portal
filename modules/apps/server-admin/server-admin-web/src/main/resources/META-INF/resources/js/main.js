@@ -38,33 +38,13 @@ AUI.add(
 					initializer: function(config) {
 						var instance = this;
 
-						instance._errorCount = 0;
-
-						instance._eventHandles = [];
-
-						var submitButton = instance.one(instance.get('submitButtonSelector'));
-
-						if (submitButton) {
-							instance._eventHandles.push(
-								submitButton.on(STR_CLICK, instance._submitForm, instance)
-							);
-						}
-
-						instance._bindXuggler();
+						instance.delegate(STR_CLICK, A.bind(instance._onSubmit, instance), instance.get('submitButtonSelector'));
 					},
 
-					destructor: function() {
-						var instance = this;
-
-						A.Array.invoke(instance._eventHandles, 'detach');
-					},
-
-					_addInputsFromData: function(node) {
+					_addInputsFromData: function(data) {
 						var instance = this;
 
 						var form = instance.get('form');
-
-						var data = node.getData();
 
 						for (var key in data) {
 							if (data.hasOwnProperty(key)) {
@@ -73,30 +53,10 @@ AUI.add(
 						}
 					},
 
-					_bindXuggler: function() {
-						var instance = this;
-
-						var installXugglerButton = instance.one('#installXugglerButton');
-
-						if (installXugglerButton) {
-							instance._eventHandles.push(
-								installXugglerButton.on(STR_CLICK, instance._installXuggler, instance)
-							);
-
-							instance._installXugglerButton = installXugglerButton;
-						}
-					},
-
 					_installXuggler: function(event) {
 						var instance = this;
 
 						var form = instance.get('form');
-
-						var currentTarget = event.currentTarget;
-
-						form.one('#' + instance.ns('redirect')).val(instance.get('redirectURL'));
-
-						instance._addInputsFromData(currentTarget);
 
 						var loadingMask = new A.LoadingMask(
 							{
@@ -122,8 +82,6 @@ AUI.add(
 									},
 									complete: function() {
 										loadingMask.hide();
-
-										instance._bindXuggler();
 									}
 								},
 
@@ -134,7 +92,7 @@ AUI.add(
 						);
 					},
 
-					_submitForm: function(event) {
+					_onSubmit: function(event) {
 						var instance = this;
 
 						var currentTarget = event.currentTarget;
@@ -143,9 +101,19 @@ AUI.add(
 
 						form.one('#' + instance.ns('redirect')).val(instance.get('redirectURL'));
 
-						instance._addInputsFromData(currentTarget);
+						var data = currentTarget.getData();
 
-						submitForm(form, instance.get('url'));
+						instance._addInputsFromData(data);
+
+						var cmd = data['cmd'];
+
+						if (!!cmd && cmd === 'installXuggler') {
+							instance._installXuggler(event);
+						}
+						else {
+							submitForm(form, instance.get('url'));
+						}
+
 					}
 				}
 			}
