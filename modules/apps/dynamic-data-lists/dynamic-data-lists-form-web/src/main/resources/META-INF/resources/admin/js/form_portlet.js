@@ -48,6 +48,12 @@ AUI.add(
 					renderUI: function() {
 						var instance = this;
 
+						instance.alert = instance.one('.alert');
+
+						if (instance.alert) {
+							instance.alert.addClass('ddl-form-alert');
+						}
+
 						instance.one('#loader').remove();
 
 						instance.get('formBuilder').render(instance.one('#formBuilder'));
@@ -66,6 +72,7 @@ AUI.add(
 
 						instance._eventHandlers = [
 							rootNode.delegate('click', A.bind('_onClickButtons', instance), '.ddl-form-builder-buttons .ddl-button'),
+							rootNode.delegate('click', A.bind('_onClickCloseAlert', instance), '.alert .close'),
 							Liferay.on('destroyPortlet', A.bind('_onDestroyPortlet', instance))
 						];
 					},
@@ -148,6 +155,12 @@ AUI.add(
 						if (currentTarget.hasClass('save')) {
 							instance.submitForm();
 						}
+					},
+
+					_onClickCloseAlert: function() {
+						var instance = this;
+
+						instance.alert.addClass('ddl-form-alert-hidden');
 					},
 
 					_onDestroyPortlet: function(event) {

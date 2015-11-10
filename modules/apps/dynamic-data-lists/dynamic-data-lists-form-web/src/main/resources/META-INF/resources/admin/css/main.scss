@@ -8,10 +8,44 @@
 }
 
 .portlet-forms {
-	.ddl-form-alert {
-		position: absolute;
-		top: 0;
-		width: 100%;
+	.alert {
+		display: none;
+
+		&.ddl-form-alert {
+			$hiddenTop: -200px;
+
+			border-radius: 0;
+			display: block;
+			position: absolute;
+			width: 100%;
+			z-index: 500;
+
+			@include keyframes(slideIn) {
+				0% {
+					top: $hiddenTop;
+				}
+
+				100% {
+					top: 0;
+				}
+			}
+
+			@include animation(slideIn 1s forwards);
+
+			&.ddl-form-alert-hidden {
+				@include keyframes(slideOut) {
+					0% {
+						top: 0;
+					}
+
+					100% {
+						top: $hiddenTop;
+					}
+				}
+
+				@include animation(slideOut 1s forwards);
+			}
+		}
 	}
 
 	.ddl-form-builder-buttons {
@@ -82,6 +116,10 @@
 		font-size: 14px;
 		position: absolute;
 	}
+}
+
+.portal-popup .portlet-forms-display .lfr-icon-actions {
+	display: none;
 }
 
 .portal-popup, .portlet-forms-admin {
