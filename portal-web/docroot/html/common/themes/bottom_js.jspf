@@ -162,7 +162,7 @@ if (layout != null) {
 			}
 		);
 
-		var navBlock = A.one(Liferay.Data.NAV_SELECTOR);
+		var navBlock = A.one(Liferay.Data.NAV_SELECTOR + ' .navbar-site');
 
 		if (navBlock) {
 			navBlock.once(
