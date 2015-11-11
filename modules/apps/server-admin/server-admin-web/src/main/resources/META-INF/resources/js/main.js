@@ -18,7 +18,7 @@ AUI.add(
 						value: null
 					},
 
-					submitButtonSelector: {
+					submitButton: {
 						validator: Lang.isString,
 						value: null
 					},
@@ -39,7 +39,11 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
-						A.one(instance.get('form')).delegate(STR_CLICK, A.bind(instance._onSubmit, instance), instance.get('submitButtonSelector'));
+						instance.get('form').delegate(
+							STR_CLICK,
+							A.bind('_onSubmit', instance),
+							instance.get('submitButton')
+						);
 					},
 
 					_addInputsFromData: function(data) {
@@ -49,7 +53,7 @@ AUI.add(
 
 						A.each(
 							data,
-							function(value, key, obj) {
+							function(value, key) {
 								form.append('<input id="' + instance.ns(key) + '" name="' + instance.ns(key) + '" type="hidden" value="' + value + '" />');
 							}
 						);
@@ -72,24 +76,32 @@ AUI.add(
 						A.io.request(
 							instance.get('submitUrl'),
 							{
+								dataType: 'HTML',
+								form: form.getDOM(),
 								on: {
 									complete: function() {
-										A.one('#' + instance.ns('cmd')).remove();
+										var cmdNode = instance.one('cmd');
 
-										loadingMask.hide();
+										if (cmdNode) {
+											cmdNode.remove();
+
+											loadingMask.hide();
+										}
 									},
 									success: function(event, id, obj) {
 										var responseData = this.get('responseData');
 
-										var newAdminXugglerPanelHTML = A.Node.create(responseData).one('#adminXugglerPanel').html();
+										var newAdminXugglerPanel = A.Node.create(responseData).one('#adminXugglerPanel');
 
-										A.one('#adminXugglerPanel').html(newAdminXugglerPanelHTML);
+										var adminXugglerPanel = A.one('#adminXugglerPanel');
+
+										if (adminXugglerPanel && newAdminXugglerPanel) {
+											var newAdminXugglerPanelHTML = newAdminXugglerPanel.html();
+
+											adminXugglerPanel.html(newAdminXugglerPanelHTML);
+										}
 									}
-								},
-
-								dataType: 'HTML',
-
-								form: form.getDOM()
+								}
 							}
 						);
 					},
@@ -107,7 +119,10 @@ AUI.add(
 							instance._installXuggler();
 						}
 						else {
-							submitForm(instance.get('form'), instance.get('submitUrl'));
+							submitForm(
+								instance.get('form'),
+								instance.get('submitUrl')
+							);
 						}
 
 					}
