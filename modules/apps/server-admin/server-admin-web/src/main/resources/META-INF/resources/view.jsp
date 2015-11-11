@@ -52,11 +52,9 @@
 				/>
 			</c:if>
 
-			<c:choose>
-				<c:when test='<%= tabs1.equals("server") %>'>
-					<liferay-util:include page="/server.jsp" servletContext="<%= application %>" />
-				</c:when>
-			</c:choose>
+			<c:if test='<%= tabs1.equals("server") %>'>
+				<liferay-util:include page="/server.jsp" servletContext="<%= application %>" />
+			</c:if>
 		</aui:form>
 
 		<aui:script use="liferay-admin">
@@ -65,7 +63,7 @@
 					form: document.<portlet:namespace />fm,
 					namespace: '<portlet:namespace />',
 					redirectUrl: '<%= redirectURL %>',
-					submitButtonSelector: '.save-server-button',
+					submitButton: '.save-server-button',
 					submitUrl: '<%= editServerURL %>'
 				}
 			);
