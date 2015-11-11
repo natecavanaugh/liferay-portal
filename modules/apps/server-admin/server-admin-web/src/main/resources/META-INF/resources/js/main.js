@@ -92,7 +92,7 @@ AUI.add(
 								form: form.getDOM(),
 								on: {
 									complete: function() {
-										var cmdNode = instance.one('cmd');
+										var cmdNode = instance.one('#' + instance.ns('cmd'));
 
 										if (cmdNode) {
 											cmdNode.remove();
