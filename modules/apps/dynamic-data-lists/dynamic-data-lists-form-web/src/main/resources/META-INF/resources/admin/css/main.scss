@@ -74,8 +74,7 @@
 		margin-right: 125px;
 	}
 
-	.validation-message {
-		font-size: 14px;
+	.help-block {
 		position: absolute;
 	}
 }
@@ -224,7 +223,7 @@
 			}
 		}
 
-		.liferay-ddm-form-field-key-value .validation-message {
+		.liferay-ddm-form-field-key-value .help-block {
 			height: 22px;
 			position: relative;
 		}
