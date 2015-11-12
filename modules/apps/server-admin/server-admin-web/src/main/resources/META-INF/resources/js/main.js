@@ -103,9 +103,9 @@ AUI.add(
 									success: function(event, id, obj) {
 										var responseData = this.get('responseData');
 
-										var newAdminXugglerPanel = A.Node.create(responseData).one('#adminXugglerPanel');
-
 										var adminXugglerPanel = A.one('#adminXugglerPanel');
+
+										var newAdminXugglerPanel = A.Node.create(responseData).one('#adminXugglerPanel');
 
 										if (adminXugglerPanel && newAdminXugglerPanel) {
 											var newAdminXugglerPanelHTML = newAdminXugglerPanel.html();
