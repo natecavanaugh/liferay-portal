@@ -39,23 +39,27 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
-						var eventHandles = [];
+						instance._eventHandles = [];
+					},
 
-						eventHandles.push(
+					bindUI: function() {
+						var instance = this;
+
+						instance._eventHandles.push(
 							instance.get('form').delegate(
 								STR_CLICK,
 								A.bind('_onSubmit', instance),
 								instance.get('submitButton')
 							)
 						);
-
-						instance._eventHandles = eventHandles;
 					},
 
 					destructor: function() {
 						var instance = this;
 
 						A.Array.invoke(instance._eventHandles, 'detach');
+
+						instance._eventHandles = null;
 					},
 
 					_addInputsFromData: function(data) {
