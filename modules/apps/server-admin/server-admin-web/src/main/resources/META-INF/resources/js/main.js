@@ -78,7 +78,7 @@ AUI.add(
 
 						var loadingMask = new A.LoadingMask(
 							{
-								'strings.loading': Liferay.Language.get('xuggler-library-is-installed'),
+								'strings.loading': Liferay.Language.get('xuggler-library-is-installing'),
 								target: A.one('#adminXugglerPanel')
 							}
 						);
