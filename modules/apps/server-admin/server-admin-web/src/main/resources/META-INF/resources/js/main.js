@@ -69,12 +69,16 @@ AUI.add(
 
 						var form = instance.get('form');
 
-						A.each(
+						var inputsArray = A.Object.map(
 							data,
 							function(value, key) {
-								form.append('<input id="' + instance.ns(key) + '" name="' + instance.ns(key) + '" type="hidden" value="' + value + '" />');
+								var nsKey = instance.ns(key);
+
+								return '<input id="' + nsKey + '" name="' + nsKey + '" type="hidden" value="' + value + '" />';
 							}
 						);
+
+						form.append(inputsArray.join(''));
 					},
 
 					_installXuggler: function() {
