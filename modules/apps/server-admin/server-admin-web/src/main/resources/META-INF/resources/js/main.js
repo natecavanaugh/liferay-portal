@@ -86,44 +86,15 @@ AUI.add(
 
 						var form = instance.get('form');
 
-						var loadingMask = new A.LoadingMask(
-							{
-								'strings.loading': Liferay.Language.get('xuggler-library-is-installing'),
-								target: A.one('#adminXugglerPanel')
-							}
-						);
-
-						loadingMask.show();
-
-						A.io.request(
+						A.one('#adminXugglerPanelContent').load(
 							instance.get('submitUrl'),
 							{
-								dataType: 'HTML',
 								form: form.getDOM(),
-								on: {
-									complete: function() {
-										var cmdNode = instance.one('cmd');
-
-										if (cmdNode) {
-											cmdNode.remove();
-
-											loadingMask.hide();
-										}
-									},
-									success: function(event, id, obj) {
-										var responseData = this.get('responseData');
-
-										var newAdminXugglerPanel = A.Node.create(responseData).one('#adminXugglerPanel');
-
-										var adminXugglerPanel = A.one('#adminXugglerPanel');
-
-										if (adminXugglerPanel && newAdminXugglerPanel) {
-											var newAdminXugglerPanelHTML = newAdminXugglerPanel.html();
-
-											adminXugglerPanel.html(newAdminXugglerPanelHTML);
-										}
-									}
-								}
+								loadingMask: {
+									'strings.loading': Liferay.Language.get('xuggler-library-is-installing')
+								},
+								selector: '#adminXugglerPanelContent',
+								where: 'outer'
 							}
 						);
 					},
@@ -138,7 +109,13 @@ AUI.add(
 						instance._addInputsFromData(data);
 
 						if (!!cmd && cmd === 'installXuggler') {
+							var cmdNode = instance.one('#cmd');
+
 							instance._installXuggler();
+
+							if (cmdNode) {
+								cmdNode.remove();
+							}
 						}
 						else {
 							submitForm(
@@ -156,6 +133,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-loading-mask-deprecated', 'liferay-portlet-base']
+		requires: ['aui-io-plugin-deprecated', 'liferay-portlet-base']
 	}
 );
