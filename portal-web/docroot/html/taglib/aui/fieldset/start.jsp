@@ -44,4 +44,4 @@
 		</c:choose>
 	</c:if>
 
-	<div class="<%= !collapsed ? "in" : StringPool.BLANK %> <%= collapsible ? "panel-collapse collapse" : StringPool.BLANK %> <%= column ? "row-fluid" : StringPool.BLANK %>" id="<%= panelId %>">
+	<div class="<%= !collapsed ? "in" : StringPool.BLANK %> <%= collapsible ? "panel-collapse collapse" : StringPool.BLANK %> <%= column ? "row" : StringPool.BLANK %>" id="<%= panelId %>">
