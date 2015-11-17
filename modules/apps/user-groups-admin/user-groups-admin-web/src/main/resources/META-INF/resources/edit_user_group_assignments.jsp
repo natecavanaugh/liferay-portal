@@ -42,6 +42,8 @@ renderResponse.setTitle(userGroup.getName());
 PortletURL searchURL = PortletURLUtil.clone(portletURL, renderResponse);
 
 UserSearch userSearch = new UserSearch(renderRequest, searchURL);
+
+RowChecker rowChecker = new UserUserGroupChecker(renderResponse, userGroup);
 %>
 
 <aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
@@ -92,7 +94,7 @@ UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 
 	<liferay-ui:search-container
 		id="users"
-		rowChecker="<%= new UserUserGroupChecker(renderResponse, userGroup) %>"
+		rowChecker="<%= rowChecker %>"
 		searchContainer="<%= userSearch %>"
 		var="userSearchContainer"
 	>
@@ -118,15 +120,7 @@ UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 			modelVar="user2"
 			rowIdProperty="screenName"
 		>
-			<liferay-ui:search-container-column-text
-				name="name"
-				property="fullName"
-			/>
-
-			<liferay-ui:search-container-column-text
-				name="screen-name"
-				property="screenName"
-			/>
+			<%@ include file="/user_search_columns.jspf" %>
 		</liferay-ui:search-container-row>
 
 		<liferay-ui:search-iterator displayStyle="<%= displayStyle %>" markupView="lexicon" />
