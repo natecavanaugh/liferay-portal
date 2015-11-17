@@ -36,7 +36,7 @@ AUI.add(
 
 						FormBuilderFieldTypesModal.superclass.bindUI.apply(instance, arguments);
 
-						instance.on('xyChange', FormBuilderUtil._onModalXYChange);
+						instance.on('xyChange', instance._onModalXYChange);
 					},
 
 					_createColumn: function(size) {
@@ -56,6 +56,10 @@ AUI.add(
 						var instance = this;
 
 						return A.Node.create(TPL_ROW);
+					},
+
+					_onModalXYChange: function(event) {
+						event.newVal = FormBuilderUtil.normalizeModalXY(event.newVal);
 					},
 
 					_uiSetFieldTypes: function(fieldTypes) {

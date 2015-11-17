@@ -82,10 +82,8 @@ AUI.add(
 
 				var settingsModal = builder._fieldSettingsModal;
 
-				if (!instance._settingsModalEventHandlers) {
-					instance._settingsModalEventHandlers = [
-						settingsModal._modal.on('xyChange', FormBuilderUtil._onModalXYChange)
-					];
+				if (!settingsModal._positionEventHandler) {
+					settingsModal._positionEventHandler = settingsModal._modal.on('xyChange', instance._onModalXYChange);
 				}
 
 				return settingsModal;
@@ -156,6 +154,10 @@ AUI.add(
 				settingsForm.submit(callback);
 
 				return false;
+			},
+
+			_onModalXYChange: function(event) {
+				event.newVal = FormBuilderUtil.normalizeModalXY(event.newVal);
 			},
 
 			_renderFormBuilderField: function() {

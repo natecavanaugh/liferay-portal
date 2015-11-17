@@ -23,12 +23,13 @@ AUI.add(
 					}
 				);
 			},
-			_onModalXYChange: function(event) {
-				var xy = event.newVal;
 
+			normalizeModalXY: function(xy) {
 				if (!A.UA.mobile) {
 					xy[1] = Math.min(90, xy[1]);
 				}
+
+				return xy;
 			}
 		};
 
