@@ -5,6 +5,8 @@ AUI.add(
 
 		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
 
+		var FormBuilderUtil = Liferay.DDL.FormBuilderUtil;
+
 		var CSS_FIELD = A.getClassName('form', 'builder', 'field');
 
 		var CSS_FIELD_CONTENT_TOOLBAR = A.getClassName('form', 'builder', 'field', 'content', 'toolbar');
@@ -82,7 +84,7 @@ AUI.add(
 
 				if (!instance._settingsModalEventHandlers) {
 					instance._settingsModalEventHandlers = [
-						settingsModal._modal.on('xyChange', instance._onSettingsModalXYChange)
+						settingsModal._modal.on('xyChange', FormBuilderUtil._onModalXYChange)
 					];
 				}
 
@@ -109,9 +111,12 @@ AUI.add(
 				settingsModalToolbar.item(0).set('cssClass', 'btn-lg btn-primary');
 				settingsModalToolbar.item(1).set('cssClass', 'btn-lg btn-link');
 
-				var portletNode = A.one('#p_p_id' + instance.get('portletNamespace'));
+				if (!A.UA.mobile) {
+					var portletNode = A.one('#p_p_id' + instance.get('portletNamespace'));
 
-				settingsModal._modal.set('centered', portletNode);
+					settingsModal._modal.set('centered', portletNode);
+				}
+
 				settingsModal._modal.set('zIndex', Liferay.zIndex.OVERLAY);
 			},
 
@@ -151,12 +156,6 @@ AUI.add(
 				settingsForm.submit(callback);
 
 				return false;
-			},
-
-			_onSettingsModalXYChange: function(event) {
-				var xy = event.newVal;
-
-				xy[1] = Math.max(90, xy[1]);
 			},
 
 			_renderFormBuilderField: function() {
@@ -216,6 +215,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddl-form-builder-settings-form']
+		requires: ['liferay-ddl-form-builder-settings-form', 'liferay-ddl-form-builder-util']
 	}
 );

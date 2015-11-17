@@ -22,6 +22,13 @@ AUI.add(
 						NAME: fieldClass.NAME
 					}
 				);
+			},
+			_onModalXYChange: function(event) {
+				var xy = event.newVal;
+
+				if (!A.UA.mobile) {
+					xy[1] = Math.min(90, xy[1]);
+				}
 			}
 		};
 
