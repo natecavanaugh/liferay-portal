@@ -26,6 +26,23 @@ AUI.add(
 				NAME: 'liferay-ddm-form-field-select',
 
 				prototype: {
+					getContextValue: function() {
+						var instance = this;
+
+						var value = SelectField.superclass.getContextValue.apply(instance, arguments);
+
+						if (!Lang.isArray(value)) {
+							try {
+								value = JSON.parse(value);
+							}
+							catch (e) {
+								value = [value];
+							}
+						}
+
+						return value[0] || '';
+					},
+
 					getOptions: function() {
 						var instance = this;
 
@@ -63,11 +80,7 @@ AUI.add(
 
 						var status = '';
 
-						var value = instance.get('value');
-
-						if (instance.get('localizable')) {
-							value = value[instance.get('locale')] || [];
-						}
+						var value = instance.getContextValue();
 
 						if (value.indexOf(option.value) > -1) {
 							status = 'selected';
