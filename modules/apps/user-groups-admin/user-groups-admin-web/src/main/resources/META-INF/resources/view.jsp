@@ -40,7 +40,15 @@ pageContext.setAttribute("portletURL", portletURL);
 
 String portletURLString = portletURL.toString();
 
-UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL);
+SearchContainer userGroupSearchContainer = new UserGroupSearch(renderRequest, portletURL);
+
+UserGroupDisplayTerms searchTerms = (UserGroupDisplayTerms)userGroupSearchContainer.getSearchTerms();
+
+LinkedHashMap<String, Object> userGroupParams = new LinkedHashMap<String, Object>();
+
+if (filterManageableUserGroups) {
+	userGroupParams.put("userGroupsUsers", Long.valueOf(user.getUserId()));
+}
 %>
 
 <liferay-ui:error exception="<%= RequiredUserGroupException.class %>" message="you-cannot-delete-user-groups-that-have-users" />
@@ -57,33 +65,35 @@ UserGroupSearch userGroupSearch = new UserGroupSearch(renderRequest, portletURL)
 	</aui:nav-bar-search>
 </aui:nav-bar>
 
-<liferay-frontend:management-bar
-	checkBoxContainerId="userGroupsSearchContainer"
-	includeCheckBox="<%= true %>"
->
-	<liferay-frontend:management-bar-buttons>
-		<liferay-frontend:management-bar-display-buttons
-			displayViews='<%= new String[] {"descriptive", "list"} %>'
-			portletURL="<%= portletURL %>"
-			selectedDisplayStyle="<%= displayStyle %>"
-		/>
-	</liferay-frontend:management-bar-buttons>
+<c:if test="<%= UserGroupLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), userGroupParams) > 0 %>">
+	<liferay-frontend:management-bar
+		checkBoxContainerId="userGroupsSearchContainer"
+		includeCheckBox="<%= true %>"
+	>
+		<liferay-frontend:management-bar-buttons>
+			<liferay-frontend:management-bar-display-buttons
+				displayViews='<%= new String[] {"descriptive", "list"} %>'
+				portletURL="<%= portletURL %>"
+				selectedDisplayStyle="<%= displayStyle %>"
+			/>
+		</liferay-frontend:management-bar-buttons>
 
-	<liferay-frontend:management-bar-filters>
-		<liferay-frontend:management-bar-sort
-			orderByCol="<%= userGroupSearch.getOrderByCol() %>"
-			orderByType="<%= userGroupSearch.getOrderByType() %>"
-			orderColumns='<%= new String[] {"name"} %>'
-			portletURL="<%= portletURL %>"
-		/>
-	</liferay-frontend:management-bar-filters>
+		<liferay-frontend:management-bar-filters>
+			<liferay-frontend:management-bar-sort
+				orderByCol="<%= userGroupSearchContainer.getOrderByCol() %>"
+				orderByType="<%= userGroupSearchContainer.getOrderByType() %>"
+				orderColumns='<%= new String[] {"name"} %>'
+				portletURL="<%= portletURL %>"
+			/>
+		</liferay-frontend:management-bar-filters>
 
-	<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_USER_GROUP) %>">
-		<liferay-frontend:management-bar-action-buttons>
-			<aui:a cssClass="btn" href="javascript:;" iconCssClass="icon-trash" id="deleteUserGroups" />
-		</liferay-frontend:management-bar-action-buttons>
-	</c:if>
-</liferay-frontend:management-bar>
+		<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_USER_GROUP) %>">
+			<liferay-frontend:management-bar-action-buttons>
+				<aui:a cssClass="btn" href="javascript:;" iconCssClass="icon-trash" id="deleteUserGroups" />
+			</liferay-frontend:management-bar-action-buttons>
+		</c:if>
+	</liferay-frontend:management-bar>
+</c:if>
 
 <aui:form action="<%= portletURLString %>" cssClass="container-fluid-1280" method="get" name="fm">
 	<liferay-portlet:renderURLParams varImpl="portletURL" />
