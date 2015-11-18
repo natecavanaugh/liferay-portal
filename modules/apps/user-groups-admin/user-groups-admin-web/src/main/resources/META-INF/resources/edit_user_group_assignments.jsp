@@ -51,7 +51,7 @@ PortletURL searchURL = PortletURLUtil.clone(portletURL, renderResponse);
 
 UserSearch userSearch = new UserSearch(renderRequest, searchURL);
 
-RowChecker rowChecker = new UserUserGroupChecker(renderResponse, userGroup);
+RowChecker rowChecker = new EmptyOnClickRowChecker(renderResponse);
 %>
 
 <aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
