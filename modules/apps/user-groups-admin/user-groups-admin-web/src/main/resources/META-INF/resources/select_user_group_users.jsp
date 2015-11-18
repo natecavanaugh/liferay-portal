@@ -47,7 +47,15 @@ portletURL.setParameter("userGroupId", String.valueOf(userGroup.getUserGroupId()
 
 PortletURL searchURL = PortletURLUtil.clone(portletURL, renderResponse);
 
-UserSearch userSearch = new UserSearch(renderRequest, searchURL);
+SearchContainer userSearchContainer = new UserSearch(renderRequest, searchURL);
+
+UserSearchTerms searchTerms = (UserSearchTerms)userSearchContainer.getSearchTerms();
+
+LinkedHashMap<String, Object> userParams = new LinkedHashMap<String, Object>();
+
+if (filterManageableOrganizations) {
+	userParams.put("usersOrgsTree", user.getOrganizations());
+}
 
 RowChecker rowChecker = new UserUserGroupChecker(renderResponse, userGroup);
 %>
@@ -64,48 +72,38 @@ RowChecker rowChecker = new UserUserGroupChecker(renderResponse, userGroup);
 	</aui:nav-bar-search>
 </aui:nav-bar>
 
-<liferay-frontend:management-bar
-	checkBoxContainerId="usersSearchContainer"
-	includeCheckBox="<%= true %>"
->
-	<liferay-frontend:management-bar-buttons>
-		<liferay-frontend:management-bar-display-buttons
-			displayViews='<%= new String[] {"icon", "descriptive", "list"} %>'
-			portletURL="<%= portletURL %>"
-			selectedDisplayStyle="<%= displayStyle %>"
-		/>
-	</liferay-frontend:management-bar-buttons>
+<c:if test="<%= UserLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), searchTerms.getStatus(), userParams) > 0 %>">
+	<liferay-frontend:management-bar
+		checkBoxContainerId="usersSearchContainer"
+		includeCheckBox="<%= true %>"
+	>
+		<liferay-frontend:management-bar-buttons>
+			<liferay-frontend:management-bar-display-buttons
+				displayViews='<%= new String[] {"icon", "descriptive", "list"} %>'
+				portletURL="<%= portletURL %>"
+				selectedDisplayStyle="<%= displayStyle %>"
+			/>
+		</liferay-frontend:management-bar-buttons>
 
-	<liferay-frontend:management-bar-filters>
-		<liferay-frontend:management-bar-sort
-			orderByCol="<%= userSearch.getOrderByCol() %>"
-			orderByType="<%= userSearch.getOrderByType() %>"
-			orderColumns='<%= new String[] {"first-name", "screen-name"} %>'
-			portletURL="<%= portletURL %>"
-		/>
-	</liferay-frontend:management-bar-filters>
+		<liferay-frontend:management-bar-filters>
+			<liferay-frontend:management-bar-sort
+				orderByCol="<%= userSearchContainer.getOrderByCol() %>"
+				orderByType="<%= userSearchContainer.getOrderByType() %>"
+				orderColumns='<%= new String[] {"first-name", "screen-name"} %>'
+				portletURL="<%= portletURL %>"
+			/>
+		</liferay-frontend:management-bar-filters>
 
-	<liferay-frontend:management-bar-action-buttons />
-</liferay-frontend:management-bar>
+		<liferay-frontend:management-bar-action-buttons />
+	</liferay-frontend:management-bar>
+</c:if>
 
 <aui:form cssClass="container-fluid-1280" method="post" name="fm">
 	<liferay-ui:search-container
 		id="users"
 		rowChecker="<%= rowChecker %>"
-		searchContainer="<%= userSearch %>"
-		var="userSearchContainer"
+		searchContainer="<%= userSearchContainer %>"
 	>
-
-		<%
-		UserSearchTerms searchTerms = (UserSearchTerms)userSearchContainer.getSearchTerms();
-
-		LinkedHashMap<String, Object> userParams = new LinkedHashMap<String, Object>();
-
-		if (filterManageableOrganizations) {
-			userParams.put("usersOrgsTree", user.getOrganizations());
-		}
-		%>
-
 		<liferay-ui:user-search-container-results userParams="<%= userParams %>" />
 
 		<liferay-ui:search-container-row
