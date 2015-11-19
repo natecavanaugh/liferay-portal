@@ -50,8 +50,6 @@ String defaultMessage = (String)request.getAttribute("liferay-ui:toggle:defaultM
 		window,
 		'<%= stateVar %>Toggle',
 		function(state, saveState) {
-			var A = AUI();
-
 			if (state == null) {
 				state = <%= stateVar %>;
 			}
