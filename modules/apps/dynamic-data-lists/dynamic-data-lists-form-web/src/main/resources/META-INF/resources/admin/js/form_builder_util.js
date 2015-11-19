@@ -22,6 +22,14 @@ AUI.add(
 						NAME: fieldClass.NAME
 					}
 				);
+			},
+
+			normalizeModalXY: function(xy) {
+				if (!A.UA.mobile) {
+					xy[1] = Math.min(90, xy[1]);
+				}
+
+				return xy;
 			}
 		};
 
