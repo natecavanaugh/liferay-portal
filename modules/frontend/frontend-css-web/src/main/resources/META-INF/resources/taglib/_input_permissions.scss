@@ -36,18 +36,4 @@
 			}
 		}
 	}
-
-	.ie9 {
-		.permissions-table-container {
-			table {
-				thead th {
-					text-align: center;
-
-					&:first-child {
-						text-align: left;
-					}
-				}
-			}
-		}
-	}
 }
