@@ -90,38 +90,6 @@ Collections.sort(customAttributesDisplays, new CustomAttributesDisplayComparator
 					message="<%= ResourceActionsUtil.getModelResource(locale, customAttributesDisplay.getClassName()) %>"
 				/>
 			</liferay-ui:search-container-column-text>
-
-			<liferay-ui:search-container-column-text
-				name="custom-fields"
-			>
-
-				<%
-				ExpandoBridge expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(company.getCompanyId(), customAttributesDisplay.getClassName());
-
-				List<String> attributeNames = Collections.list(expandoBridge.getAttributeNames());
-
-				String[] localizedNames = new String[attributeNames.size()];
-
-				int i = 0;
-
-				for (String name : attributeNames) {
-					String localizedName = LanguageUtil.get(request, name);
-
-					if (name.equals(localizedName)) {
-						localizedName = TextFormatter.format(name, TextFormatter.J);
-					}
-
-					localizedNames[i++] = HtmlUtil.escape(localizedName);
-				}
-				%>
-
-				<%= StringUtil.merge(localizedNames, StringPool.COMMA_AND_SPACE) %>
-			</liferay-ui:search-container-column-text>
-
-			<liferay-ui:search-container-column-jsp
-				cssClass="list-group-item-field"
-				path="/resource_action.jsp"
-			/>
 		</liferay-ui:search-container-row>
 
 		<liferay-ui:search-iterator markupView="lexicon" paginate="<%= false %>" />
