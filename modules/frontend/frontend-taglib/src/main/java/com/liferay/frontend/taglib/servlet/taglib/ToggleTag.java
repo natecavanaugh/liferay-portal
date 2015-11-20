@@ -14,6 +14,7 @@
 
 package com.liferay.frontend.taglib.servlet.taglib;
 
+import com.liferay.frontend.taglib.servlet.ServletContextUtil;
 import com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil;
 import com.liferay.portal.kernel.util.DeterminateKeyGenerator;
 import com.liferay.portal.kernel.util.StringPool;
@@ -29,6 +30,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 
 /**
  * @author Brian Wing Shun Chan
@@ -107,12 +109,15 @@ public class ToggleTag extends IncludeTag {
 		request.setAttribute("liferay-frontend:toggle:id", id);
 		request.setAttribute("liferay-frontend:toggle:showImage", showImage);
 		request.setAttribute("liferay-frontend:toggle:hideImage", hideImage);
-		request.setAttribute("liferay-frontend:toggle:showMessage", showMessage);
-		request.setAttribute("liferay-frontend:toggle:hideMessage", hideMessage);
+		request.setAttribute(
+			"liferay-frontend:toggle:showMessage", showMessage);
+		request.setAttribute(
+			"liferay-frontend:toggle:hideMessage", hideMessage);
 		request.setAttribute("liferay-frontend:toggle:stateVar", stateVar);
 		request.setAttribute(
 			"liferay-frontend:toggle:defaultStateValue", defaultStateValue);
-		request.setAttribute("liferay-frontend:toggle:defaultImage", defaultImage);
+		request.setAttribute(
+			"liferay-frontend:toggle:defaultImage", defaultImage);
 		request.setAttribute(
 			"liferay-frontend:toggle:defaultMessage", defaultMessage);
 
@@ -152,6 +157,13 @@ public class ToggleTag extends IncludeTag {
 
 	public void setId(String id) {
 		_id = id;
+	}
+
+	@Override
+	public void setPageContext(PageContext pageContext) {
+		super.setPageContext(pageContext);
+
+		servletContext = ServletContextUtil.getServletContext();
 	}
 
 	public void setShowImage(String showImage) {
