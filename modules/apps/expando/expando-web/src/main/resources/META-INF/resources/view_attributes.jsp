@@ -46,7 +46,10 @@ List<String> attributeNames = Collections.list(expandoBridge.getAttributeNames()
 	</aui:nav>
 </aui:nav-bar>
 
-<liferay-frontend:management-bar>
+<liferay-frontend:management-bar
+	checkBoxContainerId="customFieldsSearchContainer"
+	includeCheckBox="<%= true %>"
+>
 	<liferay-frontend:management-bar-filters>
 		<liferay-frontend:management-bar-navigation
 			navigationKeys='<%= new String[] {"all"} %>'
@@ -61,11 +64,19 @@ List<String> attributeNames = Collections.list(expandoBridge.getAttributeNames()
 			selectedDisplayStyle="<%= displayStyle %>"
 		/>
 	</liferay-frontend:management-bar-buttons>
+
+	<liferay-frontend:management-bar-action-buttons>
+		<aui:a cssClass="btn" href="javascript:;" iconCssClass="icon-trash" id="deleteCustomFields" />
+	</liferay-frontend:management-bar-action-buttons>
 </liferay-frontend:management-bar>
 
-<div class="container-fluid-1280">
+<aui:form action="<%= portletURL.toString() %>" class="container-fluid-1280" method="post" name="fm">
+	<aui:input name="redirect" type="hidden" value="<%= portletURL.toString() %>" />
+	<aui:input name="columnIds" type="hidden" />
+
 	<liferay-ui:search-container
 		emptyResultsMessage='<%= LanguageUtil.format(request, "no-custom-fields-are-defined-for-x", modelResourceName, false) %>'
+		id="customFields"
 		iteratorURL="<%= portletURL %>"
 		rowChecker="<%= new CustomFieldChecker(renderRequest, renderResponse) %>"
 	>
@@ -122,7 +133,22 @@ List<String> attributeNames = Collections.list(expandoBridge.getAttributeNames()
 
 		<liferay-ui:search-iterator markupView="lexicon" paginate="<%= false %>" />
 	</liferay-ui:search-container>
-</div>
+</aui:form>
+
+<aui:script>
+	$('#<portlet:namespace />deleteCustomFields').on(
+		'click',
+		function() {
+			var form = AUI.$(document.<portlet:namespace />fm);
+
+			var columnIds = Liferay.Util.listCheckedExcept(form, '<portlet:namespace />allRowIds');
+
+			form.fm('columnIds').val(columnIds);
+
+			submitForm(form, '<portlet:actionURL name="deleteExpandos" />');
+		}
+	);
+</aui:script>
 
 <%
 PortalUtil.addPortletBreadcrumbEntry(request, modelResourceName, portletURL.toString());
