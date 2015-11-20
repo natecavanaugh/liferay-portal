@@ -26,7 +26,7 @@ String content = BeanParamUtil.getString(wikiPage, request, "content");
 
 <c:if test="<%= baseInputEditorWikiEngine.isHelpPageDefined() %>">
 	<div align="right">
-		<liferay-ui:toggle
+		<liferay-frontend:toggle
 			defaultShowContent="<%= false %>"
 			hideMessage='<%= LanguageUtil.get(request, "hide-syntax-help") + " &raquo;" %>'
 			id="<%= baseInputEditorWikiEngine.getToggleId(pageContext) %>"
