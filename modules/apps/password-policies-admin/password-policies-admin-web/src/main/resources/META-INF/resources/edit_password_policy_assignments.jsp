@@ -68,6 +68,12 @@ renderResponse.setTitle(passwordPolicy.getName());
 
 		<aui:nav-item href="<%= userGroupsURL.toString() %>" label="organizations" selected='<%= tabs2.equals("organizations") %>' />
 	</aui:nav>
+
+	<aui:nav-bar-search>
+		<aui:form action="<%= portletURL.toString() %>" name="searchFm">
+			<liferay-ui:input-search markupView="lexicon" />
+		</aui:form>
+	</aui:nav-bar-search>
 </aui:nav-bar>
 
 <portlet:actionURL name="editPasswordPolicyAssignments" var="editPasswordPolicyAssignmentsURL" />
@@ -95,7 +101,6 @@ renderResponse.setTitle(passwordPolicy.getName());
 				searchContainer="<%= new UserSearch(renderRequest, portletURL) %>"
 				var="userSearchContainer"
 			>
-				<liferay-ui:user-search-form />
 
 				<%
 				UserSearchTerms searchTerms = (UserSearchTerms)userSearchContainer.getSearchTerms();
@@ -177,7 +182,6 @@ renderResponse.setTitle(passwordPolicy.getName());
 				searchContainer="<%= new OrganizationSearch(renderRequest, portletURL) %>"
 				var="organizationSearchContainer"
 			>
-				<liferay-ui:organization-search-form />
 
 				<%
 				OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)organizationSearchContainer.getSearchTerms();
