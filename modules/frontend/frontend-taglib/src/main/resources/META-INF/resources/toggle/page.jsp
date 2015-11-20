@@ -17,15 +17,15 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String id = (String)request.getAttribute("liferay-ui:toggle:id");
-String showImage = (String)request.getAttribute("liferay-ui:toggle:showImage");
-String hideImage = (String)request.getAttribute("liferay-ui:toggle:hideImage");
-String showMessage = (String)request.getAttribute("liferay-ui:toggle:showMessage");
-String hideMessage = (String)request.getAttribute("liferay-ui:toggle:hideMessage");
-String stateVar = (String)request.getAttribute("liferay-ui:toggle:stateVar");
-String defaultStateValue = (String)request.getAttribute("liferay-ui:toggle:defaultStateValue");
-String defaultImage = (String)request.getAttribute("liferay-ui:toggle:defaultImage");
-String defaultMessage = (String)request.getAttribute("liferay-ui:toggle:defaultMessage");
+String id = (String)request.getAttribute("liferay-frontend:toggle:id");
+String showImage = (String)request.getAttribute("liferay-frontend:toggle:showImage");
+String hideImage = (String)request.getAttribute("liferay-frontend:toggle:hideImage");
+String showMessage = (String)request.getAttribute("liferay-frontend:toggle:showMessage");
+String hideMessage = (String)request.getAttribute("liferay-frontend:toggle:hideMessage");
+String stateVar = (String)request.getAttribute("liferay-frontend:toggle:stateVar");
+String defaultStateValue = (String)request.getAttribute("liferay-frontend:toggle:defaultStateValue");
+String defaultImage = (String)request.getAttribute("liferay-frontend:toggle:defaultImage");
+String defaultMessage = (String)request.getAttribute("liferay-frontend:toggle:defaultMessage");
 %>
 
 <c:choose>
