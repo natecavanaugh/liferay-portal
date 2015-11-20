@@ -204,12 +204,6 @@ renderResponse.setTitle(passwordPolicy.getName());
 					<liferay-ui:search-container-column-text
 						name="name"
 						orderable="<%= true %>"
-						property="name"
-					/>
-
-					<liferay-ui:search-container-column-text
-						name="name"
-						orderable="<%= true %>"
 					>
 
 						<%= organization.getName() %>
