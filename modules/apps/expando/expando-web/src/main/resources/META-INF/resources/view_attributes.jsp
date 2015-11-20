@@ -67,6 +67,7 @@ List<String> attributeNames = Collections.list(expandoBridge.getAttributeNames()
 	<liferay-ui:search-container
 		emptyResultsMessage='<%= LanguageUtil.format(request, "no-custom-fields-are-defined-for-x", modelResourceName, false) %>'
 		iteratorURL="<%= portletURL %>"
+		rowChecker="<%= new CustomFieldChecker(renderRequest, renderResponse) %>"
 	>
 		<liferay-ui:search-container-results
 			results="<%= attributeNames %>"
