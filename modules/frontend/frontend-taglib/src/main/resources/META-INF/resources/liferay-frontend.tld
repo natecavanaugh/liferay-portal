@@ -404,7 +404,7 @@
 	<tag>
 		<description>Creates a component that toggles the visibility of the content of the component matching the given <![CDATA[<code>id</code>]]>. Default icons are used as the component's default mechanism for showing and hiding the content.</description>
 		<name>toggle</name>
-		<tag-class>com.liferay.taglib.ui.ToggleTag</tag-class>
+		<tag-class>com.liferay.frontend.taglib.servlet.taglib.ToggleTag</tag-class>
 		<body-content>JSP</body-content>
 		<attribute>
 			<description>Whether to initially show content by default. The default value is <![CDATA[<code>true</code>]]>.</description>
