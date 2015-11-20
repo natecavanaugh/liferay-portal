@@ -171,7 +171,7 @@ public class ToggleTag extends IncludeTag {
 		return _PAGE;
 	}
 
-	private static final String _PAGE = "/html/taglib/ui/toggle/page.jsp";
+	private static final String _PAGE = "/toggle/page.jsp";
 
 	private boolean _defaultShowContent = true;
 	private String _hideImage;
