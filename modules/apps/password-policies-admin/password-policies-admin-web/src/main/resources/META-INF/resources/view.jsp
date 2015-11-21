@@ -64,6 +64,15 @@ PasswordPolicySearch searchContainer = new PasswordPolicySearch(renderRequest, p
 			selectedDisplayStyle="<%= displayStyle %>"
 		/>
 	</liferay-frontend:management-bar-buttons>
+
+	<liferay-frontend:management-bar-filters>
+		<liferay-frontend:management-bar-sort
+			orderByCol="<%= searchContainer.getOrderByCol() %>"
+			orderByType="<%= searchContainer.getOrderByType() %>"
+			orderColumns='<%= new String[] {"name"} %>'
+			portletURL="<%= portletURL %>"
+		/>
+	</liferay-frontend:management-bar-filters>
 </liferay-frontend:management-bar>
 
 <aui:form action="<%= portletURLString %>" cssClass="container-fluid-1280" method="get" name="fm">
