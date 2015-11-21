@@ -26,6 +26,7 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="com.liferay.password.policies.admin.web.search.OrganizationPasswordPolicyChecker" %><%@
+page import="com.liferay.password.policies.admin.web.search.PasswordPolicyChecker" %><%@
 page import="com.liferay.password.policies.admin.web.search.PasswordPolicyDisplayTerms" %><%@
 page import="com.liferay.password.policies.admin.web.search.PasswordPolicySearch" %><%@
 page import="com.liferay.password.policies.admin.web.search.UserPasswordPolicyChecker" %><%@

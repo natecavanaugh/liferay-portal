@@ -28,6 +28,9 @@ String portletURLString = portletURL.toString();
 boolean passwordPolicyEnabled = LDAPSettingsUtil.isPasswordPolicyEnabled(company.getCompanyId());
 
 PasswordPolicySearch searchContainer = new PasswordPolicySearch(renderRequest, portletURL);
+
+searchContainer.setId("passwordPolicy");
+searchContainer.setRowChecker(new PasswordPolicyChecker(renderResponse));
 %>
 
 <aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
@@ -49,7 +52,10 @@ PasswordPolicySearch searchContainer = new PasswordPolicySearch(renderRequest, p
 	</c:if>
 </aui:nav-bar>
 
-<liferay-frontend:management-bar>
+<liferay-frontend:management-bar
+	includeCheckBox="<%= true %>"
+	searchContainerId="passwordPolicy"
+>
 	<liferay-frontend:management-bar-filters>
 		<liferay-frontend:management-bar-navigation
 			navigationKeys='<%= new String[] {"all"} %>'
