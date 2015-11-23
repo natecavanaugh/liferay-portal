@@ -79,10 +79,15 @@ searchContainer.setRowChecker(new PasswordPolicyChecker(renderResponse));
 			portletURL="<%= portletURL %>"
 		/>
 	</liferay-frontend:management-bar-filters>
+
+	<liferay-frontend:management-bar-action-buttons>
+		<aui:a cssClass="btn" href="javascript:;" iconCssClass="icon-trash" id="deletePasswordPolicies" />
+	</liferay-frontend:management-bar-action-buttons>
 </liferay-frontend:management-bar>
 
 <aui:form action="<%= portletURLString %>" cssClass="container-fluid-1280" method="get" name="fm">
 	<liferay-portlet:renderURLParams varImpl="portletURL" />
+	<aui:input name="passwordPolicyIds" type="hidden" />
 
 	<c:if test="<%= passwordPolicyEnabled %>">
 		<div class="alert alert-info">
@@ -155,6 +160,24 @@ searchContainer.setRowChecker(new PasswordPolicyChecker(renderResponse));
 		<liferay-ui:search-iterator markupView="lexicon" searchContainer="<%= searchContainer %>" />
 	</c:if>
 </aui:form>
+
+<aui:script>
+	$('#<portlet:namespace />deletePasswordPolicies').on(
+		'click',
+		function() {
+			if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-delete-this") %>')) {
+				var form = AUI.$(document.<portlet:namespace />fm);
+
+				var passwordPolicyIds = Liferay.Util.listCheckedExcept(form, '<portlet:namespace />allRowIds');
+
+				form.attr('method', 'post');
+				form.fm('passwordPolicyIds').val(passwordPolicyIds);
+
+				submitForm(form, '<portlet:actionURL name="deletePasswordPolicies" />');
+			}
+		}
+	);
+</aui:script>
 
 <c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_PASSWORD_POLICY) %>">
 	<portlet:renderURL var="viewPasswordPoliciesURL" />
