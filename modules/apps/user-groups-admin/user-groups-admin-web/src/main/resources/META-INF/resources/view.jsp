@@ -67,8 +67,8 @@ if (filterManageableUserGroups) {
 
 <c:if test="<%= UserGroupLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), userGroupParams) > 0 %>">
 	<liferay-frontend:management-bar
-		checkBoxContainerId="userGroupsSearchContainer"
 		includeCheckBox="<%= true %>"
+		searchContainerId="userGroups"
 	>
 		<liferay-frontend:management-bar-buttons>
 			<liferay-frontend:management-bar-display-buttons

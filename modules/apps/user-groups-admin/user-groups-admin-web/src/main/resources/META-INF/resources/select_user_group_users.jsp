@@ -74,8 +74,8 @@ RowChecker rowChecker = new UserUserGroupChecker(renderResponse, userGroup);
 
 <c:if test="<%= UserLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), searchTerms.getStatus(), userParams) > 0 %>">
 	<liferay-frontend:management-bar
-		checkBoxContainerId="usersSearchContainer"
 		includeCheckBox="<%= true %>"
+		searchContainerId="users"
 	>
 		<liferay-frontend:management-bar-buttons>
 			<liferay-frontend:management-bar-display-buttons
