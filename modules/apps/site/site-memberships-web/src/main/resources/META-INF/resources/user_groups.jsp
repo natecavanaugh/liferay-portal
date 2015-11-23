@@ -86,19 +86,10 @@ userGroupSearch.setEmptyResultsMessage("no-user-group-was-found-that-is-a-member
 		userGroupParams.put("userGroupsGroups", Long.valueOf(group.getGroupId()));
 		%>
 
-		<liferay-ui:search-container-results>
-
-			<%
-			total = UserGroupLocalServiceUtil.searchCount(company.getCompanyId(), searchTerms.getKeywords(), userGroupParams);
-
-			searchContainer.setTotal(total);
-
-			results = UserGroupLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), userGroupParams, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-
-			searchContainer.setResults(results);
-			%>
-
-		</liferay-ui:search-container-results>
+		<liferay-ui:user-group-search-container-results
+			searchTerms="<%= searchTerms %>"
+			userGroupParams="<%= userGroupParams %>"
+		/>
 
 		<liferay-ui:search-container-row
 			className="com.liferay.portal.model.UserGroup"
