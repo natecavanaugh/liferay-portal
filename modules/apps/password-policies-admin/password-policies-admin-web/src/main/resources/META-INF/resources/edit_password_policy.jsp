@@ -30,7 +30,7 @@ boolean defaultPolicy = BeanParamUtil.getBoolean(passwordPolicy, request, "defau
 portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(backURL.toString());
 
-renderResponse.setTitle((passwordPolicy == null) ? "new-password-policy" : passwordPolicy.getName());
+renderResponse.setTitle((passwordPolicy == null) ? LanguageUtil.get(request, "new-password-policy") : passwordPolicy.getName());
 %>
 
 <portlet:actionURL name="editPasswordPolicy" var="editPasswordPolicyURL" />
