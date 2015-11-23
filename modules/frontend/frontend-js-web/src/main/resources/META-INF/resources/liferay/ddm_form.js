@@ -1026,7 +1026,6 @@ AUI.add(
 
 		var FieldsetField = A.Component.create(
 			{
-
 				EXTENDS: Field,
 
 				prototype: {
