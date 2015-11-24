@@ -21,6 +21,7 @@ String tabs1 = ParamUtil.getString(request, "tabs1");
 String tabs2 = ParamUtil.getString(request, "tabs2", "users");
 String tabs3 = ParamUtil.getString(request, "tabs3", "current");
 
+String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
 String redirect = ParamUtil.getString(request, "redirect");
 
 long passwordPolicyId = ParamUtil.getLong(request, "passwordPolicyId");
@@ -47,6 +48,15 @@ portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(redirect);
 
 renderResponse.setTitle(passwordPolicy.getName());
+
+SearchContainer searchContainer = new SearchContainer();
+
+if (tabs2.equals("users")) {
+	searchContainer = new UserSearch(renderRequest, portletURL);
+}
+else if (tabs2.equals("organizations")) {
+	searchContainer = new OrganizationSearch(renderRequest, portletURL);
+}
 %>
 
 <aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
@@ -76,6 +86,35 @@ renderResponse.setTitle(passwordPolicy.getName());
 	</aui:nav-bar-search>
 </aui:nav-bar>
 
+<liferay-frontend:management-bar
+	includeCheckBox="<%= true %>"
+	searchContainerId="passwordPolicyMembers"
+>
+	<liferay-frontend:management-bar-filters>
+		<liferay-frontend:management-bar-navigation
+			navigationKeys='<%= new String[] {"all"} %>'
+			portletURL="<%= renderResponse.createRenderURL() %>"
+		/>
+	</liferay-frontend:management-bar-filters>
+
+	<liferay-frontend:management-bar-buttons>
+		<liferay-frontend:management-bar-display-buttons
+			displayViews='<%= new String[] {"list"} %>'
+			portletURL="<%= renderResponse.createRenderURL() %>"
+			selectedDisplayStyle="<%= displayStyle %>"
+		/>
+	</liferay-frontend:management-bar-buttons>
+
+	<liferay-frontend:management-bar-filters>
+		<liferay-frontend:management-bar-sort
+			orderByCol="<%= searchContainer.getOrderByCol() %>"
+			orderByType="<%= searchContainer.getOrderByType() %>"
+			orderColumns='<%= new String[] {"name"} %>'
+			portletURL="<%= portletURL %>"
+		/>
+	</liferay-frontend:management-bar-filters>
+</liferay-frontend:management-bar>
+
 <portlet:actionURL name="editPasswordPolicyAssignments" var="editPasswordPolicyAssignmentsURL" />
 
 <aui:form action="<%= editPasswordPolicyAssignmentsURL %>" cssClass="container-fluid-1280" method="post" name="fm">
@@ -97,8 +136,9 @@ renderResponse.setTitle(passwordPolicy.getName());
 			/>
 
 			<liferay-ui:search-container
+				id="passwordPolicyMembers"
 				rowChecker="<%= new UserPasswordPolicyChecker(renderResponse, passwordPolicy) %>"
-				searchContainer="<%= new UserSearch(renderRequest, portletURL) %>"
+				searchContainer="<%= searchContainer %>"
 				var="userSearchContainer"
 			>
 
@@ -181,8 +221,9 @@ renderResponse.setTitle(passwordPolicy.getName());
 			/>
 
 			<liferay-ui:search-container
+				id="passwordPolicyMembers"
 				rowChecker="<%= new OrganizationPasswordPolicyChecker(renderResponse, passwordPolicy) %>"
-				searchContainer="<%= new OrganizationSearch(renderRequest, portletURL) %>"
+				searchContainer="<%= searchContainer %>"
 				var="organizationSearchContainer"
 			>
 
