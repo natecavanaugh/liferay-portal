@@ -112,7 +112,10 @@ renderResponse.setTitle(passwordPolicy.getName());
 				}
 				%>
 
-				<liferay-ui:user-search-container-results userParams="<%= userParams %>" />
+				<liferay-ui:user-search-container-results
+					useIndexer="<%= false %>"
+					userParams="<%= userParams %>"
+				/>
 
 				<liferay-ui:search-container-row
 					className="com.liferay.portal.model.User"
@@ -193,7 +196,11 @@ renderResponse.setTitle(passwordPolicy.getName());
 				}
 				%>
 
-				<liferay-ui:organization-search-container-results organizationParams="<%= organizationParams %>" parentOrganizationId="<%= OrganizationConstants.ANY_PARENT_ORGANIZATION_ID %>" />
+				<liferay-ui:organization-search-container-results
+					organizationParams="<%= organizationParams %>"
+					parentOrganizationId="<%= OrganizationConstants.ANY_PARENT_ORGANIZATION_ID %>"
+					useIndexer="<%= false %>"
+				/>
 
 				<liferay-ui:search-container-row
 					className="com.liferay.portal.model.Organization"
