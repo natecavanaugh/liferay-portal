@@ -25,49 +25,49 @@ String content = BeanParamUtil.getString(wikiPage, request, "content");
 %>
 
 <c:if test="<%= baseInputEditorWikiEngine.isHelpPageDefined() %>">
-	<div align="right">
-		<liferay-frontend:toggle
-			defaultShowContent="<%= false %>"
-			hideMessage='<%= LanguageUtil.get(request, "hide-syntax-help") + " &raquo;" %>'
-			id="<%= baseInputEditorWikiEngine.getToggleId(pageContext) %>"
-			showMessage='<%= "&laquo; " + LanguageUtil.get(request, "show-syntax-help") %>'
-		/>
-	</div>
+	<aui:row>
+		<aui:col cssClass="text-right" width="<%= 100 %>">
+			<liferay-frontend:toggle
+				defaultShowContent="<%= false %>"
+				hideMessage='<%= LanguageUtil.get(request, "hide-syntax-help") + " &raquo;" %>'
+				id="<%= baseInputEditorWikiEngine.getToggleId(pageContext) %>"
+				showMessage='<%= "&laquo; " + LanguageUtil.get(request, "show-syntax-help") %>'
+			/>
+		</aui:col>
+	</aui:row>
 </c:if>
 
-<div>
-	<aui:row>
-		<aui:col id="wikiEditorContainer" width="<%= baseInputEditorWikiEngine.isSyntaxHelpVisible(pageContext) ? 70 : 100 %>">
-			<%@ include file="/editor_config.jspf" %>
+<aui:row>
+	<aui:col id="wikiEditorContainer" width="<%= baseInputEditorWikiEngine.isSyntaxHelpVisible(pageContext) ? 70 : 100 %>">
+		<%@ include file="/editor_config.jspf" %>
 
-			<liferay-ui:input-editor
-				configParams="<%= configParams %>"
-				contents="<%= content %>"
-				cssClass="form-control"
-				editorName="<%= baseInputEditorWikiEngine.getEditorName() %>"
-				fileBrowserParams="<%= fileBrowserParams %>"
-				toolbarSet="<%= baseInputEditorWikiEngine.getToolbarSet() %>"
-				width="100%"
-			/>
+		<liferay-ui:input-editor
+			configParams="<%= configParams %>"
+			contents="<%= content %>"
+			cssClass="form-control"
+			editorName="<%= baseInputEditorWikiEngine.getEditorName() %>"
+			fileBrowserParams="<%= fileBrowserParams %>"
+			toolbarSet="<%= baseInputEditorWikiEngine.getToolbarSet() %>"
+			width="100%"
+		/>
 
-			<aui:input name="content" type="hidden" />
+		<aui:input name="content" type="hidden" />
+	</aui:col>
+
+	<c:if test="<%= baseInputEditorWikiEngine.isHelpPageDefined() %>">
+		<aui:col cssClass="syntax-help" id="toggle_id_wiki_editor_help" style='<%= baseInputEditorWikiEngine.isSyntaxHelpVisible(pageContext) ? StringPool.BLANK : "display: none" %>' width="<%= 30 %>">
+			<h3>
+				<liferay-ui:message key="syntax-help" />
+			</h3>
+
+			<%
+			baseInputEditorWikiEngine.renderHelpPage(pageContext);
+			%>
+
+			<aui:a href="<%= baseInputEditorWikiEngine.getHelpURL() %>" target="_blank"><liferay-ui:message key="learn-more" /> &raquo;</aui:a>
 		</aui:col>
-
-		<c:if test="<%= baseInputEditorWikiEngine.isHelpPageDefined() %>">
-			<aui:col cssClass="syntax-help" id="toggle_id_wiki_editor_help" style='<%= baseInputEditorWikiEngine.isSyntaxHelpVisible(pageContext) ? StringPool.BLANK : "display: none" %>' width="<%= 30 %>">
-				<h3>
-					<liferay-ui:message key="syntax-help" />
-				</h3>
-
-				<%
-				baseInputEditorWikiEngine.renderHelpPage(pageContext);
-				%>
-
-				<aui:a href="<%= baseInputEditorWikiEngine.getHelpURL() %>" target="_blank"><liferay-ui:message key="learn-more" /> &raquo;</aui:a>
-			</aui:col>
-		</c:if>
-	</aui:row>
-</div>
+	</c:if>
+</aui:row>
 
 <c:if test="<%= baseInputEditorWikiEngine.isHelpPageDefined() %>">
 	<aui:script sandbox="<%= true %>">
@@ -79,8 +79,8 @@ String content = BeanParamUtil.getString(wikiPage, request, "content");
 			'toggle:stateChange',
 			function(event) {
 				if (event.id === '<%= baseInputEditorWikiEngine.getToggleId(pageContext) %>') {
-					var classSrc = CSS_EDITOR_WIDTH;
 					var classDest = CSS_EDITOR_WIDTH_EXPANDED;
+					var classSrc = CSS_EDITOR_WIDTH;
 
 					if (event.state === 1) {
 						classSrc = CSS_EDITOR_WIDTH_EXPANDED;
