@@ -3849,7 +3849,7 @@
 		</attribute>
 	</tag>
 	<tag>
-		<description>Creates a progress bar using the <![CDATA[<code>liferay-progress</code>]]> module.</description>
+		<description>Deprecated as of 7.0.0, with no direct replacement</description>
 		<name>progress</name>
 		<tag-class>com.liferay.taglib.ui.ProgressTag</tag-class>
 		<body-content>JSP</body-content>
