@@ -22,10 +22,11 @@
 			animationTime: <%= animationTime %>,
 			closeable: <%= closeable %>,
 			content: '<%= content %>',
-			cssClass: 'alert-<%= type %> <%= cssClass %>',
+			cssClass: '<%= cssClass %>',
 			destroyOnHide: <%= destroyOnHide %>,
 			targetContainer: '<%= targetContainer %>',
-			timeout: <%= timeout %>
+			timeout: <%= timeout %>,
+			type: '<%= type %>'
 		}
 	);
 </aui:script>

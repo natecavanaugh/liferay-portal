@@ -1,0 +1,10 @@
+.portlet-alert {
+	position: absolute;
+	width: 100%;
+	z-index: 1;
+
+	.container-fluid-1280 {
+		height: 0;
+		overflow: hidden;
+	}
+}

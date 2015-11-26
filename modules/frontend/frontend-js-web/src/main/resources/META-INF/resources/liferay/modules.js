@@ -620,6 +620,13 @@
 							'json'
 						]
 					},
+					'liferay-portlet-alert': {
+						path: 'portlet_alert.js',
+						requires: [
+							'aui-alert',
+							'liferay-portlet-base'
+						]
+					},
 					'liferay-portlet-base': {
 						path: 'portlet_base.js',
 						requires: [
