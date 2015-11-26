@@ -8,6 +8,11 @@ AUI.add(
 
 		var instanceOf = A.instanceOf;
 		var isArray = Array.isArray;
+
+		var isFormBuilderField = function(v) {
+			return (v instanceof A.FormBuilderField);
+		};
+
 		var isObject = Lang.isObject;
 		var isString = Lang.isString;
 		var isUndefined = Lang.isUndefined;
@@ -249,6 +254,8 @@ AUI.add(
 
 						LiferayFormBuilder.superclass.bindUI.apply(instance, arguments);
 
+						instance.get('boundingBox').delegate('selectstart', instance._onSelectStartFormBuilder, '.property-builder-field,.property-builder-drop-container');
+
 						instance.translationManager.after('defaultLocaleChange', instance._onDefaultLocaleChange, instance);
 						instance.translationManager.after('editingLocaleChange', instance._afterEditingLocaleChange, instance);
 
@@ -279,6 +286,18 @@ AUI.add(
 						);
 
 						return fields;
+					},
+
+					eachParentField: function(field, fn) {
+						var instance = this;
+
+						var parent = field.get('parent');
+
+						while (isFormBuilderField(parent)) {
+							fn.call(instance, parent);
+
+							parent = parent.get('parent');
+						}
 					},
 
 					getContent: function() {
@@ -472,6 +491,40 @@ AUI.add(
 						}
 					},
 
+					_onMouseOutField: function(event) {
+						var instance = this;
+
+						var field = A.Widget.getByNode(event.currentTarget);
+
+						instance.eachParentField(
+							field,
+							function(parent) {
+								var parentBB = parent.get('boundingBox');
+
+								parentBB.dd.removeInvalid('#' + parentBB.attr('id'));
+							}
+						);
+
+						LiferayFormBuilder.superclass._onMouseOutField.apply(instance, arguments);
+					},
+
+					_onMouseOverField: function(event) {
+						var instance = this;
+
+						var field = A.Widget.getByNode(event.currentTarget);
+
+						instance.eachParentField(
+							field,
+							function(parent) {
+								var parentBB = parent.get('boundingBox');
+
+								parentBB.dd.addInvalid('#' + parentBB.attr('id'));
+							}
+						);
+
+						LiferayFormBuilder.superclass._onMouseOverField.apply(instance, arguments);
+					},
+
 					_onPropertyModelChange: function(event) {
 						var instance = this;
 
@@ -513,6 +566,10 @@ AUI.add(
 								}
 							}
 						}
+					},
+
+					_onSelectStartFormBuilder: function(event) {
+						event.preventDefault();
 					},
 
 					_renderSettings: function() {
