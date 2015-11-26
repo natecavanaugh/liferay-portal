@@ -1,5 +1,9 @@
 @import "mixins";
 
+a.btn-action {
+	z-index: 500;
+}
+
 @include respond-to(phone, tablet) {
 	.btn-group, .button-holder {
 		@include respond-to(phone) {
