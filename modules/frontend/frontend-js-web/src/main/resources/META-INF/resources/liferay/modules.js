@@ -731,6 +731,7 @@
 							'aui-io-request',
 							'aui-timer',
 							'cookie',
+							'liferay-alert',
 							'liferay-notice'
 						]
 					},
