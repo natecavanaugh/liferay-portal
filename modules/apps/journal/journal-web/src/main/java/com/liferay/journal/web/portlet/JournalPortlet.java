@@ -258,8 +258,8 @@ public class JournalPortlet extends MVCPortlet {
 			ActionUtil.expireArticle(actionRequest, articleId);
 		}
 		else {
-			String[] expireArticleIds = StringUtil.split(
-				ParamUtil.getString(actionRequest, "expireArticleIds"));
+			String[] expireArticleIds = ParamUtil.getParameterValues(
+				actionRequest, "rowIds");
 
 			for (String expireArticleId : expireArticleIds) {
 				ActionUtil.expireArticle(
@@ -575,14 +575,19 @@ public class JournalPortlet extends MVCPortlet {
 				WebKeys.UPLOAD_EXCEPTION);
 
 		if (uploadException != null) {
+			Throwable cause = uploadException.getCause();
+
 			if (uploadException.isExceededLiferayFileItemSizeLimit()) {
-				throw new LiferayFileItemException();
-			}
-			else if (uploadException.isExceededSizeLimit()) {
-				throw new ArticleContentSizeException();
+				throw new LiferayFileItemException(cause);
 			}
 
-			throw new PortalException(uploadException.getCause());
+			if (uploadException.isExceededFileSizeLimit() ||
+				uploadException.isExceededUploadRequestSizeLimit()) {
+
+				throw new ArticleContentSizeException(cause);
+			}
+
+			throw new PortalException(cause);
 		}
 
 		UploadPortletRequest uploadPortletRequest =
@@ -962,8 +967,8 @@ public class JournalPortlet extends MVCPortlet {
 			deleteArticleIds = new String[] {articleId};
 		}
 		else {
-			deleteArticleIds = StringUtil.split(
-				ParamUtil.getString(actionRequest, "articleIds"));
+			deleteArticleIds = ParamUtil.getParameterValues(
+				actionRequest, "rowIds");
 		}
 
 		List<TrashedModel> trashedModels = new ArrayList<>();
