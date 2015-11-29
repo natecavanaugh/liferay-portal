@@ -545,6 +545,13 @@ AUI.add(
 							}
 						);
 
+						instance._contentBox.on(
+							'selectstart',
+							function(event) {
+								event.preventDefault();
+							}
+						);
+
 						instance._undoManager.on(
 							'clearList',
 							function(event) {
