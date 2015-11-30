@@ -1,7 +1,11 @@
 AUI.add(
 	'liferay-ddl-form-builder-settings-form',
 	function(A) {
+		var Lang = A.Lang;
+
 		var CSS_FIELD_SETTINGS_SAVE = A.getClassName('form', 'builder', 'field', 'settings', 'save');
+
+		var TPL_OPTION = '<option value="{value}">{label}</option>';
 
 		var TPL_SETTINGS_FORM = '<form action="javascript:;"></form>';
 
@@ -10,6 +14,9 @@ AUI.add(
 		var FormBuilderSettingsForm = A.Component.create(
 			{
 				ATTRS: {
+					dataProviders: {
+					},
+
 					field: {
 					}
 				},
@@ -21,6 +28,14 @@ AUI.add(
 				prototype: {
 					initializer: function() {
 						var instance = this;
+
+						var ddmDataProviderInstanceIdField = instance.getField('ddmDataProviderInstanceId');
+
+						if (ddmDataProviderInstanceIdField) {
+							instance._eventHandlers.push(
+								ddmDataProviderInstanceIdField.after('render', A.bind('_afterDDMDataProviderInstanceIdFieldRender', instance))
+							);
+						}
 
 						var labelField = instance.getField('label');
 
@@ -74,6 +89,36 @@ AUI.add(
 								}
 							}
 						);
+					},
+
+					_afterDDMDataProviderInstanceIdFieldRender: function(event) {
+						var instance = this;
+
+						var ddmDataProviderInstanceIdField = event.target;
+
+						ddmDataProviderInstanceIdField.getInputNode().html(
+							instance.get('dataProviders').map(
+								function(item) {
+									return Lang.sub(
+										TPL_OPTION,
+										{
+											label: item.name,
+											value: item.id
+										}
+									);
+								}
+							).join('')
+						);
+
+						var dataSourceTypeField = instance.getField('dataSourceType');
+
+						var dataSourceType = dataSourceTypeField.getValue();
+
+						ddmDataProviderInstanceIdField.set('visible', dataSourceType !== 'manual');
+
+						var optionsField = instance.getField('options');
+
+						optionsField.set('visible', dataSourceType === 'manual');
 					},
 
 					_afterSettingsFormRender: function() {
