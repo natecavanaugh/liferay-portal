@@ -14,18 +14,18 @@
  */
 --%>
 
-<%@ include file="/html/taglib/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
 <%
-String id = (String)request.getAttribute("liferay-ui:toggle:id");
-String showImage = (String)request.getAttribute("liferay-ui:toggle:showImage");
-String hideImage = (String)request.getAttribute("liferay-ui:toggle:hideImage");
-String showMessage = (String)request.getAttribute("liferay-ui:toggle:showMessage");
-String hideMessage = (String)request.getAttribute("liferay-ui:toggle:hideMessage");
-String stateVar = (String)request.getAttribute("liferay-ui:toggle:stateVar");
-String defaultStateValue = (String)request.getAttribute("liferay-ui:toggle:defaultStateValue");
-String defaultImage = (String)request.getAttribute("liferay-ui:toggle:defaultImage");
-String defaultMessage = (String)request.getAttribute("liferay-ui:toggle:defaultMessage");
+String id = (String)request.getAttribute("liferay-frontend:toggle:id");
+String showImage = (String)request.getAttribute("liferay-frontend:toggle:showImage");
+String hideImage = (String)request.getAttribute("liferay-frontend:toggle:hideImage");
+String showMessage = (String)request.getAttribute("liferay-frontend:toggle:showMessage");
+String hideMessage = (String)request.getAttribute("liferay-frontend:toggle:hideMessage");
+String stateVar = (String)request.getAttribute("liferay-frontend:toggle:stateVar");
+String defaultStateValue = (String)request.getAttribute("liferay-frontend:toggle:defaultStateValue");
+String defaultImage = (String)request.getAttribute("liferay-frontend:toggle:defaultImage");
+String defaultMessage = (String)request.getAttribute("liferay-frontend:toggle:defaultMessage");
 %>
 
 <c:choose>
@@ -33,13 +33,15 @@ String defaultMessage = (String)request.getAttribute("liferay-ui:toggle:defaultM
 		<a href="javascript:<%= stateVar %>Toggle();" id="<%= id %>_message"><%= defaultMessage %></a>
 	</c:when>
 	<c:otherwise>
-		<img
-			alt="<liferay-ui:message escapeAttribute="<%= true %>" key="toggle" />"
-			id="<%= id %>_image"
-			onclick="<%= stateVar %>Toggle();"
-			src="<%= defaultImage %>"
-			style="margin: 0px;"
-		/>
+		<div class="form-group" id="<%= id %>_image" title='<liferay-ui:message escapeAttribute="<%= true %>" key="toggle" />'>
+			<label>
+				<input class="toggle-switch" onclick="<%= stateVar %>Toggle();" type="checkbox" />
+
+				<span aria-hidden="true" class="toggle-switch-bar">
+					<span class="toggle-switch-handle"></span>
+				</span>
+			</label>
+		</div>
 	</c:otherwise>
 </c:choose>
 

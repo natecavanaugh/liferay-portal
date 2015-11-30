@@ -12,8 +12,9 @@
  * details.
  */
 
-package com.liferay.taglib.ui;
+package com.liferay.frontend.taglib.servlet.taglib;
 
+import com.liferay.frontend.taglib.servlet.ServletContextUtil;
 import com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil;
 import com.liferay.portal.kernel.util.DeterminateKeyGenerator;
 import com.liferay.portal.kernel.util.StringPool;
@@ -29,13 +30,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 
 /**
  * @author Brian Wing Shun Chan
- * @deprecated As of 7.0.0, replaced by {@link
-com.liferay.frontend.taglib.servlet.taglib.ToggleTag}
  */
-@Deprecated
 public class ToggleTag extends IncludeTag {
 
 	public static void doTag(
@@ -107,17 +106,20 @@ public class ToggleTag extends IncludeTag {
 				ToggleTag.class.getName());
 		}
 
-		request.setAttribute("liferay-ui:toggle:id", id);
-		request.setAttribute("liferay-ui:toggle:showImage", showImage);
-		request.setAttribute("liferay-ui:toggle:hideImage", hideImage);
-		request.setAttribute("liferay-ui:toggle:showMessage", showMessage);
-		request.setAttribute("liferay-ui:toggle:hideMessage", hideMessage);
-		request.setAttribute("liferay-ui:toggle:stateVar", stateVar);
+		request.setAttribute("liferay-frontend:toggle:id", id);
+		request.setAttribute("liferay-frontend:toggle:showImage", showImage);
+		request.setAttribute("liferay-frontend:toggle:hideImage", hideImage);
 		request.setAttribute(
-			"liferay-ui:toggle:defaultStateValue", defaultStateValue);
-		request.setAttribute("liferay-ui:toggle:defaultImage", defaultImage);
+			"liferay-frontend:toggle:showMessage", showMessage);
 		request.setAttribute(
-			"liferay-ui:toggle:defaultMessage", defaultMessage);
+			"liferay-frontend:toggle:hideMessage", hideMessage);
+		request.setAttribute("liferay-frontend:toggle:stateVar", stateVar);
+		request.setAttribute(
+			"liferay-frontend:toggle:defaultStateValue", defaultStateValue);
+		request.setAttribute(
+			"liferay-frontend:toggle:defaultImage", defaultImage);
+		request.setAttribute(
+			"liferay-frontend:toggle:defaultMessage", defaultMessage);
 
 		RequestDispatcher requestDispatcher =
 			DirectRequestDispatcherFactoryUtil.getRequestDispatcher(
@@ -157,6 +159,13 @@ public class ToggleTag extends IncludeTag {
 		_id = id;
 	}
 
+	@Override
+	public void setPageContext(PageContext pageContext) {
+		super.setPageContext(pageContext);
+
+		servletContext = ServletContextUtil.getServletContext();
+	}
+
 	public void setShowImage(String showImage) {
 		_showImage = showImage;
 	}
@@ -174,7 +183,7 @@ public class ToggleTag extends IncludeTag {
 		return _PAGE;
 	}
 
-	private static final String _PAGE = "/html/taglib/ui/toggle/page.jsp";
+	private static final String _PAGE = "/toggle/page.jsp";
 
 	private boolean _defaultShowContent = true;
 	private String _hideImage;
