@@ -456,6 +456,8 @@ if (organization != null) {
 	</c:otherwise>
 </c:choose>
 
+<%@ include file="/add_menu.jspf" %>
+
 <aui:script>
 	Liferay.Util.toggleSearchContainerButton('#<portlet:namespace />delete', '#<portlet:namespace /><%= searchContainerReference.getId("organizationSearchContainer") %>SearchContainer', document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 </aui:script>
