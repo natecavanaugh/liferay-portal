@@ -57,6 +57,12 @@
 			<type>Double</type>
 		</attribute>
 		<attribute>
+			<name>title</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>String</type>
+		</attribute>
+		<attribute>
 			<name>type</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>

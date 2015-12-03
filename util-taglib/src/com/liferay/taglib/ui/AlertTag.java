@@ -75,6 +75,12 @@ public class AlertTag extends IncludeTag {
 		setScopedAttribute("timeout", timeout);
 	}
 
+	public void setTitle(String title) {
+		_title = title;
+
+		setScopedAttribute("title", title);
+	}
+
 	public void setType(String type) {
 		_type = type;
 
@@ -92,6 +98,7 @@ public class AlertTag extends IncludeTag {
 		_destroyOnHide = false;
 		_targetContainer = null;
 		_timeout = -1.0;
+		_title = null;
 		_type = "info";
 	}
 
@@ -109,6 +116,7 @@ public class AlertTag extends IncludeTag {
 		setNamespacedAttribute(request, "destroyOnHide", _destroyOnHide);
 		setNamespacedAttribute(request, "targetContainer", _targetContainer);
 		setNamespacedAttribute(request, "timeout", _timeout);
+		setNamespacedAttribute(request, "title", _title);
 		setNamespacedAttribute(request, "type", _type);
 	}
 
@@ -125,6 +133,7 @@ public class AlertTag extends IncludeTag {
 	private boolean _destroyOnHide = false;
 	private String _targetContainer = null;
 	private Double _timeout = -1.0;
+	private String _title = null;
 	private String _type = "info";
 
 }

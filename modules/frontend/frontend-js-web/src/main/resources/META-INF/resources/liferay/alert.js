@@ -6,7 +6,7 @@ AUI.add(
 
 		var STR_ALERT_NODE = '<div class="portlet-alert"><div class="container-fluid-1280 portlet-alert-container"></div></div>';
 
-		var TPL_CONTENT = '<strong class="lead">{type}</strong>{message}';
+		var TPL_CONTENT = '<strong class="lead">{title}</strong>{message}';
 
 		var Alert = A.Component.create(
 			{
@@ -21,15 +21,8 @@ AUI.add(
 						value: ''
 					},
 
-					strings: {
-						validator: Lang.Object,
-						value: {
-							danger: Liferay.Language.get('danger'),
-							error: Liferay.Language.get('error'),
-							info: Liferay.Language.get('info'),
-							success: Liferay.Language.get('success'),
-							warning: Liferay.Language.get('warning')
-						}
+					title: {
+						validator: Lang.isString
 					},
 
 					type: {
@@ -50,6 +43,7 @@ AUI.add(
 
 						instance._eventHandles = [
 							instance.after('messageChange', instance._setBodyContent, instance),
+							instance.after('titleChange', instance._setBodyContent, instance),
 							instance.after('typeChange', instance._afterTypeChange, instance),
 							boundingBox.on('mouseenter', instance._cancelHide, instance),
 							boundingBox.on('mouseleave', instance.hide, instance)
@@ -70,7 +64,6 @@ AUI.add(
 					_afterTypeChange: function(event) {
 						var instance = this;
 
-						instance._setBodyContent();
 						instance._setCssClass();
 					},
 
@@ -141,13 +134,11 @@ AUI.add(
 					_setBodyContent: function() {
 						var instance = this;
 
-						var strings = instance.get('strings');
-
 						var bodyContent = Lang.sub(
 							TPL_CONTENT,
 							{
 								message: instance.get('message'),
-								type: strings[instance.get('type')] || ''
+								title: instance.get('title') || ''
 							}
 						);
 

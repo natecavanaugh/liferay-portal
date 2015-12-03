@@ -26,6 +26,7 @@
 			},
 			duration: <%= animationTime %>,
 			message: '<%= content %>',
+			title: '<%= title %>',
 			type: '<%= type %>'
 		}
 	).render();

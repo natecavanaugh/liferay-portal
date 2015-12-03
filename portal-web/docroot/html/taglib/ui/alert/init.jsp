@@ -24,5 +24,6 @@ String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:
 boolean destroyOnHide = GetterUtil.getBoolean(String.valueOf(request.getAttribute("liferay-ui:alert:destroyOnHide")));
 String targetContainer = GetterUtil.getString((String)request.getAttribute("liferay-ui:alert:targetContainer"));
 Double timeout = GetterUtil.getDouble((String)request.getAttribute("liferay-ui:alert:timeout"));
+String title = GetterUtil.getString((String)request.getAttribute("liferay-ui:alert:title"));
 String type = GetterUtil.getString((String)request.getAttribute("liferay-ui:alert:type"));
 %>
