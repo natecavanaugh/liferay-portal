@@ -62,3 +62,43 @@
 		</aui:form>
 	</aui:nav-bar-search>
 </aui:nav-bar>
+
+<c:if test='<%= !toolbarItem.equals("browse") %>'>
+
+	<%
+	String orderColumns = "first-name,last-name,screen-name";
+	String searchContainerId = "users";
+
+	if (toolbarItem.equals("view-all-organizations")) {
+		orderColumns = "name,type";
+		searchContainerId = "organizations";
+	}
+	%>
+
+	<liferay-frontend:management-bar
+		includeCheckBox="<%= true %>"
+		searchContainerId="<%= searchContainerId %>"
+	>
+		<liferay-frontend:management-bar-filters>
+			<liferay-frontend:management-bar-navigation
+				navigationKeys='<%= new String[] {"all"} %>'
+				portletURL="<%= renderResponse.createRenderURL() %>"
+			/>
+
+			<liferay-frontend:management-bar-sort
+				orderByCol="<%= managementBarSearchContainer.getOrderByCol() %>"
+				orderByType="<%= managementBarSearchContainer.getOrderByType() %>"
+				orderColumns="<%= StringUtil.split(orderColumns) %>"
+				portletURL="<%= portletURL %>"
+			/>
+		</liferay-frontend:management-bar-filters>
+
+		<liferay-frontend:management-bar-buttons>
+			<liferay-frontend:management-bar-display-buttons
+				displayViews='<%= new String[] {"list"} %>'
+				portletURL="<%= renderResponse.createRenderURL() %>"
+				selectedDisplayStyle="<%= displayStyle %>"
+			/>
+		</liferay-frontend:management-bar-buttons>
+	</liferay-frontend:management-bar>
+</c:if>

@@ -31,6 +31,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("mvcRenderCommandName", "/users_admin/view");
 portletURL.setParameter("usersListView", usersListView);
+portletURL.setParameter("toolbarItem", toolbarItem);
 
 if (Validator.isNotNull(viewUsersRedirect)) {
 	portletURL.setParameter("viewUsersRedirect", viewUsersRedirect);
@@ -41,6 +42,18 @@ String portletURLString = portletURL.toString();
 request.setAttribute("view.jsp-usersListView", usersListView);
 
 request.setAttribute("view.jsp-portletURL", portletURL);
+
+SearchContainer managementBarSearchContainer = new SearchContainer();
+
+if (toolbarItem.equals("view-all-users")) {
+	managementBarSearchContainer = new UserSearch(renderRequest, "cur2", currentURLObj);
+}
+
+if (toolbarItem.equals("view-all-organizations")) {
+	managementBarSearchContainer = new OrganizationSearch(renderRequest, currentURLObj);
+}
+
+String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
 %>
 
 <liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-activate-user-because-that-would-exceed-the-maximum-number-of-users-allowed" />

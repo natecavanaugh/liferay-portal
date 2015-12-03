@@ -51,6 +51,7 @@ if (filterManageableOrganizations) {
 		%>
 
 		<liferay-ui:search-container
+			id="organizations"
 			searchContainer="<%= searchContainer %>"
 			var="organizationSearchContainer"
 		>
