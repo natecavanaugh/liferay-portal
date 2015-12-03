@@ -1,49 +1,34 @@
 AUI.add(
 	'liferay-portlet-alert',
 	function(A) {
+		var getClassName = A.getClassName;
 		var Lang = A.Lang;
 
-		var STR_TARGET_CONTAINER = '<div class="portlet-alert"><div class="container-fluid-1280"></div></div>';
+		var STR_ALERT_NODE = '<div class="portlet-alert"><div class="container-fluid-1280 portlet-alert-container"></div></div>';
 
-		var TPL_LEAD = '<strong class="lead">{type}</strong>';
+		var TPL_CONTENT = '<strong class="lead">{type}</strong>{message}';
 
-		var PortletAlert = A.Component.create(
+		var Alert = A.Component.create(
 			{
 				ATTRS: {
-					animationTime: {
-						validator: Lang.isNumber,
-						value: 0.5
-					},
-
-					closeable: {
+					animated: {
 						validator: Lang.isBoolean,
 						value: true
 					},
 
-					content: {
-						validator: Lang.isString
+					message: {
+						validator: Lang.isString,
+						value: ''
 					},
 
-					cssClass: {
-						validator: Lang.isString
-					},
-
-					destroyOnHide: {
-						validator: Lang.isBoolean,
-						value: false
-					},
-
-					targetContainer: {
-						setter: A.one
-					},
-
-					timeout: {
-						setter: function(value) {
-							if (value) {
-								return value * 1000;
-							}
-
-							return -1;
+					strings: {
+						validator: Lang.Object,
+						value: {
+							danger: Liferay.Language.get('danger'),
+							error: Liferay.Language.get('error'),
+							info: Liferay.Language.get('info'),
+							success: Liferay.Language.get('success'),
+							warning: Liferay.Language.get('warning')
 						}
 					},
 
@@ -53,162 +38,165 @@ AUI.add(
 					}
 				},
 
-				AUGMENTS: [Liferay.PortletBase],
+				EXTENDS: A.Alert,
 
-				EXTENDS: A.Base,
-
-				NAME: 'portletalert',
+				NAME: 'liferayalert',
 
 				prototype: {
-					initializer: function(config) {
+					bindUI: function() {
 						var instance = this;
 
-						var content = instance._getContent();
-
-						var cssClass = 'alert-' + instance.get('type') + ' ' + instance.get('cssClass');
-
-						instance._setTargetContainer();
-
-						instance._alert = new A.Alert(
-							{
-								animated: false,
-								bodyContent: content,
-								closeable: instance.get('closeable'),
-								cssClass: cssClass,
-								destroyOnHide: instance.get('destroyOnHide'),
-								render: instance.get('targetContainer')
-							}
-						);
-
-						instance._bindUI();
-
-						instance._startClosingTimeout();
-					},
-
-					destructor: function() {
-						var instance = this;
-
-						instance._alert.destroy();
-
-						(new A.EventHandle(instance._eventHandles)).detach();
-					},
-
-					close: function(event) {
-						var instance = this;
-
-						if (event) {
-							event.preventDefault();
-						}
-
-						instance._stopClosingTimeout();
-
-						instance._slideUp();
-					},
-
-					_bindUI: function() {
-						var instance = this;
+						var boundingBox = instance.get('boundingBox');
 
 						instance._eventHandles = [
-							instance._alert.on('render', instance._slideDown, instance),
-							instance._alert.on('visibleChange', instance.close, instance),
-							instance._alert.get('contentBox').on('mouseenter', instance._stopClosingTimeout, instance),
-							instance._alert.get('contentBox').on('mouseleave', instance._startClosingTimeout, instance)
+							instance.after('messageChange', instance._setBodyContent, instance),
+							instance.after('typeChange', instance._afterTypeChange, instance),
+							boundingBox.on('mouseenter', instance._cancelHide, instance),
+							boundingBox.on('mouseleave', instance.hide, instance)
 						];
+
+						Alert.superclass.bindUI.call(this);
 					},
 
-					_getContent: function() {
+					render: function(parentNode) {
 						var instance = this;
 
-						var lead = Lang.sub(
-								TPL_LEAD,
-								{
-									type: Liferay.Language.get(instance.get('type'))
-								}
-							);
+						instance._setBodyContent();
+						instance._setCssClass();
 
-						var content = lead + instance.get('content');
-
-						return content;
+						return Alert.superclass.render.call(this, parentNode || this._getParentNode());
 					},
 
-					_setTargetContainer: function() {
+					_afterTypeChange: function(event) {
 						var instance = this;
 
-						var targetContainer = instance.get('targetContainer');
+						instance._setBodyContent();
+						instance._setCssClass();
+					},
 
-						if (!targetContainer) {
-							var referenceNode;
+					_cancelHide: function() {
+						var instance = this;
 
-							targetContainer = A.Node.create(STR_TARGET_CONTAINER);
+						instance._clearHideTimer();
+						instance._set('visible', true);
+					},
 
-							var navbar = instance.one('.navbar');
+					_getParentNode: function() {
+						var instance = this;
+
+						var parentNode = instance._parentNode || A.one('.portlet-alert-container');
+
+						if (!parentNode) {
+							var alertNode = A.Node.create(STR_ALERT_NODE);
+
+							var navbar = A.one('.navbar');
 
 							if (navbar) {
-								navbar.insert(targetContainer, 'after');
+								navbar.insert(alertNode, 'after');
 							}
 							else {
-								instance.one('.portlet-body').prepend(targetContainer);
+								A.one('.portlet-body').prepend(alertNode);
 							}
 
-							targetContainer = targetContainer.one('.container-fluid-1280');
+							parentNode = alertNode.one('div');
 
-							instance.set('targetContainer', targetContainer);
+							instance._parentNode = parentNode;
+						}
+
+						return parentNode;
+					},
+
+					_maybeHide: function() {
+						var instance = this;
+
+						if (instance._ignoreHideDelay) {
+							instance._prepareTransition(false);
+							instance._transition(false);
+						}
+						else {
+							Alert.superclass._maybeHide.call(this);
 						}
 					},
 
-					_slide: function(height) {
+					_onClickBoundingBox: function(event) {
+						if (event.target.test('.' + getClassName('close'))) {
+							this._ignoreHideDelay = true;
+							this.hide();
+						}
+					},
+
+					_prepareTransition: function(visible) {
 						var instance = this;
 
-						instance.get('targetContainer').transition(
+						var parentNode = instance._getParentNode();
+
+						instance._clearHideTimer();
+
+						if (visible && !parentNode.test('.in')) {
+							instance._uiSetVisibleHost(true);
+							parentNode.setStyle('height', 0);
+						}
+					},
+
+					_setBodyContent: function() {
+						var instance = this;
+
+						var strings = instance.get('strings');
+
+						var bodyContent = Lang.sub(
+							TPL_CONTENT,
 							{
-								duration: instance.get('animationTime'),
-								easing: 'ease-out',
-								height: height
+								message: instance.get('message'),
+								type: strings[instance.get('type')] || ''
 							}
 						);
+
+						instance.set('bodyContent', bodyContent);
 					},
 
-					_slideDown: function() {
+					_setCssClass: function() {
 						var instance = this;
 
-						instance._slide(instance._alert.get('contentBox').getComputedStyle('height'));
+						instance.set('cssClass', getClassName('alert', instance.get('type')));
 					},
 
-					_slideUp: function() {
+					_transition: function(visible) {
 						var instance = this;
 
-						instance._slide(0);
-					},
+						var parentNode = instance._getParentNode();
 
-					_startClosingTimeout: function() {
-						var instance = this;
+						if (!visible || !parentNode.test('.in')) {
+							parentNode.transition(
+								{
+									duration: instance.get('duration'),
+									easing: 'ease-out',
+									height: visible ? instance.get('boundingBox').getComputedStyle('height') : 0
+								},
+								function() {
+									parentNode.toggleClass('in', visible);
 
-						var timeout = instance.get('timeout');
+									instance._uiSetVisibleHost(visible);
 
-						if (timeout > -1) {
-							instance._timer = A.later(
-								timeout,
-								instance,
-								instance.close
+									var delay = instance.get('delay');
+
+									if (visible && delay.hide) {
+										instance.hide();
+									}
+									else if (instance.get('destroyOnHide')) {
+										A.soon(A.bind('destroy', instance));
+									}
+								}
 							);
-						}
-					},
-
-					_stopClosingTimeout: function() {
-						var instance = this;
-
-						if (instance._timer) {
-							instance._timer.cancel();
 						}
 					}
 				}
 			}
 		);
 
-		Liferay.Portlet.Alert = PortletAlert;
+		Liferay.Portlet.Alert = Alert;
 	},
 	'',
 	{
-		requires: ['aui-alert, liferay-portlet-base']
+		requires: ['aui-alert', 'event-mouseenter', 'timers']
 	}
 );

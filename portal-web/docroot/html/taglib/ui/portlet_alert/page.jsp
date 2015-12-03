@@ -19,14 +19,14 @@
 <aui:script use="liferay-portlet-alert">
 	new Liferay.Portlet.Alert(
 		{
-			animationTime: <%= animationTime %>,
 			closeable: <%= closeable %>,
-			content: '<%= content %>',
-			cssClass: '<%= cssClass %>',
-			destroyOnHide: <%= destroyOnHide %>,
-			targetContainer: '<%= targetContainer %>',
-			timeout: <%= timeout %>,
+			delay: {
+				hide: <%= timeout %>,
+				show: 0
+			},
+			duration: <%= animationTime %>,
+			message: '<%= content %>',
 			type: '<%= type %>'
 		}
-	);
+	).render();
 </aui:script>

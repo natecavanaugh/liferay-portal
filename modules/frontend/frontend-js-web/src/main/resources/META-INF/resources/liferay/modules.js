@@ -624,7 +624,8 @@
 						path: 'portlet_alert.js',
 						requires: [
 							'aui-alert',
-							'liferay-portlet-base'
+							'event-mouseenter',
+							'timers'
 						]
 					},
 					'liferay-portlet-base': {
