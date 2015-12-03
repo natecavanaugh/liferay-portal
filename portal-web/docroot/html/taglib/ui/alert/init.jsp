@@ -17,13 +17,13 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-Double animationTime = GetterUtil.getDouble((String)request.getAttribute("liferay-ui:alert:animationTime"));
+Integer animationTime = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:alert:animationTime"));
 boolean closeable = GetterUtil.getBoolean(String.valueOf(request.getAttribute("liferay-ui:alert:closeable")));
 String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:alert:cssClass"));
 boolean destroyOnHide = GetterUtil.getBoolean(String.valueOf(request.getAttribute("liferay-ui:alert:destroyOnHide")));
 String message = GetterUtil.getString((String)request.getAttribute("liferay-ui:alert:message"));
 String targetContainer = GetterUtil.getString((String)request.getAttribute("liferay-ui:alert:targetContainer"));
-Double timeout = GetterUtil.getDouble((String)request.getAttribute("liferay-ui:alert:timeout"));
+Integer timeout = GetterUtil.getInteger((String)request.getAttribute("liferay-ui:alert:timeout"));
 String title = GetterUtil.getString((String)request.getAttribute("liferay-ui:alert:title"));
 String type = GetterUtil.getString((String)request.getAttribute("liferay-ui:alert:type"));
 %>

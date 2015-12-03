@@ -18,7 +18,7 @@
 			<name>animationTime</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>Double</type>
+			<type>Integer</type>
 		</attribute>
 		<attribute>
 			<name>closeable</name>
@@ -54,7 +54,7 @@
 			<name>timeout</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>Double</type>
+			<type>Integer</type>
 		</attribute>
 		<attribute>
 			<name>title</name>

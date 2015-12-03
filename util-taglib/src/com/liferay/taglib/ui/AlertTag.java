@@ -33,7 +33,7 @@ public class AlertTag extends IncludeTag {
 		return EVAL_BODY_INCLUDE;
 	}
 
-	public void setAnimationTime(Double animationTime) {
+	public void setAnimationTime(Integer animationTime) {
 		_animationTime = animationTime;
 
 		setScopedAttribute("animationTime", animationTime);
@@ -69,7 +69,7 @@ public class AlertTag extends IncludeTag {
 		setScopedAttribute("targetContainer", targetContainer);
 	}
 
-	public void setTimeout(Double timeout) {
+	public void setTimeout(Integer timeout) {
 		_timeout = timeout;
 
 		setScopedAttribute("timeout", timeout);
@@ -91,13 +91,13 @@ public class AlertTag extends IncludeTag {
 	protected void cleanUp() {
 		super.cleanUp();
 
-		_animationTime = 0.5;
+		_animationTime = 500;
 		_closeable = true;
 		_message = null;
 		_cssClass = null;
 		_destroyOnHide = false;
 		_targetContainer = null;
-		_timeout = -1.0;
+		_timeout = -1;
 		_title = null;
 		_type = "info";
 	}
@@ -126,13 +126,13 @@ public class AlertTag extends IncludeTag {
 	private static final String _PAGE =
 		"/html/taglib/ui/alert/page.jsp";
 
-	private Double _animationTime = 0.5;
+	private Integer _animationTime = 500;
 	private boolean _closeable = true;
 	private String _message = null;
 	private String _cssClass = null;
 	private boolean _destroyOnHide = false;
 	private String _targetContainer = null;
-	private Double _timeout = -1.0;
+	private Integer _timeout = -1;
 	private String _title = null;
 	private String _type = "info";
 
