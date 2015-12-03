@@ -52,7 +52,7 @@ if (step == 1) {
 }
 %>
 
-<aui:form action="<%= portletURL.toString() %>" method="post" name="selectSiteRoleFm">
+<aui:form action="<%= portletURL.toString() %>" cssClass="container-fluid-1280" method="post" name="selectSiteRoleFm">
 	<c:choose>
 		<c:when test="<%= step == 1 %>">
 			<aui:input name="groupId" type="hidden" />

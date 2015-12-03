@@ -62,7 +62,7 @@ request.setAttribute("edit_role_assignments.jsp-portletURL", portletURL);
 	<portlet:param name="mvcPath" value="/edit_role_assignments.jsp" />
 </portlet:actionURL>
 
-<aui:form action="<%= portletURL.toString() %>" method="post" name="fm">
+<aui:form action="<%= portletURL.toString() %>" cssClass="container-fluid-1280" method="post" name="fm">
 	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
 	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
 	<aui:input name="tabs3" type="hidden" value="<%= tabs3 %>" />

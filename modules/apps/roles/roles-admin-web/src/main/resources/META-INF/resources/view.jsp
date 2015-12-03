@@ -28,7 +28,7 @@ String portletURLString = portletURL.toString();
 
 <liferay-ui:error exception="<%= RequiredRoleException.class %>" message="you-cannot-delete-a-system-role" />
 
-<aui:form action="<%= portletURLString %>" method="get" name="fm">
+<aui:form action="<%= portletURLString %>" cssClass="container-fluid-1280" method="get" name="fm">
 	<liferay-portlet:renderURLParams varImpl="portletURL" />
 
 	<liferay-ui:search-container

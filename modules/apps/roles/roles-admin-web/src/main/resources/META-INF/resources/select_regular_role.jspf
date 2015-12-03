@@ -32,7 +32,7 @@ if (selUser != null) {
 portletURL.setParameter("eventName", eventName);
 %>
 
-<aui:form action="<%= portletURL.toString() %>" method="post" name="selectRegularRoleFm">
+<aui:form action="<%= portletURL.toString() %>" cssClass="container-fluid-1280" method="post" name="selectRegularRoleFm">
 	<liferay-ui:header
 		title="roles"
 	/>
