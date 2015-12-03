@@ -45,10 +45,10 @@ public class AlertTag extends IncludeTag {
 		setScopedAttribute("closeable", closeable);
 	}
 
-	public void setContent(String content) {
-		_content = content;
+	public void setMessage(String message) {
+		_message = message;
 
-		setScopedAttribute("content", content);
+		setScopedAttribute("message", message);
 	}
 
 	public void setCssClass(String cssClass) {
@@ -93,7 +93,7 @@ public class AlertTag extends IncludeTag {
 
 		_animationTime = 0.5;
 		_closeable = true;
-		_content = null;
+		_message = null;
 		_cssClass = null;
 		_destroyOnHide = false;
 		_targetContainer = null;
@@ -111,7 +111,7 @@ public class AlertTag extends IncludeTag {
 	protected void setAttributes(HttpServletRequest request) {
 		setNamespacedAttribute(request, "animationTime", _animationTime);
 		setNamespacedAttribute(request, "closeable", _closeable);
-		setNamespacedAttribute(request, "content", _content);
+		setNamespacedAttribute(request, "message", _message);
 		setNamespacedAttribute(request, "cssClass", _cssClass);
 		setNamespacedAttribute(request, "destroyOnHide", _destroyOnHide);
 		setNamespacedAttribute(request, "targetContainer", _targetContainer);
@@ -128,7 +128,7 @@ public class AlertTag extends IncludeTag {
 
 	private Double _animationTime = 0.5;
 	private boolean _closeable = true;
-	private String _content = null;
+	private String _message = null;
 	private String _cssClass = null;
 	private boolean _destroyOnHide = false;
 	private String _targetContainer = null;

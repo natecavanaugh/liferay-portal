@@ -25,7 +25,7 @@
 				show: 0
 			},
 			duration: <%= animationTime %>,
-			message: '<%= content %>',
+			message: '<%= message %>',
 			title: '<%= title %>',
 			type: '<%= type %>'
 		}

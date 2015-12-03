@@ -27,12 +27,6 @@
 			<type>boolean</type>
 		</attribute>
 		<attribute>
-			<name>content</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
-		</attribute>
-		<attribute>
 			<name>cssClass</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -43,6 +37,12 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
+		</attribute>
+		<attribute>
+			<name>message</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>String</type>
 		</attribute>
 		<attribute>
 			<name>targetContainer</name>
