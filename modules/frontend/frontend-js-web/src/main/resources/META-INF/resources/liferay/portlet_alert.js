@@ -168,7 +168,7 @@ AUI.add(
 						if (!visible || !parentNode.test('.in')) {
 							parentNode.transition(
 								{
-									duration: instance.get('duration'),
+									duration: instance.get('duration') / 1000,
 									easing: 'ease-out',
 									height: visible ? instance.get('boundingBox').getComputedStyle('height') : 0
 								},
