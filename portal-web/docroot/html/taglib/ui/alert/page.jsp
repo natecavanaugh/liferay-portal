@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/taglib/ui/portlet_alert/init.jsp" %>
+<%@ include file="/html/taglib/ui/alert/init.jsp" %>
 
 <aui:script use="liferay-portlet-alert">
 	new Liferay.Portlet.Alert(

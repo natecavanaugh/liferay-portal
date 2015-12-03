@@ -24,7 +24,7 @@ import javax.servlet.jsp.JspException;
  * @author Carlos Lancha
  * @generated
  */
-public class PortletAlertTag extends IncludeTag {
+public class AlertTag extends IncludeTag {
 
 	@Override
 	public int doStartTag() throws JspException {
@@ -113,10 +113,10 @@ public class PortletAlertTag extends IncludeTag {
 	}
 
 	protected static final String _ATTRIBUTE_NAMESPACE = 
-		"liferay-ui:portlet-alert:";
+		"liferay-ui:alert:";
 
 	private static final String _PAGE =
-		"/html/taglib/ui/portlet_alert/page.jsp";
+		"/html/taglib/ui/alert/page.jsp";
 
 	private Double _animationTime = 0.5;
 	private boolean _closeable = true;

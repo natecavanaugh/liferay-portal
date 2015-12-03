@@ -1,5 +1,5 @@
 AUI.add(
-	'liferay-portlet-alert',
+	'liferay-alert',
 	function(A) {
 		var getClassName = A.getClassName;
 		var Lang = A.Lang;
@@ -193,7 +193,7 @@ AUI.add(
 			}
 		);
 
-		Liferay.Portlet.Alert = Alert;
+		Liferay.Alert = Alert;
 	},
 	'',
 	{
