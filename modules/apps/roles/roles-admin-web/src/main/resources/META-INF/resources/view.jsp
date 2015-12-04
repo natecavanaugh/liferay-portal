@@ -38,41 +38,35 @@ viewRolesURL.setParameter("keywords", keywords);
 
 <liferay-ui:error exception="<%= RequiredRoleException.class %>" message="you-cannot-delete-a-system-role" />
 
+<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_ROLE) %>">
+	<liferay-portlet:renderURL varImpl="addRoleURL">
+		<portlet:param name="mvcPath" value="/edit_role.jsp" />
+		<portlet:param name="redirect" value="<%= viewRolesURL.toString() %>" />
+	</liferay-portlet:renderURL>
+
+	<liferay-frontend:add-menu>
+
+		<%
+		addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_REGULAR));
+		%>
+
+		<liferay-frontend:add-menu-item title='<%= LanguageUtil.get(request, "regular-role") %>' url="<%= addRoleURL.toString() %>" />
+
+		<%
+		addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_SITE));
+		%>
+
+		<liferay-frontend:add-menu-item title='<%= LanguageUtil.get(request, "site-role") %>' url="<%= addRoleURL.toString() %>" />
+
+		<%
+		addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_ORGANIZATION));
+		%>
+
+		<liferay-frontend:add-menu-item title='<%= LanguageUtil.get(request, "organization-role") %>' url="<%= addRoleURL.toString() %>" />
+	</liferay-frontend:add-menu>
+</c:if>
+
 <aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
-	<aui:nav cssClass="navbar-nav">
-		<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_ROLE) %>">
-			<liferay-portlet:renderURL varImpl="addRoleURL">
-				<portlet:param name="mvcPath" value="/edit_role.jsp" />
-				<portlet:param name="redirect" value="<%= viewRolesURL.toString() %>" />
-			</liferay-portlet:renderURL>
-
-			<%
-			String toolbarItem = ParamUtil.getString(request, "toolbarItem");
-			%>
-
-			<aui:nav-item dropdown="<%= true %>" label="add" selected='<%= toolbarItem.equals("add") %>'>
-
-				<%
-				addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_REGULAR));
-				%>
-
-				<aui:nav-item href="<%= addRoleURL.toString() %>" label="regular-role" />
-
-				<%
-				addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_SITE));
-				%>
-
-				<aui:nav-item href="<%= addRoleURL.toString() %>" label="site-role" />
-
-				<%
-				addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_ORGANIZATION));
-				%>
-
-				<aui:nav-item href="<%= addRoleURL.toString() %>" label="organization-role" />
-			</aui:nav-item>
-		</c:if>
-	</aui:nav>
-
 	<aui:nav cssClass="navbar-nav">
 
 		<%
