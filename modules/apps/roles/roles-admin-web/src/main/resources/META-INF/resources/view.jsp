@@ -17,11 +17,17 @@
 <%@ include file="/init.jsp" %>
 
 <%
+String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
+String orderByCol = ParamUtil.getString(request, "orderByCol", "title");
+String orderByType = ParamUtil.getString(request, "orderByType", "asc");
 int type = ParamUtil.getInteger(request, "type", 1);
 
 PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("mvcPath", "/view.jsp");
+portletURL.setParameter("displayStyle", displayStyle);
+portletURL.setParameter("orderByCol", orderByCol);
+portletURL.setParameter("orderByType", orderByType);
 portletURL.setParameter("type", String.valueOf(type));
 
 pageContext.setAttribute("portletURL", portletURL);
