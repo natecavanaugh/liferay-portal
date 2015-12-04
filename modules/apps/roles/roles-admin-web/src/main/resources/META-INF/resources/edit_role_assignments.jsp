@@ -75,11 +75,32 @@ renderResponse.setTitle(role.getTitle(locale));
 	<aui:input name="assignmentsRedirect" type="hidden" />
 	<aui:input name="roleId" type="hidden" value="<%= role.getRoleId() %>" />
 
-	<liferay-ui:tabs
-		names="users,sites,organizations,user-groups"
-		param="tabs2"
-		url="<%= portletURL.toString() %>"
-	/>
+	<liferay-frontend:management-bar
+		includeCheckBox="<%= true %>"
+	>
+		<liferay-frontend:management-bar-buttons>
+			<liferay-frontend:management-bar-filters>
+				<liferay-frontend:management-bar-navigation
+					navigationKeys='<%= new String[] {"users", "sites", "organizations", "user-groups"} %>'
+					navigationParam="tabs2"
+					portletURL="<%= portletURL %>"
+				/>
+
+				<liferay-frontend:management-bar-sort
+					orderByCol="<%= orderByCol %>"
+					orderByType="<%= orderByType %>"
+					orderColumns='<%= new String[] {"name"} %>'
+					portletURL="<%= portletURL %>"
+				/>
+			</liferay-frontend:management-bar-filters>
+
+			<liferay-frontend:management-bar-display-buttons
+				displayViews='<%= new String[] {"list"} %>'
+				portletURL="<%= portletURL %>"
+				selectedDisplayStyle="<%= displayStyle %>"
+			/>
+		</liferay-frontend:management-bar-buttons>
+	</liferay-frontend:management-bar>
 
 	<%
 	String portletId = PortletProviderUtil.getPortletId(User.class.getName(), PortletProvider.Action.VIEW);
