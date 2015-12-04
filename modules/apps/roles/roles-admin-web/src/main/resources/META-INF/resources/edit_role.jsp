@@ -66,90 +66,94 @@ String subtype = BeanParamUtil.getString(role, request, "subtype");
 
 	<aui:model-context bean="<%= role %>" model="<%= Role.class %>" />
 
-	<aui:fieldset>
-		<c:choose>
-			<c:when test="<%= ((role == null) && (type == 0)) %>">
-				<aui:select name="type">
-					<aui:option label="regular" value="<%= RoleConstants.TYPE_REGULAR %>" />
-					<aui:option label="site" value="<%= RoleConstants.TYPE_SITE %>" />
-					<aui:option label="organization" value="<%= RoleConstants.TYPE_ORGANIZATION %>" />
-				</aui:select>
-			</c:when>
-			<c:when test="<%= (role == null) %>">
-				<aui:input label="type" name="typeLabel" type="resource" value="<%= LanguageUtil.get(request, RoleConstants.getTypeLabel(type)) %>" />
-
-				<aui:input name="type" type="hidden" value="<%= String.valueOf(type) %>" />
-			</c:when>
-			<c:otherwise>
-				<aui:input label="type" name="typeLabel" type="resource" value="<%= LanguageUtil.get(request, role.getTypeLabel()) %>" />
-			</c:otherwise>
-		</c:choose>
-
-		<c:choose>
-			<c:when test="<%= (role != null) && role.isSystem() %>">
-				<aui:input name="name" type="hidden" value="<%= role.getName() %>" />
-			</c:when>
-			<c:otherwise>
-				<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" label='<%= (role != null) ? "new-name" : "name" %>' name="name" />
-			</c:otherwise>
-		</c:choose>
-
-		<aui:input name="title" />
-
-		<aui:input name="description" />
-
-		<c:if test="<%= role != null %>">
-
-			<%
-			String[] subtypes = null;
-
-			if (role.getType() == RoleConstants.TYPE_ORGANIZATION) {
-				subtypes = PropsValues.ROLES_ORGANIZATION_SUBTYPES;
-			}
-			else if (role.getType() == RoleConstants.TYPE_REGULAR) {
-				subtypes = PropsValues.ROLES_REGULAR_SUBTYPES;
-			}
-			else if (role.getType() == RoleConstants.TYPE_SITE) {
-				subtypes = PropsValues.ROLES_SITE_SUBTYPES;
-			}
-			else {
-				subtypes = new String[0];
-			}
-			%>
-
-			<c:if test="<%= subtypes.length > 0 %>">
-				<aui:select name="subtype">
-					<aui:option value="" />
-
-					<%
-					for (String curSubtype : subtypes) {
-					%>
-
-						<aui:option label="<%= curSubtype %>" selected="<%= subtype.equals(curSubtype) %>" />
-
-					<%
-					}
-					%>
-
-				</aui:select>
-			</c:if>
-		</c:if>
-
+	<aui:fieldset-group markupView="lexicon">
 		<aui:fieldset>
-			<liferay-ui:custom-attribute-list
-				className="<%= Role.class.getName() %>"
-				classPK="<%= (role != null) ? role.getRoleId() : 0 %>"
-				editable="<%= true %>"
-				label="<%= true %>"
-			/>
+			<c:choose>
+				<c:when test="<%= ((role == null) && (type == 0)) %>">
+					<aui:select name="type">
+						<aui:option label="regular" value="<%= RoleConstants.TYPE_REGULAR %>" />
+						<aui:option label="site" value="<%= RoleConstants.TYPE_SITE %>" />
+						<aui:option label="organization" value="<%= RoleConstants.TYPE_ORGANIZATION %>" />
+					</aui:select>
+				</c:when>
+				<c:when test="<%= (role == null) %>">
+					<aui:input label="type" name="typeLabel" type="resource" value="<%= LanguageUtil.get(request, RoleConstants.getTypeLabel(type)) %>" />
+
+					<aui:input name="type" type="hidden" value="<%= String.valueOf(type) %>" />
+				</c:when>
+				<c:otherwise>
+					<aui:input label="type" name="typeLabel" type="resource" value="<%= LanguageUtil.get(request, role.getTypeLabel()) %>" />
+				</c:otherwise>
+			</c:choose>
+
+			<c:choose>
+				<c:when test="<%= (role != null) && role.isSystem() %>">
+					<aui:input name="name" type="hidden" value="<%= role.getName() %>" />
+				</c:when>
+				<c:otherwise>
+					<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" label='<%= (role != null) ? "new-name" : "name" %>' name="name" />
+				</c:otherwise>
+			</c:choose>
+
+			<aui:input name="title" />
+
+			<aui:input name="description" />
+
+			<c:if test="<%= role != null %>">
+
+				<%
+				String[] subtypes = null;
+
+				if (role.getType() == RoleConstants.TYPE_ORGANIZATION) {
+					subtypes = PropsValues.ROLES_ORGANIZATION_SUBTYPES;
+				}
+				else if (role.getType() == RoleConstants.TYPE_REGULAR) {
+					subtypes = PropsValues.ROLES_REGULAR_SUBTYPES;
+				}
+				else if (role.getType() == RoleConstants.TYPE_SITE) {
+					subtypes = PropsValues.ROLES_SITE_SUBTYPES;
+				}
+				else {
+					subtypes = new String[0];
+				}
+				%>
+
+				<c:if test="<%= subtypes.length > 0 %>">
+					<aui:select name="subtype">
+						<aui:option value="" />
+
+						<%
+						for (String curSubtype : subtypes) {
+						%>
+
+							<aui:option label="<%= curSubtype %>" selected="<%= subtype.equals(curSubtype) %>" />
+
+						<%
+						}
+						%>
+
+					</aui:select>
+				</c:if>
+			</c:if>
+
+			<aui:fieldset-group markupView="lexicon">
+				<aui:fieldset>
+					<liferay-ui:custom-attribute-list
+						className="<%= Role.class.getName() %>"
+						classPK="<%= (role != null) ? role.getRoleId() : 0 %>"
+						editable="<%= true %>"
+						label="<%= true %>"
+					/>
+				</aui:fieldset>
+			</aui:fieldset-group>
+
+			<aui:button-row>
+				<aui:button type="submit" />
+
+				<aui:button href="<%= redirect %>" type="cancel" />
+			</aui:button-row>
 		</aui:fieldset>
-
-		<aui:button-row>
-			<aui:button type="submit" />
-
-			<aui:button href="<%= redirect %>" type="cancel" />
-		</aui:button-row>
-	</aui:fieldset>
+	</aui:fieldset-group>
 </aui:form>
 
 <%
