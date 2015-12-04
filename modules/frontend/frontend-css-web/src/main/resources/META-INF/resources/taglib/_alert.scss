@@ -1,9 +1,21 @@
-.portlet-alert {
+.portlet-alerts-container {
 	position: absolute;
-	width: 100%;
-	z-index: 1;
+	right: 10px;
+	top: 10px;
+	width: 400px;
+	z-index: 1000;
 
-	.container-fluid-1280 {
+	.portlet-alert {
+		margin-bottom: 5px;
 		overflow: hidden;
+	}
+}
+
+.portlet-body {
+	.portlet-alerts-container {
+		right: auto;
+		top: auto;
+		width: 100%;
+		z-index: 1;
 	}
 }

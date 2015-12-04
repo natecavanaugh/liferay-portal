@@ -4,7 +4,9 @@ AUI.add(
 		var getClassName = A.getClassName;
 		var Lang = A.Lang;
 
-		var STR_ALERT_NODE = '<div class="portlet-alert"><div class="container-fluid-1280 portlet-alert-container"></div></div>';
+		var STR_ALERT_NODE = '<div class="container-fluid-1280 portlet-alert"></div>';
+
+		var STR_ALERTS_CONTAINER = '<div class="portlet-alerts-container"></div>';
 
 		var TPL_CONTENT = '<strong class="lead">{title}</strong>{message}';
 
@@ -60,7 +62,9 @@ AUI.add(
 						instance._setBodyContent();
 						instance._setCssClass();
 
-						return Alert.superclass.render.call(this, parentNode || this._getParentNode());
+						parentNode = A.one(parentNode);
+
+						return Alert.superclass.render.call(this, this._getParentNode(parentNode));
 					},
 
 					_afterTypeChange: function(event) {
@@ -76,26 +80,37 @@ AUI.add(
 						instance._set('visible', true);
 					},
 
-					_getParentNode: function() {
+					_getParentNode: function(targetNode) {
 						var instance = this;
 
-						var parentNode = instance._parentNode || instance.one('.portlet-alert-container');
+						var rootNode = targetNode || instance.get('rootNode') || A;
 
-						if (!parentNode) {
-							var rootNode = instance.get('rootNode');
+						var alertsContainer = instance._alertsContainer || (targetNode && targetNode.one('.portlet-alerts-container')) || rootNode.one('.portlet-alerts-container');
 
-							var alertNode = A.Node.create(STR_ALERT_NODE);
+						if (!alertsContainer) {
+							alertsContainer = A.Node.create(STR_ALERTS_CONTAINER);
 
 							var navbar = rootNode.one('.navbar');
 
-							if (navbar) {
-								navbar.insert(alertNode, 'after');
+							if (targetNode) {
+								targetNode.prepend(alertsContainer);
+							}
+							else if (navbar) {
+								navbar.insert(alertsContainer, 'after');
 							}
 							else {
-								rootNode.one('.portlet-body').prepend(alertNode);
+								rootNode.one('.portlet-body').prepend(alertsContainer);
 							}
 
-							parentNode = alertNode.one('div');
+							instance._alertsContainer = alertsContainer;
+						}
+
+						var parentNode = instance._parentNode;
+
+						if (!parentNode) {
+							parentNode = A.Node.create(STR_ALERT_NODE);
+
+							alertsContainer.prepend(parentNode);
 
 							instance._parentNode = parentNode;
 						}
