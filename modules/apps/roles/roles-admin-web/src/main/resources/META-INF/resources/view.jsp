@@ -18,6 +18,7 @@
 
 <%
 String displayStyle = ParamUtil.getString(request, "displayStyle", "list");
+String keywords = ParamUtil.getString(request, "keywords");
 String orderByCol = ParamUtil.getString(request, "orderByCol", "title");
 String orderByType = ParamUtil.getString(request, "orderByType", "asc");
 int type = ParamUtil.getInteger(request, "type", 1);
@@ -34,12 +35,7 @@ pageContext.setAttribute("portletURL", portletURL);
 
 String portletURLString = portletURL.toString();
 
-String keywords = ParamUtil.getString(request, "keywords");
-
-PortletURL viewRolesURL = renderResponse.createRenderURL();
-
-viewRolesURL.setParameter("mvcPath", "/view.jsp");
-viewRolesURL.setParameter("keywords", keywords);
+portletURL.setParameter("keywords", keywords);
 %>
 
 <liferay-ui:error exception="<%= RequiredRoleException.class %>" message="you-cannot-delete-a-system-role" />
@@ -47,7 +43,7 @@ viewRolesURL.setParameter("keywords", keywords);
 <c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_ROLE) %>">
 	<liferay-portlet:renderURL varImpl="addRoleURL">
 		<portlet:param name="mvcPath" value="/edit_role.jsp" />
-		<portlet:param name="redirect" value="<%= viewRolesURL.toString() %>" />
+		<portlet:param name="redirect" value="<%= portletURLString %>" />
 	</liferay-portlet:renderURL>
 
 	<liferay-frontend:add-menu>
@@ -76,22 +72,27 @@ viewRolesURL.setParameter("keywords", keywords);
 	<aui:nav cssClass="navbar-nav">
 
 		<%
-		viewRolesURL.setParameter("type", String.valueOf(RoleConstants.TYPE_REGULAR));
+		portletURL.setParameter("type", String.valueOf(RoleConstants.TYPE_REGULAR));
 		%>
 
-		<aui:nav-item href="<%= viewRolesURL.toString() %>" label="regular-roles" selected="<%= type == RoleConstants.TYPE_REGULAR %>" />
+		<aui:nav-item href="<%= portletURL.toString() %>" label="regular-roles" selected="<%= type == RoleConstants.TYPE_REGULAR %>" />
 
 		<%
-		viewRolesURL.setParameter("type", String.valueOf(RoleConstants.TYPE_SITE));
+		portletURL.setParameter("type", String.valueOf(RoleConstants.TYPE_SITE));
 		%>
 
-		<aui:nav-item href="<%= viewRolesURL.toString() %>" label="site-roles" selected="<%= type == RoleConstants.TYPE_SITE %>" />
+		<aui:nav-item href="<%= portletURL.toString() %>" label="site-roles" selected="<%= type == RoleConstants.TYPE_SITE %>" />
 
 		<%
-		viewRolesURL.setParameter("type", String.valueOf(RoleConstants.TYPE_ORGANIZATION));
+		portletURL.setParameter("type", String.valueOf(RoleConstants.TYPE_ORGANIZATION));
 		%>
 
-		<aui:nav-item href="<%= viewRolesURL.toString() %>" label="organization-roles" selected="<%= type == RoleConstants.TYPE_ORGANIZATION %>" />
+		<aui:nav-item href="<%= portletURL.toString() %>" label="organization-roles" selected="<%= type == RoleConstants.TYPE_ORGANIZATION %>" />
+
+		<%
+		portletURL.setParameter("type", String.valueOf(type));
+		%>
+
 	</aui:nav>
 
 	<aui:nav-bar-search>
