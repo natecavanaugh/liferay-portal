@@ -17,9 +17,12 @@
 <%@ include file="/init.jsp" %>
 
 <%
+int type = ParamUtil.getInteger(request, "type", 1);
+
 PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("mvcPath", "/view.jsp");
+portletURL.setParameter("type", String.valueOf(type));
 
 pageContext.setAttribute("portletURL", portletURL);
 
