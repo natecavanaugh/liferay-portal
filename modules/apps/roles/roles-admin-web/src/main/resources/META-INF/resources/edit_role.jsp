@@ -27,13 +27,12 @@ Role role = RoleServiceUtil.fetchRole(roleId);
 
 int type = ParamUtil.getInteger(request, "type");
 String subtype = BeanParamUtil.getString(role, request, "subtype");
-%>
 
-<liferay-ui:header
-	backURL="<%= backURL %>"
-	localizeTitle="<%= (role == null) %>"
-	title='<%= (role == null) ? "new-role" : role.getTitle(locale) %>'
-/>
+portletDisplay.setShowBackIcon(true);
+portletDisplay.setURLBack(backURL);
+
+renderResponse.setTitle((role == null) ? LanguageUtil.get(request, "new-role") : role.getTitle(locale));
+%>
 
 <c:if test="<%= role != null %>">
 	<liferay-util:include page="/edit_role_tabs.jsp" servletContext="<%= application %>">

@@ -61,11 +61,13 @@ portletURL.setParameter("roleId", String.valueOf(role.getRoleId()));
 
 <c:choose>
 	<c:when test="<%= !portletName.equals(PortletKeys.SERVER_ADMIN) %>">
-		<liferay-ui:header
-			backURL="<%= backURL %>"
-			localizeTitle="<%= false %>"
-			title="<%= role.getTitle(locale) %>"
-		/>
+
+		<%
+		portletDisplay.setShowBackIcon(true);
+		portletDisplay.setURLBack(backURL);
+
+		renderResponse.setTitle(role.getTitle(locale));
+		%>
 
 		<liferay-util:include page="/edit_role_tabs.jsp" servletContext="<%= application %>">
 			<liferay-util:param name="tabs1" value="define-permissions" />

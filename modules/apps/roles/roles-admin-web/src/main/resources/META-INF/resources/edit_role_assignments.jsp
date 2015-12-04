@@ -45,13 +45,12 @@ request.setAttribute("edit_role_assignments.jsp-cur", cur);
 request.setAttribute("edit_role_assignments.jsp-role", role);
 
 request.setAttribute("edit_role_assignments.jsp-portletURL", portletURL);
-%>
 
-<liferay-ui:header
-	backURL="<%= redirect %>"
-	localizeTitle="<%= false %>"
-	title="<%= role.getTitle(locale) %>"
-/>
+portletDisplay.setShowBackIcon(true);
+portletDisplay.setURLBack(redirect);
+
+renderResponse.setTitle(role.getTitle(locale));
+%>
 
 <liferay-util:include page="/edit_role_tabs.jsp" servletContext="<%= application %>">
 	<liferay-util:param name="tabs1" value="assign-members" />
