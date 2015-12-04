@@ -85,21 +85,26 @@ AUI.add(
 
 						var rootNode = targetNode || instance.get('rootNode') || A;
 
-						var alertsContainer = instance._alertsContainer || (targetNode && targetNode.one('.lfr-alert-container')) || rootNode.one('.lfr-alert-container');
+						var alertsContainer = instance._alertsContainer;
 
 						if (!alertsContainer) {
-							alertsContainer = A.Node.create(STR_ALERTS_CONTAINER);
+							alertsContainer = (targetNode && targetNode.one('.lfr-alert-container')) || rootNode.one('.lfr-alert-container');
 
-							var navbar = rootNode.one('.navbar');
+							if (!alertsContainer) {
+								alertsContainer = A.Node.create(STR_ALERTS_CONTAINER);
 
-							if (targetNode) {
-								targetNode.prepend(alertsContainer);
-							}
-							else if (navbar) {
-								navbar.insert(alertsContainer, 'after');
-							}
-							else {
-								rootNode.one('.portlet-body').prepend(alertsContainer);
+								if (targetNode) {
+									targetNode.prepend(alertsContainer);
+								} else {
+									var navbar = rootNode.one('.navbar');
+
+									if (navbar) {
+										navbar.insert(alertsContainer, 'after');
+									}
+									else {
+										rootNode.one('.portlet-body').prepend(alertsContainer);
+									}
+								}
 							}
 
 							instance._alertsContainer = alertsContainer;
