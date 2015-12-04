@@ -517,17 +517,19 @@ AUI.add(
 						var banner = instance._banner;
 
 						if (!banner) {
-							banner = new Liferay.Notice(
+							banner = new Liferay.Alert(
 								{
-									closeText: instance._extendText,
-									content: instance._warningText,
-									noticeClass: 'popup-alert-notice',
-									onClose: function() {
-										instance._host.extend();
+									closeable: true,
+									delay: {
+										hide: 10000000,
+										show: 0
 									},
-									toggleText: false
+									duration: 500,
+									message: instance._warningText,
+									title: 'Warning',
+									type: 'warning'
 								}
-							);
+							).render('body');
 
 							instance._banner = banner;
 						}
@@ -562,13 +564,12 @@ AUI.add(
 
 						var banner = instance._getBanner();
 
-						banner.html(instance._expiredText);
-
-						banner.replaceClass('popup-alert-notice', 'popup-alert-warning');
-
-						banner.replaceClass('alert-warning', 'alert-danger');
-
-						banner.show();
+						banner.setAttrs(
+							{
+								bodyContent: instance._expiredText,
+								type: 'danger'
+							}
+						);
 
 						DOC.title = instance.get('pageTitle');
 					},
@@ -578,11 +579,17 @@ AUI.add(
 
 						var banner = instance._getBanner();
 
-						counterTextNode = counterTextNode || banner.one('.countdown-timer');
+						banner.set(
+							'bodyContent',
+							Lang.sub(
+								instance._warningText,
+								[
+									instance._formatTime(remainingTime)
+								]
+							)
+						);
 
-						counterTextNode.text(instance._formatTime(remainingTime));
-
-						DOC.title = banner.text();
+						DOC.title = banner.get('contentBox').text;
 					}
 				}
 			}
@@ -593,6 +600,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-io-request', 'aui-timer', 'cookie', 'liferay-notice']
+		requires: ['aui-io-request', 'aui-timer', 'cookie', 'liferay-notice', 'liferay-alert']
 	}
 );

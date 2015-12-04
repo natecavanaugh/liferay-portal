@@ -14,22 +14,21 @@
  */
 --%>
 
-<%@ include file="/html/taglib/init.jsp" %>
+<%@ include file="/html/taglib/ui/alert/init.jsp" %>
 
-<%
-String key = (String)request.getAttribute("liferay-ui:success:key");
-String message = (String)request.getAttribute("liferay-ui:success:message");
-boolean translateMessage = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:success:translateMessage"));
-
-if (translateMessage) {
-	message = LanguageUtil.get(request, message);
-}
-%>
-
-<c:if test="<%= MultiSessionMessages.contains(portletRequest, key) %>">
-	<liferay-ui:alert
-		message="<%= message %>"
-		timeout="5000"
-		type="success"
-	/>
-</c:if>
+<aui:script use="liferay-alert">
+	new Liferay.Alert(
+		{
+			closeable: <%= closeable %>,
+			delay: {
+				hide: <%= timeout %>,
+				show: 0
+			},
+			duration: <%= animationTime %>,
+			message: '<%= message %>',
+			namespace: '<portlet:namespace />',
+			title: '<%= title %>',
+			type: '<%= type %>'
+		}
+	).render();
+</aui:script>
