@@ -31,67 +31,58 @@ String portletURLString = portletURL.toString();
 
 <liferay-ui:error exception="<%= RequiredRoleException.class %>" message="you-cannot-delete-a-system-role" />
 
+<aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
+	<aui:nav cssClass="navbar-nav">
+		<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_ROLE) %>">
+			<portlet:renderURL var="viewRolesURL">
+				<portlet:param name="mvcPath" value="/view.jsp" />
+			</portlet:renderURL>
+
+			<liferay-portlet:renderURL varImpl="addRoleURL">
+				<portlet:param name="mvcPath" value="/edit_role.jsp" />
+				<portlet:param name="redirect" value="<%= viewRolesURL %>" />
+			</liferay-portlet:renderURL>
+
+			<%
+			String toolbarItem = ParamUtil.getString(request, "toolbarItem");
+			%>
+
+			<aui:nav-item dropdown="<%= true %>" label="add" selected='<%= toolbarItem.equals("add") %>'>
+
+				<%
+				addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_REGULAR));
+				%>
+
+				<aui:nav-item href="<%= addRoleURL.toString() %>" label="regular-role" />
+
+				<%
+				addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_SITE));
+				%>
+
+				<aui:nav-item href="<%= addRoleURL.toString() %>" label="site-role" />
+
+				<%
+				addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_ORGANIZATION));
+				%>
+
+				<aui:nav-item href="<%= addRoleURL.toString() %>" label="organization-role" />
+			</aui:nav-item>
+		</c:if>
+	</aui:nav>
+
+	<aui:nav-bar-search>
+		<aui:form action="<%= portletURLString %>" name="searchFm">
+			<liferay-ui:input-search autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" markupView="lexicon" placeholder='<%= LanguageUtil.get(request, "keywords") %>' />
+		</aui:form>
+	</aui:nav-bar-search>
+</aui:nav-bar>
+
 <aui:form action="<%= portletURLString %>" cssClass="container-fluid-1280" method="get" name="fm">
 	<liferay-portlet:renderURLParams varImpl="portletURL" />
 
 	<liferay-ui:search-container
 		searchContainer="<%= new RoleSearch(renderRequest, portletURL) %>"
 	>
-		<aui:nav-bar>
-			<aui:nav cssClass="navbar-nav">
-				<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_ROLE) %>">
-					<portlet:renderURL var="viewRolesURL">
-						<portlet:param name="mvcPath" value="/view.jsp" />
-					</portlet:renderURL>
-
-					<liferay-portlet:renderURL varImpl="addRoleURL">
-						<portlet:param name="mvcPath" value="/edit_role.jsp" />
-						<portlet:param name="redirect" value="<%= viewRolesURL %>" />
-					</liferay-portlet:renderURL>
-
-					<%
-					String toolbarItem = ParamUtil.getString(request, "toolbarItem");
-					%>
-
-					<aui:nav-item dropdown="<%= true %>" label="add" selected='<%= toolbarItem.equals("add") %>'>
-
-						<%
-						addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_REGULAR));
-						%>
-
-						<aui:nav-item href="<%= addRoleURL.toString() %>" label="regular-role" />
-
-						<%
-						addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_SITE));
-						%>
-
-						<aui:nav-item href="<%= addRoleURL.toString() %>" label="site-role" />
-
-						<%
-						addRoleURL.setParameter("type", String.valueOf(RoleConstants.TYPE_ORGANIZATION));
-						%>
-
-						<aui:nav-item href="<%= addRoleURL.toString() %>" label="organization-role" />
-					</aui:nav-item>
-				</c:if>
-			</aui:nav>
-
-			<aui:nav-bar-search searchContainer="<%= searchContainer %>">
-
-				<%
-				String cssClass = "form-search";
-
-				if (windowState.equals(WindowState.MAXIMIZED)) {
-					cssClass += " col-xs-12";
-				}
-				%>
-
-				<div class="<%= cssClass %>">
-					<liferay-ui:input-search autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" placeholder='<%= LanguageUtil.get(request, "keywords") %>' />
-				</div>
-			</aui:nav-bar-search>
-		</aui:nav-bar>
-
 		<liferay-ui:search-container-results>
 
 			<%
