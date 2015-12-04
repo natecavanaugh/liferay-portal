@@ -1,18 +1,18 @@
-.portlet-alerts-container {
+.lfr-alert-container {
 	position: absolute;
 	right: 10px;
 	top: 10px;
 	width: 400px;
 	z-index: 1000;
 
-	.portlet-alert {
+	.lfr-alert-wrapper {
 		margin-bottom: 5px;
 		overflow: hidden;
 	}
 }
 
 .portlet-body {
-	.portlet-alerts-container {
+	.lfr-alert-container {
 		right: auto;
 		top: auto;
 		width: 100%;
