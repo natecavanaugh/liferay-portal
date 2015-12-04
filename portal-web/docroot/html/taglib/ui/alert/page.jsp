@@ -26,6 +26,7 @@
 			},
 			duration: <%= animationTime %>,
 			message: '<%= message %>',
+			namespace: '<portlet:namespace />',
 			title: '<%= title %>',
 			type: '<%= type %>'
 		}

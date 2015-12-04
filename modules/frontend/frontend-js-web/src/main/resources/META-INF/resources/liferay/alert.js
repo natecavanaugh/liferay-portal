@@ -31,6 +31,8 @@ AUI.add(
 					}
 				},
 
+				AUGMENTS: [Liferay.PortletBase],
+
 				EXTENDS: A.Alert,
 
 				NAME: 'liferayalert',
@@ -77,18 +79,20 @@ AUI.add(
 					_getParentNode: function() {
 						var instance = this;
 
-						var parentNode = instance._parentNode || A.one('.portlet-alert-container');
+						var parentNode = instance._parentNode || instance.one('.portlet-alert-container');
 
 						if (!parentNode) {
+							var rootNode = instance.get('rootNode');
+
 							var alertNode = A.Node.create(STR_ALERT_NODE);
 
-							var navbar = A.one('.navbar');
+							var navbar = rootNode.one('.navbar');
 
 							if (navbar) {
 								navbar.insert(alertNode, 'after');
 							}
 							else {
-								A.one('.portlet-body').prepend(alertNode);
+								rootNode.one('.portlet-body').prepend(alertNode);
 							}
 
 							parentNode = alertNode.one('div');
@@ -188,6 +192,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-alert', 'event-mouseenter', 'timers']
+		requires: ['aui-alert', 'event-mouseenter', 'liferay-portlet-base', 'timers']
 	}
 );

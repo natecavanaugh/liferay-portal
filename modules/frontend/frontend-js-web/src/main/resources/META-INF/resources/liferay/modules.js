@@ -60,6 +60,7 @@
 						requires: [
 							'aui-alert',
 							'event-mouseenter',
+							'liferay-portlet-base',
 							'timers'
 						]
 					},
