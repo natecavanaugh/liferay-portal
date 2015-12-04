@@ -27,6 +27,13 @@ portletURL.setParameter("type", String.valueOf(type));
 pageContext.setAttribute("portletURL", portletURL);
 
 String portletURLString = portletURL.toString();
+
+String keywords = ParamUtil.getString(request, "keywords");
+
+PortletURL viewRolesURL = renderResponse.createRenderURL();
+
+viewRolesURL.setParameter("mvcPath", "/view.jsp");
+viewRolesURL.setParameter("keywords", keywords);
 %>
 
 <liferay-ui:error exception="<%= RequiredRoleException.class %>" message="you-cannot-delete-a-system-role" />
@@ -34,13 +41,9 @@ String portletURLString = portletURL.toString();
 <aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
 	<aui:nav cssClass="navbar-nav">
 		<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_ROLE) %>">
-			<portlet:renderURL var="viewRolesURL">
-				<portlet:param name="mvcPath" value="/view.jsp" />
-			</portlet:renderURL>
-
 			<liferay-portlet:renderURL varImpl="addRoleURL">
 				<portlet:param name="mvcPath" value="/edit_role.jsp" />
-				<portlet:param name="redirect" value="<%= viewRolesURL %>" />
+				<portlet:param name="redirect" value="<%= viewRolesURL.toString() %>" />
 			</liferay-portlet:renderURL>
 
 			<%
@@ -68,6 +71,27 @@ String portletURLString = portletURL.toString();
 				<aui:nav-item href="<%= addRoleURL.toString() %>" label="organization-role" />
 			</aui:nav-item>
 		</c:if>
+	</aui:nav>
+
+	<aui:nav cssClass="navbar-nav">
+
+		<%
+		viewRolesURL.setParameter("type", String.valueOf(RoleConstants.TYPE_REGULAR));
+		%>
+
+		<aui:nav-item href="<%= viewRolesURL.toString() %>" label="regular-roles" selected="<%= type == RoleConstants.TYPE_REGULAR %>" />
+
+		<%
+		viewRolesURL.setParameter("type", String.valueOf(RoleConstants.TYPE_SITE));
+		%>
+
+		<aui:nav-item href="<%= viewRolesURL.toString() %>" label="site-roles" selected="<%= type == RoleConstants.TYPE_SITE %>" />
+
+		<%
+		viewRolesURL.setParameter("type", String.valueOf(RoleConstants.TYPE_ORGANIZATION));
+		%>
+
+		<aui:nav-item href="<%= viewRolesURL.toString() %>" label="organization-roles" selected="<%= type == RoleConstants.TYPE_ORGANIZATION %>" />
 	</aui:nav>
 
 	<aui:nav-bar-search>
