@@ -175,13 +175,8 @@ portletURL.setParameter("keywords", keywords);
 			<liferay-ui:search-container-column-text
 				href="<%= rowURL %>"
 				name="title"
-			>
-				<liferay-ui:icon
-					iconCssClass="<%= RolesAdminUtil.getIconCssClass(role) %>"
-					label="<%= true %>"
-					message="<%= HtmlUtil.escape(role.getTitle(locale)) %>"
-				/>
-			</liferay-ui:search-container-column-text>
+				value="<%= role.getTitle(locale) %>"
+			/>
 
 			<liferay-ui:search-container-column-text
 				href="<%= rowURL %>"
