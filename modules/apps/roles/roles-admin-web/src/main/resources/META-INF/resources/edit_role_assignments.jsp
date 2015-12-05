@@ -86,6 +86,12 @@ renderResponse.setTitle(role.getTitle(locale));
 					portletURL="<%= portletURL %>"
 				/>
 
+				<liferay-frontend:management-bar-navigation
+					navigationKeys='<%= new String[] {"current", "available"} %>'
+					navigationParam="tabs3"
+					portletURL="<%= portletURL %>"
+				/>
+
 				<liferay-frontend:management-bar-sort
 					orderByCol="<%= orderByCol %>"
 					orderByType="<%= orderByType %>"

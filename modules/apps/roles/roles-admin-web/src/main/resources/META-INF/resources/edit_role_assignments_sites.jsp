@@ -29,12 +29,6 @@ PortletURL portletURL = (PortletURL)request.getAttribute("edit_role_assignments.
 <aui:input name="addGroupIds" type="hidden" />
 <aui:input name="removeGroupIds" type="hidden" />
 
-<liferay-ui:tabs
-	names="current,available"
-	param="tabs3"
-	url="<%= portletURL.toString() %>"
-/>
-
 <liferay-ui:search-container
 	rowChecker="<%= new GroupRoleChecker(renderResponse, role) %>"
 	searchContainer="<%= new GroupSearch(renderRequest, portletURL) %>"

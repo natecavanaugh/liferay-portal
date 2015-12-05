@@ -29,12 +29,6 @@ PortletURL portletURL = (PortletURL)request.getAttribute("edit_role_assignments.
 <aui:input name="addUserIds" type="hidden" />
 <aui:input name="removeUserIds" type="hidden" />
 
-<liferay-ui:tabs
-	names="current,available"
-	param="tabs3"
-	url="<%= portletURL.toString() %>"
-/>
-
 <liferay-ui:membership-policy-error />
 
 <liferay-ui:search-container
