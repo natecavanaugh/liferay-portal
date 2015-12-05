@@ -27,6 +27,10 @@ Role role = RoleServiceUtil.fetchRole(roleId);
 
 String portletResource = ParamUtil.getString(request, "portletResource");
 
+String portletURL = ParamUtil.getString(request, "portletURL");
+
+String tabs1 = ParamUtil.getString(request, "tabs1");
+
 // Edit
 
 PortletURL editRoleURL = renderResponse.createRenderURL();
@@ -97,11 +101,19 @@ request.setAttribute("edit_role_permissions.jsp-portletResource", portletResourc
 		for (int i = 0; i < tabs1URLs.length; i++) {
 		%>
 
-		<aui:nav-item href="<%= tabs1URLs[i] %>" label="<%= tabs1Names[i] %>" selected='<%= tabs1Names[i].equals(ParamUtil.getString(request, "tabs1")) %>' />
+		<aui:nav-item href="<%= tabs1URLs[i] %>" label="<%= tabs1Names[i] %>" selected="<%= tabs1Names[i].equals(tabs1) %>" />
 
 		<%
 		}
 		%>
 
 	</aui:nav>
+
+	<c:if test='<%= tabs1.equals("assign-members") %>'>
+		<aui:nav-bar-search>
+			<aui:form action="<%= portletURL %>" name="searchFm">
+				<liferay-ui:input-search autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" markupView="lexicon" placeholder='<%= LanguageUtil.get(request, "keywords") %>' />
+			</aui:form>
+		</aui:nav-bar-search>
+	</c:if>
 </aui:nav-bar>

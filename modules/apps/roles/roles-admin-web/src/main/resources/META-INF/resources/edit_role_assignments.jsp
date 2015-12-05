@@ -61,6 +61,7 @@ renderResponse.setTitle(role.getTitle(locale));
 <liferay-util:include page="/edit_role_tabs.jsp" servletContext="<%= application %>">
 	<liferay-util:param name="tabs1" value="assign-members" />
 	<liferay-util:param name="backURL" value="<%= redirect %>" />
+	<liferay-util:param name="portletURL" value="<%= String.valueOf(portletURL) %>" />
 </liferay-util:include>
 
 <portlet:actionURL name="editRoleAssignments" var="editRoleAssignmentsURL">
