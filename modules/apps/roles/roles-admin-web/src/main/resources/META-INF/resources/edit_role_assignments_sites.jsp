@@ -54,8 +54,6 @@ PortletURL portletURL = (PortletURL)request.getAttribute("edit_role_assignments.
 		results="<%= GroupLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), groupParams, searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator()) %>"
 	/>
 
-	<div class="separator"><!-- --></div>
-
 	<%
 	portletURL.setParameter("cur", String.valueOf(cur));
 

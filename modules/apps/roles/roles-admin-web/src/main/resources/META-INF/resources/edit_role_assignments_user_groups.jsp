@@ -68,8 +68,6 @@ PortletURL portletURL = (PortletURL)request.getAttribute("edit_role_assignments.
 		/>
 	</liferay-ui:search-container-row>
 
-	<div class="separator"><!-- --></div>
-
 	<%
 	String taglibOnClick = renderResponse.getNamespace() + "updateRoleGroups('" + portletURL.toString() + StringPool.AMPERSAND + renderResponse.getNamespace() + "cur=" + cur + "');";
 	%>
