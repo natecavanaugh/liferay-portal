@@ -879,7 +879,7 @@ AUI.add(
 				A.each(
 					schedulerEvents,
 					function(schedulerEvent) {
-						if (calendarBooking.status == CalendarWorkflow.STATUS_DENIED) {
+						if (calendarBooking.status === CalendarWorkflow.STATUS_DENIED) {
 							var scheduler = schedulerEvent.get('scheduler');
 
 							var eventRecorder = scheduler.get('eventRecorder');
