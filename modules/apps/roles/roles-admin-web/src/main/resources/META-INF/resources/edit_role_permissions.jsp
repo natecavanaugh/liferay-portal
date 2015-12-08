@@ -61,11 +61,13 @@ portletURL.setParameter("roleId", String.valueOf(role.getRoleId()));
 
 <c:choose>
 	<c:when test="<%= !portletName.equals(PortletKeys.SERVER_ADMIN) %>">
-		<liferay-ui:header
-			backURL="<%= backURL %>"
-			localizeTitle="<%= false %>"
-			title="<%= role.getTitle(locale) %>"
-		/>
+
+		<%
+		portletDisplay.setShowBackIcon(true);
+		portletDisplay.setURLBack(backURL);
+
+		renderResponse.setTitle(role.getTitle(locale));
+		%>
 
 		<liferay-util:include page="/edit_role_tabs.jsp" servletContext="<%= application %>">
 			<liferay-util:param name="tabs1" value="define-permissions" />
@@ -86,7 +88,7 @@ portletURL.setParameter("roleId", String.valueOf(role.getRoleId()));
 <liferay-ui:success key="permissionDeleted" message="the-permission-was-deleted" />
 <liferay-ui:success key="permissionsUpdated" message="the-role-permissions-were-updated" />
 
-<aui:container id="permissionContainer">
+<aui:container cssClass="container-fluid-1280" id="permissionContainer">
 	<aui:row>
 		<c:if test="<%= !portletName.equals(PortletKeys.SERVER_ADMIN) %>">
 			<aui:col width="<%= 25 %>">
