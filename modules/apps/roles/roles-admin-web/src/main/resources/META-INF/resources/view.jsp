@@ -102,36 +102,45 @@ portletURL.setParameter("keywords", keywords);
 	</aui:nav-bar-search>
 </aui:nav-bar>
 
+<liferay-frontend:management-bar
+	includeCheckBox="<%= true %>"
+	searchContainerId="roleSearch"
+>
+	<liferay-frontend:management-bar-filters>
+		<liferay-frontend:management-bar-navigation
+			navigationKeys='<%= new String[] {"all"} %>'
+			portletURL="<%= portletURL %>"
+		/>
+
+		<liferay-frontend:management-bar-sort
+			orderByCol="<%= orderByCol %>"
+			orderByType="<%= orderByType %>"
+			orderColumns='<%= new String[] {"name"} %>'
+			portletURL="<%= portletURL %>"
+		/>
+	</liferay-frontend:management-bar-filters>
+
+	<liferay-frontend:management-bar-buttons>
+		<liferay-frontend:management-bar-display-buttons
+			displayViews='<%= new String[] {"list"} %>'
+			portletURL="<%= portletURL %>"
+			selectedDisplayStyle="<%= displayStyle %>"
+		/>
+	</liferay-frontend:management-bar-buttons>
+
+	<liferay-frontend:management-bar-action-buttons>
+		<liferay-frontend:management-bar-button href="javascript:;" iconCssClass="icon-trash" id="deleteRoles" label="delete" />
+	</liferay-frontend:management-bar-action-buttons>
+</liferay-frontend:management-bar>
+
 <aui:form action="<%= portletURLString %>" cssClass="container-fluid-1280" method="get" name="fm">
+	<aui:input name="deleteRoleIds" type="hidden" />
+
 	<liferay-portlet:renderURLParams varImpl="portletURL" />
 
-	<liferay-frontend:management-bar
-		includeCheckBox="<%= true %>"
-	>
-		<liferay-frontend:management-bar-filters>
-			<liferay-frontend:management-bar-navigation
-				navigationKeys='<%= new String[] {"all"} %>'
-				portletURL="<%= portletURL %>"
-			/>
-
-			<liferay-frontend:management-bar-sort
-				orderByCol="<%= orderByCol %>"
-				orderByType="<%= orderByType %>"
-				orderColumns='<%= new String[] {"name"} %>'
-				portletURL="<%= portletURL %>"
-			/>
-		</liferay-frontend:management-bar-filters>
-
-		<liferay-frontend:management-bar-buttons>
-			<liferay-frontend:management-bar-display-buttons
-				displayViews='<%= new String[] {"list"} %>'
-				portletURL="<%= portletURL %>"
-				selectedDisplayStyle="<%= displayStyle %>"
-			/>
-		</liferay-frontend:management-bar-buttons>
-	</liferay-frontend:management-bar>
-
 	<liferay-ui:search-container
+		id="roleSearch"
+		rowChecker="<%= new RoleChecker(renderResponse) %>"
 		searchContainer="<%= new RoleSearch(renderRequest, portletURL) %>"
 	>
 		<liferay-ui:search-container-results>
@@ -207,3 +216,25 @@ portletURL.setParameter("keywords", keywords);
 		<liferay-ui:search-iterator markupView="lexicon" />
 	</liferay-ui:search-container>
 </aui:form>
+
+<aui:script>
+	$('#<portlet:namespace />deleteRoles').on(
+		'click',
+		function() {
+			<portlet:namespace />doDeleteRoles(
+				Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds')
+			);
+		}
+	);
+
+	function <portlet:namespace />doDeleteRoles(deleteRoleIds) {
+		var form = AUI.$(document.<portlet:namespace />fm);
+
+		form.attr('method', 'post');
+		form.fm('deleteRoleIds').val(deleteRoleIds);
+
+		if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-delete-this") %>')) {
+			submitForm(form, '<portlet:actionURL name="deleteRoles"><portlet:param name="redirect" value="<%= portletURL.toString() %>" /></portlet:actionURL>');
+		}
+	}
+</aui:script>
