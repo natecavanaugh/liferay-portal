@@ -17,6 +17,7 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
+SearchContainer userSearchContainer = (SearchContainer)request.getAttribute("liferay-ui:user-search-container-results:searchContainer");
 UserSearchTerms searchTerms = (UserSearchTerms)request.getAttribute("liferay-ui:user-search-container-results:searchTerms");
 boolean useIndexer = GetterUtil.getBoolean(request.getAttribute("liferay-ui:user-search-container-results:useIndexer"));
 LinkedHashMap<String, Object> userParams = (LinkedHashMap<String, Object>)request.getAttribute("liferay-ui:user-search-container-results:userParams");
@@ -24,7 +25,7 @@ LinkedHashMap<String, Object> userParams = (LinkedHashMap<String, Object>)reques
 Indexer<?> indexer = IndexerRegistryUtil.nullSafeGetIndexer(User.class);
 %>
 
-<liferay-ui:search-container searchContainer='<%= (SearchContainer)request.getAttribute("liferay-ui:user-search-container-results:searchContainer") %>'>
+<liferay-ui:search-container id="<%= userSearchContainer.getId(request, namespace) %>" searchContainer='<%= userSearchContainer %>'>
 	<liferay-ui:search-container-results>
 		<c:choose>
 			<c:when test="<%= useIndexer && indexer.isIndexerEnabled() && PropsValues.USERS_SEARCH_WITH_INDEX %>">

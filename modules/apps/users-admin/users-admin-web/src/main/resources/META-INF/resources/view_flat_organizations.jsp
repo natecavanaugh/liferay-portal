@@ -43,7 +43,7 @@ if (filterManageableOrganizations) {
 		<%
 		SearchContainer searchContainer = new OrganizationSearch(renderRequest, portletURL);
 
-		RowChecker rowChecker = new RowChecker(renderResponse);
+		RowChecker rowChecker = new EmptyOnClickRowChecker(renderResponse);
 
 		rowChecker.setRowIds("rowIdsOrganization");
 
@@ -51,6 +51,7 @@ if (filterManageableOrganizations) {
 		%>
 
 		<liferay-ui:search-container
+			id="organizations"
 			searchContainer="<%= searchContainer %>"
 			var="organizationSearchContainer"
 		>
@@ -58,48 +59,6 @@ if (filterManageableOrganizations) {
 			<aui:input name="deleteOrganizationIds" type="hidden" />
 
 			<c:if test="<%= usersListView.equals(UserConstants.LIST_VIEW_FLAT_ORGANIZATIONS) %>">
-				<aui:nav cssClass="nav-tabs">
-					<portlet:renderURL var="viewUsersTreeURL">
-						<portlet:param name="mvcRenderCommandName" value="/users_admin/view" />
-						<portlet:param name="toolbarItem" value="browse" />
-						<portlet:param name="usersListView" value="<%= UserConstants.LIST_VIEW_TREE %>" />
-						<portlet:param name="saveUsersListView" value="<%= Boolean.TRUE.toString() %>" />
-					</portlet:renderURL>
-
-					<aui:nav-item href="<%= viewUsersTreeURL %>" label="browse" />
-
-					<portlet:renderURL var="viewOrganizationsFlatURL">
-						<portlet:param name="mvcRenderCommandName" value="/users_admin/view" />
-						<portlet:param name="toolbarItem" value="view-all-organizations" />
-						<portlet:param name="usersListView" value="<%= UserConstants.LIST_VIEW_FLAT_ORGANIZATIONS %>" />
-						<portlet:param name="saveUsersListView" value="<%= Boolean.TRUE.toString() %>" />
-					</portlet:renderURL>
-
-					<aui:nav-item href="<%= viewOrganizationsFlatURL %>" label="all-organizations" selected="<%= true %>" />
-
-					<portlet:renderURL var="viewUsersFlatURL">
-						<portlet:param name="mvcRenderCommandName" value="/users_admin/view" />
-						<portlet:param name="toolbarItem" value="view-all-users" />
-						<portlet:param name="usersListView" value="<%= UserConstants.LIST_VIEW_FLAT_USERS %>" />
-						<portlet:param name="saveUsersListView" value="<%= Boolean.TRUE.toString() %>" />
-					</portlet:renderURL>
-
-					<aui:nav-item href="<%= viewUsersFlatURL %>" label="all-users" />
-				</aui:nav>
-
-				<aui:nav-bar>
-
-					<%
-					request.setAttribute(WebKeys.SEARCH_CONTAINER, organizationSearchContainer);
-					%>
-
-					<liferay-util:include page="/toolbar.jsp" servletContext="<%= application %>" />
-
-					<aui:nav-bar-search>
-						<liferay-ui:organization-search-form />
-					</aui:nav-bar-search>
-				</aui:nav-bar>
-
 				<div id="breadcrumb">
 					<liferay-ui:breadcrumb showCurrentGroup="<%= false %>" showGuestGroup="<%= false %>" showLayout="<%= false %>" showPortletBreadcrumb="<%= true %>" />
 				</div>
@@ -156,7 +115,7 @@ if (filterManageableOrganizations) {
 				<aui:button cssClass="delete-organizations" disabled="<%= true %>" name="delete" onClick='<%= renderResponse.getNamespace() + "deleteOrganizations();" %>' value="delete" />
 			</c:if>
 
-			<liferay-ui:search-iterator />
+			<liferay-ui:search-iterator markupView="lexicon" />
 		</liferay-ui:search-container>
 	</c:when>
 	<c:otherwise>
@@ -165,6 +124,8 @@ if (filterManageableOrganizations) {
 		</div>
 	</c:otherwise>
 </c:choose>
+
+<%@ include file="/add_menu.jspf" %>
 
 <aui:script>
 	Liferay.Util.toggleSearchContainerButton('#<portlet:namespace />delete', '#<portlet:namespace /><%= searchContainerReference.getId("organizationSearchContainer") %>SearchContainer', document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
