@@ -733,10 +733,12 @@ AUI.add(
 								}
 
 								if (item.get('defaultCalendar')) {
-									if (item.get('calendarResourceId') == Liferay.CalendarUtil.GROUP_CALENDAR_RESOURCE_ID && item.get('permissions').MANAGE_BOOKINGS) {
+									var calendarResourceId = item.get('calendarResourceId');
+
+									if (calendarResourceId == Liferay.CalendarUtil.GROUP_CALENDAR_RESOURCE_ID && item.get('permissions').MANAGE_BOOKINGS) {
 										defaultCalendarId = calendarId;
 									}
-									else if (item.get('calendarResourceId') == Liferay.CalendarUtil.USER_CALENDAR_RESOURCE_ID && defaultCalendarId == null) {
+									else if (calendarResourceId == Liferay.CalendarUtil.USER_CALENDAR_RESOURCE_ID && defaultCalendarId == null) {
 										defaultCalendarId = calendarId;
 									}
 								}
