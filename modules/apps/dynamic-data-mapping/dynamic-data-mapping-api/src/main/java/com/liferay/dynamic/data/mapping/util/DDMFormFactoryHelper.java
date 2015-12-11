@@ -224,9 +224,7 @@ public class DDMFormFactoryHelper {
 	}
 
 	public boolean isLocalizableValue(String value) {
-		if (isLocalizableDDMForm() &&
-			StringUtil.startsWith(value, StringPool.PERCENT)) {
-
+		if (StringUtil.startsWith(value, StringPool.PERCENT)) {
 			return true;
 		}
 
@@ -298,14 +296,6 @@ public class DDMFormFactoryHelper {
 		}
 
 		return null;
-	}
-
-	protected boolean isLocalizableDDMForm() {
-		if (Validator.isNotNull(getResourceBundleBaseName(_clazz))) {
-			return true;
-		}
-
-		return false;
 	}
 
 	protected void setAvailableLocales() {
