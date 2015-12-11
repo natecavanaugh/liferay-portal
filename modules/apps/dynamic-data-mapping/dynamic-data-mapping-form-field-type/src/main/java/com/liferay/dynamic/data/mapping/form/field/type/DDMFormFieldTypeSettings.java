@@ -20,7 +20,7 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormField;
 /**
  * @author Marcellus Tavares
  */
-@DDMForm(localization = "content/Language")
+@DDMForm
 public interface DDMFormFieldTypeSettings {
 
 	@DDMFormField(required = true, visibilityExpression = "false")
