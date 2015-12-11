@@ -284,20 +284,7 @@ public class DDMFormFactoryHelper {
 			return ddmForm.localization();
 		}
 
-		for (Class<?> interfaceClass : clazz.getInterfaces()) {
-			if (!interfaceClass.isAnnotationPresent(DDMForm.class)) {
-				continue;
-			}
-
-			String resourceBundleBaseName = getResourceBundleBaseName(
-				interfaceClass);
-
-			if (Validator.isNotNull(resourceBundleBaseName)) {
-				return resourceBundleBaseName;
-			}
-		}
-
-		return null;
+		return "content.Language";
 	}
 
 	protected void setAvailableLocales() {
