@@ -198,18 +198,6 @@ body {
 	top: 22px;
 }
 
-.add-page-editor {
-	margin-top: 20px 0;
-
-	.btn {
-		padding: 3px 10px;
-	}
-}
-
-.lfr-portlet-title-editable .btn {
-	padding: 3px 10px;
-}
-
 .display-style-buttons > .dropdown > .dropdown-menu {
 	&:after, &:before {
 		@include media-query(null, $screen-xs-max) {
