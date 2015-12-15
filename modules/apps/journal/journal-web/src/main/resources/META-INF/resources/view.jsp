@@ -30,13 +30,18 @@
 
 <div id="<portlet:namespace />journalContainer">
 	<div class="closed container-fluid-1280 sidenav-container sidenav-right" id="<portlet:namespace />infoPanelId">
-		<div class="sidenav-menu-slider">
-			<div class="sidebar sidebar-default sidenav-menu">
-				<c:if test="<%= journalDisplayContext.isShowInfoPanel() %>">
-					<liferay-util:include page="/info_panel.jsp" servletContext="<%= application %>" />
-				</c:if>
-			</div>
-		</div>
+		<c:if test="<%= journalDisplayContext.isShowInfoPanel() %>">
+			<portlet:renderURL var="sidebarPanelURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+				<portlet:param name="mvcPath" value="/info_panel.jsp" />
+			</portlet:renderURL>
+
+			<liferay-frontend:sidebar-panel
+				resourceURL="<%= sidebarPanelURL %>"
+				searchContainerId="articles"
+			>
+				<liferay-util:include page="/info_panel.jsp" servletContext="<%= application %>" />
+			</liferay-frontend:sidebar-panel>
+		</c:if>
 
 		<div class="sidenav-content">
 			<div class="journal-breadcrumb" id="<portlet:namespace />breadcrumbContainer">
@@ -76,8 +81,10 @@
 	<liferay-util:include page="/add_button.jsp" servletContext="<%= application %>" />
 </c:if>
 
-<aui:script>
-	$('#<portlet:namespace />infoPanelId').sideNavigation(
+<aui:script sandbox="<%= true %>">
+	var infoPanel = $('#<portlet:namespace />infoPanelId');
+
+	infoPanel.sideNavigation(
 		{
 			gutter: 15,
 			position: 'right',
@@ -87,6 +94,28 @@
 			width: 320
 		}
 	);
+
+	var sideNav = infoPanel.data('lexicon.sidenav');
+
+	var onSearchContainerRegistered = function(event) {
+		var searchContainer = event.searchContainer;
+
+		if (searchContainer.get('id') === '<portlet:namespace />articles') {
+			searchContainer.on(
+				'rowToggled',
+				function(event) {
+					if (event.elements.allSelectedElements.size()) {
+						sideNav.showSidenav(infoPanel);
+					}
+					else {
+						sideNav.hideSidenav(infoPanel);
+					}
+				}
+			);
+		}
+	};
+
+	Liferay.on('search-container:registered', onSearchContainerRegistered);
 </aui:script>
 
 <aui:script use="liferay-journal-navigation">
