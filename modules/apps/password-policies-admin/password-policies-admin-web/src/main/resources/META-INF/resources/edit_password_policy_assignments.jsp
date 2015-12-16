@@ -19,7 +19,6 @@
 <%
 String tabs1 = ParamUtil.getString(request, "tabs1");
 String tabs2 = ParamUtil.getString(request, "tabs2", "users");
-String tabs3 = ParamUtil.getString(request, "tabs3", "current");
 
 String redirect = ParamUtil.getString(request, "redirect");
 
@@ -42,8 +41,6 @@ PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, "assign-
 portletURL.setParameter("tabs2", tabs2);
 
 PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, tabs2), portletURL.toString());
-
-portletURL.setParameter("tabs3", tabs3);
 
 portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(redirect);
@@ -121,7 +118,6 @@ else if (tabs2.equals("organizations")) {
 <aui:form action="<%= editPasswordPolicyAssignmentsURL %>" cssClass="container-fluid-1280" method="post" name="fm">
 	<aui:input name="tabs1" type="hidden" value="<%= tabs1 %>" />
 	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
-	<aui:input name="tabs3" type="hidden" value="<%= tabs3 %>" />
 	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 	<aui:input name="passwordPolicyId" type="hidden" value="<%= String.valueOf(passwordPolicy.getPasswordPolicyId()) %>" />
 
@@ -129,12 +125,6 @@ else if (tabs2.equals("organizations")) {
 		<c:when test='<%= tabs2.equals("users") %>'>
 			<aui:input name="addUserIds" type="hidden" />
 			<aui:input name="removeUserIds" type="hidden" />
-
-			<liferay-ui:tabs
-				names="current,available"
-				param="tabs3"
-				url="<%= portletURL.toString() %>"
-			/>
 
 			<liferay-ui:search-container
 				id="passwordPolicyMembers"
@@ -148,9 +138,7 @@ else if (tabs2.equals("organizations")) {
 
 				LinkedHashMap<String, Object> userParams = new LinkedHashMap<String, Object>();
 
-				if (tabs3.equals("current")) {
-					userParams.put("usersPasswordPolicies", Long.valueOf(passwordPolicy.getPasswordPolicyId()));
-				}
+				userParams.put("usersPasswordPolicies", Long.valueOf(passwordPolicy.getPasswordPolicyId()));
 				%>
 
 				<liferay-ui:user-search-container-results
@@ -185,7 +173,6 @@ else if (tabs2.equals("organizations")) {
 								<portlet:param name="mvcPath" value="/edit_password_policy_assignments.jsp" />
 								<portlet:param name="tabs1" value="<%= tabs1 %>" />
 								<portlet:param name="tabs2" value="users" />
-								<portlet:param name="tabs3" value="current" />
 								<portlet:param name="redirect" value="<%= currentURL %>" />
 								<portlet:param name="passwordPolicyId" value="<%= String.valueOf(curPasswordPolicy.getPasswordPolicyId()) %>" />
 							</portlet:renderURL>
@@ -200,26 +187,12 @@ else if (tabs2.equals("organizations")) {
 					/>
 				</liferay-ui:search-container-row>
 
-				<div class="separator"><!-- --></div>
-
-				<%
-				String taglibOnClick = renderResponse.getNamespace() + "updatePasswordPolicyUsers();";
-				%>
-
-				<aui:button onClick="<%= taglibOnClick %>" value="update-associations" />
-
 				<liferay-ui:search-iterator markupView="lexicon" />
 			</liferay-ui:search-container>
 		</c:when>
 		<c:when test='<%= tabs2.equals("organizations") %>'>
 			<aui:input name="addOrganizationIds" type="hidden" />
 			<aui:input name="removeOrganizationIds" type="hidden" />
-
-			<liferay-ui:tabs
-				names="current,available"
-				param="tabs3"
-				url="<%= portletURL.toString() %>"
-			/>
 
 			<liferay-ui:search-container
 				id="passwordPolicyMembers"
@@ -233,9 +206,7 @@ else if (tabs2.equals("organizations")) {
 
 				LinkedHashMap<String, Object> organizationParams = new LinkedHashMap<String, Object>();
 
-				if (tabs3.equals("current")) {
-					organizationParams.put("organizationsPasswordPolicies", Long.valueOf(passwordPolicy.getPasswordPolicyId()));
-				}
+				organizationParams.put("organizationsPasswordPolicies", Long.valueOf(passwordPolicy.getPasswordPolicyId()));
 				%>
 
 				<liferay-ui:organization-search-container-results
@@ -271,7 +242,6 @@ else if (tabs2.equals("organizations")) {
 								<portlet:param name="mvcPath" value="/edit_password_policy_assignments.jsp" />
 								<portlet:param name="tabs1" value="<%= tabs1 %>" />
 								<portlet:param name="tabs2" value="organizations" />
-								<portlet:param name="tabs3" value="current" />
 								<portlet:param name="redirect" value="<%= currentURL %>" />
 								<portlet:param name="passwordPolicyId" value="<%= String.valueOf(curPasswordPolicy.getPasswordPolicyId()) %>" />
 							</portlet:renderURL>
@@ -307,40 +277,8 @@ else if (tabs2.equals("organizations")) {
 					/>
 				</liferay-ui:search-container-row>
 
-				<div class="separator"><!-- --></div>
-
-				<%
-				String taglibOnClick = renderResponse.getNamespace() + "updatePasswordPolicyOrganizations();";
-				%>
-
-				<aui:button onClick="<%= taglibOnClick %>" value="update-associations" />
-
 				<liferay-ui:search-iterator markupView="lexicon" />
 			</liferay-ui:search-container>
 		</c:when>
 	</c:choose>
 </aui:form>
-
-<aui:script>
-	function <portlet:namespace />updatePasswordPolicyOrganizations() {
-		var Util = Liferay.Util;
-
-		var form = AUI.$(document.<portlet:namespace />fm);
-
-		form.fm('addOrganizationIds').val(Util.listCheckedExcept(form, '<portlet:namespace />allRowIds'));
-		form.fm('removeOrganizationIds').val(Util.listUncheckedExcept(form, '<portlet:namespace />allRowIds'));
-
-		submitForm(form);
-	}
-
-	function <portlet:namespace />updatePasswordPolicyUsers() {
-		var Util = Liferay.Util;
-
-		var form = AUI.$(document.<portlet:namespace />fm);
-
-		form.fm('addUserIds').val(Util.listCheckedExcept(form, '<portlet:namespace />allRowIds'));
-		form.fm('removeUserIds').val(Util.listUncheckedExcept(form, '<portlet:namespace />allRowIds'));
-
-		submitForm(form);
-	}
-</aui:script>
