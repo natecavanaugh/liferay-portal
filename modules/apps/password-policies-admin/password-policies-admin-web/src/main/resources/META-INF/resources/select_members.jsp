@@ -99,9 +99,21 @@ if (tabs2.equals("organizations")) {
 	>
 		<c:choose>
 			<c:when test='<%= tabs2.equals("users") %>'>
+				<%
+				UserSearchTerms searchTerms = (UserSearchTerms)memberSearchContainer.getSearchTerms();
+
+				LinkedHashMap<String, Object> userParams = new LinkedHashMap<String, Object>();
+				%>
+
 				<%@ include file="/user_search_columns.jspf" %>
 			</c:when>
 			<c:when test='<%= tabs2.equals("organizations") %>'>
+				<%
+				OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)memberSearchContainer.getSearchTerms();
+
+				LinkedHashMap<String, Object> organizationParams = new LinkedHashMap<String, Object>();
+				%>
+
 				<%@ include file="/organization_search_columns.jspf" %>
 			</c:when>
 		</c:choose>
