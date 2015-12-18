@@ -282,3 +282,53 @@ else if (tabs2.equals("organizations")) {
 		</c:when>
 	</c:choose>
 </aui:form>
+
+<liferay-frontend:add-menu>
+	<liferay-frontend:add-menu-item id="addMembers" title='<%= LanguageUtil.get(request, "add-members") %>' url="javascript:;" />
+</liferay-frontend:add-menu>
+
+<aui:script use="liferay-item-selector-dialog">
+	var Util = Liferay.Util;
+
+	var form = $(document.<portlet:namespace />fm);
+
+	<portlet:renderURL var="selectMembersURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+		<portlet:param name="mvcPath" value="/select_members.jsp" />
+		<portlet:param name="tabs1" value="<%= tabs1 %>" />
+		<portlet:param name="tabs2" value="<%= tabs2 %>" />
+		<portlet:param name="passwordPolicyId" value="<%= String.valueOf(passwordPolicyId) %>" />
+	</portlet:renderURL>
+
+	$('#<portlet:namespace />addMembers').on(
+		'click',
+		function(event) {
+			event.preventDefault();
+
+			var itemSelectorDialog = new A.LiferayItemSelectorDialog(
+				{
+					eventName: '<portlet:namespace />selectMember',
+					on: {
+						selectedItemChange: function(event) {
+							var result = event.newVal;
+
+							if (result && result.item) {
+								if (result.memberType == 'users') {
+									form.fm('addUserIds').val(result.item);
+								}
+								else if (result.memberType == 'organizations') {
+									form.fm('addOrganizationIds').val(result.item);
+								}
+
+								submitForm(form);
+							}
+						}
+					},
+					title: '<liferay-ui:message arguments="<%= passwordPolicy.getName() %>" key="add-members-to-x" />',
+					url: '<%= selectMembersURL %>'
+				}
+			);
+
+			itemSelectorDialog.open();
+		}
+	);
+</aui:script>
