@@ -1,0 +1,61 @@
+<%--
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+--%>
+
+<liferay-ui:user-search-container-results
+	useIndexer="<%= false %>"
+	userParams="<%= userParams %>"
+/>
+
+<liferay-ui:search-container-row
+	className="com.liferay.portal.model.User"
+	escapedModel="<%= true %>"
+	keyProperty="userId"
+	modelVar="user2"
+	rowIdProperty="screenName"
+>
+	<liferay-ui:search-container-column-text
+		name="name"
+	>
+
+		<%= user2.getFullName() %>
+
+		<%
+		PasswordPolicyRel passwordPolicyRel = PasswordPolicyRelLocalServiceUtil.fetchPasswordPolicyRel(User.class.getName(), user.getUserId());
+		%>
+
+		<c:if test="<%= (passwordPolicyRel != null) && (passwordPolicyRel.getPasswordPolicyId() != passwordPolicy.getPasswordPolicyId()) %>">
+
+			<%
+			PasswordPolicy curPasswordPolicy = PasswordPolicyLocalServiceUtil.getPasswordPolicy(passwordPolicyRel.getPasswordPolicyId());
+			%>
+
+			<portlet:renderURL var="assignMembersURL">
+				<portlet:param name="mvcPath" value="/edit_password_policy_assignments.jsp" />
+				<portlet:param name="tabs1" value="<%= tabs1 %>" />
+				<portlet:param name="tabs2" value="users" />
+				<portlet:param name="redirect" value="<%= currentURL %>" />
+				<portlet:param name="passwordPolicyId" value="<%= String.valueOf(curPasswordPolicy.getPasswordPolicyId()) %>" />
+			</portlet:renderURL>
+
+			<liferay-ui:icon-help message='<%= LanguageUtil.format(request, "this-user-is-already-assigned-to-password-policy-x", new Object[] {assignMembersURL, curPasswordPolicy.getName()}, false) %>' />
+		</c:if>
+	</liferay-ui:search-container-column-text>
+
+	<liferay-ui:search-container-column-text
+		name="screen-name"
+		value="<%= user2.getScreenName() %>"
+	/>
+</liferay-ui:search-container-row>

@@ -141,51 +141,7 @@ else if (tabs2.equals("organizations")) {
 				userParams.put("usersPasswordPolicies", Long.valueOf(passwordPolicy.getPasswordPolicyId()));
 				%>
 
-				<liferay-ui:user-search-container-results
-					useIndexer="<%= false %>"
-					userParams="<%= userParams %>"
-				/>
-
-				<liferay-ui:search-container-row
-					className="com.liferay.portal.model.User"
-					escapedModel="<%= true %>"
-					keyProperty="userId"
-					modelVar="user2"
-					rowIdProperty="screenName"
-				>
-					<liferay-ui:search-container-column-text
-						name="name"
-					>
-
-						<%= user2.getFullName() %>
-
-						<%
-						PasswordPolicyRel passwordPolicyRel = PasswordPolicyRelLocalServiceUtil.fetchPasswordPolicyRel(User.class.getName(), user.getUserId());
-						%>
-
-						<c:if test="<%= (passwordPolicyRel != null) && (passwordPolicyRel.getPasswordPolicyId() != passwordPolicy.getPasswordPolicyId()) %>">
-
-							<%
-							PasswordPolicy curPasswordPolicy = PasswordPolicyLocalServiceUtil.getPasswordPolicy(passwordPolicyRel.getPasswordPolicyId());
-							%>
-
-							<portlet:renderURL var="assignMembersURL">
-								<portlet:param name="mvcPath" value="/edit_password_policy_assignments.jsp" />
-								<portlet:param name="tabs1" value="<%= tabs1 %>" />
-								<portlet:param name="tabs2" value="users" />
-								<portlet:param name="redirect" value="<%= currentURL %>" />
-								<portlet:param name="passwordPolicyId" value="<%= String.valueOf(curPasswordPolicy.getPasswordPolicyId()) %>" />
-							</portlet:renderURL>
-
-							<liferay-ui:icon-help message='<%= LanguageUtil.format(request, "this-user-is-already-assigned-to-password-policy-x", new Object[] {assignMembersURL, curPasswordPolicy.getName()}, false) %>' />
-						</c:if>
-					</liferay-ui:search-container-column-text>
-
-					<liferay-ui:search-container-column-text
-						name="screen-name"
-						value="<%= user2.getScreenName() %>"
-					/>
-				</liferay-ui:search-container-row>
+				<%@ include file="/user_search_columns.jspf" %>
 
 				<liferay-ui:search-iterator markupView="lexicon" />
 			</liferay-ui:search-container>
@@ -209,73 +165,7 @@ else if (tabs2.equals("organizations")) {
 				organizationParams.put("organizationsPasswordPolicies", Long.valueOf(passwordPolicy.getPasswordPolicyId()));
 				%>
 
-				<liferay-ui:organization-search-container-results
-					organizationParams="<%= organizationParams %>"
-					parentOrganizationId="<%= OrganizationConstants.ANY_PARENT_ORGANIZATION_ID %>"
-					useIndexer="<%= false %>"
-				/>
-
-				<liferay-ui:search-container-row
-					className="com.liferay.portal.model.Organization"
-					escapedModel="<%= true %>"
-					keyProperty="organizationId"
-					modelVar="organization"
-				>
-					<liferay-ui:search-container-column-text
-						name="name"
-						orderable="<%= true %>"
-					>
-
-						<%= organization.getName() %>
-
-						<%
-						PasswordPolicyRel passwordPolicyRel = PasswordPolicyRelLocalServiceUtil.fetchPasswordPolicyRel(Organization.class.getName(), organization.getOrganizationId());
-						%>
-
-						<c:if test="<%= (passwordPolicyRel != null) && (passwordPolicyRel.getPasswordPolicyId() != passwordPolicy.getPasswordPolicyId()) %>">
-
-							<%
-							PasswordPolicy curPasswordPolicy = PasswordPolicyLocalServiceUtil.getPasswordPolicy(passwordPolicyRel.getPasswordPolicyId());
-							%>
-
-							<portlet:renderURL var="assignMembersURL">
-								<portlet:param name="mvcPath" value="/edit_password_policy_assignments.jsp" />
-								<portlet:param name="tabs1" value="<%= tabs1 %>" />
-								<portlet:param name="tabs2" value="organizations" />
-								<portlet:param name="redirect" value="<%= currentURL %>" />
-								<portlet:param name="passwordPolicyId" value="<%= String.valueOf(curPasswordPolicy.getPasswordPolicyId()) %>" />
-							</portlet:renderURL>
-
-							<liferay-ui:icon-help message='<%= LanguageUtil.format(request, "this-organization-is-already-assigned-to-password-policy-x", new Object[] {assignMembersURL, curPasswordPolicy.getName()}, false) %>' />
-						</c:if>
-					</liferay-ui:search-container-column-text>
-
-					<liferay-ui:search-container-column-text
-						name="parent-organization"
-						value="<%= HtmlUtil.escape(organization.getParentOrganizationName()) %>"
-					/>
-
-					<liferay-ui:search-container-column-text
-						name="type"
-						orderable="<%= true %>"
-						value="<%= LanguageUtil.get(request, organization.getType()) %>"
-					/>
-
-					<liferay-ui:search-container-column-text
-						name="city"
-						value="<%= HtmlUtil.escape(organization.getAddress().getCity()) %>"
-					/>
-
-					<liferay-ui:search-container-column-text
-						name="region"
-						value="<%= UsersAdmin.ORGANIZATION_REGION_NAME_ACCESSOR.get(organization) %>"
-					/>
-
-					<liferay-ui:search-container-column-text
-						name="country"
-						value="<%= UsersAdmin.ORGANIZATION_COUNTRY_NAME_ACCESSOR.get(organization) %>"
-					/>
-				</liferay-ui:search-container-row>
+				<%@ include file="/organization_search_columns.jspf" %>
 
 				<liferay-ui:search-iterator markupView="lexicon" />
 			</liferay-ui:search-container>
