@@ -17,10 +17,9 @@ package com.liferay.password.policies.admin.web.search;
 import com.liferay.portal.kernel.dao.search.RowChecker;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.PasswordPolicy;
 import com.liferay.portal.model.PasswordPolicyRel;
-import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.PasswordPolicyRelLocalServiceUtil;
 
 import javax.portlet.RenderResponse;
@@ -28,9 +27,9 @@ import javax.portlet.RenderResponse;
 /**
  * @author Scott Lee
  */
-public class OrganizationPasswordPolicyChecker extends RowChecker {
+public class DeleteUserPasswordPolicyChecker extends RowChecker {
 
-	public OrganizationPasswordPolicyChecker(
+	public DeleteUserPasswordPolicyChecker(
 		RenderResponse renderResponse, PasswordPolicy passwordPolicy) {
 
 		super(renderResponse);
@@ -39,30 +38,13 @@ public class OrganizationPasswordPolicyChecker extends RowChecker {
 	}
 
 	@Override
-	public boolean isChecked(Object obj) {
-		Organization organization = (Organization)obj;
-
-		try {
-			return OrganizationLocalServiceUtil.hasPasswordPolicyOrganization(
-				_passwordPolicy.getPasswordPolicyId(),
-				organization.getOrganizationId());
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			return false;
-		}
-	}
-
-	@Override
 	public boolean isDisabled(Object obj) {
-		Organization organization = (Organization)obj;
+		User user = (User)obj;
 
 		try {
 			PasswordPolicyRel passwordPolicyRel =
 				PasswordPolicyRelLocalServiceUtil.fetchPasswordPolicyRel(
-					Organization.class.getName(),
-					organization.getOrganizationId());
+					User.class.getName(), user.getUserId());
 
 			if ((passwordPolicyRel != null) &&
 				(passwordPolicyRel.getPasswordPolicyId() !=
@@ -79,7 +61,7 @@ public class OrganizationPasswordPolicyChecker extends RowChecker {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		OrganizationPasswordPolicyChecker.class);
+		DeleteUserPasswordPolicyChecker.class);
 
 	private final PasswordPolicy _passwordPolicy;
 

@@ -25,11 +25,13 @@ taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
-<%@ page import="com.liferay.password.policies.admin.web.search.OrganizationPasswordPolicyChecker" %><%@
+<%@ page import="com.liferay.password.policies.admin.web.search.AddOrganizationPasswordPolicyChecker" %><%@
+page import="com.liferay.password.policies.admin.web.search.AddUserPasswordPolicyChecker" %><%@
+page import="com.liferay.password.policies.admin.web.search.DeleteOrganizationPasswordPolicyChecker" %><%@
+page import="com.liferay.password.policies.admin.web.search.DeleteUserPasswordPolicyChecker" %><%@
 page import="com.liferay.password.policies.admin.web.search.PasswordPolicyChecker" %><%@
 page import="com.liferay.password.policies.admin.web.search.PasswordPolicyDisplayTerms" %><%@
 page import="com.liferay.password.policies.admin.web.search.PasswordPolicySearch" %><%@
-page import="com.liferay.password.policies.admin.web.search.UserPasswordPolicyChecker" %><%@
 page import="com.liferay.portal.DuplicatePasswordPolicyException" %><%@
 page import="com.liferay.portal.NoSuchPasswordPolicyException" %><%@
 page import="com.liferay.portal.PasswordPolicyNameException" %><%@

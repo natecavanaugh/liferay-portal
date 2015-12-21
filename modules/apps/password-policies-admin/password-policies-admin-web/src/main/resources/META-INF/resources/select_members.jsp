@@ -39,13 +39,13 @@ portletURL.setParameter("passwordPolicyId", String.valueOf(passwordPolicy.getPas
 portletURL.setParameter("eventName", eventName);
 
 String[] orderColumns = new String[] {"first-name", "screen-name"};
-RowChecker rowChecker = new UserPasswordPolicyChecker(renderResponse, passwordPolicy);
+RowChecker rowChecker = new AddUserPasswordPolicyChecker(renderResponse, passwordPolicy);
 SearchContainer searchContainer = new UserSearch(renderRequest, portletURL);
 String searchContainerId = "users";
 
 if (tabs2.equals("organizations")) {
 	orderColumns = new String[] {"name", "type"};
-	rowChecker = new OrganizationPasswordPolicyChecker(renderResponse, passwordPolicy);
+	rowChecker = new AddOrganizationPasswordPolicyChecker(renderResponse, passwordPolicy);
 	searchContainer = new OrganizationSearch(renderRequest, portletURL);
 	searchContainerId = "organizations";
 }
@@ -99,6 +99,7 @@ if (tabs2.equals("organizations")) {
 	>
 		<c:choose>
 			<c:when test='<%= tabs2.equals("users") %>'>
+
 				<%
 				UserSearchTerms searchTerms = (UserSearchTerms)memberSearchContainer.getSearchTerms();
 
@@ -108,6 +109,7 @@ if (tabs2.equals("organizations")) {
 				<%@ include file="/user_search_columns.jspf" %>
 			</c:when>
 			<c:when test='<%= tabs2.equals("organizations") %>'>
+
 				<%
 				OrganizationSearchTerms searchTerms = (OrganizationSearchTerms)memberSearchContainer.getSearchTerms();
 

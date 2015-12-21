@@ -128,7 +128,7 @@ else if (tabs2.equals("organizations")) {
 
 			<liferay-ui:search-container
 				id="passwordPolicyMembers"
-				rowChecker="<%= new UserPasswordPolicyChecker(renderResponse, passwordPolicy) %>"
+				rowChecker="<%= new DeleteUserPasswordPolicyChecker(renderResponse, passwordPolicy) %>"
 				searchContainer="<%= searchContainer %>"
 				var="userSearchContainer"
 			>
@@ -152,7 +152,7 @@ else if (tabs2.equals("organizations")) {
 
 			<liferay-ui:search-container
 				id="passwordPolicyMembers"
-				rowChecker="<%= new OrganizationPasswordPolicyChecker(renderResponse, passwordPolicy) %>"
+				rowChecker="<%= new DeleteOrganizationPasswordPolicyChecker(renderResponse, passwordPolicy) %>"
 				searchContainer="<%= searchContainer %>"
 				var="organizationSearchContainer"
 			>
