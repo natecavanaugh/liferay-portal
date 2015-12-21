@@ -245,7 +245,13 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 								var targetNode = AUI.$(currentMessageSelector);
 
 								if (targetNode.length) {
-									<%= randomNamespace %>showStatusMessage('success', '<%= UnicodeLanguageUtil.get(request, "your-request-completed-successfully") %>', randomId);
+									<%= randomNamespace %>showStatusMessage(
+										{
+											id: randomId,
+											message: '<%= UnicodeLanguageUtil.get(request, "your-request-completed-successfully") %>',
+											type: 'success'
+										}
+									);
 
 									location.hash = currentMessageSelector;
 								}
@@ -324,7 +330,13 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 							Util.toggleDisabled(commentButtonList, false);
 						},
 						error: function() {
-							<%= randomNamespace %>showStatusMessage('error', '<%= UnicodeLanguageUtil.get(request, "your-request-failed-to-complete") %>', <%= randomNamespace %>);
+							<%= randomNamespace %>showStatusMessage(
+								{
+									id: <%= randomNamespace %>,
+									message: '<%= UnicodeLanguageUtil.get(request, "your-request-failed-to-complete") %>',
+									type: 'error'
+								}
+							);
 						},
 						success: function(response) {
 							var exception = response.exception;
@@ -358,7 +370,13 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 									errorKey = '<%= UnicodeLanguageUtil.get(request, "you-cannot-delete-a-root-message-that-has-more-than-one-immediate-reply") %>';
 								}
 
-								<%= randomNamespace %>showStatusMessage('error', errorKey, <%= randomNamespace %>);
+								<%= randomNamespace %>showStatusMessage(
+									{
+										id: <%= randomNamespace %>,
+										message: errorKey,
+										type: 'error'
+									}
+								);
 							}
 						}
 					}
@@ -379,15 +397,15 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 				<%= randomNamespace %>showEl(formId);
 			}
 
-			function <%= randomNamespace %>showStatusMessage(type, message, id) {
-				var messageContainer = AUI.$('#' + id + 'discussionStatusMessages');
+			function <%= randomNamespace %>showStatusMessage(data) {
+				var messageContainer = AUI.$('#' + data.id + 'discussionStatusMessages');
 
 				if (messageContainer) {
 					messageContainer.removeClass('alert-danger alert-success');
 
-					messageContainer.addClass('alert alert-' + type);
+					messageContainer.addClass('alert alert-' + data.type);
 
-					messageContainer.html(message);
+					messageContainer.text(data.message);
 
 					messageContainer.removeClass('hide');
 				}
@@ -453,7 +471,13 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 						{
 							data: data,
 							error: function() {
-								<%= randomNamespace %>showStatusMessage('danger', '<%= UnicodeLanguageUtil.get(request, "your-request-failed-to-complete") %>', <%= randomNamespace %>);
+								<%= randomNamespace %>showStatusMessage(
+									{
+										id: <%= randomNamespace %>,
+										message: '<%= UnicodeLanguageUtil.get(request, "your-request-failed-to-complete") %>',
+										type: 'danger'
+									}
+								);
 							},
 							success: function(data) {
 								$('#<%= namespace %>moreCommentsPage').append(data);
