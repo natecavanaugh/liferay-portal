@@ -33,7 +33,7 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 %>
 
 <section>
-	<div class="hide lfr-message-response" id="<%= namespace %>discussionStatusMessages"></div>
+	<div class="hide lfr-message-response" id="<%= randomNamespace %>discussionStatusMessages"></div>
 
 	<c:if test="<%= (discussion != null) && discussion.isMaxCommentsLimitExceeded() %>">
 		<div class="alert alert-warning">
@@ -230,13 +230,27 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 				<%= randomNamespace %>hideEl(formId);
 			}
 
-			function <%= namespace %>onMessagePosted(response, refreshPage) {
+			function <%= randomNamespace %>onMessagePosted(response, refreshPage) {
 				Liferay.after(
 					'<%= portletDisplay.getId() %>:portletRefreshed',
 					function(event) {
-						<%= namespace %>showStatusMessage('success', '<%= UnicodeLanguageUtil.get(request, "your-request-completed-successfully") %>');
+						var randomNamespaceNodes = AUI.$('input[id^="<%= namespace %>randomNamespace"]');
 
-						location.hash = '#' + AUI.$('#<%= namespace %>randomNamespace').val() + 'message_' + response.commentId;
+						randomNamespaceNodes.each(
+							function(index, item) {
+								var randomId = item.value;
+
+								var currentMessageSelector = '#' + randomId + 'message_' + response.commentId;
+
+								var targetNode = AUI.$(currentMessageSelector);
+
+								if (targetNode.length) {
+									<%= randomNamespace %>showStatusMessage('success', '<%= UnicodeLanguageUtil.get(request, "your-request-completed-successfully") %>', randomId);
+
+									location.hash = currentMessageSelector;
+								}
+							}
+						);
 					}
 				);
 
@@ -310,7 +324,7 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 							Util.toggleDisabled(commentButtonList, false);
 						},
 						error: function() {
-							<%= namespace %>showStatusMessage('error', '<%= UnicodeLanguageUtil.get(request, "your-request-failed-to-complete") %>');
+							<%= randomNamespace %>showStatusMessage('error', '<%= UnicodeLanguageUtil.get(request, "your-request-failed-to-complete") %>', <%= randomNamespace %>);
 						},
 						success: function(response) {
 							var exception = response.exception;
@@ -319,7 +333,7 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 								Liferay.after(
 									'<%= portletDisplay.getId() %>:messagePosted',
 									function(event) {
-										<%= namespace %>onMessagePosted(response, refreshPage);
+										<%= randomNamespace %>onMessagePosted(response, refreshPage);
 									}
 								);
 
@@ -344,7 +358,7 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 									errorKey = '<%= UnicodeLanguageUtil.get(request, "you-cannot-delete-a-root-message-that-has-more-than-one-immediate-reply") %>';
 								}
 
-								<%= namespace %>showStatusMessage('error', errorKey);
+								<%= randomNamespace %>showStatusMessage('error', errorKey, <%= randomNamespace %>);
 							}
 						}
 					}
@@ -365,16 +379,18 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 				<%= randomNamespace %>showEl(formId);
 			}
 
-			function <%= namespace %>showStatusMessage(type, message) {
-				var messageContainer = AUI.$('#<%= namespace %>discussionStatusMessages');
+			function <%= randomNamespace %>showStatusMessage(type, message, id) {
+				var messageContainer = AUI.$('#' + id + 'discussionStatusMessages');
 
-				messageContainer.removeClass('alert-danger alert-success');
+				if (messageContainer) {
+					messageContainer.removeClass('alert-danger alert-success');
 
-				messageContainer.addClass('alert alert-' + type);
+					messageContainer.addClass('alert alert-' + type);
 
-				messageContainer.html(message);
+					messageContainer.html(message);
 
-				messageContainer.removeClass('hide');
+					messageContainer.removeClass('hide');
+				}
 			}
 
 			function <%= randomNamespace %>subscribeToComments(subscribe) {
@@ -437,7 +453,7 @@ CommentSectionDisplayContext commentSectionDisplayContext = CommentDisplayContex
 						{
 							data: data,
 							error: function() {
-								<%= namespace %>showStatusMessage('danger', '<%= UnicodeLanguageUtil.get(request, "your-request-failed-to-complete") %>');
+								<%= randomNamespace %>showStatusMessage('danger', '<%= UnicodeLanguageUtil.get(request, "your-request-failed-to-complete") %>', <%= randomNamespace %>);
 							},
 							success: function(data) {
 								$('#<%= namespace %>moreCommentsPage').append(data);
