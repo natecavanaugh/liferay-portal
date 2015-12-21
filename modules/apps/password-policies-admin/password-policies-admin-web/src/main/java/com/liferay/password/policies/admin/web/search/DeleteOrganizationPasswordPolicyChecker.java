@@ -17,20 +17,19 @@ package com.liferay.password.policies.admin.web.search;
 import com.liferay.portal.kernel.dao.search.RowChecker;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.PasswordPolicy;
 import com.liferay.portal.model.PasswordPolicyRel;
-import com.liferay.portal.model.User;
 import com.liferay.portal.service.PasswordPolicyRelLocalServiceUtil;
-import com.liferay.portal.service.UserLocalServiceUtil;
 
 import javax.portlet.RenderResponse;
 
 /**
  * @author Scott Lee
  */
-public class UserPasswordPolicyChecker extends RowChecker {
+public class DeleteOrganizationPasswordPolicyChecker extends RowChecker {
 
-	public UserPasswordPolicyChecker(
+	public DeleteOrganizationPasswordPolicyChecker(
 		RenderResponse renderResponse, PasswordPolicy passwordPolicy) {
 
 		super(renderResponse);
@@ -39,28 +38,14 @@ public class UserPasswordPolicyChecker extends RowChecker {
 	}
 
 	@Override
-	public boolean isChecked(Object obj) {
-		User user = (User)obj;
-
-		try {
-			return UserLocalServiceUtil.hasPasswordPolicyUser(
-				_passwordPolicy.getPasswordPolicyId(), user.getUserId());
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			return false;
-		}
-	}
-
-	@Override
 	public boolean isDisabled(Object obj) {
-		User user = (User)obj;
+		Organization organization = (Organization)obj;
 
 		try {
 			PasswordPolicyRel passwordPolicyRel =
 				PasswordPolicyRelLocalServiceUtil.fetchPasswordPolicyRel(
-					User.class.getName(), user.getUserId());
+					Organization.class.getName(),
+					organization.getOrganizationId());
 
 			if ((passwordPolicyRel != null) &&
 				(passwordPolicyRel.getPasswordPolicyId() !=
@@ -77,7 +62,7 @@ public class UserPasswordPolicyChecker extends RowChecker {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		UserPasswordPolicyChecker.class);
+		DeleteOrganizationPasswordPolicyChecker.class);
 
 	private final PasswordPolicy _passwordPolicy;
 
