@@ -26,7 +26,8 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-<%@ page import="com.liferay.password.policies.admin.web.search.AddOrganizationPasswordPolicyChecker" %><%@
+<%@ page import="com.liferay.password.policies.admin.constants.PasswordPoliciesAdminPortletKeys" %><%@
+page import="com.liferay.password.policies.admin.web.search.AddOrganizationPasswordPolicyChecker" %><%@
 page import="com.liferay.password.policies.admin.web.search.AddUserPasswordPolicyChecker" %><%@
 page import="com.liferay.password.policies.admin.web.search.DeleteOrganizationPasswordPolicyChecker" %><%@
 page import="com.liferay.password.policies.admin.web.search.DeleteUserPasswordPolicyChecker" %><%@
@@ -45,6 +46,7 @@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
+page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
 page import="com.liferay.portal.model.Organization" %><%@
 page import="com.liferay.portal.model.OrganizationConstants" %><%@
@@ -58,6 +60,8 @@ page import="com.liferay.portal.service.PasswordPolicyRelLocalServiceUtil" %><%@
 page import="com.liferay.portal.service.permission.PasswordPolicyPermissionUtil" %><%@
 page import="com.liferay.portal.service.permission.PortalPermissionUtil" %><%@
 page import="com.liferay.portal.util.PortalUtil" %><%@
+page import="com.liferay.portlet.PortalPreferences" %><%@
+page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %><%@
 page import="com.liferay.portlet.PortletURLUtil" %><%@
 page import="com.liferay.portlet.usersadmin.search.OrganizationSearch" %><%@
 page import="com.liferay.portlet.usersadmin.search.OrganizationSearchTerms" %><%@
@@ -82,6 +86,8 @@ WindowState windowState = liferayPortletRequest.getWindowState();
 PortletURL currentURLObj = PortletURLUtil.getCurrent(liferayPortletRequest, liferayPortletResponse);
 
 String currentURL = currentURLObj.toString();
+
+PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(liferayPortletRequest);
 %>
 
 <%@ include file="/init-ext.jsp" %>
