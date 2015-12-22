@@ -47,13 +47,12 @@ portletDisplay.setURLBack(redirect);
 
 renderResponse.setTitle(passwordPolicy.getName());
 
-SearchContainer searchContainer = new SearchContainer();
+RowChecker rowChecker = new DeleteUserPasswordPolicyChecker(renderResponse, passwordPolicy);
+SearchContainer searchContainer = new UserSearch(renderRequest, portletURL);
 
-if (tabs2.equals("users")) {
-	searchContainer = new UserSearch(renderRequest, portletURL);
-}
-else if (tabs2.equals("organizations")) {
+if (tabs2.equals("organizations")) {
 	searchContainer = new OrganizationSearch(renderRequest, portletURL);
+	rowChecker = new DeleteOrganizationPasswordPolicyChecker(renderResponse, passwordPolicy);
 }
 %>
 
@@ -91,21 +90,21 @@ else if (tabs2.equals("organizations")) {
 	<liferay-frontend:management-bar-filters>
 		<liferay-frontend:management-bar-navigation
 			navigationKeys='<%= new String[] {"all"} %>'
-			portletURL="<%= renderResponse.createRenderURL() %>"
+			portletURL="<%= PortletURLUtil.clone(portletURL, renderResponse) %>"
 		/>
 
 		<liferay-frontend:management-bar-sort
 			orderByCol="<%= searchContainer.getOrderByCol() %>"
 			orderByType="<%= searchContainer.getOrderByType() %>"
 			orderColumns='<%= new String[] {"name"} %>'
-			portletURL="<%= portletURL %>"
+			portletURL="<%= PortletURLUtil.clone(portletURL, renderResponse) %>"
 		/>
 	</liferay-frontend:management-bar-filters>
 
 	<liferay-frontend:management-bar-buttons>
 		<liferay-frontend:management-bar-display-buttons
-			displayViews='<%= new String[] {"list"} %>'
-			portletURL="<%= renderResponse.createRenderURL() %>"
+			displayViews='<%= new String[] {"icon", "descriptive", "list"} %>'
+			portletURL="<%= PortletURLUtil.clone(portletURL, renderResponse) %>"
 			selectedDisplayStyle="<%= displayStyle %>"
 		/>
 	</liferay-frontend:management-bar-buttons>
@@ -142,7 +141,7 @@ else if (tabs2.equals("organizations")) {
 
 			<liferay-ui:search-container
 				id="passwordPolicyMembers"
-				rowChecker="<%= new DeleteUserPasswordPolicyChecker(renderResponse, passwordPolicy) %>"
+				rowChecker="<%= rowChecker %>"
 				searchContainer="<%= searchContainer %>"
 				var="userSearchContainer"
 			>
@@ -157,7 +156,7 @@ else if (tabs2.equals("organizations")) {
 
 				<%@ include file="/user_search_columns.jspf" %>
 
-				<liferay-ui:search-iterator markupView="lexicon" />
+				<liferay-ui:search-iterator displayStyle="<%= displayStyle %>" markupView="lexicon" />
 			</liferay-ui:search-container>
 		</c:when>
 		<c:when test='<%= tabs2.equals("organizations") %>'>
@@ -166,7 +165,7 @@ else if (tabs2.equals("organizations")) {
 
 			<liferay-ui:search-container
 				id="passwordPolicyMembers"
-				rowChecker="<%= new DeleteOrganizationPasswordPolicyChecker(renderResponse, passwordPolicy) %>"
+				rowChecker="<%= rowChecker %>"
 				searchContainer="<%= searchContainer %>"
 				var="organizationSearchContainer"
 			>
@@ -181,7 +180,7 @@ else if (tabs2.equals("organizations")) {
 
 				<%@ include file="/organization_search_columns.jspf" %>
 
-				<liferay-ui:search-iterator markupView="lexicon" />
+				<liferay-ui:search-iterator displayStyle="<%= displayStyle %>" markupView="lexicon" />
 			</liferay-ui:search-container>
 		</c:when>
 	</c:choose>
