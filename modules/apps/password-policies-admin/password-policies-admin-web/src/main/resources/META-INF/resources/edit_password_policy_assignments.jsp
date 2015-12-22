@@ -58,11 +58,12 @@ renderResponse.setTitle(passwordPolicy.getName());
 
 String[] orderColumns = new String[] {"first-name", "screen-name"};
 RowChecker rowChecker = new DeleteUserPasswordPolicyChecker(renderResponse, passwordPolicy);
-SearchContainer searchContainer = new UserSearch(renderRequest, portletURL);
+PortletURL searchURL = PortletURLUtil.clone(portletURL, renderResponse);
+SearchContainer searchContainer = new UserSearch(renderRequest, searchURL);
 
 if (tabs2.equals("organizations")) {
 	orderColumns = new String[] {"name", "type"};
-	searchContainer = new OrganizationSearch(renderRequest, portletURL);
+	searchContainer = new OrganizationSearch(renderRequest, searchURL);
 	rowChecker = new DeleteOrganizationPasswordPolicyChecker(renderResponse, passwordPolicy);
 }
 %>

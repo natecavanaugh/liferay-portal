@@ -50,13 +50,14 @@ portletURL.setParameter("eventName", eventName);
 
 String[] orderColumns = new String[] {"first-name", "screen-name"};
 RowChecker rowChecker = new AddUserPasswordPolicyChecker(renderResponse, passwordPolicy);
-SearchContainer searchContainer = new UserSearch(renderRequest, portletURL);
+PortletURL searchURL = PortletURLUtil.clone(portletURL, renderResponse);
+SearchContainer searchContainer = new UserSearch(renderRequest, searchURL);
 String searchContainerId = "users";
 
 if (tabs2.equals("organizations")) {
 	orderColumns = new String[] {"name", "type"};
 	rowChecker = new AddOrganizationPasswordPolicyChecker(renderResponse, passwordPolicy);
-	searchContainer = new OrganizationSearch(renderRequest, portletURL);
+	searchContainer = new OrganizationSearch(renderRequest, searchURL);
 	searchContainerId = "organizations";
 }
 %>
