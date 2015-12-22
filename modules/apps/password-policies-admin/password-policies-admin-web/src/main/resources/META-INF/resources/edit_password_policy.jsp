@@ -44,13 +44,15 @@ renderResponse.setTitle((passwordPolicy == null) ? LanguageUtil.get(request, "ne
 
 	<aui:model-context bean="<%= passwordPolicy %>" model="<%= PasswordPolicy.class %>" />
 
-	<liferay-ui:panel-container extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicyPanelContainer" persistState="<%= true %>">
-		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicyGeneralPanel" persistState="<%= true %>" title="general">
+	<aui:fieldset-group markupView="lexicon">
+		<aui:fieldset>
+			<aui:input autoFocus="<%= (!defaultPolicy && windowState.equals(WindowState.MAXIMIZED)) %>" disabled="<%= defaultPolicy %>" name="name" required="true" />
+
+			<aui:input autoFocus="<%= (defaultPolicy && windowState.equals(WindowState.MAXIMIZED)) %>" name="description" />
+		</aui:fieldset>
+
+		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicyPasswordPanel" markupView="lexicon" persistState="<%= true %>" title="password-changes">
 			<aui:fieldset>
-				<aui:input autoFocus="<%= (!defaultPolicy && windowState.equals(WindowState.MAXIMIZED)) %>" disabled="<%= defaultPolicy %>" name="name" />
-
-				<aui:input autoFocus="<%= (defaultPolicy && windowState.equals(WindowState.MAXIMIZED)) %>" name="description" />
-
 				<aui:input helpMessage="changeable-help" name="changeable" />
 
 				<div class="password-policy-options" id="<portlet:namespace />changeableSettings">
@@ -89,7 +91,7 @@ renderResponse.setTitle((passwordPolicy == null) ? LanguageUtil.get(request, "ne
 			</aui:fieldset>
 		</liferay-ui:panel>
 
-		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicySyntaxPanel" persistState="<%= true %>" title="password-syntax-checking">
+		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicySyntaxPanel" markupView="lexicon" persistState="<%= true %>" title="password-syntax-checking">
 			<aui:fieldset>
 				<aui:input helpMessage="enable-syntax-checking-help" label="enable-syntax-checking" name="checkSyntax" />
 
@@ -117,7 +119,7 @@ renderResponse.setTitle((passwordPolicy == null) ? LanguageUtil.get(request, "ne
 			</aui:fieldset>
 		</liferay-ui:panel>
 
-		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicyHistoryPanel" persistState="<%= true %>" title="password-history">
+		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicyHistoryPanel" markupView="lexicon" persistState="<%= true %>" title="password-history">
 			<aui:fieldset>
 				<aui:input helpMessage="enable-history-help" label="enable-history" name="history" />
 
@@ -139,7 +141,7 @@ renderResponse.setTitle((passwordPolicy == null) ? LanguageUtil.get(request, "ne
 			</aui:fieldset>
 		</liferay-ui:panel>
 
-		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicyExpirationPanel" persistState="<%= true %>" title="password-expiration">
+		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicyExpirationPanel" markupView="lexicon" persistState="<%= true %>" title="password-expiration">
 			<aui:fieldset>
 				<aui:input helpMessage="enable-expiration-help" label="enable-expiration" name="expireable" />
 
@@ -178,7 +180,7 @@ renderResponse.setTitle((passwordPolicy == null) ? LanguageUtil.get(request, "ne
 			</aui:fieldset>
 		</liferay-ui:panel>
 
-		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicyLockoutPanel" persistState="<%= true %>" title="lockout">
+		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="passwordPoliciesAdminPasswordPolicyLockoutPanel" markupView="lexicon" persistState="<%= true %>" title="lockout">
 			<aui:fieldset>
 				<aui:input helpMessage="enable-lockout-help" label="enable-lockout" name="lockout" />
 
@@ -216,7 +218,7 @@ renderResponse.setTitle((passwordPolicy == null) ? LanguageUtil.get(request, "ne
 				</div>
 			</aui:fieldset>
 		</liferay-ui:panel>
-	</liferay-ui:panel-container>
+	</aui:fieldset-group>
 
 	<aui:button-row>
 		<aui:button cssClass="btn-lg" type="submit" />
