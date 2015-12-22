@@ -103,6 +103,22 @@ else if (tabs2.equals("organizations")) {
 		/>
 	</liferay-frontend:management-bar-buttons>
 
+	<liferay-frontend:management-bar-action-buttons>
+
+		<%
+		String taglibURL = "javascript:;";
+
+		if (tabs2.equals("users")) {
+			taglibURL = "javascript:" + renderResponse.getNamespace() + "deleteUsers();";
+		}
+		else if (tabs2.equals("organizations")) {
+			taglibURL = "javascript:" + renderResponse.getNamespace() + "deleteOrganizations();";
+		}
+		%>
+
+		<liferay-frontend:management-bar-button href="<%= taglibURL %>" icon="trash" label="delete" />
+	</liferay-frontend:management-bar-action-buttons>
+
 	<liferay-frontend:management-bar-filters>
 		<liferay-frontend:management-bar-sort
 			orderByCol="<%= searchContainer.getOrderByCol() %>"
@@ -221,4 +237,20 @@ else if (tabs2.equals("organizations")) {
 			itemSelectorDialog.open();
 		}
 	);
+
+	window.<portlet:namespace />deleteOrganizations = function() {
+		if (confirm('<liferay-ui:message key="are-you-sure-you-want-to-delete-this" />')) {
+			form.fm('removeOrganizationIds').val(Util.listCheckedExcept(form, '<portlet:namespace />allRowIds'));
+
+			submitForm(form);
+		}
+	};
+
+	window.<portlet:namespace />deleteUsers = function() {
+		if (confirm('<liferay-ui:message key="are-you-sure-you-want-to-delete-this" />')) {
+			form.fm('removeUserIds').val(Util.listCheckedExcept(form, '<portlet:namespace />allRowIds'));
+
+			submitForm(form);
+		}
+	};
 </aui:script>
