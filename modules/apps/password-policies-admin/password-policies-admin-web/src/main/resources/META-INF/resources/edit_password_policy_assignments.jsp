@@ -47,10 +47,12 @@ portletDisplay.setURLBack(redirect);
 
 renderResponse.setTitle(passwordPolicy.getName());
 
+String[] orderColumns = new String[] {"first-name", "screen-name"};
 RowChecker rowChecker = new DeleteUserPasswordPolicyChecker(renderResponse, passwordPolicy);
 SearchContainer searchContainer = new UserSearch(renderRequest, portletURL);
 
 if (tabs2.equals("organizations")) {
+	orderColumns = new String[] {"name", "type"};
 	searchContainer = new OrganizationSearch(renderRequest, portletURL);
 	rowChecker = new DeleteOrganizationPasswordPolicyChecker(renderResponse, passwordPolicy);
 }
@@ -96,7 +98,7 @@ if (tabs2.equals("organizations")) {
 		<liferay-frontend:management-bar-sort
 			orderByCol="<%= searchContainer.getOrderByCol() %>"
 			orderByType="<%= searchContainer.getOrderByType() %>"
-			orderColumns='<%= new String[] {"name"} %>'
+			orderColumns="<%= orderColumns %>"
 			portletURL="<%= PortletURLUtil.clone(portletURL, renderResponse) %>"
 		/>
 	</liferay-frontend:management-bar-filters>
