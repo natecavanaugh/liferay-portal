@@ -93,6 +93,13 @@ else if (tabs2.equals("organizations")) {
 			navigationKeys='<%= new String[] {"all"} %>'
 			portletURL="<%= renderResponse.createRenderURL() %>"
 		/>
+
+		<liferay-frontend:management-bar-sort
+			orderByCol="<%= searchContainer.getOrderByCol() %>"
+			orderByType="<%= searchContainer.getOrderByType() %>"
+			orderColumns='<%= new String[] {"name"} %>'
+			portletURL="<%= portletURL %>"
+		/>
 	</liferay-frontend:management-bar-filters>
 
 	<liferay-frontend:management-bar-buttons>
@@ -118,15 +125,6 @@ else if (tabs2.equals("organizations")) {
 
 		<liferay-frontend:management-bar-button href="<%= taglibURL %>" icon="trash" label="delete" />
 	</liferay-frontend:management-bar-action-buttons>
-
-	<liferay-frontend:management-bar-filters>
-		<liferay-frontend:management-bar-sort
-			orderByCol="<%= searchContainer.getOrderByCol() %>"
-			orderByType="<%= searchContainer.getOrderByType() %>"
-			orderColumns='<%= new String[] {"name"} %>'
-			portletURL="<%= portletURL %>"
-		/>
-	</liferay-frontend:management-bar-filters>
 </liferay-frontend:management-bar>
 
 <portlet:actionURL name="editPasswordPolicyAssignments" var="editPasswordPolicyAssignmentsURL" />
