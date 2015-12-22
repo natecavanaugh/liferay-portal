@@ -14,7 +14,7 @@
 
 package com.liferay.password.policies.admin.web.search;
 
-import com.liferay.portal.kernel.dao.search.RowChecker;
+import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.model.PasswordPolicy;
@@ -28,7 +28,7 @@ import javax.portlet.RenderResponse;
 /**
  * @author Scott Lee
  */
-public class AddUserPasswordPolicyChecker extends RowChecker {
+public class AddUserPasswordPolicyChecker extends EmptyOnClickRowChecker {
 
 	public AddUserPasswordPolicyChecker(
 		RenderResponse renderResponse, PasswordPolicy passwordPolicy) {
