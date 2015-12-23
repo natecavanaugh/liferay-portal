@@ -147,7 +147,7 @@ if (tabs2.equals("organizations")) {
 
 			if (selectedItems.size() > 0) {
 				result = {
-					memberType: '<%= tabs2 %>',
+					memberType: '<%= HtmlUtil.escapeJS(tabs2) %>',
 					item: selectedItems.attr('value').join(',')
 				};
 			}
