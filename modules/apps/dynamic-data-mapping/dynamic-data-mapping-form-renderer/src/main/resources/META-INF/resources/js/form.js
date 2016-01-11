@@ -129,6 +129,12 @@ AUI.add(
 								field.render();
 							}
 						);
+
+						var submitButton = instance.getSubmitButton();
+
+						if (submitButton) {
+							submitButton.attr('disabled', false);
+						}
 					},
 
 					_onDOMSubmitForm: function(event) {
