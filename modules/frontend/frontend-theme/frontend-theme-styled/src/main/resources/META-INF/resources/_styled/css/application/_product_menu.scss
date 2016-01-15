@@ -2,9 +2,9 @@
 	background-color: $product-menu-body-bg;
 
 	.company-details .company-logo {
-		max-height: 25px;
-		max-width: 25px;
-		vertical-align: text-top;
+		margin-right: 5px;
+		max-height: 32px;
+		max-width: 32px;
 	}
 }
 
@@ -113,6 +113,10 @@
 		margin-bottom: 0;
 	}
 
+	.list-group-heading.goto-link {
+		color: $product-menu-nav-link-color;
+	}
+
 	.list-group-heading,
 	.panel-title > .panel-toggler {
 		line-height: 32px;
@@ -156,7 +160,7 @@
 
 	.list-group-item {
 		border-width: $product-menu-list-group-item-border-width;
-		padding: 10px 40px;
+		padding: 10px 24px;
 	}
 
 	.collapse, .collapsing {
@@ -200,10 +204,26 @@
 			> .panel-body, > .list-group {
 				border-top-width: 0;
 			}
+
+			&.in, &.collapsing {
+				border-bottom: 2px solid $product-menu-panel-title-active-border;
+			}
 		}
 	}
 
 	.panel-heading {
+		.panel-title > .panel-toggler {
+			&:not(.collapsed) {
+				background-color: $product-menu-panel-title-active-bg;
+				border-left: $product-menu-panel-title-active-border-left-width $product-menu-panel-title-active-border-style $product-menu-panel-title-active-border;
+				padding-left: 24px - $product-menu-panel-title-active-border-left-width;
+			}
+
+			.category-name, .user-name, .site-name {
+				color: $product-menu-panel-title-color;
+			}
+		}
+
 		padding: 0;
 		position: relative;
 	}
@@ -240,7 +260,7 @@
 
 	.icon-sites {
 		a {
-			color: $product-menu-nav-link-color;
+			color: $product-menu-panel-title-color;
 		}
 
 		position: absolute;
@@ -252,12 +272,16 @@
 
 .product-menu {
 	.staging-links {
-		a {
+		a, .links-separator {
 			color: $product-menu-nav-link-color;
 		}
 
 		.active {
 			color: $product-menu-nav-link-active-color;
+		}
+
+		.links-separator {
+			padding: 0 5px;
 		}
 	}
 }
@@ -387,5 +411,6 @@
 
 	.tree-view {
 		overflow: visible;
+		padding: 0 16px;
 	}
 }
