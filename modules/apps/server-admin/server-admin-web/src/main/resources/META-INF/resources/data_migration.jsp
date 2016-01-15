@@ -30,6 +30,7 @@ Collection<ConvertProcess> convertProcesses = ConvertProcessUtil.getEnabledConve
 	</c:when>
 	<c:otherwise>
 
+			<liferay-ui:panel-container extended="<%= true %>" id="convertPanelContainer" persistState="<%= true %>">
 		<%
 		int i = 0;
 
@@ -38,7 +39,6 @@ Collection<ConvertProcess> convertProcesses = ConvertProcessUtil.getEnabledConve
 			String[] parameterNames = convertProcess.getParameterNames();
 		%>
 
-			<liferay-ui:panel-container extended="<%= true %>" id='<%= "convert" + i + "PanelContainer" %>' persistState="<%= true %>">
 				<liferay-ui:panel collapsible="<%= true %>" extended="<%= false %>" id='<%= "convert" + i + "Panel" %>' markupView="lexicon" persistState="<%= true %>" title="<%= convertProcess.getDescription() %>">
 					<c:choose>
 						<c:when test="<%= parameterNames == null %>">
@@ -102,14 +102,12 @@ Collection<ConvertProcess> convertProcesses = ConvertProcessUtil.getEnabledConve
 						</c:otherwise>
 					</c:choose>
 				</liferay-ui:panel>
-			</liferay-ui:panel-container>
-
-			<br />
 
 		<%
 			i++;
 		}
 		%>
+			</liferay-ui:panel-container>
 
 	</c:otherwise>
 </c:choose>
