@@ -52,13 +52,14 @@ renderResponse.setTitle((ddmDataProviderInstance == null) ? LanguageUtil.get(req
 	<div class="container-fluid-1280">
 		<aui:fieldset>
 			<liferay-util:buffer var="requiredMark">
-				<span class="icon-asterisk text-warning">
-					<span class="hide-accessible"><liferay-ui:message key="required" /></span>
-				</span>
+
 			</liferay-util:buffer>
 
 			<label class="required-warning">
-				<liferay-ui:message arguments="<%= requiredMark %>" key="all-fields-marked-with-x-are-required" translateArguments="<%= false %>" />
+				<liferay-ui:message key="all-the-required-fields-are-marked-with" />
+				<span class="icon-asterisk text-warning">
+					<span class="hide-accessible"><liferay-ui:message key="required" /></span>
+				</span>
 			</label>
 
 			<aui:input name="name" placeholder="enter-the-data-provider-name" required="<%= true %>" type="text" value="<%= ddmDataProviderDisplayContext.getDataProviderInstanceName() %>" />
