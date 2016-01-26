@@ -51,12 +51,9 @@ renderResponse.setTitle((ddmDataProviderInstance == null) ? LanguageUtil.get(req
 
 	<div class="container-fluid-1280">
 		<aui:fieldset>
-			<liferay-util:buffer var="requiredMark">
-
-			</liferay-util:buffer>
-
 			<label class="required-warning">
 				<liferay-ui:message key="all-the-required-fields-are-marked-with" />
+
 				<span class="icon-asterisk text-warning">
 					<span class="hide-accessible"><liferay-ui:message key="required" /></span>
 				</span>
