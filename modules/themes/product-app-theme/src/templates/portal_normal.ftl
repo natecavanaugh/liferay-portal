@@ -16,7 +16,7 @@
 
 		${theme.include(body_top_include)}
 
-		<#if is_setup_complete && is_signed_in>
+		<#if themeDisplay.isImpersonated() || (is_setup_complete && is_signed_in)>
 			<@liferay_control_menu["control-menu"] />
 		</#if>
 
@@ -42,7 +42,7 @@
 						</div>
 
 						<#if has_navigation && is_setup_complete>
-							<#include full_templates_path + "/navigation.ftl">
+							<#include "${full_templates_path}/navigation.ftl" />
 						</#if>
 					</nav>
 				</div>
