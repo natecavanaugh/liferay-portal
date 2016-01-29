@@ -1,6 +1,28 @@
 .loading-animation {
+	background-size: 64px;
 	background: url(../images/progress_bar/loading_animation.gif) no-repeat top center;
-	margin-top: 10px;
-	padding-top: 40px;
-	text-align: left;
+	border-radius: 50%;
+	margin: 8px;
+	overflow: hidden;
+	padding-top: 64px;
+	width: 100%;
+
+	&.loading-animation-centered {
+		left: 50%;
+		position: absolute;
+		top: 50%;
+		width: 64px;
+
+		@include transform(translate(-50%, -50%));
+	}
+
+	&.loading-animation-inverse {
+		background-image: url(../images/progress_bar/loading_animation_inverse.gif)
+	}
+
+	&.loading-animation-retina {
+		background-size: 32px;
+		padding-top: 32px;
+		width: 32px;
+	}
 }
