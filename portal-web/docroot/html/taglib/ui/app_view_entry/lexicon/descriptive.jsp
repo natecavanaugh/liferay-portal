@@ -74,22 +74,20 @@
 
 	<c:if test="<%= Validator.isNotNull(version) %>">
 		<h6 class="text-default">
-			<strong><liferay-ui:message key="version" />:</strong> <%= HtmlUtil.escape(version) %>
+			<liferay-ui:message key="version" />: <%= HtmlUtil.escape(version) %>
 		</h6>
 	</c:if>
 
 	<c:if test="<%= (createDate != null) && (modifiedDate != null) && Validator.isNotNull(author) %>">
 		<h6 class="text-default">
-			<strong>
-				<c:choose>
-					<c:when test="<%= modifiedDate.equals(createDate) %>">
-						<liferay-ui:message key="created" />:
-					</c:when>
-					<c:otherwise>
-						<liferay-ui:message key="last-updated" />:
-					</c:otherwise>
-				</c:choose>
-			</strong>
+			<c:choose>
+				<c:when test="<%= modifiedDate.equals(createDate) %>">
+					<liferay-ui:message key="created" />:
+				</c:when>
+				<c:otherwise>
+					<liferay-ui:message key="last-updated" />:
+				</c:otherwise>
+			</c:choose>
 
 			<liferay-ui:message arguments="<%= new String[] {LanguageUtil.getTimeDescription(locale, System.currentTimeMillis() - modifiedDate.getTime(), true), HtmlUtil.escape(author)} %>" key="x-ago-by-x" translateArguments="<%= false %>" />
 		</h6>
