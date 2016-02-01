@@ -21,6 +21,10 @@ AUI.add(
 				value: false
 			},
 
+			showRequiredFieldsWarning: {
+				value: false
+			},
+
 			submitLabel: {
 				value: Liferay.Language.get('submit')
 			},
@@ -126,11 +130,16 @@ AUI.add(
 
 				var locale = instance.get('locale');
 
+				instance._pageHasRequiredFields = false;
+
+				var rows = page.rows.map(A.bind('_normalizeLayoutRow', instance));
+
 				return A.merge(
 					page,
 					{
 						description: (page.description && page.description[locale]) || '',
-						rows: page.rows.map(A.bind('_normalizeLayoutRow', instance)),
+						rows: rows,
+						showRequiredFieldsWarning: instance._pageHasRequiredFields,
 						title: (page.title && page.title[locale]) || ''
 					}
 				);
@@ -152,9 +161,11 @@ AUI.add(
 
 				var field = instance.getField(fieldName);
 
-				var repeatedSiblings = field.getRepeatedSiblings();
+				if (!instance._pageHasRequiredFields) {
+					instance._pageHasRequiredFields = field.get('required');
+				}
 
-				return repeatedSiblings.map(
+				return field.getRepeatedSiblings().map(
 					function(sibling) {
 						var fragment = A.Node.create(TPL_DIV);
 

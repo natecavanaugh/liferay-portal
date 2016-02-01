@@ -171,6 +171,12 @@ public class DDMFormRendererImpl implements DDMFormRenderer {
 		stringsMap.put("next", LanguageUtil.get(resourceBundle, "next"));
 		stringsMap.put(
 			"previous", LanguageUtil.get(resourceBundle, "previous"));
+		stringsMap.put(
+			"required", LanguageUtil.get(resourceBundle, "required"));
+		stringsMap.put(
+			"requiredFieldsWarningMessage",
+			LanguageUtil.get(
+				resourceBundle, "all-the-required-fields-are-marked-with"));
 
 		return stringsMap;
 	}
@@ -185,7 +191,8 @@ public class DDMFormRendererImpl implements DDMFormRenderer {
 
 		DDMFormLayoutTransformer ddmFormLayoutTransformer =
 			new DDMFormLayoutTransformer(
-				ddmFormLayout, renderedDDMFormFieldsMap,
+				ddmForm, ddmFormLayout, renderedDDMFormFieldsMap,
+				ddmFormRenderingContext.isShowRequiredFieldsWarning(),
 				ddmFormRenderingContext.getLocale());
 
 		return ddmFormLayoutTransformer.getPages();
