@@ -166,7 +166,7 @@ AUI.add(
 
 						var publishCheckbox = instance.one('#publishCheckbox');
 
-						settingsDDMForm.set('published',publishCheckbox.attr('checked'));
+						settingsDDMForm.set('published', publishCheckbox.attr('checked'));
 
 						var settings = settingsDDMForm.toJSON();
 
