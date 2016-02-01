@@ -18,7 +18,7 @@
 
 	<div class="clamp-container">
 
-		<h5 class="truncate-text app-view-entry-title">
+		<h5 class="app-view-entry-title truncate-text">
 			<c:choose>
 				<c:when test="<%= Validator.isNull(url) %>">
 					<%= HtmlUtil.escape(title) %>
@@ -32,11 +32,11 @@
 		</h5>
 
 		<c:if test="<%= Validator.isNotNull(description) %>">
-			<h6 class="text-default truncate-text app-view-entry-description"><%= HtmlUtil.escape(description) %></h6>
+			<h6 class="app-view-entry-description text-default truncate-text"><%= HtmlUtil.escape(description) %></h6>
 		</c:if>
 
 		<c:if test="<%= Validator.isNotNull(classTypeName) %>">
-			<h6 class="text-default app-view-entry-class-type-name">
+			<h6 class="app-view-entry-class-type-name text-default">
 				<strong><liferay-ui:message key="type" />:</strong> <%= classTypeName %>
 			</h6>
 		</c:if>
@@ -75,13 +75,13 @@
 		</c:if>
 
 		<c:if test="<%= Validator.isNotNull(version) %>">
-			<h6 class="text-default truncate-text app-view-entry-version">
+			<h6 class="app-view-entry-version text-default truncate-text">
 				<liferay-ui:message key="version" />: <%= HtmlUtil.escape(version) %>
 			</h6>
 		</c:if>
 
 		<c:if test="<%= (createDate != null) && (modifiedDate != null) && Validator.isNotNull(author) %>">
-			<h6 class="text-default truncate-text app-view-entry-updated-date">
+			<h6 class="app-view-entry-updated-date text-default truncate-text">
 				<c:choose>
 					<c:when test="<%= modifiedDate.equals(createDate) %>">
 						<liferay-ui:message key="created" />:
@@ -100,25 +100,25 @@
 		%>
 
 		<c:if test="<%= displayDate != null %>">
-			<h6 class="text-default truncate-text app-view-entry-display-date">
+			<h6 class="app-view-entry-display-date text-default truncate-text">
 				<strong><liferay-ui:message key="display-date" />:</strong> <%= HtmlUtil.escape(dateFormatDateTime.format(displayDate)) %>
 			</h6>
 		</c:if>
 
 		<c:if test="<%= expirationDate != null %>">
-			<h6 class="text-default truncate-text app-view-entry-expiration-date">
+			<h6 class="app-view-entry-expiration-date text-default truncate-text">
 				<strong><liferay-ui:message key="expiration-date" />:</strong> <%= HtmlUtil.escape(dateFormatDateTime.format(expirationDate)) %>
 			</h6>
 		</c:if>
 
 		<c:if test="<%= reviewDate != null %>">
-			<h6 class="text-default truncate-text app-view-entry-review-date">
+			<h6 class="app-view-entry-review-date text-default truncate-text">
 				<strong><liferay-ui:message key="review-date" />:</strong> <%= HtmlUtil.escape(dateFormatDateTime.format(reviewDate)) %>
 			</h6>
 		</c:if>
 
 		<c:if test="<%= Validator.isNotNull(assetCategoryClassName) && (assetCategoryClassPK > 0) %>">
-			<span class="entry-categories app-view-entry-categories">
+			<span class="app-view-entry-categories entry-categories">
 				<liferay-ui:asset-categories-summary
 					className="<%= assetCategoryClassName %>"
 					classPK="<%= assetCategoryClassPK %>"
@@ -127,7 +127,7 @@
 		</c:if>
 
 		<c:if test="<%= Validator.isNotNull(assetTagClassName) && (assetTagClassPK > 0) %>">
-			<span class="entry-tags app-view-entry-tags">
+			<span class="app-view-entry-tags entry-tags">
 				<liferay-ui:asset-tags-summary
 					className="<%= assetTagClassName %>"
 					classPK="<%= assetTagClassPK %>"
@@ -136,7 +136,7 @@
 		</c:if>
 
 		<c:if test="<%= Validator.isNotNull(latestApprovedVersion) && (status > WorkflowConstants.STATUS_APPROVED) %>">
-			<h6 class="text-default truncate-text app-view-entry-aproved-info">
+			<h6 class="app-view-entry-aproved-info text-default truncate-text">
 				<strong><liferay-ui:message key="latest-aproved-version" />:</strong> <%= HtmlUtil.escape(latestApprovedVersion) %>
 				<strong><liferay-ui:message key="latest-aproved-version-author" />:</strong> <%= HtmlUtil.escape(latestApprovedVersionAuthor) %>
 			</h6>
@@ -146,7 +146,7 @@
 			<aui:workflow-status markupView="lexicon" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= status %>" />
 
 			<c:if test="<%= locked %>">
-				<small class="text-default app-view-entry-locked"><liferay-ui:message key="locked" /></small>
+				<small class="app-view-entry-locked text-default"><liferay-ui:message key="locked" /></small>
 			</c:if>
 		</c:if>
 
