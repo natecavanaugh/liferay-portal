@@ -162,7 +162,13 @@ AUI.add(
 
 						var settingsInput = instance.one('#serializedSettingsDDMFormValues');
 
-						var settings = Liferay.component('settingsDDMForm').toJSON();
+						var settingsDDMForm = Liferay.component('settingsDDMForm');
+
+						var publishCheckbox = instance.one('#publishCheckbox');
+
+						settingsDDMForm.set('published',publishCheckbox.attr('checked'));
+
+						var settings = settingsDDMForm.toJSON();
 
 						settingsInput.val(JSON.stringify(settings));
 					},
