@@ -3,6 +3,30 @@
 
 $horizontal-spacing: 35px;
 
+.ddl-forms-list {
+	.app-view-entry-title {
+		font-weight: bold;
+	}
+
+	.app-view-entry-description,
+	.app-view-entry-version,
+	.app-view-entry-updated-date {
+		font-weight: normal;
+	}
+
+	.list-group-item {
+		height: 96px;
+
+		@include sm() {
+			height: 101px;
+		}
+
+		@include md() {
+			height: 117px;
+		}
+	}
+}
+
 .ddl-publish-modal {
 	.alert-info {
 		text-align: center;
