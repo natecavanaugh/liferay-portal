@@ -12,6 +12,10 @@ $horizontal-spacing: 35px;
 	.app-view-entry-version,
 	.app-view-entry-updated-date {
 		font-weight: normal;
+
+		strong {
+			font-weight: normal;
+		}
 	}
 
 	.list-group-item {
