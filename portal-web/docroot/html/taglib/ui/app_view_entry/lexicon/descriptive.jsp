@@ -17,7 +17,6 @@
 <%@ include file="/html/taglib/ui/app_view_entry/init.jsp" %>
 
 	<div class="clamp-container">
-
 		<h5 class="app-view-entry-title truncate-text">
 			<c:choose>
 				<c:when test="<%= Validator.isNull(url) %>">
@@ -149,5 +148,4 @@
 				<small class="app-view-entry-locked text-default"><liferay-ui:message key="locked" /></small>
 			</c:if>
 		</c:if>
-
 	</div>
