@@ -162,6 +162,19 @@ AUI.add(
 						instance._fieldSettingsModal.show(field, typeName);
 					},
 
+					_addFieldsChangeListener: function(layouts) {
+						var i;
+
+						for (i = 0; i < layouts.length; i++) {
+							this._fieldsChangeHandles.push(
+								layouts[i].after(
+									'liferay-ddl-form-builder-field-list:fieldsChange',
+									A.bind(this._afterFieldsChange, this)
+								)
+							);
+						}
+					},
+
 					_afterActivePageNumberChange: function() {
 						var instance = this;
 
@@ -262,6 +275,10 @@ AUI.add(
 						visitor.set('pages', instance.get('layouts'));
 
 						return visitor;
+					},
+
+					_makeEmptyFieldList: function(col) {
+						col.set('value', new Liferay.DDL.FormBuilderFieldList());
 					},
 
 					_onClickPaginationItem: function(event) {
@@ -485,6 +502,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-form-builder', 'aui-form-builder-pages', 'liferay-ddl-form-builder-field-settings-modal', 'liferay-ddl-form-builder-field-support', 'liferay-ddl-form-builder-field-types-modal', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
+		requires: ['aui-form-builder', 'aui-form-builder-pages', 'liferay-ddl-form-builder-field-settings-modal', 'liferay-ddl-form-builder-field-support', 'liferay-ddl-form-builder-field-type', 'liferay-ddl-form-builder-field-types-modal', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
 	}
 );
