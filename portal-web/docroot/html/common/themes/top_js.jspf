@@ -315,13 +315,9 @@
 			getFilterConfig: function() {
 				var instance = this;
 
-				var filterConfig = null;
-
-				if (!instance.getCombine()) {
-					filterConfig = {
-						replaceStr: '.js' + instance.getStaticResourceURLParams(),
-						searchExp: '\\.js$'
-					}
+				var filterConfig = {
+					replaceStr: '.js' + instance.getStaticResourceURLParams(),
+					searchExp: '\\.js$'
 				}
 
 				return filterConfig;
