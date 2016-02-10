@@ -83,6 +83,16 @@ AUI.add(
 							instance.after('form-builder-field-list:fieldsChange', instance._afterFieldListChange, instance),
 							instance.after('render', instance._afterFormBuilderRender, instance)
 						];
+
+						instance._overwriteFieldToolbar();
+					},
+
+					_overwriteFieldToolbar: function() {
+						var instance = this;
+
+						instance._fieldToolbar.destroy();
+
+						instance._fieldToolbar = new Liferay.DDL.FormBuilderFieldToolbar(instance.get('fieldToolbarConfig'));
 					},
 
 					destructor: function() {
@@ -368,10 +378,10 @@ AUI.add(
 							FormBuilder.superclass._setFieldToolbarConfig.apply(instance, arguments),
 							{
 								items: [
-									A.FormBuilderFieldToolbar.ITEM_EDIT,
-									A.FormBuilderFieldToolbar.ITEM_MOVE,
-									A.FormBuilderFieldToolbar.ITEM_REMOVE,
-									A.FormBuilderFieldToolbar.ITEM_CLOSE
+									Liferay.DDL.FormBuilderFieldToolbar.ITEM_EDIT,
+									Liferay.DDL.FormBuilderFieldToolbar.ITEM_MOVE,
+									Liferay.DDL.FormBuilderFieldToolbar.ITEM_REMOVE,
+									Liferay.DDL.FormBuilderFieldToolbar.ITEM_CLOSE
 								]
 							}
 						);
