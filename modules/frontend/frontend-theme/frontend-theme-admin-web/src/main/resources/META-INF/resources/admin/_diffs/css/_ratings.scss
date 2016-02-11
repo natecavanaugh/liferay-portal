@@ -1,0 +1,29 @@
+.taglib-ratings .thumbrating .rating-element {
+	&:before {
+		background-position: 0 0;
+		background-size: 640px 32px;
+		content: '';
+		display: inline-block;
+		height: 32px;
+		vertical-align: middle;
+		width: 32px;
+	}
+
+	&.rating-thumb-up:before {
+		background-image: url(@theme_image_path@/ratings/thumbs_up.png);
+	}
+
+	&.rating-thumb-down:before {
+		background-image: url(@theme_image_path@/ratings/thumbs_down.png);
+	}
+
+	&.rating-on:before {
+		@include transition(background 0.6s steps(19));
+
+		background-position: -608px 0;
+	}
+
+	&.rating-off {
+		opacity: 1;
+	}
+}
