@@ -40,11 +40,20 @@
 </c:choose>
 
 <liferay-util:html-bottom outputKey="taglib_aui_icon_lexicon">
-	<aui:script>
-		svg4everybody(
-			{
-				polyfill: true
-			}
-		);
+	<aui:script use="aui-base">
+		<c:if test="<%= BrowserSnifferUtil.isIe(request) %>">
+			A.after(
+				'domready',
+				function() {
+		</c:if>
+					svg4everybody(
+						{
+							polyfill: true
+						}
+					);
+		<c:if test="<%= BrowserSnifferUtil.isIe(request) %>">
+				}
+			);
+		</c:if>
 	</aui:script>
 </liferay-util:html-bottom>
