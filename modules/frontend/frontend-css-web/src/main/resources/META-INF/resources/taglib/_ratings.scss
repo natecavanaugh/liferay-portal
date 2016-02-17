@@ -29,24 +29,14 @@
 			line-height: 32px;
 			margin: 2px;
 
-			@include respond-to(phone, tablet) {
-				a {
-					font-size: 1.5em;
-				}
-			}
-
 			.rating-element:before {
 				padding-right: 4px;
 			}
 		}
 	}
 
-	.rating-element {
-		padding-right: 4px;
-
-		&.rating-thumb-down {
-			margin-left: 5px;
-		}
+	.rating-element.rating-thumb-down {
+		margin-left: 12px;
 	}
 
 	.rating-input-container .rating-input {
