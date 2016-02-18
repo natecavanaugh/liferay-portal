@@ -16,7 +16,7 @@
 
 <%@ include file="/html/taglib/ui/alert/init.jsp" %>
 
-<aui:script use="liferay-alert">
+<aui:script use="liferay-alert" position="inline">
 	new Liferay.Alert(
 		{
 			closeable: <%= closeable %>,
