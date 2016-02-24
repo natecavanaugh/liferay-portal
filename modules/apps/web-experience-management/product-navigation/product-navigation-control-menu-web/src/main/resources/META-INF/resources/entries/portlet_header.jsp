@@ -21,8 +21,19 @@ String portletDescription = (String)request.getAttribute(ProductNavigationContro
 String portletTitle = (String)request.getAttribute(ProductNavigationControlMenuWebKeys.PORTLET_TITLE);
 %>
 
-<span class="control-menu-level-1-heading" data-qa-id="headerTitle"><%= HtmlUtil.escape(portletTitle) %></span>
+<li class="control-menu-nav-item control-menu-nav-item-content">
+	<div class="clamp-container">
+		<c:choose>
+			<c:when test="<%= Validator.isNotNull(portletDescription) %>">
+				<span class="control-menu-level-1-heading" data-qa-id="headerTitle" onmouseover="Liferay.Portal.ToolTip.show(this, '<%= HtmlUtil.escape(portletDescription) %>')">
+					<%= HtmlUtil.escape(portletTitle) %>
 
-<c:if test="<%= Validator.isNotNull(portletDescription) %>">
-	<liferay-ui:icon-help message="<%= HtmlUtil.escape(portletDescription) %>" />
-</c:if>
+					<liferay-ui:icon cssClass="control-menu-help-icon" icon="question-circle-full" markupView="lexicon" />
+				</span>
+			</c:when>
+			<c:otherwise>
+				<span class="control-menu-level-1-heading" data-qa-id="headerTitle"><%= HtmlUtil.escape(portletTitle) %></span>
+			</c:otherwise>
+		</c:choose>
+	</div>
+</li>
