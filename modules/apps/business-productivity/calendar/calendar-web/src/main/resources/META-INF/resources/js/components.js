@@ -95,24 +95,29 @@
 
 							var contentBox = instance.get('contentBox');
 
-							contentBox.delegate('click', instance._onClickItems, STR_DOT + CSS_SIMPLE_MENU_ITEM, instance);
+							instance._eventHandlers = [
+								A.getWin().on(
+									'resize',
+									A.debounce(instance._positionMenu, 200, instance)
+								),
+								contentBox.delegate('click', instance._onClickItems, STR_DOT + CSS_SIMPLE_MENU_ITEM, instance),
+								instance.after('visibleChange', instance._onVisibleChange, instance)
+							];
+						},
 
-							contentBox.on('touchendoutside', instance._closeMenu, instance);
+						destructor: function() {
+							var instance = this;
 
-							A.getDoc().on('click', instance._closeMenu, instance);
-
-							A.getWin().on(
-								'resize',
-								A.debounce(instance._positionMenu, 200, instance)
-							);
-
-							instance.after('visibleChange', instance._positionMenu, instance);
+							(new A.EventHandle(instance._eventHandlers)).detach();
 						},
 
 						_closeMenu: function() {
 							var instance = this;
 
 							instance.hide();
+
+							instance._outsideHandler.detach();
+							instance._outsideHandler = null;
 						},
 
 						_onClickItems: function(event) {
@@ -126,6 +131,22 @@
 
 							if (handler) {
 								handler.apply(instance, arguments);
+							}
+						},
+
+						_onVisibleChange: function(event) {
+							var instance = this;
+
+							if (event.newVal) {
+								var contentBox = instance.get('contentBox');
+
+								instance._outsideHandler = contentBox.on(
+									['mouseupoutside', 'touchendoutside'],
+									instance._closeMenu,
+									instance
+								);
+
+								instance._positionMenu();
 							}
 						},
 
@@ -485,8 +506,6 @@
 							var target = event.target.ancestor(STR_DOT + CSS_CALENDAR_LIST_ITEM_ARROW, true, STR_DOT + CSS_CALENDAR_LIST_ITEM);
 
 							if (target) {
-								event.stopPropagation();
-
 								var activeNode = instance.activeNode;
 
 								if (activeNode) {
