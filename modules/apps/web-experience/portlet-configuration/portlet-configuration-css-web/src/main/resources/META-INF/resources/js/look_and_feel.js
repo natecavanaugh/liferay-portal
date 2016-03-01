@@ -119,6 +119,7 @@ AUI.add(
 					instance._portletId = portletId;
 					instance._curPortlet = obj.one('.portlet-content');
 					instance._curPortletWrapperId = instance._curPortlet.attr(ID);
+					instance._curTopper = obj.one('.portlet-topper');
 					instance._portletBoundary = obj;
 					instance._portletBoundaryId = curPortletBoundaryId;
 					instance._newPanel = A.one('#portlet-set-properties');
@@ -1137,30 +1138,38 @@ AUI.add(
 						ajaxResponse.html(message);
 						ajaxResponse.show();
 
+						var curTopper = instance._curTopper.one('.portlet-title-default');
 						var objData = instance._objData;
 						var portlet = instance._curPortlet;
 
 						var portletData = objData.portletData;
 
-						if (portletData.useCustomTitle) {
-							var portletTitle = portlet.one('.portlet-title, .portlet-title-text');
+						var portletLanguage = instance._portletLanguage.val();
 
-							var portletLanguage = instance._portletLanguage.val();
+						if (portletLanguage == instance._currentLanguage) {
 
-							var value = portletData.title;
+							var value;
 
-							if (portletLanguage == instance._currentLanguage) {
-								var portletNameText = portletTitle.one('.portlet-name-text');
+							if (portletData.useCustomTitle) {
+								value = portletData.title;
+							}
 
-								if (portletNameText) {
-									portletNameText.text(value);
-								}
+							else {
+								var defaultPortletTitles = objData.defaultPortletTitles;
 
-								var portletTitleText = portlet.one('.portlet-title-text');
+								value = defaultPortletTitles[portletLanguage];
+							}
 
-								if (portletTitleText) {
-									portletTitleText.text(value);
-								}
+							var portletNameText = curTopper.one('.portlet-name-text');
+
+							if (portletNameText) {
+								portletNameText.text(value);
+							}
+
+							var portletTitleText = portlet.one('.portlet-title-text');
+
+							if (portletTitleText) {
+								portletTitleText.text(value);
 							}
 						}
 
@@ -1594,10 +1603,6 @@ AUI.add(
 					language.attr(DISABLED, true);
 
 					title = instance._defaultPortletTitle;
-				}
-
-				if (portletTitleText) {
-					portletTitleText.text(title);
 				}
 			},
 
