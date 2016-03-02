@@ -39,10 +39,6 @@ body.open {
 			text-decoration: none;
 		}
 	}
-
-	.taglib-icon-help {
-		margin-left: 6px;
-	}
 }
 
 .control-menu-level-1-heading {
@@ -107,12 +103,15 @@ body.open {
 
 .control-menu-nav-item-content {
 	@include display(flex);
-	@include flex(1);
+	@include flex(1 1 0);
 	@include justify-content(center);
 
 	min-width: 64px;
-	overflow: hidden;
-	position: relative;
+	width: 0;
+
+	.ie & {
+		width: auto;
+	}
 
 	.clamp-container {
 		overflow: hidden;
@@ -168,15 +167,14 @@ body.open {
 	@include flex(1);
 	@include flex-wrap(wrap);
 
-	overflow: hidden;
-	position: relative;
-	text-align: center;
-
 	> .control-menu-nav {
+		@include flex-wrap(wrap);
 		@include justify-content(center);
 	}
 
 	.taglib-icon-help {
 		margin-top: 1px;
+		min-width: 32px;
+		text-align: center;
 	}
 }
