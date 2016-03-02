@@ -136,6 +136,7 @@
 
 		label {
 			margin-bottom: 0;
+			min-width: 210px;
 
 			@include sm() {
 				float: left;
@@ -174,6 +175,7 @@
 		@include sm() {
 			@include display(flex);
 			@include flex(1);
+			@include flex-wrap(wrap);
 			@include justify-content(space-between);
 		}
 	}
