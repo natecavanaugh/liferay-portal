@@ -9,9 +9,9 @@
 	],
 	"liferayTheme": {
 		"baseTheme": "styled",
-		"supportCompass": false,
+		"rubySass": false,
 		"version": "7.0"
 	},
-	"name": "user-theme",
+	"name": "user-horizontal-theme",
 	"version": "0.0.0"
 }
