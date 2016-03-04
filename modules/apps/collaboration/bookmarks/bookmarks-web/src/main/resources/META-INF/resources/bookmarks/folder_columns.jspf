@@ -40,19 +40,22 @@ for (int j = 0; j < entryColumns.length; j++) {
 
 			<liferay-ui:search-container-column-jsp
 				align="<%= align %>"
-				cssClass="entry-action"
+				cssClass="entry-action-column"
 				path="/bookmarks/folder_action.jsp"
 			/>
 		</c:when>
 		<c:when test='<%= curEntryColumn.equals("modified-date") %>'>
 			<liferay-ui:search-container-column-date
+				cssClass="modified-date-column text-column"
 				name="<%= curEntryColumn %>"
 				value="<%= curFolder.getModifiedDate() %>"
 			/>
 		</c:when>
 		<c:when test='<%= curEntryColumn.equals("name") %>'>
 			<liferay-ui:search-container-column-text
+				cssClass="content-column name-column title-column"
 				name="<%= curEntryColumn %>"
+				truncate="<%= true %>"
 			>
 
 				<liferay-ui:app-view-entry
@@ -66,12 +69,15 @@ for (int j = 0; j < entryColumns.length; j++) {
 		</c:when>
 		<c:when test='<%= curEntryColumn.equals("url") %>'>
 			<liferay-ui:search-container-column-text
+				cssClass="content-column url-column"
 				name="<%= curEntryColumn %>"
+				truncate="<%= true %>"
 				value="--"
 			/>
 		</c:when>
 		<c:when test='<%= curEntryColumn.equals("visits") %>'>
 			<liferay-ui:search-container-column-text
+				cssClass="visits-column"
 				name="<%= curEntryColumn %>"
 				value="--"
 			/>
