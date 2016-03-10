@@ -51,13 +51,13 @@ AUI.add(
 
 		var STR_ROTATED = 'rotated';
 
-		var TPL_SIMULATION_DEVICE = '<div class="lfr-simulation-device" />';
-
 		var TPL_DEVICE_SIZE_INFO = '{width} x {height}';
 
 		var TPL_DEVICE_SIZE_STATUS = '<div class="lfr-device-size-status">' +
 				'<span class="lfr-device-size-status-content"></span>' +
 			'</div>';
+
+		var TPL_SIMULATION_DEVICE = '<div class="lfr-simulation-device" />';
 
 		var WIN = A.config.win;
 
@@ -130,18 +130,18 @@ AUI.add(
 					hideDeviceDialog: function() {
 						var instance = this;
 
-					    var dialog = Liferay.Util.getWindow(instance._dialogId);
+						var dialog = Liferay.Util.getWindow(instance._dialogId);
 
-					    dialog.hide();
-				    },
+						dialog.hide();
+					},
 
 					showDeviceDialog: function() {
 						var instance = this;
 
 						var dialog = Liferay.Util.getWindow(instance._dialogId);
 
-					    dialog.show();
-				    },
+						dialog.show();
+					},
 
 					_bindUI: function() {
 						var instance = this;
@@ -364,7 +364,7 @@ AUI.add(
 						var height = Lang.toInt(inputHeight);
 						var width = Lang.toInt(inputWidth);
 
-						var dialog = Liferay.Util.getWindow(instance._dialogId);
+						Liferay.Util.getWindow(instance._dialogId);
 
 						instance._openDeviceDialog(
 							{
