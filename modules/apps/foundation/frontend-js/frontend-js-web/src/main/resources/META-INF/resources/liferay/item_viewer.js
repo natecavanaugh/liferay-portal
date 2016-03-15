@@ -53,7 +53,7 @@ AUI.add(
 
 		var TPL_CLOSE = '<button class="close image-viewer-base-control image-viewer-close lfr-item-viewer-close" type="button"><span class="glyphicon glyphicon-chevron-left ' + CSS_ICON_MONOSPACED + '"></span><span>{0}</span></button>';
 
-		var TPL_INFO_ICON = '<span class="glyphicon glyphicon-info-sign lfr-item-viewer-icon-info"></span>';
+		var TPL_INFO_ICON = '<a class="lfr-item-viewer-icon-info-link" data-content=".image-viewer-focused" data-target=".image-viewer-sidenav" data-toggle="sidenav" data-type="fixed-push" href=""><span class="' + CSS_ICON_MONOSPACED + ' glyphicon glyphicon-info-sign lfr-item-viewer-icon-info"></span></a>';
 
 		var TPL_INFO_TAB_BODY = '<div class="{className} fade in tab-pane" id="{tabId}">{content}</div>';
 
@@ -124,15 +124,22 @@ AUI.add(
 						'<span class="glyphicon glyphicon-chevron-right ' + CSS_ICON_MONOSPACED + '"></span>' +
 					'</a>',
 
-					TPL_IMAGE_CONTAINER: '<div class="closed ' + CSS_IMAGE_CONTAINER + ' ' + CSS_SIDENAV_CONTAINER + ' sidenav-right">' +
-						'<div class="' + CSS_SIDENAV_MENU_SLIDER + '">' +
-							'<div class="' + CSS_IMAGE_INFO + ' sidebar sidebar-inverse sidebar-menu">' +
-								'<div class="sidebar-header"><ul class="nav nav-tabs product-menu-tabs"></ul></div>' +
-								'<div class="sidebar-body"><div class="tab-content"></div></div>' +
+					TPL_IMAGE_CONTAINER: '<div class="' + CSS_IMAGE_CONTAINER + '">' +
+						'<p class="fade preview-timeout-message text-muted">' + Liferay.Language.get('preview-image-is-taking-longer-than-expected') + '</p>' +
+					'</div>',
+
+					TPL_SIDENAV: '<div class="closed image-viewer-sidenav sidenav-fixed sidenav-menu-slider sidenav-right">' +
+						'<div class="image-viewer-sidenav-menu sidebar sidebar-inverse sidenav-menu">' +
+							'<div class="sidebar-header">' +
+								'<a class="' + CSS_ICON_MONOSPACED + ' image-viewer-sidenav-close sidenav-close" href="">' + Liferay.Util.getLexiconIconTpl('times') + '</a>' +
+								'<h4 class="image-viewer-sidenav-header">' +
+									'<ul class="nav nav-tabs nav-tabs-default"></ul>' +
+								'</h4>' +
+							'</div>' +
+							'<div class="image-viewer-sidenav-body sidebar-body">' +
+								'<div class="tab-content"></div>' +
 							'</div>' +
 						'</div>' +
-						'<span class="glyphicon glyphicon-time text-muted ' + CSS_LOADING_ICON + '"></span>' +
-						'<p class="fade preview-timeout-message text-muted">' + Liferay.Language.get('preview-image-is-taking-longer-than-expected') + '</p>' +
 					'</div>',
 
 					initializer: function() {
@@ -153,6 +160,12 @@ AUI.add(
 							Do.before('_beforeOnClickControl', instance, '_onClickControl', instance),
 							Do.before('_beforeSyncInfoUI', instance, '_syncInfoUI', instance)
 						];
+					},
+
+					renderUI: function() {
+						LiferayItemViewer.superclass.renderUI.apply(this, arguments);
+
+						this._renderSidenav();
 					},
 
 					updateCurrentImage: function(imageData) {
@@ -225,10 +238,8 @@ AUI.add(
 
 						var image = instance._getCurrentImage();
 
-						if (metadata && !image.attr(STR_DATA_METADATA_RENDERED)) {
+						if (metadata) {
 							instance._populateImageMetadata(image, metadata);
-
-							image.attr(STR_DATA_METADATA_RENDERED, true);
 						}
 					},
 
@@ -248,18 +259,7 @@ AUI.add(
 						var instance = this;
 
 						if (instance.get(STR_RENDER_SIDEBAR)) {
-							var sidebarNode = AUI.$(STR_DOT + CSS_SIDENAV_CONTAINER);
-
-							sidebarNode.sideNavigation(
-								{
-									content: sidebarNode.find('.image-viewer-base-image'),
-									equalHeight: false,
-									position: 'right',
-									toggler: instance._infoIconEl.getDOMNode(),
-									useDelegate: false,
-									width: '300px'
-								}
-							);
+							AUI.$('[data-toggle="sidenav"]').sideNavigation();
 						}
 					},
 
@@ -291,10 +291,12 @@ AUI.add(
 					_populateImageMetadata: function(image, metadata) {
 						var instance = this;
 
-						var imageInfoNode = image.siblings(STR_DOT + CSS_SIDENAV_MENU_SLIDER).one(STR_DOT + CSS_IMAGE_INFO);
+						var imageViewer = image.ancestor('.image-viewer');
+						var sidenavTabContent = imageViewer.one('.image-viewer-sidenav .tab-content');
+						var sidenavTabList = imageViewer.one('.image-viewer-sidenav ul');
 
-						var imageInfoNodeTabContent = imageInfoNode.one('.tab-content');
-						var imageInfoNodeTabList = imageInfoNode.one('ul');
+						sidenavTabContent.all('.tab-pane').remove();
+						sidenavTabList.all('li').remove();
 
 						metadata = JSON.parse(metadata);
 
@@ -316,7 +318,7 @@ AUI.add(
 									)
 								);
 
-								imageInfoNodeTabList.append(tabTitleNode);
+								sidenavTabList.append(tabTitleNode);
 
 								var dataStr = group.data.reduce(
 									function(previousValue, currentValue) {
@@ -342,7 +344,7 @@ AUI.add(
 									)
 								);
 
-								imageInfoNodeTabContent.append(tabContentNode);
+								sidenavTabContent.append(tabContentNode);
 							}
 						);
 					},
@@ -385,6 +387,18 @@ AUI.add(
 						}
 					},
 
+					_renderSidenav: function() {
+						var instance = this;
+
+						var sidenav = A.one('.image-viewer-sidenav');
+
+						if (!sidenav) {
+							var container = A.Node.create(instance.TPL_SIDENAV);
+
+							A.one('.image-viewer-content').prepend(container);
+						}
+					},
+
 					_setLinks: function(val) {
 						var instance = this;
 
@@ -418,9 +432,13 @@ AUI.add(
 					_showPreviewErrorMessage: function() {
 						var instance = this;
 
+						var loadingIcon = instance.get(STR_SRC_NODE).one('.' + CSS_LOADING_ICON);
+
 						instance._showPreviewError = true;
 
-						instance.get(STR_SRC_NODE).one('.' + CSS_LOADING_ICON).hide();
+						if (loadingIcon) {
+							loadingIcon.hide();
+						}
 
 						instance.fire('animate');
 					},
