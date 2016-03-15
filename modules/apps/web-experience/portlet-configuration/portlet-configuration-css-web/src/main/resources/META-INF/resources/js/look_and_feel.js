@@ -117,12 +117,16 @@ AUI.add(
 					instance._baseRenderPortletURL = baseRenderPortletURL;
 					instance._baseResourcePortletURL = baseResourcePortletURL;
 					instance._portletId = portletId;
-					instance._curPortlet = obj.one('.portlet-content');
-					instance._curPortletWrapperId = instance._curPortlet.attr(ID);
-					instance._curTopper = obj.one('.portlet-topper');
 					instance._portletBoundary = obj;
 					instance._portletBoundaryId = curPortletBoundaryId;
+
+					instance._curPortlet = obj.one('.portlet-content');
+					instance._curTopper = obj.one('.portlet-topper');
+
+					instance._curPortletWrapperId = instance._curPortlet.attr(ID);
+
 					instance._newPanel = A.one('#portlet-set-properties');
+
 					instance._currentLanguage = themeDisplay.getLanguageId();
 
 					if (instance._curPortlet) {
@@ -310,7 +314,6 @@ AUI.add(
 					borderData.borderWidth.sameForAll = ufa;
 
 					if (!ufa) {
-
 						var bottom = instance._getCombo(wBottomInt, wBottomUnit);
 						var left = instance._getCombo(wLeftInt, wLeftUnit);
 						var right = instance._getCombo(wRightInt, wRightUnit);
@@ -390,11 +393,9 @@ AUI.add(
 						var left = sLeftStyle.val();
 						var right = sRightStyle.val();
 
-						borderData.borderStyle.right = right;
-
 						borderData.borderStyle.bottom = bottom;
-
 						borderData.borderStyle.left = left;
+						borderData.borderStyle.right = right;
 					}
 				};
 
@@ -435,11 +436,9 @@ AUI.add(
 						var left = cLeftColor.val();
 						var right = cRightColor.val();
 
-						borderData.borderColor.right = right;
-
 						borderData.borderColor.bottom = bottom;
-
 						borderData.borderColor.left = left;
+						borderData.borderColor.right = right;
 					}
 				};
 
@@ -1138,17 +1137,15 @@ AUI.add(
 						ajaxResponse.html(message);
 						ajaxResponse.show();
 
-						var curTopper = instance._curTopper.one('.portlet-title-default');
 						var objData = instance._objData;
 						var portlet = instance._curPortlet;
-
-						var portletData = objData.portletData;
 
 						var portletLanguage = instance._portletLanguage.val();
 
 						if (portletLanguage == instance._currentLanguage) {
-
 							var value;
+
+							var portletData = objData.portletData;
 
 							if (portletData.useCustomTitle) {
 								value = portletData.title;
@@ -1158,12 +1155,6 @@ AUI.add(
 								var defaultPortletTitles = objData.defaultPortletTitles;
 
 								value = defaultPortletTitles[portletLanguage];
-							}
-
-							var portletNameText = curTopper.one('.portlet-name-text');
-
-							if (portletNameText) {
-								portletNameText.text(value);
 							}
 
 							var portletTitleText = portlet.one('.portlet-title-text');
@@ -1801,7 +1792,6 @@ AUI.add(
 				var pTopUnit = instance._paddingTopUnit;
 
 				var changePadding = function() {
-
 					var padding = instance._getCombo(pTop, pTopUnit);
 
 					var ufa = ufaPadding.get(CHECKED);
@@ -1879,7 +1869,6 @@ AUI.add(
 				var mTopUnit = instance._marginTopUnit;
 
 				var changeMargin = function() {
-
 					var margin = instance._getCombo(mTop, mTopUnit);
 
 					var ufa = ufaMargin.get(CHECKED);
@@ -2024,7 +2013,6 @@ AUI.add(
 
 				var changeColor = function(color) {
 					if (color) {
-
 						textData.color = color;
 					}
 				};
