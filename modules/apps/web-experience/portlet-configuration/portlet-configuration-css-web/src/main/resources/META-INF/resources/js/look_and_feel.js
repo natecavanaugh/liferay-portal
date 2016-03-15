@@ -137,7 +137,7 @@ AUI.add(
 						}
 
 						if (!instance._currentPopup) {
-							instance._currentPopup = Liferay.Util.Window.getWindow(
+							var popup = Liferay.Util.Window.getWindow(
 								{
 									dialog: {
 										draggable: {
@@ -189,7 +189,7 @@ AUI.add(
 							viewURL.setParameter('mvcPath', '/view.jsp');
 							viewURL.setParameter('portletResource', instance._portletId);
 
-							instance._currentPopup.plug(
+							popup.plug(
 								[
 									{
 										cfg: {
@@ -218,6 +218,8 @@ AUI.add(
 									}
 								]
 							);
+
+							instance._currentPopup = popup;
 						}
 
 						instance._currentPopup.show();
@@ -253,14 +255,16 @@ AUI.add(
 					bgData.backgroundColor = color;
 				};
 
-				if (!instance._backgroundColorPicker) {
+				var currentPopup = instance._currentPopup;
+
+				if (currentPopup && !instance._backgroundColorPicker) {
 					instance._backgroundColorPicker = new A.ColorPickerPopover(
 						{
 							constrain: true,
 							plugins: [Liferay.WidgetZIndex],
 							trigger: backgroundColor
 						}
-					).render(instance._currentPopup.get(BOUNDING_BOX));
+					).render(currentPopup.get(BOUNDING_BOX));
 				}
 
 				var backgroundColorPicker = instance._backgroundColorPicker;
@@ -442,47 +446,51 @@ AUI.add(
 					}
 				};
 
-				var popupBoundingBox = instance._currentPopup.get(BOUNDING_BOX);
+				var currentPopup = instance._currentPopup;
 
-				[cTopColor, cRightColor, cBottomColor, cLeftColor].forEach(
-					function(item, index) {
-						var hexValue = item.val().replace('#', EMPTY);
+				if (currentPopup) {
+					var popupBoundingBox = currentPopup.get(BOUNDING_BOX);
 
-						var borderLocation = '_borderColorPicker' + index;
+					[cTopColor, cRightColor, cBottomColor, cLeftColor].forEach(
+						function(item, index) {
+							var hexValue = item.val().replace('#', EMPTY);
 
-						if (!instance[borderLocation]) {
-							instance[borderLocation] = new A.ColorPickerPopover(
-								{
-									constrain: true,
-									plugins: [Liferay.WidgetZIndex],
-									trigger: item
-								}
-							).render(popupBoundingBox);
+							var borderLocation = '_borderColorPicker' + index;
+
+							if (popupBoundingBox && !instance[borderLocation]) {
+								instance[borderLocation] = new A.ColorPickerPopover(
+									{
+										constrain: true,
+										plugins: [Liferay.WidgetZIndex],
+										trigger: item
+									}
+								).render(popupBoundingBox);
+							}
+
+							var borderColorPicker = instance[borderLocation];
+
+							var afterColorChange = function(event) {
+								var color = event.color;
+
+								item.val(color);
+
+								item.setStyle(BACKGROUND_COLOR, color);
+
+								changeColor(color);
+							};
+
+							var borderColorChangeHandler = '_afterBorderColorChangeHandler' + index;
+
+							if (instance[borderColorChangeHandler]) {
+								instance[borderColorChangeHandler].detach();
+							}
+
+							instance[borderColorChangeHandler] = borderColorPicker.after(SELECT, afterColorChange);
+
+							borderColorPicker.set(HEX, hexValue);
 						}
-
-						var borderColorPicker = instance[borderLocation];
-
-						var afterColorChange = function(event) {
-							var color = event.color;
-
-							item.val(color);
-
-							item.setStyle(BACKGROUND_COLOR, color);
-
-							changeColor(color);
-						};
-
-						var borderColorChangeHandler = '_afterBorderColorChangeHandler' + index;
-
-						if (instance[borderColorChangeHandler]) {
-							instance[borderColorChangeHandler].detach();
-						}
-
-						instance[borderColorChangeHandler] = borderColorPicker.after(SELECT, afterColorChange);
-
-						borderColorPicker.set(HEX, hexValue);
-					}
-				);
+					);
+				}
 
 				cTopColor.detach(BLUR);
 				cTopColor.on(BLUR, changeColor);
@@ -1021,7 +1029,11 @@ AUI.add(
 
 				newPanel.show();
 
-				instance._currentPopup.loadingmask.refreshMask();
+				var currentPopup = instance._currentPopup;
+
+				if (currentPopup) {
+					currentPopup.loadingmask.refreshMask();
+				}
 
 				newPanel.all('.lfr-colorpicker-img').remove(true);
 
@@ -1143,86 +1155,107 @@ AUI.add(
 						var portletLanguage = instance._portletLanguage.val();
 
 						if (portletLanguage == instance._currentLanguage) {
-							var value;
+							var defaultPortletTitles = objData.defaultPortletTitles;
+
+							var portletTitle = defaultPortletTitles[portletLanguage];
 
 							var portletData = objData.portletData;
 
 							if (portletData.useCustomTitle) {
-								value = portletData.title;
-							}
-
-							else {
-								var defaultPortletTitles = objData.defaultPortletTitles;
-
-								value = defaultPortletTitles[portletLanguage];
+								portletTitle = portletData.title;
 							}
 
 							var portletTitleText = portlet.one('.portlet-title-text');
 
 							if (portletTitleText) {
-								portletTitleText.text(value);
+								portletTitleText.text(portletTitle);
 							}
 						}
 
 						var textData = objData.textData;
 
-						if (textData.color) {
-							portlet.setStyle(COLOR, textData.color);
+						var color = textData.color;
+
+						if (color) {
+							portlet.setStyle(COLOR, color);
 						}
 
-						if (textData.fontFamily) {
-							portlet.setStyle(FONT_FAMILY, textData.fontFamily);
+						var fontFamily = textData.fontFamily;
+
+						if (fontFamily) {
+							portlet.setStyle(FONT_FAMILY, fontFamily);
 						}
 
-						if (textData.fontSize) {
-							portlet.setStyle(FONT_SIZE, textData.fontSize);
+						var fontSize = textData.fontSize;
+
+						if (fontSize) {
+							portlet.setStyle(FONT_SIZE, fontSize);
 						}
 
-						if (textData.fontStyle) {
-							portlet.setStyle(FONT_STYLE, textData.fontStyle);
+						var fontStyle = textData.fontStyle;
+
+						if (fontStyle) {
+							portlet.setStyle(FONT_STYLE, fontStyle);
 						}
 
-						if (textData.fontWeight) {
-							portlet.setStyle(FONT_WEIGHT, textData.fontWeight);
+						var fontWeight = textData.fontWeight;
+
+						if (fontWeight) {
+							portlet.setStyle(FONT_WEIGHT, fontWeight);
 						}
 
-						if (textData.letterSpacing) {
-							portlet.setStyle(LETTER_SPACING, textData.letterSpacing);
+						var letterSpacing = textData.letterSpacing;
+
+						if (letterSpacing) {
+							portlet.setStyle(LETTER_SPACING, letterSpacing);
 						}
 
-						if (textData.lineHeight) {
-							portlet.setStyle(LINE_HEIGHT, textData.lineHeight);
+						var lineHeight = textData.lineHeight;
+
+						if (lineHeight) {
+							portlet.setStyle(LINE_HEIGHT, lineHeight);
 						}
 
-						if (textData.textAlign) {
-							portlet.setStyle(TEXT_ALIGN, textData.textAlign);
+						var textAlign = textData.textAlign;
+
+						if (textAlign) {
+							portlet.setStyle(TEXT_ALIGN, textAlign);
 						}
 
-						if (textData.textDecoration) {
-							portlet.setStyle(TEXT_DECORATION, textData.textDecoration);
+						var textDecoration = textData.textDecoration;
+
+						if (textDecoration) {
+							portlet.setStyle(TEXT_DECORATION, textDecoration);
 						}
 
-						if (textData.wordSpacing) {
-							portlet.setStyle(WORD_SPACING, textData.wordSpacing);
-						}
+						var wordSpacing = textData.wordSpacing;
 
-						var borderData = objData.borderData;
+						if (wordSpacing) {
+							portlet.setStyle(WORD_SPACING, wordSpacing);
+						}
 
 						var styling = {};
 
-						if (borderData.borderWidth) {
-							var ufaWidth = instance._ufaBorderWidth;
+						var borderData = objData.borderData;
 
-							var borderWidth = borderData.borderWidth.top.value + borderData.borderWidth.top.unit;
+						var borderDataBorderWidth = borderData.borderWidth;
+
+						if (borderDataBorderWidth) {
+							var borderWidthTop = borderDataBorderWidth.top;
+
+							var borderWidth = borderWidthTop.value + borderWidthTop.unit;
 
 							styling = {
 								borderWidth: borderWidth
 							};
 
-							if (!ufaWidth.get(CHECKED)) {
-								var widthBottom = borderData.borderWidth.bottom.value + borderData.borderWidth.bottom.unit;
-								var widthLeft = borderData.borderWidth.bottom.value + borderData.borderWidth.bottom.unit;
-								var widthRight = borderData.borderWidth.right.value + borderData.borderWidth.right.unit;
+							if (!instance._ufaBorderWidth.get(CHECKED)) {
+								var borderBottom = borderDataBorderWidth.bottom;
+								var borderRight = borderDataBorderWidth.right;
+
+								var widthBottom = borderBottom.value + borderBottom.unit;
+								var widthLeft = borderBottom.value + borderBottom.unit;
+								var widthRight = borderRight.value + borderRight.unit;
 								var widthTop = borderWidth;
 
 								styling = {
@@ -1235,106 +1268,110 @@ AUI.add(
 							portlet.setStyles(styling);
 						}
 
-						if (borderData.borderStyle) {
-							var ufaStyle = instance._ufaBorderStyle;
+						var borderDataBorderStyle = borderData.borderStyle;
 
-							var borderStyle = borderData.borderStyle.top;
+						if (borderDataBorderStyle) {
+							var borderStyle = borderDataBorderStyle.top;
 
 							styling = {
 								borderStyle: borderStyle
 							};
 
-							if (!ufaStyle.get(CHECKED)) {
-								var styleBottom = borderData.borderStyle.bottom;
-								var styleLeft = borderData.borderStyle.left;
-								var styleRight = borderData.borderStyle.right;
-								var styleTop = borderStyle;
-
+							if (!instance._ufaBorderStyle.get(CHECKED)) {
 								styling = {
-									borderBottomStyle: styleBottom,
-									borderLeftStyle: styleLeft,
-									borderRightStyle: styleRight,
-									borderTopStyle: styleTop
+									borderBottomStyle: borderDataBorderStyle.bottom,
+									borderLeftStyle: borderDataBorderStyle.left,
+									borderRightStyle: borderDataBorderStyle.right,
+									borderTopStyle: borderStyle
 								};
 							}
 
 							portlet.setStyles(styling);
 						}
 
-						if (borderData.borderColor) {
-							var ufaColor = instance._ufaBorderColor;
+						var borderDataBorderColor = borderData.borderColor;
 
-							var borderColor = borderData.borderColor.top;
+						if (borderDataBorderColor) {
+							var borderColor = borderDataBorderColor.top;
 
 							styling = {
 								borderColor: borderColor
 							};
 
-							if (!ufaColor.get(CHECKED)) {
-								var colorBottom = borderData.borderColor.bottom;
-								var colorLeft = borderData.borderColor.left;
-								var colorRight = borderData.borderColor.right;
-								var colorTop = borderColor;
-
+							if (!instance._ufaBorderColor.get(CHECKED)) {
 								styling = {
-									borderBottomColor: colorBottom,
-									borderLeftColor: colorLeft,
-									borderRightColor: colorRight,
-									borderTopColor: colorTop
+									borderBottomColor: borderDataBorderColor.bottom,
+									borderLeftColor: borderDataBorderColor.left,
+									borderRightColor: borderDataBorderColor.right,
+									borderTopColor: borderColor
 								};
 							}
+
 							portlet.setStyles(styling);
 						}
 
 						var spacingData = objData.spacingData;
 
-						if (spacingData.padding) {
-							var ufaPadding = instance._ufaPadding;
+						var spacingDataPadding = spacingData.padding;
 
-							var padding = spacingData.padding.top.value + spacingData.padding.top.unit;
+						if (spacingDataPadding) {
+							var paddingTop = spacingDataPadding.top;
+
+							var paddingVal = paddingTop.value + paddingTop.unit;
 
 							styling = {
-								padding: padding
+								padding: paddingVal
 							};
 
-							if (!ufaPadding.get(CHECKED)) {
-								var paddingBottom = spacingData.padding.bottom.value + spacingData.padding.bottom.unit;
-								var paddingLeft = spacingData.padding.left.value + spacingData.padding.left.unit;
-								var paddingRight = spacingData.padding.right.value + spacingData.padding.right.unit;
-								var paddingTop = padding;
+							if (!instance._ufaPadding.get(CHECKED)) {
+								var paddingBottom = spacingDataPadding.bottom;
+								var paddingLeft = spacingDataPadding.left;
+								var paddingRight = spacingDataPadding.right;
+
+								var paddingBottomVal = paddingBottom.value + paddingBottom.unit;
+								var paddingLeftVal = paddingLeft.value + paddingLeft.unit;
+								var paddingRightVal = paddingRight.value + paddingRight.unit;
+								var paddingTopVal = paddingVal;
 
 								styling = {
-									paddingBottom: paddingBottom,
-									paddingLeft: paddingLeft,
-									paddingRight: paddingRight,
-									paddingTop: paddingTop
+									paddingBottom: paddingBottomVal,
+									paddingLeft: paddingLeftVal,
+									paddingRight: paddingRightVal,
+									paddingTop: paddingTopVal
 								};
 							}
+
 							portlet.setStyles(styling);
 						}
 
-						if (spacingData.margin) {
-							var ufaMargin = instance._ufaMargin;
+						var spacingDataMargin = spacingData.margin;
 
-							var margin = spacingData.margin.top.value + spacingData.margin.top.unit;
+						if (spacingDataMargin) {
+							var marginTop = spacingDataMargin.top;
+
+							var marginVal = marginTop.value + marginTop.unit;
 
 							styling = {
-								margin: margin
+								margin: marginVal
 							};
 
-							if (!ufaMargin.get(CHECKED)) {
-								var marginBottom = spacingData.margin.bottom.value + spacingData.margin.bottom.unit;
-								var marginLeft = spacingData.margin.left.value + spacingData.margin.left.unit;
-								var marginRight = spacingData.margin.right.value + spacingData.margin.right.unit;
-								var marginTop = margin;
+							if (!instance._ufaMargin.get(CHECKED)) {
+								var marginBottom = spacingDataMargin.bottom;
+								var marginLeft = spacingDataMargin.left;
+								var marginRight = spacingDataMargin.right;
+
+								var marginBottomVal = marginBottom.value + marginBottom.unit;
+								var marginLeftVal = marginLeft.value + marginLeft.unit;
+								var marginRightVal = marginRight.value + marginRight.unit;
 
 								styling = {
-									marginBottom: marginBottom,
-									marginLeft: marginLeft,
-									marginRight: marginRight,
-									marginTop: marginTop
+									marginBottom: marginBottomVal,
+									marginLeft: marginLeftVal,
+									marginRight: marginRightVal,
+									marginTop: marginVal
 								};
 							}
+
 							portlet.setStyles(styling);
 						}
 					};
@@ -1397,7 +1434,11 @@ AUI.add(
 						}
 					);
 
-					instance._currentPopup.loadingmask.hide();
+					var currentPopup = instance._currentPopup;
+
+					if (currentPopup) {
+						currentPopup.loadingmask.hide();
+					}
 				};
 
 				instance._objData = portletConfig;
@@ -1736,7 +1777,6 @@ AUI.add(
 				}
 
 				instance._setTextarea(instance._customCSS, customStyles);
-
 				instance._setTextarea(instance._customCSSClassName, objData.advancedData.customCSSClassName);
 			},
 
@@ -2017,14 +2057,16 @@ AUI.add(
 					}
 				};
 
-				if (!instance._fontColorPicker) {
+				var currentPopup = instance._currentPopup;
+
+				if (currentPopup && !instance._fontColorPicker) {
 					instance._fontColorPicker = new A.ColorPickerPopover(
 						{
 							constrain: true,
 							plugins: [Liferay.WidgetZIndex],
 							trigger: fontColor
 						}
-					).render(instance._currentPopup.get(BOUNDING_BOX));
+					).render(currentPopup.get(BOUNDING_BOX));
 				}
 
 				var fontColorPicker = instance._fontColorPicker;
