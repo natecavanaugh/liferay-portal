@@ -117,11 +117,16 @@ AUI.add(
 					instance._baseRenderPortletURL = baseRenderPortletURL;
 					instance._baseResourcePortletURL = baseResourcePortletURL;
 					instance._portletId = portletId;
-					instance._curPortlet = obj.one('.portlet-content');
-					instance._curPortletWrapperId = instance._curPortlet.attr(ID);
 					instance._portletBoundary = obj;
 					instance._portletBoundaryId = curPortletBoundaryId;
+
+					instance._curPortlet = obj.one('.portlet-content');
+					instance._curTopper = obj.one('.portlet-topper');
+
+					instance._curPortletWrapperId = instance._curPortlet.attr(ID);
+
 					instance._newPanel = A.one('#portlet-set-properties');
+
 					instance._currentLanguage = themeDisplay.getLanguageId();
 
 					if (instance._curPortlet) {
@@ -132,7 +137,7 @@ AUI.add(
 						}
 
 						if (!instance._currentPopup) {
-							instance._currentPopup = Liferay.Util.Window.getWindow(
+							var popup = Liferay.Util.Window.getWindow(
 								{
 									dialog: {
 										draggable: {
@@ -184,7 +189,7 @@ AUI.add(
 							viewURL.setParameter('mvcPath', '/view.jsp');
 							viewURL.setParameter('portletResource', instance._portletId);
 
-							instance._currentPopup.plug(
+							popup.plug(
 								[
 									{
 										cfg: {
@@ -213,6 +218,8 @@ AUI.add(
 									}
 								]
 							);
+
+							instance._currentPopup = popup;
 						}
 
 						instance._currentPopup.show();
@@ -248,14 +255,16 @@ AUI.add(
 					bgData.backgroundColor = color;
 				};
 
-				if (!instance._backgroundColorPicker) {
+				var currentPopup = instance._currentPopup;
+
+				if (currentPopup && !instance._backgroundColorPicker) {
 					instance._backgroundColorPicker = new A.ColorPickerPopover(
 						{
 							constrain: true,
 							plugins: [Liferay.WidgetZIndex],
 							trigger: backgroundColor
 						}
-					).render(instance._currentPopup.get(BOUNDING_BOX));
+					).render(currentPopup.get(BOUNDING_BOX));
 				}
 
 				var backgroundColorPicker = instance._backgroundColorPicker;
@@ -280,8 +289,6 @@ AUI.add(
 			_borderStyles: function() {
 				var instance = this;
 
-				var portlet = instance._curPortlet;
-
 				var ufaColor = instance._ufaBorderColor;
 				var ufaStyle = instance._ufaBorderStyle;
 				var ufaWidth = instance._ufaBorderWidth;
@@ -301,10 +308,8 @@ AUI.add(
 
 				var changeWidth = function() {
 					var borderWidth = {};
-					var styling = {};
 
 					borderWidth = instance._getCombo(wTopInt, wTopUnit);
-					styling = {borderWidth: borderWidth.both};
 
 					var ufa = ufaWidth.get(CHECKED);
 
@@ -313,19 +318,9 @@ AUI.add(
 					borderData.borderWidth.sameForAll = ufa;
 
 					if (!ufa) {
-						var extStyling = {};
-
-						extStyling.borderTopWidth = styling.borderWidth;
-
 						var bottom = instance._getCombo(wBottomInt, wBottomUnit);
 						var left = instance._getCombo(wLeftInt, wLeftUnit);
 						var right = instance._getCombo(wRightInt, wRightUnit);
-
-						extStyling.borderRightWidth = right.both;
-						extStyling.borderBottomWidth = bottom.both;
-						extStyling.borderLeftWidth = left.both;
-
-						styling = extStyling;
 
 						borderData.borderWidth.right.value = right.input;
 						borderData.borderWidth.right.unit = right.selectBox;
@@ -336,8 +331,6 @@ AUI.add(
 						borderData.borderWidth.left.value = left.input;
 						borderData.borderWidth.left.unit = left.selectBox;
 					}
-
-					portlet.setStyles(styling);
 
 					changeStyle();
 					changeColor();
@@ -391,13 +384,8 @@ AUI.add(
 
 				var changeStyle = function() {
 					var borderStyle = {};
-					var styling = {};
 
 					borderStyle = sTopStyle.val();
-
-					styling = {
-						borderStyle: borderStyle
-					};
 
 					var ufa = ufaStyle.get(CHECKED);
 
@@ -405,28 +393,14 @@ AUI.add(
 					borderData.borderStyle.sameForAll = ufa;
 
 					if (!ufa) {
-						var extStyling = {};
-
-						extStyling.borderTopStyle = styling.borderStyle;
-
 						var bottom = sBottomStyle.val();
 						var left = sLeftStyle.val();
 						var right = sRightStyle.val();
 
-						extStyling.borderRightStyle = right;
-						extStyling.borderBottomStyle = bottom;
-						extStyling.borderLeftStyle = left;
-
-						styling = extStyling;
-
-						borderData.borderStyle.right = right;
-
 						borderData.borderStyle.bottom = bottom;
-
 						borderData.borderStyle.left = left;
+						borderData.borderStyle.right = right;
 					}
-
-					portlet.setStyles(styling);
 				};
 
 				sTopStyle.detach(CHANGE);
@@ -453,10 +427,8 @@ AUI.add(
 
 				var changeColor = function() {
 					var borderColor = {};
-					var styling = {};
 
 					borderColor = cTopColor.val();
-					styling = {borderColor: borderColor};
 
 					var ufa = ufaColor.get(CHECKED);
 
@@ -464,71 +436,61 @@ AUI.add(
 					borderData.borderColor.sameForAll = ufa;
 
 					if (!ufa) {
-						var extStyling = {};
-
-						extStyling.borderTopColor = styling.borderColor;
-
 						var bottom = cBottomColor.val();
 						var left = cLeftColor.val();
 						var right = cRightColor.val();
 
-						extStyling.borderRightColor = right;
-						extStyling.borderBottomColor = bottom;
-						extStyling.borderLeftColor = left;
-
-						styling = extStyling;
-
-						borderData.borderColor.right = right;
-
 						borderData.borderColor.bottom = bottom;
-
 						borderData.borderColor.left = left;
+						borderData.borderColor.right = right;
 					}
-
-					portlet.setStyles(styling);
 				};
 
-				var popupBoundingBox = instance._currentPopup.get(BOUNDING_BOX);
+				var currentPopup = instance._currentPopup;
 
-				[cTopColor, cRightColor, cBottomColor, cLeftColor].forEach(
-					function(item, index) {
-						var hexValue = item.val().replace('#', EMPTY);
+				if (currentPopup) {
+					var popupBoundingBox = currentPopup.get(BOUNDING_BOX);
 
-						var borderLocation = '_borderColorPicker' + index;
+					[cTopColor, cRightColor, cBottomColor, cLeftColor].forEach(
+						function(item, index) {
+							var hexValue = item.val().replace('#', EMPTY);
 
-						if (!instance[borderLocation]) {
-							instance[borderLocation] = new A.ColorPickerPopover(
-								{
-									constrain: true,
-									plugins: [Liferay.WidgetZIndex],
-									trigger: item
-								}
-							).render(popupBoundingBox);
+							var borderLocation = '_borderColorPicker' + index;
+
+							if (popupBoundingBox && !instance[borderLocation]) {
+								instance[borderLocation] = new A.ColorPickerPopover(
+									{
+										constrain: true,
+										plugins: [Liferay.WidgetZIndex],
+										trigger: item
+									}
+								).render(popupBoundingBox);
+							}
+
+							var borderColorPicker = instance[borderLocation];
+
+							var afterColorChange = function(event) {
+								var color = event.color;
+
+								item.val(color);
+
+								item.setStyle(BACKGROUND_COLOR, color);
+
+								changeColor(color);
+							};
+
+							var borderColorChangeHandler = '_afterBorderColorChangeHandler' + index;
+
+							if (instance[borderColorChangeHandler]) {
+								instance[borderColorChangeHandler].detach();
+							}
+
+							instance[borderColorChangeHandler] = borderColorPicker.after(SELECT, afterColorChange);
+
+							borderColorPicker.set(HEX, hexValue);
 						}
-
-						var borderColorPicker = instance[borderLocation];
-
-						var afterColorChange = function(event) {
-							var color = event.color;
-
-							item.val(color);
-
-							item.setStyle(BACKGROUND_COLOR, color);
-
-							changeColor(color);
-						};
-
-						var borderColorChangeHandler = '_afterBorderColorChangeHandler' + index;
-
-						if (instance[borderColorChangeHandler]) {
-							instance[borderColorChangeHandler].detach();
-						}
-
-						instance[borderColorChangeHandler] = borderColorPicker.after(SELECT, afterColorChange);
-
-						borderColorPicker.set(HEX, hexValue);
-					}
-				);
+					);
+				}
 
 				cTopColor.detach(BLUR);
 				cTopColor.on(BLUR, changeColor);
@@ -1067,7 +1029,11 @@ AUI.add(
 
 				newPanel.show();
 
-				instance._currentPopup.loadingmask.refreshMask();
+				var currentPopup = instance._currentPopup;
+
+				if (currentPopup) {
+					currentPopup.loadingmask.refreshMask();
+				}
 
 				newPanel.all('.lfr-colorpicker-img').remove(true);
 
@@ -1182,6 +1148,232 @@ AUI.add(
 						ajaxResponse.addClass(messageClass);
 						ajaxResponse.html(message);
 						ajaxResponse.show();
+
+						var objData = instance._objData;
+						var portlet = instance._curPortlet;
+
+						var portletLanguage = instance._portletLanguage.val();
+
+						if (portletLanguage == instance._currentLanguage) {
+							var defaultPortletTitles = objData.defaultPortletTitles;
+
+							var portletTitle = defaultPortletTitles[portletLanguage];
+
+							var portletData = objData.portletData;
+
+							if (portletData.useCustomTitle) {
+								portletTitle = portletData.title;
+							}
+
+							var portletTitleText = portlet.one('.portlet-title-text');
+
+							if (portletTitleText) {
+								portletTitleText.text(portletTitle);
+							}
+						}
+
+						var textData = objData.textData;
+
+						var color = textData.color;
+
+						if (color) {
+							portlet.setStyle(COLOR, color);
+						}
+
+						var fontFamily = textData.fontFamily;
+
+						if (fontFamily) {
+							portlet.setStyle(FONT_FAMILY, fontFamily);
+						}
+
+						var fontSize = textData.fontSize;
+
+						if (fontSize) {
+							portlet.setStyle(FONT_SIZE, fontSize);
+						}
+
+						var fontStyle = textData.fontStyle;
+
+						if (fontStyle) {
+							portlet.setStyle(FONT_STYLE, fontStyle);
+						}
+
+						var fontWeight = textData.fontWeight;
+
+						if (fontWeight) {
+							portlet.setStyle(FONT_WEIGHT, fontWeight);
+						}
+
+						var letterSpacing = textData.letterSpacing;
+
+						if (letterSpacing) {
+							portlet.setStyle(LETTER_SPACING, letterSpacing);
+						}
+
+						var lineHeight = textData.lineHeight;
+
+						if (lineHeight) {
+							portlet.setStyle(LINE_HEIGHT, lineHeight);
+						}
+
+						var textAlign = textData.textAlign;
+
+						if (textAlign) {
+							portlet.setStyle(TEXT_ALIGN, textAlign);
+						}
+
+						var textDecoration = textData.textDecoration;
+
+						if (textDecoration) {
+							portlet.setStyle(TEXT_DECORATION, textDecoration);
+						}
+
+						var wordSpacing = textData.wordSpacing;
+
+						if (wordSpacing) {
+							portlet.setStyle(WORD_SPACING, wordSpacing);
+						}
+
+						var styling = {};
+
+						var borderData = objData.borderData;
+
+						var borderDataBorderWidth = borderData.borderWidth;
+
+						if (borderDataBorderWidth) {
+							var borderWidthTop = borderDataBorderWidth.top;
+
+							var borderWidth = borderWidthTop.value + borderWidthTop.unit;
+
+							styling = {
+								borderWidth: borderWidth
+							};
+
+							if (!instance._ufaBorderWidth.get(CHECKED)) {
+								var borderBottom = borderDataBorderWidth.bottom;
+								var borderRight = borderDataBorderWidth.right;
+
+								var widthBottom = borderBottom.value + borderBottom.unit;
+								var widthLeft = borderBottom.value + borderBottom.unit;
+								var widthRight = borderRight.value + borderRight.unit;
+								var widthTop = borderWidth;
+
+								styling = {
+									borderBottomWidth: widthBottom,
+									borderLeftWidth: widthLeft,
+									borderRightWidth: widthRight,
+									borderTopWidth: widthTop
+								};
+							}
+							portlet.setStyles(styling);
+						}
+
+						var borderDataBorderStyle = borderData.borderStyle;
+
+						if (borderDataBorderStyle) {
+							var borderStyle = borderDataBorderStyle.top;
+
+							styling = {
+								borderStyle: borderStyle
+							};
+
+							if (!instance._ufaBorderStyle.get(CHECKED)) {
+								styling = {
+									borderBottomStyle: borderDataBorderStyle.bottom,
+									borderLeftStyle: borderDataBorderStyle.left,
+									borderRightStyle: borderDataBorderStyle.right,
+									borderTopStyle: borderStyle
+								};
+							}
+
+							portlet.setStyles(styling);
+						}
+
+						var borderDataBorderColor = borderData.borderColor;
+
+						if (borderDataBorderColor) {
+							var borderColor = borderDataBorderColor.top;
+
+							styling = {
+								borderColor: borderColor
+							};
+
+							if (!instance._ufaBorderColor.get(CHECKED)) {
+								styling = {
+									borderBottomColor: borderDataBorderColor.bottom,
+									borderLeftColor: borderDataBorderColor.left,
+									borderRightColor: borderDataBorderColor.right,
+									borderTopColor: borderColor
+								};
+							}
+
+							portlet.setStyles(styling);
+						}
+
+						var spacingData = objData.spacingData;
+
+						var spacingDataPadding = spacingData.padding;
+
+						if (spacingDataPadding) {
+							var paddingTop = spacingDataPadding.top;
+
+							var paddingVal = paddingTop.value + paddingTop.unit;
+
+							styling = {
+								padding: paddingVal
+							};
+
+							if (!instance._ufaPadding.get(CHECKED)) {
+								var paddingBottom = spacingDataPadding.bottom;
+								var paddingLeft = spacingDataPadding.left;
+								var paddingRight = spacingDataPadding.right;
+
+								var paddingBottomVal = paddingBottom.value + paddingBottom.unit;
+								var paddingLeftVal = paddingLeft.value + paddingLeft.unit;
+								var paddingRightVal = paddingRight.value + paddingRight.unit;
+								var paddingTopVal = paddingVal;
+
+								styling = {
+									paddingBottom: paddingBottomVal,
+									paddingLeft: paddingLeftVal,
+									paddingRight: paddingRightVal,
+									paddingTop: paddingTopVal
+								};
+							}
+
+							portlet.setStyles(styling);
+						}
+
+						var spacingDataMargin = spacingData.margin;
+
+						if (spacingDataMargin) {
+							var marginTop = spacingDataMargin.top;
+
+							var marginVal = marginTop.value + marginTop.unit;
+
+							styling = {
+								margin: marginVal
+							};
+
+							if (!instance._ufaMargin.get(CHECKED)) {
+								var marginBottom = spacingDataMargin.bottom;
+								var marginLeft = spacingDataMargin.left;
+								var marginRight = spacingDataMargin.right;
+
+								var marginBottomVal = marginBottom.value + marginBottom.unit;
+								var marginLeftVal = marginLeft.value + marginLeft.unit;
+								var marginRightVal = marginRight.value + marginRight.unit;
+
+								styling = {
+									marginBottom: marginBottomVal,
+									marginLeft: marginLeftVal,
+									marginRight: marginRightVal,
+									marginTop: marginVal
+								};
+							}
+
+							portlet.setStyles(styling);
+						}
 					};
 
 					instance._saveButton.detach(CLICK);
@@ -1242,7 +1434,11 @@ AUI.add(
 						}
 					);
 
-					instance._currentPopup.loadingmask.hide();
+					var currentPopup = instance._currentPopup;
+
+					if (currentPopup) {
+						currentPopup.loadingmask.hide();
+					}
 				};
 
 				instance._objData = portletConfig;
@@ -1308,44 +1504,13 @@ AUI.add(
 							return;
 						}
 
-						var curPorlet = instance._curPortlet;
+						var value = event.currentTarget.val();
 
-						var portletTitle = curPorlet.one('.portlet-title, .portlet-title-text');
+						var portletLanguage = instance._portletLanguage.val();
 
-						if (portletTitle) {
-							var cruft = portletTitle.html().match(/<\/?[^>]+>|\n|\r|\t/gim);
+						portletData.title = value;
 
-							if (cruft) {
-								cruft = cruft.join(EMPTY);
-							}
-							else {
-								cruft = EMPTY;
-							}
-
-							var value = event.currentTarget.val();
-
-							var portletLanguage = instance._portletLanguage.val();
-
-							if (portletLanguage == instance._currentLanguage) {
-								portletTitle.html(cruft);
-
-								var portletNameText = portletTitle.one('.portlet-name-text');
-
-								if (portletNameText) {
-									portletNameText.text(value);
-								}
-
-								var portletTitleText = curPorlet.one('.portlet-title-text');
-
-								if (portletTitleText) {
-									portletTitleText.text(value);
-								}
-							}
-
-							portletData.title = value;
-
-							instance._portletTitles(portletLanguage, value);
-						}
+						instance._portletTitles(portletLanguage, value);
 					}
 				);
 
@@ -1470,10 +1635,6 @@ AUI.add(
 					language.attr(DISABLED, true);
 
 					title = instance._defaultPortletTitle;
-				}
-
-				if (portletTitleText) {
-					portletTitleText.text(title);
 				}
 			},
 
@@ -1616,7 +1777,6 @@ AUI.add(
 				}
 
 				instance._setTextarea(instance._customCSS, customStyles);
-
 				instance._setTextarea(instance._customCSSClassName, objData.advancedData.customCSSClassName);
 			},
 
@@ -1655,8 +1815,6 @@ AUI.add(
 			_spacingStyles: function() {
 				var instance = this;
 
-				var portlet = instance._curPortlet;
-
 				var ufaMargin = instance._ufaMargin;
 				var ufaPadding = instance._ufaPadding;
 
@@ -1674,11 +1832,7 @@ AUI.add(
 				var pTopUnit = instance._paddingTopUnit;
 
 				var changePadding = function() {
-					var styling = {};
-
 					var padding = instance._getCombo(pTop, pTopUnit);
-
-					styling = {padding: padding.both};
 
 					var ufa = ufaPadding.get(CHECKED);
 
@@ -1688,19 +1842,10 @@ AUI.add(
 					spacingData.padding.sameForAll = ufa;
 
 					if (!ufa) {
-						var extStyling = {};
-
-						extStyling.paddingTop = styling.padding;
 
 						var bottom = instance._getCombo(pBottom, pBottomUnit);
 						var left = instance._getCombo(pLeft, pLeftUnit);
 						var right = instance._getCombo(pRight, pRightUnit);
-
-						extStyling.paddingRight = right.both;
-						extStyling.paddingBottom = bottom.both;
-						extStyling.paddingLeft = left.both;
-
-						styling = extStyling;
 
 						spacingData.padding.right.value = right.input;
 						spacingData.padding.right.unit = right.selectBox;
@@ -1711,8 +1856,6 @@ AUI.add(
 						spacingData.padding.left.value = left.input;
 						spacingData.padding.left.unit = left.selectBox;
 					}
-
-					portlet.setStyles(styling);
 				};
 
 				pTop.detach(BLUR);
@@ -1766,11 +1909,7 @@ AUI.add(
 				var mTopUnit = instance._marginTopUnit;
 
 				var changeMargin = function() {
-					var styling = {};
-
 					var margin = instance._getCombo(mTop, mTopUnit);
-
-					styling = {margin: margin.both};
 
 					var ufa = ufaMargin.get(CHECKED);
 
@@ -1780,19 +1919,10 @@ AUI.add(
 					spacingData.margin.sameForAll = ufa;
 
 					if (!ufa) {
-						var extStyling = {};
-
-						extStyling.marginTop = styling.margin;
 
 						var bottom = instance._getCombo(mBottom, mBottomUnit);
 						var left = instance._getCombo(mLeft, mLeftUnit);
 						var right = instance._getCombo(mRight, mRightUnit);
-
-						extStyling.marginRight = right.both;
-						extStyling.marginBottom = bottom.both;
-						extStyling.marginLeft = left.both;
-
-						styling = extStyling;
 
 						spacingData.margin.right.value = right.input;
 						spacingData.margin.right.unit = right.selectBox;
@@ -1803,8 +1933,6 @@ AUI.add(
 						spacingData.margin.left.value = left.input;
 						spacingData.margin.left.unit = left.selectBox;
 					}
-
-					portlet.setStyles(styling);
 				};
 
 				mTop.detach(BLUR);
@@ -1856,7 +1984,6 @@ AUI.add(
 				var fontItalic = instance._fontStyle;
 				var fontSize = instance._fontSize;
 				var leading = instance._leading;
-				var portlet = instance._curPortlet;
 				var textAlign = instance._textAlign;
 				var textDecoration = instance._textDecoration;
 				var tracking = instance._tracking;
@@ -1872,8 +1999,6 @@ AUI.add(
 					CHANGE,
 					function(event) {
 						var fontFamily = event.currentTarget.val();
-
-						portlet.setStyle(FONT_FAMILY, fontFamily);
 
 						textData.fontFamily = fontFamily;
 					}
@@ -1892,8 +2017,6 @@ AUI.add(
 							style = BOLD;
 						}
 
-						portlet.setStyle(FONT_WEIGHT, style);
-
 						textData.fontWeight = style;
 					}
 				);
@@ -1909,8 +2032,6 @@ AUI.add(
 							style = ITALIC;
 						}
 
-						portlet.setStyle(FONT_STYLE, style);
-
 						textData.fontStyle = style;
 					}
 				);
@@ -1924,8 +2045,6 @@ AUI.add(
 					function(event) {
 						var fontSize = event.currentTarget.val();
 
-						portlet.setStyle(FONT_SIZE, fontSize);
-
 						textData.fontSize = fontSize;
 					}
 				);
@@ -1934,20 +2053,20 @@ AUI.add(
 
 				var changeColor = function(color) {
 					if (color) {
-						portlet.setStyle(COLOR, color);
-
 						textData.color = color;
 					}
 				};
 
-				if (!instance._fontColorPicker) {
+				var currentPopup = instance._currentPopup;
+
+				if (currentPopup && !instance._fontColorPicker) {
 					instance._fontColorPicker = new A.ColorPickerPopover(
 						{
 							constrain: true,
 							plugins: [Liferay.WidgetZIndex],
 							trigger: fontColor
 						}
-					).render(instance._currentPopup.get(BOUNDING_BOX));
+					).render(currentPopup.get(BOUNDING_BOX));
 				}
 
 				var fontColorPicker = instance._fontColorPicker;
@@ -1977,8 +2096,6 @@ AUI.add(
 					function(event) {
 						var textAlign = event.currentTarget.val();
 
-						portlet.setStyle(TEXT_ALIGN, textAlign);
-
 						textData.textAlign = textAlign;
 					}
 				);
@@ -1991,8 +2108,6 @@ AUI.add(
 					CHANGE,
 					function(event) {
 						var decoration = event.currentTarget.val();
-
-						portlet.setStyle(TEXT_DECORATION, decoration);
 
 						textData.textDecoration = decoration;
 					}
@@ -2007,8 +2122,6 @@ AUI.add(
 					function(event) {
 						var spacing = event.currentTarget.val();
 
-						portlet.setStyle(WORD_SPACING, spacing);
-
 						textData.wordSpacing = spacing;
 					}
 				);
@@ -2022,8 +2135,6 @@ AUI.add(
 					function(event) {
 						var leading = event.currentTarget.val();
 
-						portlet.setStyle(LINE_HEIGHT, leading);
-
 						textData.lineHeight = leading;
 					}
 				);
@@ -2036,8 +2147,6 @@ AUI.add(
 					CHANGE,
 					function(event) {
 						var tracking = event.currentTarget.val();
-
-						portlet.setStyle(LETTER_SPACING, tracking);
 
 						textData.letterSpacing = tracking;
 					}
