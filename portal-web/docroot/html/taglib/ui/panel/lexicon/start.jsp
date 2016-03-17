@@ -27,6 +27,10 @@ if (accordion) {
 else if ((extended != null) && !extended) {
 	collapsed = true;
 }
+
+if (persistState && (state != null)) {
+	collapsed = !state.equals("open");
+}
 %>
 
 <div class="panel panel-default <%= cssClass %>" id="<%= id %>">

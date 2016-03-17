@@ -19,3 +19,21 @@
 		</div>
 	</div>
 </div>
+
+<aui:script use="liferay-store">
+	var panel = $('#<%= id %> .collapse');
+
+	panel.on(
+		'show.bs.collapse',
+		function(event) {
+			Liferay.Store('<%= id %>', 'open');
+		}
+	);
+
+	panel.on(
+		'hide.bs.collapse',
+		function(event) {
+			Liferay.Store('<%= id %>', 'closed');
+		}
+	);
+</aui:script>
