@@ -320,7 +320,13 @@ AUI.add(
 
 						instance._intervalId = A.setInterval(
 							function() {
-								var elapsed = instance._elapsed += 1000;
+								var timestamp = instance.get('timestamp');
+
+								var timeOffset = Math.floor((Date.now() - timestamp) / 1000) * 1000;
+
+								instance._elapsed = timeOffset;
+
+								var elapsed = instance._elapsed;
 
 								var extend = false;
 
@@ -334,8 +340,6 @@ AUI.add(
 
 								if (hasWarned) {
 									if (warningMoment || expirationMoment) {
-										var timestamp = instance.get('timestamp');
-
 										if (timestamp == 'expired') {
 											expirationMoment = true;
 											hasExpired = true;
@@ -350,11 +354,7 @@ AUI.add(
 											extend = true;
 										}
 										else {
-											var timeOffset = Math.floor((Date.now() - timestamp) / 1000) * 1000;
-
 											if (timeOffset < warningTime) {
-												instance._elapsed = timeOffset;
-
 												updateSessionState = false;
 												hasWarned = false;
 											}
