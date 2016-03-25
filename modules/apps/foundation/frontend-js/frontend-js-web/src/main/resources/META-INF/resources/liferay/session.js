@@ -341,23 +341,19 @@ AUI.add(
 								if (hasWarned) {
 									if (warningMoment || expirationMoment) {
 										if (timestamp == 'expired') {
-											expirationMoment = true;
 											hasExpired = true;
+											expirationMoment = true;
 										}
 										else if (instance.get('autoExtend')) {
+											expirationMoment = false;
+											extend = true;
 											hasExpired = false;
 											hasWarned = false;
-
-											expirationMoment = false;
 											warningMoment = false;
-
-											extend = true;
 										}
-										else {
-											if (timeOffset < warningTime) {
-												updateSessionState = false;
-												hasWarned = false;
-											}
+										else if (timeOffset < warningTime) {
+											hasWarned = false;
+											updateSessionState = false;
 										}
 									}
 
