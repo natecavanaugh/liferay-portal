@@ -351,8 +351,8 @@ AUI.add(
 								if (hasWarned) {
 									if (warningMoment || expirationMoment) {
 										if (timestamp == 'expired') {
-											hasExpired = true;
 											expirationMoment = true;
+											hasExpired = true;
 										}
 										else if (instance.get('autoExtend')) {
 											expirationMoment = false;
