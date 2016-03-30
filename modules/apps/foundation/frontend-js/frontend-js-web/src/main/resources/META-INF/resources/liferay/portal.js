@@ -108,6 +108,8 @@
 		ToolTip,
 		'show',
 		function(obj, text, tooltipConfig) {
+			var touchDevice = A.getWin().get('innerWidth') <= 1366 && A.UA.touch;
+
 			var instance = this;
 
 			var cached = instance._cached;
@@ -126,7 +128,11 @@
 					tooltipConfig
 				);
 
-				cached = new A.Tooltip(config).render();
+				cached = new A.Tooltip(config);
+
+				if (!touchDevice) {
+					cached.render();
+				}
 
 				cached.after(
 					'visibleChange',
