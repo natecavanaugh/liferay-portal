@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -49,6 +50,8 @@ public interface Theme extends Comparable<Theme>, Plugin, Serializable {
 	public String getCssPath();
 
 	public String getDevice();
+
+	public Set<String> getFaviconLoadingFramesPaths();
 
 	public String getFreeMarkerTemplateLoader();
 
