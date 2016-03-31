@@ -5,6 +5,7 @@ import core from 'metal/src/core';
 import dom from 'metal-dom/src/dom';
 import Utils from '../util/Utils.es';
 import LiferaySurface from '../surface/Surface.es';
+import Favicon from '../util/Favicon.es';
 
 class LiferayApp extends App {
 	constructor() {
@@ -34,6 +35,12 @@ class LiferayApp extends App {
 		this.addSurfaces(new LiferaySurface(body.id));
 
 		dom.append(body, '<div class="lfr-spa-loading-bar"></div>');
+	}
+
+	createFaviconAnimation(faviconLoadingFramesPaths) {
+		this.favicon = new Favicon(faviconLoadingFramesPaths);
+
+		this.favicon.preloadImages();
 	}
 
 	getValidStatusCodes() {
@@ -100,6 +107,10 @@ class LiferayApp extends App {
 		AUI().Get._insertCache = {};
 
 		Liferay.DOMTaskRunner.reset();
+
+		if (this.favicon) {
+			this.favicon.stopAnimation();
+		}
 	}
 
 	onLiferayIOComplete() {
@@ -114,6 +125,10 @@ class LiferayApp extends App {
 				path: event.path
 			}
 		);
+
+		if (this.favicon) {
+			this.favicon.startAnimation();
+		}
 	}
 
 	setBlacklist(blacklist) {
