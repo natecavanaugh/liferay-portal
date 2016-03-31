@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.6/liferay/app/App.es", ['exports', 'senna/src/app/App', 'metal/src/core', 'metal-dom/src/dom', '../util/Utils.es', '../surface/Surface.es'], function (exports, _App2, _core, _dom, _Utils, _Surface) {
+define("frontend-js-spa-web@1.0.6/liferay/app/App.es", ['exports', 'senna/src/app/App', 'metal/src/core', 'metal-dom/src/dom', '../util/Utils.es', '../surface/Surface.es', '../util/Favicon.es'], function (exports, _App2, _core, _dom, _Utils, _Surface, _Favicon) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -14,6 +14,8 @@ define("frontend-js-spa-web@1.0.6/liferay/app/App.es", ['exports', 'senna/src/ap
 	var _Utils2 = _interopRequireDefault(_Utils);
 
 	var _Surface2 = _interopRequireDefault(_Surface);
+
+	var _Favicon2 = _interopRequireDefault(_Favicon);
 
 	function _interopRequireDefault(obj) {
 		return obj && obj.__esModule ? obj : {
@@ -86,6 +88,12 @@ define("frontend-js-spa-web@1.0.6/liferay/app/App.es", ['exports', 'senna/src/ap
 			return _this;
 		}
 
+		LiferayApp.prototype.createFaviconAnimation = function createFaviconAnimation(faviconLoadingFramesPaths) {
+			this.favicon = new _Favicon2.default(faviconLoadingFramesPaths);
+
+			this.favicon.preloadImages();
+		};
+
 		LiferayApp.prototype.getValidStatusCodes = function getValidStatusCodes() {
 			return this.validStatusCodes;
 		};
@@ -142,6 +150,10 @@ define("frontend-js-spa-web@1.0.6/liferay/app/App.es", ['exports', 'senna/src/ap
 			AUI().Get._insertCache = {};
 
 			Liferay.DOMTaskRunner.reset();
+
+			if (this.favicon) {
+				this.favicon.stopAnimation();
+			}
 		};
 
 		LiferayApp.prototype.onLiferayIOComplete = function onLiferayIOComplete() {
@@ -153,6 +165,10 @@ define("frontend-js-spa-web@1.0.6/liferay/app/App.es", ['exports', 'senna/src/ap
 				app: this,
 				path: event.path
 			});
+
+			if (this.favicon) {
+				this.favicon.startAnimation();
+			}
 		};
 
 		LiferayApp.prototype.setBlacklist = function setBlacklist(blacklist) {

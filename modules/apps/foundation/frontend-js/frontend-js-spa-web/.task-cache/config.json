@@ -122,6 +122,9 @@
     "frontend-js-spa-web@1.0.6/liferay/init.es": {
         "dependencies": ["exports", "./screen/ActionURLScreen.es", "./app/App.es", "metal/src/async/async", "senna/src/globals/globals", "./screen/RenderURLScreen.es", "metal-uri/src/Uri", "senna/src/utils/utils"]
     },
+    "frontend-js-spa-web@1.0.6/liferay/util/Favicon.es": {
+        "dependencies": ["exports"]
+    },
     "frontend-js-spa-web@1.0.6/liferay/util/Utils.es": {
         "dependencies": ["exports"]
     },
@@ -138,6 +141,6 @@
         "dependencies": ["exports", "./EventScreen.es"]
     },
     "frontend-js-spa-web@1.0.6/liferay/app/App.es": {
-        "dependencies": ["exports", "senna/src/app/App", "metal/src/core", "metal-dom/src/dom", "../util/Utils.es", "../surface/Surface.es"]
+        "dependencies": ["exports", "senna/src/app/App", "metal/src/core", "metal-dom/src/dom", "../util/Utils.es", "../surface/Surface.es", "../util/Favicon.es"]
     }
 }
