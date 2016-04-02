@@ -153,8 +153,6 @@ AUI.add(
 					_defActivatedFn: function(event) {
 						var instance = this;
 
-						instance._elapsed = 0;
-
 						instance.set('timestamp');
 
 						if (event.src == SRC) {
@@ -312,8 +310,6 @@ AUI.add(
 						var sessionLength = instance.get('sessionLength');
 						var warningTime = instance.get('warningTime');
 
-						instance._elapsed = 0;
-
 						var registered = instance._registered;
 
 						var interval = 1000;
@@ -335,8 +331,6 @@ AUI.add(
 
 									elapsed = timeOffset;
 								}
-
-								instance._elapsed = elapsed;
 
 								var extend = false;
 
