@@ -19,13 +19,39 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 
 <%@ page import="com.liferay.frontend.js.spa.web.servlet.taglib.util.SPAUtil" %>
 
+<%@ page import="java.util.Iterator" %><%@
+page import="java.util.Set" %>
+
 <liferay-theme:defineObjects />
+
+<%
+Set<String> faviconLoadingFramesPaths = theme.getFaviconLoadingFramesPaths();
+Iterator pathsIterator = faviconLoadingFramesPaths.iterator();
+StringBuilder sb = new StringBuilder();
+
+sb.append("[");
+
+while (pathsIterator.hasNext()) {
+	String path = (String)pathsIterator.next();
+
+	sb.append("'");
+	sb.append(path.substring(path.indexOf("/favicon_loading_frames")));
+	sb.append("'");
+
+	if (pathsIterator.hasNext()) {
+		sb.append(",");
+	}
+}
+
+sb.append("]");
+%>
 
 <aui:script position="inline" require="frontend-js-spa-web/liferay/init.es">
 	var app = Liferay.SPA.app;
 
 	app.setBlacklist(<%= SPAUtil.getPortletsBlacklist(themeDisplay) %>);
 	app.setValidStatusCodes(<%= SPAUtil.getValidStatusCodes() %>);
+	app.createFaviconAnimation(<%= sb.toString() %>);
 </aui:script>
 
 <aui:script>

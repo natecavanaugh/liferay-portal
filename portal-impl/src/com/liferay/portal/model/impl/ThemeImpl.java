@@ -37,11 +37,13 @@ import com.liferay.portal.kernel.util.ThemeHelper;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletContext;
@@ -163,6 +165,33 @@ public class ThemeImpl extends PluginBaseImpl implements Theme {
 	@Override
 	public String getDevice() {
 		return "regular";
+	}
+
+	@Override
+	public Set<String> getFaviconLoadingFramesPaths() {
+		Set<String> framePaths = Collections.<String>emptySet();
+
+		ServletContext servletContext = null;
+
+		if (_themeId.equals("admin")) {
+			servletContext = PortalWebResourcesUtil.getServletContext(
+				PortalWebResourceConstants.RESOURCE_TYPE_THEME_ADMIN);
+		}
+		else if (_themeId.equals("classic")) {
+			servletContext = PortalWebResourcesUtil.getServletContext(
+				PortalWebResourceConstants.RESOURCE_TYPE_THEME_CLASSIC);
+		}
+		else {
+			servletContext = ServletContextPool.get(getServletContextName());
+		}
+
+		if (Validator.isNotNull(servletContext)) {
+			framePaths = servletContext.getResourcePaths(
+				"/META-INF/resources" + getImagesPath() +
+					"/favicon_loading_frames/");
+		}
+
+		return framePaths;
 	}
 
 	@Override
