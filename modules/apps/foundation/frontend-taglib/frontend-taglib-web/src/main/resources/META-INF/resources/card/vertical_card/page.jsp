@@ -19,10 +19,6 @@
 <%@ include file="/card/vertical_card/start.jspf" %>
 
 <div class="aspect-ratio <%= backgroundImage ? "aspect-ratio-bg-center aspect-ratio-bg-cover" : "" %>" style="<%= backgroundImage ? "background-image: url('" + imageUrl + "')" : "" %>">
-	<aui:a href="<%= url %>">
-		<img alt="" class="<%= imageCSSClass %><%= backgroundImage ? " sr-only" : "" %>" src="<%= imageUrl %>" />
-	</aui:a>
-
 	<c:if test="<%= Validator.isNotNull(stickerBottom) %>">
 		<%= stickerBottom %>
 	</c:if>
