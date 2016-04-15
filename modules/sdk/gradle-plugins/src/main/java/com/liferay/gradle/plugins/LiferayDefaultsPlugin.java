@@ -130,6 +130,7 @@ import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetOutput;
+import org.gradle.api.tasks.StopActionException;
 import org.gradle.api.tasks.TaskCollection;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.Upload;
@@ -165,6 +166,8 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 	public static final String BASELINE_CONFIGURATION_NAME = "baseline";
 
 	public static final String BASELINE_TASK_NAME = "baseline";
+
+	public static final String COMMIT_CACHE_TASK_NAME = "commitCache";
 
 	public static final String COPY_LIBS_TASK_NAME = "copyLibs";
 
@@ -371,6 +374,118 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 		return task;
 	}
 
+	protected Task addTaskCommitCache(
+		Project project, final InstallCacheTask installCacheTask) {
+
+		Task task = project.task(COMMIT_CACHE_TASK_NAME);
+
+		task.dependsOn(installCacheTask);
+
+		task.doLast(
+			new Action<Task>() {
+
+				@Override
+				public void execute(Task task) {
+					File cachedVersionDir =
+						installCacheTask.getCacheDestinationDir();
+
+					File cachedArtifactDir = cachedVersionDir.getParentFile();
+
+					File[] cachedVersionDirs = FileUtil.getDirectories(
+						cachedArtifactDir);
+
+					if (cachedVersionDirs.length != 2) {
+						throw new StopActionException(
+							"Skipping old cached version deletion");
+					}
+
+					File oldCachedVersionDir = cachedVersionDirs[0];
+
+					if (cachedVersionDir.equals(oldCachedVersionDir)) {
+						oldCachedVersionDir = cachedVersionDirs[1];
+					}
+
+					Project project = task.getProject();
+
+					boolean deleted = project.delete(oldCachedVersionDir);
+
+					if (!deleted && _logger.isWarnEnabled()) {
+						_logger.warn(
+							"Unable to delete old cached version in " +
+								oldCachedVersionDir);
+					}
+				}
+
+			});
+
+		task.doLast(
+			new Action<Task>() {
+
+				@Override
+				public void execute(Task task) {
+					Project project = task.getProject();
+
+					project.exec(
+						new Action<ExecSpec>() {
+
+							@Override
+							public void execute(ExecSpec execSpec) {
+								execSpec.setCommandLine("git", "add", ".");
+
+								File cachedVersionDir =
+									installCacheTask.getCacheDestinationDir();
+
+								execSpec.setWorkingDir(
+									cachedVersionDir.getParentFile());
+							}
+
+						});
+				}
+
+			});
+
+		task.doLast(
+			new Action<Task>() {
+
+				@Override
+				public void execute(Task task) {
+					Project project = task.getProject();
+
+					final String commitSubject = getGitResult(
+						project, "log", "-1", "--pretty=%s");
+
+					project.exec(
+						new Action<ExecSpec>() {
+
+							@Override
+							public void execute(ExecSpec execSpec) {
+								String message = _CACHE_COMMIT_MESSAGE;
+
+								int index = commitSubject.indexOf(' ');
+
+								if (index != -1) {
+									message =
+										commitSubject.substring(0, index + 1) +
+											_CACHE_COMMIT_MESSAGE;
+								}
+
+								execSpec.setCommandLine(
+									"git", "commit", "-m", message);
+							}
+
+						});
+				}
+
+			});
+
+		task.setDescription(
+			"Installs and commits the project to the local Gradle cache for " +
+				"testing.");
+		task.setGroup(BasePlugin.UPLOAD_GROUP);
+
+		return task;
+	}
+
 	protected Copy addTaskCopyLibs(Project project) {
 		Copy copy = GradleUtil.addTask(
 			project, COPY_LIBS_TASK_NAME, Copy.class);
@@ -408,6 +523,23 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 			BasePlugin.CLEAN_TASK_NAME +
 				StringUtil.capitalize(installCacheTask.getName()),
 			MavenPlugin.INSTALL_TASK_NAME);
+
+		installCacheTask.doFirst(
+			new Action<Task>() {
+
+				@Override
+				public void execute(Task task) {
+					String result = getGitResult(
+						task.getProject(), "status", "--porcelain", ".");
+
+					if (Validator.isNotNull(result)) {
+						throw new GradleException(
+							"Unable to install project to the local Gradle " +
+								"cache, commit changes first");
+					}
+				}
+
+			});
 
 		installCacheTask.setArtifactGroup(
 			new Callable<Object>() {
@@ -533,40 +665,81 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 		task.doLast(
 			new Action<Task>() {
 
-				private String _getGitCommitCommand(
-					String message, boolean ignored) {
+				@Override
+				public void execute(Task task) {
+					List<String> commands = new ArrayList<>();
 
-					return _getGitCommitCommand(message, false, ignored);
+					boolean gradleDaemon = _getGradleDaemon(task);
+					String gradleRelativePath = _relativize(_getGradlewFile());
+
+					// Move to the root directory
+
+					commands.add(
+						"cd " + FileUtil.getAbsolutePath(project.getRootDir()));
+
+					// Publish if the artifact has never been published
+
+					if (!hasBaseline(project)) {
+						commands.addAll(
+							_getPublishCommands(
+								gradleRelativePath, gradleDaemon, true));
+					}
+
+					// Change log
+
+					commands.add(
+						_getGradleCommand(
+							gradleRelativePath, buildChangeLogTask,
+							gradleDaemon));
+
+					commands.add(
+						"git add " +
+							_relativize(buildChangeLogTask.getChangeLogFile()));
+
+					commands.add(
+						_getGitCommitCommand("change log", false, true, true));
+
+					// Baseline
+
+					commands.add(
+						_getGradleCommand(
+							gradleRelativePath, BASELINE_TASK_NAME,
+							gradleDaemon));
+
+					commands.add(
+						"git add --all " +
+							_relativize(project.getProjectDir()));
+
+					commands.add(
+						_getGitCommitCommand(
+							"packageinfo", false, false, true));
+
+					// Publish the artifact since there will either be change
+					// log or baseline changes
+
+					commands.addAll(
+						_getPublishCommands(
+							gradleRelativePath, gradleDaemon, false));
+
+					System.out.println();
+
+					for (String command : commands) {
+						System.out.print(" && ");
+						System.out.print(command);
+					}
+
+					if (GradleUtil.getProperty(project, "first", false)) {
+						throw new GradleException();
+					}
 				}
 
-				private String _getGradleCommand(
-					String gradleRelativePath, String command,
-					boolean gradleDaemon, String ... arguments) {
+				private String _getGitCommitCommand(
+					String message, boolean all, boolean ignored,
+					boolean quiet) {
 
 					StringBuilder sb = new StringBuilder();
 
-					sb.append(gradleRelativePath);
-					sb.append(' ');
-					sb.append(command);
-
-					if (gradleDaemon) {
-						sb.append(" --daemon");
-					}
-
-					for (String argument : arguments) {
-						sb.append(' ');
-						sb.append(argument);
-					}
-
-					return sb.toString();
-				}
-
-				private String _getGitCommitCommand(
-					String message, boolean all, boolean ignored) {
-
-					StringBuilder sb = new StringBuilder();
-
-					if (all) {
+					if (all || quiet) {
 						sb.append("(git diff-index --quiet HEAD || ");
 					}
 
@@ -591,8 +764,40 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 
 					sb.append('"');
 
-					if (all) {
+					if (all || quiet) {
 						sb.append(')');
+					}
+
+					return sb.toString();
+				}
+
+				private String _getGradleCommand(
+					String gradleRelativePath, String taskName,
+					boolean gradleDaemon, String ... arguments) {
+
+					Task task = GradleUtil.getTask(project, taskName);
+
+					return _getGradleCommand(
+						gradleRelativePath, task, gradleDaemon, arguments);
+				}
+
+				private String _getGradleCommand(
+					String gradleRelativePath, Task task, boolean gradleDaemon,
+					String ... arguments) {
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.append(gradleRelativePath);
+					sb.append(' ');
+					sb.append(task.getPath());
+
+					if (gradleDaemon) {
+						sb.append(" --daemon");
+					}
+
+					for (String argument : arguments) {
+						sb.append(' ');
+						sb.append(argument);
 					}
 
 					return sb.toString();
@@ -611,16 +816,14 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 					return gradleDaemon;
 				}
 
-				private String _getGradleRelativePath() {
+				private File _getGradlewFile() {
 					File rootDir = portalRootDir;
 
 					if (portalRootDir == null) {
 						rootDir = project.getRootDir();
 					}
 
-					File gradlewFile = new File(rootDir, "gradlew");
-
-					return project.relativePath(gradlewFile);
+					return new File(rootDir, "gradlew");
 				}
 
 				private List<String> _getPublishCommands(
@@ -657,7 +860,7 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 
 					// Commit "prep next"
 
-					commands.add("git add " + project.relativePath("bnd.bnd"));
+					commands.add("git add " + _relativize("bnd.bnd"));
 
 					File moduleConfigFile = getModuleConfigFile(project);
 
@@ -665,92 +868,40 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 						moduleConfigFile.exists()) {
 
 						commands.add(
-							"git add " +
-								project.relativePath(moduleConfigFile));
+							"git add " + _relativize(moduleConfigFile));
 					}
 
-					commands.add(_getGitCommitCommand("prep next", true));
+					commands.add(
+						_getGitCommitCommand("prep next", false, true, false));
 
 					// Commit "artifact properties"
 
 					commands.add(
 						"git add " +
-							project.relativePath(
-								recordArtifactTask.getOutputFile()));
+							_relativize(recordArtifactTask.getOutputFile()));
 
 					commands.add(
-						_getGitCommitCommand("artifact properties", true));
+						_getGitCommitCommand(
+							"artifact properties", false, true, false));
 
 					// Commit other changed files
 
-					commands.add(_getGitCommitCommand("apply", true, false));
+					commands.add(
+						_getGitCommitCommand("apply", true, false, true));
 
 					return commands;
 				}
 
-				@Override
-				public void execute(Task task) {
-					List<String> commands = new ArrayList<>();
+				private String _relativize(File file) {
+					Project rootProject = project.getRootProject();
 
-					boolean gradleDaemon = _getGradleDaemon(task);
-					String gradleRelativePath = _getGradleRelativePath();
+					return rootProject.relativePath(file);
+				}
 
-					commands.add(
-						"cd " +
-							FileUtil.getAbsolutePath(project.getProjectDir()));
+				private String _relativize(String fileName) {
+					File file = project.file(fileName);
 
-					// Publish if the artifact has never been published
-
-					if (!hasBaseline(project)) {
-						commands.addAll(
-							_getPublishCommands(
-								gradleRelativePath, gradleDaemon, true));
-					}
-
-					// Change log
-
-					commands.add(
-						_getGradleCommand(
-							gradleRelativePath, buildChangeLogTask.getName(),
-							gradleDaemon));
-
-					commands.add(
-						"git add " +
-							project.relativePath(
-								buildChangeLogTask.getChangeLogFile()));
-
-					commands.add(
-						_getGitCommitCommand("change log", true, true));
-
-					// Baseline
-
-					commands.add(
-						_getGradleCommand(
-							gradleRelativePath, BASELINE_TASK_NAME,
-							gradleDaemon));
-
-					commands.add("git add --all .");
-
-					commands.add(
-						_getGitCommitCommand("packageinfo", true, false));
-
-					// Publish the artifact since there will either be change
-					// log or baseline changes
-
-					commands.addAll(
-						_getPublishCommands(
-							gradleRelativePath, gradleDaemon, false));
-
-					System.out.println();
-
-					for (String command : commands) {
-						System.out.print(" && ");
-						System.out.print(command);
-					}
-
-					if (GradleUtil.getProperty(project, "first", false)) {
-						throw new GradleException();
-					}
+					return _relativize(file);
 				}
 
 			});
@@ -812,7 +963,8 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 
 				@Override
 				public String call() throws Exception {
-					return getGitHead(writePropertiesTask.getProject());
+					return getGitResult(
+						writePropertiesTask.getProject(), "rev-parse", "HEAD");
 				}
 
 			});
@@ -1034,7 +1186,7 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 
 					if (!projectPath.startsWith(":apps:") &&
 						!projectPath.startsWith(":core:") &&
-						!projectPath.startsWith(":ee:") &&
+						!projectPath.startsWith(":private:") &&
 						!FileUtil.exists(
 							project.getRootProject(), ".gitrepo")) {
 
@@ -1257,7 +1409,7 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 		String projectPath = project.getPath();
 
 		if (!projectPath.startsWith(":apps:") &&
-			!projectPath.startsWith(":ee:") &&
+			!projectPath.startsWith(":private:") &&
 			!FileUtil.exists(project.getRootProject(), ".gitrepo")) {
 
 			return;
@@ -1398,7 +1550,7 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 
 		if (projectPath.startsWith(":apps:") ||
 			projectPath.startsWith(":core:") ||
-			projectPath.startsWith(":ee:") ||
+			projectPath.startsWith(":private:") ||
 			FileUtil.exists(project.getRootProject(), ".gitrepo")) {
 
 			configureConfigurationTransitive(
@@ -1476,7 +1628,9 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 				project, portalConfiguration, portalTestConfiguration);
 		}
 
-		addTaskInstallCache(project);
+		InstallCacheTask installCacheTask = addTaskInstallCache(project);
+
+		addTaskCommitCache(project, installCacheTask);
 
 		final Jar jarJavadocTask = addTaskJarJavadoc(project);
 		final Jar jarSourcesTask = addTaskJarSources(project, testProject);
@@ -2484,7 +2638,7 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 		return (Map<String, String>)bundleExtension.getInstructions();
 	}
 
-	protected String getGitHead(Project project) {
+	protected String getGitResult(Project project, final Object ... args) {
 		final ByteArrayOutputStream byteArrayOutputStream =
 			new ByteArrayOutputStream();
 
@@ -2493,15 +2647,16 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 
 				@Override
 				public void execute(ExecSpec execSpec) {
-					execSpec.commandLine("git", "rev-parse", "HEAD");
+					execSpec.args(args);
+					execSpec.setExecutable("git");
 					execSpec.setStandardOutput(byteArrayOutputStream);
 				}
 
 			});
 
-		String gitHead = byteArrayOutputStream.toString();
+		String result = byteArrayOutputStream.toString();
 
-		return gitHead.trim();
+		return result.trim();
 	}
 
 	protected File getLibDir(Project project) {
@@ -2738,6 +2893,8 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 	}
 
 	private static final String _APP_BND_FILE_NAME = "app.bnd";
+
+	private static final String _CACHE_COMMIT_MESSAGE = "FAKE GRADLE CACHE";
 
 	private static final String _GROUP = "com.liferay";
 

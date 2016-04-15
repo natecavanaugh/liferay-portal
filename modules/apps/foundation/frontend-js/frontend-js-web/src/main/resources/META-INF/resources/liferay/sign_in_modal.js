@@ -47,7 +47,11 @@ AUI.add(
 							if (formNode) {
 								var form = Liferay.Form.get(formNode.attr('id'));
 
-								instance._formValidator = form.formValidator;
+								instance._formValidator = '';
+
+								if (form) {
+									instance._formValidator = form.formValidator;
+								}
 
 								instance._hasSignInForm = formNode.hasClass('sign-in-form');
 							}

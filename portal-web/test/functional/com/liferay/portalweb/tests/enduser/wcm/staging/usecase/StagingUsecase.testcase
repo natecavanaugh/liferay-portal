@@ -875,6 +875,8 @@
 	</command>
 
 	<command name="StagingDemoDocumentsAndMedia" priority="3">
+		<property name="custom.properties" value="default.layout.template.id=1_column" />
+
 		<execute macro="ProductMenu#gotoControlPanelConfiguration">
 			<var name="portlet" value="Server Administration" />
 		</execute>
@@ -892,6 +894,10 @@
 		<execute macro="Portlet#addPG">
 			<var name="portletName" value="Documents and Media" />
 		</execute>
+
+		<execute macro="DMPortlet#setDescriptiveView" />
+
+		<execute macro="DMDocument#enableActionsMenuOnPortlet" />
 
 		<execute macro="Navigator#gotoSitePage">
 			<var name="pageName" value="Staging Test Page" />
@@ -914,9 +920,10 @@
 			<var name="metadataSetName" value="DM Metadata Set Name" />
 		</execute>
 
-		<execute macro="Navigator#gotoSitePage">
-			<var name="pageName" value="Staging Test Page" />
-			<var name="siteName" value="Site Name" />
+		<execute macro="DMMetadataSet#save" />
+
+		<execute macro="ProductMenu#gotoSitesContent">
+			<var name="portlet" value="Documents and Media" />
 		</execute>
 
 		<execute macro="ProductMenu#gotoSitesContent">
@@ -2303,9 +2310,9 @@
 			<var name="siteName" value="Community Site Name" />
 		</execute>
 
-		<var name="key_portletName" value="Web Content Display" />
-
-		<execute function="AssertTextNotEquals" locator1="BasePortlet#TITLE" value1="Web Content Display" />
+		<execute function="AssertElementNotPresent" locator1="BasePortlet#TITLE">
+			<var name="key_portletName" value="Web Content Display" />
+		</execute>
 
 		<execute macro="User#logoutAndLoginPG">
 			<var name="userLoginEmailAddress" value="contentcreator@liferay.com" />
@@ -2890,7 +2897,7 @@
 		<execute macro="WebContentNavigator#gotoAddCP" />
 
 		<execute macro="WebContent#addCP">
-			<var name="webContentContent" value="Web Content Contnet" />
+			<var name="webContentContent" value="Web Content Content" />
 			<var name="webContentTitle" value="Web Content Title" />
 		</execute>
 
@@ -2904,13 +2911,10 @@
 			<var name="siteName" value="Site Name" />
 		</execute>
 
+		<execute macro="Navigator#gotoStagedView" />
+
 		<execute macro="ProductMenu#gotoSitesContent">
 			<var name="portlet" value="Web Content" />
-		</execute>
-
-		<execute macro="Navigator#gotoStagedSitePage">
-			<var name="pageName" value="Staging Test Page" />
-			<var name="siteName" value="Site Name" />
 		</execute>
 
 		<execute macro="Staging#viewPublishContentCountViaPortletStagingCP">
