@@ -433,7 +433,7 @@
 	<command name="gotoChildPagePG">
 		<var name="key_pageName" value="${pageName}" />
 
-		<execute function="MouseOver#mouseOverClickNavigation" locator1="Home#PAGE" />
+		<execute function="MouseOver" locator1="Home#PAGE" />
 
 		<var name="key_childPageName" value="${childPageName}" />
 

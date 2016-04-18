@@ -4,8 +4,10 @@ buildscript {
 	}
 
 	repositories {
+		mavenLocal()
+
 		maven {
-			url "https://cdn.repository.liferay.com/nexus/content/groups/public/"
+			url "http://cdn.repository.liferay.com/nexus/content/groups/public"
 		}
 	}
 }
@@ -20,7 +22,9 @@ dependencies {
 }
 
 repositories {
+	mavenLocal()
+
 	maven {
-		url "https://cdn.repository.liferay.com/nexus/content/groups/public/"
+		url "http://cdn.repository.liferay.com/nexus/content/groups/public"
 	}
 }
