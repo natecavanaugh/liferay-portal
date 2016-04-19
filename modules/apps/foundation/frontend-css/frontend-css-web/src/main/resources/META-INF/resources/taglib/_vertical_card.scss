@@ -4,9 +4,16 @@
 	width: 32px;
 }
 
-.lfr-card-actions-column .dropdown-toggle {
-	margin-left: 8px;
-	margin-top: -5px;
+.lfr-card-actions-column {
+	.card-row-layout-fixed .dropdown-toggle {
+		margin-left: 8px;
+		margin-right: 0;
+	}
+
+	.dropdown-toggle {
+		margin-right: -8px;
+		margin-top: -5px;
+	}
 }
 
 .lfr-card-modified-by-text,
