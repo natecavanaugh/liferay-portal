@@ -437,8 +437,6 @@ AUI.add(
 					_createContactList: function(config) {
 						var instance = this;
 
-						var contactsResultContainer = config.contactsResultContainer;
-
 						var contactsResult = config.contactsResult;
 						var contactsResultURL = config.contactsResultURL;
 						var contactsSearchInput = config.contactsSearchInput;
