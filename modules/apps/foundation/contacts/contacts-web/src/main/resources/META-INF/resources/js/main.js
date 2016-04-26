@@ -862,9 +862,7 @@ AUI.add(
 					_showButton: function(node) {
 						node.show();
 
-						if (node.hasClass('hidden')) {
-							node.removeClass('hidden');
-						}
+						node.removeClass('hidden');
 					},
 
 					_updateContactsResult: function(event) {
