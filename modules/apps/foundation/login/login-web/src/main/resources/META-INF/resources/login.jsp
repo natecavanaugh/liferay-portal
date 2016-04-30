@@ -172,11 +172,11 @@
 				%>
 
 				<c:if test="<%= showForgotPasswordIcon %>">
-					<portlet:renderURL var="forgotPasswordURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
+					<portlet:renderURL var="forgotPasswordURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 						<portlet:param name="mvcRenderCommandName" value="/login/forgot_password" />
 					</portlet:renderURL>
 
-					<aui:a cssClass="pull-right" href="<%= forgotPasswordURL %>" label="forgot-password">?</aui:a>
+					<aui:a cssClass="pull-right" href="javascript:;" label="forgot-password" onClick='<%= renderResponse.getNamespace() + "showPopup('" + forgotPasswordURL + "', 'forgot-password');" %>'>?</aui:a>
 				</c:if>
 			</aui:fieldset>
 
@@ -199,11 +199,29 @@
 
 				<liferay-ui:message key="new-to-this-site" />
 
-				<aui:a href="<%= PortalUtil.getCreateAccountURL(request, themeDisplay) %>" label="create-account" />
+				<portlet:renderURL var="createAccountURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="mvcRenderCommandName" value="/login/create_account" />
+				</portlet:renderURL>
+
+				<aui:a href="javascript:;" label="create-account" onClick='<%= renderResponse.getNamespace() + "showPopup('" + createAccountURL + "', 'create-account');" %>' />
 			</c:if>
 		</aui:form>
 
 		<aui:script sandbox="<%= true %>">
+			window.<portlet:namespace />showPopup = function(url, title) {
+				Liferay.Util.openWindow(
+					{
+						dialog: {
+							centered: true,
+							destroyOnHide: true,
+							visible: false
+						},
+						title: Liferay.Language.get(title),
+						uri: url
+					}
+				);
+			};
+
 			var form = AUI.$(document.<portlet:namespace /><%= formName %>);
 
 			form.on(

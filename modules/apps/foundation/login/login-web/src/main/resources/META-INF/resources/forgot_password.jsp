@@ -30,6 +30,8 @@ if (reminderAttempts == null) {
 }
 
 portletDisplay.setShowBackIcon(false);
+
+String buttonLabel = StringPool.BLANK;
 %>
 
 <portlet:actionURL name="/login/forgot_password" var="forgotPasswordURL">
@@ -82,6 +84,8 @@ portletDisplay.setShowBackIcon(false);
 				}
 
 				String loginValue = ParamUtil.getString(request, loginParameter);
+
+				buttonLabel = PropsValues.USERS_REMINDER_QUERIES_ENABLED ? "next" : "send-new-password";
 				%>
 
 				<aui:input name="step" type="hidden" value="1" />
@@ -103,10 +107,6 @@ portletDisplay.setShowBackIcon(false);
 
 					<liferay-ui:captcha url="<%= captchaURL %>" />
 				</c:if>
-
-				<aui:button-row>
-					<aui:button cssClass="btn-lg" type="submit" value='<%= PropsValues.USERS_REMINDER_QUERIES_ENABLED ? "next" : "send-new-password" %>' />
-				</aui:button-row>
 			</c:when>
 			<c:when test="<%= (user2 != null) && Validator.isNotNull(user2.getEmailAddress()) %>">
 				<aui:input name="step" type="hidden" value="2" />
@@ -154,9 +154,9 @@ portletDisplay.setShowBackIcon(false);
 							<liferay-ui:captcha url="<%= captchaURL %>" />
 						</c:if>
 
-						<aui:button-row>
-							<aui:button cssClass="btn-lg" type="submit" value='<%= company.isSendPasswordResetLink() ? "send-password-reset-link" : "send-new-password" %>' />
-						</aui:button-row>
+						<%
+						buttonLabel = company.isSendPasswordResetLink() ? "send-password-reset-link" : "send-new-password";
+						%>
 					</c:otherwise>
 				</c:choose>
 			</c:when>
@@ -168,3 +168,36 @@ portletDisplay.setShowBackIcon(false);
 		</c:choose>
 	</aui:fieldset>
 </aui:form>
+
+<aui:script>
+	var dialog = Liferay.Util.getWindow();
+
+	dialog.addToolbar(
+		[
+			<c:if test="<%= Validator.isNotNull(buttonLabel) %>">
+			{
+				cssClass: 'btn-lg btn-primary',
+				label: '<%= LanguageUtil.get(request, buttonLabel) %>',
+				on: {
+					click: function() {
+						submitForm(document.<portlet:namespace />fm);
+					}
+				}
+			},
+			</c:if>
+			{
+				cssClass: 'btn-lg btn-link close-modal',
+				label: Liferay.Language.get('cancel'),
+				on: {
+					click: function() {
+						dialog.hide();
+					}
+				}
+			}
+		]
+	);
+
+	dialog.set('height', 450);
+	dialog.set('width', 560);
+	dialog.show();
+</aui:script>
