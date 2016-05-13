@@ -157,6 +157,7 @@ String buttonLabel = StringPool.BLANK;
 						<%
 						buttonLabel = company.isSendPasswordResetLink() ? "send-password-reset-link" : "send-new-password";
 						%>
+
 					</c:otherwise>
 				</c:choose>
 			</c:when>
