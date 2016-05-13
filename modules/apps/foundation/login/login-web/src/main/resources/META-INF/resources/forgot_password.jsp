@@ -28,13 +28,17 @@ Integer reminderAttempts = (Integer)portletSession.getAttribute(WebKeys.FORGOT_P
 if (reminderAttempts == null) {
 	reminderAttempts = 0;
 }
+
+portletDisplay.setShowBackIcon(false);
+
+String buttonLabel = StringPool.BLANK;
 %>
 
 <portlet:actionURL name="/login/forgot_password" var="forgotPasswordURL">
 	<portlet:param name="mvcRenderCommandName" value="/login/forgot_password" />
 </portlet:actionURL>
 
-<aui:form action="<%= forgotPasswordURL %>" method="post" name="fm">
+<aui:form action="<%= forgotPasswordURL %>" cssClass="container-fluid-1280" method="post" name="fm">
 	<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
 
 	<liferay-ui:error exception="<%= CaptchaConfigurationException.class %>" message="a-captcha-error-occurred-please-contact-an-administrator" />
@@ -80,6 +84,8 @@ if (reminderAttempts == null) {
 				}
 
 				String loginValue = ParamUtil.getString(request, loginParameter);
+
+				buttonLabel = PropsValues.USERS_REMINDER_QUERIES_ENABLED ? "next" : "send-new-password";
 				%>
 
 				<aui:input name="step" type="hidden" value="1" />
@@ -101,10 +107,6 @@ if (reminderAttempts == null) {
 
 					<liferay-ui:captcha url="<%= captchaURL %>" />
 				</c:if>
-
-				<aui:button-row>
-					<aui:button cssClass="btn-lg" type="submit" value='<%= PropsValues.USERS_REMINDER_QUERIES_ENABLED ? "next" : "send-new-password" %>' />
-				</aui:button-row>
 			</c:when>
 			<c:when test="<%= (user2 != null) && Validator.isNotNull(user2.getEmailAddress()) %>">
 				<aui:input name="step" type="hidden" value="2" />
@@ -152,9 +154,10 @@ if (reminderAttempts == null) {
 							<liferay-ui:captcha url="<%= captchaURL %>" />
 						</c:if>
 
-						<aui:button-row>
-							<aui:button cssClass="btn-lg" type="submit" value='<%= company.isSendPasswordResetLink() ? "send-password-reset-link" : "send-new-password" %>' />
-						</aui:button-row>
+						<%
+						buttonLabel = company.isSendPasswordResetLink() ? "send-password-reset-link" : "send-new-password";
+						%>
+
 					</c:otherwise>
 				</c:choose>
 			</c:when>
@@ -167,4 +170,64 @@ if (reminderAttempts == null) {
 	</aui:fieldset>
 </aui:form>
 
-<liferay-util:include page="/navigation.jsp" servletContext="<%= application %>" />
+<aui:script>
+	var dialog = Liferay.Util.getWindow();
+
+	dialog.addToolbar(
+		[
+			<c:if test="<%= Validator.isNotNull(buttonLabel) %>">
+			{
+				cssClass: 'btn-lg btn-primary',
+				label: '<%= LanguageUtil.get(request, buttonLabel) %>',
+				on: {
+					click: function(event) {
+						var form = AUI.$(document.<portlet:namespace />fm);
+
+						var formValidator = Liferay.Form.get('<portlet:namespace />fm').formValidator;
+
+						formValidator.validate();
+
+						if (!formValidator.hasErrors()) {
+							form.ajaxSubmit(
+								{
+									success: function(responseData) {
+										document.open();
+										document.write(responseData);
+										document.close();
+
+										var alert = $(responseData).find('.lfr-alert-container');
+
+										var alertSuccess = alert.find('.alert-success');
+
+										if (alertSuccess.length) {
+											dialog.fire(
+												'closeWindow',
+												{
+													alert: alert
+												}
+											);
+										}
+									}
+								}
+							);
+						}
+					}
+				}
+			},
+			</c:if>
+			{
+				cssClass: 'btn-lg btn-link close-modal',
+				label: Liferay.Language.get('cancel'),
+				on: {
+					click: function() {
+						dialog.hide();
+					}
+				}
+			}
+		]
+	);
+
+	dialog.set('height', 450);
+	dialog.set('width', 560);
+	dialog.show();
+</aui:script>

@@ -32,6 +32,7 @@
 		<liferay-ui:message arguments="<%= signedInAs %>" key="you-are-signed-in-as-x" translateArguments="<%= false %>" />
 	</c:when>
 	<c:otherwise>
+		<liferay-util:include page="/navigation.jsp" servletContext="<%= application %>" />
 
 		<%
 		String formName = "loginForm";
@@ -49,6 +50,8 @@
 		if (Validator.isNull(authType)) {
 			authType = company.getAuthType();
 		}
+
+		portletDisplay.setShowBackIcon(false);
 		%>
 
 		<portlet:actionURL name="/login/login" secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="loginURL">
@@ -60,52 +63,51 @@
 			<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 			<aui:input name="doActionAfterLogin" type="hidden" value="<%= portletName.equals(PortletKeys.FAST_LOGIN) ? true : false %>" />
 
-			<div class="inline-alert-container lfr-alert-container"></div>
+			<div class="inline-alert-container lfr-alert-container">
+				<c:choose>
+					<c:when test='<%= SessionMessages.contains(request, "passwordSent") %>'>
+						<div class="alert alert-success">
+							<liferay-ui:message key="your-password-was-sent-to-the-provided-email-address" />
+						</div>
+					</c:when>
+					<c:when test='<%= SessionMessages.contains(request, "userAdded") %>'>
 
-			<c:choose>
-				<c:when test='<%= SessionMessages.contains(request, "passwordSent") %>'>
+						<%
+						String userEmailAddress = (String)SessionMessages.get(request, "userAdded");
+						String userPassword = (String)SessionMessages.get(request, "userAddedPassword");
+						%>
 
-					<div class="alert alert-success">
-						<liferay-ui:message key="your-password-was-sent-to-the-provided-email-address" />
-					</div>
-				</c:when>
-				<c:when test='<%= SessionMessages.contains(request, "userAdded") %>'>
+						<div class="alert alert-success">
+							<c:choose>
+								<c:when test="<%= company.isStrangersVerify() || Validator.isNull(userPassword) %>">
+									<liferay-ui:message key="thank-you-for-creating-an-account" />
 
-					<%
-					String userEmailAddress = (String)SessionMessages.get(request, "userAdded");
-					String userPassword = (String)SessionMessages.get(request, "userAddedPassword");
-					%>
+									<c:if test="<%= company.isStrangersVerify() %>">
+										<liferay-ui:message arguments="<%= userEmailAddress %>" key="your-email-verification-code-was-sent-to-x" translateArguments="<%= false %>" />
+									</c:if>
+								</c:when>
+								<c:otherwise>
+									<liferay-ui:message arguments="<%= userPassword %>" key="thank-you-for-creating-an-account.-your-password-is-x" translateArguments="<%= false %>" />
+								</c:otherwise>
+							</c:choose>
 
-					<div class="alert alert-success">
-						<c:choose>
-							<c:when test="<%= company.isStrangersVerify() || Validator.isNull(userPassword) %>">
-								<liferay-ui:message key="thank-you-for-creating-an-account" />
+							<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_ENABLED) %>">
+								<liferay-ui:message arguments="<%= userEmailAddress %>" key="your-password-was-sent-to-x" translateArguments="<%= false %>" />
+							</c:if>
+						</div>
+					</c:when>
+					<c:when test='<%= SessionMessages.contains(request, "userPending") %>'>
 
-								<c:if test="<%= company.isStrangersVerify() %>">
-									<liferay-ui:message arguments="<%= userEmailAddress %>" key="your-email-verification-code-was-sent-to-x" translateArguments="<%= false %>" />
-								</c:if>
-							</c:when>
-							<c:otherwise>
-								<liferay-ui:message arguments="<%= userPassword %>" key="thank-you-for-creating-an-account.-your-password-is-x" translateArguments="<%= false %>" />
-							</c:otherwise>
-						</c:choose>
+						<%
+						String userEmailAddress = (String)SessionMessages.get(request, "userPending");
+						%>
 
-						<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_ENABLED) %>">
-							<liferay-ui:message arguments="<%= userEmailAddress %>" key="your-password-was-sent-to-x" translateArguments="<%= false %>" />
-						</c:if>
-					</div>
-				</c:when>
-				<c:when test='<%= SessionMessages.contains(request, "userPending") %>'>
-
-					<%
-					String userEmailAddress = (String)SessionMessages.get(request, "userPending");
-					%>
-
-					<div class="alert alert-success">
-						<liferay-ui:message arguments="<%= userEmailAddress %>" key="thank-you-for-creating-an-account.-you-will-be-notified-via-email-at-x-when-your-account-has-been-approved" translateArguments="<%= false %>" />
-					</div>
-				</c:when>
-			</c:choose>
+						<div class="alert alert-success">
+							<liferay-ui:message arguments="<%= userEmailAddress %>" key="thank-you-for-creating-an-account.-you-will-be-notified-via-email-at-x-when-your-account-has-been-approved" translateArguments="<%= false %>" />
+						</div>
+					</c:when>
+				</c:choose>
+			</div>
 
 			<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed" />
 			<liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-log-in-because-the-maximum-number-of-users-has-been-reached" />
@@ -154,18 +156,88 @@
 				<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
 
 				<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">
-					<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
+					<aui:input checked="<%= rememberMe %>" inlineField="<%= true %>" name="rememberMe" type="checkbox" />
+				</c:if>
+
+				<%
+				String mvcRenderCommandName = ParamUtil.getString(request, "mvcRenderCommandName");
+
+				boolean showForgotPasswordIcon = false;
+
+				if (!mvcRenderCommandName.equals("/login/forgot_password") && (company.isSendPassword() || company.isSendPasswordResetLink())) {
+					showForgotPasswordIcon = true;
+				}
+				%>
+
+				<c:if test="<%= showForgotPasswordIcon %>">
+					<portlet:renderURL var="forgotPasswordURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+						<portlet:param name="mvcRenderCommandName" value="/login/forgot_password" />
+					</portlet:renderURL>
+
+					<aui:a cssClass="pull-right" href="javascript:;" label="forgot-password" onClick='<%= renderResponse.getNamespace() + "showPopup('" + forgotPasswordURL + "', 'forgot-password');" %>'>?</aui:a>
 				</c:if>
 			</aui:fieldset>
 
 			<aui:button-row>
 				<aui:button cssClass="btn-lg" type="submit" value="sign-in" />
 			</aui:button-row>
+
+			<%
+			String mvcRenderCommandName = ParamUtil.getString(request, "mvcRenderCommandName");
+
+			boolean showCreateAccountLink = false;
+
+			if (!mvcRenderCommandName.equals("/login/create_account") && company.isStrangers() && !portletName.equals(PortletKeys.FAST_LOGIN)) {
+				showCreateAccountLink = true;
+			}
+			%>
+
+			<c:if test="<%= showCreateAccountLink %>">
+				<div class="separator"><!-- --></div>
+
+				<liferay-ui:message key="new-to-this-site" />
+
+				<portlet:renderURL var="createAccountURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="mvcRenderCommandName" value="/login/create_account" />
+				</portlet:renderURL>
+
+				<aui:a href="javascript:;" label="create-account" onClick='<%= renderResponse.getNamespace() + "showPopup('" + createAccountURL + "', 'create-account');" %>' />
+			</c:if>
 		</aui:form>
 
-		<liferay-util:include page="/navigation.jsp" servletContext="<%= application %>" />
-
 		<aui:script sandbox="<%= true %>">
+			window.<portlet:namespace />showPopup = function(url, title) {
+				Liferay.Util.openWindow(
+					{
+						dialog: {
+							centered: true,
+							destroyOnHide: true,
+							on: {
+								closeWindow: function(event) {
+
+									var alert = $(document).find('.lfr-alert-container');
+
+									alert.replaceWith(event.alert);
+
+									alert.find('.lfr-alert-wrapper').css('height', '58px');
+
+									Liferay.fire(
+										'closeWindow',
+										{
+											id: '<portlet:namespace />popup'
+										}
+									);
+								}
+							},
+							visible: false
+						},
+						id: '<portlet:namespace />popup',
+						title: Liferay.Language.get(title),
+						uri: url
+					}
+				);
+			};
+
 			var form = AUI.$(document.<portlet:namespace /><%= formName %>);
 
 			form.on(
