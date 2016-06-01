@@ -30,63 +30,70 @@ kbArticlePortletInstanceConfiguration = ParameterMapUtil.setParameterMap(KBArtic
 	<portlet:param name="tabs2" value="<%= tabs2 %>" />
 </liferay-portlet:renderURL>
 
-<liferay-ui:tabs
-	names="<%= tabs2Names %>"
-	param="tabs2"
-	url="<%= configurationRenderURL %>"
-/>
-
 <aui:form action="<%= configurationActionURL %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
 	<aui:input name="preferences--resourcePrimKey--" type="hidden" value="<%= kbArticlePortletInstanceConfiguration.resourcePrimKey() %>" />
 
-	<aui:fieldset>
-		<c:choose>
-			<c:when test='<%= tabs2.equals("general") %>'>
-				<div class="form-group kb-field-wrapper">
+	<div class="portlet-configuration-body-content">
+		<liferay-ui:tabs
+			names="<%= tabs2Names %>"
+			param="tabs2"
+			type="tabs nav-tabs-default"
+			url="<%= configurationRenderURL %>"
+		/>
 
-					<%
-					KBArticle kbArticle = KBArticleLocalServiceUtil.fetchLatestKBArticle(kbArticlePortletInstanceConfiguration.resourcePrimKey(), WorkflowConstants.STATUS_APPROVED);
-					%>
+		<div class="container-fluid-1280">
+			<aui:fieldset-group markupView="lexicon">
+				<aui:fieldset>
+					<c:choose>
+						<c:when test='<%= tabs2.equals("general") %>'>
+							<div class="form-group kb-field-wrapper">
 
-					<aui:input label="article" name="configurationKBArticle" type="resource" value="<%= (kbArticle != null) ? kbArticle.getTitle() : StringPool.BLANK %>" />
+								<%
+								KBArticle kbArticle = KBArticleLocalServiceUtil.fetchLatestKBArticle(kbArticlePortletInstanceConfiguration.resourcePrimKey(), WorkflowConstants.STATUS_APPROVED);
+								%>
 
-					<aui:button name="selectKBArticleButton" value="select" />
-				</div>
-			</c:when>
-			<c:when test='<%= tabs2.equals("display-settings") %>'>
-				<aui:input label="enable-description" name="preferences--enableKBArticleDescription--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleDescription() %>" />
+								<aui:input label="article" name="configurationKBArticle" type="resource" value="<%= (kbArticle != null) ? kbArticle.getTitle() : StringPool.BLANK %>" />
 
-				<aui:input label="enable-ratings" name="preferences--enableKBArticleRatings--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleRatings() %>" />
+								<aui:button name="selectKBArticleButton" value="select" />
+							</div>
+						</c:when>
+						<c:when test='<%= tabs2.equals("display-settings") %>'>
+							<aui:input label="enable-description" name="preferences--enableKBArticleDescription--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleDescription() %>" />
 
-				<aui:input label="show-asset-entries" name="preferences--showKBArticleAssetEntries--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.showKBArticleAssetEntries() %>" />
+							<aui:input label="enable-ratings" name="preferences--enableKBArticleRatings--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleRatings() %>" />
 
-				<aui:input label="show-attachments" name="preferences--showKBArticleAttachments--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.showKBArticleAttachments() %>" />
+							<aui:input label="show-asset-entries" name="preferences--showKBArticleAssetEntries--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.showKBArticleAssetEntries() %>" />
 
-				<aui:input label="enable-related-assets" name="preferences--enableKBArticleAssetLinks--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleAssetLinks() %>" />
+							<aui:input label="show-attachments" name="preferences--showKBArticleAttachments--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.showKBArticleAttachments() %>" />
 
-				<aui:input label="enable-view-count-increment" name="preferences--enableKBArticleViewCountIncrement--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleViewCountIncrement() %>" />
+							<aui:input label="enable-related-assets" name="preferences--enableKBArticleAssetLinks--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleAssetLinks() %>" />
 
-				<aui:input label="enable-subscriptions" name="preferences--enableKBArticleSubscriptions--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleSubscriptions() %>" />
+							<aui:input label="enable-view-count-increment" name="preferences--enableKBArticleViewCountIncrement--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleViewCountIncrement() %>" />
 
-				<aui:input label="enable-history" name="preferences--enableKBArticleHistory--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleHistory() %>" />
+							<aui:input label="enable-subscriptions" name="preferences--enableKBArticleSubscriptions--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleSubscriptions() %>" />
 
-				<aui:input label="enable-print" name="preferences--enableKBArticlePrint--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticlePrint() %>" />
+							<aui:input label="enable-history" name="preferences--enableKBArticleHistory--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticleHistory() %>" />
 
-				<liferay-ui:social-bookmarks-settings
-					displayPosition="<%= kbArticlePortletInstanceConfiguration.socialBookmarksDisplayPosition() %>"
-					displayStyle="<%= kbArticlePortletInstanceConfiguration.socialBookmarksDisplayStyle() %>"
-					enabled="<%= kbArticlePortletInstanceConfiguration.enableSocialBookmarks() %>"
-					types="<%= kbArticlePortletInstanceConfiguration.socialBookmarksTypes() %>"
-				/>
-			</c:when>
-		</c:choose>
+							<aui:input label="enable-print" name="preferences--enableKBArticlePrint--" type="checkbox" value="<%= kbArticlePortletInstanceConfiguration.enableKBArticlePrint() %>" />
 
-		<aui:button-row cssClass="kb-submit-buttons">
-			<aui:button type="submit" />
-		</aui:button-row>
-	</aui:fieldset>
+							<liferay-ui:social-bookmarks-settings
+								displayPosition="<%= kbArticlePortletInstanceConfiguration.socialBookmarksDisplayPosition() %>"
+								displayStyle="<%= kbArticlePortletInstanceConfiguration.socialBookmarksDisplayStyle() %>"
+								enabled="<%= kbArticlePortletInstanceConfiguration.enableSocialBookmarks() %>"
+								types="<%= kbArticlePortletInstanceConfiguration.socialBookmarksTypes() %>"
+							/>
+						</c:when>
+					</c:choose>
+				</aui:fieldset>
+			</aui:fieldset-group>
+		</div>
+	</div>
+
+	<aui:button-row cssClass="kb-submit-buttons">
+		<aui:button cssClass="btn-lg" type="submit" />
+	</aui:button-row>
 </aui:form>
 
 <c:if test='<%= tabs2.equals("general") %>'>

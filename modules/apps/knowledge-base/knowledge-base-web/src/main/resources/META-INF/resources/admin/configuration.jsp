@@ -71,6 +71,7 @@ if (PortalUtil.isRSSFeedsEnabled()) {
 		<liferay-ui:tabs
 			names="<%= tabs2Names %>"
 			param="tabs2"
+			type="tabs nav-tabs-default"
 			url="<%= configurationRenderURL %>"
 		/>
 
@@ -82,294 +83,296 @@ if (PortalUtil.isRSSFeedsEnabled()) {
 			<liferay-ui:error key="emailFromAddress" message="please-enter-a-valid-email-address" />
 			<liferay-ui:error key="emailFromName" message="please-enter-a-valid-name" />
 
-			<aui:fieldset>
-				<c:choose>
-					<c:when test='<%= tabs2.equals("email-from") %>'>
-						<aui:input label="name" name="preferences--emailFromName--" value="<%= kbGroupServiceConfiguration.emailFromName() %>" wrapperCssClass="lfr-input-text-container" />
+			<aui:fieldset-group markupView="lexicon">
+				<aui:fieldset>
+					<c:choose>
+						<c:when test='<%= tabs2.equals("email-from") %>'>
+							<aui:input label="name" name="preferences--emailFromName--" value="<%= kbGroupServiceConfiguration.emailFromName() %>" wrapperCssClass="lfr-input-text-container" />
 
-						<aui:input label="address" name="preferences--emailFromAddress--" value="<%= kbGroupServiceConfiguration.emailFromAddress() %>" wrapperCssClass="lfr-input-text-container" />
+							<aui:input label="address" name="preferences--emailFromAddress--" value="<%= kbGroupServiceConfiguration.emailFromAddress() %>" wrapperCssClass="lfr-input-text-container" />
 
-						<div class="definition-of-terms">
-							<h4><liferay-ui:message key="definition-of-terms" /></h4>
+							<div class="definition-of-terms">
+								<h4><liferay-ui:message key="definition-of-terms" /></h4>
 
-							<dl>
-								<dt>
-									[$ARTICLE_USER_ADDRESS$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-email-address-of-the-user-who-added-the-article" />
-								</dd>
-								<dt>
-									[$ARTICLE_USER_NAME$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-user-who-added-the-article" />
-								</dd>
-								<dt>
-									[$CATEGORY_TITLE$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="category.kb" />
-								</dd>
-								<dt>
-									[$COMPANY_ID$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-company-id-associated-with-the-article" />
-								</dd>
-								<dt>
-									[$COMPANY_MX$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-company-mx-associated-with-the-article" />
-								</dd>
-								<dt>
-									[$COMPANY_NAME$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-company-name-associated-with-the-article" />
-								</dd>
-								<dt>
-									[$SITE_NAME$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-site-name-associated-with-the-article" />
-								</dd>
-							</dl>
-						</div>
-					</c:when>
-					<c:when test='<%= tabs2.startsWith("article-") %>'>
-						<c:choose>
-							<c:when test='<%= tabs2.equals("article-added-email") %>'>
-								<aui:input label="enabled" name="preferences--emailKBArticleAddedEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleAddedEnabled() %>" />
-							</c:when>
-							<c:when test='<%= tabs2.equals("article-updated-email") %>'>
-								<aui:input label="enabled" name="preferences--emailKBArticleUpdatedEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleUpdatedEnabled() %>" />
-							</c:when>
-						</c:choose>
+								<dl>
+									<dt>
+										[$ARTICLE_USER_ADDRESS$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-email-address-of-the-user-who-added-the-article" />
+									</dd>
+									<dt>
+										[$ARTICLE_USER_NAME$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-user-who-added-the-article" />
+									</dd>
+									<dt>
+										[$CATEGORY_TITLE$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="category.kb" />
+									</dd>
+									<dt>
+										[$COMPANY_ID$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-company-id-associated-with-the-article" />
+									</dd>
+									<dt>
+										[$COMPANY_MX$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-company-mx-associated-with-the-article" />
+									</dd>
+									<dt>
+										[$COMPANY_NAME$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-company-name-associated-with-the-article" />
+									</dd>
+									<dt>
+										[$SITE_NAME$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-site-name-associated-with-the-article" />
+									</dd>
+								</dl>
+							</div>
+						</c:when>
+						<c:when test='<%= tabs2.startsWith("article-") %>'>
+							<c:choose>
+								<c:when test='<%= tabs2.equals("article-added-email") %>'>
+									<aui:input label="enabled" name="preferences--emailKBArticleAddedEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleAddedEnabled() %>" />
+								</c:when>
+								<c:when test='<%= tabs2.equals("article-updated-email") %>'>
+									<aui:input label="enabled" name="preferences--emailKBArticleUpdatedEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleUpdatedEnabled() %>" />
+								</c:when>
+							</c:choose>
 
-						<c:choose>
-							<c:when test='<%= tabs2.equals("article-added-email") %>'>
-								<aui:input label="subject" name="preferences--emailKBArticleAddedSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleAddedSubject() %>" wrapperCssClass="lfr-input-text-container" />
-							</c:when>
-							<c:when test='<%= tabs2.equals("article-updated-email") %>'>
-								<aui:input label="subject" name="preferences--emailKBArticleUpdatedSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleUpdatedSubject() %>" wrapperCssClass="lfr-input-text-container" />
-							</c:when>
-						</c:choose>
+							<c:choose>
+								<c:when test='<%= tabs2.equals("article-added-email") %>'>
+									<aui:input label="subject" name="preferences--emailKBArticleAddedSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleAddedSubject() %>" wrapperCssClass="lfr-input-text-container" />
+								</c:when>
+								<c:when test='<%= tabs2.equals("article-updated-email") %>'>
+									<aui:input label="subject" name="preferences--emailKBArticleUpdatedSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleUpdatedSubject() %>" wrapperCssClass="lfr-input-text-container" />
+								</c:when>
+							</c:choose>
 
-						<aui:input label="body" name='<%= "preferences--".concat(editorParam).concat("--") %>' type="textarea" value="<%= editorBody %>" wrapperCssClass="lfr-textarea-container" />
+							<aui:input label="body" name='<%= "preferences--".concat(editorParam).concat("--") %>' type="textarea" value="<%= editorBody %>" wrapperCssClass="lfr-textarea-container" />
 
-						<div class="definition-of-terms">
-							<h4><liferay-ui:message key="definition-of-terms" /></h4>
+							<div class="definition-of-terms">
+								<h4><liferay-ui:message key="definition-of-terms" /></h4>
 
-							<dl>
-								<dt>
-									[$ARTICLE_ATTACHMENTS$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-attachments-file-names" />
-								</dd>
-								<dt>
-									[$ARTICLE_CONTENT$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-content" />
-								</dd>
-								<dt>
-									[$ARTICLE_CONTENT_DIFF$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-content-diff" />
-								</dd>
-								<dt>
-									[$ARTICLE_TITLE$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-title" />
-								</dd>
-								<dt>
-									[$ARTICLE_TITLE_DIFF$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-title-diff" />
-								</dd>
-								<dt>
-									[$ARTICLE_URL$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-url" />
-								</dd>
-								<dt>
-									[$ARTICLE_USER_ADDRESS$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-email-address-of-the-user-who-added-the-article" />
-								</dd>
-								<dt>
-									[$ARTICLE_USER_NAME$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-user-who-added-the-article" />
-								</dd>
-								<dt>
-									[$ARTICLE_VERSION$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-version" />
-								</dd>
-								<dt>
-									[$CATEGORY_TITLE$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="category.kb" />
-								</dd>
-								<dt>
-									[$COMPANY_ID$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-company-id-associated-with-the-article" />
-								</dd>
-								<dt>
-									[$COMPANY_MX$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-company-mx-associated-with-the-article" />
-								</dd>
-								<dt>
-									[$COMPANY_NAME$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-company-name-associated-with-the-article" />
-								</dd>
-								<dt>
-									[$FROM_ADDRESS$]
-								</dt>
-								<dd>
-									<%= HtmlUtil.escape(kbGroupServiceConfiguration.emailFromAddress()) %>
-								</dd>
-								<dt>
-									[$FROM_NAME$]
-								</dt>
-								<dd>
-									<%= HtmlUtil.escape(kbGroupServiceConfiguration.emailFromName()) %>
-								</dd>
-								<dt>
-									[$PORTAL_URL$]
-								</dt>
-								<dd>
-									<%= PortalUtil.getPortalURL(themeDisplay) %>
-								</dd>
-								<dt>
-									[$SITE_NAME$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-site-name-associated-with-the-article" />
-								</dd>
-								<dt>
-									[$TO_ADDRESS$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-address-of-the-email-recipient" />
-								</dd>
-								<dt>
-									[$TO_NAME$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-name-of-the-email-recipient" />
-								</dd>
-							</dl>
-						</div>
-					</c:when>
-					<c:when test='<%= tabs2.startsWith("suggestion-") %>'>
-						<c:choose>
-							<c:when test='<%= tabs2.equals("suggestion-in-progress-email") %>'>
-								<aui:input label="enabled" name="preferences--emailKBArticleSuggestionInProgressEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionInProgressEnabled() %>" />
-							</c:when>
-							<c:when test='<%= tabs2.equals("suggestion-received-email") %>'>
-								<aui:input label="enabled" name="preferences--emailKBArticleSuggestionReceivedEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionReceivedEnabled() %>" />
-							</c:when>
-							<c:when test='<%= tabs2.equals("suggestion-resolved-email") %>'>
-								<aui:input label="enabled" name="preferences--emailKBArticleSuggestionResolvedEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionResolvedEnabled() %>" />
-							</c:when>
-						</c:choose>
+								<dl>
+									<dt>
+										[$ARTICLE_ATTACHMENTS$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-attachments-file-names" />
+									</dd>
+									<dt>
+										[$ARTICLE_CONTENT$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-content" />
+									</dd>
+									<dt>
+										[$ARTICLE_CONTENT_DIFF$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-content-diff" />
+									</dd>
+									<dt>
+										[$ARTICLE_TITLE$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-title" />
+									</dd>
+									<dt>
+										[$ARTICLE_TITLE_DIFF$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-title-diff" />
+									</dd>
+									<dt>
+										[$ARTICLE_URL$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-url" />
+									</dd>
+									<dt>
+										[$ARTICLE_USER_ADDRESS$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-email-address-of-the-user-who-added-the-article" />
+									</dd>
+									<dt>
+										[$ARTICLE_USER_NAME$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-user-who-added-the-article" />
+									</dd>
+									<dt>
+										[$ARTICLE_VERSION$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-version" />
+									</dd>
+									<dt>
+										[$CATEGORY_TITLE$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="category.kb" />
+									</dd>
+									<dt>
+										[$COMPANY_ID$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-company-id-associated-with-the-article" />
+									</dd>
+									<dt>
+										[$COMPANY_MX$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-company-mx-associated-with-the-article" />
+									</dd>
+									<dt>
+										[$COMPANY_NAME$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-company-name-associated-with-the-article" />
+									</dd>
+									<dt>
+										[$FROM_ADDRESS$]
+									</dt>
+									<dd>
+										<%= HtmlUtil.escape(kbGroupServiceConfiguration.emailFromAddress()) %>
+									</dd>
+									<dt>
+										[$FROM_NAME$]
+									</dt>
+									<dd>
+										<%= HtmlUtil.escape(kbGroupServiceConfiguration.emailFromName()) %>
+									</dd>
+									<dt>
+										[$PORTAL_URL$]
+									</dt>
+									<dd>
+										<%= PortalUtil.getPortalURL(themeDisplay) %>
+									</dd>
+									<dt>
+										[$SITE_NAME$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-site-name-associated-with-the-article" />
+									</dd>
+									<dt>
+										[$TO_ADDRESS$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-address-of-the-email-recipient" />
+									</dd>
+									<dt>
+										[$TO_NAME$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-name-of-the-email-recipient" />
+									</dd>
+								</dl>
+							</div>
+						</c:when>
+						<c:when test='<%= tabs2.startsWith("suggestion-") %>'>
+							<c:choose>
+								<c:when test='<%= tabs2.equals("suggestion-in-progress-email") %>'>
+									<aui:input label="enabled" name="preferences--emailKBArticleSuggestionInProgressEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionInProgressEnabled() %>" />
+								</c:when>
+								<c:when test='<%= tabs2.equals("suggestion-received-email") %>'>
+									<aui:input label="enabled" name="preferences--emailKBArticleSuggestionReceivedEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionReceivedEnabled() %>" />
+								</c:when>
+								<c:when test='<%= tabs2.equals("suggestion-resolved-email") %>'>
+									<aui:input label="enabled" name="preferences--emailKBArticleSuggestionResolvedEnabled--" type="checkbox" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionResolvedEnabled() %>" />
+								</c:when>
+							</c:choose>
 
-						<c:choose>
-							<c:when test='<%= tabs2.equals("suggestion-in-progress-email") %>'>
-								<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleSuggestionInProgressSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionInProgressSubject() %>" />
-							</c:when>
-							<c:when test='<%= tabs2.equals("suggestion-received-email") %>'>
-								<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleSuggestionReceivedSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionReceivedSubject() %>" />
-							</c:when>
-							<c:when test='<%= tabs2.equals("suggestion-resolved-email") %>'>
-								<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleSuggestionResolvedSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionResolvedSubject() %>" />
-							</c:when>
-						</c:choose>
+							<c:choose>
+								<c:when test='<%= tabs2.equals("suggestion-in-progress-email") %>'>
+									<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleSuggestionInProgressSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionInProgressSubject() %>" />
+								</c:when>
+								<c:when test='<%= tabs2.equals("suggestion-received-email") %>'>
+									<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleSuggestionReceivedSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionReceivedSubject() %>" />
+								</c:when>
+								<c:when test='<%= tabs2.equals("suggestion-resolved-email") %>'>
+									<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleSuggestionResolvedSubject--" value="<%= kbGroupServiceConfiguration.emailKBArticleSuggestionResolvedSubject() %>" />
+								</c:when>
+							</c:choose>
 
-						<aui:input cssClass="lfr-textarea-container" label="body" name='<%= "preferences--".concat(editorParam).concat("--") %>' type="textarea" value="<%= editorBody %>" />
+							<aui:input cssClass="lfr-textarea-container" label="body" name='<%= "preferences--".concat(editorParam).concat("--") %>' type="textarea" value="<%= editorBody %>" />
 
-						<div class="definition-of-terms">
-							<h4><liferay-ui:message key="definition-of-terms" /></h4>
+							<div class="definition-of-terms">
+								<h4><liferay-ui:message key="definition-of-terms" /></h4>
 
-							<dl>
-								<dt>
-									[$ARTICLE_CONTENT$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-content" />
-								</dd>
-								<dt>
-									[$ARTICLE_TITLE$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-title" />
-								</dd>
-								<dt>
-									[$ARTICLE_URL$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-article-url" />
-								</dd>
-								<dt>
-									[$COMMENT_CONTENT$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-comment-content" />
-								</dd>
-								<dt>
-									[$COMMENT_CREATE_DATE$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-comment-create-date" />
-								</dd>
-								<dt>
-									[$TO_ADDRESS$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-address-of-the-email-recipient" />
-								</dd>
-								<dt>
-									[$TO_NAME$]
-								</dt>
-								<dd>
-									<liferay-ui:message key="the-name-of-the-email-recipient" />
-								</dd>
-							</dl>
-						</div>
-					</c:when>
-					<c:when test='<%= tabs2.equals("rss") %>'>
-						<liferay-ui:rss-settings
-							delta="<%= kbGroupServiceConfiguration.rssDelta() %>"
-							displayStyle="<%= kbGroupServiceConfiguration.rssDisplayStyle() %>"
-							enabled="<%= kbGroupServiceConfiguration.enableRSS() %>"
-							feedType="<%= kbGroupServiceConfiguration.rssFeedType() %>"
-						/>
-					</c:when>
-				</c:choose>
-			</aui:fieldset>
+								<dl>
+									<dt>
+										[$ARTICLE_CONTENT$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-content" />
+									</dd>
+									<dt>
+										[$ARTICLE_TITLE$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-title" />
+									</dd>
+									<dt>
+										[$ARTICLE_URL$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-article-url" />
+									</dd>
+									<dt>
+										[$COMMENT_CONTENT$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-comment-content" />
+									</dd>
+									<dt>
+										[$COMMENT_CREATE_DATE$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-comment-create-date" />
+									</dd>
+									<dt>
+										[$TO_ADDRESS$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-address-of-the-email-recipient" />
+									</dd>
+									<dt>
+										[$TO_NAME$]
+									</dt>
+									<dd>
+										<liferay-ui:message key="the-name-of-the-email-recipient" />
+									</dd>
+								</dl>
+							</div>
+						</c:when>
+						<c:when test='<%= tabs2.equals("rss") %>'>
+							<liferay-ui:rss-settings
+								delta="<%= kbGroupServiceConfiguration.rssDelta() %>"
+								displayStyle="<%= kbGroupServiceConfiguration.rssDisplayStyle() %>"
+								enabled="<%= kbGroupServiceConfiguration.enableRSS() %>"
+								feedType="<%= kbGroupServiceConfiguration.rssFeedType() %>"
+							/>
+						</c:when>
+					</c:choose>
+				</aui:fieldset>
+			</aui:fieldset-group>
 		</div>
 	</div>
 
 	<aui:button-row cssClass="kb-submit-buttons">
-		<aui:button type="submit" />
+		<aui:button cssClass="btn-lg" type="submit" />
 	</aui:button-row>
 </aui:form>
