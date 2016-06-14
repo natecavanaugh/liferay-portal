@@ -40,6 +40,7 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 <aui:input name="deleteGroupIds" type="hidden" />
 
 <liferay-ui:search-container
+	cssClass="lfr-search-container-sites"
 	curParam="sitesCur"
 	headerNames="name,roles,null"
 	iteratorURL="<%= currentURLObj %>"
@@ -57,6 +58,7 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 		rowIdProperty="friendlyURL"
 	>
 		<liferay-ui:search-container-column-text
+			cssClass="table-cell-content"
 			name="name"
 			value="<%= HtmlUtil.escape(group.getDescriptiveName(locale)) %>"
 		/>
@@ -67,12 +69,13 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 		%>
 
 		<liferay-ui:search-container-column-text
+			cssClass="table-cell-content"
 			name="roles"
 			value="<%= HtmlUtil.escape(UsersAdminUtil.getUserColumnText(locale, userGroupRoles, UsersAdmin.USER_GROUP_ROLE_TITLE_ACCESSOR, userGroupRolesCount)) %>"
 		/>
 
 		<c:if test="<%= !portletName.equals(myAccountPortletId) && !SiteMembershipPolicyUtil.isMembershipRequired(selUser.getUserId(), group.getGroupId()) && !SiteMembershipPolicyUtil.isMembershipProtected(permissionChecker, selUser.getUserId(), group.getGroupId()) %>">
-			<liferay-ui:search-container-column-text cssClass="list-group-item-field">
+			<liferay-ui:search-container-column-text>
 				<c:if test="<%= group.isManualMembership() %>">
 					<a class="modify-link" data-rowId="<%= group.getGroupId() %>" href="javascript:;"><%= removeGroupIcon %></a>
 				</c:if>
@@ -220,6 +223,7 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 </c:if>
 
 <liferay-ui:search-container
+	cssClass="lfr-search-container-inherited-sites"
 	curParam="inheritedSitesCur"
 	headerNames="name,roles"
 	iteratorURL="<%= currentURLObj %>"
@@ -237,6 +241,7 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 		rowIdProperty="friendlyURL"
 	>
 		<liferay-ui:search-container-column-text
+			cssClass="table-cell-content"
 			name="name"
 			value="<%= HtmlUtil.escape(inheritedSite.getDescriptiveName(locale)) %>"
 		/>
@@ -247,6 +252,7 @@ currentURLObj.setParameter("historyKey", renderResponse.getNamespace() + "sites"
 		%>
 
 		<liferay-ui:search-container-column-text
+			cssClass="table-cell-content"
 			name="roles"
 			value="<%= HtmlUtil.escape(UsersAdminUtil.getUserColumnText(locale, inheritedRoles, Role.TITLE_ACCESSOR, inheritedRolesCount)) %>"
 		/>
