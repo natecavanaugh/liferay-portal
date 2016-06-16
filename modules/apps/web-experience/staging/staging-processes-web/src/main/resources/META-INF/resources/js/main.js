@@ -807,7 +807,7 @@ AUI.add(
 							var timeZoneString = instance.get('timeZone');
 
 							var today = new Date(
-								new Date().toLocaleString(
+								new Date().toUTCString(
 									localeString,
 									{
 										timeZone: timeZoneString
