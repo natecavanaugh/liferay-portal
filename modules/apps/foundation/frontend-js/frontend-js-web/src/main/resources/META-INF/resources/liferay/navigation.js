@@ -407,6 +407,8 @@ AUI.add(
 						}
 					);
 
+					sortable.plug(A.Plugin.DDConstrained);
+
 					sortable.delegate.on(
 						'drag:end',
 						function(event) {
