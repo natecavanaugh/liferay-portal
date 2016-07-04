@@ -167,15 +167,20 @@ renderResponse.setTitle((exportImportConfiguration == null) ? LanguageUtil.get(r
 
 <aui:script>
 	function <portlet:namespace />publishPages() {
-		var form = AUI.$(document.<portlet:namespace />exportPagesFm);
+		var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
+		var dateChecker = exportImport.getDateRangeChecker();
 
-		var allContentSelected = AUI.$('#<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>').val();
+		if (dateChecker.validRange) {
+			var form = AUI.$(document.<portlet:namespace />exportPagesFm);
 
-		if (allContentSelected === 'true') {
-			form.fm('<%= PortletDataHandlerKeys.PORTLET_DATA_CONTROL_DEFAULT %>').val(true);
+			var allContentSelected = AUI.$('#<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>').val();
+
+			if (allContentSelected === 'true') {
+				form.fm('<%= PortletDataHandlerKeys.PORTLET_DATA_CONTROL_DEFAULT %>').val(true);
+			}
+
+			submitForm(form);
 		}
-
-		submitForm(form);
 	}
 
 	Liferay.Util.toggleRadio('<portlet:namespace />allApplications', '<portlet:namespace />showChangeGlobalConfiguration', ['<portlet:namespace />selectApplications']);
@@ -200,7 +205,7 @@ renderResponse.setTitle((exportImportConfiguration == null) ? LanguageUtil.get(r
 		<portlet:param name="privateLayout" value="<%= String.valueOf(privateLayout) %>" />
 	</liferay-portlet:resourceURL>
 
-	new Liferay.ExportImport(
+	var exportImport = new Liferay.ExportImport(
 		{
 			commentsNode: '#<%= PortletDataHandlerKeys.COMMENTS %>',
 			deletionsNode: '#<%= PortletDataHandlerKeys.DELETIONS %>',
@@ -221,4 +226,6 @@ renderResponse.setTitle((exportImportConfiguration == null) ? LanguageUtil.get(r
 			userPreferencesNode: '#<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES_ALL %>'
 		}
 	);
+
+	Liferay.component('<portlet:namespace />ExportImportComponent', exportImport);
 </aui:script>
