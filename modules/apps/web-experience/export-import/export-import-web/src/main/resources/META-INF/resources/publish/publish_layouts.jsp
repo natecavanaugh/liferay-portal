@@ -286,6 +286,9 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 
 			submitForm(form);
 		}
+		else {
+			exportImport.showNotification(dateChecker);
+		}
 	}
 
 	Liferay.Util.toggleRadio('<portlet:namespace />allApplications', '<portlet:namespace />showChangeGlobalConfiguration', ['<portlet:namespace />selectApplications']);

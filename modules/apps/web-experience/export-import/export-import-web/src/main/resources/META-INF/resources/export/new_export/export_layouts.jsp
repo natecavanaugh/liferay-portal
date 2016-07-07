@@ -204,6 +204,9 @@ renderResponse.setTitle(!configuredExport ? LanguageUtil.get(request, "new-custo
 
 				submitForm(form, form.attr('action'), false);
 			}
+			else {
+				exportImport.showNotification(dateChecker);
+			}
 		}
 	);
 </aui:script>

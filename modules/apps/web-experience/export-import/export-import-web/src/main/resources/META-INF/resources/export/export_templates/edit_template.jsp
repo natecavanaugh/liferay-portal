@@ -175,6 +175,9 @@ renderResponse.setTitle((exportImportConfiguration == null) ? LanguageUtil.get(r
 
 				submitForm(form, form.attr('action'), false);
 			}
+			else {
+				exportImport.showNotification(dateChecker);
+			}
 		}
 	);
 </aui:script>

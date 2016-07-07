@@ -181,6 +181,9 @@ renderResponse.setTitle((exportImportConfiguration == null) ? LanguageUtil.get(r
 
 			submitForm(form);
 		}
+		else {
+			exportImport.showNotification();
+		}
 	}
 
 	Liferay.Util.toggleRadio('<portlet:namespace />allApplications', '<portlet:namespace />showChangeGlobalConfiguration', ['<portlet:namespace />selectApplications']);
