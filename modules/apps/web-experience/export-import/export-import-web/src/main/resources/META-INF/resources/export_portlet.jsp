@@ -452,6 +452,9 @@ portletURL.setParameter("portletResource", portletResource);
 						if (dateChecker.validRange) {
 							submitForm(form, form.attr('action'), false);
 						}
+						else {
+							exportImport.showNotification(dateChecker);
+						}
 					}
 				);
 			</aui:script>

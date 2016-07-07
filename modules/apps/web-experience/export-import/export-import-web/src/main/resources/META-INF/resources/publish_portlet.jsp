@@ -538,13 +538,22 @@ portletURL.setParameter("tabs3", "current-and-previous");
 							submitForm(document.<portlet:namespace />fm1);
 						}
 					}
+					else {
+						exportImport.showNotification(dateChecker);
+					}
+				}
 
 				function <portlet:namespace />publishToLive() {
 					var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
 					var dateChecker = exportImport.getDateRangeChecker();
 
-					if (dateChecker.validRange && confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-publish-to-live-and-update-the-existing-portlet-data") %>')) {
-						submitForm(document.<portlet:namespace />fm1);
+					if (dateChecker.validRange) {
+						if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-publish-to-live-and-update-the-existing-portlet-data") %>')) {
+							submitForm(document.<portlet:namespace />fm1);
+						}
+					}
+					else {
+						exportImport.showNotification(dateChecker);
 					}
 				}
 

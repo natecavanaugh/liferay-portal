@@ -326,6 +326,9 @@ renderResponse.setTitle(!configuredPublish ? LanguageUtil.get(request, "new-publ
 
 			submitForm(form);
 		}
+		else {
+			exportImport.showNotification(dateChecker);
+		}
 	}
 
 	Liferay.Util.toggleRadio('<portlet:namespace />allApplications', '<portlet:namespace />showChangeGlobalConfiguration', ['<portlet:namespace />selectApplications']);
