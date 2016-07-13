@@ -4,25 +4,23 @@ AUI.add(
 		var Sortable = A.Sortable;
 
 		var STR_CONT = 'container';
+
 		var STR_ID = 'id';
+
 		var STR_NODES = 'nodes';
 
 		A.mix(
 			Sortable.prototype,
 			{
-				_x: null,
-
 				initializer: function() {
 					var instance = this;
 
-					var del;
-
 					var id = 'sortable-' + A.guid();
 
-					var delConfig = {
+					var delegateConfig = {
 						container: instance.get(STR_CONT),
 						dragConfig: {
-							groups: [ id ]
+							groups: [id]
 						},
 						invalid: instance.get('invalid'),
 						nodes: instance.get(STR_NODES),
@@ -30,14 +28,14 @@ AUI.add(
 					};
 
 					if (instance.get('handles')) {
-						delConfig.handles = instance.get('handles');
+						delegateConfig.handles = instance.get('handles');
 					}
 
-					del = new A.DD.Delegate(delConfig);
+					var delegate = new A.DD.Delegate(delegateConfig);
 
 					instance.set(STR_ID, id);
 
-					del.dd.plug(
+					delegate.dd.plug(
 						A.Plugin.DDProxy,
 						{
 							cloneNode: true,
@@ -45,30 +43,42 @@ AUI.add(
 						}
 					);
 
-					instance.drop =  new A.DD.Drop(
+					instance.drop = new A.DD.Drop(
 						{
-							bubbleTarget: del,
-							groups: del.dd.get('groups'),
+							bubbleTarget: delegate,
+							groups: delegate.dd.get('groups'),
 							node: instance.get(STR_CONT)
 						}
 					);
 
-					instance.drop.on('drop:enter', A.bind(instance._onDropEnter, instance));
+					instance.drop.on('drop:enter', A.bind('_onDropEnter', instance));
 
 					instance._setDragMethod();
 
-					del.on(
+					delegate.on(
 						{
-							'drag:drag': A.bind(instance._dragMethod, instance),
-							'drag:end': A.bind(instance._onDragEnd, instance),
-							'drag:over': A.bind(instance._onDragOver, instance),
-							'drag:start': A.bind(instance._onDragStart, instance)
+							'drag:drag': A.bind('_dragMethod', instance),
+							'drag:end': A.bind('_onDragEnd', instance),
+							'drag:over': A.bind('_onDragOver', instance),
+							'drag:start': A.bind('_onDragStart', instance)
 						}
 					);
 
-					instance.delegate = del;
+					instance.delegate = delegate;
 
 					Sortable.reg(instance, id);
+				},
+
+				_onDragHorizontal: function(event) {
+					var instance = this;
+
+					var pageX = event.pageX;
+
+					var x = instance._x;
+
+					instance._up = pageX < x;
+
+					instance._x = pageX;
 				},
 
 				_setDragMethod: function() {
@@ -81,27 +91,16 @@ AUI.add(
 					var floated = node ? node.getStyle('float') : 'none';
 
 					if (floated === 'left' || floated === 'right') {
-						dragMethod = instance._onDragHorizontal;
+						dragMethod = '_onDragHorizontal';
 					}
 					else {
-						dragMethod = instance._onDrag;
+						dragMethod = '_onDrag';
 					}
 
-					instance._dragMethod = dragMethod;
+					instance._dragMethod = A.bind(dragMethod, instance);
 				},
 
-				_onDragHorizontal: function(e) {
-					var instance = this;
-
-					if (e.pageX < instance._x) {
-						instance._up = true;
-					}
-					else if (e.pageX > instance._x) {
-						instance._up = false;
-					}
-
-					instance._x = e.pageX;
-				}
+				_x: null
 			},
 			true
 		);
