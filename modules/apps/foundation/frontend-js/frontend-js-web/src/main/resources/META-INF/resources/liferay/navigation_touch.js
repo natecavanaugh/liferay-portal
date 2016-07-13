@@ -27,7 +27,16 @@ AUI.add(
 
 					afterMakeSortable.call(instance, sortable);
 
-					sortableDD.plug(A.Plugin.DDConstrained);
+					A.getBody().delegate('touchstart', function(event) {
+						event.preventDefault();
+					}, '.drag-handle');
+
+					sortableDD.plug(
+						A.Plugin.DDConstrained,
+						{
+							constrain: instance._navList
+						}
+					);
 
 					sortableDD.on(
 						['drag:drophit', 'drag:dropmiss'],
