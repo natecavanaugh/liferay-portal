@@ -120,8 +120,7 @@ AUI.add(
 
 						instance._notice = new Liferay.Notice(
 							{
-								animationConfig:
-								{
+								animationConfig: {
 									duration: 2,
 									left: '0px',
 									top: '0px'
@@ -529,14 +528,6 @@ AUI.add(
 						var endDatePicker = Liferay.component(instance.ns('endDateDatePicker'));
 						var endTimePicker = Liferay.component(instance.ns('endTimeTimePicker'));
 
-						var startDate = startDatePicker.getDate();
-						var startTime = startTimePicker.getTime();
-
-						startDate.setHours(startTime.getHours());
-						startDate.setMinutes(startTime.getMinutes());
-						startDate.setSeconds(0);
-						startDate.setMilliseconds(0);
-
 						var endDate = endDatePicker.getDate();
 						var endTime = endTimePicker.getTime();
 
@@ -545,9 +536,17 @@ AUI.add(
 						endDate.setSeconds(0);
 						endDate.setMilliseconds(0);
 
+						var startDate = startDatePicker.getDate();
+						var startTime = startTimePicker.getTime();
+
+						startDate.setHours(startTime.getHours());
+						startDate.setMinutes(startTime.getMinutes());
+						startDate.setSeconds(0);
+						startDate.setMilliseconds(0);
+
 						return {
-							startDate: startDate,
-							endDate: endDate
+							endDate: endDate,
+							startDate: startDate
 						}
 					},
 
@@ -626,6 +625,7 @@ AUI.add(
 
 					_rangeEndsInPast: function(today) {
 						var instance = this;
+
 						var selectedDates = instance._getSelectedDates();
 
 						return ADate.isGreaterOrEqual(today, selectedDates.endDate);
@@ -633,6 +633,7 @@ AUI.add(
 
 					_rangeEndsLater: function() {
 						var instance = this;
+
 						var selectedDates = instance._getSelectedDates();
 
 						return ADate.isGreater(selectedDates.endDate, selectedDates.startDate);
@@ -640,6 +641,7 @@ AUI.add(
 
 					_rangeStartsInPast: function(today) {
 						var instance = this;
+
 						var selectedDates = instance._getSelectedDates();
 
 						return ADate.isGreaterOrEqual(today, selectedDates.startDate);
