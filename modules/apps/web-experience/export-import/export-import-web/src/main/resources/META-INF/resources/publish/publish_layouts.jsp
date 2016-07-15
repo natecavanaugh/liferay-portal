@@ -273,6 +273,7 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 <aui:script>
 	function <portlet:namespace />publishPages() {
 		var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
+
 		var dateChecker = exportImport.getDateRangeChecker();
 
 		if (dateChecker.validRange) {

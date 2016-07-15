@@ -168,6 +168,7 @@ renderResponse.setTitle((exportImportConfiguration == null) ? LanguageUtil.get(r
 <aui:script>
 	function <portlet:namespace />publishPages() {
 		var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
+
 		var dateChecker = exportImport.getDateRangeChecker();
 
 		if (dateChecker.validRange) {

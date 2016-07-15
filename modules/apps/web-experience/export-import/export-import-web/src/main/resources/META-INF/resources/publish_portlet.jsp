@@ -529,30 +529,28 @@ portletURL.setParameter("tabs3", "current-and-previous");
 			<aui:script>
 				function <portlet:namespace />copyFromLive() {
 					var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
+
 					var dateChecker = exportImport.getDateRangeChecker();
 
-					if (dateChecker.validRange) {
-						if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-copy-from-live-and-update-the-existing-staging-portlet-information") %>')) {
-							document.<portlet:namespace />fm1.<portlet:namespace /><%= Constants.CMD %>.value = 'copy_from_live';
+					if (dateChecker.validRange && confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-copy-from-live-and-update-the-existing-staging-portlet-information") %>')) {
+						document.<portlet:namespace />fm1.<portlet:namespace /><%= Constants.CMD %>.value = 'copy_from_live';
 
-							submitForm(document.<portlet:namespace />fm1);
-						}
+						submitForm(document.<portlet:namespace />fm1);
 					}
-					else {
+					else if (!dateChecker.validRange) {
 						exportImport.showNotification(dateChecker);
 					}
 				}
 
 				function <portlet:namespace />publishToLive() {
 					var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
+
 					var dateChecker = exportImport.getDateRangeChecker();
 
-					if (dateChecker.validRange) {
-						if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-publish-to-live-and-update-the-existing-portlet-data") %>')) {
-							submitForm(document.<portlet:namespace />fm1);
-						}
+					if (dateChecker.validRange && confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-publish-to-live-and-update-the-existing-portlet-data") %>')) {
+						submitForm(document.<portlet:namespace />fm1);
 					}
-					else {
+					else if (!dateChecker.validRange) {
 						exportImport.showNotification(dateChecker);
 					}
 				}
