@@ -94,19 +94,19 @@ AUI.add(
 
 					getDateRangeChecker: function() {
 						var instance = this;
+
 						var today = new Date();
 
-						if (instance._isChecked('rangeDateRangeNode')) {
-							return {
-								todayUsed: today,
-								validRange: instance._rangeEndsLater() && instance._rangeEndsInPast(today) && instance._rangeStartsInPast(today)
-							}
-						}
-
-						return {
+						var dateRangeChecker = {
 							todayUsed: today,
 							validRange: true
+						};
+
+						if (instance._isChecked('rangeDateRangeNode')) {
+							dateRangeChecker.validRange = instance._rangeEndsLater() && instance._rangeEndsInPast(today) && instance._rangeStartsInPast(today);
 						}
+
+						return dateRangeChecker;
 					},
 
 					showNotification: function(dateChecker) {
