@@ -188,11 +188,10 @@ renderResponse.setTitle(!configuredExport ? LanguageUtil.get(request, "new-custo
 			event.halt();
 
 			var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
+
 			var dateChecker = exportImport.getDateRangeChecker();
 
 			if (dateChecker.validRange) {
-				var A = AUI();
-
 				var allContentSelected = A.one('#<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>').val();
 
 				if (allContentSelected === 'true') {
