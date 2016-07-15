@@ -547,7 +547,7 @@ AUI.add(
 						return {
 							endDate: endDate,
 							startDate: startDate
-						}
+						};
 					},
 
 					_getValue: function(nodeName) {
