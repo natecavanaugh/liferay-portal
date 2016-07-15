@@ -156,8 +156,7 @@ renderResponse.setTitle((exportImportConfiguration == null) ? LanguageUtil.get(r
 	form.on(
 		'submit',
 		function(event) {
-			event.preventDefault();
-			event.stopPropagation();
+			event.halt();
 
 			var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
 			var dateChecker = exportImport.getDateRangeChecker();

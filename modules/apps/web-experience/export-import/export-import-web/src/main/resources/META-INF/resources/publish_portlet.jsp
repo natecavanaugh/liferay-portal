@@ -130,7 +130,7 @@ portletURL.setParameter("tabs3", "current-and-previous");
 						<portlet:param name="portletResource" value="<%= portletResource %>" />
 					</liferay-portlet:renderURL>
 
-					<aui:form action="<%= publishPortletURL %>" cssClass="lfr-export-dialog" method="post" name="fm1" onSubmit='<%= "event.preventDefault(); event.stopPropagation(); " + renderResponse.getNamespace() + "publishToLive();" %>'>
+					<aui:form action="<%= publishPortletURL %>" cssClass="lfr-export-dialog" method="post" name="fm1" onSubmit='<%= "event.halt(); " + renderResponse.getNamespace() + "publishToLive();" %>'>
 						<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.PUBLISH_TO_LIVE %>" />
 						<aui:input name="redirect" type="hidden" value="<%= redirectURL %>" />
 						<aui:input name="plid" type="hidden" value="<%= plid %>" />
