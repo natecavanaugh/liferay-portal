@@ -130,7 +130,7 @@ portletURL.setParameter("tabs3", "current-and-previous");
 						<portlet:param name="portletResource" value="<%= portletResource %>" />
 					</liferay-portlet:renderURL>
 
-					<aui:form action="<%= publishPortletURL %>" cssClass="lfr-export-dialog" method="post" name="fm1" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "publishToLive();" %>'>
+					<aui:form action="<%= publishPortletURL %>" cssClass="lfr-export-dialog" method="post" name="fm1" onSubmit='<%= "event.preventDefault(); event.stopPropagation(); " + renderResponse.getNamespace() + "publishToLive();" %>'>
 						<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.PUBLISH_TO_LIVE %>" />
 						<aui:input name="redirect" type="hidden" value="<%= redirectURL %>" />
 						<aui:input name="plid" type="hidden" value="<%= plid %>" />
@@ -504,7 +504,7 @@ portletURL.setParameter("tabs3", "current-and-previous");
 					<portlet:param name="portletResource" value="<%= portletResource %>" />
 				</liferay-portlet:resourceURL>
 
-				new Liferay.ExportImport(
+				var exportImport = new Liferay.ExportImport(
 					{
 						commentsNode: '#<%= PortletDataHandlerKeys.COMMENTS %>',
 						deletionsNode: '#<%= PortletDataHandlerKeys.DELETIONS %>',
@@ -522,20 +522,38 @@ portletURL.setParameter("tabs3", "current-and-previous");
 						timeZone: '<%= timeZone.getID() %>'
 					}
 				);
+
+				Liferay.component('<portlet:namespace />ExportImportComponent', exportImport);
 			</aui:script>
 
 			<aui:script>
 				function <portlet:namespace />copyFromLive() {
-					if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-copy-from-live-and-update-the-existing-staging-portlet-information") %>')) {
-						document.<portlet:namespace />fm1.<portlet:namespace /><%= Constants.CMD %>.value = 'copy_from_live';
+					var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
+					var dateChecker = exportImport.getDateRangeChecker();
 
-						submitForm(document.<portlet:namespace />fm1);
+					if (dateChecker.validRange) {
+						if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-copy-from-live-and-update-the-existing-staging-portlet-information") %>')) {
+							document.<portlet:namespace />fm1.<portlet:namespace /><%= Constants.CMD %>.value = 'copy_from_live';
+
+							submitForm(document.<portlet:namespace />fm1);
+						}
+					}
+					else {
+						exportImport.showNotification(dateChecker);
 					}
 				}
 
 				function <portlet:namespace />publishToLive() {
-					if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-publish-to-live-and-update-the-existing-portlet-data") %>')) {
-						submitForm(document.<portlet:namespace />fm1);
+					var exportImport = Liferay.component('<portlet:namespace />ExportImportComponent');
+					var dateChecker = exportImport.getDateRangeChecker();
+
+					if (dateChecker.validRange) {
+						if (confirm('<%= UnicodeLanguageUtil.get(request, "are-you-sure-you-want-to-publish-to-live-and-update-the-existing-portlet-data") %>')) {
+							submitForm(document.<portlet:namespace />fm1);
+						}
+					}
+					else {
+						exportImport.showNotification(dateChecker);
 					}
 				}
 
