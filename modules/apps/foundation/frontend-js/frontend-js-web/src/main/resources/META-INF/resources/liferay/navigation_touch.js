@@ -11,6 +11,8 @@ AUI.add(
 
 		var afterMakeSortable = Liferay.Navigation.prototype._afterMakeSortable;
 
+		var tablet = Util.isTablet();
+
 		A.mix(
 			Liferay.Navigation.prototype,
 			{
@@ -27,7 +29,14 @@ AUI.add(
 
 					afterMakeSortable.call(instance, sortable);
 
-					sortableDD.plug(A.Plugin.DDConstrained);
+					sortableDD.plug(
+						A.Plugin.DDWinScroll,
+						{
+							horizontal: false,
+							scrollDelay: 150,
+							vertical: true
+						}
+					);
 
 					sortableDD.on(
 						['drag:drophit', 'drag:dropmiss'],
@@ -37,6 +46,10 @@ AUI.add(
 					);
 
 					instance._toggleDragConfig(sortableDD);
+
+					A.getBody().delegate('touchstart', function(event) {
+						event.preventDefault();
+					}, SELECTOR_DRAG_HANDLE);
 
 					A.on('windowresize', A.bind('_onWindowResize', instance));
 				},
@@ -65,10 +78,6 @@ AUI.add(
 
 				_toggleDragConfig: function(dd) {
 					var instance = this;
-
-					var tablet = Util.isTablet();
-
-					dd.con.set('stickY', tablet);
 
 					var addHandleString = SELECTOR_DRAG_HANDLE;
 					var removeHandleString = SELECTOR_LFR_NAV_SORTABLE;
