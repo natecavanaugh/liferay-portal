@@ -110,6 +110,10 @@ if (layout != null) {
 		</aui:script>
 	</c:if>
 
+	<aui:script use="liferay-portlet-topper">
+		new Liferay.PortletTopper();
+	</aui:script>
+
 	<aui:script use="event-move,liferay-navigation">
 		var navBlock = A.one(Liferay.Data.NAV_SELECTOR);
 

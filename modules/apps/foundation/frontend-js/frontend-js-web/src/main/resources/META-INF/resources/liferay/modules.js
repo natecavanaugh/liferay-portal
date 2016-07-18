@@ -528,6 +528,13 @@
 							'liferay-node'
 						]
 					},
+					'liferay-portlet-topper': {
+						path: 'portlet_topper.js',
+						requires: [
+							'aui-component',
+							'plugin'
+						]
+					},
 					'liferay-portlet-url': {
 						path: 'portlet_url.js',
 						requires: [

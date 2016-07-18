@@ -70,23 +70,23 @@
 	}
 }
 
-.portlet {
-	&:hover, &.focus {
-		> .portlet-content-editable {
-			@include media-query(sm) {
-				border-color: $portlet-topper-border;
-				border-top-left-radius: 0;
-				border-top-right-radius: 0;
-			}
+.show-portlet-topper {
+	> .portlet-content-editable {
+		@include media-query(sm) {
+			border-color: $portlet-topper-border;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+	}
+
+	> .portlet-topper {
+		@include media-query(sm) {
+			opacity: 1;
+
+			@include transform(translateY(-97%));
 		}
 
-		> .portlet-topper {
-			@include media-query(sm) {
-				opacity: 1;
-
-				@include transform(translateY(-97%));
-			}
-		}
+		z-index: 11;
 	}
 }
 
