@@ -5,18 +5,12 @@ AUI.add(
 
 		var DDM = A.DD.DDM;
 
-		var DRAG_NODE = 'dragNode';
-
-		var NODE = 'node';
-
-		var TRUE = true;
-
 		A.mix(
 			DDM,
 			{
 				_createFrame: function() {
 					if (!DDM._proxy) {
-						DDM._proxy = TRUE;
+						DDM._proxy = true;
 
 						var proxyNode = A.Node.create('<div></div>');
 
@@ -42,9 +36,11 @@ AUI.add(
 
 				_setFrame: function(drag) {
 					var activeHandle;
+
 					var cursor = 'auto';
-					var dragNode = drag.get(DRAG_NODE);
-					var node = drag.get(NODE);
+
+					var dragNode = drag.get('dragNode');
+					var node = drag.get('node');
 
 					activeHandle = DDM.activeDrag.get('activeHandle');
 
@@ -70,10 +66,12 @@ AUI.add(
 					}
 
 					if (drag.proxy.get('resizeFrame')) {
+						var size = node.invoke('getBoundingClientRect');
+
 						dragNode.setStyles(
 							{
-								height: Math.ceil(node.getDOMNode().getBoundingClientRect().height) + 'px',
-								width: Math.ceil(node.getDOMNode().getBoundingClientRect().width) + 'px'
+								height: Math.ceil(size.height),
+								width: Math.ceil(size.width)
 							}
 						);
 					}
