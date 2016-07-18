@@ -407,8 +407,6 @@ AUI.add(
 						}
 					);
 
-					sortable.plug(A.Plugin.DDConstrained);
-
 					sortable.plug(
 						A.Plugin.DDWinScroll,
 						{
@@ -442,7 +440,7 @@ AUI.add(
 					instance._afterMakeSortable(sortable);
 				}
 			},
-			['dd-constrain', 'dd-scroll', 'liferay-sortable'],
+			['dd-scroll', 'liferay-sortable'],
 			true
 		);
 
