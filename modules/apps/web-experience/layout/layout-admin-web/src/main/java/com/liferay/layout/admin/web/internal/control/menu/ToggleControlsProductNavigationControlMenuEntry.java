@@ -90,7 +90,7 @@ public class ToggleControlsProductNavigationControlMenuEntry
 
 	@Override
 	public String getLinkCssClass(HttpServletRequest request) {
-		return "toggle-controls visible-xs";
+		return "icon-monospaced toggle-controls visible-xs";
 	}
 
 	@Override
