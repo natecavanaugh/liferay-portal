@@ -33,10 +33,10 @@
 
 	.drag-handle {
 		cursor: move;
-		left: 3px;
-		margin-left: 15px;
+		margin-top: -16px;
 		position: absolute;
-		top: 15px;
+		right: 5px;
+		top: 50%;
 	}
 }
 
@@ -51,13 +51,13 @@
 }
 
 .touch .modify-pages {
-	.lfr-nav-sortable > a > span {
-		padding-left: 28px;
+	.lfr-nav-sortable > a {
+		padding-right: 42px;
 	}
 
 	@include md {
-		.lfr-nav-sortable > a > span {
-			padding-left: 0;
+		.lfr-nav-sortable > a {
+			padding-right: 15px;
 		}
 
 		.drag-handle {
