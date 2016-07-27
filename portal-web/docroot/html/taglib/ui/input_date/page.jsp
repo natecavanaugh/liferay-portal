@@ -113,7 +113,7 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 				var form = $(document.forms.<%= namespace + formName %>);
 
 				if (!form.length) {
-					form = $(checkbox[0].form);
+					form = $(checkbox.prop('form'));
 				}
 
 				form.fm('<%= HtmlUtil.getAUICompatibleId(name) %>').prop('disabled', checked);
