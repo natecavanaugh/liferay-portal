@@ -40,7 +40,7 @@ AUI.add(
 					rangeLastPublishNode: defaultConfig,
 					ratingsNode: defaultConfig,
 					setupNode: defaultConfig,
-					timeZone: STR_EMPTY,
+					timeZoneOffset: 0,
 					userPreferencesNode: defaultConfig
 				},
 
@@ -95,10 +95,22 @@ AUI.add(
 					getDateRangeChecker: function() {
 						var instance = this;
 
+						// today based on client side
 						var today = new Date();
 
+						// today time based on client side in milliseconds
+						var todayTime = today.getTime();
+
+						// timezone offset based on server side in milliseconds
+						var timeZoneOffsetBasedOnServerSide = this.get('timeZoneOffset');
+
+						// timezone offset based on client side in minutes
+						var timeZoneOffsetBasedOnClientSide = today.getTimezoneOffset();
+
+						var todayAlignedToServerSide = new Date(todayTime + timeZoneOffsetBasedOnServerSide + (timeZoneOffsetBasedOnClientSide * 60 * 1000));
+
 						var dateRangeChecker = {
-							todayUsed: today,
+							todayUsed: todayAlignedToServerSide,
 							validRange: true
 						};
 
