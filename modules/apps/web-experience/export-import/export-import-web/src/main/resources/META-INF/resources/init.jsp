@@ -181,6 +181,10 @@ String portletResource = ParamUtil.getString(request, "portletResource");
 Portlet selPortlet = PortletLocalServiceUtil.getPortletById(company.getCompanyId(), portletResource);
 
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
+
+Calendar calendar = CalendarFactoryUtil.getCalendar(timeZone, locale);
+
+int timeZoneOffset = timeZone.getOffset(calendar.getTimeInMillis());
 %>
 
 <%@ include file="/init-ext.jsp" %>
