@@ -35,8 +35,6 @@
 		overflow: hidden;
 
 		.lfr-discussion-message {
-			@include word-wrap(break-all);
-
 			.lfr-discussion-message-author {
 				margin-bottom: 12px;
 
