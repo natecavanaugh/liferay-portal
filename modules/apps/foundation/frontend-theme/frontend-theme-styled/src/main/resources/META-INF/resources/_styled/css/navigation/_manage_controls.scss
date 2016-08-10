@@ -33,10 +33,14 @@
 
 	.drag-handle {
 		cursor: move;
-		margin-top: -16px;
+
+		@include monospace($icon-monospaced-size);
+
+		padding: floor(($icon-monospaced-size - $lexicon-icon-size) / 2);
 		position: absolute;
 		right: 5px;
 		top: 50%;
+		transform: translateY(-50%);
 	}
 }
 
