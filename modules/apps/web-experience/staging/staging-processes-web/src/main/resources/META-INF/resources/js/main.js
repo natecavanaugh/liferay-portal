@@ -95,22 +95,18 @@ AUI.add(
 					getDateRangeChecker: function() {
 						var instance = this;
 
-						// today based on client side
 						var today = new Date();
 
-						// today time based on client side in milliseconds
-						var todayTime = today.getTime();
+						var todayMS = +today;
 
-						// timezone offset based on server side in milliseconds
-						var timeZoneOffsetBasedOnServerSide = this.get('timeZoneOffset');
+						var clientTZOffset = today.getTimezoneOffset();
 
-						// timezone offset based on client side in minutes
-						var timeZoneOffsetBasedOnClientSide = today.getTimezoneOffset();
+						var serverTZOffset = this.get('timeZoneOffset');
 
-						var todayAlignedToServerSide = new Date(todayTime + timeZoneOffsetBasedOnServerSide + (timeZoneOffsetBasedOnClientSide * 60 * 1000));
+						var adjustedDate = new Date(todayMS + serverTZOffset + (clientTZOffset * 60 * 1000));
 
 						var dateRangeChecker = {
-							todayUsed: todayAlignedToServerSide,
+							todayUsed: adjustedDate,
 							validRange: true
 						};
 
