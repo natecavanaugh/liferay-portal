@@ -17,9 +17,20 @@
 <%@ include file="/init.jsp" %>
 
 <%
+Long companyId = ParamUtil.getLong(request, "companyId");
+String themeId = ParamUtil.getString(request, "themeId");
+
+Theme selTheme = null;
+
+if (Validator.isNotNull(themeId) && Validator.isNotNull(companyId)) {
+	selTheme = ThemeLocalServiceUtil.getTheme(companyId, themeId);
+}
+
 Layout selLayout = layoutsAdminDisplayContext.getSelLayout();
 
-Theme selTheme = selLayout.getTheme();
+if (Validator.isNull(selLayout)) {
+	selTheme = selLayout.getTheme();
+}
 
 PluginPackage selPluginPackage = selTheme.getPluginPackage();
 %>
