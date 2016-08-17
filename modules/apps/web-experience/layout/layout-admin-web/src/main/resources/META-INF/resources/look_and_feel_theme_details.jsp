@@ -19,6 +19,8 @@
 <%
 String themeId = ParamUtil.getString(request, "themeId");
 
+boolean useDefaultThemeSettings = false;
+
 Layout selLayout = layoutsAdminDisplayContext.getSelLayout();
 LayoutSet selLayoutSet = layoutsAdminDisplayContext.getSelLayoutSet();
 
@@ -26,6 +28,7 @@ Theme selTheme = null;
 ColorScheme selColorScheme = null;
 
 if (Validator.isNotNull(themeId)) {
+	useDefaultThemeSettings = true;
 	selTheme = ThemeLocalServiceUtil.getTheme(company.getCompanyId(), themeId);
 	selColorScheme = ThemeLocalServiceUtil.getColorScheme(company.getCompanyId(), themeId, StringPool.BLANK);
 }
@@ -121,11 +124,16 @@ Map<String, ThemeSetting> configurableSettings = selTheme.getConfigurableSetting
 		String type = GetterUtil.getString(themeSetting.getType(), "text");
 		String value = StringPool.BLANK;
 
-		if (selLayout != null) {
-			value = selLayout.getThemeSetting(name, "regular");
+		if (useDefaultThemeSettings) {
+			value = selTheme.getSetting(name);
 		}
 		else {
-			value = selLayoutSet.getThemeSetting(name, "regular");
+			if (selLayout != null) {
+				value = selLayout.getThemeSetting(name, "regular");
+			}
+			else {
+				value = selLayoutSet.getThemeSetting(name, "regular");
+			}
 		}
 
 		String propertyName = HtmlUtil.escapeAttribute("regularThemeSettingsProperties--" + name + StringPool.DOUBLE_DASH);
