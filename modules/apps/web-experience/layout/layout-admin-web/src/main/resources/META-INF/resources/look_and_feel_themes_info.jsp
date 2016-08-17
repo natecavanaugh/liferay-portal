@@ -22,13 +22,12 @@ String themeId = ParamUtil.getString(request, "themeId");
 
 Theme selTheme = null;
 
+Layout selLayout = layoutsAdminDisplayContext.getSelLayout();
+
 if (Validator.isNotNull(themeId) && Validator.isNotNull(companyId)) {
 	selTheme = ThemeLocalServiceUtil.getTheme(companyId, themeId);
 }
-
-Layout selLayout = layoutsAdminDisplayContext.getSelLayout();
-
-if (Validator.isNull(selLayout)) {
+else if (Validator.isNull(selLayout)) {
 	selTheme = selLayout.getTheme();
 }
 
