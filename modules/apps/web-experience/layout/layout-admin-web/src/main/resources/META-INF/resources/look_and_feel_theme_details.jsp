@@ -19,18 +19,18 @@
 <%
 String themeId = ParamUtil.getString(request, "themeId");
 
-boolean useDefaultThemeSettings = false;
-
 Layout selLayout = layoutsAdminDisplayContext.getSelLayout();
 LayoutSet selLayoutSet = layoutsAdminDisplayContext.getSelLayoutSet();
 
 Theme selTheme = null;
 ColorScheme selColorScheme = null;
 
+boolean useDefaultThemeSettings = false;
+
 if (Validator.isNotNull(themeId)) {
-	useDefaultThemeSettings = true;
 	selTheme = ThemeLocalServiceUtil.getTheme(company.getCompanyId(), themeId);
 	selColorScheme = ThemeLocalServiceUtil.getColorScheme(company.getCompanyId(), themeId, StringPool.BLANK);
+	useDefaultThemeSettings = true;
 }
 else {
 	if (selLayout != null) {
