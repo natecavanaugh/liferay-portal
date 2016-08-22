@@ -372,10 +372,9 @@ AUI().use(
 			}
 
 			instance._chatInput.on('click', instance._click, instance);
-			instance._chatInput.on(['focus', 'keyup'], instance._keystroke, instance);
-
 			instance._chatOutput.on('click', instance._click, instance);
 
+			instance._chatInput.on(['focus', 'keyup'], instance._keystroke, instance);
 		};
 
 		A.extend(
@@ -586,7 +585,7 @@ AUI().use(
 					}
 				},
 
-				_click: function () {
+				_click: function() {
 					Liferay.Chat.Manager.savePanelSettings();
 				},
 
