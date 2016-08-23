@@ -63,6 +63,7 @@ buildLexicon {
 					line = """\
 @import \"../../liferay_variables_custom\";
 @import \"../../liferay_variables\";
+@import \"bourbon\";
 @import \"../../aui_custom\";
 @import \"../../liferay_custom\";"""
 				}
