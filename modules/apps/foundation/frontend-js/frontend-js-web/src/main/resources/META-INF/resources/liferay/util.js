@@ -1250,7 +1250,20 @@
 
 			var dialog = event.dialog;
 
+			var hasDialogFooter = (function() {
+				if (iframeBody.one('.lfr-form-content') && iframeBody.one('.button-holder.dialog-footer')) {
+					return true;
+				}
+
+				return false;
+			}());
+
 			iframeBody.addClass('dialog-iframe-popup');
+
+			if (hasDialogFooter) {
+				iframeBody.addClass('dialog-with-footer');
+			}
+
 			iframeBody.addClass(dialog.iframeConfig.bodyCssClass);
 
 			var detachEventHandles = function() {
