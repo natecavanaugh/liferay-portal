@@ -13,8 +13,9 @@ $card-horizontal-on-border-width: 2px !default;
 
 $dialog-footer-bg: $modal-footer-bg !default;
 $dialog-footer-border-color: $modal-footer-border-color !default;
+$dialog-footer-box-shadow: if(variable-exists(modal-footer-box-shadow), $modal-footer-box-shadow, null) !default;
 $dialog-footer-height: 60px;
-$dialog-navbar-height: $navbar-height + 1 !default;
+$dialog-navbar-height: $navbar-height !default;
 
 $dialog-desktop-footer-bg: if(variable-exists(modal-desktop-footer-bg), $modal-desktop-footer-bg, $dialog-footer-bg) !default;
 $dialog-desktop-footer-height: 89px;
