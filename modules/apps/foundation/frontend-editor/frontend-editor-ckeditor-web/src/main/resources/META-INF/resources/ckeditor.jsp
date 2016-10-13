@@ -544,6 +544,42 @@ name = HtmlUtil.escapeJS(name);
 					CKEDITOR.instances['<%= name %>'].on('focus', window['<%= name %>'].onFocusCallback);
 				</c:if>
 
+				<c:if test="<%= !(inlineEdit && Validator.isNotNull(inlineEditSaveURL)) %>">
+					var initialEditor = CKEDITOR.instances['<%= name %>'].id;
+
+					A.getWin().on(
+						'resize',
+						A.debounce(
+							function() {
+								if (currentToolbarSet != getToolbarSet(initialToolbarSet)) {
+									var ckeditorInstance = CKEDITOR.instances['<%= name %>'];
+
+									if (ckeditorInstance) {
+										var currentEditor = ckeditorInstance.id;
+
+										if (currentEditor === initialEditor) {
+											var currentDialog = CKEDITOR.dialog.getCurrent();
+
+											if (currentDialog) {
+												currentDialog.hide();
+											}
+
+											ckEditorContent = ckeditorInstance.getData();
+
+											window['<%= name %>'].dispose();
+
+											window['<%= name %>'].create();
+
+											initialEditor = CKEDITOR.instances['<%= name %>'].id;
+										}
+									}
+								}
+							},
+							250
+						)
+					);
+				</c:if>
+
 				var destroyInstance = function(event) {
 					if (event.portletId === '<%= portletId %>') {
 						try {
@@ -580,42 +616,6 @@ name = HtmlUtil.escapeJS(name);
 
 	<c:if test='<%= autoCreate && ((inlineEdit && toogleControlsStatus.equals("visible")) || !inlineEdit) %>'>
 		createEditor();
-	</c:if>
-
-	<c:if test="<%= !(inlineEdit && Validator.isNotNull(inlineEditSaveURL)) %>">
-		var initialEditor = CKEDITOR.instances['<%= name %>'].id;
-
-		A.getWin().on(
-			'resize',
-			A.debounce(
-				function() {
-					if (currentToolbarSet != getToolbarSet(initialToolbarSet)) {
-						var ckeditorInstance = CKEDITOR.instances['<%= name %>'];
-
-						if (ckeditorInstance) {
-							var currentEditor = ckeditorInstance.id;
-
-							if (currentEditor === initialEditor) {
-								var currentDialog = CKEDITOR.dialog.getCurrent();
-
-								if (currentDialog) {
-									currentDialog.hide();
-								}
-
-								ckEditorContent = ckeditorInstance.getData();
-
-								window['<%= name %>'].dispose();
-
-								window['<%= name %>'].create();
-
-								initialEditor = CKEDITOR.instances['<%= name %>'].id;
-							}
-						}
-					}
-				},
-				250
-			)
-		);
 	</c:if>
 </aui:script>
 
