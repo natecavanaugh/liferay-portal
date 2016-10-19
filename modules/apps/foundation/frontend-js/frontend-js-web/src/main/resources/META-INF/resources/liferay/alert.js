@@ -232,6 +232,12 @@ AUI.add(
 						);
 
 						instance.set('bodyContent', bodyContent);
+
+						svg4everybody(
+							{
+								polyfill: true
+							}
+						);
 					},
 
 					_updateCssClass: function() {

@@ -253,6 +253,12 @@ AUI.add(
 							)
 						);
 
+						svg4everybody(
+							{
+								polyfill: true
+							}
+						);
+
 						versionFilter.show();
 
 						instance._loadDiffHTML(currentTarget.attr('data-source-version'), currentTarget.attr(STR_DATA_VERSION));

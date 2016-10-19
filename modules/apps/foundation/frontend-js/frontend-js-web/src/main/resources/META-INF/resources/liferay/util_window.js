@@ -375,6 +375,12 @@ AUI.add(
 
 					modal.fillHeight(modal.bodyNode);
 
+					svg4everybody(
+						{
+							polyfill: true
+						}
+					);
+
 					return modal;
 				},
 

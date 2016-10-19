@@ -481,6 +481,12 @@ AUI.add(
 							);
 
 							instance._fileListTPL.render(files, fileListContent);
+
+							svg4everybody(
+								{
+									polyfill: true
+								}
+							);
 						}
 						else if (instance._allRowIdsCheckbox) {
 							instance._allRowIdsCheckbox.attr('checked', true);
