@@ -54,6 +54,16 @@
 	}
 </aui:script>
 
+<aui:script>
+	if (Liferay.replaceSvg) {
+		svg4everybody(
+			{
+				polyfill: true
+			}
+		);
+	}
+</aui:script>
+
 <%
 Group group = null;
 

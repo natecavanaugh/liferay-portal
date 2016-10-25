@@ -40,13 +40,3 @@
 		</span>
 	</c:otherwise>
 </c:choose>
-
-<liferay-util:html-bottom outputKey="taglib_aui_icon_lexicon">
-	<aui:script>
-		svg4everybody(
-			{
-				polyfill: true
-			}
-		);
-	</aui:script>
-</liferay-util:html-bottom>
