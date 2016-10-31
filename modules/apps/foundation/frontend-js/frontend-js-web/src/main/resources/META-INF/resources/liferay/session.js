@@ -313,6 +313,7 @@ AUI.add(
 						var registered = instance._registered;
 
 						var interval = 1000;
+						var sessionExtendOffset = 1000;
 
 						instance._intervalId = A.setInterval(
 							function() {
@@ -335,6 +336,11 @@ AUI.add(
 
 								var hasExpired = elapsed >= sessionLength;
 								var hasWarned = elapsed >= warningTime;
+
+								if (extend){
+									hasExpired = (elapsed + sessionExtendOffset >= sessionLength);
+									hasWarned = (elapsed + sessionExtendOffset >= warningTime);									
+								}
 
 								var updateSessionState = true;
 
