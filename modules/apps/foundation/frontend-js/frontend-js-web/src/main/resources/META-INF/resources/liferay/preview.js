@@ -173,9 +173,9 @@ AUI.add(
 									},
 									centered: true,
 									cssClass: 'lfr-preview-file-image-overlay',
-									height: '90%',
+									height: '90vh',
 									plugins: [Liferay.WidgetZIndex],
-									width: '85%'
+									width: '85vw'
 								}
 							).render();
 
