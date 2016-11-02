@@ -33,6 +33,9 @@ AUI.add(
 					redirectUrl: {
 						value: ''
 					},
+					sessionExtendOffset: {
+						value: 0
+					},
 					sessionLength: {
 						getter: '_getLengthInMillis',
 						value: 0
@@ -313,7 +316,7 @@ AUI.add(
 						var registered = instance._registered;
 
 						var interval = 1000;
-						var sessionExtendOffset = 1000;
+						var sessionExtendOffset = instance.get('sessionExtendOffset') * 1000;
 
 						instance._intervalId = A.setInterval(
 							function() {
@@ -337,9 +340,9 @@ AUI.add(
 								var hasExpired = elapsed >= sessionLength;
 								var hasWarned = elapsed >= warningTime;
 
-								if (extend){
+								if (extend) {
 									hasExpired = (elapsed + sessionExtendOffset >= sessionLength);
-									hasWarned = (elapsed + sessionExtendOffset >= warningTime);									
+									hasWarned = (elapsed + sessionExtendOffset >= warningTime);
 								}
 
 								var updateSessionState = true;
