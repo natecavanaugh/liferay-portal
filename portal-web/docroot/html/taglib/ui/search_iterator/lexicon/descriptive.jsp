@@ -92,10 +92,12 @@ for (ResultRowSplitterEntry resultRowSplitterEntry : resultRowSplitterEntries) {
 
 			<li class="list-group-item <%= GetterUtil.getString(row.getClassName()) %> <%= row.getCssClass() %> <%= rowIsChecked ? "active" : StringPool.BLANK %> <%= Validator.isNotNull(row.getState()) ? "list-group-item-" + row.getState() : StringPool.BLANK %>" data-qa-id="row" <%= AUIUtil.buildData(data) %>>
 				<c:if test="<%= rowChecker != null %>">
-					<div class="checkbox hidden-sm hidden-x list-group-item-field">
-						<label>
-							<%= rowChecker.getRowCheckBox(request, rowIsChecked, rowChecker.isDisabled(row.getObject()), row.getPrimaryKey()) %>
-						</label>
+					<div class="list-group-item-field">
+						<div class="checkbox">
+							<label>
+								<%= rowChecker.getRowCheckBox(request, rowIsChecked, rowChecker.isDisabled(row.getObject()), row.getPrimaryKey()) %>
+							</label>
+						</div>
 					</div>
 				</c:if>
 
