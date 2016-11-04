@@ -34,7 +34,12 @@
 	<c:otherwise>
 
 		<%
+		String cssClass = StringPool.BLANK;
 		String formName = "loginForm";
+
+		if (portletName.equals(PortletKeys.FAST_LOGIN) && windowState.equals(LiferayWindowState.POP_UP)) {;
+			cssClass = "container-fluid-1280";
+		}
 
 		if (windowState.equals(LiferayWindowState.EXCLUSIVE)) {
 			formName += "Modal";
@@ -51,119 +56,121 @@
 		}
 		%>
 
-		<portlet:actionURL name="/login/login" secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="loginURL">
-			<portlet:param name="mvcRenderCommandName" value="/login/login" />
-		</portlet:actionURL>
+		<div class="<%= cssClass %>">
+			<portlet:actionURL name="/login/login" secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="loginURL">
+				<portlet:param name="mvcRenderCommandName" value="/login/login" />
+			</portlet:actionURL>
 
-		<aui:form action="<%= loginURL %>" autocomplete='<%= PropsValues.COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE ? "on" : "off" %>' cssClass="sign-in-form" method="post" name="<%= formName %>" onSubmit="event.preventDefault();">
-			<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
-			<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-			<aui:input name="doActionAfterLogin" type="hidden" value="<%= portletName.equals(PortletKeys.FAST_LOGIN) ? true : false %>" />
+			<aui:form action="<%= loginURL %>" autocomplete='<%= PropsValues.COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE ? "on" : "off" %>' cssClass="sign-in-form" method="post" name="<%= formName %>" onSubmit="event.preventDefault();">
+				<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
+				<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+				<aui:input name="doActionAfterLogin" type="hidden" value="<%= portletName.equals(PortletKeys.FAST_LOGIN) ? true : false %>" />
 
-			<div class="inline-alert-container lfr-alert-container"></div>
+				<div class="inline-alert-container lfr-alert-container"></div>
 
-			<c:choose>
-				<c:when test='<%= SessionMessages.contains(request, "passwordSent") %>'>
+				<c:choose>
+					<c:when test='<%= SessionMessages.contains(request, "passwordSent") %>'>
 
-					<div class="alert alert-success">
-						<liferay-ui:message key="your-password-was-sent-to-the-provided-email-address" />
-					</div>
-				</c:when>
-				<c:when test='<%= SessionMessages.contains(request, "userAdded") %>'>
+						<div class="alert alert-success">
+							<liferay-ui:message key="your-password-was-sent-to-the-provided-email-address" />
+						</div>
+					</c:when>
+					<c:when test='<%= SessionMessages.contains(request, "userAdded") %>'>
+
+						<%
+						String userEmailAddress = (String)SessionMessages.get(request, "userAdded");
+						String userPassword = (String)SessionMessages.get(request, "userAddedPassword");
+						%>
+
+						<div class="alert alert-success">
+							<c:choose>
+								<c:when test="<%= company.isStrangersVerify() || Validator.isNull(userPassword) %>">
+									<liferay-ui:message key="thank-you-for-creating-an-account" />
+
+									<c:if test="<%= company.isStrangersVerify() %>">
+										<liferay-ui:message arguments="<%= userEmailAddress %>" key="your-email-verification-code-was-sent-to-x" translateArguments="<%= false %>" />
+									</c:if>
+								</c:when>
+								<c:otherwise>
+									<liferay-ui:message arguments="<%= userPassword %>" key="thank-you-for-creating-an-account.-your-password-is-x" translateArguments="<%= false %>" />
+								</c:otherwise>
+							</c:choose>
+
+							<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_ENABLED) %>">
+								<liferay-ui:message arguments="<%= userEmailAddress %>" key="your-password-was-sent-to-x" translateArguments="<%= false %>" />
+							</c:if>
+						</div>
+					</c:when>
+					<c:when test='<%= SessionMessages.contains(request, "userPending") %>'>
+
+						<%
+						String userEmailAddress = (String)SessionMessages.get(request, "userPending");
+						%>
+
+						<div class="alert alert-success">
+							<liferay-ui:message arguments="<%= userEmailAddress %>" key="thank-you-for-creating-an-account.-you-will-be-notified-via-email-at-x-when-your-account-has-been-approved" translateArguments="<%= false %>" />
+						</div>
+					</c:when>
+				</c:choose>
+
+				<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed" />
+				<liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-log-in-because-the-maximum-number-of-users-has-been-reached" />
+				<liferay-ui:error exception="<%= CookieNotSupportedException.class %>" message="authentication-failed-please-enable-browser-cookies" />
+				<liferay-ui:error exception="<%= NoSuchUserException.class %>" message="authentication-failed" />
+				<liferay-ui:error exception="<%= PasswordExpiredException.class %>" message="your-password-has-expired" />
+				<liferay-ui:error exception="<%= UserEmailAddressException.MustNotBeNull.class %>" message="please-enter-an-email-address" />
+				<liferay-ui:error exception="<%= UserLockoutException.LDAPLockout.class %>" message="this-account-is-locked" />
+
+				<liferay-ui:error exception="<%= UserLockoutException.PasswordPolicyLockout.class %>">
 
 					<%
-					String userEmailAddress = (String)SessionMessages.get(request, "userAdded");
-					String userPassword = (String)SessionMessages.get(request, "userAddedPassword");
+					UserLockoutException.PasswordPolicyLockout ule = (UserLockoutException.PasswordPolicyLockout)errorException;
 					%>
 
-					<div class="alert alert-success">
-						<c:choose>
-							<c:when test="<%= company.isStrangersVerify() || Validator.isNull(userPassword) %>">
-								<liferay-ui:message key="thank-you-for-creating-an-account" />
+					<liferay-ui:message arguments="<%= ule.user.getUnlockDate() %>" key="this-account-is-locked-until-x" translateArguments="<%= false %>" />
+				</liferay-ui:error>
 
-								<c:if test="<%= company.isStrangersVerify() %>">
-									<liferay-ui:message arguments="<%= userEmailAddress %>" key="your-email-verification-code-was-sent-to-x" translateArguments="<%= false %>" />
-								</c:if>
-							</c:when>
-							<c:otherwise>
-								<liferay-ui:message arguments="<%= userPassword %>" key="thank-you-for-creating-an-account.-your-password-is-x" translateArguments="<%= false %>" />
-							</c:otherwise>
-						</c:choose>
+				<liferay-ui:error exception="<%= UserPasswordException.class %>" message="authentication-failed" />
+				<liferay-ui:error exception="<%= UserScreenNameException.MustNotBeNull.class %>" message="the-screen-name-cannot-be-blank" />
 
-						<c:if test="<%= PrefsPropsUtil.getBoolean(company.getCompanyId(), PropsKeys.ADMIN_EMAIL_USER_ADDED_ENABLED) %>">
-							<liferay-ui:message arguments="<%= userEmailAddress %>" key="your-password-was-sent-to-x" translateArguments="<%= false %>" />
-						</c:if>
-					</div>
-				</c:when>
-				<c:when test='<%= SessionMessages.contains(request, "userPending") %>'>
+				<aui:fieldset>
 
 					<%
-					String userEmailAddress = (String)SessionMessages.get(request, "userPending");
+					String loginLabel = null;
+
+					if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
+						loginLabel = "email-address";
+					}
+					else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+						loginLabel = "screen-name";
+					}
+					else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
+						loginLabel = "id";
+					}
 					%>
 
-					<div class="alert alert-success">
-						<liferay-ui:message arguments="<%= userEmailAddress %>" key="thank-you-for-creating-an-account.-you-will-be-notified-via-email-at-x-when-your-account-has-been-approved" translateArguments="<%= false %>" />
-					</div>
-				</c:when>
-			</c:choose>
+					<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" cssClass="clearable" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
+						<aui:validator name="required" />
+					</aui:input>
 
-			<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed" />
-			<liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-log-in-because-the-maximum-number-of-users-has-been-reached" />
-			<liferay-ui:error exception="<%= CookieNotSupportedException.class %>" message="authentication-failed-please-enable-browser-cookies" />
-			<liferay-ui:error exception="<%= NoSuchUserException.class %>" message="authentication-failed" />
-			<liferay-ui:error exception="<%= PasswordExpiredException.class %>" message="your-password-has-expired" />
-			<liferay-ui:error exception="<%= UserEmailAddressException.MustNotBeNull.class %>" message="please-enter-an-email-address" />
-			<liferay-ui:error exception="<%= UserLockoutException.LDAPLockout.class %>" message="this-account-is-locked" />
+					<aui:input name="password" showRequiredLabel="<%= false %>" type="password" value="<%= password %>">
+						<aui:validator name="required" />
+					</aui:input>
 
-			<liferay-ui:error exception="<%= UserLockoutException.PasswordPolicyLockout.class %>">
+					<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
 
-				<%
-				UserLockoutException.PasswordPolicyLockout ule = (UserLockoutException.PasswordPolicyLockout)errorException;
-				%>
+					<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">
+						<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
+					</c:if>
+				</aui:fieldset>
 
-				<liferay-ui:message arguments="<%= ule.user.getUnlockDate() %>" key="this-account-is-locked-until-x" translateArguments="<%= false %>" />
-			</liferay-ui:error>
+				<aui:button-row>
+					<aui:button cssClass="btn-lg" type="submit" value="sign-in" />
+				</aui:button-row>
+			</aui:form>
 
-			<liferay-ui:error exception="<%= UserPasswordException.class %>" message="authentication-failed" />
-			<liferay-ui:error exception="<%= UserScreenNameException.MustNotBeNull.class %>" message="the-screen-name-cannot-be-blank" />
-
-			<aui:fieldset>
-
-				<%
-				String loginLabel = null;
-
-				if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
-					loginLabel = "email-address";
-				}
-				else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
-					loginLabel = "screen-name";
-				}
-				else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
-					loginLabel = "id";
-				}
-				%>
-
-				<aui:input autoFocus="<%= windowState.equals(LiferayWindowState.EXCLUSIVE) || windowState.equals(WindowState.MAXIMIZED) %>" cssClass="clearable" label="<%= loginLabel %>" name="login" showRequiredLabel="<%= false %>" type="text" value="<%= login %>">
-					<aui:validator name="required" />
-				</aui:input>
-
-				<aui:input name="password" showRequiredLabel="<%= false %>" type="password" value="<%= password %>">
-					<aui:validator name="required" />
-				</aui:input>
-
-				<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
-
-				<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">
-					<aui:input checked="<%= rememberMe %>" name="rememberMe" type="checkbox" />
-				</c:if>
-			</aui:fieldset>
-
-			<aui:button-row>
-				<aui:button cssClass="btn-lg" type="submit" value="sign-in" />
-			</aui:button-row>
-		</aui:form>
-
-		<liferay-util:include page="/navigation.jsp" servletContext="<%= application %>" />
+			<liferay-util:include page="/navigation.jsp" servletContext="<%= application %>" />
+		</div>
 
 		<aui:script sandbox="<%= true %>">
 			var form = AUI.$(document.<portlet:namespace /><%= formName %>);
