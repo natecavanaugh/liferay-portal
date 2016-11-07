@@ -34,12 +34,7 @@
 	<c:otherwise>
 
 		<%
-		String cssClass = StringPool.BLANK;
 		String formName = "loginForm";
-
-		if (portletName.equals(PortletKeys.FAST_LOGIN) && windowState.equals(LiferayWindowState.POP_UP)) {;
-			cssClass = "container-fluid-1280";
-		}
 
 		if (windowState.equals(LiferayWindowState.EXCLUSIVE)) {
 			formName += "Modal";
@@ -56,7 +51,7 @@
 		}
 		%>
 
-		<div class="<%= cssClass %>">
+		<div class="login-container">
 			<portlet:actionURL name="/login/login" secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="loginURL">
 				<portlet:param name="mvcRenderCommandName" value="/login/login" />
 			</portlet:actionURL>
