@@ -119,7 +119,7 @@ if (editorOptions != null) {
 <liferay-util:buffer var="alloyEditor">
 	<div class="alloy-editor alloy-editor-placeholder <%= cssClass %>" contenteditable="false" data-placeholder="<%= LanguageUtil.get(request, placeholder) %>" id="<%= name %>" name="<%= name %>"></div>
 
-	<aui:icon cssClass="alloy-editor-icon" image="format" markupView="lexicon" />
+	<aui:icon cssClass="alloy-editor-icon" image="text-editor" markupView="lexicon" />
 </liferay-util:buffer>
 
 <liferay-util:buffer var="editor">

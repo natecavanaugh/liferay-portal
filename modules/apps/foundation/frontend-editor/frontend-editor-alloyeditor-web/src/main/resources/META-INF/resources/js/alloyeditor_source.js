@@ -8,7 +8,7 @@ AUI.add(
 				iconCssClass: 'code'
 			},
 			true: {
-				iconCssClass: 'format'
+				iconCssClass: 'text-editor'
 			}
 		};
 
