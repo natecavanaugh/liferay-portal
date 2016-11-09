@@ -358,20 +358,22 @@ AUI.add(
 
 										if (hasExpired && sessionState != 'expired') {
 											if (extend) {
-
 												hasExpired = false;
 												hasWarned = false;
 												expirationMoment = false;
 												warningMoment = false;
 
 												instance.extend();
-											} else {
+											}
+											else {
 												instance.expire();
-												expirationMoment = true
+
+												expirationMoment = true;
 											}
 										}
-										else if (hasWarned && !hasExpired && !extend && sessionState != 'warned') {
+										else if (!extend && !hasExpired && hasWarned && sessionState != 'warned') {
 											instance.warn();
+
 											warningMoment = true;
 										}
 									}
