@@ -34,6 +34,7 @@ AUI.add(
 						value: ''
 					},
 					sessionExtendOffset: {
+						validator: Lang.isNumber,
 						value: 0
 					},
 					sessionLength: {
