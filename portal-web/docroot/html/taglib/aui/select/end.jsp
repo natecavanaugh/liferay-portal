@@ -39,14 +39,15 @@
 	</c:if>
 </div>
 
-<aui:script>
-	if (Liferay.Browser.isIe() && Liferay.Browser.getMajorVersion() == 11.0) {
+<c:if test="<%= (BrowserSnifferUtil.isIe(request) && (BrowserSnifferUtil.getMajorVersion(request) == 11.0)) %>">
+	<aui:script>
 		var select = AUI.$('#<%= namespace + id %>');
 
-		select.mousedown(
-			function() {
-				this.focus();
+		select.on(
+			'mousedown',
+			function(event) {
+				event.currentTarget.focus();
 			}
 		);
-	}
-</aui:script>
+	</aui:script>
+</c:if>
