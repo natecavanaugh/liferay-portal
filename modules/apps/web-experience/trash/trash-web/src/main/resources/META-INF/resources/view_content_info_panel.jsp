@@ -42,10 +42,13 @@ TrashHandler trashHandler = trashDisplayContext.getTrashHandler();
 	</aui:nav-bar>
 
 	<div class="sidebar-body">
-		<h5><liferay-ui:message key="num-of-items" /></h5>
-
-		<p>
-			<%= trashHandler.getTrashModelsCount(classPK) %>
-		</p>
+		<dl>
+			<dt class="h5">
+				<liferay-ui:message key="num-of-items" />
+			</dt>
+			<dd>
+				<%= trashHandler.getTrashModelsCount(classPK) %>
+			</dd>
+		</dl>
 	</div>
 </c:if>

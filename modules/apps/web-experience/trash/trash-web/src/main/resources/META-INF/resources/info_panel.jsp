@@ -70,23 +70,26 @@ List<TrashEntry> trashEntries = (List<TrashEntry>)request.getAttribute(TrashWebK
 				</aui:nav-bar>
 
 				<div class="sidebar-body">
-					<h5><liferay-ui:message key="type" /></h5>
-
-					<p>
-						<%= ResourceActionsUtil.getModelResource(locale, trashEntry.getClassName()) %>
-					</p>
-
-					<h5><liferay-ui:message key="removed-date" /></h5>
-
-					<p>
-						<%= dateFormatDateTime.format(trashEntry.getCreateDate()) %>
-					</p>
-
-					<h5><liferay-ui:message key="removed-by" /></h5>
-
-					<p>
-						<%= HtmlUtil.escape(trashEntry.getUserName()) %>
-					</p>
+					<dl>
+						<dt class="h5">
+							<liferay-ui:message key="type" />
+						</dt>
+						<dd>
+							<%= ResourceActionsUtil.getModelResource(locale, trashEntry.getClassName()) %>
+						</dd>
+						<dt class="h5">
+							<liferay-ui:message key="removed-date" />
+						</dt>
+						<dd>
+							<%= dateFormatDateTime.format(trashEntry.getCreateDate()) %>
+						</dd>
+						<dt class="h5">
+							<liferay-ui:message key="removed-by" />
+						</dt>
+						<dd>
+							<%= HtmlUtil.escape(trashEntry.getUserName()) %>
+						</dd>
+					</dl>
 				</div>
 			</c:when>
 			<c:otherwise>
@@ -101,11 +104,14 @@ List<TrashEntry> trashEntries = (List<TrashEntry>)request.getAttribute(TrashWebK
 				</aui:nav-bar>
 
 				<div class="sidebar-body">
-					<h5><liferay-ui:message key="num-of-items" /></h5>
-
-					<p>
-						<%= trashEntries.size() %>
-					</p>
+					<dl>
+						<dt class="h5">
+							<liferay-ui:message key="num-of-items" />
+						</dt>
+						<dd>
+							<%= trashEntries.size() %>
+						</dd>
+					</dl>
 				</div>
 			</c:otherwise>
 		</c:choose>
@@ -122,11 +128,14 @@ List<TrashEntry> trashEntries = (List<TrashEntry>)request.getAttribute(TrashWebK
 		</aui:nav-bar>
 
 		<div class="sidebar-body">
-			<h5><liferay-ui:message key="num-of-items" /></h5>
-
-			<p>
-				<%= TrashEntryLocalServiceUtil.getEntriesCount(themeDisplay.getScopeGroupId()) %>
-			</p>
+			<dl>
+				<dt class="h5">
+					<liferay-ui:message key="num-of-items" />
+				</dt>
+				<dd>
+					<%= TrashEntryLocalServiceUtil.getEntriesCount(themeDisplay.getScopeGroupId()) %>
+				</dd>
+			</dl>
 		</div>
 	</c:otherwise>
 </c:choose>
