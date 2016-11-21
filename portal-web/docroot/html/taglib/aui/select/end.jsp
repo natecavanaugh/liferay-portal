@@ -40,8 +40,8 @@
 </div>
 
 <c:if test="<%= (BrowserSnifferUtil.isIe(request) && (BrowserSnifferUtil.getMajorVersion(request) == 11.0)) %>">
-	<aui:script>
-		var select = AUI.$('#<%= namespace + id %>');
+	<aui:script sandbox="<%= true %>">
+		var select = $('#<%= namespace + id %>');
 
 		select.on(
 			'mousedown',
