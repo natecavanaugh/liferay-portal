@@ -62,9 +62,9 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 
 			<h4><%= (folder != null) ? HtmlUtil.escape(folder.getName()) : LanguageUtil.get(request, "home") %></h4>
 
-			<h6 class="text-default">
+			<div class="text-default">
 				<liferay-ui:message key="folder" />
-			</h6>
+			</div>
 		</div>
 
 		<aui:nav-bar markupView="lexicon">
@@ -74,27 +74,32 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 		</aui:nav-bar>
 
 		<div class="sidebar-body">
-			<h5><liferay-ui:message key="num-of-items" /></h5>
+			<dl>
+				<dt class="h5">
+					<liferay-ui:message key="num-of-items" />
+				</dt>
 
-			<%
-			long folderId = JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID;
+				<%
+				long folderId = JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID;
 
-			if (folder != null) {
-				folderId = folder.getFolderId();
-			}
-			%>
+				if (folder != null) {
+					folderId = folder.getFolderId();
+				}
+				%>
 
-			<p>
-				<%= JournalFolderServiceUtil.getFoldersAndArticlesCount(scopeGroupId, folderId, journalDisplayContext.getStatus()) %>
-			</p>
+				<dd>
+					<%= JournalFolderServiceUtil.getFoldersAndArticlesCount(scopeGroupId, folderId, journalDisplayContext.getStatus()) %>
+				</dd>
 
-			<c:if test="<%= folder != null %>">
-				<h5><liferay-ui:message key="created" /></h5>
-
-				<p>
-					<%= HtmlUtil.escape(folder.getUserName()) %>
-				</p>
-			</c:if>
+				<c:if test="<%= folder != null %>">
+					<dt class="h5">
+						<liferay-ui:message key="created" />
+					</dt>
+					<dd>
+						<%= HtmlUtil.escape(folder.getUserName()) %>
+					</dd>
+				</c:if>
+			</dl>
 		</div>
 	</c:when>
 	<c:when test="<%= ListUtil.isEmpty(folders) && ListUtil.isNotEmpty(articles) && (articles.size() == 1) %>">
@@ -123,9 +128,9 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 			<h4><%= HtmlUtil.escape(assetEntry.getTitle(locale)) %></h4>
 
 			<c:if test="<%= ddmStructure != null %>">
-				<h6 class="text-default">
+				<div class="text-default">
 					<%= HtmlUtil.escape(ddmStructure.getName(locale)) %>
-				</h6>
+				</div>
 			</c:if>
 		</div>
 
@@ -136,89 +141,96 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 		</aui:nav-bar>
 
 		<div class="sidebar-body">
-			<h5><liferay-ui:message key="id" /></h5>
+			<dl>
+				<dt class="h5">
+					<liferay-ui:message key="id" />
+				</dt>
+				<dd>
+					<%= HtmlUtil.escape(article.getArticleId()) %>
+				</dd>
+				<dt class="h5">
+					<liferay-ui:message key="version" />
+				</dt>
+				<dd>
+					<%= article.getVersion() %>
+				</dd>
+				<dt class="h5">
+					<liferay-ui:message key="status" />
+				</dt>
+				<dd>
+					<aui:workflow-status markupView="lexicon" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= article.getStatus() %>" />
+				</dd>
+				<dt class="h5">
+					<liferay-ui:message key="title" />
+				</dt>
+				<dd>
+					<%= HtmlUtil.escape(article.getTitle(locale)) %>
+				</dd>
 
-			<p>
-				<%= HtmlUtil.escape(article.getArticleId()) %>
-			</p>
+				<c:if test="<%= ddmTemplate != null %>">
+					<dt class="h5">
+						<liferay-ui:message key="template" />
+					</dt>
+					<dd>
+						<%= HtmlUtil.escape(ddmTemplate.getName(locale)) %>
+					</dd>
+				</c:if>
 
-			<h5><liferay-ui:message key="version" /></h5>
+				<div class="lfr-asset-tags">
+					<liferay-ui:asset-tags-summary
+						className="<%= JournalArticle.class.getName() %>"
+						classPK="<%= classPK %>"
+						message="tags"
+					/>
+				</div>
 
-			<p>
-				<%= article.getVersion() %>
-			</p>
+				<dt class="h5">
+					<liferay-ui:message key="priority" />
+				</dt>
+				<dd>
+					<%= assetEntry.getPriority() %>
+				</dd>
 
-			<h5><liferay-ui:message key="status" /></h5>
+				<%
+				Date expirationDate = article.getExpirationDate();
 
-			<p>
-				<aui:workflow-status markupView="lexicon" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= article.getStatus() %>" />
-			</p>
+				Date reviewDate = article.getReviewDate();
+				%>
 
-			<h5><liferay-ui:message key="title" /></h5>
+				<dt class="h5">
+					<liferay-ui:message key="display-date" />
+				</dt>
+				<dd>
+					<%= dateFormatDateTime.format(article.getDisplayDate()) %>
+				</dd>
+				<dt class="h5">
+					<liferay-ui:message key="expiration-date" />
+				</dt>
+				<dd>
+					<c:choose>
+						<c:when test="<%= expirationDate != null %>">
+							<%= dateFormatDateTime.format(expirationDate) %>
+						</c:when>
+						<c:otherwise>
+							<liferay-ui:message key="never-expire" />
+						</c:otherwise>
+					</c:choose>
+				</dd>
 
-			<p>
-				<%= HtmlUtil.escape(article.getTitle(locale)) %>
-			</p>
-
-			<c:if test="<%= ddmTemplate != null %>">
-				<h5><liferay-ui:message key="template" /></h5>
-
-				<p>
-					<%= HtmlUtil.escape(ddmTemplate.getName(locale)) %>
-				</p>
-			</c:if>
-
-			<div class="lfr-asset-tags">
-				<liferay-ui:asset-tags-summary
-					className="<%= JournalArticle.class.getName() %>"
-					classPK="<%= classPK %>"
-					message="tags"
-				/>
-			</div>
-
-			<h5><liferay-ui:message key="priority" /></h5>
-
-			<p>
-				<%= assetEntry.getPriority() %>
-			</p>
-
-			<%
-			Date expirationDate = article.getExpirationDate();
-
-			Date reviewDate = article.getReviewDate();
-			%>
-
-			<h5><liferay-ui:message key="display-date" /></h5>
-
-			<p>
-				<%= dateFormatDateTime.format(article.getDisplayDate()) %>
-			</p>
-
-			<h5><liferay-ui:message key="expiration-date" /></h5>
-
-			<p>
-				<c:choose>
-					<c:when test="<%= expirationDate != null %>">
-						<%= dateFormatDateTime.format(expirationDate) %>
-					</c:when>
-					<c:otherwise>
-						<liferay-ui:message key="never-expire" />
-					</c:otherwise>
-				</c:choose>
-			</p>
-
-			<h5><liferay-ui:message key="review-date" /></h5>
-
-			<p>
-				<c:choose>
-					<c:when test="<%= reviewDate != null %>">
-						<%= dateFormatDateTime.format(reviewDate) %>
-					</c:when>
-					<c:otherwise>
-						<liferay-ui:message key="never-review" />
-					</c:otherwise>
-				</c:choose>
-			</p>
+				<dt class="h5">
+					<liferay-ui:message key="review-date" />
+				</dt>
+				<dd>
+					<c:choose>
+						<c:when test="<%= reviewDate != null %>">
+							<%= dateFormatDateTime.format(reviewDate) %>
+						</c:when>
+						<c:otherwise>
+							<liferay-ui:message key="never-review" />
+						</c:otherwise>
+					</c:choose>
+				</dd>
+			</dl>
 		</div>
 	</c:when>
 	<c:otherwise>
