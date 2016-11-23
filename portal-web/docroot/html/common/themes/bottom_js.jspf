@@ -64,6 +64,25 @@
 	}
 </aui:script>
 
+<aui:script use="aui-tooltip">
+	var tooltip = A.one('.lfr-portal-tooltip-delegate.tooltip');
+
+	if (!tooltip) {
+		tooltip = new A.TooltipDelegate(
+			{
+				cssClass: 'lfr-portal-tooltip-delegate',
+				constrain: true,
+				opacity: 1,
+				trigger: '.lfr-portal-tooltip',
+				triggerHideEvent: ['click', 'mouseleave', 'MSPointerUp', 'touchend'],
+				triggerShowEvent: ['mouseenter', 'MSPointerDown','touchstart'],
+				visible: false,
+				zIndex: Liferay.zIndex.TOOLTIP
+			}
+		);
+	}
+</aui:script>
+
 <%
 Group group = null;
 

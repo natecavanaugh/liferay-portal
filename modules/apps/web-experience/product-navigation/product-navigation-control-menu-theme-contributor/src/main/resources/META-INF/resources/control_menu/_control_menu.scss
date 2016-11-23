@@ -26,7 +26,8 @@
 
 .control-menu-icon {
 	display: inline-block;
-	margin: 0 10px;
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 .control-menu-level-1 {
@@ -34,11 +35,10 @@
 	color: $control-menu-level-1-color;
 
 	> .container-fluid-1280 {
-		padding: 6px 16px 7px 5px;
+		padding: 6px 18px 7px;
 
 		@include sm() {
 			padding-bottom: 14px;
-			padding-right: 17px;
 			padding-top: 15px;
 		}
 	}
