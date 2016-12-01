@@ -50,7 +50,7 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 
 		<div class="sidebar-header">
 			<c:if test="<%= journalDisplayContext.isShowEditActions() %>">
-				<ul class="sidebar-header-actions">
+				<ul class="sidebar-actions">
 					<li>
 						<liferay-util:include page="/subscribe.jsp" servletContext="<%= application %>" />
 					</li>
@@ -60,11 +60,11 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 				</ul>
 			</c:if>
 
-			<h4><%= (folder != null) ? HtmlUtil.escape(folder.getName()) : LanguageUtil.get(request, "home") %></h4>
+			<h4 class="sidebar-title"><%= (folder != null) ? HtmlUtil.escape(folder.getName()) : LanguageUtil.get(request, "home") %></h4>
 
-			<div class="text-default">
+			<h5>
 				<liferay-ui:message key="folder" />
-			</div>
+			</h5>
 		</div>
 
 		<aui:nav-bar markupView="lexicon">
@@ -74,7 +74,7 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 		</aui:nav-bar>
 
 		<div class="sidebar-body">
-			<dl>
+			<dl class="sidebar-block">
 				<dt class="h5">
 					<liferay-ui:message key="num-of-items" />
 				</dt>
@@ -87,7 +87,7 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 				}
 				%>
 
-				<dd>
+				<dd class="h6 sidebar-caption">
 					<%= JournalFolderServiceUtil.getFoldersAndArticlesCount(scopeGroupId, folderId, journalDisplayContext.getStatus()) %>
 				</dd>
 
@@ -95,7 +95,7 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 					<dt class="h5">
 						<liferay-ui:message key="created" />
 					</dt>
-					<dd>
+					<dd class="h6 sidebar-caption">
 						<%= HtmlUtil.escape(folder.getUserName()) %>
 					</dd>
 				</c:if>
@@ -119,18 +119,18 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 		%>
 
 		<div class="sidebar-header">
-			<ul class="sidebar-header-actions">
+			<ul class="sidebar-actions">
 				<li>
 					<liferay-util:include page="/article_action.jsp" servletContext="<%= application %>" />
 				</li>
 			</ul>
 
-			<h4><%= HtmlUtil.escape(assetEntry.getTitle(locale)) %></h4>
+			<h4 class="sidebar-title"><%= HtmlUtil.escape(assetEntry.getTitle(locale)) %></h4>
 
 			<c:if test="<%= ddmStructure != null %>">
-				<div class="text-default">
+				<h5>
 					<%= HtmlUtil.escape(ddmStructure.getName(locale)) %>
-				</div>
+				</h5>
 			</c:if>
 		</div>
 
@@ -141,29 +141,29 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 		</aui:nav-bar>
 
 		<div class="sidebar-body">
-			<dl>
+			<dl class="sidebar-block">
 				<dt class="h5">
 					<liferay-ui:message key="id" />
 				</dt>
-				<dd>
+				<dd class="h6 sidebar-caption">
 					<%= HtmlUtil.escape(article.getArticleId()) %>
 				</dd>
 				<dt class="h5">
 					<liferay-ui:message key="version" />
 				</dt>
-				<dd>
+				<dd class="h6 sidebar-caption">
 					<%= article.getVersion() %>
 				</dd>
 				<dt class="h5">
 					<liferay-ui:message key="status" />
 				</dt>
-				<dd>
+				<dd class="h6 sidebar-caption">
 					<aui:workflow-status markupView="lexicon" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= article.getStatus() %>" />
 				</dd>
 				<dt class="h5">
 					<liferay-ui:message key="title" />
 				</dt>
-				<dd>
+				<dd class="h6 sidebar-caption">
 					<%= HtmlUtil.escape(article.getTitle(locale)) %>
 				</dd>
 
@@ -171,7 +171,7 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 					<dt class="h5">
 						<liferay-ui:message key="template" />
 					</dt>
-					<dd>
+					<dd class="h6 sidebar-caption">
 						<%= HtmlUtil.escape(ddmTemplate.getName(locale)) %>
 					</dd>
 				</c:if>
@@ -187,7 +187,7 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 				<dt class="h5">
 					<liferay-ui:message key="priority" />
 				</dt>
-				<dd>
+				<dd class="h6 sidebar-caption">
 					<%= assetEntry.getPriority() %>
 				</dd>
 
@@ -200,13 +200,13 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 				<dt class="h5">
 					<liferay-ui:message key="display-date" />
 				</dt>
-				<dd>
+				<dd class="h6 sidebar-caption">
 					<%= dateFormatDateTime.format(article.getDisplayDate()) %>
 				</dd>
 				<dt class="h5">
 					<liferay-ui:message key="expiration-date" />
 				</dt>
-				<dd>
+				<dd class="h6 sidebar-caption">
 					<c:choose>
 						<c:when test="<%= expirationDate != null %>">
 							<%= dateFormatDateTime.format(expirationDate) %>
@@ -220,7 +220,7 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 				<dt class="h5">
 					<liferay-ui:message key="review-date" />
 				</dt>
-				<dd>
+				<dd class="h6 sidebar-caption">
 					<c:choose>
 						<c:when test="<%= reviewDate != null %>">
 							<%= dateFormatDateTime.format(reviewDate) %>
@@ -235,7 +235,7 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 	</c:when>
 	<c:otherwise>
 		<div class="sidebar-header">
-			<h4><liferay-ui:message arguments="<%= folders.size() + articles.size() %>" key="x-items-are-selected" /></h4>
+			<h4 class="sidebar-title"><liferay-ui:message arguments="<%= folders.size() + articles.size() %>" key="x-items-are-selected" /></h4>
 		</div>
 
 		<aui:nav-bar>
