@@ -50,7 +50,7 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 		<c:choose>
 			<c:when test="<%= group == null %>">
 				<div class="sidebar-header">
-					<h4><liferay-ui:message key="sites" /></h4>
+					<h4 class="sidebar-title"><liferay-ui:message key="sites" /></h4>
 				</div>
 
 				<aui:nav-bar cssClass="navbar-no-collapse" markupView="lexicon">
@@ -60,11 +60,11 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 				</aui:nav-bar>
 
 				<div class="sidebar-body">
-					<dl>
+					<dl class="sidebar-block">
 						<dt class="h5">
 							<liferay-ui:message key="num-of-items" />
 						</dt>
-						<dd>
+						<dd class="h6 sidebar-caption">
 							<%= GroupLocalServiceUtil.getGroupsCount(company.getCompanyId(), siteAdminDisplayContext.getGroupId(), true) %>
 						</dd>
 					</dl>
@@ -77,13 +77,13 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 				%>
 
 				<div class="sidebar-header">
-					<ul class="sidebar-header-actions">
+					<ul class="sidebar-actions">
 						<li>
 							<liferay-util:include page="/site_action.jsp" servletContext="<%= application %>" />
 						</li>
 					</ul>
 
-					<h4><%= HtmlUtil.escape(group.getDescriptiveName()) %></h4>
+					<h4 class="sidebar-title"><%= HtmlUtil.escape(group.getDescriptiveName()) %></h4>
 				</div>
 
 				<aui:nav-bar cssClass="navbar-no-collapse" markupView="lexicon">
@@ -95,8 +95,8 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 				</aui:nav-bar>
 
 				<div class="sidebar-body">
-					<div>
-						<img alt="<%= HtmlUtil.escapeAttribute(group.getDescriptiveName()) %>" class="center-block img-responsive" src="<%= group.getLogoURL(themeDisplay, true) %>" />
+					<div class="crop-img crop-img-center crop-img-middle sidebar-panel">
+						<img alt="<%= HtmlUtil.escapeAttribute(group.getDescriptiveName()) %>" class="img-responsive" src="<%= group.getLogoURL(themeDisplay, true) %>" />
 					</div>
 
 					<c:if test="<%= group.isOrganization() %>">
@@ -125,12 +125,12 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
 						<c:choose>
 							<c:when test="<%= (siteAdminDisplayContext.getUsersCount(group) == 0) && (siteAdminDisplayContext.getOrganizationsCount(group) == 0) && (siteAdminDisplayContext.getUserGroupsCount(group) == 0) %>">
-								<dd>
+								<dd class="h6 sidebar-caption">
 									<liferay-ui:message key="none" />
 								</dd>
 							</c:when>
 							<c:otherwise>
-								<dd>
+								<dd class="h6 sidebar-caption">
 									<c:if test="<%= siteAdminDisplayContext.getUsersCount(group) > 0 %>">
 										<div>
 											<aui:a href='<%= HttpUtil.addParameter(assignMembersURL.toString(), "tabs1", "users") %>' label='<%= LanguageUtil.format(request, (siteAdminDisplayContext.getUsersCount(group) == 1) ? "x-user" : "x-users", siteAdminDisplayContext.getUsersCount(group), false) %>' />
@@ -163,7 +163,7 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 								<portlet:param name="groupId" value="<%= String.valueOf(group.getGroupId()) %>" />
 							</liferay-portlet:renderURL>
 
-							<dd>
+							<dd class="h6 sidebar-caption">
 								<aui:a href="<%= viewMembershipRequestsURL %>" label='<%= LanguageUtil.format(request, (siteAdminDisplayContext.getPendingRequestsCount(group) == 1) ? "x-request-pending" : "x-requests-pending", siteAdminDisplayContext.getPendingRequestsCount(group), false) %>' />
 							</dd>
 						</c:if>
@@ -171,7 +171,7 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 						<dt class="h5">
 							<liferay-ui:message key="membership-type" />
 						</dt>
-						<dd>
+						<dd class="h6 sidebar-caption">
 							<liferay-ui:message key="<%= GroupConstants.getTypeLabel(group.getType()) %>" />
 						</dd>
 
@@ -179,7 +179,7 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 							<dt class="h5">
 								<liferay-ui:message key="description" />
 							</dt>
-							<dd>
+							<dd class="h6 sidebar-caption">
 								<%= HtmlUtil.escape(group.getDescription()) %>
 							</dd>
 						</c:if>
@@ -200,7 +200,7 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 	</c:when>
 	<c:otherwise>
 		<div class="sidebar-header">
-			<h4><liferay-ui:message arguments="<%= groups.size() %>" key="x-items-are-selected" /></h4>
+			<h4 class="sidebar-title"><liferay-ui:message arguments="<%= groups.size() %>" key="x-items-are-selected" /></h4>
 		</div>
 
 		<aui:nav-bar cssClass="navbar-no-collapse" markupView="lexicon">
