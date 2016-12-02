@@ -38,7 +38,6 @@ if (Validator.isNotNull(ddmStructureKey)) {
 }
 %>
 
-
 <c:if test="<%= JournalPermission.contains(permissionChecker, scopeGroupId, ActionKeys.SUBSCRIBE) && JournalUtil.getEmailArticleAnyEventEnabled(journalGroupServiceConfiguration) %>">
 
 	<%
