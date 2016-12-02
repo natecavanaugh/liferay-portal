@@ -30,6 +30,7 @@ body.portlet {
 
 	@include ellipsis;
 
+	line-height: $icon-monospaced-size;
 	margin-top: 0;
 	max-width: 95%;
 	vertical-align: top;
