@@ -110,7 +110,7 @@ request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 						</div>
 					</c:if>
 
-					<dl>
+					<dl class="sidebar-block">
 						<dt class="h5">
 							<liferay-ui:message key="members" />
 						</dt>
