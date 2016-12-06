@@ -39,15 +39,29 @@
 	</c:if>
 </div>
 
-<c:if test="<%= BrowserSnifferUtil.isIe(request) && (BrowserSnifferUtil.getMajorVersion(request) == 11.0) %>">
-	<aui:script sandbox="<%= true %>">
-		var select = $('#<%= namespace + id %>');
+<aui:script sandbox="<%= true %>">
+	var select = $('#<%= namespace + id %>');
 
+	select.on(
+		'focus',
+		function(event) {
+			select.on(
+				'keydown',
+				function(event) {
+					if (event.keyCode == 27) {
+						event.stopPropagation();
+					}
+				}
+			);
+		}
+	);
+
+	<c:if test="<%= BrowserSnifferUtil.isIe(request) && (BrowserSnifferUtil.getMajorVersion(request) == 11.0) %>">
 		select.on(
 			'mousedown',
 			function(event) {
 				event.currentTarget.focus();
 			}
 		);
-	</aui:script>
-</c:if>
+	</c:if>
+</aui:script>
