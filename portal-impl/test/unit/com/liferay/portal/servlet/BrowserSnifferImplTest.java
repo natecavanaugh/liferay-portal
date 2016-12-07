@@ -83,6 +83,52 @@ public class BrowserSnifferImplTest {
 	}
 
 	@Test
+	public void testIsEdge() throws IOException {
+		UnsyncBufferedReader unsyncBufferedReader =
+			getResourceAsUnsyncBufferedReader("dependencies/user_agents.csv");
+
+		boolean ie = false;
+		String line = null;
+
+		while ((line = unsyncBufferedReader.readLine()) != null) {
+			line = line.trim();
+
+			if (line.isEmpty()) {
+				continue;
+			}
+
+			if (line.contains("## Edge")) {
+				ie = true;
+
+				continue;
+			}
+
+			if (ie && (line.charAt(0) == CharPool.POUND)) {
+				break;
+			}
+
+			if (ie) {
+				MockHttpServletRequest mockHttpServletRequest =
+					new MockHttpServletRequest();
+
+				mockHttpServletRequest.addHeader(HttpHeaders.USER_AGENT, line);
+
+				Assert.assertTrue(
+					_browserSnifferImpl.isEdge(mockHttpServletRequest));
+			}
+		}
+
+		MockHttpServletRequest mockHttpServletRequest =
+			new MockHttpServletRequest();
+
+		mockHttpServletRequest.addHeader(
+			HttpHeaders.USER_AGENT,
+			"opera/9.80 (windows nt 6.0) presto/2.12.388 version/12.14");
+
+		Assert.assertFalse(_browserSnifferImpl.isEdge(mockHttpServletRequest));
+	}
+
+	@Test
 	public void testIsIe() throws IOException {
 		UnsyncBufferedReader unsyncBufferedReader =
 			getResourceAsUnsyncBufferedReader("dependencies/user_agents.csv");
