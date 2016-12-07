@@ -49,11 +49,14 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 
 	@Override
 	public String getBrowserId(HttpServletRequest request) {
-		if (isIe(request)) {
-			return BROWSER_ID_IE;
+		if (isEdge(request)) {
+			return BROWSER_ID_EDGE;
 		}
 		else if (isFirefox(request)) {
 			return BROWSER_ID_FIREFOX;
+		}
+		else if (isIe(request)) {
+			return BROWSER_ID_IE;
 		}
 		else {
 			return BROWSER_ID_OTHER;
@@ -132,6 +135,17 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 		String userAgent = getUserAgent(request);
 
 		if (userAgent.contains("chrome")) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isEdge(HttpServletRequest request) {
+		String userAgent = getUserAgent(request);
+
+		if (userAgent.contains("edge")) {
 			return true;
 		}
 
@@ -499,7 +513,7 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 	protected static char[] revisionSeparators =
 		{CharPool.BACK_SLASH, CharPool.COLON, CharPool.SLASH, CharPool.SPACE};
 	protected static String[] versionLeadings =
-		{"version", "firefox", "minefield", "chrome"};
+		{"edge", "chrome", "firefox", "version", "minefield"};
 	protected static char[] versionSeparators =
 		{CharPool.BACK_SLASH, CharPool.SLASH};
 
