@@ -245,6 +245,13 @@ if (organization != null) {
 <%@ include file="/add_menu.jspf" %>
 
 <aui:script>
+	$('#<portlet:namespace />assignUsers').on(
+		'click',
+		function(event) {
+			<portlet:namespace />openSelectUsersDialog('<%= organizationId %>');
+		}
+	);
+
 	function <portlet:namespace />delete() {
 		<portlet:namespace />deleteOrganizations();
 	}

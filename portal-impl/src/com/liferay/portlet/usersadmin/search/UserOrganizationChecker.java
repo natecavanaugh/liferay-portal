@@ -14,7 +14,7 @@
 
 package com.liferay.portlet.usersadmin.search;
 
-import com.liferay.portal.kernel.dao.search.RowChecker;
+import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
@@ -33,7 +33,7 @@ import javax.portlet.RenderResponse;
  * @author Brian Wing Shun Chan
  * @author Jorge Ferrer
  */
-public class UserOrganizationChecker extends RowChecker {
+public class UserOrganizationChecker extends EmptyOnClickRowChecker {
 
 	public UserOrganizationChecker(
 		RenderResponse renderResponse, Organization organization) {
@@ -60,6 +60,10 @@ public class UserOrganizationChecker extends RowChecker {
 
 	@Override
 	public boolean isDisabled(Object obj) {
+		if (isChecked(obj)) {
+			return true;
+		}
+
 		if (!PropsValues.ORGANIZATIONS_ASSIGNMENT_STRICT) {
 			return false;
 		}
