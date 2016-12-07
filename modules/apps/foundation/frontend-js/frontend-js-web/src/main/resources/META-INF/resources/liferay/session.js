@@ -33,6 +33,10 @@ AUI.add(
 					redirectUrl: {
 						value: ''
 					},
+					sessionExtendOffset: {
+						validator: Lang.isNumber,
+						value: 0
+					},
 					sessionLength: {
 						getter: '_getLengthInMillis',
 						value: 0
@@ -313,6 +317,7 @@ AUI.add(
 						var registered = instance._registered;
 
 						var interval = 1000;
+						var sessionExtendOffset = instance.get('sessionExtendOffset') * 1000;
 
 						instance._intervalId = A.setInterval(
 							function() {
@@ -328,46 +333,49 @@ AUI.add(
 									elapsed = timeOffset;
 								}
 
-								var extend = false;
+								var extend = instance.get('autoExtend');
 
-								var expirationMoment = elapsed == sessionLength;
-								var warningMoment = elapsed == warningTime;
+								var expirationMoment = false;
+								var warningMoment = false;
 
 								var hasExpired = elapsed >= sessionLength;
 								var hasWarned = elapsed >= warningTime;
 
+								if (extend) {
+									hasExpired = (elapsed + sessionExtendOffset >= sessionLength);
+									hasWarned = (elapsed + sessionExtendOffset >= warningTime);
+								}
+
 								var updateSessionState = true;
 
 								if (hasWarned) {
-									if (warningMoment || expirationMoment) {
-										if (timestamp == 'expired') {
-											expirationMoment = true;
-											hasExpired = true;
-										}
-										else if (instance.get('autoExtend')) {
-											expirationMoment = false;
-											extend = true;
-											hasExpired = false;
-											hasWarned = false;
-											warningMoment = false;
-										}
-										else if (timeOffset < warningTime) {
-											hasWarned = false;
-											updateSessionState = false;
-										}
+									if (timestamp == 'expired') {
+										expirationMoment = true;
+										hasExpired = true;
 									}
 
 									if (updateSessionState) {
 										var sessionState = instance.get('sessionState');
 
 										if (hasExpired && sessionState != 'expired') {
-											instance.expire();
+											if (extend) {
+												hasExpired = false;
+												hasWarned = false;
+												expirationMoment = false;
+												warningMoment = false;
+
+												instance.extend();
+											}
+											else {
+												instance.expire();
+
+												expirationMoment = true;
+											}
 										}
-										else if (hasWarned && !hasExpired && sessionState != 'warned') {
+										else if (!extend && !hasExpired && hasWarned && sessionState != 'warned') {
 											instance.warn();
-										}
-										else if (extend) {
-											instance.extend();
+
+											warningMoment = true;
 										}
 									}
 								}
