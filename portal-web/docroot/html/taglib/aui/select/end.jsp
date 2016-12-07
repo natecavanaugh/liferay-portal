@@ -43,16 +43,11 @@
 	var select = $('#<%= namespace + id %>');
 
 	select.on(
-		'focus',
+		'keydown',
 		function(event) {
-			select.on(
-				'keydown',
-				function(event) {
-					if (event.keyCode == 27) {
-						event.stopPropagation();
-					}
-				}
-			);
+			if (event.which == 27) {
+				event.stopPropagation();
+			}
 		}
 	);
 
