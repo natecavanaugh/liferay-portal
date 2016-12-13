@@ -167,7 +167,7 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 		<aui:fieldset>
 			<h3><liferay-ui:message key="default-values" /></h3>
 
-			<aui:field-wrapper label="populate-with-a-default-server-configuration">
+			<aui:field-wrapper label="load-default-server-configuration-for">
 				<aui:input label="Apache Directory Server" name="defaultLdap" onClick='<%= renderResponse.getNamespace() + "updateDefaultLdap('apache');" %>' type="radio" value="apache" />
 				<aui:input label="Fedora Directory Server" name="defaultLdap" onClick='<%= renderResponse.getNamespace() + "updateDefaultLdap('fedora');" %>' type="radio" value="fedora" />
 				<aui:input label="Microsoft Active Directory Server" name="defaultLdap" onClick='<%= renderResponse.getNamespace() + "updateDefaultLdap('microsoft');" %>' type="radio" value="microsoft" />
