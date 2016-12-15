@@ -222,7 +222,7 @@ AUI.add(
 					_getLengthInMillis: function(value) {
 						var instance = this;
 
-						return value * 60000;
+						return value * 1000;
 					},
 
 					_getTimestamp: function(value) {
