@@ -336,35 +336,31 @@ AUI.add(
 								var hasExpired = elapsed >= sessionLength;
 								var hasWarned = elapsed >= warningTime;
 
-								var updateSessionState = true;
-
 								if (hasWarned) {
 									if (timestamp == 'expired') {
 										expirationMoment = true;
 										hasExpired = true;
 									}
 
-									if (updateSessionState) {
-										var sessionState = instance.get('sessionState');
+									var sessionState = instance.get('sessionState');
 
-										if (hasExpired && sessionState != 'expired') {
-											if (extend) {
+									if (hasExpired && sessionState != 'expired') {
+										if (extend) {
+											expirationMoment = false;
+											hasExpired = false;
+											hasWarned = false;
+											warningMoment = false;
 
-												hasExpired = false;
-												hasWarned = false;
-												expirationMoment = false;
-												warningMoment = false;
-
-												instance.extend();
-											} else {
-												instance.expire();
-												expirationMoment = true
-											}
+											instance.extend();
 										}
-										else if (hasWarned && !hasExpired && !extend && sessionState != 'warned') {
-											instance.warn();
-											warningMoment = true;
+										else {
+											instance.expire();
+											expirationMoment = true
 										}
+									}
+									else if (hasWarned && !hasExpired && !extend && sessionState != 'warned') {
+										instance.warn();
+										warningMoment = true;
 									}
 								}
 
