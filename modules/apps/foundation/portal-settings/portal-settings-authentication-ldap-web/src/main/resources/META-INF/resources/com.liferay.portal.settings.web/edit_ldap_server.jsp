@@ -366,16 +366,10 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 			importUserSearchFilter = '(objectClass=person)';
 			userMappingEmailAddress = 'mail';
 			userMappingFirstName = 'givenName';
-			userMappingFullName = '';
-			userMappingGroup = '';
 			userMappingJobTitle = 'title';
 			userMappingLastName = 'sn';
-			userMappingMiddleName = '';
 			userMappingPassword = 'userPassword';
-			userMappingPortrait = '';
 			userMappingScreenName = 'cn';
-			userMappingStatus = '';
-			userMappingUuid = '';
 			importGroupSearchFilter = '(objectClass=groupOfUniqueNames)';
 			groupMappingDescription = 'description';
 			groupMappingGroupName = 'cn';
@@ -387,27 +381,15 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 			baseProviderURL = 'ldap://localhost:19389';
 			baseDN = 'dc=localdomain';
 			principal = 'cn=Directory Manager';
-			credentials = '';
 			searchFilter = '(mail=@email_address@)';
 			importUserSearchFilter = '(objectClass=inetOrgPerson)';
 			userMappingEmailAddress = 'mail';
 			userMappingFirstName = 'givenName';
 			userMappingFullName = 'cn';
-			userMappingGroup = '';
 			userMappingJobTitle = 'title';
 			userMappingLastName = 'sn';
-			userMappingMiddleName = '';
 			userMappingPassword = 'userPassword';
-			userMappingPortrait = '';
 			userMappingScreenName = 'uid';
-			userMappingStatus = '';
-			userMappingUuid = '';
-			importGroupSearchFilter = '';
-			groupMappingDescription = '';
-			groupMappingGroupName = '';
-			groupMappingUser = '';
-			exportMappingUserDefaultObjectClass = '';
-			exportMappingGroupDefaultObjectClass = '';
 		}
 		else if (ldapType == 'microsoft') {
 			baseProviderURL = 'ldap://localhost:389';
@@ -420,46 +402,26 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 			userMappingFirstName = 'givenName';
 			userMappingFullName = 'cn';
 			userMappingGroup = 'memberOf';
-			userMappingJobTitle = '';
 			userMappingLastName = 'sn';
 			userMappingMiddleName = 'middleName';
 			userMappingPassword = 'unicodePwd';
-			userMappingPortrait = '';
 			userMappingScreenName = 'sAMAccountName';
-			userMappingStatus = '';
-			userMappingUuid = '';
 			importGroupSearchFilter = '(objectClass=group)';
 			groupMappingDescription = 'sAMAccountName';
 			groupMappingGroupName = 'cn';
 			groupMappingUser = 'member';
-			exportMappingUserDefaultObjectClass = '';
-			exportMappingGroupDefaultObjectClass = '';
 		}
 		else if (ldapType == 'novell') {
 			baseProviderURL = 'ldap://localhost:389';
-			baseDN = '';
 			principal = 'cn=admin,ou=test';
 			credentials = 'secret';
 			searchFilter = '(mail=@email_address@)';
-			importUserSearchFilter = '';
 			userMappingEmailAddress = 'mail';
 			userMappingFirstName = 'givenName';
-			userMappingFullName = '';
-			userMappingGroup = '';
 			userMappingJobTitle = 'title';
 			userMappingLastName = 'sn';
-			userMappingMiddleName = '';
 			userMappingPassword = 'userPassword';
-			userMappingPortrait = '';
 			userMappingScreenName = 'cn';
-			userMappingStatus = '';
-			userMappingUuid = '';
-			importGroupSearchFilter = '';
-			groupMappingDescription = '';
-			groupMappingGroupName = '';
-			groupMappingUser = '';
-			exportMappingUserDefaultObjectClass = '';
-			exportMappingGroupDefaultObjectClass = '';
 		}
 		else if (ldapType == 'open') {
 			baseProviderURL = 'ldap://localhost:389';
@@ -470,13 +432,9 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 			importUserSearchFilter = '(objectClass=inetOrgPerson)';
 			userMappingEmailAddress = 'mail';
 			userMappingFirstName = 'givenName';
-			userMappingFullName = '';
-			userMappingGroup = '';
 			userMappingJobTitle = 'title';
 			userMappingLastName = 'sn';
-			userMappingMiddleName = '';
 			userMappingPassword = 'userPassword';
-			userMappingPortrait = '';
 			userMappingScreenName = 'cn';
 			userMappingStatus = '';
 			userMappingUuid = '';
