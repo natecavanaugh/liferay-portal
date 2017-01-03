@@ -330,12 +330,18 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 	}
 
 	function <portlet:namespace />updateDefaultLdap(ldapType) {
-		var baseProviderURL = '';
 		var baseDN = '';
-		var principal = '';
+		var baseProviderURL = '';
 		var credentials = '';
-		var searchFilter = '';
+		var exportMappingGroupDefaultObjectClass = '';
+		var exportMappingUserDefaultObjectClass = '';
+		var groupMappingDescription = '';
+		var groupMappingGroupName = '';
+		var groupMappingUser = '';
+		var importGroupSearchFilter = '';
 		var importUserSearchFilter = '';
+		var principal = '';
+		var searchFilter = '';
 		var userMappingEmailAddress = '';
 		var userMappingFirstName = '';
 		var userMappingFullName = '';
@@ -348,41 +354,35 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 		var userMappingScreenName = '';
 		var userMappingStatus = '';
 		var userMappingUuid = '';
-		var importGroupSearchFilter = '';
-		var groupMappingDescription = '';
-		var groupMappingGroupName = '';
-		var groupMappingUser = '';
-		var exportMappingUserDefaultObjectClass = '';
-		var exportMappingGroupDefaultObjectClass = '';
 
 		var form = AUI.$(document.<portlet:namespace />fm);
 
 		if (ldapType == 'apache') {
-			baseProviderURL = 'ldap://localhost:10389';
 			baseDN = 'dc=example,dc=com';
-			principal = 'uid=admin,ou=system';
+			baseProviderURL = 'ldap://localhost:10389';
 			credentials = 'secret';
-			searchFilter = '(mail=@email_address@)';
+			exportMappingGroupDefaultObjectClass = 'top,groupOfUniqueNames';
+			exportMappingUserDefaultObjectClass = 'top,person,inetOrgPerson,organizationalPerson';
+			groupMappingDescription = 'description';
+			groupMappingGroupName = 'cn';
+			groupMappingUser = 'uniqueMember';
+			importGroupSearchFilter = '(objectClass=groupOfUniqueNames)';
 			importUserSearchFilter = '(objectClass=person)';
+			principal = 'uid=admin,ou=system';
+			searchFilter = '(mail=@email_address@)';
 			userMappingEmailAddress = 'mail';
 			userMappingFirstName = 'givenName';
 			userMappingJobTitle = 'title';
 			userMappingLastName = 'sn';
 			userMappingPassword = 'userPassword';
 			userMappingScreenName = 'cn';
-			importGroupSearchFilter = '(objectClass=groupOfUniqueNames)';
-			groupMappingDescription = 'description';
-			groupMappingGroupName = 'cn';
-			groupMappingUser = 'uniqueMember';
-			exportMappingUserDefaultObjectClass = 'top,person,inetOrgPerson,organizationalPerson';
-			exportMappingGroupDefaultObjectClass = 'top,groupOfUniqueNames';
 		}
 		else if (ldapType == 'fedora') {
-			baseProviderURL = 'ldap://localhost:19389';
 			baseDN = 'dc=localdomain';
+			baseProviderURL = 'ldap://localhost:19389';
+			importUserSearchFilter = '(objectClass=inetOrgPerson)';
 			principal = 'cn=Directory Manager';
 			searchFilter = '(mail=@email_address@)';
-			importUserSearchFilter = '(objectClass=inetOrgPerson)';
 			userMappingEmailAddress = 'mail';
 			userMappingFirstName = 'givenName';
 			userMappingFullName = 'cn';
@@ -392,12 +392,16 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 			userMappingScreenName = 'uid';
 		}
 		else if (ldapType == 'microsoft') {
-			baseProviderURL = 'ldap://localhost:389';
 			baseDN = 'dc=example,dc=com';
-			principal = 'admin';
+			baseProviderURL = 'ldap://localhost:389';
 			credentials = 'secret';
-			searchFilter = '(&(objectCategory=person)(sAMAccountName=@user_id@))';
+			groupMappingDescription = 'sAMAccountName';
+			groupMappingGroupName = 'cn';
+			groupMappingUser = 'member';
+			importGroupSearchFilter = '(objectClass=group)';
 			importUserSearchFilter = '(objectClass=person)';
+			principal = 'admin';
+			searchFilter = '(&(objectCategory=person)(sAMAccountName=@user_id@))';
 			userMappingEmailAddress = 'userprincipalname';
 			userMappingFirstName = 'givenName';
 			userMappingFullName = 'cn';
@@ -406,15 +410,11 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 			userMappingMiddleName = 'middleName';
 			userMappingPassword = 'unicodePwd';
 			userMappingScreenName = 'sAMAccountName';
-			importGroupSearchFilter = '(objectClass=group)';
-			groupMappingDescription = 'sAMAccountName';
-			groupMappingGroupName = 'cn';
-			groupMappingUser = 'member';
 		}
 		else if (ldapType == 'novell') {
 			baseProviderURL = 'ldap://localhost:389';
-			principal = 'cn=admin,ou=test';
 			credentials = 'secret';
+			principal = 'cn=admin,ou=test';
 			searchFilter = '(mail=@email_address@)';
 			userMappingEmailAddress = 'mail';
 			userMappingFirstName = 'givenName';
@@ -424,26 +424,22 @@ renderResponse.setTitle((ldapServerId == 0) ? LanguageUtil.get(resourceBundle, "
 			userMappingScreenName = 'cn';
 		}
 		else if (ldapType == 'open') {
-			baseProviderURL = 'ldap://localhost:389';
 			baseDN = 'dc=example,dc=com';
-			principal = 'cn=admin,ou=test';
+			baseProviderURL = 'ldap://localhost:389';
 			credentials = 'secret';
-			searchFilter = '(mail=@email_address@)';
+			groupMappingDescription = 'description';
+			groupMappingGroupName = 'cn';
+			groupMappingUser = 'uniqueMember';
+			importGroupSearchFilter = '(objectClass=groupOfUniqueNames)';
 			importUserSearchFilter = '(objectClass=inetOrgPerson)';
+			principal = 'cn=admin,ou=test';
+			searchFilter = '(mail=@email_address@)';
 			userMappingEmailAddress = 'mail';
 			userMappingFirstName = 'givenName';
 			userMappingJobTitle = 'title';
 			userMappingLastName = 'sn';
 			userMappingPassword = 'userPassword';
 			userMappingScreenName = 'cn';
-			userMappingStatus = '';
-			userMappingUuid = '';
-			importGroupSearchFilter = '(objectClass=groupOfUniqueNames)';
-			groupMappingGroupName = 'cn';
-			groupMappingDescription = 'description';
-			groupMappingUser = 'uniqueMember';
-			exportMappingUserDefaultObjectClass = '';
-			exportMappingGroupDefaultObjectClass = '';
 		}
 
 		form.fm('ldap--<%= LDAPConstants.BASE_PROVIDER_URL %>--').val(baseProviderURL);
