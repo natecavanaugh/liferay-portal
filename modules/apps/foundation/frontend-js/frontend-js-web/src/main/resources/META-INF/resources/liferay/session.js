@@ -355,11 +355,13 @@ AUI.add(
 										}
 										else {
 											instance.expire();
+
 											expirationMoment = true
 										}
 									}
 									else if (hasWarned && !hasExpired && !extend && sessionState != 'warned') {
 										instance.warn();
+
 										warningMoment = true;
 									}
 								}
