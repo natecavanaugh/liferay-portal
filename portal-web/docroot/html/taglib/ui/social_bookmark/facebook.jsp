@@ -34,10 +34,12 @@ else if (displayStyle.equals("vertical")) {
 		}
 
 		window.fbAsyncInit = function() {
-			FB.init({
-				xfbml: true,
-				version: 'v2.8'
-			});
+			FB.init(
+				{
+					version: 'v2.8',
+					xfbml: true
+				}
+			);
 		}
 	</script>
 
