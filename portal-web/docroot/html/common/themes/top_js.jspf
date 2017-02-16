@@ -49,6 +49,9 @@
 			isChrome: function() {
 				return <%= BrowserSnifferUtil.isChrome(request) %>;
 			},
+			isEdge: function() {
+				return <%= BrowserSnifferUtil.isEdge(request) %>;
+			},
 			isFirefox: function() {
 				return <%= BrowserSnifferUtil.isFirefox(request) %>;
 			},

@@ -64,6 +64,10 @@ public class BrowserSnifferUtil {
 		return getBrowserSniffer().isChrome(request);
 	}
 
+	public static boolean isEdge(HttpServletRequest request) {
+		return getBrowserSniffer().isEdge(request);
+	}
+
 	public static boolean isFirefox(HttpServletRequest request) {
 		return getBrowserSniffer().isFirefox(request);
 	}
