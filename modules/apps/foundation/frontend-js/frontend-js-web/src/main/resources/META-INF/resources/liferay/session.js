@@ -415,9 +415,9 @@ AUI.add(
 								show: Liferay.Language.get('show')
 							};
 
-							instance._expiredText = Liferay.Language.get('warning-your-session-has-expired');
+							instance._expiredText = Liferay.Language.get('your-session-has-expired');
 
-							instance._warningText = Liferay.Language.get('warning-your-session-will-expire');
+							instance._warningText = Liferay.Language.get('your-session-will-expire');
 							instance._warningText = Lang.sub(
 								instance._warningText,
 								[
