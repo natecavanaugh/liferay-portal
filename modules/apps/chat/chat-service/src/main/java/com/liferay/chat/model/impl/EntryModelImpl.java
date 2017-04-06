@@ -68,6 +68,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 			{ "fromUserId", Types.BIGINT },
 			{ "toUserId", Types.BIGINT },
 			{ "content", Types.VARCHAR },
+			{ "entryUuid", Types.VARCHAR },
 			{ "flag", Types.INTEGER }
 		};
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP = new HashMap<String, Integer>();
@@ -78,10 +79,11 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 		TABLE_COLUMNS_MAP.put("fromUserId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("toUserId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("content", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("entryUuid", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("flag", Types.INTEGER);
 	}
 
-	public static final String TABLE_SQL_CREATE = "create table Chat_Entry (entryId LONG not null primary key,createDate LONG,fromUserId LONG,toUserId LONG,content VARCHAR(1000) null,flag INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table Chat_Entry (entryId LONG not null primary key,createDate LONG,fromUserId LONG,toUserId LONG,content VARCHAR(1000) null,entryUuid VARCHAR(75) null,flag INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table Chat_Entry";
 	public static final String ORDER_BY_JPQL = " ORDER BY entry.createDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY Chat_Entry.createDate DESC";
@@ -146,6 +148,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 		attributes.put("fromUserId", getFromUserId());
 		attributes.put("toUserId", getToUserId());
 		attributes.put("content", getContent());
+		attributes.put("entryUuid", getEntryUuid());
 		attributes.put("flag", getFlag());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
@@ -184,6 +187,12 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 		if (content != null) {
 			setContent(content);
+		}
+
+		String entryUuid = (String)attributes.get("entryUuid");
+
+		if (entryUuid != null) {
+			setEntryUuid(entryUuid);
 		}
 
 		Integer flag = (Integer)attributes.get("flag");
@@ -327,6 +336,21 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	}
 
 	@Override
+	public String getEntryUuid() {
+		if (_entryUuid == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _entryUuid;
+		}
+	}
+
+	@Override
+	public void setEntryUuid(String entryUuid) {
+		_entryUuid = entryUuid;
+	}
+
+	@Override
 	public int getFlag() {
 		return _flag;
 	}
@@ -372,6 +396,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 		entryImpl.setFromUserId(getFromUserId());
 		entryImpl.setToUserId(getToUserId());
 		entryImpl.setContent(getContent());
+		entryImpl.setEntryUuid(getEntryUuid());
 		entryImpl.setFlag(getFlag());
 
 		entryImpl.resetOriginalValues();
@@ -480,6 +505,14 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 			entryCacheModel.content = null;
 		}
 
+		entryCacheModel.entryUuid = getEntryUuid();
+
+		String entryUuid = entryCacheModel.entryUuid;
+
+		if ((entryUuid != null) && (entryUuid.length() == 0)) {
+			entryCacheModel.entryUuid = null;
+		}
+
 		entryCacheModel.flag = getFlag();
 
 		return entryCacheModel;
@@ -487,7 +520,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append("{entryId=");
 		sb.append(getEntryId());
@@ -499,6 +532,8 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 		sb.append(getToUserId());
 		sb.append(", content=");
 		sb.append(getContent());
+		sb.append(", entryUuid=");
+		sb.append(getEntryUuid());
 		sb.append(", flag=");
 		sb.append(getFlag());
 		sb.append("}");
@@ -508,7 +543,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(22);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.chat.model.Entry");
@@ -533,6 +568,10 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 		sb.append(
 			"<column><column-name>content</column-name><column-value><![CDATA[");
 		sb.append(getContent());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>entryUuid</column-name><column-value><![CDATA[");
+		sb.append(getEntryUuid());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>flag</column-name><column-value><![CDATA[");
@@ -560,6 +599,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	private boolean _setOriginalToUserId;
 	private String _content;
 	private String _originalContent;
+	private String _entryUuid;
 	private int _flag;
 	private long _columnBitmask;
 	private Entry _escapedModel;

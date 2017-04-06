@@ -58,6 +58,14 @@ public class EntryLocalServiceUtil {
 		return getService().addEntry(createDate, fromUserId, toUserId, content);
 	}
 
+	public static com.liferay.chat.model.Entry addEntry(long createDate,
+		long fromUserId, long toUserId, java.lang.String content,
+		java.lang.String entryUuid) {
+		return getService()
+				   .addEntry(createDate, fromUserId, toUserId, content,
+			entryUuid);
+	}
+
 	public static com.liferay.chat.model.Entry addEntry(long fromUserId,
 		long toUserId, java.lang.String content) {
 		return getService().addEntry(fromUserId, toUserId, content);

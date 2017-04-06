@@ -52,6 +52,14 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	}
 
 	@Override
+	public com.liferay.chat.model.Entry addEntry(long createDate,
+		long fromUserId, long toUserId, java.lang.String content,
+		java.lang.String entryUuid) {
+		return _entryLocalService.addEntry(createDate, fromUserId, toUserId,
+			content, entryUuid);
+	}
+
+	@Override
 	public com.liferay.chat.model.Entry addEntry(long fromUserId,
 		long toUserId, java.lang.String content) {
 		return _entryLocalService.addEntry(fromUserId, toUserId, content);

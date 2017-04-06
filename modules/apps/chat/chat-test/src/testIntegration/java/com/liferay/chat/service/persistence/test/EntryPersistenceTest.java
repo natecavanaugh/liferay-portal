@@ -130,6 +130,8 @@ public class EntryPersistenceTest {
 
 		newEntry.setContent(RandomTestUtil.randomString());
 
+		newEntry.setEntryUuid(RandomTestUtil.randomString());
+
 		newEntry.setFlag(RandomTestUtil.nextInt());
 
 		_entries.add(_persistence.update(newEntry));
@@ -143,6 +145,8 @@ public class EntryPersistenceTest {
 			newEntry.getFromUserId());
 		Assert.assertEquals(existingEntry.getToUserId(), newEntry.getToUserId());
 		Assert.assertEquals(existingEntry.getContent(), newEntry.getContent());
+		Assert.assertEquals(existingEntry.getEntryUuid(),
+			newEntry.getEntryUuid());
 		Assert.assertEquals(existingEntry.getFlag(), newEntry.getFlag());
 	}
 
@@ -234,7 +238,7 @@ public class EntryPersistenceTest {
 	protected OrderByComparator<Entry> getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("Chat_Entry", "entryId",
 			true, "createDate", true, "fromUserId", true, "toUserId", true,
-			"content", true, "flag", true);
+			"content", true, "entryUuid", true, "flag", true);
 	}
 
 	@Test
@@ -437,6 +441,8 @@ public class EntryPersistenceTest {
 		entry.setToUserId(RandomTestUtil.nextLong());
 
 		entry.setContent(RandomTestUtil.randomString());
+
+		entry.setEntryUuid(RandomTestUtil.randomString());
 
 		entry.setFlag(RandomTestUtil.nextInt());
 
