@@ -79,11 +79,12 @@ public class ChatPollerProcessor extends BasePollerProcessor {
 	protected void addEntry(PollerRequest pollerRequest) throws Exception {
 		long toUserId = getLong(pollerRequest, "toUserId");
 		String content = getString(pollerRequest, "content");
+		String entryUuid = getString(pollerRequest, "entryUuid");
 
 		if (toUserId > 0) {
 			EntryLocalServiceUtil.addEntry(
 				pollerRequest.getTimestamp(), pollerRequest.getUserId(),
-				toUserId, content);
+				toUserId, content, entryUuid);
 		}
 	}
 
@@ -237,6 +238,7 @@ public class ChatPollerProcessor extends BasePollerProcessor {
 			}
 
 			entryJSONObject.put("content", HtmlUtil.escape(entry.getContent()));
+			entryJSONObject.put("entryUuid", entry.getEntryUuid());
 			entryJSONObject.put("flag", entry.getFlag());
 			entryJSONObject.put("toUserId", entry.getToUserId());
 
