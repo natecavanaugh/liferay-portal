@@ -34,6 +34,16 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	public Entry addEntry(
 		long createDate, long fromUserId, long toUserId, String content) {
 
+		String entryUuid = StringPool.BLANK;
+
+		return addEntry(createDate, fromUserId, toUserId, content, entryUuid);
+	}
+
+	@Override
+	public Entry addEntry(
+		long createDate, long fromUserId, long toUserId, String content,
+		String entryUuid) {
+
 		List<Entry> entries = entryFinder.findByEmptyContent(
 			fromUserId, toUserId, 0, 5);
 
@@ -60,6 +70,10 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 			}
 		}
 
+		if (Validator.isNull(entryUuid)) {
+			entryUuid = StringPool.BLANK;
+		}
+
 		long entryId = counterLocalService.increment();
 
 		Entry entry = entryPersistence.create(entryId);
@@ -68,6 +82,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		entry.setFromUserId(fromUserId);
 		entry.setToUserId(toUserId);
 		entry.setContent(content);
+		entry.setEntryUuid(entryUuid);
 
 		entryPersistence.update(entry);
 
