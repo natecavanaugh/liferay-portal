@@ -142,8 +142,7 @@ public class ATag extends BaseATag {
 			jspWriter.write("\" ");
 		}
 
-		if (Validator.isNotNull(title) ||
-			AUIUtil.isOpensNewWindow(getTarget())) {
+		if (Validator.isNotNull(title)) {
 
 			ResourceBundle resourceBundle =
 				TagResourceBundleUtil.getResourceBundle(pageContext);
@@ -152,11 +151,6 @@ public class ATag extends BaseATag {
 
 			if (Validator.isNotNull(title)) {
 				jspWriter.write(LanguageUtil.get(resourceBundle, title));
-			}
-
-			if (AUIUtil.isOpensNewWindow(getTarget())) {
-				jspWriter.write(
-					LanguageUtil.get(resourceBundle, "opens-new-window"));
 			}
 
 			jspWriter.write("\" ");
