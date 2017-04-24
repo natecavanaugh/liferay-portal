@@ -143,7 +143,6 @@ public class ATag extends BaseATag {
 		}
 
 		if (Validator.isNotNull(title)) {
-
 			ResourceBundle resourceBundle =
 				TagResourceBundleUtil.getResourceBundle(pageContext);
 
