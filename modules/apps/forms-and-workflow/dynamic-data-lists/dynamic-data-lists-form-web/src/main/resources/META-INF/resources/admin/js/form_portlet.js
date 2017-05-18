@@ -744,16 +744,19 @@ AUI.add(
 					_setPublished: function(value) {
 						var instance = this;
 
+						var title;
+
 						if (value) {
-							A.one('.publish-icon')
-								.removeClass("disabled")
-								.attr('title', Liferay.Language.get('copy-url'));
+							title = Liferay.Language.get('copy-url');
 						}
 						else {
-							A.one('.publish-icon')
-								.addClass("disabled")
-								.attr('title', Liferay.Language.get('publish-the-form-to-get-its-shareable-link'));
+							title = Liferay.Language.get('publish-the-form-to-get-its-shareable-link');
 						}
+
+						var publishIcon = A.one('.publish-icon');
+
+						publishIcon.toggleClass('disabled', !value);
+						publishIcon.attr('title', title);
 					},
 
 					_showAlert: function(message, type) {
