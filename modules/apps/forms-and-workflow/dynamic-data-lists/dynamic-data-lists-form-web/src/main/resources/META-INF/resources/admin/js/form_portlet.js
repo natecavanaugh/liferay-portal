@@ -191,7 +191,6 @@ AUI.add(
 						if (autosaveInterval > 0) {
 							instance._intervalId = setInterval(A.bind('_autosave', instance), autosaveInterval * MINUTE);
 						}
-
 					},
 
 					destructor: function() {
@@ -207,6 +206,23 @@ AUI.add(
 
 						instance._copyPublishFormURLPopover.destroy();
 						instance._publishTooltip.destroy();
+					},
+
+					createCopyPublishFormURLPopover: function() {
+						var instance = this;
+
+						instance._copyPublishFormURLPopover = new Liferay.DDL.FormBuilderCopyPublishFormURLPopover(
+							{
+								portletNamespace: instance.get('namespace')
+							}
+						);
+
+						instance._copyPublishFormURLPopover.setAlign(
+							{
+								node: A.one('.publish-icon'),
+								points: [A.WidgetPositionAlign.RC, A.WidgetPositionAlign.LC]
+							}
+						);
 					},
 
 					createEditor: function(editorName) {
@@ -227,21 +243,6 @@ AUI.add(
 								}
 							);
 						}
-					},
-
-					createCopyPublishFormURLPopover: function() {
-						var instance = this;
-
-						instance._copyPublishFormURLPopover = new Liferay.DDL.FormBuilderCopyPublishFormURLPopover(
-							{
-								portletNamespace: instance.get('namespace')
-							}
-						);
-
-						instance._copyPublishFormURLPopover.setAlign({
-							node: A.one('.publish-icon'),
-							points: [A.WidgetPositionAlign.RC, A.WidgetPositionAlign.LC]
-						});
 					},
 
 					createPublishTooltip: function() {
@@ -388,8 +389,6 @@ AUI.add(
 						instance.one('#name').val(state.name);
 
 						instance.one('#rules').val(state.rules);
-
-						var publishCheckbox = instance.one('#publishCheckbox');
 
 						var settingsDDMForm = Liferay.component('settingsDDMForm');
 
@@ -566,6 +565,28 @@ AUI.add(
 						return window[instance.ns('nameEditor')].getHTML();
 					},
 
+					_handlePublishAction: function() {
+						var instance = this;
+
+						var publishMessage = Liferay.Language.get('the-form-was-published-successfully-access-it-with-this-url-x');
+
+						var formUrl = '<span style="font-weight: 500">' + instance._createFormURL() + '</span>';
+
+						publishMessage = publishMessage.replace(/\{0\}/gim, formUrl);
+
+						instance._showAlert(publishMessage, 'success');
+
+						instance.one('#publish').html(Liferay.Language.get('unpublish-form'));
+					},
+
+					_handleUnpublishAction: function() {
+						var instance = this;
+
+						instance._showAlert(Liferay.Language.get('the-form-was-unpublished-successfully'), 'success');
+
+						instance.one('#publish').html(Liferay.Language.get('publish-form'));
+					},
+
 					_isSameState: function(state1, state2) {
 						var instance = this;
 
@@ -630,25 +651,13 @@ AUI.add(
 						);
 					},
 
-					_onPublishIconClick: function() {
-						var instance = this;
-
-						if (!instance.get('published')) {
-							return;
-						}
-
-						instance._copyPublishFormURLPopover.set('publishURL', instance._createFormURL());
-
-						instance._copyPublishFormURLPopover.show();
-					},
-
 					_onPublishButtonClick: function() {
 						var instance = this;
 
 						instance._autosave(
 							function() {
-
 								var publishedValue = instance.get('published');
+
 								var newPublishedValue = !publishedValue;
 
 								var payload = instance.ns(
@@ -671,7 +680,6 @@ AUI.add(
 												else {
 													instance._handleUnpublishAction();
 												}
-
 											}
 										},
 										data: payload,
@@ -679,32 +687,18 @@ AUI.add(
 										method: 'POST'
 									}
 								);
-
 							}
 						);
-
 					},
 
-					_handlePublishAction: function() {
+					_onPublishIconClick: function() {
 						var instance = this;
 
-						var publishMessage = Liferay.Language.get('the-form-was-published-successfully-access-it-with-this-url-x')
+						if (instance.get('published')) {
+							instance._copyPublishFormURLPopover.set('publishURL', instance._createFormURL());
 
-						var formUrl = '<span style="font-weight: 500">' + instance._createFormURL() + '</span>';
-
-						publishMessage = publishMessage.replace(/\{0\}/gim, formUrl);
-
-						instance._showAlert(publishMessage, "success");
-
-						instance.one('#publish').html(Liferay.Language.get('unpublish-form'));
-					},
-
-					_handleUnpublishAction: function() {
-						var instance = this;
-
-						instance._showAlert(Liferay.Language.get('the-form-was-unpublished-successfully'), "success");
-
-						instance.one('#publish').html(Liferay.Language.get('publish-form'));
+							instance._copyPublishFormURLPopover.show();
+						}
 					},
 
 					_onRulesButtonClick: function() {
@@ -764,7 +758,7 @@ AUI.add(
 
 						var alert = instance.get('alert');
 
-						var icon = "exclamation-full";
+						var icon = 'exclamation-full';
 
 						if (type === 'success') {
 							icon = 'check';
