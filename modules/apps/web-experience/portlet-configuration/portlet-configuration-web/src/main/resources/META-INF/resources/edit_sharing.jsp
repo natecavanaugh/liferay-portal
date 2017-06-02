@@ -71,6 +71,10 @@ String widgetURL = PortalUtil.getWidgetURL(portlet, themeDisplay);
 							<textarea class="field form-control lfr-textarea" id="<portlet:namespace />widgetScript" onClick="this.select();" readonly="true"><%= HtmlUtil.escape(textAreaContent) %></textarea>
 						</aui:field-wrapper>
 
+						<div class="alert alert-info">
+							<liferay-ui:message key="you-may-need-to-configure-the-system-property-http-header-secure-x-frame-options-255-to-allow-sharing-to-your-website" />
+						</div>
+
 						<aui:input label='<%= LanguageUtil.format(request, "allow-users-to-add-x-to-any-website", HtmlUtil.escape(portletDisplay.getTitle()), false) %>' name="widgetShowAddAppLink" type="toggle-switch" value="<%= widgetShowAddAppLink %>" />
 					</aui:fieldset>
 
