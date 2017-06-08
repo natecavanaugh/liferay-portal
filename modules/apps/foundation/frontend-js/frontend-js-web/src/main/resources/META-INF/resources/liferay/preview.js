@@ -236,6 +236,7 @@ AUI.add(
 
 						if (!maxPreviewImage) {
 							maxPreviewImage = instance._currentPreviewImage.clone().removeClass('lfr-preview-file-image-current');
+							maxPreviewImage._node.id = maxPreviewImage._node.id + "Clone";
 
 							var id = maxPreviewImage.get('id');
 
