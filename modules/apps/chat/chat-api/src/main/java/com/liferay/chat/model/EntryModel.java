@@ -160,6 +160,21 @@ public interface EntryModel extends BaseModel<Entry> {
 	public void setContent(String content);
 
 	/**
+	 * Returns the entry uuid of this entry.
+	 *
+	 * @return the entry uuid of this entry
+	 */
+	@AutoEscape
+	public String getEntryUuid();
+
+	/**
+	 * Sets the entry uuid of this entry.
+	 *
+	 * @param entryUuid the entry uuid of this entry
+	 */
+	public void setEntryUuid(String entryUuid);
+
+	/**
 	 * Returns the flag of this entry.
 	 *
 	 * @return the flag of this entry

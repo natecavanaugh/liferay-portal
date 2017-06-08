@@ -73,6 +73,9 @@ public interface EntryLocalService extends BaseLocalService,
 	public Entry addEntry(long createDate, long fromUserId, long toUserId,
 		java.lang.String content);
 
+	public Entry addEntry(long createDate, long fromUserId, long toUserId,
+		java.lang.String content, java.lang.String entryUuid);
+
 	public Entry addEntry(long fromUserId, long toUserId,
 		java.lang.String content);
 

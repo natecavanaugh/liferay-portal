@@ -18,6 +18,7 @@
 		<column name="fromUserId" type="long" />
 		<column name="toUserId" type="long" />
 		<column name="content" type="String" />
+		<column name="entryUuid" type="String" />
 		<column name="flag" type="int" />
 
 		<!-- Order -->

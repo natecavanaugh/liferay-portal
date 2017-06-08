@@ -61,6 +61,7 @@ public class EntryWrapper implements Entry, ModelWrapper<Entry> {
 		attributes.put("fromUserId", getFromUserId());
 		attributes.put("toUserId", getToUserId());
 		attributes.put("content", getContent());
+		attributes.put("entryUuid", getEntryUuid());
 		attributes.put("flag", getFlag());
 
 		return attributes;
@@ -96,6 +97,12 @@ public class EntryWrapper implements Entry, ModelWrapper<Entry> {
 
 		if (content != null) {
 			setContent(content);
+		}
+
+		String entryUuid = (String)attributes.get("entryUuid");
+
+		if (entryUuid != null) {
+			setEntryUuid(entryUuid);
 		}
 
 		Integer flag = (Integer)attributes.get("flag");
@@ -178,6 +185,16 @@ public class EntryWrapper implements Entry, ModelWrapper<Entry> {
 	@Override
 	public java.lang.String getContent() {
 		return _entry.getContent();
+	}
+
+	/**
+	* Returns the entry uuid of this entry.
+	*
+	* @return the entry uuid of this entry
+	*/
+	@Override
+	public java.lang.String getEntryUuid() {
+		return _entry.getEntryUuid();
 	}
 
 	/**
@@ -298,6 +315,16 @@ public class EntryWrapper implements Entry, ModelWrapper<Entry> {
 	@Override
 	public void setEntryId(long entryId) {
 		_entry.setEntryId(entryId);
+	}
+
+	/**
+	* Sets the entry uuid of this entry.
+	*
+	* @param entryUuid the entry uuid of this entry
+	*/
+	@Override
+	public void setEntryUuid(java.lang.String entryUuid) {
+		_entry.setEntryUuid(entryUuid);
 	}
 
 	@Override

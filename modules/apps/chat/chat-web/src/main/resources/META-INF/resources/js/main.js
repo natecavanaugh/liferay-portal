@@ -642,9 +642,14 @@ AUI().use(
 
 					var escapedHTML = LString.escapeHTML(content);
 
+					var uuid = themeDisplay.getUserId() + ":" + userId + ":" + createDate + ":" + Liferay.Util.randomInt();
+
+					Liferay.Chat.Manager.addEntryUuid(uuid);
+
 					instance.send(
 						{
 							content: content,
+							entryUuid: uuid,
 							toUserId: userId
 						}
 					);
@@ -818,6 +823,12 @@ AUI().use(
 						name: 'chat-user-dashboard-service'
 					}
 				);
+			},
+
+			addEntryUuid: function(uuid) {
+				var instance = this;
+
+				instance._entryUuids.push(uuid);
 			},
 
 			getContainer: function() {
@@ -1577,6 +1588,12 @@ AUI().use(
 							);
 						}
 
+						var entryUuids = instance._entryUuids;
+
+						var entryUuid = entry.entryUuid;
+
+						var entryEchoed = entryUuids.indexOf(entryUuid) > -1;
+
 						var incoming = false;
 
 						var userId = entry.toUserId;
@@ -1589,7 +1606,7 @@ AUI().use(
 
 						var buddy = instance._buddies[userId];
 
-						if (buddy && (incoming || key != windowId)) {
+						if (buddy && (entryEchoed || key != windowId)) {
 							var chat = instance._chatSessions[userId];
 
 							var content = entry.content;
@@ -1694,6 +1711,7 @@ AUI().use(
 			_buddyServices: {},
 			_chatSessions: {},
 			_entries: [],
+			_entryUuids: [],
 			_minimizedPanelIds: {},
 			_panels: {},
 			_settings: {},

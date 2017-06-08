@@ -63,7 +63,7 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append("{entryId=");
 		sb.append(entryId);
@@ -75,6 +75,8 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 		sb.append(toUserId);
 		sb.append(", content=");
 		sb.append(content);
+		sb.append(", entryUuid=");
+		sb.append(entryUuid);
 		sb.append(", flag=");
 		sb.append(flag);
 		sb.append("}");
@@ -98,6 +100,13 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 			entryImpl.setContent(content);
 		}
 
+		if (entryUuid == null) {
+			entryImpl.setEntryUuid(StringPool.BLANK);
+		}
+		else {
+			entryImpl.setEntryUuid(entryUuid);
+		}
+
 		entryImpl.setFlag(flag);
 
 		entryImpl.resetOriginalValues();
@@ -115,6 +124,7 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 
 		toUserId = objectInput.readLong();
 		content = objectInput.readUTF();
+		entryUuid = objectInput.readUTF();
 
 		flag = objectInput.readInt();
 	}
@@ -137,6 +147,13 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 			objectOutput.writeUTF(content);
 		}
 
+		if (entryUuid == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(entryUuid);
+		}
+
 		objectOutput.writeInt(flag);
 	}
 
@@ -145,5 +162,6 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 	public long fromUserId;
 	public long toUserId;
 	public String content;
+	public String entryUuid;
 	public int flag;
 }

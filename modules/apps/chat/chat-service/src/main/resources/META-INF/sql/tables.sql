@@ -4,6 +4,7 @@ create table Chat_Entry (
 	fromUserId LONG,
 	toUserId LONG,
 	content VARCHAR(1000) null,
+	entryUuid VARCHAR(75) null,
 	flag INTEGER
 );
 

@@ -37,6 +37,7 @@ public class EntrySoap implements Serializable {
 		soapModel.setFromUserId(model.getFromUserId());
 		soapModel.setToUserId(model.getToUserId());
 		soapModel.setContent(model.getContent());
+		soapModel.setEntryUuid(model.getEntryUuid());
 		soapModel.setFlag(model.getFlag());
 
 		return soapModel;
@@ -130,6 +131,14 @@ public class EntrySoap implements Serializable {
 		_content = content;
 	}
 
+	public String getEntryUuid() {
+		return _entryUuid;
+	}
+
+	public void setEntryUuid(String entryUuid) {
+		_entryUuid = entryUuid;
+	}
+
 	public int getFlag() {
 		return _flag;
 	}
@@ -143,5 +152,6 @@ public class EntrySoap implements Serializable {
 	private long _fromUserId;
 	private long _toUserId;
 	private String _content;
+	private String _entryUuid;
 	private int _flag;
 }
