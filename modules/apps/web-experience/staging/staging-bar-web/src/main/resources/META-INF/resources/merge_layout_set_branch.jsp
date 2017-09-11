@@ -105,7 +105,6 @@ String title = LanguageUtil.get(resourceBundle, "merge-site-pages-variation");
 		var layoutSetBranch = AUI.$('#<portlet:namespace />' + layoutSetBranchId);
 
 		var mergeLayoutSetBranchId = layoutSetBranch.attr('data-layoutSetBranchId');
-		var mergeLayoutSetBranchName = layoutSetBranch.attr('data-layoutSetBranchName');
 		var mergeLayoutSetBranchMessage = layoutSetBranch.attr('data-layoutSetBranchMessage');
 
 		if (confirm(mergeLayoutSetBranchMessage)) {
