@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"check-source-formatting": "file:../../../../../../liferay-frontend-source-formatter",
 		"clay": "2.0.0-alpha.7",
 		"liferay-amd-loader": "2.3.0",
 		"metal-modal": "^2.0.5",
@@ -34,7 +35,8 @@
 	"name": "frontend-js-web",
 	"scripts": {
 		"checkFormat": "npm run prettier -- --list-different",
-		"format": "npm run prettier -- --write",
+		"csf": "csf src/**/*.es.js test/**/*.es.js",
+		"format": "npm run csf -- -i",
 		"lint": "eslint src/**/*.es.js test/**/*.es.js",
 		"prettier": "prettier-eslint src/**/*.es.js test/**/*.es.js",
 		"test": "jest"
