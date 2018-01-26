@@ -7,8 +7,8 @@
 	},
 	"devDependencies": {
 		"babel-preset-env": "^1.6.0",
+		"check-source-formatting": "^2.0.2",
 		"eslint": "^4.7.1",
-		"eslint-config-liferay": "^2.0.7",
 		"jest": "^20.0.4",
 		"liferay-jest-junit-reporter": "0.0.3",
 		"liferay-module-config-generator": "^1.2.1",
@@ -16,8 +16,7 @@
 		"metal-cli": "^4.0.1",
 		"metal-component": "^2.5.13",
 		"metal-dom": "^2.5.13",
-		"metal-events": "^2.5.16",
-		"prettier-eslint-cli": "4.4.0"
+		"metal-events": "^2.5.16"
 	},
 	"jest": {
 		"globals": {
@@ -33,10 +32,9 @@
 	},
 	"name": "frontend-js-web",
 	"scripts": {
-		"checkFormat": "npm run prettier -- --list-different",
-		"format": "npm run prettier -- --write",
-		"lint": "eslint src/**/*.es.js test/**/*.es.js",
-		"prettier": "prettier-eslint src/**/*.es.js test/**/*.es.js",
+		"checkFormat": "npm run csf",
+		"csf": "csf src/**/*.es.js test/**/*.es.js",
+		"format": "npm run csf -- -i",
 		"test": "jest"
 	},
 	"version": "1.0.69"
