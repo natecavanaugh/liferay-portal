@@ -872,7 +872,6 @@ AUI.add(
 
 						var locales = [defaultLocale].concat(availableLocales);
 
-
 						if (locales.indexOf(event.prevVal) > -1) {
 							instance.updateLocalizationMap(event.prevVal);
 						}
@@ -880,7 +879,6 @@ AUI.add(
 						if (locales.indexOf(event.newVal) > -1) {
 							instance.addLocaleToLocalizationMap(event.newVal);
 						}
-
 
 						instance.set('displayLocale', event.newVal);
 						instance.set('readOnly', defaultLocale !== event.newVal && !localizable);
@@ -1522,11 +1520,13 @@ AUI.add(
 
 							var layoutValue = instance.getParsedValue(instance.getValue());
 
+							var retVal = null;
+
 							if (layoutValue.layoutId) {
-								return layoutValue;
+								retVal = layoutValue;
 							}
 
-							return null;
+							return retVal;
 						}
 					},
 
@@ -3375,8 +3375,7 @@ AUI.add(
 
 							new A.DD.Drag(
 								A.mix(dragOptions, instance.get('dd'))
-							)
-							.plug(A.Plugin.DDProxy, proxyOptions);
+							).plug(A.Plugin.DDProxy, proxyOptions);
 						}
 					}
 				}
