@@ -469,10 +469,10 @@
 
 				var windowName = Liferay.Util.getWindowName();
 
-				var dialog = topUtil.Window._map[windowName];
+				var dialog = topUtil.Window.getById(windowName);
 
 				if (dialog) {
-					openingWindow = topUtil.Window._map[windowName]._opener;
+					openingWindow = dialog._opener;
 
 					Window._opener = openingWindow;
 				}
