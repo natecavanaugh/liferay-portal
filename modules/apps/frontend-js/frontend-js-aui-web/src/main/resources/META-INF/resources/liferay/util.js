@@ -36,6 +36,12 @@
 		'</svg>';
 
 	var Window = {
+		getById: function(id) {
+			var instance = this;
+
+			return instance._map[id];
+		},
+
 		_map: {}
 	};
 
