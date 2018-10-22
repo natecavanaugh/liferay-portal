@@ -34,7 +34,9 @@ DLOpenerGoogleDriveFileReference dlOpenerGoogleDriveFileReference = (DLOpenerGoo
 
 			var defaultError = '<liferay-ui:message key="an-unexpected-error-occurred" />';
 			var dialogId = '<portlet:namespace />LoadingDialog';
+
 			var isTimeConsumed = false;
+
 			var url;
 
 			showStatusMessage = Liferay.lazyLoad(
@@ -45,11 +47,13 @@ DLOpenerGoogleDriveFileReference dlOpenerGoogleDriveFileReference = (DLOpenerGoo
 			);
 
 			function showError(message) {
-				showStatusMessage({
-					title: '<liferay-ui:message key="error" />:',
-					message: message,
-					type: 'danger'
-				});
+				showStatusMessage(
+					{
+						message: message,
+						title: '<liferay-ui:message key="error" />:',
+						type: 'danger'
+					}
+				);
 			}
 
 			function navigate() {
@@ -73,11 +77,13 @@ DLOpenerGoogleDriveFileReference dlOpenerGoogleDriveFileReference = (DLOpenerGoo
 						}
 
 						return response.json();
-				})
+					}
+				)
 				.then(
 					function(response) {
 						if (response.complete) {
 								url = response.googleDocsEditURL;
+
 								navigate();
 						}
 						else if (response.error) {
@@ -86,12 +92,15 @@ DLOpenerGoogleDriveFileReference dlOpenerGoogleDriveFileReference = (DLOpenerGoo
 						else {
 							setTimeout(polling, TIME_POLLING);
 						}
-				})
+					}
+				)
 				.catch(
 					function(error) {
 						showError(error);
+
 						Liferay.Util.getWindow(dialogId).hide();
-					});
+					}
+				);
 			}
 
 			<%
@@ -119,9 +128,11 @@ DLOpenerGoogleDriveFileReference dlOpenerGoogleDriveFileReference = (DLOpenerGoo
 				},
 				function() {
 					setTimeout(polling, TIME_POLLING);
+
 					setTimeout(
 						function() {
 							isTimeConsumed = true;
+
 							navigate();
 						},
 						TIME_SHOW_MSG
