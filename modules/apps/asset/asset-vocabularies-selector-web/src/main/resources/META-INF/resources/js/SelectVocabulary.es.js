@@ -147,7 +147,7 @@ class SelectVocabulary extends PortletBase {
 			this.selectedNodes_ = selectedNodes;
 
 			Liferay.Util.getOpener().Liferay.fire(this.itemSelectorSaveEvent, {
-				data
+				data: selectedNodes
 			});
 		}
 	}
