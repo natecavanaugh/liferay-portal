@@ -102,7 +102,11 @@ class StringInput extends React.Component {
 	};
 
 	render() {
-		const {disabled, options, value} = this.props;
+		let {disabled, displayValue, options, value} = this.props;
+
+		if (value) {
+			options = [{label: 'test', value: 1234}];
+		}
 
 		return options.length === 0 ? (
 			<div className="criterion-input input-group">
@@ -127,17 +131,30 @@ class StringInput extends React.Component {
 				</div>
 			</div>
 		) : (
-			<ClaySelectWithOption
-				className="criterion-input form-control"
-				data-testid="options-string"
-				disabled={disabled}
-				onChange={this._handleChange}
-				options={options.map(o => ({
-					label: o.label,
-					value: o.value
-				}))}
-				value={value}
-			/>
+			<div className="criterion-input input-group">
+				<div className="input-group-prepend">
+					<button
+						className="btn btn-secondary"
+						id="button-addon1"
+						onClick={this._handleSelectEntity}
+						type="button"
+					>
+						{displayValue}
+					</button>
+				</div>
+
+				<ClaySelectWithOption
+					className="criterion-input form-control input-group-item input-group-append input-group-item-shrink"
+					data-testid="options-string"
+					disabled={disabled}
+					onChange={this._handleChange}
+					options={options.map(o => ({
+						label: o.label,
+						value: o.value
+					}))}
+					value={value}
+				/>
+			</div>
 		);
 	}
 }
